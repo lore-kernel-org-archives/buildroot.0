@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4A09C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 19:38:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3568C00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 19:41:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 57EF0400E4;
-	Tue, 26 Jul 2022 19:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57EF0400E4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E8A4400C6;
+	Tue, 26 Jul 2022 19:41:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E8A4400C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZVPFL8q1xZEz; Tue, 26 Jul 2022 19:38:39 +0000 (UTC)
+	with ESMTP id rL0W0mnXPOBV; Tue, 26 Jul 2022 19:41:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6AA9E400C1;
-	Tue, 26 Jul 2022 19:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AA9E400C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 362DE40101;
+	Tue, 26 Jul 2022 19:41:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 362DE40101
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9C6341BF27A
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:38:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3238E1BF27A
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:41:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 762E0600B9
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:38:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 762E0600B9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D0E760644
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:41:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D0E760644
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FYmSJtJUw2Np for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 19:38:35 +0000 (UTC)
+ with ESMTP id 61Gf7oOEwM5E for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 19:41:52 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D28C6001B
-Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6D28C6001B
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 19:38:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF9E4605D5
+Received: from mxd1.seznam.cz (mxd1.seznam.cz [77.75.78.210])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BF9E4605D5
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 19:41:51 +0000 (UTC)
 Received: from email.seznam.cz
- by email-smtpc15b.ng.seznam.cz (email-smtpc15b.ng.seznam.cz [10.23.14.195])
- id 4970703aff50cf614977ce4d; Tue, 26 Jul 2022 21:38:32 +0200 (CEST)
+ by email-smtpc1b.ko.seznam.cz (email-smtpc1b.ko.seznam.cz [10.53.13.15])
+ id 1e5b34b5a87b8bee1e5c8ac2; Tue, 26 Jul 2022 21:41:40 +0200 (CEST)
 Received: from localhost.localdomain (mail.ms-free.net [185.147.46.46])
- by email-relay8.ng.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
- Tue, 26 Jul 2022 21:38:29 +0200 (CEST)  
+ by email-relay29.ko.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+ Tue, 26 Jul 2022 21:41:37 +0200 (CEST)  
 From: Petr Vorel <pevik@seznam.cz>
 To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 21:38:10 +0200
-Message-Id: <20220726193810.43817-1-pevik@seznam.cz>
+Date: Tue, 26 Jul 2022 21:41:29 +0200
+Message-Id: <20220726194129.44446-1-pevik@seznam.cz>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-szn-frgn: <ac563087-9774-44f2-9670-d48f4aeedcfb>
+X-szn-frgn: <3ff463d3-6592-43eb-90e9-aa203cdd2cba>
 X-szn-frgc: <0>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=seznam.cz; s=beta; 
- t=1658864312; bh=SiQIwbQZdZISMyYA5laQcPP9vLkB4IhuSS1g/GnCAKo=;
+ t=1658864500; bh=yfhvLm0mYHw4t/LA4aZgBoQ14uu9Gcg2+q5sOM5qTcY=;
  h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
  Content-Transfer-Encoding:X-szn-frgn:X-szn-frgc;
- b=DpWFmBXvVuK/01NltoURImr8qho7rrYkyWNVGx9f+u+aKl1VoTwOLRdWuDukNFcx2
- 75yVaIBVTHz5YxJ7NqbTn3Q4/o+iy2XbD8rNFgfuHBnaOazgsp/5qgXoY8RZbqte8q
- buXll0i3Kja1mAC8IWaTfjxLtmTu3mr6JSU4zhh8=
+ b=WFbZSgxZFMPptDl9wAdIDze1dVWhngtDEoneVZJ6mQIm8u8Ig78IQYSGFvDPGWbnu
+ UllDQ/31RW5c4yw7VJP3ftQ+OSlqYGbDhgHlYSrMZS6+hAJ3DObkxuifo0HcO+Y+V4
+ H9NeF+7TBsGu8mnBEgcHJfBY7uuBqNFNq9ReLNio=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=seznam.cz header.i=@seznam.cz
- header.a=rsa-sha256 header.s=beta header.b=DpWFmBXv
-Subject: [Buildroot] [PATCH 1/1] package/debianutils: bump version to 5.7-0.2
+ header.a=rsa-sha256 header.s=beta header.b=WFbZSgxZ
+Subject: [Buildroot] [PATCH 1/1] package/iproute2: bump version to 5.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,6 +72,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -79,83 +81,76 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Petr Vorel <petr.vorel@gmail.com>
 
-debian/copyright has been moved to a different tarball
-(debianutils_5.7-0.2.debian.tar.xz) which does not contain the source
-code, thus build from salsa git instead of tarball from
-https://snapshot.debian.org/.
-
-Add patch to disable po4a (unnecessary dependency just to get
-translations).
-
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/debianutils/0001-Disable-po4a.patch | 25 +++++++++++++++++++++
- package/debianutils/debianutils.hash        |  6 ++---
- package/debianutils/debianutils.mk          |  7 +++---
- 3 files changed, 32 insertions(+), 6 deletions(-)
- create mode 100644 package/debianutils/0001-Disable-po4a.patch
+Tested with test-pkg.
 
-diff --git a/package/debianutils/0001-Disable-po4a.patch b/package/debianutils/0001-Disable-po4a.patch
+ .../0001-bpf_glue-include-errno.h.patch       | 32 +++++++++++++++++++
+ package/iproute2/iproute2.hash                |  2 +-
+ package/iproute2/iproute2.mk                  |  2 +-
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+ create mode 100644 package/iproute2/0001-bpf_glue-include-errno.h.patch
+
+diff --git a/package/iproute2/0001-bpf_glue-include-errno.h.patch b/package/iproute2/0001-bpf_glue-include-errno.h.patch
 new file mode 100644
-index 0000000000..2af9a93279
+index 0000000000..4273c044ad
 --- /dev/null
-+++ b/package/debianutils/0001-Disable-po4a.patch
-@@ -0,0 +1,25 @@
-+From 7134952f97ad5afb208e270571afbfe12670cc14 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <petr.vorel@gmail.com>
-+Date: Mon, 25 Jul 2022 12:59:45 +0200
-+Subject: [PATCH] Disable po4a
++++ b/package/iproute2/0001-bpf_glue-include-errno.h.patch
+@@ -0,0 +1,32 @@
++From f8decf82af07591833f89004e9b72cc39c1b5c52 Mon Sep 17 00:00:00 2001
++From: Juhee Kang <claudiajkang@gmail.com>
++Date: Tue, 19 Jul 2022 00:58:27 +0900
++Subject: [PATCH] bpf_glue: include errno.h
 +
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++If __NR_bpf is not enabled, bpf() function set errno and return -1. Thus,
++this patch includes the header.
++
++Fixes: ac4e0913beb1 ("bpf: Export bpf syscall wrapper")
++Signed-off-by: Juhee Kang <claudiajkang@gmail.com>
++Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
++
++[ upstream status: f8decf82af07591833f89004e9b72cc39c1b5c52 ]
 +---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ lib/bpf_glue.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 86ac499..7c61896 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,6 +1,6 @@
-+ AUTOMAKE_OPTIONS = foreign
++diff --git a/lib/bpf_glue.c b/lib/bpf_glue.c
++index c1cf351b..88a24751 100644
++--- a/lib/bpf_glue.c
+++++ b/lib/bpf_glue.c
++@@ -7,6 +7,7 @@
++ #include <sys/syscall.h>
++ #include <limits.h>
++ #include <unistd.h>
+++#include <errno.h>
 + 
-+-SUBDIRS = po4a
-++# SUBDIRS = po4a
-+ 
-+ EXTRA_DIST = CHANGELOG CONTRIBUTING .gitlab-ci.yml
-+ 
++ #include "bpf_util.h"
++ #ifdef HAVE_LIBBPF
 +-- 
 +2.37.1
 +
-diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
-index 16a45d4ea1..cd77b54ad1 100644
---- a/package/debianutils/debianutils.hash
-+++ b/package/debianutils/debianutils.hash
-@@ -1,4 +1,4 @@
--# From http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils/debianutils_4.11.dsc
--sha256 bb5ce6290696b0d623377521ed217f484aa98f7346c5f7c48f9ae3e1acfb7151 debianutils_4.11.tar.xz
- # Locally calculated
--sha256 3c8b5112cb8f74ba959233291908d73f527afa6f1d96f93649aeb912b5884567 debian/copyright
-+sha256  76ba936451d9ea23a397d60d93ffc1a39544534f17a1f5b816cdaf4bb7a57486  debianutils-debian-5.7-0.2.tar.bz2
-+# Locally calculated from https://snapshot.debian.org/archive/debian/20220501T215056Z/pool/main/d/debianutils/debianutils_5.7-0.2.debian.tar.xz
-+sha256  3c8b5112cb8f74ba959233291908d73f527afa6f1d96f93649aeb912b5884567  debian/copyright
-diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
-index d2c41130fb..05ef43135d 100644
---- a/package/debianutils/debianutils.mk
-+++ b/package/debianutils/debianutils.mk
-@@ -4,9 +4,10 @@
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index eafe7a6c9a..2bb1ddbc72 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  6e384f1b42c75e1a9daac57866da37dcff909090ba86eb25a6e764da7893660e  iproute2-5.17.0.tar.xz
++sha256  5ba3d464d51c8c283550d507ffac3d10f7aec587b7c66b0ccb6950643646389e  iproute2-5.18.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 8ecde069f5..b9347ed367 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DEBIANUTILS_VERSION = 4.11
--DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
--DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils
-+DEBIANUTILS_VERSION = 5.7-0.2
-+DEBIANUTILS_SOURCE = debianutils-debian-$(DEBIANUTILS_VERSION).tar.bz2
-+DEBIANUTILS_SITE = https://salsa.debian.org/debian/debianutils/-/archive/debian/$(DEBIANUTILS_VERSION)
-+DEBIANUTILS_AUTORECONF = YES
- DEBIANUTILS_CONF_OPTS = --exec-prefix=/
- DEBIANUTILS_LICENSE = GPL-2.0+, SMAIL (savelog)
- DEBIANUTILS_LICENSE_FILES = debian/copyright
+-IPROUTE2_VERSION = 5.17.0
++IPROUTE2_VERSION = 5.18.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
 2.36.1
 
