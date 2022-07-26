@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3BA5C00144
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 22:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A70D9C00144
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 22:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7F1EE40236;
-	Tue, 26 Jul 2022 22:03:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F1EE40236
+	by smtp1.osuosl.org (Postfix) with ESMTP id 460D980BBC;
+	Tue, 26 Jul 2022 22:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 460D980BBC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y-7JD4XcSZ1K; Tue, 26 Jul 2022 22:03:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 62A7580BAA;
+	Tue, 26 Jul 2022 22:03:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62A7580BAA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F5E91BF59F
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 22:03:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 011694018E
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 22:03:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 011694018E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nbJwT0w6oyuu; Tue, 26 Jul 2022 22:03:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8FB1E401DD;
-	Tue, 26 Jul 2022 22:03:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FB1E401DD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4E1C01BF9B9
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 22:03:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3517240247
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 22:03:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3517240247
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RbSEZXiZFBxQ for <buildroot@lists.busybox.net>;
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6YeaKbBGP_uy for <buildroot@lists.busybox.net>;
  Tue, 26 Jul 2022 22:03:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 419DD40118
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30B5840012
  for <buildroot@buildroot.org>; Tue, 26 Jul 2022 22:03:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 419DD40118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30B5840012
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 9925B86400; Tue, 26 Jul 2022 21:49:21 +0000 (UTC)
+ id 85B1C863FE; Tue, 26 Jul 2022 21:49:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 00:01:19 +0200
+Date: Tue, 26 Jul 2022 23:57:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1ca7348fd445c6842ba2d8c20e4e76e49aa54fdb
-X-Git-Newrev: f7403e4d35c89f14a6663dcd471382734b2a75ca
+X-Git-Oldrev: 69e84008abf87eaeeb3f2d53c880cf33492a3bf8
+X-Git-Newrev: f3d5916a9fde5d1bd451b7705a17c3553ac43de2
 X-Patchwork-Hint: ignore
-Message-Id: <20220726214921.9925B86400@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opkg-utils: drop host-diffutils
- dependency
+Message-Id: <20220726214921.85B1C863FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual/prerequisite.txt: add diffutils
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,35 +58,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7665012790623671208=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7403e4d35c89f14a6663dcd471382734b2a75ca
+--===============7665012790623671208==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f3d5916a9fde5d1bd451b7705a17c3553ac43de2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diffutils is now a host system dependency, so there is no need for
-opkg-utils to depend on host-diffutils.
+The command `cmp` is used by `package/pkg-generic.mk` at commit
+8623cc5deb5. This command is provided by `diffutils`, so it should be
+installed on the host system.
 
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/opkg-utils/opkg-utils.mk | 1 -
- 1 file changed, 1 deletion(-)
+ docs/manual/prerequisite.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-index 369a4586e8..ad267c5c94 100644
---- a/package/opkg-utils/opkg-utils.mk
-+++ b/package/opkg-utils/opkg-utils.mk
-@@ -12,7 +12,6 @@ OPKG_UTILS_LICENSE_FILES = COPYING
- 
- HOST_OPKG_UTILS_DEPENDENCIES = \
- 	$(BR2_PYTHON3_HOST_DEPENDENCY) \
--	host-diffutils \
- 	host-lz4 \
- 	host-xz
- 
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 40071491f8..763fe79041 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -23,6 +23,7 @@ between distributions).
+ ** +make+ (version 3.81 or any later)
+ ** +binutils+
+ ** +build-essential+ (only for Debian based systems)
++** +diffutils+
+ ** +gcc+ (version 4.8 or any later)
+ ** `g++` (version 4.8 or any later)
+ ** +bash+
+
+--===============7665012790623671208==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7665012790623671208==--
