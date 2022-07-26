@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17AB9C43334
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA50C433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA79440167;
-	Tue, 26 Jul 2022 13:13:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA79440167
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0406A84745;
+	Tue, 26 Jul 2022 13:14:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0406A84745
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pwah9YPnrHuq; Tue, 26 Jul 2022 13:14:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB33A8420B;
+	Tue, 26 Jul 2022 13:14:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB33A8420B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D76601BF2B4
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:14:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B06A6419C9
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:14:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B06A6419C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aBWSyc5RIXEO; Tue, 26 Jul 2022 13:13:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 759B84136C;
-	Tue, 26 Jul 2022 13:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 759B84136C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F90C1BF2B4
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:13:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F75641718
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:13:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F75641718
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 271P0Mn2PhAW for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 13:13:04 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96ED141089
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 96ED141089
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:13:03 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 8C1F9240008;
- Tue, 26 Jul 2022 13:13:00 +0000 (UTC)
-To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Buildroot List <buildroot@buildroot.org>,
- =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
-Date: Tue, 26 Jul 2022 15:12:48 +0200
-Message-Id: <20220726131249.2009383-3-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220726131249.2009383-1-thomas.petazzoni@bootlin.com>
-References: <20220726131249.2009383-1-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658841181;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UFkfXepOdae2QMSUEXjB7sIh4xvgBSHFol2P3XqYh5k=;
- b=VINR0PKOP+tVlwe177F/YUXkoMsDGipiZkpDSfQtP9eIX/+fZdrgYDO/wxJJOpDL4PsV+F
- JiVJ8s/+MuXJylDp0c/EYjIuK/ydVGJsFYHxthToeOK0cGo1Ke39iaVuVT54EY4TRDEDcn
- wtBubEwtaQQWmR9AJOcM0P71xIq6zluhzvOfkW3YfNDOPLj0vfImDyU8dypPyWLp3CMnl9
- Moc3wsYI13XMzJ646JveH740gGurDuZKvDVldC66Q5nlA76D3eSnPjMcSrw7n660lBbIh7
- 3wWyEViHJvENYc6iehFhh0N/v3zwKBOr2oA/rNc9t9YAmmybQhkysmLoeU/FYQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VINR0PKO
-Subject: [Buildroot] [PATCH 2/2] arch: add support for configurable page
- size on ARM64
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6mFz6iHS0Jr6 for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 13:14:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 321B740288
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:14:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 321B740288
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 6351185ECF; Tue, 26 Jul 2022 13:00:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 26 Jul 2022 15:13:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 934788d162596d5ed634c5fb2914d76a6bf554ec
+X-Git-Newrev: 7451295826865fc08eb067ad226a11fd1c2b4512
+X-Patchwork-Hint: ignore
+Message-Id: <20220726130027.6351185ECF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/kontron_bl_imx8mm_defconfig: bump
+ U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,164 +58,398 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBjb21taXQgaXMgYmFzZWQgb24gZWFybGllciB3b3JrIGZyb20gxYF1a2FzeiBTdGVsbWFj
-aAo8bC5zdGVsbWFjaEBzYW1zdW5nLmNvbT4gdG8gYWRkIHN1cHBvcnQgZm9yIGRpZmZlcmVudCBw
-YWdlIHNpemVzIG9uCkFSTTY0LgoKSW4gaGlzIGluaXRpYWwgc3VibWlzc2lvbiwgxYF1a2FzeiB0
-b29rIGFuIGFwcHJvYWNoIHNpbWlsYXIgdG8gdGhpcwpvbmUsIGkuZSBtYWtlIGl0IEFSTTY0LXNw
-ZWNpZmljLiBGb2xsb3dpbmcgdGhlIGZlZWRiYWNrIG9uIHRoZSBtYWlsaW5nCmxpc3QsIGhpcyBz
-ZWNvbmQgdmVyc2lvbiBbMV0gdHJpZWQgdG8gZ2VuZXJhbGl6ZSB0aGUgbG9naWMgdG8KY29uZmln
-dXJlIHRoZSBwYWdlIHNpemUgYmV0d2VlbiBhcmNoaXRlY3R1cmVzLiBCdXQgdGhlIGdlbmVyYWwK
-Y29uc2Vuc3VzIGR1cmluZyB0aGUgcmV2aWV3IHByb2Nlc3Mgd2FzIHRoYXQgdGhlcmUgd2Fzbid0
-IG11Y2ggdG8KZ2VuZXJhbGl6ZSBpbiB0aGUgZW5kLgoKU28sIHRoaXMgbmV3IGl0ZXJhdGlvbiBp
-cyBiYWNrIHRvIGEgc2ltcGxlciBhcHByb2FjaDoKCiAqIFdlIGhhdmUgbmV3IG9wdGlvbnMgaW4g
-Q29uZmlnLmluLmFybSB0byBjb25maWd1cmUgdGhlIHBhZ2UKICAgc2l6ZS4gT25seSA0IEtCIGFu
-ZCA2NCBLQiBhcmUgc3VwcG9ydGVkLCBiZWNhdXNlIG91ciB0ZXN0aW5nIGluCiAgIFFlbXUgYW5k
-IHJlYWwgaGFyZHdhcmUgaGFzIG5vdCBhbGxvd2VkIHRvIGdldCBhIHN1Y2Nlc3NmdWwgc2V0dXAK
-ICAgZm9yIDE2IEtCIHBhZ2VzLiBXZSBjYW4gYWx3YXlzIHJlLWFkZCBzdXBwb3J0IGZvciAxNiBL
-QiBsYXRlciBpZgogICB0aGF0IGlzIHJlc29sdmVkLgoKICogVGhlIGxvZ2ljIHRvIGRlZmluZSB0
-aGUgQVJDSF9UT09MQ0hBSU5fV1JBUFBFUl9PUFRTIG9wdGlvbnMgaXMKICAgbW92ZWQgZnJvbSB0
-aGUgQVJDLXNwZWNpZmljIGZpbGUgdG8gYXJjaC9hcmNoLm1rLCBhbmQgZXh0ZW5kZWQgdG8KICAg
-Y292ZXIgQVJNNjQuCgogKiBUaGUgYXBwcm9wcmlhdGUgbG9naWMgaW4gdWNsaWJjLm1rIGFuZCBs
-aW51eC5tayBpcyBhZGRlZCB0byB0d2VhawogICB0aGUgcmVsZXZhbnQgY29uZmlndXJhdGlvbiBv
-cHRpb25zLgoKICogQSB0ZXN0IGNhc2UgaXMgYWRkZWQgaW4gdGhlIHJ1bnRpbWUgdGVzdCBpbmZy
-YXN0cnVjdHVyZSB0byB0ZXN0CiAgIGJ1aWxkaW5nIGFuZCBib290aW5nIHVuZGVyIFFlbXUgYSA2
-NCBLQiBjb25maWd1cmF0aW9uLCB3aXRoIGFsbCAzIEMKICAgbGlicmFyaWVzLgoKRm9yIHRoZSBy
-ZWd1bGFyIGNvbmZpZ3VyYXRpb24gb2YgNCBLQiBwYWdlcywgdGhpcyBjb21taXQgbWFrZXMgb25l
-CmZ1bmN0aW9uYWwgY2hhbmdlOiAtV2wsLXosbWF4LXBhZ2Utc2l6ZT00MDk2IGlzIG5vdyBwYXNz
-ZWQgaW4gdGhlCmNvbXBpbGVyIGZsYWdzIG9mIHRoZSB3cmFwcGVyLgoKWzFdIGh0dHBzOi8vcGF0
-Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9idWlsZHJvb3QvbGlzdC8/c2VyaWVzPTI3NTQ1MgoK
-U2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGlu
-LmNvbT4KLS0tCiBhcmNoL0NvbmZpZy5pbi5hcm0gICAgICAgICAgICAgICAgICAgICAgICAgICAg
-fCAyNSArKysrKysrCiBhcmNoL2FyY2gubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgfCAxMSArKysrCiBhcmNoL2FyY2gubWsuYXJjICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgfCAgOSAtLS0KIGxpbnV4L2xpbnV4Lm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB8ICA4ICsrKwogcGFja2FnZS91Y2xpYmMvdWNsaWJjLm1rICAgICAgICAgICAgICAgICAgICAg
-IHwgMTMgKysrKwogLi4uL3Rlc3RzL3Rvb2xjaGFpbi90ZXN0X2FhcmNoNjRfNjRrLnB5ICAgICAg
-IHwgNjUgKysrKysrKysrKysrKysrKysrKwogNiBmaWxlcyBjaGFuZ2VkLCAxMjIgaW5zZXJ0aW9u
-cygrKSwgOSBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEwMDY0NCBzdXBwb3J0L3Rlc3Rpbmcv
-dGVzdHMvdG9vbGNoYWluL3Rlc3RfYWFyY2g2NF82NGsucHkKCmRpZmYgLS1naXQgYS9hcmNoL0Nv
-bmZpZy5pbi5hcm0gYi9hcmNoL0NvbmZpZy5pbi5hcm0KaW5kZXggZWI3MWQ3MDQzMC4uYTBhMmUy
-ZjVlOSAxMDA2NDQKLS0tIGEvYXJjaC9Db25maWcuaW4uYXJtCisrKyBiL2FyY2gvQ29uZmlnLmlu
-LmFybQpAQCAtNzcwLDYgKzc3MCwzMSBAQCBjb25maWcgQlIyX0FSTV9JTlNUUlVDVElPTlNfVEhV
-TUIyCiAKIGVuZGNob2ljZQogCitjaG9pY2UKKwlwcm9tcHQgIk1NVSBQYWdlIFNpemUiCisJZGVm
-YXVsdCBCUjJfQVJNNjRfUEFHRV9TSVpFXzRLCisJZGVwZW5kcyBvbiBCUjJfYWFyY2g2NCB8fCBC
-UjJfYWFyY2g2NF9iZQorCWhlbHAKKwkgIFRoZSBkZWZhdWx0IGlzIDRLQiwgYW5kIHlvdSBzaG91
-bGQgcHJvYmFibHkga2VlcCB0aGlzIHVubGVzcworCSAgeW91IGtub3cgd2hhdCB5b3UgYXJlIGRv
-aW5nLiBJbiBwYXJ0aWN1bGFyLCB0aGUga2VybmVsCisJICBjb25maWd1cmF0aW9uIG11c3QgbWF0
-Y2ggdGhpcyBjaG9pY2UuIElmIHlvdXIga2VybmVsIGlzCisJICBidWlsdCBieSBCdWlsZHJvb3Qs
-IHRoZSBrZXJuZWwgY29uZmlndXJhdGlvbiBpcworCSAgYXV0b21hdGljYWxseSBhZGp1c3RlZCwg
-YnV0IG5vdCBpZiB5b3UgYnVpbHQgeW91ciBrZXJuZWwKKwkgIG91dHNpZGUgb2YgQnVpbGRyb290
-LgorCitjb25maWcgQlIyX0FSTTY0X1BBR0VfU0laRV80SworCWJvb2wgIjRLQiIKKworY29uZmln
-IEJSMl9BUk02NF9QQUdFX1NJWkVfNjRLCisJYm9vbCAiNjRLQiIKKworZW5kY2hvaWNlCisKK2Nv
-bmZpZyBCUjJfQVJNNjRfUEFHRV9TSVpFCisJc3RyaW5nCisJZGVmYXVsdCAiNEsiIGlmIEJSMl9B
-Uk02NF9QQUdFX1NJWkVfNEsKKwlkZWZhdWx0ICI2NEsiIGlmIEJSMl9BUk02NF9QQUdFX1NJWkVf
-NjRLCisKIGNvbmZpZyBCUjJfQVJDSAogCWRlZmF1bHQgImFybSIJCWlmIEJSMl9hcm0KIAlkZWZh
-dWx0ICJhcm1lYiIJCWlmIEJSMl9hcm1lYgpkaWZmIC0tZ2l0IGEvYXJjaC9hcmNoLm1rIGIvYXJj
-aC9hcmNoLm1rCmluZGV4IDI4OWM1YTExMjUuLjk2ZjExZWJhNDIgMTAwNjQ0Ci0tLSBhL2FyY2gv
-YXJjaC5taworKysgYi9hcmNoL2FyY2gubWsKQEAgLTE4LDUgKzE4LDE2IEBAIEdDQ19UQVJHRVRf
-RlBVIDo9ICQoY2FsbCBxc3RyaXAsJChCUjJfR0NDX1RBUkdFVF9GUFUpKQogR0NDX1RBUkdFVF9G
-TE9BVF9BQkkgOj0gJChjYWxsIHFzdHJpcCwkKEJSMl9HQ0NfVEFSR0VUX0ZMT0FUX0FCSSkpCiBH
-Q0NfVEFSR0VUX01PREUgOj0gJChjYWxsIHFzdHJpcCwkKEJSMl9HQ0NfVEFSR0VUX01PREUpKQog
-CisjIEV4cGxpY2l0bHkgc2V0IExEJ3MgIm1heC1wYWdlLXNpemUiIGluc3RlYWQgb2YgcmVseWlu
-ZyBvbiBzb21lIGRlZmF1bHRzCitpZmVxICgkKEJSMl9BUkNfUEFHRV9TSVpFXzRLKSQoQlIyX0FS
-TTY0X1BBR0VfU0laRV80SykseSkKK0FSQ0hfVE9PTENIQUlOX1dSQVBQRVJfT1BUUyArPSAtV2ws
-LXosbWF4LXBhZ2Utc2l6ZT00MDk2CitlbHNlIGlmZXEgKCQoQlIyX0FSQ19QQUdFX1NJWkVfOEsp
-LHkpCitBUkNIX1RPT0xDSEFJTl9XUkFQUEVSX09QVFMgKz0gLVdsLC16LG1heC1wYWdlLXNpemU9
-ODE5MgorZWxzZSBpZmVxICgkKEJSMl9BUkNfUEFHRV9TSVpFXzE2SykseSkKK0FSQ0hfVE9PTENI
-QUlOX1dSQVBQRVJfT1BUUyArPSAtV2wsLXosbWF4LXBhZ2Utc2l6ZT0xNjM4NAorZWxzZSBpZmVx
-ICgkKEJSMl9BUk02NF9QQUdFX1NJWkVfNjRLKSx5KQorQVJDSF9UT09MQ0hBSU5fV1JBUFBFUl9P
-UFRTICs9IC1XbCwteixtYXgtcGFnZS1zaXplPTY1NTM2CitlbmRpZgorCiAjIEluY2x1ZGUgYW55
-IGFyY2hpdGVjdHVyZSBzcGVjaWZpYyBtYWtlZmlsZXMuCiAtaW5jbHVkZSAkKHNvcnQgJCh3aWxk
-Y2FyZCBhcmNoL2FyY2gubWsuKikpCmRpZmYgLS1naXQgYS9hcmNoL2FyY2gubWsuYXJjIGIvYXJj
-aC9hcmNoLm1rLmFyYwppbmRleCAzMmI4MThiMGUwLi5hNmI1NmE4NjlmIDEwMDY0NAotLS0gYS9h
-cmNoL2FyY2gubWsuYXJjCisrKyBiL2FyY2gvYXJjaC5tay5hcmMKQEAgLTUsMTMgKzUsNCBAQCBp
-ZmVxICgkKEJSMl9BUkNfQVRPTUlDX0VYVCkseSkKIEFSQ0hfVE9PTENIQUlOX1dSQVBQRVJfT1BU
-UyA9IC1tYXRvbWljCiBlbmRpZgogCi0jIEV4cGxpY2l0bHkgc2V0IExEJ3MgIm1heC1wYWdlLXNp
-emUiIGluc3RlYWQgb2YgcmVseWluZyBvbiBzb21lIGRlZmF1bHRzCi1pZmVxICgkKEJSMl9BUkNf
-UEFHRV9TSVpFXzRLKSx5KQotQVJDSF9UT09MQ0hBSU5fV1JBUFBFUl9PUFRTICs9IC1XbCwteixt
-YXgtcGFnZS1zaXplPTQwOTYKLWVsc2UgaWZlcSAoJChCUjJfQVJDX1BBR0VfU0laRV84SykseSkK
-LUFSQ0hfVE9PTENIQUlOX1dSQVBQRVJfT1BUUyArPSAtV2wsLXosbWF4LXBhZ2Utc2l6ZT04MTky
-Ci1lbHNlIGlmZXEgKCQoQlIyX0FSQ19QQUdFX1NJWkVfMTZLKSx5KQotQVJDSF9UT09MQ0hBSU5f
-V1JBUFBFUl9PUFRTICs9IC1XbCwteixtYXgtcGFnZS1zaXplPTE2Mzg0Ci1lbmRpZgotCiBlbmRp
-ZgpkaWZmIC0tZ2l0IGEvbGludXgvbGludXgubWsgYi9saW51eC9saW51eC5tawppbmRleCAzMjJj
-Y2FiYmQ5Li4zZDlhYzM3OTU5IDEwMDY0NAotLS0gYS9saW51eC9saW51eC5taworKysgYi9saW51
-eC9saW51eC5tawpAQCAtMzc0LDYgKzM3NCwxNCBAQCBkZWZpbmUgTElOVVhfS0NPTkZJR19GSVhV
-UF9DTURTCiAJCSQoY2FsbCBLQ09ORklHX0RJU0FCTEVfT1BULENPTkZJR19BUkNfUEFHRV9TSVpF
-XzRLKQogCQkkKGNhbGwgS0NPTkZJR19ESVNBQkxFX09QVCxDT05GSUdfQVJDX1BBR0VfU0laRV84
-SykKIAkJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfQVJDX1BBR0VfU0laRV8xNksp
-KQorCSQoaWYgJChCUjJfQVJNNjRfUEFHRV9TSVpFXzRLKSwKKwkJJChjYWxsIEtDT05GSUdfRU5B
-QkxFX09QVCxDT05GSUdfQVJNNjRfNEtfUEFHRVMpCisJCSQoY2FsbCBLQ09ORklHX0RJU0FCTEVf
-T1BULENPTkZJR19BUk02NF8xNktfUEFHRVMpCisJCSQoY2FsbCBLQ09ORklHX0RJU0FCTEVfT1BU
-LENPTkZJR19BUk02NF82NEtfUEFHRVMpKQorCSQoaWYgJChCUjJfQVJNNjRfUEFHRV9TSVpFXzY0
-SyksCisJCSQoY2FsbCBLQ09ORklHX0RJU0FCTEVfT1BULENPTkZJR19BUk02NF80S19QQUdFUykK
-KwkJJChjYWxsIEtDT05GSUdfRElTQUJMRV9PUFQsQ09ORklHX0FSTTY0XzE2S19QQUdFUykKKwkJ
-JChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfQVJNNjRfNjRLX1BBR0VTKSkKIAkkKGlm
-ICQoQlIyX1RBUkdFVF9ST09URlNfQ1BJTyksCiAJCSQoY2FsbCBLQ09ORklHX0VOQUJMRV9PUFQs
-Q09ORklHX0JMS19ERVZfSU5JVFJEKSkKIAkjIEFzIHRoZSBrZXJuZWwgZ2V0cyBjb21waWxlZCBi
-ZWZvcmUgcm9vdCBmaWxlc3lzdGVtcyBhcmUKZGlmZiAtLWdpdCBhL3BhY2thZ2UvdWNsaWJjL3Vj
-bGliYy5tayBiL3BhY2thZ2UvdWNsaWJjL3VjbGliYy5tawppbmRleCA1MDA2YWEwY2I2Li4wZTE3
-YThlNjVkIDEwMDY0NAotLS0gYS9wYWNrYWdlL3VjbGliYy91Y2xpYmMubWsKKysrIGIvcGFja2Fn
-ZS91Y2xpYmMvdWNsaWJjLm1rCkBAIC03Myw2ICs3MywxOCBAQCBkZWZpbmUgVUNMSUJDX0JJTkZN
-VF9DT05GSUcKIGVuZGVmCiBlbmRpZgogCisjCisjIEFBcmNoNjQgZGVmaW5pdGlvbnMKKyMKKwor
-aWZlcSAoJChVQ0xJQkNfVEFSR0VUX0FSQ0gpLGFhcmNoNjQpCitVQ0xJQkNfQVJNNjRfUEFHRV9T
-SVpFID0gQ09ORklHX0FBUkNINjRfUEFHRV9TSVpFXyQoY2FsbCBxc3RyaXAsJChCUjJfQVJNNjRf
-UEFHRV9TSVpFKSkKK2RlZmluZSBVQ0xJQkNfQUFSQ0g2NF9QQUdFX1NJWkVfQ09ORklHCisJJChT
-RUQpICcvQ09ORklHX0FBUkNINjRfUEFHRV9TSVpFXyovZCcgJChARCkvLmNvbmZpZworCSQoY2Fs
-bCBLQ09ORklHX0VOQUJMRV9PUFQsJChVQ0xJQkNfQVJNNjRfUEFHRV9TSVpFKSkKK2VuZGVmCitl
-bmRpZiAjIGFhcmNoNjQKKwogIwogIyBBUkMgZGVmaW5pdGlvbnMKICMKQEAgLTM4Niw2ICszOTgs
-NyBAQCBkZWZpbmUgVUNMSUJDX0tDT05GSUdfRklYVVBfQ01EUwogCSQoY2FsbCBLQ09ORklHX1NF
-VF9PUFQsU0hBUkVEX0xJQl9MT0FERVJfUFJFRklYLCIvbGliIikKIAkkKFVDTElCQ19NTVVfQ09O
-RklHKQogCSQoVUNMSUJDX0JJTkZNVF9DT05GSUcpCisJJChVQ0xJQkNfQUFSQ0g2NF9QQUdFX1NJ
-WkVfQ09ORklHKQogCSQoVUNMSUJDX0FSQ19QQUdFX1NJWkVfQ09ORklHKQogCSQoVUNMSUJDX0FS
-Q19BVE9NSUNTX0NPTkZJRykKIAkkKFVDTElCQ19BUk1fQUJJX0NPTkZJRykKZGlmZiAtLWdpdCBh
-L3N1cHBvcnQvdGVzdGluZy90ZXN0cy90b29sY2hhaW4vdGVzdF9hYXJjaDY0XzY0ay5weSBiL3N1
-cHBvcnQvdGVzdGluZy90ZXN0cy90b29sY2hhaW4vdGVzdF9hYXJjaDY0XzY0ay5weQpuZXcgZmls
-ZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi41OWM3ODM0MzYwCi0tLSAvZGV2L251bGwK
-KysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3Rvb2xjaGFpbi90ZXN0X2FhcmNoNjRfNjRrLnB5
-CkBAIC0wLDAgKzEsNjUgQEAKK2ltcG9ydCBvcworaW1wb3J0IHJlCisKK2ltcG9ydCBpbmZyYS5i
-YXNldGVzdAorCisKK2NsYXNzIFRlc3RBYXJjaDY0UGFnZXM2NGtCYXNlKGluZnJhLmJhc2V0ZXN0
-LkJSVGVzdCk6CisgICAgX190ZXN0X18gPSBGYWxzZQorICAgIGNvbmZpZyA9IFwKKyAgICAgICAg
-IiIiCisgICAgICAgIEJSMl9hYXJjaDY0PXkKKyAgICAgICAgQlIyX0FSTTY0X1BBR0VfU0laRV82
-NEs9eQorICAgICAgICBCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzVfMTU9
-eQorICAgICAgICBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5QU1BMCIKKyAgICAg
-ICAgQlIyX0xJTlVYX0tFUk5FTD15CisgICAgICAgIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZF
-UlNJT049eQorICAgICAgICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI1
-LjE1LjE4IgorICAgICAgICBCUjJfTElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKKyAg
-ICAgICAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fQ09ORklHX0ZJTEU9ImJvYXJkL3FlbXUvYWFy
-Y2g2NC12aXJ0L2xpbnV4LmNvbmZpZyIKKyAgICAgICAgQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19I
-T1NUX09QRU5TU0w9eQorICAgICAgICBCUjJfVEFSR0VUX1JPT1RGU19DUElPPXkKKyAgICAgICAg
-QlIyX1RBUkdFVF9ST09URlNfQ1BJT19HWklQPXkKKyAgICAgICAgIiIiCisKKyAgICBkZWYgbG9n
-aW4oc2VsZik6CisgICAgICAgIGltZyA9IG9zLnBhdGguam9pbihzZWxmLmJ1aWxkZGlyLCAiaW1h
-Z2VzIiwgInJvb3Rmcy5jcGlvLmd6IikKKyAgICAgICAga2VybiA9IG9zLnBhdGguam9pbihzZWxm
-LmJ1aWxkZGlyLCAiaW1hZ2VzIiwgIkltYWdlIikKKyAgICAgICAgc2VsZi5lbXVsYXRvci5ib290
-KGFyY2g9ImFhcmNoNjQiLAorICAgICAgICAgICAgICAgICAgICAgICAgICAga2VybmVsPWtlcm4s
-CisgICAgICAgICAgICAgICAgICAgICAgICAgICBrZXJuZWxfY21kbGluZT1bImNvbnNvbGU9dHR5
-QU1BMCJdLAorICAgICAgICAgICAgICAgICAgICAgICAgICAgb3B0aW9ucz1bIi1NIiwgInZpcnQi
-LCAiLWNwdSIsICJjb3J0ZXgtYTU3IiwgIi1tIiwgIjUxMk0iLCAiLWluaXRyZCIsIGltZ10pCisg
-ICAgICAgIHNlbGYuZW11bGF0b3IubG9naW4oKQorCisKKyAgICBkZWYgdGVzdF9ydW4oc2VsZik6
-CisgICAgICAgIHNlbGYubG9naW4oKQorCisgICAgICAgIGNtZCA9ICJkbWVzZyB8IGdyZXAgJ0Rl
-bnRyeSBjYWNoZSciCisgICAgICAgIG91dHB1dCwgZXhpdF9jb2RlID0gc2VsZi5lbXVsYXRvci5y
-dW4oY21kLCAxMjApCisgICAgICAgIHIgPSByZS5tYXRjaCgiLipEZW50cnkgY2FjaGUgaGFzaCB0
-YWJsZSBlbnRyaWVzOiBbMC05XSogXChvcmRlcjogKFswLTldKiksIChbMC05XSopIGJ5dGVzLioi
-LCBvdXRwdXRbMF0pCisgICAgICAgIG9yZGVyID0gaW50KHIuZ3JvdXAoMSkpCisgICAgICAgIHNp
-emUgPSBpbnQoci5ncm91cCgyKSkKKyAgICAgICAgc2VsZi5hc3NlcnRFcXVhbCgyICoqIG9yZGVy
-ICogNjQgKiAxMDI0LCBzaXplKQorCitjbGFzcyBUZXN0QWFyY2g2NFBhZ2VzNjRrR2xpYmMoVGVz
-dEFhcmNoNjRQYWdlczY0a0Jhc2UpOgorICAgIF9fdGVzdF9fID0gVHJ1ZQorICAgIGNvbmZpZyA9
-IFRlc3RBYXJjaDY0UGFnZXM2NGtCYXNlLmNvbmZpZyArIFwKKyAgICAgICAgIiIiCisgICAgICAg
-IEJSMl9UT09MQ0hBSU5fQlVJTERST09UX0dMSUJDPXkKKyAgICAgICAgIiIiCisKK2NsYXNzIFRl
-c3RBYXJjaDY0UGFnZXM2NGt1Q2xpYmMoVGVzdEFhcmNoNjRQYWdlczY0a0Jhc2UpOgorICAgIF9f
-dGVzdF9fID0gVHJ1ZQorICAgIGNvbmZpZyA9IFRlc3RBYXJjaDY0UGFnZXM2NGtCYXNlLmNvbmZp
-ZyArIFwKKyAgICAgICAgIiIiCisgICAgICAgIEJSMl9UT09MQ0hBSU5fQlVJTERST09UX1VDTElC
-Qz15CisgICAgICAgICIiIgorCitjbGFzcyBUZXN0QWFyY2g2NFBhZ2VzNjRrTXVzbChUZXN0QWFy
-Y2g2NFBhZ2VzNjRrQmFzZSk6CisgICAgX190ZXN0X18gPSBUcnVlCisgICAgY29uZmlnID0gVGVz
-dEFhcmNoNjRQYWdlczY0a0Jhc2UuY29uZmlnICsgXAorICAgICAgICAiIiIKKyAgICAgICAgQlIy
-X1RPT0xDSEFJTl9CVUlMRFJPT1RfTVVTTD15CisgICAgICAgICIiIgorCi0tIAoyLjM3LjEKCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=7451295826865fc08eb067ad226a11fd1c2b4512
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Bump U-Boot to version 2022.04 and remove the two patches
+that have already been upstreamed.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Acked-By: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...imx8mm-kontron-n801x-s-convert-options-to.patch |  31 ---
+ ...imx8mm-kontron-n801x-s-add-common-board-u.patch | 305 ---------------------
+ configs/kontron_bl_imx8mm_defconfig                |   4 +-
+ 3 files changed, 1 insertion(+), 339 deletions(-)
+
+diff --git a/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch b/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
+deleted file mode 100644
+index 6d76282def..0000000000
+--- a/board/kontron/bl-imx8mm/patches/uboot/0001-imx-imx8mm-imx8mm-kontron-n801x-s-convert-options-to.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 95a311af81cd47c44d3d6e3f717f06a06d8f3dfd Mon Sep 17 00:00:00 2001
+-From: Heiko Thiery <heiko.thiery@gmail.com>
+-Date: Mon, 10 Jan 2022 14:13:02 +0100
+-Subject: [PATCH 1/2] imx: imx8mm: imx8mm-kontron-n801x-s: convert options to Kconfig
+-
+-CONFIG_SPL_MMC and CONFIG_SPL_SERIAL
+-
+-Patch submitted upstream:
+-https://patchwork.ozlabs.org/project/uboot/patch/20220112085755.7396-1-heiko.thiery@gmail.com/
+-
+-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+----
+- configs/kontron-sl-mx8mm_defconfig | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/configs/kontron-sl-mx8mm_defconfig b/configs/kontron-sl-mx8mm_defconfig
+-index 35d12fca32..940bf07a92 100644
+---- a/configs/kontron-sl-mx8mm_defconfig
+-+++ b/configs/kontron-sl-mx8mm_defconfig
+-@@ -15,6 +15,8 @@ CONFIG_SPL_DM_SPI=y
+- CONFIG_DEFAULT_DEVICE_TREE="imx8mm-kontron-n801x-s"
+- CONFIG_SPL_TEXT_BASE=0x7E1000
+- CONFIG_TARGET_KONTRON_MX8MM=y
+-+CONFIG_SPL_MMC=y
+-+CONFIG_SPL_SERIAL=y
+- CONFIG_BOOTCOUNT_BOOTLIMIT=3
+- CONFIG_SPL=y
+- CONFIG_DISTRO_DEFAULTS=y
+--- 
+-2.30.2
+-
+diff --git a/board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch b/board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch
+deleted file mode 100644
+index a88d7aba87..0000000000
+--- a/board/kontron/bl-imx8mm/patches/uboot/0002-imx-imx8mm-imx8mm-kontron-n801x-s-add-common-board-u.patch
++++ /dev/null
+@@ -1,305 +0,0 @@
+-From ef694c19c074333fd16589ec6ffef3e7ca895186 Mon Sep 17 00:00:00 2001
+-From: Heiko Thiery <heiko.thiery@gmail.com>
+-Date: Wed, 12 Jan 2022 08:44:36 +0100
+-Subject: [PATCH 2/2] imx: imx8mm: imx8mm-kontron-n801x-s: add common board
+- u-boot.dtsi
+-
+-When using a board variant that selects the lvds specific dtb the
+-*.u-boot.dtsi file will not be included. To have a lvds dtb specific
+-u-boot.dtsi file move this part to a common board u-boot.dtsi file and
+-include this in the board base u-boot.dtsi and create an additional one
+-for the lvds variant.
+-
+-Patch submitted upstream:
+-https://patchwork.ozlabs.org/project/uboot/patch/20220112085755.7396-2-heiko.thiery@gmail.com/
+-
+-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+----
+- .../imx8mm-kontron-n801x-s-lvds-u-boot.dtsi   |   6 +
+- .../dts/imx8mm-kontron-n801x-s-u-boot.dtsi    | 124 +----------------
+- arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi | 128 ++++++++++++++++++
+- 3 files changed, 135 insertions(+), 123 deletions(-)
+- create mode 100644 arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi
+- create mode 100644 arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi
+-
+-diff --git a/arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi b/arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi
+-new file mode 100644
+-index 0000000000..4bf75722bf
+---- /dev/null
+-+++ b/arch/arm/dts/imx8mm-kontron-n801x-s-lvds-u-boot.dtsi
+-@@ -0,0 +1,6 @@
+-+// SPDX-License-Identifier: GPL-2.0+
+-+/*
+-+ * Copyright (C) 2019 Kontron Electronics GmbH
+-+ */
+-+
+-+#include "imx8mm-kontron-n801x-u-boot.dtsi"
+-diff --git a/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi b/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi
+-index 22d18e6f1c..4bf75722bf 100644
+---- a/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi
+-+++ b/arch/arm/dts/imx8mm-kontron-n801x-s-u-boot.dtsi
+-@@ -3,126 +3,4 @@
+-  * Copyright (C) 2019 Kontron Electronics GmbH
+-  */
+- 
+--#include "imx8mm-u-boot.dtsi"
+--
+--/ {
+--	aliases {
+--		usb0 = &usbotg1;
+--		usb1 = &usbotg2;
+--	};
+--
+--	wdt-reboot {
+--		compatible = "wdt-reboot";
+--		wdt = <&wdog1>;
+--		u-boot,dm-spl;
+--	};
+--
+--	firmware {
+--		optee {
+--			compatible = "linaro,optee-tz";
+--			method = "smc";
+--		};
+--	};
+--};
+--
+--&fec1 {
+--	phy-mode = "rgmii-rxid";
+--};
+--
+--&i2c1 {
+--	u-boot,dm-spl;
+--	u-boot,dm-pre-reloc;
+--};
+--
+--&i2c2 {
+--	status = "okay";
+--	u-boot,dm-spl;
+--	u-boot,dm-pre-reloc;
+--};
+--
+--&pinctrl_ecspi1 {
+--	u-boot,dm-spl;
+--};
+--
+--&pinctrl_i2c1 {
+--	u-boot,dm-spl;
+--};
+--
+--&pinctrl_pmic {
+--	u-boot,dm-spl;
+--	fsl,pins = <
+--		MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0		0x141
+--		/* Disable Pullup for SD_VSEL */
+--		MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4		0x41
+--	>;
+--};
+--
+--&pinctrl_uart3 {
+--	u-boot,dm-spl;
+--	u-boot,dm-pre-reloc;
+--};
+--
+--&pinctrl_usdhc1 {
+--	u-boot,dm-spl;
+--};
+--
+--&pinctrl_usdhc1_100mhz {
+--	u-boot,dm-spl;
+--};
+--
+--&pinctrl_usdhc1_200mhz {
+--	u-boot,dm-spl;
+--};
+--
+--&pinctrl_usdhc2 {
+--	u-boot,dm-spl;
+--};
+--
+--&pca9450 {
+--	u-boot,dm-spl;
+--};
+--
+--&{/soc@0/bus@30800000/i2c@30a20000/pmic@25/regulators} {
+--	u-boot,dm-spl;
+--};
+--
+--&ecspi1 {
+--	u-boot,dm-spl;
+--};
+--
+--&gpio1 {
+--	u-boot,dm-spl;
+--};
+--
+--&gpio2 {
+--	u-boot,dm-spl;
+--};
+--
+--&gpio3 {
+--	u-boot,dm-spl;
+--};
+--
+--&gpio4 {
+--	u-boot,dm-spl;
+--};
+--
+--&gpio5 {
+--	u-boot,dm-spl;
+--};
+--
+--&uart3 {
+--	u-boot,dm-spl;
+--	u-boot,dm-pre-reloc;
+--};
+--
+--&usdhc1 {
+--	u-boot,dm-spl;
+--};
+--
+--&usdhc2 {
+--	u-boot,dm-spl;
+--};
+--
+--&wdog1 {
+--	u-boot,dm-spl;
+--};
+-+#include "imx8mm-kontron-n801x-u-boot.dtsi"
+-diff --git a/arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi b/arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi
+-new file mode 100644
+-index 0000000000..22d18e6f1c
+---- /dev/null
+-+++ b/arch/arm/dts/imx8mm-kontron-n801x-u-boot.dtsi
+-@@ -0,0 +1,128 @@
+-+// SPDX-License-Identifier: GPL-2.0+
+-+/*
+-+ * Copyright (C) 2019 Kontron Electronics GmbH
+-+ */
+-+
+-+#include "imx8mm-u-boot.dtsi"
+-+
+-+/ {
+-+	aliases {
+-+		usb0 = &usbotg1;
+-+		usb1 = &usbotg2;
+-+	};
+-+
+-+	wdt-reboot {
+-+		compatible = "wdt-reboot";
+-+		wdt = <&wdog1>;
+-+		u-boot,dm-spl;
+-+	};
+-+
+-+	firmware {
+-+		optee {
+-+			compatible = "linaro,optee-tz";
+-+			method = "smc";
+-+		};
+-+	};
+-+};
+-+
+-+&fec1 {
+-+	phy-mode = "rgmii-rxid";
+-+};
+-+
+-+&i2c1 {
+-+	u-boot,dm-spl;
+-+	u-boot,dm-pre-reloc;
+-+};
+-+
+-+&i2c2 {
+-+	status = "okay";
+-+	u-boot,dm-spl;
+-+	u-boot,dm-pre-reloc;
+-+};
+-+
+-+&pinctrl_ecspi1 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&pinctrl_i2c1 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&pinctrl_pmic {
+-+	u-boot,dm-spl;
+-+	fsl,pins = <
+-+		MX8MM_IOMUXC_GPIO1_IO00_GPIO1_IO0		0x141
+-+		/* Disable Pullup for SD_VSEL */
+-+		MX8MM_IOMUXC_GPIO1_IO04_GPIO1_IO4		0x41
+-+	>;
+-+};
+-+
+-+&pinctrl_uart3 {
+-+	u-boot,dm-spl;
+-+	u-boot,dm-pre-reloc;
+-+};
+-+
+-+&pinctrl_usdhc1 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&pinctrl_usdhc1_100mhz {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&pinctrl_usdhc1_200mhz {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&pinctrl_usdhc2 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&pca9450 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&{/soc@0/bus@30800000/i2c@30a20000/pmic@25/regulators} {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&ecspi1 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&gpio1 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&gpio2 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&gpio3 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&gpio4 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&gpio5 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&uart3 {
+-+	u-boot,dm-spl;
+-+	u-boot,dm-pre-reloc;
+-+};
+-+
+-+&usdhc1 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&usdhc2 {
+-+	u-boot,dm-spl;
+-+};
+-+
+-+&wdog1 {
+-+	u-boot,dm-spl;
+-+};
+--- 
+-2.30.2
+-
+diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
+index 2b7e121e25..705222df28 100644
+--- a/configs/kontron_bl_imx8mm_defconfig
++++ b/configs/kontron_bl_imx8mm_defconfig
+@@ -3,8 +3,6 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-BR2_GLOBAL_PATCH_DIR="board/kontron/bl-imx8mm/patches"
+-
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
+ 
+@@ -40,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30880
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron-sl-mx8mm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
