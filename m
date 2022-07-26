@@ -1,50 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25FB3C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 18:50:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DC40C00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 18:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD8B3607F5;
-	Tue, 26 Jul 2022 18:50:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD8B3607F5
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB7564015E;
+	Tue, 26 Jul 2022 18:51:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB7564015E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JH98scpJMDYN; Tue, 26 Jul 2022 18:50:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iPkrx4jCe9jT; Tue, 26 Jul 2022 18:51:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE2CA605AF;
-	Tue, 26 Jul 2022 18:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE2CA605AF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3D3611BF27C
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 18:50:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EBDA840463;
+	Tue, 26 Jul 2022 18:51:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBDA840463
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 534671BF27C
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 18:50:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 175C78175E
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 18:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 175C78175E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AC854015E
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 18:50:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AC854015E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lkwkc8SDbpe2 for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 18:50:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47AE381455
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 18:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47AE381455
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E5DCB85F52; Tue, 26 Jul 2022 18:36:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 20:43:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5f54ccb46f7f35c4b73418d10f51ad4525a1e6ca
-X-Git-Newrev: 7050140f23655511bb219c3a9829846ffb6123c5
-X-Patchwork-Hint: ignore
-Message-Id: <20220726183654.E5DCB85F52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnuradio: use external volk
- instead of the internal one
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5vVpSXGEumkk for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 18:50:50 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC35040156
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CC35040156
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 18:50:49 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id DF18920009;
+ Tue, 26 Jul 2022 18:50:46 +0000 (UTC)
+Date: Tue, 26 Jul 2022 20:50:45 +0200
+To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Message-ID: <20220726205045.6b14ec12@windsurf>
+In-Reply-To: <20220208162409.496110-2-gwenj@trabucayre.com>
+References: <20220208162409.496110-1-gwenj@trabucayre.com>
+ <20220208162409.496110-2-gwenj@trabucayre.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658861447;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=5JMju0cjc9Z1l7vc9EU6Y5E0Ng7Ice1W+UMfR0FrI9o=;
+ b=K/5bPHWCjSWoWhjaSR9pH6p9N7VgSJg4ZFsk+3Li2Ui2YuQF0TE9ithXHq5euI54daUsBX
+ RGD3dG5X+OcHAvcxdLP+NU6YxCpqRAUCdbLII3wraJcrTna5X0oLU3AmCbWphEb+odXJYu
+ h87aw8mLPKSigngXRHRU4+Nj5+UiuXRcjpJkEkLMLvLXs7BCXOWxscTQ5X53zIExOKt9KD
+ FsfVKHUt0PEgbXH+YfM+Z4bZpvQFE3SuXXuY7zpJ3d3GadDSb8vJZ4YIlW20ERIqMa9IU1
+ 95nIGS+jT2yrRhMqcbE7cwKKQlrwQvcpoY75fXVgWpt3fdNSIScmunavyfIr8g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=K/5bPHWC
+Subject: Re: [Buildroot] [PATCH 2/2] package/gnuradio: move to package/volk
+ instead of using the internal one
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,65 +79,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7050140f23655511bb219c3a9829846ffb6123c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  8 Feb 2022 17:24:09 +0100
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
-Until recent releases GNURadio was shipped with volk as a
-submodule. Even though we still use 3.8.x, with the newer 3.9 and
-3.10, volk is no longer available as a submodule, and it is needed to
-build it separately.
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Until recent releases GNURadio was shipped with volk as a submodule. With 3.9
+> and 3.10 this is no more true and requires building volk before GNURadio.
+> 
+> This patch disable internal's volk, and add a dependency to the corresponding
+> package, to use inconditionnaly the one build by buildroot 
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+>  package/gnuradio/Config.in   | 1 +
+>  package/gnuradio/gnuradio.mk | 4 +++-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
 
-In order to prepare for this, this patch disable the internal volk,
-and adds a dependency to the corresponding package, to use
-unconditionnaly the one built by Buildroot.
+Applied to master, thanks.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gnuradio/Config.in   | 1 +
- package/gnuradio/gnuradio.mk | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 1896d1326a..103175946c 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -28,6 +28,7 @@ config BR2_PACKAGE_GNURADIO
- 	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_LOG4CPP
- 	select BR2_PACKAGE_GMP
-+	select BR2_PACKAGE_VOLK
- 	help
- 	  GNU Radio is a free & open-source software development
- 	  toolkit that provides signal processing blocks to implement
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 49e3b95191..e36dce081c 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -19,13 +19,15 @@ GNURADIO_DEPENDENCIES = \
- 	host-swig \
- 	boost \
- 	log4cpp \
--	gmp
-+	gmp \
-+	volk
- 
- GNURADIO_CONF_OPTS = \
- 	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
- 	-DENABLE_DEFAULT=OFF \
- 	-DENABLE_VOLK=ON \
- 	-DENABLE_GNURADIO_RUNTIME=ON \
-+	-DENABLE_INTERNAL_VOLK=OFF \
- 	-DENABLE_TESTING=OFF \
- 	-DXMLTO_EXECUTABLE=NOTFOUND
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
