@@ -1,135 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FF29C433EF
-	for <buildroot@archiver.kernel.org>; Mon, 25 Jul 2022 22:32:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B6E6C43334
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 03:41:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DADD883E4B;
-	Mon, 25 Jul 2022 22:32:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DADD883E4B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7859341B5B;
+	Tue, 26 Jul 2022 03:41:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7859341B5B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DNiYPi7gW7nH; Mon, 25 Jul 2022 22:32:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 74cMedOWYR-x; Tue, 26 Jul 2022 03:41:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B76B83E46;
-	Mon, 25 Jul 2022 22:32:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B76B83E46
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E874410BE;
+	Tue, 26 Jul 2022 03:41:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E874410BE
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D15491BF363
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:30:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CB4331BF309
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 03:41:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8A6A837C9
- for <buildroot@lists.busybox.net>; Mon, 25 Jul 2022 22:30:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8A6A837C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id A56BB83F61
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 03:41:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A56BB83F61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DWTmgZsSEFNP for <buildroot@lists.busybox.net>;
- Mon, 25 Jul 2022 22:30:25 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 431F183300
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com
- (mail-bn7nam10on2139.outbound.protection.outlook.com [40.107.92.139])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 431F183300
- for <buildroot@buildroot.org>; Mon, 25 Jul 2022 22:30:25 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eDKOLnz8NSEbBfXmnR6wwVFsB80MHg6t8vV7sD6MxJMBnMmTzHDwW4WTwsCaoe9w8IxrAK+CNhv8Mua0Hz3yeEUgVBS/hxjVdNgczAXIaEmE4+uNrjxmnT0HINuAlZ9wtx2kitgkkqC1udjd+4iBSVpeQP7uvAA+n4dgNgazDSy/NLrW+jFvdvkSMrFJAdtkunks8Vr8EAJzYVi6n1Izy6/bwak543j1GcSnqaIU2mI/ApF6S4lorXWcHreZXPCxV18Y+exQVBTRTNbwPvsUmfGrTp5uPZD7MgctqY5Rcev5iZcSUNdr5dFx5JEu7T99Xq7SRRjwIEMVAMdnURYfNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BXFMXxjWVDqwVgMQAgEZyHgovNBI8yWuVv5CIHd8sko=;
- b=ILVmPRkCnVXpvGFC8KS5TG0bQsZ07uPGQ3RHjnhwIbWy9SIzknwIQg29LQ7Ds3NUigFMuJArlSKuC1vMMvD5C0f6947p+rmT5ZLoTSanD3jHQEvCNfmN6wgT2RySAJE4G4Dpfxqbe+6Wo4s8ePFyTG0TRdQW5P/eXLdUGDvj/+crF+57kcuPh9ZVNoZr8PYwMqkSG9DljQqtTiiTauxdmM2X+dfucVLz5xxZcsZtqO7nEqL5TGfqj/qIFX1b6YIF3akAOd/XOAnJnsWT6H2kW6FFjJpoQak5K7eh7l17V3N2Z/gducW3BKkBHc8R+wZQjt1yqlvFOUU5Qbcs+RaGFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by BL0PR10MB2817.namprd10.prod.outlook.com
- (2603:10b6:208:77::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Mon, 25 Jul
- 2022 22:30:21 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::7451:2903:45de:3912]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::7451:2903:45de:3912%7]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
- 22:30:21 +0000
-Date: Mon, 25 Jul 2022 22:30:09 -0700
-From: Colin Foster <colin.foster@in-advantage.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <Yt974a8KLSLnCTt+@COLIN-DESKTOP1.localdomain>
-References: <20220720171125.2914642-1-colin.foster@in-advantage.com>
- <0f201981-84b3-db70-6fa1-091c3ae61882@mind.be>
-Content-Disposition: inline
-In-Reply-To: <0f201981-84b3-db70-6fa1-091c3ae61882@mind.be>
-X-ClientProxiedBy: MW4P221CA0020.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:303:8b::25) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+ with ESMTP id K1G1_JZrKyx1 for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 03:41:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA00F833C7
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EA00F833C7
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 03:41:51 +0000 (UTC)
+X-IronPort-AV: E=Sophos;i="5.93,193,1654531200"; d="scan'208";a="206890884"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com)
+ ([199.255.45.15])
+ by ob1.hgst.iphmx.com with ESMTP; 26 Jul 2022 11:41:49 +0800
+IronPort-SDR: KYYEzOV2zDKEInxuhknni6SNhBpgwfyMwTDhyptFV0e88QzhnQudt73odmGVegA6qwjLyFKXAI
+ WBRgfFGl2uzAaOpewb1K9iO4+u3AaUTXGGfDO5nONAJUdbdhofB/tHjAMTmZZJ5YXMWuaKJdDV
+ 3onKMTlp0bfxXRIHhvJwt6Diw+8vNrkm25Ur60OHcVTKWvxnMdCoPqYoUgRL1zp6srp7CXxXJ6
+ UZDa9pPfvxLdvw1J8icHT4tjDkMoT54l0BD0k6NTd1s2cfKWmcuTNcz+lhrmUHflJTg4DeuUvf
+ fnPj2gMBc4on7wnCcubR+L/k
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+ by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 25 Jul 2022 19:58:06 -0700
+IronPort-SDR: vWWyEJsgfQYlly3KfFHPk+rb+dAdWHBJqMaVbmOjHAcB5pHc9ZISiTHDyYMyYWr93t4PznvBpP
+ 2/PhzOf6ejQkfI7B8tI7Q7e9ImXEhflSyZZxmb/ZpalD6yuZlBVXzNWy8srGr75mp3DUILsyt8
+ IbpO8RREtYnN0wbuN/5lgSxf4JnwRbQSvhtYVpmyR2VVKjKyyGOp2iV+z4DP+xEuq8pume6jzz
+ Ylxn4nNviakEF8MxDz8UDRnMXFlgX6IyEVbsGkNw09Eqn0pSxIB1TSi59YaV3jhk9aVZW/yFPl
+ MXA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+ by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 25 Jul 2022 20:41:51 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LsN4t4DxBz1RwqM
+ for <buildroot@buildroot.org>; Mon, 25 Jul 2022 20:41:50 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+ by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new,
+ port 10026) with ESMTP id zo1J21ksSS3n for <buildroot@buildroot.org>;
+ Mon, 25 Jul 2022 20:41:49 -0700 (PDT)
+Received: from [10.225.163.10] (unknown [10.225.163.10])
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LsN4n6BFQz1RtVk;
+ Mon, 25 Jul 2022 20:41:45 -0700 (PDT)
+Message-ID: <493e8a12-f32a-0abe-7bb4-ecc4233f6fd6@opensource.wdc.com>
+Date: Tue, 26 Jul 2022 12:41:44 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9531eb2c-f161-43d8-9b97-08da6e8d3f8f
-X-MS-TrafficTypeDiagnostic: BL0PR10MB2817:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zxI+Owsep/QITpGhaVFRNu8ytBGjJq0VinBD55ivdIZfkiOzlK29vYtVEHDRs6qCr0ejYPU7ZflDDmZ5eqNYfejmQ0x+BZt6oW43lcYgTs2oAjcOxdrDr4wNsvAWITzGe+yXfzonvjCb8kiWsPx0M8dHMVdQgqXumSBBzgzZY7yPKjRJ1F1cyANzGvmB5Cl3HtpEqjBbBkDc181jY3e8+eobOVLYzCQIGijFrG8z0Xo2Y7oSgHDlTBXz6ktXX0xBOrp0pw4DGYRTJZuotVxfMVHi1ovSXyFe+nDXiBb4UiMNHuygWv7/QDecrNA5s8OqjiCLOq3N1v1xwzDqCqJpN6yh7TsbmfCV6aE98+ZKV3yqxqMmHW/7GIiSm3nWprqQu4jgMqLlaKi5S7J8FMOSl91a8a0minOI6KpWc3idJyoneKvIblZXQN70hiNBq6Geg1N9hOLmXpneKnILTVZUzP6qg5AeqOAK+q/3IyyPNBzkZEqoP/yt6enSAeJ9juZjRDh2X3usuAslhe0eZQETy3Wl3JLcobxCuOcoF8KL59TUjsLJ+pCW3H76Y7SE+7bo+X/X5/I4rw7tDS0pA8OEEDiSHqi0QAIdG1FAcyvBhWk2IJJk4bBGWKP5QJffFobOpMOT1FuSvKLER3Rm7MUAQ0hXe+8aXnWxKe8MabCK4dOmBzHUTZIdIvncGIJUqcl0ZsStVJ+qRhW/lHxQiXV/2ysnYkE7UdiMM2IDtAVX+ZFAuwNz+JwCTk6VH2Rmvs2r
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:MWHPR1001MB2351.namprd10.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(346002)(39830400003)(376002)(396003)(366004)(136003)(6916009)(83380400001)(86362001)(66556008)(4326008)(8676002)(316002)(66476007)(66946007)(2906002)(186003)(5660300002)(8936002)(44832011)(38100700002)(4744005)(6506007)(9686003)(6512007)(26005)(53546011)(41300700001)(6486002)(478600001)(6666004);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1UcZkeGPEtV8yi51BSi90CJazX4YRRs8UT2glw+fAmt0roAp/7Hvuc8LMBzo?=
- =?us-ascii?Q?lYIm7M6/Dwjog7fdDyWWe1hSpZ5Pk16ksKq740vqrUtLkpHzt0/Wf2SC3aEJ?=
- =?us-ascii?Q?I8ehIHML+k2Km+FiBgSYK2rrkm1s2SZvYkKeVWJd4qb5IzVhX1aCazJWhzqR?=
- =?us-ascii?Q?aCWAtnIAsJYmI+n43ZsiBarPQR9Jj1icm5ZVh4wf7xa9nXwLDNdaz0HEh6wi?=
- =?us-ascii?Q?2su++Axh4PmONWvfZzVCnTAT5dB4iB/FSpNjoraCc1VwYHW24VWtKv4Kf3xW?=
- =?us-ascii?Q?cExUEOoiKTWmOJQjia4AXS1Kpy6j3tiG5otLV95cMRNrnQ8qWtB93e9pGYHk?=
- =?us-ascii?Q?vBLsPSeC6AXGuWt1JHzet+s9cLEBFoQoRD/uJW5Ievu36X9YLTJgRY7O17Cm?=
- =?us-ascii?Q?4y3htzU80DGfiKzDyc3Fy9yDMtrehAPDuCJ/IUVJc9GWqcAfEQ8dr8PbgI2y?=
- =?us-ascii?Q?epUEhgjd/N/Z1cheImNeIFjpEtIlK8Em6KRgdZQRbse/F6GTxxWOY2AS2v3B?=
- =?us-ascii?Q?3hPpIWP3Tq22mXhnuuzpnNRJcFy0K7zZx5fdN8D+q4q9dbDMzI3psjY3Qaq6?=
- =?us-ascii?Q?b0wJQmZf9fsfXSOnQelHul01jwqNlDC1bv/hKQcmLp11XLqR6gxaqWs0m6HG?=
- =?us-ascii?Q?Cn4tA6g2amYdJ8ir+usAHKLKdChWs4uByNhyWqRNgb7UkvpWBkJfzU15Svtm?=
- =?us-ascii?Q?Bigl5MOanE/z1aS88JT2lVhTjcT4E7HuulVWaSCOZNuArVl1bTVSWwl/rgEx?=
- =?us-ascii?Q?7kExeplI+QAFPCCIwLo5GvQlMmqrxpw8Jvm13WiSO8ehlivhk8raWPNE5L4t?=
- =?us-ascii?Q?1cV0v86daXwks8nCSKABNPUp06zkhbkLB1ioLqQ16rt8MXt+BAQvo2yvhUet?=
- =?us-ascii?Q?HQf8ee/waoRxHcj5rU4ciq12gCoxiOw4PgL4O7aNNyH+r9og31akIyis134t?=
- =?us-ascii?Q?z2Rj0Lm4m9GlvhtKOi3maje72lgtzZCi/5gRduYPv/nfPMhQzLgCrX2uiOlE?=
- =?us-ascii?Q?nqG/rK8H0Ef/JphZeABr8cb7Hp5GNeGV1UtbqsOX3dlaDRW69tqLenQo/RAV?=
- =?us-ascii?Q?nfpd03U30KsWNsD7jkyWJEztGrkT7D06kfd4leuda6mPG9GekJhg86y6iC4U?=
- =?us-ascii?Q?u7NFICPP70ShCdlobXWS5FTpurTry2JM+3PisHPod25q/XrxWLR6WUV4s1Bn?=
- =?us-ascii?Q?3PnqYfUclFU1lPm44BFhi20B/HJgDFjRdGN2tczBlQ0f1RGhC/HpJYVTLYuA?=
- =?us-ascii?Q?Wvs2DVIGfKmOMUFeJTLeTMwZWf+IRR+KjVwRw8c5Hy3FSBd0NJ4MpBWv0Btv?=
- =?us-ascii?Q?SXZcm/YB0QQjzIQ0AZStcf7E974ORAGlDNNTHlW8xdKphRYH/CxghWHRPRub?=
- =?us-ascii?Q?kxcB1MD+JUo0Wu563J/TgdNhk3yEm4kqYWEL1tdUObPFS/0kfsPfeVEi69oQ?=
- =?us-ascii?Q?DVK/UZJzJLMdrYsbwHlTTV3G5euSvbbZfPNpa6zWLyUW1fymbe1FdrhCigtB?=
- =?us-ascii?Q?0+CVI2yRyXP2NEkkD7l8Pur0WxbHm7/oadCbWOP92J1jcL15vQBRxE8CatpD?=
- =?us-ascii?Q?cLmfoyyI7u6AdX9Zc/Nq390RxchDVXDwJIcsXovipGLAQbsfjfBfrWwmAmIr?=
- =?us-ascii?Q?ew=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9531eb2c-f161-43d8-9b97-08da6e8d3f8f
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 22:30:21.0288 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aAPGa9QVF4y1QxDaXmfHqrBsL1TRy99S7RR11XWE7mmXubs9xStsQlJN+DzDThLaWH0oeGxoBwb8rPm/3lOth/2f52Oxx1wcxdAWGBW6Z7s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR10MB2817
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BXFMXxjWVDqwVgMQAgEZyHgovNBI8yWuVv5CIHd8sko=;
- b=YojT8beFUqYUfqtT761ll6XSMrH1DOg2Uq4QbIIVo+yh+quirNG7HXwbA/EEI+ITiNgEYQBFo165IK9gLAQlx8HzT4MlcklExKh24rgyDVdoBASnPcn9YTvQa6wDJZV6KQUN9pgIbxlgH5VivcqS3+dLgMYRKfX8fNiGtVFJLdw=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Damien Le Moal via buildroot <buildroot@buildroot.org>
+References: <20220530033836.474926-1-damien.lemoal@opensource.wdc.com>
+ <20220530033836.474926-3-damien.lemoal@opensource.wdc.com>
+ <20220725164425.7316b2e3@windsurf>
+Organization: Western Digital Research
+In-Reply-To: <20220725164425.7316b2e3@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+ t=1658806911; x=1690342911;
+ h=message-id:date:mime-version:subject:to:cc:references:
+ from:in-reply-to:content-transfer-encoding;
+ bh=NjRPAUCMbZ8vJ9ZIuy2rXKfrLKmb5MqFi7ezdWDeLCA=;
+ b=PSe8iS1gf6PIZzsoPi2EPeF84ppTEBfNEFLiipMgUeqeFY5G6K7zkiWy
+ /MbDmXwiRnVCa1JAc8FurdWmNV6wwWoTyMn0ogIHZvUutpivHcaRGIewH
+ 1566U+BAlPHG43OEpgfE7kR8Fbra9yCOw4tyOeZoPmR5Q4WkASqpr/E4Q
+ 2dT7AYApjvpAb6fdgfCWHcjBEmO/VWP/6hcQTliC0cC7a5CpU7jE7POtv
+ TH02q4YBa8zeRG+tEIOKDoj6noC84bsJFCHltbuV2hfpeQKdK8RJ819E+
+ YMsXelSgb1uXn9tgLWIVQldn2QMEwpOQobtSQygXm5CAqelpvzuBceNcK
+ g==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+ opensource.wdc.com; h=content-transfer-encoding:content-type
+ :in-reply-to:organization:from:references:to:content-language
+ :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+ 1658806909; x=1661398910; bh=NjRPAUCMbZ8vJ9ZIuy2rXKfrLKmb5MqFi7e
+ zdWDeLCA=; b=g96ENq3+QGnV2aeqeyhUbdcoNmqWoEfozqTexPRrPIrpzsfzwZK
+ PU0N3IwTL9tinSkgiSnLdAEYkN078vomddKOA1da8eIUZz594cXoQtbQjMQppuOO
+ opb1dSGZ89hoTdpf0fGw9jhvebyRHvm3L2HsnYnc2Eb00dydb0fR3WfNFVFq1i7N
+ 01FbW86zBO4PLsZeeXB+ob1jsw3TzGKmyK8Z/7u5zfinNngH9N7AM7Xf60Qx0quI
+ 9mmaYLBdJbEmPNOp19G/wp1yTbRui3vl5s/IFJOBMd7uaDGTcTCNmFL44NR0Go1u
+ vrbiJDF/erRuLOmamRH0S+D7dwpodCy//0A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=inadvantage.onmicrosoft.com
- header.i=@inadvantage.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-inadvantage-onmicrosoft-com header.b=YojT8beF
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Subject: Re: [Buildroot] [PATCH v1] package/mstpd: fix mstpd bridge-stp use
- of pidof
+ dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
+ header.a=rsa-sha256 header.s=dkim.wdc.com header.b=PSe8iS1g; 
+ dkim=pass (2048-bit key) header.d=opensource.wdc.com
+ header.i=@opensource.wdc.com header.a=rsa-sha256 header.s=dkim
+ header.b=g96ENq3+
+X-Mailman-Original-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+ reason="pass (just generated, assumed good)"
+ header.d=opensource.wdc.com
+Subject: Re: [Buildroot] [PATCH v2 02/11] package: elf2flt: Update RISC-V
+ 64-bits support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -141,40 +126,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Damien Le Moal via buildroot <buildroot@buildroot.org>
+Reply-To: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc: Niklas Cassel <Niklas.Cassel@wdc.com>,
+ Alistair Francis <alistair@alistair23.me>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, Jul 23, 2022 at 02:47:51PM +0200, Arnout Vandecappelle wrote:
-> 
-> 
-> On 20/07/2022 19:11, Colin Foster wrote:
-> > Through mstpd version 0.1.0, the bridge-stp script uses the '-c'
-> > option to the pidof command. Busybox does not support this option, so
-> > mstpd does not work.
-> > 
-> > This has been fixed in the main development branch of mstpd, but it is
-> > unclear when the next release will be. In the meantime, apply the fix
-> > here so that mstpd will be useable until the next version release.
-> > 
-> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> 
->  Applied to master, thanks.
-> 
->  Would it be useful to add a runtime test for mstpd to detect such issues?
+On 7/25/22 23:44, Thomas Petazzoni wrote:
+> Hello Damien, Hello Niklas,
 
-That was my first fix attempt - run `pidof -c init` and see if it
-succeeded. Fall back to just `pidof` otherwise.
-
-We decided to just drop the -c argument entirely, since it probably
-wasn't needed.
++Geert
 
 > 
->  Regards,
->  Arnout
+> On Mon, 30 May 2022 12:38:27 +0900
+> Damien Le Moal via buildroot <buildroot@buildroot.org> wrote:
 > 
+>> From: Damien Le Moal <damien.lemoal@wdc.com>
+>>
+>> Remove the old elf2flt 0002-elf2flt-add-riscv-64-bits-support.patch
+>> patch file for riscv64 architecture and replace it with 3 patches:
+>>
+>> (1) The first patch fixes the data section alignment
+>> (2) The second patch fixes a bug with the handling of the eh_frame
+>>     section causing text and data section overlap problems.
+>> (3) The third patch adds a simpler riscv64 flat bin relocation support.
+>>
+>> These 3 patches are submitted to the upstream elf2flt project as pull
+>> request #22:
+>>
+>> https://github.com/uclinux-dev/elf2flt/pull/22
+> 
+> We are seeing an issue with this patch applied: it segfaults when
+> linking binaries on the m68k architecture.
+> 
+> To be fully clear, when we use the current version of elf2flt in
+> Buildroot (2021.02) + patch 0001-elf2flt-handle-binutils-2.34.patch +
+> patch 0002-elf2flt.ld-reinstate-32-byte-alignment-for-.data-sec.patch,
+> we have the following failure:
+> 
+>   /home/thomas/buildroot/outputs/m68k/host/m68k-buildroot-uclinux-uclibc/bin/elf2flt: ERROR: text=0x7db78 overlaps data=0x6b940 ?
+> 
+> which already existed *prior* to applying your patch.
+> 
+> However, as soon as we add
+> 0003-elf2flt-fix-.eh_frame-section-handling.patch into the patch series
+> applied to elf2flt, we get:
+> 
+>   ld (ld-elf2flt): /home/thomas/buildroot/outputs/m68k/host/m68k-buildroot-uclinux-uclibc/bin/elf2flt terminated with signal 11 [Segmentation fault], core dumped
+> 
+> Our friend gdb gives us some hint on where the segfault occurs:
+> 
+> #0  0x000055ebfc7524e0 in add_com_to_bss (bss_len=19112, number_of_symbols=3869, symbol_table=0x55ebfd601d50) at elf2flt.c:273
+> 273         if (strcmp("*COM*", symbol_table[i]->section->name) == 0) {
+> 
+> Of course, we're not sure if the error "ERROR: text=0x7db78 overlaps
+> data=0x6b940 ?" is fixed by your patch and a later problem causes the
+> segfault, or if your patch causes the segfault in the first place.
+> 
+> Please note that if we revert both
+> 32f93b0ef2c602dfa1f5b243ba865d5b16e2fa33 and
+> 65d78dcfeb8b2eafaebe2d0c3c8c42e7e85f46ac in Buildroot, we have a
+> working elf2flt for m68k.
+> 
+> Do you have any idea?
+> 
+> Thanks a lot!
+> 
+> Thomas
+
+
+-- 
+Damien Le Moal
+Western Digital Research
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
