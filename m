@@ -4,68 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCDD6C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 17:37:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4582CC00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 17:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B03960EE4;
-	Tue, 26 Jul 2022 17:37:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B03960EE4
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADF2D610B0;
+	Tue, 26 Jul 2022 17:41:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADF2D610B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EqcyjFbXgP4w; Tue, 26 Jul 2022 17:37:43 +0000 (UTC)
+	with ESMTP id CEMG3KsaN2gj; Tue, 26 Jul 2022 17:41:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78E6B600C7;
-	Tue, 26 Jul 2022 17:37:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78E6B600C7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A9DAD1BF957
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 17:37:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C603060EE4;
+	Tue, 26 Jul 2022 17:41:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C603060EE4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CFD41BF957
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 17:41:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 751B784751
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 17:37:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 751B784751
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7009560EE4
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 17:41:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7009560EE4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OV-bs5enXE07 for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 17:37:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F7C9845B9
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2F7C9845B9
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 17:37:39 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 82E851C0007;
- Tue, 26 Jul 2022 17:37:36 +0000 (UTC)
-Date: Tue, 26 Jul 2022 19:37:35 +0200
-To: Xuanhao Shi via buildroot <buildroot@buildroot.org>
-Message-ID: <20220726193735.735588e4@windsurf>
-In-Reply-To: <20220726165041.17584-2-x-shi@ti.com>
-References: <20220726165041.17584-1-x-shi@ti.com>
- <20220726165041.17584-2-x-shi@ti.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y1lUiMDraTAD for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 17:41:20 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C19260EE1
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7C19260EE1
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 17:41:20 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id m17so20858301wrw.7
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 10:41:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=lEZ5fVxZB9BEK+V8IcXqWEZjos/dh5powURA9Oga93A=;
+ b=ogwwlXVaoqHWOJR1MP0nZv3u2uavhfNAoUMmRLJlk71yl0V2qtnuQcC6lOsep+3l7t
+ OJHHCvhMRgmjy2eUeWxUizVyUtWfNoLTsIRqerdHCbBdeKx8TnZzA62ggfKF90pnEjTE
+ y8fwS/OPeRuhegV7B3A4M5QFGKbrZo0mvpIDQR1V2OCDv8eWQ1GYLoNBNpA6H5/YceZq
+ rf43M8xOVL4dgOPlman5hPvm8sDd4IZNO3CaIsvwkMnzLz29Fl4HmXw5TND63nKZBURj
+ 0VDR3bI3of+e191SF2MBjF+vZAqVZOnyNFIlGUkyCE9rVh22P7SfwVQJJZlOgUK4bYOI
+ Co4w==
+X-Gm-Message-State: AJIora/nJfFem0nj/2CqFwLS51jvJbxI+KRFcrLvdajeZum8weyBo5e3
+ wN6NrqsuYPHmQ6NXtNVaAJVN831wiK6gYQ==
+X-Google-Smtp-Source: AGRyM1vHhVJzXvjnEtphfthvBtW4lDDd5J5ZhhBvyUXqbWsHRNRiER2m+EgyZx73lRbE7ClU+FGCgw==
+X-Received: by 2002:a05:6000:178c:b0:21e:9970:fa7 with SMTP id
+ e12-20020a056000178c00b0021e99700fa7mr3780572wrg.133.1658857278325; 
+ Tue, 26 Jul 2022 10:41:18 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:86bb:8231:62d7:1874?
+ ([2a01:cb19:8acf:5600:86bb:8231:62d7:1874])
+ by smtp.gmail.com with ESMTPSA id
+ be13-20020a05600c1e8d00b003a340fb163csm15829454wmb.8.2022.07.26.10.41.17
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 26 Jul 2022 10:41:18 -0700 (PDT)
+Message-ID: <d37f0028-7f29-8e6e-54c5-c9e7de548b2c@smile.fr>
+Date: Tue, 26 Jul 2022 19:41:17 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>, buildroot@buildroot.org
+References: <20220208162409.496110-1-gwenj@trabucayre.com>
+ <20220208162409.496110-2-gwenj@trabucayre.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20220208162409.496110-2-gwenj@trabucayre.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658857057;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=teSo3cGgGxGlzpz6tnUrDsw6gyiha87j1eovjlk55KU=;
- b=VgUZHz68db3ifDKUsEHDKTgYVQi9RYFZ5JEbYXPgDIvfhWBZOJrrtBhynBYwfAq2FGtdsf
- ZF+kRe6myiUbQahmTd+rOQQoMYhGvYBbtryozdHv2zS8T/PDav0Di+0ydqAXYax9CEiZzS
- IsX8M1bmGKgdP6d7J+IFx0Csz7uC5BelVARDMj6psAfzJr4rdZSvC+tBqvFsFajGEfJUGa
- 1zRsB07HFGVfmt50Y6ReLQxI+HJ99EXFyD0hPJZNpePNZqBh7fEiWQHp0LJUohyP15zshX
- USF6eBM87XnrFuq4qSOhA+21EpbfugMTv4Hxboz/2Pm/7vgTKxMz589X1XiPDg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VgUZHz68
-Subject: Re: [Buildroot] [PATCH 1/4] package/arm-gnu-toolchain: add version
- selection
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=lEZ5fVxZB9BEK+V8IcXqWEZjos/dh5powURA9Oga93A=;
+ b=QLc+jI0qsmMBRpEsjVYEz3C/qMg//IncF7mBBffZgyU91uBmGtHBqMiBI5BEhqanft
+ dfjN1EHBR/wm4p9eF+HQe1v80RiCEmS90C/eQ0yrRIGPZCRzOlmc8MBCCCa4Uw4zDU39
+ iAR62l/o3dsW9aE1MhIDvXICXbEiSbvkg1xXIYZNcIg4YoPnOnDBFKqK7TSoDmArLOPt
+ YSchs4tyMzoi2482hHwUqK88OM8CbUrphJ3Z7AKmSShJdY7t97TnDlS3jcBKtVKgpinj
+ lmQYE6xpZcJUgatKxUwrTJbqI33kivAzW8s/i7WPGjTNv5G1JQ20d4VzDZEgRTyOZzhz
+ ekGg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=QLc+jI0q
+Subject: Re: [Buildroot] [PATCH 2/2] package/gnuradio: move to package/volk
+ instead of using the internal one
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,89 +101,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Xuanhao Shi <x-shi@ti.com>, Suniel Mahesh <sunil@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-On Tue, 26 Jul 2022 11:50:38 -0500
-Xuanhao Shi via buildroot <buildroot@buildroot.org> wrote:
-
-> Adds a way to select a custom toolchain link and
-> source instead of always using verion 11.2 due
-
-version -> version
-
-> to bugs in the newest version.
-
-Could you give some details on the "bugs" ?
-
-> diff --git a/package/arm-gnu-toolchain/Config.in.host b/package/arm-gnu-toolchain/Config.in.host
-> new file mode 100644
-> index 0000000000..25d0af1d04
-> --- /dev/null
-> +++ b/package/arm-gnu-toolchain/Config.in.host
-> @@ -0,0 +1,38 @@
-> +config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN
-> +	bool "host arm-gnu-toolchain"
-> +	help
-> +	  Separate ARM32 cross-compilation toolchain 
-> +	  for some AArch64 platforms.
-> +
-> +menu "host arm-gnu-toolchain version"
-> +	depends on BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN
-
-The menu is not needed.
-
-Use:
-
-if BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN
-
-...
-
-endif
-
-to enclose the options of this package.
-
-> +choice
-> +	bool "host arm-gnu-toolchain version"
-
-Just "version"
-
-> +config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_DEFAULT
-> +	bool "Version 11.2-2022.02"
-> +	help
-> +	  Use version 11.2.
-> +
-> +config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_CUSTOM
-> +	bool "Custom archived sources"
-> +	help
-> +	  Specify custom archive for the toolchain.
-
-Seeing what you end up needing in your defconfig, I think I would
-prefer explicit options for 11.x and 10.x, rather than all this
-"custom" mess.
-
-So just:
-
-config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_VERSION_11_X
-	...
-config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_VERSION_10_X
-	...
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gR3dlbmhhZWwsCgpMZSAwOC8wMi8yMDIyIMOgIDE3OjI0LCBHd2VuaGFlbCBHb2F2ZWMt
+TWVyb3UgYSDDqWNyaXTCoDoKPiBGcm9tOiBHd2VuaGFlbCBHb2F2ZWMtTWVyb3UgPGd3ZW5oYWVs
+LmdvYXZlYy1tZXJvdUB0cmFidWNheXJlLmNvbT4KPiAKPiBVbnRpbCByZWNlbnQgcmVsZWFzZXMg
+R05VUmFkaW8gd2FzIHNoaXBwZWQgd2l0aCB2b2xrIGFzIGEgc3VibW9kdWxlLiBXaXRoIDMuOQo+
+IGFuZCAzLjEwIHRoaXMgaXMgbm8gbW9yZSB0cnVlIGFuZCByZXF1aXJlcyBidWlsZGluZyB2b2xr
+IGJlZm9yZSBHTlVSYWRpby4KCkN1cnJlbnRseSBCdWlsZHJvb3Qgc3RpbGwgcHJvdmlkZSBnbnVy
+YWRpbyAzLjgsIGFkZGluZyB2b2xrIGRlcGVuZGVuY3kgaGVyZSBpcyBhCnByZWxpbWluYXJ5IHdv
+cmsgYmVmb3JlIGJ1bXBpbmcgZ251cmFkaW8gdG8gYSBuZXdlciB2ZXJzaW9uLgoKPiAKPiBUaGlz
+IHBhdGNoIGRpc2FibGUgaW50ZXJuYWwncyB2b2xrLCBhbmQgYWRkIGEgZGVwZW5kZW5jeSB0byB0
+aGUgY29ycmVzcG9uZGluZwo+IHBhY2thZ2UsIHRvIHVzZSBpbmNvbmRpdGlvbm5hbHkgdGhlIG9u
+ZSBidWlsZCBieSBidWlsZHJvb3QgCj4gCj4gU2lnbmVkLW9mZi1ieTogR3dlbmhhZWwgR29hdmVj
+LU1lcm91IDxnd2VuaGFlbC5nb2F2ZWMtbWVyb3VAdHJhYnVjYXlyZS5jb20+Cj4gLS0tCj4gIHBh
+Y2thZ2UvZ251cmFkaW8vQ29uZmlnLmluICAgfCAxICsKPiAgcGFja2FnZS9nbnVyYWRpby9nbnVy
+YWRpby5tayB8IDQgKysrLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMSBk
+ZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2dudXJhZGlvL0NvbmZpZy5pbiBi
+L3BhY2thZ2UvZ251cmFkaW8vQ29uZmlnLmluCj4gaW5kZXggMTg5NmQxMzI2YS4uMTAzMTc1OTQ2
+YyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2dudXJhZGlvL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2th
+Z2UvZ251cmFkaW8vQ29uZmlnLmluCj4gQEAgLTI4LDYgKzI4LDcgQEAgY29uZmlnIEJSMl9QQUNL
+QUdFX0dOVVJBRElPCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfQk9PU1RfVEhSRUFECj4gIAlzZWxl
+Y3QgQlIyX1BBQ0tBR0VfTE9HNENQUAo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0dNUAo+ICsJc2Vs
+ZWN0IEJSMl9QQUNLQUdFX1ZPTEsKCk1heWJlIHlvdSBjb3VsZCB1cGRhdGUgdGhlIGNvbW1lbnQg
+b24gd2NoYXIgZGVwZW5kZW5jeToKCmRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUiAjIGJvb3N0LCB2
+b2xrCgpSZXZpZXdlZC1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+CgpC
+ZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gIAloZWxwCj4gIAkgIEdOVSBSYWRpbyBpcyBhIGZyZWUg
+JiBvcGVuLXNvdXJjZSBzb2Z0d2FyZSBkZXZlbG9wbWVudAo+ICAJICB0b29sa2l0IHRoYXQgcHJv
+dmlkZXMgc2lnbmFsIHByb2Nlc3NpbmcgYmxvY2tzIHRvIGltcGxlbWVudAo+IGRpZmYgLS1naXQg
+YS9wYWNrYWdlL2dudXJhZGlvL2dudXJhZGlvLm1rIGIvcGFja2FnZS9nbnVyYWRpby9nbnVyYWRp
+by5tawo+IGluZGV4IDQxN2E1MWUwNjcuLmVkNzA2MGI4NWMgMTAwNjQ0Cj4gLS0tIGEvcGFja2Fn
+ZS9nbnVyYWRpby9nbnVyYWRpby5tawo+ICsrKyBiL3BhY2thZ2UvZ251cmFkaW8vZ251cmFkaW8u
+bWsKPiBAQCAtMTksMTMgKzE5LDE1IEBAIEdOVVJBRElPX0RFUEVOREVOQ0lFUyA9IFwKPiAgCWhv
+c3Qtc3dpZyBcCj4gIAlib29zdCBcCj4gIAlsb2c0Y3BwIFwKPiAtCWdtcAo+ICsJZ21wIFwKPiAr
+CXZvbGsKPiAgCj4gIEdOVVJBRElPX0NPTkZfT1BUUyA9IFwKPiAgCS1EUFlUSE9OX0VYRUNVVEFC
+TEU9JChIT1NUX0RJUikvYmluL3B5dGhvbjMgXAo+ICAJLURFTkFCTEVfREVGQVVMVD1PRkYgXAo+
+ICAJLURFTkFCTEVfVk9MSz1PTiBcCj4gIAktREVOQUJMRV9HTlVSQURJT19SVU5USU1FPU9OIFwK
+PiArCS1ERU5BQkxFX0lOVEVSTkFMX1ZPTEs9T0ZGIFwKPiAgCS1ERU5BQkxFX1RFU1RJTkc9T0ZG
+IFwKPiAgCS1EWE1MVE9fRVhFQ1VUQUJMRT1OT1RGT1VORAo+ICAKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
+bGlzdGluZm8vYnVpbGRyb290Cg==
