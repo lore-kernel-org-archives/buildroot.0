@@ -1,70 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EBA0C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 18:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FA3EC00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 18:55:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3A1C6063B;
-	Tue, 26 Jul 2022 18:55:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A1C6063B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29F658143C;
+	Tue, 26 Jul 2022 18:55:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29F658143C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XaXuug1kJEVP; Tue, 26 Jul 2022 18:55:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K7KUvNowqRIM; Tue, 26 Jul 2022 18:55:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A98C0605A6;
-	Tue, 26 Jul 2022 18:55:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A98C0605A6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24F7781447;
+	Tue, 26 Jul 2022 18:55:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24F7781447
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C41801BF27C
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 18:55:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 804A21BF27C
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 18:55:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B2054092C
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 18:55:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B2054092C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 668EF4092C
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 18:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 668EF4092C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GmWQoDVmcsh3 for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 18:55:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD287408E5
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BD287408E5
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 18:55:32 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8774220005;
- Tue, 26 Jul 2022 18:55:30 +0000 (UTC)
-Date: Tue, 26 Jul 2022 20:55:29 +0200
-To: Xuanhao Shi <x-shi@ti.com>
-Message-ID: <20220726205529.0e85e2de@windsurf>
-In-Reply-To: <20220726165041.17584-3-x-shi@ti.com>
-References: <20220726165041.17584-1-x-shi@ti.com>
- <20220726165041.17584-3-x-shi@ti.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id liB--qb4Rdmx for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 18:55:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C2B5408E5
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0C2B5408E5
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 18:55:45 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ ay11-20020a05600c1e0b00b003a3013da120so11872021wmb.5
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 11:55:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=DBuvuZReje1O11oZ3nEim8UbikjmY55WDBZKsl3LX6Y=;
+ b=PFWp3GdNs05pybYEwR5IQfJUVj+c/3374HIyi+UXTKyBtwiysnCCbfueT6wnbtS4HJ
+ 2XZL35BfmC4u3dIwwhdxBkvynLxQ/0b2XexJvs+zjc2eSvBuv12ktR/98uOtN6GZL003
+ /Uj1IVhSpMR8KMCrL5R2hJ0h9rlyR8NhxpNyaad0h1ManRD8kKTFIpPf+9lmHp6ugBW/
+ cmug55dgprfUKvoz9ydNQOVp4PiuyVmICWVn5QDw+8L+G1t9UFcafgdxegDQzu+bK+RF
+ +gFFqia9WLEhDL759ZxdChtZlnXMbDamDcUP+VdjWpwfsbS7h8yNxT5hHO+elmQSHWgS
+ 6GWg==
+X-Gm-Message-State: AJIora/pga3L6BMe/4dT1LH9QezX2DTSG/6Ue/I9D8vfdv8bVLzgc7KC
+ foNFQ44hfOmSvScq2I+JMUF7Mmc/mi2h+A==
+X-Google-Smtp-Source: AGRyM1t8kuirm4peC5gf5tcNq5xCbmLba4GyUVjBzGqAoSH+5Yw9+0HTLKnihWAYtPbIMEs5soyeng==
+X-Received: by 2002:a7b:c442:0:b0:3a3:bdb:e84c with SMTP id
+ l2-20020a7bc442000000b003a30bdbe84cmr379562wmi.101.1658861743986; 
+ Tue, 26 Jul 2022 11:55:43 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ j6-20020a5d4486000000b0021e47fb24a2sm15188544wrq.19.2022.07.26.11.55.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 26 Jul 2022 11:55:43 -0700 (PDT)
+Message-ID: <a6bc2746-d90b-f2c4-38eb-0d40250cbde1@mind.be>
+Date: Tue, 26 Jul 2022 20:55:42 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: Vincent Fazio <vfazio@xes-inc.com>, buildroot@buildroot.org
+References: <20220726174505.2976048-1-vfazio@xes-inc.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220726174505.2976048-1-vfazio@xes-inc.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658861730;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=k5jZ22C4f2HSfUb3cl3YsEwJRDqa8iYlXAEQle/V7Bo=;
- b=KGiJib/VzNI6dC+VMh5k9OFxon/l+pOksamiryfTw91cK7AqEs3UMmy9AlroB283I4jcaW
- mlYqUPGthhfiF+gg/GN1uRwtQHWAvwM1mpXuDei7quEle8F4dyMhggoK8Jyu7PRLCz44x3
- xnLHVlXZnwBMORUTz8kjChl661ddbuffPQ18+jRqLe/elZ1YmdNRihaqx0Gjoznx+k5Ln7
- wMkjm9U2fvfJqtvOx0l8lHB7OujWxBaJL4latWKkLcugq98JKDiFumSMmtVVXOMqDsdNLo
- j8ga6QXQK80AFA4FuMn0+ZqfOGEQMmnYsgavICATBzMbXiiddiogpt74suU/tg==
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=DBuvuZReje1O11oZ3nEim8UbikjmY55WDBZKsl3LX6Y=;
+ b=FuDyyuZUOlvo+Ip+WRanHPN72MIy76q3hceBrILPZ74kijAm4FB+0jCARMFuVfeC9m
+ r4sOMDySOEZIZOk/NqbFRE41+PDFztPItwl9GxPkPGTbtPpsJMB+Bu63C75CgRXYFCP/
+ 3S2hT7PNEal1C+7bs88XtnEZg3wUSbLeZ/eo7ubvLr/hwOI4nECjedpIEAAltTUaUKRA
+ vV5lR7nmL8sQIhwNEOfVVy9BSB4TCUsao9tbii5zeoXeDFGZBVY1lEZ0f+F7VWvPR1jy
+ XelYKR/ia3oDrOIWfe/OEzu3G0AFRz7rr1HFYr5D9ceHbktN2+saJ3FcWGM7PHWKa8mR
+ IzFQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KGiJib/V
-Subject: Re: [Buildroot] [PATCH 2/4] package/k3-image-gen: new package
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=FuDyyuZU
+Subject: Re: [Buildroot] [PATCH] package/mcelog: bump to version 184
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,137 +101,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+  Hi Vincent,
 
-Thanks for your contribution. However, as you will see below from my
-review, this will require significant rework, the approach you're
-taking is really not good.
-
-On Tue, 26 Jul 2022 11:50:39 -0500
-Xuanhao Shi <x-shi@ti.com> wrote:
-
-> k3-image-gen is a package that helps support TI's k3 SoCs
-> by building a separate boot binary, tiboot3.bin, on the R core.
+On 26/07/2022 19:45, Vincent Fazio wrote:
+> Minor changes necessary to fix building the package:
+>    - Call out host-python3 in the makefile
+>    - Patch genconfig.py to not use hardcoded python3 shebang
 > 
-> https://git.ti.com/cgit/k3-image-gen/k3-image-gen/about/
-> Signed-off-by: Xuanhao Shi <x-shi@ti.com>
+> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 > ---
->  package/Config.in                      |  1 +
->  package/k3-image-gen/Config.in         | 37 ++++++++++++++++++++++
->  package/k3-image-gen/k3-image-gen.hash |  2 ++
->  package/k3-image-gen/k3-image-gen.mk   | 43 ++++++++++++++++++++++++++
->  4 files changed, 83 insertions(+)
-
-A new package needs an entry in the DEVELOPERS file.
-
-Also, I think this package should probably go in boot/ instead of
-package/.
-
-> diff --git a/package/k3-image-gen/Config.in b/package/k3-image-gen/Config.in
+>   .../0001-Use-env-as-the-shebang-target.patch  | 33 +++++++++++++++++++
+>   package/mcelog/mcelog.hash                    |  2 +-
+>   package/mcelog/mcelog.mk                      |  3 +-
+>   3 files changed, 36 insertions(+), 2 deletions(-)
+>   create mode 100644 package/mcelog/0001-Use-env-as-the-shebang-target.patch
+> 
+> diff --git a/package/mcelog/0001-Use-env-as-the-shebang-target.patch b/package/mcelog/0001-Use-env-as-the-shebang-target.patch
 > new file mode 100644
-> index 0000000000..3522382677
+> index 0000000000..ce9fc9c44c
 > --- /dev/null
-> +++ b/package/k3-image-gen/Config.in
-> @@ -0,0 +1,37 @@
-> +config BR2_PACKAGE_K3_IMAGE_GEN
-> +	bool "k3-image-gen"
-> +	help
-> +	  Using TI's k3-image-gen to build a separate bare metal
-> +	  boot binary from a separate spl. Currently supports
-> +	  version 08.04.00.004 as default.
+> +++ b/package/mcelog/0001-Use-env-as-the-shebang-target.patch
+> @@ -0,0 +1,33 @@
+> +From c6eee289225beccfc40c73d31baa4179abc5ac57 Mon Sep 17 00:00:00 2001
+> +From: Vincent Fazio <vfazio@xes-inc.com>
+> +Date: Thu, 21 Jul 2022 16:56:11 -0500
+> +Subject: [PATCH] Use env as the shebang target
 > +
-> +	  https://git.ti.com/cgit/k3-image-gen/k3-image-gen/
+> +Let the script be flexible when it comes to finding the python3
+> +interpreter.
 > +
-> +menu "U-Boot SPL Build Options"
-> +	depends on BR2_PACKAGE_K3_IMAGE_GEN
+> +Some build wrappers, such as buildroot, will provide a python3 binary
+> +for use by scripts but it will not be at the fixed path of /usr/bin/.
+> +Instead it will be available in a path defined in $PATH
 > +
-> +config BR2_PACKAGE_K3_IMAGE_GEN_UBOOT_SPL_DEFCONFIG
-> +	string "U-Boot SPL defconfig for image gen"
-> +	help
-> +	  This is the defconfig without the suffix for the separate SPL.
-> +	  For example, "am64x_evm_r5" for AM64X boards.
-
-Do you need two U-Boot builds, one for the main U-Boot running on the
-Cortex-A cores and one U-Boot running on the Cortex-R5 core ?
-
-
-> diff --git a/package/k3-image-gen/k3-image-gen.hash b/package/k3-image-gen/k3-image-gen.hash
-> new file mode 100644
-> index 0000000000..393c7726cd
-> --- /dev/null
-> +++ b/package/k3-image-gen/k3-image-gen.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 8446d4f169b894304593f0c325028f25e401d0b793d6fd3aa9efa3da937222d2  k3-image-gen-08.04.00.004.tar.gz
-> diff --git a/package/k3-image-gen/k3-image-gen.mk b/package/k3-image-gen/k3-image-gen.mk
-> new file mode 100644
-> index 0000000000..5449a2d0a5
-> --- /dev/null
-> +++ b/package/k3-image-gen/k3-image-gen.mk
-> @@ -0,0 +1,43 @@
-> +################################################################################
-> +#
-> +#k3-image-gen
-> +#
-> +################################################################################
+> +Using env as the shebang target with python3 as the command will follow
+> +$PATH search priority when determining the python3 interpreter.
 > +
-> +K3_IMAGE_GEN_VERSION = 08.04.00.004
-> +K3_IMAGE_GEN_SITE = https://git.ti.com/cgit/k3-image-gen/k3-image-gen/snapshot
-> +K3_IMAGE_GEN_SOURCE = k3-image-gen-$(K3_IMAGE_GEN_VERSION).tar.gz
-> +K3_IMAGE_GEN_LICENSE = GPL-2.0+
+> +Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 
-Do you have a license file ?
+  Please include a link to your upstream contribution, i.e.:
 
-> +K3_IMAGE_GEN_MAKE = $(BR2_MAKE)
+Upstream: https://github.com/andikleen/mcelog/pull/xxxx
+
+
+  Regards,
+  Arnout
+
+> +---
+> + genconfig.py | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
 > +
-> +K3_IMAGE_GEN_UBOOT_SPL_ARCH = arm
-> +K3_IMAGE_GEN_UBOOT_SPL_CROSS = \
-> +$(HOST_ARM_GNU_TOOLCHAIN_INSTALL_DIR)/bin/arm-none-eabi-
-> +K3_IMAGE_GEN_UBOOT_SPL_DEFCONFIG = \
-> +$(call qstrip, $(BR2_PACKAGE_K3_IMAGE_GEN_UBOOT_SPL_DEFCONFIG))_defconfig
+> +diff --git a/genconfig.py b/genconfig.py
+> +index a387cb3..48c1b3e 100755
+> +--- a/genconfig.py
+> ++++ b/genconfig.py
+> +@@ -1,4 +1,4 @@
+> +-#!/usr/bin/python3
+> ++#!/usr/bin/env python3
+> + # generate man config documentation from mcelog.conf example
+> + # genconfig.py mcelog.conf intro.html
+> + import sys
+> +--
+> +2.25.1
 > +
-> +K3_IMAGE_GEN_SOC = $(call qstrip,$(BR2_PACKAGE_K3_IMAGE_GEN_SOC))
-> +K3_IMAGE_GEN_CONFIG = $(call qstrip,$(BR2_PACKAGE_K3_IMAGE_GEN_CONFIG))
-> +
-> +K3_IMAGE_GEN_DEPENDENCIES += host-arm-gnu-toolchain uboot
-> +
-> +K3_IMAGE_GEN_MAKE_OPTS += \
-> +	SOC=$(K3_IMAGE_GEN_SOC) \
-> +	CONFIG=$(K3_IMAGE_GEN_CONFIG) \
-> +	CROSS_COMPILE=$(K3_IMAGE_GEN_UBOOT_SPL_CROSS) \
-> +	SBL=$(BINARIES_DIR)/u-boot-spl.bin \
-> +	O=$(BINARIES_DIR) \
-> +	BIN_DIR=$(BINARIES_DIR) 
-> +
-> +define K3_IMAGE_GEN_BUILD_CMDS
-> +	$(UBOOT_MAKE) -C $(BUILD_DIR)/uboot* ARCH=$(K3_IMAGE_GEN_UBOOT_SPL_ARCH) \
-> +	CROSS_COMPILE=$(K3_IMAGE_GEN_UBOOT_SPL_CROSS) $(K3_IMAGE_GEN_UBOOT_SPL_DEFCONFIG)
-> +	$(UBOOT_MAKE) -C $(BUILD_DIR)/uboot* ARCH=$(K3_IMAGE_GEN_UBOOT_SPL_ARCH) \
-> +	CROSS_COMPILE=$(K3_IMAGE_GEN_UBOOT_SPL_CROSS)
-
-This clearly is not acceptable. You can from k3-image-gen mess up with
-the build directory of U-Boot. $(BUILD_DIR)/uboot* can point to
-something else than U-Boot, and even in principle doing the build of
-one package in another is wrong.
-
-Could you explain what you are trying to do? Is it because you need to
-build two different U-Boot configurations?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+> diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
+> index 598aa648fd..94b5f2cc37 100644
+> --- a/package/mcelog/mcelog.hash
+> +++ b/package/mcelog/mcelog.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  e9c82b565da06673c2630f9e6bc668634ad7d2c7f13c70db1900cce110ae62dc  mcelog-180.tar.gz
+> +sha256  067d52006f0aa42045acc6d9c04d590362448bacd8ef415d42729e6f35825028  mcelog-184.tar.gz
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+> diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+> index da7785ca91..6a0d806661 100644
+> --- a/package/mcelog/mcelog.mk
+> +++ b/package/mcelog/mcelog.mk
+> @@ -4,11 +4,12 @@
+>   #
+>   ################################################################################
+>   
+> -MCELOG_VERSION = 180
+> +MCELOG_VERSION = 184
+>   MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
+>   MCELOG_LICENSE = GPL-2.0
+>   MCELOG_LICENSE_FILES = LICENSE
+>   MCELOG_SELINUX_MODULES = mcelog
+> +MCELOG_DEPENDENCIES = host-python3
+>   
+>   define MCELOG_BUILD_CMDS
+>   	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
