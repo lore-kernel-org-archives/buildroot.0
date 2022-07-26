@@ -1,50 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80D21C00144
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 21:30:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07B2AC00144
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 21:31:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08DB9607B4;
-	Tue, 26 Jul 2022 21:30:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08DB9607B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8CC2840178;
+	Tue, 26 Jul 2022 21:31:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CC2840178
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Uz-8Xl0dWg0y; Tue, 26 Jul 2022 21:30:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2WPH4EB7AcJL; Tue, 26 Jul 2022 21:31:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1F71607A8;
-	Tue, 26 Jul 2022 21:30:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1F71607A8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9649D1BF59F
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:30:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A29154013F;
+	Tue, 26 Jul 2022 21:31:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A29154013F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 392A11BF59F
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7112F607A8
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:30:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7112F607A8
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBFC481766
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:31:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBFC481766
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FMZ4HOZvlPbb for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 21:30:35 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCA836079D
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 21:30:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCA836079D
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2C8AC8632B; Tue, 26 Jul 2022 21:16:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 23:11:25 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 558d62490b4486f47248c63aa0eceaaa27e3069c
-X-Git-Newrev: 235acd628a6e23e3ec79a758e1ae4a7558ecf07e
-X-Patchwork-Hint: ignore
-Message-Id: <20220726211651.2C8AC8632B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain: handle white spaces in sysroot
- dir in copy_toolchain_sysroot
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zonYyRqJW504 for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 21:31:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C9578131D
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C9578131D
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 21:31:30 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8F14D240007;
+ Tue, 26 Jul 2022 21:31:28 +0000 (UTC)
+Date: Tue, 26 Jul 2022 23:31:27 +0200
+To: Lang Daniel via buildroot <buildroot@buildroot.org>
+Message-ID: <20220726233127.1ceaeee9@windsurf>
+In-Reply-To: <VI1P190MB0493383AF3C4D4BA08C5CDC09FCE9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+References: <VI1P190MB0493383AF3C4D4BA08C5CDC09FCE9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658871088;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=T87zw6Fkg8tzMi4stk899hZ/AvDSoyt4gbSKj3jD/To=;
+ b=lDFIZGLtyAiviQol5HJLGIG62z6WAaJEJF5Vz4kMzRcwYhpb5SlCfPxodc+vhHU3/0qR3a
+ vkuQ8CvCujDkEwe6hWrGrCW3z0XfaMwGmV2UPHz6v/IzxMmbeVKl2AJZo9ofP2J1HpUyzU
+ OqEt4mnXxpxRLy8WXdxCAE4pHMIoJ65gt5IWaVxZVzRELQOLfakengHiTrp2d0mN13oftB
+ P3tDVty82ls972ePtS1Rfr7TQ3ygAayOD/guwdX25uLdqrbzXtkE5sPH1IDBjpKefgRFk9
+ edvWP+EBddwKN9gVhhTH/rtJ1NEAAZ4x+szI/Pt6hxcCozH+oydr8a3vVyrWyA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=lDFIZGLt
+Subject: Re: [Buildroot] [PATCH 1/1] toolchain: handle white spaces in
+ sysroot path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,41 +77,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Lang Daniel <d.lang@abatec.at>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=235acd628a6e23e3ec79a758e1ae4a7558ecf07e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Daniel,
 
-When changing permissions on all directories in the staging directory,
-after copying sysroot, paths that contain spaces break the call to
-chmod.
+On Tue, 17 May 2022 10:32:12 +0000
+Lang Daniel via buildroot <buildroot@buildroot.org> wrote:
 
-With -print0 for find and -0 for xargs white spaces are correctly
-interpreted.
+> When changing permissions on all directories in the staging directory,
+> after copying sysroot, paths that contain spaces break the call to chmod.
+> 
+> With -print0 for find and -0 for xargs white spaces are correctly interpreted.
+> 
+> Signed-off-by: Daniel Lang <d.lang@abatec.at>
+> ---
+> Backport to: 2022.02.x
+> ---
+>  toolchain/helpers.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+To be honest, I am not sure this is sufficient to use a sysroot path
+with white-space, and it's a scenario that we are not testing, so it's
+likely to break in the future. But your patch doesn't hurt, so I've
+applied it anyway.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index ef8e9a5f64..eec46d44c6 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -150,7 +150,7 @@ copy_toolchain_sysroot = \
- 	if test -n "$${SUPPORT_LIB_DIR}" ; then \
- 		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
- 	fi ; \
--	find $(STAGING_DIR) -type d | xargs chmod 755
-+	find $(STAGING_DIR) -type d -print0 | xargs -0 chmod 755
- 
- #
- # Check the specified kernel headers version actually matches the
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
