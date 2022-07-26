@@ -1,82 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC874C43334
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:05:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CC4BC43334
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64D12402FE;
-	Tue, 26 Jul 2022 13:05:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64D12402FE
+	by smtp1.osuosl.org (Postfix) with ESMTP id C39BA84745;
+	Tue, 26 Jul 2022 13:13:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C39BA84745
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BdgSZcjx6oxc; Tue, 26 Jul 2022 13:05:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FbQ35txKL5DA; Tue, 26 Jul 2022 13:13:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE6E9410B4;
-	Tue, 26 Jul 2022 13:05:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE6E9410B4
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1301840DE;
+	Tue, 26 Jul 2022 13:13:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1301840DE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B2A51BF2B4
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:05:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F36C21BF2B4
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:13:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 735624035C
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:05:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 735624035C
+ by smtp4.osuosl.org (Postfix) with ESMTP id D9CD840248
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:13:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9CD840248
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OQZv-gdTKajL for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 13:05:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88B64410B4
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com
- [IPv6:2607:f8b0:4864:20::1033])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88B64410B4
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:05:23 +0000 (UTC)
-Received: by mail-pj1-x1033.google.com with SMTP id ku18so13420185pjb.2
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 06:05:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=26m4L52dykCXWqezeqMhG1GU85ALz2297b1spGAPfxA=;
- b=faW9q8+rKuMwIdeyyQQss55KqxhRU9t5jAsKd4Cgrv3WisZsmpkZrqGtSi0oBcXXme
- TXWMJ3yTzmksnP5r7y3jwfvchevKXMHA8VcbIZ+J390DoPMDeNp4EeiQpVwBf3hdONMo
- 7URP9WQkzkNGch/5CtwLwGPzBhnj+blxeeH1nTqNP4NcQeeaZ2Um5508a3g/7D3/DZBX
- mfWRKxKCmJLflryvdw7F64iK7olMc9uxknmA2iSyOyUZlEsntHywFMUjEwrvanQF3Me/
- XEoKxRb6bAlLbrbhGEw74LrKADHr/iQcm+Fq1YBCYlH7cPPvuh+JD+Os/zHjeZSCUVww
- FyVw==
-X-Gm-Message-State: AJIora+wMQj5M2wyhEmNr/58kBhhBudCFpJnSY5mGbPZgCplhTeCDVPU
- S+KjK3xGjS9fjI9YVly/T7ANMV0g839N1tm19OvJ4ZGs
-X-Google-Smtp-Source: AGRyM1thVfvbFNb3dInsTBPbH5ZQpy7AM0vCgLekoBlfev8eMLA2XjBDXp7/3q9HdXVycwPSUq0s1BCQb/BeQuS5oPA=
-X-Received: by 2002:a17:902:d582:b0:16d:612c:2d6a with SMTP id
- k2-20020a170902d58200b0016d612c2d6amr13312713plh.168.1658840722765; Tue, 26
- Jul 2022 06:05:22 -0700 (PDT)
+ with ESMTP id nsds73ZBpDRG for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 13:13:00 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 299D540167
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 299D540167
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:12:59 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 157F8240004;
+ Tue, 26 Jul 2022 13:12:55 +0000 (UTC)
+To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Buildroot List <buildroot@buildroot.org>,
+ =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
+Date: Tue, 26 Jul 2022 15:12:46 +0200
+Message-Id: <20220726131249.2009383-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <CABPiF0=6w4ZGfZidXFuaikLw=M_MkoSou=8tFmrP80WWGWHDSA@mail.gmail.com>
-In-Reply-To: <CABPiF0=6w4ZGfZidXFuaikLw=M_MkoSou=8tFmrP80WWGWHDSA@mail.gmail.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 26 Jul 2022 10:05:10 -0300
-Message-ID: <CAOMZO5DqxwGsNAXsimRy8q1DqT=PNVD=C3ezGu-KR7vUmQRqdg@mail.gmail.com>
-To: bob mcgrath <bobwmcgrath@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=26m4L52dykCXWqezeqMhG1GU85ALz2297b1spGAPfxA=;
- b=Ff6xybSRdyZbw4IxkSf02pPR5BJyYeKm5D14aIShUpy1h3HxLnA2oRFxmflobWXYRO
- 4IpLdgmDGYaHW3Sgh8VCKB5o3xKa6KOjXfg5zamLVk7yMiSVXC0Bidb/eWeZsEDPpBrD
- EU4vTVxA844BytAwi/xvbveAA/OGgswRqQwnfKHoLN56qudRAH1duoh8LbuwgTvmPRWj
- C6m8z8Ewh2TyWYTnsqGNT5EVKDwGp5SU26+DXft8SQahk3eVT0MgIlcub3PG+kVWTIWM
- KqY10vOpZqez+2yikEMc76ISx2ED43XGiVCDuFkDFOb5dVYMLlekpeIuSSJelJShnuTL
- TY9w==
+ d=bootlin.com; s=gm1; t=1658841177;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=JOYv8jGcuejLEJVFzZubyyS7bTGqTaY6Wldy4Y+M9Lg=;
+ b=Z10uio/DxG6CbVCG6UolEfgZf3AqiO5QpdsmiEj5VheMqdIxFDb2DPLioiNkla7lSvgjPL
+ STZvZgQVPpGpVkILR7hPq3tlseuCIv7hLiicrUr1aE2rUtMun3f5vEvZqs/srJJa24xqrs
+ OrZ/xDj9wGXNFaVYZFf6MvUsCr2FAwwHo7m5u9Dq4MjWWP7e76Xyz2vZF2riPSEFaoB46f
+ TsXTysWVYU3yG/PoFm/QRdZWm4gZ67iA7BGcYgCj77srgtVVU4EejylhWf4ff2KbTc+RBm
+ QPPrgxSRs++Z1R1YMOzHD5DNGg88EzybrL7kHu/tupYdWve+HSWvTnt099zASQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Ff6xybSR
-Subject: Re: [Buildroot] google coral devboard defconfig.
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Z10uio/D
+Subject: [Buildroot] [PATCH 0/2] Add support for configurable page size on
+ ARM64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,27 +74,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bob,
-
-On Tue, Jul 26, 2022 at 10:02 AM bob mcgrath <bobwmcgrath@gmail.com> wrote:
->
-> I am trying to get a google coral devboard to boot with buildroot.  Starting with the freescale_imx8qmmek_defconfig I have been able to get an error from uboot over the serial port.
->
-> U-Boot SPL 2020.04 (Jul 25 2022 - 03:14:51 -0500)
-
-I suggest you use mainline U-Boot 2022.07 instead.
-
-> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
-> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="lf-5.10.y-1.0.0"
-
-Use a mainline kernel, such as 5.18 as well.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpIZXJlIGlzIGEgbmV3IGl0ZXJhdGlvbiBvZiB0aGUgc3VwcG9ydCBmb3IgY29uZmln
+dXJhYmxlIHBhZ2Ugc2l6ZSBvbgpBUk02NCwgYmFzZWQgb24gZWFybGllciB3b3JrIGZyb20gxYF1
+a2FzeiBTdGVsbWFjaAo8bC5zdGVsbWFjaEBzYW1zdW5nLmNvbT4sIGJ1dCBmYWlybHkgc2lnbmlm
+aWNhbnRseSBjaGFuZ2VkLgoKSG9wZWZ1bGx5IHRoaXMgaXRlcmF0aW9uIGNhbiBtYWtlcyBpdCB3
+YXkgdXBzdHJlYW0hCgpUaG9tYXMKClRob21hcyBQZXRhenpvbmkgKDIpOgogIHBhY2thZ2UvdWNs
+aWJjOiBkZWZpbmUgQlIyX1VDTElCQ19UQVJHRVRfQVJDSCBmb3IgQVJNNjQKICBhcmNoOiBhZGQg
+c3VwcG9ydCBmb3IgY29uZmlndXJhYmxlIHBhZ2Ugc2l6ZSBvbiBBUk02NAoKIGFyY2gvQ29uZmln
+LmluLmFybSAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDI1ICsrKysrKysKIGFyY2gvYXJj
+aC5tayAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDExICsrKysKIGFyY2gvYXJj
+aC5tay5hcmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA5IC0tLQogbGludXgvbGlu
+dXgubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDggKysrCiBwYWNrYWdlL3Vj
+bGliYy9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL3VjbGli
+Yy91Y2xpYmMubWsgICAgICAgICAgICAgICAgICAgICAgfCAxMyArKysrCiAuLi4vdGVzdHMvdG9v
+bGNoYWluL3Rlc3RfYWFyY2g2NF82NGsucHkgICAgICAgfCA2NSArKysrKysrKysrKysrKysrKysr
+CiA3IGZpbGVzIGNoYW5nZWQsIDEyMyBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygtKQogY3Jl
+YXRlIG1vZGUgMTAwNjQ0IHN1cHBvcnQvdGVzdGluZy90ZXN0cy90b29sY2hhaW4vdGVzdF9hYXJj
+aDY0XzY0ay5weQoKLS0gCjIuMzcuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
