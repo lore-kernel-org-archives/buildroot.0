@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5308EC00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 16:46:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 638E8C00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 16:46:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2695422EF;
-	Tue, 26 Jul 2022 16:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2695422EF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C02A411A9;
+	Tue, 26 Jul 2022 16:46:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C02A411A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hAviHhsT6Jf8; Tue, 26 Jul 2022 16:46:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lw0rli6EIXg5; Tue, 26 Jul 2022 16:46:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 989D8422C0;
-	Tue, 26 Jul 2022 16:46:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 989D8422C0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07DB741198;
+	Tue, 26 Jul 2022 16:46:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07DB741198
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0C43C1BF3D9
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:46:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3DE601BF3D9
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBEF34014B
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:46:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBEF34014B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 184F74014B
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:46:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 184F74014B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d_ofIuX41vDa for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 16:46:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCE8B40148
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CCE8B40148
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 16:46:29 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2F7441BF208;
- Tue, 26 Jul 2022 16:46:28 +0000 (UTC)
-Date: Tue, 26 Jul 2022 18:46:27 +0200
-To: Romain Naour <romain.naour@smile.fr>
-Message-ID: <20220726184627.064046c2@windsurf>
-In-Reply-To: <20220725125147.19057-1-romain.naour@smile.fr>
-References: <20220725125147.19057-1-romain.naour@smile.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658853988;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=POxxOQ5oyAL8YJTom6Qvypgsyc7/4CErYclI6WDnsIo=;
- b=esVohwN+8UlJK0A9igkrquB0UMtinGZ6QEw2blDAEdnhThR4JmQW6ONoydtXVksbc6iRmz
- ukzYuw7iod5tezb8HojKqO7WfUs7zFCllJxNSCneUwlNirI7kJ7j+qIvZe9leBmLgV0Vix
- uEc/IWpI8Vzn8lzCxmpXvhAd2+9G71j9zEwNsYdiEbsiNQ/269lXUPP2OJnQcDc+/b7+pB
- eipmTMpoZULkMEAsI42xht4UvAKAEQEiiZwxNCXTKOQeQSnxgByKvk5MpZyAZAKLlTdfM6
- +0ufDEGAcCFLbhuZ4JKg4aYCb/Q7Yl3j/4/DNX2xSBe+mGsb8JIRzTuXQKSDXg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=esVohwN+
-Subject: Re: [Buildroot] [PATCH] package/gcc: disable split-stack for
+ with ESMTP id dlf_q4qjOznH for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 16:46:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 57EFD40148
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 16:46:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57EFD40148
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 3757985F11; Tue, 26 Jul 2022 16:32:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 26 Jul 2022 18:46:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7d1bae0707f0411a6874ba1c801d4e59d0d7b4fa
+X-Git-Newrev: 3915a3f589d95b6793125f03d295671606d86e84
+X-Patchwork-Hint: ignore
+Message-Id: <20220726163253.3757985F11@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: disable split-stack for
  non-thread builds for gcc powerpc spe
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -78,33 +58,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 25 Jul 2022 14:51:47 +0200
-Romain Naour <romain.naour@smile.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3915a3f589d95b6793125f03d295671606d86e84
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The toolchain for powerpc spe can use uClibc-ng without thread support.
-> So we need the same fix as commit [1].
-> 
-> [1] fff68f75b3519cadb2639fde2296b26db919d79d
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
->  ...le-split-stack-for-non-thread-builds.patch | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch
+The toolchain for powerpc spe can use uClibc-ng without thread support.
+So we need the same fix as commit [1].
 
-Applied to master, thanks.
+[1] fff68f75b3519cadb2639fde2296b26db919d79d
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...disable-split-stack-for-non-thread-builds.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch b/package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch
+new file mode 100644
+index 0000000000..8d99e89293
+--- /dev/null
++++ b/package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch
+@@ -0,0 +1,26 @@
++From 1ddcb4870533af1b71b6afb75b8f2b271fd88eb4 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 25 Jul 2022 00:29:55 +0200
++Subject: [PATCH] disable split-stack for non-thread builds
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Romain: convert to git format]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ libgcc/config/t-stack | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
++index cc0366b4cd8..f3f97e86d60 100644
++--- a/libgcc/config/t-stack
+++++ b/libgcc/config/t-stack
++@@ -1,4 +1,6 @@
++ # Makefile fragment to provide generic support for -fsplit-stack.
++ # This should be used in config.host for any host which supports
++ # -fsplit-stack.
+++ifeq ($(enable_threads),yes)
++ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+++endif
++-- 
++2.34.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
