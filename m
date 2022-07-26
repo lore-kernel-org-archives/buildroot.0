@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5288EC00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 15:11:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 741F8C00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 15:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF43684CA2;
-	Tue, 26 Jul 2022 15:11:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF43684CA2
+	by smtp4.osuosl.org (Postfix) with ESMTP id E981641B7F;
+	Tue, 26 Jul 2022 15:12:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E981641B7F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z3qXkaSGAZEU; Tue, 26 Jul 2022 15:11:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GKHpb2R0MemZ; Tue, 26 Jul 2022 15:12:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F38018420B;
-	Tue, 26 Jul 2022 15:11:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F38018420B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75D36419D9;
+	Tue, 26 Jul 2022 15:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75D36419D9
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E753D1BF5A2
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 15:11:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 918461BF5A2
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 15:12:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C20468420B
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 15:11:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C20468420B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5AC4E8420B
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 15:12:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AC4E8420B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r5IhdenaV9JH for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 15:11:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0AFDC840DE
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 15:11:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AFDC840DE
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0A0C085EE5; Tue, 26 Jul 2022 14:57:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 17:10:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 99d839fa6b29f5919c524e1336f24236657948f7
-X-Git-Newrev: ca881f183dff08f77c4932e86b878109e86e1a4b
-X-Patchwork-Hint: ignore
-Message-Id: <20220726145752.0A0C085EE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch/Config.in: BR2_BINFMT_FLAT remove
+ with ESMTP id wTrtUKqgalig for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 15:12:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD1328474E
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AD1328474E
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 15:12:11 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8FBCA1BF207;
+ Tue, 26 Jul 2022 15:12:08 +0000 (UTC)
+Date: Tue, 26 Jul 2022 17:12:07 +0200
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <20220726171207.67d3cee5@windsurf>
+In-Reply-To: <20220726144737.694203-1-romain.naour@smile.fr>
+References: <20220726144737.694203-1-romain.naour@smile.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658848328;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=czh4aYoDTe680ZnSlU35M8tbKSg7pwEcSwvfhe23ZJ8=;
+ b=dmCJVzhpU5ET8TJv8edrhQM+FZGs5nZUqbDNOvWi8HqPZyodWmI2Dz9XWlHiIWXf64j/6P
+ kvShzg0f276Bl29sPWyhd/9S094W+sUDYmfV+/GhHXZ6FvtW/Y5TCN9zAZsvMt9bR8V6My
+ yPtOkLYtwxKMiMnCXK0Igwre0x1R2Nf0CxyV773T/5cV5j0RdOoujqYvPooEGwSRHSnkQW
+ vpMF0gdMlAg1S4RE38ieSq1laPXFseKpetfQWkueU9XUaAKjTRgih/dKK0Rf/73nlAbO0J
+ akFHZQ4d3awRqqb5uC6ZnD1o/DaqybrrekGXBfoOvklwAIBbWWXZRwft2wTAVw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dmCJVzhp
+Subject: Re: [Buildroot] [PATCH] arch/Config.in: BR2_BINFMT_FLAT remove
  architecture dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,52 +78,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca881f183dff08f77c4932e86b878109e86e1a4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 26 Jul 2022 16:47:37 +0200
+Romain Naour <romain.naour@smile.fr> wrote:
 
-The commit [1] removed the Config.in.host file and moved the arm, sh,
-sparc, xtensa and riscv-64 architectures dependencies.  But this list
-doesn't contain all elf2flt supported architectures and this breaks
-the host-gcc-initial build for m68k.
+> The commit [1] removed the Config.in.host file and moved
+> the arm, sh, sparc, xtensa and riscv-64 architectures dependencies.
+> But this list doesn't contains all elf2flt supported architecture
+> and break the host-gcc-initial build for m68k.
+> 
+> Since BR2_BINFMT_FLAT is only available on no MMU case, we can
+> rely on BR2_USE_MMU option and remove the architecture list.
+> 
+> Note: SH without MMU support has been removed by [2], sparc requires
+> an MMU since at least [3].
+> 
+> [1] 9db5eb258cf492567bac33a33cb606f14045639d
+> [2] 04ea3d38dd76f4e96f4961143d674aff59b13d3f
+> [3] 29563047e074a7c0b73c9e6b629d08bac1e07cb5
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
+>  arch/Config.in | 1 -
+>  1 file changed, 1 deletion(-)
 
-Since BR2_BINFMT_FLAT is only available on no MMU case, we can rely on
-BR2_USE_MMU option and remove the architecture list.
+Applied to master after adding a reference to the autobuilder failure
+that is fixed by this commit. Thanks!
 
-Note: SH without MMU support has been removed by [2], sparc requires
-an MMU since at least [3].
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/15d62edfc4b54c0b40b9d3961b797bce4e307919/
-
-[1] 9db5eb258cf492567bac33a33cb606f14045639d
-[2] 04ea3d38dd76f4e96f4961143d674aff59b13d3f
-[3] 29563047e074a7c0b73c9e6b629d08bac1e07cb5
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- arch/Config.in | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/Config.in b/arch/Config.in
-index 442d6b0075..9135df9def 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -388,7 +388,6 @@ config BR2_BINFMT_ELF
- 
- config BR2_BINFMT_FLAT
- 	bool "FLAT"
--	depends on BR2_arm || BR2_sh || BR2_sparc || BR2_xtensa || BR2_RISCV_64
- 	depends on !BR2_USE_MMU
- 	help
- 	  FLAT binary is a relatively simple and lightweight executable
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
