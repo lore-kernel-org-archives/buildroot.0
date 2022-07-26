@@ -4,84 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED78EC00144
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:16:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 691ABC00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:20:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C6C2606E7;
-	Tue, 26 Jul 2022 20:16:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C6C2606E7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 114CF60773;
+	Tue, 26 Jul 2022 20:20:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 114CF60773
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PSQ_Nj4XXJmT; Tue, 26 Jul 2022 20:16:55 +0000 (UTC)
+	with ESMTP id j8VXOfZ-lppU; Tue, 26 Jul 2022 20:20:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98665606A9;
-	Tue, 26 Jul 2022 20:16:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98665606A9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6CBD81BF3EF
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:16:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FCDF6072A;
+	Tue, 26 Jul 2022 20:19:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FCDF6072A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4D3231BF3EF
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:19:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4590D408E5
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:16:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4590D408E5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 288098131D
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:19:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 288098131D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rHaf_CAnUmsB for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 20:16:52 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F1A5408E4
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0F1A5408E4
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:16:51 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id l22so52379wrz.7
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:16:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=GWvQY4w2z5wSj2h1INyUz+9T6KiYPx8H7wK8MiLUseM=;
- b=RUsnpdqrqMdNrwptA8zVXObW4Ij/+5fuAHypPM49E/sVOISjF7m8e9Tl8xd2zjncNM
- nIDLA31uuBlNcVEGETySZWNFP4ECbfgbPAHaFN9nbhSBo+plhD6xL8hxB+aIqDTut6d1
- 5gI5X8xUlth1jjWJajq7osgK13GhkwnluXN8IYLi3N/TwY233sB+RXIb+/0u8cv6hCuc
- nERHAix3Jv+FcHkdKml/0Oahf6R6BBqLT0Lg0XZXyx4CM7x1Xcv5u43TGO563FwF/Hwf
- rycWHqXnERpMy05x2Ea30QgAE5sxjBVnjURtJkHekd288uMedfaaITQSduLmqilpEkg4
- nVFQ==
-X-Gm-Message-State: AJIora+P+p1cw2TvhNBjjk1j1lBoBifp7Z30+SP2I3BddOUpGrAAMi0Z
- pRozcY9nOVICBaTYHKKhHM+nLXf+cw8=
-X-Google-Smtp-Source: AGRyM1vkSRsKPoNFs8B/Qy0h5T2BBlTWtffgDB//gY/swBIvPWUjxx9v/CeAlYriJ4Gv8Fdmr58M5g==
-X-Received: by 2002:adf:d1c4:0:b0:21e:8df7:76d8 with SMTP id
- b4-20020adfd1c4000000b0021e8df776d8mr6327985wrd.586.1658866610004; 
- Tue, 26 Jul 2022 13:16:50 -0700 (PDT)
-Received: from kali.home (2a01cb0680639d806be2c385179f3c58.ipv6.abo.wanadoo.fr.
- [2a01:cb06:8063:9d80:6be2:c385:179f:3c58])
- by smtp.gmail.com with ESMTPSA id
- p21-20020a05600c205500b003a2eacc8179sm19505448wmg.27.2022.07.26.13.16.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 26 Jul 2022 13:16:49 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 22:16:47 +0200
-Message-Id: <20220726201647.216177-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ARBTsrqrWROr for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 20:19:55 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CC5A81760
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6CC5A81760
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:19:54 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 38EA260003;
+ Tue, 26 Jul 2022 20:19:50 +0000 (UTC)
+Date: Tue, 26 Jul 2022 22:19:49 +0200
+To: Joel Stanley <joel@jms.id.au>
+Message-ID: <20220726221949.73378442@windsurf>
+In-Reply-To: <20220719102724.6adf0242@windsurf>
+References: <20220708142150.234611-1-bernd.kuhls@t-online.de>
+ <20220718141453.23c89337@windsurf>
+ <CACPK8XeFVxsENuo9uWCzQiaOOSfDvkrSMVTQfUU5me_Xzsw-gg@mail.gmail.com>
+ <20220719102724.6adf0242@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=GWvQY4w2z5wSj2h1INyUz+9T6KiYPx8H7wK8MiLUseM=;
- b=JHsgLLBR2wB3Kk8zbG3bCLLEoGxZx70NdBuw+8FUZXP++Qr9v81CkfVbuo8bT4h/Bh
- /FGluGS10nFHO0nBfIB1KpINc47oPy9zU3UHDVqsli35ZGy432t+WZbWSaCPegIRcyre
- tW9UqohaUgcdXIyECKy7TT6GwAQmG2/WnWUt8zaKf7b82TVtmaKR0szl5sMIrI5PllTt
- QjLPXrHSVGGiXa4PLyx24H9TFH9ir+Jn19ahpTvc+75a/uIJhjiOMFI8xYbQzv+LNj5j
- iOkjkJH9Ux3CeaLBteQnSnpd6WXt3FknFnwFrXn4G/AmCeJ5/COZQ7wnM4D7R44hFHG2
- I4/Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=JHsgLLBR
-Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: alsa needs UCM
+ d=bootlin.com; s=gm1; t=1658866792;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=JpZHEBABYzwXl8rp5+ySXCbGksKl7uXzDDDssTlQQYY=;
+ b=JxoN902SFX8YCkvGP/LbZPNLhfLhVfEYTPm1rPYdqyfY984IQJRWOY3bEm9ROo5RO1NJRn
+ Hvjdp7UWh20DMEu6mHSA3qkG8dI4a+Ok9NQyAeUGnjVfjRHcgUeunICnOenu9qrsHjx2da
+ W6YjTcV+W55BVGV2CA9IkJjtlPGe2TuG/i4I6EzCB38dA3QRK9Gktk8kD/OGyx15pveo1F
+ cQ+sSXONp26rwlu+cGKJN8HIbbypgh0TiZnHpGGnumi5es/j2hB0p5cCAhAdk92qk3Pzi5
+ fKVjMNpBslV0hhOqhp+gT/bkUyYRQVl1ZaKIgspktAyYYGGZwtPA/6wRPxytyw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JxoN902S
+Subject: Re: [Buildroot] [PATCH 1/1] package/pixman: fix powerpc64le build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,49 +78,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@kaod.org>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-alsa needs UCM since bump to version 16.1 in commit
-6f3131296484767f037d3535ab69f328e94351db to avoid the following build
-failure:
+Hello Joel,
 
-In file included from ../src/modules/alsa/alsa-mixer.h:51,
-                 from ../src/modules/alsa/alsa-ucm.c:51:
-../src/modules/alsa/alsa-ucm.h:26:10: fatal error: alsa/use-case.h: No such file or directory
-   26 | #include <alsa/use-case.h>
-      |          ^~~~~~~~~~~~~~~~~
+Do you have some updates on this pixman issue?
 
-Fixes:
- - http://autobuild.buildroot.org/results/c651c03bc493ac721ad6517ace550237488ef8a8
+Thanks a lot!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/pulseaudio/pulseaudio.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thomas Petazzoni
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index b423057ab6..567540c225 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -105,8 +105,8 @@ else
- PULSEAUDIO_CONF_OPTS += -Dwebrtc-aec=disabled
- endif
- 
--# pulseaudio alsa backend needs pcm/mixer apis
--ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
-+# pulseaudio alsa backend needs pcm/mixer/ucm apis
-+ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_UCM),yyy)
- PULSEAUDIO_DEPENDENCIES += alsa-lib
- PULSEAUDIO_CONF_OPTS += -Dalsa=enabled
- else
+On Tue, 19 Jul 2022 10:27:24 +0200
+Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
+
+> Hello Joel,
+> 
+> On Tue, 19 Jul 2022 07:46:03 +0000
+> Joel Stanley <joel@jms.id.au> wrote:
+> 
+> > There's a few build failures going around due to nonsense
+> > configurations. In most cases the config has BR2_powerpc64le=y without
+> > selecting a CPU.  
+> 
+> "Not selecting a CPU" is not possible. There is always a CPU within the:
+> 
+> choice
+>         prompt "Target Architecture Variant"
+>         default BR2_generic_powerpc
+>         help
+>           Specific CPU variant to use
+> 
+> ...
+> endchoice
+> 
+> that will be selected. However...
+> 
+> > This defaults us to BR2_powerpc_970=y, which is a CPU
+> > that isn't supported to run ppc64le.  
+> 
+> ... it seems like some of them are selectable on ppc64le, even though
+> they do not make sense.
+> 
+> > The fix is to only allow CPUs that support ppc64le to be configured
+> > for that platform. I've prepared some patches that I'm running though
+> > CI now, and I'll send them out once they're tested.  
+> 
+> Excellent! Looking forward to it!
+> 
+> > If my changes don't fix this pixman issue then we can use the
+> > BR2_POWERPC_CPU_HAS_ALTIVEC to force AltiVec/VMX off when we know the
+> > CPU does not support it.  
+> 
+> But there's still a weird thing going on: pixman has a configure.ac
+> check that compiles a small test program to verify if VMX support is
+> available... and it concludes it is, but the actual pixman code then
+> fails to build.
+> 
+> Thanks for your feedback!
+> 
+> Thomas
+
+
+
 -- 
-2.35.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
