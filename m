@@ -4,82 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0547CC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 08:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5636BC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 08:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76EF9612D5;
-	Tue, 26 Jul 2022 08:30:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76EF9612D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2D4860EC2;
+	Tue, 26 Jul 2022 08:47:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2D4860EC2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bnkcburzpGEq; Tue, 26 Jul 2022 08:30:00 +0000 (UTC)
+	with ESMTP id D44WI5WXeoyk; Tue, 26 Jul 2022 08:47:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A7B360ECD;
-	Tue, 26 Jul 2022 08:29:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A7B360ECD
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD39D60B0B;
+	Tue, 26 Jul 2022 08:47:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD39D60B0B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 12CC81BF239
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 08:29:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 46D3D1BF239
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 08:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DEFB941B74
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 08:29:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEFB941B74
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1EE63418E5
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 08:47:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EE63418E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DHKqDTgNpn_4 for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 08:29:57 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 985ED41B72
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 985ED41B72
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 08:29:56 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id b16so9081228lfb.7
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 01:29:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=rGOI0w4IPJ81jqR2oduWn7uSr2stGfBxXZRlo2WIOnU=;
- b=lxbkWyX+oYHRca/1yHXHConQ522MRnr/CpKl94ckM+ccNTTT57bsINIr0VORr9oAQg
- oKNZYhH0aJzYRfAeOFK4sUNOtHJ1012ceuz9BvxaETgqfbT2wvHg9QmjHWs/qERjuWGU
- 0bPiVPyzZMWvHdl2FCS8bjB3BLD1TmLX7NnFdVDapDT5PVvxoasFmIE6EIF8YLGY20gu
- hqWHTgKtJH5XJxbe1Y3opJRWHVoDyGH1LpdL11AUPRFVfU8F6evpmhyJe9X1Z8Y+8YEf
- xw/PWi6GRXJfBkAgCjo36FaydiNicIg89VhpDXaaEdTWqrIOCWrgTWZqs3z0BOJjZ1D7
- 6oUw==
-X-Gm-Message-State: AJIora/l5/iUKQfjfodDfurxC3JPAjDpOM84sLKgDmKoObWdlO214C9d
- KLzA9q0Wv3ByogSVrXDLzekMEb7nV0AE3R85YUk0Cu6uyJU=
-X-Google-Smtp-Source: AGRyM1uZialp/1azmwOA1Qy187JthyGoq+MmpmR6WH7Tu87e96MreNggF4dhUJxrilLVoLkTPiEsJ0yTTQ82B+fYVxE=
-X-Received: by 2002:a05:6512:374a:b0:48a:8c6c:20d with SMTP id
- a10-20020a056512374a00b0048a8c6c020dmr3485714lfs.234.1658824194060; Tue, 26
- Jul 2022 01:29:54 -0700 (PDT)
+ with ESMTP id VeaTG4sSEfml for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 08:47:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56A43415E7
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 56A43415E7
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 08:47:34 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9946:e64:fb26:3d99])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id C22EA780346;
+ Tue, 26 Jul 2022 10:47:26 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 26 Jul 2022 10:47:26 +0200
+Date: Tue, 26 Jul 2022 10:47:26 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220726084726.GI3168@scaer>
+References: <20220726063400.2321251-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-References: <20220721144939.1265027-1-ardeleanalex@gmail.com>
- <20220722070150.40715-1-ardeleanalex@gmail.com>
- <43e30f67-d82b-b6af-13bc-cc2088b3e253@mind.be>
-In-Reply-To: <43e30f67-d82b-b6af-13bc-cc2088b3e253@mind.be>
-From: Alexandru Ardelean <ardeleanalex@gmail.com>
-Date: Tue, 26 Jul 2022 11:29:42 +0300
-Message-ID: <CA+U=DsqxbbH63h6u6xApqm-pgC3gE0grvaeqn=BRy+J8bwgazQ@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=rGOI0w4IPJ81jqR2oduWn7uSr2stGfBxXZRlo2WIOnU=;
- b=MdFv0RA8Qf3kFlhmwET2fcIVPGvtcazCQAJ3Y+rg+pHIGF5ZjzJ8NKx3vXIh6XKUU+
- E0Grbur0mN6POVo8wE02WVhVVTvFwOWYdOqORFJv+/SfKB0OfvTiTBtBrFlLwch7sJsR
- lTSGP9PQPCW2s8zfBEjtRFkwi72vW72oXgO0GLDDP7QAsA66Bwb26Gg1U7G+YF+tsbLs
- Tw+V60kCzxwxFBz/W+iMQHGmZ4eO+Vo/NJOovsGeUd9EgqSh/WCI7lbaFIEWwom6Zfho
- k4UyN4sjPPcYYBIU4xxQA+borGWUUVyW6VHfrhb7DPtWw567bkE0YFNN9ui5ZsW9QTWL
- nIZQ==
+Content-Disposition: inline
+In-Reply-To: <20220726063400.2321251-1-james.hilliard1@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1658825251;
+ bh=YNBsW2Q/IJGWmZi3ErxUsW1kRfn6NFEzJC7eMQOjmxk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=GGsRoJIU0NtE8SdcdZP/0eCxzdVyeUu3/gZY//wr93N2kKgKB1VdN/WA55DHAJELz
+ LwuK3ir8+KBxMW+51fEIV4McPhfrRA4XIVHceLW6sRcEe5LuNagcI+ayD2rFN5mEA7
+ OSCmUeo9BjWeODdpkrIXD25UFuKnZiQDIqHVvtYys73xYhOOqqbI1LeQZ8gZQXbkNV
+ Dpx41Gfphi7rDTR09yqcxe1fll4UfjvO7p+018OozDTyWcMFpAUHgWZAKv1AMCjL7U
+ vK65Su9xQjsF8wxWMQ1u+EMjI5ww6i0v1czOuISgP9wHFEdsj/Z7Pej58kzcoXtmX0
+ kcTvUjQBZpjPw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=MdFv0RA8
-Subject: Re: [Buildroot] [PATCH v2] package/cog: add libgbm as dependency
- when building with DRM support
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GGsRoJIU
+Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: set cpp_rtti option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,116 +76,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, Jul 23, 2022 at 11:48 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 22/07/2022 09:01, Alexandru Ardelean wrote:
-> > When building with the DRM support, it can happen that the libgbm library
-> > is not yet built by the provider of this lib (specified by
-> > BR2_PACKAGE_PROVIDES_LIBGBM).
->
->   I've applied this one to master already, however there are two comments on v1
-> that remain unaddressed.
+James, Al;,
 
-yes
-i wasn't sure whether to do this patch-first (which is more of a fix)
-and do a follow-up
-will do a follow-up :)
-since this was applied
-thanks :)
+On 2022-07-26 00:34 -0600, James Hilliard spake thusly:
+> This needs to be set based on BR2_PACKAGE_LLVM_RTTI being set.
 
->
-> >
-> > The docs in cog `docs/platform-drm.md` specify this dep-list:
-> > - **WPEBackend-fdo**:
-> > - **Wayland**:
-> > - **libdrm**:
-> > - **libgbm**:
-> > - **libinput**:
-> > - **libudev**:
->
->   This would imply that a dependency on udev is needed as well (both in the
-> Config.in and the .mk). It is actually implied by libinput, so we won't get
-> build failures, but it's better to have explicit dependencies.
+BR2_PACKAGE_LLVM_RTTI is a sub-option of llvm, so it somehow means
+that llvm should be a dependency of mesa3d, which your patch does not
+add.
 
-ack; will add
+But we already have a conditional dependency on llvm, so this nex rtti
+option should be a sub-condition of BR2_PACKAGE_MESA3D_LLVM?
 
->
-> >
-> > libgbm needs to be added.
-> > Adding libegl as well.
-> >
-> > Updated package/cog/Config.in to define the dependencies (for DRM)
-> > according to libegl & libgbm.
-> >
-> > Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
-> > ---
-> >   package/cog/Config.in | 9 ++++++---
-> >   package/cog/cog.mk    | 2 +-
-> >   2 files changed, 7 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/cog/Config.in b/package/cog/Config.in
-> > index d4238750f9..484eb85c70 100644
-> > --- a/package/cog/Config.in
-> > +++ b/package/cog/Config.in
-> > @@ -39,7 +39,8 @@ config BR2_PACKAGE_COG_PLATFORM_FDO
-> >   config BR2_PACKAGE_COG_PLATFORM_DRM
-> >       bool "DRM backend"
-> >       depends on BR2_PACKAGE_HAS_UDEV # libinput
-> > -     depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
-> > +     depends on BR2_PACKAGE_HAS_LIBEGL
-> > +     depends on BR2_PACKAGE_HAS_LIBGBM
->
->   It apparently needs the
-> BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT feature. You can test
-> that by trying a build with rockchip-mali or ti-sgx-um as provider, since those
-> packages don't have that feature.
+Regards,
+Yann E. MORIN.
 
-ack; will add
-i think i should also add BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF as
-Thomas mentioned
+> Fixes:
+>  - http://autobuild.buildroot.net/results/e2ebc9a73ed421aa6be44fe41bb5224cc12f699d
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/mesa3d/mesa3d.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 96520e2efd..652b5168d2 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -94,6 +94,12 @@ else
+>  MESA3D_CONF_OPTS += -Dgallium-vc4-neon=disabled
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
+> +MESA3D_CONF_OPTS += -Dcpp_rtti=true
+> +else
+> +MESA3D_CONF_OPTS += -Dcpp_rtti=false
+> +endif
+> +
+>  # Drivers
+>  
+>  #Gallium Drivers
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
->
->
->   Regards,
->   Arnout
->
-> >       select BR2_PACKAGE_LIBDRM
-> >       select BR2_PACKAGE_LIBINPUT
-> >       help
-> > @@ -52,7 +53,9 @@ config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
-> >       help
-> >         Expose remote control interface on system bus
-> >
-> > -comment "DRM platform needs mesa3d w/ EGL driver and GBM"
-> > -     depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
-> > +comment "DRM platform needs EGL and GBM"
-> > +     depends on \
-> > +             !BR2_PACKAGE_HAS_LIBEGL || \
-> > +             !BR2_PACKAGE_HAS_LIBGBM
-> >
-> >   endif
-> > diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> > index f2ca0af93d..da660eb7c1 100644
-> > --- a/package/cog/cog.mk
-> > +++ b/package/cog/cog.mk
-> > @@ -28,7 +28,7 @@ endif
-> >
-> >   ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
-> >   COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
-> > -COG_DEPENDENCIES += libdrm libinput
-> > +COG_DEPENDENCIES += libdrm libinput libgbm libegl
-> >   else
-> >   COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
-> >   endif
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
