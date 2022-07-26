@@ -1,70 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0759C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:01:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D7E0C00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:02:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69D8F408E1;
-	Tue, 26 Jul 2022 20:01:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69D8F408E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 323B56077D;
+	Tue, 26 Jul 2022 20:02:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 323B56077D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iP7GnIY7XJRo; Tue, 26 Jul 2022 20:01:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fealL5xMtxuk; Tue, 26 Jul 2022 20:02:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43E11408D3;
-	Tue, 26 Jul 2022 20:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43E11408D3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03A366072A;
+	Tue, 26 Jul 2022 20:02:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03A366072A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3800C1BF27A
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:00:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 220891BF27A
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:00:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1283160644
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:00:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1283160644
+ by smtp3.osuosl.org (Postfix) with ESMTP id 078E660608
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:00:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 078E660608
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id leO6f0wjawf5 for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 20:00:41 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E960A60608
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E960A60608
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:00:40 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 100001BF203;
- Tue, 26 Jul 2022 20:00:38 +0000 (UTC)
-Date: Tue, 26 Jul 2022 22:00:38 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220726220038.0405c026@windsurf>
-In-Reply-To: <20220726195248.44796-1-fontaine.fabrice@gmail.com>
-References: <20220726195248.44796-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id xpPJZr1ZmjmC for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 20:00:36 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCDBD606A9
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BCDBD606A9
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:00:35 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id u5so21573975wrm.4
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:00:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ZBv+VJZXy9eIFInTYRb6PBHYpF8UNbINbv1E7emX3Fk=;
+ b=hAfMoKV2YA5y+yS/H47vihu0YHbxABzKhuRaGAUnpeow8LXytQtPyhQ1Vwjfa4da7r
+ G4UOgGd0N6YqhHhzgwSie4tbiX6+J903USlXwK/y4OhuzzbxP6NO4RyUvfRWF3fBx+1+
+ Sa0Khrsv/ZTeDxAvV3RkSnjLj5SdQaSDJ59rr+TRPDIdhByYIYSKcBeTmP2Rde7G+DRu
+ Z91j4zRgo2rBQpKwGcIgjRaoHd79UWbWva//2OgEaslSpPLjHXTSx89HaE7fJi7fBW7c
+ xW0dxfIeRlnfONu7DwkyZ+N0C0qi8p7IRr08XdOnCp9Xy//3nTsVV8K3/54O0I0LrID1
+ v2/A==
+X-Gm-Message-State: AJIora8imRd3xgvBzjubOW8TixEHMGdTfE1o4qggqr27/9o+HbmGGmy3
+ OJ5GbY6xKoPJcb8WwRvwDo/KB5iCycg=
+X-Google-Smtp-Source: AGRyM1sWWOa+dBV81p0bNu/yt6WmHT+UNh2kNAYpvQi7kdtwA/U+NnzFBonZ1IyEAdX16FxWOPOzpw==
+X-Received: by 2002:a5d:5889:0:b0:21d:bccd:38e3 with SMTP id
+ n9-20020a5d5889000000b0021dbccd38e3mr11469381wrf.659.1658865633659; 
+ Tue, 26 Jul 2022 13:00:33 -0700 (PDT)
+Received: from kali.home (2a01cb0680639d806be2c385179f3c58.ipv6.abo.wanadoo.fr.
+ [2a01:cb06:8063:9d80:6be2:c385:179f:3c58])
+ by smtp.gmail.com with ESMTPSA id
+ e1-20020a5d5301000000b0021e5b5a68f8sm16903083wrv.45.2022.07.26.13.00.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 26 Jul 2022 13:00:33 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 26 Jul 2022 22:00:29 +0200
+Message-Id: <20220726200029.45380-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658865639;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CjZEoBVhqCmTrb2CnCaNpJoBX+S12arfmQn1me+JMyg=;
- b=GUToj9EijQ4eijIXbrIsBv/6GGg/KQLLPQBMS+SkuizltC6FcE2bTQG2pu3fWXcDAUCBCy
- kWt/2WywyKjqRjeXWt7wWP1bMUvJ19GXoO6EklZUCNKYdTdmccc8HioLbNcG9z0f2h7IyG
- x93WJSP4Xp83782V3bsGBv8Ksu1srpr5zRYdstF26FfG+tdsC9JiU07oxvcR8XaSfKpitd
- 88AudvBHfED0UXxaSjC3f3h+TJGGCUtkyPM7Tb61Wm5L86UkL2+MM4asvx7kyGQ1Af5c7u
- wjRvDGM9MCEGtWy4Wf8+4z0bJzUwYug73Oa5Q8T89mrUmtKQAEJY9Rxxktmfwg==
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ZBv+VJZXy9eIFInTYRb6PBHYpF8UNbINbv1E7emX3Fk=;
+ b=k/lI8uMccQXBbta7KrFa9mKx+X5r4JgclwETKP0leC98+1l2D8M3hHwpXgAnUVAEno
+ UC6H+hAADXPOx77n4W7cEwxtQPJVL12RkhuaiViu5plYpiT/GbvoS+TKC95SQkkSGcOV
+ g4G0JveajcIVSsWeZ1gk/8GpEqofDWVbtw58g7gNL0aL6WSZEFgLXPWUSwUkNzvp0FRs
+ P21gV05XkC48UBRUXiVxQ+JWduvg5ZMfdXc9tYpRigoAHLIHs+KyY/YfQ8InMdYxSvwA
+ JQUKN7x/6mHVy4rXXjq1yF83OjdZ5VrnDvBLW+uugnzIgCgySksbp69DR+S7HnkaKODt
+ 0kZg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GUToj9Ei
-Subject: Re: [Buildroot] [PATCH 1/1] package/fscryptctl: fix build with gcc
- 4.8
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=k/lI8uMc
+Subject: [Buildroot] [PATCH 1/1] package/freeradius-server: add CPE variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,41 +93,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 26 Jul 2022 21:52:48 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+cpe:2.3:a:freeradius:freeradius is a valid CPE identifier for this
+package:
 
-> Fix the following build failure with gcc 4.8 raised since bump to
-> version 1.0.0 in commit ib832f6eb9d86920907c50901a99f13b44dd94647 and
-> https://github.com/google/fscryptctl/commit/9dba7224cbde07df25ba01146a2f6fb897bb9e56:
-> 
-> fscryptctl.c: In function 'string_to_mode':
-> fscryptctl.c:214:3: error: 'for' loop initial declarations are only allowed in C99 mode
->    for (size_t i = 0; i < ARRAY_SIZE(mode_strings); i++) {
->    ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/58e8facd9105dcdfbc21ed245de03f3162c98cc9
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/fscryptctl/fscryptctl.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afreeradius%3Afreeradius
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/freeradius-server/freeradius-server.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
+diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
+index 04d8685813..4c526d2342 100644
+--- a/package/freeradius-server/freeradius-server.mk
++++ b/package/freeradius-server/freeradius-server.mk
+@@ -8,6 +8,8 @@ FREERADIUS_SERVER_VERSION = 3.0.25
+ FREERADIUS_SERVER_SITE = ftp://ftp.freeradius.org/pub/freeradius
+ FREERADIUS_SERVER_LICENSE = GPL-2.0
+ FREERADIUS_SERVER_LICENSE_FILES = COPYRIGHT
++FREERADIUS_SERVER_CPE_ID_VENDOR = freeradius
++FREERADIUS_SERVER_CPE_ID_PRODUCT = freeradius
+ FREERADIUS_SERVER_DEPENDENCIES = libtalloc
+ FREERADIUS_SERVER_AUTORECONF = YES
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
