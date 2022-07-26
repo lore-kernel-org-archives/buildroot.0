@@ -1,72 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91AE4C00144
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 21:59:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1452C00144
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 22:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31B334018E;
-	Tue, 26 Jul 2022 21:59:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31B334018E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RgDoP-kOvZ-y; Tue, 26 Jul 2022 21:59:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 22E4C4013F;
-	Tue, 26 Jul 2022 21:59:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22E4C4013F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AB4C51BF239
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:59:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FDDA607A8
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 21:59:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FDDA607A8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53694607D0;
+	Tue, 26 Jul 2022 22:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53694607D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lkLnsSfa5yNc for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 21:59:44 +0000 (UTC)
-X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14FE1606BF
-Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
- by smtp3.osuosl.org (Postfix) with ESMTP id 14FE1606BF
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 21:59:43 +0000 (UTC)
-Received: from [192.168.50.173] ([146.241.73.23])
- by Aruba Outgoing Smtp  with ESMTPSA
- id GSTnoqtHVXOlAGSTnoM9CW; Tue, 26 Jul 2022 23:52:40 +0200
-Message-ID: <229dd860-e5ff-64a4-f97e-00cc3de26075@benettiengineering.com>
-Date: Tue, 26 Jul 2022 23:52:39 +0200
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OVE3q4Zuyn4s; Tue, 26 Jul 2022 22:01:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F297B607A8;
+	Tue, 26 Jul 2022 22:01:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F297B607A8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D1C01BF59F
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 22:01:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7885E812B4
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 22:01:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7885E812B4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zYNywPYJehhZ for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 22:01:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C0A1812AE
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1C0A1812AE
+ for <buildroot@busybox.net>; Tue, 26 Jul 2022 22:01:03 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id a11so9507763wmq.3
+ for <buildroot@busybox.net>; Tue, 26 Jul 2022 15:01:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=+YRbeFkDBQhqBrk8W5DLj2rDfbBM6eN3Zhz0NYfKwGU=;
+ b=nQjR7ePabHBL44cpaYTAwstBcoz8PqKIDR5S2HSKjy/KZnWhEMrrzE9AJrWmBVT+EV
+ nTZ+37vaXhcahJON7TiBjJ55VF9QSSUGkLMpEtf1F/YZMM6G7UUAlEgyKYwIbgcTwJ0/
+ h7P4+DYd4tqL7O7qxN00+AbRy6cfSFUWLyPpEc6ExgDSE0r5m6s2zGbR1+6xTDS35Bwh
+ NClYvg0z94mh5cFeh0XeenlElf/mdczOiCo2RZyPB/RAnpONQX5nILlRiNY0DKviFR0+
+ ww1mWHGyoXLhkgh3VayX0KALNgWIt6dXTjMVf9Hx7hc8f+deVlDIj18JYNQiLSKCrXM+
+ LnZQ==
+X-Gm-Message-State: AJIora+iFc1alxNoGjRzXVW8Tra45wcuDG2CO5wq1ipAJVRFNmMelmAf
+ cRN+K0APSXEqs+wKZ+M8gNDujg==
+X-Google-Smtp-Source: AGRyM1uwLKM7y68D/o5gwaPGW28fJqV6fcIWyhGZOWqFUefq5CYzs3OqJv6RnZ7SAd9Bir66r7Jjiw==
+X-Received: by 2002:a05:600c:a18e:b0:3a3:10ef:672a with SMTP id
+ id14-20020a05600ca18e00b003a310ef672amr762676wmb.14.1658872862069; 
+ Tue, 26 Jul 2022 15:01:02 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:86bb:8231:62d7:1874?
+ ([2a01:cb19:8acf:5600:86bb:8231:62d7:1874])
+ by smtp.gmail.com with ESMTPSA id
+ l16-20020a05600c4f1000b003a2e27fc275sm223612wmq.12.2022.07.26.15.01.01
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 26 Jul 2022 15:01:01 -0700 (PDT)
+Message-ID: <57bbeaff-9600-cc1d-5baa-4ed1919c35c5@smile.fr>
+Date: Wed, 27 Jul 2022 00:01:01 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
 Content-Language: en-US
-To: James Hilliard <james.hilliard1@gmail.com>
-References: <20220101214034.2152144-1-giulio.benetti@benettiengineering.com>
- <CADvTj4r09-gBxrbbJCd-gXCaOzZsMGUgv=E-SELMUieGdTorcA@mail.gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <CADvTj4r09-gBxrbbJCd-gXCaOzZsMGUgv=E-SELMUieGdTorcA@mail.gmail.com>
-X-CMAE-Envelope: MS4xfJ+A0etsVKcRFef/t+3zLhjC00oAQx1yP3dRF05Ben08+hizMd+OROIFKyZS+TZ2iDAs/VS/kU1uuGmmTnhPJICIfeWWaWh4BvnbE/8ZPkR3qKgs2d6T
- wVeA5far6gj48BjzDIsp5J0zGHinxUFcnJ9j4aFTCAOVLRQgDee23ZES+xxMK9FoROXUTLsCrpF/QPaZowHeNUadLRHIZdKDUz2HqOIDSSH6LVBM+ji00AZP
- TCp/VnGONXn9l/p45Aku2bixIKq0fMFdxHx9WoD7ucdV9Epxy8ep0lV2Jc6MBGWQ
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1658872360; bh=D1BDBRwRs9Q67BcIzi3g8umIYWzXIkTgt5+TXF1SSj4=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=ao1dPJmIfUM7HEEOUTC6FsDtfUDOw48fLBjO0X74g1Lk0xZfaltjfVeWWMLf2fc7N
- Z8yDG4qa+8uRvCMR2S0728c4Ro0nFOVBam9KEDoSU4lnh8WCpelvDcH1uAAQ5//EmX
- ficZGoncFnRaOcWbE7y5nrY+Bv/iimaER0Y6zPZdSJeflLKBWXqgrAtTaWfCAKf5+O
- 4WLzVX6iK+CRkW0tfOcA6qSG66PHMIQqH62lKHMJttRHupTZ0j3PcI/uNa/YZt2Awh
- 7lDbG/W8ILxwV3XwYwNYXc6k7wqMYqCD6LJ0u5AAXIdXamZtAiQ9FyR3xkln4XcH3n
- VKrl68YXme3LQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=ao1dPJmI
-Subject: Re: [Buildroot] [PATCH] Makefile: disable 'printvars' and
- 'show-vars' recipes for Make 4.3
+To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>, buildroot@busybox.net
+References: <20220206101134.30291-1-guillaume.bressaix@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20220206101134.30291-1-guillaume.bressaix@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:in-reply-to:content-transfer-encoding;
+ bh=+YRbeFkDBQhqBrk8W5DLj2rDfbBM6eN3Zhz0NYfKwGU=;
+ b=WldVU5J1h3TMsd63PDeBhc+IZnUdG84J/iANwrJQe1WoUslw5+ohxcLaEjue1ATmLz
+ gCZv1zgBeBlmAiwiiEnCZAoF5JxKjSPZT8Dg0SCz1Wi0VDc+GgrR7vCddCo34gKsRepl
+ 0l3IAfli84JboBPdjJkfcgMmZOFcdPLSquUnYgBFS6/K6DUMYzBXa8MRnZDL/9mG9aC6
+ Sb8VFGzrV0FzvzfTqVVin1KwWSXyQbdo+Wvoy+31A5Tvvx7wOqq7MMYZ8QN4YWdM5FfR
+ OrIKa/DQdeYeh88bgKF3q93fUIvBzQUGoQsPyjmXeoNEPRgaP2TmnlhpvGjX0fIoc8h8
+ YMmA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=WldVU5J1
+Subject: Re: [Buildroot] [PATCH] package/mbw: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,115 +99,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- buildroot <buildroot@buildroot.org>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi James,
-
-On 21/07/22 05:55, James Hilliard wrote:
-> On Sat, Jan 1, 2022 at 2:40 PM Giulio Benetti
-> <giulio.benetti@benettiengineering.com> wrote:
->>
->> Make 4.3 is buggy and leads to a "Segmentation fault (core dumped)" when
->> calling 'make printvars' or 'make show-vars', so let's refuse to execute
->> those recipes if Make 4.3 by adding 'check-make-version' recipe as
->> depedendency of 'printvars' and 'show-vars' as suggested by Yann E. Morin.
-> 
-> FYI autobuilder threads seem to die when this gets hit:
-> make: *** [Makefile:1056: check-make-version] Error 1
-> Process Process-12:
-> Traceback (most recent call last):
->    File "/usr/lib/python3.10/multiprocessing/process.py", line 315, in _bootstrap
->      self.run()
->    File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
->      self._target(*self._args, **self._kwargs)
->    File "/home/autobuild/buildroot-test/scripts/autobuild-run", line
-> 748, in run_instance
->      self.run_one_build()
->    File "/home/autobuild/buildroot-test/scripts/autobuild-run", line
-> 731, in run_one_build
->      ret = self.do_reproducible_build()
->    File "/home/autobuild/buildroot-test/scripts/autobuild-run", line
-> 524, in do_reproducible_build
->      ret = self.check_reproducibility()
->    File "/home/autobuild/buildroot-test/scripts/autobuild-run", line
-> 416, in check_reproducibility
->      prefix = subprocess.check_output(["make", "--no-print-directory",
-> "O=%s" % self.outputdir,
->    File "/usr/lib/python3.10/subprocess.py", line 420, in check_output
->      return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
->    File "/usr/lib/python3.10/subprocess.py", line 524, in run
->      raise CalledProcessError(retcode, process.args,
-> subprocess.CalledProcessError: Command '['make',
-> '--no-print-directory',
-> 'O=/home/autobuild/autobuild/instance-11/output-1', '-C',
-> 'instance-11/buildroot', 'printvars', 'VARS=TARGET_CROSS']' returned
-> non-zero exit status 2.
-
-Do you have an autobuilder failure link?
-So I can reproduce it here and find a work-around for it.
-
-Thank you!
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> 
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->>   Makefile | 11 +++++++++--
->>   1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/Makefile b/Makefile
->> index 0b8c7b2867..ac98b84425 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -1058,13 +1058,20 @@ ifeq ($(NEED_WRAPPER),y)
->>          $(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
->>   endif
->>
->> +.PHONY: check-make-version
->> +check-make-version:
->> +ifneq ($(filter $(RUNNING_MAKE_VERSION),4.3),)
->> +       @echo "Make 4.3 doesn't support 'printvars' and 'show-vars' recipes"
->> +       @exit 1
->> +endif
->> +
->>   # printvars prints all the variables currently defined in our
->>   # Makefiles. Alternatively, if a non-empty VARS variable is passed,
->>   # only the variables matching the make pattern passed in VARS are
->>   # displayed.
->>   # show-vars does the same, but as a JSON dictionnary.
->>   .PHONY: printvars
->> -printvars:
->> +printvars: check-make-version
->>          @:
->>          $(foreach V, \
->>                  $(sort $(filter $(VARS),$(.VARIABLES))), \
->> @@ -1077,7 +1084,7 @@ printvars:
->>
->>   .PHONY: show-vars
->>   show-vars: VARS?=%
->> -show-vars:
->> +show-vars: check-make-version
->>          @:
->>          $(info $(call clean-json, { \
->>                          $(foreach V, \
->> --
->> 2.25.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot@buildroot.org
->> https://lists.buildroot.org/mailman/listinfo/buildroot
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gR3VpbGxhdW1lLAoKTGUgMDYvMDIvMjAyMiDDoCAxMToxMSwgR3VpbGxhdW1lIFcuIEJy
+ZXMgYSDDqWNyaXTCoDoKPiBTaWduZWQtb2ZmLWJ5OiBHdWlsbGF1bWUgVy4gQnJlcyA8Z3VpbGxh
+dW1lLmJyZXNzYWl4QGdtYWlsLmNvbT4KPiAtLS0KPiAgREVWRUxPUEVSUyAgICAgICAgICAgIHwg
+IDEgKwo+ICBwYWNrYWdlL0NvbmZpZy5pbiAgICAgfCAgMSArCj4gIHBhY2thZ2UvbWJ3L0NvbmZp
+Zy5pbiB8ICA3ICsrKysrKysKPiAgcGFja2FnZS9tYncvbWJ3Lmhhc2ggIHwgIDMgKysrCj4gIHBh
+Y2thZ2UvbWJ3L21idy5tayAgICB8IDIwICsrKysrKysrKysrKysrKysrKysrCj4gIDUgZmlsZXMg
+Y2hhbmdlZCwgMzIgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9t
+YncvQ29uZmlnLmluCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL21idy9tYncuaGFzaAo+
+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9tYncvbWJ3Lm1rCj4gCj4gZGlmZiAtLWdpdCBh
+L0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCj4gaW5kZXggYTFlYzlhMDkxZS4uYWNjODdhYTAwNyAx
+MDA2NDQKPiAtLS0gYS9ERVZFTE9QRVJTCj4gKysrIGIvREVWRUxPUEVSUwo+IEBAIC0xMTQ4LDYg
+KzExNDgsNyBAQCBOOglHdWlsbGF1bWUgV2lsbGlhbSBCcnMgPGd1aWxsYXVtZS5icmVzc2FpeEBn
+bWFpbC5jb20+Cj4gIEY6CXBhY2thZ2UvbGlibmlkcy8KPiAgRjoJcGFja2FnZS9saWJ4Y3J5cHQv
+Cj4gIEY6CXBhY2thZ2UvbGlxdWlkLWRzcC8KPiArRjoJcGFja2FnZS9tYncvCj4gIEY6CXBhY2th
+Z2UvcGl4aWV3cHMvCj4gIEY6CXBhY2thZ2UvcHl0aG9uLXB5YmluZC8KPiAgRjoJcGFja2FnZS9y
+ZWF2ZXIvCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25maWcu
+aW4KPiBpbmRleCBlNGNhMTk1YmViLi44NDQ1MTczNjMzIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uv
+Q29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9Db25maWcuaW4KPiBAQCAtMTE4LDYgKzExOCw3IEBA
+IG1lbnUgIkRlYnVnZ2luZywgcHJvZmlsaW5nIGFuZCBiZW5jaG1hcmsiCj4gIAlzb3VyY2UgInBh
+Y2thZ2UvbHR0bmctYmFiZWx0cmFjZS9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvbHR0
+bmctbW9kdWxlcy9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvbHR0bmctdG9vbHMvQ29u
+ZmlnLmluIgo+ICsJc291cmNlICJwYWNrYWdlL21idy9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBh
+Y2thZ2UvbWNlbG9nL0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFja2FnZS9tZW1zdGF0L0NvbmZp
+Zy5pbiIKPiAgCXNvdXJjZSAicGFja2FnZS9uZXRwZXJmL0NvbmZpZy5pbiIKPiBkaWZmIC0tZ2l0
+IGEvcGFja2FnZS9tYncvQ29uZmlnLmluIGIvcGFja2FnZS9tYncvQ29uZmlnLmluCj4gbmV3IGZp
+bGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi43YmFmYTM1MzU5Cj4gLS0tIC9kZXYv
+bnVsbAo+ICsrKyBiL3BhY2thZ2UvbWJ3L0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEsNyBAQAo+ICtj
+b25maWcgQlIyX1BBQ0tBR0VfTUJXCgp0ZXN0LXBrZyBzZWVtcyBvazoKCiQgLi91dGlscy90ZXN0
+LXBrZyAtYyBkZWZjb25maWcgIC1kIHRlc3QtcGtnIC1wIG1idyAtawogICAgICAgICAgICAgICAg
+ICAgIGJvb3RsaW4tYXJtdjUtdWNsaWJjIFsxLzZdOiBPSwogICAgICAgICAgICAgICAgICAgICBi
+b290bGluLWFybXY3LWdsaWJjIFsyLzZdOiBPSwogICAgICAgICAgICAgICAgICAgYm9vdGxpbi1h
+cm12N20tdWNsaWJjIFszLzZdOiBPSwogICAgICAgICAgICAgICAgICAgICBib290bGluLXg4Ni02
+NC1tdXNsIFs0LzZdOiBPSwogICAgICAgICAgICAgICAgICAgICAgYnItYXJtLWZ1bGwtc3RhdGlj
+IFs1LzZdOiBPSwogICAgICAgICAgICAgICAgICAgICAgICAgICAgc291cmNlcnktYXJtIFs2LzZd
+OiBPSwo2IGJ1aWxkcywgMCBza2lwcGVkLCAwIGJ1aWxkIGZhaWxlZCwgMCBsZWdhbC1pbmZvIGZh
+aWxlZCwgMCBzaG93LWluZm8gZmFpbGVkCgo+ICsJYm9vbCAibWJ3Igo+ICsJaGVscAo+ICsJICBN
+QlcgaXMgYSBtZW1vcnkgYmFuZHdpZHRoIGJlbmNobWFya2luZyB0b29sLgo+ICsJICBNQlcgZGV0
+ZXJtaW5lcyB0aGUgImNvcHkiIG1lbW9yeSBiYW5kd2lkdGggYXZhaWxhYmxlCj4gKwkgIHRvIHVz
+ZXJzcGFjZSBwcm9ncmFtcy4KCldlIG5lZWQgYW4gZW1wdHkgbGluZSBoZXJlLgoKPiArCSAgaHR0
+cHM6Ly9naXRodWIuY29tL3JhYXMvbWJ3Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWJ3L21idy5o
+YXNoIGIvcGFja2FnZS9tYncvbWJ3Lmhhc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4
+IDAwMDAwMDAwMDAuLjk2NmIzYzlkYWUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9t
+YncvbWJ3Lmhhc2gKPiBAQCAtMCwwICsxLDMgQEAKPiArIyBMb2NhbGx5IGNvbXB1dGVkCj4gK3No
+YTI1NiAgOWY3MzY1Yzc1MmY0ZGZlMGQ3ZDQ2YzU5OWZmMWU0YjQxMjE3OWJlNzY0YjBkNzEyMjY5
+ZDdlZTYxZTBjZjcxOCAgbWJ3LTEuNC50YXIuZ3oKPiArc2hhMjU2ICA0M2EyODVlMThhMjE1ODQ5
+NGIwOTk2NDVlMWVhMzUxNDQ1MmMwODU5MjdiMzQ4NTZkMzljMWY2OTE3YzdkMDRkICBtYncuc3Bl
+Ywo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21idy9tYncubWsgYi9wYWNrYWdlL21idy9tYncubWsK
+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmZiNTk5ZDBiZmQKPiAt
+LS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9tYncvbWJ3Lm1rCj4gQEAgLTAsMCArMSwyMCBA
+QAo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMgbWJ3Cj4gKyMKPiArIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMKPiArCj4gK01CV19WRVJTSU9OID0gMS40CgpBIG5ldyB2ZXJzaW9u
+IDEuNSBpcyBub3cgYXZhaWxhYmxlLgoKPiArTUJXX1NJVEUgPSAkKGNhbGwgZ2l0aHViLHJhYXMs
+bWJ3LHYkKE1CV19WRVJTSU9OKSkKPiArTUJXX0xJQ0VOU0UgPSBMR1BMLTIuMQo+ICtNQldfTElD
+RU5TRV9GSUxFUyA9IG1idy5zcGVjCj4gKwo+ICtkZWZpbmUgTUJXX0JVSUxEX0NNRFMKPiArCSQo
+VEFSR0VUX0NPTkZJR1VSRV9PUFRTKSAkKE1BS0UpIC1DICQoQEQpCj4gK2VuZGVmCj4gKwo+ICtk
+ZWZpbmUgTUJXX0lOU1RBTExfVEFSR0VUX0NNRFMKPiArCSQoSU5TVEFMTCkgLUQgLW0gMDc1NSAk
+KEBEKS9tYncgJChUQVJHRVRfRElSKS91c3Ivc2Jpbgo+ICtlbmRlZgoKVGhlIHZlcnNpb24gMS41
+IHByb3ZpZGUgYSBzaW1wbGUgQ01ha2VsaXN0cy50eHQgYnV0IG1idyBpcyBpbnN0YWxsZWQgaW4K
+L3Vzci9iaW4uIFdoeSBhcmUgeW91IHVzaW5nIC91c3Ivc2JpbiA/CgpCZXN0IHJlZ2FyZHMsClJv
+bWFpbgoKCj4gKwo+ICskKGV2YWwgJChnZW5lcmljLXBhY2thZ2UpKQoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
