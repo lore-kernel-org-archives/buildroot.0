@@ -1,50 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70BF7C00144
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15E9CC00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:12:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBD1C60608;
-	Tue, 26 Jul 2022 20:12:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBD1C60608
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2F9140116;
+	Tue, 26 Jul 2022 20:12:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2F9140116
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0r7dyJMvNffl; Tue, 26 Jul 2022 20:12:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y8JtRfQs-6dW; Tue, 26 Jul 2022 20:12:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFF2D606A9;
-	Tue, 26 Jul 2022 20:12:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFF2D606A9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 539651BF3EF
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:12:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B177400D8;
+	Tue, 26 Jul 2022 20:12:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B177400D8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 137401BF3EF
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:12:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C2EA81758
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C2EA81758
+ by smtp2.osuosl.org (Postfix) with ESMTP id E1E1F40101
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:12:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1E1F40101
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id puVaTCV3wLe8 for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 20:12:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47CFC81757
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:12:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47CFC81757
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id CA23C85FBE; Tue, 26 Jul 2022 19:58:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 22:11:24 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7dba02bf622282473f3e51883c028e1cbffa4937
-X-Git-Newrev: 89c5bfe3e429ab29a00b62c206670d3bc1f0db7f
-X-Patchwork-Hint: ignore
-Message-Id: <20220726195823.CA23C85FBE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/janus-gateway: bump to version
- 1.0.3
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VOVleTHYVZBZ for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 20:12:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DE21400D8
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8DE21400D8
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:12:28 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ b21-20020a05600c4e1500b003a32bc8612fso12981wmq.3
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:12:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=IzO2T648h6o1OnqEW7ERhVM3IzPsO0kP9yuefgMGrWg=;
+ b=YPEoP+hwfCzg+HsF6jB2I1bC0Lf405SA7BD+2sJVDfIUCVYUbKAHtZ6OKEbFpoHiR3
+ JNXenZ9yFcyesfRf8dCPlOuQO1Np9Pt+k+D/VvPmPqnlYe20K8oT9IQJnB+5V916iULu
+ O4ouTE5tdcVlKUrL58JwySPCVaqQpx9b65iNndBOQcftv7Aq7fQw9aFpMb9A8GEeq4zm
+ tJ9w78hnTMs/ARK5y0ckSO28GAPVXPO9GsPCNoCf92vsmYhv/xb8BzYLKXCrgT8NW5m/
+ HIKmiUTldse2+p1+vS0N7QEGir8Jg/5XDXUsuRJYAGtSE3631sh00CGlwHOabYfzg7JV
+ iEdw==
+X-Gm-Message-State: AJIora8tR8obfzITmRWHyI8UISE0EVsg0bvXmPUj+QnHxlkvbIiQP+ua
+ rwu3gzvmvFHlWEdtGTmC5If9mg==
+X-Google-Smtp-Source: AGRyM1v6b4Jg/SCJu4VaexJrJEpdBt/YF5gaXYri0LQzDXPC3Y4vF8dBcxYSDEEshxXsylWOaIeYyA==
+X-Received: by 2002:a05:600c:1da8:b0:3a3:1969:b0d with SMTP id
+ p40-20020a05600c1da800b003a319690b0dmr561378wms.172.1658866346752; 
+ Tue, 26 Jul 2022 13:12:26 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ k22-20020a05600c1c9600b003a2e5f536b3sm23897111wms.24.2022.07.26.13.12.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 26 Jul 2022 13:12:26 -0700 (PDT)
+Message-ID: <2f0b64a5-9109-3341-abed-9367f6f6bae3@mind.be>
+Date: Tue, 26 Jul 2022 22:12:23 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, Peter Seiderer
+ <ps.report@gmx.net>, Buildroot List <buildroot@buildroot.org>
+References: <20220725152522.1579992-1-thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220725152522.1579992-1-thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :references:from:organization:in-reply-to:content-transfer-encoding;
+ bh=IzO2T648h6o1OnqEW7ERhVM3IzPsO0kP9yuefgMGrWg=;
+ b=CISi7wOmjf/RcLYgWGwKOqdlQn+hTZP87d+7A5ZCW220H24FbSGRHMzYrrdUK/O7ox
+ oSxmk8H4rzbTZHA99xPQznabbWIpEmbhIPcmwk6twDHcY+zCEpWqhvdl8CRb74lfCG5J
+ L68MeNQarF7hv4QNz4qrt7tg2mKNU4tWUYXRR6DRmw/+dmFmgN6MElJ8aJjvF4QSwtW7
+ 3FGNw0a6KXkf25TJZ9BBC72pUyG+Y2m8JfQACy1KJAy72qcqeXgtuh3w5iP1bRTwzia/
+ wxzJtS55yd4keEfixxwYPPvLIoWLTocTcCkpD7RAXvXlhrDUqgtEnP/O4HSWqMv3JF9v
+ YWWw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=CISi7wOm
+Subject: Re: [Buildroot] [PATCH 0/5] Very initial Qt6 packaging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,194 +102,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89c5bfe3e429ab29a00b62c206670d3bc1f0db7f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Rebased second patch
-- Drop third and fourth patches (already in version)
-- duktape is an optional dependency since version 1.0.0 and
-  https://github.com/meetecho/janus-gateway/commit/fab4215b7826638660eba2147bb772dd57fed10c
-- gengetopt is not a dependency since version 1.0.1 and
-  https://github.com/meetecho/janus-gateway/commit/c21500c02e93e4b08c5242d0f0066d26ffc9f1a9
 
-https://github.com/meetecho/janus-gateway/blob/v1.0.1/CHANGELOG.md
+On 25/07/2022 17:25, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Here is a small patch series that introduce an initial, extremely
+> minimal package for Qt6. Don't be excited too soon: it is so minimal
+> that even GUI support is not included!
+> 
+> The goal of this series is just to get the process of Qt6 packaging
+> started, and be able to progressively on top of this initial base
+> rather than having one huge patch series to review.
+> 
+> I have taken some initial work from Peter Seiderer as a starting point
+> for this series (for the double-conversion and libb2 packages), but
+> for Qt6 I took a different approach than Peter in his initial series
+> at [1]: I made the qt6base package strictly minimal for now.
+> 
+> The individual patches have more details, especially the patch adding
+> qt6base itself.
+> 
+> Let me know if you have any question.
+> 
+> Thanks!
+> 
+> Thomas
+> 
+> [1] https://patchwork.ozlabs.org/project/buildroot/list/?series=229448
+> 
+> Peter Seiderer (2):
+>    package/double-conversion: new package
+>    package/libb2: new package
+> 
+> Thomas Petazzoni (3):
+>    package/pcre2: add pcre2-16 to the host variant
+>    package/qt6/qt6base: new package
+>    support/misc/toolchainfile.cmake.in: add definitions needed by Qt6
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...002-Add-test-for-Wunused-but-set-variable.patch |  8 ++++---
- .../0003-Fixed-missing-XSS-mitigation.patch        | 25 ----------------------
- .../0004-Fix-build-with-libressl-3.5.0.patch       | 25 ----------------------
- package/janus-gateway/Config.in                    |  8 +++++++
- package/janus-gateway/janus-gateway.hash           |  2 +-
- package/janus-gateway/janus-gateway.mk             | 14 +++++++-----
- 6 files changed, 23 insertions(+), 59 deletions(-)
+  Series applied to master. Thanks for this work!
 
-diff --git a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-index 2dfcc76d68..31796d6e28 100644
---- a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-+++ b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-@@ -18,6 +18,8 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- (rebased against v0.6.3)
- Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+[rebased against v1.0.3)
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Upstream status: rejected
- (https://github.com/meetecho/janus-gateway/pull/1789)]
- ---
-@@ -27,10 +29,10 @@ Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-  3 files changed, 79 insertions(+), 2 deletions(-)
-  create mode 100644 m4/ax_check_compile_flag.m4
- 
--diff --git a/Makefile.am b/Makefile.am
-+diff --git a/src/Makefile.am b/src/Makefile.am
- index f961fdb..3ddbe59 100644
----- a/Makefile.am
--+++ b/Makefile.am
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
- @@ -151,6 +151,7 @@ janus_CFLAGS = \
-  	-DEVENTDIR=\"$(eventdir)\" \
-  	-DLOGGERDIR=\"$(loggerdir)\" \
-diff --git a/package/janus-gateway/0003-Fixed-missing-XSS-mitigation.patch b/package/janus-gateway/0003-Fixed-missing-XSS-mitigation.patch
-deleted file mode 100644
-index e1e612133b..0000000000
---- a/package/janus-gateway/0003-Fixed-missing-XSS-mitigation.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From f62bba6513ec840761f2434b93168106c7c65a3d Mon Sep 17 00:00:00 2001
--From: Lorenzo Miniero <lminiero@gmail.com>
--Date: Wed, 15 Dec 2021 14:10:01 +0100
--Subject: [PATCH] Fixed missing XSS mitigation (see #2817)
--
--[Retrieved from:
--https://github.com/meetecho/janus-gateway/commit/f62bba6513ec840761f2434b93168106c7c65a3d]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- html/textroomtest.js | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/html/textroomtest.js b/html/textroomtest.js
--index bf95a260a..7d5ae832c 100644
----- a/html/textroomtest.js
--+++ b/html/textroomtest.js
--@@ -351,7 +351,7 @@ function sendPrivateMsg(username) {
-- 				text: JSON.stringify(message),
-- 				error: function(reason) { bootbox.alert(reason); },
-- 				success: function() {
---					$('#chatroom').append('<p style="color: purple;">[' + getDateString() + '] <b>[whisper to ' + display + ']</b> ' + result);
--+					$('#chatroom').append('<p style="color: purple;">[' + getDateString() + '] <b>[whisper to ' + display + ']</b> ' + escapeXmlTags(result));
-- 					$('#chatroom').get(0).scrollTop = $('#chatroom').get(0).scrollHeight;
-- 				}
-- 			});
-diff --git a/package/janus-gateway/0004-Fix-build-with-libressl-3.5.0.patch b/package/janus-gateway/0004-Fix-build-with-libressl-3.5.0.patch
-deleted file mode 100644
-index 6d75318a45..0000000000
---- a/package/janus-gateway/0004-Fix-build-with-libressl-3.5.0.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 8e450a097f5f0c7e9c034e954fbc709797521f1c Mon Sep 17 00:00:00 2001
--From: Lorenzo Miniero <lminiero@gmail.com>
--Date: Fri, 13 May 2022 18:42:38 +0200
--Subject: [PATCH] Fix build with libressl >= 3.5.0 (see #2980)
--
--[Retrieved from:
--https://github.com/meetecho/janus-gateway/commit/8e450a097f5f0c7e9c034e954fbc709797521f1c]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- dtls-bio.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/dtls-bio.h b/dtls-bio.h
--index 92f06d7c0a..fbfd4c37bf 100644
----- a/dtls-bio.h
--+++ b/dtls-bio.h
--@@ -35,7 +35,7 @@ void janus_dtls_bio_agent_set_mtu(int start_mtu);
-- int janus_dtls_bio_agent_get_mtu(void);
-- 
-- #if defined(LIBRESSL_VERSION_NUMBER)
---#define JANUS_USE_OPENSSL_PRE_1_1_API (1)
--+#define JANUS_USE_OPENSSL_PRE_1_1_API (LIBRESSL_VERSION_NUMBER < 0x30500000L)
-- #else
-- #define JANUS_USE_OPENSSL_PRE_1_1_API (OPENSSL_VERSION_NUMBER < 0x10100000L)
-- #endif
-diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 5d711fe746..ccf065d211 100644
---- a/package/janus-gateway/Config.in
-+++ b/package/janus-gateway/Config.in
-@@ -30,6 +30,14 @@ config BR2_PACKAGE_JANUS_GATEWAY_AUDIO_BRIDGE
- 	bool "audio bridge"
- 	select BR2_PACKAGE_OPUS
- 
-+config BR2_PACKAGE_JANUS_GATEWAY_DUKTAPE
-+	bool "duktape"
-+	depends on !BR2_OPTIMIZE_FAST # duktape
-+	select BR2_PACKAGE_DUKTAPE
-+
-+comment "duktape plugin can't be built with optimize for fast"
-+	depends on BR2_OPTIMIZE_FAST
-+
- config BR2_PACKAGE_JANUS_GATEWAY_ECHO_TEST
- 	bool "echo test"
- 
-diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
-index 7aec3d2aa3..5d73ede87f 100644
---- a/package/janus-gateway/janus-gateway.hash
-+++ b/package/janus-gateway/janus-gateway.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b5fe70d95b9288200df15d5f75cb8eb6db66484c6ded159422a81e880ecb7104  janus-gateway-0.11.6.tar.gz
-+sha256  5b8a7304761783585bfa8db7471bf8c393fa2a0ffc346747afadc0c1a9d213f5  janus-gateway-1.0.3.tar.gz
- sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 381843a0af..9a74350b2c 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -4,19 +4,16 @@
- #
- ################################################################################
- 
--JANUS_GATEWAY_VERSION = 0.11.6
-+JANUS_GATEWAY_VERSION = 1.0.3
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
- JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
- JANUS_GATEWAY_LICENSE_FILES = COPYING
- JANUS_GATEWAY_CPE_ID_VENDOR = meetecho
- JANUS_GATEWAY_CPE_ID_PRODUCT = janus
- 
--# 0003-Fixed-missing-XSS-mitigation.patch
--JANUS_GATEWAY_IGNORE_CVES += CVE-2021-4124
--
- # ding-libs provides the ini_config library
- JANUS_GATEWAY_DEPENDENCIES = host-pkgconf jansson libnice \
--	libsrtp host-gengetopt libglib2 openssl libconfig \
-+	libsrtp libglib2 openssl libconfig \
- 	$(if $(BR2_PACKAGE_LIBOGG),libogg)
- 
- # Straight out of the repository, no ./configure, and we also patch
-@@ -41,6 +38,13 @@ else
- JANUS_GATEWAY_CONF_OPTS += --disable-plugin-audiobridge
- endif
- 
-+ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_DUKTAPE),y)
-+JANUS_GATEWAY_DEPENDENCIES += duktape
-+JANUS_GATEWAY_CONF_OPTS += --enable-plugin-duktape
-+else
-+JANUS_GATEWAY_CONF_OPTS += --disable-plugin-duktape
-+endif
-+
- ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_ECHO_TEST),y)
- JANUS_GATEWAY_CONF_OPTS += --enable-plugin-echotest
- else
+  Regards,
+  Arnout
+
+> 
+>   DEVELOPERS                                    |  5 ++
+>   package/Config.in                             |  3 +
+>   package/double-conversion/Config.in           | 11 +++
+>   .../double-conversion/double-conversion.hash  |  3 +
+>   .../double-conversion/double-conversion.mk    | 14 ++++
+>   package/libb2/Config.in                       |  6 ++
+>   package/libb2/libb2.hash                      |  3 +
+>   package/libb2/libb2.mk                        | 18 +++++
+>   package/pcre2/pcre2.mk                        |  3 +
+>   package/qt6/Config.in                         | 43 ++++++++++
+>   package/qt6/qt6.mk                            | 12 +++
+>   ...al-qsimd_p.h-fix-build-on-ARM-v7-due.patch | 49 ++++++++++++
+>   package/qt6/qt6base/Config.in                 | 16 ++++
+>   package/qt6/qt6base/qt6base.mk                | 79 +++++++++++++++++++
+>   support/misc/toolchainfile.cmake.in           |  9 +++
+>   15 files changed, 274 insertions(+)
+>   create mode 100644 package/double-conversion/Config.in
+>   create mode 100644 package/double-conversion/double-conversion.hash
+>   create mode 100644 package/double-conversion/double-conversion.mk
+>   create mode 100644 package/libb2/Config.in
+>   create mode 100644 package/libb2/libb2.hash
+>   create mode 100644 package/libb2/libb2.mk
+>   create mode 100644 package/qt6/Config.in
+>   create mode 100644 package/qt6/qt6.mk
+>   create mode 100644 package/qt6/qt6base/0001-src-corelib-global-qsimd_p.h-fix-build-on-ARM-v7-due.patch
+>   create mode 100644 package/qt6/qt6base/Config.in
+>   create mode 100644 package/qt6/qt6base/qt6base.mk
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
