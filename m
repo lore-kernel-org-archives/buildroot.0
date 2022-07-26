@@ -1,73 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EB43C43334
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 07:08:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24A10C43334
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 07:08:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A851401B3;
-	Tue, 26 Jul 2022 07:08:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A851401B3
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7kgTFjNlu3-2; Tue, 26 Jul 2022 07:08:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C5984196E;
-	Tue, 26 Jul 2022 07:08:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C5984196E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D120A1BF280
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 07:08:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A9B7C60D95
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 07:08:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9B7C60D95
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8F5860E93;
+	Tue, 26 Jul 2022 07:08:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8F5860E93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id shqi6CWTcZ1s for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 07:08:01 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41EF460C18
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 41EF460C18
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 07:08:00 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2447B240009;
- Tue, 26 Jul 2022 07:07:56 +0000 (UTC)
-Date: Tue, 26 Jul 2022 09:07:55 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220726090755.2ec1a4a8@windsurf>
-In-Reply-To: <CADvTj4ob3JZmsB=jdW3kM4mTQ30jsDXWTOEG5FUG1b=vwfRB8g@mail.gmail.com>
-References: <20220726044425.72570-1-james.hilliard1@gmail.com>
- <20220726044425.72570-2-james.hilliard1@gmail.com>
- <20220726082503.48ce118f@windsurf>
- <CADvTj4ob3JZmsB=jdW3kM4mTQ30jsDXWTOEG5FUG1b=vwfRB8g@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id d1bJid4rWEa1; Tue, 26 Jul 2022 07:08:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E84460DCA;
+	Tue, 26 Jul 2022 07:08:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E84460DCA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EB6701BF280
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 07:08:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C2BE540016
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 07:08:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2BE540016
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PmOLioOTY10l for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 07:08:29 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A47440057
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7A47440057
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 07:08:29 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id m17so18570272wrw.7
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 00:08:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=auoJugZ3PIvnALj3qEcoBhBpDow0HjkHE1GM+sDcoSM=;
+ b=s7BqAsGcKCxUfeiARTjZkJQS66KvdIYr0uEchS5m8gA/XOBY4lul9WBS/0D3eoFz+0
+ azP1STns1QF/7ahJUDk/NmOsRkbEnLnm2+ZQ/fC2hFy/owu0Y0gB6lUHvR6jD3Xc36xc
+ GLfSnSk1a/fy5XLdWKGUVaSgnKKPP8s3m2rrqzzijiGOqWlDFrZ62W8VbCDyBsx3VtX3
+ oGsd8h0vPx54gqZmaxEOrtp/kVnQpUH6NyY2FHN60RpCejxb/AwzmvCDKQ+Or6CITIJ3
+ ZULVK8qATWcjqCDdp0yt/GG/kcHAhzicZK4lDbuORyWgb4Lzd0/uN4O8kRsgMcvky7JN
+ QCFA==
+X-Gm-Message-State: AJIora9IPBXFgCXoaLhzZ/BQ8xZwAkJErKw9aVsH4xulqGOryVus1thP
+ SZ7pklVMp2MymrzDBqbLy7n/qgUKV68=
+X-Google-Smtp-Source: AGRyM1u2fDDYWHeOJcM0FCkae8GY7c816O6ewXYuC+vZbCb0D/0Mj6yrNkyWRPFbjznrKVDemnh0dA==
+X-Received: by 2002:a05:6000:156f:b0:21d:887f:8ddf with SMTP id
+ 15-20020a056000156f00b0021d887f8ddfmr9971306wrz.534.1658819307361; 
+ Tue, 26 Jul 2022 00:08:27 -0700 (PDT)
+Received: from kali.home (2a01cb09d053e3d59a58c457f47a946a.ipv6.abo.wanadoo.fr.
+ [2a01:cb09:d053:e3d5:9a58:c457:f47a:946a])
+ by smtp.gmail.com with ESMTPSA id
+ d10-20020a5d4f8a000000b0021d928d2388sm13892885wru.85.2022.07.26.00.08.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 26 Jul 2022 00:08:27 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 26 Jul 2022 09:08:16 +0200
+Message-Id: <20220726070816.1197309-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658819278;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=PwLewc6rkZ6tKPDr82ihBRzMjIYoU+CnO1sKDDJUjTM=;
- b=BDITAGNQugVZiN7O/vA/1hPy6hk4x06J+6k85NhnOGzNE+/SZeTAI/h9i8iAsGdnBOUQyC
- ZotRNdGxnT+WC0Of4UkTB7t6IW42FNKodyRXKJXp4FhrrQspE20rm/P1VQb4gxjWZOfKkH
- lZTlp/Um/FXjO9gFpQbVGqEbPAhx5tp6g64mPAkMhvBH/Vfttf41BjIqeZwDbKIRb0bB/Z
- 7qkJwknZeygC8SxO5cIGZVA5otXeryiGneRvwktytxm0l79v+Xp0cmoPuUFuJC6zPKajIS
- VD9GMy6/TrvIUjPZH4t4bZ/RIv0Md9pUYrjF5K5ieimjssWQVAJiYOZ9tq4CHg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=BDITAGNQ
-Subject: Re: [Buildroot] [PATCH v4 2/2] package/pkg-meson: use meson to
- build/install packages
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=auoJugZ3PIvnALj3qEcoBhBpDow0HjkHE1GM+sDcoSM=;
+ b=c17pt0hafKyl61tA9ArSNPyfGSKKtkT8bLHm9ai3CXLz99kFZQcS3af/hXx2Nou30J
+ yin/ODlrQALK5zI0mKe48bnefoSYz7+yZ9JRB+ky5L1/xXGVM7Wpq5VVTsup4p+DSS+u
+ sdgCaBwSmWFqIMMmAoKjCAgvPzFNOc6HsLXSfLGiQRd1E6GVv8LiQ+8RF0f86eMWR8eC
+ CuoBxCSXbfzqe5B9U7n/EKGTZfO8dTFMDIeTsFqp2OsZqNcJAC2LEKaGW/Qj8cOcROaM
+ Dshi9/BC1IbfutgWzde+4Dcyz5VqYLBLD4VUIkQSG00NIPmyXumcKzvS9jhhFHEGm3ay
+ nahQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=c17pt0ha
+Subject: [Buildroot] [PATCH 1/1] package/libseccomp: bump to version 2.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,57 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Samuel Martin <s.martin49@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- buildroot <buildroot@buildroot.org>, Norbert Lange <nolange79@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 26 Jul 2022 00:38:11 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+https://github.com/seccomp/libseccomp/releases/tag/v2.5.4
 
-> > I *think* this is wrong, at least in the classical autotools sense of
-> > prefix vs. DESTDIR.  
-> 
-> This isn't really different from how we handle target/staging prefix+install.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libseccomp/libseccomp.hash | 4 ++--
+ package/libseccomp/libseccomp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-It is completely different. Do you know the difference between prefix
-and DESTDIR?
-
-prefix is the path where the software will be located when executed.
-
-DESTDIR is here to divert the installation.
-
-For host packages, we use prefix=$(HOST_DIR) and no DESTDIR because the
-software will be located in $(HOST_DIR) when executed.
-
-For target packages, we use prefix=/usr and DESTDIR=$(TARGET_DIR) /
-$(STAGING_DIR) because the software will be located in /usr when
-executed on the target, but temporarily during the installation we need
-the files to go in $(TARGET_DIR) or $(STAGING_DIR).
-
-See also https://www.gnu.org/prep/standards/html_node/DESTDIR.html.
-
-> > And you should drop --destdir $$(HOST_DIR) here.  
-> 
-> I recall this didn't work due to pkg-config file generation being prefix based
-> which was resulting in pkg-config files being incompatible with per-package
-> directories.
-
-And this needs to be investigated since as explained above --prefix /
-and --destdir $(HOST_DIR) is most likely incorrect for host packages.
-
-Thomas
+diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
+index 20b8864727..8337f33f3e 100644
+--- a/package/libseccomp/libseccomp.hash
++++ b/package/libseccomp/libseccomp.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/seccomp/libseccomp/releases/tag/v2.5.3
+-sha256  59065c8733364725e9721ba48c3a99bbc52af921daf48df4b1e012fbc7b10a76  libseccomp-2.5.3.tar.gz
++# From https://github.com/seccomp/libseccomp/releases/tag/v2.5.4
++sha256  d82902400405cf0068574ef3dc1fe5f5926207543ba1ae6f8e7a1576351dcbdb  libseccomp-2.5.4.tar.gz
+ # Locally calculated
+ sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  LICENSE
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index ee2cb126f1..7d7f33618e 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSECCOMP_VERSION = 2.5.3
++LIBSECCOMP_VERSION = 2.5.4
+ LIBSECCOMP_SITE = https://github.com/seccomp/libseccomp/releases/download/v$(LIBSECCOMP_VERSION)
+ LIBSECCOMP_LICENSE = LGPL-2.1
+ LIBSECCOMP_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
