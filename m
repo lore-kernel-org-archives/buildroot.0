@@ -4,67 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE8C9CCA47E
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:14:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 597DDC433EF
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5867541484;
-	Tue, 26 Jul 2022 13:14:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5867541484
+	by smtp4.osuosl.org (Postfix) with ESMTP id D841641BBC;
+	Tue, 26 Jul 2022 13:21:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D841641BBC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SM8_w2APhZLA; Tue, 26 Jul 2022 13:14:31 +0000 (UTC)
+	with ESMTP id YV5wbZTLztF8; Tue, 26 Jul 2022 13:21:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 450C14099F;
-	Tue, 26 Jul 2022 13:14:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 450C14099F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 44E121BF2B4
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:14:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CFDA419C9;
+	Tue, 26 Jul 2022 13:21:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CFDA419C9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B85E1BF2B4
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1ED1C8474F
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:14:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1ED1C8474F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 456B2419C9
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 456B2419C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QekIa6uWNlHy for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 13:14:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DYd_qQaAIoGc for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 13:21:12 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A747484066
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0D1041997
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A747484066
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:14:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B0D1041997
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:21:11 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E5B4D1BF20A;
- Tue, 26 Jul 2022 13:14:21 +0000 (UTC)
-Date: Tue, 26 Jul 2022 15:14:21 +0200
-To: Fabio Estevam <festevam@gmail.com>
-Message-ID: <20220726151421.451706e1@windsurf>
-In-Reply-To: <20220421215611.1362150-1-festevam@gmail.com>
-References: <20220421215611.1362150-1-festevam@gmail.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 715991BF204;
+ Tue, 26 Jul 2022 13:21:09 +0000 (UTC)
+Date: Tue, 26 Jul 2022 15:21:08 +0200
+To: Alexey Brodkin via buildroot <buildroot@buildroot.org>
+Message-ID: <20220726152108.3470eb7d@windsurf>
+In-Reply-To: <IA1PR12MB62107029D82ADA688CF7C210A18F9@IA1PR12MB6210.namprd12.prod.outlook.com>
+References: <20220717200407.1400318-1-thomas.petazzoni@bootlin.com>
+ <IA1PR12MB62105EDFE310AD93A55A33B6A18D9@IA1PR12MB6210.namprd12.prod.outlook.com>
+ <20220718091350.4b968717@windsurf>
+ <IA1PR12MB62107029D82ADA688CF7C210A18F9@IA1PR12MB6210.namprd12.prod.outlook.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658841262;
+ d=bootlin.com; s=gm1; t=1658841670;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=9ZKIZG0bdKaGYM4pIcN1T4/kLgKIIRQOgTBhkJ+5ymA=;
- b=CSqxpaVUqYw9hghyLHERtv+gtnidxHCCoiPA4R2TapOdPRxlYb19ESI26q2zVpwzEKPMOq
- aukOXU8GnsOGS7kNg/TytjDrqcsBh0BV3TpyAjPMsHJVdVdeeeL44gnm3lnryPAUdSurQM
- V9SGI6cbAtCZAfA598hWkoRgoMxR4g84gImN6LZhVmRG0VZZeB7h3mKBsd65B/u5rWg29I
- QYARNysBr9SJsP9lQVkKy9rO4GxwOeUjstRSuf5rFwSfmLhnIc+TlYXf45gQwNQv+ORjsh
- uiqWevfDeYqEZqZc6qZt9/HhkKXpK2cxeNWG/booijaPaGpc7NJgnTIW1BaBZw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=SSLsIZLwNXu0rGu8y7sJedl0SwswitjnGo1Bm6bnHOM=;
+ b=EQAYyfRqfSuZ74Qs/zdNiGp9el2Z4/83appj5SSb5zvSS3UtCfh85BU0QBEBZsM9Phf6te
+ gpBc07N9ez2dGLMwWTLUFg7HRCRY4frQH5hFIcz0wqWO9XGpVukbw0U/0b9oJxxzl1einw
+ vVC3gIgEFTE2IpW+YQSYnc8drXwWFevQZdIeFd4E1evTNDwwdu5/lZOlirxUjr4vIltb/X
+ U5nmP/GTKLi1R84kOMKlZ6NIYSXqEiYBATehHLOeMZQKMwe0QX6LbNoQ8c1zFDGI5gPL+X
+ QkkFc27W1fVwt1tcvW59ywToDSx0ASQsqAvFQFwT0zdtRw/T4QAO/CDjsZb5+Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CSqxpaVU
-Subject: Re: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: Bump
- U-Boot
+ header.s=gm1 header.b=EQAYyfRq
+Subject: Re: [Buildroot] [arc-buildroot] [PATCH] arch: remove support for
+ BR2_ARC_PAGE_SIZE_4K
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,29 +81,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: heiko.thiery@gmail.com, frieder.schrempf@kontron.de,
- buildroot@buildroot.org
+Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ ARC Maintainers <arc-buildroot@synopsys.com>,
+ Claudiu Zissulescu <Claudiu.Zissulescu@synopsys.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 21 Apr 2022 18:56:11 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+Hello Alexey,
 
-> Bump U-Boot to version 2022.04 and remove the two patches
-> that have already been upstreamed.
+On Tue, 19 Jul 2022 18:20:25 +0000
+Alexey Brodkin via buildroot <buildroot@buildroot.org> wrote:
+
+> So that seems to be a good catch indeed.
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
-> Hi Heiko,
+> 1. In older GNU LD such a check doesn't exist and so LD never craps out.
+>    And here I mean the latest ARC Binutils ("arc-2020.09-release"), which are based
+>    on upstream v2.35. Thus if building with 4KiB pages but ARC Binutils,
+>    the problem is not seen. I'm sure even built that way binaries work perfectly
+>    fine as I do remember trying it not that long ago myself.
+>    
+>    BTW that pre-defined "common-page-size" comes from GCC actually, see
+>    https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/arc/linux.h;h=0f1ff055be757ad1483910fc4918e7fef7fe4d5e;hb=1ea978e3066ac565a1ec28a96a4d61eaf38e2726#l48
 
-Applied to master, thanks.
+OK.
+
+> 2. And in case of building for ARCv3 processors we don't mess with "page-size"
+>    stuff in the "LINK_SPEC", see https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/blob/arc64/gcc/config/arc64/linux32.h#L26
+
+OK, but I don't really see the relationship.
+
+> That said I'd like to get our GCC & Binutils maintainer input on what needs
+> to be done with these "page-size" options in the "LINK_SPEC".
+> 
+> Maybe with use of up-to-date Binutils those default values are no longer needed?
+
+Why no longer needed? Of course is you change the page size, you need
+to pass some options to the linker so that it can place sections and
+define load addresses (and other related stuff) accordingly.
+
+> Or we may keep default "max" value and then not explicitly set outside "common"
+> value will be adjusted as needed automatically.
+
+I don't understand what you mean here. Today, we are setting
+max-page-size, and that doesn't work because the common-page-size value
+is higher. As I mentioned in my initial patch, passing
+-Wl,-z,max-page-size=4096 (already done) and
+-Wl,-z,common-page-size=4096 would most likely fix the error, but I
+wasn't sure it was the correct thing to do.
+
+Do you have more feedback from your GCC and binutils maintainer perhaps?
+
+Thanks a lot!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
