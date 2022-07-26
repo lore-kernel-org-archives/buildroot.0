@@ -4,70 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 597DDC433EF
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:21:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82EACC00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 13:53:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D841641BBC;
-	Tue, 26 Jul 2022 13:21:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D841641BBC
+	by smtp4.osuosl.org (Postfix) with ESMTP id A928041600;
+	Tue, 26 Jul 2022 13:44:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A928041600
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YV5wbZTLztF8; Tue, 26 Jul 2022 13:21:15 +0000 (UTC)
+	with ESMTP id b2xMeAw3rJbT; Tue, 26 Jul 2022 13:44:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CFDA419C9;
-	Tue, 26 Jul 2022 13:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CFDA419C9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7B85E1BF2B4
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:21:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F844415C6;
+	Tue, 26 Jul 2022 13:44:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F844415C6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 497441BF2B4
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:44:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 456B2419C9
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:21:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 456B2419C9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0AD7E61092
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 13:44:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AD7E61092
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DYd_qQaAIoGc for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 13:21:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YeD4e_IBbZvl for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 13:44:40 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0D1041997
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B0D1041997
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:21:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3CF360EFE
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D3CF360EFE
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 13:44:39 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 715991BF204;
- Tue, 26 Jul 2022 13:21:09 +0000 (UTC)
-Date: Tue, 26 Jul 2022 15:21:08 +0200
-To: Alexey Brodkin via buildroot <buildroot@buildroot.org>
-Message-ID: <20220726152108.3470eb7d@windsurf>
-In-Reply-To: <IA1PR12MB62107029D82ADA688CF7C210A18F9@IA1PR12MB6210.namprd12.prod.outlook.com>
-References: <20220717200407.1400318-1-thomas.petazzoni@bootlin.com>
- <IA1PR12MB62105EDFE310AD93A55A33B6A18D9@IA1PR12MB6210.namprd12.prod.outlook.com>
- <20220718091350.4b968717@windsurf>
- <IA1PR12MB62107029D82ADA688CF7C210A18F9@IA1PR12MB6210.namprd12.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ by mail.gandi.net (Postfix) with ESMTPA id 2F847240003;
+ Tue, 26 Jul 2022 13:44:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 26 Jul 2022 15:44:35 +0200
+Message-Id: <20220726134436.2014032-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658841670;
+ d=bootlin.com; s=gm1; t=1658843078;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=SSLsIZLwNXu0rGu8y7sJedl0SwswitjnGo1Bm6bnHOM=;
- b=EQAYyfRqfSuZ74Qs/zdNiGp9el2Z4/83appj5SSb5zvSS3UtCfh85BU0QBEBZsM9Phf6te
- gpBc07N9ez2dGLMwWTLUFg7HRCRY4frQH5hFIcz0wqWO9XGpVukbw0U/0b9oJxxzl1einw
- vVC3gIgEFTE2IpW+YQSYnc8drXwWFevQZdIeFd4E1evTNDwwdu5/lZOlirxUjr4vIltb/X
- U5nmP/GTKLi1R84kOMKlZ6NIYSXqEiYBATehHLOeMZQKMwe0QX6LbNoQ8c1zFDGI5gPL+X
- QkkFc27W1fVwt1tcvW59ywToDSx0ASQsqAvFQFwT0zdtRw/T4QAO/CDjsZb5+Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=/YhvMSH3jxv3GdVJ/3IgOPdM8zGoiVIbaS1jWUm7TtQ=;
+ b=GuBwaf75rz9zGpfMwizUiLqGvo6lvgVnzc/pBWWoKpTTjlFnH8MOzLZTlePTlG0WyfZXMj
+ IjWI8lIrpPZ5es/d8jXuPRUqgi911SNu1jvscBqnwhijUNNp6wfypeLtHKs5M3+//NILiR
+ jNsRE0UgcIn/EebvpGrXqdnzMleQALBar9ppNTV3iU61H7FGPrFXZRSwMQC5fKTe1exI3V
+ ch9v+ejVqgIpT91HyQDDfH6UioPMTKXj6pIXytYHoWo6qvPjAok9qdY3ahutaLdaEjSKKZ
+ VCiGISD9km+0V9tK1SKG0TPJpU//15i047+hD3tTWxNyQMnxeAPq7RIXe6ZW1Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EQAYyfRq
-Subject: Re: [Buildroot] [arc-buildroot] [PATCH] arch: remove support for
- BR2_ARC_PAGE_SIZE_4K
+ header.s=gm1 header.b=GuBwaf75
+Subject: [Buildroot] [PATCH] toolchain/toolchain-buildroot,
+ package/glibc: sync glibc dependency comments
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,65 +73,74 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
- ARC Maintainers <arc-buildroot@synopsys.com>,
- Claudiu Zissulescu <Claudiu.Zissulescu@synopsys.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexey,
+In commit fd839aeb7f40596e60bc53a96b7a65892924cc26 ("package/glibc:
+introduce and use BR2_PACKAGE_GLIBC_ARCH_SUPPORTS and
+BR2_PACKAGE_GLIBC_SUPPORTS") we moved the Config.in logic about glibc
+dependencies from toolchain/toolchain-buildroot/Config.in into
+package/glibc/Config.in.
 
-On Tue, 19 Jul 2022 18:20:25 +0000
-Alexey Brodkin via buildroot <buildroot@buildroot.org> wrote:
+Unfortunately, it is not possible to move the Config.in comments that
+tell the user, within the choice..endchoice for the C library why
+glibc is not currently selectable, so we had to keep them in
+toolchain/toolchain-buildroot/Config.in.
 
-> So that seems to be a good catch indeed.
-> 
-> 1. In older GNU LD such a check doesn't exist and so LD never craps out.
->    And here I mean the latest ARC Binutils ("arc-2020.09-release"), which are based
->    on upstream v2.35. Thus if building with 4KiB pages but ARC Binutils,
->    the problem is not seen. I'm sure even built that way binaries work perfectly
->    fine as I do remember trying it not that long ago myself.
->    
->    BTW that pre-defined "common-page-size" comes from GCC actually, see
->    https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/arc/linux.h;h=0f1ff055be757ad1483910fc4918e7fef7fe4d5e;hb=1ea978e3066ac565a1ec28a96a4d61eaf38e2726#l48
+Turns out that the comments were out of sync with the dependencies,
+and two comments were missing. This commit adds the missing ones, and
+adds a comment in package/glibc/Config.in explaining that we need to
+be careful about updating toolchain/toolchain-buildroot/Config.in as
+well.
 
-OK.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/Config.in                 | 3 +++
+ toolchain/toolchain-buildroot/Config.in | 8 ++++++++
+ 2 files changed, 11 insertions(+)
 
-> 2. And in case of building for ARCv3 processors we don't mess with "page-size"
->    stuff in the "LINK_SPEC", see https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/blob/arc64/gcc/config/arc64/linux32.h#L26
-
-OK, but I don't really see the relationship.
-
-> That said I'd like to get our GCC & Binutils maintainer input on what needs
-> to be done with these "page-size" options in the "LINK_SPEC".
-> 
-> Maybe with use of up-to-date Binutils those default values are no longer needed?
-
-Why no longer needed? Of course is you change the page size, you need
-to pass some options to the linker so that it can place sections and
-define load addresses (and other related stuff) accordingly.
-
-> Or we may keep default "max" value and then not explicitly set outside "common"
-> value will be adjusted as needed automatically.
-
-I don't understand what you mean here. Today, we are setting
-max-page-size, and that doesn't work because the common-page-size value
-is higher. As I mentioned in my initial patch, passing
--Wl,-z,max-page-size=4096 (already done) and
--Wl,-z,common-page-size=4096 would most likely fix the error, but I
-wasn't sure it was the correct thing to do.
-
-Do you have more feedback from your GCC and binutils maintainer perhaps?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index f535f9f6eb..2c6dc40139 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -30,6 +30,9 @@ config BR2_PACKAGE_GLIBC_SUPPORTS
+ 	bool
+ 	default y if BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS
++	# Make sure to keep these dependencies in sync with the
++	# Config.in comments in
++	# toolchain/toolchain-buildroot/Config.in
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 56343daee7..c8f522a8da 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -64,6 +64,14 @@ comment "glibc on MIPS w/ NAN2008 needs a toolchain w/ headers >= 4.5"
+ 	depends on BR2_MIPS_NAN_2008
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+ 
++comment "glibc on RISC-V 64-bit needs a toolchain w/ headers >= 5.0"
++	depends on BR2_RISCV_64
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
++
++comment "glibc on ARC needs a toolchain w/ headers >= 5.1"
++	depends on BR2_arc
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
++
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl"
+ 	depends on BR2_PACKAGE_MUSL_SUPPORTS
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.37.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
