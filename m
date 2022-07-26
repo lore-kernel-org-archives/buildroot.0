@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACA21C00144
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:53:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64630C00144
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 20:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45B814013F;
-	Tue, 26 Jul 2022 20:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45B814013F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 14DEA40167;
+	Tue, 26 Jul 2022 20:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14DEA40167
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IFIQOCrQMbSt; Tue, 26 Jul 2022 20:53:02 +0000 (UTC)
+	with ESMTP id V0EJ4xbc3qKi; Tue, 26 Jul 2022 20:53:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5667D40116;
-	Tue, 26 Jul 2022 20:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5667D40116
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A3E111BF3EF
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:52:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 231954013F;
+	Tue, 26 Jul 2022 20:53:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 231954013F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AF581BF3EF
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:53:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3FEF6408F2
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:52:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FEF6408F2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 759FE80BA4
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 20:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 759FE80BA4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xugEGxsHGIcP for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 20:52:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JR4WYId8dAPt for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 20:53:45 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5614408F1
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B5614408F1
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:52:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D13D80B9F
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9D13D80B9F
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 20:53:44 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id F3023240009;
- Tue, 26 Jul 2022 20:52:50 +0000 (UTC)
-Date: Tue, 26 Jul 2022 22:52:50 +0200
-To: Christian Stewart via buildroot <buildroot@buildroot.org>
-Message-ID: <20220726225250.2d25ac5d@windsurf>
-In-Reply-To: <20220517101912.3243181-1-christian@paral.in>
-References: <20220517101912.3243181-1-christian@paral.in>
+ by mail.gandi.net (Postfix) with ESMTPSA id 606BC1C0002;
+ Tue, 26 Jul 2022 20:53:41 +0000 (UTC)
+Date: Tue, 26 Jul 2022 22:53:40 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220726225340.53ea9dd0@windsurf>
+In-Reply-To: <20220726173235.24338-1-fontaine.fabrice@gmail.com>
+References: <20220726173235.24338-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658868771;
+ d=bootlin.com; s=gm1; t=1658868821;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=cWbZ5xrTnwBNA/SytOS0rEh3wIRXUx4GA76Rs0QDH48=;
- b=A3gEjV0YTcgmT4O3LCLGHtD72SJ+zJCCBWZARMqXGb3Q2AYLZPDqhQNvKow+MAZJ+zDwVL
- ajzR1tXcHVWX7BPV9vPQieSaH2lnZXxGb9vtgIRCyXV+f38jfDUYfESihF1g25pUuliKSs
- O2jFw0drXLJHGEbx2/ixgetNFFTgZ1BHnW8Gd5rriKPTj+p7UF/vdVwC4nFweH1oVqEbrF
- XMDyNLjdfrHB7L1oz5gdKwTejkLE1jBjB7ZLjmtxKM+cVUjn1ArF9fDgbS4qsFLa8Xeofi
- dEGww2ygkYGe0RcdnKvoWEM7KaLLLlKzBIEQjesPmzt7WT85MaS6nRuoimPi8A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=X38pSYe508uA8KOUUUOcjRgaUaLNGPsITil8RixlTGM=;
+ b=iWhOoCFH8yBLdZTbys1R4ycLUWc7kFaJ/fcurNr6Y9htao0BD9vT4yolH77MLzSuqdyKA0
+ S3ebqAHhPZwxs53/je8Cq2unNuwzklE5h9GGig77Dl7FNBGj/nnAMsC1snTCXPCH2vSOFz
+ c558nlJdS12w2UpxrnAWfEaZf7nppZ2uvQZ9LRdf+LEtZWpi0OigxFKui9fgOd/yz8d/Zn
+ QcDcf2+IgPEMwYkwuplUSQ2KBmNpWyj4xq9gVP1H9O43NFcSBisx8w9Wi9ANpYfFsTemJ/
+ /LciKZmIlAuDcSkYadACnm9tBkczlx3O7akTj6XwR6s9HPoGmoj9qnognMIxnQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=A3gEjV0Y
-Subject: Re: [Buildroot] [PATCH v1 1/1] boot/arm-trusted-firmware: allow
- enabling without uboot or edk2
+ header.s=gm1 header.b=iWhOoCFH
+Subject: Re: [Buildroot] [PATCH 1/1] package/janus-gateway: bump to version
+ 1.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,23 +78,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Gregory Dymarek <gregd72002@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 17 May 2022 03:19:12 -0700
-Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+On Tue, 26 Jul 2022 19:32:35 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> It should be possible to compile ARM_TRUSTED_FIRMWARE without u-boot or EDK2.
-> For example, one might want to produce "bl31.bin" for use as an init stub for
-> the Raspberry Pi 4.
+> - Rebased second patch
+> - Drop third and fourth patches (already in version)
+> - duktape is an optional dependency since version 1.0.0 and
+>   https://github.com/meetecho/janus-gateway/commit/fab4215b7826638660eba2147bb772dd57fed10c
+> - gengetopt is not a dependency since version 1.0.1 and
+>   https://github.com/meetecho/janus-gateway/commit/c21500c02e93e4b08c5242d0f0066d26ffc9f1a9
 > 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> https://github.com/meetecho/janus-gateway/blob/v1.0.1/CHANGELOG.md
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  boot/arm-trusted-firmware/Config.in | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  ...dd-test-for-Wunused-but-set-variable.patch |  8 +++---
+>  .../0003-Fixed-missing-XSS-mitigation.patch   | 25 -------------------
+>  .../0004-Fix-build-with-libressl-3.5.0.patch  | 25 -------------------
+>  package/janus-gateway/Config.in               |  8 ++++++
+>  package/janus-gateway/janus-gateway.hash      |  2 +-
+>  package/janus-gateway/janus-gateway.mk        | 14 +++++++----
+>  6 files changed, 23 insertions(+), 59 deletions(-)
+>  delete mode 100644 package/janus-gateway/0003-Fixed-missing-XSS-mitigation.patch
+>  delete mode 100644 package/janus-gateway/0004-Fix-build-with-libressl-3.5.0.patch
 
 Applied to master, thanks.
 
