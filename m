@@ -1,83 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 170E9C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 19:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4A09C00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 19:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6479A4049F;
-	Tue, 26 Jul 2022 19:32:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6479A4049F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 57EF0400E4;
+	Tue, 26 Jul 2022 19:38:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57EF0400E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5A5sZ-_Qrrij; Tue, 26 Jul 2022 19:32:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZVPFL8q1xZEz; Tue, 26 Jul 2022 19:38:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3314C40442;
-	Tue, 26 Jul 2022 19:32:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3314C40442
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AD0051BF27A
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:32:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AA9E400C1;
+	Tue, 26 Jul 2022 19:38:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AA9E400C1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C6341BF27A
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7071780C1E
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:32:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7071780C1E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 762E0600B9
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:38:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 762E0600B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1YEYobb9nmFG for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 19:32:13 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E52480CE3
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5E52480CE3
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 19:32:13 +0000 (UTC)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
- by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 26QJW8i4057032;
- Tue, 26 Jul 2022 14:32:08 -0500
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
- by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 26QJW8Ut084156
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Tue, 26 Jul 2022 14:32:08 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 26
- Jul 2022 14:32:07 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 26 Jul 2022 14:32:08 -0500
-Received: from [128.247.75.130] (ileax41-snat.itg.ti.com [10.172.224.153])
- by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 26QJW75d061754;
- Tue, 26 Jul 2022 14:32:07 -0500
-Message-ID: <7c1e1a84-2a16-130c-a547-96c92f6d3fca@ti.com>
-Date: Tue, 26 Jul 2022 14:32:07 -0500
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FYmSJtJUw2Np for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 19:38:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D28C6001B
+Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6D28C6001B
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 19:38:34 +0000 (UTC)
+Received: from email.seznam.cz
+ by email-smtpc15b.ng.seznam.cz (email-smtpc15b.ng.seznam.cz [10.23.14.195])
+ id 4970703aff50cf614977ce4d; Tue, 26 Jul 2022 21:38:32 +0200 (CEST)
+Received: from localhost.localdomain (mail.ms-free.net [185.147.46.46])
+ by email-relay8.ng.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+ Tue, 26 Jul 2022 21:38:29 +0200 (CEST)  
+From: Petr Vorel <pevik@seznam.cz>
+To: buildroot@buildroot.org
+Date: Tue, 26 Jul 2022 21:38:10 +0200
+Message-Id: <20220726193810.43817-1-pevik@seznam.cz>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Xuanhao Shi via buildroot
- <buildroot@buildroot.org>
-References: <20220726165041.17584-1-x-shi@ti.com>
- <20220726165041.17584-2-x-shi@ti.com> <20220726193735.735588e4@windsurf>
-In-Reply-To: <20220726193735.735588e4@windsurf>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-szn-frgn: <ac563087-9774-44f2-9670-d48f4aeedcfb>
+X-szn-frgc: <0>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1658863928;
- bh=sblAa2qSPtkGo0aVR8Ubn5tnt6dwqEDJefz1crJSYIY=;
- h=Date:Subject:To:CC:References:From:In-Reply-To;
- b=Te8mfNeJAIBGN0wiKf5eXZQM2CTl795uN48hGbSrbahK59wzhQ2aj9P9EtfbiF0PZ
- G5zzOKnTSAmuAzR3L4aUEn4muiBiupOl9+mX4LjWbBuzyo6zNXlJufLw1KR2D807UY
- TkFUR/kLCayCm55OMtBI7UYBWvQXWC/egsHz4pqs=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=Te8mfNeJ
-Subject: Re: [Buildroot] [PATCH 1/4] package/arm-gnu-toolchain: add version
- selection
+ d=seznam.cz; s=beta; 
+ t=1658864312; bh=SiQIwbQZdZISMyYA5laQcPP9vLkB4IhuSS1g/GnCAKo=;
+ h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding:X-szn-frgn:X-szn-frgc;
+ b=DpWFmBXvVuK/01NltoURImr8qho7rrYkyWNVGx9f+u+aKl1VoTwOLRdWuDukNFcx2
+ 75yVaIBVTHz5YxJ7NqbTn3Q4/o+iy2XbD8rNFgfuHBnaOazgsp/5qgXoY8RZbqte8q
+ buXll0i3Kja1mAC8IWaTfjxLtmTu3mr6JSU4zhh8=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=seznam.cz header.i=@seznam.cz
+ header.a=rsa-sha256 header.s=beta header.b=DpWFmBXv
+Subject: [Buildroot] [PATCH 1/1] package/debianutils: bump version to 5.7-0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,94 +72,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Xuanhao Shi via buildroot <buildroot@buildroot.org>
-Reply-To: Xuanhao Shi <x-shi@ti.com>
-Cc: Suniel Mahesh <sunil@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 7/26/22 12:37, Thomas Petazzoni wrote:
+From: Petr Vorel <petr.vorel@gmail.com>
 
-Hello, thank you very much for your input!
+debian/copyright has been moved to a different tarball
+(debianutils_5.7-0.2.debian.tar.xz) which does not contain the source
+code, thus build from salsa git instead of tarball from
+https://snapshot.debian.org/.
 
->> to bugs in the newest version.
-> 
-> Could you give some details on the "bugs" ?
-> 
+Add patch to disable po4a (unnecessary dependency just to get
+translations).
 
-I have experienced bugs very similar to this while building with version 
-11 for k3-image-gen:
-https://bugs.launchpad.net/gcc-arm-embedded/+bug/1969997
-I think the problem is that when the pre-packaged GCC was built, it 
-could be targeting a newer x86_64 architecture than the processor being 
-used, but I am not that sure.
-They are confirming that they will fix this in the next release:
-https://bugs.linaro.org/show_bug.cgi?id=5825#c19
-In the meantime, since this bug did not appear on version 10, I decided 
-to add the option to use version 10 at the moment.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/debianutils/0001-Disable-po4a.patch | 25 +++++++++++++++++++++
+ package/debianutils/debianutils.hash        |  6 ++---
+ package/debianutils/debianutils.mk          |  7 +++---
+ 3 files changed, 32 insertions(+), 6 deletions(-)
+ create mode 100644 package/debianutils/0001-Disable-po4a.patch
 
->> diff --git a/package/arm-gnu-toolchain/Config.in.host b/package/arm-gnu-toolchain/Config.in.host
->> new file mode 100644
->> index 0000000000..25d0af1d04
->> --- /dev/null
->> +++ b/package/arm-gnu-toolchain/Config.in.host
->> @@ -0,0 +1,38 @@
->> +config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN
->> +	bool "host arm-gnu-toolchain"
->> +	help
->> +	  Separate ARM32 cross-compilation toolchain
->> +	  for some AArch64 platforms.
->> +
->> +menu "host arm-gnu-toolchain version"
->> +	depends on BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN
-> 
-> The menu is not needed.
-> 
-> Use:
-> 
-> if BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN
-> 
-> ...
-> 
-> endif
-> 
-> to enclose the options of this package.
-> 
->> +choice
->> +	bool "host arm-gnu-toolchain version"
-> 
-> Just "version"
-> 
->> +config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_DEFAULT
->> +	bool "Version 11.2-2022.02"
->> +	help
->> +	  Use version 11.2.
->> +
->> +config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_CUSTOM
->> +	bool "Custom archived sources"
->> +	help
->> +	  Specify custom archive for the toolchain.
-> 
-> Seeing what you end up needing in your defconfig, I think I would
-> prefer explicit options for 11.x and 10.x, rather than all this
-> "custom" mess.
-> 
-> So just:
-> 
-> config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_VERSION_11_X
-> 	...
-> config BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_VERSION_10_X
-> 	...
-> 
-> Thanks!
-> 
-> Thomas
+diff --git a/package/debianutils/0001-Disable-po4a.patch b/package/debianutils/0001-Disable-po4a.patch
+new file mode 100644
+index 0000000000..2af9a93279
+--- /dev/null
++++ b/package/debianutils/0001-Disable-po4a.patch
+@@ -0,0 +1,25 @@
++From 7134952f97ad5afb208e270571afbfe12670cc14 Mon Sep 17 00:00:00 2001
++From: Petr Vorel <petr.vorel@gmail.com>
++Date: Mon, 25 Jul 2022 12:59:45 +0200
++Subject: [PATCH] Disable po4a
++
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++---
++ Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 86ac499..7c61896 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,6 +1,6 @@
++ AUTOMAKE_OPTIONS = foreign
++ 
++-SUBDIRS = po4a
+++# SUBDIRS = po4a
++ 
++ EXTRA_DIST = CHANGELOG CONTRIBUTING .gitlab-ci.yml
++ 
++-- 
++2.37.1
++
+diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+index 16a45d4ea1..cd77b54ad1 100644
+--- a/package/debianutils/debianutils.hash
++++ b/package/debianutils/debianutils.hash
+@@ -1,4 +1,4 @@
+-# From http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils/debianutils_4.11.dsc
+-sha256 bb5ce6290696b0d623377521ed217f484aa98f7346c5f7c48f9ae3e1acfb7151 debianutils_4.11.tar.xz
+ # Locally calculated
+-sha256 3c8b5112cb8f74ba959233291908d73f527afa6f1d96f93649aeb912b5884567 debian/copyright
++sha256  76ba936451d9ea23a397d60d93ffc1a39544534f17a1f5b816cdaf4bb7a57486  debianutils-debian-5.7-0.2.tar.bz2
++# Locally calculated from https://snapshot.debian.org/archive/debian/20220501T215056Z/pool/main/d/debianutils/debianutils_5.7-0.2.debian.tar.xz
++sha256  3c8b5112cb8f74ba959233291908d73f527afa6f1d96f93649aeb912b5884567  debian/copyright
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+index d2c41130fb..05ef43135d 100644
+--- a/package/debianutils/debianutils.mk
++++ b/package/debianutils/debianutils.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-DEBIANUTILS_VERSION = 4.11
+-DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
+-DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils
++DEBIANUTILS_VERSION = 5.7-0.2
++DEBIANUTILS_SOURCE = debianutils-debian-$(DEBIANUTILS_VERSION).tar.bz2
++DEBIANUTILS_SITE = https://salsa.debian.org/debian/debianutils/-/archive/debian/$(DEBIANUTILS_VERSION)
++DEBIANUTILS_AUTORECONF = YES
+ DEBIANUTILS_CONF_OPTS = --exec-prefix=/
+ DEBIANUTILS_LICENSE = GPL-2.0+, SMAIL (savelog)
+ DEBIANUTILS_LICENSE_FILES = debian/copyright
+-- 
+2.36.1
 
-Ok. I'll rework this patch accordingly.
-
-Xuanhao
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
