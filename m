@@ -1,79 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10583C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 16:51:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF037C00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 16:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A870A42317;
-	Tue, 26 Jul 2022 16:51:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A870A42317
+	by smtp2.osuosl.org (Postfix) with ESMTP id 76A4240612;
+	Tue, 26 Jul 2022 16:57:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76A4240612
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z1kLZxvxC_tQ; Tue, 26 Jul 2022 16:51:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WnP_S1bvPWXz; Tue, 26 Jul 2022 16:56:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EF97422F5;
-	Tue, 26 Jul 2022 16:51:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EF97422F5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4D0F11BF3D9
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:50:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E5AA40148;
+	Tue, 26 Jul 2022 16:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E5AA40148
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B5EF51BF3D9
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:56:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 259C384788
- for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:50:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 259C384788
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C74140148
+ for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 16:56:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C74140148
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r5t2zbSYX63k for <buildroot@lists.busybox.net>;
- Tue, 26 Jul 2022 16:50:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA76C8479F
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CA76C8479F
- for <buildroot@buildroot.org>; Tue, 26 Jul 2022 16:50:47 +0000 (UTC)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
- by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 26QGogPs022466;
- Tue, 26 Jul 2022 11:50:42 -0500
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
- by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 26QGog3K032254
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Tue, 26 Jul 2022 11:50:42 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 26
- Jul 2022 11:50:42 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 26 Jul 2022 11:50:42 -0500
-Received: from uda0500531.dal.design.ti.com (ileax41-snat.itg.ti.com
- [10.172.224.153])
- by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 26QGofBq095306;
- Tue, 26 Jul 2022 11:50:42 -0500
-To: <buildroot@buildroot.org>
-Date: Tue, 26 Jul 2022 11:50:41 -0500
-Message-ID: <20220726165041.17584-5-x-shi@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220726165041.17584-1-x-shi@ti.com>
-References: <20220726165041.17584-1-x-shi@ti.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZsiUYFOJ9z0k for <buildroot@lists.busybox.net>;
+ Tue, 26 Jul 2022 16:56:52 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E4F34013C
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3E4F34013C
+ for <buildroot@buildroot.org>; Tue, 26 Jul 2022 16:56:52 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id AF50760002;
+ Tue, 26 Jul 2022 16:56:48 +0000 (UTC)
+Date: Tue, 26 Jul 2022 18:56:47 +0200
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20220726185647.7ba6303c@windsurf>
+In-Reply-To: <20220724235818.679881-1-christian@paral.in>
+References: <20220724235818.679881-1-christian@paral.in>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1658854242;
- bh=Y/2wPcfPWWbOrH1q6qA0O67SWUogEtfZJZzDMT0WI1w=;
- h=From:To:CC:Subject:Date:In-Reply-To:References;
- b=I4NlJzQUByKLAe4hBcN4rqlB/tgM3SXRTa09qPXBdx4xC+RHdZWk0m1wyRbQcRDq6
- pd/KOCqUoOvoohIRE8PeoD7zgpPwIm434mxhCSwFEU1rjRySAHjwu9xdTyHhP58pmn
- a9r9C94rC6xeqdVUOOfe+qejwZjPIstnYzeVWiJA=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=I4NlJzQU
-Subject: [Buildroot] [PATCH 4/4] configs/am64x_sk_defconfig: add new
- defconfig
+ d=bootlin.com; s=gm1; t=1658854609;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=O8RLWcuND4TU4qb9tw2qJL1Y5Q0g4b4IOt2/GSqtqmY=;
+ b=RnH+sWYM/3jVtxyANWaG71/EQlQUptWINbC0uZQy5p7/36Lc5T0S27H5NSc7TPb12G38Fo
+ sOckJXjwAdUqTHTuKWyyD0PvZ+1EvUJatbvSLmzara2esxcuH4aLV+auThvwpMLJhR2OAc
+ v8ho+xXg2PRSqgrgbus1qhC0jPWDnjmfp80FGPdRWTNnkBAfS2wE/m+1H3O8pa2KD/cSPX
+ KdK4NGnwo6TuJRAbRKbTCSJwhE9nWQN2C6cHTNf2BBoiGArOvGqTONJ5fDIo3Gp04IQC/o
+ ig7lBhU1FfxzP21YCGyOwS5chNlIPker57Ox+ORMbs0XmRcgGvaWiTmlus8Ifg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RnH+sWYM
+Subject: Re: [Buildroot] [PATCH 1/1] package/mkbootimg: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,76 +75,182 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Xuanhao Shi via buildroot <buildroot@buildroot.org>
-Reply-To: Xuanhao Shi <x-shi@ti.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Suniel Mahesh <sunil@amarulasolutions.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adds the new defconfig for TI's AM64X_SK board after patch.
+Hello,
 
-Signed-off-by: Xuanhao Shi <x-shi@ti.com>
----
- configs/am64x_sk_defconfig | 44 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 configs/am64x_sk_defconfig
+Thanks for your contribution! See some comments below.
 
-diff --git a/configs/am64x_sk_defconfig b/configs/am64x_sk_defconfig
-new file mode 100644
-index 0000000000..629bff6519
---- /dev/null
-+++ b/configs/am64x_sk_defconfig
-@@ -0,0 +1,44 @@
-+BR2_aarch64=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_INIT_SYSTEMD=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/am6x/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(TOPDIR)/board/am6x/am64x/linux/ti_sdk_arm64_release_defconfig"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am642-sk"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX=y
-+BR2_PACKAGE_K3_IMAGE_GEN=y
-+BR2_PACKAGE_K3_IMAGE_GEN_UBOOT_SPL_DEFCONFIG="am64x_evm_r5"
-+BR2_PACKAGE_K3_IMAGE_GEN_SOC="am64x"
-+BR2_PACKAGE_K3_IMAGE_GEN_CONFIG="evm"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="lite"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="SPD=opteed"
-+BR2_TARGET_OPTEE_OS=y
-+BR2_TARGET_OPTEE_OS_PLATFORM="k3"
-+BR2_TARGET_OPTEE_OS_CORE_IMAGES="tee-pager_v2.bin"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am64x_evm_a53"
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="tispl.bin"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="TEE=$(BINARIES_DIR)/tee-pager_v2.bin"
-+BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN=y
-+BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_CUSTOM=y
-+BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_CUSTOM_SITE="https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10"
-+BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_CUSTOM_SOURCE="gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2"
-+BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_CUSTOM_LICENSE="GPL-3.0+"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+On Sun, 24 Jul 2022 16:58:18 -0700
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+
+> Android bootimg utilities: mkbootimg and unpackbootimg.
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/Config.in.host                        |  1 +
+>  ...akefile-remove-cc-and-ar-definitions.patch | 97 +++++++++++++++++++
+>  package/mkbootimg/Config.in.host              |  4 +
+>  package/mkbootimg/mkbootimg.hash              |  3 +
+>  package/mkbootimg/mkbootimg.mk                | 26 +++++
+>  5 files changed, 131 insertions(+)
+
+Entry in the DEVELOPERS file is missing.
+
+> diff --git a/package/mkbootimg/0001-makefile-remove-cc-and-ar-definitions.patch b/package/mkbootimg/0001-makefile-remove-cc-and-ar-definitions.patch
+> new file mode 100644
+> index 0000000000..d61b1e0b88
+> --- /dev/null
+> +++ b/package/mkbootimg/0001-makefile-remove-cc-and-ar-definitions.patch
+> @@ -0,0 +1,97 @@
+> +From 04a62922ce238f3106a916a30c0c2995ffa1526c Mon Sep 17 00:00:00 2001
+> +From: Christian Stewart <christian@paral.in>
+> +Date: Sat, 14 May 2022 20:58:14 -0700
+> +Subject: [PATCH] makefile: remove cc and ar definitions
+> +
+> +Signed-off-by: Christian Stewart <christian@paral.in>
+> +---
+> + Makefile             | 26 +-------------------------
+> + libmincrypt/Makefile | 27 +++++----------------------
+> + 2 files changed, 6 insertions(+), 47 deletions(-)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index 6ee3a38c..39d0996b 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -1,29 +1,4 @@
+> + # Andrew Huang <bluedrum@163.com>
+> +-ifeq ($(CC),cc)
+> +-CC = gcc
+> +-endif
+> +-AR = ar rcv
+> +-ifeq ($(windir),)
+> +-EXE =
+> +-RM = rm -f
+> +-else
+> +-EXE = .exe
+> +-RM = del
+> +-endif
+> +-
+> +-CFLAGS = -ffunction-sections -O3
+> +-
+> +-ifneq (,$(findstring darwin,$(CROSS_COMPILE)))
+> +-    UNAME_S := Darwin
+> +-else
+> +-    UNAME_S := $(shell uname -s)
+> +-endif
+> +-ifeq ($(UNAME_S),Darwin)
+> +-    LDFLAGS += -Wl,-dead_strip
+> +-else
+> +-    LDFLAGS += -Wl,--gc-sections -s
+> +-endif
+
+This is not needed. They can be overridden on the command line, as long
+as you pass them to the right side of make, i.e:
+
+	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
+
+The CC, CFLAGS, LDFLAGS from HOST_CONFIGURE_OPTS will take precedence
+over the ones defined in the Makefile.
+
+> +-
+> + all:mkbootimg$(EXE) unpackbootimg$(EXE)
+> + 
+> + static:
+> +@@ -31,6 +6,7 @@ static:
+> + 
+> + libmincrypt.a:
+> + 	$(MAKE) -C libmincrypt
+> ++	cp ./libmincrypt/libmincrypt.a ./libmincrypt.a
+
+This added line is not related to the patch.
+
+> + 
+> + mkbootimg$(EXE):mkbootimg.o libmincrypt.a
+> + 	$(CROSS_COMPILE)$(CC) -o $@ $^ -L. -lmincrypt $(LDFLAGS)
+> +diff --git a/libmincrypt/Makefile b/libmincrypt/Makefile
+> +index ad482de9..c7c478ff 100755
+> +--- a/libmincrypt/Makefile
+> ++++ b/libmincrypt/Makefile
+> +@@ -1,31 +1,14 @@
+> +-ifeq ($(CC),cc)
+> +-CC = gcc
+> +-endif
+> +-AR = ar rc
+> +-ifeq ($(windir),)
+> +-RM = rm -f
+> +-CP = cp
+> +-else
+> +-RM = del
+> +-CP = copy /y
+> +-endif
+> +-
+> +-CFLAGS = -ffunction-sections -O3
+> +-EXT = a
+> +-LIB = libmincrypt.$(EXT)
+> ++LIB = libmincrypt.a
+
+Same comment. And EXT = a doesn't cause any problem.
+
+> + LIB_OBJS = dsa_sig.o p256.o p256_ec.o p256_ecdsa.o rsa.o sha.o sha256.o
+> + INC  = -I..
+> + 
+> +-all:$(LIB)
+> ++all: $(LIB)
+
+Spurious change.
+
+> + 
+> + clean:
+> + 	$(RM) $(LIB_OBJS) $(LIB)
+> + 
+> +-$(LIB):$(LIB_OBJS)
+> +-	$(CROSS_COMPILE)$(AR) $@ $^
+> +-	$(CP) $@ ..
+> +-
+> ++$(LIB): $(LIB_OBJS)
+> ++	$(CROSS_COMPILE)$(AR) rc $@ $^
+
+Why?
+
+> + 
+> +-%.o:%.c
+> ++%.o: %.c
+
+Spurious change.
+
+> diff --git a/package/mkbootimg/Config.in.host b/package/mkbootimg/Config.in.host
+> new file mode 100644
+> index 0000000000..2ca7bcae00
+> --- /dev/null
+> +++ b/package/mkbootimg/Config.in.host
+> @@ -0,0 +1,4 @@
+> +config BR2_PACKAGE_HOST_MKBOOTIMG
+> +	bool "host mkbootimg"
+> +	help
+> +	  Android Bootimg mkbootimg and unpackbootimg utils.
+
+Missing link to the upstream Github project.
+
+> +define HOST_MKBOOTIMG_BUILD_CMDS
+> +	$(foreach t,$(HOST_MKBOOTIMG_TARGETS),\
+> +		$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) SRCDIR=$(@D) \
+
+Are you sure SRCDIR is needed?
+
+Thanks!
+
+Thomas
 -- 
-2.17.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
