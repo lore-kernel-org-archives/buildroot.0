@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EDD4C00140
-	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 19:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17866C00140
+	for <buildroot@archiver.kernel.org>; Tue, 26 Jul 2022 19:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4713F40012;
-	Tue, 26 Jul 2022 19:58:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4713F40012
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91C19401A6;
+	Tue, 26 Jul 2022 19:58:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91C19401A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id csPyPp6ZC1FB; Tue, 26 Jul 2022 19:58:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q-PozpXhpPDK; Tue, 26 Jul 2022 19:58:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63B734011F;
-	Tue, 26 Jul 2022 19:58:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63B734011F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E17011BF27A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BA8C408C2;
+	Tue, 26 Jul 2022 19:58:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BA8C408C2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EBC5C1BF9B5
  for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9D4940012
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE93160681
  for <buildroot@lists.busybox.net>; Tue, 26 Jul 2022 19:57:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9D4940012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE93160681
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 99GQplFm03g0 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zp8qW3W2l7iH for <buildroot@lists.busybox.net>;
  Tue, 26 Jul 2022 19:57:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3128400D8
+ by smtp3.osuosl.org (Postfix) with ESMTP id E918360644
  for <buildroot@buildroot.org>; Tue, 26 Jul 2022 19:57:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3128400D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E918360644
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8908485FA0; Tue, 26 Jul 2022 19:43:31 +0000 (UTC)
+ id 7F3C385F9F; Tue, 26 Jul 2022 19:43:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 26 Jul 2022 21:56:31 +0200
+Date: Tue, 26 Jul 2022 21:56:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0f99c9087a84ff8f9f621e4e7b7ab3332566e26
-X-Git-Newrev: b07210b272c6e8810b038190cf5c1fd1f7b48397
+X-Git-Oldrev: fecec75b6205c299b6f422bbf175bd5d43485e02
+X-Git-Newrev: f0f99c9087a84ff8f9f621e4e7b7ab3332566e26
 X-Patchwork-Hint: ignore
-Message-Id: <20220726194331.8908485FA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: remove BR2_GCC_ENABLE_LTO
+Message-Id: <20220726194331.7F3C385F9F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/binutils: remove
+ BR2_BINUTILS_ENABLE_LTO
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b07210b272c6e8810b038190cf5c1fd1f7b48397
+commit: https://git.buildroot.net/buildroot/commit/?id=f0f99c9087a84ff8f9f621e4e7b7ab3332566e26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Currently, this option doesn't do anything. It only adds
@@ -72,87 +73,70 @@ disable them if it is not set. Since both of these default to enabled,
 plugins and lto are effectively always enabled.
 
 There really is no need to make this configurable: it adds a bit of size
-and build time to host-gcc, but we don't care about that for host tools.
-It's still up to individual builds to enable the LTO options.
+and build time to host-binutils, but we don't care about that for host
+tools. It's still up to individual builds to enable the LTO options.
 
 Therefore, remove the option entirely. For clarity, explicitly pass
 --enable-plugins --enable-lto to configure.
 
-No legacy handling is added for the removed option. Since the behaviour
-hasn't actually changed (independently of whether the option was enabled
-or not), there's no point bothering the user with a legacy option.
-
-elf2flt was linking with libdl depending on this option. Since the
-option doesn't do anything, this is probably not needed. Still, to avoid
-breaking things, and because linking with libdl doesn't cost us anything
-anyway, always link with libdl.
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/elf2flt/elf2flt.mk | 6 +-----
- package/gcc/Config.in.host | 6 ------
- package/gcc/gcc.mk         | 6 ++----
- 3 files changed, 3 insertions(+), 15 deletions(-)
+ package/binutils/Config.in.host | 3 ---
+ package/binutils/binutils.mk    | 6 ++----
+ package/gcc/Config.in.host      | 1 -
+ 3 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index 9230e3ce1a..6cd0786c3d 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -24,11 +24,7 @@ HOST_ELF2FLT_CONF_OPTS = \
- 	--target=$(GNU_TARGET_NAME) \
- 	--disable-werror
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index ef1b2a94db..5bdda25faf 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -35,9 +35,6 @@ config BR2_BINUTILS_VERSION
+ 	default "2.37"		if BR2_BINUTILS_VERSION_2_37_X
+ 	default "2.38"		if BR2_BINUTILS_VERSION_2_38_X
  
--HOST_ELF2FLT_LIBS = -lz
+-config BR2_BINUTILS_ENABLE_LTO
+-	bool
 -
--ifeq ($(BR2_GCC_ENABLE_LTO),y)
--HOST_ELF2FLT_LIBS += -ldl
--endif
-+HOST_ELF2FLT_LIBS = -lz -ldl
- 
- HOST_ELF2FLT_CONF_ENV = LIBS="$(HOST_ELF2FLT_LIBS)"
- 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 20187db6fd..9833ae1336 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -130,12 +130,6 @@ config BR2_TOOLCHAIN_BUILDROOT_DLANG
- 	  D language and you want D libraries to be installed on your
- 	  target system.
- 
--config BR2_GCC_ENABLE_LTO
--	bool "Enable compiler link-time-optimization support"
--	help
--	  This option enables link-time optimization (LTO) support in
--	  gcc.
--
- config BR2_GCC_ENABLE_OPENMP
- 	bool "Enable compiler OpenMP support"
- 	depends on !BR2_PTHREADS_NONE && !BR2_arc && !BR2_microblaze
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 114e774503..ec6f3b550a 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -75,6 +75,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
- 	--disable-libssp \
- 	--disable-multilib \
- 	--disable-decimal-float \
+ config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
+ 	string "Additional binutils options"
+ 	default ""
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index c94ebe0995..6362cb1641 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -86,6 +86,8 @@ HOST_BINUTILS_CONF_OPTS = \
+ 	--with-sysroot=$(STAGING_DIR) \
+ 	--enable-poison-system-directories \
+ 	--without-debuginfod \
 +	--enable-plugins \
 +	--enable-lto \
- 	--with-gmp=$(HOST_DIR) \
- 	--with-mpc=$(HOST_DIR) \
- 	--with-mpfr=$(HOST_DIR) \
-@@ -165,10 +167,6 @@ else
- HOST_GCC_COMMON_CONF_OPTS += --enable-tls
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+ 
+@@ -120,10 +122,6 @@ HOST_BINUTILS_POST_EXTRACT_HOOKS += BINUTILS_XTENSA_OVERLAY_EXTRACT
+ HOST_BINUTILS_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
  endif
  
--ifeq ($(BR2_GCC_ENABLE_LTO),y)
--HOST_GCC_COMMON_CONF_OPTS += --enable-plugins --enable-lto
+-ifeq ($(BR2_BINUTILS_ENABLE_LTO),y)
+-HOST_BINUTILS_CONF_OPTS += --enable-plugins --enable-lto
 -endif
 -
- ifeq ($(BR2_PTHREADS_NONE),y)
- HOST_GCC_COMMON_CONF_OPTS += \
- 	--disable-threads \
+ # Hardlinks between binaries in different directories cause a problem
+ # with rpath fixup, so we de-hardlink those binaries, and replace them
+ # with copies instead.
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index a7e237c3f7..20187db6fd 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -132,7 +132,6 @@ config BR2_TOOLCHAIN_BUILDROOT_DLANG
+ 
+ config BR2_GCC_ENABLE_LTO
+ 	bool "Enable compiler link-time-optimization support"
+-	select BR2_BINUTILS_ENABLE_LTO
+ 	help
+ 	  This option enables link-time optimization (LTO) support in
+ 	  gcc.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
