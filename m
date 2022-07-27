@@ -1,87 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB500C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 09:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66090C19F29
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 09:22:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 363B060B42;
-	Wed, 27 Jul 2022 09:21:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 363B060B42
+	by smtp2.osuosl.org (Postfix) with ESMTP id 084B040492;
+	Wed, 27 Jul 2022 09:22:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 084B040492
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CmR7En9jDR8T; Wed, 27 Jul 2022 09:21:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4l56Y3pD8E4N; Wed, 27 Jul 2022 09:22:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6366060B3A;
-	Wed, 27 Jul 2022 09:21:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6366060B3A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28AB5404AA;
+	Wed, 27 Jul 2022 09:22:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28AB5404AA
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AD4061BF57F
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:21:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 228CE1BF57F
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 869F0408CF
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:21:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 869F0408CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id BABF7408CF
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:22:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BABF7408CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id blz2k1-H2578 for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 09:21:28 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C2DC408CC
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2C2DC408CC
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 09:21:28 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id i8so376480wro.11
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 02:21:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=wqLAPTukMgqLxsBIVOghRglBDUEq+xmqFu8CX3MvYdA=;
- b=FRdGvb17zeSGBGTApXU5YiekiYzOMB7C+llexSE1oR1xVweINoSz1/gICPEVvbRJa4
- JeA0azRwTxA786jB61aahM5yjPzZARERsBY7ar10qfBzcrFVRqj38X95TYf0D3uvLV77
- dZGMKWisdzQHN2HKx7DzhwBI1fvo3JaxEP79Kx1m7Z2GbqOyOc/710aROONUAZYMwIcT
- cY/D73WGJbfwDiMmfCN0MrCVkaF4gEX8QKSaC1xr2gh6oDu2xGHwldYL5zS4LqXrPzAm
- /OznPvfYM/FUT3DZvuiNZfw6mPrynNvyQcNyKfGQrZlmwEawqO5AxgMZPJHEycFmuc6d
- asvw==
-X-Gm-Message-State: AJIora8r/ZO3VylJ3lrxrN6FOMptC4qzXhE6/e7VXaFgMQ8NWzDk6q1N
- Uc8vtgGeaHqUtSpB02e+SmHxUtzeEuY=
-X-Google-Smtp-Source: AGRyM1s5ZMUKN389w5wIOVjAXLbtFBMaNNUlMYaEJNGwOWDAhvbdfHYtj1npHppQQ80yASHsJwtljg==
-X-Received: by 2002:a5d:528a:0:b0:21d:7c04:2ddf with SMTP id
- c10-20020a5d528a000000b0021d7c042ddfmr12938943wrv.422.1658913686043; 
- Wed, 27 Jul 2022 02:21:26 -0700 (PDT)
-Received: from kali.home (2a01cb0680494f3e376d079efd3cafb3.ipv6.abo.wanadoo.fr.
- [2a01:cb06:8049:4f3e:376d:79e:fd3c:afb3])
- by smtp.gmail.com with ESMTPSA id
- f12-20020a5d568c000000b0021e5cc26dd0sm15119704wrv.62.2022.07.27.02.21.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 02:21:25 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 11:21:23 +0200
-Message-Id: <20220727092123.985892-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id xijzsx5UFYIn for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 09:22:14 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5470408CC
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E5470408CC
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 09:22:13 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EA2D524000E;
+ Wed, 27 Jul 2022 09:22:08 +0000 (UTC)
+Date: Wed, 27 Jul 2022 11:22:07 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20220727112207.309f4ec4@windsurf>
+In-Reply-To: <20220727083020.GD1085273@scaer>
+References: <20220726163951.2111731-1-thomas.petazzoni@bootlin.com>
+ <20220726163951.2111731-4-thomas.petazzoni@bootlin.com>
+ <20220727083020.GD1085273@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=wqLAPTukMgqLxsBIVOghRglBDUEq+xmqFu8CX3MvYdA=;
- b=F99bJpK1JQJ5aUg/fky7X3J0ZG9x841lkzVyklv5dzHt6FFNOBME2aVbZJMllMg7wg
- 35TnmjqGyS0yVOzyd23T0tgUVrbdTixbx7DgMUZ2VF2ipyoAi7+O67VJy8Y2snNTcLtS
- ARNfMLEHxZzxst+gy7DeGZmLGtnz7Uc4RcWDsN4UmHq47x/saR8nfEhvoiK+Zqi2q9nx
- 17D9mQhAkdOBLSXSSqtrAHJNngT1DmwQ7cUrRzT0oW+1hDQ9Im1TXYRrk/WxIDVGQQUQ
- Bj+lrFx8k/X0VsGdF3ZdBXApS1pTqzRShP6kVT4Hd6Z5jwTDNlreVpy5qZacnRCqHbhl
- MF7Q==
+ d=bootlin.com; s=gm1; t=1658913731;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=JrcYVH/Kzlen+KPcW+7B9diXmtzHCtGqYjqcVlt0VmQ=;
+ b=kKqcDLf9z1vx1eyxhicN9b/yWPlYiR4U3wwmNHupM7S5rpLlolCI0TVwUAFkAuAMWOTISn
+ 6JMH7j6M/cloNBYCCneBhFpLO4UWj1cn5uphISHDaTWeMjktXuglxWrQedtrZzDS1YWUFM
+ yIyo2krQTGwbcbhxWcYKzNixiFjDJX9k4VtqxvUP8c+U6tzWyESIrfFyDjMZmhDPZE4dpt
+ VV3/rDpGX8SQbeV2xQzGZCzpw5pH8NjI/W9Opk1dVnwmhuGC0IRH5hQH/+iGYhu40J62WX
+ PL5Emou1n7bQV0PsTXn5pF33uYBJoG1dI+RwBftdPl4/lnSv5hQ50r1GnVFskg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=F99bJpK1
-Subject: [Buildroot] [PATCH 1/1] package/drbd-utils: bump to version 9.21.4
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=kKqcDLf9
+Subject: Re: [Buildroot] [PATCH v2 4/4] arch: rework MMU option handling and
+ move to "Target architecture" menu
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +78,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christophe Vu-Brugier <cvubrugier@fastmail.fm>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Niklas Cassel <niklas.cassel@wdc.com>,
+ Damien Le Moal <damien.lemoal@wdc.com>, Mark Corbin <mark@dibsco.co.uk>,
+ Jonathan Ben Avraham <yba@tkos.co.il>, buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/LINBIT/drbd-utils/blob/v9.21.4/ChangeLog
+Hello Yann,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/drbd-utils/drbd-utils.hash | 2 +-
- package/drbd-utils/drbd-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for the review!
 
-diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
-index 58d282714e..9bdfd69538 100644
---- a/package/drbd-utils/drbd-utils.hash
-+++ b/package/drbd-utils/drbd-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3827bfed6630f8784ec558a8ac3de68175d544876d897c0810ad141a61487cad  drbd-utils-9.19.0.tar.gz
-+sha256  730d68b9ee48df7b2e3ddff38bf54a5bc405651bac0ece180b4f22a468e543b3  drbd-utils-9.21.4.tar.gz
- sha256  1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
-diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
-index 2082810a37..3ab3246f49 100644
---- a/package/drbd-utils/drbd-utils.mk
-+++ b/package/drbd-utils/drbd-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DRBD_UTILS_VERSION = 9.19.0
-+DRBD_UTILS_VERSION = 9.21.4
- DRBD_UTILS_SITE = http://pkg.linbit.com/downloads/drbd/utils
- DRBD_UTILS_LICENSE = GPL-2.0+
- DRBD_UTILS_LICENSE_FILES = COPYING
+On Wed, 27 Jul 2022 10:30:20 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> I am not sure why you are removing a generic option in favour of two
+> arch-specific options that behave exactly the same.
+
+The motivation is explained in the commit log. Quoting it
+
+================================================================
+However, if we simply move it in arch/Config.in, it means that we
+would have the following order of options:
+
+ Target architecture
+ Target architecture variant
+ ABI
+ MMU
+ Binary format
+
+But really, the MMU option should be right below the Target
+architecture variant, and the available ABIs derived from that.
+================================================================
+
+> Why not just keep that:
+> 
+>     config BR2_USE_MMU
+>         bool "MMU support" if BR2_ARCH_HAS_MMU_OPTIONAL
+>         default y if BR2_ARCH_HAS_MMU_OPTIONAL
+> 
+> This still achieves what you want:
+>   - arch/variants that have a mandatory MMU can directly select
+>     BR2_USE_MMU as this patch does, and the prompt does not appear
+>     in that case;
+>   - arch/variants that have no MMU don't select BR2_USE_MMU, and
+>     there is no prompt either
+>   - arch/variants that have an optrional MMU select
+>     BR2_ARCH_HAS_MMU_OPTIONAL, BR2_USE_MMU is default y, and there
+>     is a prompt.
+> 
+> And then we drop one Kconfig knob (MMU_MANDATORY), and do not need to
+> introduce two others (one for riscv and one for xtensa).
+> 
+> I.e. the case for arch-specific options is not clear to me...
+
+See above :-)
+
+Thomas
 -- 
-2.35.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
