@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00CA4C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 15:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D25DC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 15:42:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A59A182768;
-	Wed, 27 Jul 2022 15:42:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A59A182768
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0G8hA7-LAfFU; Wed, 27 Jul 2022 15:42:30 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 265BC82730;
-	Wed, 27 Jul 2022 15:42:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 265BC82730
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F106F1BF41A
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:42:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CC3AC605AF
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:42:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC3AC605AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11ADE60BF1;
+	Wed, 27 Jul 2022 15:42:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11ADE60BF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7-0lFr5829-t for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 15:42:25 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id d9Tzyyve_qty; Wed, 27 Jul 2022 15:42:43 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0AB56606BF;
+	Wed, 27 Jul 2022 15:42:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AB56606BF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DAD81BF41A
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:42:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 25D7A82796
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:42:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25D7A82796
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nLva-21iNlND for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 15:42:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B67F160034
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EAEF82726
 Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on2109.outbound.protection.outlook.com [40.107.93.109])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B67F160034
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:42:25 +0000 (UTC)
+ (mail-dm6nam10on2117.outbound.protection.outlook.com [40.107.93.117])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1EAEF82726
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:42:37 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nkfDAQd7om6M7tK8a5hLFHIiyqhIHUTMpodW5HKI0uUR2M3HLR38tqLfZwRopIDM9lMkERxfmK6lIfM3j/WleQHXJqgVCF1X47dPuZ0Pw4bnbPl2rizektJe78OoJo/sJ2MDNXMvQe8c2gp6REX0x0kEej830qWRHptstxPrvOc5Gc6ELKI/yC9FbMTwyUJuGd7qJe+/HrEGPc5N2Mk2IZrRK6Ge5xm2i9XQxEqfZ/Hjcr9yg6DqszX59DiQkajbQYcVoqu+FfQAcVMn/ty6/6LllPhBiPySA8BVnXkr9wiVFzJqFgrVrSk8qaZsR6N2ahLlPv8T3ZDygvf1xlRLEA==
+ b=M6cJmQWvaZvx3zQKSp+G1oFrhiOLZIA2p1mSmaMGwu5uOf9z0HUGjKbx6s+cCFycRpb82SBb7oi0Rqk6t2DitnHeRlzbxLk5kkwx/Rv3FzJsTritOVLc4xyvW8ap8ugtAiiaZuxt3T+/Y0BQN31PQHqn2pC2VnYh7XrJTlWWQwwStM6+lWjz0XIIJ2HjB+pwBoNjTtc7aRHO61V7qs0BG+mkdNKTIgBvQMuTk5ShmTiCVrjST1gebuA6t2KTKAkybKwZEwewAsCh9QfrgiMZ8a2BFeau9h1Nia5sxKhprDWIsPh2AE02jJpKxBKio6VtN2baIVQcdJvdLHt5Xbqbww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0aduudRGyHBAWCmvb/NfMmazV3Xan4mDwyKGqOFtZPM=;
- b=bdHDLSCRSK4zxyEYMGs6HXvb0LZYYEwf6PTvEimHfAt1E2uJC+2+9czZlv8How5Hk0e4JKNTEiTjE2u/qHR5WJL3+CNwrJqRvV7yjvZuzN+m5242yjhw2qbVfykhLdyqkJaOJN70uE/CGqntLJBjEZXQgrXs1B82YHe3b9GVIgnWfu3YCdGSOi71I7laXUBwaILVzW4vlKLAHjGMAd/lDbZFFG8qHVi4nJYfruBZu8COq+J+BT9bS1T6N84Z3YA6dzPtp6UqqBzE3l6p+33V8uN2ZGGwNuJllBUDLMKlQTlgvJuiNUWcS5/GAYtYrOV5IZF6+FlLtE8RI8tZa9yP7w==
+ bh=vPRUCvVpEfewrQ+hDOLd3e87O6bo7/Bx6tq2viPK+9E=;
+ b=llEoPdH6/kxKgnQdo392PZSxw3Q4QwVugOeMW2T2SV7EIzOFXi1ROz/PmSYnLqnehSBpn57Lr0LCxx3S8zwytCIFGx2AQs3PUA9ByOxRXDzye/celM0MXtXHxCJ7mr88fVzO1oFrES73AN/y92q5WrCopq7hwvUslcFwgaIlKbVVHg0emzo3VQfomCRJdZfYTSXDj4bchF76o/pdND+UEPd/y3/xRNXdiGvWdRN155O7prkaduMzvYYhLd5aybluFTKcoC5JuOqn8qOHTri7ipM0XSxQOm9MPBd/PgyA+kQmTb80dIC0crKty5qfrGkbKTcAmAEJrIiR1w9d9AXrMQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=phobosdpl.com; dmarc=pass action=none
  header.from=phobosdpl.com; dkim=pass header.d=phobosdpl.com; arc=none
@@ -50,15 +50,15 @@ Received: from DM6PR17MB3515.namprd17.prod.outlook.com (2603:10b6:5:1de::16)
  by BN8PR17MB2820.namprd17.prod.outlook.com (2603:10b6:408:52::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.6; Wed, 27 Jul
- 2022 15:42:23 +0000
+ 2022 15:42:35 +0000
 Received: from DM6PR17MB3515.namprd17.prod.outlook.com
  ([fe80::74a0:ce3:5577:546f]) by DM6PR17MB3515.namprd17.prod.outlook.com
  ([fe80::74a0:ce3:5577:546f%7]) with mapi id 15.20.5458.025; Wed, 27 Jul 2022
- 15:42:23 +0000
+ 15:42:35 +0000
 From: Sen Hastings <sen@phobosdpl.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 10:41:11 -0500
-Message-Id: <20220727154114.1378721-2-sen@phobosdpl.com>
+Date: Wed, 27 Jul 2022 10:41:12 -0500
+Message-Id: <20220727154114.1378721-3-sen@phobosdpl.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220727154114.1378721-1-sen@phobosdpl.com>
 References: <20220727154114.1378721-1-sen@phobosdpl.com>
@@ -67,67 +67,68 @@ X-ClientProxiedBy: SN6PR08CA0005.namprd08.prod.outlook.com
  (2603:10b6:5:1de::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d9c76b27-63a3-4e5a-1365-08da6fe6994e
+X-MS-Office365-Filtering-Correlation-Id: 199ff60d-bc62-42be-8244-08da6fe69d3e
 X-MS-TrafficTypeDiagnostic: BN8PR17MB2820:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N+H0ffZRK90xvHrlY2nW0d6hF/j9C7Jegc+7LxSwP7sGLqT90E9yeYZTaSQgbzNiEL3n79SQGJa6c3QExtmBmWNIrzM27X2KTe+ibAevCvGMw3QIsh9r8yUYebdxQyAO4JErqMT+3UM3oLZanuEzyB+W2WQytPKeSMKX2Iy7+LCmQI95K8cInGdmJ97QFmy+Kxjybqghkt784FKEZlUdf2AwWvgL+c8ME4t3AipqeobsELGX/S77ycuSSaX2EUTBkd94FctcxIsDpLJIzrfVN6zM0pHvWHtOAMrO1wvEd/M6kesRBqk1QMAjrXmNeV/Y0PhTv0oG9Snt2QkfY0nMHN8Q2+KgrXt1hW0CXcpm5sB3phOZoBQlPjJWhYV4IHfF65Zec/As+6c27iNTffOgpcmFOqXHAOxTD9NMoM2ExW/HXRKeYVYAAlbJzbxPpVjYfOlADOHGv4GnEKEZQUqRqlvuH7eIlX6h1jB6WFgP/8kYg4MIrHeoUS1JdRr3cFoD1Wot3CmCzDrF1Xo9YMkwsA5gNFwxjj+jStJIsIeiHAlQudUcg4P2yvYE7NiqPy2QKKQlgD6ivdfesnmTZIbB2/klJCarKqNm1+x4RiIdSUzZtoLCVsFEQwr26HWEnOtu06x0BAJvbN7UA2FtFNcqUUfEDevs7G71bVPy8T6aGxOeqEaN4uNjSQyAse+WfJpk/SlO3k+veE+9x+ioOPZNesFi5TmCPVAQ7duT3300OlMj1B2R2iVVargXx3uQsoR89LEN+TmzeKHSJyrbxC3adAxp2KEBOLKpigHWrWygmoQ=
+X-Microsoft-Antispam-Message-Info: yA4LDWS9W6R/OdHrCoQ/9IS+a4CGp8L9+RUftZKUm/aPoRVzRM/UQ9prkZ+MaEKUYCDCZkFZbcXhWn3xJbM6i+c/9eeoyfmoN0XeZb+1lNuFSxn7SBdKF/Nv8vi9Lyo2Fl9T+Ms3wSSJnGYcmronsYA47IEBouzDgnEES5EFw8BXjX0tPat1ayXu7YHcDLHY6Xi7tzhi8kRD8PKmZamyFz4Fa3pOt+Mb/2gu9UGxtt7OKGXvMny3hm8ac7cP+aOsyPgi18vAjv+M+myKQjtyTJBx9sKxEA6mHp7cCDH1q7WVKP3XCh4qA1is02FHwG9rco+kWF/H1wKry340RAlazKrUAdlzEumT2MNymvV8iAf+2wfxOoBm4CLh9/0Cj2qlSPe3sq93smXeIVvHbKbuTfM44r3WjkG2KFgbz/n81sZef0q9CZYUmpENjKPNxllvLQXYsKcx9Ksy5w4yTNhx9+GQLhySgADF8QvqK1iHcUhIQrMLud1xcc7WJrlWgKSzmcPiiHstCWIcucMtZdWIK4/jm1KUFS/FxVDcH0SMDtN8hZQdlqJy8Cua4eb6tGCT/wfwuX/zhV+gRuF+bVTNxWdCvHfUURXXwZjRAInbE0gehRwWDRbBwe5KQqv44lwDQxbJ3sVXPH0I2oQJw8VNFvWIKyX6WmST1tr3s6FBnCJDJVB2Fd561Xuikpj4JaC9EaVq2WHKYyAHLC695nSBmC5P+F9ddnHbtxoGovQKVvdkqLhKJWyl6qoYO348spLLoytf0vApMZjgRSE0Qt5kHHFI7eYz3PqmuSyBrYNj7OtUUA+ab3Q4P9InL/w3CsrOJxwGUwEV9PWVcicjv8Ekzw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DM6PR17MB3515.namprd17.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(346002)(376002)(136003)(396003)(366004)(39830400003)(83380400001)(8936002)(5660300002)(107886003)(1076003)(38100700002)(38350700002)(186003)(6666004)(41300700001)(478600001)(52116002)(6506007)(6512007)(26005)(6486002)(6916009)(316002)(36756003)(2616005)(86362001)(66476007)(66556008)(4744005)(66946007)(8676002)(4326008)(2906002);
+ SFS:(13230016)(346002)(376002)(136003)(396003)(366004)(39830400003)(83380400001)(8936002)(5660300002)(107886003)(1076003)(38100700002)(38350700002)(186003)(6666004)(41300700001)(478600001)(52116002)(6506007)(6512007)(26005)(6486002)(6916009)(316002)(36756003)(2616005)(86362001)(66476007)(66556008)(66946007)(8676002)(4326008)(2906002)(4210325003);
  DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o/xBqNkPQgewHcbfEiM479Png/H0E491bGo8wcGK7lbXk9CEX2Zt8MwZzY2Z?=
- =?us-ascii?Q?jPWNzUozwZzgmg7CsyE2Oi5Lh67D425GdbObVyNU8Mc77Ho2Vyjlq+x+MA+j?=
- =?us-ascii?Q?JJWVdnzrsmQwS6qh51W6DcXJ0ZgZhH9vE9vPGOZASM8u/pX5UDZ4dc4m9x6v?=
- =?us-ascii?Q?NgUhvK6yv7zOyUptSmq84GXwLmMDF0Qzfhx4dj9xvU7qKvw4thCJQW7ijDqK?=
- =?us-ascii?Q?so/zC1nx2UkAMqRriwJGxVkFSrzbuo8xYWKEW2I5hkgkWmMwGMaS71Pl8OQa?=
- =?us-ascii?Q?yyFrnHzFLRWSDGAXl+QC2yXduv5cd/yREjRp+rPWr3P3k0SiaQR/nrfXV24m?=
- =?us-ascii?Q?IILj6KvSAL3DBTbFmrpEEz4Sryf8hyvkTyN4eT00HNgEOx1MPUu1Qd6PotQZ?=
- =?us-ascii?Q?4lEUm7MhU/0hnFl7MvdmenJtXVT9ACo8eqrr8ex8DDmPa7FTFezSO8LZIylT?=
- =?us-ascii?Q?3CeBkG6JUVj4OAPM7zVm4auKuc1D1DYGFlJyaBHcxxS4RlhIeqtAyrxynTkJ?=
- =?us-ascii?Q?FPFWNvqxD068dhzHAs6vzSfn7OyzNJTcyl4mkT1x3UbU9s+8ghETRoPr6ili?=
- =?us-ascii?Q?lcBzF3YnrrURJU9AkGc0ctEI1MTa5hD4niDHHdgj93cK/IT/K7QPlNlx0iF1?=
- =?us-ascii?Q?YHtzXurJaGn1kbFumTiAuGYZjwi8earT7UUOXPeu9U4gWikfsUWxvPk2RAxV?=
- =?us-ascii?Q?RNomMdjG7ifyu1eCOKdpwul3jxlODJWnA/U1KlqE+2SFnMsyKAooE8rgEhdD?=
- =?us-ascii?Q?tTjhDcjEuYGWgkfgmSvzHInsfkBUKN38WYLilHKfXmy43TTUe90JCEjx9ylo?=
- =?us-ascii?Q?8oAcz2Xs1BzVLrSflBUZ7DuETs5MF8b9YOPJH/5qFVLAOMgj9vFU03tNSLK7?=
- =?us-ascii?Q?wFzbn/QT9gBa3+2GRUkaAYbLcb7uVJTBwSAiwQXWBvnGOkOsK61Uq8gjZmsf?=
- =?us-ascii?Q?5lWkRZzgmHeTMZSiwtpFvdNOql/GqFte1eZYi2I6dm/eDSzUf1/xYuHkZKo7?=
- =?us-ascii?Q?DjyOWQCdYnibKZDGv+UwwJ9Vb+jLkvffhHKA/7TUkMuN7k2MrbIGzClMkIMq?=
- =?us-ascii?Q?UsDWF87JFqLsPbm8v2dsPnZS850zPBR34WbIIKQnv3RN7WlPmFbSuL+V4r4x?=
- =?us-ascii?Q?gzMbKkfU0Q2dScWQsPoL6vP8xbQEZ/6zV5BHyimkbaeIMb1UV5KG5on5Z3hY?=
- =?us-ascii?Q?nF8ltJpODGFohIDggSt5dNPUiih5Fk8dNidkRGs6Ib9gHC6KGgHoyy1IiUyR?=
- =?us-ascii?Q?WZHBxaTFyT7lL6A6jCYu1vY7yiQKjwDkyoNxmjmRIOF1fXv6KGLZFJre3s+3?=
- =?us-ascii?Q?jpORb8MvzfBnR7FX2VtmUZn0LJUNiq1wrRlnklkmwoiGG5aMuhKUQB1yNIxo?=
- =?us-ascii?Q?T5rv+U7k/hrqWYvzMsj/GWrlstGFHB12gGzfUqvKRrH2CaPaWeDw2Htwz3Dp?=
- =?us-ascii?Q?nAhrRqtScnp0Vhk5h/yi0bJLRyg3KLQddwZdr0eqmCf7k3xa0aM18OE6REXr?=
- =?us-ascii?Q?C2hqvxJ0/0VQ6UKr73K43XYwJrUKZx9zJVNxZfqD+zj7EmzYMA58ruLskQKg?=
- =?us-ascii?Q?8asPawUuEhPiyl9lfKSaLd8yXPa6zYWVUqBTj85T?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2Q5x90leontLH6hUF2CjTIJJcQBWC3OPHToCMyqa3VaPegYYxUWkdFu+OIUN?=
+ =?us-ascii?Q?/6bOkokpXW8JYZss9E5OCU82W9itb62NTzjOqYlX6aheju7csG4SOXBICURw?=
+ =?us-ascii?Q?9jRLXqCGppymQfeaUMqshvHSXCvYfHQgELw834v4YJ/ukR6dgplq2I4KVXcL?=
+ =?us-ascii?Q?St/gXYMZ8ietmvcp1d2i79tnqH9u9ZOB9GwvYXJMHatAd2rRxyx7+IaFjbIa?=
+ =?us-ascii?Q?WxQslyKhEGnzXlIIJP6zl8TDROxVvQnhpWdnYVyH+LnAN7g7dxB6eiSLMKSI?=
+ =?us-ascii?Q?m2ZaD6It3rh2I9TP/38yk6t2JXZd6rnb11h0s1XnFF7lfcrC58xGaxfryJjJ?=
+ =?us-ascii?Q?kmBsZGr44UEBZMkNS+WSiAibxmhKPVHPsZPOP8v6HeTCynv20UZggmJtxO8S?=
+ =?us-ascii?Q?5oJnRWf3GxaBUmYOvQtI7HarXwaeBa1OpdPYHDCtWOI95iA43mA+l7fllYuz?=
+ =?us-ascii?Q?7AIII2ETy+JWU9DsrwS0HVRj4WNnC0dQFKp2CejmSU9VNupCqc8nGejGoDtb?=
+ =?us-ascii?Q?jzJ0/AnCDCH0Nsq9e9ln5XnR2B2QRiIeaLbjP3NIWyUQuvU4d0+J+Pc8Etiq?=
+ =?us-ascii?Q?swHiNzKclS3HCzCQ6i/nqifg5Bk9uDnPIyFmwjMc8rhT9twWsbgtXOVIhovD?=
+ =?us-ascii?Q?zagPLpGWRPtxr9tewDOE+osGf6d3DYzfM28xit/oG4DgKS6A0iubGLJ4u7i9?=
+ =?us-ascii?Q?0gsRRJunp1sqscEUlM24CBTxhYqQ4qp6nQK9fd7u/quLAjcu0RzYyxgh0QSy?=
+ =?us-ascii?Q?OmE/ybPrMKhgT6tOQGCUzeN331aKYDFCNWK+9OlQxFftpxgUMTmrkSQSRYbO?=
+ =?us-ascii?Q?Zb6SyzU4wYlIqSaPk/1Nvk4SRwXt9Bpa3tf3N3EL3GzwOcrsar/NwPDYPxQa?=
+ =?us-ascii?Q?VPfRktGBZp/zKMclqXDbfTjuzKBR55wJ0T/8m3qkIgoe2Bp9vT7baJ2+f5ur?=
+ =?us-ascii?Q?yjLpYKXGZT8Qn3W0MdZMH21aPLOEm+nTNSur55wzMxcxhsl0LEFL0F7uQAQn?=
+ =?us-ascii?Q?kujogQAcRWHCp8QwDu+2JjYd/IZBQyj75Sw/ZHC8k0pT1k/T1WsCVCqBBaZH?=
+ =?us-ascii?Q?4xma7o5FqQVqTp4LKcDPvHoCHg4Vvf5ThU0dfIVZ7hwoVBTvosqiOhPNcvlL?=
+ =?us-ascii?Q?jeSmrvXBtiHJukz7Xot76TPnl8RVrllcn74pWqcMCXo5eTxMXfrE5MI7vKLl?=
+ =?us-ascii?Q?Qrakwg60J6HB19xc04hzhvbbCmiKrNa4C1eHQpMkUA0J8sg5t9XGGBk18zCu?=
+ =?us-ascii?Q?qMQ5H/vjdtraThBLWy0GzCOI+GrLzr5Tad3qUwDdvVQTOMtyvQ6UpJgYnCZX?=
+ =?us-ascii?Q?149kMm9ElFpSjAz6La586MgHg4LUt5E2vXdRnQFNDwgz23xhXJemXirWEkoF?=
+ =?us-ascii?Q?V3bM0l52ICiHjgF0ueoJRQun4b7fRuwuOzHY9cY5fgmX/bScht/5xGFJNzHs?=
+ =?us-ascii?Q?iXZo+nFH+OmFjlJWAjzCQCWM5yqhiFkAMXGTwxhaCgrVystgmS7EutdS86DY?=
+ =?us-ascii?Q?lFlFahwusJmL/9N5IIWDMJZ0nsNoTTFP8tc0CahhZbTAfKMajwyPCe9/8FKX?=
+ =?us-ascii?Q?FuJLmSoPuDEfthDWZjzl49fcSbpIfQXNAO+es9M4?=
 X-OriginatorOrg: phobosdpl.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9c76b27-63a3-4e5a-1365-08da6fe6994e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 199ff60d-bc62-42be-8244-08da6fe69d3e
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR17MB3515.namprd17.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2022 15:42:23.3100 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2022 15:42:29.9345 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 07b76dd5-c518-427b-a15a-2e07dfd0130a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ja5zxgHNX481uz2VJc/WleIBAIMjIJPDudHHL5zZbl6F46acPYEfutoz5po7Q1o/ngEHBGV/OwgYvFDBCqoiuA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: FqXtEakY3xkD707HXi+BdvHzhNDLmzme98+yE+loGVsd8bZwHnqyrcQyYZse+S5N91SE3ED7/6XnnFd9DA2SiQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR17MB2820
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=centc.onmicrosoft.com; 
  s=selector2-centc-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0aduudRGyHBAWCmvb/NfMmazV3Xan4mDwyKGqOFtZPM=;
- b=ieUFapEdbx3ZgYVhdj3acH9h49S4TVQHv8tdsH3uix6EpuyN26JEnL2kt69+g3MLssANhRWj45++S0GHZv01wy/zEGr6qclieRNwWvjlzk0kfoI62WE8R05Buvju27oxlQRJn9Bgfg9czPXhQrQqbxWia67ikmvhK1VJ9i4wvc8=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=vPRUCvVpEfewrQ+hDOLd3e87O6bo7/Bx6tq2viPK+9E=;
+ b=l77ZhncAsBKTU4nFZ/4+QqxiUiVk7ndZas2+ax7HuHw+sgIxbel0ANj1frqPN6fP3Lr4XSN4vG5EtCewwdSd1M3YVN2Gz8yPkDLtELE9pcZFX/TscgHUvpioO2sNZD3DQYK8sRUQEY/CWuvt/8ygsUVSbOGgCcYjAl4G4v/aT80=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=centc.onmicrosoft.com
  header.i=@centc.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-centc-onmicrosoft-com header.b=ieUFapEd
+ header.s=selector2-centc-onmicrosoft-com header.b=l77ZhncA
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=phobosdpl.com;
-Subject: [Buildroot] [PATCH 1/4] support/scripts/pkg-stats: fixed CSS cascade
+Subject: [Buildroot] [PATCH 2/4] support/scripts/pkg-stats: fixed sortGrid()
+ performance
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -145,33 +146,145 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the .version-needs-update class being overridden by .correct class.
+sortGrid() has been rewritten to dynamically generate stylesheets with
+explicit grid-row properties to re-order the cells, instead of removing
+and reinserting the cells.
+Performance *should* now be comperable to sort-table.js.
 
 Signed-off-by: Sen Hastings <sen@phobosdpl.com>
 ---
- support/scripts/pkg-stats | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 116 +++++++++++++++++++++-----------------
+ 1 file changed, 64 insertions(+), 52 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 91a1a1622d..b2a8ddd446 100755
+index b2a8ddd446..0fb44d1e11 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -818,12 +818,12 @@ function sortGrid(sortLabel){
- .centered {
-   text-align: center;
- }
-- .wrong, .lotsofpatches, .invalid_url, .version-needs-update, .cpe-nok, .cve-nok {
--   background: #ff9a69;
-- }
-  .correct, .nopatches, .good_url, .version-good, .cpe-ok, .cve-ok {
-    background: #d2ffc4;
-  }
-+ .wrong, .lotsofpatches, .invalid_url, .version-needs-update, .cpe-nok, .cve-nok {
-+   background: #ff9a69;
-+ }
-  .somepatches, .missing_url, .version-unknown, .cpe-unknown, .cve-unknown {
-    background: #ffd870;
-  }
+@@ -738,60 +738,72 @@ html_header = """
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <script>
++const triangleUp = String.fromCodePoint(32, 9652);
++const triangleDown = String.fromCodePoint(32, 9662);
++var lastColumnName = false;
++
+ function sortGrid(sortLabel){
++	let i = 0;
+ 	let pkgSortArray = [], sortedPkgArray = [], pkgStringSortArray = [], pkgNumSortArray = [];
+-	let columnValues = Array.from(document.getElementsByClassName(sortLabel));
+-
+-	columnValues.shift();
+-	columnValues.forEach((listing) => {
+-		let sortArr = [];
+-		sortArr[0] = listing.id.replace(sortLabel+"_", "");
+-		if (!listing.innerText){
+-			sortArr[1] = -1;
+-		} else {
+-			sortArr[1] = listing.innerText;
+-		};
+-		pkgSortArray.push(sortArr);
+-	})
+-	pkgSortArray.forEach((listing) => {
+-		if ( isNaN(parseInt(listing[1], 10)) ){
+-			pkgStringSortArray.push(listing);
+-		} else {
+-			listing[1] = parseFloat(listing[1]);
+-			pkgNumSortArray.push(listing);
+-		};
+-	})
+-	sortedStringPkgArray = pkgStringSortArray.sort(function(a, b) {
+-		const nameA = a[1].toUpperCase(); // ignore upper and lowercase
+-		const nameB = b[1].toUpperCase(); // ignore upper and lowercase
+-		if (nameA < nameB) { return -1;	};
+-		if (nameA > nameB) { return 1; };
+-		return 0;   // names must be equal
+-	});
+-	sortedNumPkgArray = pkgNumSortArray.sort(function(a, b) {
+-		return a[1] - b[1];
+-	});
+-
+-	let triangleUp = String.fromCodePoint(32, 9652);
+-	let triangleDown = String.fromCodePoint(32, 9662);
+-	let columnName = document.getElementById(sortLabel);
+-
+-	if (columnName.lastElementChild.innerText == triangleDown) {
+-		columnName.lastElementChild.innerText = triangleUp;
+-		sortedStringPkgArray.reverse();
+-		sortedNumPkgArray.reverse();
+-		sortedPkgArray = sortedNumPkgArray.concat(sortedStringPkgArray)
+-	} else {
+-		columnName.lastElementChild.innerText = triangleDown;
+-		sortedPkgArray = sortedStringPkgArray.concat(sortedNumPkgArray)
+-	}
+-
+-	sortedPkgArray.forEach((listing) => {
+-		let row = Array.from(document.getElementsByClassName(listing[0]));
+-		let packageGrid = document.getElementById("package-grid");
+-		row.forEach((element) => { packageGrid.append(element)});
+-	})
+-}
++	const columnValues = Array.from(document.getElementsByClassName(sortLabel));
++	const columnName = document.getElementById(sortLabel);
++	let lastStyle = document.getElementById("sort-css");
++
++	if (lastStyle){
++		lastStyle.disable = true;
++		lastStyle.remove();
++	};
++	const styleElement = document.createElement('style');
++	styleElement.id = "sort-css";
++	document.head.appendChild(styleElement);
++	const styleSheet = styleElement.sheet;
++
++        columnValues.shift();
++        columnValues.forEach((listing) => {
++                let sortArr = [];
++                sortArr[0] = listing.id.replace(sortLabel+"_", "");
++                if (!listing.innerText){
++                        sortArr[1] = -1;
++                } else {
++                        sortArr[1] = listing.innerText;
++                };
++                pkgSortArray.push(sortArr);
++        });
++        pkgSortArray.forEach((listing) => {
++                if ( isNaN(parseInt(listing[1], 10)) ){
++                        pkgStringSortArray.push(listing);
++                } else {
++                        listing[1] = parseFloat(listing[1]);
++                        pkgNumSortArray.push(listing);
++                };
++        });
++
++        let sortedStringPkgArray = pkgStringSortArray.sort((a, b) => {
++                if (a[1].toUpperCase() < b[1].toUpperCase()) { return -1; };
++                if (a[1].toUpperCase() > b[1].toUpperCase()) { return 1; };
++                return 0;
++        });
++        let sortedNumPkgArray = pkgNumSortArray.sort((a, b) => a[1] - b[1]);
++
++        if (columnName.lastElementChild.innerText == triangleDown) {
++                columnName.lastElementChild.innerText = triangleUp;
++                sortedStringPkgArray.reverse();
++                sortedNumPkgArray.reverse();
++                sortedPkgArray = sortedNumPkgArray.concat(sortedStringPkgArray);
++        } else {
++                columnName.lastElementChild.innerText = triangleDown;
++                sortedPkgArray = sortedStringPkgArray.concat(sortedNumPkgArray);
++        };
++
++	if (lastColumnName && lastColumnName != columnName){lastColumnName.lastElementChild.innerText = ""};
++	lastColumnName = columnName;
++	sortedPkgArray.unshift(["label"]);
++        sortedPkgArray.forEach((listing) => {
++		i++;
++		let rule = "." + listing[0] + " { grid-row: " + i + "; }";
++		styleSheet.insertRule(rule);
++        });
++};
+ </script>
+ 
+ <style>
 -- 
 2.34.1
 
