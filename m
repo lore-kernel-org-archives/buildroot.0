@@ -1,97 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97895C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 11:08:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04244C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 11:08:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A5DD40457;
-	Wed, 27 Jul 2022 11:08:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A5DD40457
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0BF181270;
+	Wed, 27 Jul 2022 11:08:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0BF181270
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2CVct67Z2xjp; Wed, 27 Jul 2022 11:08:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hxfpTI4dtjVC; Wed, 27 Jul 2022 11:08:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAA0C403D0;
-	Wed, 27 Jul 2022 11:08:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAA0C403D0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 949B980B5F;
+	Wed, 27 Jul 2022 11:08:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 949B980B5F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 37DC81BF46D
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:08:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B99231BF46D
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:08:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11AE140382
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:08:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11AE140382
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0C6D403CC
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0C6D403CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IjV9PwP_yolI for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 11:08:19 +0000 (UTC)
+ with ESMTP id dy8D7qhwrErT for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 11:08:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 054994035D
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 054994035D
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 11:08:18 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id b6so10294198wmq.5
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 04:08:18 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 035404035D
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 035404035D
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 11:08:20 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id v13so15902004wru.12
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 04:08:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:references:from:organization:in-reply-to
+ :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=y1EV1OxnzmXXbpfHicRR3ACGqP4jh5z59GsVdNTrphw=;
- b=F5AedmlGqeP9VRNxY1EYEG/5EGGkg3YKZelOteyb8fdvlUUhBfGaXFaKtV/NKlorhk
- 4tOXpDUHiTW/Zc6BF1VC1bu7qEQjJn1ocTzZk65etR4dTHPD8f1x75Gx4SKq3YocN8r7
- bdz5WRwP2Tx0NOYx7GR/mqga597v7wwLFELGqzEQE/EwHnB+FS2rCUwWyski31h4yxQ2
- 5KNQZqhSe8UifZAt+S5zukTSPcQnYtOD1ToOjTSt6Y492hbNs/G48gzo4ZpnfhsRUsIE
- uz3klRp/RGO572dcrNSJaUVdbJx6HbIdXz6ihT045or2IoraIzY5Edxch5I1pWhuJMz7
- 1gqA==
-X-Gm-Message-State: AJIora9c8AgWIB3Cl+ed1KijHnoUiegr6s5mv2QADl2oK8hWjKzdIb8N
- 5n7hOOc/tChOGksTdQBlarjRDGL8yd67/A==
-X-Google-Smtp-Source: AGRyM1sK4VzfkFVKwg59+ciiFPMprF3i7qZeSiq6zXSb6gpGfQB0+lrC0ypBxvBgmSeCKjKrmeOQaQ==
-X-Received: by 2002:a05:600c:2194:b0:3a3:bea:1017 with SMTP id
- e20-20020a05600c219400b003a30bea1017mr2602603wme.44.1658920097114; 
- Wed, 27 Jul 2022 04:08:17 -0700 (PDT)
+ bh=NbRkwMoOZbKj+X6V5M0/UcxnHyd4qq5c07L8z0B5oDk=;
+ b=VWxZ6pnyhMDWUrgTDxi8vrpx6QQ8K4HhXMNV71pkwPBPL5auTn6tTXqWc23J+FJB+a
+ 7iJRadPs8D7mxcpFo63heYXiPCiQWkF2+qoT9AelyNAw6PNwGhSTlxm0V009SeV7ABGw
+ Rld2OSK+/f/qEcr9+EDKMMB5GvsQ+vr6Oll+LJsbatMlxX1PTDQNUMVNacCUhq8SNjLe
+ +zSy1S99NEAuHZqP3K9/hJ9vEDy42OK9wMjocuHlUvf+Z/GPRW3iccsRdktlfn2sfkhx
+ NAYKRKabL3Dg9Fk8IfEJesnSIVtADNmfhM4c9hGiaN9fM9XkSVDYjPZpzDNb/5mnvy8F
+ qELQ==
+X-Gm-Message-State: AJIora/oKdu2P5Imjea+kpMYtRtPqJ+XHNpN071dDajdJd9ZYZIg+bPO
+ xzF1rjmBpUb1pFaQp+7Ecy63iA==
+X-Google-Smtp-Source: AGRyM1vPjzf5dRiZhx3FzFTjed0dCzw1nNCA4PGIP6eZcrXWrhO4LMUWgUnx+PkByxaJ6+U+r1bguA==
+X-Received: by 2002:a5d:5187:0:b0:21e:6efd:1f06 with SMTP id
+ k7-20020a5d5187000000b0021e6efd1f06mr12783544wrv.471.1658920099064; 
+ Wed, 27 Jul 2022 04:08:19 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- c3-20020a7bc003000000b003a2e7c13a3asm1941016wmb.42.2022.07.27.04.08.16
+ bg26-20020a05600c3c9a00b003a3279b9037sm2059973wmb.16.2022.07.27.04.08.18
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Jul 2022 04:08:16 -0700 (PDT)
-Message-ID: <d0804aa5-6883-85c8-134f-d16489eb70bd@mind.be>
-Date: Tue, 26 Jul 2022 22:55:39 +0200
+ Wed, 27 Jul 2022 04:08:18 -0700 (PDT)
+Message-ID: <ccbd9868-2add-5859-f19b-d46b394f8ca9@mind.be>
+Date: Wed, 27 Jul 2022 09:58:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Buildroot List <buildroot@buildroot.org>,
- =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
-References: <20220726131249.2009383-1-thomas.petazzoni@bootlin.com>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20220518013424.2558229-1-james.hilliard1@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220726131249.2009383-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220518013424.2558229-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
- :references:from:organization:in-reply-to:content-transfer-encoding;
- bh=y1EV1OxnzmXXbpfHicRR3ACGqP4jh5z59GsVdNTrphw=;
- b=Ov8JPcbFqIOnGzYlqFhn7imnPoLBYpZL2sh7hSAOmBhN911RnAbD+y53XWzF3P3SgV
- eEfBnksd5YXqSa/4OUo0hOEmWt/wJbgY5gE1EDhtLhGsmZl1PCMCm/a3I/GlEgfxguXj
- ppcPgx+ZfmOxIWsQgJG+uWlAi5AUxNRclgltgnrWP8+IlwsoEZmJCjvs0sSekyjNaLY1
- pOv/KSjhbsnb4jfWi3EGJRkantjv84t1IHQ9Hp4wbYDjJlUNrhjcV5xo65UvJMCizuO9
- tMmIUEaMq72QFV3DV9Fvl5Q26KK2lC3Ld5URgbJ+IUTCRJh2pwv1dAluwAciZIRwZr9U
- SX8A==
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=NbRkwMoOZbKj+X6V5M0/UcxnHyd4qq5c07L8z0B5oDk=;
+ b=QpD5KvFhB8iNtk7gCIHaV69c2W7Z6Y8EfD+RGAwXlwkHfmB1Lz3WTzx5/50DMJfDOF
+ mJR65bvRbqtglf30H2Sj7k2mFrdDuXNWeAeoQXcIceeS/orZ66WmB7LcAogdGG+wEZLr
+ mJH85bpPZv7NLOZbI+xGz5Sg1Ts0w1h7NwRR/uw37Kao1b0GD1XWmpekhhE3nWuKtolp
+ GVcBR2tn4jsi4GQmnqxzErOyDYU2ZeB4scE4EJkaqwpScI1yAS4cW/0Zxv3SyDpXsqlO
+ uoirYXfWzOxKxGDvdJCYAfbnJ6mDdOxtDvqcHxbAeZ046fnGrGZCo00jSPRI0pPe5AM/
+ YR/w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Ov8JPcbF
-Subject: Re: [Buildroot] [PATCH 0/2] Add support for configurable page size
- on ARM64
+ header.a=rsa-sha256 header.s=google header.b=QpD5KvFh
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt5: bump packages to latest
+ kde submodule versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,30 +101,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Bartosz Bilas <b.bilas@grinn-global.com>,
+ Joshua Henderson <joshua.henderson@microchip.com>,
+ Julien Corjon <corjon.j@ecagroup.com>,
+ =?UTF-8?Q?Ga=c3=abl_Portay?= <gael.portay@collabora.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAyNi8wNy8yMDIyIDE1OjEyLCBUaG9tYXMgUGV0YXp6b25pIHdyb3RlOgo+IEhlbGxvLAo+
-IAo+IEhlcmUgaXMgYSBuZXcgaXRlcmF0aW9uIG9mIHRoZSBzdXBwb3J0IGZvciBjb25maWd1cmFi
-bGUgcGFnZSBzaXplIG9uCj4gQVJNNjQsIGJhc2VkIG9uIGVhcmxpZXIgd29yayBmcm9tIMWBdWth
-c3ogU3RlbG1hY2gKPiA8bC5zdGVsbWFjaEBzYW1zdW5nLmNvbT4sIGJ1dCBmYWlybHkgc2lnbmlm
-aWNhbnRseSBjaGFuZ2VkLgo+IAo+IEhvcGVmdWxseSB0aGlzIGl0ZXJhdGlvbiBjYW4gbWFrZXMg
-aXQgd2F5IHVwc3RyZWFtIQo+IAo+IFRob21hcwo+IAo+IFRob21hcyBQZXRhenpvbmkgKDIpOgo+
-ICAgIHBhY2thZ2UvdWNsaWJjOiBkZWZpbmUgQlIyX1VDTElCQ19UQVJHRVRfQVJDSCBmb3IgQVJN
-NjQKPiAgICBhcmNoOiBhZGQgc3VwcG9ydCBmb3IgY29uZmlndXJhYmxlIHBhZ2Ugc2l6ZSBvbiBB
-Uk02NAoKICBCb3RoIGFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MhCgogIFJlZ2FyZHMsCiAgQXJu
-b3V0Cgo+IAo+ICAgYXJjaC9Db25maWcuaW4uYXJtICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHwgMjUgKysrKysrKwo+ICAgYXJjaC9hcmNoLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIHwgMTEgKysrKwo+ICAgYXJjaC9hcmNoLm1rLmFyYyAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHwgIDkgLS0tCj4gICBsaW51eC9saW51eC5tayAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgfCAgOCArKysKPiAgIHBhY2thZ2UvdWNsaWJjL0NvbmZpZy5pbiAgICAgICAg
-ICAgICAgICAgICAgICB8ICAxICsKPiAgIHBhY2thZ2UvdWNsaWJjL3VjbGliYy5tayAgICAgICAg
-ICAgICAgICAgICAgICB8IDEzICsrKysKPiAgIC4uLi90ZXN0cy90b29sY2hhaW4vdGVzdF9hYXJj
-aDY0XzY0ay5weSAgICAgICB8IDY1ICsrKysrKysrKysrKysrKysrKysKPiAgIDcgZmlsZXMgY2hh
-bmdlZCwgMTIzIGluc2VydGlvbnMoKyksIDkgZGVsZXRpb25zKC0pCj4gICBjcmVhdGUgbW9kZSAx
-MDA2NDQgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3Rvb2xjaGFpbi90ZXN0X2FhcmNoNjRfNjRrLnB5
-Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 18/05/2022 03:34, James Hilliard wrote:
+> Bump qt5 packages to latest submodule versions from:
+> https://invent.kde.org/qt/qt/qt5/-/tree/kde/5.15
+> 
+> Drop a qt5location patch which is now upstream.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>   package/qt5/qt53d/qt53d.hash                  |   2 +-
+>   package/qt5/qt53d/qt53d.mk                    |   2 +-
+>   package/qt5/qt5base/qt5base.hash              |   2 +-
+>   package/qt5/qt5base/qt5base.mk                |   2 +-
+>   package/qt5/qt5charts/qt5charts.hash          |   2 +-
+>   package/qt5/qt5charts/qt5charts.mk            |   2 +-
+>   .../qt5/qt5connectivity/qt5connectivity.hash  |   2 +-
+>   .../qt5/qt5connectivity/qt5connectivity.mk    |   2 +-
+>   .../qt5/qt5declarative/qt5declarative.hash    |   2 +-
+>   package/qt5/qt5declarative/qt5declarative.mk  |   2 +-
+
+  Is it possible that you missed qt5doc, which I merged two days ago? Or did it 
+really not have an update?
+
+  Regards,
+  Arnout
+
+>   .../qt5graphicaleffects.hash                  |   2 +-
+>   .../qt5graphicaleffects.mk                    |   2 +-
+>   .../qt5/qt5imageformats/qt5imageformats.hash  |   2 +-
+>   .../qt5/qt5imageformats/qt5imageformats.mk    |   2 +-
+>   ...fix-compilation-for-no-opengl-builds.patch | 528 ------------------
+>   package/qt5/qt5location/qt5location.hash      |   2 +-
+>   package/qt5/qt5location/qt5location.mk        |   2 +-
+>   package/qt5/qt5lottie/qt5lottie.hash          |   2 +-
+>   package/qt5/qt5lottie/qt5lottie.mk            |   2 +-
+>   package/qt5/qt5multimedia/qt5multimedia.hash  |   2 +-
+>   package/qt5/qt5multimedia/qt5multimedia.mk    |   2 +-
+>   .../qt5quickcontrols/qt5quickcontrols.hash    |   2 +-
+>   .../qt5/qt5quickcontrols/qt5quickcontrols.mk  |   2 +-
+>   .../qt5quickcontrols2/qt5quickcontrols2.hash  |   2 +-
+>   .../qt5quickcontrols2/qt5quickcontrols2.mk    |   2 +-
+>   .../qt5quicktimeline/qt5quicktimeline.hash    |   2 +-
+>   .../qt5/qt5quicktimeline/qt5quicktimeline.mk  |   2 +-
+>   .../qt5remoteobjects/qt5remoteobjects.hash    |   2 +-
+>   .../qt5/qt5remoteobjects/qt5remoteobjects.mk  |   2 +-
+>   package/qt5/qt5script/qt5script.hash          |   2 +-
+>   package/qt5/qt5script/qt5script.mk            |   2 +-
+>   package/qt5/qt5scxml/qt5scxml.hash            |   2 +-
+>   package/qt5/qt5scxml/qt5scxml.mk              |   2 +-
+>   package/qt5/qt5sensors/qt5sensors.hash        |   2 +-
+>   package/qt5/qt5sensors/qt5sensors.mk          |   2 +-
+>   package/qt5/qt5serialbus/qt5serialbus.hash    |   2 +-
+>   package/qt5/qt5serialbus/qt5serialbus.mk      |   2 +-
+>   package/qt5/qt5serialport/qt5serialport.hash  |   2 +-
+>   package/qt5/qt5serialport/qt5serialport.mk    |   2 +-
+>   package/qt5/qt5svg/qt5svg.hash                |   2 +-
+>   package/qt5/qt5svg/qt5svg.mk                  |   2 +-
+>   package/qt5/qt5tools/qt5tools.hash            |   2 +-
+>   package/qt5/qt5tools/qt5tools.mk              |   2 +-
+>   .../qt5virtualkeyboard.hash                   |   2 +-
+>   .../qt5virtualkeyboard/qt5virtualkeyboard.mk  |   2 +-
+>   package/qt5/qt5wayland/qt5wayland.hash        |   2 +-
+>   package/qt5/qt5wayland/qt5wayland.mk          |   2 +-
+>   package/qt5/qt5webchannel/qt5webchannel.hash  |   2 +-
+>   package/qt5/qt5webchannel/qt5webchannel.mk    |   2 +-
+>   package/qt5/qt5websockets/qt5websockets.hash  |   2 +-
+>   package/qt5/qt5websockets/qt5websockets.mk    |   2 +-
+>   package/qt5/qt5webview/qt5webview.hash        |   2 +-
+>   package/qt5/qt5webview/qt5webview.mk          |   2 +-
+>   package/qt5/qt5x11extras/qt5x11extras.hash    |   2 +-
+>   package/qt5/qt5x11extras/qt5x11extras.mk      |   2 +-
+>   .../qt5/qt5xmlpatterns/qt5xmlpatterns.hash    |   2 +-
+>   package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk  |   2 +-
+>   57 files changed, 56 insertions(+), 584 deletions(-)
+>   delete mode 100644 package/qt5/qt5location/0002-fix-compilation-for-no-opengl-builds.patch
+> 
+
+[snip]
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
