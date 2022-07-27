@@ -1,134 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3884FC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 11:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 498F4C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 12:05:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ABCE3404D8;
-	Wed, 27 Jul 2022 11:38:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABCE3404D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94738823A0;
+	Wed, 27 Jul 2022 12:05:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94738823A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uHgT3jHsv35E; Wed, 27 Jul 2022 11:38:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vcNRs9v8KjCe; Wed, 27 Jul 2022 12:05:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0C10404B2;
-	Wed, 27 Jul 2022 11:38:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0C10404B2
+	by smtp1.osuosl.org (Postfix) with ESMTP id D59F981CE7;
+	Wed, 27 Jul 2022 12:05:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D59F981CE7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 64E971BF20B
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:38:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7264C1BF372
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 12:05:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F229F401D1
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:38:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F229F401D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4BE8340A00
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 12:05:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BE8340A00
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mOHFL7Ugc1jO for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 11:38:23 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE63D401BC
-Received: from USG02-BN3-obe.outbound.protection.office365.us
- (mail-bn3usg02on0117.outbound.protection.office365.us [23.103.208.117])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EE63D401BC
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 11:38:22 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
- b=qpy+VMMMtVRj1i0ve03ypdrYtiQnY/AG/VaKY3jB9TqTHyR85SgXL7gn+eyc9MzenTmJ14bDfRCcpSLMLE5ulgTKZQkebMnInU20cyhs9EK4fWLPTRqXNmZrOhNx1EDUgcohigrdLQb6GcmrxTa5tyqB6pBmWfqjhffPhOt5x1ZiYuA09U1JoY6m2j2A7FZMy1aXqodvRVwmnXGno5UCEldifXgeSUzOxFSzLickle8JaHBukQNOAmyq6igil0qEGQhRCmtGl4so4urOonKzPH4lV+ND+keDfxCBYS5NGgc6GA7JVCA7gslsrJ/A48eUSwirULo8cIoZ9BIvD8TBlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector5401;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YTyoZtxPUp+H2vbLPxzsitSxfzoTpTkijf67WmK+Cj0=;
- b=ss3g8s7tmRDoq1EDpJ1wBv8tgWDzinygsBkIWRyKdtmEDpGynWH0ow8A+LwUQtsbyi/YjyvZztlylgxdkHuP2P9efDrOaysCAIJNboZGXz/Q0FsdsGkjO6MAQgYXFSnF8bE/OoeOuMbGnTkMxWDC4MdCeOhDood3B1enZrYfAtxRl8/xpDtlIsA2gKSkitce73mbsIxZ56htbsUPgJqYIy0ke2gAPmnyCcfJj2FMd0u10nJEBZFEUudFGiztXmxPfiLwB+/46LovDS3JSAc+s64koWVMSLyh4iOQF0+C8WDdigY8yofYujAkkZe29bJ/UTh3ztu9kQ4xyCrp+l2sIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xes-inc.com; dmarc=pass action=none header.from=xes-inc.com;
- dkim=pass header.d=xes-inc.com; arc=none
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:18b::15)
- by PH1P110MB1441.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:18a::12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.20; Wed, 27 Jul
- 2022 11:38:18 +0000
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::a01c:a0e2:2eaa:977]) by PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::a01c:a0e2:2eaa:977%5]) with mapi id 15.20.5458.025; Wed, 27 Jul 2022
- 11:38:18 +0000
-From: Vincent Fazio <vfazio@xes-inc.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Thread-Topic: [External] - Re: [Buildroot] [PATCH] package/mcelog: bump to
- version 184
-Thread-Index: AQHYoRd8t3LoAU/bWE+LDR7DExovla2REFGAgAEH9HA=
-Date: Wed, 27 Jul 2022 11:38:18 +0000
-Message-ID: <PH1P110MB1603C0224F20D0511A14C3E09F979@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
-References: <20220726174505.2976048-1-vfazio@xes-inc.com>
- <20220726215235.56555d7b@windsurf>
-In-Reply-To: <20220726215235.56555d7b@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 104e9e65-f507-458c-e680-08da6fc48045
-x-ms-traffictypediagnostic: PH1P110MB1441:EE_
-x-ms-exchange-atpmessageproperties: SA|SL
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DcLXjKiZP1zMMqsTSMsboNWKI89hpL8RiMMdSm6/hkHaWMIQgvNoiECesyEMxhvs+6EIWTwtBkBOqL3QOHuGUrkRhrSVavDx2C1uXCLAHGFJhUU5NH34WU4aiwSpnyBld+f8ei28hQpV8eN0/3XnxhGxKhUSMU43z1ZPgA+TWyLwNd2twNfU4z1DT0if8StO6An8eqecTAzCU+RwT/ZxdAAFanMubpGcpkx3aP2NXIgjuf/kER1J1PH014SOOwrtad0jC1/6DYVmom5JerimegeHxeSEmmMw/Q2Svz5QdB+Bz/6etFicEHO8EgYUUDExgBRNjVZ0HOdMSFcJ1/8GViI1P61X9s3KWiweSnMH6ZC6fBxBiM7kp0hpJAFAEsSLzeddogkq6oy5mCbH0hYxJakMw88dGUiVWxqWTBBRqXQE/4zpFgaWljpj4EcoZVs2Y8ohqX8VwHXZ5YmH0K6sNingnKYMe6fS/6vmqv8vPuwkem2wyWfzVpDQb3+gbVPnh/SOqwJsqa/WLJZ1D2yBgTa1LbDN/zKDPQjuKggP2dmGu4HQF691LTOcR91Ywx6eVZHPRGjslG89qgAe4xaFIAwHndqTp0FQEMqnBeEw3zy6sMI1kEkljJK6qvcUwHY9t6x2DZl6Sh20eXtyNNmvCi0zbu6rsWV9vTjg4yRvlDRjnqbajgSZjsYYnFBS3BCPQKZPWneW3o7oocbt6sV2k8OG3hLE35Q0PkOeEXShUn+XkAKZMduPb7t/5TmCDn1UrOd9xl73e1ofiOJ/Pc0vWlamwGRc7U3NB3RL37c8bPctkvtiJ1GORuuU/uXGlBoQ
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230016)(4636009)(366004)(136003)(39830400003)(396003)(8676002)(53546011)(7696005)(186003)(71200400001)(6506007)(52536014)(66446008)(9686003)(4326008)(66476007)(64756008)(66556008)(76116006)(66946007)(54906003)(5660300002)(83380400001)(2906002)(41320700001)(38070700005)(26005)(38100700002)(6916009)(8936002)(33656002)(86362001)(55016003)(122000001)(41300700001)(966005)(508600001);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?rzbxkd5/mSw3j4sURZt+mewCHGC3IzbJmJr5ab9n62kK7bferJjbc+90ysTk?=
- =?us-ascii?Q?R5W+tELs/oJkfenTADyyFplqUPx76RhEAaLDipkV4wdMuwGP0/NpLQ54QT4U?=
- =?us-ascii?Q?e79uztUjtjGXfND8K0SRFSUGV0+IHxNNMI0fWUNqzBnTpBTj0HJM0wV3CSkY?=
- =?us-ascii?Q?hnjHAznaCPTDO9oamvriCYmKaYnSprkiQiYIfxTt5NnpAphNQcwwntDEVl1f?=
- =?us-ascii?Q?8/NcHQnnQUyTEX45eVjI8roYoBiArvY/fGRFU+nBzp+88dYxiQQ/Pg60UOa2?=
- =?us-ascii?Q?r/OvGS4zMF2cTc/X7WUl0YMi8zRBfLh5Aaiw6RYqtjPrM2x5NLWkX8c3V+2U?=
- =?us-ascii?Q?EEipp6QDu8OkhEN62xSqzjYLJs81kfgrGDDQvPkF5TR1tYXUc8r19r01Iw3L?=
- =?us-ascii?Q?FJIUBedTBOD7D0R5P6VRwfI9wvSVfj/G8/LnTpgym2ppOTTkeJ/+P9fMen4l?=
- =?us-ascii?Q?OSDKyhDMN6Y2EsNLfo/Mi9z6+F167LrsPrfkomGD67WjockW3CpzuCHZVVFO?=
- =?us-ascii?Q?NX7q8M3AvHdEWaemw/0Tq1WTKwMfGon6SmoNnDCwgZRcsQGgMqmefwE2TgHt?=
- =?us-ascii?Q?/E2SldKIa+Vn1beup1PPoSUim9bXFQqL/hsUInBT7k4VN4IFe+SgMXgh7nNz?=
- =?us-ascii?Q?X9DT0rPLz8b9eQKFtcFKq+kSCim0EYi8MBkwF4issvOKlMaxvabFesc2uAnu?=
- =?us-ascii?Q?8h2GPwAkosAEDc06qaVSdixYySSxsAr0VMbNyjdDBXIU+Sx3hCIuOpc+pBfz?=
- =?us-ascii?Q?4XLbtOy4QvmGZSATokxRq0RIIV77npWcQWc9lDHtY5JXhj5i09wQlDbEMPCR?=
- =?us-ascii?Q?XxDgWW6myOn904sRUAZUfWOV+oe9REYVNfNvDrG3p8D0G/IjUHwvJPPKzGj9?=
- =?us-ascii?Q?Rl1qBvoXCqVuiE17sNsNehuO8UwDl9/enB6fOLuttu2+uugzGdKi7Oxoh1Iq?=
- =?us-ascii?Q?CLhUbaJNraSwtnNdKN9wM8xGuhklNeR14Xfd/Z/UlDtERpMGKh9vHFfUreTm?=
- =?us-ascii?Q?MLEbcV/HfPRqBoEiIK/+ZzPgW5wV6EgphXSXOizT5vGKHGTSF/BhBoy6Xmef?=
- =?us-ascii?Q?FR7OteA2/UBTL5GJPpRR/9adKYE/jmMAbZFFdqD2oMb7UoKelxcPkS0cQeSd?=
- =?us-ascii?Q?R2lRq5fRGDcAAoSb6rs/JVrqK9zcKnPG1XvLBDhSOGxIiOJ2V4bs5RHE4NeY?=
- =?us-ascii?Q?07ECM+FBMGXabiPYczgtZfpJ9HKIAi5qBB1ttacrtov/GHx4kRO8DVEAjofB?=
- =?us-ascii?Q?VtQA0ZZO39WermyOLO1FcyF9V3j1X0tlMQ1hQccmTxPJxiGtGHMKbWKT2YcB?=
- =?us-ascii?Q?07I/B/W2T54tIZlguSOX/e6JUXH/ozP/GA0Qd2uLPP+LI1tO9jm56Chqs5XY?=
- =?us-ascii?Q?zUwI/gTM6uwtDDcYjGqcAW2KpVY77KWk6DHFS4SH99Y0xp+IVwal5KM+WVFw?=
- =?us-ascii?Q?sl3qbMMYYNV9f7Qu1aozCVFlXD4FilYaAxGU0uxHt3WKgeKfGDLAwXjMAxj2?=
- =?us-ascii?Q?DIZV49JFCDEQkp8=3D?=
+ with ESMTP id NWGQaX5LLX7g for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 12:05:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33F77408EA
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
+ [IPv6:2607:f8b0:4864:20::235])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33F77408EA
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 12:05:35 +0000 (UTC)
+Received: by mail-oi1-x235.google.com with SMTP id r13so20222510oie.1
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 05:05:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=/4fgVqgURuZAh3hJH4HkWnF3+Fuptv4r6I8x5cg9W4I=;
+ b=Ktd6lkSDvFoGTHwsVj63XYWoSrP8pDUkLNDFGM4QN5hovYlg13CYUr8vNI0+le/gRn
+ ggxeB3xdoJXb5tWMg5K6hHAWidUsir/zYqa/cCiN3WBj7lfr+NYGHEoX7uTJrvg83m5n
+ V4hawGGjkwlv20F8Dy2ttHxSw4RpmweLE1CM9gQwdEg4fRDtEy1/3IcqqXGD9ufIPLr6
+ nM6Gxj7BbS8fvfR8nO0vA1B6lu1D9x00JC3ygLqPCREgpe3l/grCOHMkWSf10sw5xipf
+ Fch8/yM4iSQG/sijfT7+qXQSw7dUy8tGv2NdewPcJJzzBAe4KMzzCjfDJwYVAYrE4cyS
+ qSIg==
+X-Gm-Message-State: AJIora/kQ9g7/LgZfCeqZBdzr6UIwWNQusVsS/ImQvKvt3ikSU8D/UIy
+ lnLLqwE2ZJLelnyPcloAk5xJvI9MTq/gSBTu9Yg=
+X-Google-Smtp-Source: AGRyM1taML01t5+SR4BcvCkewhI1B7XTJNeRUMI+TfqyqtlMYlDYT/n0Jz+A2XEra8pddk94qkwyKTaRmJ3bzkZU9uo=
+X-Received: by 2002:a05:6808:14d0:b0:33a:a708:e01a with SMTP id
+ f16-20020a05680814d000b0033aa708e01amr1580671oiw.148.1658923534073; Wed, 27
+ Jul 2022 05:05:34 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: xes-inc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 104e9e65-f507-458c-e680-08da6fc48045
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jul 2022 11:38:18.2372 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 2925f1cd-bdc3-4a76-bb38-6159e20a17f1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH1P110MB1441
+References: <20220108224337.3702128-1-fontaine.fabrice@gmail.com>
+ <c1c3040b-d429-dcaf-6e97-5f0c8367b48a@mind.be>
+In-Reply-To: <c1c3040b-d429-dcaf-6e97-5f0c8367b48a@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Jul 2022 14:05:23 +0200
+Message-ID: <CAPi7W82V0nFCRi55MPsHV7DPQFSrGRmy1_mpFAhjj-MEgv6=DA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xes-inc.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YTyoZtxPUp+H2vbLPxzsitSxfzoTpTkijf67WmK+Cj0=;
- b=1sTnTH+793Ea1oAMq7xueQJiBOYX7cSe1EqO1A2R+It9bz8cClgnmtg2wDtILvojXPS2/b/F3HWQbhTjP0NDtq4JkE2ZGlJU0GsQdyUeLfnMuw1LQfsMRi2olOstMNOKWliVx4aZGCT2KLm0fkbpSX8NR+N7nzJqsYHlR31BbDhFn2nOtFNgXAHiQ7JVg/Pgg7hxFf6tqOzpRicbqYcrMw5HKQJsPAqKEQwDvbjnc03joISN5EzHlz/Dy+KVMRMTbSsM9UQfIyabshucbXif7lOcIh9t5m9cuWLyxuw1iWwCEFvKbWbcLVxLd2UhI2GwGoHNSD/wA+isYykwSt+NmA==
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=/4fgVqgURuZAh3hJH4HkWnF3+Fuptv4r6I8x5cg9W4I=;
+ b=crnjM9XcQJ7ENp7/k4ANuEh65EgRKNS/FxEjT0lbdQ6ybebS9efbx1cZWMp+5EFH70
+ 01CgImSftuxl0bQwjKfUpx6NkT6wQ3M2FCNIKfTj3ttkaX9Zt1bUkxdaE2XJXmKAnyfW
+ Y3anyhD3E9cf0qnR5rwQRHnDAJRnEvr2negwzausyxkEO+RD0cSMwDFiRJKZK8mbHRLJ
+ WGTf5mIUhyA0CHuuY9KwxSDZJnRV7+2aZmjADHswvL/J4tAN0SP0PfIGX9BFWjAlLVUK
+ hveejPCgNLresijsPsWQTYAldRjOZpeMv0BPhPwxaV+X9RkXiA+3ObdLj/AA7OhWhQmD
+ SPWA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
- header.s=selector1 header.b=1sTnTH+7
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xes-inc.com;
-Subject: Re: [Buildroot] [External] - Re: [PATCH] package/mcelog: bump to
- version 184
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=crnjM9Xc
+Subject: Re: [Buildroot] [PATCH 1/2] package/minizip: add minizip-zlib
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -140,82 +90,292 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Fabrice Fontaine <fabrice.fontaine@orange.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4682723535004198237=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas,
+--===============4682723535004198237==
+Content-Type: multipart/alternative; boundary="000000000000f5451005e4c83b3e"
 
-> -----Original Message-----
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Sent: Tuesday, July 26, 2022 2:53 PM
-> To: Vincent Fazio <vfazio@xes-inc.com>
-> Cc: buildroot@buildroot.org; Romain Naour <romain.naour@gmail.com>
-> Subject: [External] - Re: [Buildroot] [PATCH] package/mcelog: bump to
-> version 184
-> 
-> Hello Vincent,
-> 
-> On Tue, 26 Jul 2022 12:45:05 -0500
-> Vincent Fazio <vfazio@xes-inc.com> wrote:
-> 
-> > diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
-> > index 598aa648fd..94b5f2cc37 100644
-> > --- a/package/mcelog/mcelog.hash
-> > +++ b/package/mcelog/mcelog.hash
-> > @@ -1,3 +1,3 @@
-> >  # Locally computed
-> > -sha256
-> e9c82b565da06673c2630f9e6bc668634ad7d2c7f13c70db1900cce110ae62dc
-> mcelog-180.tar.gz
-> > +sha256
-> 067d52006f0aa42045acc6d9c04d590362448bacd8ef415d42729e6f35825028
-> mcelog-184.tar.gz
-> >  sha256
-> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
-> LICENSE
-> > diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-> > index da7785ca91..6a0d806661 100644
-> > --- a/package/mcelog/mcelog.mk
-> > +++ b/package/mcelog/mcelog.mk
-> > @@ -4,11 +4,12 @@
-> >  #
+--000000000000f5451005e4c83b3e
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Arnout,
+
+Le mer. 27 juil. 2022 =C3=A0 13:08, Arnout Vandecappelle <arnout@mind.be> a
+=C3=A9crit :
+
+>   Hi Fabrice,
+>
+> On 08/01/2022 23:43, Fabrice Fontaine wrote:
+> > Add a virtual package to allow the user to select the minizip provider:
+>
+>   A virtual package should be used when the alternatives are more or less
+> drop-in replacements. Here, however, they are absolutely not: they instal=
+l
+> completely different header files and libraries. There is no way that
+> something
+> that expects minizip-ng can build with minizip-zlib or vice versa.
+>
+>   In addition, the two can be installed in parallel.
+>
+
+That's not completely true: minizip(-ng) and minizip-legacy can be
+installed in parallel only if compatibility headers are disabled (which is
+done since commit fc166894b3f257c4cb20d84368c918f3335dadf5).
+Ideally, it would be great to enable back those compatibility headers.
+Should I make this new option dependent on !BR2_PACKAGE_MINIZIP_LEGACY
+instead of making a virtual package?
+
+>
+>
+>   So there's no reason at all to make it a virtual package.
+>
+
+I decided to make a virtual package because there was already a virtual
+package for zlib and zlib-ng.
+I thought that we were in the same situation with minizip(-ng) and
+minizip-legacy.
+
+
+>
+> >   - the current minizip (which has been renamed minizip-ng since
 > >
-> ##########################################################
-> ######################
+> https://github.com/zlib-ng/minizip-ng/commit/db95894646b87f6178ceaa389cbd=
+b5b1ba8cd97a
+> )
+>
+>   It would make more sense to switch the existing minizip package to this
+> new
+> upstream repository.
+>
+
+Actually, we're already shipping minizip-ng as minizip. However, minizip-ng
+is not really widely used by the opensource community. For example,
+domoticz only supports minizip-legacy.
+
+
+>
+>   We could rename the package to minizip-ng, but we generally avoid that.
+> It's
+> just annoyance for people who upgrade buildroot (legacy handling helps,
+> but it
+> is still annoying), and there is no benefit at all other than
+> "consistency".
+
+
+OK, I can send a v2 which doesn't rename minizip as minizip-ng.
+
+
+>
+> >   - the 'legacy' minizip provided by zlib which is still widely support=
+ed
+> >     by various opensource packages such as domoticz
+>
+>   We should just add a package minizip-zlib.
+>
+
+>
+> > There is no need to add entries in Config.legacy as the previous option=
+s
+> > are kept and the default provider of minizip is minizip-ng.
 > >
-> > -MCELOG_VERSION = 180
-> > +MCELOG_VERSION = 184
-> >  MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
-> >  MCELOG_LICENSE = GPL-2.0
-> >  MCELOG_LICENSE_FILES = LICENSE
-> >  MCELOG_SELINUX_MODULES = mcelog
-> > +MCELOG_DEPENDENCIES = host-python3
-> 
-> If I read correctly the Makefile, it seems like host-python3 is only
-> needed to generate the manpage, which we don't need. Perhaps it would
-> be useful instead to contribute upstream a make variable that would
-> allow to disable building the manpage, and therefore get rid of the
-> host-python3 dependency?
-> 
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> [snip]
+> > diff --git a/package/minizip-zlib/minizip-zlib.mk
+> b/package/minizip-zlib/minizip-zlib.mk
+> > new file mode 100644
+> > index 0000000000..67d4e31f41
+> > --- /dev/null
+> > +++ b/package/minizip-zlib/minizip-zlib.mk
+> > @@ -0,0 +1,24 @@
+> >
+> +########################################################################=
+########
+> > +#
+> > +# minizip-zlib
+> > +#
+> >
+> +########################################################################=
+########
+> > +
+> > +MINIZIP_ZLIB_VERSION =3D 1.2.11
+> > +MINIZIP_ZLIB_SOURCE =3D zlib-$(MINIZIP_ZLIB_VERSION).tar.xz
+> > +MINIZIP_ZLIB_SITE =3D http://www.zlib.net
+> > +MINIZIP_ZLIB_LICENSE =3D Zlib
+> > +MINIZIP_ZLIB_LICENSE_FILES =3D README
+> > +MINIZIP_ZLIB_INSTALL_STAGING =3D YES
+> > +MINIZIP_ZLIB_PROVIDES =3D minizip
+> > +MINIZIP_ZLIB_SUBDIR =3D contrib/minizip
+> > +MINIZIP_ZLIB_AUTORECONF =3D YES
+>
+>   Please add a comment why autoreconf is needed.
+>
+>   Regards,
+>   Arnout
+>
+> > +MINIZIP_ZLIB_DEPENDENCIES =3D zlib
+> > +
+> > +ifeq ($(BR2_PACKAGE_MINIZIP_DEMOS),y)
+> > +MINIZIP_ZLIB_CONF_OPTS +=3D --enable-demos
+> > +else
+> > +MINIZIP_ZLIB_CONF_OPTS +=3D --disable-demos
+> > +endif
+> > +
+> > +$(eval $(autotools-package))
+> [snip]
+>
 
-This is true. I can look into doing this, I was just trying to be as minimally invasive as possible.
+Best Regards,
 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
-> CAUTION: This email originated from outside of the organization. Do not click
-> links or open attachments unless you recognize the sender and know the
-> content is safe.
+Fabrice
+
+--000000000000f5451005e4c83b3e
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr">Hi Arnout,<br></div><br><div class=3D"gma=
+il_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 27 juil. 2022 =
+=C3=A0=C2=A013:08, Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.b=
+e" target=3D"_blank">arnout@mind.be</a>&gt; a =C3=A9crit=C2=A0:<br></div><b=
+lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
+ft:1px solid rgb(204,204,204);padding-left:1ex">=C2=A0 Hi Fabrice,<br>
+<br>
+On 08/01/2022 23:43, Fabrice Fontaine wrote:<br>
+&gt; Add a virtual package to allow the user to select the minizip provider=
+:<br>
+<br>
+=C2=A0 A virtual package should be used when the alternatives are more or l=
+ess <br>
+drop-in replacements. Here, however, they are absolutely not: they install =
+<br>
+completely different header files and libraries. There is no way that somet=
+hing <br>
+that expects minizip-ng can build with minizip-zlib or vice versa.<br>
+<br>
+=C2=A0 In addition, the two can be installed in parallel.<br></blockquote><=
+div><br></div><div>That&#39;s not completely true: minizip(-ng) and minizip=
+-legacy can be installed in parallel only if compatibility headers are disa=
+bled (which is done since commit fc166894b3f257c4cb20d84368c918f3335dadf5).=
+</div><div>Ideally, it would be great to enable back those compatibility he=
+aders.</div><div> Should I make this new option dependent on !BR2_PACKAGE_M=
+INIZIP_LEGACY instead of making a virtual package?<br></div>=C2=A0<blockquo=
+te class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px =
+solid rgb(204,204,204);padding-left:1ex">
+<br>
+=C2=A0 So there&#39;s no reason at all to make it a virtual package.<br></b=
+lockquote><div><br></div><div><div>I decided to make a virtual package beca=
+use there was already a virtual package for zlib and zlib-ng.</div><div>I t=
+hought that we were in the same situation with minizip(-ng) and minizip-leg=
+acy.<br></div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" styl=
+e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
+g-left:1ex">
+<br>
+&gt;=C2=A0 =C2=A0- the current minizip (which has been renamed minizip-ng s=
+ince<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/zlib-ng/minizip-ng/co=
+mmit/db95894646b87f6178ceaa389cbdb5b1ba8cd97a" rel=3D"noreferrer" target=3D=
+"_blank">https://github.com/zlib-ng/minizip-ng/commit/db95894646b87f6178cea=
+a389cbdb5b1ba8cd97a</a>)<br>
+<br>
+=C2=A0 It would make more sense to switch the existing minizip package to t=
+his new <br>
+upstream repository.<br></blockquote><div><br></div><div>Actually, we&#39;r=
+e already shipping minizip-ng as minizip. However, minizip-ng is not really=
+ widely used by the opensource community. For example, domoticz only suppor=
+ts minizip-legacy.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quo=
+te" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204=
+);padding-left:1ex">
+<br>
+=C2=A0 We could rename the package to minizip-ng, but we generally avoid th=
+at. It&#39;s <br>
+just annoyance for people who upgrade buildroot (legacy handling helps, but=
+ it <br>
+is still annoying), and there is no benefit at all other than &quot;consist=
+ency&quot;.=C2=A0</blockquote><div><br></div><div>OK, I can send a v2 which=
+ doesn&#39;t rename minizip as minizip-ng.<br></div><div>=C2=A0<br></div><b=
+lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
+ft:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+&gt;=C2=A0 =C2=A0- the &#39;legacy&#39; minizip provided by zlib which is s=
+till widely supported<br>
+&gt;=C2=A0 =C2=A0 =C2=A0by various opensource packages such as domoticz<br>
+<br>
+=C2=A0 We should just add a package minizip-zlib.<br></blockquote><blockquo=
+te class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px =
+solid rgb(204,204,204);padding-left:1ex">
+<br>
+<br>
+&gt; There is no need to add entries in Config.legacy as the previous optio=
+ns<br>
+&gt; are kept and the default provider of minizip is minizip-ng.<br>
+&gt; <br>
+&gt; Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice=
+@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
+<br>
+[snip]<br>
+&gt; diff --git a/package/minizip-zlib/<a href=3D"http://minizip-zlib.mk" r=
+el=3D"noreferrer" target=3D"_blank">minizip-zlib.mk</a> b/package/minizip-z=
+lib/<a href=3D"http://minizip-zlib.mk" rel=3D"noreferrer" target=3D"_blank"=
+>minizip-zlib.mk</a><br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..67d4e31f41<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/minizip-zlib/<a href=3D"http://minizip-zlib.mk" rel=3D"n=
+oreferrer" target=3D"_blank">minizip-zlib.mk</a><br>
+&gt; @@ -0,0 +1,24 @@<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +#<br>
+&gt; +# minizip-zlib<br>
+&gt; +#<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +<br>
+&gt; +MINIZIP_ZLIB_VERSION =3D 1.2.11<br>
+&gt; +MINIZIP_ZLIB_SOURCE =3D zlib-$(MINIZIP_ZLIB_VERSION).tar.xz<br>
+&gt; +MINIZIP_ZLIB_SITE =3D <a href=3D"http://www.zlib.net" rel=3D"noreferr=
+er" target=3D"_blank">http://www.zlib.net</a><br>
+&gt; +MINIZIP_ZLIB_LICENSE =3D Zlib<br>
+&gt; +MINIZIP_ZLIB_LICENSE_FILES =3D README<br>
+&gt; +MINIZIP_ZLIB_INSTALL_STAGING =3D YES<br>
+&gt; +MINIZIP_ZLIB_PROVIDES =3D minizip<br>
+&gt; +MINIZIP_ZLIB_SUBDIR =3D contrib/minizip<br>
+&gt; +MINIZIP_ZLIB_AUTORECONF =3D YES<br>
+<br>
+=C2=A0 Please add a comment why autoreconf is needed.<br>
+<br>
+=C2=A0 Regards,<br>
+=C2=A0 Arnout<br>
+<br>
+&gt; +MINIZIP_ZLIB_DEPENDENCIES =3D zlib<br>
+&gt; +<br>
+&gt; +ifeq ($(BR2_PACKAGE_MINIZIP_DEMOS),y)<br>
+&gt; +MINIZIP_ZLIB_CONF_OPTS +=3D --enable-demos<br>
+&gt; +else<br>
+&gt; +MINIZIP_ZLIB_CONF_OPTS +=3D --disable-demos<br>
+&gt; +endif<br>
+&gt; +<br>
+&gt; +$(eval $(autotools-package))<br>
+[snip]<br></blockquote><div><br></div><div>Best Regards,</div><div><br></di=
+v><div>Fabrice<br></div></div></div>
+
+--000000000000f5451005e4c83b3e--
+
+--===============4682723535004198237==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4682723535004198237==--
