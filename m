@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03889C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:14:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E29AC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:14:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 957FF409FF;
-	Wed, 27 Jul 2022 10:14:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 957FF409FF
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6B89819BE;
+	Wed, 27 Jul 2022 10:14:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6B89819BE
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6-YDA0j13lOW; Wed, 27 Jul 2022 10:14:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0291481819;
+	Wed, 27 Jul 2022 10:14:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0291481819
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 67FCD1BF4E6
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:14:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4210140611
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:14:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4210140611
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s7WLFbybAJmL; Wed, 27 Jul 2022 10:14:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6271D409EC;
-	Wed, 27 Jul 2022 10:14:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6271D409EC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E488E1BF4E6
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB4EA60B5C
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB4EA60B5C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id or2l5eKrtFVi for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k4zKG2QDh9_A for <buildroot@lists.busybox.net>;
  Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18E7E60B52
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1ED9B409EC
  for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18E7E60B52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ED9B409EC
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 41A5886594; Wed, 27 Jul 2022 10:00:36 +0000 (UTC)
+ id 4BD2486599; Wed, 27 Jul 2022 10:00:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 12:13:47 +0200
+Date: Wed, 27 Jul 2022 12:14:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8237c5202e46260a945de474ecb6537d86a93991
-X-Git-Newrev: e4c81885ed487ccb511c4a4c4f8a8c1aa5180f78
+X-Git-Oldrev: e4c81885ed487ccb511c4a4c4f8a8c1aa5180f78
+X-Git-Newrev: fe522b9c17f2579a3c698354aa326962311053f2
 X-Patchwork-Hint: ignore
-Message-Id: <20220727100036.41A5886594@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/drbd-utils: bump to version 9.21.4
+Message-Id: <20220727100036.4BD2486599@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jszip: security bump to version
+ 3.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +64,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4c81885ed487ccb511c4a4c4f8a8c1aa5180f78
+commit: https://git.buildroot.net/buildroot/commit/?id=fe522b9c17f2579a3c698354aa326962311053f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/LINBIT/drbd-utils/blob/v9.21.4/ChangeLog
+- Santize filenames when files are loaded with loadAsync, to avoid "zip
+  slip" attacks. The original filename is available on each zip entry as
+  unsafeOriginalName. See the documentation.
+- Drop patch (already in version)
+- Update hash of license file (dual licensing clarification with
+  https://github.com/Stuk/jszip/commit/f81c2d700d8e5fec4ed89fb565e4a266bb4dd26e)
+- Update indentation in hash file (two spaces)
+
+https://github.com/Stuk/jszip/blob/v3.10.0/CHANGES.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/drbd-utils/drbd-utils.hash | 2 +-
- package/drbd-utils/drbd-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...se-a-null-prototype-object-for-this-files.patch | 56 ----------------------
+ package/jszip/jszip.hash                           |  4 +-
+ package/jszip/jszip.mk                             |  5 +-
+ 3 files changed, 3 insertions(+), 62 deletions(-)
 
-diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
-index 58d282714e..9bdfd69538 100644
---- a/package/drbd-utils/drbd-utils.hash
-+++ b/package/drbd-utils/drbd-utils.hash
+diff --git a/package/jszip/0001-fix-Use-a-null-prototype-object-for-this-files.patch b/package/jszip/0001-fix-Use-a-null-prototype-object-for-this-files.patch
+deleted file mode 100644
+index 969db5b403..0000000000
+--- a/package/jszip/0001-fix-Use-a-null-prototype-object-for-this-files.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 22357494f424178cb416cdb7d93b26dd4f824b36 Mon Sep 17 00:00:00 2001
+-From: Michael Aquilina <michaelaquilina@gmail.com>
+-Date: Mon, 14 Jun 2021 12:28:46 +0100
+-Subject: [PATCH] fix: Use a null prototype object for this.files
+-
+-This approach is taken to prevent overriding object methods that would
+-exist on a normal object Object.create({})
+-
+-[Retrieved from:
+-https://github.com/Stuk/jszip/commit/22357494f424178cb416cdb7d93b26dd4f824b36]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- lib/index.js  | 5 ++++-
+- lib/object.js | 6 +++---
+- 2 files changed, 7 insertions(+), 4 deletions(-)
+-
+-diff --git a/lib/index.js b/lib/index.js
+-index b449877..b4c95ba 100644
+---- a/lib/index.js
+-+++ b/lib/index.js
+-@@ -19,7 +19,10 @@ function JSZip() {
+-     //   "folder/" : {...},
+-     //   "folder/data.txt" : {...}
+-     // }
+--    this.files = {};
+-+    // NOTE: we use a null prototype because we do not
+-+    // want filenames like "toString" coming from a zip file
+-+    // to overwrite methods and attributes in a normal Object.
+-+    this.files = Object.create(null);
+- 
+-     this.comment = null;
+- 
+-diff --git a/lib/object.js b/lib/object.js
+-index 1c9d8e8..aec3db7 100644
+---- a/lib/object.js
+-+++ b/lib/object.js
+-@@ -179,16 +179,16 @@ var out = {
+-      */
+-     forEach: function(cb) {
+-         var filename, relativePath, file;
+-+        /* jshint ignore:start */
+-+        // ignore warning about unwanted properties because this.files is a null prototype object
+-         for (filename in this.files) {
+--            if (!this.files.hasOwnProperty(filename)) {
+--                continue;
+--            }
+-             file = this.files[filename];
+-             relativePath = filename.slice(this.root.length, filename.length);
+-             if (relativePath && filename.slice(0, this.root.length) === this.root) { // the file is in the current root
+-                 cb(relativePath, file); // TODO reverse the parameters ? need to be clean AND consistent with the filter search fn...
+-             }
+-         }
+-+        /* jshint ignore:end */
+-     },
+- 
+-     /**
+diff --git a/package/jszip/jszip.hash b/package/jszip/jszip.hash
+index 13a2076ade..d0c56a44ab 100644
+--- a/package/jszip/jszip.hash
++++ b/package/jszip/jszip.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3827bfed6630f8784ec558a8ac3de68175d544876d897c0810ad141a61487cad  drbd-utils-9.19.0.tar.gz
-+sha256  730d68b9ee48df7b2e3ddff38bf54a5bc405651bac0ece180b4f22a468e543b3  drbd-utils-9.21.4.tar.gz
- sha256  1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
-diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
-index 2082810a37..3ab3246f49 100644
---- a/package/drbd-utils/drbd-utils.mk
-+++ b/package/drbd-utils/drbd-utils.mk
-@@ -4,7 +4,7 @@
+ # Locally computed:
+-sha256	e5343decfb781b15c54c0df9ddedd6c8518c800a4667a0a95741c694a4f38d34  jszip-3.2.2.tar.gz
+-sha256	14450c78405ad2a2173e25740b56406556779149df9c4c83523a8c63d0686210  LICENSE.markdown
++sha256  aa3033c6bb5357a0b0965c92fbdb6d6abe64676e70ffa7933b63c573ab79ee45  jszip-3.10.0.tar.gz
++sha256  566c953c6090b1218ca6217dd7359d45dde46581968586dc607d59a78af6a9c4  LICENSE.markdown
+diff --git a/package/jszip/jszip.mk b/package/jszip/jszip.mk
+index a93766be11..3504368675 100644
+--- a/package/jszip/jszip.mk
++++ b/package/jszip/jszip.mk
+@@ -4,15 +4,12 @@
  #
  ################################################################################
  
--DRBD_UTILS_VERSION = 9.19.0
-+DRBD_UTILS_VERSION = 9.21.4
- DRBD_UTILS_SITE = http://pkg.linbit.com/downloads/drbd/utils
- DRBD_UTILS_LICENSE = GPL-2.0+
- DRBD_UTILS_LICENSE_FILES = COPYING
+-JSZIP_VERSION = 3.2.2
++JSZIP_VERSION = 3.10.0
+ JSZIP_SITE = $(call github,Stuk,jszip,v$(JSZIP_VERSION))
+ JSZIP_LICENSE = MIT or GPL-3.0
+ JSZIP_LICENSE_FILES = LICENSE.markdown
+ JSZIP_CPE_ID_VENDOR = jszip_project
+ 
+-# 0001-fix-Use-a-null-prototype-object-for-this-files.patch
+-JSZIP_IGNORE_CVES += CVE-2021-23413
+-
+ define JSZIP_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/dist/jszip.min.js \
+ 		$(TARGET_DIR)/var/www/jszip/js/jszip.min.js
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
