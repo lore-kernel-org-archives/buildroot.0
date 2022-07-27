@@ -4,69 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2A1BC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 09:43:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B82CC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 09:44:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7FAA460B4C;
-	Wed, 27 Jul 2022 09:43:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FAA460B4C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 383D860B50;
+	Wed, 27 Jul 2022 09:44:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 383D860B50
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uhcgZZ7ww4kR; Wed, 27 Jul 2022 09:43:34 +0000 (UTC)
+	with ESMTP id bTW4FFUN1Dne; Wed, 27 Jul 2022 09:44:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECD9860AC9;
-	Wed, 27 Jul 2022 09:43:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECD9860AC9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 21CAF1BF57F
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:43:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D15360B64;
+	Wed, 27 Jul 2022 09:44:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D15360B64
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E66911BF57F
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:43:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A21480BCE
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:43:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A21480BCE
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE4B960B51
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:43:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE4B960B51
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q709sTKv0X5p for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 09:43:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CA5F80BBB
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2CA5F80BBB
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 09:43:30 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:2464:a3b6:9580:87a1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 39C65B00729;
- Wed, 27 Jul 2022 11:43:18 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 27 Jul 2022 11:43:17 +0200
-Date: Wed, 27 Jul 2022 11:43:17 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220727094317.GF1085273@scaer>
-References: <20220726163951.2111731-1-thomas.petazzoni@bootlin.com>
- <20220726163951.2111731-4-thomas.petazzoni@bootlin.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mo4asXnkXmyt for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 09:43:58 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76E6960B50
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 76E6960B50
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 09:43:58 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id d8so23305303wrp.6
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 02:43:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=n3m92OXKZG2oBjuHem+tOgRHBolmhiTwRkxdsh8O4Ew=;
+ b=jVJy/XTrJ3A9YcLtb0zSBOWoBP5+SiMElmfpTt89nh4uG3RuwXhq6CDeoosNIdhKm1
+ E0iHHjW8Ax1yjVjDMhf/EJA0aHmYETiKAI4W3TSKzoXkyhNwWWzh8BWC95kVjO+TALPN
+ 116nGg6WuK1SIgJQObRzFwa0TXJld2WVfA26bL3Hz5K/QVB6en+QSfCGZpBehmySIhdp
+ whJKB4RgP2ZlJPyzmqda6yUaAZmwVgtgaWMomrOWBRdVnDXZIhKfB6DKV6yrjoJ5U1uS
+ uI0Diy8mh+0N9GvldGPjNsc6/9+wLV83lnqbaJCEddUbG+rCgxO5emaRgqDZ2w/8cM7G
+ laYQ==
+X-Gm-Message-State: AJIora9JySmxhE3OzOLYMN4i/Y+nhKHvEd2cBMAGh+qrEdpdmdbG7ztw
+ LdnPfJFJnJReminTE8TFTdJasnZUM7A=
+X-Google-Smtp-Source: AGRyM1tdoZRdAqeqL7+iWJKnNGIssp0Skxe/ce1jPy+1d2eGRb29Te8WAQGYzyWEKr/RBSwVDetusg==
+X-Received: by 2002:a5d:6d84:0:b0:21e:824d:59bf with SMTP id
+ l4-20020a5d6d84000000b0021e824d59bfmr11026989wrs.291.1658915036090; 
+ Wed, 27 Jul 2022 02:43:56 -0700 (PDT)
+Received: from kali.home (2a01cb0680494f3e376d079efd3cafb3.ipv6.abo.wanadoo.fr.
+ [2a01:cb06:8049:4f3e:376d:79e:fd3c:afb3])
+ by smtp.gmail.com with ESMTPSA id
+ c14-20020a05600c0a4e00b003a37b7e0780sm1419525wmq.8.2022.07.27.02.43.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Jul 2022 02:43:55 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 27 Jul 2022 11:43:50 +0200
+Message-Id: <20220727094352.1051200-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220726163951.2111731-4-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658915007;
- bh=fOQHx5wulGLaem7436dyGezkrpiLjaV0LSpQuvZwy9k=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=VWbTGIHkvvDcuAD9xBQF2/CNcp9LCQ7yFdGS4HIMBUfqQzc4zdWAVEtoiNOA+bo20
- xQ7QmPOFvqVZPGxa2fXIm1jAFIOLxZzPpBD7qB4KzRc60N7swXoigbQ9FDQd5R5657
- nY1M2amQJROiMoKbnfEXsDPBpWTXhp8wJNH/4NAm+UDB2pPCVDr/cOPQH3GYLX4lqd
- V7iCLtnSk7B+UZKkk3xqdoI3Sxne8LuzWiHTJ1J4igz6lSqWppYPIbI+Ln45lenJ+P
- Y6vRa9h5Wak4MLMAU49OqJN7V3haAbKOB/iYm8tizf2iC4lnCbwS5aSEE4VRgBQgTc
- 8f+y4sk/Nl7Wg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VWbTGIHk
-Subject: Re: [Buildroot] [PATCH v2 4/4] arch: rework MMU option handling and
- move to "Target architecture" menu
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=n3m92OXKZG2oBjuHem+tOgRHBolmhiTwRkxdsh8O4Ew=;
+ b=jnEcCD96lyfiJmg644BRhRWbqc18y8/6wziH9SU7+4tnPxV9GRoSBWbKlneRyGtpxq
+ 260ZxVlPqnO308cNMT/MkniLW7xilnYQR5rheaNSboEJVRtg5Jb5ux3ZUcPTNYaA3Qed
+ dWLLQ7Pf+rz80s1pcZy9FO6SJtD9WGhWhJ1mLUyauhtQhLzORZaaUTLXmVSaAwnkZZ8P
+ GaLsWmoCE8C69Uhv/Ut4bV9N9G8WaSMEiWPEIUQ9Zixgm4Gfcfk2i4IVZzjgLHVgZow6
+ Icm++AczLDz+lyVxPYD8V/fGQlSFvi+m9LiwhvxPF48L7se4bo81OsKd5TQvrIHOqfHd
+ C3wg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=jnEcCD96
+Subject: [Buildroot] [PATCH 1/3] package/sconeserver: reorder options
+ alphabetically
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,625 +94,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Niklas Cassel <niklas.cassel@wdc.com>,
- Damien Le Moal <damien.lemoal@wdc.com>, Mark Corbin <mark@dibsco.co.uk>,
- Jonathan Ben Avraham <yba@tkos.co.il>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Simon Dawson <spdawson@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/sconeserver/Config.in      | 42 +++++++++++++++---------------
+ package/sconeserver/sconeserver.mk | 42 +++++++++++++++---------------
+ 2 files changed, 42 insertions(+), 42 deletions(-)
 
-On 2022-07-26 18:39 +0200, Thomas Petazzoni via buildroot spake thusly:
-> The MMU option is currently located in the "Toolchain" menu, but it
-> doesn't make sense as it's really architecture related. In addition,
-> the selection of MMU has an impact on the choice of binary format
-> available, which is visible in the architecture menu.
-> 
-> Therefore, this commit moves the MMU option into the architecture
-> menu.
-
-I slightly expanded on that after your reply.
-
-[--SNIP--]
-> This commit might raise a concern in terms of backward compatibility
-> with existing configurations. The only configurations that will be
-> broken by this change are RISC-V noMMU (which was very recently
-> introduced) and Xtensa noMMU (which we can probably agree is not such
-> a widely popular configuration).
-
-Indeed. People in this game know what to do and look for.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> Changes since v1:
-> - Make BR2_RISCV_USE_MMU and BR2_XTENSA_USE_MMU default y to behave
->   like BR2_USE_MMU used to
-> - Update the defconfigs that had "# BR2_USE_MMU is not set" to use the
->   new option.
-> ---
->  arch/Config.in                            | 47 +++++++++++------------
->  arch/Config.in.arm                        | 10 ++---
->  arch/Config.in.m68k                       |  2 +-
->  arch/Config.in.riscv                      | 12 +++++-
->  arch/Config.in.xtensa                     | 12 +++++-
->  configs/canaan_kd233_defconfig            |  2 +-
->  configs/qemu_riscv64_nommu_virt_defconfig |  4 +-
->  configs/qemu_xtensa_lx60_nommu_defconfig  |  4 +-
->  configs/sipeed_maix_bit_defconfig         |  2 +-
->  configs/sipeed_maix_bit_sdcard_defconfig  |  2 +-
->  configs/sipeed_maix_dock_defconfig        |  2 +-
->  configs/sipeed_maix_dock_sdcard_defconfig |  2 +-
->  configs/sipeed_maix_go_defconfig          |  2 +-
->  configs/sipeed_maix_go_sdcard_defconfig   |  2 +-
->  configs/sipeed_maixduino_defconfig        |  2 +-
->  configs/sipeed_maixduino_sdcard_defconfig |  2 +-
->  toolchain/Config.in                       |  7 ----
->  17 files changed, 59 insertions(+), 57 deletions(-)
-> 
-> diff --git a/arch/Config.in b/arch/Config.in
-> index 095036f1aa..1d38c7a065 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -9,10 +9,7 @@ config BR2_KERNEL_64_USERLAND_32
->  config BR2_SOFT_FLOAT
->  	bool
->  
-> -config BR2_ARCH_HAS_MMU_MANDATORY
-> -	bool
-> -
-> -config BR2_ARCH_HAS_MMU_OPTIONAL
-> +config BR2_USE_MMU
->  	bool
->  
->  choice
-> @@ -23,7 +20,7 @@ choice
->  
->  config BR2_arcle
->  	bool "ARC (little endian)"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  Synopsys' DesignWare ARC Processor Cores are a family of
->  	  32-bit CPUs that can be used from deeply embedded to high
-> @@ -31,7 +28,7 @@ config BR2_arcle
->  
->  config BR2_arceb
->  	bool "ARC (big endian)"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  Synopsys' DesignWare ARC Processor Cores are a family of
->  	  32-bit CPUs that can be used from deeply embedded to high
-> @@ -49,7 +46,7 @@ config BR2_arm
->  
->  config BR2_armeb
->  	bool "ARM (big endian)"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  ARM is a 32-bit reduced instruction set computer (RISC)
->  	  instruction set architecture (ISA) developed by ARM Holdings.
-> @@ -76,7 +73,7 @@ config BR2_aarch64_be
->  config BR2_csky
->  	bool "csky"
->  	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
->  	help
->  	  csky is processor IP from china.
-> @@ -85,7 +82,7 @@ config BR2_csky
->  
->  config BR2_i386
->  	bool "i386"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  Intel i386 architecture compatible microprocessor
->  	  http://en.wikipedia.org/wiki/I386
-> @@ -99,7 +96,7 @@ config BR2_m68k
->  
->  config BR2_microblazeel
->  	bool "Microblaze AXI (little endian)"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI
->  	  bus based architecture (little endian)
-> @@ -108,7 +105,7 @@ config BR2_microblazeel
->  
->  config BR2_microblazebe
->  	bool "Microblaze non-AXI (big endian)"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB
->  	  bus based architecture (non-AXI, big endian)
-> @@ -117,7 +114,7 @@ config BR2_microblazebe
->  
->  config BR2_mips
->  	bool "MIPS (big endian)"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  MIPS is a RISC microprocessor from MIPS Technologies. Big
->  	  endian.
-> @@ -126,7 +123,7 @@ config BR2_mips
->  
->  config BR2_mipsel
->  	bool "MIPS (little endian)"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  MIPS is a RISC microprocessor from MIPS Technologies. Little
->  	  endian.
-> @@ -136,7 +133,7 @@ config BR2_mipsel
->  config BR2_mips64
->  	bool "MIPS64 (big endian)"
->  	select BR2_ARCH_IS_64
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  MIPS is a RISC microprocessor from MIPS Technologies. Big
->  	  endian.
-> @@ -146,7 +143,7 @@ config BR2_mips64
->  config BR2_mips64el
->  	bool "MIPS64 (little endian)"
->  	select BR2_ARCH_IS_64
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  MIPS is a RISC microprocessor from MIPS Technologies. Little
->  	  endian.
-> @@ -155,7 +152,7 @@ config BR2_mips64el
->  
->  config BR2_nios2
->  	bool "Nios II"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  Nios II is a soft core processor from Altera Corporation.
->  	  http://www.altera.com/
-> @@ -163,14 +160,14 @@ config BR2_nios2
->  
->  config BR2_or1k
->  	bool "OpenRISC"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  OpenRISC is a free and open processor for embedded system.
->  	  http://openrisc.io
->  
->  config BR2_powerpc
->  	bool "PowerPC"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
->  	  alliance. Big endian.
-> @@ -180,7 +177,7 @@ config BR2_powerpc
->  config BR2_powerpc64
->  	bool "PowerPC64 (big endian)"
->  	select BR2_ARCH_IS_64
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
->  	  alliance. Big endian.
-> @@ -190,7 +187,7 @@ config BR2_powerpc64
->  config BR2_powerpc64le
->  	bool "PowerPC64 (little endian)"
->  	select BR2_ARCH_IS_64
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
->  	  alliance. Little endian.
-> @@ -210,7 +207,7 @@ config BR2_riscv
->  config BR2_s390x
->  	bool "s390x"
->  	select BR2_ARCH_IS_64
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  s390x is a big-endian architecture made by IBM.
->  	  http://www.ibm.com/
-> @@ -218,7 +215,7 @@ config BR2_s390x
->  
->  config BR2_sh
->  	bool "SuperH"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  SuperH (or SH) is a 32-bit reduced instruction set computer
->  	  (RISC) instruction set architecture (ISA) developed by
-> @@ -228,7 +225,7 @@ config BR2_sh
->  
->  config BR2_sparc
->  	bool "SPARC"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  SPARC (from Scalable Processor Architecture) is a RISC
->  	  instruction set architecture (ISA) developed by Sun
-> @@ -239,7 +236,7 @@ config BR2_sparc
->  config BR2_sparc64
->  	bool "SPARC64"
->  	select BR2_ARCH_IS_64
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  SPARC (from Scalable Processor Architecture) is a RISC
->  	  instruction set architecture (ISA) developed by Sun
-> @@ -250,7 +247,7 @@ config BR2_sparc64
->  config BR2_x86_64
->  	bool "x86_64"
->  	select BR2_ARCH_IS_64
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  	help
->  	  x86-64 is an extension of the x86 instruction set (Intel i386
->  	  architecture compatible microprocessor).
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index eb71d70430..15f96c4239 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -73,26 +73,26 @@ config BR2_ARM_CPU_HAS_THUMB2
->  
->  config BR2_ARM_CPU_ARMV4
->  	bool
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  
->  config BR2_ARM_CPU_ARMV5
->  	bool
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  
->  config BR2_ARM_CPU_ARMV6
->  	bool
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  
->  config BR2_ARM_CPU_ARMV7A
->  	bool
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  
->  config BR2_ARM_CPU_ARMV7M
->  	bool
->  
->  config BR2_ARM_CPU_ARMV8A
->  	bool
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  
->  choice
->  	prompt "Target Architecture Variant"
-> diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
-> index 1f7d944621..9fd22aaf1e 100644
-> --- a/arch/Config.in.m68k
-> +++ b/arch/Config.in.m68k
-> @@ -26,7 +26,7 @@ choice
->  config BR2_m68k_68040
->  	bool "68040"
->  	select BR2_m68k_m68k
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  
->  config BR2_m68k_cf5208
->  	bool "5208"
-> diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
-> index 30bdcaa80b..b5e84389e0 100644
-> --- a/arch/Config.in.riscv
-> +++ b/arch/Config.in.riscv
-> @@ -71,15 +71,23 @@ choice
->  
->  config BR2_RISCV_32
->  	bool "32-bit"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  
->  config BR2_RISCV_64
->  	bool "64-bit"
->  	select BR2_ARCH_IS_64
-> -	select BR2_ARCH_HAS_MMU_OPTIONAL
->  
->  endchoice
->  
-> +config BR2_RISCV_USE_MMU
-> +	bool "MMU support"
-> +	default y
-> +	depends on BR2_RISCV_64
-> +	select BR2_USE_MMU
-> +	help
-> +	  Enable this option if your RISC-V core has a MMU (Memory
-> +	  Management Unit).
-> +
->  choice
->  	prompt "Target ABI"
->  	default BR2_RISCV_ABI_ILP32D if !BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVD
-> diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-> index 45ad2dc487..f9d5adb4c9 100644
-> --- a/arch/Config.in.xtensa
-> +++ b/arch/Config.in.xtensa
-> @@ -5,11 +5,10 @@ choice
->  
->  config BR2_XTENSA_CUSTOM
->  	bool "Custom Xtensa processor configuration"
-> -	select BR2_ARCH_HAS_MMU_OPTIONAL
->  
->  config BR2_xtensa_fsf
->  	bool "fsf - Default configuration"
-> -	select BR2_ARCH_HAS_MMU_MANDATORY
-> +	select BR2_USE_MMU
->  
->  endchoice
->  
-> @@ -41,6 +40,15 @@ config BR2_XTENSA_BIG_ENDIAN
->  
->  endchoice
->  
-> +config BR2_XTENSA_USE_MMU
-> +	bool "MMU support"
-> +	default y
-> +	depends on BR2_XTENSA_CUSTOM
-> +	select BR2_USE_MMU
-> +	help
-> +	  Enable this option if your Xtensa core has a MMU (Memory
-> +	  Management Unit).
-> +
->  config BR2_ENDIAN
->  	default "LITTLE"	if BR2_XTENSA_LITTLE_ENDIAN
->  	default "BIG"		if BR2_xtensa_fsf || BR2_XTENSA_BIG_ENDIAN
-> diff --git a/configs/canaan_kd233_defconfig b/configs/canaan_kd233_defconfig
-> index 85b7b14fbd..278fb883bf 100644
-> --- a/configs/canaan_kd233_defconfig
-> +++ b/configs/canaan_kd233_defconfig
-> @@ -7,13 +7,13 @@ BR2_RISCV_ISA_CUSTOM_RVA=y
->  BR2_RISCV_ISA_CUSTOM_RVF=y
->  BR2_RISCV_ISA_CUSTOM_RVD=y
->  BR2_RISCV_ISA_CUSTOM_RVC=y
-> +# BR2_RISCV_USE_MMU is not set
->  BR2_RISCV_ABI_LP64D=y
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
->  # Binary format
-> -# BR2_USE_MMU is not set
->  BR2_BINFMT_FLAT=y
->  BR2_BINFMT_FLAT_ONE=y
->  # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-> diff --git a/configs/qemu_riscv64_nommu_virt_defconfig b/configs/qemu_riscv64_nommu_virt_defconfig
-> index 33fad50a3c..691cf31748 100644
-> --- a/configs/qemu_riscv64_nommu_virt_defconfig
-> +++ b/configs/qemu_riscv64_nommu_virt_defconfig
-> @@ -1,13 +1,11 @@
->  # Architecture
->  BR2_riscv=y
->  BR2_RISCV_64=y
-> +# BR2_RISCV_USE_MMU is not set
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
-> -# Toolchain
-> -# BR2_USE_MMU is not set
-> -
->  # Busybox with hush
->  BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
->  
-> diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
-> index f107b7e73b..4be1b66edc 100644
-> --- a/configs/qemu_xtensa_lx60_nommu_defconfig
-> +++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-> @@ -2,9 +2,7 @@
->  BR2_xtensa=y
->  BR2_XTENSA_CUSTOM=y
->  BR2_XTENSA_OVERLAY_FILE="https://github.com/jcmvbkbc/xtensa-toolchain-build/raw/95291b7c39e6f790d0b2f062c945a630290f2c81/overlays/xtensa_dc233c.tar.gz"
-> -
-> -# Toolchain
-> -# BR2_USE_MMU is not set
-> +# BR2_XTENSA_USE_MMU is not set
->  
->  # Use minimal busybox with hush and networking tools
->  BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
-> diff --git a/configs/sipeed_maix_bit_defconfig b/configs/sipeed_maix_bit_defconfig
-> index dbc5af4e74..b31bc1309b 100644
-> --- a/configs/sipeed_maix_bit_defconfig
-> +++ b/configs/sipeed_maix_bit_defconfig
-> @@ -7,13 +7,13 @@ BR2_RISCV_ISA_CUSTOM_RVA=y
->  BR2_RISCV_ISA_CUSTOM_RVF=y
->  BR2_RISCV_ISA_CUSTOM_RVD=y
->  BR2_RISCV_ISA_CUSTOM_RVC=y
-> +# BR2_RISCV_USE_MMU is not set
->  BR2_RISCV_ABI_LP64D=y
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
->  # Binary format
-> -# BR2_USE_MMU is not set
->  BR2_BINFMT_FLAT=y
->  BR2_BINFMT_FLAT_ONE=y
->  # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-> diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
-> index 9f1c3a305f..4ad3b2e1db 100644
-> --- a/configs/sipeed_maix_bit_sdcard_defconfig
-> +++ b/configs/sipeed_maix_bit_sdcard_defconfig
-> @@ -7,13 +7,13 @@ BR2_RISCV_ISA_CUSTOM_RVA=y
->  BR2_RISCV_ISA_CUSTOM_RVF=y
->  BR2_RISCV_ISA_CUSTOM_RVD=y
->  BR2_RISCV_ISA_CUSTOM_RVC=y
-> +# BR2_RISCV_USE_MMU is not set
->  BR2_RISCV_ABI_LP64D=y
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
->  # System
-> -# BR2_USE_MMU is not set
->  BR2_BINFMT_FLAT=y
->  BR2_BINFMT_FLAT_ONE=y
->  # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-> diff --git a/configs/sipeed_maix_dock_defconfig b/configs/sipeed_maix_dock_defconfig
-> index 0f30e8d38f..d071e5d380 100644
-> --- a/configs/sipeed_maix_dock_defconfig
-> +++ b/configs/sipeed_maix_dock_defconfig
-> @@ -7,13 +7,13 @@ BR2_RISCV_ISA_CUSTOM_RVA=y
->  BR2_RISCV_ISA_CUSTOM_RVF=y
->  BR2_RISCV_ISA_CUSTOM_RVD=y
->  BR2_RISCV_ISA_CUSTOM_RVC=y
-> +# BR2_RISCV_USE_MMU is not set
->  BR2_RISCV_ABI_LP64D=y
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
->  # Binary format
-> -# BR2_USE_MMU is not set
->  BR2_BINFMT_FLAT=y
->  BR2_BINFMT_FLAT_ONE=y
->  # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-> diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
-> index fdbca11590..de79ff950b 100644
-> --- a/configs/sipeed_maix_dock_sdcard_defconfig
-> +++ b/configs/sipeed_maix_dock_sdcard_defconfig
-> @@ -7,13 +7,13 @@ BR2_RISCV_ISA_CUSTOM_RVA=y
->  BR2_RISCV_ISA_CUSTOM_RVF=y
->  BR2_RISCV_ISA_CUSTOM_RVD=y
->  BR2_RISCV_ISA_CUSTOM_RVC=y
-> +# BR2_RISCV_USE_MMU is not set
->  BR2_RISCV_ABI_LP64D=y
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
->  # System
-> -# BR2_USE_MMU is not set
->  BR2_BINFMT_FLAT=y
->  BR2_BINFMT_FLAT_ONE=y
->  # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-> diff --git a/configs/sipeed_maix_go_defconfig b/configs/sipeed_maix_go_defconfig
-> index 2054e49ae2..3055379db4 100644
-> --- a/configs/sipeed_maix_go_defconfig
-> +++ b/configs/sipeed_maix_go_defconfig
-> @@ -7,13 +7,13 @@ BR2_RISCV_ISA_CUSTOM_RVA=y
->  BR2_RISCV_ISA_CUSTOM_RVF=y
->  BR2_RISCV_ISA_CUSTOM_RVD=y
->  BR2_RISCV_ISA_CUSTOM_RVC=y
-> +# BR2_RISCV_USE_MMU is not set
->  BR2_RISCV_ABI_LP64D=y
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
->  # Binary format
-> -# BR2_USE_MMU is not set
->  BR2_BINFMT_FLAT=y
->  BR2_BINFMT_FLAT_ONE=y
->  # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-> diff --git a/configs/sipeed_maix_go_sdcard_defconfig b/configs/sipeed_maix_go_sdcard_defconfig
-> index a16943608c..7338b0c09d 100644
-> --- a/configs/sipeed_maix_go_sdcard_defconfig
-> +++ b/configs/sipeed_maix_go_sdcard_defconfig
-> @@ -7,13 +7,13 @@ BR2_RISCV_ISA_CUSTOM_RVA=y
->  BR2_RISCV_ISA_CUSTOM_RVF=y
->  BR2_RISCV_ISA_CUSTOM_RVD=y
->  BR2_RISCV_ISA_CUSTOM_RVC=y
-> +# BR2_RISCV_USE_MMU is not set
->  BR2_RISCV_ABI_LP64D=y
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
->  # System
-> -# BR2_USE_MMU is not set
->  BR2_BINFMT_FLAT=y
->  BR2_BINFMT_FLAT_ONE=y
->  # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-> diff --git a/configs/sipeed_maixduino_defconfig b/configs/sipeed_maixduino_defconfig
-> index a581ecbea5..50c59bd4ad 100644
-> --- a/configs/sipeed_maixduino_defconfig
-> +++ b/configs/sipeed_maixduino_defconfig
-> @@ -7,13 +7,13 @@ BR2_RISCV_ISA_CUSTOM_RVA=y
->  BR2_RISCV_ISA_CUSTOM_RVF=y
->  BR2_RISCV_ISA_CUSTOM_RVD=y
->  BR2_RISCV_ISA_CUSTOM_RVC=y
-> +# BR2_RISCV_USE_MMU is not set
->  BR2_RISCV_ABI_LP64D=y
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
->  # Binary format
-> -# BR2_USE_MMU is not set
->  BR2_BINFMT_FLAT=y
->  BR2_BINFMT_FLAT_ONE=y
->  # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-> diff --git a/configs/sipeed_maixduino_sdcard_defconfig b/configs/sipeed_maixduino_sdcard_defconfig
-> index 7e627e5d15..b4f1994239 100644
-> --- a/configs/sipeed_maixduino_sdcard_defconfig
-> +++ b/configs/sipeed_maixduino_sdcard_defconfig
-> @@ -7,13 +7,13 @@ BR2_RISCV_ISA_CUSTOM_RVA=y
->  BR2_RISCV_ISA_CUSTOM_RVF=y
->  BR2_RISCV_ISA_CUSTOM_RVD=y
->  BR2_RISCV_ISA_CUSTOM_RVC=y
-> +# BR2_RISCV_USE_MMU is not set
->  BR2_RISCV_ABI_LP64D=y
->  
->  # Patches
->  BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
->  
->  # System
-> -# BR2_USE_MMU is not set
->  BR2_BINFMT_FLAT=y
->  BR2_BINFMT_FLAT_ONE=y
->  # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index e6fabbfc74..5f79c07df0 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -315,13 +315,6 @@ config BR2_TOOLCHAIN_EXTRA_LIBS
->  config BR2_TOOLCHAIN_HAS_FULL_GETTEXT
->  	bool
->  
-> -config BR2_USE_MMU
-> -	bool "Enable MMU support" if BR2_ARCH_HAS_MMU_OPTIONAL
-> -	default y if BR2_ARCH_HAS_MMU_OPTIONAL || BR2_ARCH_HAS_MMU_MANDATORY
-> -	help
-> -	  If your target has a MMU, you should say Y here.  If you
-> -	  are unsure, just say Y.
-> -
->  config BR2_TARGET_OPTIMIZATION
->  	string "Target Optimizations"
->  	default ""
-> -- 
-> 2.37.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index d46ba85fbc..4ade8b4590 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -15,24 +15,6 @@ if BR2_PACKAGE_SCONESERVER
+ 
+ comment "Sconeserver modules"
+ 
+-config BR2_PACKAGE_SCONESERVER_EXAMPLES
+-	bool "examples"
+-	help
+-	  Example modules for Sconeserver
+-
+-config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
+-	bool "http::sconesite"
+-	select BR2_PACKAGE_LIBXML2
+-	help
+-	  http::sconesite module for Sconeserver
+-
+-config BR2_PACKAGE_SCONESERVER_MYSQL
+-	bool "mysql"
+-	depends on BR2_USE_MMU # mysql
+-	select BR2_PACKAGE_MYSQL
+-	help
+-	  MySQL module for Sconeserver
+-
+ config BR2_PACKAGE_SCONESERVER_BLUETOOTH
+ 	bool "bluetooth"
+ 	depends on BR2_USE_WCHAR # bluez5_utils -> libglib2
+@@ -51,11 +33,16 @@ comment "bluetooth support needs a toolchain w/ wchar, threads, dynamic library,
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 
+-config BR2_PACKAGE_SCONESERVER_RSS
+-	bool "rss"
++config BR2_PACKAGE_SCONESERVER_EXAMPLES
++	bool "examples"
++	help
++	  Example modules for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
++	bool "http::sconesite"
+ 	select BR2_PACKAGE_LIBXML2
+ 	help
+-	  RSS module for Sconeserver
++	  http::sconesite module for Sconeserver
+ 
+ config BR2_PACKAGE_SCONESERVER_LOCATION
+ 	bool "location"
+@@ -76,6 +63,19 @@ config BR2_PACKAGE_SCONESERVER_MATHS
+ 	help
+ 	  Mathematics module for Sconeserver
+ 
++config BR2_PACKAGE_SCONESERVER_MYSQL
++	bool "mysql"
++	depends on BR2_USE_MMU # mysql
++	select BR2_PACKAGE_MYSQL
++	help
++	  MySQL module for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_RSS
++	bool "rss"
++	select BR2_PACKAGE_LIBXML2
++	help
++	  RSS module for Sconeserver
++
+ config BR2_PACKAGE_SCONESERVER_TESTBUILDER
+ 	bool "testbuilder"
+ 	help
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index 2b28f8015c..bad050210e 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -40,6 +40,13 @@ else
+ SCONESERVER_CONF_OPTS += --without-ssl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SCONESERVER_BLUETOOTH),y)
++SCONESERVER_DEPENDENCIES += bluez5_utils
++SCONESERVER_CONF_OPTS += --with-bluetooth
++else
++SCONESERVER_CONF_OPTS += --without-bluetooth
++endif
++
+ ifeq ($(BR2_PACKAGE_SCONESERVER_EXAMPLES),y)
+ SCONESERVER_CONF_OPTS += --with-examples
+ else
+@@ -53,6 +60,20 @@ else
+ SCONESERVER_CONF_OPTS += --without-sconesite
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SCONESERVER_LOCATION),y)
++SCONESERVER_DEPENDENCIES += gpsd
++SCONESERVER_CONF_OPTS += --with-location
++else
++SCONESERVER_CONF_OPTS += --without-location
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_MATHS),y)
++SCONESERVER_DEPENDENCIES += mpfr
++SCONESERVER_CONF_OPTS += --with-maths
++else
++SCONESERVER_CONF_OPTS += --without-maths
++endif
++
+ ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
+ SCONESERVER_DEPENDENCIES += mysql
+ SCONESERVER_CONF_OPTS += \
+@@ -63,13 +84,6 @@ else
+ SCONESERVER_CONF_OPTS += --without-mysql
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SCONESERVER_BLUETOOTH),y)
+-SCONESERVER_DEPENDENCIES += bluez5_utils
+-SCONESERVER_CONF_OPTS += --with-bluetooth
+-else
+-SCONESERVER_CONF_OPTS += --without-bluetooth
+-endif
+-
+ ifeq ($(BR2_PACKAGE_SCONESERVER_RSS),y)
+ SCONESERVER_DEPENDENCIES += libxml2
+ SCONESERVER_CONF_OPTS += --with-rss
+@@ -77,20 +91,6 @@ else
+ SCONESERVER_CONF_OPTS += --without-rss
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SCONESERVER_LOCATION),y)
+-SCONESERVER_DEPENDENCIES += gpsd
+-SCONESERVER_CONF_OPTS += --with-location
+-else
+-SCONESERVER_CONF_OPTS += --without-location
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SCONESERVER_MATHS),y)
+-SCONESERVER_DEPENDENCIES += mpfr
+-SCONESERVER_CONF_OPTS += --with-maths
+-else
+-SCONESERVER_CONF_OPTS += --without-maths
+-endif
+-
+ ifeq ($(BR2_PACKAGE_SCONESERVER_TESTBUILDER),y)
+ SCONESERVER_CONF_OPTS += --with-testbuilder
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
