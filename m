@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E29AC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:14:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B26DC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:14:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6B89819BE;
-	Wed, 27 Jul 2022 10:14:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6B89819BE
+	by smtp3.osuosl.org (Postfix) with ESMTP id C896A60B52;
+	Wed, 27 Jul 2022 10:14:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C896A60B52
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6-YDA0j13lOW; Wed, 27 Jul 2022 10:14:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4IJkPD3i3sbm; Wed, 27 Jul 2022 10:14:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0291481819;
-	Wed, 27 Jul 2022 10:14:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0291481819
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 67FCD1BF4E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD45F60B5F;
+	Wed, 27 Jul 2022 10:14:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD45F60B5F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CC77E1BF4E6
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:14:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4210140611
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:14:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4210140611
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD3BA60B5F
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD3BA60B5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k4zKG2QDh9_A for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HCc5FI4Tk-sK for <buildroot@lists.busybox.net>;
  Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1ED9B409EC
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ED9B409EC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C38C60B30
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:14:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C38C60B30
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4BD2486599; Wed, 27 Jul 2022 10:00:36 +0000 (UTC)
+ id 37A8186591; Wed, 27 Jul 2022 10:00:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 12:14:12 +0200
+Date: Wed, 27 Jul 2022 12:12:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4c81885ed487ccb511c4a4c4f8a8c1aa5180f78
-X-Git-Newrev: fe522b9c17f2579a3c698354aa326962311053f2
+X-Git-Oldrev: 0fc2438ff6e3d14cc9e7b546e2909e386db33439
+X-Git-Newrev: 8237c5202e46260a945de474ecb6537d86a93991
 X-Patchwork-Hint: ignore
-Message-Id: <20220727100036.4BD2486599@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jszip: security bump to version
- 3.10.0
+Message-Id: <20220727100036.37A8186591@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdk-pixbuf: bump to version 2.42.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,120 +63,82 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe522b9c17f2579a3c698354aa326962311053f2
+commit: https://git.buildroot.net/buildroot/commit/?id=8237c5202e46260a945de474ecb6537d86a93991
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Santize filenames when files are loaded with loadAsync, to avoid "zip
-  slip" attacks. The original filename is available on each zip entry as
-  unsafeOriginalName. See the documentation.
-- Drop patch (already in version)
-- Update hash of license file (dual licensing clarification with
-  https://github.com/Stuk/jszip/commit/f81c2d700d8e5fec4ed89fb565e4a266bb4dd26e)
-- Update indentation in hash file (two spaces)
-
-https://github.com/Stuk/jszip/blob/v3.10.0/CHANGES.md
+https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/blob/2.42.8/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...se-a-null-prototype-object-for-this-files.patch | 56 ----------------------
- package/jszip/jszip.hash                           |  4 +-
- package/jszip/jszip.mk                             |  5 +-
- 3 files changed, 3 insertions(+), 62 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.hash |  4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 22 +++++++++++-----------
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/jszip/0001-fix-Use-a-null-prototype-object-for-this-files.patch b/package/jszip/0001-fix-Use-a-null-prototype-object-for-this-files.patch
-deleted file mode 100644
-index 969db5b403..0000000000
---- a/package/jszip/0001-fix-Use-a-null-prototype-object-for-this-files.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 22357494f424178cb416cdb7d93b26dd4f824b36 Mon Sep 17 00:00:00 2001
--From: Michael Aquilina <michaelaquilina@gmail.com>
--Date: Mon, 14 Jun 2021 12:28:46 +0100
--Subject: [PATCH] fix: Use a null prototype object for this.files
--
--This approach is taken to prevent overriding object methods that would
--exist on a normal object Object.create({})
--
--[Retrieved from:
--https://github.com/Stuk/jszip/commit/22357494f424178cb416cdb7d93b26dd4f824b36]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- lib/index.js  | 5 ++++-
-- lib/object.js | 6 +++---
-- 2 files changed, 7 insertions(+), 4 deletions(-)
--
--diff --git a/lib/index.js b/lib/index.js
--index b449877..b4c95ba 100644
----- a/lib/index.js
--+++ b/lib/index.js
--@@ -19,7 +19,10 @@ function JSZip() {
--     //   "folder/" : {...},
--     //   "folder/data.txt" : {...}
--     // }
---    this.files = {};
--+    // NOTE: we use a null prototype because we do not
--+    // want filenames like "toString" coming from a zip file
--+    // to overwrite methods and attributes in a normal Object.
--+    this.files = Object.create(null);
-- 
--     this.comment = null;
-- 
--diff --git a/lib/object.js b/lib/object.js
--index 1c9d8e8..aec3db7 100644
----- a/lib/object.js
--+++ b/lib/object.js
--@@ -179,16 +179,16 @@ var out = {
--      */
--     forEach: function(cb) {
--         var filename, relativePath, file;
--+        /* jshint ignore:start */
--+        // ignore warning about unwanted properties because this.files is a null prototype object
--         for (filename in this.files) {
---            if (!this.files.hasOwnProperty(filename)) {
---                continue;
---            }
--             file = this.files[filename];
--             relativePath = filename.slice(this.root.length, filename.length);
--             if (relativePath && filename.slice(0, this.root.length) === this.root) { // the file is in the current root
--                 cb(relativePath, file); // TODO reverse the parameters ? need to be clean AND consistent with the filter search fn...
--             }
--         }
--+        /* jshint ignore:end */
--     },
-- 
--     /**
-diff --git a/package/jszip/jszip.hash b/package/jszip/jszip.hash
-index 13a2076ade..d0c56a44ab 100644
---- a/package/jszip/jszip.hash
-+++ b/package/jszip/jszip.hash
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 5e7dc7e03b..4bb246aa50 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256	e5343decfb781b15c54c0df9ddedd6c8518c800a4667a0a95741c694a4f38d34  jszip-3.2.2.tar.gz
--sha256	14450c78405ad2a2173e25740b56406556779149df9c4c83523a8c63d0686210  LICENSE.markdown
-+sha256  aa3033c6bb5357a0b0965c92fbdb6d6abe64676e70ffa7933b63c573ab79ee45  jszip-3.10.0.tar.gz
-+sha256  566c953c6090b1218ca6217dd7359d45dde46581968586dc607d59a78af6a9c4  LICENSE.markdown
-diff --git a/package/jszip/jszip.mk b/package/jszip/jszip.mk
-index a93766be11..3504368675 100644
---- a/package/jszip/jszip.mk
-+++ b/package/jszip/jszip.mk
-@@ -4,15 +4,12 @@
- #
+-# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.4.sha256sum
+-sha256  fe9c5dd88f486194ea2bc09b8814c1ed895bb6c530f37cbbf259757c4e482e4d  gdk-pixbuf-2.42.4.tar.xz
++# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.8.sha256sum
++sha256  84acea3acb2411b29134b32015a5b1aaa62844b19c4b1ef8b8971c6b0759f4c6  gdk-pixbuf-2.42.8.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 329c05520e..57e8bbd511 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--JSZIP_VERSION = 3.2.2
-+JSZIP_VERSION = 3.10.0
- JSZIP_SITE = $(call github,Stuk,jszip,v$(JSZIP_VERSION))
- JSZIP_LICENSE = MIT or GPL-3.0
- JSZIP_LICENSE_FILES = LICENSE.markdown
- JSZIP_CPE_ID_VENDOR = jszip_project
+ GDK_PIXBUF_VERSION_MAJOR = 2.42
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).4
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).8
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPL-2.1+
+@@ -41,30 +41,30 @@ GDK_PIXBUF_CONF_OPTS += -Dintrospection=disabled
+ endif
  
--# 0001-fix-Use-a-null-prototype-object-for-this-files.patch
--JSZIP_IGNORE_CVES += CVE-2021-23413
--
- define JSZIP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/dist/jszip.min.js \
- 		$(TARGET_DIR)/var/www/jszip/js/jszip.min.js
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+-GDK_PIXBUF_CONF_OPTS += -Dpng=true
++GDK_PIXBUF_CONF_OPTS += -Dpng=enabled
+ GDK_PIXBUF_DEPENDENCIES += libpng
+ else
+-GDK_PIXBUF_CONF_OPTS += -Dpng=false
++GDK_PIXBUF_CONF_OPTS += -Dpng=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+-GDK_PIXBUF_CONF_OPTS += -Djpeg=true
+-HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=true
++GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
++HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
+ GDK_PIXBUF_DEPENDENCIES += jpeg
+ HOST_GDK_PIXBUF_DEPENDENCIES += host-libjpeg
+ else
+-GDK_PIXBUF_CONF_OPTS += -Djpeg=false
+-HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=false
++GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
++HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+-GDK_PIXBUF_CONF_OPTS += -Dtiff=true
+-HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=true
++GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
++HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
+ GDK_PIXBUF_DEPENDENCIES += tiff
+ HOST_GDK_PIXBUF_DEPENDENCIES += host-tiff
+ else
+-GDK_PIXBUF_CONF_OPTS += -Dtiff=false
+-HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=false
++GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
++HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
+ endif
+ 
+ # gdk-pixbuf requires the loaders.cache file populated to work properly
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
