@@ -1,87 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AA52C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:34:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C957C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE07C81551;
-	Wed, 27 Jul 2022 13:34:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE07C81551
+	by smtp3.osuosl.org (Postfix) with ESMTP id 001D360C24;
+	Wed, 27 Jul 2022 13:38:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 001D360C24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n_p88i-XSVrI; Wed, 27 Jul 2022 13:34:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CHkQBV8UQit6; Wed, 27 Jul 2022 13:38:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE5B881489;
-	Wed, 27 Jul 2022 13:34:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE5B881489
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A7F21BF2BA
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:34:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 036A760BDE;
+	Wed, 27 Jul 2022 13:38:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 036A760BDE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AE2CD1BF2BA
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:38:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E84B5410B5
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:34:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E84B5410B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88BAA60BDD
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:38:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88BAA60BDD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jEKv8dXuD5R3 for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 13:34:33 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EF5940A7A
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9EF5940A7A
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:34:33 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id h8so24193989wrw.1
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 06:34:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5XeJKY6Sv493fQAvc7igTPNt4tw8z+X+3Kj0L7HQ6dM=;
- b=Pm/c7YNfhyiWHzqUI7Qn040+6ckO45Jh2HvY86pzAJvA6yM9XVflfAk7zK8f4jQsYL
- tdQmwCm0QswqxDOihwrIoUVhY9Ps6IMvPymq9op9txjNbhMCtyeitKSqM/OZciGSZb6n
- bJNG31feGGmKGQcnsT6UdZMM4VaC+9b0vXNb8GNf7ET9PpQXtlY4oczjxepJUpfv/nPE
- ZxXs9rs7lDMbquhkt2ftT87glzWAfD/XYugmee1JxfUBdsx9Of1x6p+vc76NIpAKMf35
- /xsI7QrYs9pQx+JNEp4UDBiwWUjaFzlbN3kl/MxQKKy+jg0GZdFkuRjEQT+UYcHOkVD/
- 1YLw==
-X-Gm-Message-State: AJIora94UtXTXc3mdeeyG0F9JsSKkuzg0F8Y9493WsNrnI9p/fnYGpEy
- +GQWrPGRHzr34ji1OVbqF+5C78hOjYg=
-X-Google-Smtp-Source: AGRyM1svNoKVTFTky36burVw7qzyvsKfJoufSVOJ/jsCkV2G4FQL5YYg7dyJmwMxgKAs6FZd6ydTwA==
-X-Received: by 2002:adf:f5cf:0:b0:21e:2ebc:4126 with SMTP id
- k15-20020adff5cf000000b0021e2ebc4126mr14470658wrp.195.1658928871480; 
- Wed, 27 Jul 2022 06:34:31 -0700 (PDT)
-Received: from kali.home (2a01cb0680494f3e376d079efd3cafb3.ipv6.abo.wanadoo.fr.
- [2a01:cb06:8049:4f3e:376d:79e:fd3c:afb3])
- by smtp.gmail.com with ESMTPSA id
- r41-20020a05600c322900b003a2e89d1fb5sm1557738wmp.42.2022.07.27.06.34.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 06:34:31 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 15:34:28 +0200
-Message-Id: <20220727133428.1324337-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ANigO_gXB1yG for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 13:38:33 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03F2660A88
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03F2660A88
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:38:32 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 67192240003;
+ Wed, 27 Jul 2022 13:38:29 +0000 (UTC)
+Date: Wed, 27 Jul 2022 15:38:27 +0200
+To: Dominik Michael Rauh <dmrauh@posteo.de>
+Message-ID: <20220727153827.6a926131@windsurf>
+In-Reply-To: <20220507094650.496076-1-dmrauh@posteo.de>
+References: <20210802092426.1259479-1-dmrauh@posteo.de>
+ <20220507094650.496076-1-dmrauh@posteo.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=5XeJKY6Sv493fQAvc7igTPNt4tw8z+X+3Kj0L7HQ6dM=;
- b=k5MChEaGzwy+lQh4YuBWkWHVEZW9DGpR4oASkHAhA7l37Bj7eMtAii+q03HwLDNkal
- eNeNJKKTKzmoz+pfoEcUGCWUhwNQusdxx5k2LwY2PC5INPUKR1ZjQXVnqd+Pb+HwMR3P
- 1VrI/rOOWR1JgjZUFLCdbQN3o0eR18pj/L38m2uEsqAGRJoSBSVMF/YMViy+kQFzxJSx
- Z46PlfehaJOdX+9lXQWz/GtdY97pr9PQxAQA4TXFVWKP9dbDHIWWSsZAyPdHonAgXlMa
- 8/i/mrS3uRm8cWc+IKJyVub6M4TGNPYEMZeCGv2u7kZkxJAwiHC2pOp03QDojV/KjgQ8
- l/mQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=k5MChEaG
-Subject: [Buildroot] [PATCH 1/1] package/gdal: add GDAL_CPE_ID_VENDOR
+ d=bootlin.com; s=gm1; t=1658929109;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LQYRTRINu2sYYGTqB6cfp4vLY+t5MKlOF2eL/B1KToc=;
+ b=C8EMpnK3Ugpt5BvYE2qP9Oj8vVakXI1JriQydG7p/6h0kfh0O/rBpEYHXE5mZ4JpxmRPm8
+ KCjUGPfpTqLiiRTyXA0NeOfQomtcRhkDgKjWpMaOPxWUi1Uxgy/Q2TbJ2p2ZqVfIml9fVv
+ O9Vhbn+UjAuFXvmTZ2jcWXf4WcnF/GIEVlNY2JjQCyzqegFtajqxaDGntY6p75ILT4saU2
+ aYSCKWg8tTG6+G3ywaO4DVAJyosRgzMblNMJczNkg+tZxEKlw8SC8LqdUGPo2KGdHtx/A9
+ X4nJ+Ruvs0swQsVs4LCNv9yfnMcsj3hNaRKR9WMJPnE0eGkQw/WvXSlyxJ9rdA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=C8EMpnK3
+Subject: Re: [Buildroot] [PATCH v5] package/gdal: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,37 +76,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dominik Michael Rauh <dmrauh@posteo.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:osgeo:gdal is a valid CPE identifier for this package:
+Hello Dominik,
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aosgeo%3Agdal
+On Sat,  7 May 2022 09:46:50 +0000
+Dominik Michael Rauh <dmrauh@posteo.de> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gdal/gdal.mk | 1 +
- 1 file changed, 1 insertion(+)
+> GDAL is a translator library for raster and vector geospatial data
+> formats. As a library, it presents a single raster abstract data model
+> and single vector abstract data model to the calling application for all
+> supported formats. It also comes with a variety of useful command line
+> utilities for data translation and processing.
+> 
+> https://gdal.org/
+> 
+> test-pkg shows that this package is affected by binutils bug 27597.
+> 
+> Signed-off-by: Dominik Michael Rauh <dmrauh@posteo.de>
 
-diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
-index 0d42037ad6..c75b7743ce 100644
---- a/package/gdal/gdal.mk
-+++ b/package/gdal/gdal.mk
-@@ -9,6 +9,7 @@ GDAL_SITE = https://download.osgeo.org/gdal/$(GDAL_VERSION)
- GDAL_SOURCE = gdal-$(GDAL_VERSION).tar.xz
- GDAL_LICENSE = MIT, many others
- GDAL_LICENSE_FILES = LICENSE.TXT
-+GDAL_CPE_ID_VENDOR = osgeo
- GDAL_INSTALL_STAGING = YES
- GDAL_CONFIG_SCRIPTS = gdal-config
- # gdal at its core only needs host-pkgconf, libgeotiff, proj and tiff
+Believe it or not, but we finally applied your patch! I had to do a few
+changes:
+
+ - Addition of an entry to the DEVELOPERS file
+
+ - Removal of PROVENANCE.TXT as a license file, and simplification of
+   the license variable to just "MIT, many others" as the licensing
+   situation of GDAL is very complicated.
+
+ - Use GDAL_CONF_OPTS = (and not +=) to define all unconditional
+   options, and do that before the conditional features.
+
+ - Removal of the postgis change for gdal support, which I have moved
+   to a separate commit. It also required an extra patch to PostGIS to
+   build properly.
+
+ - Bump to the latest version of gdal.
+
+You can see the final 3 commits at:
+
+  https://gitlab.com/buildroot.org/buildroot/-/commit/d48af707737ece6242d58e83b98e5c601fa55acc
+  https://gitlab.com/buildroot.org/buildroot/-/commit/1e64fa2956171cdc9d6e6c8896b4b589ce573513
+  https://gitlab.com/buildroot.org/buildroot/-/commit/b9a38a42ac817b963be2b4b51d218c5eabb1059d
+
+Best regards,
+
+Thomas
 -- 
-2.35.1
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
