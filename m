@@ -1,96 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C267C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 11:09:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6F97C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 11:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3B2140518;
-	Wed, 27 Jul 2022 11:09:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3B2140518
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FF2060B59;
+	Wed, 27 Jul 2022 11:10:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FF2060B59
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SpTjhZpbVbfT; Wed, 27 Jul 2022 11:10:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EFEC60A7B;
+	Wed, 27 Jul 2022 11:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EFEC60A7B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A3A91BF46D
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:08:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 65FEF404B9
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65FEF404B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3gC7ptp-QNYY; Wed, 27 Jul 2022 11:09:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B59EE404D8;
-	Wed, 27 Jul 2022 11:09:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B59EE404D8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BD4211BF46D
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:08:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96218404A6
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 11:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96218404A6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wJ8FdFxl8FMe for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 11:08:32 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mxs4TxxCtItz for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 11:08:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42CBC403D0
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 42CBC403D0
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 11:08:32 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id v17so4740607wrr.10
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 04:08:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59CAE40168
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 59CAE40168
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 11:08:38 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ x23-20020a05600c179700b003a30e3e7989so837991wmo.0
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 04:08:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=HIpkcxpGyOANUUvS1aI5B3s+pWzKOSANw7rcERDZ0gQ=;
- b=QqNF+Kv0hUYM//J9bfjbZQAegyA4kdn63oKB3tVnthiTX51Yp2Z6Tt1ETb0SY/GMoP
- J8VeS5ABieCY15x0AezqKcBwPikiapx9DH7nvm08S1+o2XQNlialxLHAx2+wr5nguLFs
- LIHl7uP4IZMpDeTZL28XXeaQpINCoA8Sm1y41/5xGkE3aZwv5J1P4ytAN0G8rJAVzSXO
- o/zWNzwEyleUF10WDpS5Yx/6unx/7dwi37SdOQntp8pOq8SRLYKpzkYoLEz7uvUj/OKe
- Q4HtmW5JRUSvIL1yL2TSToXFqs+155ohMkkvyRdZt38KYlPBWjzoViFiRcxwatvP7m5o
- XqBA==
-X-Gm-Message-State: AJIora+tXbAi4jnyqDuIuYtuIFZA8MyBIyUxOMmE4ySo1vTJh5+mzXR3
- rmIA+nEZOReTB5ghn8wvrB0uyA==
-X-Google-Smtp-Source: AGRyM1s9EzlLZnmmB6Cq4Z3w2K37dJhxtOySG0bCikp7ilC5n73W6PRtOyiPBQJ9910hmC3FKPwHGg==
-X-Received: by 2002:a5d:434e:0:b0:21e:9970:fab with SMTP id
- u14-20020a5d434e000000b0021e99700fabmr5672707wrr.127.1658920110312; 
- Wed, 27 Jul 2022 04:08:30 -0700 (PDT)
+ bh=pIOhjJ4uw4fuzcGgJRNdTcdDcVwLsFYtXEBL4A6raqQ=;
+ b=RiMeMNRR4m2NPyFtGnCigNPgaACF9g0N8lJg0eZJeDqxRlY8XIkqvrb8oFpNGQ9kIY
+ pwzCP8vP6gOMLgUzygu+JDSpmn61KiYXqrR1GvyBL1es4yAIpH8z04fFAMlKDWUEXxnn
+ x527Ze/7Cb7RK18QSylSpFDtfjvZ7gPCSOOt/eG4RxVQsBihe5GaVz/wjHyPPYrCatHX
+ q5SxJ/PNcQeeRAH29fzCBHA6l0l504LlUTeuhkVrhKfGG2zRRmzw09hDhMaGlNhSvJEL
+ hKWYuqkx3UVKUbw9kxKNx1qkbHwMT3QuLXOPiIZ8zJ8lCncugYw9r4uOXpp2lqV7ran2
+ ZKSw==
+X-Gm-Message-State: AJIora9mHg/LbBY60Xkvi3cCCy+4HRm2ZA7kSRLWFTnBaPDJfdVOOIw7
+ biA/EalMo3HQCJctjFUCOn+NJw==
+X-Google-Smtp-Source: AGRyM1s4YIZVJigB0/CYVzxarbesrUMJt79KDgS2eWEUwjYN6PK1b5wMRrnDyehJ2q/vrKbwlcVs2w==
+X-Received: by 2002:a1c:7915:0:b0:3a3:11a3:7452 with SMTP id
+ l21-20020a1c7915000000b003a311a37452mr2695100wme.27.1658920116504; 
+ Wed, 27 Jul 2022 04:08:36 -0700 (PDT)
 Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
  ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- j3-20020adfa543000000b0021e150553acsm14847982wrb.14.2022.07.27.04.08.29
+ i16-20020a05600c401000b003a305c0ab06sm1460514wmm.31.2022.07.27.04.08.35
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 27 Jul 2022 04:08:29 -0700 (PDT)
-Message-ID: <0b33098c-cdf6-d59a-0ee3-fc9821de53ba@mind.be>
-Date: Wed, 27 Jul 2022 11:00:25 +0200
+ Wed, 27 Jul 2022 04:08:35 -0700 (PDT)
+Message-ID: <c1c3040b-d429-dcaf-6e97-5f0c8367b48a@mind.be>
+Date: Wed, 27 Jul 2022 12:02:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20220727071557.3434892-1-james.hilliard1@gmail.com>
- <20220727071557.3434892-2-james.hilliard1@gmail.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+References: <20220108224337.3702128-1-fontaine.fabrice@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220727071557.3434892-2-james.hilliard1@gmail.com>
+In-Reply-To: <20220108224337.3702128-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=HIpkcxpGyOANUUvS1aI5B3s+pWzKOSANw7rcERDZ0gQ=;
- b=Eq4W1Ef4JVGFJbw8q4eDU3BYla951D+A+J+uCuFzd8UJUphk97Gp8ply1VCunG6LVi
- Zp5BwPJvP3h298F7vajzm6AFCJ5SrKcD04WQkUoG0NL4L/mNdC5O3Qhgu0BAZHdIX/gB
- HeXni9laN5C1F8nd/3qQGt35LwnTCaxzALyM6yHUcv6iJQ01CFB4ioPQ+/cZCBdTy440
- +iQk24AlKdpShmmSq+7TxhwdWk5KyBuCKL+WQXdIXPnOLmt7tDYnOH+PbY6o4y/CFx9W
- TNjvTie5vvhCnC0n+tOj5LtCtQwwdRH+PcLWKcVG7E5zNeFoR4vuhoiz8ycRUUoNkRAH
- JGXw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=pIOhjJ4uw4fuzcGgJRNdTcdDcVwLsFYtXEBL4A6raqQ=;
+ b=K6Nb+1hRsg0CW0w2CsFYtJoW9dc7yaBWWnXmPJ70wIUTLeAf0QMR/1UGiB08Vf07Qq
+ zo6MLIeiUx5nAmTyI57ROxpxnXGBZn4AU3rLBW1vp7xzXAJ/uB5CppeQllBND+9+3Wg/
+ 4G4yDAHkAgikSL9oDdZAzxw1kF1ZA/+HdWDboLRh4UNXCkh4SPwdUGXP1+x02uc6Cxyf
+ aUZDrt8iHKhTED4G0V2oy8fDSGRUh3JeJsplcGinAJ//D/FKXG1wyJc2Kk58f4kwDvCg
+ nFkULvK7mVVhBVCMeMoqfgZyq+gB1w5jy8Qc4BEOVTPLC3mLWxZpYr3aoknMz4uhvSMe
+ Fg7A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Eq4W1Ef4
-Subject: Re: [Buildroot] [PATCH v5 2/2] package/pkg-meson: use meson to
- build/install packages
+ header.a=rsa-sha256 header.s=google header.b=K6Nb+1hR
+Subject: Re: [Buildroot] [PATCH 1/2] package/minizip: add minizip-zlib
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,197 +102,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Samuel Martin <s.martin49@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- Norbert Lange <nolange79@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Fabrice Fontaine <fabrice.fontaine@orange.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+  Hi Fabrice,
+
+On 08/01/2022 23:43, Fabrice Fontaine wrote:
+> Add a virtual package to allow the user to select the minizip provider:
+
+  A virtual package should be used when the alternatives are more or less 
+drop-in replacements. Here, however, they are absolutely not: they install 
+completely different header files and libraries. There is no way that something 
+that expects minizip-ng can build with minizip-zlib or vice versa.
+
+  In addition, the two can be installed in parallel.
+
+  So there's no reason at all to make it a virtual package.
+
+>   - the current minizip (which has been renamed minizip-ng since
+>     https://github.com/zlib-ng/minizip-ng/commit/db95894646b87f6178ceaa389cbdb5b1ba8cd97a)
+
+  It would make more sense to switch the existing minizip package to this new 
+upstream repository.
+
+  We could rename the package to minizip-ng, but we generally avoid that. It's 
+just annoyance for people who upgrade buildroot (legacy handling helps, but it 
+is still annoying), and there is no benefit at all other than "consistency".
+
+>   - the 'legacy' minizip provided by zlib which is still widely supported
+>     by various opensource packages such as domoticz
+
+  We should just add a package minizip-zlib.
 
 
-On 27/07/2022 09:15, James Hilliard wrote:
-> As of version 0.54.0 meson has had the ability to build and install
-> packages rather than having to run ninja directly as before.
+> There is no need to add entries in Config.legacy as the previous options
+> are kept and the default provider of minizip is minizip-ng.
 > 
-> This will allow us to use features such as meson install tags in
-> the future which require meson to be used for the installation.
-> 
-> Note that we've removed FOO_NINJA_ENV which may cause issues
-> in the unlikely event an external package uses it.
-> 
-> We need to set --pkgconfig.relocatable so that pkg-config files are
-> not generated with absolute paths which cause issues with per-package
-> directories.
-
-  This still doesn't explain how it is related to using meson rather than ninja. 
-Are you saying that when calling ninja directly, PPD work perfectly fine, but if 
-it's installed with meson, it doesn't? Then I'd really like to have a little 
-more insight into what meson does to break it.
-
-  I suspect that the two are actually unrelated, and thus the patches should be 
-split.
-
-> 
-> Remove conflicting host-systemd paths.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 [snip]
-> @@ -156,10 +157,20 @@ define $(2)_CONFIGURE_CMDS
->   	mkdir -p $$($$(PKG)_SRCDIR)/build
->   	$$(HOST_CONFIGURE_OPTS) \
->   	$$($$(PKG)_CONF_ENV) $$(MESON) \
-> +		--pkgconfig.relocatable \
->   		--prefix=$$(HOST_DIR) \
-> -		--libdir=lib \
-> -		--sysconfdir=$$(HOST_DIR)/etc \
-> +		--bindir=$$(HOST_DIR)/bin \
+> diff --git a/package/minizip-zlib/minizip-zlib.mk b/package/minizip-zlib/minizip-zlib.mk
+> new file mode 100644
+> index 0000000000..67d4e31f41
+> --- /dev/null
+> +++ b/package/minizip-zlib/minizip-zlib.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# minizip-zlib
+> +#
+> +################################################################################
+> +
+> +MINIZIP_ZLIB_VERSION = 1.2.11
+> +MINIZIP_ZLIB_SOURCE = zlib-$(MINIZIP_ZLIB_VERSION).tar.xz
+> +MINIZIP_ZLIB_SITE = http://www.zlib.net
+> +MINIZIP_ZLIB_LICENSE = Zlib
+> +MINIZIP_ZLIB_LICENSE_FILES = README
+> +MINIZIP_ZLIB_INSTALL_STAGING = YES
+> +MINIZIP_ZLIB_PROVIDES = minizip
+> +MINIZIP_ZLIB_SUBDIR = contrib/minizip
+> +MINIZIP_ZLIB_AUTORECONF = YES
 
-  bindir defaults to "bin", which means things will be installed in <prefix>/bin 
-and references to bindir in pkgconfig will use <prefix>/bin absolute paths as 
-well (actually, as ${prefix}/bin). How does pkgconfig.relocatable change things 
-that we suddenly need to override the default with an absolute path?
-
-> +		--datadir=$$(HOST_DIR)/share \
-> +		--includedir=$$(HOST_DIR)/include \
-> +		--infodir=$$(HOST_DIR)/share/info \
-> +		--libdir=$$(HOST_DIR)/lib \
-> +		--libexecdir=$$(HOST_DIR)/libexec \
-> +		--localedir=$$(HOST_DIR)/share/locale \
->   		--localstatedir=$$(HOST_DIR)/var \
-> +		--mandir=$$(HOST_DIR)/share/man \
-> +		--sbindir=$$(HOST_DIR)/sbin \
-> +		--sharedstatedir=$$(HOST_DIR)/com \
-> +		--sysconfdir=$$(HOST_DIR)/etc \
->   		--default-library=shared \
->   		--buildtype=release \
->   		--wrap-mode=nodownload \
-> @@ -179,13 +190,23 @@ $(2)_DEPENDENCIES += host-meson
->   ifndef $(2)_BUILD_CMDS
->   ifeq ($(4),target)
->   define $(2)_BUILD_CMDS
-> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
-> -		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-> +	$$(TARGET_MAKE_ENV) \
-> +	$$($$(PKG)_MESON_ENV) \
-> +	$$(MESON) \
-> +		compile \
-> +		$$(MESON_BUILD_OPTS) \
-> +		$$(if $$($$(PKG)_NINJA_OPTS),--ninja-args $$($$(PKG)_NINJA_OPTS)) \
-> +		-C $$($$(PKG)_SRCDIR)/build
->   endef
->   else
->   define $(2)_BUILD_CMDS
-> -	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
-> -		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-> +	$$(HOST_MAKE_ENV) \
-> +	$$($$(PKG)_MESON_ENV) \
-> +	$$(MESON) \
-> +		compile \
-> +		$$(MESON_BUILD_OPTS) \
-> +		$$(if $$($$(PKG)_NINJA_OPTS),--ninja-args $$($$(PKG)_NINJA_OPTS)) \
-> +		-C $$($$(PKG)_SRCDIR)/build
->   endef
->   endif
->   endif
-> @@ -196,8 +217,12 @@ endif
->   #
->   ifndef $(2)_INSTALL_CMDS
->   define $(2)_INSTALL_CMDS
-> -	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
-> -		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
-> +	$$(HOST_MAKE_ENV) \
-> +	$$($$(PKG)_MESON_ENV) \
-> +	$$(MESON) \
-> +		install \
-> +		$$(MESON_INSTALL_OPTS) \
-> +		-C $$($$(PKG)_SRCDIR)/build
-
-  Why is there a --ninja-args in the build but not in the install?
-
->   endef
->   endif
->   
-> @@ -207,8 +232,13 @@ endif
->   #
->   ifndef $(2)_INSTALL_STAGING_CMDS
->   define $(2)_INSTALL_STAGING_CMDS
-> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) \
-> -		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
-> +	$$(TARGET_MAKE_ENV) \
-> +	$$($$(PKG)_MESON_ENV) \
-> +	$$(MESON) \
-> +		install \
-> +		$$(MESON_INSTALL_OPTS) \
-> +		--destdir $$(STAGING_DIR) \
-> +		-C $$($$(PKG)_SRCDIR)/build
->   endef
->   endif
->   
-> @@ -218,8 +248,13 @@ endif
->   #
->   ifndef $(2)_INSTALL_TARGET_CMDS
->   define $(2)_INSTALL_TARGET_CMDS
-> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) \
-> -		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
-> +	$$(TARGET_MAKE_ENV) \
-> +	$$($$(PKG)_MESON_ENV) \
-> +	$$(MESON) \
-> +		install \
-> +		$$(MESON_INSTALL_OPTS) \
-> +		--destdir $$(TARGET_DIR) \
-> +		-C $$($$(PKG)_SRCDIR)/build
->   endef
->   endif
->   
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 47aaddf849..6efc8d636f 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -749,7 +749,7 @@ endef
->   SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_PRESET_ALL
->   
->   SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
-> -SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
-> +SYSTEMD_MESON_ENV = $(HOST_UTF8_LOCALE_ENV)
->   
->   define SYSTEMD_LINUX_CONFIG_FIXUPS
->   	$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS)
-> @@ -777,10 +777,7 @@ endef
->   HOST_SYSTEMD_CONF_OPTS = \
->   	-Dsplit-bin=true \
->   	-Dsplit-usr=false \
-> -	--prefix=/usr \
-> -	--libdir=lib \
-> -	--sysconfdir=/etc \
-> -	--localstatedir=/var \
-> +	-Drootprefix=$(HOST_DIR) \
-
-  This change looks like something we can apply independently of the rest of the 
-seris as well. It looks like a much better way of handling the special case of 
-systemd. However, I'd like a much more detailed explanation about why this works 
-now but didn't work in commit 35c11a027c88a3c943554eefbbed051fd2d98a50. That 
-commit has an extensive explanation of the reasoning.
+  Please add a comment why autoreconf is needed.
 
   Regards,
   Arnout
 
->   	-Dmode=release \
->   	-Dutmp=false \
->   	-Dhibernate=false \
-> @@ -852,8 +849,6 @@ HOST_SYSTEMD_DEPENDENCIES = \
->   	host-gperf \
->   	host-python-jinja2
->   
-> -HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
-> -
->   # Fix RPATH After installation
->   # * systemd provides a install_rpath instruction to meson because the binaries
->   #   need to link with libsystemd which is not in a standard path
+> +MINIZIP_ZLIB_DEPENDENCIES = zlib
+> +
+> +ifeq ($(BR2_PACKAGE_MINIZIP_DEMOS),y)
+> +MINIZIP_ZLIB_CONF_OPTS += --enable-demos
+> +else
+> +MINIZIP_ZLIB_CONF_OPTS += --disable-demos
+> +endif
+> +
+> +$(eval $(autotools-package))
+[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
