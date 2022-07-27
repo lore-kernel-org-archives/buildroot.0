@@ -1,72 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 975F0C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 07:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 143C5C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 08:20:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4EE5881271;
-	Wed, 27 Jul 2022 07:58:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EE5881271
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B8F360AB8;
+	Wed, 27 Jul 2022 08:20:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B8F360AB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 24ARSyB7ouQ2; Wed, 27 Jul 2022 07:58:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZIMTNIlxZf3c; Wed, 27 Jul 2022 08:20:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DC7880C98;
-	Wed, 27 Jul 2022 07:58:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DC7880C98
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D1AC01BF3A0
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:58:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB262605EA;
+	Wed, 27 Jul 2022 08:20:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB262605EA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CC1071BF59A
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:20:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA527403E9
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:58:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA527403E9
+ by smtp4.osuosl.org (Postfix) with ESMTP id B221A408FB
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B221A408FB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VegZYY2pktzQ for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 07:58:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MsF1qMAwZTlB for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 08:20:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABC31401C5
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ABC31401C5
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 07:58:46 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9946:e64:fb26:3d99])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id EF2AE780516;
- Wed, 27 Jul 2022 09:58:42 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 27 Jul 2022 09:58:42 +0200
-Date: Wed, 27 Jul 2022 09:58:42 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220727075842.GC1085273@scaer>
-References: <20220726163951.2111731-1-thomas.petazzoni@bootlin.com>
- <20220726163951.2111731-3-thomas.petazzoni@bootlin.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E0C7408F6
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6E0C7408F6
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 08:20:15 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id mf4so30236834ejc.3
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 01:20:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=3X+E5FmauJjQNDKH0608mXuv61YipiYmFZsDiRsbIuA=;
+ b=imgmr2F+rz26KFKHm8D5G9V/eTOCdV5gQeXL0lS1DD3VSqf6MZ2nBeC+BFEsTuTFkI
+ 4RfHlPsvlpM/h7+2nnrGfrEhIQpHp8E2pFfGJE1Lm5ZBxnX9BUU0PEVXMlt+iHe8oLEo
+ hYr6Kzk5peiqaYRRoSJTgt9Bb23S3JapMSgPoSH4frX84uZO81HTMAENbU1mPd2L7Khr
+ 40bSyhiBuzUHheKcgPqikMt+Xe2ZMXoOG+2YTXTibBrrAHTQoZjwOdLrYxa+RBaffNqo
+ 6tjIir8hh8gggzVQepgtmzjByFDFQ8bK3CwlLAwLBkxuqLR2hDAlnUMmc9+8sf6YwR2K
+ Y+GA==
+X-Gm-Message-State: AJIora/gT76XopvgJ7aIaoaKEy5+sqTSfw7B60va9WLrQYTMWmAjkEW2
+ P724APL2S5Y9+988NfMEPIKC78SFcOw=
+X-Google-Smtp-Source: AGRyM1u67osgK9iQqpEjU9RXLpGTiW6pEAQtJCfUFsFRpw7nIuJOmVuBJMLaMYmzj8SRycE1C0YckQ==
+X-Received: by 2002:a17:906:5a5b:b0:72b:39cf:6042 with SMTP id
+ my27-20020a1709065a5b00b0072b39cf6042mr16497233ejc.301.1658910013282; 
+ Wed, 27 Jul 2022 01:20:13 -0700 (PDT)
+Received: from mercury.lan ([5.2.192.119]) by smtp.gmail.com with ESMTPSA id
+ kw24-20020a170907771800b0072b609d9a36sm3433563ejc.16.2022.07.27.01.20.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Jul 2022 01:20:12 -0700 (PDT)
+From: Alexandru Ardelean <ardeleanalex@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 27 Jul 2022 11:19:52 +0300
+Message-Id: <20220727081953.38627-1-ardeleanalex@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220726163951.2111731-3-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658908725;
- bh=FML913jLf634rPSHR7e6ChNjkTmIxLZs7gWOJjaSIWc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=G1Zai9Dbpw8tEPhXCRthtQqzRc8LNE0yaSXILsu5s5ok1wJUEvFcVNDJm4gHVQokf
- h1VyWRkzm4zJiUJuUQ2rKpzfU6djjaBllMwqyL949hA/NsITBbUVxxoo/8Y81tWnID
- 1jkPNVEZvE9ePQPjKhoYb4Snj5W+X+qm7UEqMm5PJHBoVSp14lWG6IzhPjBZ2KaCx3
- vX1mt8cd8OinDVhravTGXd4zbhE91XrQ/oVbtz6x5zfc3sMI8Ms3F5dKG4gF9C7MZD
- 4qG33E988UCJuKdXkujbeAhlpzClzaCYjqOpwVEhxtwv1a0m0mVy2e0h1whOv9nxLD
- zXXj+qjnirADg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=G1Zai9Db
-Subject: Re: [Buildroot] [PATCH v2 3/4] arch/Config.in: move the binary
- format selection further down
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=3X+E5FmauJjQNDKH0608mXuv61YipiYmFZsDiRsbIuA=;
+ b=Gk9H0GOryi48+vgjDOEhYpo0XFUad1cL3LnhglTR/haan03d2/an/SpRmwsOD4tHXB
+ 9dB9f3k6/ef0K7unbeivYzJEXhyT5K//6HMVv42dsqFkzF8oyEXu/h2jdOyZWioQQLc9
+ JnemydkELkHaDZcKe7Yli+XArdetYXJCPr+iR/26I3C5bPfV0Qf40ehjRLJ9U14agsW4
+ WRDNqMjLs9Jwz5cHJR7clUpuVFWL9lXlvhqeULup7dbaifCb6Vic8/a1+ikvhkXhdr+V
+ UbY3Iwa9vAUQ5Dq0tH7KmNwWNrtlNDi6sUL77MaCrxf7w5DdzoT/j/3j73W4c7XJ70yB
+ 4dzg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Gk9H0GOr
+Subject: [Buildroot] [PATCH 1/2] package/cog: add udev dependency to drm
+ platform support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,171 +92,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: aperez@igalia.com, michael@nosthoff.rocks, thomas.petazzoni@bootlin.com,
+ Alexandru Ardelean <ardeleanalex@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+The DRM platform support already has the 'BR2_PACKAGE_HAS_UDEV' symbol in
+package/cog/Config.in
 
-On 2022-07-26 18:39 +0200, Thomas Petazzoni via buildroot spake thusly:
-> Right now the "Target options" menu looks like this:
-> 
->  Target architecture (....)
->  ... options related to the binary format selection ...
->  ... options related to the architecture variant selection ...
-> 
-> This doesn't make much sense: the architecture variant selection
-> should be just below the target architecture selection. With this
-> commit, things will now be presented this way:
-> 
->  Target architecture (....)
->  ... options related to the architecture variant selection ...
->  ... options related to the binary format selection ...
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+We just need to specify 'udev' as a dependency in the cog.mk file.
+The udev virtual package is pulled by libinput anyway, but this makes it
+more explicit.
 
-Applied to master, thanks.
+Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+---
 
-Regards,
-Yann E. MORIN.
+In continuation of:
+  https://patchwork.ozlabs.org/project/buildroot/patch/20220722070150.40715-1-ardeleanalex@gmail.com/
 
-> ---
->  arch/Config.in | 100 ++++++++++++++++++++++++-------------------------
->  1 file changed, 50 insertions(+), 50 deletions(-)
-> 
-> diff --git a/arch/Config.in b/arch/Config.in
-> index 9135df9def..095036f1aa 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -371,56 +371,6 @@ config BR2_BINFMT_SUPPORTS_SHARED
->  config BR2_READELF_ARCH_NAME
->  	string
->  
-> -# Set up target binary format
-> -choice
-> -	prompt "Target Binary Format"
-> -	default BR2_BINFMT_ELF if BR2_USE_MMU
-> -	default BR2_BINFMT_FLAT
-> -
-> -config BR2_BINFMT_ELF
-> -	bool "ELF"
-> -	depends on BR2_USE_MMU
-> -	select BR2_BINFMT_SUPPORTS_SHARED
-> -	help
-> -	  ELF (Executable and Linkable Format) is a format for libraries
-> -	  and executables used across different architectures and
-> -	  operating systems.
-> -
-> -config BR2_BINFMT_FLAT
-> -	bool "FLAT"
-> -	depends on !BR2_USE_MMU
-> -	help
-> -	  FLAT binary is a relatively simple and lightweight executable
-> -	  format based on the original a.out format. It is widely used
-> -	  in environment where no MMU is available.
-> -
-> -endchoice
-> -
-> -# Set up flat binary type
-> -choice
-> -	prompt "FLAT Binary type"
-> -	default BR2_BINFMT_FLAT_ONE
-> -	depends on BR2_BINFMT_FLAT
-> -
-> -config BR2_BINFMT_FLAT_ONE
-> -	bool "One memory region"
-> -	help
-> -	  All segments are linked into one memory region.
-> -
-> -config BR2_BINFMT_FLAT_SHARED
-> -	bool "Shared binary"
-> -	depends on BR2_m68k
-> -	# Even though this really generates shared binaries, there is no libdl
-> -	# and dlopen() cannot be used. So packages that require shared
-> -	# libraries cannot be built. Therefore, we don't select
-> -	# BR2_BINFMT_SUPPORTS_SHARED and therefore force BR2_STATIC_LIBS.
-> -	# Although this adds -static to the compilation, that's not a problem
-> -	# because the -mid-shared-library option overrides it.
-> -	help
-> -	  Allow to load and link indiviual FLAT binaries at run time.
-> -
-> -endchoice
-> -
->  if BR2_arcle || BR2_arceb
->  source "arch/Config.in.arc"
->  endif
-> @@ -481,4 +431,54 @@ if BR2_xtensa
->  source "arch/Config.in.xtensa"
->  endif
->  
-> +# Set up target binary format
-> +choice
-> +	prompt "Target Binary Format"
-> +	default BR2_BINFMT_ELF if BR2_USE_MMU
-> +	default BR2_BINFMT_FLAT
-> +
-> +config BR2_BINFMT_ELF
-> +	bool "ELF"
-> +	depends on BR2_USE_MMU
-> +	select BR2_BINFMT_SUPPORTS_SHARED
-> +	help
-> +	  ELF (Executable and Linkable Format) is a format for libraries
-> +	  and executables used across different architectures and
-> +	  operating systems.
-> +
-> +config BR2_BINFMT_FLAT
-> +	bool "FLAT"
-> +	depends on !BR2_USE_MMU
-> +	help
-> +	  FLAT binary is a relatively simple and lightweight executable
-> +	  format based on the original a.out format. It is widely used
-> +	  in environment where no MMU is available.
-> +
-> +endchoice
-> +
-> +# Set up flat binary type
-> +choice
-> +	prompt "FLAT Binary type"
-> +	default BR2_BINFMT_FLAT_ONE
-> +	depends on BR2_BINFMT_FLAT
-> +
-> +config BR2_BINFMT_FLAT_ONE
-> +	bool "One memory region"
-> +	help
-> +	  All segments are linked into one memory region.
-> +
-> +config BR2_BINFMT_FLAT_SHARED
-> +	bool "Shared binary"
-> +	depends on BR2_m68k
-> +	# Even though this really generates shared binaries, there is no libdl
-> +	# and dlopen() cannot be used. So packages that require shared
-> +	# libraries cannot be built. Therefore, we don't select
-> +	# BR2_BINFMT_SUPPORTS_SHARED and therefore force BR2_STATIC_LIBS.
-> +	# Although this adds -static to the compilation, that's not a problem
-> +	# because the -mid-shared-library option overrides it.
-> +	help
-> +	  Allow to load and link indiviual FLAT binaries at run time.
-> +
-> +endchoice
-> +
->  endmenu # Target options
-> -- 
-> 2.37.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+ package/cog/cog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index da660eb7c1..95b6220629 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -28,7 +28,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+ COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
+-COG_DEPENDENCIES += libdrm libinput libgbm libegl
++COG_DEPENDENCIES += libdrm libinput libgbm libegl udev
+ else
+ COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
