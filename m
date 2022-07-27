@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 796B6C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 07:41:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61835C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 07:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1ED860ADB;
-	Wed, 27 Jul 2022 07:41:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1ED860ADB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 095244099F;
+	Wed, 27 Jul 2022 07:41:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 095244099F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wnR-CbeT4xXD; Wed, 27 Jul 2022 07:41:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ouI6La5YIECl; Wed, 27 Jul 2022 07:41:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1659460ACC;
-	Wed, 27 Jul 2022 07:41:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1659460ACC
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE45D40996;
+	Wed, 27 Jul 2022 07:41:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE45D40996
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 952611BF3A0
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:41:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DE67E1BF3A0
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6D82D81454
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:41:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D82D81454
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA8EB81454
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:41:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA8EB81454
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hpP_cGSzkdsv for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 07:41:01 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FF88817AD
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5FF88817AD
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 07:41:01 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B2B0720009;
- Wed, 27 Jul 2022 07:40:58 +0000 (UTC)
-Date: Wed, 27 Jul 2022 09:40:57 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220727094057.3442cdc7@windsurf>
-In-Reply-To: <20220727065409.326410-1-fontaine.fabrice@gmail.com>
-References: <20220727065409.326410-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658907659;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=uIXdcQtba1Jcb+H05JanOM0jacZG1RpJtRTk7BjkXV0=;
- b=DQf1aqHF9mYWUmtRu9c36S6iOOU1JlM0RJqcLE5QSBGVSkf7eMMZX0h/QYBdocbhuKRi/S
- PtoYxpBYcl8/jFuMYyb8x42GwjRXOCFX9IyKpYfR4LfORUijM+V4YbMHPjIaT+y1hVwWeI
- jfVukoQdQkm4fSbFQXe5hw+ABL1yEY6Ctyi7jh9bIifwoCPBGmy9Zr6cgnUywVBSHW5Lnu
- qy+id7wc0XJuHvJ2vGnfHjT9QDI93eiEpZngkcWqurszXVVHmSjuPkB44i57+Rlj4qvnci
- O4OHysz3C3L7DJDGq3RPgTmRWiMzw2PQhRpRNd/p3xcnH0cuGkXfnenGihr+Cg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DQf1aqHF
-Subject: Re: [Buildroot] [PATCH 1/1] package/netdata: add freeipmi optional
- dependency
+ with ESMTP id Rqh7QeeWoP4U for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 07:41:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1F3C818AC
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 07:41:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1F3C818AC
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 54CFD8644C; Wed, 27 Jul 2022 07:27:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 27 Jul 2022 09:41:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 55106a056e09cbb1c16c561c41ba160464305c62
+X-Git-Newrev: 94ab3132cc232f70d1770bcf263e44d2cfa6f6ae
+X-Patchwork-Hint: ignore
+Message-Id: <20220727072744.54CFD8644C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: simplify alsa-lib
+ feature selection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,27 +58,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 27 Jul 2022 08:54:09 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=94ab3132cc232f70d1770bcf263e44d2cfa6f6ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/netdata/netdata.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+Instead of having the user need to figure out that 2 alsa-lib features
+are needed for pipewire ALSA support, have the top-level pulseaudio
+option select the relevant alsa-lib features, when alsa-lib is enabled
+as already done for pulseaudio in commit
+97cd3680a4cc4bc0c71bccccb1459eda4b880159
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pipewire/Config.in   | 2 ++
+ package/pipewire/pipewire.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pipewire/Config.in b/package/pipewire/Config.in
+index 3bfcf42a81..f038291e87 100644
+--- a/package/pipewire/Config.in
++++ b/package/pipewire/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_PIPEWIRE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	select BR2_PACKAGE_ALSA_LIB_UCM if BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_ALSA_LIB_SEQ if BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO if BR2_PACKAGE_BLUEZ5_UTILS # runtime
+ 	help
+ 	  PipeWire is a server and user space API to deal with
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index ecfb6c0ae2..790d9c8d9f 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -77,7 +77,7 @@ endif
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ PIPEWIRE_CONF_OPTS += -Dpipewire-alsa=enabled
+ PIPEWIRE_DEPENDENCIES += alsa-lib
+-ifeq ($(BR2_PACKAGE_ALSA_LIB_SEQ)$(BR2_PACKAGE_ALSA_LIB_UCM)$(BR2_PACKAGE_HAS_UDEV),yyy)
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ PIPEWIRE_CONF_OPTS += -Dalsa=enabled
+ else
+ PIPEWIRE_CONF_OPTS += -Dalsa=disabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
