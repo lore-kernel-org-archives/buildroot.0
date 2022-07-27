@@ -4,46 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99BB4C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 08:25:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8808CC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 08:27:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37DAB60AB1;
-	Wed, 27 Jul 2022 08:25:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37DAB60AB1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2919760AE0;
+	Wed, 27 Jul 2022 08:27:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2919760AE0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dhSggJvyu2wn; Wed, 27 Jul 2022 08:25:39 +0000 (UTC)
+	with ESMTP id o1ziefcijNFE; Wed, 27 Jul 2022 08:27:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94BCE60AE0;
-	Wed, 27 Jul 2022 08:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94BCE60AE0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 598011BF59A
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:25:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19E926066D;
+	Wed, 27 Jul 2022 08:27:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19E926066D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C22F81BF59A
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:27:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FA94401C5
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:25:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FA94401C5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99A2C40356
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:27:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99A2C40356
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ol8QMFqh2dZu for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 08:25:35 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4193040412
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 08:25:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4193040412
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 964AD86499; Wed, 27 Jul 2022 08:11:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 10:25:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c05d10e8c1691e33118f0944319e0f22357b09c2
-X-Git-Newrev: 3b6bce65981db6974bffc5bb4860fb44d15efe20
-X-Patchwork-Hint: ignore
-Message-Id: <20220727081149.964AD86499@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: bump to version 10.4.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZwFHXKQl0bJk for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 08:27:07 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E64BE40438
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E64BE40438
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 08:27:06 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id v17so4210851wrr.10
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 01:27:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
+ :content-transfer-encoding;
+ bh=EozABZgOIOjSNZfo2NI5bRXu3GSXR3fdvj9bYBlqbtM=;
+ b=7HVLIr8J33iomAte4bYcRdNsFFdDwOOkQVYiq41vTTqlXPItcKNvX4zo5Dd07wGVTB
+ YFk/PHKKm6CrkaIcIn0QXfhHCNtRCWLfbRZ0PFaE5Es4tx1wE5im2G69Ofub7HfjmZTe
+ vehEa2WTcP2Uv9Z6o9wK3ASsWTsR+5iww+H0iHB5bW51m3rx6iVgwxhSBEnIDMVs4YAI
+ or3P5D51la1tMMlGMq8I/ZVtb6D0JonSGhCmG62XCE6F4IBF+UBLHOmvbH4WnOtRNpCz
+ kmw1eDGXgaSiXm+Y+bzgvDqOMEIFWAijT878WZVal0JbffgcbJJ5KePCH72R78mcPROg
+ EcFQ==
+X-Gm-Message-State: AJIora/wRg+VifKf63UsbdFl5+ap0uD6Qvs0N2pKl/4NLdErRqUqRUln
+ blHmJ0Kn3QVa0dk9VX9vLzKDWA==
+X-Google-Smtp-Source: AGRyM1vQzTBPL5VK52h9M1c8+rsaTpUKpZ7XnnST+SriuL7CG/qmNS0SGha/ISLp00OINfPPANVKlw==
+X-Received: by 2002:a05:6000:178d:b0:21d:a453:b7c6 with SMTP id
+ e13-20020a056000178d00b0021da453b7c6mr14591327wrg.275.1658910424929; 
+ Wed, 27 Jul 2022 01:27:04 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:86bb:8231:62d7:1874?
+ ([2a01:cb19:8acf:5600:86bb:8231:62d7:1874])
+ by smtp.gmail.com with ESMTPSA id
+ l21-20020a05600c1d1500b003a326b84340sm1491652wms.44.2022.07.27.01.27.04
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 27 Jul 2022 01:27:04 -0700 (PDT)
+Message-ID: <c5d7ac74-5835-e376-97ee-e47f517ff53a@smile.fr>
+Date: Wed, 27 Jul 2022 10:27:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
+References: <20220601210939.2350383-1-aperez@igalia.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20220601210939.2350383-1-aperez@igalia.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=EozABZgOIOjSNZfo2NI5bRXu3GSXR3fdvj9bYBlqbtM=;
+ b=zCydNZ+tAH+RITAmLNbMfB4aPzDIljK5KYf7ZTanXwFntbEo9orE5X+vq3QQNXr9OO
+ cHbHpp2k5LbtGHGgwKhAAhC7qOGFqlnRmIb6CU3OHZW+sKGqpIl2SWMUDLoJlwnNZB2J
+ Dstm82upJj0Ah7FJVs4ZJyDc78LYENwEeRUG2rEuqLhbXkLnXJ8KZgA4qxe2+Lk55eKW
+ NCICLSjYroPxws1Wcupwnbf+TVXmkcwEikEgz6/FM++gPGOCF3kPzlQF57i5uTIbBv8/
+ zt4PsrEivqJs0vg4cplRQVW00gy+I5wgnERFv+CVK19Wn/kRJN2WyC48MfxcYv7HxOC3
+ VUVQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=zCydNZ+t
+Subject: Re: [Buildroot] [PATCH 1/2] package: Add libmanette
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,424 +99,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b6bce65981db6974bffc5bb4860fb44d15efe20
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Remove upstream patch: 0004-Remove-cyclades-from-libsanitizer.patch
-
-https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=a7e72b282177fbaa6a852324641c871313d326da
-
-See announce:
-https://gcc.gnu.org/pipermail/gcc-announce/2022/000173.html
-
-Tested in gitlab:
-https://gitlab.com/kubu93/buildroot/-/pipelines/597437606
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- .../0004-Remove-cyclades-from-libsanitizer.patch   | 125 ---------------------
- ...R-target-92095-internal-error-with-O1-mcp.patch |  26 ++---
- ...k-Add-mcmodel-option-to-handle-large-GOTs.patch |  10 +-
- ...k-Use-cmodel-large-when-building-crtstuff.patch |   8 +-
- ...REENTRANT-for-OpenRISC-when-pthread-is-p.patch} |   6 +-
- ...isable-split-stack-for-non-thread-builds.patch} |   2 +-
- package/gcc/Config.in.host                         |   2 +-
- package/gcc/gcc.hash                               |   4 +-
- 8 files changed, 29 insertions(+), 154 deletions(-)
-
-diff --git a/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch b/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
-deleted file mode 100644
-index ee6e349a6c..0000000000
---- a/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
-+++ /dev/null
-@@ -1,125 +0,0 @@
--From 745dae5923aba02982563481d75a21595df22ff8 Mon Sep 17 00:00:00 2001
--From: Tamar Christina <tamar.christina@arm.com>
--Date: Fri, 21 May 2021 10:30:59 +0100
--Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
--
--The Linux kernel has removed the interface to cyclades from
--the latest kernel headers[1] due to them being orphaned for the
--past 13 years.
--
--libsanitizer uses this header when compiling against glibc, but
--glibcs itself doesn't seem to have any references to cyclades.
--
--Further more it seems that the driver is broken in the kernel and
--the firmware doesn't seem to be available anymore.
--
--As such since this is breaking the build of libsanitizer (and so the
--GCC bootstrap[2]) I propose to remove this.
--
--[1] https://lkml.org/lkml/2021/3/2/153
--[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
--
--(cherry picked from commit f7c5351552387bd43f6ca3631016d7f0dfe0f135)
--
--libsanitizer/ChangeLog:
--
--	PR sanitizer/100379
--	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry-pick
--	llvm-project revision f7c5351552387bd43f6ca3631016d7f0dfe0f135.
--	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
--	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
--
--Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-----
-- .../sanitizer_common_interceptors_ioctl.inc           |  9 ---------
-- .../sanitizer_platform_limits_posix.cpp               | 11 -----------
-- .../sanitizer_platform_limits_posix.h                 | 10 ----------
-- 3 files changed, 30 deletions(-)
--
--diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--index 7f181258eab..b7da6598755 100644
----- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--+++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--@@ -370,15 +370,6 @@ static void ioctl_table_fill() {
-- 
-- #if SANITIZER_GLIBC
--   // _(SIOCDEVPLIP, WRITE, struct_ifreq_sz); // the same as EQL_ENSLAVE
---  _(CYGETDEFTHRESH, WRITE, sizeof(int));
---  _(CYGETDEFTIMEOUT, WRITE, sizeof(int));
---  _(CYGETMON, WRITE, struct_cyclades_monitor_sz);
---  _(CYGETTHRESH, WRITE, sizeof(int));
---  _(CYGETTIMEOUT, WRITE, sizeof(int));
---  _(CYSETDEFTHRESH, NONE, 0);
---  _(CYSETDEFTIMEOUT, NONE, 0);
---  _(CYSETTHRESH, NONE, 0);
---  _(CYSETTIMEOUT, NONE, 0);
--   _(EQL_EMANCIPATE, WRITE, struct_ifreq_sz);
--   _(EQL_ENSLAVE, WRITE, struct_ifreq_sz);
--   _(EQL_GETMASTRCFG, WRITE, struct_ifreq_sz);
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--index 35a690cba5c..6e5c330b98e 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--@@ -143,7 +143,6 @@ typedef struct user_fpregs elf_fpregset_t;
-- # include <sys/procfs.h>
-- #endif
-- #include <sys/user.h>
---#include <linux/cyclades.h>
-- #include <linux/if_eql.h>
-- #include <linux/if_plip.h>
-- #include <linux/lp.h>
--@@ -460,7 +459,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-- 
-- #if SANITIZER_GLIBC
--   unsigned struct_ax25_parms_struct_sz = sizeof(struct ax25_parms_struct);
---  unsigned struct_cyclades_monitor_sz = sizeof(struct cyclades_monitor);
-- #if EV_VERSION > (0x010000)
--   unsigned struct_input_keymap_entry_sz = sizeof(struct input_keymap_entry);
-- #else
--@@ -824,15 +822,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-- #endif // SANITIZER_LINUX
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
---  unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
---  unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
---  unsigned IOCTL_CYGETMON = CYGETMON;
---  unsigned IOCTL_CYGETTHRESH = CYGETTHRESH;
---  unsigned IOCTL_CYGETTIMEOUT = CYGETTIMEOUT;
---  unsigned IOCTL_CYSETDEFTHRESH = CYSETDEFTHRESH;
---  unsigned IOCTL_CYSETDEFTIMEOUT = CYSETDEFTIMEOUT;
---  unsigned IOCTL_CYSETTHRESH = CYSETTHRESH;
---  unsigned IOCTL_CYSETTIMEOUT = CYSETTIMEOUT;
--   unsigned IOCTL_EQL_EMANCIPATE = EQL_EMANCIPATE;
--   unsigned IOCTL_EQL_ENSLAVE = EQL_ENSLAVE;
--   unsigned IOCTL_EQL_GETMASTRCFG = EQL_GETMASTRCFG;
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--index ad358eef8b7..cba41ba5494 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--@@ -983,7 +983,6 @@ extern unsigned struct_vt_mode_sz;
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
-- extern unsigned struct_ax25_parms_struct_sz;
---extern unsigned struct_cyclades_monitor_sz;
-- extern unsigned struct_input_keymap_entry_sz;
-- extern unsigned struct_ipx_config_data_sz;
-- extern unsigned struct_kbdiacrs_sz;
--@@ -1328,15 +1327,6 @@ extern unsigned IOCTL_VT_WAITACTIVE;
-- #endif  // SANITIZER_LINUX
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
---extern unsigned IOCTL_CYGETDEFTHRESH;
---extern unsigned IOCTL_CYGETDEFTIMEOUT;
---extern unsigned IOCTL_CYGETMON;
---extern unsigned IOCTL_CYGETTHRESH;
---extern unsigned IOCTL_CYGETTIMEOUT;
---extern unsigned IOCTL_CYSETDEFTHRESH;
---extern unsigned IOCTL_CYSETDEFTIMEOUT;
---extern unsigned IOCTL_CYSETTHRESH;
---extern unsigned IOCTL_CYSETTIMEOUT;
-- extern unsigned IOCTL_EQL_EMANCIPATE;
-- extern unsigned IOCTL_EQL_ENSLAVE;
-- extern unsigned IOCTL_EQL_GETMASTRCFG;
---- 
--2.27.0
--
-diff --git a/package/gcc/10.3.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch b/package/gcc/10.4.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-similarity index 94%
-rename from package/gcc/10.3.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-rename to package/gcc/10.4.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-index af0d2d7d02..e8283afadb 100644
---- a/package/gcc/10.3.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-+++ b/package/gcc/10.4.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-@@ -1,4 +1,4 @@
--From 0824d6819857f306583592bce96315893f91bd84 Mon Sep 17 00:00:00 2001
-+From d672b64ae257e789311dfd0aea947972af64b966 Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Wed, 20 Jan 2021 23:26:29 +0100
- Subject: [PATCH] Revert "re PR target/92095 (internal error with -O1
-@@ -45,10 +45,10 @@ index 5f9999a669c..37452b06415 100644
-  extern const char *output_cbranch (rtx, rtx, int, int, int, rtx_insn *);
-  extern const char *output_return (rtx_insn *);
- diff --git a/gcc/config/sparc/sparc.c b/gcc/config/sparc/sparc.c
--index d0843102148..14d112d8ca8 100644
-+index 7cfa9f80676..3a721f19eb5 100644
- --- a/gcc/config/sparc/sparc.c
- +++ b/gcc/config/sparc/sparc.c
--@@ -4157,6 +4157,13 @@ eligible_for_sibcall_delay (rtx_insn *trial)
-+@@ -4243,6 +4243,13 @@ eligible_for_sibcall_delay (rtx_insn *trial)
-  static bool
-  sparc_cannot_force_const_mem (machine_mode mode, rtx x)
-  {
-@@ -62,7 +62,7 @@ index d0843102148..14d112d8ca8 100644
-    switch (GET_CODE (x))
-      {
-      case CONST_INT:
--@@ -4192,11 +4199,9 @@ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
-+@@ -4278,11 +4285,9 @@ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
-  }
-  
-  /* Global Offset Table support.  */
-@@ -76,7 +76,7 @@ index d0843102148..14d112d8ca8 100644
-  
-  /* Return the SYMBOL_REF for the Global Offset Table.  */
-  
--@@ -4209,6 +4214,27 @@ sparc_got (void)
-+@@ -4295,6 +4300,27 @@ sparc_got (void)
-    return got_symbol_rtx;
-  }
-  
-@@ -104,7 +104,7 @@ index d0843102148..14d112d8ca8 100644
-  /* Wrapper around the load_pcrel_sym{si,di} patterns.  */
-  
-  static rtx
--@@ -4228,78 +4254,30 @@ gen_load_pcrel_sym (rtx op0, rtx op1, rtx op2)
-+@@ -4314,78 +4340,30 @@ gen_load_pcrel_sym (rtx op0, rtx op1, rtx op2)
-    return insn;
-  }
-  
-@@ -189,7 +189,7 @@ index d0843102148..14d112d8ca8 100644
-  }
-  
-  /* Ensure that we are not using patterns that are not OK with PIC.  */
--@@ -5464,7 +5442,7 @@ save_local_or_in_reg_p (unsigned int regno, int leaf_function)
-+@@ -5550,7 +5528,7 @@ save_local_or_in_reg_p (unsigned int regno, int leaf_function)
-      return true;
-  
-    /* GOT register (%l7) if needed.  */
-@@ -198,7 +198,7 @@ index d0843102148..14d112d8ca8 100644
-      return true;
-  
-    /* If the function accesses prior frames, the frame pointer and the return
--@@ -12507,9 +12485,10 @@ static void
-+@@ -12658,9 +12636,10 @@ static void
-  sparc_file_end (void)
-  {
-    /* If we need to emit the special GOT helper function, do so now.  */
-@@ -210,7 +210,7 @@ index d0843102148..14d112d8ca8 100644
-  #ifdef DWARF2_UNWIND_INFO
-        bool do_cfi;
-  #endif
--@@ -12546,22 +12525,17 @@ sparc_file_end (void)
-+@@ -12697,22 +12676,17 @@ sparc_file_end (void)
-  #ifdef DWARF2_UNWIND_INFO
-        do_cfi = dwarf2out_do_cfi_asm ();
-        if (do_cfi)
-@@ -239,7 +239,7 @@ index d0843102148..14d112d8ca8 100644
-  #endif
-      }
-  
--@@ -13056,10 +13030,7 @@ sparc_init_pic_reg (void)
-+@@ -13207,10 +13181,7 @@ sparc_init_pic_reg (void)
-    edge entry_edge;
-    rtx_insn *seq;
-  
-@@ -252,10 +252,10 @@ index d0843102148..14d112d8ca8 100644
-  
-    start_sequence ();
- diff --git a/gcc/config/sparc/sparc.md b/gcc/config/sparc/sparc.md
--index 6e9ccb4ecfd..8fb0fa11aed 100644
-+index b242c4b4481..7d08f50705a 100644
- --- a/gcc/config/sparc/sparc.md
- +++ b/gcc/config/sparc/sparc.md
--@@ -1601,7 +1601,10 @@
-+@@ -1603,7 +1603,10 @@
-     (clobber (reg:P O7_REG))]
-    "REGNO (operands[0]) == INTVAL (operands[3])"
-  {
-@@ -324,5 +324,5 @@ index f00283f6e7b..67d4ac38095 100644
-  #include <stdbool.h>
-  #include <stdint.h>
- -- 
--2.30.2
-+2.34.3
- 
-diff --git a/package/gcc/10.3.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/10.4.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-similarity index 96%
-rename from package/gcc/10.3.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-rename to package/gcc/10.4.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-index 73010c21ee..62eb437c62 100644
---- a/package/gcc/10.3.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-+++ b/package/gcc/10.4.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-@@ -1,4 +1,4 @@
--From 1dad3f95ffcd1871ca670a13a06fbedb1c3ce509 Mon Sep 17 00:00:00 2001
-+From 8555b8d4f1d873d172c12a540ff97c57ed17f045 Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Sun, 2 May 2021 06:11:44 +0900
- Subject: [PATCH] or1k: Add mcmodel option to handle large GOTs
-@@ -166,10 +166,10 @@ index 03c9b8d0bba..8e035075f8a 100644
-  Target RejectNegative Mask(CMOV)
-  Enable generation of conditional move (l.cmov) instructions.  By default the
- diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
--index eabeec944e7..eda350c99ec 100644
-+index d7c787af226..848112e5b24 100644
- --- a/gcc/doc/invoke.texi
- +++ b/gcc/doc/invoke.texi
--@@ -1102,7 +1102,8 @@ Objective-C and Objective-C++ Dialects}.
-+@@ -1103,7 +1103,8 @@ Objective-C and Objective-C++ Dialects}.
-  @gccoptlist{-mboard=@var{name}  -mnewlib  -mhard-mul  -mhard-div @gol
-  -msoft-mul  -msoft-div @gol
-  -msoft-float  -mhard-float  -mdouble-float -munordered-float @gol
-@@ -179,7 +179,7 @@ index eabeec944e7..eda350c99ec 100644
-  
-  @emph{PDP-11 Options}
-  @gccoptlist{-mfpu  -msoft-float  -mac0  -mno-ac0  -m40  -m45  -m10 @gol
--@@ -25111,6 +25112,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
-+@@ -25142,6 +25143,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
-  @code{l.slli}) instructions.  By default extra instructions will be generated
-  to store the immediate to a register first.
-  
-@@ -196,5 +196,5 @@ index eabeec944e7..eda350c99ec 100644
-  @end table
-  
- -- 
--2.25.1
-+2.34.3
- 
-diff --git a/package/gcc/10.3.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/10.4.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-similarity index 93%
-rename from package/gcc/10.3.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-rename to package/gcc/10.4.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-index 7da0e8f757..30d0c607f5 100644
---- a/package/gcc/10.3.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-+++ b/package/gcc/10.4.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-@@ -1,4 +1,4 @@
--From 0354e007a6235df81e208fa89cbf1571a8b56975 Mon Sep 17 00:00:00 2001
-+From 3499ecd7c93c4c431cab83312bc5eabbf383c182 Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Sun, 2 May 2021 06:11:45 +0900
- Subject: [PATCH] or1k: Use cmodel=large when building crtstuff
-@@ -29,10 +29,10 @@ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-  create mode 100644 libgcc/config/or1k/t-crtstuff
- 
- diff --git a/libgcc/config.host b/libgcc/config.host
--index c529cc40f0c..ddf0033e28c 100644
-+index 89f41b56000..1210704d7e8 100644
- --- a/libgcc/config.host
- +++ b/libgcc/config.host
--@@ -1127,12 +1127,12 @@ nios2-*-*)
-+@@ -1137,12 +1137,12 @@ nios2-*-*)
-  	extra_parts="$extra_parts crti.o crtn.o"
-  	;;
-  or1k-*-linux*)
-@@ -56,5 +56,5 @@ index 00000000000..dcae7f3498e
- +# Compile crtbeginS.o and crtendS.o with -mcmodel=large
- +CRTSTUFF_T_CFLAGS_S += -mcmodel=large
- -- 
--2.25.1
-+2.34.3
- 
-diff --git a/package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch b/package/gcc/10.4.0/0004-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-similarity index 88%
-rename from package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-rename to package/gcc/10.4.0/0004-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-index 5ac03d7c0c..e3dbbc7eb8 100644
---- a/package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-+++ b/package/gcc/10.4.0/0004-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-@@ -1,4 +1,4 @@
--From f80e9941739fb3973b61fc6a5abddef5ad2faf73 Mon Sep 17 00:00:00 2001
-+From d2e4e3e72b5f2f68d595dfd3a77f58744f3f243e Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd.kuhls@t-online.de>
- Date: Fri, 27 Mar 2020 21:23:53 +0100
- Subject: [PATCH] gcc: define _REENTRANT for OpenRISC when -pthread is passed
-@@ -14,7 +14,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  1 file changed, 2 insertions(+)
- 
- diff --git a/gcc/config/or1k/linux.h b/gcc/config/or1k/linux.h
--index cbdc781418f..36303af892c 100644
-+index 21cef067dda..2e1bb5601a9 100644
- --- a/gcc/config/or1k/linux.h
- +++ b/gcc/config/or1k/linux.h
- @@ -32,6 +32,8 @@
-@@ -27,5 +27,5 @@ index cbdc781418f..36303af892c 100644
-  #define LINK_SPEC "%{h*}			\
-     %{static:-Bstatic}				\
- -- 
--2.31.1
-+2.34.3
- 
-diff --git a/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch b/package/gcc/10.4.0/0005-disable-split-stack-for-non-thread-builds.patch
-similarity index 92%
-rename from package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/10.4.0/0005-disable-split-stack-for-non-thread-builds.patch
-index 668b1cd9d7..7ba9e0de54 100644
---- a/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
-+++ b/package/gcc/10.4.0/0005-disable-split-stack-for-non-thread-builds.patch
-@@ -1,4 +1,4 @@
--From cdb76d638e91cc53949585d98fa653d3671b92ac Mon Sep 17 00:00:00 2001
-+From 14336d46b35577300dd68147a8f0c8165684850b Mon Sep 17 00:00:00 2001
- From: Waldemar Brodkorb <wbx@openadk.org>
- Date: Mon, 25 Jul 2022 00:29:55 +0200
- Subject: [PATCH] disable split-stack for non-thread builds
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 9833ae1336..74abad71d7 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -85,7 +85,7 @@ config BR2_GCC_SUPPORTS_DLANG
- config BR2_GCC_VERSION
- 	string
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
--	default "10.3.0"    if BR2_GCC_VERSION_10_X
-+	default "10.4.0"    if BR2_GCC_VERSION_10_X
- 	default "11.3.0"    if BR2_GCC_VERSION_11_X
- 	default "12.1.0"    if BR2_GCC_VERSION_12_X
- 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index b1cfb1c9cf..b9536ddffe 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -1,7 +1,7 @@
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
- sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-10.3.0/sha512.sum
--sha512  2b2dd7453d48a398c29eaebd1422b70341001b8c90a62aee51e83344e7fdd8a8e45f82a4a9165bd7edc76dada912c932f4b6632c5636760fec4c5d7e402b3f86  gcc-10.3.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-10.4.0/sha512.sum
-+sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-11.3.0/sha512.sum
- sha512  f0be5ad705c73b84477128a69c047f57dd47002f375eb60e1e842e08cf2009a509e92152bca345823926d550b7395ae6d4de7db51d1ee371c2dc37313881fca7  gcc-11.3.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-12.1.0/sha512.sum
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQWRyaWFuLAoKTGUgMDEvMDYvMjAyMiDDoCAyMzowOSwgQWRyaWFuIFBlcmV6IGRlIENh
+c3RybyBhIMOpY3JpdMKgOgo+IGxpYm1hbmV0dGUgaXMgYSBsaWJyYXJ5IHdoaWNoIHByb3ZpZGVz
+IGEgaGlnaGVyIGxldmVsIGludGVyZmFjZSB0bwo+IGVudW1lcmF0ZSBhbmQgbWFrZSB1c2Ugb2Yg
+Z2FtZSBjb250cm9sbGVycyAoZ2FtZXBhZHMsIGpveXN0aWNrcykuCj4gV2ViS2l0R1RLIGNhbiB1
+c2UgbGlibWFuZXR0ZSB0byBleHBvc2UgY29udHJvbGxlcnMgdG8gd2ViIGNvbnRlbnQsCj4gd2hp
+Y2ggd2lsbCBiZSBlbmFibGVkIG9uIGEgZm9sbG93LXVwIHBhdGNoLgo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPgo+IC0tLQo+ICBE
+RVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwo+ICBwYWNrYWdlL0NvbmZp
+Zy5pbiAgICAgICAgICAgICAgICAgIHwgIDEgKwo+ICBwYWNrYWdlL2xpYm1hbmV0dGUvQ29uZmln
+LmluICAgICAgIHwgMTUgKysrKysrKysrKysKPiAgcGFja2FnZS9saWJtYW5ldHRlL2xpYm1hbmV0
+dGUuaGFzaCB8ICA1ICsrKysKPiAgcGFja2FnZS9saWJtYW5ldHRlL2xpYm1hbmV0dGUubWsgICB8
+IDQyICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICA1IGZpbGVzIGNoYW5nZWQsIDY0
+IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGlibWFuZXR0ZS9D
+b25maWcuaW4KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGlibWFuZXR0ZS9saWJtYW5l
+dHRlLmhhc2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGlibWFuZXR0ZS9saWJtYW5l
+dHRlLm1rCj4gCj4gZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCj4gaW5kZXgg
+NzFjYzNkYTZkNy4uNzQwZTlhM2NhNyAxMDA2NDQKPiAtLS0gYS9ERVZFTE9QRVJTCj4gKysrIGIv
+REVWRUxPUEVSUwo+IEBAIC0zNSw2ICszNSw3IEBAIEY6CXBhY2thZ2UvYnViYmxld3JhcC8KPiAg
+RjoJcGFja2FnZS9jYWdlLwo+ICBGOglwYWNrYWdlL2NvZy8KPiAgRjoJcGFja2FnZS9saWJlcG94
+eS8KPiArRjoJcGFja2FnZS9saWJtYW5ldHRlLwo+ICBGOglwYWNrYWdlL2xpYnBzbC8KPiAgRjoJ
+cGFja2FnZS9saWJ3cGUvCj4gIEY6CXBhY2thZ2Uvd2Via2l0Z3RrLwo+IGRpZmYgLS1naXQgYS9w
+YWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXggMDBmMDYxMDE1Zi4u
+MjI0MmFkNDA5ZSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2th
+Z2UvQ29uZmlnLmluCj4gQEAgLTUwNiw2ICs1MDYsNyBAQCBlbmRtZW51Cj4gIAlzb3VyY2UgInBh
+Y2thZ2Uva2JkL0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFja2FnZS9sY2Rwcm9jL0NvbmZpZy5p
+biIKPiAgCXNvdXJjZSAicGFja2FnZS9saWJpZWM2MTg1MC9Db25maWcuaW4iCj4gKwlzb3VyY2Ug
+InBhY2thZ2UvbGlibWFuZXR0ZS9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvbGlidWJv
+b3RlbnYvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2xpYnVpby9Db25maWcuaW4iCj4g
+IAlzb3VyY2UgInBhY2thZ2UvbGludXgtYmFja3BvcnRzL0NvbmZpZy5pbiIKPiBkaWZmIC0tZ2l0
+IGEvcGFja2FnZS9saWJtYW5ldHRlL0NvbmZpZy5pbiBiL3BhY2thZ2UvbGlibWFuZXR0ZS9Db25m
+aWcuaW4KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjgyOTdkOGM3
+ZjQKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9saWJtYW5ldHRlL0NvbmZpZy5pbgo+
+IEBAIC0wLDAgKzEsMTUgQEAKPiArY29uZmlnIEJSMl9QQUNLQUdFX0xJQk1BTkVUVEUKPiArCWJv
+b2wgImxpYm1hbmV0dGUiCj4gKwlkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBnZXR0ZXh0Cj4g
+KwlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiArCWRlcGVuZHMgb24gQlIy
+X1VTRV9NTVUgIyBmb3JrKCkKClRoZXNlICJkZXBlbmRzIG9uIiBzZWVtcyB0byBiZSByZXZlcnNl
+IGRlcGVuZGVuY2llcyBvZiBsaWJnbGliMiwgc28gdXBkYXRlIHRoZQpjb21tZW50IHRvICMgbGli
+Z2xpYjIKCkkgYnVpbGQgdGVzdGVkIHdpdGggYW4gIm9sZCIgdG9vbGNoYWluIHdpdGgga2VybmVs
+LWhlYWRlcnMgNC45OgoKaHR0cHM6Ly90b29sY2hhaW5zLmJvb3RsaW4uY29tL2Rvd25sb2Fkcy9y
+ZWxlYXNlcy90b29sY2hhaW5zL2FhcmNoNjQvdGFyYmFsbHMvYWFyY2g2NC0tZ2xpYmMtLXN0YWJs
+ZS0yMDIwLjA4LTEudGFyLmJ6MgoKQnV0IGl0IGZhaWwgdG8gYnVpbGQgZHVlIHRvIHRoZSBmb2xs
+b3dpbmcgZXJyb3I6CgouL3NyYy9tYW5ldHRlLWRldmljZS5jOiBJbiBmdW5jdGlvbiDigJhvbl9l
+dmRldl9ldmVudOKAmToKLi4vc3JjL21hbmV0dGUtZGV2aWNlLmM6MzgwOjM5OiBlcnJvcjog4oCY
+c3RydWN0IGlucHV0X2V2ZW504oCZIGhhcyBubyBtZW1iZXIgbmFtZWQK4oCYaW5wdXRfZXZlbnRf
+c2Vj4oCZCiAgMzgwIHwgICBtYW5ldHRlX2V2ZW50LmFueS50aW1lID0gZXZkZXZfZXZlbnQtPmlu
+cHV0X2V2ZW50X3NlYyAqIDEwMDAgKwogICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgXn4KLi4vc3JjL21hbmV0dGUtZGV2aWNlLmM6MzgxOjM5OiBlcnJvcjog4oCY
+c3RydWN0IGlucHV0X2V2ZW504oCZIGhhcyBubyBtZW1iZXIgbmFtZWQK4oCYaW5wdXRfZXZlbnRf
+dXNlY+KAmQogIDM4MSB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGV2ZGV2X2V2ZW50LT5p
+bnB1dF9ldmVudF91c2VjIC8gMTAwMDsKICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIF5+CgpsaWJtYW5ldHRlIHJlcXVpcmVzIGEgdG9vbGNoYWluIHdpdGgga2Vy
+bmVsLWhlYWRlcnMgYXQgbGVhc3QgNC4xNjoKCmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3Nj
+bS9saW51eC9rZXJuZWwvZ2l0L3N0YWJsZS9saW51eC5naXQvY29tbWl0Lz9pZD0xNTIxOTRmZTlj
+M2YwMzIzMmI5YzBkMDI2NDc5M2E3ZmE0YWY4MmY4CgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4g
+KwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCRVZERVYKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJH
+TElCMgo+ICsJaGVscAo+ICsJICBHT2JqZWN0IGxpYnJhcnkgd2hpY2ggcHJvdmlkZXMgYWNjZXNz
+IHRvIGdhbWUgY29udHJvbGxlcnMuCj4gKwo+ICsJICBodHRwczovL2dpdGxhYi5nbm9tZS5vcmcv
+R05PTUUvbGlibWFuZXR0ZQo+ICsKPiArY29tbWVudCAibGlibWFuZXR0ZSBuZWVkcyBhIHRvb2xj
+aGFpbiB3LyB3Y2hhciwgdGhyZWFkcyIKPiArCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUKPiArCWRl
+cGVuZHMgb24gIUJSMl9VU0VfV0NIQVIgfHwgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiBk
+aWZmIC0tZ2l0IGEvcGFja2FnZS9saWJtYW5ldHRlL2xpYm1hbmV0dGUuaGFzaCBiL3BhY2thZ2Uv
+bGlibWFuZXR0ZS9saWJtYW5ldHRlLmhhc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4
+IDAwMDAwMDAwMDAuLjk2MDg5Zjk3MWEKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9s
+aWJtYW5ldHRlL2xpYm1hbmV0dGUuaGFzaAo+IEBAIC0wLDAgKzEsNSBAQAo+ICsjIEZyb20gaHR0
+cHM6Ly9kb3dubG9hZC5nbm9tZS5vcmcvc291cmNlcy9saWJtYW5ldHRlLzAuMi9saWJtYW5ldHRl
+LTAuMi42LnNoYTI1NnN1bQo+ICtzaGEyNTYgIDYzNjUzMjU5YTgyMWVjN2Q5MGQ2ODFlNTJlNzU3
+ZTIyMTlkNDYyODI4YzlkNzRiMDU2YTVmNTMyNjc2MzZiYWMgIGxpYm1hbmV0dGUtMC4yLjYudGFy
+Lnh6Cj4gKwo+ICsjIExvY2FsbHkgY2FsY3VsYXRlZAo+ICtzaGEyNTYgIGRjNjI2NTIwZGNkNTNh
+MjJmNzI3YWYzZWU0MmM3NzBlNTZjOTdhNjRmZTNhZGIwNjM3OTlkOGFiMDMyZmU1NTEgIENPUFlJ
+TkcKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJtYW5ldHRlL2xpYm1hbmV0dGUubWsgYi9wYWNr
+YWdlL2xpYm1hbmV0dGUvbGlibWFuZXR0ZS5tawo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5k
+ZXggMDAwMDAwMDAwMC4uMTBmMmI4YTQ2Ngo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdl
+L2xpYm1hbmV0dGUvbGlibWFuZXR0ZS5tawo+IEBAIC0wLDAgKzEsNDIgQEAKPiArIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMKPiArIwo+ICsjIGxpYm1hbmV0dGUKPiArIwo+ICsjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIwo+ICsKPiArTElCTUFORVRURV9WRVJTSU9OX01BSk9SID0gMC4yCj4gK0xJQk1B
+TkVUVEVfVkVSU0lPTiA9ICQoTElCTUFORVRURV9WRVJTSU9OX01BSk9SKS42Cj4gK0xJQk1BTkVU
+VEVfU09VUkNFID0gbGlibWFuZXR0ZS0kKExJQk1BTkVUVEVfVkVSU0lPTikudGFyLnh6Cj4gK0xJ
+Qk1BTkVUVEVfU0lURSA9IGh0dHBzOi8vZG93bmxvYWQuZ25vbWUub3JnL3NvdXJjZXMvbGlibWFu
+ZXR0ZS8kKExJQk1BTkVUVEVfVkVSU0lPTl9NQUpPUikKPiArTElCTUFORVRURV9MSUNFTlNFID0g
+TEdQTC0yLjErCj4gK0xJQk1BTkVUVEVfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKPiArTElCTUFO
+RVRURV9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiArTElCTUFORVRURV9ERVBFTkRFTkNJRVMgPSBc
+Cj4gKwlsaWJldmRldiBcCj4gKwlsaWJnbGliMiBcCj4gKwkkKFRBUkdFVF9OTFNfREVQRU5ERU5D
+SUVTKQo+ICsKPiArTElCTUFORVRURV9MREZMQUdTID0gJChUQVJHRVRfTERGTEFHUykgJChUQVJH
+RVRfTkxTX0xJQlMpCj4gKwo+ICtMSUJNQU5FVFRFX0NPTkZfT1BUUyA9IFwKPiArCS1EZGVtb3M9
+ZmFsc2UgXAo+ICsJLURidWlsZC10ZXN0cz1mYWxzZSBcCj4gKwktRGluc3RhbGwtdGVzdHM9ZmFs
+c2UgXAo+ICsJLURkb2M9ZmFsc2UgXAo+ICsJLUR2YXBpPWZhbHNlCj4gKwo+ICtpZmVxICgkKEJS
+Ml9QQUNLQUdFX0dPQkpFQ1RfSU5UUk9TUEVDVElPTikseSkKPiArTElCTUFORVRURV9DT05GX09Q
+VFMgKz0gLURpbnRyb3NwZWN0aW9uPXRydWUKPiArTElCTUFORVRURV9ERVBFTkRFTkNJRVMgKz0g
+Z29iamVjdC1pbnRyb3NwZWN0aW9uCj4gK2Vsc2UKPiArTElCTUFORVRURV9DT05GX09QVFMgKz0g
+LURpbnRyb3NwZWN0aW9uPWZhbHNlCj4gK2VuZGlmCj4gKwo+ICtpZmVxICgkKEJSMl9QQUNLQUdF
+X0xJQkdVREVWKSx5KQo+ICtMSUJNQU5FVFRFX0NPTkZfT1BUUyArPSAtRGd1ZGV2PWVuYWJsZWQK
+PiArTElCTUFORVRURV9ERVBFTkRFTkNJRVMgKz0gbGliZ3VkZXYKPiArZWxzZQo+ICtMSUJNQU5F
+VFRFX0NPTkZfT1BUUyArPSAtRGd1ZGV2PWRpc2FibGVkCj4gK2VuZGlmCj4gKwo+ICskKGV2YWwg
+JChtZXNvbi1wYWNrYWdlKSkKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
