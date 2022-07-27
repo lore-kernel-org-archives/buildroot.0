@@ -4,86 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 281F9C19F21
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E804C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:12:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD906414C1;
-	Wed, 27 Jul 2022 22:12:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD906414C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7702416C9;
+	Wed, 27 Jul 2022 22:12:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7702416C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8XuUPZPK7WZ2; Wed, 27 Jul 2022 22:12:25 +0000 (UTC)
+	with ESMTP id hNOuHe-Z1nTj; Wed, 27 Jul 2022 22:12:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6091C414C2;
-	Wed, 27 Jul 2022 22:12:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6091C414C2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 289FD415D8;
+	Wed, 27 Jul 2022 22:12:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 289FD415D8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A98771BF47F
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:12:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DA6A41BF47F
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:12:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83FAF409DB
+ by smtp2.osuosl.org (Postfix) with ESMTP id C073C409DA
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:12:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83FAF409DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C073C409DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HBOlQPHaeZjp for <buildroot@lists.busybox.net>;
+ with ESMTP id 11LyJRoBGbbZ for <buildroot@lists.busybox.net>;
  Wed, 27 Jul 2022 22:12:21 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C82C409DA
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7C82C409DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5882D40469
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5882D40469
  for <buildroot@buildroot.org>; Wed, 27 Jul 2022 22:12:21 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id v17so7296246wrr.10
+Received: by mail-wr1-x431.google.com with SMTP id l22so4679040wrz.7
  for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:12:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=PEoR99TL+kt/jmuWBSJ7afkQqTJ743knAoHN7ZLrWNA=;
- b=wYStZaj6snyCcNsUh6mWklXQ1bEwgI+5S/xv35ujggyXMGCmQXufaR0iMTsVBxxJP3
- 4yshON2mMxPG+VXcHNHonYuDP8uoX407/y2enH/2sHzKTU19d9GE2I8iIODuCEJxyYvl
- Qa8CjyoSxtsSZiHWjfACJHFabqf9TF2Xkza6UT4Wlr8Jxq5L2ahocr1nFzxBPez+kvIg
- gVMAD8Ux9LpTF4HIpfrExfQ4sScMmBxnCRK8DMBjWeeNPistGu82cpDIfYBbUxGrsyVY
- djklajia858BWuHMuAz+1ZT9MH21ECaDtanwv6FOkDaYGNim+FMl0ZTTmt1PgwAM9HU2
- SIiA==
-X-Gm-Message-State: AJIora/fck3CE3Oi0ueW5d/9h9n+07qDM0rwSq8eSKU5oHBz086YyywE
- nV8AXRQ6iGBCx19JLJf6uHkKh6EzB0cScA==
-X-Google-Smtp-Source: AGRyM1uQY2VHtM6XTxDlZLHHGK41zHVsiHepihYXHG7pGezCQun2qyHtyIbzrSx3j9Ok42DPAqI7bg==
-X-Received: by 2002:a5d:620b:0:b0:21e:5252:311c with SMTP id
- y11-20020a5d620b000000b0021e5252311cmr15312445wru.604.1658959939706; 
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cx53gC1Lutm10uFzKcYGrOhU3lxTyLV7DACO1JXdU/k=;
+ b=ZSVGZ9bOLzw99xwSlkHewk7VXDgR+KMsPUgnI1V+USsvYcuTXTDuTJ3TPwEvkmmkt/
+ lZ4eFFPLb0lqkNrE2O+4vXS/sRPCzjzYY8idXOUGxMtdMk1MpsxexVWsr4bU41/fEvbK
+ K7AJzt0Je9/a7EmFeVUNQhegXUB54Itnv+KFEHekqW90UP4BuG3zJLFkAM390147aPVP
+ Df/Uh3xtH+0jDlMSWIuCurW8aRI/hfktflnHCZslS5+ho3XVVxkHyKjqHtE5gjFXRJxs
+ kVtp4HhJ9NQx1urEvW5f0sHH7d2LVC/jSD37KGIESepiLCgll1VjA7Mh0UUUV6lFujXv
+ W3Uw==
+X-Gm-Message-State: AJIora8JBPKsjcbhJ8YIUVckmILKKcFG8PgH7qZ/uU/2gU3/05Tmavzi
+ DOdIKufCSXYUVtTlASeMR3Mz6RgVMMHaDw==
+X-Google-Smtp-Source: AGRyM1ssV5UylwoGeX4JJfbLPIbNZ0PL5/4m8xK+x5xjxPTmwQiI6ZMdWsQ9kEEVOp0h8eoUDxasMQ==
+X-Received: by 2002:a5d:5989:0:b0:21d:b2bd:d712 with SMTP id
+ n9-20020a5d5989000000b0021db2bdd712mr15710492wri.698.1658959939118; 
  Wed, 27 Jul 2022 15:12:19 -0700 (PDT)
 Received: from arnoutx1.home ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
  by smtp.gmail.com with ESMTPSA id
- m64-20020a1c2643000000b003a30af0ec83sm3413037wmm.25.2022.07.27.15.12.19
+ m64-20020a1c2643000000b003a30af0ec83sm3413037wmm.25.2022.07.27.15.12.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 15:12:19 -0700 (PDT)
+ Wed, 27 Jul 2022 15:12:18 -0700 (PDT)
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 00:12:17 +0200
-Message-Id: <20220727221217.1072588-2-arnout@mind.be>
+Date: Thu, 28 Jul 2022 00:12:16 +0200
+Message-Id: <20220727221217.1072588-1-arnout@mind.be>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220727221217.1072588-1-arnout@mind.be>
-References: <20220727221217.1072588-1-arnout@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=PEoR99TL+kt/jmuWBSJ7afkQqTJ743knAoHN7ZLrWNA=;
- b=U+auHu5siJAYY21Az9o5rjR2JAFY1DrrQlzyYQjl/Ey2WLhit4J+xebVYS5Q7+8NU8
- AiqE6eHZz3qJ1JRFkbVj6RbcPDnxO9yYrxNBc89tnk6MVknlEnarv7uRZvxRQ+6UNTbY
- lVTDTMuBhjKd94TGxBsqocFMlNzlPpUwBhv+A8TolO3+9rXBgnqBAER7OuPD/4OFN9Vq
- qnivCx+k1D01uE3auwLlkZCdeiQyVtkd8Eh/gLwDsZw2SXdc21dftZ1TveOYGl9F9lYB
- /GEqIfvBIUZYiSTcMEog2L6SVcfrZNZg3BlUD4UxFkaziyniGepNU7lY8nqGjM8S1Zjo
- Qflw==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=cx53gC1Lutm10uFzKcYGrOhU3lxTyLV7DACO1JXdU/k=;
+ b=cX4P70owzyq9ZG8Byi8rrA6iMQscbYEXBq6Zny7N4jPyPqJ3Fozfd65xPzpYZ5gul1
+ W4bU6Dlw9NP7+0cprk7FYeTtC/8Wud1cN1z53vhsn9wuF1dPEzhn6hbwnjBGe8T8/1fA
+ hsFboVh50J/MASdh3FsqWocx+bmT0rxsscP4Kdk/KfE8RJjZAbshfyazGWoElzgnVo/B
+ 5Y6+V044mZl/20G0BJ0nNwgCSNQoTvLnXphlm8PWUcKXmCsMw9sfwaGYfbKY4rELbQdZ
+ Gj3sGdvZAtCLTtPyO0SUkMjvLEK6DP4IZK2KugxBvhHjwGDoWP+6cfBhKmvuRxWlNqpt
+ cQ8A==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=U+auHu5s
-Subject: [Buildroot] [PATCH 2/2] docs/manual: add integration section for
- systemd with dbus
+ header.a=rsa-sha256 header.s=google header.b=cX4P70ow
+Subject: [Buildroot] [PATCH 1/2] docs/manual: introduce "Integration topics"
+ chapter
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,63 +100,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a section to the "Integration topics" chapter about how we integrate
-systemd. Add a first subsection about how dbus and dbus-broker work with
-systemd.
+We want to add more information in the manual about how a system created
+with buildroot works overall. We currently already have a chapter about
+SELinux, but we want to add more information like that, e.g. details
+about how systemd in Buildroot works.
 
-This is just the start of the integration information about systemd.
+Create a new chapter "Integration topics" with an introductory blurb,
+and move the SELinux topic under it (as a section rather than a
+chapter).
+
+"Integration topics" is not the best title, but we couldn't find
+anything better.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- docs/manual/integration-systemd.txt | 27 +++++++++++++++++++++++++++
- docs/manual/integration.txt         |  2 ++
- 2 files changed, 29 insertions(+)
- create mode 100644 docs/manual/integration-systemd.txt
+ ...x-support.txt => integration-selinux-support.txt} |  6 +++---
+ docs/manual/integration.txt                          | 12 ++++++++++++
+ docs/manual/manual.txt                               |  2 ++
+ 3 files changed, 17 insertions(+), 3 deletions(-)
+ rename docs/manual/{selinux-support.txt => integration-selinux-support.txt} (96%)
+ create mode 100644 docs/manual/integration.txt
 
-diff --git a/docs/manual/integration-systemd.txt b/docs/manual/integration-systemd.txt
+diff --git a/docs/manual/selinux-support.txt b/docs/manual/integration-selinux-support.txt
+similarity index 96%
+rename from docs/manual/selinux-support.txt
+rename to docs/manual/integration-selinux-support.txt
+index 21137ae6c3..1f6bcf47eb 100644
+--- a/docs/manual/selinux-support.txt
++++ b/docs/manual/integration-selinux-support.txt
+@@ -2,7 +2,7 @@
+ // vim: set syntax=asciidoc:
+ 
+ [[selinux]]
+-== Using SELinux in Buildroot
++=== Using SELinux in Buildroot
+ 
+ https://selinuxproject.org[SELinux] is a Linux kernel security module
+ enforcing access control policies. In addition to the traditional file
+@@ -30,7 +30,7 @@ upstream https://github.com/SELinuxProject/refpolicy[refpolicy]
+ project, enabled with +BR2_PACKAGE_REFPOLICY+.
+ 
+ [[enabling-selinux]]
+-=== Enabling SELinux support
++==== Enabling SELinux support
+ 
+ To have proper support for +SELinux+ in a Buildroot generated system,
+ the following configuration options must be enabled:
+@@ -42,7 +42,7 @@ In addition, your filesystem image format must support extended
+ attributes.
+ 
+ [[selinux-policy-tweaking]]
+-=== SELinux policy tweaking
++==== SELinux policy tweaking
+ 
+ The +SELinux refpolicy+ contains modules that can be enabled or
+ disabled when being built. Each module provide a number of +SELinux+
+diff --git a/docs/manual/integration.txt b/docs/manual/integration.txt
 new file mode 100644
-index 0000000000..44248b43ff
+index 0000000000..bdfbfa59de
 --- /dev/null
-+++ b/docs/manual/integration-systemd.txt
-@@ -0,0 +1,27 @@
++++ b/docs/manual/integration.txt
+@@ -0,0 +1,12 @@
 +// -*- mode:doc; -*-
 +// vim: set syntax=asciidoc:
 +
-+[[integration-systemd]]
-+=== Systemd
++[[integration]]
++== Integration topics
 +
-+This chapter describes the decisions taken in Buildroot's integration of
-+systemd, and how various use cases can be implemented.
++This chapter discusses how various things are integrated at system
++level. Buildroot is highly configurable, almost everything discussed
++here can be changed or overridden by xref:rootfs-custom[rootfs overlay
++or custom skeleton] configuration.
 +
-+==== DBus daemon
-+
-+Systemd requires a DBus daemon. There are two options for it: traditional dbus
-+(+BR2_PACKAGE_DBUS+) and bus1 dbus-broker (+BR2_PACKAGE_DBUS_BROKER+). At
-+least one of them must be chosen. If both are included in the configuration,
-+dbus-broker will be used as system bus, but the traditional dbus-daemon is
-+still installed as well and can be used as session bus. Also its tools (e.g.
-++dbus-send+) can be used (systemd itself has +busctl+ as an alternative). In
-+addition, the traditional dbus package is the only one that provides +libdbus+,
-+which is used by many packages as dbus integration library.
-+
-+Both in the dbus and in the dbus-broker case, the daemon runs as user +dbus+.
-+The DBus configuration files are also identical for both.
-+
-+To make sure that only one of the two daemons is started as system bus, the
-+systemd activation files of the dbus package (+dbus.socket+ and the
-++dbus.service+ symlink in +multi-user.target.wants+) are removed when
-+dbus-broker is selected.
-diff --git a/docs/manual/integration.txt b/docs/manual/integration.txt
-index bdfbfa59de..be56bf6567 100644
---- a/docs/manual/integration.txt
-+++ b/docs/manual/integration.txt
-@@ -9,4 +9,6 @@ level. Buildroot is highly configurable, almost everything discussed
- here can be changed or overridden by xref:rootfs-custom[rootfs overlay
- or custom skeleton] configuration.
++include::integration-selinux-support.txt[]
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index b5cc044805..8ba0c76d32 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -38,6 +38,8 @@ include::common-usage.txt[]
  
-+include::integration-systemd.txt[]
+ include::customize.txt[]
+ 
++include::integration.txt[]
 +
- include::integration-selinux-support.txt[]
+ include::selinux-support.txt[]
+ 
+ include::faq-troubleshooting.txt[]
 -- 
 2.35.3
 
