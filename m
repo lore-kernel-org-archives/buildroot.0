@@ -1,87 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8392C3F6B0
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:19:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9717C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:23:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 404D360C12;
-	Wed, 27 Jul 2022 13:19:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 404D360C12
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A8B44055E;
+	Wed, 27 Jul 2022 13:23:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A8B44055E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bLg64vDUhEiC; Wed, 27 Jul 2022 13:19:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9BpCAW8nPMe9; Wed, 27 Jul 2022 13:23:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E3E960C05;
-	Wed, 27 Jul 2022 13:19:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E3E960C05
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 91B931BF2BA
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:19:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 998444052F;
+	Wed, 27 Jul 2022 13:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 998444052F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2190B1BF2BA
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:23:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6CD9281B60
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:19:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CD9281B60
+ by smtp2.osuosl.org (Postfix) with ESMTP id F03AE4052F
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:23:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F03AE4052F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TuwvLaDB5Xn6 for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 13:19:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jL06oY7FtHXx for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 13:23:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEDB081AC4
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AEDB081AC4
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:19:34 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id h8so24112861wrw.1
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 06:19:34 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11FEB4052B
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 11FEB4052B
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:23:01 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 8-20020a05600c024800b003a2fe343db1so1005100wmj.1
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 06:23:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:in-reply-to
  :content-transfer-encoding;
- bh=/lZckN14DnA9cAly4bS6XqiAIRh23F5uUjc8DXMQUO4=;
- b=fWc8QmyyX1GlMT22Dn1p2VWKUC8kx2id1aQTTUuT7By8SK9jo9a6CbMk07A6iIHtk4
- 41Vz05LrM5ECQGFJgIEpCzBNbRVkdQQDDWCVxnUWFCx2luHoXHHrSlFXzBKy3SPyjq16
- nJquHbMgDLURH6H+thlIMOYoKqB/Os8Jtu03Ypi2Uxy0tfszHUy08VelLywKDYfsKy1g
- gSHY34urQnybzc1L0upI0I/cwdx0cLpc3TLb4yOBz8izwqQPLFprGBgd67fDSOTDkJMC
- wb+yFZLLXspZ/htmjDFpyrf+Xy6DB9HqprZ51ISdZm0p1VOqyTIO8NnV9nJkji2hHi1m
- Lxvw==
-X-Gm-Message-State: AJIora+NmBmcb9Y0pY/Re20Q3dWhSPWeOJa91MpXgdJloEy0ygthJzyZ
- RYi0AbXiU4Loo/Fo5Qb1xzc22xCZa1c=
-X-Google-Smtp-Source: AGRyM1tzQaExFQ25UtSwu23NAa23NRKTghInj2274PPzZKexYgXo9YeCIA3ZI4lVUinSbs6CDYxceg==
-X-Received: by 2002:adf:f804:0:b0:21e:de03:b64f with SMTP id
- s4-20020adff804000000b0021ede03b64fmr1287026wrp.543.1658927972387; 
- Wed, 27 Jul 2022 06:19:32 -0700 (PDT)
-Received: from kali.home (2a01cb0680494f3e376d079efd3cafb3.ipv6.abo.wanadoo.fr.
- [2a01:cb06:8049:4f3e:376d:79e:fd3c:afb3])
+ bh=EUmIzYhm2NSvD+XIguysu8jyH12Io8ishesAh09t9GQ=;
+ b=Fb8/jQ5rqllRvNjv6csLlZQnpsdA2/TD9QHf9xc7cfF3eS4+XTg8VaqonL/fgMm37j
+ 9I0Hlb8c50eTXGVaeq/V5QguWfq4LkSvpgh9VQGuzuoiahL1zb8zw+yaBvFp0Y0Tx/Gc
+ 0hUwlReGtE2jGwNVDkmFn5aadMPkrtlscsaNsinTnFkHx0hhQKojSrz2x6XkDBx9K+N0
+ b+lJlEbX28pDGD0Rmzb7wNw69kV4N6+9euYbbNA/k1eRIdtU2DOmuMOvstPssaudDGhK
+ 8zsKrAvH1iVVWOJuEjMZR5DlX5yURk4k+goo4j8FDQFVpwYkeE/7x/LzU13WbHa63cOB
+ 724w==
+X-Gm-Message-State: AJIora/Aj0DcvQJQHza0NnBOdVdU7B2l+QET1TKStuKu7GdXJOelCZx0
+ tCSWm2GLRJrl75/Hx18GwvF6Og==
+X-Google-Smtp-Source: AGRyM1t0ZyGmv6LKSgIp7rMVbl4geAkK5ksWFQkGc04UbXOwSFIQjME9PTEYLS3vkMQ7AlgsM5tjiQ==
+X-Received: by 2002:a05:600c:17d5:b0:3a3:576:21ba with SMTP id
+ y21-20020a05600c17d500b003a3057621bamr3017858wmo.176.1658928180223; 
+ Wed, 27 Jul 2022 06:23:00 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:86bb:8231:62d7:1874?
+ ([2a01:cb19:8acf:5600:86bb:8231:62d7:1874])
  by smtp.gmail.com with ESMTPSA id
- az30-20020a05600c601e00b003a31d200a7dsm2699962wmb.9.2022.07.27.06.19.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 06:19:32 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 15:19:04 +0200
-Message-Id: <20220727131904.1316745-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ j17-20020a05600c191100b003a342933727sm3027225wmq.3.2022.07.27.06.22.59
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 27 Jul 2022 06:22:59 -0700 (PDT)
+Message-ID: <ba33b6d8-53e0-e3e0-4b37-de13643bc9a1@smile.fr>
+Date: Wed, 27 Jul 2022 15:22:59 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To: Ricardo Martincoski <ricardo.martincoski@gmail.com>,
+ buildroot@buildroot.org
+References: <20220724054912.2354219-1-ricardo.martincoski@gmail.com>
+ <20220724054912.2354219-9-ricardo.martincoski@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <20220724054912.2354219-9-ricardo.martincoski@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=/lZckN14DnA9cAly4bS6XqiAIRh23F5uUjc8DXMQUO4=;
- b=T4o3Jweiy9m2tPGej2gCrF3WKThZcw8oGi/xItMJWXKOBEz2dmXfOpqaQe3kAGgju2
- OcazctS3JD7zOkIr+ASShfzw+20j8bWIliZl3kL6fuz0IcQDGxgu4jH9v6elbZEEo6/r
- XuQNShnDlbgg2pgdNUeaD5na6XXDNOjLDeBMdSxBBSjgkCwg6tne01ffTdTpRL1TEOkW
- h+ITRxwiqWcRHhNhNzFlpLR1B3lrVpH5LnkI2czv9wNuNzEoO12e8MvpyX/ef6t1Iw5k
- R9kQckUcQ4vYdoK7UQzkHyeck5Ch7VUWPo6h0H+jheNuRKDw+OHTb9bW6pG0Kt+QfLos
- HGRA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=T4o3Jwei
-Subject: [Buildroot] [PATCH 1/1] package/botan: bump to version 2.19.2
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:in-reply-to:content-transfer-encoding;
+ bh=EUmIzYhm2NSvD+XIguysu8jyH12Io8ishesAh09t9GQ=;
+ b=r4ocgnYS5ECDX2B9PyKQbP4gc7+uSWbJFMd/uaDELy0QVe3Nu+vifDUmA7Xd1R2g4V
+ r3rw/TR31bwSMBPqGBmwRItz53+NYHWHDlx+dIxudz7omnAg2k1aqLFucL2MF9KVixSe
+ Qk1ICkc8X9XiN43HMYphvPWQVnSaTGyLTkl6UFgQz9I0qCH099tm3Ss5fNOKEXAIlwdG
+ roxaS6XE16Kn5GTEhII0zh/Zsc7ag9pk6vUYUUo5WYdap9wE5fRWPY6o9zPLlW2MrpHw
+ c+CnBb8Nxq7XaSI8w6GUASlBqXY5FiHWGNL4AehyssR/j/lccC5g1k5vLY0WuF8ThYQP
+ AqOQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=r4ocgnYS
+Subject: Re: [Buildroot] [PATCH 08/16] docs/manual: check-package before
+ submitting patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,76 +103,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop openssl dependency: "The OpenSSL provider was incompatible with
-OpenSSL 3.0. It has been removed"
-
-https://github.com/randombit/botan/blob/2.19.2/news.rst
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/botan/Config.in  | 2 --
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 7 +------
- 3 files changed, 2 insertions(+), 9 deletions(-)
-
-diff --git a/package/botan/Config.in b/package/botan/Config.in
-index 635fe1836d..8f7f3f5c7a 100644
---- a/package/botan/Config.in
-+++ b/package/botan/Config.in
-@@ -20,8 +20,6 @@ config BR2_PACKAGE_BOTAN
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
--	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  Botan is a crypto library for C++
- 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 2729cb493f..d768c669ea 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,4 +1,4 @@
- # From https://botan.randombit.net/releases/sha256sums.txt
--sha256  e26e00cfefda64082afdd540d3c537924f645d6a674afed2cd171005deff5560  Botan-2.19.1.tar.xz
-+sha256  3af5f17615c6b5cd8b832d269fb6cb4d54ec64f9eb09ddbf1add5093941b4d75  Botan-2.19.2.tar.xz
- # Locally computed
- sha256  472faf6d2231130382779f96de506be19296473750356449fc426ddc9cb03b50  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 6095844b14..b26ee4c66e 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BOTAN_VERSION = 2.19.1
-+BOTAN_VERSION = 2.19.2
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
-@@ -61,11 +61,6 @@ BOTAN_DEPENDENCIES += bzip2
- BOTAN_CONF_OPTS += --with-bzip2
- endif
- 
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--BOTAN_DEPENDENCIES += openssl
--BOTAN_CONF_OPTS += --with-openssl
--endif
--
- ifeq ($(BR2_PACKAGE_SQLITE),y)
- BOTAN_DEPENDENCIES += sqlite
- BOTAN_CONF_OPTS += --with-sqlite
--- 
-2.35.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gUmljYXJkbywKCkxlIDI0LzA3LzIwMjIgw6AgMDc6NDksIFJpY2FyZG8gTWFydGluY29z
+a2kgYSDDqWNyaXTCoDoKPiBBZGQgJ21ha2UgY2hlY2stcGFja2FnZScgdG8gdGhlIGRlZmF1bHQg
+d29ya2Zsb3cgb2Ygc3VibWl0dGluZyBwYXRjaGVzLAo+IGp1c3QgYWZ0ZXIgdGhlIHJlYmFzZSBh
+bmQgYmVmb3JlIHVzaW5nIGZvcm1hdC1wYXRjaC4KPiAKPiBDYzogVGhvbWFzIERlIFNjaGFtcGhl
+bGVpcmUgPHRob21hcy5kZV9zY2hhbXBoZWxlaXJlQG5va2lhLmNvbT4KPiBTaWduZWQtb2ZmLWJ5
+OiBSaWNhcmRvIE1hcnRpbmNvc2tpIDxyaWNhcmRvLm1hcnRpbmNvc2tpQGdtYWlsLmNvbT4KPiAt
+LS0KPiAgZG9jcy9tYW51YWwvY29udHJpYnV0ZS50eHQgfCA2ICsrKysrKwo+ICAxIGZpbGUgY2hh
+bmdlZCwgNiBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL2RvY3MvbWFudWFsL2NvbnRy
+aWJ1dGUudHh0IGIvZG9jcy9tYW51YWwvY29udHJpYnV0ZS50eHQKPiBpbmRleCBlNTg4YzY5YmU2
+Li5jNTY1MmFmN2EwIDEwMDY0NAo+IC0tLSBhL2RvY3MvbWFudWFsL2NvbnRyaWJ1dGUudHh0Cj4g
+KysrIGIvZG9jcy9tYW51YWwvY29udHJpYnV0ZS50eHQKPiBAQCAtMjk0LDYgKzI5NCwxMiBAQCAk
+IGdpdCBmZXRjaCAtLWFsbCAtLXRhZ3MKPiAgJCBnaXQgcmViYXNlIG9yaWdpbi9tYXN0ZXIKPiAg
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gIAo+ICtOb3cgcnVuIHNvbWUgYmFzaWMgY2hlY2tzIGZv
+ciB0aGUgY2hhbmdlcyB5b3UgY29tbWl0dGVkOgoKInNvbWUgYmFzaWMgY2hlY2tzIiBtYXkgYmUg
+bm90IHJlYWxseSBtZWFuaW5nZnVsIGZvciBuZXdjb21lcnMuCgpJIHdvdWxkIGFkZCBhIHNtYWxs
+IGRlc2NyaXB0aW9uIG9mIHdoYXQgY2hlY2stcGFja2FnZSByZWFsbHkgZG9lcy4KCkJlc3QgcmVn
+YXJkcywKUm9tYWluCgoKPiArCj4gKy0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICskIG1ha2UgY2hl
+Y2stcGFja2FnZQo+ICstLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiArCj4gIE5vdywgeW91IGFyZSBy
+ZWFkeSB0byBnZW5lcmF0ZSB0aGVuIHN1Ym1pdCB5b3VyIHBhdGNoIHNldC4KPiAgCj4gIFRvIGdl
+bmVyYXRlIGl0LCBydW46CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
