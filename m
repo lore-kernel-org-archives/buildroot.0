@@ -1,49 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96044C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 15:03:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3447C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 15:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27557818BE;
-	Wed, 27 Jul 2022 15:03:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27557818BE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AC1060DCA;
+	Wed, 27 Jul 2022 15:03:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AC1060DCA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IqC-kguk93Yv; Wed, 27 Jul 2022 15:03:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cj18S-oHw02c; Wed, 27 Jul 2022 15:03:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0F4581304;
-	Wed, 27 Jul 2022 15:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0F4581304
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9F2091C116E
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:02:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6748A60B30;
+	Wed, 27 Jul 2022 15:03:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6748A60B30
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 51ACA1BF4E4
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B1FF812CA
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:02:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B1FF812CA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D64E60B00
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:02:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D64E60B00
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dX5-M2PYz18s for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 15:02:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5DE6A80EE8
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fPboyHFn7bBK for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 15:02:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0D2760B30
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D0D2760B30
  for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:02:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DE6A80EE8
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1BDA28668F; Wed, 27 Jul 2022 14:48:47 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id q18so14325209wrx.8
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 08:02:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=yBXVlsWetTLezsNYQC9QHp8k1EuQySthM+WOFq8+HQA=;
+ b=7Tsmd4J72GdS44VKSFvmMNhRn51WJXwCAeRutl5w0+JtBxz93nRdSUcVrCSuN0+wSJ
+ aJj2tWME0aO3dOPI4QGDsKcRtB3aBn1aQ/MXtp8wmdfDhtiHO6B1dW0MiH5Txt3UXOEy
+ efiBBrxcPnqmt0lK1qPDNbpRGHx1oHJ7605Vh0KPSwj1ShDfnNqi2TyViCGOpZpC3p/j
+ 2mBEs3UOxM4279v6FyLXdTx1soJ7BbR6lhEdXNTOztXeEAYCpxT29sj2pqjG8HLKe0+T
+ iH4M4R2MiwG43zVLe4oCmsfFd6u+ehKchpMTSvc/l0q1wt4JrRvkdAvYb3GfwxCXZOIM
+ ErAA==
+X-Gm-Message-State: AJIora8F6NUmF0Q2P3gdTsnY/92EvUkKYIkzRSor8t3+3PlpMELPNxTL
+ MavLd8cwrpBTeoX/rU71h05ljHRgi/cBtA==
+X-Google-Smtp-Source: AGRyM1s3VmoXXXGm+Op64eqzFzYA3tJ2tWEJXvaAIoyfHWjs+3lZxRPpRC4n2T1udyeTDNtn3UTq8g==
+X-Received: by 2002:a05:6000:1545:b0:21e:6a2d:1e42 with SMTP id
+ 5-20020a056000154500b0021e6a2d1e42mr13935184wry.660.1658934151954; 
+ Wed, 27 Jul 2022 08:02:31 -0700 (PDT)
+Received: from arnoutx1.home ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ n11-20020a05600c500b00b003a2e42ae9a4sm3139544wmr.14.2022.07.27.08.02.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Jul 2022 08:02:31 -0700 (PDT)
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 16:59:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9e4da84a950d018ba84aa61efdc7a96f669871b8
-X-Git-Newrev: 60fd21238508a513ab53bcb67d5e63053485bafb
-X-Patchwork-Hint: ignore
-Message-Id: <20220727144847.1BDA28668F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs: drop csky defconfig
+Date: Wed, 27 Jul 2022 17:02:30 +0200
+Message-Id: <20220727150230.2529065-1-arnout@mind.be>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=yBXVlsWetTLezsNYQC9QHp8k1EuQySthM+WOFq8+HQA=;
+ b=Bbu2+eNG6od3+tGVEgEwZPZteQ7Ykl4lItrOHXz7vCxgKeUDJLLUFUvC7f3wQmFOmd
+ x5I9q52m61rSOigcPw3qHxLy2SZCr3q9yj0nPWI23RZpnAjyKJeduInudhB0+grLks14
+ gOv+SQNH1iorA5wJg4JKfNpFi+KtBCi6qO58TU5a7NllhCd+5j5oWjlyPdcRSML07lRY
+ Kkdnta/ImIgWywh9ex8DAW9B7fRPpH+OvsXOCImkQBpG+EuHw+X/sHXLhFCPdHguei62
+ w8GGF+HDzXquyirtKB2eWAYWgz3FTKI41QW9buNBwgOaCsUFZxHP0ECU+vi6G5cUIQvq
+ kmLQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Bbu2+eNG
+Subject: [Buildroot] [PATCH] support/testing/run-tests: fix --testcases
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,356 +93,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60fd21238508a513ab53bcb67d5e63053485bafb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The --testcases option of run-tests says how many test cases to build in
+parallel. It automatically derives a jlevel from it by dividing the
+number of cores + 1 by the number of parallel testcases. However, this
+will typically result in a fractional number. Make doesn't like
+fractional numbers as argument to -j.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Guo Ren <ren_guo@c-sky.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Convert the number to integer (rounding up).
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS                     |   4 --
- board/csky/gx6605s/gdbinit     |  25 -------
- board/csky/gx6605s/gx6605s.dts | 155 -----------------------------------------
- board/csky/readme.txt          |  88 -----------------------
- configs/csky_gx6605s_defconfig |  19 -----
- 5 files changed, 291 deletions(-)
+ support/testing/run-tests | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 700533dbf7..769fc43069 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1185,10 +1185,6 @@ F:	support/testing/tests/package/br2-external/python-pybind
- F:	support/testing/tests/package/sample_python_pybind.py
- F:	support/testing/tests/package/test_python_pybind.py
- 
--N:	Guo Ren <ren_guo@c-sky.com>
--F:	board/csky/
--F:	configs/csky_*
--
- N:	Gustavo Heinz <gustavo@gsthnz.com>
- F:	package/python-m2crypto/
- 
-diff --git a/board/csky/gx6605s/gdbinit b/board/csky/gx6605s/gdbinit
-deleted file mode 100644
-index d602aad46d..0000000000
---- a/board/csky/gx6605s/gdbinit
-+++ /dev/null
-@@ -1,25 +0,0 @@
--tar jtag jtag://127.0.0.1:1025
--reset
--
--# setup CCR (Cache Config Reg)
--# 0-1:MP,2:IE,3:DE,4:WB,5:RS,6:Z,7:BE
--set $cr18 = 0x7d
--
--# vendor custom setup, double cache line & preload
--set $cr30 = 0xc
--
--# pin mux for serial8250
--set *(unsigned int *) 0xa030a14c |= (1 << 22) | (1 << 23)
--
--# pass devicetree blob
--# r2 is magic
--# r3 is address
--set $r2 = 0x20150401
--set $r3 = 0x92000000
--restore gx6605s.dtb binary 0x92000000
--
--# flush cache
--set $cr17 = 0x33
--
--load
--
-diff --git a/board/csky/gx6605s/gx6605s.dts b/board/csky/gx6605s/gx6605s.dts
-deleted file mode 100644
-index e4d46f59a0..0000000000
---- a/board/csky/gx6605s/gx6605s.dts
-+++ /dev/null
-@@ -1,155 +0,0 @@
--/dts-v1/;
--#include <dt-bindings/gpio/gpio.h>
--#include <dt-bindings/input/input.h>
--
--/ {
--	model = "C-SKY gx6605s";
--	compatible = "csky,gx6605s";
--	#address-cells = <1>;
--	#size-cells = <1>;
--
--	memory {
--		device_type = "memory";
--		reg = <0x10000000 0x04000000>;
--	};
--
--	soc {
--		#address-cells = <1>;
--		#size-cells = <1>;
--		compatible = "simple-bus";
--		ranges;
--
--		dummy_apb: apb-clock {
--			compatible = "fixed-clock";
--			clock-frequency = <27000000>;
--			clock-output-names = "dummy_apb";
--			#clock-cells = <0>;
--		};
--
--		intc: interrupt-controller@500000 {
--			compatible = "csky,gx6605s-intc";
--			reg = <0x00500000 0x400>;
--			interrupt-controller;
--			#interrupt-cells = <1>;
--		};
--
--		timer@20a000 {
--			compatible = "csky,gx6605s-timer";
--			reg = <0x0020a000 0x400>;
--			clocks = <&dummy_apb>;
--			interrupts = <10>;
--			interrupt-parent = <&intc>;
--		};
--
--		ehci-hcd@900000 {
--			compatible = "generic-ehci";
--			reg = <0x00900000 0x400>;
--			interrupt-parent = <&intc>;
--			interrupts = <59>;
--		};
--
--		ohci-hcd0@a00000 {
--			compatible = "generic-ohci";
--			reg = <0x00a00000 0x400>;
--			interrupt-parent = <&intc>;
--			interrupts = <58>;
--		};
--
--		ohci-hcd1@b00000 {
--			compatible = "generic-ohci";
--			reg = <0x00b00000 0x400>;
--			interrupt-parent = <&intc>;
--			interrupts = <57>;
--		};
--
--		serial@403000 {
--			compatible = "ns16550a";
--			reg = <0x00403000 0x400>;
--			interrupt-parent = <&intc>;
--			interrupts = <15>;
--			clock-frequency = <29491200>;
--			baud = <115200>;
--			reg-shift = <2>;
--			reg-io-width = <1>;
--		};
--
--		gpio0: gpio@305000 {
--			compatible = "wd,mbl-gpio";
--			reg-names = "dirout", "dat", "set", "clr";
--			reg = <0x305000 4>, <0x305004 4>, <0x305008 4>, <0x30500c 4>;
--			bgpio-base = <0>;
--			#gpio-cells = <2>;
--			gpio-controller;
--		};
--
--		gpio_buttons {
--			compatible = "gpio-keys-polled";
--			#address-cells = <1>;
--			#size-cells = <0>;
--			poll-interval = <100>;
--			autorepeat;
--
--			button0 {
--				label = "button8";
--				linux,code = <KEY_LEFT>;
--				gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
--			};
--
--			button1 {
--				label = "button6";
--				linux,code = <KEY_RIGHT>;
--				gpios = <&gpio0 6 GPIO_ACTIVE_LOW>;
--			};
--
--			button2 {
--				label = "button5";
--				linux,code = <KEY_UP>;
--				gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
--			};
--
--			button3 {
--				label = "button9";
--				linux,code = <KEY_DOWN>;
--				gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
--			};
--
--			button4 {
--				label = "button7";
--				linux,code = <KEY_ENTER>;
--				gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
--			};
--		};
--
--		gpio_leds {
--			compatible = "gpio-leds";
--
--			led0 {
--				label = "led10";
--				gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
--				linux,default-trigger = "heartbeat";
--			};
--
--			led1 {
--				label = "led11";
--				gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
--				linux,default-trigger = "timer";
--			};
--
--			led2 {
--				label = "led12";
--				gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
--				linux,default-trigger = "default-on";
--			};
--
--			led3 {
--				label = "led13";
--				gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
--				linux,default-trigger = "default-on";
--			};
--		};
--	};
--
--	chosen {
--		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/sda2 rw rootwait";
--	};
--};
-diff --git a/board/csky/readme.txt b/board/csky/readme.txt
-deleted file mode 100644
-index dc82dcc1d7..0000000000
---- a/board/csky/readme.txt
-+++ /dev/null
-@@ -1,88 +0,0 @@
--C-SKY Development Kit
--
--Intro
--=====
--
--C-SKY is a CPU Architecture from www.c-sky.com and has it own instruction set.
--Just like arm and mips in linux/arch, it named as 'csky'.
--
--gx6605s develop board is made by Hangzhou Nationalchip and C-SKY.
--
--Hardware Spec:
--  * CPU: ck610 up to 594Mhz
--  * Integrate with 64MB ddr2 in SOC.
--  * Integrate with hardware Jtag.
--  * Integrate with usb-to-serial chip.
--  * USB ehci controller in SOC.
--  * Power Supply: DC 5V from two micro-usb.
--
--How to build it
--===============
--
--Configure Buildroot
---------------------
--
--The csky_gx6605s_defconfig configuration is a sample configuration with
--all that is required to bring the gx6605s Development Board:
--
--  $ make csky_gx6605s_defconfig
--
--Build everything
------------------
--
--Note: you will need to have access to the network, since Buildroot will
--download the packages' sources.
--
--  $ make
--
--Result of the build
---------------------
--
--After building, you should obtain this tree:
--
--    output/images/
--    +-- vmlinux
--    +-- rootfs.ext2
--    +-- <board name>.dtb
--
--How to run it
--=============
--
--Prepare Jtag-Server
---------------------
--
--  Download the Jtag-Server here:
--
--  https://github.com/c-sky/tools/raw/master/DebugServerConsole-linux-x86_64-V4.2.00-20161213.tar.gz
--
--  Go to the unpacked directory:
--
--  $./DebugServerConsole -ddc -rstwait 1000 -prereset -port 1025
--
--  Perhaps you need to use "sudo", which need libusb to detect c510:b210
--
--  $ sudo ./DebugServerConsole -ddc -rstwait 1000 -prereset -port 1025
--
--Prepare USB drive
-------------------
--
--  You sould determine which device associated to the usb drive
--  carefully. eg:
--
--  $ cat /proc/partitions
--   8       48    1971712 sdd
--   8       49     976720 sdd1
--
--  $ sudo dd if=rootfs.ext2 of=/dev/sdd1
--  $ sudo sync
--
--Run
-----
--
--  Plug the usb drive on gx6605s dev board.
--
--  Setup the Console with the rate 115200/8-N-1.
--
--  $ cd output/images
--  $ ../host/bin/csky-linux-gdb -x ../../board/csky/gx6605s/gdbinit vmlinux
--
-diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
-deleted file mode 100644
-index f1f9579dca..0000000000
---- a/configs/csky_gx6605s_defconfig
-+++ /dev/null
-@@ -1,19 +0,0 @@
--# Architecture
--BR2_csky=y
--BR2_ck610=y
--
--# System
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--
--# Linux headers same as kernel, a 5.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/csky/gx6605s/gx6605s.dts"
+diff --git a/support/testing/run-tests b/support/testing/run-tests
+index 022209b414..f9c0bebc48 100755
+--- a/support/testing/run-tests
++++ b/support/testing/run-tests
+@@ -87,7 +87,7 @@ def main():
+             return 1
+         # same default BR2_JLEVEL as package/Makefile.in
+         br2_jlevel = 1 + multiprocessing.cpu_count()
+-        each_testcase = br2_jlevel / args.testcases
++        each_testcase = int((br2_jlevel + args.testcases - 1) / args.testcases)
+         if each_testcase < 1:
+             each_testcase = 1
+         BRConfigTest.jlevel = each_testcase
+-- 
+2.35.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
