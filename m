@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C02CEC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 14:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 992ADC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 14:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6FF2F405D2;
-	Wed, 27 Jul 2022 14:47:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FF2F405D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26409402C6;
+	Wed, 27 Jul 2022 14:48:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26409402C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yOPWGkuweq5o; Wed, 27 Jul 2022 14:47:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UGvDPmLK9qHU; Wed, 27 Jul 2022 14:48:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 937D940603;
-	Wed, 27 Jul 2022 14:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 937D940603
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 206021BF9D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCAE04027C;
+	Wed, 27 Jul 2022 14:48:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCAE04027C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 221831C1162
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 14:46:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACD7360AEB
+ by smtp4.osuosl.org (Postfix) with ESMTP id E49AA41557
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 14:46:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACD7360AEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E49AA41557
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 812GYZ4KUIBo for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 14:46:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lJm_Uqcx8U_O for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 14:46:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DE34D60C09
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC66141513
  for <buildroot@buildroot.org>; Wed, 27 Jul 2022 14:46:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE34D60C09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC66141513
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A494D86699; Wed, 27 Jul 2022 14:32:25 +0000 (UTC)
+ id 80A4786692; Wed, 27 Jul 2022 14:32:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 16:44:08 +0200
+Date: Wed, 27 Jul 2022 16:44:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 69284b6700e5f45e25a583e87b86ed1eb95038fd
-X-Git-Newrev: 166ea61fb4400f9d1b23a89a7a2c1c6fbee62327
+X-Git-Oldrev: ff59cbf5362d5dc8e6131999a48ef08b7256a9ee
+X-Git-Newrev: 72ac45aceab38ec128f029756c4151e9d9325585
 X-Patchwork-Hint: ignore
-Message-Id: <20220727143225.A494D86699@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jack2: add systemd optional
- dependency
+Message-Id: <20220727143225.80A4786692@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/botan: bump to version 2.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,35 +63,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=166ea61fb4400f9d1b23a89a7a2c1c6fbee62327
+commit: https://git.buildroot.net/buildroot/commit/?id=72ac45aceab38ec128f029756c4151e9d9325585
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add systemd optional dependency (enabled by default)
+Drop openssl dependency: "The OpenSSL provider was incompatible with
+OpenSSL 3.0. It has been removed"
+
+https://github.com/randombit/botan/blob/2.19.2/news.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jack2/jack2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/botan/Config.in  | 2 --
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 7 +------
+ 3 files changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index 3b45474cc4..73f723aef0 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -47,6 +47,13 @@ else
- JACK2_CONF_OPTS += --readline=no
+diff --git a/package/botan/Config.in b/package/botan/Config.in
+index 635fe1836d..8f7f3f5c7a 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -20,8 +20,6 @@ config BR2_PACKAGE_BOTAN
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	select BR2_PACKAGE_BOOST_SYSTEM if BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+-	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4 if BR2_PACKAGE_LIBOPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  Botan is a crypto library for C++
+ 
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index 2729cb493f..d768c669ea 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,4 @@
+ # From https://botan.randombit.net/releases/sha256sums.txt
+-sha256  e26e00cfefda64082afdd540d3c537924f645d6a674afed2cd171005deff5560  Botan-2.19.1.tar.xz
++sha256  3af5f17615c6b5cd8b832d269fb6cb4d54ec64f9eb09ddbf1add5093941b4d75  Botan-2.19.2.tar.xz
+ # Locally computed
+ sha256  472faf6d2231130382779f96de506be19296473750356449fc426ddc9cb03b50  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 6095844b14..b26ee4c66e 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOTAN_VERSION = 2.19.1
++BOTAN_VERSION = 2.19.2
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
+@@ -61,11 +61,6 @@ BOTAN_DEPENDENCIES += bzip2
+ BOTAN_CONF_OPTS += --with-bzip2
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+JACK2_DEPENDENCIES += systemd
-+JACK2_CONF_OPTS += --systemd=yes
-+else
-+JACK2_CONF_OPTS += --systemd=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_JACK2_LEGACY),y)
- JACK2_CONF_OPTS += --classic
- else
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-BOTAN_DEPENDENCIES += openssl
+-BOTAN_CONF_OPTS += --with-openssl
+-endif
+-
+ ifeq ($(BR2_PACKAGE_SQLITE),y)
+ BOTAN_DEPENDENCIES += sqlite
+ BOTAN_CONF_OPTS += --with-sqlite
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
