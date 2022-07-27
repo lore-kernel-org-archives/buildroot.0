@@ -4,67 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C957C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32842C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:39:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 001D360C24;
-	Wed, 27 Jul 2022 13:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 001D360C24
+	by smtp3.osuosl.org (Postfix) with ESMTP id C823760C31;
+	Wed, 27 Jul 2022 13:39:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C823760C31
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CHkQBV8UQit6; Wed, 27 Jul 2022 13:38:37 +0000 (UTC)
+	with ESMTP id dpqzKafyqMpf; Wed, 27 Jul 2022 13:39:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 036A760BDE;
-	Wed, 27 Jul 2022 13:38:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 036A760BDE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AE2CD1BF2BA
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:38:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDB4260BDE;
+	Wed, 27 Jul 2022 13:39:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDB4260BDE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 579B41BF2BA
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:39:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 88BAA60BDD
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:38:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88BAA60BDD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33298817AC
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:39:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33298817AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ANigO_gXB1yG for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 13:38:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03F2660A88
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 03F2660A88
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:38:32 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 67192240003;
- Wed, 27 Jul 2022 13:38:29 +0000 (UTC)
-Date: Wed, 27 Jul 2022 15:38:27 +0200
-To: Dominik Michael Rauh <dmrauh@posteo.de>
-Message-ID: <20220727153827.6a926131@windsurf>
-In-Reply-To: <20220507094650.496076-1-dmrauh@posteo.de>
-References: <20210802092426.1259479-1-dmrauh@posteo.de>
- <20220507094650.496076-1-dmrauh@posteo.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nd1Hje2ODcau for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 13:39:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06B24817B5
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 06B24817B5
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:39:34 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id h9so24285370wrm.0
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 06:39:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=qRiwh88NGrecojPfxBn9H+vMLIo4acq6FZsx/9/fbaY=;
+ b=IhQFfyjDJmEVw0thpptgYz74DT+v5Vf7gUOW1pdk50ptyng+3mVAutkPZTgvsa2GQ1
+ 9FBD/+7UF/w91Ttk+S+LtirEVcf+G5DuNLiN0/H++NpbULLiniZ3LqteKlbvumWxTTTJ
+ bEYxmovHKhxufD+b8LnEAHQOCZvabzn7BT1c/5Vd67t05r/rxR+3bwJQPZ5OzuRBsWDJ
+ ncbUbvOiFFPh+wLAOUSRzalzbjJVr0sqo5SllopFfX5MZcb8+H/Ikjy6wAKYhsZ0x+Gb
+ nOsLsA+imZqkzkhQQABsY4ovQvvq9Kn+9mey7PspSTYW1+ZVth4MsqdeaQru9L0Zu0oY
+ 9u9g==
+X-Gm-Message-State: AJIora8PtW+VBex53iWH30EjOg6go8HG0oH7XWDwsl8dOjpCz6tLU7CJ
+ fgHDtTs5Enh0nBe/G8yeYGHW+bJgBYo=
+X-Google-Smtp-Source: AGRyM1uYtXfFJrB5d7/zydrSrCSQYiITlsYlxU5gW1+nVKxbqCOumcRtVfO+gKb4sUk8KweWsBjhVg==
+X-Received: by 2002:a05:6000:100d:b0:21e:69b3:1901 with SMTP id
+ a13-20020a056000100d00b0021e69b31901mr13997326wrx.622.1658929172533; 
+ Wed, 27 Jul 2022 06:39:32 -0700 (PDT)
+Received: from kali.home (2a01cb0680494f3e376d079efd3cafb3.ipv6.abo.wanadoo.fr.
+ [2a01:cb06:8049:4f3e:376d:79e:fd3c:afb3])
+ by smtp.gmail.com with ESMTPSA id
+ j3-20020a05600c1c0300b003a31b00c216sm2783324wms.0.2022.07.27.06.39.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Jul 2022 06:39:32 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 27 Jul 2022 15:39:29 +0200
+Message-Id: <20220727133929.1325636-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658929109;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=LQYRTRINu2sYYGTqB6cfp4vLY+t5MKlOF2eL/B1KToc=;
- b=C8EMpnK3Ugpt5BvYE2qP9Oj8vVakXI1JriQydG7p/6h0kfh0O/rBpEYHXE5mZ4JpxmRPm8
- KCjUGPfpTqLiiRTyXA0NeOfQomtcRhkDgKjWpMaOPxWUi1Uxgy/Q2TbJ2p2ZqVfIml9fVv
- O9Vhbn+UjAuFXvmTZ2jcWXf4WcnF/GIEVlNY2JjQCyzqegFtajqxaDGntY6p75ILT4saU2
- aYSCKWg8tTG6+G3ywaO4DVAJyosRgzMblNMJczNkg+tZxEKlw8SC8LqdUGPo2KGdHtx/A9
- X4nJ+Ruvs0swQsVs4LCNv9yfnMcsj3hNaRKR9WMJPnE0eGkQw/WvXSlyxJ9rdA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=C8EMpnK3
-Subject: Re: [Buildroot] [PATCH v5] package/gdal: new package
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=qRiwh88NGrecojPfxBn9H+vMLIo4acq6FZsx/9/fbaY=;
+ b=dH73hL4CZNAR9vuV1zY765abcjIwnIsKbKKQroM0T3gE6FxP4Da/ZFDzKF8xyl3owu
+ wZyCJ4oFQ2q+pWACRBy8yw2goloyFeS529WdIPfHKoETsjpVduKpq60PADDTbv11c+Kl
+ SCOjGLA/lRPbpUSRNBa7xOjwBot0p4HOpzltBMS1SHLlriA8flyvlzli1hb7vPXrQ57a
+ 5YX+aLvU07CatCUcbnVfpkzCZPpspTb2mlQdPia5YCPsIvjXqUzSbnTur7x3PHg4i2fm
+ Djj4B1XieMHFlIqjCB3pgQhIRwVub5U3wyAOi3VWZD9sC2QBcjikUuCH2PLCm0tIJJVh
+ xidQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=dH73hL4C
+Subject: [Buildroot] [PATCH 1/1] package/minizip: use minizip-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,62 +93,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Dominik,
+https://github.com/nmoinvaz/minizip is a symlink to
+https://github.com/zlib-ng/minizip-ng
 
-On Sat,  7 May 2022 09:46:50 +0000
-Dominik Michael Rauh <dmrauh@posteo.de> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/minizip/Config.in  | 2 +-
+ package/minizip/minizip.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> GDAL is a translator library for raster and vector geospatial data
-> formats. As a library, it presents a single raster abstract data model
-> and single vector abstract data model to the calling application for all
-> supported formats. It also comes with a variety of useful command line
-> utilities for data translation and processing.
-> 
-> https://gdal.org/
-> 
-> test-pkg shows that this package is affected by binutils bug 27597.
-> 
-> Signed-off-by: Dominik Michael Rauh <dmrauh@posteo.de>
-
-Believe it or not, but we finally applied your patch! I had to do a few
-changes:
-
- - Addition of an entry to the DEVELOPERS file
-
- - Removal of PROVENANCE.TXT as a license file, and simplification of
-   the license variable to just "MIT, many others" as the licensing
-   situation of GDAL is very complicated.
-
- - Use GDAL_CONF_OPTS = (and not +=) to define all unconditional
-   options, and do that before the conditional features.
-
- - Removal of the postgis change for gdal support, which I have moved
-   to a separate commit. It also required an extra patch to PostGIS to
-   build properly.
-
- - Bump to the latest version of gdal.
-
-You can see the final 3 commits at:
-
-  https://gitlab.com/buildroot.org/buildroot/-/commit/d48af707737ece6242d58e83b98e5c601fa55acc
-  https://gitlab.com/buildroot.org/buildroot/-/commit/1e64fa2956171cdc9d6e6c8896b4b589ce573513
-  https://gitlab.com/buildroot.org/buildroot/-/commit/b9a38a42ac817b963be2b4b51d218c5eabb1059d
-
-Best regards,
-
-Thomas
+diff --git a/package/minizip/Config.in b/package/minizip/Config.in
+index e4d185d9d7..98eb4dec16 100644
+--- a/package/minizip/Config.in
++++ b/package/minizip/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_MINIZIP
+ 	  It is compatible with PKZip 2.04g, WinZip, InfoZip,
+ 	  MimarSinan Codex Suite 2002 tools, and compatible sofware.
+ 
+-	  https://github.com/nmoinvaz/minizip
++	  https://github.com/zlib-ng/minizip-ng
+ 
+ config BR2_PACKAGE_MINIZIP_DEMOS
+ 	bool "minizip"
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 61936e0568..5adee7c494 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MINIZIP_VERSION = 3.0.6
+-MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
++MINIZIP_SITE = $(call github,zlib-ng,minizip-ng,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = host-pkgconf
+ MINIZIP_INSTALL_STAGING = YES
+ MINIZIP_CONF_OPTS = \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
