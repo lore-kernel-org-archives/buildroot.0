@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9FE6C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:50:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D8A8C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 23B9D403B8;
-	Wed, 27 Jul 2022 22:50:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23B9D403B8
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE89540A03;
+	Wed, 27 Jul 2022 22:50:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE89540A03
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vv9jUkJwwHQf; Wed, 27 Jul 2022 22:50:44 +0000 (UTC)
+	with ESMTP id fwlVI_DO2OtG; Wed, 27 Jul 2022 22:50:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2235F40195;
-	Wed, 27 Jul 2022 22:50:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2235F40195
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7DFB11BF834
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE722409E9;
+	Wed, 27 Jul 2022 22:50:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE722409E9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BACB1BF9D1
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:50:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64B97827D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 60F9C416E4
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64B97827D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60F9C416E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8-r_XLhadwbA for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zVG4xBFbY1v5 for <buildroot@lists.busybox.net>;
  Wed, 27 Jul 2022 22:50:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4318C826FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 42CBD416E3
  for <buildroot@buildroot.org>; Wed, 27 Jul 2022 22:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4318C826FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42CBD416E3
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 3EA7F8677A; Wed, 27 Jul 2022 22:36:52 +0000 (UTC)
+ id 353F686774; Wed, 27 Jul 2022 22:36:52 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Thu, 28 Jul 2022 00:48:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e3f1c960be9f9a814ba2a7010ad78c7ba9d11839
-X-Git-Newrev: 50e398e2d9f7e01ddcddb00929041546d750d32a
+X-Git-Oldrev: bd3cf3fb5b0da97e6d4dd9c9321e44c376c1f36a
+X-Git-Newrev: e3f1c960be9f9a814ba2a7010ad78c7ba9d11839
 X-Patchwork-Hint: ignore
-Message-Id: <20220727223652.3EA7F8677A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/run-test: add test for systemd
- using dbus-broker
+Message-Id: <20220727223652.353F686774@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/systemd: do not force dbus if
+ dbus-broker is available
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,121 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50e398e2d9f7e01ddcddb00929041546d750d32a
+commit: https://git.buildroot.net/buildroot/commit/?id=e3f1c960be9f9a814ba2a7010ad78c7ba9d11839
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add four new tests for systemd (rw and ro in each case):
-  - use dbus-broker instead of the original dbus
-  - use the original dbus, with dbus-broker installed
-
-The first two extend the existing IfUpDown test cases by just enabling
-dbus-broker; the second ones extend this further, by explicitly enabling
-the original dbus.
-
-For one of the tests, we overload the test_run() function to test that
-the dbus-broker daemon is indeed running as root. We need not replicate
-that check in the other dbus-broker-only test, and it does not make
-sense to test that in tests that have the original dbus enabled.
-
-Presence of the original dbus and dbus-broker on the same system is
-valid: the original dbus is used as the default system bus daemon. We do
-not test switching between the two at runtime, though as this is really
-too corner-case specific. We just test to ensure the original dbus
-system bus daemon is not impacted by the presence of dbus-broker.
-
-Note: the 'full' test-case enables all systemd options, and some of them
-do pull the original dbus package, so we can't use that to test the
-integration of dbus-broker; instead, we extend the ifupdown case, which
-does not enable the original dbus.
-
-The default external toolchain for cortex-A9 is the old ARM toolchain
-which has kernel headers 4.10 Since dbus-broker needs toolchain headers
->= 4.17, it can't be selected with this toolchain. Switch the systemd
-tests to the Bootlin toolchains instead. We switch all of them to make
-things easier. Note that we will need to take care in the future that
-the headers version used in the bootlin toolchain doesn't get bigger
-than the kernel that is used. The kernel is currently 5.10, the headers
-in the bleeding edge bootlin toolchain are 5.4.
+dbus-broker fits the bill as a message bus daemon, so only enable the
+original dbus if dbus-broker is not enabled.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/testing/tests/init/test_systemd.py | 47 ++++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ package/systemd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index be28209ba0..06c42736ae 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -9,6 +9,7 @@ class InitSystemSystemdBase(InitSystemBase):
-         BR2_cortex_a9=y
-         BR2_ARM_ENABLE_VFP=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_INIT_SYSTEMD=y
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         # BR2_TARGET_ROOTFS_TAR is not set
-@@ -76,6 +77,29 @@ class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
-         self.check_systemd("squashfs")
- 
- 
-+class TestInitSystemSystemdRoIfupdownDbusbroker(TestInitSystemSystemdRoIfupdown):
-+    config = TestInitSystemSystemdRoIfupdown.config + \
-+        """
-+        BR2_PACKAGE_DBUS_BROKER=y
-+        """
-+
-+    def test_run(self):
-+        # Parent class' test_run() method does exactly that, no more:
-+        self.check_systemd("squashfs")
-+
-+        # Check that the dbus-broker daemon is running as non-root
-+        cmd = "find /proc/$(pidof dbus-broker) -maxdepth 1 -name exe -user dbus"
-+        out, _ = self.emulator.run(cmd)
-+        self.assertEqual(len(out), 1)
-+
-+
-+class TestInitSystemSystemdRoIfupdownDbusbrokerDbus(TestInitSystemSystemdRoIfupdownDbusbroker):
-+    config = TestInitSystemSystemdRoIfupdownDbusbroker.config + \
-+        """
-+        BR2_PACKAGE_DBUS=y
-+        """
-+
-+
- class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
-@@ -88,6 +112,29 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
-         self.check_systemd("ext2")
- 
- 
-+class TestInitSystemSystemdRwIfupdownDbusbroker(TestInitSystemSystemdRwIfupdown):
-+    config = TestInitSystemSystemdRwIfupdown.config + \
-+        """
-+        BR2_PACKAGE_DBUS_BROKER=y
-+        """
-+
-+    def test_run(self):
-+        # Parent class' test_run() method does exactly that, no more:
-+        self.check_systemd("ext2")
-+
-+        # Check that the dbus-broker daemon is running as non-root
-+        cmd = "find /proc/$(pidof dbus-broker) -maxdepth 1 -name exe -user dbus"
-+        out, _ = self.emulator.run(cmd)
-+        self.assertEqual(len(out), 1)
-+
-+
-+class TestInitSystemSystemdRwIfupdownDbusbrokerDbus(TestInitSystemSystemdRwIfupdownDbusbroker):
-+    config = TestInitSystemSystemdRwIfupdownDbusbroker.config + \
-+        """
-+        BR2_PACKAGE_DBUS=y
-+        """
-+
-+
- class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index d5d88404de..45a9e2d644 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -26,7 +26,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
+ 	select BR2_PACKAGE_HAS_UDEV
+-	select BR2_PACKAGE_DBUS # runtime dependency only
++	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
+ 	select BR2_PACKAGE_LIBCAP
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
