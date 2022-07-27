@@ -1,49 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42C58C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE895C19F28
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:57:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7E1960BE9;
-	Wed, 27 Jul 2022 13:57:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7E1960BE9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86E0682503;
+	Wed, 27 Jul 2022 13:57:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86E0682503
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CXnPRXJ01hS6; Wed, 27 Jul 2022 13:57:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id v6D80_iRQYqO; Wed, 27 Jul 2022 13:57:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA67960D75;
-	Wed, 27 Jul 2022 13:57:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA67960D75
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CF10B1BF2BA
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:57:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7910824A4;
+	Wed, 27 Jul 2022 13:57:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7910824A4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 66CBD1BF2BA
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:57:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9CEE40889
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:57:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9CEE40889
+ by smtp2.osuosl.org (Postfix) with ESMTP id 37AEC40573
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:57:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37AEC40573
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DWg_40QlCjqV for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 13:57:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70A534150F
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:57:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70A534150F
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4631486612; Wed, 27 Jul 2022 13:43:44 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 15:56:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b9a38a42ac817b963be2b4b51d218c5eabb1059d
-X-Git-Newrev: 42f7f451ecd27dfe721092515eef09c47bc03bc5
-X-Patchwork-Hint: ignore
-Message-Id: <20220727134344.4631486612@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/boot-qemu-image.py:
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lK7rFwoIc4fs for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 13:57:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFFD7403FB
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DFFD7403FB
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:57:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B23181BF216;
+ Wed, 27 Jul 2022 13:57:43 +0000 (UTC)
+Date: Wed, 27 Jul 2022 15:57:42 +0200
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20220727155742.492bcb84@windsurf>
+In-Reply-To: <20220115143344.12319-2-romain.naour@gmail.com>
+References: <20220115143344.12319-1-romain.naour@gmail.com>
+ <20220115143344.12319-2-romain.naour@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658930264;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=tloA7d40oNIbnAky6Dmroum1R8OEMq1PMP6O3iXsINA=;
+ b=HGuwm+arFqkWPC9qh7bSh+oLqAsZe6zXXaypfrh6/S9bMl6/hP/2CtOdQFq8AzdtjwKqyM
+ GyYzalqoKgj7NZqwlvD/8r75lC5MoRPwb1uULAgzd8Z8xg/9cpMoaHA1a+Le9MfVui6795
+ 62G2ldULEDwKSJ40gpYHbcGbUi1wQQrC/iEtPg4/2EGlGiPsDyV0Pss7ki0rGBXqsQwHN+
+ gkm9T6A6HeCaTXksmj9z/7PRekT/C6deQ9mCSgXSs3J3bxCR50pufWIYDxQOY6krZWqFPt
+ hjB2RcOiCV8ScIAa1bZEH+6Y8R1Hztq0vzw3pAjb6flckXRy3DwkPte9Q+kWgA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HGuwm+ar
+Subject: Re: [Buildroot] [PATCH 2/2] support/scripts/boot-qemu-image.py:
  increase the timeout by 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,69 +79,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42f7f451ecd27dfe721092515eef09c47bc03bc5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 15 Jan 2022 15:33:44 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-As for the Buildroot testsuite, multiply every emulator timeout by 10
-to avoid sporadic failures in elastic runners.
+> As for the Buildroot testsuite, multiply every emulator timeout by 10
+> to avoid sporadic failures in elastic runners.
+> 
+> qemu_arm_vexpress_tz_defconfig tested locally with sucess.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/1970084046
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  support/scripts/boot-qemu-image.py | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-qemu_arm_vexpress_tz_defconfig tested locally with sucess.
+Applied to master, thanks.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1970084046
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/boot-qemu-image.py | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
-index fba1533bb7..ba50ea69ee 100755
---- a/support/scripts/boot-qemu-image.py
-+++ b/support/scripts/boot-qemu-image.py
-@@ -25,7 +25,7 @@ def main():
-     qemu_start = os.path.join(os.getcwd(), 'output/images/start-qemu.sh')
- 
-     child = pexpect.spawn(qemu_start, ['serial-only'],
--                          timeout=5, encoding='utf-8',
-+                          timeout=50, encoding='utf-8',
-                           env={"QEMU_AUDIO_DRV": "none"})
- 
-     # We want only stdout into the log to avoid double echo
-@@ -36,7 +36,7 @@ def main():
-     time.sleep(1)
- 
-     try:
--        child.expect(["buildroot login:"], timeout=60)
-+        child.expect(["buildroot login:"], timeout=600)
-     except pexpect.EOF as e:
-         # Some emulations require a fork of qemu-system, which may be
-         # missing on the system, and is not provided by Buildroot.
-@@ -58,7 +58,7 @@ def main():
-     child.sendline("root\r")
- 
-     try:
--        child.expect(["# "], timeout=60)
-+        child.expect(["# "], timeout=600)
-     except pexpect.EOF:
-         print("Cannot connect to shell")
-         sys.exit(1)
-@@ -69,7 +69,7 @@ def main():
-     child.sendline("poweroff\r")
- 
-     try:
--        child.expect(["System halted"], timeout=60)
-+        child.expect(["System halted"], timeout=600)
-         child.expect(pexpect.EOF)
-     except pexpect.EOF:
-         pass
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
