@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66D74C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:01:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF544C19F29
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:01:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C77BF409EC;
-	Wed, 27 Jul 2022 10:01:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C77BF409EC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41AFA409C1;
+	Wed, 27 Jul 2022 10:01:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41AFA409C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1QJnWUmjs2HG; Wed, 27 Jul 2022 10:01:19 +0000 (UTC)
+	with ESMTP id QACPOPudtA_q; Wed, 27 Jul 2022 10:01:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 948FF40977;
-	Wed, 27 Jul 2022 10:01:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 948FF40977
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A69A91BF9D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE8CA40A06;
+	Wed, 27 Jul 2022 10:01:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE8CA40A06
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ACFE71C1162
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:01:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7EE7660B5C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 872E2403B8
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EE7660B5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 872E2403B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GiNjKcWVGJ3c for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2j2ZXEHbTjHh for <buildroot@lists.busybox.net>;
  Wed, 27 Jul 2022 10:01:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C247560B0A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B85DD40105
  for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:01:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C247560B0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B85DD40105
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0082686563; Wed, 27 Jul 2022 09:47:17 +0000 (UTC)
+ id EAE7486562; Wed, 27 Jul 2022 09:47:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 11:57:10 +0200
+Date: Wed, 27 Jul 2022 11:56:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 51eedcf465581e06db3f487e4581bfc2dc45e326
-X-Git-Newrev: ba20e0322256b77cf0021a95f5e52dc3416b56a1
+X-Git-Oldrev: e861c85d4501d581bb731fd00d87e5ccae1bbbea
+X-Git-Newrev: 51eedcf465581e06db3f487e4581bfc2dc45e326
 X-Patchwork-Hint: ignore
-Message-Id: <20220727094718.0082686563@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pulseaudio: drop ncurses dependency
+Message-Id: <20220727094717.EAE7486562@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/paho-mqtt-c: sample file path
+ without white-space
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba20e0322256b77cf0021a95f5e52dc3416b56a1
+commit: https://git.buildroot.net/buildroot/commit/?id=51eedcf465581e06db3f487e4581bfc2dc45e326
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ncurses dependency was wrongly added by commit
-a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
+By default sample files are installed to share/doc/Eclipse Paho C/.
+The white-space can cause problems later down the line.
+Therefore the path is changed to the one used by paho-mqtt-c
+when configured to build the .deb package, which is share/doc/libpaho-mqtt.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Before:
+Install configuration: "Release"
+Installing: $(STAGING_DIR)/usr/share/doc/Eclipse Paho C/MQTTAsync_publish.c
+Installing: $(STAGING_DIR)/usr/share/doc/Eclipse Paho C/MQTTAsync_publish_time.c
+Installing: $(STAGING_DIR)/usr/share/doc/Eclipse Paho C/MQTTAsync_subscribe.c
+
+After:
+Install configuration: "Release"
+Installing: $(STAGING_DIR)/usr/share/doc/libpaho-mqtt/MQTTAsync_publish.c
+Installing: $(STAGING_DIR)/usr/share/doc/libpaho-mqtt/MQTTAsync_publish_time.c
+Installing: $(STAGING_DIR)/usr/share/doc/libpaho-mqtt/MQTTAsync_subscribe.c
+
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pulseaudio/pulseaudio.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/paho-mqtt-c/paho-mqtt-c.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 747c09ad4a..5f6981ba0d 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -24,7 +24,6 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES) \
- 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
- 	$(if $(BR2_PACKAGE_DBUS),dbus) \
--	$(if $(BR2_PACKAGE_NCURSES),ncurses) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
- 	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index d6356a7ccc..1b6fc5785c 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -11,6 +11,7 @@ PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+ PAHO_MQTT_C_INSTALL_STAGING = YES
+ 
+ PAHO_MQTT_C_CONF_OPTS = \
++	-DCMAKE_INSTALL_DOCDIR=share/doc/libpaho-mqtt \
+ 	-DPAHO_ENABLE_TESTING=FALSE \
+ 	-DPAHO_ENABLE_CPACK=FALSE \
+ 	-DPAHO_HIGH_PERFORMANCE=TRUE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
