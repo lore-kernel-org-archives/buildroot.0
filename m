@@ -4,81 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 498F4C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 12:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0929AC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 12:26:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94738823A0;
-	Wed, 27 Jul 2022 12:05:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94738823A0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66C708148D;
+	Wed, 27 Jul 2022 12:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66C708148D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vcNRs9v8KjCe; Wed, 27 Jul 2022 12:05:41 +0000 (UTC)
+	with ESMTP id rZeXgGfGVbgp; Wed, 27 Jul 2022 12:26:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D59F981CE7;
-	Wed, 27 Jul 2022 12:05:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D59F981CE7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95C4D81570;
+	Wed, 27 Jul 2022 12:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95C4D81570
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7264C1BF372
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 12:05:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 558A81BF372
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 12:26:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BE8340A00
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 12:05:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BE8340A00
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E899409F7
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 12:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E899409F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NWGQaX5LLX7g for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 12:05:35 +0000 (UTC)
+ with ESMTP id AA0tu34P2B29 for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 12:26:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33F77408EA
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
- [IPv6:2607:f8b0:4864:20::235])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 33F77408EA
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 12:05:35 +0000 (UTC)
-Received: by mail-oi1-x235.google.com with SMTP id r13so20222510oie.1
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 05:05:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1D1E40977
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A1D1E40977
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 12:26:01 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ u14-20020a05600c00ce00b003a323062569so919229wmm.4
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 05:26:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=/4fgVqgURuZAh3hJH4HkWnF3+Fuptv4r6I8x5cg9W4I=;
- b=Ktd6lkSDvFoGTHwsVj63XYWoSrP8pDUkLNDFGM4QN5hovYlg13CYUr8vNI0+le/gRn
- ggxeB3xdoJXb5tWMg5K6hHAWidUsir/zYqa/cCiN3WBj7lfr+NYGHEoX7uTJrvg83m5n
- V4hawGGjkwlv20F8Dy2ttHxSw4RpmweLE1CM9gQwdEg4fRDtEy1/3IcqqXGD9ufIPLr6
- nM6Gxj7BbS8fvfR8nO0vA1B6lu1D9x00JC3ygLqPCREgpe3l/grCOHMkWSf10sw5xipf
- Fch8/yM4iSQG/sijfT7+qXQSw7dUy8tGv2NdewPcJJzzBAe4KMzzCjfDJwYVAYrE4cyS
- qSIg==
-X-Gm-Message-State: AJIora/kQ9g7/LgZfCeqZBdzr6UIwWNQusVsS/ImQvKvt3ikSU8D/UIy
- lnLLqwE2ZJLelnyPcloAk5xJvI9MTq/gSBTu9Yg=
-X-Google-Smtp-Source: AGRyM1taML01t5+SR4BcvCkewhI1B7XTJNeRUMI+TfqyqtlMYlDYT/n0Jz+A2XEra8pddk94qkwyKTaRmJ3bzkZU9uo=
-X-Received: by 2002:a05:6808:14d0:b0:33a:a708:e01a with SMTP id
- f16-20020a05680814d000b0033aa708e01amr1580671oiw.148.1658923534073; Wed, 27
- Jul 2022 05:05:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220108224337.3702128-1-fontaine.fabrice@gmail.com>
- <c1c3040b-d429-dcaf-6e97-5f0c8367b48a@mind.be>
-In-Reply-To: <c1c3040b-d429-dcaf-6e97-5f0c8367b48a@mind.be>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ghlkxSev047d3puccujA0jnpmq+nZzr9x2eQEiowgGk=;
+ b=AfmDqhyIbgY39u7IxTFYwuYvXfazDzl6I3w3l3s+TnAfVReMJUUlr0am/cXRQUQxpu
+ a6EdlaT5YiNzObFeeYIffk3ETytOahDlOBL4YRojhf26gCYFOVoPacxzrMrMJQiKP0gG
+ 1uCmZh4WoyKItyPqbKqpS7vWbvxA96IpmNxXP2cO0CAWg+eUe9+/dte13nz1wlRCzNg0
+ x19bnOw8Jr37UZg6zq84vRgCjpBSSWuFsGWLROald5ISTcGhIf2cCkDCWPFNkHRwCtAO
+ +33q4Pem7Y8U2yuVKUveidbfCDY8XizNqt0axbyXa04z2F2DpA2GZp0TEN9wn+NSdRhk
+ AL4g==
+X-Gm-Message-State: AJIora/y9r4uL7W+l8fCYmTiOSU9c9SIm07XwufgKz7UGSvUuWiv9F+q
+ bJXes+UjQ6XBU8ioz+KMHSI1U1iLe54=
+X-Google-Smtp-Source: AGRyM1tQ2Q6IcFQl4WOaTK4UNTk7gUm1BoZz1GQUSxhWnmOy9wQ09E7RwelqoGkSg9rrVPzfpSDCJA==
+X-Received: by 2002:a05:600c:4e4b:b0:3a3:19bf:35e1 with SMTP id
+ e11-20020a05600c4e4b00b003a319bf35e1mr2999465wmq.74.1658924759437; 
+ Wed, 27 Jul 2022 05:25:59 -0700 (PDT)
+Received: from kali.home (2a01cb0680494f3e376d079efd3cafb3.ipv6.abo.wanadoo.fr.
+ [2a01:cb06:8049:4f3e:376d:79e:fd3c:afb3])
+ by smtp.gmail.com with ESMTPSA id
+ z11-20020a05600c0a0b00b003a319bd3278sm2822261wmp.40.2022.07.27.05.25.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Jul 2022 05:25:58 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 27 Jul 2022 14:05:23 +0200
-Message-ID: <CAPi7W82V0nFCRi55MPsHV7DPQFSrGRmy1_mpFAhjj-MEgv6=DA@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
+To: buildroot@buildroot.org
+Date: Wed, 27 Jul 2022 14:25:51 +0200
+Message-Id: <20220727122551.1179103-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=/4fgVqgURuZAh3hJH4HkWnF3+Fuptv4r6I8x5cg9W4I=;
- b=crnjM9XcQJ7ENp7/k4ANuEh65EgRKNS/FxEjT0lbdQ6ybebS9efbx1cZWMp+5EFH70
- 01CgImSftuxl0bQwjKfUpx6NkT6wQ3M2FCNIKfTj3ttkaX9Zt1bUkxdaE2XJXmKAnyfW
- Y3anyhD3E9cf0qnR5rwQRHnDAJRnEvr2negwzausyxkEO+RD0cSMwDFiRJKZK8mbHRLJ
- WGTf5mIUhyA0CHuuY9KwxSDZJnRV7+2aZmjADHswvL/J4tAN0SP0PfIGX9BFWjAlLVUK
- hveejPCgNLresijsPsWQTYAldRjOZpeMv0BPhPwxaV+X9RkXiA+3ObdLj/AA7OhWhQmD
- SPWA==
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=ghlkxSev047d3puccujA0jnpmq+nZzr9x2eQEiowgGk=;
+ b=KDUKdJizM2X+T3on1bLgjjpIJ3YI1CB+tH9GlHmBdd54cPRj/zx8WV317WLpvSy+GU
+ QZqk8NupH0GpT4ylvQl3N0A66EOpV/Xtat9N+lxdfpdiGHI1sLq1ln67Qy2ER9SoWlCB
+ Af4kBxeMiEAis0CN6S9oCVWH8FQmE9faYcbrSCeuRzhpHoI9oiePRHKs4Nxf8QuGn6g8
+ WMZ5TUT5dq0U3Q5qGRa4v+la8dXlHjK4QQ3FoEts4WXFBGebDcZ/XOP1uNHAkmMTCfP6
+ nbTs0174AXdO3Z5s0vwELCIx5Kc1F8vJRm5lmJOa8mC5ihpGSQrOdIsWFkR3XY+9Je0M
+ Cnhw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=crnjM9Xc
-Subject: Re: [Buildroot] [PATCH 1/2] package/minizip: add minizip-zlib
- support
+ header.a=rsa-sha256 header.s=20210112 header.b=KDUKdJiz
+Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: bump to version
+ 3.0.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,292 +95,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fabrice.fontaine@orange.com>,
- Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4682723535004198237=="
+Cc: Frank Vanbever <frank.vanbever@essensium.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4682723535004198237==
-Content-Type: multipart/alternative; boundary="000000000000f5451005e4c83b3e"
+Switch to pcre2 as pcre is deprecated
 
---000000000000f5451005e4c83b3e
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.7
 
-Hi Arnout,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...build-pcre.m4-fix-build-without-pcre.patch | 29 +++++++++++++++++++
+ package/libmodsecurity/libmodsecurity.hash    |  4 +--
+ package/libmodsecurity/libmodsecurity.mk      |  9 +++---
+ 3 files changed, 36 insertions(+), 6 deletions(-)
+ create mode 100644 package/libmodsecurity/0004-build-pcre.m4-fix-build-without-pcre.patch
 
-Le mer. 27 juil. 2022 =C3=A0 13:08, Arnout Vandecappelle <arnout@mind.be> a
-=C3=A9crit :
-
->   Hi Fabrice,
->
-> On 08/01/2022 23:43, Fabrice Fontaine wrote:
-> > Add a virtual package to allow the user to select the minizip provider:
->
->   A virtual package should be used when the alternatives are more or less
-> drop-in replacements. Here, however, they are absolutely not: they instal=
-l
-> completely different header files and libraries. There is no way that
-> something
-> that expects minizip-ng can build with minizip-zlib or vice versa.
->
->   In addition, the two can be installed in parallel.
->
-
-That's not completely true: minizip(-ng) and minizip-legacy can be
-installed in parallel only if compatibility headers are disabled (which is
-done since commit fc166894b3f257c4cb20d84368c918f3335dadf5).
-Ideally, it would be great to enable back those compatibility headers.
-Should I make this new option dependent on !BR2_PACKAGE_MINIZIP_LEGACY
-instead of making a virtual package?
-
->
->
->   So there's no reason at all to make it a virtual package.
->
-
-I decided to make a virtual package because there was already a virtual
-package for zlib and zlib-ng.
-I thought that we were in the same situation with minizip(-ng) and
-minizip-legacy.
-
-
->
-> >   - the current minizip (which has been renamed minizip-ng since
-> >
-> https://github.com/zlib-ng/minizip-ng/commit/db95894646b87f6178ceaa389cbd=
-b5b1ba8cd97a
-> )
->
->   It would make more sense to switch the existing minizip package to this
-> new
-> upstream repository.
->
-
-Actually, we're already shipping minizip-ng as minizip. However, minizip-ng
-is not really widely used by the opensource community. For example,
-domoticz only supports minizip-legacy.
-
-
->
->   We could rename the package to minizip-ng, but we generally avoid that.
-> It's
-> just annoyance for people who upgrade buildroot (legacy handling helps,
-> but it
-> is still annoying), and there is no benefit at all other than
-> "consistency".
-
-
-OK, I can send a v2 which doesn't rename minizip as minizip-ng.
-
-
->
-> >   - the 'legacy' minizip provided by zlib which is still widely support=
-ed
-> >     by various opensource packages such as domoticz
->
->   We should just add a package minizip-zlib.
->
-
->
-> > There is no need to add entries in Config.legacy as the previous option=
-s
-> > are kept and the default provider of minizip is minizip-ng.
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> [snip]
-> > diff --git a/package/minizip-zlib/minizip-zlib.mk
-> b/package/minizip-zlib/minizip-zlib.mk
-> > new file mode 100644
-> > index 0000000000..67d4e31f41
-> > --- /dev/null
-> > +++ b/package/minizip-zlib/minizip-zlib.mk
-> > @@ -0,0 +1,24 @@
-> >
-> +########################################################################=
-########
-> > +#
-> > +# minizip-zlib
-> > +#
-> >
-> +########################################################################=
-########
-> > +
-> > +MINIZIP_ZLIB_VERSION =3D 1.2.11
-> > +MINIZIP_ZLIB_SOURCE =3D zlib-$(MINIZIP_ZLIB_VERSION).tar.xz
-> > +MINIZIP_ZLIB_SITE =3D http://www.zlib.net
-> > +MINIZIP_ZLIB_LICENSE =3D Zlib
-> > +MINIZIP_ZLIB_LICENSE_FILES =3D README
-> > +MINIZIP_ZLIB_INSTALL_STAGING =3D YES
-> > +MINIZIP_ZLIB_PROVIDES =3D minizip
-> > +MINIZIP_ZLIB_SUBDIR =3D contrib/minizip
-> > +MINIZIP_ZLIB_AUTORECONF =3D YES
->
->   Please add a comment why autoreconf is needed.
->
->   Regards,
->   Arnout
->
-> > +MINIZIP_ZLIB_DEPENDENCIES =3D zlib
-> > +
-> > +ifeq ($(BR2_PACKAGE_MINIZIP_DEMOS),y)
-> > +MINIZIP_ZLIB_CONF_OPTS +=3D --enable-demos
-> > +else
-> > +MINIZIP_ZLIB_CONF_OPTS +=3D --disable-demos
-> > +endif
-> > +
-> > +$(eval $(autotools-package))
-> [snip]
->
-
-Best Regards,
-
-Fabrice
-
---000000000000f5451005e4c83b3e
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi Arnout,<br></div><br><div class=3D"gma=
-il_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 27 juil. 2022 =
-=C3=A0=C2=A013:08, Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.b=
-e" target=3D"_blank">arnout@mind.be</a>&gt; a =C3=A9crit=C2=A0:<br></div><b=
-lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
-ft:1px solid rgb(204,204,204);padding-left:1ex">=C2=A0 Hi Fabrice,<br>
-<br>
-On 08/01/2022 23:43, Fabrice Fontaine wrote:<br>
-&gt; Add a virtual package to allow the user to select the minizip provider=
-:<br>
-<br>
-=C2=A0 A virtual package should be used when the alternatives are more or l=
-ess <br>
-drop-in replacements. Here, however, they are absolutely not: they install =
-<br>
-completely different header files and libraries. There is no way that somet=
-hing <br>
-that expects minizip-ng can build with minizip-zlib or vice versa.<br>
-<br>
-=C2=A0 In addition, the two can be installed in parallel.<br></blockquote><=
-div><br></div><div>That&#39;s not completely true: minizip(-ng) and minizip=
--legacy can be installed in parallel only if compatibility headers are disa=
-bled (which is done since commit fc166894b3f257c4cb20d84368c918f3335dadf5).=
-</div><div>Ideally, it would be great to enable back those compatibility he=
-aders.</div><div> Should I make this new option dependent on !BR2_PACKAGE_M=
-INIZIP_LEGACY instead of making a virtual package?<br></div>=C2=A0<blockquo=
-te class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px =
-solid rgb(204,204,204);padding-left:1ex">
-<br>
-=C2=A0 So there&#39;s no reason at all to make it a virtual package.<br></b=
-lockquote><div><br></div><div><div>I decided to make a virtual package beca=
-use there was already a virtual package for zlib and zlib-ng.</div><div>I t=
-hought that we were in the same situation with minizip(-ng) and minizip-leg=
-acy.<br></div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
-g-left:1ex">
-<br>
-&gt;=C2=A0 =C2=A0- the current minizip (which has been renamed minizip-ng s=
-ince<br>
-&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/zlib-ng/minizip-ng/co=
-mmit/db95894646b87f6178ceaa389cbdb5b1ba8cd97a" rel=3D"noreferrer" target=3D=
-"_blank">https://github.com/zlib-ng/minizip-ng/commit/db95894646b87f6178cea=
-a389cbdb5b1ba8cd97a</a>)<br>
-<br>
-=C2=A0 It would make more sense to switch the existing minizip package to t=
-his new <br>
-upstream repository.<br></blockquote><div><br></div><div>Actually, we&#39;r=
-e already shipping minizip-ng as minizip. However, minizip-ng is not really=
- widely used by the opensource community. For example, domoticz only suppor=
-ts minizip-legacy.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quo=
-te" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204=
-);padding-left:1ex">
-<br>
-=C2=A0 We could rename the package to minizip-ng, but we generally avoid th=
-at. It&#39;s <br>
-just annoyance for people who upgrade buildroot (legacy handling helps, but=
- it <br>
-is still annoying), and there is no benefit at all other than &quot;consist=
-ency&quot;.=C2=A0</blockquote><div><br></div><div>OK, I can send a v2 which=
- doesn&#39;t rename minizip as minizip-ng.<br></div><div>=C2=A0<br></div><b=
-lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
-ft:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-&gt;=C2=A0 =C2=A0- the &#39;legacy&#39; minizip provided by zlib which is s=
-till widely supported<br>
-&gt;=C2=A0 =C2=A0 =C2=A0by various opensource packages such as domoticz<br>
-<br>
-=C2=A0 We should just add a package minizip-zlib.<br></blockquote><blockquo=
-te class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px =
-solid rgb(204,204,204);padding-left:1ex">
-<br>
-<br>
-&gt; There is no need to add entries in Config.legacy as the previous optio=
-ns<br>
-&gt; are kept and the default provider of minizip is minizip-ng.<br>
-&gt; <br>
-&gt; Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice=
-@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-<br>
-[snip]<br>
-&gt; diff --git a/package/minizip-zlib/<a href=3D"http://minizip-zlib.mk" r=
-el=3D"noreferrer" target=3D"_blank">minizip-zlib.mk</a> b/package/minizip-z=
-lib/<a href=3D"http://minizip-zlib.mk" rel=3D"noreferrer" target=3D"_blank"=
->minizip-zlib.mk</a><br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..67d4e31f41<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/minizip-zlib/<a href=3D"http://minizip-zlib.mk" rel=3D"n=
-oreferrer" target=3D"_blank">minizip-zlib.mk</a><br>
-&gt; @@ -0,0 +1,24 @@<br>
-&gt; +#####################################################################=
-###########<br>
-&gt; +#<br>
-&gt; +# minizip-zlib<br>
-&gt; +#<br>
-&gt; +#####################################################################=
-###########<br>
-&gt; +<br>
-&gt; +MINIZIP_ZLIB_VERSION =3D 1.2.11<br>
-&gt; +MINIZIP_ZLIB_SOURCE =3D zlib-$(MINIZIP_ZLIB_VERSION).tar.xz<br>
-&gt; +MINIZIP_ZLIB_SITE =3D <a href=3D"http://www.zlib.net" rel=3D"noreferr=
-er" target=3D"_blank">http://www.zlib.net</a><br>
-&gt; +MINIZIP_ZLIB_LICENSE =3D Zlib<br>
-&gt; +MINIZIP_ZLIB_LICENSE_FILES =3D README<br>
-&gt; +MINIZIP_ZLIB_INSTALL_STAGING =3D YES<br>
-&gt; +MINIZIP_ZLIB_PROVIDES =3D minizip<br>
-&gt; +MINIZIP_ZLIB_SUBDIR =3D contrib/minizip<br>
-&gt; +MINIZIP_ZLIB_AUTORECONF =3D YES<br>
-<br>
-=C2=A0 Please add a comment why autoreconf is needed.<br>
-<br>
-=C2=A0 Regards,<br>
-=C2=A0 Arnout<br>
-<br>
-&gt; +MINIZIP_ZLIB_DEPENDENCIES =3D zlib<br>
-&gt; +<br>
-&gt; +ifeq ($(BR2_PACKAGE_MINIZIP_DEMOS),y)<br>
-&gt; +MINIZIP_ZLIB_CONF_OPTS +=3D --enable-demos<br>
-&gt; +else<br>
-&gt; +MINIZIP_ZLIB_CONF_OPTS +=3D --disable-demos<br>
-&gt; +endif<br>
-&gt; +<br>
-&gt; +$(eval $(autotools-package))<br>
-[snip]<br></blockquote><div><br></div><div>Best Regards,</div><div><br></di=
-v><div>Fabrice<br></div></div></div>
-
---000000000000f5451005e4c83b3e--
-
---===============4682723535004198237==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/libmodsecurity/0004-build-pcre.m4-fix-build-without-pcre.patch b/package/libmodsecurity/0004-build-pcre.m4-fix-build-without-pcre.patch
+new file mode 100644
+index 0000000000..5a5baeacee
+--- /dev/null
++++ b/package/libmodsecurity/0004-build-pcre.m4-fix-build-without-pcre.patch
+@@ -0,0 +1,29 @@
++From af96f4fe916adc7dc6d649a07c10b45c978d31a1 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 27 Jul 2022 14:17:20 +0200
++Subject: [PATCH] build/pcre.m4: fix build without pcre
++
++Don't raise an error if pcre is disabled now that pcre2 is supported
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent (no feedback on
++https://github.com/SpiderLabs/ModSecurity/pull/2596)]
++---
++ build/pcre.m4 | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/build/pcre.m4 b/build/pcre.m4
++index f6c9ae18..3e40f5c9 100644
++--- a/build/pcre.m4
+++++ b/build/pcre.m4
++@@ -99,7 +99,6 @@ AC_SUBST(PCRE_LD_PATH)
++ 
++ if test -z "${PCRE_VERSION}"; then
++     AC_MSG_NOTICE([*** pcre library not found.])
++-    ifelse([$2], , AC_MSG_ERROR([pcre library is required]), $2)
++ else
++     AC_MSG_NOTICE([using pcre v${PCRE_VERSION}])
++     ifelse([$1], , , $1) 
++-- 
++2.35.1
++
+diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
+index 341dbc3765..087157d162 100644
+--- a/package/libmodsecurity/libmodsecurity.hash
++++ b/package/libmodsecurity/libmodsecurity.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.6/modsecurity-v3.0.6.tar.gz.sha256
+-sha256  06315d9a32fc830997178f30a69e933c9c2364b263a2f036959bebc4dde59a08  modsecurity-v3.0.6.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.7/modsecurity-v3.0.7.tar.gz.sha256
++sha256  cfd8b7e7e6a0e9ca4e19b9adeb07594ba75eba16a66da5e9b0974c0117c21a34  modsecurity-v3.0.7.tar.gz
+ # Localy calculated
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index 8fa3d59845..916ba8fbcb 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMODSECURITY_VERSION = 3.0.6
++LIBMODSECURITY_VERSION = 3.0.7
+ LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
+ LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(LIBMODSECURITY_VERSION)
+ LIBMODSECURITY_INSTALL_STAGING = YES
+@@ -12,12 +12,13 @@ LIBMODSECURITY_LICENSE = Apache-2.0
+ LIBMODSECURITY_LICENSE_FILES = LICENSE
+ LIBMODSECURITY_CPE_ID_VENDOR = trustwave
+ LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
+-# We're patching build/libmaxmind.m4
++# We're patching build/libmaxmind.m4 and build/pcre.m4
+ LIBMODSECURITY_AUTORECONF = YES
+ 
+-LIBMODSECURITY_DEPENDENCIES = pcre
++LIBMODSECURITY_DEPENDENCIES = pcre2
+ LIBMODSECURITY_CONF_OPTS = \
+-	--with-pcre="$(STAGING_DIR)/usr/bin/pcre-config" \
++	--without-pcre \
++	--with-pcre2="$(STAGING_DIR)/usr" \
+ 	--disable-examples \
+ 	--without-lmdb \
+ 	--without-ssdeep \
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4682723535004198237==--
