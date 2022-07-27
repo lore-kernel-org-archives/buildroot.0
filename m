@@ -1,52 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 474C9C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E287BC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D48F782978;
-	Wed, 27 Jul 2022 22:31:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D48F782978
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BFBD416C0;
+	Wed, 27 Jul 2022 22:37:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BFBD416C0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j92a1c2gScj3; Wed, 27 Jul 2022 22:37:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BAE141690;
+	Wed, 27 Jul 2022 22:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BAE141690
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F265A1BF47F
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:37:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA65282A8F
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:37:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA65282A8F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gPhPIiEkxX_f; Wed, 27 Jul 2022 22:31:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00C4E82725;
-	Wed, 27 Jul 2022 22:31:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00C4E82725
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 356B91BF47F
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:31:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0FBEE40469
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:31:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FBEE40469
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vKN1l3mb-4VL for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 22:31:37 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11143403B8
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 11143403B8
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 22:31:36 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (10)
-Received: from zm.lan (pub-42.182.29.194.multiplay.pl [194.29.182.42])
- by server220076.nazwa.pl (Postfix) with ESMTP id B3D281BC3EA;
- Thu, 28 Jul 2022 00:31:34 +0200 (CEST)
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eJJ0dMoU1W7t for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 22:37:20 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E431782A87
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E431782A87
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 22:37:19 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id d8so36653wrp.6
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:37:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=4hqjVhv3+KTAJ4W70wSA1FqkcbL6JldADBZf01TjwL4=;
+ b=PbfVC3PUM7f9jOlvr223InvI7ek6RkhKLUku+nMgcpIJpRJXFpuqwlZK+4QhFvR72S
+ vLfwnYcZcgExRvFkNCETkI3K/4OFl1fKOQlbL97plclqa0uKPWcKez5/WHJuMyDWTT8k
+ CQlMMXof4gLKDVCSyIs9aZE2JCr2eD5rNewTwmV5lCKrxmfD1ir+nxXau02UkylPQi2M
+ IIOFejzD5d43FSC21Zouh52KykIYtSvVtGs0PVnM0gCy3sECgMc6iSM9HGVdqaDjDLS2
+ TsIonbhtIX7OkBHm5TwBu6AwZY4WEqSJf0iLX95YZzs1CxqiSb6cSEJMM144XeOytgiT
+ 2OxA==
+X-Gm-Message-State: AJIora8LnHfhfMQFDZI2kXnVgxZTK8J54rymrGdnfwzmOMaa3aNtYiS2
+ r1j1sZJFCYNpXq0aAx9ydugMpvHI290=
+X-Google-Smtp-Source: AGRyM1uDNifK81wTUegyrnVitk7ZGf3pRhNqB8lcZNLXyXUjCL/NwZIcXY6oDRQFeJ2M1g2yO1+7FA==
+X-Received: by 2002:a5d:5a12:0:b0:21e:8327:7e03 with SMTP id
+ bq18-20020a5d5a12000000b0021e83277e03mr12347026wrb.567.1658961437901; 
+ Wed, 27 Jul 2022 15:37:17 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ p12-20020a05600c23cc00b003a2c67aa6c0sm4005721wmb.23.2022.07.27.15.37.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Jul 2022 15:37:17 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 00:31:32 +0200
-Message-Id: <20220727223133.1416245-1-m.niestroj@grinn-global.com>
-X-Mailer: git-send-email 2.37.1
+Date: Thu, 28 Jul 2022 00:37:14 +0200
+Message-Id: <20220727223714.1452262-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-pytest-asyncio: bump to version
- 0.19.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=4hqjVhv3+KTAJ4W70wSA1FqkcbL6JldADBZf01TjwL4=;
+ b=E0sXVejHMNxe3YUONaXjsmFrkqICp6b29JKdTqIn+CyV4Y5dOUQ53dMRK33J6GWwum
+ wL9G67AEPi5uolks0rVBJLCq273wo44Ecv5Gf9V2safxkLnFPKBdJuw67hNbsfkLjA6U
+ 6fxZpL3o5R5v6odt04LWqFK/nf/LtUufHFGbuc6lX1qD+lHw78tUPsuCVilBTs43YeEx
+ 6bMR4aOJpgDqWimk9MNABD2/HitalGDyeEBbDcTJQFqcpkCSm/nCWH4BzuxhV+dHU3Xa
+ QPwW81iaUyRA+v9JaVH0hpi6l4ycbPljAwViv+rYXrpl6/CTyjduMn7gQP62Lio2rJiA
+ Rlog==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=E0sXVejH
+Subject: [Buildroot] [PATCH 1/1] package/gdal: fix license hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,55 +93,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Dominik Michael Rauh <dmrauh@posteo.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Second newline at the end of licence file was removed upstream, so
-update license file hash.
+license hash is wrong since the addition of the package in commit
+1e64fa2956171cdc9d6e6c8896b4b589ce573513:
 
-[1] https://github.com/pytest-dev/pytest-asyncio/commit/4c7da65d6fcf9d725eccba28ad1ed2083524ee16
+ERROR: LICENSE.TXT has wrong sha256 hash:
+ERROR: expected: b82e6cca0b13f5db2f22ab667f22254fb1f4b135ea73d5bd6238ef89aff31f6c
+ERROR: got     : fac0116e799ca4de79b076ee04863b5e2b69541ea3664b9bb108c81a5355f16a
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/e443db6d7ff3ae867035d169853b880b5e13d181
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pytest-asyncio/python-pytest-asyncio.hash | 6 +++---
- package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gdal/gdal.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
-index 4949919ecb..e20d78aa01 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
--md5  8940c41c342b5bafe2ebb0d6e5c320ec  pytest-asyncio-0.15.1.tar.gz
--sha256  2564ceb9612bbd560d19ca4b41347b54e7835c2f792c504f698e05395ed63f6f  pytest-asyncio-0.15.1.tar.gz
-+md5  0c74a0ae2b509735594684bf00512252  pytest-asyncio-0.19.0.tar.gz
-+sha256  ac4ebf3b6207259750bc32f4c1d8fcd7e79739edbc67ad0c58dd150b1d072fed  pytest-asyncio-0.19.0.tar.gz
- # Locally computed sha256 checksums
--sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
-+sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
-index bd2e0083a9..337565ca85 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/gdal/gdal.hash b/package/gdal/gdal.hash
+index 52bb60de35..826a7f0b45 100644
+--- a/package/gdal/gdal.hash
++++ b/package/gdal/gdal.hash
+@@ -3,4 +3,4 @@ md5  4b7981efbeed69c06c79fb65d0a60d83  gdal-3.5.1.tar.xz
+ sha256  d12c30a9eacdeaab493c0d1c9f88eb337c9cbb5bb40744c751bdd5a5af166ab6  gdal-3.5.1.tar.xz
  
--PYTHON_PYTEST_ASYNCIO_VERSION = 0.15.1
-+PYTHON_PYTEST_ASYNCIO_VERSION = 0.19.0
- PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
--PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/de/c1/b2b0119e30f61f7ec8b44f129f6fde46a1a7329de17110f124639aa8896b
-+PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/43/1c/4293ce5ddfd1db78fbf192bd3c47183c9ecc2816b8de382ed1b2491c7cea
- PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
- PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
- PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
+ # Hashes of license files:
+-sha256  b82e6cca0b13f5db2f22ab667f22254fb1f4b135ea73d5bd6238ef89aff31f6c  LICENSE.TXT
++sha256  fac0116e799ca4de79b076ee04863b5e2b69541ea3664b9bb108c81a5355f16a  LICENSE.TXT
 -- 
-2.37.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
