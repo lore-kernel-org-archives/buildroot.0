@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E230C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03889C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05C9E409F8;
-	Wed, 27 Jul 2022 10:14:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05C9E409F8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 957FF409FF;
+	Wed, 27 Jul 2022 10:14:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 957FF409FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NAYQDDABg34W; Wed, 27 Jul 2022 10:14:00 +0000 (UTC)
+	with ESMTP id s7WLFbybAJmL; Wed, 27 Jul 2022 10:14:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB240409EC;
-	Wed, 27 Jul 2022 10:13:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB240409EC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D85D1BF4E6
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:13:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6271D409EC;
+	Wed, 27 Jul 2022 10:14:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6271D409EC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E488E1BF4E6
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7555D812A4
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:13:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7555D812A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB4EA60B5C
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB4EA60B5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C_ehSGuF-CDC for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 10:13:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 740A480DE9
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 740A480DE9
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:13:56 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9A6041BF203;
- Wed, 27 Jul 2022 10:13:54 +0000 (UTC)
-Date: Wed, 27 Jul 2022 12:13:53 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220727121353.602bc74f@windsurf>
-In-Reply-To: <20220727092123.985892-1-fontaine.fabrice@gmail.com>
-References: <20220727092123.985892-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658916834;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mWpBP0XjFaBDm/HQ6CeT3uAf6mkn5KP7aB5fNYKvFRQ=;
- b=PU1ChEg/S+YtNodZz45VTfTFI8HkPuS0I1t1pwxkLgYokf6gQZ9YnSkBA+t08aH7AzmlXg
- zxmGg9BfYD8ooPJqaGJu4QkYdkVjXG9mu41MFAbVXZRkOAhFhI+qyvXVUD/TKUOxFTMOmH
- OrrbqqvMnsZxTiPWalfYRuCy0ls2j/+s1QCB1rRdCJ9G2mnd+7IKTbvteqaMiG+IltDJ8b
- sQ5hC8YnaWF0JQEOD/vk2XNtq9p1mEngj8rTVqFOl8eRkV/f8abqII0NjEc99qYMC07vzc
- nrc308HYRo5nPEXQ6OdG6JvFXMFGRb1/DEkszs25RqlGWFkxVzxXMt+pHPy8Hg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PU1ChEg/
-Subject: Re: [Buildroot] [PATCH 1/1] package/drbd-utils: bump to version
- 9.21.4
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id or2l5eKrtFVi for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18E7E60B52
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:14:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18E7E60B52
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 41A5886594; Wed, 27 Jul 2022 10:00:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 27 Jul 2022 12:13:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8237c5202e46260a945de474ecb6537d86a93991
+X-Git-Newrev: e4c81885ed487ccb511c4a4c4f8a8c1aa5180f78
+X-Patchwork-Hint: ignore
+Message-Id: <20220727100036.41A5886594@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/drbd-utils: bump to version 9.21.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,30 +57,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Christophe Vu-Brugier <cvubrugier@fastmail.fm>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 27 Jul 2022 11:21:23 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e4c81885ed487ccb511c4a4c4f8a8c1aa5180f78
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/LINBIT/drbd-utils/blob/v9.21.4/ChangeLog
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/drbd-utils/drbd-utils.hash | 2 +-
->  package/drbd-utils/drbd-utils.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+https://github.com/LINBIT/drbd-utils/blob/v9.21.4/ChangeLog
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/drbd-utils/drbd-utils.hash | 2 +-
+ package/drbd-utils/drbd-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
+index 58d282714e..9bdfd69538 100644
+--- a/package/drbd-utils/drbd-utils.hash
++++ b/package/drbd-utils/drbd-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3827bfed6630f8784ec558a8ac3de68175d544876d897c0810ad141a61487cad  drbd-utils-9.19.0.tar.gz
++sha256  730d68b9ee48df7b2e3ddff38bf54a5bc405651bac0ece180b4f22a468e543b3  drbd-utils-9.21.4.tar.gz
+ sha256  1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index 2082810a37..3ab3246f49 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DRBD_UTILS_VERSION = 9.19.0
++DRBD_UTILS_VERSION = 9.21.4
+ DRBD_UTILS_SITE = http://pkg.linbit.com/downloads/drbd/utils
+ DRBD_UTILS_LICENSE = GPL-2.0+
+ DRBD_UTILS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
