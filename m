@@ -1,49 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4651CC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 14:38:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC9C8C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 14:39:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA17B60D74;
-	Wed, 27 Jul 2022 14:38:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA17B60D74
+	by smtp2.osuosl.org (Postfix) with ESMTP id 789AA405CF;
+	Wed, 27 Jul 2022 14:39:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 789AA405CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qOEvtA_a_y3y; Wed, 27 Jul 2022 14:38:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6bStpPFXEQtG; Wed, 27 Jul 2022 14:39:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E45FE60AEB;
-	Wed, 27 Jul 2022 14:38:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E45FE60AEB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ACB401BF4E4
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 14:38:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABD644013E;
+	Wed, 27 Jul 2022 14:39:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABD644013E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E28B1BF4E4
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 14:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86CA94092B
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 14:38:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86CA94092B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 295574013E
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 14:39:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 295574013E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aFVNMRPvL3Fp for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 14:38:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 759B5403CC
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 14:38:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 759B5403CC
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3A6928661B; Wed, 27 Jul 2022 14:25:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 15:57:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 42f7f451ecd27dfe721092515eef09c47bc03bc5
-X-Git-Newrev: f986b7fd27aef50c0d9e5261e26595f647464dba
-X-Patchwork-Hint: ignore
-Message-Id: <20220727142508.3A6928661B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libutp: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HNDAiCU-kF6n for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 14:39:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12AA14013D
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 12AA14013D
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 14:39:18 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9F6051BF209;
+ Wed, 27 Jul 2022 14:39:15 +0000 (UTC)
+Date: Wed, 27 Jul 2022 16:39:14 +0200
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20220727163914.3326711b@windsurf>
+In-Reply-To: <20220205180817.2103343-3-bernd.kuhls@t-online.de>
+References: <20220205180817.2103343-1-bernd.kuhls@t-online.de>
+ <20220205180817.2103343-3-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658932756;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ZdBq+SbuGOpYVF9UKCj2X+fEVcKYf7ZpQvJdxGb4hSc=;
+ b=Z3EH+pXCbFCPi1lEzYFMZpd60CDF2WFTwTJ/4uHZwlbk1F4oKGkKMzmojwYYocmSHzt8uR
+ 3wZRuqk/mpjKQB5+YGAmNurPhjrBnvdz6F7NkDT0C9WkVrCNdAXoupKH/rDXUzpXa9Rins
+ DhQ1VGDWQTd4+o3zkhkkAQczCk9nqkSwNmg/VU2MLxrZI5UNHf1ftQ4Tn8FCEA7U3YnU+O
+ nrhonQpcTY74K4qsTfYQkK+W6nozXXsXJrsSTONqZQLTNUd6uKp1Y8U/HuCGTcatlxji4i
+ 0Yvln+C2hBnyTvUH8xQlgfdhpOUat2s2xjsuN8W1VM5sDSNHPfZEkxcObz5D9g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Z3EH+pXC
+Subject: Re: [Buildroot] [PATCH 3/3] package/libutp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,95 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f986b7fd27aef50c0d9e5261e26595f647464dba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  5 Feb 2022 19:08:17 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Needed for upcoming version bump of transmission.
+> Needed for upcoming version bump of transmission.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> Build test using this defconfig
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/libutp/Config.in   | 10 ++++++++++
- package/libutp/libutp.hash |  3 +++
- package/libutp/libutp.mk   | 13 +++++++++++++
- 5 files changed, 28 insertions(+)
+Applied to master, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8adbc420a1..5864601dd8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -391,6 +391,7 @@ F:	package/libsoundtouch/
- F:	package/libsquish/
- F:	package/libudfread/
- F:	package/liburiparser/
-+F:	package/libutp/
- F:	package/libva/
- F:	package/libva-intel-driver/
- F:	package/libva-utils/
-diff --git a/package/Config.in b/package/Config.in
-index 1711ee69a6..58ceaaa70b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1888,6 +1888,7 @@ menu "Networking"
- 	source "package/libupnp/Config.in"
- 	source "package/libupnpp/Config.in"
- 	source "package/liburiparser/Config.in"
-+	source "package/libutp/Config.in"
- 	source "package/libuwsc/Config.in"
- 	source "package/libvncserver/Config.in"
- 	source "package/libwebsock/Config.in"
-diff --git a/package/libutp/Config.in b/package/libutp/Config.in
-new file mode 100644
-index 0000000000..6382913103
---- /dev/null
-+++ b/package/libutp/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBUTP
-+	bool "libutp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  uTorrent Transport Protocol library
-+
-+	  https://github.com/bittorrent/libutp
-+
-+comment "libutp support needs a toolchain with C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libutp/libutp.hash b/package/libutp/libutp.hash
-new file mode 100644
-index 0000000000..38d46b0ae5
---- /dev/null
-+++ b/package/libutp/libutp.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  c515e6f9add47d3d202389e8a62feb765f0ae41d6398cc238e44028be520774e  libutp-fda9f4b3db97ccb243fcbed2ce280eb4135d705b.tar.gz
-+sha256  4441418beb8e352b6e2aa09083b4c51a86814a49878dbb1a81936b466cd5badd  LICENSE
-diff --git a/package/libutp/libutp.mk b/package/libutp/libutp.mk
-new file mode 100644
-index 0000000000..c926c290d2
---- /dev/null
-+++ b/package/libutp/libutp.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libutp
-+#
-+################################################################################
-+
-+LIBUTP_VERSION = fda9f4b3db97ccb243fcbed2ce280eb4135d705b
-+LIBUTP_SITE = $(call github,transmission,libutp,$(LIBUTP_VERSION))
-+LIBUTP_LICENSE = MIT
-+LIBUTP_LICENSE_FILES = LICENSE
-+LIBUTP_INSTALL_STAGING = YES
-+
-+$(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
