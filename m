@@ -1,62 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F8ADC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87585C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D217E60BCC;
-	Wed, 27 Jul 2022 13:06:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D217E60BCC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B80E4052B;
+	Wed, 27 Jul 2022 13:13:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B80E4052B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OYiD7kcKAtWe; Wed, 27 Jul 2022 13:06:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gJ23aS4cvhOz; Wed, 27 Jul 2022 13:13:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C337460C03;
-	Wed, 27 Jul 2022 13:06:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C337460C03
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 19A121BF9D1
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:06:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6BC2A40134;
+	Wed, 27 Jul 2022 13:13:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BC2A40134
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 89AE91BF2BA
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9D6581D4D
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:06:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9D6581D4D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CA4E40154
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:12:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CA4E40154
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y5eYW5ifpZHT for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 13:06:04 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85077812AF
-Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 85077812AF
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:06:04 +0000 (UTC)
-Received: from vfazio2.xes-mad.com (vfazio2.xes-mad.com [10.52.16.113])
- by mail.xes-mad.com (Postfix) with ESMTP id DC8C2246EC;
- Wed, 27 Jul 2022 08:06:02 -0500 (CDT)
-From: Vincent Fazio <vfazio@xes-inc.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 08:05:48 -0500
-Message-Id: <20220727130548.3184889-1-vfazio@xes-inc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220726174505.2976048-1-vfazio@xes-inc.com>
-References: <20220726174505.2976048-1-vfazio@xes-inc.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2xz09bVu8EED for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 13:12:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 422A840134
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com
+ [IPv6:2607:f8b0:4864:20::c35])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 422A840134
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:12:55 +0000 (UTC)
+Received: by mail-oo1-xc35.google.com with SMTP id
+ p5-20020a4a4805000000b0043548dba757so3196344ooa.8
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 06:12:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=a8PJYUpXbZxnXAGZipeuVpF5O+Kfl6rWiJG6xGWHEyI=;
+ b=WWC6x9HWP1Z47T5mt7l9iiDdpwySU1780qejsxkW8X0VjcWS5CXXz9rD/L/TkuXnIv
+ CUWtMBhRjG97cOiSEkrZ/h41QbFwzfJMuwrZZdYA1zbC1A/HBS+HZZdqae88mqUQhs1s
+ ewwVfwjZUn2CcvLYz3V5y9HyI+i/zvpH1xl5iJaWFeJ0E8jKxGJebGF1b5oaSXxKzjZ1
+ +HtnRLHp2p9W0shyWNJ9UvJwG7rpZWo0Lm+RRapbwRSSYv85KBk6b41RyZAf8el4GsPJ
+ QOZi80DOsOg3TLekDh1AVnEbG0DJYWbB4Q2YkVsfUnCIP5MZ26NeD92eeeHgA5XL7uGD
+ dA0w==
+X-Gm-Message-State: AJIora+RPE6jsSIGc4H6W8RIhxmvyy3ZxP9xJcghoPNZVuO07tt46Fbf
+ JRKy5m0/Qf4TonOw1Km3UxaJTiNwPY/yy7mSxGk=
+X-Google-Smtp-Source: AGRyM1s7WhWwUYZog00iYpECxIqpk3ouiov19aRV5NlDMfkwyb4gqA8+IjdILV9VFo2PlhzldU/s1bu/ZkhgakMgmeA=
+X-Received: by 2002:a4a:d10e:0:b0:435:ebf8:4cdb with SMTP id
+ k14-20020a4ad10e000000b00435ebf84cdbmr4196328oor.0.1658927574218; Wed, 27 Jul
+ 2022 06:12:54 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=xes-inc.com; s=mail; 
- t=1658927162; bh=KPakmEjPufu0H4fcaXOi7cmIVIGUL4/bEWX96PETHZE=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=EGlHAq0StQ3kCj4MemDi42V3vXHiI6QJwBR2KQy+pLr7qRqzjvpLYk0LQDjXDZHkG
- pP+iWad9XTXnlShW8WelBd7WW4HLUnPe5y/uc/A/uJX8Rv/566teSjCyOalfhFtfsw
- hanTk4gO1QYe5rim4JZ9rTOOyC6vUK+q4VlDW1m4=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=xes-inc.com header.i=@xes-inc.com
- header.a=rsa-sha256 header.s=mail header.b=EGlHAq0S
-Subject: [Buildroot] [PATCH v2] package/mcelog: bump to version 184
+References: <20220108224337.3702128-1-fontaine.fabrice@gmail.com>
+ <c1c3040b-d429-dcaf-6e97-5f0c8367b48a@mind.be>
+ <CAPi7W82V0nFCRi55MPsHV7DPQFSrGRmy1_mpFAhjj-MEgv6=DA@mail.gmail.com>
+ <574b8f3f-6a94-2517-2d7b-b59b102afefe@mind.be>
+In-Reply-To: <574b8f3f-6a94-2517-2d7b-b59b102afefe@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Jul 2022 15:12:43 +0200
+Message-ID: <CAPi7W81Rx_xHu4v6QhdkKJ-7cj-Xv9Wef5-xaPzGa63qGRNR_g@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=a8PJYUpXbZxnXAGZipeuVpF5O+Kfl6rWiJG6xGWHEyI=;
+ b=kXN1NMxWCsWW+K5cMFWDeRd/xAp6opItbU+JCb/udwGjvvVrOjcn6nbLcaUceKO/pN
+ VjitjX1eSGLwtB9qj/s3JrUGSRJ2Bl9JaL1ZO0oWCRFvJg0iICtlB89J2YOZQAQIyMEd
+ NdxJbgxVXzryRD2AdnK69xV5DdnqvVYgxRy8GvIiDPzWUjWw+sUMEiwJAnRVWaICr6A3
+ pDEAXSwpr2XBwPD4uxjdKtg5N/jprSkWsMpkFC4jJ+yi9fN3I+7oZKOlQBjqVkqRTeFV
+ jy5oi9t4yoojHV0u1Qbp+EPhRLrFLL7HJ1n+egA16r0wpiIha8iWs/NluVcsAj0hjOM1
+ tYMQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kXN1NMxW
+Subject: Re: [Buildroot] [PATCH 1/2] package/minizip: add minizip-zlib
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,137 +93,546 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, Vincent Fazio <vfazio@xes-inc.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Fabrice Fontaine <fabrice.fontaine@orange.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1018531280355735438=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Include a patch to introduce the `install-nodoc` make target to avoid
-a dependency on host-python3 for manpage generation.
+--===============1018531280355735438==
+Content-Type: multipart/alternative; boundary="000000000000c4fd8805e4c92c29"
 
-Upstream: https://github.com/andikleen/mcelog/pull/109
+--000000000000c4fd8805e4c92c29
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
----
-Changes v1 -> v2:
-  - change patch to add install-nodoc make target (suggested by Thomas)
-  - drop host-python3 dependency (suggested by Thomas)
-  - document upstream PR (requested by Arnout)
+Le mer. 27 juil. 2022 =C3=A0 14:49, Arnout Vandecappelle <arnout@mind.be> a
+=C3=A9crit :
 
- ...01-Makefile-add-install-nodoc-target.patch | 65 +++++++++++++++++++
- package/mcelog/mcelog.hash                    |  2 +-
- package/mcelog/mcelog.mk                      |  4 +-
- 3 files changed, 68 insertions(+), 3 deletions(-)
- create mode 100644 package/mcelog/0001-Makefile-add-install-nodoc-target.patch
+>
+>
+> On 27/07/2022 14:05, Fabrice Fontaine wrote:
+> > Hi Arnout,
+> >
+> > Le mer. 27 juil. 2022 =C3=A0 13:08, Arnout Vandecappelle <arnout@mind.b=
+e
+> > <mailto:arnout@mind.be>> a =C3=A9crit :
+> >
+> >        Hi Fabrice,
+> >
+> >     On 08/01/2022 23:43, Fabrice Fontaine wrote:
+> >      > Add a virtual package to allow the user to select the minizip
+> provider:
+> >
+> >        A virtual package should be used when the alternatives are more
+> or less
+> >     drop-in replacements. Here, however, they are absolutely not: they
+> install
+> >     completely different header files and libraries. There is no way
+> that something
+> >     that expects minizip-ng can build with minizip-zlib or vice versa.
+> >
+> >        In addition, the two can be installed in parallel.
+> >
+> >
+> > That's not completely true: minizip(-ng) and minizip-legacy can be
+> installed in
+> > parallel only if compatibility headers are disabled (which is done sinc=
+e
+> commit
+> > fc166894b3f257c4cb20d84368c918f3335dadf5).
+> > Ideally, it would be great to enable back those compatibility headers.
+> > Should I make this new option dependent on !BR2_PACKAGE_MINIZIP_LEGACY
+> instead
+> > of making a virtual package?
+>
+>   Ah, I missed that, thanks for the observation.
+>
+>   But then I wonder: can't domoticz be compiled with
+> BR2_PACKAGE_MINIZIP_LEGACY?
+> I haven't looked into the zlib changelogs, but since minizip is under
+> contrib/,
+> I don't actually expect much activity there. So it makes more sense to us=
+e
+> minizip-ng everywhere.
+>
+>   Hang on... Where is BR2_PACKAGE_MINIZIP_LEGACY? Where are those
+> compatibility
+> headers? I checked the source of our current minizip(-ng) and can't find
+> them
+> anywhere, and I don't see BR2_PACKAGE_MINIZIP_LEGACY in your patch
+> either...
+>
 
-diff --git a/package/mcelog/0001-Makefile-add-install-nodoc-target.patch b/package/mcelog/0001-Makefile-add-install-nodoc-target.patch
-new file mode 100644
-index 0000000000..a36a54c73c
---- /dev/null
-+++ b/package/mcelog/0001-Makefile-add-install-nodoc-target.patch
-@@ -0,0 +1,65 @@
-+From c224ad8bafe859d640dfaf67d396c38c73880409 Mon Sep 17 00:00:00 2001
-+From: Vincent Fazio <vfazio@xes-inc.com>
-+Date: Wed, 27 Jul 2022 07:18:37 -0500
-+Subject: [PATCH] Makefile: add install-nodoc target
-+
-+This target is useful for "essentials only" installs for embedded
-+environments with the added benefit of not requiring a python
-+interpreter for installing the package.
-+
-+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-+---
-+ Makefile | 19 +++++++++++--------
-+ 1 file changed, 11 insertions(+), 8 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 339b8dd..50a322b 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -28,7 +28,7 @@ TRIGGERS=cache-error-trigger dimm-error-trigger page-error-trigger \
-+ 
-+ all: mcelog
-+ 
-+-.PHONY: install clean depend FORCE
-++.PHONY: install install-nodoc clean depend FORCE
-+ 
-+ OBJ := p4.o k8.o mcelog.o dmi.o tsc.o core2.o bitfield.o intel.o \
-+        nehalem.o dunnington.o tulsa.o config.o memutil.o msg.o   \
-+@@ -50,16 +50,11 @@ SRC := $(OBJ:.o=.c)
-+ mcelog: ${OBJ} version.o
-+ 
-+ # dbquery intentionally not installed by default
-+-install: mcelog mcelog.conf mcelog.conf.5 mcelog.triggers.5
-+-	mkdir -p $(DESTDIR)${etcprefix}/etc/mcelog $(DESTDIR)${prefix}/sbin $(DESTDIR)$(MANDIR)/man5 $(DESTDIR)$(MANDIR)/man8
-+-	install -m 755 -p mcelog $(DESTDIR)${prefix}/sbin/mcelog
-++install: install-nodoc mcelog.conf.5 mcelog.triggers.5
-++	mkdir -p $(DESTDIR)$(MANDIR)/man5 $(DESTDIR)$(MANDIR)/man8
-+ 	install -m 644 -p mcelog.8 $(DESTDIR)$(MANDIR)/man8
-+ 	install -m 644 -p mcelog.conf.5 $(DESTDIR)$(MANDIR)/man5
-+ 	install -m 644 -p mcelog.triggers.5 $(DESTDIR)$(MANDIR)/man5
-+-	install -m 644 -p -b mcelog.conf $(DESTDIR)${etcprefix}/etc/mcelog/mcelog.conf
-+-	for i in ${TRIGGERS} ; do 						\
-+-		install -m 755 -p -b triggers/$$i $(DESTDIR)${etcprefix}/etc/mcelog ; 	\
-+-	done
-+ ifdef DOCDIR
-+ 	install -d 755 $(DESTDIR)${DOCDIR}
-+ 	install -m 644 -p ${DOC} $(DESTDIR)${DOCDIR}
-+@@ -68,6 +63,14 @@ else
-+ 	echo "Consider defining DOCDIR to install additional documentation"
-+ endif
-+ 
-++install-nodoc: mcelog mcelog.conf
-++	mkdir -p $(DESTDIR)${etcprefix}/etc/mcelog $(DESTDIR)${prefix}/sbin
-++	install -m 755 -p mcelog $(DESTDIR)${prefix}/sbin/mcelog
-++	install -m 644 -p -b mcelog.conf $(DESTDIR)${etcprefix}/etc/mcelog/mcelog.conf
-++	for i in ${TRIGGERS} ; do 						\
-++		install -m 755 -p -b triggers/$$i $(DESTDIR)${etcprefix}/etc/mcelog ; 	\
-++	done
-++
-+ mcelog.conf.5: mcelog.conf config-intro.man
-+ 	./genconfig.py mcelog.conf config-intro.man > mcelog.conf.5
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
-index 598aa648fd..94b5f2cc37 100644
---- a/package/mcelog/mcelog.hash
-+++ b/package/mcelog/mcelog.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  e9c82b565da06673c2630f9e6bc668634ad7d2c7f13c70db1900cce110ae62dc  mcelog-180.tar.gz
-+sha256  067d52006f0aa42045acc6d9c04d590362448bacd8ef415d42729e6f35825028  mcelog-184.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index da7785ca91..24aeb5b519 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MCELOG_VERSION = 180
-+MCELOG_VERSION = 184
- MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
- MCELOG_LICENSE = GPL-2.0
- MCELOG_LICENSE_FILES = LICENSE
-@@ -15,7 +15,7 @@ define MCELOG_BUILD_CMDS
- endef
- 
- define MCELOG_INSTALL_TARGET_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install-nodoc
- endef
- 
- define MCELOG_INSTALL_INIT_SYSTEMD
--- 
-2.25.1
+My patch didn't add any BR2_PACKAGE_MINIZIP_LEGACY option. This was just a
+proposal to avoid making a virtual package.
+
+
+>
+>   Oh, hang on 2: there is in fact a MZ_COMPAT cmake option which we
+> currently
+> don't enable, and it looks like that one does enable the compatibility
+> headers.
+>
+
+MZ_COMPAT was disabled by commit fc166894b3f257c4cb20d84368c918f3335dadf5
+to avoid a build failure with domoticz.
+
+
+>
+> >        So there's no reason at all to make it a virtual package.
+> >
+> >
+> > I decided to make a virtual package because there was already a virtual
+> package
+> > for zlib and zlib-ng.
+> > I thought that we were in the same situation with minizip(-ng) and
+> minizip-legacy.
+>
+>   zlib and zlib-ng are both maintained, so that's different.
+>
+
+Actually, minizip and minizip(-ng) are both maintained. Latest commit on
+minizip was made on January:
+https://github.com/madler/zlib/commits/master/contrib/minizip/minizip.c
+
+
+>
+>   I'd propose the following:
+>
+> if MZ_COMPAT works with domoticz; then
+>         1. Add BR2_PACKAGE_MINIZIP_LEGACY
+>         2. Select BR2_PACKAGE_MINIZIP{,_LEGACY} from domoticz
+> else
+>         1. Introduce minizip-legacy as a virtual package
+>         2. Add BR2_PACKAGE_MINIZIP_LEGACY_COMPAT to minizip that
+> implements the virtual
+> package
+>         3. Add minizip-zlib package
+>         4. select minizip-zlib from domoticz
+> fi
+>
+>   Note that for 4. you need something like we have for openssl, an
+> additional
+> blind symbol that allows selecting a specific minizip-legacy
+> implementation.
+>
+
+OK, I'll go for the second option.
+
+
+>
+>
+> >      >   - the current minizip (which has been renamed minizip-ng since
+> >      >
+> >
+> https://github.com/zlib-ng/minizip-ng/commit/db95894646b87f6178ceaa389cbd=
+b5b1ba8cd97a
+> >     <
+> https://github.com/zlib-ng/minizip-ng/commit/db95894646b87f6178ceaa389cbd=
+b5b1ba8cd97a
+> >)
+> >
+> >        It would make more sense to switch the existing minizip package
+> to this new
+> >     upstream repository.
+> >
+> >
+> > Actually, we're already shipping minizip-ng as minizip.
+>
+>   Yes, but we are currently using a different github project.
+>
+>   So before (or independent) of all the rest, I'd send a patch that just
+> changes
+> the SITE used by minizip.
+>
+
+OK, I'll send a patch but basically this is the same github project:
+https://github.com/nmoinvaz/minizip-ng is just a symlink to
+https://github.com/zlib-ng/minizip-ng
+
+
+>
+>
+> > However, minizip-ng is
+> > not really widely used by the opensource community. For example,
+> domoticz only
+> > supports minizip-legacy.
+>
+>   vlc at least seems to support it. And those are the only two in
+> buildroot that
+> have any minizip support AFAICS, so not much basis to draw a conclusion.
+>
+>
+>   Regards,
+>   Arnout
+>
+> >        We could rename the package to minizip-ng, but we generally avoi=
+d
+> that. It's
+> >     just annoyance for people who upgrade buildroot (legacy handling
+> helps, but it
+> >     is still annoying), and there is no benefit at all other than
+> "consistency".
+> >
+> >
+> > OK, I can send a v2 which doesn't rename minizip as minizip-ng.
+> >
+> >
+> >      >   - the 'legacy' minizip provided by zlib which is still widely
+> supported
+> >      >     by various opensource packages such as domoticz
+> >
+> >        We should just add a package minizip-zlib.
+> >
+> >
+> >
+> >      > There is no need to add entries in Config.legacy as the previous
+> options
+> >      > are kept and the default provider of minizip is minizip-ng.
+> >      >
+> >      > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
+> >     <mailto:fontaine.fabrice@gmail.com>>
+> >
+> >     [snip]
+> >      > diff --git a/package/minizip-zlib/minizip-zlib.mk
+> >     <http://minizip-zlib.mk> b/package/minizip-zlib/minizip-zlib.mk
+> >     <http://minizip-zlib.mk>
+> >      > new file mode 100644
+> >      > index 0000000000..67d4e31f41
+> >      > --- /dev/null
+> >      > +++ b/package/minizip-zlib/minizip-zlib.mk <
+> http://minizip-zlib.mk>
+> >      > @@ -0,0 +1,24 @@
+> >      >
+> >
+>  +#######################################################################=
+#########
+> >      > +#
+> >      > +# minizip-zlib
+> >      > +#
+> >      >
+> >
+>  +#######################################################################=
+#########
+> >      > +
+> >      > +MINIZIP_ZLIB_VERSION =3D 1.2.11
+> >      > +MINIZIP_ZLIB_SOURCE =3D zlib-$(MINIZIP_ZLIB_VERSION).tar.xz
+> >      > +MINIZIP_ZLIB_SITE =3D http://www.zlib.net <http://www.zlib.net>
+> >      > +MINIZIP_ZLIB_LICENSE =3D Zlib
+> >      > +MINIZIP_ZLIB_LICENSE_FILES =3D README
+> >      > +MINIZIP_ZLIB_INSTALL_STAGING =3D YES
+> >      > +MINIZIP_ZLIB_PROVIDES =3D minizip
+> >      > +MINIZIP_ZLIB_SUBDIR =3D contrib/minizip
+> >      > +MINIZIP_ZLIB_AUTORECONF =3D YES
+> >
+> >        Please add a comment why autoreconf is needed.
+> >
+> >        Regards,
+> >        Arnout
+> >
+> >      > +MINIZIP_ZLIB_DEPENDENCIES =3D zlib
+> >      > +
+> >      > +ifeq ($(BR2_PACKAGE_MINIZIP_DEMOS),y)
+> >      > +MINIZIP_ZLIB_CONF_OPTS +=3D --enable-demos
+> >      > +else
+> >      > +MINIZIP_ZLIB_CONF_OPTS +=3D --disable-demos
+> >      > +endif
+> >      > +
+> >      > +$(eval $(autotools-package))
+> >     [snip]
+> >
+> >
+> > Best Regards,
+> >
+> > Fabrice
+>
+
+Best Regards,
+
+Fabrice
+
+--000000000000c4fd8805e4c92c29
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 27 juil. 2022 =C3=A0=C2=
+=A014:49, Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be">arnout=
+@mind.be</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_qu=
+ote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,20=
+4);padding-left:1ex"><br>
+<br>
+On 27/07/2022 14:05, Fabrice Fontaine wrote:<br>
+&gt; Hi Arnout,<br>
+&gt; <br>
+&gt; Le=C2=A0mer. 27 juil. 2022 =C3=A0=C2=A013:08, Arnout Vandecappelle &lt=
+;<a href=3D"mailto:arnout@mind.be" target=3D"_blank">arnout@mind.be</a> <br=
+>
+&gt; &lt;mailto:<a href=3D"mailto:arnout@mind.be" target=3D"_blank">arnout@=
+mind.be</a>&gt;&gt; a =C3=A9crit=C2=A0:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 Hi Fabrice,<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0On 08/01/2022 23:43, Fabrice Fontaine wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Add a virtual package to allow the user to se=
+lect the minizip provider:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 A virtual package should be used when the a=
+lternatives are more or less<br>
+&gt;=C2=A0 =C2=A0 =C2=A0drop-in replacements. Here, however, they are absol=
+utely not: they install<br>
+&gt;=C2=A0 =C2=A0 =C2=A0completely different header files and libraries. Th=
+ere is no way that something<br>
+&gt;=C2=A0 =C2=A0 =C2=A0that expects minizip-ng can build with minizip-zlib=
+ or vice versa.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 In addition, the two can be installed in pa=
+rallel.<br>
+&gt; <br>
+&gt; <br>
+&gt; That&#39;s not completely true: minizip(-ng) and minizip-legacy can be=
+ installed in <br>
+&gt; parallel only if compatibility headers are disabled (which is done sin=
+ce commit <br>
+&gt; fc166894b3f257c4cb20d84368c918f3335dadf5).<br>
+&gt; Ideally, it would be great to enable back those compatibility headers.=
+<br>
+&gt; Should I make this new option dependent on !BR2_PACKAGE_MINIZIP_LEGACY=
+ instead <br>
+&gt; of making a virtual package?<br>
+<br>
+=C2=A0 Ah, I missed that, thanks for the observation.<br>
+<br>
+=C2=A0 But then I wonder: can&#39;t domoticz be compiled with BR2_PACKAGE_M=
+INIZIP_LEGACY? <br>
+I haven&#39;t looked into the zlib changelogs, but since minizip is under c=
+ontrib/, <br>
+I don&#39;t actually expect much activity there. So it makes more sense to =
+use <br>
+minizip-ng everywhere.<br>
+<br>
+=C2=A0 Hang on... Where is BR2_PACKAGE_MINIZIP_LEGACY? Where are those comp=
+atibility <br>
+headers? I checked the source of our current minizip(-ng) and can&#39;t fin=
+d them <br>
+anywhere, and I don&#39;t see BR2_PACKAGE_MINIZIP_LEGACY in your patch eith=
+er...<br></blockquote><div><br></div><div>My patch didn&#39;t add any BR2_P=
+ACKAGE_MINIZIP_LEGACY option. This was just a proposal to avoid making a vi=
+rtual package.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" =
+style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
+dding-left:1ex">
+<br>
+=C2=A0 Oh, hang on 2: there is in fact a MZ_COMPAT cmake option which we cu=
+rrently <br>
+don&#39;t enable, and it looks like that one does enable the compatibility =
+headers.<br></blockquote><div><br></div><div>MZ_COMPAT was disabled by comm=
+it fc166894b3f257c4cb20d84368c918f3335dadf5 to avoid a build failure with d=
+omoticz.</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"m=
+argin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left=
+:1ex">
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 So there&#39;s no reason at all to make it =
+a virtual package.<br>
+&gt; <br>
+&gt; <br>
+&gt; I decided to make a virtual package because there was already a virtua=
+l package <br>
+&gt; for zlib and zlib-ng.<br>
+&gt; I thought that we were in the same situation with minizip(-ng) and min=
+izip-legacy.<br>
+<br>
+=C2=A0 zlib and zlib-ng are both maintained, so that&#39;s different.<br></=
+blockquote><div><br></div><div>Actually, minizip and minizip(-ng) are both =
+maintained. Latest commit on minizip was made on January:</div><div><a href=
+=3D"https://github.com/madler/zlib/commits/master/contrib/minizip/minizip.c=
+">https://github.com/madler/zlib/commits/master/contrib/minizip/minizip.c</=
+a></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:=
+0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+=C2=A0 I&#39;d propose the following:<br>
+<br>
+if MZ_COMPAT works with domoticz; then<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 1. Add BR2_PACKAGE_MINIZIP_LEGACY<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 2. Select BR2_PACKAGE_MINIZIP{,_LEGACY} from do=
+moticz<br>
+else<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 1. Introduce minizip-legacy as a virtual packag=
+e<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 2. Add BR2_PACKAGE_MINIZIP_LEGACY_COMPAT to min=
+izip that implements the virtual <br>
+package<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 3. Add minizip-zlib package<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 4. select minizip-zlib from domoticz<br>
+fi<br>
+<br>
+=C2=A0 Note that for 4. you need something like we have for openssl, an add=
+itional <br>
+blind symbol that allows selecting a specific minizip-legacy implementation=
+.<br></blockquote><div><br></div><div>OK, I&#39;ll go for the second option=
+.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"marg=
+in:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1e=
+x">
+<br>
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0- the current minizip (which has =
+been renamed minizip-ng since<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/zlib-ng/minizip-ng/co=
+mmit/db95894646b87f6178ceaa389cbdb5b1ba8cd97a" rel=3D"noreferrer" target=3D=
+"_blank">https://github.com/zlib-ng/minizip-ng/commit/db95894646b87f6178cea=
+a389cbdb5b1ba8cd97a</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://github.com/zlib-ng/minizip-n=
+g/commit/db95894646b87f6178ceaa389cbdb5b1ba8cd97a" rel=3D"noreferrer" targe=
+t=3D"_blank">https://github.com/zlib-ng/minizip-ng/commit/db95894646b87f617=
+8ceaa389cbdb5b1ba8cd97a</a>&gt;)<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 It would make more sense to switch the exis=
+ting minizip package to this new<br>
+&gt;=C2=A0 =C2=A0 =C2=A0upstream repository.<br>
+&gt; <br>
+&gt; <br>
+&gt; Actually, we&#39;re already shipping minizip-ng as minizip.<br>
+<br>
+=C2=A0 Yes, but we are currently using a different github project.<br>
+<br>
+=C2=A0 So before (or independent) of all the rest, I&#39;d send a patch tha=
+t just changes <br>
+the SITE used by minizip.<br></blockquote><div><br></div><div>OK, I&#39;ll =
+send a patch but basically this is the same github project: <br></div><div>=
+<a href=3D"https://github.com/nmoinvaz/minizip-ng">https://github.com/nmoin=
+vaz/minizip-ng</a> is just a symlink to</div><div><a href=3D"https://github=
+.com/zlib-ng/minizip-ng">https://github.com/zlib-ng/minizip-ng</a></div><di=
+v>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
+ 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+<br>
+&gt; However, minizip-ng is <br>
+&gt; not really widely used by the opensource community. For example, domot=
+icz only <br>
+&gt; supports minizip-legacy.<br>
+<br>
+=C2=A0 vlc at least seems to support it. And those are the only two in buil=
+droot that <br>
+have any minizip support AFAICS, so not much basis to draw a conclusion.<br=
+>
+<br>
+<br>
+=C2=A0 Regards,<br>
+=C2=A0 Arnout<br>
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 We could rename the package to minizip-ng, =
+but we generally avoid that. It&#39;s<br>
+&gt;=C2=A0 =C2=A0 =C2=A0just annoyance for people who upgrade buildroot (le=
+gacy handling helps, but it<br>
+&gt;=C2=A0 =C2=A0 =C2=A0is still annoying), and there is no benefit at all =
+other than &quot;consistency&quot;. <br>
+&gt; <br>
+&gt; <br>
+&gt; OK, I can send a v2 which doesn&#39;t rename minizip as minizip-ng.<br=
+>
+&gt; <br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0- the &#39;legacy&#39; minizip pr=
+ovided by zlib which is still widely supported<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0by various opensource pack=
+ages such as domoticz<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 We should just add a package minizip-zlib.<=
+br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; There is no need to add entries in Config.leg=
+acy as the previous options<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; are kept and the default provider of minizip =
+is minizip-ng.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Signed-off-by: Fabrice Fontaine &lt;<a href=
+=3D"mailto:fontaine.fabrice@gmail.com" target=3D"_blank">fontaine.fabrice@g=
+mail.com</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:fontaine.fabrice@gmail=
+.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;&gt;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0[snip]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; diff --git a/package/minizip-zlib/<a href=3D"=
+http://minizip-zlib.mk" rel=3D"noreferrer" target=3D"_blank">minizip-zlib.m=
+k</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://minizip-zlib.mk" rel=3D"noref=
+errer" target=3D"_blank">http://minizip-zlib.mk</a>&gt; b/package/minizip-z=
+lib/<a href=3D"http://minizip-zlib.mk" rel=3D"noreferrer" target=3D"_blank"=
+>minizip-zlib.mk</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"http://minizip-zlib.mk" rel=3D"noref=
+errer" target=3D"_blank">http://minizip-zlib.mk</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; new file mode 100644<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; index 0000000000..67d4e31f41<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; --- /dev/null<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +++ b/package/minizip-zlib/<a href=3D"http://=
+minizip-zlib.mk" rel=3D"noreferrer" target=3D"_blank">minizip-zlib.mk</a> &=
+lt;<a href=3D"http://minizip-zlib.mk" rel=3D"noreferrer" target=3D"_blank">=
+http://minizip-zlib.mk</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; @@ -0,0 +1,24 @@<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0+##################################################=
+##############################<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +#<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +# minizip-zlib<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +#<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0+##################################################=
+##############################<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_VERSION =3D 1.2.11<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_SOURCE =3D zlib-$(MINIZIP_ZLIB_=
+VERSION).tar.xz<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_SITE =3D <a href=3D"http://www.=
+zlib.net" rel=3D"noreferrer" target=3D"_blank">http://www.zlib.net</a> &lt;=
+<a href=3D"http://www.zlib.net" rel=3D"noreferrer" target=3D"_blank">http:/=
+/www.zlib.net</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_LICENSE =3D Zlib<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_LICENSE_FILES =3D README<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_INSTALL_STAGING =3D YES<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_PROVIDES =3D minizip<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_SUBDIR =3D contrib/minizip<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_AUTORECONF =3D YES<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 Please add a comment why autoreconf is need=
+ed.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 Regards,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 Arnout<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_DEPENDENCIES =3D zlib<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +ifeq ($(BR2_PACKAGE_MINIZIP_DEMOS),y)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_CONF_OPTS +=3D --enable-demos<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +else<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +MINIZIP_ZLIB_CONF_OPTS +=3D --disable-demos<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +endif<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +$(eval $(autotools-package))<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[snip]<br>
+&gt; <br>
+&gt; <br>
+&gt; Best Regards,<br>
+&gt; <br>
+&gt; Fabrice<br></blockquote><div><br></div><div>Best Regards,</div><div><b=
+r></div><div>Fabrice<br></div></div></div>
+
+--000000000000c4fd8805e4c92c29--
+
+--===============1018531280355735438==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1018531280355735438==--
