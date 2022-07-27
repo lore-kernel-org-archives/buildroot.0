@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67121C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0180FC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:58:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 098BA80E48;
-	Wed, 27 Jul 2022 10:58:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 098BA80E48
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d9YCuUdMXf2z; Wed, 27 Jul 2022 10:58:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9556F80E3F;
-	Wed, 27 Jul 2022 10:58:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9556F80E3F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1A28C1BF4E6
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:58:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01B6A60B8B
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:58:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01B6A60B8B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87F8A60B59;
+	Wed, 27 Jul 2022 10:58:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87F8A60B59
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m35sQGOTEdxp for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 10:58:11 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HIx5AXNhVieQ; Wed, 27 Jul 2022 10:58:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 819A560B00;
+	Wed, 27 Jul 2022 10:58:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 819A560B00
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BF2C1BF4E6
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:58:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 580FD40289
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:58:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 580FD40289
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OmyRe_tgrnxZ for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 10:58:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A03DB60B6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3054240484
 Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
  [IPv6:2a00:1450:4864:20::32c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A03DB60B6C
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:58:11 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- r1-20020a05600c35c100b003a326685e7cso2038683wmq.1
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 03:58:11 -0700 (PDT)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3054240484
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:58:12 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id a11so10274566wmq.3
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 03:58:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
  :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=7d6S4tTwdFOchmCXUphrGJ263o1t/MySqgg0pKMLSew=;
- b=5VBLQ7U4FEYxStF3hMijTHTpcEOPsvlRJbacSOqHZYoY8QWfUKG/bBVrKT7c80tQke
- M8tB1LVbhqcLlhVkadYH5R5zxpoXXJ1BkmZOzdoBLaGeN/lYcEsrwvEQ/vIu1MGCBpDP
- C0CEfctJT6ENMVg6eQ32iijW8RnsKJlu0JxdRgTuAjKazZ+tZE+RbBxSnVzOls9o2saB
- VHCYeueE3vX5+VBrMVCxMKMmGZw5hRerheOg/wuVcB13GtcI4G+0AiemIAVng9b90Kc1
- gnGe43DpEuf8bSEUq5lXM+nLS1GIGulQOWJhKUyaoQz1WCkeOEc6pHrE4NRXk2FzR0e8
- fPXA==
-X-Gm-Message-State: AJIora8iXdPGUWMHeD+ulz10oWpSPO/P8j93f9Ilk+NUs0MLGtiHo3gA
- 8nZ2loGTAducDN77pLS1Gt7qUiEzoZ4=
-X-Google-Smtp-Source: AGRyM1sh5Mx4poVFLpBV2eXu44roqnMJNN+THDfX4TqdOXjU8K9nn4zBVHBKm/iFx/80yJLXSbqvgw==
-X-Received: by 2002:a05:600c:154a:b0:3a3:2fae:9bae with SMTP id
- f10-20020a05600c154a00b003a32fae9baemr2721699wmg.23.1658919489790; 
- Wed, 27 Jul 2022 03:58:09 -0700 (PDT)
+ bh=Rz317JKop2nqTTt/kciCRHAgjvRgvYWgFZf/Hwr4kFQ=;
+ b=yWouhsbO77n7DMkLUKY/xQDso39WyNaFmfPZWU5Hfupi38Is5hfcGMEIn05Eltj2zM
+ nleApwtVzVPijcgGYQxKSq4Nm2Sa3b66IHnX0YHAyTgp/VPkntL7NATTqfKCqfAdFjwk
+ YT+Ufmm3cbqBMldDh7hISKsInrXuZ+cn0G5RE/6xdmoXSRaKiJSZ5si1YOjYuPt4pG26
+ Lknv/Hw+cYR74IQIV+cdQrsYAMbc0La6BAscjGrZ6xFdRuqgjWoCt2l2CPcs4YksNfk5
+ JHMWqA3NXh/X0KEBiQeUHeOTPUCm7Jb4qgAd9RJCXWjcOLdgXrhXcc4IKnu3oykM5iw2
+ HnXQ==
+X-Gm-Message-State: AJIora/AlmEm+HNfwiWpmQ6AbCOnUnvzNFt7fUssDrQmtEof0GMAZUH3
+ ht7A1AZlcmcNjSRLfqkzsXb6fWdhPTM=
+X-Google-Smtp-Source: AGRyM1s2T8v8QAWmMERqwlQINUBh/Xply2aCfXpgzfGlPTN3FEqvozE5pxoX4+GvMiqMwuJEgY2DWA==
+X-Received: by 2002:a05:600c:3495:b0:3a3:1fab:d01e with SMTP id
+ a21-20020a05600c349500b003a31fabd01emr2768166wmq.150.1658919490365; 
+ Wed, 27 Jul 2022 03:58:10 -0700 (PDT)
 Received: from scaer.home ([2a01:cb19:8b51:cb00:2464:a3b6:9580:87a1])
  by smtp.gmail.com with ESMTPSA id
  e13-20020a5d65cd000000b0021e47386eb8sm17005038wrw.2.2022.07.27.03.58.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 03:58:09 -0700 (PDT)
+ Wed, 27 Jul 2022 03:58:10 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 12:58:05 +0200
-Message-Id: <ad063dad0d9c6d469d1e809b5e925a950bac712b.1658919469.git.yann.morin.1998@free.fr>
+Date: Wed, 27 Jul 2022 12:58:06 +0200
+Message-Id: <e30808faf4915d550dc8d48c519aaba575a8f19b.1658919469.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1658919469.git.yann.morin.1998@free.fr>
 References: <cover.1658919469.git.yann.morin.1998@free.fr>
@@ -73,17 +72,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=7d6S4tTwdFOchmCXUphrGJ263o1t/MySqgg0pKMLSew=;
- b=laPU+S5T+Nfk+Uxpngs0BkE6OwHe8/Ip+Ogp6kn5TOEhIIkH1a6zd5l9UioMJAi3iX
- WrJI070oUkRwm5u0+728GSXjOio0WWWjNYFJKH9Y7yB9D4O5MWNk30MW4lyxLSNImLSN
- 9uD1gnUIJlE2QUmryYWJKDog7bvzxY6W2mQRFF3nuZNF+huGSaZcNO8erXN3mSyh6jzC
- 5OOQCK5YMwiSbOv2v4hsBtjrx/zXo4DKIAAmfDKIjn+pBBWUeFEedwkXQHy755uI69mn
- zSBfZdTcqQ+XOCAcCtIJ/JBQROJlpwAfC+lpl9lIz9adzScJuoKDANmE2PId0oKLKzYs
- Wytw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Rz317JKop2nqTTt/kciCRHAgjvRgvYWgFZf/Hwr4kFQ=;
+ b=OBro4YGRQcWBxEAHNORQ0E6NDvJGKRzza5I/Ema+/QOTwNBZLBNJp9BOKceW6EDdzv
+ LnACOXUkA4QPbkZBPNxIgcTsigTXUUUsXoh/Fgxhey5trnEJHpmVA2KTFW6D0rpykr1m
+ VTJJfoXt9UvG3qGJ4eOZArzr4Y8SUfXrJJbWIm/6sjki8MVWxeAKUja6rTDS3cUIsHys
+ A8bUFE9BlKlHnbTaD+Rx/ifxSbzI8lMSXR+j3ZWVzuwwWs5BVaUNny7vjh+z+L2LcoMH
+ n8mor6wMr4cW/KV0XF+WcAvTaZXQwqmm8b7JACWAQZ4jCglxukqAK7pwNetmonAaMt4E
+ rEKw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=laPU+S5T
-Subject: [Buildroot] [PATCH 2/5] configs: drop csky defconfig
+ header.a=rsa-sha256 header.s=20210112 header.b=OBro4YGR
+Subject: [Buildroot] [PATCH 3/5] package: drop csky support in
+ toolchain-related packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,343 +107,167 @@ Cc: Guo Ren <ren_guo@c-sky.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS                     |   4 -
- board/csky/gx6605s/gdbinit     |  25 ------
- board/csky/gx6605s/gx6605s.dts | 155 ---------------------------------
- board/csky/readme.txt          |  88 -------------------
- configs/csky_gx6605s_defconfig |  19 ----
- 5 files changed, 291 deletions(-)
- delete mode 100644 board/csky/gx6605s/gdbinit
- delete mode 100644 board/csky/gx6605s/gx6605s.dts
- delete mode 100644 board/csky/readme.txt
- delete mode 100644 configs/csky_gx6605s_defconfig
+ package/Makefile.in                  | 9 ---------
+ package/binutils/Config.in.host      | 3 +--
+ package/gcc/Config.in.host           | 4 ----
+ package/gdb/Config.in                | 1 -
+ package/gdb/Config.in.host           | 2 --
+ package/gdb/gdb.hash                 | 3 ---
+ package/gdb/gdb.mk                   | 6 ------
+ package/glibc/Config.in              | 1 -
+ package/linux-headers/Config.in.host | 3 ---
+ 9 files changed, 1 insertion(+), 31 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 04c9588f34..7747cefa0d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1181,10 +1181,6 @@ F:	support/testing/tests/package/br2-external/python-pybind
- F:	support/testing/tests/package/sample_python_pybind.py
- F:	support/testing/tests/package/test_python_pybind.py
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 580e9d14ca..ff60f85092 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -75,15 +75,6 @@ ABI := $(ABI)hf
+ endif
+ endif
  
--N:	Guo Ren <ren_guo@c-sky.com>
--F:	board/csky/
--F:	configs/csky_*
+-# For C-SKY abiv1 & abiv2
+-ifeq ($(BR2_csky),y)
+-ifeq ($(BR2_ck610),y)
+-ABI = abiv1
+-else
+-ABI = abiv2
+-endif
+-endif
 -
- N:	Gustavo Heinz <gustavo@gsthnz.com>
- F:	package/python-m2crypto/
+ # For FSL PowerPC there's SPE
+ ifeq ($(BR2_powerpc_SPE),y)
+ ABI = spe
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 5bdda25faf..9fa0cc4e8d 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -7,14 +7,13 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
  
-diff --git a/board/csky/gx6605s/gdbinit b/board/csky/gx6605s/gdbinit
-deleted file mode 100644
-index d602aad46d..0000000000
---- a/board/csky/gx6605s/gdbinit
-+++ /dev/null
-@@ -1,25 +0,0 @@
--tar jtag jtag://127.0.0.1:1025
--reset
--
--# setup CCR (Cache Config Reg)
--# 0-1:MP,2:IE,3:DE,4:WB,5:RS,6:Z,7:BE
--set $cr18 = 0x7d
--
--# vendor custom setup, double cache line & preload
--set $cr30 = 0xc
--
--# pin mux for serial8250
--set *(unsigned int *) 0xa030a14c |= (1 << 22) | (1 << 23)
--
--# pass devicetree blob
--# r2 is magic
--# r3 is address
--set $r2 = 0x20150401
--set $r3 = 0x92000000
--restore gx6605s.dtb binary 0x92000000
--
--# flush cache
--set $cr17 = 0x33
--
--load
--
-diff --git a/board/csky/gx6605s/gx6605s.dts b/board/csky/gx6605s/gx6605s.dts
-deleted file mode 100644
-index e4d46f59a0..0000000000
---- a/board/csky/gx6605s/gx6605s.dts
-+++ /dev/null
-@@ -1,155 +0,0 @@
--/dts-v1/;
--#include <dt-bindings/gpio/gpio.h>
--#include <dt-bindings/input/input.h>
--
--/ {
--	model = "C-SKY gx6605s";
--	compatible = "csky,gx6605s";
--	#address-cells = <1>;
--	#size-cells = <1>;
--
--	memory {
--		device_type = "memory";
--		reg = <0x10000000 0x04000000>;
--	};
--
--	soc {
--		#address-cells = <1>;
--		#size-cells = <1>;
--		compatible = "simple-bus";
--		ranges;
--
--		dummy_apb: apb-clock {
--			compatible = "fixed-clock";
--			clock-frequency = <27000000>;
--			clock-output-names = "dummy_apb";
--			#clock-cells = <0>;
--		};
--
--		intc: interrupt-controller@500000 {
--			compatible = "csky,gx6605s-intc";
--			reg = <0x00500000 0x400>;
--			interrupt-controller;
--			#interrupt-cells = <1>;
--		};
--
--		timer@20a000 {
--			compatible = "csky,gx6605s-timer";
--			reg = <0x0020a000 0x400>;
--			clocks = <&dummy_apb>;
--			interrupts = <10>;
--			interrupt-parent = <&intc>;
--		};
--
--		ehci-hcd@900000 {
--			compatible = "generic-ehci";
--			reg = <0x00900000 0x400>;
--			interrupt-parent = <&intc>;
--			interrupts = <59>;
--		};
--
--		ohci-hcd0@a00000 {
--			compatible = "generic-ohci";
--			reg = <0x00a00000 0x400>;
--			interrupt-parent = <&intc>;
--			interrupts = <58>;
--		};
--
--		ohci-hcd1@b00000 {
--			compatible = "generic-ohci";
--			reg = <0x00b00000 0x400>;
--			interrupt-parent = <&intc>;
--			interrupts = <57>;
--		};
--
--		serial@403000 {
--			compatible = "ns16550a";
--			reg = <0x00403000 0x400>;
--			interrupt-parent = <&intc>;
--			interrupts = <15>;
--			clock-frequency = <29491200>;
--			baud = <115200>;
--			reg-shift = <2>;
--			reg-io-width = <1>;
--		};
--
--		gpio0: gpio@305000 {
--			compatible = "wd,mbl-gpio";
--			reg-names = "dirout", "dat", "set", "clr";
--			reg = <0x305000 4>, <0x305004 4>, <0x305008 4>, <0x30500c 4>;
--			bgpio-base = <0>;
--			#gpio-cells = <2>;
--			gpio-controller;
--		};
--
--		gpio_buttons {
--			compatible = "gpio-keys-polled";
--			#address-cells = <1>;
--			#size-cells = <0>;
--			poll-interval = <100>;
--			autorepeat;
--
--			button0 {
--				label = "button8";
--				linux,code = <KEY_LEFT>;
--				gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
--			};
--
--			button1 {
--				label = "button6";
--				linux,code = <KEY_RIGHT>;
--				gpios = <&gpio0 6 GPIO_ACTIVE_LOW>;
--			};
--
--			button2 {
--				label = "button5";
--				linux,code = <KEY_UP>;
--				gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
--			};
--
--			button3 {
--				label = "button9";
--				linux,code = <KEY_DOWN>;
--				gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
--			};
--
--			button4 {
--				label = "button7";
--				linux,code = <KEY_ENTER>;
--				gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
--			};
--		};
--
--		gpio_leds {
--			compatible = "gpio-leds";
--
--			led0 {
--				label = "led10";
--				gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
--				linux,default-trigger = "heartbeat";
--			};
--
--			led1 {
--				label = "led11";
--				gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
--				linux,default-trigger = "timer";
--			};
--
--			led2 {
--				label = "led12";
--				gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
--				linux,default-trigger = "default-on";
--			};
--
--			led3 {
--				label = "led13";
--				gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
--				linux,default-trigger = "default-on";
--			};
--		};
--	};
--
--	chosen {
--		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/sda2 rw rootwait";
--	};
--};
-diff --git a/board/csky/readme.txt b/board/csky/readme.txt
-deleted file mode 100644
-index dc82dcc1d7..0000000000
---- a/board/csky/readme.txt
-+++ /dev/null
-@@ -1,88 +0,0 @@
--C-SKY Development Kit
--
--Intro
--=====
--
--C-SKY is a CPU Architecture from www.c-sky.com and has it own instruction set.
--Just like arm and mips in linux/arch, it named as 'csky'.
--
--gx6605s develop board is made by Hangzhou Nationalchip and C-SKY.
--
--Hardware Spec:
--  * CPU: ck610 up to 594Mhz
--  * Integrate with 64MB ddr2 in SOC.
--  * Integrate with hardware Jtag.
--  * Integrate with usb-to-serial chip.
--  * USB ehci controller in SOC.
--  * Power Supply: DC 5V from two micro-usb.
--
--How to build it
--===============
--
--Configure Buildroot
---------------------
--
--The csky_gx6605s_defconfig configuration is a sample configuration with
--all that is required to bring the gx6605s Development Board:
--
--  $ make csky_gx6605s_defconfig
--
--Build everything
------------------
--
--Note: you will need to have access to the network, since Buildroot will
--download the packages' sources.
--
--  $ make
--
--Result of the build
---------------------
--
--After building, you should obtain this tree:
--
--    output/images/
--    +-- vmlinux
--    +-- rootfs.ext2
--    +-- <board name>.dtb
--
--How to run it
--=============
--
--Prepare Jtag-Server
---------------------
--
--  Download the Jtag-Server here:
--
--  https://github.com/c-sky/tools/raw/master/DebugServerConsole-linux-x86_64-V4.2.00-20161213.tar.gz
--
--  Go to the unpacked directory:
--
--  $./DebugServerConsole -ddc -rstwait 1000 -prereset -port 1025
--
--  Perhaps you need to use "sudo", which need libusb to detect c510:b210
--
--  $ sudo ./DebugServerConsole -ddc -rstwait 1000 -prereset -port 1025
--
--Prepare USB drive
-------------------
--
--  You sould determine which device associated to the usb drive
--  carefully. eg:
--
--  $ cat /proc/partitions
--   8       48    1971712 sdd
--   8       49     976720 sdd1
--
--  $ sudo dd if=rootfs.ext2 of=/dev/sdd1
--  $ sudo sync
--
--Run
-----
--
--  Plug the usb drive on gx6605s dev board.
--
--  Setup the Console with the rate 115200/8-N-1.
--
--  $ cd output/images
--  $ ../host/bin/csky-linux-gdb -x ../../board/csky/gx6605s/gdbinit vmlinux
--
-diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
-deleted file mode 100644
-index f1f9579dca..0000000000
---- a/configs/csky_gx6605s_defconfig
-+++ /dev/null
-@@ -1,19 +0,0 @@
--# Architecture
--BR2_csky=y
--BR2_ck610=y
--
--# System
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--
--# Linux headers same as kernel, a 5.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/csky/gx6605s/gx6605s.dts"
+ choice
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_37_X if !BR2_arc && !BR2_csky
++	default BR2_BINUTILS_VERSION_2_37_X if !BR2_arc
+ 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+ 	help
+ 	  Select the version of binutils you wish to use.
+ 
+ config BR2_BINUTILS_VERSION_2_36_X
+ 	bool "binutils 2.36.1"
+-	depends on !BR2_csky
+ 
+ config BR2_BINUTILS_VERSION_2_37_X
+ 	bool "binutils 2.37"
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 74abad71d7..ba2a2ee072 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -27,10 +27,6 @@ config BR2_GCC_VERSION_10_X
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_powerpc_SPE
+-	# C-SKY sk610 needs abiv1, which is not supported in
+-	# upstream gcc. C-SKY gcc upstream support not tested
+-	# with upstream binutils and glibc.
+-	depends on !BR2_csky
+ 	# ARC HS48 rel 31 only supported by gcc arc fork.
+ 	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index a39837fe71..cf5a2a892c 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -52,7 +52,6 @@ config BR2_PACKAGE_GDB_DEBUGGER
+ 	bool "full debugger"
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_sh
+-	depends on !BR2_csky
+ 	select BR2_PACKAGE_GMP if BR2_GDB_VERSION_11
+ 	select BR2_PACKAGE_NCURSES
+ 
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 43af64a1ed..15d5f52a36 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -44,7 +44,6 @@ choice
+ 	prompt "GDB debugger Version"
+ 	default BR2_GDB_VERSION_10
+ 	depends on !BR2_arc
+-	depends on !BR2_csky
+ 	help
+ 	  Select the version of gdb you wish to use.
+ 
+@@ -67,7 +66,6 @@ endif
+ config BR2_GDB_VERSION
+ 	string
+ 	default "arc-2020.09-release-gdb" if BR2_arc
+-	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+ 	default "9.2"      if BR2_GDB_VERSION_9_2
+ 	default "10.2"	   if BR2_GDB_VERSION_10 || !BR2_PACKAGE_HOST_GDB
+ 	default "11.2"     if BR2_GDB_VERSION_11
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index e7933374f1..cb7f4c805d 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -5,6 +5,3 @@ sha512  07e9026423438049b11f4f784d57401ece4e940570f613bd6958b3714fe7fbc2c048470b
+ 
+ # Locally calculated (fetched from Github)
+ sha512  5a2acf2fd33ab2ff589e1037ca40abda54328997dcff26b2b49b874bd3be980be5a63342962254f3c3bda98e32ce7a33af704d37353352833dee193135600458  gdb-arc-2020.09-release-gdb.tar.gz
+-
+-# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
+-sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b  gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 9bde2beea1..86e57481de 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -14,12 +14,6 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+ GDB_FROM_GIT = y
+ endif
+ 
+-ifeq ($(BR2_csky),y)
+-GDB_SITE = $(call github,c-sky,binutils-gdb,$(GDB_VERSION))
+-GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+-GDB_FROM_GIT = y
+-endif
+-
+ GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ GDB_CPE_ID_VENDOR = gnu
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index c0526cdd9e..23cbfcd9aa 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -21,7 +21,6 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ 	default y if BR2_microblaze
+ 	default y if BR2_nios2
+ 	default y if BR2_arc && BR2_ARC_ATOMIC_EXT
+-	default y if BR2_csky
+ 	depends on !BR2_powerpc_SPE
+ 	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
+ 	depends on BR2_USE_MMU
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 678c3d35f7..c2e872abfb 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -30,18 +30,15 @@ config BR2_KERNEL_HEADERS_AS_KERNEL
+ config BR2_KERNEL_HEADERS_4_9
+ 	bool "Linux 4.9.x kernel headers"
+ 	depends on !BR2_riscv
+-	depends on !BR2_csky
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+ 
+ config BR2_KERNEL_HEADERS_4_14
+ 	bool "Linux 4.14.x kernel headers"
+ 	depends on !BR2_riscv
+-	depends on !BR2_csky
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+ 
+ config BR2_KERNEL_HEADERS_4_19
+ 	bool "Linux 4.19.x kernel headers"
+-	depends on !BR2_csky
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+ 
+ config BR2_KERNEL_HEADERS_5_4
 -- 
 2.25.1
 
