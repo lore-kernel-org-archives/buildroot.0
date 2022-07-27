@@ -4,62 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C771C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 16:49:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAB6AC19F2B
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 17:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF939409F1;
-	Wed, 27 Jul 2022 16:49:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF939409F1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C66F4092B;
+	Wed, 27 Jul 2022 17:05:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C66F4092B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G5sBJGceLBXl; Wed, 27 Jul 2022 16:49:39 +0000 (UTC)
+	with ESMTP id JtGcM_o3Kesd; Wed, 27 Jul 2022 17:05:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C653C409DD;
-	Wed, 27 Jul 2022 16:49:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C653C409DD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A74791BF422
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 16:49:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9265840886;
+	Wed, 27 Jul 2022 17:05:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9265840886
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6370A1BF429
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 17:05:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B913409DD
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 16:49:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B913409DD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C0A6827A8
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 17:05:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C0A6827A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R2NNfkTeOVT3 for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 16:49:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19761409BB
-Received: from aposti.net (aposti.net [89.234.176.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 19761409BB
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 16:49:35 +0000 (UTC)
-Date: Wed, 27 Jul 2022 17:49:22 +0100
-From: Paul Cercueil <paul@crapouillou.net>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-Id: <AQUOFR.XHG7UPPE48DS1@crapouillou.net>
-In-Reply-To: <20220727155711.GD1134587@scaer>
-References: <20220620115510.33792-1-paul@crapouillou.net>
- <efe0cf31-54a7-6abc-8034-c440327e644f@smile.fr>
- <NNROFR.FBROLJPFYDGX1@crapouillou.net> <20220727155711.GD1134587@scaer>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0OM8B-n2Q5lk for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 17:05:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CE9681A50
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3CE9681A50
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 17:05:33 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id k11so24960129wrx.5
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:05:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=8Tq0XqbLpRWPWBvNzCSvq/hwRY3NCM3Q+LAImdztonw=;
+ b=NktyoSW4AlhB6D0t2SqgLP2//q6xP3eeToWpAzh8wyYxwGUcbaXpgdEwngSulA8ysa
+ d4t9NyQ95ATY76hhg7Sa5ycCB6t4FqKcl0WKv5E7wX1lG856ibttuDwujo5VqUYzFwyk
+ jGNkJB4Ujqsjdp065h+yb2j3nwdMVQy1OkdZ8Wue639n8nWD6jT6nvPqoUacm1rTEEXD
+ XIZtrXZ+NxwsCPssboKDjVve8mDclIVQOCgAxGnmQg1pvGU08lfONjKqcpg8LzGRswjW
+ HPo2LiwzaMsG9mTtjQaX4TVDyfCPUQXQv2grcS2C+jNPlNvxB2mnJZdWlR+z/lusPfvM
+ 5IOg==
+X-Gm-Message-State: AJIora+iMWf0whOS9JFMu5pJqO+j9Uj9VweSbVFzKMbMy0LhAJHquZY3
+ mnMvB14BtR7aiDro7hT1nrEoCzWyBlH9uw==
+X-Google-Smtp-Source: AGRyM1sJ9dSr7W37ffaqWRZiNffeR4TWGrI73BqmfN6P85M8sqaQrEelcHzQAS9VfHNeOWy9Ngo6Zw==
+X-Received: by 2002:a5d:528a:0:b0:21d:7c04:2ddf with SMTP id
+ c10-20020a5d528a000000b0021d7c042ddfmr14266529wrv.422.1658941531884; 
+ Wed, 27 Jul 2022 10:05:31 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ w10-20020adfde8a000000b0021e50971147sm17471302wrl.44.2022.07.27.10.05.31
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 27 Jul 2022 10:05:31 -0700 (PDT)
+Message-ID: <28488fd2-ab02-43c7-25da-cdcb3f37d83a@mind.be>
+Date: Wed, 27 Jul 2022 19:05:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: Norbert Lange <nolange79@gmail.com>
+References: <20220109221650.777610-1-nolange79@gmail.com>
+ <2288ff34-d140-a1a0-3f8e-86baf04f4dee@mind.be>
+ <CADYdroP82ZnJLWzL0=DP1r2T-0nJe3c7xxC4QgwkNtF5dkC_8A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <CADYdroP82ZnJLWzL0=DP1r2T-0nJe3c7xxC4QgwkNtF5dkC_8A@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=crapouillou.net; 
- s=mail; t=1658940571; h=from:from:sender:reply-to:subject:subject:date:date:
- message-id:message-id:to:to:cc:cc:mime-version:mime-version:
- content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XDW685hqk2uIefhyw6nVhZbDts1DBExuUH+tVxE6xiI=;
- b=ACKTLTJPiYOUT0RseGF5Pi9yarbFV4ieb+eyoJTsosVpN9+esqkx2vFFWzVfnTBRbUG6YZ
- 2V1pJvpglw/VxwQiiFsz3EW/3JEBr1MlVtY9lS5r/WLvzYENdxRiqvQlP7CVYW+9JLolVY
- M0IVjC1Xeq2ZWqqvPpUC/s+pmvfBHKk=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
- header.a=rsa-sha256 header.s=mail header.b=ACKTLTJP
-Subject: Re: [Buildroot] [PATCH 1/1] package/boost: add option to force
- static build
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=8Tq0XqbLpRWPWBvNzCSvq/hwRY3NCM3Q+LAImdztonw=;
+ b=gfy1rYoB055RvhYi9jVzdRFFIteqnH/5czgDOfowJeXGQVTG0ChbLOmruAgP2t+UA7
+ 0M77GY3l1Me4mE5xB5AzbQ4+FwLNNI+p99tVaYEZGUkmPDLfpzC8f/I2+ck4qPleJ0Pm
+ 6K93lTBvOHWw2yGvK4aPDDXVUorvnwVilgnREdNxhZ6fEwrdknPevbSr9PqZ5/HdKdi3
+ EH3ImsvJJbOoGBRAQhUiesUF5oIW+xDVZDeoD0DEdt06dsL2zrjxiTWkOg+QMiEttL1N
+ 7inPxfD5MhHMHflYbQLsNviMLMkzP8+QlAzV0HaI3+/O+oLvPXQwBrJztOfu4n22Vo8v
+ waSw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=gfy1rYoB
+Subject: Re: [Buildroot] [PATCH v6 1/4] package/dbus-broker: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,187 +102,160 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ buildroot <buildroot@buildroot.org>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
 
-Le mer., juil. 27 2022 at 17:57:11 +0200, Yann E. MORIN =
 
-<yann.morin.1998@free.fr> a =E9crit :
-> Paul, All,
-> =
-
-> On 2022-07-27 16:42 +0100, Paul Cercueil spake thusly:
->>  Le mer., juil. 27 2022 at 17:06:52 +0200, Romain Naour
->>  <romain.naour@smile.fr> a =E9crit :
->>  >Le 20/06/2022 =E0 13:55, Paul Cercueil a =E9crit :
->>  >> This option can be useful when building for a system that
->>  >> needs to somewhat maintain compatibility with previously built
->>  >> software, as Boost is notorious for breaking ABI at every
->>  >> single release.
-> =
-
-> If you need to link with boost libs, it means your program already =
-
-> know
-> the correct ABI?
-
-It knows the ABI of libboost that was used at the time the program was =
-
-compiled.
-
-> I mean, you have two situations:
->   - you have sources for your program: you don't care about ABI
->     breakage, because you will build from source, so the compiler and
->     linker knows what to do, so you don't need to force static libs?
-
-That's true, *if* you only consider Buildroot packages. Because as soon =
-
-as libboost is bumped in Buildroot, every application compiled against =
-
-the previous SDK is broken, and needs to be compiled again.
-
->   - you have a .o file for your package's, and you can actually link
->     with the static libs, so it means you have the proper ABI, so why
->     can't you link with the shared ones?
-
-As soon as libboost is bumped in Buildroot, the symbol names of the =
-
-library change, so everything need to be compiled from sources again, =
-
-and not just re-linked.
-
-> Now, if you have a binary-only executable, then you don't need to link
-> it at all.
-
-If I have a binary-only executable linked to a shared libboost, then I =
-
-*need* to have in the rootfs the shared libboost of the *exact* same =
-
-version used when compiling.
-
-Which means that as soon as my users update the rootfs, every pre-built =
-
-application out there that links against libboost is now broken.
-
-> So, I am not sure I see what the actual issue is...
-> =
-
-> Also, I don't think it is sane, as Romain pointed out, that the whole
-> Boost is bilt statically for the whole system; that does not fly with
-> me...
-> =
-
->>  >After discussing with Thomas and Arnout, we are not convinced by =
-
->> this
->>  >patch.
-> =
-
-> Neither am I...
-> =
-
->>  Yes, I know that a similar per-package option could be added to all
->>  packages, and I know that we (both you and me) don't want that. My =
-
->> argument
->>  is that none of the other packages (that I know of) break ABI at =
-
->> every
->>  single minor version. Only Boost does that, and it makes it =
-
->> completely
->>  impossible to support old programs.
->> =
-
->>  I've been doing this trick of compiling static builds of Boost since
->>  Buildroot 2014.05 and the majority of binaries built back then =
-
->> still run
->>  with my current distribution based on Buildroot 2021.08. Programs =
-
->> built
->>  against shared Boost would break every 3 months.
-> =
-
-> I don't understand what you are saying here. Do you mean that you =
-
-> built
-> binaries back in 2014, and drop them in your shinny new system, and =
-
-> they
-> still run? That's fine, do that: install pre-built binaries of your
-> application: you don't need to build a static boost on the whole =
-
-> system
-> for that.
-
-Those binaries built back in 2014 still run now because I already had =
-
-the "static libboost" exception back in 2014. If I didn't have that, =
-
-these binaries would have been linked against the shared libboost, and =
-
-would have been broken as soon as the shared libboost bumped its =
-
-*minor* version - which occurs every few months.
-
-Since these old binaries are not linked against a shared libboost, =
-
-thanks to the "static libboost" exception, they are not the problem =
-
-here.
-
-What I am trying to do, is to make sure that any program compiled today =
-
-against my buildroot SDK won't link against the shared libboost, and =
-
-link against a static libboost instead, to give them a chance to be =
-
-compatible in my distribution for a bit more than a few months.
-
-Note that by "programs" here we're talking about applications and games =
-
-produced by the community, which may be closed-source and very old, =
-
-which means that they cannot be easily recompiled.
-
-> Now, if what you need is a way to initially be able to build those
-> programs to start with, and link them statically, so that you can
-> install them as binary prebuilt, then build a static-only SDK, build
-> your programs, and drop them in your other configuration that has =
-
-> Boost
-> available as shared for the rest of the system.
-> =
-
-> Of course, unless there is something else I missed (entirely possible
-> as I am having a very bad day today and can't think totally right).
-
-I want to link everything dynamically for the flexibility - for =
-
-instance all of our old games (including closed-sources ones) gained =
-
-support for rendering on DRM/KMS through SDL1, just because they were =
-
-dynamically linked against libsdl1.
-
-I only want to link statically against libboost, because it is the only =
-
-library that breaks its ABI at every single *minor* version, while =
-
-every other library breaks its ABI at every *major* version.
-
-Hope that clears any doubts.
-
-Cheers,
--Paul
-
-
+On 27/07/2022 15:47, Norbert Lange wrote:
+> Am Mi., 27. Juli 2022 um 13:08 Uhr schrieb Arnout Vandecappelle
+> <arnout@mind.be>:
+>>
+>>    Norbert, Yann,
+>>
+>>    As usual, apologies for taking so long to review this. It's because it's a bit
+>> complicated. I actually tried to look at it just after our hackaton in January
+>> but it was too complicated to quickly get my head around.
+>>
+>> On 09/01/2022 23:16, Norbert Lange wrote:
+>>> dbus-broker is an alternate implementation of a dbus dameon. It can be
+>>> used as a drop-in replacement for the system bus daemon, as well as the
+>>> session bus daemon.
+>>>
+>>> dbus-broker is (basically, and as far as we're concerned in Buildroot)
+>>> split in two components:
+>>>
+>>>     - the actual message bus daemon, that relays messages across clients
+>>>
+>>>     - a launcher, which is responsible for setting various aspects of the
+>>>       bus, like setting the policy et al. and opening the socket(s) the
+>>>       message bus daemon will have to listen on...
+>>>
+>>> The launcher can only be used in a systemd setup (it makes heavy use of
+>>> systemd facilities), while the message bus is generic. However, the
+>>> message bus daemon is useless without a launcher. There does not exist a
+>>> non-systemd launcher, which makes dbus-broker actually a systemd-only
+>>> package; this can be revisited when/if a non-systemd launcher appears.
+>>>
+>>> Note, however, that libdbus is not provided by dbus-borker. People who
+>>> want to use dbus-broker as the bus daemon, and need libdbus, will have
+>>> to enable both, see below.
+>>>
+>>> There are two cases:
+>>>
+>>>    1. original dbus disabled
+>>>
+>>>       Here, we install the config files and systemd socket activation
+>>>       units; dbus-broker provides the system and sessions bus daemons.
+>>>
+>>>       In this case, libdbus is not available.
+>>>
+>>>    2. original dbus enabled
+>>>
+>>>       In this case, we do not install the config files and systemd socket
+>>>       activation units, or define a user: they all are provided by the
+>>>       original dbus, and we piggy-back on those.
+>>>
+>>>       In this situation, the default system and sessions message bus are
+>>>       the original dbus, and libdbus is available; dbus-broker is not
+>>>       enabled.
+>>>
+>>>       So far, we believe it would be over-engineered to provide a way
+>>>       to allow choosing the bus daemon in the configuraiton. However,
+>>>       users may opt-in to use dbus-broker in a few ways:
+>>>         - at build-time: by calling systemctl enable/disable from a
+>>>           post-build script (preferred), or by providing drop-in units
+>>>           or presets in an overlay (less preferred) or custom skeleton
+>>>           (as a last resort),
+>>>         - at runtime (on a RW filesystem): by calling systemctl
+>>>           enable/disable
+>>
+>>    I don't know... To me it seems logical that if both are enabled, that you use
+>> dbus-broker for the bus and only use original dbus for libdbus.
+> 
+> Would be fine by me, back then most distros required you to
+> manually enable dbus-broker, now it seems they shift to using
+> it by default if installed.
+
+  Since we anyway already have the infrastructure to automatically enable it if 
+dbus is not included, it should be easy to do that even if dbus is included.
+
+>>    So to me the proper approach seems to change dbus itself so the daemon is
+>> optional, i.e. only libdbus is installed if the daemon is not enabled, similar
+>> to e.g. libcurl. BR2_PACKAGE_DBUS_DAEMON should default to y because that's what
+>> most people want. We'd have to go through existing packages to check if they
+>> depend on libdbus or on the daemon - mostly it will be the first. If there is a
+>> package that really needs the daemon (I don't actually think so), then we might
+>> need to introduce a virtual package for the daemon. Regardless, dbus-broker
+>> should depend on !BR2_PACKAGE_DBUS_DAEMON.
+
+  Looking more detailed at it, this seems too complicated. dbus doesn't offer a 
+way to install only the library. Also in terms of rootfs size, the only 
+difference is the dbus-daemon and dbus-launch binaries, plus a few config files. 
+Not really sufficient to make it worth it.
+
+  What I will do, I think, is to include logic in dbus to remove the activation 
+units (both the service and the socket) when dbus-broker is enabled. It is 
+slightly messy because dbus.mk and dbus-broker.mk become fairly tightly woven 
+together, but I think it's worth it from a usability perspective.
+
+
+> Debian does something similar, including splitting of the xml config files
+> and actual daemons into their own packages.
+> 
+> see [1].
+> 
+>>> Note about the user: the path to the system bus socket is a so-called
+>>> "well-known location": it is expected to be there, by spec. Moving it
+>>> elsewhere is going to break existing programs. So, the user running the
+>>> system bus daemon must be able to create that socket.
+>>>
+>>> As we may have two packages providing a system bus daemon, they have to
+>>> be both able to create the socket, and thus must both be able to write
+>>> in the directory containing the socket. And since they can be switched
+>>> at runtime, they must be running as the same user.
+>>>
+>>> We can't just reference the original dbus user, so we duplicate the
+>>> entry. What is important, is that the user be named 'dbus', as that's
+>>> what we use in both cases.
+>>
+>>    If it's a virtual package, then the user could be created by the virtual
+>> package itself.
+
+  It won't be a virtual package, so no longer relevant.
+
+
+> with systemd you probably dont even need a real user for the isolation
+> benefits.
+> So maybe this would just be necessary if dbus utilities are used,
+> you can also just let systemd create that user dynamically:
+> 
+> [Service]
+> ...
+> User=dbus
+> Group=dbus > DynamicUser=true
+
+  If we do this both in the dbus and the dbus-broker units, then indeed we can 
+remove the dbus user.
+
+  If I add this just to dbus-broker, but dbus still creates a static user, is 
+this going to give a problem for systemd? I.e. does systemd support a 
+DynamicUser=true if the user exists already statically? I think so...
+
+
+  Regards,
+  Arnout
+
+> ExecStart=!/usr/bin/dbus-broker-launch --scope system --audit
+> ExecReload=!/usr/bin/busctl call org.freedesktop.DBus
+> /org/freedesktop/DBus org.freedesktop.DBus ReloadConfig
+
+[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
