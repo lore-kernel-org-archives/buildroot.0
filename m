@@ -1,58 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0430DC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 08:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A32E4C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 08:50:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 922C94058C;
-	Wed, 27 Jul 2022 08:38:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 922C94058C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A43781A27;
+	Wed, 27 Jul 2022 08:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A43781A27
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BGR8aVJzOFXO; Wed, 27 Jul 2022 08:50:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4AC4881992;
+	Wed, 27 Jul 2022 08:50:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AC4881992
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 633B01BF59A
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:50:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4992C40982
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:50:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4992C40982
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2htf-2sYJsWL; Wed, 27 Jul 2022 08:38:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAB8440544;
-	Wed, 27 Jul 2022 08:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAB8440544
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E1AAC1BF59A
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:38:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCB9B6074C
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 08:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCB9B6074C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 99eQb8y08cHF for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 08:38:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 147E5606BF
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 147E5606BF
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 08:38:37 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 46E3C1814B9; Wed, 27 Jul 2022 10:38:34 +0200 (CEST)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mGSNhU-T8hR0 for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 08:50:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57FB14094B
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 57FB14094B
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 08:50:35 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id v13so15449943wru.12
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 01:50:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=VYvrULQIBO6sT2gSYSOzNGWqhwTLnTyGy4YNFYnFYPA=;
+ b=BKGLmIYVcAfL/MmJQMHEi0Q3Gsji63GpMzJJtg3ktSqxKKoTAPndmUIhQpHPnQfbt+
+ W88NakzFrnQq5GzLYt1MBCqP+HfrfNBHo2xTQlOaSlbJ445d3//PlBAS5Mc2D4ABBnMW
+ mFW2e9h6YYotzDwZVbTIlhU9GJQuLQEgePNfusYckFmHZeqODVkIesq0/0y7fAKC/X78
+ TLY45dbIXmMm1y6KfVH5yr4C3dOrn4k+s37jL0XNaa/+XLx3H8Wbr8nf3k7Ra2Dl9LA9
+ gm5iOluFNoNGGPP9VcBVv4fsdUvxbeSFBk3skJkuQh/cMWmeXTIJQkZ9a0S2dOwq4NFF
+ cYiw==
+X-Gm-Message-State: AJIora/tyUGjdNIo4zaJ9ao11JMJquk3uKgIoutGo++/BBVoVWfrWocy
+ iMqBbLcfeuVNucFg4QtFd7LKLvIoXBI=
+X-Google-Smtp-Source: AGRyM1ssS1ZhwWrwV+AGNKVhZlbROjtCwEp646TkemsyqrVUHJVZtiNP5WUz0jDffiFtSc65hI0law==
+X-Received: by 2002:adf:fb49:0:b0:21a:3ccc:fb77 with SMTP id
+ c9-20020adffb49000000b0021a3cccfb77mr12770159wrs.280.1658911832809; 
+ Wed, 27 Jul 2022 01:50:32 -0700 (PDT)
+Received: from kali.home (2a01cb0680494f3e376d079efd3cafb3.ipv6.abo.wanadoo.fr.
+ [2a01:cb06:8049:4f3e:376d:79e:fd3c:afb3])
+ by smtp.gmail.com with ESMTPSA id
+ r10-20020a5d4e4a000000b0021e8cdd0c48sm7060600wrt.15.2022.07.27.01.50.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Jul 2022 01:50:32 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 10:37:30 +0200
-Message-Id: <20220727083730.3141497-1-buildroot@heine.tech>
+Date: Wed, 27 Jul 2022 10:50:23 +0200
+Message-Id: <20220727085023.876407-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1658911114; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=vRtlq7nswXV5GgAVqB7tBz99MszvMM93zFmWCmaDdb0=;
- b=fwcaIafkARQZ98m/7c7Bb/+wY8Q1YzEo27HWaS12dT6/tLtTm60bXh4INmSSBNs3AF5JZJ
- gKlw00X/AeDIDOGARbkFe0jF4oAWqMgZB+xO+J59Hq9g0K49/UzrrjGDJ3mMfknBKqQcp+
- n48A7h3IyBqk6v+WUN9CWDrSd8Q5ghQ=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=fwcaIafk
-Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.48.0
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=VYvrULQIBO6sT2gSYSOzNGWqhwTLnTyGy4YNFYnFYPA=;
+ b=qrY+OXBVKWGarh8nWd/xhIVKHqLkorjrqPyhv2EeYYmKRxK8pCeVz1rpl2TjYdjcdb
+ VsNGG7YO7jV3vGQqiCXXQW+JYl3cBSKKrliSU714e8KII3AhZnzf3TtNv0Ke87VmdvY2
+ PuykIhIw8jA6UF/DFUAEcp8TqUeDjm/6BNitFjWLWBFByW6NKtNPKhDJbKcarxZNAbNA
+ qaNrMbt4mnrQmSvkn6BGCSGellKzlEjHfxL+TrwZkmC2m7RORFqIXCmDtlntvuff2Wl8
+ pPXpUsP8/AEvhXBQrWS6U4zRpUd+R2JYGtWDlqURr0ZvDQvYuPtQXBfzC0hx7YXkQw4J
+ U63A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=qrY+OXBV
+Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: drop ncurses dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,393 +93,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Robert Rose <robertroyrose@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- rework host-grpc-only-cpp-plugin.patch to match changed CMakeLists.txt
-- reintroduce patch to fix cross_compile with host grpc_cpp_plugin [1]
-- add patch to disable unconditionally downloading repos of 3rd party APIs not
-  used in build [2]
+ncurses dependency was wrongly added by commit
+a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
 
-[1] https://github.com/grpc/grpc/pull/30378
-[2] https://github.com/grpc/grpc/issues/30385
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...h => 0003-host-grpc-only-cpp-plugin.patch} | 91 +++++++++----------
- .../0004-fix-grpc-plugin-cross-compile.patch  | 43 +++++++++
- ...nconditionally-downloading-api-repos.patch | 39 ++++++++
- package/grpc/grpc.hash                        |  2 +-
- package/grpc/grpc.mk                          |  2 +-
- 5 files changed, 125 insertions(+), 52 deletions(-)
- rename package/grpc/{0004-host-grpc-only-cpp-plugin.patch => 0003-host-grpc-only-cpp-plugin.patch} (61%)
- create mode 100644 package/grpc/0004-fix-grpc-plugin-cross-compile.patch
- create mode 100644 package/grpc/0005-disable-unconditionally-downloading-api-repos.patch
+ package/pulseaudio/pulseaudio.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/grpc/0004-host-grpc-only-cpp-plugin.patch b/package/grpc/0003-host-grpc-only-cpp-plugin.patch
-similarity index 61%
-rename from package/grpc/0004-host-grpc-only-cpp-plugin.patch
-rename to package/grpc/0003-host-grpc-only-cpp-plugin.patch
-index c97d9a9385..c68b096df6 100644
---- a/package/grpc/0004-host-grpc-only-cpp-plugin.patch
-+++ b/package/grpc/0003-host-grpc-only-cpp-plugin.patch
-@@ -11,15 +11,18 @@ Upstream-status: not accepted (see https://github.com/grpc/grpc/issues/25322)
- 
- Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+Updated for 1.48.0:
-+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
- ---
-  CMakeLists.txt | 43 +++++++++++++++++++++++++++++++++++--------
-  1 file changed, 35 insertions(+), 8 deletions(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index e8934a3e03..c2df332cc6 100644
-+index d3963b074b..51cef83141 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -48,12 +48,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
-+@@ -49,12 +49,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
-  option(gRPC_BUILD_CODEGEN "Build codegen" ON)
-  option(gRPC_BUILD_CSHARP_EXT "Build C# extensions" ON)
-  option(gRPC_BACKWARDS_COMPATIBILITY_MODE "Build libraries that are binary compatible across a larger number of OS and libc versions" OFF)
-@@ -36,7 +39,7 @@ index e8934a3e03..c2df332cc6 100644
-  set(gRPC_INSTALL ${gRPC_INSTALL_default} CACHE BOOL
-      "Generate installation target")
-  
--@@ -367,6 +371,8 @@ add_custom_target(plugins
-+@@ -555,6 +559,8 @@ add_custom_target(plugins
-    DEPENDS ${_gRPC_PLUGIN_LIST}
-  )
-  
-@@ -44,17 +47,17 @@ index e8934a3e03..c2df332cc6 100644
- +
-  add_custom_target(tools_c
-    DEPENDS
--   check_epollexclusive
--@@ -382,6 +388,8 @@ add_custom_target(tools_cxx
-+ )
-+@@ -567,6 +573,8 @@ add_custom_target(tools_cxx
-  add_custom_target(tools
-    DEPENDS tools_c tools_cxx)
-  
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
- +
-- protobuf_generate_grpc_cpp(
--   src/proto/grpc/channelz/channelz.proto
-+ protobuf_generate_grpc_cpp_with_import_path_correction(
-+   src/proto/grpc/channelz/channelz.proto src/proto/grpc/channelz/channelz.proto
-  )
--@@ -1000,6 +1008,7 @@ if(gRPC_BUILD_TESTS)
-+@@ -1228,6 +1236,7 @@ if(gRPC_BUILD_TESTS)
-      DEPENDS buildtests_c buildtests_cxx)
-  endif()
-  
-@@ -62,7 +65,7 @@ index e8934a3e03..c2df332cc6 100644
-  
-  add_library(address_sorting
-    third_party/address_sorting/address_sorting.c
--@@ -1051,6 +1060,8 @@ if(gRPC_INSTALL)
-+@@ -1280,6 +1289,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -70,26 +73,26 @@ index e8934a3e03..c2df332cc6 100644
- +
-  if(gRPC_BUILD_TESTS)
-  
-- add_library(end2end_nosec_tests
--@@ -1313,6 +1324,8 @@ target_link_libraries(end2end_tests
-+ add_library(end2end_tests
-+@@ -1451,6 +1462,8 @@ endforeach()
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-  add_library(gpr
--   src/core/lib/gpr/alloc.cc
--   src/core/lib/gpr/atm.cc
--@@ -2106,6 +2119,8 @@ if(gRPC_INSTALL)
-+   src/core/ext/upb-generated/google/protobuf/any.upb.c
-+   src/core/ext/upb-generated/google/rpc/status.upb.c
-+@@ -2373,6 +2386,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
- +
-- if(gRPC_BUILD_CSHARP_EXT)
-+ if(gRPC_BUILD_TESTS)
-  
-- add_library(grpc_csharp_ext SHARED
--@@ -2288,6 +2303,8 @@ endif()
-+ add_library(grpc_test_util
-+@@ -2511,6 +2526,8 @@ endif()
-  
-  endif()
-  
-@@ -97,8 +100,8 @@ index e8934a3e03..c2df332cc6 100644
- +
-  add_library(grpc_unsecure
-    src/core/ext/filters/census/grpc_context.cc
--   src/core/ext/filters/client_channel/backend_metric.cc
--@@ -2650,6 +2667,8 @@ if(gRPC_INSTALL)
-+   src/core/ext/filters/channel_idle/channel_idle_filter.cc
-+@@ -2916,6 +2933,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -107,16 +110,16 @@ index e8934a3e03..c2df332cc6 100644
-  if(gRPC_BUILD_TESTS)
-  
-  if(gRPC_BUILD_CODEGEN)
--@@ -2717,6 +2736,8 @@ endif()
-+@@ -2987,6 +3006,8 @@ endif()
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-  add_library(grpc++
--   src/cpp/client/channel_cc.cc
--   src/cpp/client/client_callback.cc
--@@ -3134,6 +3155,7 @@ if(gRPC_INSTALL)
-+   src/core/ext/transport/binder/client/binder_connector.cc
-+   src/core/ext/transport/binder/client/channel_create.cc
-+@@ -3463,6 +3484,7 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -124,7 +127,7 @@ index e8934a3e03..c2df332cc6 100644
-  
-  if(gRPC_BUILD_CODEGEN)
-  add_library(grpc++_reflection
--@@ -3374,6 +3396,8 @@ target_link_libraries(grpc++_test_util
-+@@ -3705,6 +3727,8 @@ target_link_libraries(grpc++_test_util
-  
-  endif()
-  
-@@ -133,7 +136,7 @@ index e8934a3e03..c2df332cc6 100644
-  add_library(grpc++_unsecure
-    src/cpp/client/channel_cc.cc
-    src/cpp/client/client_callback.cc
--@@ -3656,6 +3680,7 @@ if(gRPC_INSTALL)
-+@@ -4023,6 +4047,7 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -141,7 +144,7 @@ index e8934a3e03..c2df332cc6 100644
-  
-  add_library(grpc_plugin_support
-    src/compiler/cpp_generator.cc
--@@ -3715,7 +3740,7 @@ foreach(_hdr
-+@@ -4082,7 +4107,7 @@ foreach(_hdr
-  endforeach()
-  
-  
-@@ -149,27 +152,18 @@ index e8934a3e03..c2df332cc6 100644
- +if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
-    install(TARGETS grpc_plugin_support EXPORT gRPCTargets
-      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
--     LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
--@@ -3795,6 +3820,8 @@ endif()
-+     BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
-+@@ -4166,6 +4191,8 @@ endif()
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-  add_library(upb
--   third_party/upb/upb/decode_fast.c
--   third_party/upb/upb/decode.c
--@@ -3852,8 +3879,6 @@ if(gRPC_INSTALL)
--   )
-- endif()
-- 
---
---
-- add_executable(check_epollexclusive
--   test/build/check_epollexclusive.c
-- )
--@@ -3958,6 +3981,8 @@ target_link_libraries(gen_percent_encoding_tables
--   ${_gRPC_ALLTARGETS_LIBRARIES}
-+   third_party/upb/third_party/utf8_range/naive.c
-+   third_party/upb/third_party/utf8_range/range2-neon.c
-+@@ -4256,6 +4283,8 @@ target_link_libraries(gen_hpack_tables
-+   gpr
-  )
-  
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
-@@ -177,7 +171,7 @@ index e8934a3e03..c2df332cc6 100644
-  
-  if(gRPC_BUILD_TESTS)
-  
--@@ -10722,7 +10747,7 @@ target_link_libraries(grpc_cli
-+@@ -11228,7 +11257,7 @@ target_link_libraries(grpc_cli
-  
-  
-  endif()
-@@ -186,7 +180,7 @@ index e8934a3e03..c2df332cc6 100644
-  
-  add_executable(grpc_cpp_plugin
-    src/compiler/cpp_plugin.cc
--@@ -10752,7 +10777,7 @@ target_link_libraries(grpc_cpp_plugin
-+@@ -11258,7 +11287,7 @@ target_link_libraries(grpc_cpp_plugin
-  
-  
-  
-@@ -194,8 +188,8 @@ index e8934a3e03..c2df332cc6 100644
- +if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
-    install(TARGETS grpc_cpp_plugin EXPORT gRPCTargets
-      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
--     LIBRARY DESTINATION ${gRPC_INSTALL_LIBDIR}
--@@ -15420,7 +15445,7 @@ endif()
-+     BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
-+@@ -19803,7 +19832,7 @@ endif()
-  
-  
-  
-@@ -204,12 +198,9 @@ index e8934a3e03..c2df332cc6 100644
-  
-  if(gRPC_INSTALL)
-    install(EXPORT gRPCTargets
--@@ -15517,3 +15542,5 @@ generate_pkgconfig(
--   "-lgrpc++_unsecure -labsl_statusor -labsl_status -labsl_raw_hash_set -labsl_hashtablez_sampler -labsl_synchronization -labsl_time -labsl_time_zone -labsl_civil_time -labsl_graphcycles_internal -labsl_symbolize -labsl_demangle_internal -labsl_malloc_internal -labsl_stacktrace -labsl_debugging_internal -labsl_exponential_biased -labsl_cord -labsl_str_format_internal -labsl_hash -labsl_bad_variant_access -labsl_bad_optional_access -labsl_strings -labsl_strings_internal -labsl_base -labsl_spinlock_wait -labsl_int128 -labsl_city -labsl_throw_delegate -labsl_raw_logging_internal -labsl_log_severity"
-+@@ -19900,3 +19929,5 @@ generate_pkgconfig(
-+   "-lgrpc++_unsecure"
-    ""
-    "grpc++_unsecure.pc")
- +
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
---- 
--2.26.3
--
-diff --git a/package/grpc/0004-fix-grpc-plugin-cross-compile.patch b/package/grpc/0004-fix-grpc-plugin-cross-compile.patch
-new file mode 100644
-index 0000000000..d4e18a7853
---- /dev/null
-+++ b/package/grpc/0004-fix-grpc-plugin-cross-compile.patch
-@@ -0,0 +1,43 @@
-+From 6798193f062676fddf7fee6d0c928f8ce6d92894 Mon Sep 17 00:00:00 2001
-+From: Michael Nosthoff <buildroot@heine.tech>
-+Date: Thu, 21 Jul 2022 22:14:32 +0200
-+Subject: [PATCH] cmake: fix cross-compilation with
-+ gRPC_BUILD_GRPC_CPP_PLUGIN=OFF
-+
-+commit 99752b173cfa reintroduced the cross-compilation issue which was fixed by da10b795e177
-+
-+upstream PR: https://github.com/grpc/grpc/pull/30378
-+
-+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-+
-+---
-+ CMakeLists.txt                    | 2 +-
-+ templates/CMakeLists.txt.template | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9cad96a12f95..11e7ae2b67df 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -514,7 +514,7 @@ function(protobuf_generate_grpc_cpp_with_import_path_correction FILE_LOCATION IM
-+          --plugin=protoc-gen-grpc=${_gRPC_CPP_PLUGIN}
-+          ${_protobuf_include_path}
-+          ${REL_FIL}
-+-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${FILE_LOCATION} ${ABS_FIL} ${_gRPC_PROTOBUF_PROTOC} grpc_cpp_plugin
-++    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${FILE_LOCATION} ${ABS_FIL} ${_gRPC_PROTOBUF_PROTOC} ${_gRPC_CPP_PLUGIN}
-+     WORKING_DIRECTORY ${_gRPC_PROTO_SRCS_DIR}
-+     COMMENT "Running gRPC C++ protocol buffer compiler for ${IMPORT_PATH}"
-+     VERBATIM)
-+diff --git a/templates/CMakeLists.txt.template b/templates/CMakeLists.txt.template
-+index 161cf46798f1..82fe4217913a 100644
-+--- a/templates/CMakeLists.txt.template
-++++ b/templates/CMakeLists.txt.template
-+@@ -498,7 +498,7 @@
-+            --plugin=protoc-gen-grpc=<%text>${_gRPC_CPP_PLUGIN}</%text>
-+            <%text>${_protobuf_include_path}</%text>
-+            <%text>${REL_FIL}</%text>
-+-      DEPENDS <%text>${CMAKE_CURRENT_SOURCE_DIR}/${FILE_LOCATION}</%text> <%text>${ABS_FIL}</%text> <%text>${_gRPC_PROTOBUF_PROTOC}</%text> grpc_cpp_plugin
-++      DEPENDS <%text>${CMAKE_CURRENT_SOURCE_DIR}/${FILE_LOCATION}</%text> <%text>${ABS_FIL}</%text> <%text>${_gRPC_PROTOBUF_PROTOC}</%text> <%text>${_gRPC_CPP_PLUGIN}</%text>
-+       WORKING_DIRECTORY <%text>${_gRPC_PROTO_SRCS_DIR}</%text>
-+       COMMENT "Running gRPC C++ protocol buffer compiler for <%text>${IMPORT_PATH}</%text>"
-+       VERBATIM)
-diff --git a/package/grpc/0005-disable-unconditionally-downloading-api-repos.patch b/package/grpc/0005-disable-unconditionally-downloading-api-repos.patch
-new file mode 100644
-index 0000000000..967bbf6247
---- /dev/null
-+++ b/package/grpc/0005-disable-unconditionally-downloading-api-repos.patch
-@@ -0,0 +1,39 @@
-+From b0599c3d1b52818c79ea8fa5dfdc40a4ce01e454 Mon Sep 17 00:00:00 2001
-+From: Michael Nosthoff <buildroot@heine.tech>
-+Date: Fri, 22 Jul 2022 08:49:48 +0200
-+Subject: [PATCH] disable unconditionally downloading api repos
-+
-+The Buildroot build doesn't need those submodules, so disable them hard
-+for now.
-+
-+See https://github.com/grpc/grpc/issues/30385
-+
-+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-+
-+---
-+ CMakeLists.txt | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 11e7ae2b67..a9062fa6ef 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -327,6 +327,7 @@ include(cmake/xxhash.cmake)
-+ include(cmake/zlib.cmake)
-+ include(cmake/download_archive.cmake)
-+ 
-++if(FALSE)
-+ # Setup external proto library at third_party/envoy-api with 2 download URLs
-+ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/envoy-api)
-+   # Download the archive via HTTP, validate the checksum, and extract to third_party/envoy-api.
-+@@ -403,6 +404,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xds)
-+     xds-cb28da3451f158a947dfc45090fe92b07b243bc1
-+   )
-+ endif()
-++endif()
-+ 
-+ if(WIN32)
-+   set(_gRPC_BASELIB_LIBRARIES ws2_32 crypt32)
-+-- 
-+2.25.1
-+
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 9e3a225a51..84af11f5a1 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  e18b16f7976aab9a36c14c38180f042bb0fd196b75c9fd6a20a2b5f934876ad6  grpc-1.45.2.tar.gz
-+sha256  9b1f348b15a7637f5191e4e673194549384f2eccf01fcef7cc1515864d71b424  grpc-1.48.0.tar.gz
- sha256  277adcc1dcef8359b1efb48e628635f88b40be8fbd64e82fd0169930d135d7a5  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 2f037b5d59..5d90397efc 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = 1.45.2
-+GRPC_VERSION = 1.48.0
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
- GRPC_LICENSE_FILES = LICENSE
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 747c09ad4a..5f6981ba0d 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -24,7 +24,6 @@ PULSEAUDIO_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_AVAHI_DAEMON),avahi) \
+ 	$(if $(BR2_PACKAGE_DBUS),dbus) \
+-	$(if $(BR2_PACKAGE_NCURSES),ncurses) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+ 	$(if $(BR2_PACKAGE_FFTW_SINGLE),fftw-single) \
+ 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
 -- 
-2.25.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
