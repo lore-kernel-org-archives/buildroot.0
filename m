@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63F2FC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 14:46:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE295C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 14:46:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2E9841571;
-	Wed, 27 Jul 2022 14:46:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2E9841571
+	by smtp1.osuosl.org (Postfix) with ESMTP id 380DB82425;
+	Wed, 27 Jul 2022 14:46:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 380DB82425
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jouBOlov6Mtz; Wed, 27 Jul 2022 14:46:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id swbb477GB_Ti; Wed, 27 Jul 2022 14:46:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DC0741551;
-	Wed, 27 Jul 2022 14:46:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DC0741551
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9304C1C1162
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59204823E2;
+	Wed, 27 Jul 2022 14:46:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59204823E2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AC0C31C116E
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 14:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7BD4760D89
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94F9440393
  for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 14:46:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BD4760D89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F9440393
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KBl5CMSr1L5t for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r8BMqaanTZFT for <buildroot@lists.busybox.net>;
  Wed, 27 Jul 2022 14:46:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A51DC60ACE
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6DF94013D
  for <buildroot@buildroot.org>; Wed, 27 Jul 2022 14:46:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A51DC60ACE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6DF94013D
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6877786697; Wed, 27 Jul 2022 14:32:25 +0000 (UTC)
+ id 8CD3086694; Wed, 27 Jul 2022 14:32:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 16:43:59 +0200
+Date: Wed, 27 Jul 2022 16:44:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 447323feac9606f827b166c4946b38b80fec456a
-X-Git-Newrev: acb02354a128ef8e4b18f2f311cd51ac6b4cb7e5
+X-Git-Oldrev: 72ac45aceab38ec128f029756c4151e9d9325585
+X-Git-Newrev: 61170e696dfbc0ed6e5e10966f426d473a938590
 X-Patchwork-Hint: ignore
-Message-Id: <20220727143225.6877786697@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dust: new package
+Message-Id: <20220727143225.8CD3086694@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jack2: libsamplerate is optional,
+ not mandatoy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,91 +64,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acb02354a128ef8e4b18f2f311cd51ac6b4cb7e5
+commit: https://git.buildroot.net/buildroot/commit/?id=61170e696dfbc0ed6e5e10966f426d473a938590
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-dust is an alternative of the command du from the Linux kernel,
-written in Rust. It aims to be more intuitive and visual in order
-to give the user a better view of his system's storage capacity.
-
-Signed-off-by: Nicolas Tran <nicolas.tran@smile.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/dust/Config.in | 11 +++++++++++
- package/dust/dust.hash |  3 +++
- package/dust/dust.mk   | 12 ++++++++++++
- 5 files changed, 28 insertions(+)
+ package/jack2/Config.in | 1 -
+ package/jack2/jack2.mk  | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5864601dd8..6d6f25affd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2188,6 +2188,7 @@ F:	package/exiv2/
- F:	package/ofono/
+diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+index 8abdda6376..e02449ba87 100644
+--- a/package/jack2/Config.in
++++ b/package/jack2/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_JACK2
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	select BR2_PACKAGE_LIBSAMPLERATE
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_HWDEP
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 6939aac9a6..4059fa689c 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -9,7 +9,7 @@ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK2_LICENSE_FILES = COPYING
+ JACK2_CPE_ID_VENDOR = jackaudio
+-JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
++JACK2_DEPENDENCIES = libsndfile alsa-lib
+ JACK2_INSTALL_STAGING = YES
  
- N:	Nicolas Tran <nicolas.tran@smile.fr>
-+F:	package/dust/
- F:	package/hyperfine/
+ JACK2_CONF_OPTS = --alsa
+@@ -19,6 +19,13 @@ JACK2_DEPENDENCIES += libexecinfo
+ JACK2_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lexecinfo"
+ endif
  
- N:	Niklas Cassel <niklas.cassel@wdc.com>
-diff --git a/package/Config.in b/package/Config.in
-index 58ceaaa70b..9e355723d6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -211,6 +211,7 @@ menu "Filesystem and flash utilities"
- 	source "package/curlftpfs/Config.in"
- 	source "package/davfs2/Config.in"
- 	source "package/dosfstools/Config.in"
-+	source "package/dust/Config.in"
- 	source "package/e2fsprogs/Config.in"
- 	source "package/e2tools/Config.in"
- 	source "package/ecryptfs-utils/Config.in"
-diff --git a/package/dust/Config.in b/package/dust/Config.in
-new file mode 100644
-index 0000000000..7b6e9304bc
---- /dev/null
-+++ b/package/dust/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_DUST
-+	bool "dust"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  dust is an alternative written in Rust of the command "du"
-+	  from the Linux kernel. It aims to be more intuitive and visual
-+	  in order to give the user a better view of his system's
-+	  current storage capacity.
++ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++JACK2_DEPENDENCIES += libsamplerate
++JACK2_CONF_OPTS += --samplerate=yes
++else
++JACK2_CONF_OPTS += --samplerate=no
++endif
 +
-+	  https://github.com/bootandy/dust.git
-diff --git a/package/dust/dust.hash b/package/dust/dust.hash
-new file mode 100644
-index 0000000000..d4f6bff4e4
---- /dev/null
-+++ b/package/dust/dust.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  271cc0f1978049b2dbfece633b85d4dd0184df346bd93720062c13e4332f2549  dust-0.8.1.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/dust/dust.mk b/package/dust/dust.mk
-new file mode 100644
-index 0000000000..2cffc336a9
---- /dev/null
-+++ b/package/dust/dust.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# dust
-+#
-+################################################################################
-+
-+DUST_VERSION = 0.8.1
-+DUST_SITE = $(call github,bootandy,dust,v$(DUST_VERSION))
-+DUST_LICENSE = APACHE-2.0
-+DUST_LICENSE_FILES = LICENSE
-+
-+$(eval $(cargo-package))
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ JACK2_DEPENDENCIES += opus
+ JACK2_CONF_OPTS += --opus=yes
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
