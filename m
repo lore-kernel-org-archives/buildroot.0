@@ -1,88 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 269ABC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 12:55:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F8ADC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 13:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1874409F7;
-	Wed, 27 Jul 2022 12:55:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1874409F7
+	by smtp3.osuosl.org (Postfix) with ESMTP id D217E60BCC;
+	Wed, 27 Jul 2022 13:06:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D217E60BCC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9wq8MvGgC84m; Wed, 27 Jul 2022 12:55:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OYiD7kcKAtWe; Wed, 27 Jul 2022 13:06:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C0B54094B;
-	Wed, 27 Jul 2022 12:55:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C0B54094B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C53161BF372
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 12:55:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C337460C03;
+	Wed, 27 Jul 2022 13:06:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C337460C03
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 19A121BF9D1
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:06:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A005A40154
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 12:55:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A005A40154
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9D6581D4D
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 13:06:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9D6581D4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TuD-0KZ0Jg-D for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 12:55:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 801D740518
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 801D740518
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 12:55:10 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id j7so2130859wrh.3
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 05:55:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yaHUEqQzZMmDVpnz4xH8qmU8Az0+7/7f/bR0iTnIOh4=;
- b=77kQSX+LtulZVAtivElvyqjqQqM/mplhtAJlF71B9LkniB/+YLfE6nQh/POfIx/x59
- cByD2ZZhjMvgUEMcIKOJKOAO3qi8bsQipr8h5HBFKKs+IvOHwT4xH3t+wokMEE7K2c4B
- yVI3ebvTTuOG8GA4J9e6vMkMICSt8Ghjjg+nRymNWh03poJTilq/AtWIuUIaZAVqiryz
- PZiId3FhAdOmAD52imwLLVuo+eZZmQjJcFOBTCcbzZ5b93RrICpkdKdlLc9NkyHch0lh
- sPI3cFQr4BZtrtD7TURwFgi5kHktgGbVhMZm2LI2JX7H3VOudY00S6pGUfG2jFDzs2gw
- YIew==
-X-Gm-Message-State: AJIora9LLDW8pzBW+BgOk318fASJkuQHlAEKobEH+c4gj1XwIIKnGkph
- h62Nsur8iC36cxJ4+4VPQLnLuWqN5DfxQQ==
-X-Google-Smtp-Source: AGRyM1u6anYzzfqOzKaHfP04QyFJxJe6GN4QO1GkVGiQ0wwt7CY7OgRF5exY46kMaAODLFH8YGvi7w==
-X-Received: by 2002:a05:6000:1885:b0:21d:ae7a:4f97 with SMTP id
- a5-20020a056000188500b0021dae7a4f97mr14419600wri.74.1658926508341; 
- Wed, 27 Jul 2022 05:55:08 -0700 (PDT)
-Received: from nitra.nantes.intranet
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- c1-20020adffb01000000b0021e30e9e44asm17126425wrr.53.2022.07.27.05.55.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 05:55:07 -0700 (PDT)
-From: Nicolas Tran <nicolas.tran@smile.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y5eYW5ifpZHT for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 13:06:04 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85077812AF
+Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 85077812AF
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 13:06:04 +0000 (UTC)
+Received: from vfazio2.xes-mad.com (vfazio2.xes-mad.com [10.52.16.113])
+ by mail.xes-mad.com (Postfix) with ESMTP id DC8C2246EC;
+ Wed, 27 Jul 2022 08:06:02 -0500 (CDT)
+From: Vincent Fazio <vfazio@xes-inc.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 14:55:04 +0200
-Message-Id: <20220727125504.2177588-1-nicolas.tran@smile.fr>
-X-Mailer: git-send-email 2.32.0
+Date: Wed, 27 Jul 2022 08:05:48 -0500
+Message-Id: <20220727130548.3184889-1-vfazio@xes-inc.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220726174505.2976048-1-vfazio@xes-inc.com>
+References: <20220726174505.2976048-1-vfazio@xes-inc.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=yaHUEqQzZMmDVpnz4xH8qmU8Az0+7/7f/bR0iTnIOh4=;
- b=WsMPxtQxyj+tdPhK2zeihhukqPCZ0JwTy7DzGyhlkLBZT01/esnsooa2CGabsaUUBz
- zd+AFLCxiIMptmYM2zykGfT6ufDoZZJc1UpKO+B4blebDG0+5ySq9Ruiktsm+/xaPvyE
- Z6OvdfArhsrLZMGYBA2JPrW1vIJOsulEE4PPXjYVHsaECGpECEHswpiOVkFTHfIg25wX
- 3wzD+k1pkEfdhALPMjN4ahYs0tNZVLWwncDHOArIlz5nWVmPSaOBQ86dFE9UFAeg8FqR
- Dq0DsG5is3H0vmiP2TL/w5POCgpZOGztM0g+AIxx/oJPi7YI2YzmtO+qc3yv6+Yz/uNR
- EQgA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=WsMPxtQx
-Subject: [Buildroot] [PATCH v4] package/dust: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=xes-inc.com; s=mail; 
+ t=1658927162; bh=KPakmEjPufu0H4fcaXOi7cmIVIGUL4/bEWX96PETHZE=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=EGlHAq0StQ3kCj4MemDi42V3vXHiI6QJwBR2KQy+pLr7qRqzjvpLYk0LQDjXDZHkG
+ pP+iWad9XTXnlShW8WelBd7WW4HLUnPe5y/uc/A/uJX8Rv/566teSjCyOalfhFtfsw
+ hanTk4gO1QYe5rim4JZ9rTOOyC6vUK+q4VlDW1m4=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=xes-inc.com header.i=@xes-inc.com
+ header.a=rsa-sha256 header.s=mail header.b=EGlHAq0S
+Subject: [Buildroot] [PATCH v2] package/mcelog: bump to version 184
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,126 +68,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Nicolas Tran <nicolas.tran@smile.fr>
+Cc: Romain Naour <romain.naour@gmail.com>, Vincent Fazio <vfazio@xes-inc.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-dust is an alternative of the command du from the Linux kernel,
-written in Rust. It aims to be more intuitive and visual in order
-to give the user a better view of his system's storage capacity.
+Include a patch to introduce the `install-nodoc` make target to avoid
+a dependency on host-python3 for manpage generation.
 
-Signed-off-by: Nicolas Tran <nicolas.tran@smile.fr>
+Upstream: https://github.com/andikleen/mcelog/pull/109
+
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 ---
+Changes v1 -> v2:
+  - change patch to add install-nodoc make target (suggested by Thomas)
+  - drop host-python3 dependency (suggested by Thomas)
+  - document upstream PR (requested by Arnout)
 
-The package has been checked with correct formatting and
-without typos:
-$ ./utils/check-package package/dust/*
+ ...01-Makefile-add-install-nodoc-target.patch | 65 +++++++++++++++++++
+ package/mcelog/mcelog.hash                    |  2 +-
+ package/mcelog/mcelog.mk                      |  4 +-
+ 3 files changed, 68 insertions(+), 3 deletions(-)
+ create mode 100644 package/mcelog/0001-Makefile-add-install-nodoc-target.patch
 
-Tests have been run using test-pkg:
-$ ./utils/test-pkg -c dust.config -p dust
-
-test-pkg config:
-To run the test, the file dust.config contains the following line
-BR2_PACKAGE_DUST=y
-
-Results:
-     bootlin-armv5-uclibc [1/6]: SKIPPED
-      bootlin-armv7-glibc [2/6]: OK
-    bootlin-armv7m-uclibc [3/6]: SKIPPED
-      bootlin-x86-64-musl [4/6]: OK
-       br-arm-full-static [5/6]: SKIPPED
-             sourcery-arm [6/6]: OK
-
-This PATCH v4 contains an updated value of the dust tarball's hash.
-It was wrong in the previous patch because I made a $ make dust-dirclean
-without removing the sources in the dl/ directory while I trying to
-update the package from the v0.8.1-alpha.2 to the v0.8.1.
-Moreover, tests have been rerun successfully.
-
-Signed-off-by: Nicolas Tran <nicolas.tran@smile.fr>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/dust/Config.in | 11 +++++++++++
- package/dust/dust.hash |  3 +++
- package/dust/dust.mk   | 12 ++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/dust/Config.in
- create mode 100644 package/dust/dust.hash
- create mode 100644 package/dust/dust.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 270fc52de1..9938acb2fa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2184,6 +2184,7 @@ F:	package/exiv2/
- F:	package/ofono/
+diff --git a/package/mcelog/0001-Makefile-add-install-nodoc-target.patch b/package/mcelog/0001-Makefile-add-install-nodoc-target.patch
+new file mode 100644
+index 0000000000..a36a54c73c
+--- /dev/null
++++ b/package/mcelog/0001-Makefile-add-install-nodoc-target.patch
+@@ -0,0 +1,65 @@
++From c224ad8bafe859d640dfaf67d396c38c73880409 Mon Sep 17 00:00:00 2001
++From: Vincent Fazio <vfazio@xes-inc.com>
++Date: Wed, 27 Jul 2022 07:18:37 -0500
++Subject: [PATCH] Makefile: add install-nodoc target
++
++This target is useful for "essentials only" installs for embedded
++environments with the added benefit of not requiring a python
++interpreter for installing the package.
++
++Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
++---
++ Makefile | 19 +++++++++++--------
++ 1 file changed, 11 insertions(+), 8 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 339b8dd..50a322b 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -28,7 +28,7 @@ TRIGGERS=cache-error-trigger dimm-error-trigger page-error-trigger \
++ 
++ all: mcelog
++ 
++-.PHONY: install clean depend FORCE
+++.PHONY: install install-nodoc clean depend FORCE
++ 
++ OBJ := p4.o k8.o mcelog.o dmi.o tsc.o core2.o bitfield.o intel.o \
++        nehalem.o dunnington.o tulsa.o config.o memutil.o msg.o   \
++@@ -50,16 +50,11 @@ SRC := $(OBJ:.o=.c)
++ mcelog: ${OBJ} version.o
++ 
++ # dbquery intentionally not installed by default
++-install: mcelog mcelog.conf mcelog.conf.5 mcelog.triggers.5
++-	mkdir -p $(DESTDIR)${etcprefix}/etc/mcelog $(DESTDIR)${prefix}/sbin $(DESTDIR)$(MANDIR)/man5 $(DESTDIR)$(MANDIR)/man8
++-	install -m 755 -p mcelog $(DESTDIR)${prefix}/sbin/mcelog
+++install: install-nodoc mcelog.conf.5 mcelog.triggers.5
+++	mkdir -p $(DESTDIR)$(MANDIR)/man5 $(DESTDIR)$(MANDIR)/man8
++ 	install -m 644 -p mcelog.8 $(DESTDIR)$(MANDIR)/man8
++ 	install -m 644 -p mcelog.conf.5 $(DESTDIR)$(MANDIR)/man5
++ 	install -m 644 -p mcelog.triggers.5 $(DESTDIR)$(MANDIR)/man5
++-	install -m 644 -p -b mcelog.conf $(DESTDIR)${etcprefix}/etc/mcelog/mcelog.conf
++-	for i in ${TRIGGERS} ; do 						\
++-		install -m 755 -p -b triggers/$$i $(DESTDIR)${etcprefix}/etc/mcelog ; 	\
++-	done
++ ifdef DOCDIR
++ 	install -d 755 $(DESTDIR)${DOCDIR}
++ 	install -m 644 -p ${DOC} $(DESTDIR)${DOCDIR}
++@@ -68,6 +63,14 @@ else
++ 	echo "Consider defining DOCDIR to install additional documentation"
++ endif
++ 
+++install-nodoc: mcelog mcelog.conf
+++	mkdir -p $(DESTDIR)${etcprefix}/etc/mcelog $(DESTDIR)${prefix}/sbin
+++	install -m 755 -p mcelog $(DESTDIR)${prefix}/sbin/mcelog
+++	install -m 644 -p -b mcelog.conf $(DESTDIR)${etcprefix}/etc/mcelog/mcelog.conf
+++	for i in ${TRIGGERS} ; do 						\
+++		install -m 755 -p -b triggers/$$i $(DESTDIR)${etcprefix}/etc/mcelog ; 	\
+++	done
+++
++ mcelog.conf.5: mcelog.conf config-intro.man
++ 	./genconfig.py mcelog.conf config-intro.man > mcelog.conf.5
++ 
++-- 
++2.25.1
++
+diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
+index 598aa648fd..94b5f2cc37 100644
+--- a/package/mcelog/mcelog.hash
++++ b/package/mcelog/mcelog.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e9c82b565da06673c2630f9e6bc668634ad7d2c7f13c70db1900cce110ae62dc  mcelog-180.tar.gz
++sha256  067d52006f0aa42045acc6d9c04d590362448bacd8ef415d42729e6f35825028  mcelog-184.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index da7785ca91..24aeb5b519 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Nicolas Tran <nicolas.tran@smile.fr>
-+F:	package/dust/
- F:	package/hyperfine/
+-MCELOG_VERSION = 180
++MCELOG_VERSION = 184
+ MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
+ MCELOG_LICENSE = GPL-2.0
+ MCELOG_LICENSE_FILES = LICENSE
+@@ -15,7 +15,7 @@ define MCELOG_BUILD_CMDS
+ endef
  
- N:	Niklas Cassel <niklas.cassel@wdc.com>
-diff --git a/package/Config.in b/package/Config.in
-index f039d83113..f93ff56c8d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -211,6 +211,7 @@ menu "Filesystem and flash utilities"
- 	source "package/curlftpfs/Config.in"
- 	source "package/davfs2/Config.in"
- 	source "package/dosfstools/Config.in"
-+	source "package/dust/Config.in"
- 	source "package/e2fsprogs/Config.in"
- 	source "package/e2tools/Config.in"
- 	source "package/ecryptfs-utils/Config.in"
-diff --git a/package/dust/Config.in b/package/dust/Config.in
-new file mode 100644
-index 0000000000..7b6e9304bc
---- /dev/null
-+++ b/package/dust/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_DUST
-+	bool "dust"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  dust is an alternative written in Rust of the command "du"
-+	  from the Linux kernel. It aims to be more intuitive and visual
-+	  in order to give the user a better view of his system's
-+	  current storage capacity.
-+
-+	  https://github.com/bootandy/dust.git
-diff --git a/package/dust/dust.hash b/package/dust/dust.hash
-new file mode 100644
-index 0000000000..d4f6bff4e4
---- /dev/null
-+++ b/package/dust/dust.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  271cc0f1978049b2dbfece633b85d4dd0184df346bd93720062c13e4332f2549  dust-0.8.1.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/dust/dust.mk b/package/dust/dust.mk
-new file mode 100644
-index 0000000000..2cffc336a9
---- /dev/null
-+++ b/package/dust/dust.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# dust
-+#
-+################################################################################
-+
-+DUST_VERSION = 0.8.1
-+DUST_SITE = $(call github,bootandy,dust,v$(DUST_VERSION))
-+DUST_LICENSE = APACHE-2.0
-+DUST_LICENSE_FILES = LICENSE
-+
-+$(eval $(cargo-package))
+ define MCELOG_INSTALL_TARGET_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install-nodoc
+ endef
+ 
+ define MCELOG_INSTALL_INIT_SYSTEMD
 -- 
-2.32.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
