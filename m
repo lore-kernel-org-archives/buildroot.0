@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6419C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 15:10:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7E91C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 15:11:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76AC860D89;
-	Wed, 27 Jul 2022 15:10:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76AC860D89
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CcO1hLyHkmaP; Wed, 27 Jul 2022 15:10:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DD1360C2D;
-	Wed, 27 Jul 2022 15:10:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DD1360C2D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 692731BF41A
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:10:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 440B4824EF
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:10:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 440B4824EF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E51B8250B;
+	Wed, 27 Jul 2022 15:11:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E51B8250B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m2dYARqiJm9Y for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 15:10:50 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Dj7EHGPqfaFc; Wed, 27 Jul 2022 15:11:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78FDA824EF;
+	Wed, 27 Jul 2022 15:11:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78FDA824EF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 714A11BF41A
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:10:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C79E60D74
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 15:10:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C79E60D74
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t_ZjeVoehYAr for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 15:10:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 201F3824DD
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 201F3824DD
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:10:50 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id q18so14377399wrx.8
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 08:10:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ECE960B94
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3ECE960B94
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:10:53 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id v17so5858842wrr.10
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 08:10:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YlL3lGwXLaQiNOUHNItHHgckZdIhgUZ0wZ9W6udA+2c=;
- b=WyXYQy1eKqlpKJW7sT3ctl95rWMmBBMf/Gu7X4Jez9qGqfy5Ga+3+IziLT5bT1viEo
- CsPy9N8KXnaj452oFHpFIBje7Jue66Tg3jyJTJ1N7pqJAno/5g+jalnTtObjp8D1BIwC
- odNlUlCUJeXIkuxQRFHVaLtGf7PcCtVr+wyS9zMQnZWuTkrUDwRDAOY4XSgJAjC0EBti
- F2Fb9x+h/oSxLr9PVr9+S4tcGVXJEe1WlaVIJ8GW9Y+w/2IuRDZUH25fpNqFTzzZuCB8
- uXyMwMp2HLRlfC7gQE2WBsgcv9BTCALWCEki5/7OYMVsCBSGVZq+bthV0yaVUcHUoDTw
- z+6g==
-X-Gm-Message-State: AJIora/C7ERTpRIwMliC2Hk1IEhtQNYlBUD0Snf9SeUIyu9KBVoecggF
- n5FClGALqGx3jPT7jddDqnsyUiE9YwY=
-X-Google-Smtp-Source: AGRyM1tmbOVZ1EaWNNBj+hSzpcCvR5eb/jcSZdzKd0GgxsyAn580l/A66TKDyT9xlm2ghJZ5aCiJ5Q==
-X-Received: by 2002:a05:600c:1083:b0:3a3:1964:fb14 with SMTP id
- e3-20020a05600c108300b003a31964fb14mr3426227wmd.203.1658934648124; 
- Wed, 27 Jul 2022 08:10:48 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=hTkpl9zyNfxJLTREDf/rBsXU2r+EJVJ1gXFvNq9/XAQ=;
+ b=Din5cqZEhqgiIRMyFUBKM/LmO0YOfxKB0cieGHJdc7WNDiy/VhHOdxltxNNTCnl6GZ
+ tlBhrVKuxoJg+FpDP21A7p5gggbYrM88mCVhJyNeND8RA4rf/aa/AYJRtrNoSraWXJeN
+ WacM/Xp+XTsM+qU/f/bMZn0AhmCM883GslFHZx6R7DGJK3PHJFCE2FWngU8KklnM+/gz
+ hkyjrUQUPxtqESgOLfknO2tMHfj7jkuM5Qgm6u3NFdENn/2Pfq0gDcqMNZjgey6IYUBj
+ Prx8Iy6BGWvmiT3EMlaSrUiJ5lkmrVKOJLA9ciB8kz6NMtUhgQrEC99aG97Qo0+gJljK
+ fdEg==
+X-Gm-Message-State: AJIora/BRZQpvr8snFlBDfhfGadjBdgarNJnDuHxfjFh4TtmnglESjwt
+ 20RteUGLpP/f5QLSfUhlpYeJNf7Pi2w=
+X-Google-Smtp-Source: AGRyM1sUoth52qYQAHGjFz4bz1Ev43iDcRlmcp5PXKhIwd5yBEEs4guwL1xS6MY7SLcsE3VNDpPGkg==
+X-Received: by 2002:a05:6000:1549:b0:21d:c154:486d with SMTP id
+ 9-20020a056000154900b0021dc154486dmr15294446wry.50.1658934651281; 
+ Wed, 27 Jul 2022 08:10:51 -0700 (PDT)
 Received: from kali.home (2a01cb0680494f3e376d079efd3cafb3.ipv6.abo.wanadoo.fr.
  [2a01:cb06:8049:4f3e:376d:79e:fd3c:afb3])
  by smtp.gmail.com with ESMTPSA id
- p14-20020a05600c358e00b003a32297598csm2704022wmq.43.2022.07.27.08.10.47
+ p14-20020a05600c358e00b003a32297598csm2704022wmq.43.2022.07.27.08.10.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 08:10:47 -0700 (PDT)
+ Wed, 27 Jul 2022 08:10:50 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 17:10:36 +0200
-Message-Id: <20220727151037.1362328-1-fontaine.fabrice@gmail.com>
+Date: Wed, 27 Jul 2022 17:10:37 +0200
+Message-Id: <20220727151037.1362328-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220727151037.1362328-1-fontaine.fabrice@gmail.com>
+References: <20220727151037.1362328-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=YlL3lGwXLaQiNOUHNItHHgckZdIhgUZ0wZ9W6udA+2c=;
- b=b3pCgXmUHcVGpZxYpFdD+PKSXUdGUGsRCJp80XSzDbjOQKZyKlcLWObToE6wAlV+7m
- yGIOwOKRCGW7K5AYW3GKGfpJWv/ZzpCONY5Wkv6hURKnDilhfwSRQRpHu0NREusAQNf4
- 7Sf3o1QyYDR/McCex0/U0itLwZpbBWDK+SEfX4TLo6sLrWvYavOk4U5eZRUiCxDzGiSe
- c1RzQJ39XY0m3Mn2mxWtrazfhIQVAx3f6u49z4CHiaFmDdZrtwgN1Q2Gum+xkWAz7zjr
- xWf6NjKQWZQm3Q+faxcJ2OUJds5tJ8oaYiW+PFzHZefxsz6xZBavcJ1hV8UKGwvQKs+v
- hjoA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=hTkpl9zyNfxJLTREDf/rBsXU2r+EJVJ1gXFvNq9/XAQ=;
+ b=eVaobVtoobxaDm1e3IaCEobD2x3cje0DUwStKOrgbgIgBrgrXYo1pVtwJ5W0x2nc8o
+ B61XpZQQDENdJUXH1Bze3jNDsvT3UjZV2fgv8kjTzslF1pSL5ebxwe0qltbNhbebIG4T
+ 24GwbGHnrXuEH8t2w8Lx4D0NdMomhm2B20ViVW/dvTM1rN15yllrwN0SIb33BGtR8e3S
+ OTW4UlCukGfQ4eqab1OC8+Oiqaj7z0PwJ1ITxIbEW3LqhPaqp+UUCds/Gm+egYKe7QFF
+ xPe5Wr0tiIxES6S7dSZK2/VUfWGdLTXrWV2KEMGucAeyqOIaOdwMDimtlEZ2AklQtFlI
+ rVHw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=b3pCgXmU
-Subject: [Buildroot] [PATCH v2,1/2] package/minizip-zlib: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=eVaobVto
+Subject: [Buildroot] [PATCH v2,2/2] package/domoticz: selects minizip-zlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,98 +102,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Legacy minizip provided in contrib/minizip of zlib.
-
-https://www.winimage.com/zLibDll/minizip.html
+Selects minizip-zlib and so drop git submodules
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - Drop virtual-package
+ package/domoticz/Config.in     | 1 +
+ package/domoticz/domoticz.hash | 2 +-
+ package/domoticz/domoticz.mk   | 8 ++++----
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/minizip-zlib/Config.in         |  7 +++++++
- package/minizip-zlib/minizip-zlib.hash |  4 ++++
- package/minizip-zlib/minizip-zlib.mk   | 20 ++++++++++++++++++++
- 5 files changed, 33 insertions(+)
- create mode 100644 package/minizip-zlib/Config.in
- create mode 100644 package/minizip-zlib/minizip-zlib.hash
- create mode 100644 package/minizip-zlib/minizip-zlib.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3645a22fea..1e55f8e90c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -958,6 +958,7 @@ F:	package/mbedtls/
- F:	package/mbedtls3/
- F:	package/minissdpd/
- F:	package/minizip/
-+F:	package/minizip-zlib/
- F:	package/mongodb/
- F:	package/motion/
- F:	package/mutt/
-diff --git a/package/Config.in b/package/Config.in
-index 654990ab97..a2ab473940 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1401,6 +1401,7 @@ menu "Compression and decompression"
- 	source "package/lz4/Config.in"
- 	source "package/lzo/Config.in"
- 	source "package/minizip/Config.in"
-+	source "package/minizip-zlib/Config.in"
- 	source "package/snappy/Config.in"
- 	source "package/szip/Config.in"
- 	source "package/zchunk/Config.in"
-diff --git a/package/minizip-zlib/Config.in b/package/minizip-zlib/Config.in
-new file mode 100644
-index 0000000000..fe9b337a86
---- /dev/null
-+++ b/package/minizip-zlib/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MINIZIP_ZLIB
-+	bool "minizip-zlib"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Legacy minizip provided in contrib/minizip of zlib.
-+
-+	  https://www.winimage.com/zLibDll/minizip.html
-diff --git a/package/minizip-zlib/minizip-zlib.hash b/package/minizip-zlib/minizip-zlib.hash
-new file mode 100644
-index 0000000000..4d2c5c29d3
---- /dev/null
-+++ b/package/minizip-zlib/minizip-zlib.hash
-@@ -0,0 +1,4 @@
-+# From http://www.zlib.net/
-+sha256  4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066  zlib-1.2.11.tar.xz
-+# License files, locally calculated
-+sha256  7960b6b1cc63e619abb77acaea5427159605afee8c8b362664f4effc7d7f7d15  README
-diff --git a/package/minizip-zlib/minizip-zlib.mk b/package/minizip-zlib/minizip-zlib.mk
-new file mode 100644
-index 0000000000..935877678d
---- /dev/null
-+++ b/package/minizip-zlib/minizip-zlib.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# minizip-zlib
-+#
-+################################################################################
-+
-+MINIZIP_ZLIB_VERSION = 1.2.11
-+MINIZIP_ZLIB_SOURCE = zlib-$(MINIZIP_ZLIB_VERSION).tar.xz
-+MINIZIP_ZLIB_SITE = http://www.zlib.net
-+MINIZIP_ZLIB_LICENSE = Zlib
-+MINIZIP_ZLIB_LICENSE_FILES = README
-+MINIZIP_ZLIB_INSTALL_STAGING = YES
-+MINIZIP_ZLIB_SUBDIR = contrib/minizip
-+# configure is not shipped in contrib/minizip
-+MINIZIP_ZLIB_AUTORECONF = YES
-+MINIZIP_ZLIB_DEPENDENCIES = zlib
-+# demos must be disabled to avoid a conflict with BR2_PACKAGE_MINIZIP_DEMOS
-+MINIZIP_ZLIB_CONF_OPTS = --disable-demos
-+
-+$(eval $(autotools-package))
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index 4324d13cee..85361eecf0 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -19,6 +19,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	select BR2_PACKAGE_FMT
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_MINIZIP_ZLIB
+ 	select BR2_PACKAGE_MOSQUITTO
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_SQLITE
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index 18bf57b7e0..9de241015c 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  b7faf959c4f1dbfec3b0c17ab495f29b3d1437bc2251579c5252be82247e7ff9  domoticz-2022.1-br1.tar.gz
++sha256  8282cb71c924b6ef92503976d50f966f2c785eab8f8cffa1136ac133f0241157  domoticz-2022.1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 5edc10e8d8..f21c52d432 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -5,9 +5,7 @@
+ ################################################################################
+ 
+ DOMOTICZ_VERSION = 2022.1
+-DOMOTICZ_SITE = https://github.com/domoticz/domoticz
+-DOMOTICZ_SITE_METHOD = git
+-DOMOTICZ_GIT_SUBMODULES = YES
++DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
+ DOMOTICZ_LICENSE = GPL-3.0
+ DOMOTICZ_LICENSE_FILES = License.txt
+ DOMOTICZ_CPE_ID_VENDOR = domoticz
+@@ -19,6 +17,7 @@ DOMOTICZ_DEPENDENCIES = \
+ 	jsoncpp \
+ 	libcurl \
+ 	lua \
++	minizip \
+ 	mosquitto \
+ 	openssl \
+ 	sqlite \
+@@ -34,10 +33,11 @@ DOMOTICZ_CONF_OPTS += \
+ 	-DUSE_OPENSSL_STATIC=OFF
+ 
+ # Do not use any built-in libraries which are enabled by default for
+-# jsoncpp, fmt, sqlite and mqtt
++# jsoncpp, fmt, minizip, sqlite and mqtt
+ DOMOTICZ_CONF_OPTS += \
+ 	-DUSE_BUILTIN_JSONCPP=OFF \
+ 	-DUSE_BUILTIN_LIBFMT=OFF \
++	-DUSE_BUILTIN_MINIZIP=OFF \
+ 	-DUSE_BUILTIN_SQLITE=OFF \
+ 	-DUSE_BUILTIN_MQTT=OFF
+ 
 -- 
 2.35.1
 
