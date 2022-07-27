@@ -1,87 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E287BC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9FE6C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:50:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BFBD416C0;
-	Wed, 27 Jul 2022 22:37:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BFBD416C0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23B9D403B8;
+	Wed, 27 Jul 2022 22:50:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23B9D403B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j92a1c2gScj3; Wed, 27 Jul 2022 22:37:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vv9jUkJwwHQf; Wed, 27 Jul 2022 22:50:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BAE141690;
-	Wed, 27 Jul 2022 22:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BAE141690
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2235F40195;
+	Wed, 27 Jul 2022 22:50:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2235F40195
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F265A1BF47F
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:37:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7DFB11BF834
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:50:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA65282A8F
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:37:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA65282A8F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64B97827D9
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64B97827D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eJJ0dMoU1W7t for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 22:37:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E431782A87
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E431782A87
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 22:37:19 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id d8so36653wrp.6
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:37:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=4hqjVhv3+KTAJ4W70wSA1FqkcbL6JldADBZf01TjwL4=;
- b=PbfVC3PUM7f9jOlvr223InvI7ek6RkhKLUku+nMgcpIJpRJXFpuqwlZK+4QhFvR72S
- vLfwnYcZcgExRvFkNCETkI3K/4OFl1fKOQlbL97plclqa0uKPWcKez5/WHJuMyDWTT8k
- CQlMMXof4gLKDVCSyIs9aZE2JCr2eD5rNewTwmV5lCKrxmfD1ir+nxXau02UkylPQi2M
- IIOFejzD5d43FSC21Zouh52KykIYtSvVtGs0PVnM0gCy3sECgMc6iSM9HGVdqaDjDLS2
- TsIonbhtIX7OkBHm5TwBu6AwZY4WEqSJf0iLX95YZzs1CxqiSb6cSEJMM144XeOytgiT
- 2OxA==
-X-Gm-Message-State: AJIora8LnHfhfMQFDZI2kXnVgxZTK8J54rymrGdnfwzmOMaa3aNtYiS2
- r1j1sZJFCYNpXq0aAx9ydugMpvHI290=
-X-Google-Smtp-Source: AGRyM1uDNifK81wTUegyrnVitk7ZGf3pRhNqB8lcZNLXyXUjCL/NwZIcXY6oDRQFeJ2M1g2yO1+7FA==
-X-Received: by 2002:a5d:5a12:0:b0:21e:8327:7e03 with SMTP id
- bq18-20020a5d5a12000000b0021e83277e03mr12347026wrb.567.1658961437901; 
- Wed, 27 Jul 2022 15:37:17 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- p12-20020a05600c23cc00b003a2c67aa6c0sm4005721wmb.23.2022.07.27.15.37.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 15:37:17 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id 8-r_XLhadwbA for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 22:50:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4318C826FF
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 22:50:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4318C826FF
+Received: by busybox.osuosl.org (Postfix, from userid 4052)
+ id 3EA7F8677A; Wed, 27 Jul 2022 22:36:52 +0000 (UTC)
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 00:37:14 +0200
-Message-Id: <20220727223714.1452262-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=4hqjVhv3+KTAJ4W70wSA1FqkcbL6JldADBZf01TjwL4=;
- b=E0sXVejHMNxe3YUONaXjsmFrkqICp6b29JKdTqIn+CyV4Y5dOUQ53dMRK33J6GWwum
- wL9G67AEPi5uolks0rVBJLCq273wo44Ecv5Gf9V2safxkLnFPKBdJuw67hNbsfkLjA6U
- 6fxZpL3o5R5v6odt04LWqFK/nf/LtUufHFGbuc6lX1qD+lHw78tUPsuCVilBTs43YeEx
- 6bMR4aOJpgDqWimk9MNABD2/HitalGDyeEBbDcTJQFqcpkCSm/nCWH4BzuxhV+dHU3Xa
- QPwW81iaUyRA+v9JaVH0hpi6l4ycbPljAwViv+rYXrpl6/CTyjduMn7gQP62Lio2rJiA
- Rlog==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=E0sXVejH
-Subject: [Buildroot] [PATCH 1/1] package/gdal: fix license hash
+Date: Thu, 28 Jul 2022 00:48:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e3f1c960be9f9a814ba2a7010ad78c7ba9d11839
+X-Git-Newrev: 50e398e2d9f7e01ddcddb00929041546d750d32a
+X-Patchwork-Hint: ignore
+Message-Id: <20220727223652.3EA7F8677A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/run-test: add test for systemd
+ using dbus-broker
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,42 +57,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dominik Michael Rauh <dmrauh@posteo.de>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-license hash is wrong since the addition of the package in commit
-1e64fa2956171cdc9d6e6c8896b4b589ce573513:
+commit: https://git.buildroot.net/buildroot/commit/?id=50e398e2d9f7e01ddcddb00929041546d750d32a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ERROR: LICENSE.TXT has wrong sha256 hash:
-ERROR: expected: b82e6cca0b13f5db2f22ab667f22254fb1f4b135ea73d5bd6238ef89aff31f6c
-ERROR: got     : fac0116e799ca4de79b076ee04863b5e2b69541ea3664b9bb108c81a5355f16a
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+Add four new tests for systemd (rw and ro in each case):
+  - use dbus-broker instead of the original dbus
+  - use the original dbus, with dbus-broker installed
 
-Fixes:
- - http://autobuild.buildroot.org/results/e443db6d7ff3ae867035d169853b880b5e13d181
+The first two extend the existing IfUpDown test cases by just enabling
+dbus-broker; the second ones extend this further, by explicitly enabling
+the original dbus.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For one of the tests, we overload the test_run() function to test that
+the dbus-broker daemon is indeed running as root. We need not replicate
+that check in the other dbus-broker-only test, and it does not make
+sense to test that in tests that have the original dbus enabled.
+
+Presence of the original dbus and dbus-broker on the same system is
+valid: the original dbus is used as the default system bus daemon. We do
+not test switching between the two at runtime, though as this is really
+too corner-case specific. We just test to ensure the original dbus
+system bus daemon is not impacted by the presence of dbus-broker.
+
+Note: the 'full' test-case enables all systemd options, and some of them
+do pull the original dbus package, so we can't use that to test the
+integration of dbus-broker; instead, we extend the ifupdown case, which
+does not enable the original dbus.
+
+The default external toolchain for cortex-A9 is the old ARM toolchain
+which has kernel headers 4.10 Since dbus-broker needs toolchain headers
+>= 4.17, it can't be selected with this toolchain. Switch the systemd
+tests to the Bootlin toolchains instead. We switch all of them to make
+things easier. Note that we will need to take care in the future that
+the headers version used in the bootlin toolchain doesn't get bigger
+than the kernel that is used. The kernel is currently 5.10, the headers
+in the bleeding edge bootlin toolchain are 5.4.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gdal/gdal.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/init/test_systemd.py | 47 ++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/gdal/gdal.hash b/package/gdal/gdal.hash
-index 52bb60de35..826a7f0b45 100644
---- a/package/gdal/gdal.hash
-+++ b/package/gdal/gdal.hash
-@@ -3,4 +3,4 @@ md5  4b7981efbeed69c06c79fb65d0a60d83  gdal-3.5.1.tar.xz
- sha256  d12c30a9eacdeaab493c0d1c9f88eb337c9cbb5bb40744c751bdd5a5af166ab6  gdal-3.5.1.tar.xz
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index be28209ba0..06c42736ae 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -9,6 +9,7 @@ class InitSystemSystemdBase(InitSystemBase):
+         BR2_cortex_a9=y
+         BR2_ARM_ENABLE_VFP=y
+         BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+         BR2_INIT_SYSTEMD=y
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         # BR2_TARGET_ROOTFS_TAR is not set
+@@ -76,6 +77,29 @@ class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
+         self.check_systemd("squashfs")
  
- # Hashes of license files:
--sha256  b82e6cca0b13f5db2f22ab667f22254fb1f4b135ea73d5bd6238ef89aff31f6c  LICENSE.TXT
-+sha256  fac0116e799ca4de79b076ee04863b5e2b69541ea3664b9bb108c81a5355f16a  LICENSE.TXT
--- 
-2.35.1
-
+ 
++class TestInitSystemSystemdRoIfupdownDbusbroker(TestInitSystemSystemdRoIfupdown):
++    config = TestInitSystemSystemdRoIfupdown.config + \
++        """
++        BR2_PACKAGE_DBUS_BROKER=y
++        """
++
++    def test_run(self):
++        # Parent class' test_run() method does exactly that, no more:
++        self.check_systemd("squashfs")
++
++        # Check that the dbus-broker daemon is running as non-root
++        cmd = "find /proc/$(pidof dbus-broker) -maxdepth 1 -name exe -user dbus"
++        out, _ = self.emulator.run(cmd)
++        self.assertEqual(len(out), 1)
++
++
++class TestInitSystemSystemdRoIfupdownDbusbrokerDbus(TestInitSystemSystemdRoIfupdownDbusbroker):
++    config = TestInitSystemSystemdRoIfupdownDbusbroker.config + \
++        """
++        BR2_PACKAGE_DBUS=y
++        """
++
++
+ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
+@@ -88,6 +112,29 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+         self.check_systemd("ext2")
+ 
+ 
++class TestInitSystemSystemdRwIfupdownDbusbroker(TestInitSystemSystemdRwIfupdown):
++    config = TestInitSystemSystemdRwIfupdown.config + \
++        """
++        BR2_PACKAGE_DBUS_BROKER=y
++        """
++
++    def test_run(self):
++        # Parent class' test_run() method does exactly that, no more:
++        self.check_systemd("ext2")
++
++        # Check that the dbus-broker daemon is running as non-root
++        cmd = "find /proc/$(pidof dbus-broker) -maxdepth 1 -name exe -user dbus"
++        out, _ = self.emulator.run(cmd)
++        self.assertEqual(len(out), 1)
++
++
++class TestInitSystemSystemdRwIfupdownDbusbrokerDbus(TestInitSystemSystemdRwIfupdownDbusbroker):
++    config = TestInitSystemSystemdRwIfupdownDbusbroker.config + \
++        """
++        BR2_PACKAGE_DBUS=y
++        """
++
++
+ class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
