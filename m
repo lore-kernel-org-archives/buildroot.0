@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D3B8C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 09:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB500C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 09:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9783281971;
-	Wed, 27 Jul 2022 09:16:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9783281971
+	by smtp3.osuosl.org (Postfix) with ESMTP id 363B060B42;
+	Wed, 27 Jul 2022 09:21:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 363B060B42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hjO9dNPQQ9qu; Wed, 27 Jul 2022 09:16:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CmR7En9jDR8T; Wed, 27 Jul 2022 09:21:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B319B81919;
-	Wed, 27 Jul 2022 09:16:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B319B81919
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ACE231BF57F
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:16:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6366060B3A;
+	Wed, 27 Jul 2022 09:21:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6366060B3A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AD4061BF57F
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84D7B4041C
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:16:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84D7B4041C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 869F0408CF
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 09:21:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 869F0408CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ImE0SYpHb23g for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 09:16:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id blz2k1-H2578 for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 09:21:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80F754028D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C2DC408CC
 Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
  [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 80F754028D
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 09:16:18 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id i8so360245wro.11
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 02:16:18 -0700 (PDT)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2C2DC408CC
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 09:21:28 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id i8so376480wro.11
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 02:21:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=qB2XZAafY6LgT3VSNxWtU/W+zXTIlQPpFGnPCDWm164=;
- b=426e3L2vFIin5TlRdJFimXwJ8CRGUYqH66gM7yox2q9hzCEFx/nAKDJGGO0QzZusZ2
- epVx3pgmN39ag4WG6E6DFSUkSU9M3teNHYFNg6Q/g7RRHU1z8962xYSPxDUrwyRBY1q/
- 8gN454LlkqH2N5MOs2AmoXHv2HaMROYE3S4Hafp3TFMu+W2BoAbCJvg4t2TlxnURmWqu
- HgQYMLGtYeX0zLw1KCfXhHrbNzxgflZKA4YAqJVt1ckqxGA+acXE6T1oUkdTWrvH0JG6
- K57WkvD/tj1wDaUhC/fyugLf+cX8bo3xYrFFYE9jetRsW+FKX/UgIqkREbG2+sb0LXPm
- LWew==
-X-Gm-Message-State: AJIora97xToEusGnj2EYarpF64E5irJjcC6hUGhsUCInnIEJGHrmd8p5
- DptYAdTthO2jSxrgrFrtiCmqx+G0iLw=
-X-Google-Smtp-Source: AGRyM1tfW93ajtvsNft7IXkMrXL0voW8jdk0RMsF996sKKBe2RKbtsHG00cW2RLak6doYsbP3WhJyQ==
-X-Received: by 2002:a05:6000:1549:b0:21d:bdce:1d01 with SMTP id
- 9-20020a056000154900b0021dbdce1d01mr14019103wry.373.1658913376125; 
- Wed, 27 Jul 2022 02:16:16 -0700 (PDT)
+ bh=wqLAPTukMgqLxsBIVOghRglBDUEq+xmqFu8CX3MvYdA=;
+ b=FRdGvb17zeSGBGTApXU5YiekiYzOMB7C+llexSE1oR1xVweINoSz1/gICPEVvbRJa4
+ JeA0azRwTxA786jB61aahM5yjPzZARERsBY7ar10qfBzcrFVRqj38X95TYf0D3uvLV77
+ dZGMKWisdzQHN2HKx7DzhwBI1fvo3JaxEP79Kx1m7Z2GbqOyOc/710aROONUAZYMwIcT
+ cY/D73WGJbfwDiMmfCN0MrCVkaF4gEX8QKSaC1xr2gh6oDu2xGHwldYL5zS4LqXrPzAm
+ /OznPvfYM/FUT3DZvuiNZfw6mPrynNvyQcNyKfGQrZlmwEawqO5AxgMZPJHEycFmuc6d
+ asvw==
+X-Gm-Message-State: AJIora8r/ZO3VylJ3lrxrN6FOMptC4qzXhE6/e7VXaFgMQ8NWzDk6q1N
+ Uc8vtgGeaHqUtSpB02e+SmHxUtzeEuY=
+X-Google-Smtp-Source: AGRyM1s5ZMUKN389w5wIOVjAXLbtFBMaNNUlMYaEJNGwOWDAhvbdfHYtj1npHppQQ80yASHsJwtljg==
+X-Received: by 2002:a5d:528a:0:b0:21d:7c04:2ddf with SMTP id
+ c10-20020a5d528a000000b0021d7c042ddfmr12938943wrv.422.1658913686043; 
+ Wed, 27 Jul 2022 02:21:26 -0700 (PDT)
 Received: from kali.home (2a01cb0680494f3e376d079efd3cafb3.ipv6.abo.wanadoo.fr.
  [2a01:cb06:8049:4f3e:376d:79e:fd3c:afb3])
  by smtp.gmail.com with ESMTPSA id
- t15-20020adfe10f000000b0021ee28ff76esm120539wrz.38.2022.07.27.02.16.15
+ f12-20020a5d568c000000b0021e5cc26dd0sm15119704wrv.62.2022.07.27.02.21.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 02:16:15 -0700 (PDT)
+ Wed, 27 Jul 2022 02:21:25 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 11:16:07 +0200
-Message-Id: <20220727091607.979180-1-fontaine.fabrice@gmail.com>
+Date: Wed, 27 Jul 2022 11:21:23 +0200
+Message-Id: <20220727092123.985892-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=qB2XZAafY6LgT3VSNxWtU/W+zXTIlQPpFGnPCDWm164=;
- b=BEgYRg1CihmeLNEwsOiMFm5cpyp7GG644tOX+bFX5kGFlMZOg1VKRA1eD7omf4pdVx
- 9sO+qk57gFMe7qut6OplkrtWZlRI88vS+5NTRgTl+Ee58CITGUAQdaFL0xAEH7wb2PKF
- OApl6fatTLwuQgKWxSIjKKyzJHx3gtsrVIU22Xqo+wZzaCmmW1PSraYr4ysJchWTxwJk
- DlZV+zcFlfSqub0/B3Nc342O9oXTtmBlr8zpGbppbOsrsLFFLMrxywL3IhgBOKCybgoL
- ByQLnhKa9xQWZ1bGfChDIkM2A/ezY7EJKLGYYon6fvCzTjmSHXmYPMgrdVbNk9dkI0xz
- u22g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=wqLAPTukMgqLxsBIVOghRglBDUEq+xmqFu8CX3MvYdA=;
+ b=F99bJpK1JQJ5aUg/fky7X3J0ZG9x841lkzVyklv5dzHt6FFNOBME2aVbZJMllMg7wg
+ 35TnmjqGyS0yVOzyd23T0tgUVrbdTixbx7DgMUZ2VF2ipyoAi7+O67VJy8Y2snNTcLtS
+ ARNfMLEHxZzxst+gy7DeGZmLGtnz7Uc4RcWDsN4UmHq47x/saR8nfEhvoiK+Zqi2q9nx
+ 17D9mQhAkdOBLSXSSqtrAHJNngT1DmwQ7cUrRzT0oW+1hDQ9Im1TXYRrk/WxIDVGQQUQ
+ Bj+lrFx8k/X0VsGdF3ZdBXApS1pTqzRShP6kVT4Hd6Z5jwTDNlreVpy5qZacnRCqHbhl
+ MF7Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BEgYRg1C
-Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: bump to version 2.42.8
+ header.a=rsa-sha256 header.s=20210112 header.b=F99bJpK1
+Subject: [Buildroot] [PATCH 1/1] package/drbd-utils: bump to version 9.21.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,84 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Christophe Vu-Brugier <cvubrugier@fastmail.fm>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/blob/2.42.8/NEWS
+https://github.com/LINBIT/drbd-utils/blob/v9.21.4/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.hash |  4 ++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 22 +++++++++++-----------
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ package/drbd-utils/drbd-utils.hash | 2 +-
+ package/drbd-utils/drbd-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index 5e7dc7e03b..4bb246aa50 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
+index 58d282714e..9bdfd69538 100644
+--- a/package/drbd-utils/drbd-utils.hash
++++ b/package/drbd-utils/drbd-utils.hash
 @@ -1,3 +1,3 @@
--# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.4.sha256sum
--sha256  fe9c5dd88f486194ea2bc09b8814c1ed895bb6c530f37cbbf259757c4e482e4d  gdk-pixbuf-2.42.4.tar.xz
-+# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.8.sha256sum
-+sha256  84acea3acb2411b29134b32015a5b1aaa62844b19c4b1ef8b8971c6b0759f4c6  gdk-pixbuf-2.42.8.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 329c05520e..57e8bbd511 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256  3827bfed6630f8784ec558a8ac3de68175d544876d897c0810ad141a61487cad  drbd-utils-9.19.0.tar.gz
++sha256  730d68b9ee48df7b2e3ddff38bf54a5bc405651bac0ece180b4f22a468e543b3  drbd-utils-9.21.4.tar.gz
+ sha256  1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index 2082810a37..3ab3246f49 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GDK_PIXBUF_VERSION_MAJOR = 2.42
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).4
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).8
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPL-2.1+
-@@ -41,30 +41,30 @@ GDK_PIXBUF_CONF_OPTS += -Dintrospection=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
--GDK_PIXBUF_CONF_OPTS += -Dpng=true
-+GDK_PIXBUF_CONF_OPTS += -Dpng=enabled
- GDK_PIXBUF_DEPENDENCIES += libpng
- else
--GDK_PIXBUF_CONF_OPTS += -Dpng=false
-+GDK_PIXBUF_CONF_OPTS += -Dpng=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_JPEG),y)
--GDK_PIXBUF_CONF_OPTS += -Djpeg=true
--HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=true
-+GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
- GDK_PIXBUF_DEPENDENCIES += jpeg
- HOST_GDK_PIXBUF_DEPENDENCIES += host-libjpeg
- else
--GDK_PIXBUF_CONF_OPTS += -Djpeg=false
--HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=false
-+GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_TIFF),y)
--GDK_PIXBUF_CONF_OPTS += -Dtiff=true
--HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=true
-+GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
- GDK_PIXBUF_DEPENDENCIES += tiff
- HOST_GDK_PIXBUF_DEPENDENCIES += host-tiff
- else
--GDK_PIXBUF_CONF_OPTS += -Dtiff=false
--HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=false
-+GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
- endif
- 
- # gdk-pixbuf requires the loaders.cache file populated to work properly
+-DRBD_UTILS_VERSION = 9.19.0
++DRBD_UTILS_VERSION = 9.21.4
+ DRBD_UTILS_SITE = http://pkg.linbit.com/downloads/drbd/utils
+ DRBD_UTILS_LICENSE = GPL-2.0+
+ DRBD_UTILS_LICENSE_FILES = COPYING
 -- 
 2.35.1
 
