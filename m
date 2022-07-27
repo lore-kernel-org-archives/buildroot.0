@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55FF9C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2999C04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 10:49:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDEA481BB4;
-	Wed, 27 Jul 2022 10:49:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDEA481BB4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C1F081B53;
+	Wed, 27 Jul 2022 10:49:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C1F081B53
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jXzA5DMh5zLi; Wed, 27 Jul 2022 10:49:13 +0000 (UTC)
+	with ESMTP id Oy5m5WXkx_Pj; Wed, 27 Jul 2022 10:49:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8AC181B9A;
-	Wed, 27 Jul 2022 10:49:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8AC181B9A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7E1631BF4E6
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:48:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 986B481B35;
+	Wed, 27 Jul 2022 10:49:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 986B481B35
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 121B31BF4E6
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 48D9480BD4
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:48:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48D9480BD4
+ by smtp2.osuosl.org (Postfix) with ESMTP id E1678404E2
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 10:48:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1678404E2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t7_fFsP3tHPM for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 10:48:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44B9280BBD
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:48:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44B9280BBD
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 61AB1865BE; Wed, 27 Jul 2022 10:34:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 12:14:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 49b8fad29c65971f97bb81a7b7c4a1fda7276df4
-X-Git-Newrev: 117b15866a1d1b87adc87b95768f2a0a62b13905
-X-Patchwork-Hint: ignore
-Message-Id: <20220727103457.61AB1865BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sconeserver: add sqlite optional
- dependency
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2qvft0c82UjW for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 10:48:56 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCF41404B2
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BCF41404B2
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 10:48:54 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id AD3C560008;
+ Wed, 27 Jul 2022 10:48:52 +0000 (UTC)
+Date: Wed, 27 Jul 2022 12:48:51 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220727124851.198ee5d1@windsurf>
+In-Reply-To: <20220727094352.1051200-1-fontaine.fabrice@gmail.com>
+References: <20220727094352.1051200-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658918933;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=IpyuoxvMZ0uD0PhsHVM1BvZt2mysoPYFvHHZV1jbpvo=;
+ b=Ip92ANfF9h21U4ojKk6bodQJCBX2RbUEuK6oiJTgjgrG+kb0KzKHsZ2ATdfpoyCP9lK82q
+ z/amfxI0eXFDaUDnAmGMD9wM2JwNcaBss7GbRnS4qJL7x1F39t62HIEuXM7teNwHtU8a6b
+ BKaaiP6w5FXPLFM907aarBG8GLtc+CrZuCdqy0xo937c6nVUw1jEpUivM2Wfh+Zcm5f3Id
+ vwkh4TVamc1fZaNdHA8JHdUsQW7F12427ZL4ju9NCMRdysdoBvAY9QvLW061FxirBHxg6G
+ XkKYzzheK5LalFnGiS3p9+6FAqbTgoQm0TQXlgE5+kKybQ66id2Eb+dGB2lr2Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Ip92ANfF
+Subject: Re: [Buildroot] [PATCH 1/3] package/sconeserver: reorder options
+ alphabetically
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,60 +78,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Samuel Martin <s.martin49@gmail.com>, Simon Dawson <spdawson@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=117b15866a1d1b87adc87b95768f2a0a62b13905
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 27 Jul 2022 11:43:50 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-sqlite is an optional dependency which is enabled by default since
-https://github.com/sconemad/sconeserver/commit/4120395991c2c63abef58426beee4ecf5879c204
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/sconeserver/Config.in      | 42 +++++++++++++++---------------
+>  package/sconeserver/sconeserver.mk | 42 +++++++++++++++---------------
+>  2 files changed, 42 insertions(+), 42 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sconeserver/Config.in      | 6 ++++++
- package/sconeserver/sconeserver.mk | 7 +++++++
- 2 files changed, 13 insertions(+)
+Series applied, thanks!
 
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index 4ade8b4590..eed777ae96 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -76,6 +76,12 @@ config BR2_PACKAGE_SCONESERVER_RSS
- 	help
- 	  RSS module for Sconeserver
- 
-+config BR2_PACKAGE_SCONESERVER_SQLITE
-+	bool "sqlite"
-+	select BR2_PACKAGE_SQLITE
-+	help
-+	  SQLite module for Sconeserver
-+
- config BR2_PACKAGE_SCONESERVER_TESTBUILDER
- 	bool "testbuilder"
- 	help
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index bad050210e..fd7e6774eb 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -91,6 +91,13 @@ else
- SCONESERVER_CONF_OPTS += --without-rss
- endif
- 
-+ifeq ($(BR2_PACKAGE_SCONESERVER_SQLITE),y)
-+SCONESERVER_DEPENDENCIES += sqlite
-+SCONESERVER_CONF_OPTS += --with-sqlite
-+else
-+SCONESERVER_CONF_OPTS += --without-sqlite
-+endif
-+
- ifeq ($(BR2_PACKAGE_SCONESERVER_TESTBUILDER),y)
- SCONESERVER_CONF_OPTS += --with-testbuilder
- else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
