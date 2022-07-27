@@ -4,84 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89ABEC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 07:33:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7537FC04A68
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 07:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DD844088D;
-	Wed, 27 Jul 2022 07:33:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DD844088D
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0EF34098C;
+	Wed, 27 Jul 2022 07:40:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0EF34098C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rhe5eDoFD0Bv; Wed, 27 Jul 2022 07:33:54 +0000 (UTC)
+	with ESMTP id OVYBPmG4Xil5; Wed, 27 Jul 2022 07:40:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5ECB5408A3;
-	Wed, 27 Jul 2022 07:33:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ECB5408A3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 132551BF3A0
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:33:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0D454098D;
+	Wed, 27 Jul 2022 07:40:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0D454098D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D211D1BF3A0
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:40:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B8EE340246
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:33:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8EE340246
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3BC9401C5
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 07:40:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3BC9401C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oB5NYw8oAewz for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 07:33:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1DD64028D
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F1DD64028D
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 07:33:23 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id v17so4047515wrr.10
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 00:33:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=QDNzEMJXteorxDolusjQ1XqrN0CMOirqkOdYD1HrUkA=;
- b=bpHBmZnNaFKBYYOshE/6rA5K08zgd+YnAu5WlYbCsOCtXRdKntmvAPAQh/EBu1tA+Z
- jHLxFSjw8UDOKZbXWljPOMCwL1bANm6dMou707NdMeujlRnqi0E8d/f3to65D17KoyDn
- w/NADtYUG9Iy+wLGKoLvbHhqYu8JX+sYmVxddzvXZxOfaX5HHMzeHLicR6PYNyf8AgFj
- r5mj5FEhx5qtFUYWLYlsRekQxKsKb7K7Edka4esemi6MW0etbh0+SIJ4HEDnToG508Cj
- 92ctnwu/ihJciciqAf2GXIsu3JXOxUqESXF1VQUnPuV2SInE840y1iZWUzE+dCxl958J
- bkfA==
-X-Gm-Message-State: AJIora9LG5kIgjwd+N31FY2rqHQT9uapw1/ZhMA19qehDffO4LkpQ+eL
- mq1JgqY5eZuwGPKd/h0quTCj5pEFNEPgGg==
-X-Google-Smtp-Source: AGRyM1v0Pk3qUXZBnYfgM9JufjT4k0nUQ5KmxGuk1NxZFXM+SUlIh55vBsw4pIP3W8dfHfokDFDByw==
-X-Received: by 2002:a5d:47a4:0:b0:21e:6994:92c4 with SMTP id
- 4-20020a5d47a4000000b0021e699492c4mr12838964wrb.632.1658907201747; 
- Wed, 27 Jul 2022 00:33:21 -0700 (PDT)
-Received: from P-NTS-Evian.home ([2a01:cb19:8acf:5600:86bb:8231:62d7:1874])
- by smtp.gmail.com with ESMTPSA id
- q9-20020adfaa49000000b0021e7e050404sm12313000wrd.117.2022.07.27.00.33.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 00:33:21 -0700 (PDT)
-From: Romain Naour <romain.naour@smile.fr>
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 09:32:32 +0200
-Message-Id: <20220727073232.834610-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.34.3
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BnVlZiFvrQXq for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 07:40:38 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14A61403E9
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 14A61403E9
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 07:40:37 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 274C0200007;
+ Wed, 27 Jul 2022 07:40:35 +0000 (UTC)
+Date: Wed, 27 Jul 2022 09:40:33 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220727094033.21f2e5da@windsurf>
+In-Reply-To: <20220727071412.330214-1-fontaine.fabrice@gmail.com>
+References: <20220727071412.330214-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=QDNzEMJXteorxDolusjQ1XqrN0CMOirqkOdYD1HrUkA=;
- b=EqfofrZPeQxX7vJV7tyuv3PdmdArWe/tGW/sbcT7dh6EUaN5OFxNC3e/xAADp4n2NZ
- /6+5lAQLvr9hx7O3tTWMMsMqatPN11OE21OGy99zZMCgJ38914tR9L+NALDbB/jJ4yrp
- UDx0NGmbAuLysNM2RTFNFA7O5xnSeTy3Jf4sJwg0oz2W79aMt2LOjCjELD6DYC3+4NAn
- tkig7G7szePezW1wE7Zl7V736vpdoxWDQtVKUfd8dyaXfNiT50at5MJlGwVE3Q7HTkno
- 9qYogLUI09n5XLcA4rQZnKtSMaW1SR/+BuYeXdY0ZJpkAC0MKvUZ4FypI2PZfNVp4Hsi
- 9EfA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=EqfofrZP
-Subject: [Buildroot] [PATCH] package/gcc: bump to version 10.4.0
+ d=bootlin.com; s=gm1; t=1658907635;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=duqdqVd5w9T6PuJN7I6K7ti0Igx71/x8QA+XLh40Bro=;
+ b=emUHqf9RIaX4Tp5BZh+9gi9EkBjUARJ6NBV1LN2PhI5JRYugPTWroPGszwmEzwxgvPnx2d
+ +WybDa1u8icpTLJPu75N8RfWuXw2xEvq/xoMfpWKoiFsH9A0zRKeHwis+ZKQwPY+4J6+jq
+ 4vmigWD/Xxl5NTtTyjvn8MVuFCeHbFPF9bC5iuNfUD7QXXCXduLPXpfUlo3+BbmSZkhTxr
+ PnC/oWdm6zSey//3UE/GFFb2tevc1uUK7eXJyy4UmyP+hZe7x4iDVX0VW3VK4iWftGomKB
+ W9oflxDgRF1W1G0+PuhIHoEZtL61hyG3Bp4KDmOR31W19CEBlLXoO+mJk/CrQA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=emUHqf9R
+Subject: Re: [Buildroot] [PATCH 1/1] package/zeek: disable with uclibc-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,427 +74,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove upstream patch: 0004-Remove-cyclades-from-libsanitizer.patch
+Hello Fabrice,
 
-https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=a7e72b282177fbaa6a852324641c871313d326da
+On Wed, 27 Jul 2022 09:14:12 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-See announce:
-https://gcc.gnu.org/pipermail/gcc-announce/2022/000173.html
+> zeek unconditionally uses f_owner_ex which is only available with
+> aarch64 on uclibc-ng
+> (https://github.com/wbx-github/uclibc-ng/search?q=f_owner_ex) resulting
+> in the following build failure since the addition of the package in
+> commit ea36681572255ec906167308c07adc42ed2ac9f9:
+> 
+> /home/giuliobenetti/autobuild/run/instance-0/output-1/build/zeek-4.1.1/auxil/libkqueue/src/linux/platform.c: In function 'linux_kqueue_init':
+> /home/giuliobenetti/autobuild/run/instance-0/output-1/build/zeek-4.1.1/auxil/libkqueue/src/linux/platform.c:279:23: error: storage size of 'sig_owner' isn't known
+>   279 |     struct f_owner_ex sig_owner;
+>       |                       ^~~~~~~~~
+> /home/giuliobenetti/autobuild/run/instance-0/output-1/build/zeek-4.1.1/auxil/libkqueue/src/linux/platform.c:383:22: error: 'F_OWNER_TID' undeclared (first use in this function)
+>   383 |     sig_owner.type = F_OWNER_TID;
+>       |                      ^~~~~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/f15bc6fda2a6117b2beef91a3f97a5d063789102
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Tested in gitlab:
-https://gitlab.com/kubu93/buildroot/-/pipelines/597437606
+It's probably a bit of a pity to disable this package on uClibc just
+because of this missing structure. I have no idea why uClibc has it
+just in the aarch64 headers, because on both glibc and musl, it's
+defined in a completely generic way.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- ...04-Remove-cyclades-from-libsanitizer.patch | 125 ------------------
- ...get-92095-internal-error-with-O1-mcp.patch |  26 ++--
- ...-mcmodel-option-to-handle-large-GOTs.patch |  10 +-
- ...-cmodel-large-when-building-crtstuff.patch |   8 +-
- ...RANT-for-OpenRISC-when-pthread-is-p.patch} |   6 +-
- ...e-split-stack-for-non-thread-builds.patch} |   2 +-
- package/gcc/Config.in.host                    |   2 +-
- package/gcc/gcc.hash                          |   4 +-
- 8 files changed, 29 insertions(+), 154 deletions(-)
- delete mode 100644 package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
- rename package/gcc/{10.3.0 => 10.4.0}/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch (94%)
- rename package/gcc/{10.3.0 => 10.4.0}/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch (96%)
- rename package/gcc/{10.3.0 => 10.4.0}/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch (93%)
- rename package/gcc/{10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch => 10.4.0/0004-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch} (88%)
- rename package/gcc/{10.3.0/0006-disable-split-stack-for-non-thread-builds.patch => 10.4.0/0005-disable-split-stack-for-non-thread-builds.patch} (92%)
+So here is my proposal:
 
-diff --git a/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch b/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
-deleted file mode 100644
-index ee6e349a6c..0000000000
---- a/package/gcc/10.3.0/0004-Remove-cyclades-from-libsanitizer.patch
-+++ /dev/null
-@@ -1,125 +0,0 @@
--From 745dae5923aba02982563481d75a21595df22ff8 Mon Sep 17 00:00:00 2001
--From: Tamar Christina <tamar.christina@arm.com>
--Date: Fri, 21 May 2021 10:30:59 +0100
--Subject: [PATCH] libsanitizer: Remove cyclades from libsanitizer
--
--The Linux kernel has removed the interface to cyclades from
--the latest kernel headers[1] due to them being orphaned for the
--past 13 years.
--
--libsanitizer uses this header when compiling against glibc, but
--glibcs itself doesn't seem to have any references to cyclades.
--
--Further more it seems that the driver is broken in the kernel and
--the firmware doesn't seem to be available anymore.
--
--As such since this is breaking the build of libsanitizer (and so the
--GCC bootstrap[2]) I propose to remove this.
--
--[1] https://lkml.org/lkml/2021/3/2/153
--[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379
--
--(cherry picked from commit f7c5351552387bd43f6ca3631016d7f0dfe0f135)
--
--libsanitizer/ChangeLog:
--
--	PR sanitizer/100379
--	* sanitizer_common/sanitizer_common_interceptors_ioctl.inc: Cherry-pick
--	llvm-project revision f7c5351552387bd43f6ca3631016d7f0dfe0f135.
--	* sanitizer_common/sanitizer_platform_limits_posix.cpp: Likewise.
--	* sanitizer_common/sanitizer_platform_limits_posix.h: Likewise.
--
--Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-----
-- .../sanitizer_common_interceptors_ioctl.inc           |  9 ---------
-- .../sanitizer_platform_limits_posix.cpp               | 11 -----------
-- .../sanitizer_platform_limits_posix.h                 | 10 ----------
-- 3 files changed, 30 deletions(-)
--
--diff --git a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--index 7f181258eab..b7da6598755 100644
----- a/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--+++ b/libsanitizer/sanitizer_common/sanitizer_common_interceptors_ioctl.inc
--@@ -370,15 +370,6 @@ static void ioctl_table_fill() {
-- 
-- #if SANITIZER_GLIBC
--   // _(SIOCDEVPLIP, WRITE, struct_ifreq_sz); // the same as EQL_ENSLAVE
---  _(CYGETDEFTHRESH, WRITE, sizeof(int));
---  _(CYGETDEFTIMEOUT, WRITE, sizeof(int));
---  _(CYGETMON, WRITE, struct_cyclades_monitor_sz);
---  _(CYGETTHRESH, WRITE, sizeof(int));
---  _(CYGETTIMEOUT, WRITE, sizeof(int));
---  _(CYSETDEFTHRESH, NONE, 0);
---  _(CYSETDEFTIMEOUT, NONE, 0);
---  _(CYSETTHRESH, NONE, 0);
---  _(CYSETTIMEOUT, NONE, 0);
--   _(EQL_EMANCIPATE, WRITE, struct_ifreq_sz);
--   _(EQL_ENSLAVE, WRITE, struct_ifreq_sz);
--   _(EQL_GETMASTRCFG, WRITE, struct_ifreq_sz);
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--index 35a690cba5c..6e5c330b98e 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--@@ -143,7 +143,6 @@ typedef struct user_fpregs elf_fpregset_t;
-- # include <sys/procfs.h>
-- #endif
-- #include <sys/user.h>
---#include <linux/cyclades.h>
-- #include <linux/if_eql.h>
-- #include <linux/if_plip.h>
-- #include <linux/lp.h>
--@@ -460,7 +459,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-- 
-- #if SANITIZER_GLIBC
--   unsigned struct_ax25_parms_struct_sz = sizeof(struct ax25_parms_struct);
---  unsigned struct_cyclades_monitor_sz = sizeof(struct cyclades_monitor);
-- #if EV_VERSION > (0x010000)
--   unsigned struct_input_keymap_entry_sz = sizeof(struct input_keymap_entry);
-- #else
--@@ -824,15 +822,6 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
-- #endif // SANITIZER_LINUX
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
---  unsigned IOCTL_CYGETDEFTHRESH = CYGETDEFTHRESH;
---  unsigned IOCTL_CYGETDEFTIMEOUT = CYGETDEFTIMEOUT;
---  unsigned IOCTL_CYGETMON = CYGETMON;
---  unsigned IOCTL_CYGETTHRESH = CYGETTHRESH;
---  unsigned IOCTL_CYGETTIMEOUT = CYGETTIMEOUT;
---  unsigned IOCTL_CYSETDEFTHRESH = CYSETDEFTHRESH;
---  unsigned IOCTL_CYSETDEFTIMEOUT = CYSETDEFTIMEOUT;
---  unsigned IOCTL_CYSETTHRESH = CYSETTHRESH;
---  unsigned IOCTL_CYSETTIMEOUT = CYSETTIMEOUT;
--   unsigned IOCTL_EQL_EMANCIPATE = EQL_EMANCIPATE;
--   unsigned IOCTL_EQL_ENSLAVE = EQL_ENSLAVE;
--   unsigned IOCTL_EQL_GETMASTRCFG = EQL_GETMASTRCFG;
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--index ad358eef8b7..cba41ba5494 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h
--@@ -983,7 +983,6 @@ extern unsigned struct_vt_mode_sz;
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
-- extern unsigned struct_ax25_parms_struct_sz;
---extern unsigned struct_cyclades_monitor_sz;
-- extern unsigned struct_input_keymap_entry_sz;
-- extern unsigned struct_ipx_config_data_sz;
-- extern unsigned struct_kbdiacrs_sz;
--@@ -1328,15 +1327,6 @@ extern unsigned IOCTL_VT_WAITACTIVE;
-- #endif  // SANITIZER_LINUX
-- 
-- #if SANITIZER_LINUX && !SANITIZER_ANDROID
---extern unsigned IOCTL_CYGETDEFTHRESH;
---extern unsigned IOCTL_CYGETDEFTIMEOUT;
---extern unsigned IOCTL_CYGETMON;
---extern unsigned IOCTL_CYGETTHRESH;
---extern unsigned IOCTL_CYGETTIMEOUT;
---extern unsigned IOCTL_CYSETDEFTHRESH;
---extern unsigned IOCTL_CYSETDEFTIMEOUT;
---extern unsigned IOCTL_CYSETTHRESH;
---extern unsigned IOCTL_CYSETTIMEOUT;
-- extern unsigned IOCTL_EQL_EMANCIPATE;
-- extern unsigned IOCTL_EQL_ENSLAVE;
-- extern unsigned IOCTL_EQL_GETMASTRCFG;
---- 
--2.27.0
--
-diff --git a/package/gcc/10.3.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch b/package/gcc/10.4.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-similarity index 94%
-rename from package/gcc/10.3.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-rename to package/gcc/10.4.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-index af0d2d7d02..e8283afadb 100644
---- a/package/gcc/10.3.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-+++ b/package/gcc/10.4.0/0001-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-@@ -1,4 +1,4 @@
--From 0824d6819857f306583592bce96315893f91bd84 Mon Sep 17 00:00:00 2001
-+From d672b64ae257e789311dfd0aea947972af64b966 Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Wed, 20 Jan 2021 23:26:29 +0100
- Subject: [PATCH] Revert "re PR target/92095 (internal error with -O1
-@@ -45,10 +45,10 @@ index 5f9999a669c..37452b06415 100644
-  extern const char *output_cbranch (rtx, rtx, int, int, int, rtx_insn *);
-  extern const char *output_return (rtx_insn *);
- diff --git a/gcc/config/sparc/sparc.c b/gcc/config/sparc/sparc.c
--index d0843102148..14d112d8ca8 100644
-+index 7cfa9f80676..3a721f19eb5 100644
- --- a/gcc/config/sparc/sparc.c
- +++ b/gcc/config/sparc/sparc.c
--@@ -4157,6 +4157,13 @@ eligible_for_sibcall_delay (rtx_insn *trial)
-+@@ -4243,6 +4243,13 @@ eligible_for_sibcall_delay (rtx_insn *trial)
-  static bool
-  sparc_cannot_force_const_mem (machine_mode mode, rtx x)
-  {
-@@ -62,7 +62,7 @@ index d0843102148..14d112d8ca8 100644
-    switch (GET_CODE (x))
-      {
-      case CONST_INT:
--@@ -4192,11 +4199,9 @@ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
-+@@ -4278,11 +4285,9 @@ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
-  }
-  
-  /* Global Offset Table support.  */
-@@ -76,7 +76,7 @@ index d0843102148..14d112d8ca8 100644
-  
-  /* Return the SYMBOL_REF for the Global Offset Table.  */
-  
--@@ -4209,6 +4214,27 @@ sparc_got (void)
-+@@ -4295,6 +4300,27 @@ sparc_got (void)
-    return got_symbol_rtx;
-  }
-  
-@@ -104,7 +104,7 @@ index d0843102148..14d112d8ca8 100644
-  /* Wrapper around the load_pcrel_sym{si,di} patterns.  */
-  
-  static rtx
--@@ -4228,78 +4254,30 @@ gen_load_pcrel_sym (rtx op0, rtx op1, rtx op2)
-+@@ -4314,78 +4340,30 @@ gen_load_pcrel_sym (rtx op0, rtx op1, rtx op2)
-    return insn;
-  }
-  
-@@ -189,7 +189,7 @@ index d0843102148..14d112d8ca8 100644
-  }
-  
-  /* Ensure that we are not using patterns that are not OK with PIC.  */
--@@ -5464,7 +5442,7 @@ save_local_or_in_reg_p (unsigned int regno, int leaf_function)
-+@@ -5550,7 +5528,7 @@ save_local_or_in_reg_p (unsigned int regno, int leaf_function)
-      return true;
-  
-    /* GOT register (%l7) if needed.  */
-@@ -198,7 +198,7 @@ index d0843102148..14d112d8ca8 100644
-      return true;
-  
-    /* If the function accesses prior frames, the frame pointer and the return
--@@ -12507,9 +12485,10 @@ static void
-+@@ -12658,9 +12636,10 @@ static void
-  sparc_file_end (void)
-  {
-    /* If we need to emit the special GOT helper function, do so now.  */
-@@ -210,7 +210,7 @@ index d0843102148..14d112d8ca8 100644
-  #ifdef DWARF2_UNWIND_INFO
-        bool do_cfi;
-  #endif
--@@ -12546,22 +12525,17 @@ sparc_file_end (void)
-+@@ -12697,22 +12676,17 @@ sparc_file_end (void)
-  #ifdef DWARF2_UNWIND_INFO
-        do_cfi = dwarf2out_do_cfi_asm ();
-        if (do_cfi)
-@@ -239,7 +239,7 @@ index d0843102148..14d112d8ca8 100644
-  #endif
-      }
-  
--@@ -13056,10 +13030,7 @@ sparc_init_pic_reg (void)
-+@@ -13207,10 +13181,7 @@ sparc_init_pic_reg (void)
-    edge entry_edge;
-    rtx_insn *seq;
-  
-@@ -252,10 +252,10 @@ index d0843102148..14d112d8ca8 100644
-  
-    start_sequence ();
- diff --git a/gcc/config/sparc/sparc.md b/gcc/config/sparc/sparc.md
--index 6e9ccb4ecfd..8fb0fa11aed 100644
-+index b242c4b4481..7d08f50705a 100644
- --- a/gcc/config/sparc/sparc.md
- +++ b/gcc/config/sparc/sparc.md
--@@ -1601,7 +1601,10 @@
-+@@ -1603,7 +1603,10 @@
-     (clobber (reg:P O7_REG))]
-    "REGNO (operands[0]) == INTVAL (operands[3])"
-  {
-@@ -324,5 +324,5 @@ index f00283f6e7b..67d4ac38095 100644
-  #include <stdbool.h>
-  #include <stdint.h>
- -- 
--2.30.2
-+2.34.3
- 
-diff --git a/package/gcc/10.3.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch b/package/gcc/10.4.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-similarity index 96%
-rename from package/gcc/10.3.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-rename to package/gcc/10.4.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-index 73010c21ee..62eb437c62 100644
---- a/package/gcc/10.3.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-+++ b/package/gcc/10.4.0/0002-or1k-Add-mcmodel-option-to-handle-large-GOTs.patch
-@@ -1,4 +1,4 @@
--From 1dad3f95ffcd1871ca670a13a06fbedb1c3ce509 Mon Sep 17 00:00:00 2001
-+From 8555b8d4f1d873d172c12a540ff97c57ed17f045 Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Sun, 2 May 2021 06:11:44 +0900
- Subject: [PATCH] or1k: Add mcmodel option to handle large GOTs
-@@ -166,10 +166,10 @@ index 03c9b8d0bba..8e035075f8a 100644
-  Target RejectNegative Mask(CMOV)
-  Enable generation of conditional move (l.cmov) instructions.  By default the
- diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
--index eabeec944e7..eda350c99ec 100644
-+index d7c787af226..848112e5b24 100644
- --- a/gcc/doc/invoke.texi
- +++ b/gcc/doc/invoke.texi
--@@ -1102,7 +1102,8 @@ Objective-C and Objective-C++ Dialects}.
-+@@ -1103,7 +1103,8 @@ Objective-C and Objective-C++ Dialects}.
-  @gccoptlist{-mboard=@var{name}  -mnewlib  -mhard-mul  -mhard-div @gol
-  -msoft-mul  -msoft-div @gol
-  -msoft-float  -mhard-float  -mdouble-float -munordered-float @gol
-@@ -179,7 +179,7 @@ index eabeec944e7..eda350c99ec 100644
-  
-  @emph{PDP-11 Options}
-  @gccoptlist{-mfpu  -msoft-float  -mac0  -mno-ac0  -m40  -m45  -m10 @gol
--@@ -25111,6 +25112,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
-+@@ -25142,6 +25143,15 @@ Enable generation of shift with immediate (@code{l.srai}, @code{l.srli},
-  @code{l.slli}) instructions.  By default extra instructions will be generated
-  to store the immediate to a register first.
-  
-@@ -196,5 +196,5 @@ index eabeec944e7..eda350c99ec 100644
-  @end table
-  
- -- 
--2.25.1
-+2.34.3
- 
-diff --git a/package/gcc/10.3.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch b/package/gcc/10.4.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-similarity index 93%
-rename from package/gcc/10.3.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-rename to package/gcc/10.4.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-index 7da0e8f757..30d0c607f5 100644
---- a/package/gcc/10.3.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-+++ b/package/gcc/10.4.0/0003-or1k-Use-cmodel-large-when-building-crtstuff.patch
-@@ -1,4 +1,4 @@
--From 0354e007a6235df81e208fa89cbf1571a8b56975 Mon Sep 17 00:00:00 2001
-+From 3499ecd7c93c4c431cab83312bc5eabbf383c182 Mon Sep 17 00:00:00 2001
- From: Stafford Horne <shorne@gmail.com>
- Date: Sun, 2 May 2021 06:11:45 +0900
- Subject: [PATCH] or1k: Use cmodel=large when building crtstuff
-@@ -29,10 +29,10 @@ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-  create mode 100644 libgcc/config/or1k/t-crtstuff
- 
- diff --git a/libgcc/config.host b/libgcc/config.host
--index c529cc40f0c..ddf0033e28c 100644
-+index 89f41b56000..1210704d7e8 100644
- --- a/libgcc/config.host
- +++ b/libgcc/config.host
--@@ -1127,12 +1127,12 @@ nios2-*-*)
-+@@ -1137,12 +1137,12 @@ nios2-*-*)
-  	extra_parts="$extra_parts crti.o crtn.o"
-  	;;
-  or1k-*-linux*)
-@@ -56,5 +56,5 @@ index 00000000000..dcae7f3498e
- +# Compile crtbeginS.o and crtendS.o with -mcmodel=large
- +CRTSTUFF_T_CFLAGS_S += -mcmodel=large
- -- 
--2.25.1
-+2.34.3
- 
-diff --git a/package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch b/package/gcc/10.4.0/0004-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-similarity index 88%
-rename from package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-rename to package/gcc/10.4.0/0004-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-index 5ac03d7c0c..e3dbbc7eb8 100644
---- a/package/gcc/10.3.0/0005-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-+++ b/package/gcc/10.4.0/0004-gcc-define-_REENTRANT-for-OpenRISC-when-pthread-is-p.patch
-@@ -1,4 +1,4 @@
--From f80e9941739fb3973b61fc6a5abddef5ad2faf73 Mon Sep 17 00:00:00 2001
-+From d2e4e3e72b5f2f68d595dfd3a77f58744f3f243e Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd.kuhls@t-online.de>
- Date: Fri, 27 Mar 2020 21:23:53 +0100
- Subject: [PATCH] gcc: define _REENTRANT for OpenRISC when -pthread is passed
-@@ -14,7 +14,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  1 file changed, 2 insertions(+)
- 
- diff --git a/gcc/config/or1k/linux.h b/gcc/config/or1k/linux.h
--index cbdc781418f..36303af892c 100644
-+index 21cef067dda..2e1bb5601a9 100644
- --- a/gcc/config/or1k/linux.h
- +++ b/gcc/config/or1k/linux.h
- @@ -32,6 +32,8 @@
-@@ -27,5 +27,5 @@ index cbdc781418f..36303af892c 100644
-  #define LINK_SPEC "%{h*}			\
-     %{static:-Bstatic}				\
- -- 
--2.31.1
-+2.34.3
- 
-diff --git a/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch b/package/gcc/10.4.0/0005-disable-split-stack-for-non-thread-builds.patch
-similarity index 92%
-rename from package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/10.4.0/0005-disable-split-stack-for-non-thread-builds.patch
-index 668b1cd9d7..7ba9e0de54 100644
---- a/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
-+++ b/package/gcc/10.4.0/0005-disable-split-stack-for-non-thread-builds.patch
-@@ -1,4 +1,4 @@
--From cdb76d638e91cc53949585d98fa653d3671b92ac Mon Sep 17 00:00:00 2001
-+From 14336d46b35577300dd68147a8f0c8165684850b Mon Sep 17 00:00:00 2001
- From: Waldemar Brodkorb <wbx@openadk.org>
- Date: Mon, 25 Jul 2022 00:29:55 +0200
- Subject: [PATCH] disable split-stack for non-thread builds
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 9833ae1336..74abad71d7 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -85,7 +85,7 @@ config BR2_GCC_SUPPORTS_DLANG
- config BR2_GCC_VERSION
- 	string
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
--	default "10.3.0"    if BR2_GCC_VERSION_10_X
-+	default "10.4.0"    if BR2_GCC_VERSION_10_X
- 	default "11.3.0"    if BR2_GCC_VERSION_11_X
- 	default "12.1.0"    if BR2_GCC_VERSION_12_X
- 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index b1cfb1c9cf..b9536ddffe 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -1,7 +1,7 @@
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
- sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-10.3.0/sha512.sum
--sha512  2b2dd7453d48a398c29eaebd1422b70341001b8c90a62aee51e83344e7fdd8a8e45f82a4a9165bd7edc76dada912c932f4b6632c5636760fec4c5d7e402b3f86  gcc-10.3.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-10.4.0/sha512.sum
-+sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-11.3.0/sha512.sum
- sha512  f0be5ad705c73b84477128a69c047f57dd47002f375eb60e1e842e08cf2009a509e92152bca345823926d550b7395ae6d4de7db51d1ee371c2dc37313881fca7  gcc-11.3.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-12.1.0/sha512.sum
+ (1) Unbundle libkqueue from zeek, by creating a separate libkqueue
+     package (BTW zeek should be investigated further, it contains
+     several bundled libraries, and it should preferably use external
+     packages instead of bundled libraries).
+
+ (2) Add a patch in libkqueue that checks for the availability of
+     f_owner_ex, and if not available, provides its own definition.
+
+ (3) Send a patch to uClibc to add the missing f_owner_ex definition.
+
+Do you think you could have a look into this?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.34.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
