@@ -4,68 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33A61C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 16:41:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 077E4C19F2B
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 16:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B225160E82;
-	Wed, 27 Jul 2022 16:41:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B225160E82
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7079260E80;
+	Wed, 27 Jul 2022 16:44:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7079260E80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IA4zJxh9Li5i; Wed, 27 Jul 2022 16:41:06 +0000 (UTC)
+	with ESMTP id jFSrm1gzqk9U; Wed, 27 Jul 2022 16:44:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3438B60E7B;
-	Wed, 27 Jul 2022 16:41:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3438B60E7B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FDD360E69;
+	Wed, 27 Jul 2022 16:44:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FDD360E69
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7C8BC1BF422
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 16:41:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4357D1BF422
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 16:44:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5751780D9A
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 16:41:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5751780D9A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 15B978176D
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 16:44:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15B978176D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iHLKnPgsJnCN for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 16:41:02 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26D7C80D51
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 26D7C80D51
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 16:41:02 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:2464:a3b6:9580:87a1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 47519B00717;
- Wed, 27 Jul 2022 18:40:57 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 27 Jul 2022 18:40:57 +0200
-Date: Wed, 27 Jul 2022 18:40:57 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220727164057.GG1134587@scaer>
-References: <20220727104751.2505442-1-thomas.petazzoni@bootlin.com>
+ with ESMTP id X2dTvMdStftK for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 16:44:01 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 047AA8176C
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 047AA8176C
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 16:44:00 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id l4so3701198wrm.13
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 09:44:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=MoegZZUYNlunRGBICIupTrahGH4yYF0vOucdhh0uhB0=;
+ b=oboZ/bn3+2K9AnwF+mB9F78FpBzIHI9Kuvr5hafNJISRGLMF/GTKxMsPxFrL1tNbIX
+ 3TqXXnZl8+28UEtNQ1aeT3tmBZEL7RKJcLyOgn+JDInomESrrSerMPxC276cUdT6JeeN
+ 4g9ha25QCbjoichW6nOWmoi2W9wwkmY6/qIGiXVaXl31KAAy/9IjUzRS4sdotdn7GXD1
+ gvyhlyqFgIx+83E36UMiYy7pO4mCsMfpyDVWA87EM3Fx7mL8tMJe0o91K3eYBLmiV9Tz
+ gdm+q3zQ9Z6IlHXl4WN8CDGHkK3ytR7KC5S0HfHLx/0fhVHDjGaWAYvgtWxJX1qIhb+q
+ xj4A==
+X-Gm-Message-State: AJIora9RoUD7n7zZ5rN1wYs3k2hnV1ZDLfDrbZxEZZ2ni0ayOu9HdBdH
+ kODr3YSfhRrHcYdYpUmL00scyQ==
+X-Google-Smtp-Source: AGRyM1uUu68/7Zq3GcldM/TG/VLD6Oz2S7s/TtiZyDAQmY3Q2w52aulrdzpdzM/hGLJbhnYz58T7gA==
+X-Received: by 2002:a05:6000:2a8:b0:21e:4adc:83d5 with SMTP id
+ l8-20020a05600002a800b0021e4adc83d5mr15527894wry.6.1658940239153; 
+ Wed, 27 Jul 2022 09:43:59 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ j20-20020a5d6e54000000b0021d65e9d449sm17193672wrz.73.2022.07.27.09.43.58
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 27 Jul 2022 09:43:58 -0700 (PDT)
+Message-ID: <1d66703f-c4f1-7b76-db0c-e0bb94ec0d9c@mind.be>
+Date: Wed, 27 Jul 2022 18:43:56 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220727104751.2505442-1-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1658940060;
- bh=t2O6hJ8EOOLvhGCToR3sczcFlu4u8+jDOVVwYw+AA4A=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Ri7sujX9HtpeCIeoj9G14o6q4EELiCM7QoETvJ7Heqw8dh3z0yvvfZTBWaJ+sauC5
- 8TGZaW0pO/obRnYCra26P4aSscl81FH0BLWbK7zbVmrcb7yPiU00MEq58+7QsbTtGt
- fN8n8JVSmOmMzncGtzZLqc2atoH0R9WDdeIu574puvnf6dYhjVbHwAU/uLWSwvKuTK
- /W/+wLeiUY5zCvwvo4Dj8KVu/WugffeAwukqiy6aJ0rjBv7a4DL4RG6l0fJNdx+jDN
- rVyrCPDuvfeI6D++bx2ClI6i8gvvEfSJMee8dhcsTQYjkM84s2WFJSpdqONxqZETd1
- 8vHqZaBXhxb4g==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220727150230.2529065-1-arnout@mind.be>
+ <20220727162040.GE1134587@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220727162040.GE1134587@scaer>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=MoegZZUYNlunRGBICIupTrahGH4yYF0vOucdhh0uhB0=;
+ b=SDmcvxLLfshIJo0wutV7JBkvk3rvmVZJw8clay2tlHKqnjM18Lr7XP3n/CM27tDNnJ
+ o4DQq0G+L0guv24UJA4LNrDNbDFmhspMgxcm6ZQ8SPEKYrCNAdkki3kY3sT6ABIxQBm/
+ 2llKlRrNo01ki+fLSf8f6Ib/bCLEbUikMlcCpRJy1vv8AymBu573rWQYIZm5xNS8plG5
+ PAx9Y8ZsFYLXcNX2bq1hl7gi4a1hTK/5Jqvfx78ffVBmLISBz19tP6jIy55ZJWes2qC0
+ SHR8mXyHqV2cP7reOVrQV2RCBV1MsXeS6duYxgCZg8X+brCB9LBcTNFeZuemUXfpN0wF
+ oFPg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ri7sujX9
-Subject: Re: [Buildroot] [PATCH] support/scripts/check-host-rpath: send
- readelf error output to oblivion
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=SDmcvxLL
+Subject: Re: [Buildroot] [PATCH] support/testing/run-tests: fix --testcases
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,89 +102,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
 
-On 2022-07-27 12:47 +0200, Thomas Petazzoni via buildroot spake thusly:
-> Somewhere between binutils 2.35 and 2.37, some functionality was
-> added in readelf to parse more DWARF information. Unfortunately, as
-> reported in binutils bug
-> 28981 ("https://sourceware.org/bugzilla/show_bug.cgi?id=28981"), this
-> feature causes a number of fairly scary warnings to be displayed when
-> running readelf on binaries built with Clang, such as the pre-built
-> rustc and rustdoc binaries part of the host-rust-bin package. It
-> looks like this:
-> 
-> readelf: /home/thomas/projets/buildroot/output/host/bin/rustc: Warning: Unrecognized form: 0x23
-[--SNIP we got the idea, thanks--]
-> These warnings are caused by the readelf calls done by the
-> support/scripts/check-host-rpath script. The annoying thing is that
-> once host-rust-bin has been installed in $(HOST_DIR), this warning
-> appears after the installation of every single host package, because
-> support/scripts/check-host-rpath rescans all binaries every time.
-> 
-> To avoid showing those scary warnings, this commit sends the error
-> output of readelf to /dev/null.
-> 
-> Of course, it would be nicer to only filter out those warnings, but
-> filtering the error output without merging the error output into the
-> standard output is tricky, so let's keep things simple. If there is
-> really an error, readelf will abort.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/scripts/check-host-rpath | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On 27/07/2022 18:20, Yann E. MORIN wrote:
+> Arnout, All,
 > 
-> diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-> index b27cb883f3..f36677cc96 100755
-> --- a/support/scripts/check-host-rpath
-> +++ b/support/scripts/check-host-rpath
-> @@ -61,7 +61,7 @@ elf_needs_rpath() {
->  
->      while read lib; do
->          [ -e "${hostdir}/lib/${lib}" ] && return 0
-> -    done < <( readelf -d "${file}"                                         \
-> +    done < <( readelf -d "${file}" 2>/dev/null                             \
->                |sed -r -e '/^.* \(NEEDED\) .*Shared library: \[(.+)\]$/!d;' \
->                       -e 's//\1/;'                                          \
->              )
-> @@ -100,7 +100,7 @@ check_elf_has_rpath() {
->  	    # false.
->              [[ ${dir} =~ "${perpackagedir}/"[^/]+/host/lib ]] && return 0
->          done
-> -    done < <( readelf -d "${file}"                                              \
-> +    done < <( readelf -d "${file}" 2>/dev/null                                  \
->                |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
->                        -e 's//\3/;'                                              \
->              )
-> -- 
-> 2.37.1
+> On 2022-07-27 17:02 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+>> The --testcases option of run-tests says how many test cases to build in
+>> parallel. It automatically derives a jlevel from it by dividing the
+>> number of cores + 1 by the number of parallel testcases. However, this
+>> will typically result in a fractional number. Make doesn't like
+>> fractional numbers as argument to -j.
+>>
+>> Convert the number to integer (rounding up).
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> ---
+>>   support/testing/run-tests | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/support/testing/run-tests b/support/testing/run-tests
+>> index 022209b414..f9c0bebc48 100755
+>> --- a/support/testing/run-tests
+>> +++ b/support/testing/run-tests
+>> @@ -87,7 +87,7 @@ def main():
+>>               return 1
+>>           # same default BR2_JLEVEL as package/Makefile.in
+>>           br2_jlevel = 1 + multiprocessing.cpu_count()
+>> -        each_testcase = br2_jlevel / args.testcases
+>> +        each_testcase = int((br2_jlevel + args.testcases - 1) / args.testcases)
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> * br2_jlevel is an int, as multiprocessing.cpu_count() is an int, so it
+>    will be always >=2  (cpu_count() raises an error if it can't determine
+>    the number of CPU, so it will always return at least 1);
+> 
+> * args.testcases is an int, and is checked to be >=1
+> 
+> So, with the following, we're guaranteed to have an int that is >=1:
+> 
+>      int((br2_jlevel + args.testcases) / args.testcases)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  That way you're adding one if it is actually divisible. E.g.
+testcases = 2, cpu_count == 3
+  => br_jlevel = 4
+  => each_testcase = (4 + 2) / 2 = 3
+  => total cpu use = 3 * 2 = 6
+
+  In practice though, num_cpus is almost always a multiple of 2, so the 
+likelihood of it being divisible is very small. Also, in practice, it's probably 
+better to have a total cpu use number that is higher than the actual number of 
+cpus, since a lot of time time is spent on serial execution. So don't bother 
+changing it again.
+
+> Because br2_jlevel + args.testcases is guaranteed to always be bigger
+> than or equal to args.testcases.
+> 
+>>           if each_testcase < 1:
+>>               each_testcase = 1
+
+  Yes, this is true even with the proper rounding, because br2_jlevel > 1 
+(assuming you have at least one CPU).
+
+  Regards,
+  Arnout
+
+> 
+> So that test can be dropped now.
+> 
+> I've amended your change with the above. Please yell if my maths are
+> wrong... ;-)
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>           BRConfigTest.jlevel = each_testcase
+>> -- 
+>> 2.35.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
