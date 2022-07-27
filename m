@@ -4,84 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E804C04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0A54C19F29
+	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:13:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7702416C9;
-	Wed, 27 Jul 2022 22:12:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7702416C9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E784415D8;
+	Wed, 27 Jul 2022 22:13:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E784415D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hNOuHe-Z1nTj; Wed, 27 Jul 2022 22:12:39 +0000 (UTC)
+	with ESMTP id s6CUzzRvngbi; Wed, 27 Jul 2022 22:13:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 289FD415D8;
-	Wed, 27 Jul 2022 22:12:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 289FD415D8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DA6A41BF47F
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:12:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBAFD41504;
+	Wed, 27 Jul 2022 22:13:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBAFD41504
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 673051BF47F
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:13:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C073C409DA
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:12:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C073C409DA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4235781026
+ for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:13:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4235781026
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 11LyJRoBGbbZ for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 22:12:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ygcdDG9X8Qiu for <buildroot@lists.busybox.net>;
+ Wed, 27 Jul 2022 22:13:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5882D40469
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5882D40469
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 22:12:21 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id l22so4679040wrz.7
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:12:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED42080F2C
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
+ [IPv6:2607:f8b0:4864:20::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ED42080F2C
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 22:13:46 +0000 (UTC)
+Received: by mail-oi1-x229.google.com with SMTP id i4so440430oif.2
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 15:13:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=cx53gC1Lutm10uFzKcYGrOhU3lxTyLV7DACO1JXdU/k=;
- b=ZSVGZ9bOLzw99xwSlkHewk7VXDgR+KMsPUgnI1V+USsvYcuTXTDuTJ3TPwEvkmmkt/
- lZ4eFFPLb0lqkNrE2O+4vXS/sRPCzjzYY8idXOUGxMtdMk1MpsxexVWsr4bU41/fEvbK
- K7AJzt0Je9/a7EmFeVUNQhegXUB54Itnv+KFEHekqW90UP4BuG3zJLFkAM390147aPVP
- Df/Uh3xtH+0jDlMSWIuCurW8aRI/hfktflnHCZslS5+ho3XVVxkHyKjqHtE5gjFXRJxs
- kVtp4HhJ9NQx1urEvW5f0sHH7d2LVC/jSD37KGIESepiLCgll1VjA7Mh0UUUV6lFujXv
- W3Uw==
-X-Gm-Message-State: AJIora8JBPKsjcbhJ8YIUVckmILKKcFG8PgH7qZ/uU/2gU3/05Tmavzi
- DOdIKufCSXYUVtTlASeMR3Mz6RgVMMHaDw==
-X-Google-Smtp-Source: AGRyM1ssV5UylwoGeX4JJfbLPIbNZ0PL5/4m8xK+x5xjxPTmwQiI6ZMdWsQ9kEEVOp0h8eoUDxasMQ==
-X-Received: by 2002:a5d:5989:0:b0:21d:b2bd:d712 with SMTP id
- n9-20020a5d5989000000b0021db2bdd712mr15710492wri.698.1658959939118; 
- Wed, 27 Jul 2022 15:12:19 -0700 (PDT)
-Received: from arnoutx1.home ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- m64-20020a1c2643000000b003a30af0ec83sm3413037wmm.25.2022.07.27.15.12.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 27 Jul 2022 15:12:18 -0700 (PDT)
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 00:12:16 +0200
-Message-Id: <20220727221217.1072588-1-arnout@mind.be>
-X-Mailer: git-send-email 2.35.3
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=erbf0pw7F/tUmV45rLgAL4XAeMxP2uuEluTGSjisQms=;
+ b=LlbBx6pd/kTppyULg+yWNhoCzc1neoEywGUfRmvGPJRAv7kzI3/I+nAc61I3eue1e3
+ ZK5gXal08nbBNPfmrju6RXSJ6X8WvriWLlID5Tfihh08euS2YkUld/8ITlOYX51nOkKB
+ qADvhrc0uwbRoy3ON0g2F6JZwIBzmgCOwWH/YEfWAb9bQP0sIfB5C4wEZyxMldS5kgOC
+ iTwUpEO7DFKpkCNcct/aKFX4Rzi2RLC3UR7StoKws2FxD3R7Hhw1+2miHqmyJSasP3R7
+ dO7RiRlUmEXhBXfpBWiQgzUs8V81zJrjiuGBqwsa4U/phN52HzOlGwpa8lPTLQxui7Dr
+ btQA==
+X-Gm-Message-State: AJIora9RFfTRt0eY6w6QaUuIZIKkkR+oAfVNuJWVy8SFuKxPoyetWaNP
+ gly9VxcUS/dbElcmXJ22UKwRXka2d2IwrSqrLOo=
+X-Google-Smtp-Source: AGRyM1tClzEm+L5iFpXBwaL+velp7+5333qF5isDO+RcFr6TkTDQ5yoMv2boHyyhqXIkEyijoinW+DkwHWIWkhI4DwI=
+X-Received: by 2002:a05:6808:211a:b0:33a:9a59:fb31 with SMTP id
+ r26-20020a056808211a00b0033a9a59fb31mr2832276oiw.147.1658960026048; Wed, 27
+ Jul 2022 15:13:46 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220727071557.3434892-1-james.hilliard1@gmail.com>
+ <20220727071557.3434892-2-james.hilliard1@gmail.com>
+ <20220727112523.GA1134587@scaer>
+In-Reply-To: <20220727112523.GA1134587@scaer>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 27 Jul 2022 16:13:34 -0600
+Message-ID: <CADvTj4oMg_qBSFxKGC9XA1VMDD943c9aszevXvPYM1CYfNPyUA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=cx53gC1Lutm10uFzKcYGrOhU3lxTyLV7DACO1JXdU/k=;
- b=cX4P70owzyq9ZG8Byi8rrA6iMQscbYEXBq6Zny7N4jPyPqJ3Fozfd65xPzpYZ5gul1
- W4bU6Dlw9NP7+0cprk7FYeTtC/8Wud1cN1z53vhsn9wuF1dPEzhn6hbwnjBGe8T8/1fA
- hsFboVh50J/MASdh3FsqWocx+bmT0rxsscP4Kdk/KfE8RJjZAbshfyazGWoElzgnVo/B
- 5Y6+V044mZl/20G0BJ0nNwgCSNQoTvLnXphlm8PWUcKXmCsMw9sfwaGYfbKY4rELbQdZ
- Gj3sGdvZAtCLTtPyO0SUkMjvLEK6DP4IZK2KugxBvhHjwGDoWP+6cfBhKmvuRxWlNqpt
- cQ8A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=cX4P70ow
-Subject: [Buildroot] [PATCH 1/2] docs/manual: introduce "Integration topics"
- chapter
+ d=gmail.com; s=20210112;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=erbf0pw7F/tUmV45rLgAL4XAeMxP2uuEluTGSjisQms=;
+ b=YA4leoj/Xts4tL0ak+GbN2mSzmnLh7DWgPFBlFRiF28M+iGySA4SAdW7TX5yKKdGEV
+ 5CDPl5ZUW/svRJb2tInhXF/tl/NdHoJB3+31tET0Addp8LXXQmrKyJJHqaczcL0rncbi
+ GDsSAzAXCaDIM5b5FxrnBpo33OXHoxGHC1gQ7NfYl37CCygm63+umV/ONpnhaaUuuQRN
+ pfvdVRvWdHiuKggUURYzXP2z5BQwNr+f6Jtg7nhuWvf+qmDA5MvsaQUiHn1IRdY4F4Br
+ pOBlVQ357IAkTy3iM6E9BHlOvnjFbPx/XApP50ZBw36zDoCD4H0tqXtE/569Q9KiRFKJ
+ Pkcg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=YA4leoj/
+Subject: Re: [Buildroot] [PATCH v5 2/2] package/pkg-meson: use meson to
+ build/install packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,102 +91,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Samuel Martin <s.martin49@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
+ buildroot <buildroot@buildroot.org>, Norbert Lange <nolange79@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We want to add more information in the manual about how a system created
-with buildroot works overall. We currently already have a chapter about
-SELinux, but we want to add more information like that, e.g. details
-about how systemd in Buildroot works.
+On Wed, Jul 27, 2022 at 5:25 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2022-07-27 01:15 -0600, James Hilliard spake thusly:
+> > As of version 0.54.0 meson has had the ability to build and install
+> > packages rather than having to run ninja directly as before.
+> [--SNIP--]
+> > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> > index 47aaddf849..6efc8d636f 100644
+> > --- a/package/systemd/systemd.mk
+> > +++ b/package/systemd/systemd.mk
+> [--SNIP--]
+> > @@ -777,10 +777,7 @@ endef
+> >  HOST_SYSTEMD_CONF_OPTS = \
+> >       -Dsplit-bin=true \
+> >       -Dsplit-usr=false \
+> > -     --prefix=/usr \
+> > -     --libdir=lib \
+> > -     --sysconfdir=/etc \
+> > -     --localstatedir=/var \
+> > +     -Drootprefix=$(HOST_DIR) \
+>
+> Have you read the explanations in 35c11a027c8 (package/systemd: add host
+> variant)? This change must expand on how it does not break things, with
+> a very good and detailed commit log, and as a separate patch.
+>
+> Also, if the HOST_SYSTEMD_FIX_RPATH hook still needed, then?
 
-Create a new chapter "Integration topics" with an introductory blurb,
-and move the SELinux topic under it (as a section rather than a
-chapter).
+Well I think I did find a way to remove that:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220727221055.1838031-1-james.hilliard1@gmail.com/
 
-"Integration topics" is not the best title, but we couldn't find
-anything better.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...x-support.txt => integration-selinux-support.txt} |  6 +++---
- docs/manual/integration.txt                          | 12 ++++++++++++
- docs/manual/manual.txt                               |  2 ++
- 3 files changed, 17 insertions(+), 3 deletions(-)
- rename docs/manual/{selinux-support.txt => integration-selinux-support.txt} (96%)
- create mode 100644 docs/manual/integration.txt
-
-diff --git a/docs/manual/selinux-support.txt b/docs/manual/integration-selinux-support.txt
-similarity index 96%
-rename from docs/manual/selinux-support.txt
-rename to docs/manual/integration-selinux-support.txt
-index 21137ae6c3..1f6bcf47eb 100644
---- a/docs/manual/selinux-support.txt
-+++ b/docs/manual/integration-selinux-support.txt
-@@ -2,7 +2,7 @@
- // vim: set syntax=asciidoc:
- 
- [[selinux]]
--== Using SELinux in Buildroot
-+=== Using SELinux in Buildroot
- 
- https://selinuxproject.org[SELinux] is a Linux kernel security module
- enforcing access control policies. In addition to the traditional file
-@@ -30,7 +30,7 @@ upstream https://github.com/SELinuxProject/refpolicy[refpolicy]
- project, enabled with +BR2_PACKAGE_REFPOLICY+.
- 
- [[enabling-selinux]]
--=== Enabling SELinux support
-+==== Enabling SELinux support
- 
- To have proper support for +SELinux+ in a Buildroot generated system,
- the following configuration options must be enabled:
-@@ -42,7 +42,7 @@ In addition, your filesystem image format must support extended
- attributes.
- 
- [[selinux-policy-tweaking]]
--=== SELinux policy tweaking
-+==== SELinux policy tweaking
- 
- The +SELinux refpolicy+ contains modules that can be enabled or
- disabled when being built. Each module provide a number of +SELinux+
-diff --git a/docs/manual/integration.txt b/docs/manual/integration.txt
-new file mode 100644
-index 0000000000..bdfbfa59de
---- /dev/null
-+++ b/docs/manual/integration.txt
-@@ -0,0 +1,12 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+[[integration]]
-+== Integration topics
-+
-+This chapter discusses how various things are integrated at system
-+level. Buildroot is highly configurable, almost everything discussed
-+here can be changed or overridden by xref:rootfs-custom[rootfs overlay
-+or custom skeleton] configuration.
-+
-+include::integration-selinux-support.txt[]
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index b5cc044805..8ba0c76d32 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -38,6 +38,8 @@ include::common-usage.txt[]
- 
- include::customize.txt[]
- 
-+include::integration.txt[]
-+
- include::selinux-support.txt[]
- 
- include::faq-troubleshooting.txt[]
--- 
-2.35.3
-
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >       -Dutmp=false \
+> >       -Dhibernate=false \
+> > @@ -852,8 +849,6 @@ HOST_SYSTEMD_DEPENDENCIES = \
+> >       host-gperf \
+> >       host-python-jinja2
+> >
+> > -HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+> > -
+> >  # Fix RPATH After installation
+> >  # * systemd provides a install_rpath instruction to meson because the binaries
+> >  #   need to link with libsystemd which is not in a standard path
+> > --
+> > 2.34.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
