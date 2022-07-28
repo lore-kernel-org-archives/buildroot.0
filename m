@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD01CC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 11:58:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEC2AC04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 12:05:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 742D560D6F;
-	Thu, 28 Jul 2022 11:58:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 742D560D6F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3802760D6F;
+	Thu, 28 Jul 2022 12:05:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3802760D6F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gUjKyNT8JYCZ; Thu, 28 Jul 2022 11:58:56 +0000 (UTC)
+	with ESMTP id mcmkR7bOvQ6z; Thu, 28 Jul 2022 12:05:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6594D60AE0;
-	Thu, 28 Jul 2022 11:58:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6594D60AE0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C43571BF359
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 11:58:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8434960AD7;
+	Thu, 28 Jul 2022 12:05:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8434960AD7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7561A1BF3F2
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 12:05:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EEBE40227
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 11:58:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EEBE40227
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C9BF83E81
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 12:05:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C9BF83E81
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tjU3AvorO8I7 for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 11:58:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nfmp3jkaLAZ5 for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 12:05:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B4094010C
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5B4094010C
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 11:58:53 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id d8so1890624wrp.6
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 04:58:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09AC483EA6
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 09AC483EA6
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 12:05:51 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id v17so1894176wrr.10
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 05:05:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ncc3jQU0z9BtLeq5pADM33DK02p9KmclJ0V1k2U2tE8=;
- b=Sg3ZWU3YiB4uEGu+if2+FuTdD+hQIfhMMpxzl7ZyGxSH06NTIdZVbH2VQMIAOcCxlC
- 2NapNCOTvBlVyPKSwzCsCJIbmt4lO5Vr9p6V42AaRHw+lBXM/ejcaBVsBcg1OPjDZb0D
- F47hO3EejM+yKOP+MDuxb3FCPHBbILEHN4L/Z/8UZjBaJKKeXSileqZKfIg6sOFnKBzL
- xnFr1bwRElNBgIRtAZc4voVVOg7WM0lNuMqbhn0onGvg5R0OKLQELxWJMzXZUiLKAiOp
- QchACX+B4AnEupkPP/CtN8ldyZ1l3EPz1abwZe5+9EQhgTWYqHZpNpSUPi1VAmCDnTcZ
- g/vg==
-X-Gm-Message-State: AJIora9Ni7NArEXO+/7yUaXE+rFgSEuAjZQR1BlQs2AlaMcZBEE10p2I
- PpaEjRQtm16WNgN3m/OtFcoNQyfHMWY=
-X-Google-Smtp-Source: AGRyM1s4XmZVS/dpZvQZVxZF2qVreG1AJjOsEfeNCcN0VrdNiAHLTilIxABCfK971PZ07Y+PaLEtQw==
-X-Received: by 2002:adf:ef8d:0:b0:21e:a5e3:35af with SMTP id
- d13-20020adfef8d000000b0021ea5e335afmr8682165wro.671.1659009530999; 
- Thu, 28 Jul 2022 04:58:50 -0700 (PDT)
+ bh=2UxvZ/EiIz1Ca5BJAVYoOpmX8OISFWq6YMXzzlt0Pcw=;
+ b=gAQk/PV2xC3IT5qA86KWKNFXtgb/wvtMpe//kS5YjacypfzzDWmg1cF7M9fyJEukgf
+ 2QRD/trC5s0xI2deOhOBWqowPV491s3oW7R8ce+mgGjEJuMRuzjMtCtPcQZ4n2rhRiXd
+ A98pdqAEWRNq2lLG7eRCvt1e/fungeyrP1/DXnBEEcxZE+FwZu8wcpDB9lJ1AgnvFNzW
+ 8t5/Uua+ubZlIwjM0FKV675yXu+A8iiOskuQd5LA0dNOqGyg3hS/h+y8u8z86ZU6xcoq
+ 28NYx6DTB+Y/4jkU2Oy0iiffc/R74exMXcuHdQHtf4Q5qe+PXVZ7NIPSMRuyD1tZOxvQ
+ C27w==
+X-Gm-Message-State: AJIora/PpbzKa0c+xjlusa8Q+xVosn7C0RMhXog3NTIFCGeCAc9edLv3
+ 8B2mH7GcbwRfKqGg11O9be7qpnf7x1Y=
+X-Google-Smtp-Source: AGRyM1tEDeB+ecOBQpM6PiM0ygT0ufnb9xPZ36BsjPqI2sUhvX10m7ciciL/GjPbia+gJQW9WZ1pdg==
+X-Received: by 2002:a5d:5005:0:b0:21e:f1b0:6eb0 with SMTP id
+ e5-20020a5d5005000000b0021ef1b06eb0mr2349352wrt.532.1659009949778; 
+ Thu, 28 Jul 2022 05:05:49 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- h18-20020a05600c351200b003a31df6af2esm5705828wmq.1.2022.07.28.04.58.50
+ bh16-20020a05600c3d1000b003a326ba4e99sm1100025wmb.34.2022.07.28.05.05.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 28 Jul 2022 04:58:50 -0700 (PDT)
+ Thu, 28 Jul 2022 05:05:49 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 13:58:47 +0200
-Message-Id: <20220728115847.2533147-1-fontaine.fabrice@gmail.com>
+Date: Thu, 28 Jul 2022 14:05:46 +0200
+Message-Id: <20220728120546.2534117-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=Ncc3jQU0z9BtLeq5pADM33DK02p9KmclJ0V1k2U2tE8=;
- b=Up077OtCyX7vh7fR3LSH9TJkDw60hfFVO7KK/tQjRmye+EQSzDX6yv+RuJCZfc66Xm
- rqiwIMJSAuUqThbE8RfzNJHGB59Ku7d1EvqIN4gTHpS4/cDgSTWrhgzK55K3lBgCyqrM
- sn1M66CsbrusFFPBKWtmAxsdkLEFozFL2YW+huArcO9PQSeUs0HGcyh3X5RPkbN6QhUa
- 1RJLf5wuPffAxEflF6WpQTtwztsEFnlbm9iiLTlqFlt4TeBwjr2WLeA5h6NTFLCN1fqp
- 6UFo/t5X2czMezdXqxQjVaeAib+eJLzUxQj6UM8FTwGZ+L316VJg97albO37HM44J+Up
- RDqA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=2UxvZ/EiIz1Ca5BJAVYoOpmX8OISFWq6YMXzzlt0Pcw=;
+ b=CAlpLvbDGUb5FdkXDEpjy42YBmd3jD/mln9LuuSxkx2cE49+srnahUaTNd7JvOxFwV
+ HLY2E1UjxSbiuy8QZmIgbHhhYKEz5K7TUf6Lh/I2lYexgtENnFueww2+15jNcTQxQGH1
+ 2f2RL3eXmNik+m/Ar/x6LJta2zDtHgUOr2q1jkqZVHRKxxSHtBUlpzBiX2/1E6SDZNik
+ OLXL5S1EvM+MPope78gURRBRU6iYFl5U4RhdQEuRD2Q0Q6pOER3er0B7eGSwwJseHPE0
+ NicN0xhQUfNjgYc/sQwHBby4QRr8iyV8muhuROY1CAfo1hTd5dVP9/ehnPlDGz94ZmD8
+ /j9w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Up077OtC
-Subject: [Buildroot] [PATCH 1/1] package/lapack: bump to version 3.10.1
+ header.a=rsa-sha256 header.s=20210112 header.b=CAlpLvbD
+Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: select pcre2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,148 +93,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Benjamin Kamath <kamath.ben@gmail.com>,
+Cc: Frank Vanbever <frank.vanbever@essensium.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patch (already in version)
-- Update hash of LICENSE (update in year:
-  https://github.com/Reference-LAPACK/lapack/commit/e7ad0370d4c3bb81d663abb773e49094f68bd5d6)
+Commit ea746f312844df298bbc9a697ca178f3a3c67a8f forgot to select pcre2
+resulting in the following build failure:
 
-http://www.netlib.org/lapack/lapack-3.10.1.html
+Makefile:575: *** pcre2 is in the dependency chain of libmodsecurity that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6528d2611bd1a45c1e94bc6b866de9c33dd90a7b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...001-Fix-out-of-bounds-read-in-slarrv.patch | 82 -------------------
- package/lapack/lapack.hash                    |  4 +-
- package/lapack/lapack.mk                      |  5 +-
- 3 files changed, 3 insertions(+), 88 deletions(-)
- delete mode 100644 package/lapack/0001-Fix-out-of-bounds-read-in-slarrv.patch
+ package/libmodsecurity/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lapack/0001-Fix-out-of-bounds-read-in-slarrv.patch b/package/lapack/0001-Fix-out-of-bounds-read-in-slarrv.patch
-deleted file mode 100644
-index 43c6444b02..0000000000
---- a/package/lapack/0001-Fix-out-of-bounds-read-in-slarrv.patch
-+++ /dev/null
-@@ -1,82 +0,0 @@
--From 0631b6beaed60ba118b0b027c0f8d35397bf5df0 Mon Sep 17 00:00:00 2001
--From: Keno Fischer <keno@juliacomputing.com>
--Date: Thu, 30 Sep 2021 03:51:23 -0400
--Subject: [PATCH] Fix out of bounds read in slarrv
--
--This was originally reported as https://github.com/JuliaLang/julia/issues/42415.
--I've tracked this down to an our of bounds read on the following line:
--
--https://github.com/Reference-LAPACK/lapack/blob/44ecb6a5ff821b1cbb39f8cc2166cb098e060b4d/SRC/slarrv.f#L423
--
--In the crashing example, `M` is `0`, causing `slarrv` to read uninitialized
--memory from the work array. I believe the `0` for `M` is correct and indeed,
--the documentation above supports that `M` may be zero:
--
--https://github.com/Reference-LAPACK/lapack/blob/44ecb6a5ff821b1cbb39f8cc2166cb098e060b4d/SRC/slarrv.f#L113-L116
--
--I believe it may be sufficient to early-out this function as suggested
--in this PR. However, I have limited context for the full routine here,
--so I would appreciate a sanity check.
--
--[Retrieved from:
--https://github.com/Reference-LAPACK/lapack/commit/38f3eeee3108b18158409ca2a100e6fe03754781]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- SRC/clarrv.f | 2 +-
-- SRC/dlarrv.f | 2 +-
-- SRC/slarrv.f | 2 +-
-- SRC/zlarrv.f | 2 +-
-- 4 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/SRC/clarrv.f b/SRC/clarrv.f
--index 1f09e4da6..42f710757 100644
----- a/SRC/clarrv.f
--+++ b/SRC/clarrv.f
--@@ -348,7 +348,7 @@ SUBROUTINE CLARRV( N, VL, VU, D, L, PIVMIN,
-- *
-- *     Quick return if possible
-- *
---      IF( N.LE.0 ) THEN
--+      IF( (N.LE.0).OR.(M.LE.0) ) THEN
--          RETURN
--       END IF
-- *
--diff --git a/SRC/dlarrv.f b/SRC/dlarrv.f
--index b036c1e66..299430361 100644
----- a/SRC/dlarrv.f
--+++ b/SRC/dlarrv.f
--@@ -350,7 +350,7 @@ SUBROUTINE DLARRV( N, VL, VU, D, L, PIVMIN,
-- *
-- *     Quick return if possible
-- *
---      IF( N.LE.0 ) THEN
--+      IF( (N.LE.0).OR.(M.LE.0) ) THEN
--          RETURN
--       END IF
-- *
--diff --git a/SRC/slarrv.f b/SRC/slarrv.f
--index 9d72b339a..95f94fd1b 100644
----- a/SRC/slarrv.f
--+++ b/SRC/slarrv.f
--@@ -350,7 +350,7 @@ SUBROUTINE SLARRV( N, VL, VU, D, L, PIVMIN,
-- *
-- *     Quick return if possible
-- *
---      IF( N.LE.0 ) THEN
--+      IF( (N.LE.0).OR.(M.LE.0) ) THEN
--          RETURN
--       END IF
-- *
--diff --git a/SRC/zlarrv.f b/SRC/zlarrv.f
--index 51ec558f5..e4be63e0d 100644
----- a/SRC/zlarrv.f
--+++ b/SRC/zlarrv.f
--@@ -348,7 +348,7 @@ SUBROUTINE ZLARRV( N, VL, VU, D, L, PIVMIN,
-- *
-- *     Quick return if possible
-- *
---      IF( N.LE.0 ) THEN
--+      IF( (N.LE.0).OR.(M.LE.0) ) THEN
--          RETURN
--       END IF
-- *
-diff --git a/package/lapack/lapack.hash b/package/lapack/lapack.hash
-index 6f6dbff1a6..4d4d2c0596 100644
---- a/package/lapack/lapack.hash
-+++ b/package/lapack/lapack.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  328c1bea493a32cac5257d84157dc686cc3ab0b004e2bea22044e0a59f6f8a19  lapack-3.10.0.tar.gz
--sha256  66246b7d3e6736aea46e63fd5e087659474d07edfe2f9b051d085d9b42aaac61  LICENSE
-+sha256  cd005cd021f144d7d5f7f33c943942db9f03a28d110d6a3b80d718a295f7f714  lapack-3.10.1.tar.gz
-+sha256  44f7c08ab11e40b21d8bf8220712929ba8d0204645d2174869acf915562d0969  LICENSE
-diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
-index 609075842d..2d069c1c93 100644
---- a/package/lapack/lapack.mk
-+++ b/package/lapack/lapack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LAPACK_VERSION = 3.10.0
-+LAPACK_VERSION = 3.10.1
- LAPACK_LICENSE = BSD-3-Clause
- LAPACK_LICENSE_FILES = LICENSE
- LAPACK_SITE = $(call github,Reference-LAPACK,lapack,v$(LAPACK_VERSION))
-@@ -13,9 +13,6 @@ LAPACK_INSTALL_STAGING = YES
- LAPACK_SUPPORTS_IN_SOURCE_BUILD = NO
- LAPACK_CONF_OPTS = -DLAPACKE=ON -DCBLAS=ON
- 
--# 0001-Fix-out-of-bounds-read-in-slarrv.patch
--LAPACK_IGNORE_CVES += CVE-2021-4048
--
- ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
- LAPACK_CONF_OPTS += -DBUILD_COMPLEX=ON -DBUILD_COMPLEX16=ON
- else
+diff --git a/package/libmodsecurity/Config.in b/package/libmodsecurity/Config.in
+index f65ab3de93..b15d808759 100644
+--- a/package/libmodsecurity/Config.in
++++ b/package/libmodsecurity/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBMODSECURITY
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# libmodsecurity embeds several mbedtls source files
+ 	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_LIBCURL_MBEDTLS)
+-	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_PCRE2
+ 	help
+ 	  Libmodsecurity is one component of the ModSecurity
+ 	  v3 project. The library codebase serves as an
 -- 
 2.35.1
 
