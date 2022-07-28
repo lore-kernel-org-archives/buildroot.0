@@ -1,86 +1,132 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 860ECC19F2B
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 01:54:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E60C04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 02:15:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1203882ACD;
-	Thu, 28 Jul 2022 01:54:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1203882ACD
+	by smtp2.osuosl.org (Postfix) with ESMTP id E6A0840A37;
+	Thu, 28 Jul 2022 02:15:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6A0840A37
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 85DZMDlDdjdb; Thu, 28 Jul 2022 01:54:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4LQmPaSE_3q3; Thu, 28 Jul 2022 02:15:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D07BC829EE;
-	Thu, 28 Jul 2022 01:53:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D07BC829EE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 05CFD1BF393
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 01:53:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 138794052D;
+	Thu, 28 Jul 2022 02:15:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 138794052D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D2421BF94B
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 02:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF25160EDE
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 01:53:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF25160EDE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 589F84052D
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 02:15:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 589F84052D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jfOuXiVp7YQk for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 01:53:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xTcZJ6NKMiMO for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 02:15:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 813F560EC4
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com
- [IPv6:2607:f8b0:4864:20::233])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 813F560EC4
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 01:53:55 +0000 (UTC)
-Received: by mail-oi1-x233.google.com with SMTP id h188so517825oia.13
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 18:53:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=QXMXF0BC/TU1y0zfCIa+J+yELXhBdbd8OAHWPe952ms=;
- b=zFO11h8U5GCa500lj2Ryr72osX+03udIoGIx7Gto6TayIgMquTKvQJttva4xQv+TUH
- lNT02xmoKJaCvQWpOUrnqMJ1nPUVw0N6GbTJSpFBSBzDqjwl22c63UfUftJ+MVQ0t9qM
- PaGCT+mv4QQoyAwZejK3K8noP7MYNTGt5jqKgVqqCX7XtuHfUrF1wmo2foxCDz6UdURY
- eMyW/AXbf5PxMzj/5gh/etNygz+rPkBdVUBHfvK9ViDSbe7QGnr8zR/2+vWlGEhRdjVr
- wMzqqxMrUybwCh6GKbzDXG/u4O2iTKP35zodxMtTqsQPA6Ll0sJUZ9RjvihHgT/onPmx
- bgHQ==
-X-Gm-Message-State: AJIora+rDeeP6nPtrAH6t+5zd7gzO+UTLpPS1Oex8wIq1YZatbDX5D5I
- D7xrD9LwXqdhr2GMmQzOl7I6j1DUxQNVKwxTO8E=
-X-Google-Smtp-Source: AGRyM1t2XveLA2eNy/sjsibEUg6BLx5yfh5qBx7Khutxk7RGI6VoZDW4XpR+QLty6Uwe0ktNoB8rHakICe782efznFM=
-X-Received: by 2002:a54:488d:0:b0:33a:87b3:31a with SMTP id
- r13-20020a54488d000000b0033a87b3031amr3107995oic.153.1658973234482; Wed, 27
- Jul 2022 18:53:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76DCC40462
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on2092.outbound.protection.outlook.com [40.107.223.92])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 76DCC40462
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 02:15:18 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e08PLRGCldXzNOyv1Z6s8O2iozNF3TGn5McSrKQ8Mza7WrBhKIVg9nCkkpkMOkKyFR+S+UtS5Bi0uPsY0hVh0p8lU2eRheStBQVPM47gbZWMYn8u4f36t51RUYa1EhH31rGD6uP/YExjUkA18PCPWFUmmJ8TfXO24O08fla3k4PWWv5vlxptvql+QqNWKOI0OopufjLZ27TqmWf7sQ3YFlRpqB6zcdHqmnNeRaL48zmUuTdwtGW6DGq1g1avDbCSJHOxge5ptYux0uZpj9KzQTDKkiEi3zpwoO3vfUMwlLhLThUbsANI9NgW/goJMnHfjsmIOtTeZPdtXDzRo54YeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YvnxJvIm1qyRrBwgcjyDJHGhjTY0Xo+YVaPXsjvCt9M=;
+ b=ivqXq4Ne19NQc+uLtZg7rcrHbAQGgmxL4DPKKUY3j6gWwMktUMWS3M6DFchdz5ZRrHKGQjrEWVO8CZ0gtt0vYFfIstOao6xJCazJdXTVHwcSJqJaufJ/XU5n7Paoy8Oekt0A51GcKjmPbCZMAqy1GDnqoHhnijOqu62iItlqefxmlVyu4Vx8hd+cK72BqwDJRNzMuo61qZS4QW7nPhFDV6USCHgNTgjIVldt49IE1ZJ2LGf+5rNN+86hjx6Qnm2knu4WrCmqciSQwETMAWHrcQZCMm0CNQ+DAtgOmyXkfitTKEmfUSSkiEldzMGmTkh3BYWCxR0EtCwiI9u5YhpQyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=phobosdpl.com; dmarc=pass action=none
+ header.from=phobosdpl.com; dkim=pass header.d=phobosdpl.com; arc=none
+Received: from CH2PR17MB3512.namprd17.prod.outlook.com (2603:10b6:610:3b::30)
+ by CY4PR17MB0950.namprd17.prod.outlook.com (2603:10b6:903:a1::12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.25; Thu, 28 Jul
+ 2022 02:15:13 +0000
+Received: from CH2PR17MB3512.namprd17.prod.outlook.com
+ ([fe80::e828:d088:296:c]) by CH2PR17MB3512.namprd17.prod.outlook.com
+ ([fe80::e828:d088:296:c%4]) with mapi id 15.20.5482.006; Thu, 28 Jul 2022
+ 02:15:10 +0000
+From: Sen Hastings <sen@phobosdpl.com>
+To: buildroot@buildroot.org
+Date: Wed, 27 Jul 2022 21:14:42 -0500
+Message-Id: <20220728021444.135820-1-sen@phobosdpl.com>
+X-Mailer: git-send-email 2.34.1
+X-ClientProxiedBy: SA9PR03CA0002.namprd03.prod.outlook.com
+ (2603:10b6:806:20::7) To CH2PR17MB3512.namprd17.prod.outlook.com
+ (2603:10b6:610:3b::30)
 MIME-Version: 1.0
-References: <20220722060936.566534-1-james.hilliard1@gmail.com>
- <20220724153736.GY2641@scaer> <d3dd1b44-33a2-0260-fe89-e93fb71a0209@mind.be>
- <CADvTj4ps6SNy2oQ0UFYYkkjK39ubTiBtFd4RSp4hMvjdB1ywPA@mail.gmail.com>
- <23a6eba2-06fd-8579-9815-214b3656daf7@mind.be>
-In-Reply-To: <23a6eba2-06fd-8579-9815-214b3656daf7@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 27 Jul 2022 19:53:43 -0600
-Message-ID: <CADvTj4qQ0pwW184-xdBvezPO6RrMgN3-T3benq2FkMHiGXWeAA@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8892f0ab-e282-4a0d-7e53-08da703efe5f
+X-MS-TrafficTypeDiagnostic: CY4PR17MB0950:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qkldQi7HA5LCgSBxbWtO7FRRBBLF6Tw3gCW8I1pr6SvQQzkue7ovNPRzFEJ1nP3FcxwHf2yYQk3NTVCXgN16E3WWEgJlju64/RsMwM5IYQh2yUDnlGxYpxO76lCnr20l4UrWH5/gJFVt3lNwAwcJdawY0GtXXCKGxQRgdFVz91z5QsthG0gYej/q1f9b3O6iny743QuwvII30JJ4bPdZSpbzwik28nN/wjIjTtrbw92EQM3W7X1PSF4QsqC7EsB0RbRk+X4ubZOI5G/8ZDqAPHdLJ87pXhqBLT7SLsYlk21rFXn4Y9Qx5kF6yH9mSbemAXFBCxQkqSb5hNDCKi3K97Y2XpVaZJg6nDfdrtIdFaSz1jNvu4RLpyO3mcfngtf92x1MW5JdEeL/kHApQb55NxIuLYcIIxr4Vc37MgbFigjNDW9TZFO21wY4Bz3szu7f1HuXfL8TEFGyEdm5TeIiz+86i9TVXKlnQ+11nsruSARcpSPFwXJRo1nKhMxH7oEE7DFkxJMi2HGw0Qk5UPCcdgAuSfMiscCreAAX7SEhOcxA2LFzSl+k4EgIM4FBaEAxo2xAWdPs7dCnp3ysm0KZVS40QcfVshF6jh52gFqU9HewpL6ZNJ8Ibs/HufOMjYC6Af7yqNZPNO6EDmdI6gwmUgO/5hM1841s1+s+Z54/JPt/2tEA2DTO0pZ9d6klmZOHj7DBAYeVkarItHQ/BaGcpQtODCnzlTO4Fo3b7pHw0dzAagLpwJPKhV5MvXgpRHlVL8SX7DiouMI0JPytCAuN8Q1Ah+kAE2Cjh0XQavSKKuA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR17MB3512.namprd17.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230016)(376002)(396003)(136003)(39830400003)(346002)(366004)(38350700002)(8936002)(8676002)(54906003)(38100700002)(5660300002)(6666004)(4744005)(6486002)(316002)(66556008)(66946007)(4326008)(36756003)(186003)(6916009)(66476007)(86362001)(6506007)(478600001)(41300700001)(1076003)(26005)(52116002)(2616005)(6512007)(2906002)(83380400001);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tLtfIK10vvkFoKUMXrfoaIzQXLQqqBajn/z4iwKSw/9Pl525faSSYOGLxgHM?=
+ =?us-ascii?Q?c9th3fIkgh+hlvdx+MmHGbo5Aq0mbjOftaW3ZrtHnY+NEUqppm6/IMJKWEq3?=
+ =?us-ascii?Q?0te+TiOm3vX4ThD75wrsKsbcv4bgT3DuRITshRVqaXhdejxk4hCAG4vUlgKk?=
+ =?us-ascii?Q?h1qI/dA7pMRkOajyHRtRjRGrC6gHiHOVouaoUGhn8wDoBu2q68pPQzlrKySH?=
+ =?us-ascii?Q?DxySAtsyJ+0yOT2PkyCgW9TTMg/Jqiu7yy2c1o7F8ATgX5djaSRo3Bx6HqNA?=
+ =?us-ascii?Q?iSTdkmz5A4Bnq55DUu7wJ4K1gq21TtxYandDvzULTmawPaRqaW8JRTec9dY/?=
+ =?us-ascii?Q?AtGLmmIE+6se4+yrsEMVWGREyNSZt6L8AZ4mghnrSjfVXGTPp/dsKF5lqZ+/?=
+ =?us-ascii?Q?ojhawz7Owe16ZDoX6DtYX2GDZZVCEqfRyNy/KtQdic7SPkv+U3A7EI6BH7yo?=
+ =?us-ascii?Q?dzbZ8ST6fx3X8ESGQsTbWbyRyLtkqFbZuUP+8bP/xIijPlrvMbqtRBOKD+q1?=
+ =?us-ascii?Q?dYHfFsy0AtzyCHCgdmY06zUQn6JNmtEC6GDWi9uEc11QKhHbSXL3Yj4WOB89?=
+ =?us-ascii?Q?HCkEf26hwmjK1RFriog4D8RnWicTZtmuUbp0wFHwXpiYI+oxiuQBfSwqk4pb?=
+ =?us-ascii?Q?wLRvFH9vkAbAgBydsZDBOrsTqHenesVEP7v38I1f3L6QDef3NSnZGPgfiOMH?=
+ =?us-ascii?Q?aRMqETJ3teAUbb9VSb3VGilKt8C30iySmjHUh2E0h34nxUZrBVf91xUJ4/ef?=
+ =?us-ascii?Q?+OYVhMsP3HICPWehrEvbJHlrpbjmGSluxInoigXUPs/6wsA4YnHaqQZ0i9GY?=
+ =?us-ascii?Q?8W2Thl0ZkH+0DSVIskqwhTSISQENSBLxUlIm2qHTt8JhpZRm3nrM+QmX7RlI?=
+ =?us-ascii?Q?f3wrrCZfkRBZrgUwKzPSL1cIKMbqhkfz8lW/Zw8GzL7DQ8hN/qILRs/BcHdY?=
+ =?us-ascii?Q?NVkEy8ZyZiSKXuPpbnGuMqMR3wsmmeh7iZfpSak7o+FdSJx5yutrrQDcYzlM?=
+ =?us-ascii?Q?WSCQjGv/vx1RzIcgMESbMWaSiDHC3jOgyWYpXZ+CK/zjBE6dox01XN3jaGRx?=
+ =?us-ascii?Q?1qM6kLIcGJcQwRK6ow8KtJ8n3gOoLKdILPJ7dbC+tSUoIB8P85iVPCt+sjqN?=
+ =?us-ascii?Q?UmwbGXLCQYYOiciA+N2EWa5YyBO53H+a2oJDGJPN+TAvJTr/uh/r3ym2ujJb?=
+ =?us-ascii?Q?Lct1Ua0kCOKho1llT4g4EWV98N+xR2SQLQtO7HQYzRR+uiE37gz2GPKwlnlY?=
+ =?us-ascii?Q?iA9GODR40jOlzmmM8RzssBDGbQLbt240fFnANvxcU61RS9tabbK0mAFw0yiw?=
+ =?us-ascii?Q?bMK++pQv3s7S1Cbn5sNU7yf2pLRg7uzF9koDbOiQQhJji4/H7mh0eRJ0mU+U?=
+ =?us-ascii?Q?oFivUpXAAJSyKO9aMH5dVzNwMvqn2iSI2Q9cKt1GD4FYAe4QRYxLV6o9jA0/?=
+ =?us-ascii?Q?UvryI+VlG64cFq9kAAV1TdhiQ9RNqZLkIZeEtdJWjelAVNUiFtLjAQxL1z/y?=
+ =?us-ascii?Q?G7cetzD5Mp4uQ4/nawegmgBs18IxzvM+2fOt+YLv3aKtoPb4PfpUpZ/9mxEH?=
+ =?us-ascii?Q?zBxqXX97m34pe9RTIZ12q/ivQFd0XVsbdYEntgYI?=
+X-OriginatorOrg: phobosdpl.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8892f0ab-e282-4a0d-7e53-08da703efe5f
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR17MB3512.namprd17.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 02:15:10.7111 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 07b76dd5-c518-427b-a15a-2e07dfd0130a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zhQqz6zTrPnpCVv+HufN1sOjC2UKCGk2kaE2eoHsvggj4Px2PBczSBzBkI2qKnYkopE8wNrpb60duJ16UxGFhQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR17MB0950
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=QXMXF0BC/TU1y0zfCIa+J+yELXhBdbd8OAHWPe952ms=;
- b=LjHIdr+QiC5n809wanDSXZUgMT1LGFADp0vNRaJc8OC8ySZME523FkQW6D8XW44bLR
- 3bcz+Oae31cGwWl1QjOtr59mEB5LOD6WHIWfLDQKHApIRDOGwGF9fDEcWvh5McPjpKaD
- ehzYpXQWsXPSidwDHH2HDfV3jRxbXboLVZCv4pGcV8cD0EgJDE2WFmQHEIx2jaf7lpzp
- VsAUTw2EEjcsHCfTn3wdCqXKlFCcWoW6prmZfOkImC01P8D7Al5XLGiJu0WDErMF/Hg6
- S0SR1KYg+vWFJPwBvBeNek7CDH/9/1pKtkRhO2cuF9+XCi85svQsx8tagCfVPAm3YfER
- F+mQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=LjHIdr+Q
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/pkg-meson: use meson to
- build/install packages
+ d=centc.onmicrosoft.com; 
+ s=selector2-centc-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YvnxJvIm1qyRrBwgcjyDJHGhjTY0Xo+YVaPXsjvCt9M=;
+ b=xwAzkM7A+t9G6FlbbvZNiXEOpCicc9M4r/urmurcq8rKoHck3SvXp87w3rrv8FZewIUAdWwEEFrtjgBcghND25h0qdGpOz37EKz6EEdj0zJjR+ZwiBKIfmZOjiaZC0s/Mai9BcFiSJOpTi3J+yKUJsMzq4/1KvxPe1JNfhqjKSM=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=centc.onmicrosoft.com
+ header.i=@centc.onmicrosoft.com header.a=rsa-sha256
+ header.s=selector2-centc-onmicrosoft-com header.b=xwAzkM7A
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=phobosdpl.com;
+Subject: [Buildroot] [PATCH 0/2] support/scripts/pkg-stats: fix row/column
+ ordering issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,208 +138,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Samuel Martin <s.martin49@gmail.com>, buildroot <buildroot@buildroot.org>,
- Norbert Lange <nolange79@gmail.com>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Sen Hastings <sen@phobosdpl.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Jul 26, 2022 at 1:31 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 26/07/2022 06:59, James Hilliard wrote:
-> > On Sun, Jul 24, 2022 at 1:30 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>
-> >>
-> >>
-> >> On 24/07/2022 17:37, Yann E. MORIN wrote:
-> >>> James, All,
-> >>>
-> >>> On 2022-07-22 00:09 -0600, James Hilliard spake thusly:
-> >>>> As of version 0.54.0 meson has had the ability to build and install
-> >>>> packages rather than having to run ninja directly as before.
-> >>>>
-> >>>> This will allow us to use features such as meson install tags in
-> >>>> the future which require meson to be used for the installation.
-> >>>>
-> >>>> It appears we need to ensure the cmake prefix path is set for the
-> >>>> meson generated relocatable pkg-config format to work properly.
-> >>>>
-> >>>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> [snip]
-> >>>>    * +FOO_NINJA_OPTS+, to specify a space-separated list of targets to build. By
-> >>>
-> >>> Now that we use meson to build and instal, does it still make sense to
-> >>> have FOO_NINJA_OPTS to be the list of targets to install?
-> >>>
-> >>> I mean, isn't there a way to tell meson what to install, instead?
-> >>
-> >>    FOO_NINJA_OPTS could theoretically be used to control other things about
-> >> ninja, e.g. warnings and debugging. Though I don't really see why you'd ever
-> >> want to do that in a buildroot package.
-> >
-> > There might be some use cases in which it makes sense to use it to control
-> > what gets built...I figured best just keep it for now.
->
->   If it is used to control what gets built, then Yann's remark applies - it
-> should be passed to meson itself, not to ninja. That is, assuming that "meson
-> build" does have a way to specify what gets built.
+This patchset is essentially a revision of [3/4] and republishing of [2/4]
+from the previous patchset, but is published as a new patchset.
 
-Well it's being passed by meson to ninja directly I think.
+This is because I'm not sure whether you are supposed to rev patches that
+have already been committed.
 
->
->
-> >>>> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> >>>> index 3b1db35fb6..4fa620080d 100644
-> >>>> --- a/package/pkg-cmake.mk
-> >>>> +++ b/package/pkg-cmake.mk
-> >>>> @@ -90,6 +90,8 @@ define $(2)_CONFIGURE_CMDS
-> >>>>       $$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
-> >>>>               -DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
-> >>>>               -DCMAKE_INSTALL_PREFIX="/usr" \
-> >>>> +            -DCMAKE_PREFIX_PATH="$$(STAGING_DIR)/usr" \
-> >>
-> >>    Wouldn't it be better to put this in the toolchainfile?
-> >
-> > So it seems we just need to remove this from the toolchainfile instead actually:
-> > https://patchwork.ozlabs.org/project/buildroot/patch/20220726044425.72570-1-james.hilliard1@gmail.com/
->
->   The problem is, the toolchainfile is not only meant to be used in Buildroot
-> itself, but also by external builds (using the SDK). The idea is that it should
-> be sufficient to call cmake with an option pointing to the toolchain file to do
-> a build externally. That's why we have the pkgconfig setting in there.
+Sen Hastings (2):
+  support/scripts/pkg-stats: fix rows with duplicate package class names
+  support/scripts/pkg-stats: fixed sortGrid() performance
 
-This seems to work:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220728014402.142320-1-james.hilliard1@gmail.com/
+ support/scripts/pkg-stats | 169 ++++++++++++++++++++------------------
+ 1 file changed, 91 insertions(+), 78 deletions(-)
 
->
->
-> >>>> +            -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=ON \
-> >>
-> >>    This one as well, I guess.
-> >>
-> >>>
-> >>> But doesn't that needs to be in a separate patch? I mean, does it not
-> >>> make sense opn its own?
-> >>
-> >>    +1.
-> >>
-> >>    The commit message of that patch could also explain better what it does exactly.
-> >>
-> >>>
-> >>> [--SNIP--]
-> >>>> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> >>>> index 0835e08e3a..de5817d5da 100644
-> >>>> --- a/package/pkg-meson.mk
-> >>>> +++ b/package/pkg-meson.mk
-> >>> [--SNIP--]
-> >>>> @@ -138,6 +138,7 @@ define $(2)_CONFIGURE_CMDS
-> >>>>       $$(MESON) \
-> >>>>               --prefix=/usr \
-> >>>>               --libdir=lib \
-> >>>> +            --pkgconfig.relocatable \
-> >>>
-> >>> Please explain what that means and why this is needed in the context of
-> >>> a target package.
-> >>
-> >>    And also it should probably be a separate patch - pkgconfig stuff should be
-> >> done at configure time, not at build time, so using meson to start the build
-> >> shouldn't really be related to it.
-> >
-> > This is inside of $(2)_CONFIGURE_CMDS so it is done at configure time AFAIU.
->
->   The patch is about "use meson to build/install packages". It is very weird
-> that calling meson instead of ninja in the build step would require to do
-> something different in the configure step.
+-- 
+2.34.1
 
-Well meson does do some extra stuff when using meson's install compared
-with just ninja, it also supports additional features like tag
-filtering during install.
-
->
->
-> >>>>               --default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
-> >>>>               --buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
-> >>>>               --cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-> >>>> @@ -156,10 +157,11 @@ define $(2)_CONFIGURE_CMDS
-> >>>>       mkdir -p $$($$(PKG)_SRCDIR)/build
-> >>>>       $$(HOST_CONFIGURE_OPTS) \
-> >>>>       $$($$(PKG)_CONF_ENV) $$(MESON) \
-> >>>> -            --prefix=$$(HOST_DIR) \
-> >>>> +            --prefix=/ \
-> >>>
-> >>> It is very weird that host packages are configured with / as prefix, and
-> >>> then installed in HOST_DIR set as DEST_DIR.
-> >>
-> >>    It's not weird, it's wrong! There is no reasonable explanation how this can be
-> >> correct. We are really installing stuff in that specific location, any paths
-> >> should refer to that location and not a path beginning with /.
-> >
-> > Well from my understanding when using relocatable mode/meson install the
-> > prefix is appended to the destdir similar to how it works for target/staging
-> > directories.
->
->   As Thomas explained in the v4, it is not at all similar to target/staging.
-
-Well meson AFAIU is designed to make things functional even when run
-from the build tree which may have implications here, meson tends to do
-stuff differently from other build systems in general I think.
-
->
->
->   Regards,
->   Arnout
->
-> >>    If for some reason meson doesn't work when the prefix is not / or /usr or
-> >> /usr/local, it's a bug in meson, really.
-> >
-> > I think the issue is in how prefix and destdir get combined.
-> >
-> >>
-> >>    Regards,
-> >>    Arnout
-> >>
-> >>>
-> >>> I guess this is working thanks to --pkgconfig.relocatable a few lines
-> >>> below?
-> >>>
-> >>> This must be explained in the commit log (and probably a little comment
-> >>> above $(2)_CONFIGURE_CMDS for host packages.
-> >>>
-> >>>>               --libdir=lib \
-> >>>> -            --sysconfdir=$$(HOST_DIR)/etc \
-> >>>> -            --localstatedir=$$(HOST_DIR)/var \
-> >>>> +            --pkgconfig.relocatable \
-> >>>> +            --sysconfdir=etc \
-> >>>> +            --localstatedir=var \
-> >>
-> >>    These two could be correct, however, since I think they're taken relative to
-> >> prefix (the default values are absolute because the default prefix is /usr and
-> >> sysconfdir is /etc, not /usr/etc - but in our case a relative path is fine).
-> >>
-> >>    Regards,
-> >>    Arnout
-> >>
-> >>>
-> >>> Ditto for etc and var?
-> >>>
-> >>> So, to make it easier to follow, I'd change the ordering:
-> >>>
-> >>>       --pkgconfig.relocatable \
-> >>>       --prefix=/ \
-> >>>       --sysconfdir=etc \
-> >>>       --localstatedir=var \
-> >
-> > Reordered in v4.
-> >
-> >>>
-> >>> Regards,
-> >>> Yann E. MORIN.
-> >>>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
