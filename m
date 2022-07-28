@@ -1,68 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69AADC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 20:56:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77239C04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 20:56:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08E8660AF0;
-	Thu, 28 Jul 2022 20:56:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08E8660AF0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17332828DE;
+	Thu, 28 Jul 2022 20:56:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17332828DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kR6ZbShEuDAG; Thu, 28 Jul 2022 20:56:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vLXiFQdhhHVo; Thu, 28 Jul 2022 20:56:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D05F60ACD;
-	Thu, 28 Jul 2022 20:56:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D05F60ACD
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB40C8267C;
+	Thu, 28 Jul 2022 20:56:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB40C8267C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D1AC1BF37F
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 20:56:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 98A791BF37F
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 20:56:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 582AF8267C
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 20:56:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 582AF8267C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 72B6C8267C
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 20:56:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72B6C8267C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6dmdj1VGnv_Q for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 20:56:00 +0000 (UTC)
+ with ESMTP id l1mHdNS_Cwa8 for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 20:56:43 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4288D8266D
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4288D8266D
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 20:56:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48D278266D
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 48D278266D
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 20:56:43 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5E25F240005;
- Thu, 28 Jul 2022 20:55:58 +0000 (UTC)
-Date: Thu, 28 Jul 2022 22:55:57 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id D762660005;
+ Thu, 28 Jul 2022 20:56:39 +0000 (UTC)
+Date: Thu, 28 Jul 2022 22:56:38 +0200
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220728225557.32c66b9e@windsurf>
-In-Reply-To: <20220728115204.2465495-1-fontaine.fabrice@gmail.com>
-References: <20220728115204.2465495-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220728225638.20e308a0@windsurf>
+In-Reply-To: <20220728115847.2533147-1-fontaine.fabrice@gmail.com>
+References: <20220728115847.2533147-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659041758;
+ d=bootlin.com; s=gm1; t=1659041800;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=/rpn/nfd9HqwV1iibVFyF5077MFiZg9sS1uCctsi5P4=;
- b=dADuy1x2N4CmGlqud5wCLVpP1MBWuRx3bYG1WhayqeKauHt7VFYJ2PCgf7R/FsaAPZgziy
- xsZ8QQCbAytJgoMh7QRDGuB2rBS0KXy04s+n/huv9/gJlo7c6Mx7lYh+ACbFoqkJS5Bsro
- 5MWbVljqMkKBJorRTTi2iWyQa4+aYlvaPznaSwbAUzMzGeZg7b6QKOlQzYOcmVGthKBv+A
- juIbzh45y/1Za0fX+c8yNZwurdt0tFi/jEVTJE78EKIbPrVWik/Qkkl8Qqe1hf1AMC3aMA
- XN20ojLtIF1hnObf5RsuexHwI/bR+GqH0go/zfGvILSUaBePvhFkOsRQ1Kl4ug==
+ bh=ZsAGSQVYNSz9WJ9gquCbUVZ+1hZj2UHlnZazXgAH9dQ=;
+ b=kRgwC229PQak5ERtGZNaQP073fjOtqyqw7f9JcXvFPqOr+pUKpTGNMMg4UklYk0qcZoD94
+ 0EMUb9vpoYNX6xF5FhlkOFfYpCxlVvQUfw9ZrgKTvcc6ZXsl44jOx3qPTu5chukAKakNaB
+ 7pyRsF5SlA+UMkWu4JkB3yL0Y8ajr8YjRnJPM/fUlpUrofEPtkW68GfjnnwR7PAwvniPoK
+ RLKAMFt56g3aD+ROX8hV+QS3oKNDlkhCEKmbo9aRXPcOk7lgpRRKxzk4RKGW4sWaI0vGje
+ bMhaoweTzZd3MhquJ7w+W3ejs/2I48dgUYcqxpCYbsrjOjngfG0e0+mtgQhNRg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dADuy1x2
-Subject: Re: [Buildroot] [PATCH 1/1] package/pulseaudio: fix speex dependency
+ header.s=gm1 header.b=kRgwC229
+Subject: Re: [Buildroot] [PATCH 1/1] package/lapack: bump to version 3.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,34 +77,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Benjamin Kamath <kamath.ben@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Jul 2022 13:52:04 +0200
+On Thu, 28 Jul 2022 13:58:47 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> pulseaudio needs speexdsp, not speex resulting in the following build
-> failure since commit 7752afbe4bb9fa1def5ba89daf21564ea58af79a which
-> explicitly enable or disable speex:
+> - Drop patch (already in version)
+> - Update hash of LICENSE (update in year:
+>   https://github.com/Reference-LAPACK/lapack/commit/e7ad0370d4c3bb81d663abb773e49094f68bd5d6)
 > 
-> ../output-1/build/pulseaudio-16.1/meson.build:713:2: ERROR: Dependency "speexdsp" not found, tried pkgconfig and cmake
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8d4c5d5bfd65744753ca75180dd45a01c90f0b91
+> http://www.netlib.org/lapack/lapack-3.10.1.html
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/pulseaudio/pulseaudio.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  ...001-Fix-out-of-bounds-read-in-slarrv.patch | 82 -------------------
+>  package/lapack/lapack.hash                    |  4 +-
+>  package/lapack/lapack.mk                      |  5 +-
+>  3 files changed, 3 insertions(+), 88 deletions(-)
+>  delete mode 100644 package/lapack/0001-Fix-out-of-bounds-read-in-slarrv.patch
 
-I have added a comment in the .mk file that will help us remember that
-even though the option is named "speex", it really checks/needs
-speexdsp as a dependency. Applied with this change.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
