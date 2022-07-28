@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D2FC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 07:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DA0FC04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 07:34:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AA4C60AFB;
-	Thu, 28 Jul 2022 07:34:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AA4C60AFB
+	by smtp2.osuosl.org (Postfix) with ESMTP id CCEED40136;
+	Thu, 28 Jul 2022 07:34:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCEED40136
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TEm7hf8WofGv; Thu, 28 Jul 2022 07:34:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kLmdlXHfJ1L7; Thu, 28 Jul 2022 07:34:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C85660671;
-	Thu, 28 Jul 2022 07:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C85660671
+	by smtp2.osuosl.org (Postfix) with ESMTP id E41F340B47;
+	Thu, 28 Jul 2022 07:34:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E41F340B47
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF9D41BF423
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 07:33:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0E0231BF423
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 07:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9C5B40270
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7664402C5
  for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 07:33:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9C5B40270
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7664402C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mJFSlt-PwHRp for <buildroot@lists.busybox.net>;
+ with ESMTP id FUzUZ0dne-v0 for <buildroot@lists.busybox.net>;
  Thu, 28 Jul 2022 07:33:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7EEA40052
+ by smtp4.osuosl.org (Postfix) with ESMTP id C08434026C
  for <buildroot@buildroot.org>; Thu, 28 Jul 2022 07:33:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7EEA40052
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C08434026C
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D848D867A3; Thu, 28 Jul 2022 07:20:03 +0000 (UTC)
+ id E19F2867C0; Thu, 28 Jul 2022 07:20:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 09:32:49 +0200
+Date: Thu, 28 Jul 2022 09:33:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97eede9242edb52aff2d03b628e8954ad8785335
-X-Git-Newrev: a5be1da1ff84dc2f523d5192444fe2569779f246
+X-Git-Oldrev: a5be1da1ff84dc2f523d5192444fe2569779f246
+X-Git-Newrev: ca804515166dd45138662b591d1b685ea338fb20
 X-Patchwork-Hint: ignore
-Message-Id: <20220728072003.D848D867A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pytest: bump to version
- 7.1.2
+Message-Id: <20220728072003.E19F2867C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pytest-asyncio: bump to
+ version 0.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,53 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5be1da1ff84dc2f523d5192444fe2569779f246
+commit: https://git.buildroot.net/buildroot/commit/?id=ca804515166dd45138662b591d1b685ea338fb20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is just a starting year in licence file now (see [1]), but
-licence itself did not change.
+Second newline at the end of licence file was removed upstream, so
+update license file hash.
 
-Also fixup the spacing in the hash file to match the "new" coding
-style.
-
-[1] https://github.com/pytest-dev/pytest/commit/ed24f29e6017183ea22f3136aa180a8e3280cf8a
+[1] https://github.com/pytest-dev/pytest-asyncio/commit/4c7da65d6fcf9d725eccba28ad1ed2083524ee16
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pytest/python-pytest.hash | 6 +++---
- package/python-pytest/python-pytest.mk   | 4 ++--
+ package/python-pytest-asyncio/python-pytest-asyncio.hash | 6 +++---
+ package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
-index 060dc6189e..c2ead0aa64 100644
---- a/package/python-pytest/python-pytest.hash
-+++ b/package/python-pytest/python-pytest.hash
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+index 4949919ecb..e20d78aa01 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest/json
--md5	8bc467ebd5d571778dc51dd87ff09513  pytest-6.2.5.tar.gz
--sha256	131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89  pytest-6.2.5.tar.gz
-+md5  4a98001581a18d4084cb5027fdb1467d  pytest-7.1.2.tar.gz
-+sha256  a06a0425453864a270bc45e71f783330a7428defb4230fb5e6a731fde06ecd45  pytest-7.1.2.tar.gz
- # Locally computer sha256
--sha256	7898b9b164d4f93fd9a562fd0f592935518b48c4745303964110eb7f7fe64faf  LICENSE
-+sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
-index 5aa9ebca6e..85d762ac8b 100644
---- a/package/python-pytest/python-pytest.mk
-+++ b/package/python-pytest/python-pytest.mk
+ # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
+-md5  8940c41c342b5bafe2ebb0d6e5c320ec  pytest-asyncio-0.15.1.tar.gz
+-sha256  2564ceb9612bbd560d19ca4b41347b54e7835c2f792c504f698e05395ed63f6f  pytest-asyncio-0.15.1.tar.gz
++md5  0c74a0ae2b509735594684bf00512252  pytest-asyncio-0.19.0.tar.gz
++sha256  ac4ebf3b6207259750bc32f4c1d8fcd7e79739edbc67ad0c58dd150b1d072fed  pytest-asyncio-0.19.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
++sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+index bd2e0083a9..337565ca85 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTEST_VERSION = 6.2.5
-+PYTHON_PYTEST_VERSION = 7.1.2
- PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
--PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/4b/24/7d1f2d2537de114bdf1e6875115113ca80091520948d370c964b88070af2
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/4e/1f/34657c6ac56f3c58df650ba41f8ffb2620281ead8e11bcdc7db63cf72a78
- PYTHON_PYTEST_SETUP_TYPE = setuptools
- PYTHON_PYTEST_LICENSE = MIT
- PYTHON_PYTEST_LICENSE_FILES = LICENSE
+-PYTHON_PYTEST_ASYNCIO_VERSION = 0.15.1
++PYTHON_PYTEST_ASYNCIO_VERSION = 0.19.0
+ PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
+-PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/de/c1/b2b0119e30f61f7ec8b44f129f6fde46a1a7329de17110f124639aa8896b
++PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/43/1c/4293ce5ddfd1db78fbf192bd3c47183c9ecc2816b8de382ed1b2491c7cea
+ PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
+ PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
