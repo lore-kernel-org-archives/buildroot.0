@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7788CC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 06:44:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1A64C04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 06:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 02794408FB;
-	Thu, 28 Jul 2022 06:44:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02794408FB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id smJW70Rwl1Rl; Thu, 28 Jul 2022 06:44:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09EC740567;
-	Thu, 28 Jul 2022 06:44:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09EC740567
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8ED8E1BF364
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 06:44:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D4E160EF4
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 06:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D4E160EF4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2945D60EFF;
+	Thu, 28 Jul 2022 06:49:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2945D60EFF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eJa3gpK7BB5C for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 06:44:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F16C60EF1
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 06:44:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F16C60EF1
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8FCD386799; Thu, 28 Jul 2022 06:30:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 08:43:49 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50e398e2d9f7e01ddcddb00929041546d750d32a
-X-Git-Newrev: b95b8fb44cc1a0ba18f2575a5da4faa0b6e27a10
-X-Patchwork-Hint: ignore
-Message-Id: <20220728063035.8FCD386799@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nerdctl: new package
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5TB3tYnV7hmd; Thu, 28 Jul 2022 06:49:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37A1160EF6;
+	Thu, 28 Jul 2022 06:49:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37A1160EF6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 96B871BF364
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 06:49:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5739D417D9
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 06:49:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5739D417D9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mtwPyvKY0ZCd for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 06:49:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62931417D2
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 62931417D2
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 06:49:40 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0784C40004;
+ Thu, 28 Jul 2022 06:49:36 +0000 (UTC)
+Date: Thu, 28 Jul 2022 08:49:36 +0200
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20220728084936.7e6fa9c8@windsurf>
+In-Reply-To: <20220311044816.3222673-1-christian@paral.in>
+References: <20220311044816.3222673-1-christian@paral.in>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1658990977;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6hasK3IZpUclx+8mXtXKGymQbQUt7doriI2nzD/gbV0=;
+ b=IUUWOGaFrc8R/0bK4J0YSEsdoe8VS/w7rjSLBZx1rFqFnEFYqjDwoIU7+BylNIpqIOfKfb
+ eANYAKvuH07Sg1FUCNmTCa9rIYU3drHb7Ws6npk7K8+sPBSb1rIxa2EmWu/u+qboTxKY4m
+ Ox635eY0mU1cTNDSc+0fRBZTfLtFp7K50zwpjLIFUoTQ7veK0NYrFGgp5rs2RVLXfnH0vd
+ EP7niBUR1WfEeS13jYwJVvpKh55DTmWhGKvr7MF7++K2vqV8gG+dUiuW/rMyPglZ46bi3l
+ BTuWBRKX6KJVrHiL/JRchDXsxaEmm1Rab0kSEy8HtZvNg6tWHXWHlGZWzm9RoQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IUUWOGaF
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/nerdctl: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,117 +77,89 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Tian Yuanhao <tianyuanhao3@163.com>,
+ "Yann E . Morin" <yann.morin.1998@free.fr>,
+ Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b95b8fb44cc1a0ba18f2575a5da4faa0b6e27a10
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-nerdctl is a CLI for containerd (package docker-containerd) which is
-drop-in compatible with the Docker Daemon CLI.
+On Thu, 10 Mar 2022 20:48:16 -0800
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-This allows using the lighter weight containerd daemon directly,
-instead of via the additional docker daemon. It also implements
-rootless mode.
+> nerdctl is a CLI for containerd (package docker-containerd) which is drop-in
+> compatible with the Docker Daemon CLI.
+> 
+> This allows using the lighter weight containerd daemon directly, instead of via
+> the additional docker daemon. It also implements rootless mode.
+> 
+> https://github.com/containerd/nerdctl
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
 
-https://github.com/containerd/nerdctl
+I have finally applied this patch, with a number of changes. See below.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/nerdctl/Config.in    | 18 ++++++++++++++++++
- package/nerdctl/nerdctl.hash |  3 +++
- package/nerdctl/nerdctl.mk   | 20 ++++++++++++++++++++
- 5 files changed, 43 insertions(+)
+>  package/Config.in            |  1 +
+>  package/nerdctl/Config.in    | 24 ++++++++++++++++++++++++
+>  package/nerdctl/nerdctl.hash |  3 +++
+>  package/nerdctl/nerdctl.mk   | 20 ++++++++++++++++++++
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6944d3129c..cb98c3883d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -538,6 +538,7 @@ F:	package/gocryptfs/
- F:	package/mbpfan/
- F:	package/moby-buildkit/
- F:	package/mosh/
-+F:	package/nerdctl/
- F:	package/pkg-golang.mk
- F:	package/rtl8821au/
- F:	package/runc/
-diff --git a/package/Config.in b/package/Config.in
-index 8ecf2295d3..4ff1fb2f3c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2594,6 +2594,7 @@ menu "System tools"
- 	source "package/monit/Config.in"
- 	source "package/multipath-tools/Config.in"
- 	source "package/ncdu/Config.in"
-+	source "package/nerdctl/Config.in"
- 	source "package/netifrc/Config.in"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
-diff --git a/package/nerdctl/Config.in b/package/nerdctl/Config.in
-new file mode 100644
-index 0000000000..969b9bb40e
---- /dev/null
-+++ b/package/nerdctl/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_NERDCTL
-+	bool "nerdctl"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd
-+	depends on BR2_USE_MMU # util-linux
-+	select BR2_PACKAGE_CONTAINERD # runtime
-+	help
-+	  Docker-compatible CLI for containerd, controlling runc.
-+
-+	  https://github.com/containerd/nerdctl
-+
-+comment "nerdctl needs a glibc or musl toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/nerdctl/nerdctl.hash b/package/nerdctl/nerdctl.hash
-new file mode 100644
-index 0000000000..22cc97c362
---- /dev/null
-+++ b/package/nerdctl/nerdctl.hash
-@@ -0,0 +1,3 @@
-+# Computed locally
-+sha256  be41804ef139a3f92b774edc8439678e56b44033d7ab3fcf4389f0865c1fe069  nerdctl-0.17.1.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/nerdctl/nerdctl.mk b/package/nerdctl/nerdctl.mk
-new file mode 100644
-index 0000000000..3f3c04aa11
---- /dev/null
-+++ b/package/nerdctl/nerdctl.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# nerdctl
-+#
-+################################################################################
-+
-+NERDCTL_VERSION = 0.17.1
-+NERDCTL_SITE = $(call github,containerd,nerdctl,v$(NERDCTL_VERSION))
-+
-+NERDCTL_LICENSE = Apache-2.0
-+NERDCTL_LICENSE_FILES = LICENSE
-+
-+NERDCTL_GOMOD = github.com/containerd/nerdctl
-+
-+NERDCTL_LDFLAGS = \
-+	-X $(NERDCTL_GOMOD)/pkg/version.Version=$(NERDCTL_VERSION)
-+
-+NERDCTL_BUILD_TARGETS = cmd/nerdctl
-+
-+$(eval $(golang-package))
+Entry in DEVELOPERS file was missing.
+
+> diff --git a/package/nerdctl/Config.in b/package/nerdctl/Config.in
+> new file mode 100644
+> index 0000000000..51a2919d9d
+> --- /dev/null
+> +++ b/package/nerdctl/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_NERDCTL
+> +	bool "nerdctl"
+> +	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd
+> +	depends on BR2_USE_MMU # util-linux
+> +	select BR2_PACKAGE_CONTAINERD # containerd runtime dependency
+> +	select BR2_PACKAGE_RUNC # containerd runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX_BINARIES # containerd
+> +	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT # containerd
+> +	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT # containerd
+> +	select BR2_PACKAGE_UTIL_LINUX_MOUNT # containerd
+
+It seems you got confused here with the propagation of the
+select/depends on. You replicated all "selects" from containerd, but
+this is useless. selecting containerd is sufficient, as it will itself
+select runc and util-linux with all its sub-options.
+
+What needs to be replicated are the "depends on" of the things you are
+selecting.
+
+> diff --git a/package/nerdctl/nerdctl.hash b/package/nerdctl/nerdctl.hash
+> new file mode 100644
+> index 0000000000..a31b12b26d
+> --- /dev/null
+> +++ b/package/nerdctl/nerdctl.hash
+> @@ -0,0 +1,3 @@
+> +# Computed locally
+> +sha256  be41804ef139a3f92b774edc8439678e56b44033d7ab3fcf4389f0865c1fe069  nerdctl-0.17.1.tar.gz
+> +sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+
+The hash of the license file was wrong. I checked, the license file is
+indeed Apache-2.0, so I don't know why you had a bogus hash here.
+
+Applied with those changes. Thanks again!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
