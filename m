@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95191C04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 20:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBB5BC04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 20:51:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2DFA4042B;
-	Thu, 28 Jul 2022 20:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2DFA4042B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E73082F20;
+	Thu, 28 Jul 2022 20:51:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E73082F20
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i82xfiUtAwJY; Thu, 28 Jul 2022 20:51:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZZVc4sZUhPXX; Thu, 28 Jul 2022 20:51:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE2CC4031D;
-	Thu, 28 Jul 2022 20:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE2CC4031D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2372A1BF37F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7027D828DE;
+	Thu, 28 Jul 2022 20:51:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7027D828DE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2FDBC1C1190
  for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 20:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1B7860A9F
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 20:51:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1B7860A9F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18180828DE
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 20:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18180828DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XCZfWqLy3iqa for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tzMFYngl47TH for <buildroot@lists.busybox.net>;
  Thu, 28 Jul 2022 20:51:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C256606B0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1509E825BF
  for <buildroot@buildroot.org>; Thu, 28 Jul 2022 20:51:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C256606B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1509E825BF
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id F0B7B864A4; Thu, 28 Jul 2022 20:37:34 +0000 (UTC)
+ id E76D88661A; Thu, 28 Jul 2022 20:37:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 22:51:16 +0200
+Date: Thu, 28 Jul 2022 22:50:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f897a557a615241db83464abac9714b752b79a0c
-X-Git-Newrev: 543333ecae495b25ed702043c1f6358c8ed9eb6f
+X-Git-Oldrev: ceb261cb4281e0d76f76724a30bf7e61ef59bef1
+X-Git-Newrev: f897a557a615241db83464abac9714b752b79a0c
 X-Patchwork-Hint: ignore
-Message-Id: <20220728203734.F0B7B864A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freeradius-server: requires MD4 in
- openssl
+Message-Id: <20220728203734.E76D88661A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/earlyoom: fix build with kernel <
+ 4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=543333ecae495b25ed702043c1f6358c8ed9eb6f
+commit: https://git.buildroot.net/buildroot/commit/?id=f897a557a615241db83464abac9714b752b79a0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable MD4 in openssl to avoid the following build failure raised since
-the addition of the package in commit
-736c4c1655d93652a9a7e79235bbe726b3d46176:
+PR_CAP_AMBIENT is only available since kernel 4.3 and
+https://github.com/torvalds/linux/commit/58319057b7847667f0c9585b9de0e8932b0fdb08
+resulting in the following build failure since bump to version 1.7 in
+commit 07b7f88668b1e51e3d17e14bd8795ef042df144e and
+https://github.com/rfjakob/earlyoom/commit/9edc5cfc9ad794ed59baec5e6ee8d1060456a315:
 
-In file included from src/lib/md4.c:16:
-src/lib/md4.c: In function 'fr_md4_calc':
-src/freeradius-devel/md4.h:76:33: error: unknown type name 'MD4_CTX'; did you mean 'FR_MD4_CTX'?
-   76 | #  define FR_MD4_CTX            MD4_CTX
-      |                                 ^~~~~~~
+main.c: In function 'main':
+main.c:119:11: error: 'PR_CAP_AMBIENT' undeclared (first use in this function)
+     prctl(PR_CAP_AMBIENT, PR_CAP_AMBIENT_CLEAR_ALL, 0, 0, 0);
+           ^
 
 Fixes:
- - http://autobuild.buildroot.org/results/a8aa12a8129056391f975820ea3d1d62241ac051
+ - http://autobuild.buildroot.org/results/5a0ad7e1f6de3c37e40c37d8f583fc699a457753
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freeradius-server/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ .../0001-main.c-fix-build-with-kernel-4.3.patch    | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/freeradius-server/Config.in b/package/freeradius-server/Config.in
-index 52a50bd3a7..d51d92714d 100644
---- a/package/freeradius-server/Config.in
-+++ b/package/freeradius-server/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_FREERADIUS_SERVER
- 	depends on !BR2_STATIC_LIBS # libtalloc
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4 if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBTALLOC
- 	help
- 	  FreeRADIUS is an open source server which implements
+diff --git a/package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch b/package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch
+new file mode 100644
+index 0000000000..8233800cd6
+--- /dev/null
++++ b/package/earlyoom/0001-main.c-fix-build-with-kernel-4.3.patch
+@@ -0,0 +1,45 @@
++From 499e81bfcdd9379bf4619a7c3ad85ed7f2b1dca5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 28 Jul 2022 10:05:18 +0200
++Subject: [PATCH] main.c: fix build with kernel < 4.3
++
++PR_CAP_AMBIENT is only available since kernel 4.3 and
++https://github.com/torvalds/linux/commit/58319057b7847667f0c9585b9de0e8932b0fdb08
++resulting in the following build failure since version 1.7 and
++https://github.com/rfjakob/earlyoom/commit/9edc5cfc9ad794ed59baec5e6ee8d1060456a315:
++
++main.c: In function 'main':
++main.c:119:11: error: 'PR_CAP_AMBIENT' undeclared (first use in this function)
++     prctl(PR_CAP_AMBIENT, PR_CAP_AMBIENT_CLEAR_ALL, 0, 0, 0);
++           ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/5a0ad7e1f6de3c37e40c37d8f583fc699a457753
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/rfjakob/earlyoom/pull/276]
++---
++ main.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/main.c b/main.c
++index c068c7c..99ca9e2 100644
++--- a/main.c
+++++ b/main.c
++@@ -115,11 +115,13 @@ int main(int argc, char* argv[])
++         fatal(4, "Could not cd to /proc: %s", strerror(errno));
++     }
++ 
+++#ifdef PR_CAP_AMBIENT
++     // When systemd starts a daemon with capabilities, it uses ambient
++     // capabilities to do so. If not dropped, the capabilities can spread
++     // to any child process. This is usually not necessary and its a good
++     // idea to drop them if not needed.
++     prctl(PR_CAP_AMBIENT, PR_CAP_AMBIENT_CLEAR_ALL, 0, 0, 0);
+++#endif
++ 
++     meminfo_t m = parse_meminfo();
++ 
++-- 
++2.35.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
