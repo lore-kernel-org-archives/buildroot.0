@@ -1,72 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06A36C04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 22:15:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69F5DC19F2B
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 22:29:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8DFF940616;
-	Thu, 28 Jul 2022 22:15:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DFF940616
+	by smtp3.osuosl.org (Postfix) with ESMTP id C57F260E2D;
+	Thu, 28 Jul 2022 22:29:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C57F260E2D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZlXdSYQirxA4; Thu, 28 Jul 2022 22:15:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mjRiZgNrDTsd; Thu, 28 Jul 2022 22:29:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 525F6405C4;
-	Thu, 28 Jul 2022 22:15:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 525F6405C4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E8C4B1BF301
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 22:15:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A634460D67;
+	Thu, 28 Jul 2022 22:28:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A634460D67
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B5D71BF301
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 22:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3608405C4
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 22:15:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3608405C4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81D5C60D67
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 22:28:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81D5C60D67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qu-palFtDEn5 for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 22:15:29 +0000 (UTC)
-X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2A47400DB
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dIg7AJLjWFen for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 22:28:55 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F53960D5D
 Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2A47400DB
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 22:15:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F53960D5D
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 22:28:55 +0000 (UTC)
 Received: from [192.168.50.173] ([146.241.73.23])
  by Aruba Outgoing Smtp  with ESMTPSA
- id HBg8oTVtYPF2eHBg8owrV6; Fri, 29 Jul 2022 00:08:24 +0200
-Message-ID: <3f5103d8-76d7-f62f-35cf-86af90fac2df@benettiengineering.com>
-Date: Fri, 29 Jul 2022 00:08:23 +0200
+ id HBzxoTsANPF2eHBzxox1HQ; Fri, 29 Jul 2022 00:28:53 +0200
+Message-ID: <733d97a0-7ee5-d788-6cba-ccac757befdb@benettiengineering.com>
+Date: Fri, 29 Jul 2022 00:28:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.0
-To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
- buildroot@buildroot.org
-References: <20220310121229.18284-1-zajec5@gmail.com>
 Content-Language: en-US
+To: Jan Havran <havran.jan@email.cz>, buildroot@buildroot.org
+References: <YlBzP4J4FGA4Z7nL@arch-zen.localdomain>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220310121229.18284-1-zajec5@gmail.com>
-X-CMAE-Envelope: MS4xfIMXFWGNDHLOofFeqjgsHfwYpIW0S0XOdu3+igDoImoxJBS2XLedMbsJweDXCK3iKqO50Zy/3Gz9Q2+j18LOx8Bnj2hcUr8V91sRgQBxbgQieO0xXKjk
- B/Ia6IFRX6QMmxaWqTOfrXYrzMdOZTo3aVr25jw93UptQc/iExKQAf+qxKyZvYpVjKaV9EATtn0f2HV2UbsWvTrODzOIHQ/HC1j8TX0cKnYFVqflfUSd4gTS
- dYmFEt5t2oOYjg9InoiseG09stZZkXSxWdCDrzBDW6+xa0MyVUevkOBQK13rhPZvcBwvEDg5I248QM/Hz+jzFQ==
+In-Reply-To: <YlBzP4J4FGA4Z7nL@arch-zen.localdomain>
+X-CMAE-Envelope: MS4xfBOP771BXdZEu7s1SF1YMDirKIFp+Xue0xm4TTqE7EfvZF7M6pVmo+bVbEy4ChjD4k/Mg8Hy53rqMoK5goseJH7FDANhe4gGrLBw5VT4MxPR0Rx4Uhg0
+ HXRAc1VT7aNUrAN8slZZ+OP1/8+5NwCSMtEDw3ucxuwUNIkyLsujleB0Je3ef4uzGYvK/xRfZJgqsU8M38+mZSikp5GRo7Zp9e2kTE6TLW090PXVW/3VUdei
+ BhI3kF4yDPVDymYYMdcOQ/EiD7peG/gRqkvdTJwb5gx9C9Iaoa7pKWjCpkDuHOmI
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1659046104; bh=CQhzCnXT8TOWRXYLkWEbvTtBlbaX7Jv6lUEpOdtsW0s=;
+ t=1659047333; bh=Turi3UeXJTxebJs2egaFw3EPI+gjJIrGcohiI8Ch4mI=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=hAjeCfUR1u0YlPPxCSOSxFn+irR0v819+bkl7GfI3oHlQpBLHfXX8UbEUHT9n0rIL
- L+z8Hm7S4rWhHl86QDW+rcHedH0cEBbMW0iYzimQEyJuCQ9r9HDAtj8GSxzP93V7fm
- 2IidA5xYHQ0byAtEulKtOwK+4ngrthhcfX8yeuTQ70we2Pnd1oKHV1rxyJLeG7Tq7B
- EdB1kX4Wdi48NRO9DvZKpDPYrLNyhpQ/+b2FZKjbBJ6nIb8tG5Okq2aUHpivXIyOrC
- VFP6eOTji36YheeB0x2sZSjHpPmglptFH/Oh9SdVDL6Y431w4OwLCt6ML7dfa8Z3bJ
- S8p7XNhUw2hgA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=iABsLNdO18MU8GpJSK9ndQDYeDrlCPDfxs78zng6a7cZGGN0i/n6NkjD/qUHW+Qbg
+ IuDs2/yeetzr2/GYxWr7JpIGpVwPIlQtAN/a+DLNzYHfpHzKSiMwI7dLbsMs21uYrv
+ B7eKdPuYR9DFCb3FtcvecimyOX7NsNrBfVd54xJKYyn0k+SIzEgN+jURqSGOGhmfoA
+ o+FJ/tXd2CPOPYScW8eMkY+bG3w0BZ4T1kX12VAMG+Fmzp7ljuAgjhPPiJAcXLiELx
+ umgEoB4H90Xc/uhKvtWAi5EyPDUgo+1qAkRbPD75cojjjpqk/329J1M/boZP1xeDfx
+ SCcddYtAlJMDg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=hAjeCfUR
-Subject: Re: [Buildroot] [PATCH V2] board/broadcom: add support for
- Northstar platform devices
+ header.a=rsa-sha256 header.s=a1 header.b=iABsLNdO
+Subject: Re: [Buildroot] [PATCH 1/1] board/pine64/pinecube: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,164 +76,234 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUmFmYcWCLAoKT24gMTAvMDMvMjIgMTM6MTIsIFJhZmHFgiBNacWCZWNraSB3cm90ZToKPiBG
-cm9tOiBSYWZhxYIgTWnFgmVja2kgPHJhZmFsQG1pbGVja2kucGw+Cj4gCj4gQnJvYWRjb20gTm9y
-dGhzdGFyIGZhbWlseSBvZiBTb0NzIGlzIG1vc3QgY29tbW9ubHkgdXNlZCBmb3IgaG9tZQo+IHJv
-dXRlcnMuIEl0J3MgYW4gQVJNIHBsYXRmb3JtIHdpdGggQ29ydGV4LUE5IENQVShzKS4KPiAKPiBB
-bGwga25vd24gTm9ydGhzdGFyIGRldmljZXMgY29tZSB3aXRoIENGRSBib290bG9hZGVyIHdoaWNo
-IGFsbW9zdCBhbHdheXMKPiBleHBlY3RzIGEgVFJYIGZpcm13YXJlIGZvcm1hdCAod2l0aCBleGNl
-cHRpb24gZm9yIEQtTGluaykuIFNvbWUgdmVuZG9ycwo+IChsaWtlIEx1eHVsIGFuZCBOZXRnZWFy
-KSB3cmFwIFRSWCBpbiB0aGVpciBvd24gY29udGFpbmVycy4KPiAKPiBUaGlzIGJvYXJkIGNvZGUg
-cHJvdmlkZXM6Cj4gCj4gMS4gTWluaW1hbCBrZXJuZWwgd2l0aCBzdXBwb3J0IGZvciBvbi1Tb0Mg
-YmxvY2tzCj4gSXQgZW5hYmxlcyBMaW51eCBkcml2ZXJzIGZvciBTb0MsIHdhdGNoZG9nLCBFdGhl
-cm5ldCwgc3dpdGNoLCBVU0IsCj4gUENJZSwgTEVEcykuCj4gCj4gMi4gUG9zdCBpbWFnZSBzY3Jp
-cHQgYnVpbGRpbmcgZmlybXdhcmUgaW1hZ2VzCj4gSW4gdXNlcyBCdWlsZHJvb3QgcGFja2FnZXMg
-dG9vbHMgKGx6bWFfYWxvbmUsIG90cngsIGx4bGZ3KSB0byBidWlsZAo+IGJvb3Rsb2FkZXItY29t
-cGF0aWJsZSBpbWFnZXMgdGhhdCBjYW4gYmUgZmxhc2hlZC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBS
-YWZhxYIgTWnFgmVja2kgPHJhZmFsQG1pbGVja2kucGw+Cj4gLS0tCj4gUHJldmlvdXMgYXR0ZW1w
-dDoKPiBbUEFUQ0hdIGJvYXJkL2Jyb2FkY29tOiBhZGQgc3VwcG9ydCBmb3IgTm9ydGhzdGFyIHBs
-YXRmb3JtIGRldmljZXMKPiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVp
-bGRyb290L3BhdGNoLzIwMjEwODEwMTMxMjM2LjE4MDIyLTEtemFqZWM1QGdtYWlsLmNvbS8KPiAK
-PiBWMjogVXBkYXRlIERFVkVMT1BFUlMKPiAgICAgIFJlZHVjZSBrZXJuZWwgY29uZmlnCj4gICAg
-ICBBZGQgcmVhZG1lLnR4dAo+ICAgICAgVXNlIFVCSSB3aXRoIHViaWZzIGZvciByb290ZnMgKGlu
-c3RlYWQgb2YgaW5pdHJhbWZzKQo+IC0tLQo+ICAgREVWRUxPUEVSUyAgICAgICAgICAgICAgICAg
-ICAgICB8ICAyICsKPiAgIGJvYXJkL2Jyb2FkY29tL25zL2xpbnV4LmNvbmZpZyAgfCA3MCArKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysKPiAgIGJvYXJkL2Jyb2FkY29tL25zL3Bvc3Qt
-aW1hZ2Uuc2ggfCA0MCArKysrKysrKysrKysrKysrKysrCj4gICBib2FyZC9icm9hZGNvbS9ucy9y
-ZWFkbWUudHh0ICAgIHwgMzggKysrKysrKysrKysrKysrKysrCj4gICBjb25maWdzL2Jyb2FkY29t
-X25zX2RlZmNvbmZpZyAgIHwgMTQgKysrKysrKwo+ICAgNSBmaWxlcyBjaGFuZ2VkLCAxNjQgaW5z
-ZXJ0aW9ucygrKQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2Jyb2FkY29tL25zL2xpbnV4
-LmNvbmZpZwo+ICAgY3JlYXRlIG1vZGUgMTAwNzU1IGJvYXJkL2Jyb2FkY29tL25zL3Bvc3QtaW1h
-Z2Uuc2gKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9icm9hZGNvbS9ucy9yZWFkbWUudHh0
-Cj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgY29uZmlncy9icm9hZGNvbV9uc19kZWZjb25maWcKPiAK
-PiBkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKPiBpbmRleCAzYmM5ODE5Mzgy
-Li40ZDE3MTk0YWYzIDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BFUlMKPiArKysgYi9ERVZFTE9QRVJT
-Cj4gQEAgLTIzODIsNiArMjM4Miw4IEBAIEY6CWJvYXJkL2F2bmV0L3M2bHg5X21pY3JvYm9hcmQv
-Cj4gICBGOgljb25maWdzL3M2bHg5X21pY3JvYm9hcmRfZGVmY29uZmlnCj4gICAKPiAgIE46CVJh
-ZmHFgiBNacWCZWNraSA8cmFmYWxAbWlsZWNraS5wbD4KPiArRjoJYm9hcmQvYnJvYWRjb20vbnMv
-Cj4gK0Y6CWNvbmZpZ3MvYnJvYWRjb21fbnNfZGVmY29uZmlnCj4gICBGOglwYWNrYWdlL2Zpcm13
-YXJlLXV0aWxzLwo+ICAgCj4gICBOOglSYWh1bCBCZWRhcmthciA8cmFodWxiZWRhcmthcjg5QGdt
-YWlsLmNvbT4KPiBkaWZmIC0tZ2l0IGEvYm9hcmQvYnJvYWRjb20vbnMvbGludXguY29uZmlnIGIv
-Ym9hcmQvYnJvYWRjb20vbnMvbGludXguY29uZmlnCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBp
-bmRleCAwMDAwMDAwMDAwLi40N2U2OTkwMDMyCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJk
-L2Jyb2FkY29tL25zL2xpbnV4LmNvbmZpZwo+IEBAIC0wLDAgKzEsNzAgQEAKPiArQ09ORklHX0VN
-QkVEREVEPXkKPiArQ09ORklHX0FSQ0hfQkNNPXkKPiArQ09ORklHX0FSQ0hfQkNNXzUzMDFYPXkK
-PiArQ09ORklHX0FSQ0hfQkNNXzUzNTczPXkKPiArQ09ORklHX1NNUD15Cj4gK0NPTkZJR19OUl9D
-UFVTPTIKPiArQ09ORklHX0hJR0hNRU09eQo+ICtDT05GSUdfQVJNX0FQUEVOREVEX0RUQj15Cj4g
-K0NPTkZJR19DTURMSU5FPSJ1YmkubXRkPXViaSByb290PXViaTA6cm9vdGZzIHJvb3Rmc3R5cGU9
-dWJpZnMiCj4gK0NPTkZJR19DTURMSU5FX0ZPUkNFPXkKPiArIyBDT05GSUdfU1VTUEVORCBpcyBu
-b3Qgc2V0Cj4gK0NPTkZJR19ORVQ9eQo+ICtDT05GSUdfUEFDS0VUPXkKPiArQ09ORklHX1VOSVg9
-eQo+ICtDT05GSUdfSU5FVD15Cj4gK0NPTkZJR19CUklER0U9eQo+ICtDT05GSUdfQlJJREdFX1ZM
-QU5fRklMVEVSSU5HPXkKPiArQ09ORklHX05FVF9EU0E9eQo+ICtDT05GSUdfVkxBTl84MDIxUT15
-Cj4gK0NPTkZJR19QQ0k9eQo+ICtDT05GSUdfQkNNNDdYWF9OVlJBTT15Cj4gK0NPTkZJR19CQ000
-N1hYX1NQUk9NPXkKPiArQ09ORklHX01URD15Cj4gK0NPTkZJR19NVERfQkNNNDdYWF9QQVJUUz15
-Cj4gK0NPTkZJR19NVERfUEFSU0VSX1RSWD15Cj4gK0NPTkZJR19NVERfQkNNNDdYWFNGTEFTSD15
-Cj4gK0NPTkZJR19NVERfUkFXX05BTkQ9eQo+ICtDT05GSUdfTVREX05BTkRfQlJDTU5BTkQ9eQo+
-ICtDT05GSUdfTVREX1NQSV9OT1I9eQo+ICtDT05GSUdfTVREX1VCST15Cj4gK0NPTkZJR19ORVRE
-RVZJQ0VTPXkKPiArQ09ORklHX1ZYTEFOPXkKPiArQ09ORklHX1ZFVEg9eQo+ICtDT05GSUdfQjUz
-PXkKPiArQ09ORklHX0JHTUFDX0JDTUE9eQo+ICtDT05GSUdfQlJPQURDT01fUEhZPXkKPiArQ09O
-RklHX01ESU9fQlVTX01VWF9NTUlPUkVHPXkKPiArQ09ORklHX1NFUklBTF84MjUwPXkKPiArQ09O
-RklHX1NFUklBTF84MjUwX0NPTlNPTEU9eQo+ICtDT05GSUdfU0VSSUFMXzgyNTBfTlJfVUFSVFM9
-Mgo+ICtDT05GSUdfU0VSSUFMXzgyNTBfUlVOVElNRV9VQVJUUz0yCj4gK0NPTkZJR19TRVJJQUxf
-T0ZfUExBVEZPUk09eQo+ICtDT05GSUdfU1BJPXkKPiArQ09ORklHX1RIRVJNQUw9eQo+ICtDT05G
-SUdfV0FUQ0hET0c9eQo+ICtDT05GSUdfQkNNNDdYWF9XRFQ9eQo+ICtDT05GSUdfQkNNQV9IT1NU
-X1NPQz15Cj4gK0NPTkZJR19CQ01BX0RSSVZFUl9HTUFDX0NNTj15Cj4gK0NPTkZJR19CQ01BX0RS
-SVZFUl9HUElPPXkKPiArQ09ORklHX1VTQj15Cj4gK0NPTkZJR19VU0JfTEVEU19UUklHR0VSX1VT
-QlBPUlQ9eQo+ICtDT05GSUdfVVNCX1hIQ0lfSENEPXkKPiArQ09ORklHX1VTQl9YSENJX1BMQVRG
-T1JNPXkKPiArQ09ORklHX1VTQl9FSENJX0hDRD15Cj4gK0NPTkZJR19VU0JfT0hDSV9IQ0Q9eQo+
-ICsjIENPTkZJR19VU0JfT0hDSV9IQ0RfUENJIGlzIG5vdCBzZXQKPiArQ09ORklHX1VTQl9IQ0Rf
-QkNNQT15Cj4gK0NPTkZJR19ORVdfTEVEUz15Cj4gK0NPTkZJR19MRURTX0NMQVNTPXkKPiArQ09O
-RklHX0xFRFNfR1BJTz15Cj4gK0NPTkZJR19MRURTX1RSSUdHRVJTPXkKPiArQ09ORklHX0xFRFNf
-VFJJR0dFUl9USU1FUj15Cj4gK0NPTkZJR19MRURTX1RSSUdHRVJfSEVBUlRCRUFUPXkKPiArQ09O
-RklHX0xFRFNfVFJJR0dFUl9ERUZBVUxUX09OPXkKPiArQ09ORklHX1BIWV9CQ01fTlNfVVNCMj15
-Cj4gK0NPTkZJR19QSFlfQkNNX05TX1VTQjM9eQo+ICtDT05GSUdfVUJJRlNfRlM9eQo+ICtDT05G
-SUdfREVCVUdfTEw9eQo+ICtDT05GSUdfREVCVUdfVU5DT01QUkVTUz15Cj4gK0NPTkZJR19FQVJM
-WV9QUklOVEs9eQo+IGRpZmYgLS1naXQgYS9ib2FyZC9icm9hZGNvbS9ucy9wb3N0LWltYWdlLnNo
-IGIvYm9hcmQvYnJvYWRjb20vbnMvcG9zdC1pbWFnZS5zaAo+IG5ldyBmaWxlIG1vZGUgMTAwNzU1
-Cj4gaW5kZXggMDAwMDAwMDAwMC4uYjYxNTBmYzUzOQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9i
-b2FyZC9icm9hZGNvbS9ucy9wb3N0LWltYWdlLnNoCj4gQEAgLTAsMCArMSw0MCBAQAo+ICsjIS9i
-aW4vc2gKPiArCj4gKyMgJDE6IGltYWdlcyBkaXJlY3RvcnkgcGF0aAo+ICsjICQyOiBkZXZpY2Ug
-ZHRzIGZpbGVuYW1lCj4gKyMgJDM6IGJvYXJkIGlkCj4gK2J1aWxkX2x4bCgpIHsKPiArCWxvY2Fs
-IGltYWdlcz0iJDEiCj4gKwlsb2NhbCBkZXZpY2U9IiQyIgo+ICsJbG9jYWwgYm9hcmQ9IiQzIgo+
-ICsKPiArCSRIT1NUX0RJUi9iaW4vbHptYV9hbG9uZSBlICRpbWFnZXMvekltYWdlLiRkZXZpY2Ug
-JGltYWdlcy96SW1hZ2UuJGRldmljZS5sem1hIC1kMTYKPiArCXJtIC1mICRpbWFnZXMvekltYWdl
-LiRkZXZpY2UKPiArCSRIT1NUX0RJUi9iaW4vb3RyeCBjcmVhdGUgJGltYWdlcy8kZGV2aWNlLnRy
-eCAtZiAkaW1hZ2VzL3pJbWFnZS4kZGV2aWNlLmx6bWEgLWEgMHgyMDAwMCAtZiAkaW1hZ2VzL3Jv
-b3Rmcy51YmkKPiArCXJtIC1mICRpbWFnZXMvekltYWdlLiRkZXZpY2UubHptYQo+ICsJJEhPU1Rf
-RElSL2Jpbi9seGxmdyBjcmVhdGUgJGltYWdlcy8kZGV2aWNlLmx4bCAtaSAkaW1hZ2VzLyRkZXZp
-Y2UudHJ4IC1iICIkYm9hcmQiCj4gK30KPiArCj4gKyMgJDE6IGltYWdlcyBkaXJlY3RvcnkgcGF0
-aAo+ICsjICQyOiBkZXZpY2UgZHRzIGZpbGVuYW1lCj4gK2J1aWxkX3RyeCgpIHsKPiArCWxvY2Fs
-IGltYWdlcz0iJDEiCj4gKwlsb2NhbCBkZXZpY2U9IiQyIgo+ICsKPiArCSRIT1NUX0RJUi9iaW4v
-bHptYV9hbG9uZSBlICRpbWFnZXMvekltYWdlLiRkZXZpY2UgJGltYWdlcy96SW1hZ2UuJGRldmlj
-ZS5sem1hIC1kMTYKPiArCXJtIC1mICRpbWFnZXMvekltYWdlLiRkZXZpY2UKPiArCSRIT1NUX0RJ
-Ui9iaW4vb3RyeCBjcmVhdGUgJGltYWdlcy8kZGV2aWNlLnRyeCAtZiAkaW1hZ2VzL3pJbWFnZS4k
-ZGV2aWNlLmx6bWEgLWEgMHgyMDAwMCAtZiAkaW1hZ2VzL3Jvb3Rmcy51YmkKPiArCXJtIC1mICRp
-bWFnZXMvekltYWdlLiRkZXZpY2UubHptYQo+ICt9Cj4gKwo+ICtkZXZpY2VzPSIkKHNlZCAtbiAn
-cy9eQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9IlwoW2EtejAtOSBcLV0qXCkiJC9c
-MS9wJyAke0JSMl9DT05GSUd9KSIKPiArZm9yIGRldmljZSBpbiAkZGV2aWNlczsgZG8KPiArCWNh
-c2UgIiRkZXZpY2UiIGluCj4gKwkJImJjbTQ3MDgtc21hcnRyZy1zcjQwMGFjIikKPiArCQkJYnVp
-bGRfdHJ4ICIkMSIgIiRkZXZpY2UiCj4gKwkJCTs7Cj4gKwkJImJjbTQ3MDk0LWx1eHVsLXh3ci0z
-MTUwLXYxIikKPiArCQkJYnVpbGRfbHhsICIkMSIgIiRkZXZpY2UiICJYV1ItMzE1MCIKPiArCQkJ
-OzsKPiArCWVzYWMKPiArZG9uZQo+IGRpZmYgLS1naXQgYS9ib2FyZC9icm9hZGNvbS9ucy9yZWFk
-bWUudHh0IGIvYm9hcmQvYnJvYWRjb20vbnMvcmVhZG1lLnR4dAo+IG5ldyBmaWxlIG1vZGUgMTAw
-NjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uMThjOWIwM2MxMwo+IC0tLSAvZGV2L251bGwKPiArKysg
-Yi9ib2FyZC9icm9hZGNvbS9ucy9yZWFkbWUudHh0Cj4gQEAgLTAsMCArMSwzOCBAQAo+ICtCcm9h
-ZGNvbSBOb3J0aHN0YXIKPiArCj4gK0ludHJvCj4gKz09PT09Cj4gKwo+ICtUaGlzIHJlYWRtZSBj
-b3ZlcnMgTm9ydGhzdGFyIGZhbWlseSBvZiBCcm9hZGNvbSBTb0NzLiBJdCBpbmNsdWRlczoKPiAr
-ICAtIEJDTTQ3MDggKDIgeCA4MDAgTUh6KQo+ICsgIC0gQkNNNDcwODEgKDEgeCA4MDAgTUh6KQo+
-ICsgIC0gQkNNNDcwOSAoMiB4IDEgR0h6KQo+ICsgIC0gQkNNNDcwOTQgKDIgeCAxIEdIeikgKEFL
-QSBCQ000NzA5QzApCj4gKwo+ICtOb3J0aHN0YXIgcGxhdGZvcm0gaXMgdXNlZCBpbiBzb21lIGhv
-bWUgcm91dGVycyBieSBtdWx0aXBsZSB2ZW5kb3JzLiBUaGVyZSBhcmUKPiArb3ZlciAxMDAgbWFy
-a2V0IGRldmljZXMgYmFzZWQgb24gaXQgYW5kIHRoZXkgY2FuIGFsbCBiZSBzdXBwb3J0ZWQgd2l0
-aCAxIGtlcm5lbC4KPiArCj4gK1RoZXJlIGlzIG5vIHBvaW50IGluIGhhdmluZyBzZXBhcmF0ZWQg
-Ym9hcmQgZm9yIGVhY2ggbW9kZWwuIFRoaXMgYm9hcmQgY29kZSBpcwo+ICttZWFudCBmb3IgYWxs
-IHN1cHBvcnRlZCBOb3J0aHN0YXIgZGV2aWNlcy4KPiArCj4gK0FsbCBOb3J0aHN0YXIgZGV2aWNl
-cyBjb21lIHdpdGggQ0ZFIGJvb3Rsb2FkZXIgYnkgZGVmYXVsdC4gSXQncyBiYXNpY2FsbHkgY2xv
-c2VkCj4gK3NvdXJjZSBhcyBzb3VyY2VzIGFyZSBhdmFpbGFibGUgZm9yIHNvbWUgb2xkIHJlbGVh
-c2VzIG9ubHkuIFRoZXJlIGlzIG5vIFUtQm9vdCAob3IKPiArYW55IG90aGVyKSBkcm9wLWluIHJl
-cGxhY2VtZW50IG9yIHNlY29uZCBzdGFnZSBsb2FkZXIgd2l0aCBOb3J0aHN0YXIgc3VwcG9ydC4K
-PiArCj4gK0NGRSBzdXBwb3J0cyBmbGFzaGluZyBmaXJtd2FyZSBpbWFnZXMgb3ZlciBURlRQIGFu
-ZCBIVFRQIChkZXBlbmRpbmcgb24gdmVuZG9yIC8KPiArZGV2aWNlIHNldHVwKS4KPiArCj4gK0hv
-dyB0byBidWlsZCBpdAo+ICs9PT09PT09PT09PT09PT0KPiArCj4gKyAgJCBtYWtlIGJyb2FkY29t
-X25zX2RlZmNvbmZpZwo+ICsKPiArICAkIG1ha2UKPiArCj4gK0hvdyB0byBmbGFzaCBvdmVyIEhU
-VFAKPiArPT09PT09PT09PT09PT09PT09PT09PQo+ICsKPiArUG93ZXIgb24gZGV2aWNlIGFuZCBw
-cmVzcyAoYW5kIGhvbGQpIENUUkwrQyBpbiBzZXJpYWwgY29uc29sZSB0ZXJtaW5hbC4gV2hlbiBD
-RkUKPiArZ2V0cyBpbnRvIHByb21wdCBtb2RlIGl0J2xsIGF1dG9tYXRpY2FsbHkgc3RhcnQgYnVp
-bHQtaW4gSFRUUCBzZXJ2ZXIuIE5hdmlnYXRlCj4gK3RvIGh0dHA6Ly8xOTIuMTY4LjEuMS8gKHVu
-bGVzcyBJUCB3YXMgY2hhbmdlZCAtIHZlcmlmeSB3aXRoICJpZmNvbmZpZyIpIGFuZAo+ICt1cGxv
-YWQgbmV3IGZpcm13YXJlIHVzaW5nIGEgd2ViIGJyb3dzZXIuCj4gZGlmZiAtLWdpdCBhL2NvbmZp
-Z3MvYnJvYWRjb21fbnNfZGVmY29uZmlnIGIvY29uZmlncy9icm9hZGNvbV9uc19kZWZjb25maWcK
-PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmJiYTcwMTFhYWMKPiAt
-LS0gL2Rldi9udWxsCj4gKysrIGIvY29uZmlncy9icm9hZGNvbV9uc19kZWZjb25maWcKPiBAQCAt
-MCwwICsxLDE0IEBACj4gK0JSMl9hcm09eQo+ICtCUjJfY29ydGV4X2E5PXkKPiArQlIyX1JPT1RG
-U19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvYnJvYWRjb20vbnMvcG9zdC1pbWFnZS5zaCIKPiAr
-QlIyX0xJTlVYX0tFUk5FTD15Cj4gK0JSMl9MSU5VWF9LRVJORUxfVVNFX0NVU1RPTV9DT05GSUc9
-eQo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9DT05GSUdfRklMRT0iYm9hcmQvYnJvYWRjb20v
-bnMvbGludXguY29uZmlnIgo+ICtCUjJfTElOVVhfS0VSTkVMX0FQUEVOREVEX1pJTUFHRT15Cj4g
-K0JSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJiY200NzA4LXNtYXJ0cmctc3I0MDBh
-YyBiY200NzA5NC1sdXh1bC14d3ItMzE1MC12MSIKPiArIyBCUjJfVEFSR0VUX1JPT1RGU19UQVIg
-aXMgbm90IHNldAo+ICtCUjJfVEFSR0VUX1JPT1RGU19VQkk9eQo+ICtCUjJfVEFSR0VUX1JPT1RG
-U19VQklfU1VCU0laRT0yMDQ4Cj4gK0JSMl9UQVJHRVRfUk9PVEZTX1VCSUZTX0xFQlNJWkU9MHgx
-ZjAwMAo+ICtCUjJfUEFDS0FHRV9IT1NUX0ZJUk1XQVJFX1VUSUxTPXkKPiArQlIyX1BBQ0tBR0Vf
-SE9TVF9MWk1BX0FMT05FPXkKCkkndmUgYnVpbHQgYnJvYWRjb21fbnNfZGVmY29uZmlnIHN1Y2Nl
-c3NmdWxseSB1c2luZyBidWlsZHJvb3Qncwp1dGlscy9kb2NrZXItcnVuLiBJIGRvbid0IGhhdmUg
-YSBoYXJkd2FyZSB0byBnaXZlIGEgdHJ5IGJ1dCBldmVyeXRoaW5nCmxvb2tzIGdvb2QgdG8gbWUg
-bm93IGV4Y2VwdCBJJ2QgbGlrZSB0byBoYXZlIDIgVVJMIHBvaW50aW5nIHRvIDIKZGlmZmVyZW50
-IHByb2R1Y3RzIGZvciB0aGUgMiAuZHRzIGNhc2VzOgotIGJjbTQ3MDgtc21hcnRyZy1zcjQwMGFj
-Ci0gYmNtNDcwOTQtbHV4dWwteHdyLTMxNTAtdjEKVGhpcyBiZWNhdXNlIHRoZXkgdXNlIDIgZGlm
-ZmVyZW50IG91dHB1dHMgYW5kIGNhbiBoZWxwIHBlb3BsZSBsb29raW5nCmFyb3VuZCBmb3Igc3Vw
-cG9ydCBmb3IgdGhlaXIgTm9ydGhzdGFyIHJvdXRlcnMsIHNvIHRoaXMgY2FuIGxlYWQgdG8gaGF2
-ZQptb3JlIHBlb3BsZSB1c2luZyB0aGlzIHN1cHBvcnQuCgpNYXliZSB5b3UgY2FuIHByb3ZpZGUg
-dGhlbSBpbiBjb21taXQgbG9nIGFuZCByZWFkbWUudHh0IHRvbyBhbmQgd2l0aAp0aGF0IGluY2x1
-ZGVkOgoKUmV2aWV3ZWQtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRp
-ZW5naW5lZXJpbmcuY29tPgoKQmVzdCByZWdhcmRzCi0tIApHaXVsaW8gQmVuZXR0aQpCZW5ldHRp
-IEVuZ2luZWVyaW5nIHNhcwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi Jan,
+
+On 08/04/22 19:39, Jan Havran wrote:
+> Add support for PineCube with:
+> - U-Boot 2022.01
+> - Linux 5.15
+
+Here I would briefly describe the board(various I/Os) and add a https
+URL to the board official webpage if it exists.
+
+> Signed-off-by: Jan Havran <havran.jan@email.cz>
+> ---
+>   DEVELOPERS                         |  4 +++
+>   board/pine64/pinecube/boot.cmd     |  6 ++++
+>   board/pine64/pinecube/genimage.cfg | 34 +++++++++++++++++++++
+>   board/pine64/pinecube/readme.txt   | 31 ++++++++++++++++++++
+>   configs/pinecube_defconfig         | 47 ++++++++++++++++++++++++++++++
+>   5 files changed, 122 insertions(+)
+>   create mode 100644 board/pine64/pinecube/boot.cmd
+>   create mode 100644 board/pine64/pinecube/genimage.cfg
+>   create mode 100644 board/pine64/pinecube/readme.txt
+>   create mode 100644 configs/pinecube_defconfig
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index a66b9d7eee..d418a1af99 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1356,6 +1356,10 @@ F:	package/pangomm/
+>   F:	package/rpm/
+>   F:	package/yad/
+>   
+> +N:	Jan Havran <havran.jan@email.cz>
+> +F:	board/pine64/pinecube/
+> +F:	configs/pinecube_defconfig
+> +
+>   N:	Jan Heylen <jan.heylen@nokia.com>
+>   F:	package/opentracing-cpp/
+>   
+> diff --git a/board/pine64/pinecube/boot.cmd b/board/pine64/pinecube/boot.cmd
+> new file mode 100644
+> index 0000000000..d8b62e0b4a
+> --- /dev/null
+> +++ b/board/pine64/pinecube/boot.cmd
+> @@ -0,0 +1,6 @@
+> +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait rw
+> +
+> +fatload mmc 0 $kernel_addr_r zImage
+> +fatload mmc 0 $fdt_addr_r sun8i-s3-pinecube.dtb
+> +
+> +bootz $kernel_addr_r - $fdt_addr_r
+
+The lastest boards use extlinux.conf instead of boot.cmd since it's
+pretty easier to use it during debugging. So it's better to have
+extlinux.conf here and when one finalize the project then it can create
+the corresponding boot.cmd
+
+> diff --git a/board/pine64/pinecube/genimage.cfg b/board/pine64/pinecube/genimage.cfg
+> new file mode 100644
+> index 0000000000..af175811ad
+> --- /dev/null
+> +++ b/board/pine64/pinecube/genimage.cfg
+> @@ -0,0 +1,34 @@
+> +image boot.vfat {
+> +	vfat {
+> +		files = {
+> +			"zImage",
+> +			"sun8i-s3-pinecube.dtb",
+> +			"boot.scr"
+> +		}
+> +	}
+> +
+> +	size = 8M
+> +}
+> +
+> +image sdcard.img {
+> +	hdimage {
+> +	}
+> +
+> +	partition u-boot {
+> +		in-partition-table = "no"
+> +		image = "u-boot-sunxi-with-spl.bin"
+> +		offset = 8K
+> +		size = 504K # 512KB - 8KB
+> +	}
+> +
+> +	partition boot {
+> +		partition-type = 0xC
+> +		bootable = "true"
+> +		image = "boot.vfat"
+> +	}
+> +
+> +	partition rootfs {
+> +		partition-type = 0x83
+> +		image = "rootfs.ext4"
+> +	}
+> +}
+> diff --git a/board/pine64/pinecube/readme.txt b/board/pine64/pinecube/readme.txt
+> new file mode 100644
+> index 0000000000..7770bbfe42
+> --- /dev/null
+> +++ b/board/pine64/pinecube/readme.txt
+> @@ -0,0 +1,31 @@
+> +Intro
+> +=====
+> +
+> +This directory contains a Buildroot configuration for building a
+> +Pine64 PineCube.
+> +
+> +Board homepage: https://www.pine64.org/cube/
+> +Board wiki:     https://wiki.pine64.org/wiki/PineCube
+
+These ^^^ are the URLs I ask you for in commit log
+
+> +
+> +How to build it
+> +===============
+> +
+> +  $ make pinecube_defconfig
+> +  $ make
+> +
+> +Note: you will need access to the internet to download the required
+> +sources.
+> +
+> +How to write the SD card
+> +========================
+> +
+> +Once the build process is finished you will have an image called "sdcard.img"
+> +in the output/images/ directory.
+> +
+> +Copy the bootable "sdcard.img" onto an SD card with "dd":
+> +
+> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+> +  $ sudo sync
+> +
+> +Insert the micro SDcard in your PineCube and power it up. The console
+> +is on the serial port 2, 115200 8N1 (check Wiki for board pinout).
+> diff --git a/configs/pinecube_defconfig b/configs/pinecube_defconfig
+
+Since this is a Pine64 board and you also use board/pine64/pinecube it's
+better to rename pinecube_defconfig to pine64_pinecube_defconfig like
+pine64_sopine_defconfig
+
+> new file mode 100644
+> index 0000000000..1064167d8e
+> --- /dev/null
+> +++ b/configs/pinecube_defconfig
+> @@ -0,0 +1,47 @@
+> +# Target options
+> +BR2_arm=y
+> +BR2_cortex_a7=y
+> +BR2_ARM_FPU_NEON_VFPV4=y
+
+This ^^^ should be removed since NEON doesn't support complete FPU
+standard API, so it's better to keep the default for BR2_cortex_a7
+
+> +
+> +# Toolchain options
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+> +
+> +# System configuration
+> +BR2_TARGET_GENERIC_HOSTNAME="pinecube"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to PINECUBE"
+
+"Welcome to Pine64 Pinecube" ^^^
+
+> +BR2_SYSTEM_DHCP="eth0"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pinecube/genimage.cfg"
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15"
+
+Here ^^^ please use latest stable 5.15.x version, now it's 5.15.57:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/
+
+and re-test it
+
+> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-s3-pinecube"
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +
+> +# Bootloader
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pinecube"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/pine64/pinecube/boot.cmd"
+> +
+> +# Required host utilities for building an SDCard image
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+
+Here ^^^ remember to check which Host tool is needed after changing to
+extlinux.conf
+
+Anyway I've built it successfully with Buildroot's utils/docker-run.
+
+Waiting for V2 patch then.
+
+Thank you!
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
