@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A18CC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 07:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 235BAC04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 07:35:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4BE0F40B47;
-	Thu, 28 Jul 2022 07:35:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BE0F40B47
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFA4583330;
+	Thu, 28 Jul 2022 07:35:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFA4583330
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R7Pju2qkuh_j; Thu, 28 Jul 2022 07:35:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RZT4QkVTkZwc; Thu, 28 Jul 2022 07:35:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EDAC40136;
-	Thu, 28 Jul 2022 07:35:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EDAC40136
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 19C901BF423
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 07:35:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D525782D0C;
+	Thu, 28 Jul 2022 07:35:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D525782D0C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 758C31BF423
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 07:35:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 012DC4012E
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 07:35:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 012DC4012E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4FBF082D0C
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 07:35:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FBF082D0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IaZc4XksWxT9 for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 07:35:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LZ9ZmPBfr55H for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 07:35:27 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9793A40136
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9793A40136
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 07:35:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 332058249E
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 332058249E
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 07:35:26 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 57B511C0006;
- Thu, 28 Jul 2022 07:35:01 +0000 (UTC)
-Date: Thu, 28 Jul 2022 09:35:00 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id F2CD1240002;
+ Thu, 28 Jul 2022 07:35:23 +0000 (UTC)
+Date: Thu, 28 Jul 2022 09:35:22 +0200
 To: Marcin Niestroj <m.niestroj@grinn-global.com>
-Message-ID: <20220728093500.46be560e@windsurf>
-In-Reply-To: <20220727222716.1407968-1-m.niestroj@grinn-global.com>
-References: <20220727222716.1407968-1-m.niestroj@grinn-global.com>
+Message-ID: <20220728093522.2519239a@windsurf>
+In-Reply-To: <20220727222918.1411727-1-m.niestroj@grinn-global.com>
+References: <20220727222918.1411727-1-m.niestroj@grinn-global.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1658993701;
+ d=bootlin.com; s=gm1; t=1658993724;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=8YpqXUjpK/soPjb/a/SIgFulJKjopaauy6ALoe+lroI=;
- b=Mo2L0VG7y58ODHvhxrYZ3STeeo06xiNOIFNPVkZFgnRcqkSyPpv4c6P4eM6KwvEZhK1SvE
- /SO5Ag8OqC4ujctyOAWPn9FCCLK1I8t1Y7eXB3PqRYPGxq+f0t80ZVYBfFy6x2YZjtKEfl
- hgXU9fMRlpOffk+n1Xq1ksvS4kT/2obSyloxgOEoxuCS5gh/KpdJ2xMD1PDzC+tP7xHM/G
- c/EC4jiJTRhqcKYkaN6zqnDJAJCBmNo2pPvhNopFoZQY6O8BUd0jOEsVmfbdoUBOavAPKZ
- buHFUYZTcf6y66Zmq4rhCAkmGFvSUjiOCmcxj107cCaRvHpwF9GnW8ngmCxvog==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=wrvP2Xy2QcARddBm9yWi1VpdQOUKadDJ7wo9k3H62K4=;
+ b=jwwb1Rn03MpJ5t7Ps+/Pwgr/twZ7zy/fVMtV6zTuML9zCS17RlHZlU0qcVKJhkzkPmqyU8
+ Y8KRS+EnlaXWOQjMcx47zM0ipwcAg/zGHG4fC6uClJMkok96BWtaCdjkW5L2dA92iOlNus
+ Xo13OLh0GG3RtntBkSrAqqOdVLqdZ5YGAEobFxnffPusPnDepOBYaUJmTEoB7/cdOb+R9T
+ Qwtx6o8IF7WH0gtx8tFumQ3ZsnLWtEcORp1/MkZNu68sd80SN6C37z30SF3iQTrV4n5Cu7
+ pJBHJrkLZgipRhAPBeqR55cpqGq6JR1twgTxtA4TfZawTkyszV6/MtuZKSVMjQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Mo2L0VG7
-Subject: Re: [Buildroot] [PATCH] configs/orangepi_zero_plus_defconfig:
- switch to mainline TF-A
+ header.s=gm1 header.b=jwwb1Rn0
+Subject: Re: [Buildroot] [PATCH] package/python-pytest: bump to version 7.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,25 +77,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Jul 2022 00:27:15 +0200
+On Thu, 28 Jul 2022 00:29:18 +0200
 Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
 
-> Use the same TF-A as orangepi_zero_plus2 board.
+> There is just a starting year in licence file now (see [1]), but licence
+> itself did not change.
 > 
-> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/2720001176
+> [1] https://github.com/pytest-dev/pytest/commit/ed24f29e6017183ea22f3136aa180a8e3280cf8a
 > 
 > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  configs/orangepi_zero_plus_defconfig | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>  package/python-pytest/python-pytest.hash | 6 +++---
+>  package/python-pytest/python-pytest.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
+This changed raised a check-package warning due to the spacing used in
+the hash file. I fixed that up when applying.
+
+Thanks!
 
 Thomas
 -- 
