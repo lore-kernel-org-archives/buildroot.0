@@ -1,50 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E35FCC04A68
-	for <buildroot@archiver.kernel.org>; Wed, 27 Jul 2022 22:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5836C04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 01:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93D7940538;
-	Wed, 27 Jul 2022 22:51:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93D7940538
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TG55FuDHDmpu; Wed, 27 Jul 2022 22:51:09 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B6FD4409FC;
-	Wed, 27 Jul 2022 22:51:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6FD4409FC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A281C1BF834
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:50:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DA12416E3
- for <buildroot@lists.busybox.net>; Wed, 27 Jul 2022 22:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DA12416E3
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE29241795;
+	Thu, 28 Jul 2022 01:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE29241795
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6D5WbJOvmp_5 for <buildroot@lists.busybox.net>;
- Wed, 27 Jul 2022 22:50:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BCE2416E1
- for <buildroot@buildroot.org>; Wed, 27 Jul 2022 22:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BCE2416E1
-Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 2AC4886773; Wed, 27 Jul 2022 22:36:52 +0000 (UTC)
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7SHwsdX8bS_P; Thu, 28 Jul 2022 01:44:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBA2941793;
+	Thu, 28 Jul 2022 01:44:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBA2941793
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A0A0F1BF393
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 01:44:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 82ACD81A81
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 01:44:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82ACD81A81
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qP_Vk3ZywMbv for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 01:44:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA8CC81778
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CA8CC81778
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 01:44:12 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id o2so436554iof.8
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 18:44:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=7ePjTBfM4iUAWkoOiWl/0q6NmCMzJEzZk/3tQU/6XmY=;
+ b=3XSX15Dr76wuWEdGJ46HULzfJqODd9f1mef7ayLFPpIozfk2+A0yfGDGukZuqkJ0rk
+ m6koTD/3WtM8Ps4VYaxzRi7vqPJ6xs1I0BKwIa8D6HdrktN02qwdBkN1ZvKz3gLqYgO0
+ PqhmHRNnVVSk2mLIxD9WVFSCyJ5Zz/os5AqO3IGqnRFoWqemdGDJ3evltLLwWBfy1nUA
+ BqP1VMhhB+BqZl49rOU/hF8auNELP8fCxqpdm3USIAV68wwO8b9lmga94updkDzWn1DG
+ SX+ZUZEhgMX6HmMixgj6cT3dvZvj5yXAMIInunW7lhf8BnxXwmeXH7LFI89gld2QKwMb
+ RvMA==
+X-Gm-Message-State: AJIora8gZdxUyrBV/lQQw+l89A8neQ4xYGET/LFGYIFRaI6iaBSGQ+VG
+ KsRdAzuMU3hoVjyxAgzdkruLm6Gzm+bz+w==
+X-Google-Smtp-Source: AGRyM1t0V9ffXU8MSHxxuD9DNjXOFk1H+KPCdqskt6bYMtJx0+kKKNdrPDtY2JOXM8GI090PF7fzIg==
+X-Received: by 2002:a05:6602:26c3:b0:66c:f8b2:53c with SMTP id
+ g3-20020a05660226c300b0066cf8b2053cmr8508124ioo.50.1658972651678; 
+ Wed, 27 Jul 2022 18:44:11 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-133-32.hlrn.qwest.net.
+ [71.33.133.32]) by smtp.gmail.com with ESMTPSA id
+ i2-20020a6bb802000000b0067bcb28e036sm9037283iof.49.2022.07.27.18.44.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 27 Jul 2022 18:44:11 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 00:48:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f1e3b2bb01903faf7595ed3151140bbf767681e0
-X-Git-Newrev: bd3cf3fb5b0da97e6d4dd9c9321e44c376c1f36a
-X-Patchwork-Hint: ignore
-Message-Id: <20220727223652.2AC4886773@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus-broker: new package
+Date: Wed, 27 Jul 2022 19:44:01 -0600
+Message-Id: <20220728014402.142320-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=7ePjTBfM4iUAWkoOiWl/0q6NmCMzJEzZk/3tQU/6XmY=;
+ b=AvrDBMoET23NFbIA/LIKKmT1IZhOfbdbE8CfS/ese6Id29OPPkVm0H6N8pG06DXcHG
+ pNs2wZG+5m4bVcnauMWH0jvpsB9rQV3fVNrqX8YCqr7fyHJW3k2nJWvnq2Pl8J2RHr+2
+ sFOTLoC/iSLfzlY2/dMHMljnZPZ/WcfH9qnPYL2WwAZis35S0S3w4oUXx/uyaGXMH8am
+ it1zqK/i+PSpOLusg9NwxbTuoa1f5LyiYhTIIlXVABMOcOxCOktdfbfSDbe1QIOzldZn
+ uBonbyKsAoRFtqZSdyWzyM+1HbF49eJu3lf0dx2oVSO1aNoBqHlp1JceO+szUFRn1v/L
+ pA8Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=AvrDBMoE
+Subject: [Buildroot] [PATCH 1/2] support/misc/toolchainfile.cmake.in: set
+ PKG_CONFIG/CMAKE prefix paths
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,512 +93,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd3cf3fb5b0da97e6d4dd9c9321e44c376c1f36a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+These appear to not be getting set correctly and are needed when using
+meson's relocatable pkgconfig format.
 
-dbus-broker is an alternate implementation of a dbus daemon. It can be
-used as a drop-in replacement for the system bus daemon, as well as the
-session bus daemon.
-
-dbus-broker is (basically, and as far as we're concerned in Buildroot)
-split in two components:
-
-  - the actual message bus daemon, that relays messages across clients
-
-  - a launcher, which is responsible for setting various aspects of the
-    bus, like setting the policy et al. and opening the socket(s) the
-    message bus daemon will have to listen on...
-
-The launcher can only be used in a systemd setup (it makes heavy use of
-systemd facilities), while the message bus is generic. However, the
-message bus daemon is useless without a launcher. There does not exist a
-non-systemd launcher, which makes dbus-broker actually a systemd-only
-package; this can be revisited when/if a non-systemd launcher appears.
-
-Note, however, that libdbus is not provided by dbus-broker. People who
-want to use dbus-broker as the bus daemon, and need libdbus, will have
-to enable both.
-
-If only original dbus is enabled, things stay as they are now. This is
-for the moment still the default, though we should change that once
-dbus-broker has proven to work.
-
-If only dbus-broker is enabled, it installs the necessary socket
-activation units and dbus configuration files. The daemon is not
-launched at boot time; instead it is socket-activated when a client
-connects to the bus the first time.
-
-If both original dbus and dbus-broker are enabled, we have a conflict
-with the configuration files, the socket activation file. Also, original
-dbus activates the daemon as a service in multi-user.target.wants, so it
-is not socket-activated and dbus-broker would never get the opportunity
-to start.
-
-Therefore, original dbus is updated to remove the conflicting files and
-the activation of dbus-daemon. Since dbus-broker installs some of the
-same file that original dbus removes, we have to add a dependency to
-make sure that the ones installed by dbus-broker aren't removed.
-
-If both are installed, it is still possible to revert back to using
-original dbus as system bus:
-      - at build-time: by calling systemctl enable/disable from a
-        post-build script (preferred), or by providing drop-in units
-        or presets in an overlay (less preferred) or custom skeleton
-        (as a last resort),
-      - at runtime (on a RW filesystem): by calling systemctl
-        enable/disable
-
-Note about the user: the path to the system bus socket is a so-called
-"well-known location": it is expected to be there, by spec. Moving it
-elsewhere is going to break existing programs. So, the user running the
-system bus daemon must be able to create that socket.
-
-As we may have two packages providing a system bus daemon, they have to
-be both able to create the socket, and thus must both be able to write
-in the directory containing the socket. And since they can be switched
-at runtime, they must be running as the same user.
-
-We can't just reference the original dbus user, so we duplicate the
-entry. What is important, is that the user be named 'dbus', as that's
-what we use in both cases.
-
-If both original dbus and dbus-broker are selected, the dbus user is
-included twice, but the specifications are identical so that's fine.
-mkusers will create the user only once.
-
-Finally, the licensing terms are pretty trivial for dbus-broker itself,
-but it makes use of third-party code that it inherits as git submodules
-(that are bundled in the release archive). Thus the licensing is a bit
-convoluted... The third-party codes claim to be licensed as "Apache-2.0
-and LGP-2.1+" in their AUTHORS files, but at the same time claim
-"**Apache-2.0** OR **LGPL-2.1-or-later**" in their README files. The
-individual source files (that are used) do not seem to have any
-licensing header to clarify the situation. So we represent the situation
-with "Apache-2.0 and/or LGPL-2.1+".
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-[yann.morin.1998@free.fr:
-  - don't select systemd; depend on it instead
-  - only install config files and systemd units without original dbus
-  - install a user to run the message bus as
-  - fix licensing info
-  - entirely reword and extend the commit log
-  - add myself to DEVELOPERS as well
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-[Arnout:
- - Use dbus-broker as system bus if both are selected.
- - Remove conflicting files from dbus installation.
- - Simplify symbolic link creation.
- - Add comment to remind update of session.conf and system.conf.
-]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                           |   2 +
- package/Config.in                    |   1 +
- package/dbus-broker/Config.in        |  23 +++++++
- package/dbus-broker/dbus-broker.hash |   3 +
- package/dbus-broker/dbus-broker.mk   |  67 +++++++++++++++++++
- package/dbus-broker/dbus.socket      |   5 ++
- package/dbus-broker/session.conf     |  65 ++++++++++++++++++
- package/dbus-broker/system.conf      | 123 +++++++++++++++++++++++++++++++++++
- package/dbus/dbus.mk                 |  16 +++++
- 9 files changed, 305 insertions(+)
+ support/misc/toolchainfile.cmake.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 50a295a743..6944d3129c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2202,6 +2202,7 @@ F:	package/tpm-tools/
- F:	package/trousers/
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 5d2b8695b4..2c6adfd02d 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -91,6 +91,12 @@ endif()
+ if(NOT DEFINED CMAKE_FIND_ROOT_PATH_MODE_INCLUDE)
+   set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+ endif()
++if(NOT DEFINED PKG_CONFIG_USE_CMAKE_PREFIX_PATH)
++  set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
++endif()
++if(NOT DEFINED CMAKE_PREFIX_PATH)
++  set(CMAKE_PREFIX_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@/usr")
++endif()
+ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
  
- N:	Norbert Lange <nolange79@gmail.com>
-+F:	package/dbus-broker/
- F:	package/systemd/
- F:	package/tcf-agent/
- 
-@@ -3015,6 +3016,7 @@ F:	package/asterisk/
- F:	package/cegui/
- F:	package/dahdi-linux/
- F:	package/dahdi-tools/
-+F:	package/dbus-broker/
- F:	package/dtc/
- F:	package/dtv-scan-tables/
- F:	package/dvb-apps/
-diff --git a/package/Config.in b/package/Config.in
-index 174cfde73e..8ecf2295d3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -468,6 +468,7 @@ endmenu
- 	source "package/dahdi-tools/Config.in"
- 	source "package/davinci-bootcount/Config.in"
- 	source "package/dbus/Config.in"
-+	source "package/dbus-broker/Config.in"
- 	source "package/dbus-cpp/Config.in"
- 	source "package/dbus-cxx/Config.in"
- 	source "package/dbus-glib/Config.in"
-diff --git a/package/dbus-broker/Config.in b/package/dbus-broker/Config.in
-new file mode 100644
-index 0000000000..c7206232da
---- /dev/null
-+++ b/package/dbus-broker/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_DBUS_BROKER
-+	bool "dbus-broker"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
-+	depends on BR2_PACKAGE_SYSTEMD
-+	select BR2_PACKAGE_EXPAT
-+	help
-+	  Linux D-Bus Message Broker.
-+
-+	  The dbus-broker project is an implementation of a message bus
-+	  as defined by the D-Bus specification. Its aim is to provide
-+	  high performance and reliability, while keeping compatibility
-+	  to the D-Bus reference implementation.
-+
-+	  It is exclusively written for Linux systems, and makes use of
-+	  many modern features provided by recent linux kernel releases.
-+
-+	  https://github.com/bus1/dbus-broker/wiki
-+
-+comment "dbusbroker needs systemd and a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_SYSTEMD
-diff --git a/package/dbus-broker/dbus-broker.hash b/package/dbus-broker/dbus-broker.hash
-new file mode 100644
-index 0000000000..26ebab7ac1
---- /dev/null
-+++ b/package/dbus-broker/dbus-broker.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  4eca425db52b7ab1027153e93fea9b3f11759db9e93ffbf88759b73ddfb8026a  dbus-broker-29.tar.xz
-+sha256  3cda3630283eda0eab825abe5ac84d191248c6b3fe1c232a118124959b96c6a4  LICENSE
-diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
-new file mode 100644
-index 0000000000..22c5e8d8b7
---- /dev/null
-+++ b/package/dbus-broker/dbus-broker.mk
-@@ -0,0 +1,67 @@
-+################################################################################
-+#
-+# dbus-broker
-+#
-+################################################################################
-+
-+DBUS_BROKER_VERSION = 29
-+DBUS_BROKER_SOURCE = dbus-broker-$(DBUS_BROKER_VERSION).tar.xz
-+DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS_BROKER_VERSION)
-+
-+DBUS_BROKER_LICENSE = \
-+	Apache-2.0, \
-+	Apache-2.0 and/or LGPL-2.1+ (c-dvar, c-ini, c-list, c-rbtree, c-shquote, c-stdaux, c-utf8)
-+# For the third-party code, the licensing legal-info is inconsistent between
-+# the AUTHORS and README, so keep both
-+DBUS_BROKER_LICENSE_FILES = \
-+	LICENSE \
-+	subprojects/c-dvar/AUTHORS subprojects/c-dvar/README.md \
-+	subprojects/c-ini/AUTHORS subprojects/c-ini/README.md \
-+	subprojects/c-list/AUTHORS subprojects/c-list/README.md \
-+	subprojects/c-rbtree/AUTHORS subprojects/c-rbtree/README.md \
-+	subprojects/c-shquote/AUTHORS subprojects/c-shquote/README.md \
-+	subprojects/c-stdaux/AUTHORS subprojects/c-stdaux/README.md \
-+	subprojects/c-utf8/AUTHORS subprojects/c-utf8/README.md
-+
-+DBUS_BROKER_DEPENDENCIES = expat systemd
-+DBUS_BROKER_CONF_OPTS = -Dlauncher=true
-+
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+DBUS_BROKER_DEPENDENCIES += audit
-+DBUS_BROKER_CONF_OPTS += -Daudit=true
-+else
-+DBUS_BROKER_CONF_OPTS += -Daudit=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+DBUS_BROKER_DEPENDENCIES += libselinux
-+DBUS_BROKER_CONF_OPTS += -Dselinux=true
-+else
-+DBUS_BROKER_CONF_OPTS += -Dselinux=false
-+endif
-+
-+# We must be using the same user as the original dbus, so we can share
-+# the home directory and create a socket there. As a consequence, the
-+# username and groupname must be dbus:dbus, and they both need to have
-+# the same home.
-+define DBUS_BROKER_USERS
-+	dbus -1 dbus -1 * /run/dbus - dbus DBus messagebus user
-+endef
-+
-+# We overwrite some files from dbus, so add a dependency.
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+DBUS_BROKER_DEPENDENCIES += dbus
-+endif
-+
-+define DBUS_BROKER_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(DBUS_BROKER_PKGDIR)/session.conf \
-+		$(TARGET_DIR)/usr/share/dbus-1/session.conf
-+	$(INSTALL) -D -m 0644 $(DBUS_BROKER_PKGDIR)/system.conf \
-+		$(TARGET_DIR)/usr/share/dbus-1/system.conf
-+	$(INSTALL) -D -m 0644 $(DBUS_BROKER_PKGDIR)/dbus.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/dbus.socket
-+	$(HOST_MAKE_ENV) ln -sf ../dbus.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/sockets.target.wants/dbus.socket
-+endef
-+
-+$(eval $(meson-package))
-diff --git a/package/dbus-broker/dbus.socket b/package/dbus-broker/dbus.socket
-new file mode 100644
-index 0000000000..5c373cf450
---- /dev/null
-+++ b/package/dbus-broker/dbus.socket
-@@ -0,0 +1,5 @@
-+[Unit]
-+Description=D-Bus System Message Bus Socket
-+
-+[Socket]
-+ListenStream=/run/dbus/system_bus_socket
-diff --git a/package/dbus-broker/session.conf b/package/dbus-broker/session.conf
-new file mode 100644
-index 0000000000..e4758fa218
---- /dev/null
-+++ b/package/dbus-broker/session.conf
-@@ -0,0 +1,65 @@
-+<!-- This configuration file controls the per-user-login-session message bus.
-+     Add a session-local.conf and edit that rather than changing this
-+     file directly. -->
-+
-+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-Bus Bus Configuration 1.0//EN"
-+ "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
-+<busconfig>
-+  <!-- Our well-known bus type, don't change this -->
-+  <type>session</type>
-+
-+  <!-- If we fork, keep the user's original umask to avoid affecting
-+       the behavior of child processes. -->
-+  <keep_umask/>
-+
-+  <standard_session_servicedirs />
-+
-+  <policy context="default">
-+    <!-- Allow everything to be sent -->
-+    <allow send_destination="*" eavesdrop="true"/>
-+    <!-- Allow everything to be received -->
-+    <allow eavesdrop="true"/>
-+    <!-- Allow anyone to own anything -->
-+    <allow own="*"/>
-+  </policy>
-+
-+  <!-- Config files are placed here that among other things,
-+       further restrict the above policy for specific services. -->
-+  <includedir>session.d</includedir>
-+
-+  <includedir>/etc/dbus-1/session.d</includedir>
-+
-+  <!-- This is included last so local configuration can override what's
-+       in this standard file -->
-+  <include ignore_missing="yes">/etc/dbus-1/session-local.conf</include>
-+
-+  <include if_selinux_enabled="yes" selinux_root_relative="yes">contexts/dbus_contexts</include>
-+
-+  <!-- For the session bus, override the default relatively-low limits
-+       with essentially infinite limits, since the bus is just running
-+       as the user anyway, using up bus resources is not something we need
-+       to worry about. In some cases, we do set the limits lower than
-+       "all available memory" if exceeding the limit is almost certainly a bug,
-+       having the bus enforce a limit is nicer than a huge memory leak. But the
-+       intent is that these limits should never be hit. -->
-+
-+  <!-- the memory limits are 1G instead of say 4G because they can't exceed 32-bit signed int max -->
-+  <limit name="max_incoming_bytes">1000000000</limit>
-+  <limit name="max_incoming_unix_fds">250000000</limit>
-+  <limit name="max_outgoing_bytes">1000000000</limit>
-+  <limit name="max_outgoing_unix_fds">250000000</limit>
-+  <limit name="max_message_size">1000000000</limit>
-+  <!-- We do not override max_message_unix_fds here since the in-kernel
-+       limit is also relatively low -->
-+  <limit name="service_start_timeout">120000</limit>
-+  <limit name="auth_timeout">240000</limit>
-+  <limit name="pending_fd_timeout">150000</limit>
-+  <limit name="max_completed_connections">100000</limit>
-+  <limit name="max_incomplete_connections">10000</limit>
-+  <limit name="max_connections_per_user">100000</limit>
-+  <limit name="max_pending_service_starts">10000</limit>
-+  <limit name="max_names_per_connection">50000</limit>
-+  <limit name="max_match_rules_per_connection">50000</limit>
-+  <limit name="max_replies_per_connection">50000</limit>
-+
-+</busconfig>
-diff --git a/package/dbus-broker/system.conf b/package/dbus-broker/system.conf
-new file mode 100644
-index 0000000000..4b17fbd90e
---- /dev/null
-+++ b/package/dbus-broker/system.conf
-@@ -0,0 +1,123 @@
-+<!-- This configuration file controls the systemwide message bus.
-+     Add a system-local.conf and edit that rather than changing this
-+     file directly. -->
-+
-+<!-- Note that there are any number of ways you can hose yourself
-+     security-wise by screwing up this file; in particular, you
-+     probably don't want to listen on any more addresses, add any more
-+     auth mechanisms, run as a different user, etc. -->
-+
-+<!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-Bus Bus Configuration 1.0//EN"
-+ "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
-+<busconfig>
-+
-+  <!-- Our well-known bus type, do not change this -->
-+  <type>system</type>
-+
-+  <!-- Fork into daemon mode -->
-+  <fork/>
-+
-+  <!-- Run as special user -->
-+  <user>dbus</user>
-+
-+  <!-- We use system service launching using a helper -->
-+  <standard_system_servicedirs/>
-+
-+  <!-- Enable logging to syslog -->
-+  <syslog/>
-+
-+  <policy context="default">
-+    <!-- All users can connect to system bus -->
-+    <allow user="*"/>
-+
-+    <!-- Holes must be punched in service configuration files for
-+         name ownership and sending method calls -->
-+    <deny own="*"/>
-+    <deny send_type="method_call"/>
-+
-+    <!-- Signals and reply messages (method returns, errors) are allowed
-+         by default -->
-+    <allow send_type="signal"/>
-+    <allow send_requested_reply="true" send_type="method_return"/>
-+    <allow send_requested_reply="true" send_type="error"/>
-+
-+    <!-- All messages may be received by default -->
-+    <allow receive_type="method_call"/>
-+    <allow receive_type="method_return"/>
-+    <allow receive_type="error"/>
-+    <allow receive_type="signal"/>
-+
-+    <!-- Allow anyone to talk to the message bus -->
-+    <allow send_destination="org.freedesktop.DBus"
-+           send_interface="org.freedesktop.DBus" />
-+    <allow send_destination="org.freedesktop.DBus"
-+           send_interface="org.freedesktop.DBus.Introspectable"/>
-+    <allow send_destination="org.freedesktop.DBus"
-+           send_interface="org.freedesktop.DBus.Properties"/>
-+    <!-- But disallow some specific bus services -->
-+    <deny send_destination="org.freedesktop.DBus"
-+          send_interface="org.freedesktop.DBus"
-+          send_member="UpdateActivationEnvironment"/>
-+    <deny send_destination="org.freedesktop.DBus"
-+          send_interface="org.freedesktop.DBus.Debug.Stats"/>
-+    <deny send_destination="org.freedesktop.DBus"
-+          send_interface="org.freedesktop.systemd1.Activator"/>
-+  </policy>
-+
-+  <!-- Only systemd, which runs as root, may report activation failures. -->
-+  <policy user="root">
-+    <allow send_destination="org.freedesktop.DBus"
-+           send_interface="org.freedesktop.systemd1.Activator"/>
-+  </policy>
-+
-+  <!-- root may monitor the system bus. -->
-+  <policy user="root">
-+    <allow send_destination="org.freedesktop.DBus"
-+           send_interface="org.freedesktop.DBus.Monitoring"/>
-+  </policy>
-+
-+  <!-- If the Stats interface was enabled at compile-time, root may use it.
-+       Copy this into system.local.conf or system.d/*.conf if you want to
-+       enable other privileged users to view statistics and debug info -->
-+  <policy user="root">
-+    <allow send_destination="org.freedesktop.DBus"
-+           send_interface="org.freedesktop.DBus.Debug.Stats"/>
-+  </policy>
-+
-+
-+  <!-- The defaults for these limits are hard-coded in dbus-daemon.
-+       Some clarifications:
-+       Times are in milliseconds (ms); 1000ms = 1 second
-+       133169152 bytes = 127 MiB
-+       33554432 bytes = 32 MiB
-+       150000ms = 2.5 minutes -->
-+  <!-- <limit name="max_incoming_bytes">133169152</limit> -->
-+  <!-- <limit name="max_incoming_unix_fds">64</limit> -->
-+  <!-- <limit name="max_outgoing_bytes">133169152</limit> -->
-+  <!-- <limit name="max_outgoing_unix_fds">64</limit> -->
-+  <!-- <limit name="max_message_size">33554432</limit> -->
-+  <!-- <limit name="max_message_unix_fds">16</limit> -->
-+  <!-- <limit name="service_start_timeout">25000</limit> -->
-+  <!-- <limit name="auth_timeout">5000</limit> -->
-+  <!-- <limit name="pending_fd_timeout">150000</limit> -->
-+  <!-- <limit name="max_completed_connections">2048</limit> -->
-+  <!-- <limit name="max_incomplete_connections">64</limit> -->
-+  <!-- <limit name="max_connections_per_user">256</limit> -->
-+  <!-- <limit name="max_pending_service_starts">512</limit> -->
-+  <!-- <limit name="max_names_per_connection">512</limit> -->
-+  <!-- <limit name="max_match_rules_per_connection">512</limit> -->
-+  <!-- <limit name="max_replies_per_connection">128</limit> -->
-+
-+  <!-- Config files are placed here that among other things, punch
-+       holes in the above policy for specific services. -->
-+  <includedir>system.d</includedir>
-+
-+  <includedir>/etc/dbus-1/system.d</includedir>
-+
-+  <!-- This is included last so local configuration can override what's
-+       in this standard file -->
-+  <include ignore_missing="yes">/etc/dbus-1/system-local.conf</include>
-+
-+  <include if_selinux_enabled="yes" selinux_root_relative="yes">contexts/dbus_contexts</include>
-+
-+</busconfig>
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index de447d8680..a3a21c1bcc 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,6 +4,8 @@
- #
- ################################################################################
- 
-+# When updating dbus, check if there are changes in session.conf and
-+# system.conf, and update the versions in the dbus-broker package accordingly.
- DBUS_VERSION = 1.12.22
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
-@@ -97,6 +99,20 @@ define DBUS_INSTALL_INIT_SYSV
- 	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
- endef
- 
-+# If dbus-broker is installed, don't install the activation links for
-+# dbus itself, not the configuration files. They will be overwritten
-+# by dbus-broker
-+ifeq ($(BR2_PACKAGE_DBUS_BROKER),y)
-+define DBUS_REMOVE_SYSTEMD_ACTIVATION_LINKS
-+	rm -f $(TARGET_DIR)/usr/lib/systemd/system/multi-user.target.wants/dbus.service
-+	rm -f $(TARGET_DIR)/usr/lib/systemd/system/sockets.target.wants/dbus.socket
-+	rm -f $(TARGET_DIR)/usr/lib/systemd/system/dbus.socket
-+	rm -f $(TARGET_DIR)/usr/share/dbus-1/session.conf
-+	rm -f $(TARGET_DIR)/usr/share/dbus-1/system.conf
-+endef
-+DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_SYSTEMD_ACTIVATION_LINKS
-+endif
-+
- define DBUS_INSTALL_INIT_SYSTEMD
- 	mkdir -p $(TARGET_DIR)/var/lib/dbus
- 	ln -sf /etc/machine-id $(TARGET_DIR)/var/lib/dbus/machine-id
+ # This toolchain file can be used both inside and outside Buildroot.
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
