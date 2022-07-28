@@ -1,70 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 848C4C04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 21:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B499EC04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 21:04:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2822C60AE0;
-	Thu, 28 Jul 2022 21:01:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2822C60AE0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D8D4826B4;
+	Thu, 28 Jul 2022 21:04:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D8D4826B4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ysg782goPyWZ; Thu, 28 Jul 2022 21:01:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EB43eJuDvehC; Thu, 28 Jul 2022 21:04:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DC5460ACD;
-	Thu, 28 Jul 2022 21:01:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DC5460ACD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EE2F91BF37F
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:01:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DD5182662;
+	Thu, 28 Jul 2022 21:04:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DD5182662
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 739081BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:04:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D717740354
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:01:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D717740354
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4CD9A415A6
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:04:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CD9A415A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3JKQHFeYTh-d for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 21:01:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD36E40327
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DD36E40327
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 21:01:05 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D7E6B1BF205;
- Thu, 28 Jul 2022 21:01:03 +0000 (UTC)
-Date: Thu, 28 Jul 2022 23:01:02 +0200
-To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-Message-ID: <20220728230102.221c28c6@windsurf>
-In-Reply-To: <20220728191648.1201217-1-arnout@mind.be>
-References: <20220728191648.1201217-1-arnout@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659042064;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=w2j/ilWRAmAX1fyXJ0d3Cp7EmtEs3lZg1Om9V3hMpXY=;
- b=PfEOvh21tHN39+o5I+ug+CxLEI/fxCSuuQX7cvpyM03D8fXtlmP2CexE/RwasyTspZVHI4
- trESZEzOS0zdpT76FxBEJJE5j9IYWsq2bEp2HbxVIqNSYKwICzjorQbpKC3DkVmHx0zuhS
- iw0aRdXHDi3f7hsahUao5Mo0YgacBgoIfqenwBfKcnCrjtgBHswFtKQbKDeT+YI91Pbo0v
- AGhqoFKVBurnn13RxcYND6V95goY7iVjAfctsuvXMZHjzHFUaHdN7C43cYu8pzOstN1hD+
- sw+loHKR4+7TrP7T9+T8oAGHCrqhnXw9OXN6xcleyK3kNg8E4UIUmsVs78/erg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PfEOvh21
-Subject: Re: [Buildroot] [PATCH] package/zsh: add more cache variables for
- TRY_RUN
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9UjwkVzG2WcP for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 21:04:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 42A6A4014C
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 21:04:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42A6A4014C
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 199278681A; Thu, 28 Jul 2022 20:51:03 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 28 Jul 2022 23:04:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8b9014e762c9810d09b49c4132d9306fc333ebd6
+X-Git-Newrev: 4e2567861a81abb963d9317cf5337b57533ad6b1
+X-Patchwork-Hint: ignore
+Message-Id: <20220728205103.199278681A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/eudev: remove HOST_EUDEV_SYSCONFDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,34 +57,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Phil Eichinger <phil.eichinger@gmail.com>,
- Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Jul 2022 21:16:48 +0200
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4e2567861a81abb963d9317cf5337b57533ad6b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> It turns out that zsh has a number of additional TRY_RUN calls. We
-> already set a few with cache variables, add a few more. They are found
-> based on reading the configure.ac, aczsh.m4, and the configure output.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Phil Eichinger <phil.eichinger@gmail.com>
-> Cc: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/zsh/zsh.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+The HOST_EUDEV_SYSCONFDIR is a leftover from before eudev, when udev was
+still built from systemd sources. Now that we have a separate file for
+eudev and systemd, there's no need any more to have a condition there.
+In addition, its usage in systemd.mk has been removed.
 
-Applied to master, thanks.
+Remove the HOST_EUDEV_SYSCONFDIR variable and instead use /etc directly
+in eudev.mk.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/eudev/eudev.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 705370689d..f050563feb 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -57,13 +57,12 @@ endef
+ 
+ HOST_EUDEV_DEPENDENCIES = host-gperf host-pkgconf
+ 
+-HOST_EUDEV_SYSCONFDIR = $(if $(BR2_PACKAGE_SYSTEMD),/usr/lib,/etc)
+ HOST_EUDEV_CONF_OPTS = \
+ 	--prefix=/usr \
+ 	--sbindir=/sbin \
+ 	--libexecdir=/lib \
+ 	--with-rootlibdir=/lib \
+-	--sysconfdir=$(HOST_EUDEV_SYSCONFDIR) \
++	--sysconfdir=/etc \
+ 	--disable-blkid \
+ 	--disable-introspection \
+ 	--disable-kmod \
+@@ -86,7 +85,7 @@ HOST_EUDEV_TARGET_FINALIZE_HOOKS += HOST_EUDEV_BUILD_HWDB
+ # of tharget/, not the real one, so the files are still available on
+ # re-builds (foo-rebuild, etc...)
+ define HOST_EUDEV_RM_HWDB_SRC
+-	rm -rf $(TARGET_DIR)/$(HOST_EUDEV_SYSCONFDIR)/udev/hwdb.d/
++	rm -rf $(TARGET_DIR)/etc/udev/hwdb.d/
+ endef
+ HOST_EUDEV_ROOTFS_PRE_CMD_HOOKS += HOST_EUDEV_RM_HWDB_SRC
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
