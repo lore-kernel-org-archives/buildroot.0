@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC15BC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 19:05:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AD2EC04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 19:05:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66EC84037C;
-	Thu, 28 Jul 2022 19:05:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66EC84037C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15A2C60ABB;
+	Thu, 28 Jul 2022 19:05:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15A2C60ABB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MFh1KFFZeLGh; Thu, 28 Jul 2022 19:05:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pe8hCWrpuJL8; Thu, 28 Jul 2022 19:05:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8550A401DD;
-	Thu, 28 Jul 2022 19:05:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8550A401DD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A5E131BF21A
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 19:04:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 357C160A87;
+	Thu, 28 Jul 2022 19:05:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 357C160A87
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 494F11BF21A
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 19:04:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EB7D84032A
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 19:04:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB7D84032A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16F94416A3
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 19:04:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16F94416A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GcfEPv4twBgd for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fd5xIY8zsKuJ for <buildroot@lists.busybox.net>;
  Thu, 28 Jul 2022 19:04:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A6854016A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5553B409BB
  for <buildroot@buildroot.org>; Thu, 28 Jul 2022 19:04:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A6854016A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5553B409BB
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 64D4B86594; Thu, 28 Jul 2022 18:50:30 +0000 (UTC)
+ id 50BAD864E4; Thu, 28 Jul 2022 18:50:30 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
 Date: Thu, 28 Jul 2022 21:03:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 960fc93df2f7981e13a1bb7fb76fd958e36b8611
-X-Git-Newrev: 2f32e668aa880c2d4a2cce6c789b7ca7ed6221ba
+X-Git-Oldrev: 8a1e8cd3e1ffc48d10969bcceffc7c8086119f9a
+X-Git-Newrev: ed3ae42807ec2fa39ee4ab92ea3794a06f2e51ac
 X-Patchwork-Hint: ignore
-Message-Id: <20220728185030.64D4B86594@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zsh: Enable dynamic modules
+Message-Id: <20220728185030.50BAD864E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/systemd: remove hwdb-update service
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,49 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f32e668aa880c2d4a2cce6c789b7ca7ed6221ba
+commit: https://git.buildroot.net/buildroot/commit/?id=ed3ae42807ec2fa39ee4ab92ea3794a06f2e51ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The autoconf scripts seem to assume that no dynamic loader
-is available if crosscompiling.
-This results in only a small set of modules being enabled
-and linked statically.
+Since the source HWDB files are already removed from the target, it
+makes little sense to keep the service around.  If accidently
+triggered it could create an empty database.
 
-For comparison, debian patches the fallback to enable
-dynamic modules (unconditionally).
-
-This commit enables modules if shared libraries are enabled.
+The service is installed in both staging and host directory as well and
+not removed from there, so a user could craft his own solutions if it's
+necessary to update the database.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/zsh/zsh.mk | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ package/systemd/systemd.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index c5ab7c2fae..f03a2e6982 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -36,6 +36,19 @@ else
- ZSH_CONF_OPTS += --disable-pcre
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 624de68584..19fd525534 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -310,6 +310,12 @@ define SYSTEMD_BUILD_HWDB
+ 	$(HOST_DIR)/bin/systemd-hwdb update --root $(TARGET_DIR) --strict --usr
+ endef
+ SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_BUILD_HWDB
++define SYSTEMD_RM_HWBD_UPDATE_SERVICE
++	rm -rf $(TARGET_DIR)/usr/lib/systemd/system/systemd-hwdb-update.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/*/systemd-hwdb-update.service \
++		$(TARGET_DIR)/usr/bin/systemd-hwdb
++endef
++SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_RM_HWBD_UPDATE_SERVICE
+ else
+ SYSTEMD_CONF_OPTS += -Dhwdb=false
  endif
- 
-+ifneq ($(BR2_STATIC_LIBS),y)
-+# zsh uses TRY_RUN to determine these
-+ZSH_CONF_OPTS += \
-+	zsh_cv_shared_environ=yes \
-+	zsh_cv_shared_tgetent=yes \
-+	zsh_cv_shared_tigetstr=yes \
-+	zsh_cv_sys_dynamic_clash_ok=yes \
-+	zsh_cv_sys_dynamic_rtld_global=yes \
-+	zsh_cv_sys_dynamic_execsyms=yes \
-+	zsh_cv_sys_dynamic_strip_exe=yes \
-+	zsh_cv_sys_dynamic_strip_lib=yes
-+endif
-+
- # Add /bin/zsh to /etc/shells otherwise some login tools like dropbear
- # can reject the user connection. See man shells.
- define ZSH_ADD_ZSH_TO_SHELLS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
