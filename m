@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D12DC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 08:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A4C4C04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 09:00:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 208C160F30;
-	Thu, 28 Jul 2022 08:47:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 208C160F30
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA8E982F11;
+	Thu, 28 Jul 2022 09:00:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA8E982F11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aAvXFttS2oJW; Thu, 28 Jul 2022 08:47:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uehgu4Q-m6FD; Thu, 28 Jul 2022 09:00:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C52D60B73;
-	Thu, 28 Jul 2022 08:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C52D60B73
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 876A11BF2BC
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:47:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0535C82EB5;
+	Thu, 28 Jul 2022 09:00:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0535C82EB5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A7291BF2BC
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 09:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 521BF4197C
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:47:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 521BF4197C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61E3A82EB5
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 09:00:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61E3A82EB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SH__GfQsxjej for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 08:47:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zrrhRUFWC1rn for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 09:00:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F4085410B1
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 08:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F4085410B1
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id ECAA38410F; Thu, 28 Jul 2022 08:33:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84A3082EA2
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 09:00:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84A3082EA2
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 7CBD784CA4; Thu, 28 Jul 2022 08:46:32 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 10:42:46 +0200
+Date: Thu, 28 Jul 2022 10:54:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 117c21820f3d9df67da6524400617d5fabbf424f
-X-Git-Newrev: 622e5f67bd7f9249514c44c7b64f2821a8f74635
+X-Git-Oldrev: 622e5f67bd7f9249514c44c7b64f2821a8f74635
+X-Git-Newrev: 6ba523c813397d6ca629df4110a68921b5cc6693
 X-Patchwork-Hint: ignore
-Message-Id: <20220728083332.ECAA38410F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdal: fix json dependency
+Message-Id: <20220728084632.7CBD784CA4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2022.05.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,143 +56,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=622e5f67bd7f9249514c44c7b64f2821a8f74635
+commit: https://git.buildroot.net/buildroot/commit/?id=6ba523c813397d6ca629df4110a68921b5cc6693
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gdal needs json-c, not libjson, resulting in the following build failure
-since the addition of the package in commit
-1e64fa2956171cdc9d6e6c8896b4b589ce573513:
-
-configure: error: could not find json-c/json.h
-
-While at it, also drop unrecognized options:
-
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --enable-ipv6, --disable-nls, --without-dods-root, --without-fme, --without-grass, --without-libgrass, --without-ingres, --without-jasper, --without-charls, --without-mdb, --without-mongocxx, --without-mrsid_lidar, --without-perl
-
-Fixes:
- - http://autobuild.buildroot.org/results/f977675125167806e844a176a4c8c8873557b709
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2e399893b4f60f1e103228df6e4439d4e4ac3dd5)
+[Peter: drop Makefile change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdal/Config.in |  6 ++++--
- package/gdal/gdal.mk   | 15 ++-------------
- 2 files changed, 6 insertions(+), 15 deletions(-)
+ CHANGES                  | 32 ++++++++++++++++++++++++++++++++
+ support/misc/Vagrantfile |  2 +-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/package/gdal/Config.in b/package/gdal/Config.in
-index 55a8c7fb83..ee7209566a 100644
---- a/package/gdal/Config.in
-+++ b/package/gdal/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GDAL
- 	bool "gdal"
--	depends on BR2_INSTALL_LIBSTDCPP # proj, libjson
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	depends on BR2_INSTALL_LIBSTDCPP # proj
- 	# configure can't find proj, when linking statically
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
-@@ -8,8 +9,8 @@ config BR2_PACKAGE_GDAL
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
- 	depends on BR2_USE_WCHAR # proj
- 	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBGEOTIFF
--	select BR2_PACKAGE_LIBJSON
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_PROJ
- 	select BR2_PACKAGE_ZLIB
-@@ -24,6 +25,7 @@ config BR2_PACKAGE_GDAL
- 	  https://gdal.org/
+diff --git a/CHANGES b/CHANGES
+index 38e83171f2..de57f62e4a 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,35 @@
++2022.05.1, released July 24th, 2022
++
++	Important / security related fixes.
++
++	Disable big endian no-mmu on ARM as it is not supported by
++	elf2flt.
++
++	Tighten dependencies for external Bootlin toolchains to ensure
++	they can only be selected in compatible configurations.
++
++	Support external toolchains without gdbserver.
++
++	Updated/fixed packages: apache, avahi, bdwgc, bind, bpftool,
++	cups, darkhttpd, dmalloc, ecryptfs-utils, fxload, ghostscript,
++	gnutls, gst-omx, gst1-devtools, gst1-libav, gst1-plugins-base,
++	gst1-plugins-bad, gst1-plugins-good, gst1-plugins-ugly,
++	gst1-python, gst1-rtsp-server, gst1-vaapi, gstreamer1,
++	gstreamer1-editing-services, gtest, iptables, keyutils, lcms2,
++	libabseil-cpp, libcamera, libcurl, libeastl, libgpgme,
++	libgtk3, libmdbx, libmediaart, libmodsecurity, libnetconf2,
++	libopenssl, libpjsip, libsamplerate, libsndfile, libtalloc,
++	logrotate, luajit, nginx, noip, paxtest, php, postgresql,
++	procrank_linux, pure-ftpd, python-pillow, qdecoder,
++	rabbitmq-server, rpi-userland, ruby, rustc, sofia-sip,
++	systemd, tcpreplay, tinyproxy, tor, uacme, uboot-tools, vim,
++	watchdogd, webkitgtk, weston, wireguard-linux-compat,
++	wpa_supplicant, wpewebkit, zstd
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#14881: Watchdogd Package missing INSTALL_STAGING
++
+ 2022.05, released June 6th, 2022
  
- comment "gdal needs a toolchain w/ C++, dynamic library, gcc >= 4.7, not binutils bug 27597, threads, wchar"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
- 		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 || \
-diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
-index c75b7743ce..33e7ba724a 100644
---- a/package/gdal/gdal.mk
-+++ b/package/gdal/gdal.mk
-@@ -18,14 +18,14 @@ GDAL_CONFIG_SCRIPTS = gdal-config
- # enabled but it seems, in contrast to mrf driver support, that they
- # can be implicitly disabled, by configuring gdal without their
- # respectively needed dependencies.
--GDAL_DEPENDENCIES = host-pkgconf jpeg libgeotiff libpng proj tiff zlib
-+GDAL_DEPENDENCIES = host-pkgconf jpeg json-c libgeotiff libpng proj tiff zlib
+ 	Fixes all over the tree.
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 21e3455ae1..69dfb0ca28 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- # Yes, even though they have --with options, these few libraries are
- # mandatory. If we don't provide them, bundled versions are used.
- GDAL_CONF_OPTS = \
- 	--with-geotiff \
- 	--with-jpeg \
--	--with-libjson-c \
-+	--with-libjson-c=$(STAGING_DIR)/usr \
- 	--with-libtool \
- 	--with-libz \
- 	--with-png \
-@@ -38,45 +38,35 @@ GDAL_CONF_OPTS = \
- 	--without-cryptopp \
- 	--without-curl \
- 	--without-dds \
--	--without-dods-root \
- 	--without-ecw \
- 	--without-expat \
- 	--without-exr \
- 	--without-fgdb \
--	--without-fme \
- 	--without-freexl \
- 	--without-geos \
- 	--without-gnm \
- 	--without-libkml \
- 	--without-lz4 \
--	--without-grass \
--	--without-libgrass \
- 	--without-gta \
- 	--without-hdf4 \
- 	--without-hdf5 \
- 	--without-hdfs \
- 	--without-heif \
- 	--without-idb \
--	--without-ingres \
- 	--without-jp2lura \
--	--without-jasper \
- 	--without-java \
- 	--without-jpeg12 \
- 	--without-jxl \
--	--without-charls \
- 	--without-kakadu \
- 	--without-kea \
- 	--without-lerc \
- 	--without-gif \
- 	--without-liblzma \
- 	--without-libdeflate \
--	--without-mdb \
--	--without-mongocxx \
- 	--without-mongocxxv3 \
- 	--without-mrsid \
- 	--without-jp2mrsid \
- 	--without-macosx-framework \
--	--without-mrsid_lidar \
- 	--without-msg \
- 	--without-mysql \
- 	--without-netcdf \
-@@ -92,7 +82,6 @@ GDAL_CONF_OPTS = \
- 	--without-pcre \
- 	--without-pcre2 \
- 	--without-pdfium \
--	--without-perl \
- 	--without-podofo \
- 	--without-poppler \
- 	--without-python \
+ # Buildroot version to use
+-RELEASE='2022.05'
++RELEASE='2022.05.1'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
