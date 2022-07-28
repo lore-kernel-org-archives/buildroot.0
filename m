@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9553DC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 21:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A624C04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 21:05:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20F19415B9;
-	Thu, 28 Jul 2022 21:05:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20F19415B9
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD101415B5;
+	Thu, 28 Jul 2022 21:05:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD101415B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l4RQ6b0Ty-Fo; Thu, 28 Jul 2022 21:05:09 +0000 (UTC)
+	with ESMTP id RvhQVB0LxIam; Thu, 28 Jul 2022 21:05:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E57B0415A6;
-	Thu, 28 Jul 2022 21:05:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E57B0415A6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9CFFF1BF3C2
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:04:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FD85415A4;
+	Thu, 28 Jul 2022 21:05:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FD85415A4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AA871BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:05:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 744444014C
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:04:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 744444014C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0836960A73
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:05:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0836960A73
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FnmYRalBY_iO for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 21:04:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BFF5415A4
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 21:04:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BFF5415A4
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 25A108681C; Thu, 28 Jul 2022 20:51:03 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 23:04:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4e2567861a81abb963d9317cf5337b57533ad6b1
-X-Git-Newrev: 07aa585aa6517eeb7f805b4d84a9667be4b3e259
-X-Patchwork-Hint: ignore
-Message-Id: <20220728205103.25A108681C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Makefile: always delete hwdb sources
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5rUfIgPWtpii for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 21:05:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF31060812
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DF31060812
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 21:05:06 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6A72A240005;
+ Thu, 28 Jul 2022 21:05:04 +0000 (UTC)
+Date: Thu, 28 Jul 2022 23:05:03 +0200
+To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+Message-ID: <20220728230503.5bf0a582@windsurf>
+In-Reply-To: <20220728193726.1465662-1-arnout@mind.be>
+References: <20220728193726.1465662-1-arnout@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659042305;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ZziMRxPt4y8IUwzQDUkxCSnx5oA1/GfrBrWIPUJiki4=;
+ b=JlDrQCeUCfXyb2cBq1BvJv7YxhubXUCdzDEsU2+1UsbbVoodm3R/yXVAS1CxOKg+y7yK0U
+ AClL8byd5STU4j8gcwmLOGSCcYy0mmzWJLYWZ/eEQrlmfxupuLnDm3A8X5Igpsfs7PIEH9
+ wQR6bcKSz3FC/CNdi7wSpiNB7wufKLepCitLvpBM8uf/HR8fqal0locKE79UnpvZpuw2vs
+ t87QaceuygPy8puJj5PPDwHw9o5rlHIoSYzpaZdk4rwfn0IZ9iTOOevfRl2TnHHpWMv6Jd
+ Xl27qFUXTOQFJdgy5ek9Ni+kPfK3G6OuDdtLjMRsRKJst44UVsQyallNfI2AZg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JlDrQCeU
+Subject: Re: [Buildroot] [PATCH 1/2] package/eudev: remove
+ HOST_EUDEV_SYSCONFDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,95 +78,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>, Sen Hastings <sen@phobosdpl.com>,
+ buildroot@buildroot.org, Norbert Lange <nolange79@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07aa585aa6517eeb7f805b4d84a9667be4b3e259
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 28 Jul 2022 21:37:25 +0200
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
 
-In eudev and systemd, we have code that deletes the hwdb sources from
-the target - they are not useful since a binary hwdb is created from
-them. However, if eudev or systemd is not used, then those sources are
-not useful either. It's possible that other packages than eudev or
-systemd install hwdb files, which would be left on the system.
+> The HOST_EUDEV_SYSCONFDIR is a leftover from before eudev, when udev was
+> still built from systemd sources. Now that we have a separate file for
+> eudev and systemd, there's no need any more to have a condition there.
+> In addition, its usage in systemd.mk has been removed.
+> 
+> Remove the HOST_EUDEV_SYSCONFDIR variable and instead use /etc directly
+> in eudev.mk.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/eudev/eudev.mk | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
-Always remove the hwdb files.
+Both applied, thanks!
 
-Note that we don't expect much space savings from this, but anything may
-help. It's certainly more consistent to do it always than just in eudev
-and systemd.
-
-We do this both from /usr/lib/udev (usual installation path for systemd)
-and in /etc/udev (usual installation path for eudev) because packages
-may install in either location.
-
-We keep the comment explaining why it's done in rootfs-pre-cmd instead
-of target-finalize - this was only present in eudev.mk.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Makefile                   | 8 ++++++++
- package/eudev/eudev.mk     | 8 --------
- package/systemd/systemd.mk | 5 -----
- 3 files changed, 8 insertions(+), 13 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index f116ccb5bc..e30e778346 100644
---- a/Makefile
-+++ b/Makefile
-@@ -807,6 +807,14 @@ endif # merged /usr
- 
- 	touch $(TARGET_DIR)/usr
- 
-+# Note: this will run in the filesystem context, so will use a copy
-+# of target/, not the real one, so the files are still available on
-+# re-builds (foo-rebuild, etc...)
-+define ROOTFS_RM_HWDB_DATA
-+	rm -rf $(TARGET_DIR)/usr/lib/udev/hwdb.d/ $(TARGET_DIR)/etc/udev/hwdb.d/
-+endef
-+ROOTFS_PRE_CMD_HOOKS += ROOTFS_RM_HWDB_DATA
-+
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
- 	@rm -f $(ROOTFS_COMMON_TAR)
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index f050563feb..feb5505289 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -81,13 +81,5 @@ define HOST_EUDEV_BUILD_HWDB
- endef
- HOST_EUDEV_TARGET_FINALIZE_HOOKS += HOST_EUDEV_BUILD_HWDB
- 
--# Note: this will run in the filesystem context, so will use a copy
--# of tharget/, not the real one, so the files are still available on
--# re-builds (foo-rebuild, etc...)
--define HOST_EUDEV_RM_HWDB_SRC
--	rm -rf $(TARGET_DIR)/etc/udev/hwdb.d/
--endef
--HOST_EUDEV_ROOTFS_PRE_CMD_HOOKS += HOST_EUDEV_RM_HWDB_SRC
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 19fd525534..1d7452de19 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -732,11 +732,6 @@ endef
- SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_UPDATE_CATALOGS
- endif
- 
--define SYSTEMD_RM_HWDB_DATA
--	rm -rf $(TARGET_DIR)/usr/lib/udev/hwdb.d/ $(TARGET_DIR)/etc/udev/hwdb.d/
--endef
--SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_HWDB_DATA
--
- define SYSTEMD_RM_CATALOG_UPDATE_SERVICE
- 	rm -rf $(TARGET_DIR)/usr/lib/systemd/catalog \
- 		$(TARGET_DIR)/usr/lib/systemd/system/systemd-journal-catalog-update.service \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
