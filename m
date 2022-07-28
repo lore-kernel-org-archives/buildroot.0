@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B499EC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 21:04:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9553DC04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 21:05:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D8D4826B4;
-	Thu, 28 Jul 2022 21:04:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D8D4826B4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20F19415B9;
+	Thu, 28 Jul 2022 21:05:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20F19415B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EB43eJuDvehC; Thu, 28 Jul 2022 21:04:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l4RQ6b0Ty-Fo; Thu, 28 Jul 2022 21:05:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DD5182662;
-	Thu, 28 Jul 2022 21:04:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DD5182662
+	by smtp4.osuosl.org (Postfix) with ESMTP id E57B0415A6;
+	Thu, 28 Jul 2022 21:05:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E57B0415A6
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 739081BF3C2
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:04:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9CFFF1BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:04:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CD9A415A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 744444014C
  for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 21:04:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CD9A415A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 744444014C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9UjwkVzG2WcP for <buildroot@lists.busybox.net>;
+ with ESMTP id FnmYRalBY_iO for <buildroot@lists.busybox.net>;
  Thu, 28 Jul 2022 21:04:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42A6A4014C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4BFF5415A4
  for <buildroot@buildroot.org>; Thu, 28 Jul 2022 21:04:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42A6A4014C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BFF5415A4
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 199278681A; Thu, 28 Jul 2022 20:51:03 +0000 (UTC)
+ id 25A108681C; Thu, 28 Jul 2022 20:51:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 23:04:10 +0200
+Date: Thu, 28 Jul 2022 23:04:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8b9014e762c9810d09b49c4132d9306fc333ebd6
-X-Git-Newrev: 4e2567861a81abb963d9317cf5337b57533ad6b1
+X-Git-Oldrev: 4e2567861a81abb963d9317cf5337b57533ad6b1
+X-Git-Newrev: 07aa585aa6517eeb7f805b4d84a9667be4b3e259
 X-Patchwork-Hint: ignore
-Message-Id: <20220728205103.199278681A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/eudev: remove HOST_EUDEV_SYSCONFDIR
+Message-Id: <20220728205103.25A108681C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Makefile: always delete hwdb sources
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e2567861a81abb963d9317cf5337b57533ad6b1
+commit: https://git.buildroot.net/buildroot/commit/?id=07aa585aa6517eeb7f805b4d84a9667be4b3e259
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The HOST_EUDEV_SYSCONFDIR is a leftover from before eudev, when udev was
-still built from systemd sources. Now that we have a separate file for
-eudev and systemd, there's no need any more to have a condition there.
-In addition, its usage in systemd.mk has been removed.
+In eudev and systemd, we have code that deletes the hwdb sources from
+the target - they are not useful since a binary hwdb is created from
+them. However, if eudev or systemd is not used, then those sources are
+not useful either. It's possible that other packages than eudev or
+systemd install hwdb files, which would be left on the system.
 
-Remove the HOST_EUDEV_SYSCONFDIR variable and instead use /etc directly
-in eudev.mk.
+Always remove the hwdb files.
+
+Note that we don't expect much space savings from this, but anything may
+help. It's certainly more consistent to do it always than just in eudev
+and systemd.
+
+We do this both from /usr/lib/udev (usual installation path for systemd)
+and in /etc/udev (usual installation path for eudev) because packages
+may install in either location.
+
+We keep the comment explaining why it's done in rootfs-pre-cmd instead
+of target-finalize - this was only present in eudev.mk.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/eudev/eudev.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ Makefile                   | 8 ++++++++
+ package/eudev/eudev.mk     | 8 --------
+ package/systemd/systemd.mk | 5 -----
+ 3 files changed, 8 insertions(+), 13 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index f116ccb5bc..e30e778346 100644
+--- a/Makefile
++++ b/Makefile
+@@ -807,6 +807,14 @@ endif # merged /usr
+ 
+ 	touch $(TARGET_DIR)/usr
+ 
++# Note: this will run in the filesystem context, so will use a copy
++# of target/, not the real one, so the files are still available on
++# re-builds (foo-rebuild, etc...)
++define ROOTFS_RM_HWDB_DATA
++	rm -rf $(TARGET_DIR)/usr/lib/udev/hwdb.d/ $(TARGET_DIR)/etc/udev/hwdb.d/
++endef
++ROOTFS_PRE_CMD_HOOKS += ROOTFS_RM_HWDB_DATA
++
+ .PHONY: target-post-image
+ target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+ 	@rm -f $(ROOTFS_COMMON_TAR)
 diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 705370689d..f050563feb 100644
+index f050563feb..feb5505289 100644
 --- a/package/eudev/eudev.mk
 +++ b/package/eudev/eudev.mk
-@@ -57,13 +57,12 @@ endef
- 
- HOST_EUDEV_DEPENDENCIES = host-gperf host-pkgconf
- 
--HOST_EUDEV_SYSCONFDIR = $(if $(BR2_PACKAGE_SYSTEMD),/usr/lib,/etc)
- HOST_EUDEV_CONF_OPTS = \
- 	--prefix=/usr \
- 	--sbindir=/sbin \
- 	--libexecdir=/lib \
- 	--with-rootlibdir=/lib \
--	--sysconfdir=$(HOST_EUDEV_SYSCONFDIR) \
-+	--sysconfdir=/etc \
- 	--disable-blkid \
- 	--disable-introspection \
- 	--disable-kmod \
-@@ -86,7 +85,7 @@ HOST_EUDEV_TARGET_FINALIZE_HOOKS += HOST_EUDEV_BUILD_HWDB
- # of tharget/, not the real one, so the files are still available on
- # re-builds (foo-rebuild, etc...)
- define HOST_EUDEV_RM_HWDB_SRC
--	rm -rf $(TARGET_DIR)/$(HOST_EUDEV_SYSCONFDIR)/udev/hwdb.d/
-+	rm -rf $(TARGET_DIR)/etc/udev/hwdb.d/
+@@ -81,13 +81,5 @@ define HOST_EUDEV_BUILD_HWDB
  endef
- HOST_EUDEV_ROOTFS_PRE_CMD_HOOKS += HOST_EUDEV_RM_HWDB_SRC
+ HOST_EUDEV_TARGET_FINALIZE_HOOKS += HOST_EUDEV_BUILD_HWDB
  
+-# Note: this will run in the filesystem context, so will use a copy
+-# of tharget/, not the real one, so the files are still available on
+-# re-builds (foo-rebuild, etc...)
+-define HOST_EUDEV_RM_HWDB_SRC
+-	rm -rf $(TARGET_DIR)/etc/udev/hwdb.d/
+-endef
+-HOST_EUDEV_ROOTFS_PRE_CMD_HOOKS += HOST_EUDEV_RM_HWDB_SRC
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 19fd525534..1d7452de19 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -732,11 +732,6 @@ endef
+ SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_UPDATE_CATALOGS
+ endif
+ 
+-define SYSTEMD_RM_HWDB_DATA
+-	rm -rf $(TARGET_DIR)/usr/lib/udev/hwdb.d/ $(TARGET_DIR)/etc/udev/hwdb.d/
+-endef
+-SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_HWDB_DATA
+-
+ define SYSTEMD_RM_CATALOG_UPDATE_SERVICE
+ 	rm -rf $(TARGET_DIR)/usr/lib/systemd/catalog \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/systemd-journal-catalog-update.service \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
