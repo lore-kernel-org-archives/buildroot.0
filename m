@@ -1,134 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C457C04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 02:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22980C04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 06:07:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3194982C38;
-	Thu, 28 Jul 2022 02:15:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3194982C38
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E4C260EB1;
+	Thu, 28 Jul 2022 06:07:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E4C260EB1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C1XcyxVPvRaN; Thu, 28 Jul 2022 06:07:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 707CE60E45;
+	Thu, 28 Jul 2022 06:07:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 707CE60E45
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F40951BF364
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 06:07:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF49082BC4
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 06:07:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF49082BC4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ltT7L4FnxBfS; Thu, 28 Jul 2022 02:15:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AD3482A0B;
-	Thu, 28 Jul 2022 02:15:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AD3482A0B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 796B51BF94B
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 02:15:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E8FC41774
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 02:15:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E8FC41774
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 83L9eTXuBNsv for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 02:15:45 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tKm2FK4zJ8-0 for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 06:07:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D99841719
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam11on2118.outbound.protection.outlook.com [40.107.223.118])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1D99841719
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 02:15:44 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oTexNuHyiUP+RNRUo2X8kXOUSk4K4BsgOUdWqhL8feq/ox9vv3VE41QknhQWpAG38onR9bsffArOziHEJMoJARS1HzTVXA+51H1HwViiXyuGXLWiK0YJt0FB8P11MPVWEXgvywPnUBSTLQowskI1zsaDhaii+3tCcSEuEwwQXDqE4FH/TOY1uffJLaoe9970lJ93BmiwmC/LXv2gLUgviJSY0N5uKsvbJHC5Bnn6/QQUEDVQ6SJaaRbVYwBgW/vOSs9tLGmHVAcAaQcYwAmdLS67zdn+ZFmgWYXRSsDCdUtt4eLAcfhQ05YlEfyjKfkysYAWPnbk72/Lbv6sVkx4wQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EKa90j6tdHPlZO/GiwMAbVhrzI8kHy+xjeuoleBPW6U=;
- b=Q2kslgagVYnig65XSpihiKR9u2AzT+M9Gtx9r1HBv9eCs+hgd0XEAbrueVA5ZupGEvc+WkNh991yexFjOWS2d1M2J5JI70yXC5iZKbE1ETpKTKNHB+2FTq98CNN06WUYmQlvTsTEgGY7qJI3umw2OrAhCkbTzUdH4PSGHIDgCNXZ9M24T7wV3PAuQgwRE5yug1zNYTyKVEaPmtIqjPIkZUIHAFAqFQt26L0IKptGxdq75AbCF+E3L53nh6MMxAjGaNUXmFvGblCLs4HVyebcwJir0WvKmxBV3Aex2eWIdl2qQMO/RuJO+kjeZlRaoexZ7kx9dRdjhpcU+7fMNsHQEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=phobosdpl.com; dmarc=pass action=none
- header.from=phobosdpl.com; dkim=pass header.d=phobosdpl.com; arc=none
-Received: from CH2PR17MB3512.namprd17.prod.outlook.com (2603:10b6:610:3b::30)
- by CY4PR17MB0950.namprd17.prod.outlook.com (2603:10b6:903:a1::12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.25; Thu, 28 Jul
- 2022 02:15:42 +0000
-Received: from CH2PR17MB3512.namprd17.prod.outlook.com
- ([fe80::e828:d088:296:c]) by CH2PR17MB3512.namprd17.prod.outlook.com
- ([fe80::e828:d088:296:c%4]) with mapi id 15.20.5482.006; Thu, 28 Jul 2022
- 02:15:42 +0000
-From: Sen Hastings <sen@phobosdpl.com>
-To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 21:14:44 -0500
-Message-Id: <20220728021444.135820-3-sen@phobosdpl.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220728021444.135820-1-sen@phobosdpl.com>
-References: <20220728021444.135820-1-sen@phobosdpl.com>
-X-ClientProxiedBy: SA9PR03CA0002.namprd03.prod.outlook.com
- (2603:10b6:806:20::7) To CH2PR17MB3512.namprd17.prod.outlook.com
- (2603:10b6:610:3b::30)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21B7282B08
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 21B7282B08
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 06:07:40 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id oy13so1400423ejb.1
+ for <buildroot@buildroot.org>; Wed, 27 Jul 2022 23:07:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=QJ92uGFNPRJkWio4wLQgC6HAuwq9xBmAXy16YXUutWk=;
+ b=DGTkAaJ0CMgx3OggUmDH+9/mynUcfoBVMfKgW6Bqh9M23fhZFQpAsPDBKtxKeuSDb6
+ dAl8aNGWvLDWqkHNQcj8mu01k7gGZ0WbajsVBkT0yySsiLYSPLrdqpIL9DejZdPs7BGC
+ 427qy0bL7FUni3Omn/tM/K88Duxv3jIjuTrQqvrhxHRbOPKRz/j5ZMHgLQzBLPA/PNU5
+ JpQaf2Pi1GzN2svOdMek2pGS8bSXUt4k9XlcmBpsA5OFmr2lWCpefTz+DgGyRh/I1mcM
+ n+OhNtbZ+KxOdoObgj2ENUYeQtEtlmHIe1ZWcEbKY0Xu763olcc64GsZ/NNyrjD3jdNh
+ d0CA==
+X-Gm-Message-State: AJIora8VIty152UlkyH0XaqvwFRciYQ56cUQFaPnj2+dlqJWpRRLA0Aw
+ kj9GvnGb7JhfzUw3+pWbatQGLM47X+6z2Z2rIOuAxQ==
+X-Google-Smtp-Source: AGRyM1uDYtHKT1vGcFNyz63piWQR+LvfRsWwozMurWg/N5WpBk04L9skmhgwxj7VDBHi0y2TrHYnbFU5HFP+UnyY6T8=
+X-Received: by 2002:a17:907:1c8a:b0:6e9:2a0d:d7b7 with SMTP id
+ nb10-20020a1709071c8a00b006e92a0dd7b7mr19488832ejc.572.1658988459111; Wed, 27
+ Jul 2022 23:07:39 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: eee204bb-3d49-469b-0186-08da703f1290
-X-MS-TrafficTypeDiagnostic: CY4PR17MB0950:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iphGqMLETQZFBtVB1I0WJmUFqgwH9bABm9ZOCQDTcPfnREk88h7wp32eS2dAYLeXTIR7uCJ2FVjjtGNmS1n4Xo7EPDC7GSx8/sdJB1c9tw86K8H3EGztdk6XiiI5E2sG8+IgaNq5/K2//ql9mz2i6iWRt4kTEKzPPainp7w0WcAJkU7MhVua/+7j+8Gekhg0JeIE0iA0hn+Lown6KXDZ0BVCHu+xiV4pp6itZLUEm5bEfaRVOSmg5GaHgmTSNFx9VPN/Oos9WdhKJepeXkqNOaDrJwk8DqdoITCgsqkyjfesy9Ss6t1lL6PHiikZ31McelHjhmzywC4UtoMQKLGEKtSN26BJI/YkOb3jBxgM7KdBe2UolhLVtl9B5qq7FWZSfeTSB2hOeVGC3BAJ40b6F2NOCq1MaGlqoUOESefsnYM26iDPiNEpIN4SAi5PqLRx74gljTEf8UwmIdgdW3Ab1mbg90YyBxtEd/Ldf94s23HcfPcIX9VhLb9BdiM977neQGREfuT3DkE1VT4KmSxYfgV0uEMOGAsaCpIHAkKFBJCoWc/olEqOjHP3quumtIim7V11x0A5qrnAezfkAeAxE35tjXdXY9r4LHeezPq5FMZA+FQsov0vZ0Dwcq93wVDiibjuIjC/6Ekxu+hh9G0H9dShXzWZqPCO32xj4NCBh4x7NnnBUPvMBz3Im//mMABHDmGWiS2x1Cgvu5rBuXJZkwCYWNzAxUG0abUzcC/qAFpK+kda0F0ScYZ/4qHpH8JumNFgmIlQRraXeRGEVPC5HVgD4TCQNV5Qr3iJh+7hOjNy6V4WfU/lF5M+qLWCS08KDTIBo6kGQfR8mE3tHGBGBw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR17MB3512.namprd17.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(376002)(396003)(136003)(39830400003)(346002)(366004)(38350700002)(8936002)(8676002)(54906003)(38100700002)(5660300002)(6486002)(316002)(66556008)(66946007)(4326008)(36756003)(186003)(6916009)(66476007)(86362001)(6506007)(478600001)(41300700001)(1076003)(26005)(52116002)(2616005)(6512007)(2906002)(83380400001)(4210325003);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?g92MKmtwFUGHwe7N5adrHMWoAOdTG5MnLUxErlqkbxQR6Yl/nSHGd54sMfeN?=
- =?us-ascii?Q?ZkD5ybxk3z5J8KPQLibF3/m9EMW7YEC++VPz0GyUZa5BLHBD1euTs6n4UHW+?=
- =?us-ascii?Q?olCHeid8dfSJAEYSqB9kq3jd93nUQ/4jPQZhbZkrs9XH5XLzoXi1B8fEZMBJ?=
- =?us-ascii?Q?a8n/XtgahAwGr3jO9hlfDWi/zTN4ABrw6u8JLw5k+65FIKO3/bsmOzlX0IJs?=
- =?us-ascii?Q?fh3ftdprq9Y6EffihOJAY75bY9sdcG3ULEfUECVOToAxlZ844cqcjHyTZjgi?=
- =?us-ascii?Q?IkyIXIT1X6t33SN9+IMy4J9v12E4guIsNq7MIWlvIyjgqxyTTYnjEpoCq/4/?=
- =?us-ascii?Q?etqNB7J63gEMQau6j9O63ha+wf2+TjFVQgsLvRtDgBQPOTBRPOXBTtsvVIEC?=
- =?us-ascii?Q?6XOJJxpy7JGt/5Q0b6Zz0JteuV2dhk1zhz9fGaapVc9Q7xYP6TL6uZy0AVGw?=
- =?us-ascii?Q?F7GbGW6nhmi6dmwHq7tuKzV2Lp0q+DhDoDpl/p/uYZosK7QeCB+A71YQwmKW?=
- =?us-ascii?Q?XHQp1JvV+Yec+8Tfu74TaePmHXcbn/7UBFS7Q/nzLokweAi8RnSB5ifdzvLl?=
- =?us-ascii?Q?58O9BpHoLMg9t8E3R9yUUGxkCOVGuXAirDEjX3oAPMV7ORu/yVlX11kyZc25?=
- =?us-ascii?Q?yFThayn7Nd3SGuuiGqUzwmoDHWRNS5Czfo7CwpdUpxj1h2GyGs3IWmbQGxU6?=
- =?us-ascii?Q?7dyVs3YKeLO1dsXvOj96eobrSy5ooY48bEg5KRSu8B/jPRkrrb1OMDJMjUBM?=
- =?us-ascii?Q?/RUo8mEDYEbOqSEOpOO0xzdPw+0+L9UjDa6tfIJoxy+6AdAsgqf0B3CSDnpR?=
- =?us-ascii?Q?Pl6oHXe0tbXprXXgc8bzdJ7F08feERYFM72j2PTojqhwBNyS7o0373qfEdkg?=
- =?us-ascii?Q?vpinQ02k/qy2IwTxv/di2lQg+dxuycPZuGS4eUNCalHYhb2XD/w2+stPiPdE?=
- =?us-ascii?Q?g75Q7R9IxFmiF2DkPeKtMN5ZsxqUIDy8gY1/XP4hFZL6S7x9Ber8kWaeTCyX?=
- =?us-ascii?Q?3uvo80hJwLFMIGCnM8QdJMaJAtmKD+wYCBefOjMhBSEkWeojnT5xKFFs4Szg?=
- =?us-ascii?Q?AozwIxqyO5ciffsq1/2AZXRfrbvEaagcPDEpStPLRPf403wl2ZkopDPhtPbU?=
- =?us-ascii?Q?62SrAFK8qK0bYD1VQHfjLhQ7DMJnS5jDX25BSvL6qkavU7+OaHDGuoLLX+RK?=
- =?us-ascii?Q?248QuwWmrT8Z1n613lkIF+goKimm5JhoMYEaeFrNDm3jsz9GYIYqMmT3vWzP?=
- =?us-ascii?Q?+L3FpfO3xYKiplztwlodgJPdaQi+N2cahVWv1ozQGhBLDw9LfCOMSOXdHTx6?=
- =?us-ascii?Q?o+224qGhvElFK3jIrrDXeRZnvTdOXDk8JDf7IRhwCCkrkqdv/MVi5AtgEqGa?=
- =?us-ascii?Q?+PdNgc2uijyqzYBmgtPd/sUAifjk5StY2anwjKN4s+7ZIE/Y2FdRK0MQ6KMd?=
- =?us-ascii?Q?fdh4sZ8XIxPhXwM6LbGfcYh0Ub7oDGqYXvQd7u37wmODuMd1wsgY/owKuIMY?=
- =?us-ascii?Q?g4aAq2lpaCZSGif39nTPR7NUXb5zvsCOrbkCigWtg0A2kOx69ZxrQFRNo+B1?=
- =?us-ascii?Q?k9UfR2UQZ5zl9uBt8hGK64B9UouDe4O4wZSreofr?=
-X-OriginatorOrg: phobosdpl.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eee204bb-3d49-469b-0186-08da703f1290
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR17MB3512.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 02:15:42.4430 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 07b76dd5-c518-427b-a15a-2e07dfd0130a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z3yXJhBBUSOzZHPeUPz1yIQZRHXgXjbDQ/M6D8U4q1a/Ueq0RkmJ80ExC6iyNXIhoE6TGA0LmN02Zy6Ebi9diw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR17MB0950
+References: <20211210141209.1812043-1-jose.pekkarinen@unikie.com>
+ <20211210141209.1812043-7-jose.pekkarinen@unikie.com>
+ <20220726102142.71da58e4@windsurf>
+In-Reply-To: <20220726102142.71da58e4@windsurf>
+Date: Thu, 28 Jul 2022 09:07:03 +0300
+Message-ID: <CAJPV9MqbH=-7WHDPPxZ6EJ5qoarUfyun-EGXs7tcXp3kcasytg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=centc.onmicrosoft.com; 
- s=selector2-centc-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EKa90j6tdHPlZO/GiwMAbVhrzI8kHy+xjeuoleBPW6U=;
- b=gJfq7MKCLOCXqXRgxelyH1ieMNK8qapM0NW4Mhu3kGKMQOwIF4lrGtTycLWvRtz9oNISPI9b5EnwhtT8D13W/d0K50Ngfrcv2GZQNUjP3KgEvuGk0+20lCxdX0HR5uPNE46f6p4YotNOBZD/VBS2eilyyb0srgY3WPO2DiMviNY=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=centc.onmicrosoft.com
- header.i=@centc.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-centc-onmicrosoft-com header.b=gJfq7MKC
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=phobosdpl.com;
-Subject: [Buildroot] [PATCH 2/2] support/scripts/pkg-stats: fixed sortGrid()
- performance
+ d=unikie.com; s=google;
+ h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+ :cc;
+ bh=QJ92uGFNPRJkWio4wLQgC6HAuwq9xBmAXy16YXUutWk=;
+ b=DlhzrsGn7iaXUUefIf9S0uuDkVOOb4lDpjX91Uwi2AscGrvdfjcqMIQn7Fq/ZNq67H
+ h4w8Gq4LSOq5vrnxWMmzilAEwnjg9k+c5MwrGAUUDpH/hPiEzGjYqp54pj08thHy5ONP
+ NRy5NQs9Ptt39qBr/1AcdEIu5DxfnKsKFAmrRLzobxqHAY2XuUQV+2f6851YB+5LDF0I
+ ynvgy41DM0gvumGUkCe9qOLJyJVnqPRt4r9wgupzWucM0PUe58qpEEfaop6FEiEi2r2x
+ vSoNFUaa2EszcuMc+Hy84qlrsi7QkJBhbMtIeMg+K9fmnefuPvxmOkpk6hlmfHPIKReP
+ PZOQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=unikie.com header.i=@unikie.com
+ header.a=rsa-sha256 header.s=google header.b=DlhzrsGn
+Subject: Re: [Buildroot] [PATCH 7/7] package/avocado-vt: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -140,156 +89,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@phobosdpl.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Jos=C3=A9_Pekkarinen_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?UTF-8?Q?Jos=C3=A9_Pekkarinen?= <jose.pekkarinen@unikie.com>
+Cc: buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============4954038501624014545=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-sortGrid() has been rewritten to dynamically generate stylesheets with
-explicit grid-row properties to re-order the rows, instead of removing
-and reinserting the cells.
-Performance *should* now be comperable to sorttable.js.
+--===============4954038501624014545==
+Content-Type: multipart/alternative; boundary="000000000000cad61305e4d75918"
 
-Signed-off-by: Sen Hastings <sen@phobosdpl.com>
----
- support/scripts/pkg-stats | 116 +++++++++++++++++++++-----------------
- 1 file changed, 64 insertions(+), 52 deletions(-)
+--000000000000cad61305e4d75918
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index d3ec65edbb..d795131cef 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -744,60 +744,72 @@ html_header = """
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1">
- <script>
-+const triangleUp = String.fromCodePoint(32, 9652);
-+const triangleDown = String.fromCodePoint(32, 9662);
-+var lastColumnName = false;
-+
- function sortGrid(sortLabel){
-+	let i = 0;
- 	let pkgSortArray = [], sortedPkgArray = [], pkgStringSortArray = [], pkgNumSortArray = [];
--	let columnValues = Array.from(document.getElementsByClassName(sortLabel));
--
--	columnValues.shift();
--	columnValues.forEach((listing) => {
--		let sortArr = [];
--		sortArr[0] = listing.id.replace(sortLabel+"_", "");
--		if (!listing.innerText){
--			sortArr[1] = -1;
--		} else {
--			sortArr[1] = listing.innerText;
--		};
--		pkgSortArray.push(sortArr);
--	})
--	pkgSortArray.forEach((listing) => {
--		if ( isNaN(parseInt(listing[1], 10)) ){
--			pkgStringSortArray.push(listing);
--		} else {
--			listing[1] = parseFloat(listing[1]);
--			pkgNumSortArray.push(listing);
--		};
--	})
--	sortedStringPkgArray = pkgStringSortArray.sort(function(a, b) {
--		const nameA = a[1].toUpperCase(); // ignore upper and lowercase
--		const nameB = b[1].toUpperCase(); // ignore upper and lowercase
--		if (nameA < nameB) { return -1;	};
--		if (nameA > nameB) { return 1; };
--		return 0;   // names must be equal
--	});
--	sortedNumPkgArray = pkgNumSortArray.sort(function(a, b) {
--		return a[1] - b[1];
--	});
--
--	let triangleUp = String.fromCodePoint(32, 9652);
--	let triangleDown = String.fromCodePoint(32, 9662);
--	let columnName = document.getElementById(sortLabel);
--
--	if (columnName.lastElementChild.innerText == triangleDown) {
--		columnName.lastElementChild.innerText = triangleUp;
--		sortedStringPkgArray.reverse();
--		sortedNumPkgArray.reverse();
--		sortedPkgArray = sortedNumPkgArray.concat(sortedStringPkgArray)
--	} else {
--		columnName.lastElementChild.innerText = triangleDown;
--		sortedPkgArray = sortedStringPkgArray.concat(sortedNumPkgArray)
--	}
--
--	sortedPkgArray.forEach((listing) => {
--		let row = Array.from(document.getElementsByClassName(listing[0]));
--		let packageGrid = document.getElementById("package-grid");
--		row.forEach((element) => { packageGrid.append(element)});
--	})
--}
-+	const columnValues = Array.from(document.getElementsByClassName(sortLabel));
-+	const columnName = document.getElementById(sortLabel);
-+	let lastStyle = document.getElementById("sort-css");
-+
-+	if (lastStyle){
-+		lastStyle.disable = true;
-+		lastStyle.remove();
-+	};
-+	const styleElement = document.createElement('style');
-+	styleElement.id = "sort-css";
-+	document.head.appendChild(styleElement);
-+	const styleSheet = styleElement.sheet;
-+
-+        columnValues.shift();
-+        columnValues.forEach((listing) => {
-+                let sortArr = [];
-+                sortArr[0] = listing.id.replace(sortLabel+"_", "");
-+                if (!listing.innerText){
-+                        sortArr[1] = -1;
-+                } else {
-+                        sortArr[1] = listing.innerText;
-+                };
-+                pkgSortArray.push(sortArr);
-+        });
-+        pkgSortArray.forEach((listing) => {
-+                if ( isNaN(parseInt(listing[1], 10)) ){
-+                        pkgStringSortArray.push(listing);
-+                } else {
-+                        listing[1] = parseFloat(listing[1]);
-+                        pkgNumSortArray.push(listing);
-+                };
-+        });
-+
-+        let sortedStringPkgArray = pkgStringSortArray.sort((a, b) => {
-+                if (a[1].toUpperCase() < b[1].toUpperCase()) { return -1; };
-+                if (a[1].toUpperCase() > b[1].toUpperCase()) { return 1; };
-+                return 0;
-+        });
-+        let sortedNumPkgArray = pkgNumSortArray.sort((a, b) => a[1] - b[1]);
-+
-+        if (columnName.lastElementChild.innerText == triangleDown) {
-+                columnName.lastElementChild.innerText = triangleUp;
-+                sortedStringPkgArray.reverse();
-+                sortedNumPkgArray.reverse();
-+                sortedPkgArray = sortedNumPkgArray.concat(sortedStringPkgArray);
-+        } else {
-+                columnName.lastElementChild.innerText = triangleDown;
-+                sortedPkgArray = sortedStringPkgArray.concat(sortedNumPkgArray);
-+        };
-+
-+	if (lastColumnName && lastColumnName != columnName){lastColumnName.lastElementChild.innerText = ""};
-+	lastColumnName = columnName;
-+	sortedPkgArray.unshift(["label"]);
-+        sortedPkgArray.forEach((listing) => {
-+		i++;
-+		let rule = "." + listing[0] + " { grid-row: " + i + "; }";
-+		styleSheet.insertRule(rule);
-+        });
-+};
- </script>
- 
- <style>
--- 
-2.34.1
+On Tue, Jul 26, 2022 at 11:21 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> Hello Jos=C3=A9,
+>
+> On Fri, 10 Dec 2021 16:12:09 +0200
+> Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com> wrote:
+>
+> > This patch adds a basic package for avocado-vt
+> > plugin.
+> >
+> > Signed-off-by: Jos=C3=A9 Pekkarinen <jose.pekkarinen@unikie.com>
+>
+> Thanks a lot for your contribution!
+>
+> Do you have an example on how to use this in the context of Buildroot?
+>
+> First, your patch was missing lots of dependencies: python-netaddr,
+> python-netifaces, python-simplejson, and one more I can't remember.
+>
+> Then, I tried to follow
+> https://avocado-vt.readthedocs.io/en/latest/GetStartedGuide.html by
+> running "avocado vt-bootstrap --vt-type qemu" on the target, but this
+> checks if gcc is installed on the target, which obviously fails because
+> we don't support installing a compiler on the target.
+>
+> Could you show a simple example of using avocado-vt in the context of
+> Buildroot? Ideally, a runtime test in support/testing/ would be useful.
+> See support/testing/tests/package/test_avocado.py for an example test
+> case I have added for avocado itself.
+>
+
+Hi,
+
+I'm afraid, I find no traces of it being used in our records, we
+
+targeted to set it up to have a testing facility that could be used by a
+tester that never came to the table. Please feel free to ignore this patch,
+we don't need it anymore.
+
+Best regards.
+
+
+Jos=C3=A9.
+
+--000000000000cad61305e4d75918
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Tue, Jul 26, 2022 at 11:21 AM Thom=
+as Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.pet=
+azzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote=
+" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);=
+padding-left:1ex">Hello Jos=C3=A9,<br>
+<br>
+On Fri, 10 Dec 2021 16:12:09 +0200<br>
+Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkarinen@unikie.com" targ=
+et=3D"_blank">jose.pekkarinen@unikie.com</a>&gt; wrote:<br>
+<br>
+&gt; This patch adds a basic package for avocado-vt<br>
+&gt; plugin.<br>
+&gt; <br>
+&gt; Signed-off-by: Jos=C3=A9 Pekkarinen &lt;<a href=3D"mailto:jose.pekkari=
+nen@unikie.com" target=3D"_blank">jose.pekkarinen@unikie.com</a>&gt;<br>
+<br>
+Thanks a lot for your contribution!<br>
+<br>
+Do you have an example on how to use this in the context of Buildroot?<br>
+<br>
+First, your patch was missing lots of dependencies: python-netaddr,<br>
+python-netifaces, python-simplejson, and one more I can&#39;t remember.<br>
+<br>
+Then, I tried to follow<br>
+<a href=3D"https://avocado-vt.readthedocs.io/en/latest/GetStartedGuide.html=
+" rel=3D"noreferrer" target=3D"_blank">https://avocado-vt.readthedocs.io/en=
+/latest/GetStartedGuide.html</a> by<br>
+running &quot;avocado vt-bootstrap --vt-type qemu&quot; on the target, but =
+this<br>
+checks if gcc is installed on the target, which obviously fails because<br>
+we don&#39;t support installing a compiler on the target.<br>
+<br>
+Could you show a simple example of using avocado-vt in the context of<br>
+Buildroot? Ideally, a runtime test in support/testing/ would be useful.<br>
+See support/testing/tests/package/test_avocado.py for an example test<br>
+case I have added for avocado itself.<br></blockquote><div><br></div></div>=
+<blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div class=
+=3D"gmail_quote"><div>Hi,</div><div><br></div></div></blockquote><blockquot=
+e style=3D"margin:0 0 0 40px;border:none;padding:0px"><div class=3D"gmail_q=
+uote"><div>I&#39;m afraid, I find no traces of it being used in our records=
+, we</div></div></blockquote>targeted to set it up to have a testing facili=
+ty that could be used by a<div>tester that never came to the table. Please =
+feel free to ignore this patch,</div><div>we don&#39;t need it anymore.</di=
+v><div><br></div><div><blockquote style=3D"margin:0 0 0 40px;border:none;pa=
+dding:0px"><div>Best regards.</div></blockquote><br><div dir=3D"ltr" class=
+=3D"gmail_signature"><div dir=3D"ltr"><blockquote style=3D"margin:0px 0px 0=
+px 40px;border:none;padding:0px">Jos=C3=A9.</blockquote></div></div></div><=
+/div>
+
+--000000000000cad61305e4d75918--
+
+--===============4954038501624014545==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4954038501624014545==--
