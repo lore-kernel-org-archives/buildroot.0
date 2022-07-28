@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4473BC04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 23:24:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE05DC19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 23:25:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D623060E94;
-	Thu, 28 Jul 2022 23:24:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D623060E94
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FA3741736;
+	Thu, 28 Jul 2022 23:25:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FA3741736
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ugB-ZvFi_Mjj; Thu, 28 Jul 2022 23:24:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ax9ddA_4SNJV; Thu, 28 Jul 2022 23:25:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 061F760E43;
-	Thu, 28 Jul 2022 23:24:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 061F760E43
+	by smtp4.osuosl.org (Postfix) with ESMTP id D97F94159F;
+	Thu, 28 Jul 2022 23:24:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D97F94159F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 125991C1190
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 23:24:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 24F831BF360
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 23:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EDD2060D5C
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 23:24:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDD2060D5C
+ by smtp3.osuosl.org (Postfix) with ESMTP id F2E6660B47
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 23:24:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2E6660B47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9-sk11fe09iy for <buildroot@lists.busybox.net>;
+ with ESMTP id xHEC_6NscKFy for <buildroot@lists.busybox.net>;
  Thu, 28 Jul 2022 23:24:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E04960B47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 135AB60ABB
 Received: from NAM11-BN8-obe.outbound.protection.outlook.com
  (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6E04960B47
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 135AB60ABB
  for <buildroot@buildroot.org>; Thu, 28 Jul 2022 23:24:30 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KX5g8x5F2u5z0CYwLin+YdESA62xolJm+0YBTq0lpGZMKkOLwc7r9bCnxYJJ5TZ0BJs0aIOYB7YxI0IX61MyneQe1n18p59hk4xM75dRNM6uAh90LnptW5As9V1tDDfqvfvRxm3waorSTpV2EG5YM4ok7a36FuZfTHe0MBaeihdwbAu26bSL/l6MBrji9kOjBCw9L41tEQoO2it16NUU8JLgajGPeLza/CB0QaYwOso6rWjwiReuGK8vjECJVR6GyA1gaah4lEh5AXoK2NrlBpo/twSbKSA7M57Z1SmGsDeWdFZBispb9CeoaaSqeZRQiHv8atJz4WlAa5zG1jUrpw==
+ b=mNt2UXg8FYfJ19bpu+Ha/dYnH+UJelbcmrbg3k8VkhCBiqu/RPH97c/8OvA6uMIovKKx+LdIsV3OQthOwHk9+k2i+fvEuS0v0kXwNPjDRtjkgcI6opoVJMdFnJVtdXtuydIQccemo3uGPhReRCRFn9QOvG3oTyi4Y/gdjlpkg07Nwx81ivITVa8OMJCZ38P76OWozjc7rTJpVhd/MYfh95r+CHBCAwofyr1RY/OTIwVxf21OlK2ZOSS+wAoJ1+QFsEg6ETJSKiw3YlijJqSEzXE3oTXrzBdHrGiTxtGn3lYJjxFBYH5mBvf/ggC/1P14ubB1EH91PfduyaN5xJZ4zQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ScMZNxmmBGVnqwtSKFLuWVmDFmjm1vGeSbJSyFg424A=;
- b=oSvyUIYbRDMvaaNkiztsv65Jj2ir/cuPYCYGA9oG3dlbSZYkKIp7noM6Jnt5qlMxw/0mdeXbVNgJRAfKfD+o1RgHUJp7rrtWI3w4gjMUXTXFSdsb+t+ImmugPWc7Rl0m5dZyiaFjD+VoTWaJ/sici5hrc06rUJcqnHQoXWNNRNMHodrj2jpt7eNTsR1hF2Dv5lMF2pxMNCSpXXu1dzJmdM/77ScW6hcIIiAwKS2e7ogYin3Pr3jvkS5RxJpSRFX4FYp9+RkifBxlkTIWvZLxTgHUgTTjyBKUry2FiPMN0nUbLI4TWy4QRHRvrg0mZYX4ksm1wT3odcuocaeLdktHMQ==
+ bh=/l/6ZXiAlMMStXIhx4t6tW2v0RblZZTBYtPgFS7rqqs=;
+ b=gJ8qjQN+qGOUVXUgCjokxmu6SstheXGWmYm55QCzd7SOhPIYz2ne3Xx/h0sL7VXGbIDIQJCoFJlag7x0dZnQJ95ZkDXoG0KhXhJf5IVb+3iibJuTuExGcIpDBh4S+jStqtzwtAz2GLA163ryudRNEM3yQYtxbtmz4InSdEaa/NSPfxVnqtEUpI1mMvzbMS+GdYbxDNcw4ubrugVXi0AngwX1LGZ09Y3tsj+79EpaaEcrj3kHg1eCxgMnCHoXRLqwOKGekq0+mD8ibTn2TYpRk6ZqVhMyuoidZtBNQTELjnK7gbp/7Yh5iFmwjWVt+1HXoyf/cI6OOvn1OCmKzNQbnw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=phobosdpl.com; dmarc=pass action=none
  header.from=phobosdpl.com; dkim=pass header.d=phobosdpl.com; arc=none
@@ -50,85 +50,83 @@ Received: from DM6PR17MB3515.namprd17.prod.outlook.com (2603:10b6:5:1de::16)
  by PH0PR17MB4688.namprd17.prod.outlook.com (2603:10b6:510:86::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.11; Thu, 28 Jul
- 2022 23:24:25 +0000
+ 2022 23:24:24 +0000
 Received: from DM6PR17MB3515.namprd17.prod.outlook.com
  ([fe80::74a0:ce3:5577:546f]) by DM6PR17MB3515.namprd17.prod.outlook.com
  ([fe80::74a0:ce3:5577:546f%7]) with mapi id 15.20.5482.011; Thu, 28 Jul 2022
- 23:24:25 +0000
+ 23:24:24 +0000
 From: Sen Hastings <sen@phobosdpl.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Jul 2022 18:23:56 -0500
-Message-Id: <20220728232357.270130-2-sen@phobosdpl.com>
+Date: Thu, 28 Jul 2022 18:23:55 -0500
+Message-Id: <20220728232357.270130-1-sen@phobosdpl.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220728232357.270130-1-sen@phobosdpl.com>
-References: <20220728232357.270130-1-sen@phobosdpl.com>
 X-ClientProxiedBy: SN6PR04CA0081.namprd04.prod.outlook.com
  (2603:10b6:805:f2::22) To DM6PR17MB3515.namprd17.prod.outlook.com
  (2603:10b6:5:1de::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 249e354e-d9e5-41cf-e992-08da70f04ed8
+X-MS-Office365-Filtering-Correlation-Id: 5ad038f6-3458-4b79-3d83-08da70f04e8a
 X-MS-TrafficTypeDiagnostic: PH0PR17MB4688:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 83gFGCXS86AM7QvUmdB+dleT6nNODhhvmgF0xAZGnC9fb4IoWx4sLCXxhoXUU/PB++bS6BcykF8PiAcbsJfdECqD9FoJBsmSZYsulbMuOz4AdZb5fG9sK1p1plg3J2R2KosQ4ErKb4t9w781zj388kAluCXcw+xvhT8kkfLUKe5jnCCZ9pxRvPod+Ra7WzGB7k905utvs77K4eHcanGxvP7/Qk8qoqHPzomZwUPQfU5BTuMkF6EJh1Mwx/qSud/QlMgKYUa16k1804mPa+GwPXB5DdfN5GzTgrtJnLLJzZ64zPWvJZZKR1Twe2/3RME/NBFNVZXX1fJ/HUmG+op9Db0XCuf+92MAP/iSN50MDf/siZ1CW0mtv7f3amJIwnGYXiSGwZwSYe+ImiAwyXLQSgDJNWjU1TvRq886Itcp6/TkQfT597n31cZBCKF3X1BJ21MW6Akw9E5FrslWdeVNLCN3634gtGtweE8gpCiiS5i/GZaiIHtwtM3l4hDKt4smQrSRofNaFhftvs4zlroVm6+WnDAnvQFY5wEEJHR2lCRzlkOZPzqvP2ZMhTA5lmWaVFKBPgkfwYK/RTSK0bpiljRiUui68qyGSa6w1Fd2YaZNUJlQhDULlCS8V99lR2lJK/ONPxlA3b5VeHdDNW18ElH5XprZmXYfilg7J+zSvh2k2u3vRa+WUL2SZZTH5qM5Dy7zgu41ajQzq4pwfX/w9ei1dtFhtwqayK7oMIxuZBU1pbxCt+x8lkEW6dNLfPbWwgja+kG1MAdH7Fj0trtZARMHc/JSmv6C3e2Hb2lJOWKreQljRp/AOPNoKqMZw1Pxigh1yEwKMTfMBS2KPtNTUw==
+X-Microsoft-Antispam-Message-Info: ldMj8LyGHPo2CO7UYeBSc4DAXlgZWL+AQg9xdPGynDbPoacaF4OssfZYSSIgh7JGEHFMQlk/rcJxB61YgC/5X32XdETCShFr1tpEOiGGPhOv47/w42QLQOffolNI0o6UWKuts15AuttTEtDVmALCjDOOPL/0salJX/G9swYhlCW522vbOGbA6lYWOBFv62dslJHMtsyHIkqZVtDPj5tiQcM+sY1u7Tl0YsHnxPwxV8aQhA+ZQNE0foZA18Rl0Fv0V6iAUYjbGF4JwgeVCLFEWfqtTJwhLGhxJqaMWn+1EtKbzV1jK+6HKh2QI5zht3q5XYUGjw+2niixklOlvcUcKZnxA31prECRe11LG91HbOzsGbvNHhExL64q+GuWAkOPksK5IgRRY555uyJx5d1E+9e1MpP/iBUydlggHyRCmtRGt9G+D0MZUcrQjF/L2dR5G+HQ5DJzOKeceQtk5x08y7MUzcg8bI3xGkMrbNMA0KCxmLnGaW7UONpowA8Q8TQDSyeaZXVe0QX4yWmnyRFnArENGN0zTh1bYwOpVLlESp8wGHEvkAFDdwhkCToz5M9WSJraqMJYi6NLisyaVWAhsKr7ao1zo+Vw83pR18+XhHEtVXwsMVkktnxPWrNAidv/rIjmVahMgoaoFwQfNHxZk8L/Mf1jyUKxhR9cPbigEW3GVWUTeJ8PNiJjXwZ+WN435ohrXorwC6QOFk6FRpDrSww8qHvXIBSDY8IEnP5v2FN6TpAw7oEe6Lot1PKB5qRIsFgF8j/bF6tW7x+BScjlZJwkdbZDmYc8rUx1MfboIMsz0X7A291V1T88i1tx846F
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DM6PR17MB3515.namprd17.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(396003)(346002)(376002)(366004)(39830400003)(136003)(66476007)(8676002)(66556008)(66946007)(4326008)(316002)(6916009)(26005)(6512007)(52116002)(478600001)(6486002)(966005)(36756003)(1076003)(2616005)(186003)(107886003)(83380400001)(8936002)(86362001)(5660300002)(4744005)(6506007)(6666004)(41300700001)(38350700002)(38100700002)(2906002);
+ SFS:(13230016)(396003)(346002)(376002)(366004)(39830400003)(136003)(66476007)(8676002)(66556008)(66946007)(4326008)(316002)(6916009)(26005)(6512007)(52116002)(478600001)(6486002)(966005)(36756003)(19627405001)(1076003)(2616005)(186003)(107886003)(83380400001)(8936002)(86362001)(166002)(5660300002)(6506007)(6666004)(41300700001)(38350700002)(38100700002)(53546011)(2906002);
  DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OGGcJw54hdmd9EJdRl/m748DecbnZmRGebIYXnV82UQStDgvsvBBP6VKT7Bt?=
- =?us-ascii?Q?xzEng64WvJHttrkStjKcAJxtrxw03/iDxTDqv23+4fSEGiTk/sNWn7vmcprG?=
- =?us-ascii?Q?gq/ZVWBs8UeI4DxupnZbU1KmYsDd2/w/hCJmejV/OABevApXAOsCWa0abJoN?=
- =?us-ascii?Q?q+GSv8CpzuvZmNQ3KMKnQFYXDg5tLcNGj+mCz7WnuCrbmKrfM0WJEbC/zNBs?=
- =?us-ascii?Q?4wyzzF8k9vEeE98NcD30hc5COnOblx5X6bRTDz3SdpHNZGDfgSvivaMpdzH0?=
- =?us-ascii?Q?NPqvRfple/lbBAVl9JXUdi1II88rTW4+58RcamVtc7KCK1o3CY9hvxqEvxpf?=
- =?us-ascii?Q?XFqctx5+uOXgTpTFHefgt7DGPCtejgb/RvH5Zv9VcK0shVAjoacMAHtx8c4m?=
- =?us-ascii?Q?IdCU8FH7JzzzPaDy33bSxIyJOFChcbeVGWiiLHGt+H6vCI1z4c1LXYLT9CyK?=
- =?us-ascii?Q?Wf3yvebgbkSq3ycFsG4rObgoKrGSohS6SztmuFxTXgizkM1PaSz8A+2gQeax?=
- =?us-ascii?Q?rmdMLRGIRlUaNVjrOcZu8/86eDj2wkfcX1KCw9f5A9dX5NwcDv1L5/gvLzYS?=
- =?us-ascii?Q?m6PiHmVkhtwUdbjLZS0EAtRdTaSanabNoTUsS/RtZMtj4NHWqDjeJRO8X1GD?=
- =?us-ascii?Q?/dujwSIX9K9601tX0LpCo/K9C/HL2SGH7AXNrUbzOgJdElki/TuUno1yg+Y0?=
- =?us-ascii?Q?BGcVyPPiQY6I52QLMm70P5oYpcuJK38goYoOAxV8JjoV/rQuTKN3rCF6hIUV?=
- =?us-ascii?Q?hY+l+sRUgpEsmZuo3tiLoPlkMcjHfyQBcW75s+IcRzSURIBwu3w1ao1qlp39?=
- =?us-ascii?Q?KA2yVyld8AkAkSUYCI7TgGDiEbL/NIcoSDfJgIP/9Xt4rcmWxZlR5mN4AcCF?=
- =?us-ascii?Q?ia39pk7dZKVB0F8/EW46P8hj9W9vVlFqgTLlu3YbNuBAnUcLSGBF1y0pMZyP?=
- =?us-ascii?Q?RpQn1pTDpkGRJurWzVszeRinGa84Ltp8DLuMTE6+5VdZAU5iEdFpCJuS6prd?=
- =?us-ascii?Q?U5LLo9Uays3fql3ut/wLQ6LF0DgQQzgmFA7OSjo00ckFYvG14JgJCdt1WpVK?=
- =?us-ascii?Q?Jn3X6Qkcj3O+ZVVmNUFu3qQ6dpnQnz39tJId7L6wA/DkZ82YSwxNg5lMaID3?=
- =?us-ascii?Q?lq9sfiZj35FbyYG0gwBqwIWCngYHHKsXZDbs4/1Doai8ufwUXjfdiwEW1fCP?=
- =?us-ascii?Q?lIC0mE6WrFnABqfIilaOEe/U3a8NGOp41mCZUZXaE1kzV0bgpxitBi/kB/Si?=
- =?us-ascii?Q?b9DDkXD4Hz50pIi6XszsvUvRb/dH6ksXOKKPRc5cAi+8ozLEc1Q7fgkT6ZwY?=
- =?us-ascii?Q?+sw47T+Vse1yQJpc/YBR6U3/BruifgpPyLe1MK0xLg5Oa/i5DkLcgyh2fa3M?=
- =?us-ascii?Q?iLIVDWZdDLZUHqWCziHKVAyY8IsbEFFPNeXl2RcIVAy4hb8tSPsEj+aJmO2x?=
- =?us-ascii?Q?YR7Pz1Z37ywsO4THiFGapJoLF7j2X5vsAQMfFrdeRHrMQ21NFk9o000o2+14?=
- =?us-ascii?Q?t3vos0jfXm8QadLlI9qQzZ55VhxRFGI5z4xBpj1WOKBzO3Sq0Y8JqBTXQgSr?=
- =?us-ascii?Q?6ETgK0WuS5FtyOufjjkD9QT1o57nM6XbGkLoPSTL?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?U3kCp5Y61oNNEfu5HWUyIWRbqaQ+HpYGuQS4Uo1cnJZnc338RM48ZzRaNVly?=
+ =?us-ascii?Q?ltyCgGxD365beASkN6wmRTPlA0GZmInGBoqgva5vzf1JZlv11GbJiSziHQvT?=
+ =?us-ascii?Q?6i91RZHvvpUSPJlL4Y61MyXwQl9F9HHQbMSmggeAJl+OmDooBJotYz9oq2Ak?=
+ =?us-ascii?Q?Q95VmVNcS4ua0i1IIzAFl+vDtq+QKNRmFV8LJpKofPaVg0IL5O7oLz+5g92i?=
+ =?us-ascii?Q?Z0h6iiV13owIlj9HBpA+juimI85v1p4CcRNQrB54ZnfXKm+EiuRS5ICZ1oDD?=
+ =?us-ascii?Q?IkeHjzRBux2Ey2nJWhS+xwcXzZT2tPHzPmU3LWZk5TDVGegeB6UrNZGWs/Mf?=
+ =?us-ascii?Q?ViWFL3Yyd+GPegND7PaEmZ1DBqJz04lU9/ceWkVspUzastkqvgHyTDZwAlfp?=
+ =?us-ascii?Q?CwFgOHFpqTXlai5xpIWApWpnacHMisOQQn7g6GqOCilXs9NiMP8Y6t3Bk8/e?=
+ =?us-ascii?Q?6GwEopEMMlgPNOwJ7aBPHHeCeuF1KS5r4aKh0s6+hNTXxfhx5vM/5YTaYeHg?=
+ =?us-ascii?Q?JwSvMBZYCn9GbZk9o4BQRgoqt2Oa2Wk25h2e2Wm+5KYLK+qeeCawHtj9vdQ2?=
+ =?us-ascii?Q?YJz7NGazSTIfn2/EmrnN9CN/JczG0H3iDK+JI5CbtCNh7tpyLwsZ04zdgN13?=
+ =?us-ascii?Q?ICaoTx1sHGT0kjx+Lu1sOVcQNI2Bqo6/NwIVblzw76tzYaWyNAfsLXtf0LxB?=
+ =?us-ascii?Q?siutpce6dvNzBJSuByMJ0fRBp8qZslF0ytFZEqz+be/xdMCiZVDL0vFYMt42?=
+ =?us-ascii?Q?4q2CF2jEBSuhLzVPJPJiUB0G+hYuvA7uW6ez4+b2mD1NgzTZyodoKQcwGjxO?=
+ =?us-ascii?Q?OCs9374Aam3C+OVtX+mEvtWzoRSHzV0jHL7kZa7ByBYNf6PEnrCyPXsuwG4m?=
+ =?us-ascii?Q?AGq5Ki0oA0jOw3a5JW3Lq66YmrBdunCLh5AZN0rIfYpaVfQzdsxk/SuomXgz?=
+ =?us-ascii?Q?oj9Iy09jgtgP7NIazZX7A5XI0XjZruR/0Fhh+6rwlEm+wS1n9hA6te1x0u7d?=
+ =?us-ascii?Q?9LcXTVhn4Ap78YtwJK6k5VOWseiNQ9KREN7VTDk3nuttOnOnSDj1IUba06Km?=
+ =?us-ascii?Q?onVnb9D+Z7Wsw0d/e7pkJtAW7al9j8bjgCfWdbofDhpcx0N2TT/8x9PTcxOv?=
+ =?us-ascii?Q?A54AQs61IZZI4L17x/pQDY6/ViRO/grKhG8A3QJMU6xOZdMPv23LQb50uObK?=
+ =?us-ascii?Q?4BN8NMBwBwBJZ5GNiqKqeUZBkCqSgV8rB2jV+QgrWJjROuSD8PajpNQy4XOl?=
+ =?us-ascii?Q?itbbWj7aCYt+vSoGpc++Mry1kOZUDEAGWU9J0P4pyflx+I+S6mCrxKL2ZADD?=
+ =?us-ascii?Q?StFK5Pyr1Sv84ZjA+dRWPomo5+oK5E1o7IpLdMFMt3w9LE0ykTwhz4WG5ltR?=
+ =?us-ascii?Q?JV4sDHoG4Vv9FAS3bEaQKVGiiuQ5QkDKYLywwia6EgqvzID7Rfpx4fLgxBp0?=
+ =?us-ascii?Q?YkNfuK3Ix3qfiRRxT/jVgWA+AQy/Wt7FcvEZXl2XJ3x1395TqyYGskWLxSn4?=
+ =?us-ascii?Q?3YWB9TOVXiZok2oKBAa3CNNN+jBv2qYPcvtXRjUUMz2rSj0WfJkhJwWI1S9F?=
+ =?us-ascii?Q?BNQ+3wstpflhSlW1cDiMSR9DnzeQRlfvMWyPieQn?=
 X-OriginatorOrg: phobosdpl.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 249e354e-d9e5-41cf-e992-08da70f04ed8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ad038f6-3458-4b79-3d83-08da70f04e8a
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR17MB3515.namprd17.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 23:24:24.5209 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 23:24:23.9584 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 07b76dd5-c518-427b-a15a-2e07dfd0130a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j4ObErl84DSP2fzcRZUO45k6xmL6XtabFkzNx+6rIA22AbOSsQHaMa1V8KFGzNwcQ2ATGEEN0oz/srdYVlVGpw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: SUKs/fSSXyWk3yMzTFvYvI36z/oEh9YTLATCeBNDeefjExTrf2E1uHBcylF5LZ9HnIjA8VDQFzzSQK/l4LOUGA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR17MB4688
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=centc.onmicrosoft.com; 
  s=selector2-centc-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ScMZNxmmBGVnqwtSKFLuWVmDFmjm1vGeSbJSyFg424A=;
- b=jkaEglxbJjnbC6kRtsiRWHw5MZ710TbypiOnj/48ZoBA1gKurQBouqygdhaNS2ZKb9nJ9FXLAnrInjTiqXw9gnP7PY8kcb6cWrEpFJ+HQo9TJWikvFmn9Xz8Yd4iBaRbLYEc9Vx7LU15P27lzzXl8uF136lcU+TnzeuBiUih2yc=
+ bh=/l/6ZXiAlMMStXIhx4t6tW2v0RblZZTBYtPgFS7rqqs=;
+ b=EgamrHA/koUOmBzDmh8ZX6K3W4THFzqz2ac6Sl640Homnc4YSB4RFA6KblIHkx+WkD7hu786D6S2CGoTC56/bwRKbUZVSTPkW3/1gOGlVSlzWPiEbx4sG+9A19SozbYA4HEsxWiCr79oHbC7VCAXDQDNPRsbkIE1ESvITKX+goY=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=centc.onmicrosoft.com
  header.i=@centc.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-centc-onmicrosoft-com header.b=jkaEglxb
+ header.s=selector2-centc-onmicrosoft-com header.b=EgamrHA/
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=phobosdpl.com;
-Subject: [Buildroot] [PATCH 2/3] support/scripts/pkg-stats: adjust column
- widths
+Subject: [Buildroot] [PATCH 1/3] support/scripts/pkg-stats: make cells with
+ many CVEs collapsible
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -146,33 +144,136 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This adjusts the column widths, mostly for asthetics/legibility.
+Sometimes a package can have a lot of CVEs.
+Rather than have the CVE cell make a really tall row
+(that means you have to scroll a bunch) this collapses the CVE
+cell to a fixed size scrollable element with a
+sticky button that lets you expand and collapse it.
 
-It is primarily for chrome based browsers, which like to
-linebreak on explicit hyphens, meaning every CVE takes multiple lines.
+If Javascript is enabled:
 
-see: https://github.com/w3c/csswg-drafts/issues/3434
+A stylesheet is generated and appended before content rendering,
+amending the cells style to have a fixed height and overflow.
+
+Also, the expand/contract button is unhidden.
+
+This means the CVE cells are rendered in a collapsed state
+instead of being rendered in an expanded state and then
+slamming shut.
+
+This avoids a "flash" and *helps* (vertically at least) manage CLS
+(cumulative layout shift).
+
+see: https://web.dev/cls/
+
+If Javascript is disabled:
+
+The cells stay fully open and the expand/contract button stays hidden.
 
 Signed-off-by: Sen Hastings <sen@phobosdpl.com>
 ---
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/pkg-stats | 38 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 36 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 8ce4e3f260..4b396d3217 100755
+index d795131cef..8ce4e3f260 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -853,7 +853,7 @@ function expandField(fieldId){
- #package-grid, #results-grid {
-   display: grid;
-   grid-gap: 2px;
--  grid-template-columns: 1fr repeat(12, min-content);
-+  grid-template-columns: max-content repeat(5, min-content) 20ch repeat(3, max-content) repeat(2, 20ch) auto;
+@@ -747,6 +747,14 @@ html_header = """
+ const triangleUp = String.fromCodePoint(32, 9652);
+ const triangleDown = String.fromCodePoint(32, 9662);
+ var lastColumnName = false;
++const styleElement = document.createElement('style');
++document.head.insertAdjacentElement("afterend", styleElement);
++const styleSheet = styleElement.sheet;
++const collapseRule = ".collapse{ height: 200px; overflow: hidden scroll;}"
++const buttonRule = ".see-more{ display: block;}"
++
++styleSheet.insertRule(collapseRule);
++styleSheet.insertRule(buttonRule);
+ 
+ function sortGrid(sortLabel){
+ 	let i = 0;
+@@ -759,7 +767,6 @@ function sortGrid(sortLabel){
+ 		lastStyle.disable = true;
+ 		lastStyle.remove();
+ 	};
+-	const styleElement = document.createElement('style');
+ 	styleElement.id = "sort-css";
+ 	document.head.appendChild(styleElement);
+ 	const styleSheet = styleElement.sheet;
+@@ -809,16 +816,37 @@ function sortGrid(sortLabel){
+ 		let rule = "." + listing[0] + " { grid-row: " + i + "; }";
+ 		styleSheet.insertRule(rule);
+         });
++	styleSheet.insertRule(collapseRule);
++	styleSheet.insertRule(buttonRule);
++};
++
++function expandField(fieldId){
++        const field = document.getElementById(fieldId);
++        const fieldText = field.firstElementChild.innerText;
++        const fieldTotal = fieldText.split(' ')[2];
++
++        if (fieldText == "see all " + fieldTotal + triangleDown){
++		field.firstElementChild.innerText = "see less " + fieldTotal + triangleUp;
++                field.style.height = "auto";
++        } else {
++                field.firstElementChild.innerText = "see all " + fieldTotal + triangleDown;
++                field.style.height = "200px";
++        }
+ };
+ </script>
+ 
+ <style>
+ 
+-.label {
++.see-more{
++  display: none;
++}
++
++.label, .see-more {
+   position: sticky;
+   top: 1px;
  }
- #results-grid {
-   grid-template-columns: 3fr 1fr;
+ .label{
++  z-index: 1;
+   background: white;
+   padding: 10px 2px 10px 2px;
+ }
+@@ -1029,6 +1057,8 @@ def dump_html_pkg(f, pkg):
+     data_field_id = f'cves__{pkg_css_class}'
+     div_class = ["centered cves data"]
+     div_class.append(f'_{pkg_css_class}')
++    if len(pkg.cves) > 10:
++        div_class.append("collapse")
+     if pkg.is_status_ok("cve"):
+         div_class.append("cve-ok")
+     elif pkg.is_status_error("cve"):
+@@ -1038,6 +1068,10 @@ def dump_html_pkg(f, pkg):
+     else:
+         div_class.append("cve-unknown")
+     f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">\n')
++    if len(pkg.cves) > 10:
++        cve_total = len(pkg.cves) + 1
++        f.write(f' <div onclick=\"expandField(\'{data_field_id}\')\" \
++        class=\"see-more centered cve_ignored\">see all ({cve_total}) &#9662;</div>\n')
+     if pkg.is_status_error("cve"):
+         for cve in pkg.cves:
+             f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s</a><br/>\n" % (cve, cve))
 -- 
 2.34.1
+
+
+
+
+
+
+From cbb01a5a28346617aa2fbf17479fb5aed1d2b0c0 Mon Sep 17 00:00:00 2001
+From: Sen Hastings <sen@phobosdpl.com>
+Date: Thu, 28 Jul 2022 15:05:34 -0500
+Subject: [PATCH 1/2] support/scripts/pkg-stats: make cells with many CVEs collapseable
+
 
 _______________________________________________
 buildroot mailing list
