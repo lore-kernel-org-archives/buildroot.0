@@ -4,93 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F97C04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 08:36:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D12DC04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 08:47:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C7AD60F2F;
-	Thu, 28 Jul 2022 08:36:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C7AD60F2F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 208C160F30;
+	Thu, 28 Jul 2022 08:47:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 208C160F30
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jBnqgAhg1IdJ; Thu, 28 Jul 2022 08:36:23 +0000 (UTC)
+	with ESMTP id aAvXFttS2oJW; Thu, 28 Jul 2022 08:47:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C86260B73;
-	Thu, 28 Jul 2022 08:36:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C86260B73
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 56F771BF2BC
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:36:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C52D60B73;
+	Thu, 28 Jul 2022 08:47:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C52D60B73
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 876A11BF2BC
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2DF5760B73
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:36:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DF5760B73
+ by smtp4.osuosl.org (Postfix) with ESMTP id 521BF4197C
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:47:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 521BF4197C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0o2D5m338qsH for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 08:36:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1158B60B50
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1158B60B50
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 08:36:19 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id k11so1253747wrx.5
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 01:36:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
- :content-language:to:cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=Y/UiosuW5J+uwxLpKZazG98/on2zQaghe33jP4CSzIM=;
- b=LCEKf7wONxiGTUDWioLWtLfGQbjJTBumzCpettyGhhdtjGK8ZGojXhUvd9bQ9Prkos
- IYsLg5AQlbUKcUHQET1wO4o5ylATw4NI0X+Pfh9tpFIaA4njcMlbBkvOjbNOPFMUVm7+
- o33xRTwO0DcNsFkftVTvIUQu/drKFLmlyLVjNVNjBVQmQ4XLeq3lIOMe3ETNaSsl6fKP
- 9Y1ZfSGq9D5YGg0+WKGlxfGpfdciS6xJPhLMfBlBLwAL4xAM4WmBq/UmpzRZbvRgE3ng
- pW3MJn6qnEM1mYjiMshNxkasvQ7vK2xjlYj38s3Wyeos+oj/0sqk3Eyo5rO7+Qa/xJfZ
- FW4g==
-X-Gm-Message-State: AJIora9q8Lwq/6/a+ML9H1KkiFd4dfU4OvHDarJdlFJvavi8uKXy7dZm
- sidaz2NUA0PJxn63vW//oMJZ/w==
-X-Google-Smtp-Source: AGRyM1tsvlPG9wu3WfyAdiNWN3CYNa4tRHLkFX1tM/5s95SQO2fu0XlyMs6/JPpURVLjC/m/0NuN5A==
-X-Received: by 2002:adf:ec02:0:b0:21e:8e67:d0f9 with SMTP id
- x2-20020adfec02000000b0021e8e67d0f9mr11220353wrn.114.1658997378055; 
- Thu, 28 Jul 2022 01:36:18 -0700 (PDT)
-Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
- ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
- by smtp.gmail.com with ESMTPSA id
- n41-20020a05600c502900b0039c5ab7167dsm4731868wmr.48.2022.07.28.01.36.17
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 28 Jul 2022 01:36:17 -0700 (PDT)
-Message-ID: <b1d8cc93-cf3b-195a-979b-48b14a48e506@mind.be>
-Date: Thu, 28 Jul 2022 10:36:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-GB
-To: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>,
- buildroot@buildroot.org
-References: <20220112094250.27022-1-sebastien.szymanski@armadeus.com>
- <20220112094250.27022-2-sebastien.szymanski@armadeus.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220112094250.27022-2-sebastien.szymanski@armadeus.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=message-id:date:mime-version:user-agent:subject:content-language:to
- :cc:references:from:organization:in-reply-to
- :content-transfer-encoding;
- bh=Y/UiosuW5J+uwxLpKZazG98/on2zQaghe33jP4CSzIM=;
- b=RAurNNhTP9I5By7elSdrIwEiCo8kvxQLO7XILddiFsPTAo05kfs405ldfbbLNmvSJG
- NAQqyfvNZ3MfDr7FUhRce9WOPUcCyK68VZ+Gx1LPS4xYAN7QC+jhvxPk6jAIs77VsHjH
- nt0U7MkUgudwiNxFpIbEd/H1DQpjUh+P7O7CYBrZoh/o3Lq3RON74LaEalTcyI2jUVsG
- nTZ+/ox9Dq3aH7GWGt521r2Jd850qKz4EgOVLCOTPDUpjZR4bLK1u9XgPh4tJNFH//pU
- qN5Ju/b07C3t9/fuEW/J45cRS8ciegU5h9lm/qjabLKAhVdHk0pNgjT/pfsz+eeqCrEF
- nbSQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=RAurNNhT
-Subject: Re: [Buildroot] [PATCH 2/3] package/libimxvpuapi2: new package
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SH__GfQsxjej for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 08:47:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F4085410B1
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 08:47:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F4085410B1
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id ECAA38410F; Thu, 28 Jul 2022 08:33:32 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 28 Jul 2022 10:42:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 117c21820f3d9df67da6524400617d5fabbf424f
+X-Git-Newrev: 622e5f67bd7f9249514c44c7b64f2821a8f74635
+X-Patchwork-Hint: ignore
+Message-Id: <20220728083332.ECAA38410F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdal: fix json dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,117 +55,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxMi8wMS8yMDIyIDEwOjQyLCBTw6liYXN0aWVuIFN6eW1hbnNraSB3cm90ZToKPiBUaGlz
-IGlzIHZlcnNpb24gMiBvZiBsaWJpbXh2cHVhcGkuCj4gVGhlIEFQSSBoYXMgYmVlbiByZXdyaXR0
-ZW4sIGFuZCBpcyBpbmNvbXBhdGlibGUgd2l0aCB0aGUgb2xkZXIgb25lLgo+IEN1cnJlbnRseSwg
-dGhlIGZvbGxvd2luZyBwbGF0Zm9ybXMgYXJlIHN1cHBvcnRlZCAobGlzdGVkIHdpdGggdGhlaXIg
-VlBVcyk6Cj4gKiBpLk1YNiAoQ2hpcHMmTWVkaWEgQ09EQTk2MCBjb2RlYykKPiAqIGkuTVg4bSAo
-SGFudHJvIEcxL0cyIGRlY29kZXIsIG5vIGVuY29kZXIpCj4gKiBpLk1YOG1tIChIYW50cm8gRzEv
-RzIgZGVjb2RlciwgSGFudHJvIEgxIGVuY29kZXIpCj4gCj4gU2lnbmVkLW9mZi1ieTogU8OpYmFz
-dGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgo+IC0tLQo+
-ICAgcGFja2FnZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKPiAgIHBh
-Y2thZ2UvbGliaW14dnB1YXBpMi9Db25maWcuaW4gICAgICAgICAgfCA0OCArKysrKysrKysrKysr
-KysrKysrKysrKysKPiAgIHBhY2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLmhhc2gg
-fCAgMyArKwo+ICAgcGFja2FnZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIubWsgICB8IDI4
-ICsrKysrKysrKysrKysrCj4gICA0IGZpbGVzIGNoYW5nZWQsIDgwIGluc2VydGlvbnMoKykKPiAg
-IGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xpYmlteHZwdWFwaTIvQ29uZmlnLmluCj4gICBj
-cmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIuaGFz
-aAo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVh
-cGkyLm1rCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25m
-aWcuaW4KPiBpbmRleCA4ZDg0NGFhMTFlLi4wMDlkMjAwNmYwIDEwMDY0NAo+IC0tLSBhL3BhY2th
-Z2UvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9Db25maWcuaW4KPiBAQCAtMTc2Myw2ICsxNzYz
-LDcgQEAgbWVudSAiTXVsdGltZWRpYSIKPiAgIAlzb3VyY2UgInBhY2thZ2UvbGliZWJtbC9Db25m
-aWcuaW4iCj4gICAJc291cmNlICJwYWNrYWdlL2xpYmhkaG9tZXJ1bi9Db25maWcuaW4iCj4gICAJ
-c291cmNlICJwYWNrYWdlL2xpYmlteHZwdWFwaS9Db25maWcuaW4iCj4gKwlzb3VyY2UgInBhY2th
-Z2UvbGliaW14dnB1YXBpMi9Db25maWcuaW4iCgogIFRoaXMgb25lIHNob3VsZCBhbHNvIG1vdmUg
-dG8gcGFja2FnZS9mcmVlc2NhbGUtaW14LiBsaWJpbXh2cHVhcGkgcmVhbGx5IHNob3VsZCAKZ28g
-dGhlcmUgYXMgd2VsbC4KCj4gICAJc291cmNlICJwYWNrYWdlL2xpYm1hdHJvc2thL0NvbmZpZy5p
-biIKPiAgIAlzb3VyY2UgInBhY2thZ2UvbGlibW1zL0NvbmZpZy5pbiIKPiAgIAlzb3VyY2UgInBh
-Y2thZ2UvbGlibXBlZzIvQ29uZmlnLmluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmlteHZw
-dWFwaTIvQ29uZmlnLmluIGIvcGFja2FnZS9saWJpbXh2cHVhcGkyL0NvbmZpZy5pbgo+IG5ldyBm
-aWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uMDk1NDcxOGNjMAo+IC0tLSAvZGV2
-L251bGwKPiArKysgYi9wYWNrYWdlL2xpYmlteHZwdWFwaTIvQ29uZmlnLmluCj4gQEAgLTAsMCAr
-MSw0OCBAQAo+ICtjb21tZW50ICJsaWJpbXh2cHVhcGkyIG5lZWRzIGFuIGkuTVggcGxhdGZvcm0g
-d2l0aCBWUFUgc3VwcG9ydCBhbmQgbGliaW14ZG1hYnVmZmVyIgo+ICsJZGVwZW5kcyBvbiBCUjJf
-YXJtIHx8IEJSMl9hYXJjaDY0Cj4gKwlkZXBlbmRzIG9uICghQlIyX1BBQ0tBR0VfRlJFRVNDQUxF
-X0lNWF9IQVNfVlBVIFwKPiArCQkmJiAhQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9IQVNfVlBV
-X0hBTlRSTykgXAoKICBUaGUgVlBVIHByZXNlbmNlIGlzIGNvbnNpZGVyZWQgYW4gYXJjaGl0ZWN0
-dXJlIGRlcGVuZGVuY3ksIHNvIHRoZXJlJ3Mgbm8gbmVlZCAKdG8gc2hvdyBhIGNvbW1lbnQgZm9y
-IHRoZW0uCgo+ICsJCXx8ICFCUjJfUEFDS0FHRV9MSUJJTVhETUFCVUZGRVIKCiAgVGhpcyBzaG91
-bGQgYmUgc2VsZWN0IChzZWUgYmVsb3cpIHNvIG5vIGNvbW1lbnQgZWl0aGVyLiBZb3UgZG8gbmVl
-ZCBhIGNvbW1lbnQgCmZvciB0aGUgbGludXggdHJhbnNpdGl2ZSBkZXBlbmRlbmN5IGhvd2V2ZXIu
-Cgo+ICsKPiArY29uZmlnIEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTIKPiArCWJvb2wgImxpYmlt
-eHZwdWFwaTIiCj4gKwlkZXBlbmRzIG9uIEJSMl9hcm0gfHwgQlIyX2FhcmNoNjQgIyBPbmx5IHJl
-bGV2YW50IGZvciBpLk1YCj4gKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhf
-SEFTX1ZQVSB8fCBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX0hBU19WUFVfSEFOVFJPCj4gKwlk
-ZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xJQklNWERNQUJVRkZFUgoKICBUaGlzIHNob3VsZCBiZSBz
-ZWxlY3QsIG5vdCBkZXBlbmRzIG9uLgoKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9JTVhfVlBVIGlm
-IEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfSEFTX1ZQVQo+ICsJc2VsZWN0IEJSMl9QQUNLQUdF
-X0lNWF9WUFVfSEFOVFJPIGlmIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfSEFTX1ZQVV9IQU5U
-Uk8KPiArCWhlbHAKPiArCSAgVGhpcyBsaWJyYXJ5IHByb3ZpZGVzIGFuIEFQSSBmb3IgdXNpbmcg
-aGFyZHdhcmUgdmlkZW8gY29kZWNzCj4gKwkgIG9uIGkuTVggcGxhdGZvcm1zLiBUaGUgQVBJIGFi
-c3RyYWN0cyBhd2F5IHBsYXRmb3JtIHNwZWNpZmljCj4gKwkgIGRldGFpbHMgYW5kIGFsbG93cyBm
-b3IgdXNpbmcgdGhlIHNhbWUgY29kZSB3aXRoIGRpZmZlcmVudAo+ICsJICBoYXJkd2FyZSB2aWRl
-byBjb2RlY3Mgb24gZGlmZmVyZW50IGkuTVggcGxhdGZvcm1zLgo+ICsKPiArCSAgVGhpcyBpcyB2
-ZXJzaW9uIDIgb2YgbGliaW14dnB1YXBpLiBUaGUgQVBJIGhhcyBiZWVuIHJld3JpdHRlbiwKPiAr
-CSAgYW5kIGlzIGluY29tcGF0aWJsZSB3aXRoIHRoZSBvbGRlciBvbmUuCgogIFdlIGhlYXJkIGZy
-b20gR2FyeSBCaXNzb24gdGhhdCBpbmRlZWQgd2UgbmVlZCBib3RoIGdzdDEtaW14IGFuZCBnc3Qx
-LWlteDIgCmJlY2F1c2UgdGhlIGxhdHRlciBubyBsb25nZXIgc3VwcG9ydHMgc29tZSBlbGVtZW50
-cyBmb3IgaW14Ni4gVGh1cywgd2UgYWxzbyBuZWVkIApib3RoIGxpYmlteHZwdWFwaSBhbmQgbGli
-aW14dnB1YXBpMi4gUGxlYXNlIGFkZCB0aGF0IHRvIHRoZSBjb21taXQgbG9nLgoKPiArCj4gKwkg
-IGh0dHBzOi8vZ2l0aHViLmNvbS9GcmVlc2NhbGUvbGliaW14dnB1YXBpCj4gKwo+ICtpZiBCUjJf
-UEFDS0FHRV9MSUJJTVhWUFVBUEkyCj4gK2Nob2ljZQo+ICsJcHJvbXB0ICJQbGF0Zm9ybSIKPiAr
-Cj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lNWDYKPiArCWJvb2wgImkuTVg2
-IChDb2RhKSIKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSU1YX1ZQVQo+ICsKPiArY29uZmln
-IEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJfSU1YOE0KPiArCWJvb2wgImkuTVg4TSAoSGFudHJv
-KSIKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSU1YX1ZQVV9IQU5UUk8KPiArCj4gK2NvbmZp
-ZyBCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lNWDhNTQo+ICsJYm9vbCAiaS5NWDhNTSAoSGFu
-dHJvKSIKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSU1YX1ZQVV9IQU5UUk8KPiArZW5kY2hv
-aWNlCgogIFRoaXMgY2hvaWNlIHNob3VsZCBiZSByZW1vdmVkLCBpbnN0ZWFkIHVzaW5nIHRoZSBz
-eW1ib2xzIGZyb20gCnBhY2thZ2UvZnJlZXNjYWxlLWlteC9Db25maWcuaW4uCgo+ICsKPiArY29u
-ZmlnIEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJfUExBVEZPUk0KPiArCXN0cmluZwo+ICsJZGVm
-YXVsdCAiaW14NiIgaWYgQlIyX1BBQ0tBR0VfTElCSU1YVlBVQVBJMl9JTVg2Cj4gKwlkZWZhdWx0
-ICJpbXg4bSIgaWYgQlIyX1BBQ0tBR0VfTElCSU1YVlBVQVBJMl9JTVg4TQo+ICsJZGVmYXVsdCAi
-aW14OG1tIiBpZiBCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lNWDhNTQo+ICsKPiArZW5kaWYK
-PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIuaGFzaCBi
-L3BhY2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLmhhc2gKPiBuZXcgZmlsZSBtb2Rl
-IDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmQyNmNmODc2N2IKPiAtLS0gL2Rldi9udWxsCj4g
-KysrIGIvcGFja2FnZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIuaGFzaAo+IEBAIC0wLDAg
-KzEsMyBAQAo+ICsjIGxvY2FsbHkgY29tcHV0ZWQgaGFzaAo+ICtzaGEyNTYgIDYxMWE1MTc2ZTM3
-ZTUxMzJkOTc4MTdlNmQ2MDQ4YWNmMjI5ZjY3ZWZkMjIwMWUzZjRhYWI2ZjcyMGU3YjY3ZDEgIGxp
-YmlteHZwdWFwaTItMi4yLjAudGFyLmd6Cj4gK3NoYTI1NiAgNGJiMzNjYzRjZDk1NmI1NmI3Nzli
-NTAxZjE4Y2FlNDZhOWUyNmY4Yzg1MDBjY2E4NmVkNzU4YjhiYzVlMTc4OCAgTElDRU5TRQo+IGRp
-ZmYgLS1naXQgYS9wYWNrYWdlL2xpYmlteHZwdWFwaTIvbGliaW14dnB1YXBpMi5tayBiL3BhY2th
-Z2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLm1rCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-PiBpbmRleCAwMDAwMDAwMDAwLi42OTU3MTcxYWQzCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3Bh
-Y2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLm1rCj4gQEAgLTAsMCArMSwyOCBAQAo+
-ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMgbGliaW14dnB1YXBpMgo+ICsjCj4g
-KyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKwo+ICtMSUJJTVhWUFVBUEkyX1ZFUlNJT04gPSAy
-LjIuMAo+ICtMSUJJTVhWUFVBUEkyX1NJVEUgPSAkKGNhbGwgZ2l0aHViLEZyZWVzY2FsZSxsaWJp
-bXh2cHVhcGksJChMSUJJTVhWUFVBUEkyX1ZFUlNJT04pKQo+ICtMSUJJTVhWUFVBUEkyX0xJQ0VO
-U0UgPSBMR1BMLTIuMSsKPiArTElCSU1YVlBVQVBJMl9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+
-ICtMSUJJTVhWUFVBUEkyX0RFUEVOREVOQ0lFUyA9IGhvc3QtcGtnY29uZiBob3N0LXB5dGhvbjMg
-bGliaW14ZG1hYnVmZmVyCj4gK0xJQklNWFZQVUFQSTJfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4g
-K0xJQklNWFZQVUFQSTJfTkVFRFNfRVhURVJOQUxfV0FGID0gTk8KCiAgQWdhaW4sIHRoaXMgaXMg
-dGhlIGRlZmF1bHQuCgo+ICsKPiAraWZlcSAoJChCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lN
-WDYpLHkpCj4gK0xJQklNWFZQVUFQSTJfREVQRU5ERU5DSUVTICs9IGlteC12cHUKPiArZW5kaWYK
-PiArCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTElCSU1YVlBVQVBJMl9JTVg4TSkkKEJSMl9QQUNL
-QUdFX0xJQklNWFZQVUFQSTJfSU1YOE1NKSx5KQo+ICtMSUJJTVhWUFVBUEkyX0RFUEVOREVOQ0lF
-UyArPSBpbXgtdnB1LWhhbnRybwo+ICtlbmRpZgo+ICsKPiArTElCSU1YVlBVQVBJMl9DT05GX09Q
-VFMgKz0gXAo+ICsJLS1pbXgtaGVhZGVycz0kKFNUQUdJTkdfRElSKS91c3IvaW5jbHVkZS8gXAoK
-ICBBZ2FpbiwgeW91IG5lZWQgdG8gcG9pbnQgaW50byB0aGUga2VybmVsIGJ1aWxkIGRpci4KCiAg
-UmVnYXJkcywKICBBcm5vdXQKCj4gKwktLXN5c3Jvb3QtcGF0aD0kKFNUQUdJTkdfRElSKSBcCj4g
-KwktLWlteC1wbGF0Zm9ybT0kKEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJfUExBVEZPUk0pCj4g
-Kwo+ICskKGV2YWwgJCh3YWYtcGFja2FnZSkpCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=622e5f67bd7f9249514c44c7b64f2821a8f74635
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+gdal needs json-c, not libjson, resulting in the following build failure
+since the addition of the package in commit
+1e64fa2956171cdc9d6e6c8896b4b589ce573513:
+
+configure: error: could not find json-c/json.h
+
+While at it, also drop unrecognized options:
+
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --enable-ipv6, --disable-nls, --without-dods-root, --without-fme, --without-grass, --without-libgrass, --without-ingres, --without-jasper, --without-charls, --without-mdb, --without-mongocxx, --without-mrsid_lidar, --without-perl
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f977675125167806e844a176a4c8c8873557b709
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gdal/Config.in |  6 ++++--
+ package/gdal/gdal.mk   | 15 ++-------------
+ 2 files changed, 6 insertions(+), 15 deletions(-)
+
+diff --git a/package/gdal/Config.in b/package/gdal/Config.in
+index 55a8c7fb83..ee7209566a 100644
+--- a/package/gdal/Config.in
++++ b/package/gdal/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GDAL
+ 	bool "gdal"
+-	depends on BR2_INSTALL_LIBSTDCPP # proj, libjson
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
++	depends on BR2_INSTALL_LIBSTDCPP # proj
+ 	# configure can't find proj, when linking statically
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
+@@ -8,8 +9,8 @@ config BR2_PACKAGE_GDAL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
+ 	depends on BR2_USE_WCHAR # proj
+ 	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_JSON_C
+ 	select BR2_PACKAGE_LIBGEOTIFF
+-	select BR2_PACKAGE_LIBJSON
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_PROJ
+ 	select BR2_PACKAGE_ZLIB
+@@ -24,6 +25,7 @@ config BR2_PACKAGE_GDAL
+ 	  https://gdal.org/
+ 
+ comment "gdal needs a toolchain w/ C++, dynamic library, gcc >= 4.7, not binutils bug 27597, threads, wchar"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
+ 		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 || \
+diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
+index c75b7743ce..33e7ba724a 100644
+--- a/package/gdal/gdal.mk
++++ b/package/gdal/gdal.mk
+@@ -18,14 +18,14 @@ GDAL_CONFIG_SCRIPTS = gdal-config
+ # enabled but it seems, in contrast to mrf driver support, that they
+ # can be implicitly disabled, by configuring gdal without their
+ # respectively needed dependencies.
+-GDAL_DEPENDENCIES = host-pkgconf jpeg libgeotiff libpng proj tiff zlib
++GDAL_DEPENDENCIES = host-pkgconf jpeg json-c libgeotiff libpng proj tiff zlib
+ 
+ # Yes, even though they have --with options, these few libraries are
+ # mandatory. If we don't provide them, bundled versions are used.
+ GDAL_CONF_OPTS = \
+ 	--with-geotiff \
+ 	--with-jpeg \
+-	--with-libjson-c \
++	--with-libjson-c=$(STAGING_DIR)/usr \
+ 	--with-libtool \
+ 	--with-libz \
+ 	--with-png \
+@@ -38,45 +38,35 @@ GDAL_CONF_OPTS = \
+ 	--without-cryptopp \
+ 	--without-curl \
+ 	--without-dds \
+-	--without-dods-root \
+ 	--without-ecw \
+ 	--without-expat \
+ 	--without-exr \
+ 	--without-fgdb \
+-	--without-fme \
+ 	--without-freexl \
+ 	--without-geos \
+ 	--without-gnm \
+ 	--without-libkml \
+ 	--without-lz4 \
+-	--without-grass \
+-	--without-libgrass \
+ 	--without-gta \
+ 	--without-hdf4 \
+ 	--without-hdf5 \
+ 	--without-hdfs \
+ 	--without-heif \
+ 	--without-idb \
+-	--without-ingres \
+ 	--without-jp2lura \
+-	--without-jasper \
+ 	--without-java \
+ 	--without-jpeg12 \
+ 	--without-jxl \
+-	--without-charls \
+ 	--without-kakadu \
+ 	--without-kea \
+ 	--without-lerc \
+ 	--without-gif \
+ 	--without-liblzma \
+ 	--without-libdeflate \
+-	--without-mdb \
+-	--without-mongocxx \
+ 	--without-mongocxxv3 \
+ 	--without-mrsid \
+ 	--without-jp2mrsid \
+ 	--without-macosx-framework \
+-	--without-mrsid_lidar \
+ 	--without-msg \
+ 	--without-mysql \
+ 	--without-netcdf \
+@@ -92,7 +82,6 @@ GDAL_CONF_OPTS = \
+ 	--without-pcre \
+ 	--without-pcre2 \
+ 	--without-pdfium \
+-	--without-perl \
+ 	--without-podofo \
+ 	--without-poppler \
+ 	--without-python \
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
