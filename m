@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F388C04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 02:15:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C457C04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 02:15:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A05134177F;
-	Thu, 28 Jul 2022 02:15:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A05134177F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3194982C38;
+	Thu, 28 Jul 2022 02:15:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3194982C38
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ltT7L4FnxBfS; Thu, 28 Jul 2022 02:15:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1AD3482A0B;
+	Thu, 28 Jul 2022 02:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AD3482A0B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 796B51BF94B
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 02:15:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5E8FC41774
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 02:15:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E8FC41774
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KssR_CPtEp2w; Thu, 28 Jul 2022 02:15:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 072E64175F;
-	Thu, 28 Jul 2022 02:15:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 072E64175F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 28C621BF94B
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 02:15:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0419640A68
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 02:15:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0419640A68
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fE3kRlt3I3H3 for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 02:15:35 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 83L9eTXuBNsv for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 02:15:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAF364052D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D99841719
 Received: from NAM11-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam11on2104.outbound.protection.outlook.com [40.107.223.104])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AAF364052D
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 02:15:35 +0000 (UTC)
+ (mail-dm6nam11on2118.outbound.protection.outlook.com [40.107.223.118])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1D99841719
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 02:15:44 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i5fNGaGPX80Vr9hvRNFfiR6Yb+KDe8RjcPQvRIbznL8HrM4OknImLGtoTtKBMq43ODxML4tY3M39q+8TQzh8HaPgfRQLUsONsli4umEUHOpAbXL01LOh2CpsN/SyxHwJ4z3Uz+HQzOapSAgrALoFc5FRf51W7asr02XGF/xKFGY4xRrOoXwd+nraz8iNIhgIWg+DKYk/1MZTVdfm4DEBTbwRDGmAUskfOXSnQZNb/gET6PLvhgGMckr12vB/R8QRbAy5FqMMX/lVEzm/AmvoWMilmotA6iHDceCRu/CbP1YShyRrcADw2fZHu1L4IgVw/IqyMnTVDfg9bnytXphi7w==
+ b=oTexNuHyiUP+RNRUo2X8kXOUSk4K4BsgOUdWqhL8feq/ox9vv3VE41QknhQWpAG38onR9bsffArOziHEJMoJARS1HzTVXA+51H1HwViiXyuGXLWiK0YJt0FB8P11MPVWEXgvywPnUBSTLQowskI1zsaDhaii+3tCcSEuEwwQXDqE4FH/TOY1uffJLaoe9970lJ93BmiwmC/LXv2gLUgviJSY0N5uKsvbJHC5Bnn6/QQUEDVQ6SJaaRbVYwBgW/vOSs9tLGmHVAcAaQcYwAmdLS67zdn+ZFmgWYXRSsDCdUtt4eLAcfhQ05YlEfyjKfkysYAWPnbk72/Lbv6sVkx4wQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YjlktygnkXUt9vHmWtPONObUTJH270F1YIHdlkpL03M=;
- b=mMj8/x/y82Z7p5yHPcDlCn/NIZRkYWZJuqkwvYEmCDvnzS9dIXdguqE9FvRmXQ2iJN3GZsVRPl+iZkI2E2PkyVqdnbGq+qdFXqoT0u0XDOh1aJLHije8V+Jvp9VjI1f+FzkcsI3853sFOQF3d6Mkx+fdRn1OFJPqaUfXt4+qh0ObsH4ufqvqVvksoS+C1nS3t+qo0IaKPBKltVL5Q0j+hQoNIkBFQnTuwc3OjDz0AFgcRAqnS+F2eRKwMKLyWavL2qiiFhuW7llkntGB2BtyuEaVMmdnJPW6SHIUtPHk1AFgitc1CWYydUE4eSSZToTBKTVemMe39B6qpbuBOPvBuQ==
+ bh=EKa90j6tdHPlZO/GiwMAbVhrzI8kHy+xjeuoleBPW6U=;
+ b=Q2kslgagVYnig65XSpihiKR9u2AzT+M9Gtx9r1HBv9eCs+hgd0XEAbrueVA5ZupGEvc+WkNh991yexFjOWS2d1M2J5JI70yXC5iZKbE1ETpKTKNHB+2FTq98CNN06WUYmQlvTsTEgGY7qJI3umw2OrAhCkbTzUdH4PSGHIDgCNXZ9M24T7wV3PAuQgwRE5yug1zNYTyKVEaPmtIqjPIkZUIHAFAqFQt26L0IKptGxdq75AbCF+E3L53nh6MMxAjGaNUXmFvGblCLs4HVyebcwJir0WvKmxBV3Aex2eWIdl2qQMO/RuJO+kjeZlRaoexZ7kx9dRdjhpcU+7fMNsHQEg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=phobosdpl.com; dmarc=pass action=none
  header.from=phobosdpl.com; dkim=pass header.d=phobosdpl.com; arc=none
@@ -50,15 +50,15 @@ Received: from CH2PR17MB3512.namprd17.prod.outlook.com (2603:10b6:610:3b::30)
  by CY4PR17MB0950.namprd17.prod.outlook.com (2603:10b6:903:a1::12)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.25; Thu, 28 Jul
- 2022 02:15:33 +0000
+ 2022 02:15:42 +0000
 Received: from CH2PR17MB3512.namprd17.prod.outlook.com
  ([fe80::e828:d088:296:c]) by CH2PR17MB3512.namprd17.prod.outlook.com
  ([fe80::e828:d088:296:c%4]) with mapi id 15.20.5482.006; Thu, 28 Jul 2022
- 02:15:32 +0000
+ 02:15:42 +0000
 From: Sen Hastings <sen@phobosdpl.com>
 To: buildroot@buildroot.org
-Date: Wed, 27 Jul 2022 21:14:43 -0500
-Message-Id: <20220728021444.135820-2-sen@phobosdpl.com>
+Date: Wed, 27 Jul 2022 21:14:44 -0500
+Message-Id: <20220728021444.135820-3-sen@phobosdpl.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220728021444.135820-1-sen@phobosdpl.com>
 References: <20220728021444.135820-1-sen@phobosdpl.com>
@@ -67,68 +67,68 @@ X-ClientProxiedBy: SA9PR03CA0002.namprd03.prod.outlook.com
  (2603:10b6:610:3b::30)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9306d258-3719-4769-61bf-08da703f0cdf
+X-MS-Office365-Filtering-Correlation-Id: eee204bb-3d49-469b-0186-08da703f1290
 X-MS-TrafficTypeDiagnostic: CY4PR17MB0950:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KaQgg2j+d4IoRVXf51S6iChuXoCFjNDsnb8o1d/Dxp7jbcoSBZSD+uhIxP4U84stsGAAPevOa55nC/zjssUXfnH/iuthqgDKrLHFHFTTgPtPePEyLbyI69MWW81++rvj7MoUuDDF4Jlfrfu1IDhJYYuwTrWklzjcgU+ShnwC0lJgf+X0QYc2O8CcYvaFAgliZdnv6NBGHaVFtF1rNL6mT3JRVcZJeYmyjc/FAyT/GfZ2PKS/rqJ39/wQS+z71YujBqQIt6w0emo/Y8YblYKmJQcNOJJkXLYYS+TYHfAow5Znvof4DTYShAoAx3+SaxRdeZjJ2cgPdtfumyeJofxLBh7j4r52m6B9txz1kg6dTutfD6K42KO3MWuB7TjO/Mtz0qavuWz1HL/xNkcxzeiP20rE5+RHHeARk7tJEqQGRbd2oGVFTNTvXperSwIR8Kh7ZCtp1w0NtGnf8D0UsDNCZCgyLecCsR+G2CIrEhkbXJzlhkXNZSaXNwcWebwNTnaRl51QAELUv1D5d1Yn2xzM2J4omhz4+qxNmtxiiJVwVyusuUZUUuFwMcTa/NLlI82L6OyxqKCWhz6j7V2TTMuDDfEZLIkHSB48sVCT0UUtvj7pqqcRrYy0E+c3tFV5FbzERNrTfg3XoLBKtzhqUNNNrawdc071rRWuQ4vRAOC28Qgad4Ps66JGFvf4wzyXwBSMjNHpjfBxhMLheRtEzEtgwsQZXA+UbeOtJsY5ZFHP2+ymz8b2o7X7cOjWeuB6JBvRhHqZyZQYC0EkDc+Hzsgyn6qkwjNs/6t9eg0Kc6FumJA=
+X-Microsoft-Antispam-Message-Info: iphGqMLETQZFBtVB1I0WJmUFqgwH9bABm9ZOCQDTcPfnREk88h7wp32eS2dAYLeXTIR7uCJ2FVjjtGNmS1n4Xo7EPDC7GSx8/sdJB1c9tw86K8H3EGztdk6XiiI5E2sG8+IgaNq5/K2//ql9mz2i6iWRt4kTEKzPPainp7w0WcAJkU7MhVua/+7j+8Gekhg0JeIE0iA0hn+Lown6KXDZ0BVCHu+xiV4pp6itZLUEm5bEfaRVOSmg5GaHgmTSNFx9VPN/Oos9WdhKJepeXkqNOaDrJwk8DqdoITCgsqkyjfesy9Ss6t1lL6PHiikZ31McelHjhmzywC4UtoMQKLGEKtSN26BJI/YkOb3jBxgM7KdBe2UolhLVtl9B5qq7FWZSfeTSB2hOeVGC3BAJ40b6F2NOCq1MaGlqoUOESefsnYM26iDPiNEpIN4SAi5PqLRx74gljTEf8UwmIdgdW3Ab1mbg90YyBxtEd/Ldf94s23HcfPcIX9VhLb9BdiM977neQGREfuT3DkE1VT4KmSxYfgV0uEMOGAsaCpIHAkKFBJCoWc/olEqOjHP3quumtIim7V11x0A5qrnAezfkAeAxE35tjXdXY9r4LHeezPq5FMZA+FQsov0vZ0Dwcq93wVDiibjuIjC/6Ekxu+hh9G0H9dShXzWZqPCO32xj4NCBh4x7NnnBUPvMBz3Im//mMABHDmGWiS2x1Cgvu5rBuXJZkwCYWNzAxUG0abUzcC/qAFpK+kda0F0ScYZ/4qHpH8JumNFgmIlQRraXeRGEVPC5HVgD4TCQNV5Qr3iJh+7hOjNy6V4WfU/lF5M+qLWCS08KDTIBo6kGQfR8mE3tHGBGBw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:CH2PR17MB3512.namprd17.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(376002)(396003)(136003)(39830400003)(346002)(366004)(38350700002)(8936002)(8676002)(54906003)(38100700002)(5660300002)(6666004)(6486002)(316002)(66556008)(66946007)(4326008)(36756003)(186003)(6916009)(66476007)(86362001)(6506007)(478600001)(41300700001)(1076003)(26005)(52116002)(2616005)(6512007)(2906002)(83380400001);
+ SFS:(13230016)(376002)(396003)(136003)(39830400003)(346002)(366004)(38350700002)(8936002)(8676002)(54906003)(38100700002)(5660300002)(6486002)(316002)(66556008)(66946007)(4326008)(36756003)(186003)(6916009)(66476007)(86362001)(6506007)(478600001)(41300700001)(1076003)(26005)(52116002)(2616005)(6512007)(2906002)(83380400001)(4210325003);
  DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6xdG/XzleL3jC2vEKuKDstZsOGZKrTYu5q4ISTi6mUE0Q82hoU52KayG6VJ5?=
- =?us-ascii?Q?uCkblNZWOuK8tFpbD+omSFtKawFBOULbCnT2+VPfMSraDTU45VURhoSap3FQ?=
- =?us-ascii?Q?jM+z+OhzcxiikgwUHuTzMZWNbWETjl68xXMfFmRnvA5MzWgt+wGQdN5xRpZH?=
- =?us-ascii?Q?8yXrvdwwXvtf4sNIWzB0Nv6gw3XAC5wgbmg5AYZ/2rl/1GRtdjQIllYV58va?=
- =?us-ascii?Q?SaL1SDAzhsBHbjn6hfM/+9lWdDVhyao7yy3PpdikdGytoXP/gLYeMz8cXSac?=
- =?us-ascii?Q?Qbgeq5816eDCmN2EdCFr86M/C3qbASW4rpN5iOI1GDBrlmXJDFhcMuWQcYLn?=
- =?us-ascii?Q?jEqy5mfLLYZMT4oKhkrJuQGFwhGfx9UZqbGofngNXyLCsgMbqsILMjC95D8q?=
- =?us-ascii?Q?XH9o7y7dnkvCy3nu/F7QsIC80GxPhKhLqrUwCFOhETicUsChNH1onfXXZiQV?=
- =?us-ascii?Q?R32fpRpRiYve2wXHZV45EJCPk78Y5XSQWW/8DVZSboOCec9vHGVF3taykHBs?=
- =?us-ascii?Q?GnHeSF2XfzZC1UWVl/i6JwWvVfTQInmDoGoJKALicyt+ePp/GsSpd/EArtQl?=
- =?us-ascii?Q?ozKB5rn2FbF/pqqMJaPOxKElAW10Id/pcOLKnhdxGlgkZ02ygpMorGho4q9S?=
- =?us-ascii?Q?AjELmdmpP+C14XZlpA8GPxW919CqSruff4EH6c4mNCo5DrdEvuj/6r2E3vNH?=
- =?us-ascii?Q?RIPqVuqGbw2QovPDzXPEsScqVpIL0f5RoMR8UIi61tDRvJ5ck2eNW+UZtg0N?=
- =?us-ascii?Q?WYr+vYTsGrPk/nq7M6yU9udd4lU4jEAO5MOzBsyO47oZTLtZFPN79tFTsDum?=
- =?us-ascii?Q?yOsD3cfm1ItbifTNkVjTUvEe2UZgBk8Qt6B48vBvA1H1wdPQ2Nslvj7OYlzc?=
- =?us-ascii?Q?t+8Ju9y3o9P+w3mKa0TFDAnK97Kbb3NY3CEZNvO8RjWDIoc5x0ZC+8hZHe7/?=
- =?us-ascii?Q?b857fN1JQg2LR5HK3G7GbRmtxC/M7+6SsqXXA6wsd0KGlIgz/W3wCZ0qiOx7?=
- =?us-ascii?Q?uJaW8I/5rCtujKmmbjT74jxdiEdueOW5+HBD2ZyFXhZhudUkGh786zsvJpri?=
- =?us-ascii?Q?6B24MvSZRIs17b9e762QZCUHHKRR93RcIje+b/lInlBQHJZKoT4Ox/NVlkgF?=
- =?us-ascii?Q?0Zy+hFE4xzK15LszQf4jd/IepTe4eq9uQRon5afUVrfcQf//Jh22QFJIGmyV?=
- =?us-ascii?Q?+WbckLP30Ce8nHBWfhsKpT91vaxob/y73OHkiuplBmUDTvwplAs25mbixCAX?=
- =?us-ascii?Q?caqU2Rk8BZYRO/VUbayVXW11LcclC8Po2az5H7iQw8fowU3BFNH7Fz92tSdc?=
- =?us-ascii?Q?8ctd35EImEX7ilMaFr9Mbaf2aNnQYoBGO2BBJSettQKuw2pRZpMsS8qpLBNJ?=
- =?us-ascii?Q?jh36JnDO8LekiTiNJuMsk6EzonZp1FUvR+yDU5tsEudmdhhfdk28HUe07BHF?=
- =?us-ascii?Q?NKnc8xQfxspk5QLTBZP4TYWSzWtp7MIC9CmF0W1oaXlUg8r6SLwFaiVqdpHh?=
- =?us-ascii?Q?9cYaCDBwTZkw7dlpcM5skMW3zmu8uc86NjzSNsbHbob1K4+xTWrVgErrLpJE?=
- =?us-ascii?Q?GN1BYtQIASdTx0oGna6A/lcwtiGCXyxO2YWnc/gX?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?g92MKmtwFUGHwe7N5adrHMWoAOdTG5MnLUxErlqkbxQR6Yl/nSHGd54sMfeN?=
+ =?us-ascii?Q?ZkD5ybxk3z5J8KPQLibF3/m9EMW7YEC++VPz0GyUZa5BLHBD1euTs6n4UHW+?=
+ =?us-ascii?Q?olCHeid8dfSJAEYSqB9kq3jd93nUQ/4jPQZhbZkrs9XH5XLzoXi1B8fEZMBJ?=
+ =?us-ascii?Q?a8n/XtgahAwGr3jO9hlfDWi/zTN4ABrw6u8JLw5k+65FIKO3/bsmOzlX0IJs?=
+ =?us-ascii?Q?fh3ftdprq9Y6EffihOJAY75bY9sdcG3ULEfUECVOToAxlZ844cqcjHyTZjgi?=
+ =?us-ascii?Q?IkyIXIT1X6t33SN9+IMy4J9v12E4guIsNq7MIWlvIyjgqxyTTYnjEpoCq/4/?=
+ =?us-ascii?Q?etqNB7J63gEMQau6j9O63ha+wf2+TjFVQgsLvRtDgBQPOTBRPOXBTtsvVIEC?=
+ =?us-ascii?Q?6XOJJxpy7JGt/5Q0b6Zz0JteuV2dhk1zhz9fGaapVc9Q7xYP6TL6uZy0AVGw?=
+ =?us-ascii?Q?F7GbGW6nhmi6dmwHq7tuKzV2Lp0q+DhDoDpl/p/uYZosK7QeCB+A71YQwmKW?=
+ =?us-ascii?Q?XHQp1JvV+Yec+8Tfu74TaePmHXcbn/7UBFS7Q/nzLokweAi8RnSB5ifdzvLl?=
+ =?us-ascii?Q?58O9BpHoLMg9t8E3R9yUUGxkCOVGuXAirDEjX3oAPMV7ORu/yVlX11kyZc25?=
+ =?us-ascii?Q?yFThayn7Nd3SGuuiGqUzwmoDHWRNS5Czfo7CwpdUpxj1h2GyGs3IWmbQGxU6?=
+ =?us-ascii?Q?7dyVs3YKeLO1dsXvOj96eobrSy5ooY48bEg5KRSu8B/jPRkrrb1OMDJMjUBM?=
+ =?us-ascii?Q?/RUo8mEDYEbOqSEOpOO0xzdPw+0+L9UjDa6tfIJoxy+6AdAsgqf0B3CSDnpR?=
+ =?us-ascii?Q?Pl6oHXe0tbXprXXgc8bzdJ7F08feERYFM72j2PTojqhwBNyS7o0373qfEdkg?=
+ =?us-ascii?Q?vpinQ02k/qy2IwTxv/di2lQg+dxuycPZuGS4eUNCalHYhb2XD/w2+stPiPdE?=
+ =?us-ascii?Q?g75Q7R9IxFmiF2DkPeKtMN5ZsxqUIDy8gY1/XP4hFZL6S7x9Ber8kWaeTCyX?=
+ =?us-ascii?Q?3uvo80hJwLFMIGCnM8QdJMaJAtmKD+wYCBefOjMhBSEkWeojnT5xKFFs4Szg?=
+ =?us-ascii?Q?AozwIxqyO5ciffsq1/2AZXRfrbvEaagcPDEpStPLRPf403wl2ZkopDPhtPbU?=
+ =?us-ascii?Q?62SrAFK8qK0bYD1VQHfjLhQ7DMJnS5jDX25BSvL6qkavU7+OaHDGuoLLX+RK?=
+ =?us-ascii?Q?248QuwWmrT8Z1n613lkIF+goKimm5JhoMYEaeFrNDm3jsz9GYIYqMmT3vWzP?=
+ =?us-ascii?Q?+L3FpfO3xYKiplztwlodgJPdaQi+N2cahVWv1ozQGhBLDw9LfCOMSOXdHTx6?=
+ =?us-ascii?Q?o+224qGhvElFK3jIrrDXeRZnvTdOXDk8JDf7IRhwCCkrkqdv/MVi5AtgEqGa?=
+ =?us-ascii?Q?+PdNgc2uijyqzYBmgtPd/sUAifjk5StY2anwjKN4s+7ZIE/Y2FdRK0MQ6KMd?=
+ =?us-ascii?Q?fdh4sZ8XIxPhXwM6LbGfcYh0Ub7oDGqYXvQd7u37wmODuMd1wsgY/owKuIMY?=
+ =?us-ascii?Q?g4aAq2lpaCZSGif39nTPR7NUXb5zvsCOrbkCigWtg0A2kOx69ZxrQFRNo+B1?=
+ =?us-ascii?Q?k9UfR2UQZ5zl9uBt8hGK64B9UouDe4O4wZSreofr?=
 X-OriginatorOrg: phobosdpl.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9306d258-3719-4769-61bf-08da703f0cdf
+X-MS-Exchange-CrossTenant-Network-Message-Id: eee204bb-3d49-469b-0186-08da703f1290
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR17MB3512.namprd17.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 02:15:32.8969 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2022 02:15:42.4430 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 07b76dd5-c518-427b-a15a-2e07dfd0130a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sHy0oPE9vOylR5Cx6nwhhYTy3X+pfqKA4opy54mzi4FnlpX8J+EbbkuHGuGBwO1XQNPFIu5vPOJ8YY271HUVJw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Z3yXJhBBUSOzZHPeUPz1yIQZRHXgXjbDQ/M6D8U4q1a/Ueq0RkmJ80ExC6iyNXIhoE6TGA0LmN02Zy6Ebi9diw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR17MB0950
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=centc.onmicrosoft.com; 
  s=selector2-centc-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YjlktygnkXUt9vHmWtPONObUTJH270F1YIHdlkpL03M=;
- b=VR5H96Z46DkuoZgQzDW5KskYRNf9ga/BncrUZZBxyVdrWlXqRP0vK0t8B5/Y9/9OOD1bJpTHE4dyRYeccXMSJLo3FAn5z19AgRmmisSWi2wioruFe6kexPV9iQod22djYyWjGU8Bo76k3Tq0dLhCq3HVV/ubEwe93K0XvMUGAFY=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=EKa90j6tdHPlZO/GiwMAbVhrzI8kHy+xjeuoleBPW6U=;
+ b=gJfq7MKCLOCXqXRgxelyH1ieMNK8qapM0NW4Mhu3kGKMQOwIF4lrGtTycLWvRtz9oNISPI9b5EnwhtT8D13W/d0K50Ngfrcv2GZQNUjP3KgEvuGk0+20lCxdX0HR5uPNE46f6p4YotNOBZD/VBS2eilyyb0srgY3WPO2DiMviNY=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=centc.onmicrosoft.com
  header.i=@centc.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-centc-onmicrosoft-com header.b=VR5H96Z4
+ header.s=selector2-centc-onmicrosoft-com header.b=gJfq7MKC
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=phobosdpl.com;
-Subject: [Buildroot] [PATCH 1/2] support/scripts/pkg-stats: fix duplicate
- package class names across rows
+Subject: [Buildroot] [PATCH 2/2] support/scripts/pkg-stats: fixed sortGrid()
+ performance
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -147,192 +147,145 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Like all good problems, disparate pieces work together to create
-a "synergistically" hairy mess.
-
-The sortGrid() overhaul highlighted a flaw in pkg-stats allowing
-for duplicate package class names across rows.
-
-As an example,
-
-boot/barebox/barebox.mk and boot/barebox/barebox/barebox.mk
-both get the classname ._barebox and so sortGrid() sticks them on
-the same line giving a table with a vestigal row sticking out
-of the right side like some kind of appendage.
-
-Also I neglected to add a "_" to the current version column's cells
-pkgname class so instead of "._pkgname" we had ".pkgname" and so
-the cells were not collected properly as part of the row.
-
-These issues explain the formatting weirdness.
-
-package classnames are now ".path_to_package_makefile" without suffix
-(.mk) (so ._boot_barebox_barebox and ._boot_barebox_barebox_barebox
-instead of ._barebox) in order to guarantee uniqueness.
-
-and what was *accidentally*
-class="centered current_version data .barebox" is now
-class="centered current_version data ._boot_barebox_barebox"
-just like *all* the other cells in the row. :p
+sortGrid() has been rewritten to dynamically generate stylesheets with
+explicit grid-row properties to re-order the rows, instead of removing
+and reinserting the cells.
+Performance *should* now be comperable to sorttable.js.
 
 Signed-off-by: Sen Hastings <sen@phobosdpl.com>
 ---
- support/scripts/pkg-stats | 53 ++++++++++++++++++++-------------------
- 1 file changed, 27 insertions(+), 26 deletions(-)
+ support/scripts/pkg-stats | 116 +++++++++++++++++++++-----------------
+ 1 file changed, 64 insertions(+), 52 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 9c37506cd4..d3ec65edbb 100755
+index d3ec65edbb..d795131cef 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -885,12 +885,13 @@ def boolean_str(b):
+@@ -744,60 +744,72 @@ html_header = """
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <script>
++const triangleUp = String.fromCodePoint(32, 9652);
++const triangleDown = String.fromCodePoint(32, 9662);
++var lastColumnName = false;
++
+ function sortGrid(sortLabel){
++	let i = 0;
+ 	let pkgSortArray = [], sortedPkgArray = [], pkgStringSortArray = [], pkgNumSortArray = [];
+-	let columnValues = Array.from(document.getElementsByClassName(sortLabel));
+-
+-	columnValues.shift();
+-	columnValues.forEach((listing) => {
+-		let sortArr = [];
+-		sortArr[0] = listing.id.replace(sortLabel+"_", "");
+-		if (!listing.innerText){
+-			sortArr[1] = -1;
+-		} else {
+-			sortArr[1] = listing.innerText;
+-		};
+-		pkgSortArray.push(sortArr);
+-	})
+-	pkgSortArray.forEach((listing) => {
+-		if ( isNaN(parseInt(listing[1], 10)) ){
+-			pkgStringSortArray.push(listing);
+-		} else {
+-			listing[1] = parseFloat(listing[1]);
+-			pkgNumSortArray.push(listing);
+-		};
+-	})
+-	sortedStringPkgArray = pkgStringSortArray.sort(function(a, b) {
+-		const nameA = a[1].toUpperCase(); // ignore upper and lowercase
+-		const nameB = b[1].toUpperCase(); // ignore upper and lowercase
+-		if (nameA < nameB) { return -1;	};
+-		if (nameA > nameB) { return 1; };
+-		return 0;   // names must be equal
+-	});
+-	sortedNumPkgArray = pkgNumSortArray.sort(function(a, b) {
+-		return a[1] - b[1];
+-	});
+-
+-	let triangleUp = String.fromCodePoint(32, 9652);
+-	let triangleDown = String.fromCodePoint(32, 9662);
+-	let columnName = document.getElementById(sortLabel);
+-
+-	if (columnName.lastElementChild.innerText == triangleDown) {
+-		columnName.lastElementChild.innerText = triangleUp;
+-		sortedStringPkgArray.reverse();
+-		sortedNumPkgArray.reverse();
+-		sortedPkgArray = sortedNumPkgArray.concat(sortedStringPkgArray)
+-	} else {
+-		columnName.lastElementChild.innerText = triangleDown;
+-		sortedPkgArray = sortedStringPkgArray.concat(sortedNumPkgArray)
+-	}
+-
+-	sortedPkgArray.forEach((listing) => {
+-		let row = Array.from(document.getElementsByClassName(listing[0]));
+-		let packageGrid = document.getElementById("package-grid");
+-		row.forEach((element) => { packageGrid.append(element)});
+-	})
+-}
++	const columnValues = Array.from(document.getElementsByClassName(sortLabel));
++	const columnName = document.getElementById(sortLabel);
++	let lastStyle = document.getElementById("sort-css");
++
++	if (lastStyle){
++		lastStyle.disable = true;
++		lastStyle.remove();
++	};
++	const styleElement = document.createElement('style');
++	styleElement.id = "sort-css";
++	document.head.appendChild(styleElement);
++	const styleSheet = styleElement.sheet;
++
++        columnValues.shift();
++        columnValues.forEach((listing) => {
++                let sortArr = [];
++                sortArr[0] = listing.id.replace(sortLabel+"_", "");
++                if (!listing.innerText){
++                        sortArr[1] = -1;
++                } else {
++                        sortArr[1] = listing.innerText;
++                };
++                pkgSortArray.push(sortArr);
++        });
++        pkgSortArray.forEach((listing) => {
++                if ( isNaN(parseInt(listing[1], 10)) ){
++                        pkgStringSortArray.push(listing);
++                } else {
++                        listing[1] = parseFloat(listing[1]);
++                        pkgNumSortArray.push(listing);
++                };
++        });
++
++        let sortedStringPkgArray = pkgStringSortArray.sort((a, b) => {
++                if (a[1].toUpperCase() < b[1].toUpperCase()) { return -1; };
++                if (a[1].toUpperCase() > b[1].toUpperCase()) { return 1; };
++                return 0;
++        });
++        let sortedNumPkgArray = pkgNumSortArray.sort((a, b) => a[1] - b[1]);
++
++        if (columnName.lastElementChild.innerText == triangleDown) {
++                columnName.lastElementChild.innerText = triangleUp;
++                sortedStringPkgArray.reverse();
++                sortedNumPkgArray.reverse();
++                sortedPkgArray = sortedNumPkgArray.concat(sortedStringPkgArray);
++        } else {
++                columnName.lastElementChild.innerText = triangleDown;
++                sortedPkgArray = sortedStringPkgArray.concat(sortedNumPkgArray);
++        };
++
++	if (lastColumnName && lastColumnName != columnName){lastColumnName.lastElementChild.innerText = ""};
++	lastColumnName = columnName;
++	sortedPkgArray.unshift(["label"]);
++        sortedPkgArray.forEach((listing) => {
++		i++;
++		let rule = "." + listing[0] + " { grid-row: " + i + "; }";
++		styleSheet.insertRule(rule);
++        });
++};
+ </script>
  
- 
- def dump_html_pkg(f, pkg):
--    f.write(f'<div id=\"package__{pkg.name}\" \
--        class=\"package data _{pkg.name}\">{pkg.path}</div>\n')
-+    pkg_css_class = pkg.path.replace("/", "_")[:-3]
-+    f.write(f'<div id=\"package__{pkg_css_class}\" \
-+        class=\"package data _{pkg_css_class}\">{pkg.path}</div>\n')
-     # Patch count
--    data_field_id = f'patch_count__{pkg.name}'
-+    data_field_id = f'patch_count__{pkg_css_class}'
-     div_class = ["centered patch_count data"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     if pkg.patch_count == 0:
-         div_class.append("nopatches")
-     elif pkg.patch_count < 5:
-@@ -901,10 +902,10 @@ def dump_html_pkg(f, pkg):
-         \">{str(pkg.patch_count)}</div>\n')
- 
-     # Infrastructure
--    data_field_id = f'infrastructure__{pkg.name}'
-+    data_field_id = f'infrastructure__{pkg_css_class}'
-     infra = infra_str(pkg.infras)
-     div_class = ["centered infrastructure data"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     if infra == "Unknown":
-         div_class.append("wrong")
-     else:
-@@ -913,9 +914,9 @@ def dump_html_pkg(f, pkg):
-         \">{infra_str(pkg.infras)}</div>\n')
- 
-     # License
--    data_field_id = f'license__{pkg.name}'
-+    data_field_id = f'license__{pkg_css_class}'
-     div_class = ["centered license data"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     if pkg.is_status_ok('license'):
-         div_class.append("correct")
-     else:
-@@ -924,9 +925,9 @@ def dump_html_pkg(f, pkg):
-         \">{boolean_str(pkg.is_status_ok("license"))}</div>\n')
- 
-     # License files
--    data_field_id = f'license_files__{pkg.name}'
-+    data_field_id = f'license_files__{pkg_css_class}'
-     div_class = ["centered license_files data"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     if pkg.is_status_ok('license-files'):
-         div_class.append("correct")
-     else:
-@@ -935,9 +936,9 @@ def dump_html_pkg(f, pkg):
-         \">{boolean_str(pkg.is_status_ok("license-files"))}</div>\n')
- 
-     # Hash
--    data_field_id = f'hash_file__{pkg.name}'
-+    data_field_id = f'hash_file__{pkg_css_class}'
-     div_class = ["centered hash_file data"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     if pkg.is_status_ok('hash'):
-         div_class.append("correct")
-     else:
-@@ -946,17 +947,17 @@ def dump_html_pkg(f, pkg):
-         \">{boolean_str(pkg.is_status_ok("hash"))}</div>\n')
- 
-     # Current version
--    data_field_id = f'current_version__{pkg.name}'
-+    data_field_id = f'current_version__{pkg_css_class}'
-     if len(pkg.current_version) > 20:
-         current_version = pkg.current_version[:20] + "..."
-     else:
-         current_version = pkg.current_version
-     f.write(f'  <div id=\"{data_field_id}\" \
--        class=\"centered current_version data {pkg.name}\">{current_version}</div>\n')
-+        class=\"centered current_version data _{pkg_css_class}\">{current_version}</div>\n')
- 
-     # Latest version
--    data_field_id = f'latest_version__{pkg.name}'
--    div_class.append(f'_{pkg.name}')
-+    data_field_id = f'latest_version__{pkg_css_class}'
-+    div_class.append(f'_{pkg_css_class}')
-     div_class.append("latest_version data")
-     if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
-         div_class.append("version-error")
-@@ -988,9 +989,9 @@ def dump_html_pkg(f, pkg):
-     f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">{latest_version_text}</div>\n')
- 
-     # Warnings
--    data_field_id = f'warnings__{pkg.name}'
-+    data_field_id = f'warnings__{pkg_css_class}'
-     div_class = ["centered warnings data"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     if pkg.warnings == 0:
-         div_class.append("correct")
-     else:
-@@ -998,9 +999,9 @@ def dump_html_pkg(f, pkg):
-     f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">{pkg.warnings}</div>\n')
- 
-     # URL status
--    data_field_id = f'upstream_url__{pkg.name}'
-+    data_field_id = f'upstream_url__{pkg_css_class}'
-     div_class = ["centered upstream_url data"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     url_str = pkg.status['url'][1]
-     if pkg.status['url'][0] in ("error", "warning"):
-         div_class.append("missing_url")
-@@ -1013,9 +1014,9 @@ def dump_html_pkg(f, pkg):
-     f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">{url_str}</div>\n')
- 
-     # CVEs
--    data_field_id = f'cves__{pkg.name}'
-+    data_field_id = f'cves__{pkg_css_class}'
-     div_class = ["centered cves data"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     if pkg.is_status_ok("cve"):
-         div_class.append("cve-ok")
-     elif pkg.is_status_error("cve"):
-@@ -1037,9 +1038,9 @@ def dump_html_pkg(f, pkg):
-     f.write("  </div>\n")
- 
-     # CVEs Ignored
--    data_field_id = f'ignored_cves__{pkg.name}'
-+    data_field_id = f'ignored_cves__{pkg_css_class}'
-     div_class = ["centered data ignored_cves"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     if pkg.ignored_cves:
-         div_class.append("cve_ignored")
-     f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">\n')
-@@ -1048,9 +1049,9 @@ def dump_html_pkg(f, pkg):
-     f.write("  </div>\n")
- 
-     # CPE ID
--    data_field_id = f'cpe_id__{pkg.name}'
-+    data_field_id = f'cpe_id__{pkg_css_class}'
-     div_class = ["left cpe_id data"]
--    div_class.append(f'_{pkg.name}')
-+    div_class.append(f'_{pkg_css_class}')
-     if pkg.is_status_ok("cpe"):
-         div_class.append("cpe-ok")
-     elif pkg.is_status_error("cpe"):
+ <style>
 -- 
 2.34.1
 
