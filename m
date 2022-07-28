@@ -1,83 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79AC0C04A68
-	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 08:33:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10F97C04A68
+	for <buildroot@archiver.kernel.org>; Thu, 28 Jul 2022 08:36:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ECC0D40191;
-	Thu, 28 Jul 2022 08:33:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECC0D40191
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C7AD60F2F;
+	Thu, 28 Jul 2022 08:36:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C7AD60F2F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B1arAPFltp3N; Thu, 28 Jul 2022 08:33:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jBnqgAhg1IdJ; Thu, 28 Jul 2022 08:36:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4876D401A2;
-	Thu, 28 Jul 2022 08:33:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4876D401A2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 56A041BF2BC
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:33:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7C86260B73;
+	Thu, 28 Jul 2022 08:36:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C86260B73
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 56F771BF2BC
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BB6983490
- for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:33:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BB6983490
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2DF5760B73
+ for <buildroot@lists.busybox.net>; Thu, 28 Jul 2022 08:36:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DF5760B73
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XiWwR9zr_qPF for <buildroot@lists.busybox.net>;
- Thu, 28 Jul 2022 08:33:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0o2D5m338qsH for <buildroot@lists.busybox.net>;
+ Thu, 28 Jul 2022 08:36:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA8CC83478
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com
- [IPv6:2607:f8b0:4864:20::e2c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EA8CC83478
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 08:33:21 +0000 (UTC)
-Received: by mail-vs1-xe2c.google.com with SMTP id o4so955820vsc.12
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 01:33:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1158B60B50
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1158B60B50
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 08:36:19 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id k11so1253747wrx.5
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 01:36:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=hLeB5lOEUPN+j9VaCVzHX3NI4+6py7c9NcQvalHkY5U=;
- b=PM39MTpVc3ZKfHaFmJrakS2H96VF6AoNNG6yNydWxnvYIuiN4eN5utNG7tTJZPp8Fa
- +uZKyLAx6OVkoe8UM5payhXFYPURG186iS6DVgdnyNB4e/gEpoI7Wr6kBZ7KytwerkOF
- R05H00BOSQfw6cCT7elscft9ZJHNaak8+dUWn1POZtPbQn2qZJdaD504eBVxOoG3wDCp
- eKWZzOeRu11H2HwdEX2hBASBePDYQXe8qYwWPK1NfMdo9P8hsgh9U6jzLMVawivs4znc
- Gs/WTuPhWFglIfqXn5uSKUuho3KACAK+4vnuStGtZV/0vAHK/f/AUHynOZMgBLsTKV5W
- CGPA==
-X-Gm-Message-State: AJIora/9rHsZK1M1uHww5tL+uO/nNHCGST3o8Krpx50RUiIeVUHeZT0T
- frSBNrAb0MsmKa0XNOdhBcIzP0jUFJ8IWf79UpI=
-X-Google-Smtp-Source: AGRyM1vvUSxNfz8fr2f6FmKP8/LTWgy6ycrboQ8imot8jSIeX6lqgAjc2qgpaSH+iruVY5/ni7UuQbv5mPmTF5K6QbM=
-X-Received: by 2002:a67:d79e:0:b0:358:59c7:f480 with SMTP id
- q30-20020a67d79e000000b0035859c7f480mr6852735vsj.69.1658997200531; Thu, 28
- Jul 2022 01:33:20 -0700 (PDT)
+ h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+ :content-language:to:cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Y/UiosuW5J+uwxLpKZazG98/on2zQaghe33jP4CSzIM=;
+ b=LCEKf7wONxiGTUDWioLWtLfGQbjJTBumzCpettyGhhdtjGK8ZGojXhUvd9bQ9Prkos
+ IYsLg5AQlbUKcUHQET1wO4o5ylATw4NI0X+Pfh9tpFIaA4njcMlbBkvOjbNOPFMUVm7+
+ o33xRTwO0DcNsFkftVTvIUQu/drKFLmlyLVjNVNjBVQmQ4XLeq3lIOMe3ETNaSsl6fKP
+ 9Y1ZfSGq9D5YGg0+WKGlxfGpfdciS6xJPhLMfBlBLwAL4xAM4WmBq/UmpzRZbvRgE3ng
+ pW3MJn6qnEM1mYjiMshNxkasvQ7vK2xjlYj38s3Wyeos+oj/0sqk3Eyo5rO7+Qa/xJfZ
+ FW4g==
+X-Gm-Message-State: AJIora9q8Lwq/6/a+ML9H1KkiFd4dfU4OvHDarJdlFJvavi8uKXy7dZm
+ sidaz2NUA0PJxn63vW//oMJZ/w==
+X-Google-Smtp-Source: AGRyM1tsvlPG9wu3WfyAdiNWN3CYNa4tRHLkFX1tM/5s95SQO2fu0XlyMs6/JPpURVLjC/m/0NuN5A==
+X-Received: by 2002:adf:ec02:0:b0:21e:8e67:d0f9 with SMTP id
+ x2-20020adfec02000000b0021e8e67d0f9mr11220353wrn.114.1658997378055; 
+ Thu, 28 Jul 2022 01:36:18 -0700 (PDT)
+Received: from ?IPV6:2a01:cb19:8acf:5600:3b0f:2669:24db:51d0?
+ ([2a01:cb19:8acf:5600:3b0f:2669:24db:51d0])
+ by smtp.gmail.com with ESMTPSA id
+ n41-20020a05600c502900b0039c5ab7167dsm4731868wmr.48.2022.07.28.01.36.17
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 28 Jul 2022 01:36:17 -0700 (PDT)
+Message-ID: <b1d8cc93-cf3b-195a-979b-48b14a48e506@mind.be>
+Date: Thu, 28 Jul 2022 10:36:16 +0200
 MIME-Version: 1.0
-References: <20220727221055.1838031-1-james.hilliard1@gmail.com>
-In-Reply-To: <20220727221055.1838031-1-james.hilliard1@gmail.com>
-From: Norbert Lange <nolange79@gmail.com>
-Date: Thu, 28 Jul 2022 10:33:09 +0200
-Message-ID: <CADYdroOD6Y7MH3+HAyicL4he60YDnAB15=VP9xpUE08=L_nrUQ@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-GB
+To: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>,
+ buildroot@buildroot.org
+References: <20220112094250.27022-1-sebastien.szymanski@armadeus.com>
+ <20220112094250.27022-2-sebastien.szymanski@armadeus.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Organization: Essensium/Mind
+In-Reply-To: <20220112094250.27022-2-sebastien.szymanski@armadeus.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=hLeB5lOEUPN+j9VaCVzHX3NI4+6py7c9NcQvalHkY5U=;
- b=AtQfV3i77jfNZAGzz04v1Y8G+iUL0Kv1ZQKGFtt78P6ntl+9zFb1gA/xcndjiG7A0l
- sWFnOSD/whHEFBQYt+nkAz/sLB0x3x20Ho7tJ52BuSzk88EyFzuocAkT+PlNEUVo7Tbk
- MZ9IzlVNGSTYDtw4h0XfZgmNk+Rc2rz4yCHGK17qwG8x9LpsYiHFA4Crj3CoWkbrfesx
- egpSOEUsiEccmlbI2yKpbq86qEb/8LbeH56ydaNBQGEXtULX5nKc+hzQOitOIGgvTh97
- xZUeLXwkKdWa95HXGLij4JK2S3LCbxQD4cTz62r3OWBprvuvbq4ijU2jB4WAEXrhVy/6
- 2kHA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=AtQfV3i7
-Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: use statically linked
- host tools
+ d=mind.be; s=google;
+ h=message-id:date:mime-version:user-agent:subject:content-language:to
+ :cc:references:from:organization:in-reply-to
+ :content-transfer-encoding;
+ bh=Y/UiosuW5J+uwxLpKZazG98/on2zQaghe33jP4CSzIM=;
+ b=RAurNNhTP9I5By7elSdrIwEiCo8kvxQLO7XILddiFsPTAo05kfs405ldfbbLNmvSJG
+ NAQqyfvNZ3MfDr7FUhRce9WOPUcCyK68VZ+Gx1LPS4xYAN7QC+jhvxPk6jAIs77VsHjH
+ nt0U7MkUgudwiNxFpIbEd/H1DQpjUh+P7O7CYBrZoh/o3Lq3RON74LaEalTcyI2jUVsG
+ nTZ+/ox9Dq3aH7GWGt521r2Jd850qKz4EgOVLCOTPDUpjZR4bLK1u9XgPh4tJNFH//pU
+ qN5Ju/b07C3t9/fuEW/J45cRS8ciegU5h9lm/qjabLKAhVdHk0pNgjT/pfsz+eeqCrEF
+ nbSQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=RAurNNhT
+Subject: Re: [Buildroot] [PATCH 2/3] package/libimxvpuapi2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,170 +102,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@phobosdpl.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Do., 28. Juli 2022 um 00:11 Uhr schrieb James Hilliard
-<james.hilliard1@gmail.com>:
->
-> This lets us remove the HOST_SYSTEMD_FIX_RPATH hack.
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...nalctl-allow-statically-linked-build.patch | 68 +++++++++++++++++++
->  package/systemd/systemd.mk                    | 28 +++-----
->  2 files changed, 76 insertions(+), 20 deletions(-)
->  create mode 100644 package/systemd/0002-journalctl-allow-statically-linked-build.patch
->
-> diff --git a/package/systemd/0002-journalctl-allow-statically-linked-build.patch b/package/systemd/0002-journalctl-allow-statically-linked-build.patch
-> new file mode 100644
-> index 0000000000..98ffb72cca
-> --- /dev/null
-> +++ b/package/systemd/0002-journalctl-allow-statically-linked-build.patch
-> @@ -0,0 +1,68 @@
-> +From d2dadbdc5618776e07e98baf8795cc8adebf05a1 Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Wed, 27 Jul 2022 15:28:09 -0600
-> +Subject: [PATCH] journalctl: allow statically linked build
-> +
-> +The journalctl tool may be needed on cross compilation hosts in order
-> +to run --update-catalog against a target rootfs.
-> +
-> +To avoid reliability issues caused by shared linking allow journalctl
-> +to be linked statically.
-> +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[Upstream status:
-> +https://github.com/systemd/systemd/pull/24140]
-> +---
-> + meson.build       | 11 ++++++++++-
-> + meson_options.txt |  2 ++
-> + 2 files changed, 12 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 692ee1ed4d..8cce19dce6 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -2263,11 +2263,19 @@ public_programs += executable(
-> +         install_rpath : rootpkglibdir,
-> +         install : true)
-> +
-> ++if get_option('link-journalctl-shared')
-> ++        journalctl_link_with = [libshared]
-> ++else
-> ++        journalctl_link_with = [libsystemd_static,
-> ++                                libshared_static,
-> ++                                libbasic_gcrypt]
-> ++endif
-> ++
-> + public_programs += executable(
-> +         'journalctl',
-> +         journalctl_sources,
-> +         include_directories : includes,
-> +-        link_with : [libshared],
-> ++        link_with : [journalctl_link_with],
-> +         dependencies : [threads,
-> +                         libdl,
-> +                         libxz,
-> +@@ -4357,6 +4365,7 @@ foreach tuple : [
-> +         ['link-systemctl-shared', get_option('link-systemctl-shared')],
-> +         ['link-networkd-shared',  get_option('link-networkd-shared')],
-> +         ['link-timesyncd-shared', get_option('link-timesyncd-shared')],
-> ++        ['link-journalctl-shared',get_option('link-journalctl-shared')],
-> +         ['link-boot-shared',      get_option('link-boot-shared')],
-> +         ['first-boot-full-preset'],
-> +         ['fexecve'],
-> +diff --git a/meson_options.txt b/meson_options.txt
-> +index 628ca1d797..d8c0c581c2 100644
-> +--- a/meson_options.txt
-> ++++ b/meson_options.txt
-> +@@ -25,6 +25,8 @@ option('link-networkd-shared', type: 'boolean',
-> +        description : 'link systemd-networkd and its helpers to libsystemd-shared.so')
-> + option('link-timesyncd-shared', type: 'boolean',
-> +        description : 'link systemd-timesyncd and its helpers to libsystemd-shared.so')
-> ++option('link-journalctl-shared', type: 'boolean',
-> ++       description : 'link journalctl against libsystemd-shared.so')
-> + option('link-boot-shared', type: 'boolean',
-> +        description : 'link bootctl and systemd-bless-boot against libsystemd-shared.so')
-> + option('first-boot-full-preset', type: 'boolean', value: false,
-> +--
-> +2.34.1
-> +
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 47aaddf849..13348f9358 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -738,7 +738,7 @@ endef
->  SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_CATALOG_UPDATE_SERVICE
->
->  define SYSTEMD_CREATE_TMPFILES_HOOK
-> -       HOST_SYSTEMD_TMPFILES=$(HOST_DIR)/bin/systemd-tmpfiles \
-> +       HOST_SYSTEMD_TMPFILES=$(HOST_DIR)/bin/systemd-tmpfiles.standalone \
->                 $(SYSTEMD_PKGDIR)/fakeroot_tmpfiles.sh $(TARGET_DIR)
->  endef
->  SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_CREATE_TMPFILES_HOOK
-> @@ -781,6 +781,13 @@ HOST_SYSTEMD_CONF_OPTS = \
->         --libdir=lib \
->         --sysconfdir=/etc \
->         --localstatedir=/var \
-> +       -Dlink-udev-shared=false \
-> +       -Dlink-systemctl-shared=false \
-> +       -Dlink-networkd-shared=false \
-> +       -Dlink-timesyncd-shared=false \
-> +       -Dlink-journalctl-shared=false \
-> +       -Dlink-boot-shared=false \
-> +       -Dstandalone-binaries=true \
->         -Dmode=release \
->         -Dutmp=false \
->         -Dhibernate=false \
-> @@ -854,24 +861,5 @@ HOST_SYSTEMD_DEPENDENCIES = \
->
->  HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
->
-> -# Fix RPATH After installation
-> -# * systemd provides a install_rpath instruction to meson because the binaries
-> -#   need to link with libsystemd which is not in a standard path
-> -# * meson can only replace the RPATH, not append to it
-> -# * the original rpath is thus lost.
-> -# * the original path had been tweaked by buildroot via LDFLAGS to add
-> -#   $(HOST_DIR)/lib
-> -# * thus re-tweak rpath after the installation for all binaries that need it
-> -HOST_SYSTEMD_HOST_TOOLS = busctl journalctl systemctl systemd-* udevadm
-> -
-> -define HOST_SYSTEMD_FIX_RPATH
-> -       for f in $(addprefix $(HOST_DIR)/bin/,$(HOST_SYSTEMD_HOST_TOOLS)); do \
-> -               [ -e $$f ] || continue; \
-> -               $(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $${f} \
-> -               || exit 1; \
-> -       done
-> -endef
-> -HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
-> -
->  $(eval $(meson-package))
->  $(eval $(host-meson-package))
-> --
-> 2.34.1
->
-
-Hello James,
-
-what issues are you trying to prevent here? buildroot's host tools
-generally use the rpath to work,
-static tools will just blow up filesize, and would only make sense if
-you want to copy a few of them
-to another location.
-
-Makes sense for example the bootctl tool when you want to re-use that
-in an initramfs,
-but thats not buildroot's concern AFAIK.
-
-Norbert
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxMi8wMS8yMDIyIDEwOjQyLCBTw6liYXN0aWVuIFN6eW1hbnNraSB3cm90ZToKPiBUaGlz
+IGlzIHZlcnNpb24gMiBvZiBsaWJpbXh2cHVhcGkuCj4gVGhlIEFQSSBoYXMgYmVlbiByZXdyaXR0
+ZW4sIGFuZCBpcyBpbmNvbXBhdGlibGUgd2l0aCB0aGUgb2xkZXIgb25lLgo+IEN1cnJlbnRseSwg
+dGhlIGZvbGxvd2luZyBwbGF0Zm9ybXMgYXJlIHN1cHBvcnRlZCAobGlzdGVkIHdpdGggdGhlaXIg
+VlBVcyk6Cj4gKiBpLk1YNiAoQ2hpcHMmTWVkaWEgQ09EQTk2MCBjb2RlYykKPiAqIGkuTVg4bSAo
+SGFudHJvIEcxL0cyIGRlY29kZXIsIG5vIGVuY29kZXIpCj4gKiBpLk1YOG1tIChIYW50cm8gRzEv
+RzIgZGVjb2RlciwgSGFudHJvIEgxIGVuY29kZXIpCj4gCj4gU2lnbmVkLW9mZi1ieTogU8OpYmFz
+dGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgo+IC0tLQo+
+ICAgcGFja2FnZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKPiAgIHBh
+Y2thZ2UvbGliaW14dnB1YXBpMi9Db25maWcuaW4gICAgICAgICAgfCA0OCArKysrKysrKysrKysr
+KysrKysrKysrKysKPiAgIHBhY2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLmhhc2gg
+fCAgMyArKwo+ICAgcGFja2FnZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIubWsgICB8IDI4
+ICsrKysrKysrKysrKysrCj4gICA0IGZpbGVzIGNoYW5nZWQsIDgwIGluc2VydGlvbnMoKykKPiAg
+IGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xpYmlteHZwdWFwaTIvQ29uZmlnLmluCj4gICBj
+cmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIuaGFz
+aAo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVh
+cGkyLm1rCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25m
+aWcuaW4KPiBpbmRleCA4ZDg0NGFhMTFlLi4wMDlkMjAwNmYwIDEwMDY0NAo+IC0tLSBhL3BhY2th
+Z2UvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9Db25maWcuaW4KPiBAQCAtMTc2Myw2ICsxNzYz
+LDcgQEAgbWVudSAiTXVsdGltZWRpYSIKPiAgIAlzb3VyY2UgInBhY2thZ2UvbGliZWJtbC9Db25m
+aWcuaW4iCj4gICAJc291cmNlICJwYWNrYWdlL2xpYmhkaG9tZXJ1bi9Db25maWcuaW4iCj4gICAJ
+c291cmNlICJwYWNrYWdlL2xpYmlteHZwdWFwaS9Db25maWcuaW4iCj4gKwlzb3VyY2UgInBhY2th
+Z2UvbGliaW14dnB1YXBpMi9Db25maWcuaW4iCgogIFRoaXMgb25lIHNob3VsZCBhbHNvIG1vdmUg
+dG8gcGFja2FnZS9mcmVlc2NhbGUtaW14LiBsaWJpbXh2cHVhcGkgcmVhbGx5IHNob3VsZCAKZ28g
+dGhlcmUgYXMgd2VsbC4KCj4gICAJc291cmNlICJwYWNrYWdlL2xpYm1hdHJvc2thL0NvbmZpZy5p
+biIKPiAgIAlzb3VyY2UgInBhY2thZ2UvbGlibW1zL0NvbmZpZy5pbiIKPiAgIAlzb3VyY2UgInBh
+Y2thZ2UvbGlibXBlZzIvQ29uZmlnLmluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmlteHZw
+dWFwaTIvQ29uZmlnLmluIGIvcGFja2FnZS9saWJpbXh2cHVhcGkyL0NvbmZpZy5pbgo+IG5ldyBm
+aWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uMDk1NDcxOGNjMAo+IC0tLSAvZGV2
+L251bGwKPiArKysgYi9wYWNrYWdlL2xpYmlteHZwdWFwaTIvQ29uZmlnLmluCj4gQEAgLTAsMCAr
+MSw0OCBAQAo+ICtjb21tZW50ICJsaWJpbXh2cHVhcGkyIG5lZWRzIGFuIGkuTVggcGxhdGZvcm0g
+d2l0aCBWUFUgc3VwcG9ydCBhbmQgbGliaW14ZG1hYnVmZmVyIgo+ICsJZGVwZW5kcyBvbiBCUjJf
+YXJtIHx8IEJSMl9hYXJjaDY0Cj4gKwlkZXBlbmRzIG9uICghQlIyX1BBQ0tBR0VfRlJFRVNDQUxF
+X0lNWF9IQVNfVlBVIFwKPiArCQkmJiAhQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9IQVNfVlBV
+X0hBTlRSTykgXAoKICBUaGUgVlBVIHByZXNlbmNlIGlzIGNvbnNpZGVyZWQgYW4gYXJjaGl0ZWN0
+dXJlIGRlcGVuZGVuY3ksIHNvIHRoZXJlJ3Mgbm8gbmVlZCAKdG8gc2hvdyBhIGNvbW1lbnQgZm9y
+IHRoZW0uCgo+ICsJCXx8ICFCUjJfUEFDS0FHRV9MSUJJTVhETUFCVUZGRVIKCiAgVGhpcyBzaG91
+bGQgYmUgc2VsZWN0IChzZWUgYmVsb3cpIHNvIG5vIGNvbW1lbnQgZWl0aGVyLiBZb3UgZG8gbmVl
+ZCBhIGNvbW1lbnQgCmZvciB0aGUgbGludXggdHJhbnNpdGl2ZSBkZXBlbmRlbmN5IGhvd2V2ZXIu
+Cgo+ICsKPiArY29uZmlnIEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTIKPiArCWJvb2wgImxpYmlt
+eHZwdWFwaTIiCj4gKwlkZXBlbmRzIG9uIEJSMl9hcm0gfHwgQlIyX2FhcmNoNjQgIyBPbmx5IHJl
+bGV2YW50IGZvciBpLk1YCj4gKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhf
+SEFTX1ZQVSB8fCBCUjJfUEFDS0FHRV9GUkVFU0NBTEVfSU1YX0hBU19WUFVfSEFOVFJPCj4gKwlk
+ZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xJQklNWERNQUJVRkZFUgoKICBUaGlzIHNob3VsZCBiZSBz
+ZWxlY3QsIG5vdCBkZXBlbmRzIG9uLgoKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9JTVhfVlBVIGlm
+IEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfSEFTX1ZQVQo+ICsJc2VsZWN0IEJSMl9QQUNLQUdF
+X0lNWF9WUFVfSEFOVFJPIGlmIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVhfSEFTX1ZQVV9IQU5U
+Uk8KPiArCWhlbHAKPiArCSAgVGhpcyBsaWJyYXJ5IHByb3ZpZGVzIGFuIEFQSSBmb3IgdXNpbmcg
+aGFyZHdhcmUgdmlkZW8gY29kZWNzCj4gKwkgIG9uIGkuTVggcGxhdGZvcm1zLiBUaGUgQVBJIGFi
+c3RyYWN0cyBhd2F5IHBsYXRmb3JtIHNwZWNpZmljCj4gKwkgIGRldGFpbHMgYW5kIGFsbG93cyBm
+b3IgdXNpbmcgdGhlIHNhbWUgY29kZSB3aXRoIGRpZmZlcmVudAo+ICsJICBoYXJkd2FyZSB2aWRl
+byBjb2RlY3Mgb24gZGlmZmVyZW50IGkuTVggcGxhdGZvcm1zLgo+ICsKPiArCSAgVGhpcyBpcyB2
+ZXJzaW9uIDIgb2YgbGliaW14dnB1YXBpLiBUaGUgQVBJIGhhcyBiZWVuIHJld3JpdHRlbiwKPiAr
+CSAgYW5kIGlzIGluY29tcGF0aWJsZSB3aXRoIHRoZSBvbGRlciBvbmUuCgogIFdlIGhlYXJkIGZy
+b20gR2FyeSBCaXNzb24gdGhhdCBpbmRlZWQgd2UgbmVlZCBib3RoIGdzdDEtaW14IGFuZCBnc3Qx
+LWlteDIgCmJlY2F1c2UgdGhlIGxhdHRlciBubyBsb25nZXIgc3VwcG9ydHMgc29tZSBlbGVtZW50
+cyBmb3IgaW14Ni4gVGh1cywgd2UgYWxzbyBuZWVkIApib3RoIGxpYmlteHZwdWFwaSBhbmQgbGli
+aW14dnB1YXBpMi4gUGxlYXNlIGFkZCB0aGF0IHRvIHRoZSBjb21taXQgbG9nLgoKPiArCj4gKwkg
+IGh0dHBzOi8vZ2l0aHViLmNvbS9GcmVlc2NhbGUvbGliaW14dnB1YXBpCj4gKwo+ICtpZiBCUjJf
+UEFDS0FHRV9MSUJJTVhWUFVBUEkyCj4gK2Nob2ljZQo+ICsJcHJvbXB0ICJQbGF0Zm9ybSIKPiAr
+Cj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lNWDYKPiArCWJvb2wgImkuTVg2
+IChDb2RhKSIKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSU1YX1ZQVQo+ICsKPiArY29uZmln
+IEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJfSU1YOE0KPiArCWJvb2wgImkuTVg4TSAoSGFudHJv
+KSIKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSU1YX1ZQVV9IQU5UUk8KPiArCj4gK2NvbmZp
+ZyBCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lNWDhNTQo+ICsJYm9vbCAiaS5NWDhNTSAoSGFu
+dHJvKSIKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSU1YX1ZQVV9IQU5UUk8KPiArZW5kY2hv
+aWNlCgogIFRoaXMgY2hvaWNlIHNob3VsZCBiZSByZW1vdmVkLCBpbnN0ZWFkIHVzaW5nIHRoZSBz
+eW1ib2xzIGZyb20gCnBhY2thZ2UvZnJlZXNjYWxlLWlteC9Db25maWcuaW4uCgo+ICsKPiArY29u
+ZmlnIEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJfUExBVEZPUk0KPiArCXN0cmluZwo+ICsJZGVm
+YXVsdCAiaW14NiIgaWYgQlIyX1BBQ0tBR0VfTElCSU1YVlBVQVBJMl9JTVg2Cj4gKwlkZWZhdWx0
+ICJpbXg4bSIgaWYgQlIyX1BBQ0tBR0VfTElCSU1YVlBVQVBJMl9JTVg4TQo+ICsJZGVmYXVsdCAi
+aW14OG1tIiBpZiBCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lNWDhNTQo+ICsKPiArZW5kaWYK
+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIuaGFzaCBi
+L3BhY2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLmhhc2gKPiBuZXcgZmlsZSBtb2Rl
+IDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmQyNmNmODc2N2IKPiAtLS0gL2Rldi9udWxsCj4g
+KysrIGIvcGFja2FnZS9saWJpbXh2cHVhcGkyL2xpYmlteHZwdWFwaTIuaGFzaAo+IEBAIC0wLDAg
+KzEsMyBAQAo+ICsjIGxvY2FsbHkgY29tcHV0ZWQgaGFzaAo+ICtzaGEyNTYgIDYxMWE1MTc2ZTM3
+ZTUxMzJkOTc4MTdlNmQ2MDQ4YWNmMjI5ZjY3ZWZkMjIwMWUzZjRhYWI2ZjcyMGU3YjY3ZDEgIGxp
+YmlteHZwdWFwaTItMi4yLjAudGFyLmd6Cj4gK3NoYTI1NiAgNGJiMzNjYzRjZDk1NmI1NmI3Nzli
+NTAxZjE4Y2FlNDZhOWUyNmY4Yzg1MDBjY2E4NmVkNzU4YjhiYzVlMTc4OCAgTElDRU5TRQo+IGRp
+ZmYgLS1naXQgYS9wYWNrYWdlL2xpYmlteHZwdWFwaTIvbGliaW14dnB1YXBpMi5tayBiL3BhY2th
+Z2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLm1rCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
+PiBpbmRleCAwMDAwMDAwMDAwLi42OTU3MTcxYWQzCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3Bh
+Y2thZ2UvbGliaW14dnB1YXBpMi9saWJpbXh2cHVhcGkyLm1rCj4gQEAgLTAsMCArMSwyOCBAQAo+
+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMgbGliaW14dnB1YXBpMgo+ICsjCj4g
+KyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKwo+ICtMSUJJTVhWUFVBUEkyX1ZFUlNJT04gPSAy
+LjIuMAo+ICtMSUJJTVhWUFVBUEkyX1NJVEUgPSAkKGNhbGwgZ2l0aHViLEZyZWVzY2FsZSxsaWJp
+bXh2cHVhcGksJChMSUJJTVhWUFVBUEkyX1ZFUlNJT04pKQo+ICtMSUJJTVhWUFVBUEkyX0xJQ0VO
+U0UgPSBMR1BMLTIuMSsKPiArTElCSU1YVlBVQVBJMl9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+
+ICtMSUJJTVhWUFVBUEkyX0RFUEVOREVOQ0lFUyA9IGhvc3QtcGtnY29uZiBob3N0LXB5dGhvbjMg
+bGliaW14ZG1hYnVmZmVyCj4gK0xJQklNWFZQVUFQSTJfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4g
+K0xJQklNWFZQVUFQSTJfTkVFRFNfRVhURVJOQUxfV0FGID0gTk8KCiAgQWdhaW4sIHRoaXMgaXMg
+dGhlIGRlZmF1bHQuCgo+ICsKPiAraWZlcSAoJChCUjJfUEFDS0FHRV9MSUJJTVhWUFVBUEkyX0lN
+WDYpLHkpCj4gK0xJQklNWFZQVUFQSTJfREVQRU5ERU5DSUVTICs9IGlteC12cHUKPiArZW5kaWYK
+PiArCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTElCSU1YVlBVQVBJMl9JTVg4TSkkKEJSMl9QQUNL
+QUdFX0xJQklNWFZQVUFQSTJfSU1YOE1NKSx5KQo+ICtMSUJJTVhWUFVBUEkyX0RFUEVOREVOQ0lF
+UyArPSBpbXgtdnB1LWhhbnRybwo+ICtlbmRpZgo+ICsKPiArTElCSU1YVlBVQVBJMl9DT05GX09Q
+VFMgKz0gXAo+ICsJLS1pbXgtaGVhZGVycz0kKFNUQUdJTkdfRElSKS91c3IvaW5jbHVkZS8gXAoK
+ICBBZ2FpbiwgeW91IG5lZWQgdG8gcG9pbnQgaW50byB0aGUga2VybmVsIGJ1aWxkIGRpci4KCiAg
+UmVnYXJkcywKICBBcm5vdXQKCj4gKwktLXN5c3Jvb3QtcGF0aD0kKFNUQUdJTkdfRElSKSBcCj4g
+KwktLWlteC1wbGF0Zm9ybT0kKEJSMl9QQUNLQUdFX0xJQklNWFZQVUFQSTJfUExBVEZPUk0pCj4g
+Kwo+ICskKGV2YWwgJCh3YWYtcGFja2FnZSkpCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
