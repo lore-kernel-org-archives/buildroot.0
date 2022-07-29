@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6607C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 11:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99441C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 11:28:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69FA840860;
-	Fri, 29 Jul 2022 11:28:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69FA840860
+	by smtp4.osuosl.org (Postfix) with ESMTP id 358EB410BC;
+	Fri, 29 Jul 2022 11:28:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 358EB410BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wy7TQOt4ZKJt; Fri, 29 Jul 2022 11:28:05 +0000 (UTC)
+	with ESMTP id KcgWwHc30Rzj; Fri, 29 Jul 2022 11:28:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B5C141B8C;
-	Fri, 29 Jul 2022 11:28:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B5C141B8C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 44EE41BF279
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 11:27:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09992409FE;
+	Fri, 29 Jul 2022 11:28:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09992409FE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 87FD31BF279
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 11:28:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2CFAA61086
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 11:27:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CFAA61086
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6388240BA0
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 11:28:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6388240BA0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yCIVHSlEdogA for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 11:27:50 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B6DB6107A
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MwzL5Z0N4rQv for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 11:27:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AEE640154
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B6DB6107A
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 11:27:49 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3AEE640154
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 11:27:58 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 516231BF206;
- Fri, 29 Jul 2022 11:27:48 +0000 (UTC)
-Date: Fri, 29 Jul 2022 13:27:47 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220729132747.48c1b071@windsurf>
-In-Reply-To: <20220728211018.247787-1-giulio.benetti@benettiengineering.com>
-References: <20220728211018.247787-1-giulio.benetti@benettiengineering.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 062DB1BF206;
+ Fri, 29 Jul 2022 11:27:56 +0000 (UTC)
+Date: Fri, 29 Jul 2022 13:27:56 +0200
+To: Adrian Perez de Castro <aperez@igalia.com>
+Message-ID: <20220729132756.174271d1@windsurf>
+In-Reply-To: <20220729052145.792037-1-aperez@igalia.com>
+References: <20220729052145.792037-1-aperez@igalia.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659094068;
+ d=bootlin.com; s=gm1; t=1659094077;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=V0GJ71NM2t57CjL/POfgeiejnoiDtSj2gw0ESlFEZO4=;
- b=AAO3gEurvNsq8Gh7jTnBtcjfeVz85n5Qdr2lg0exOPnwzDf2HcvNv+CCD0XQA3sRMY4B24
- rfyHfPlOhrYJccx4CXreDIwfHDyfN0f8eyEaLgZrX49asjjj0DpcpCAosFmv+j1d28d8c/
- eHvhGa7omOtceAM4vG+fQBel+Mk857dmza2pmmFdB1/C4sjjfIcJSGLuaTcO5hxaj7Ko34
- CBSMloib5rK4w9KSWhMc+NUVRDgAQ/AIJdb1J4oeWeP8eVez3XUzD4HMUw5QAazhuTbVBZ
- auLyeP0i+InU/3ZBziDflhW7Rk9cRjJQgJyAbw9BngfpAUI8hBpjMymrMyhrLQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=bsTwhmGR5RnmU14PjbQnq5JpDO3+bgMZVOxZ1pW5iqE=;
+ b=XhIK3MEdOwOQaKRb1eyEJ9Ojl3qBsHFOSgl1KOmYnffVLn8h++dUn/f0Rn1igbtCUJmk7b
+ FXcVJTmcamO/o0gjXw+v+wCCRVKB6EHUOJNEVW4rtGCTQ00ax14/mvHeMyMMWIgeoNJCPg
+ PB1zHYHck4H71PjzM6sqIaOS2JATiKvsEqe89UAA/4Y2ygW/GjD3B7gDAoT8AqO8W8Dzbb
+ QiYqxNJ8Q4uin0vfkGr4r/gAHMJxwgv1NuQQIGaOWwo3D/uC586waB/50y1iYNmmmR0o62
+ 2PKK2hUt2FBUtun56vjbErIl2wVhS5fiFFCcCTRlDz1d/qaUp9AJHpXI08Pf3A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AAO3gEur
-Subject: Re: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.5.0
+ header.s=gm1 header.b=XhIK3MEd
+Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
+ version 2.36.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,23 +84,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Jul 2022 23:10:18 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Fri, 29 Jul 2022 08:21:45 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> - Drop local patches that have been upstreamed
-> - Remove AUTORECONF since configure.ac patches have been upstreamed
-> - Add --disable-asciidoc to avoid generating manual pages that require
-> asciidoctor leading to build failure
+> Bugfix release, including the patch that can be now removed, and
+> security patches for CVE-2022-32792, CVE-2022-32816, and CVE-2022-2294.
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Release notes:
+> 
+>   https://wpewebkit.org/release/wpewebkit-2.36.5.html
+> 
+> Accompanying security advisory:
+> 
+>   https://wpewebkit.org/security/WSA-2022-0007.html
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
->  ...d-check-program-for-symver-attribute.patch | 56 -------------------
->  ...onfigure.ac-replace-argp_usage-check.patch | 40 -------------
->  package/cryptsetup/cryptsetup.hash            |  4 +-
->  package/cryptsetup/cryptsetup.mk              | 10 +---
->  4 files changed, 5 insertions(+), 105 deletions(-)
->  delete mode 100644 package/cryptsetup/0001-Add-check-program-for-symver-attribute.patch
->  delete mode 100644 package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
+>  ...5034-WebKitTestRunner-shouldn-t-link.patch | 58 -------------------
+>  package/wpewebkit/wpewebkit.hash              |  9 +--
+>  package/wpewebkit/wpewebkit.mk                |  2 +-
+>  3 files changed, 6 insertions(+), 63 deletions(-)
+>  delete mode 100644 package/wpewebkit/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
 
 Applied to master, thanks.
 
