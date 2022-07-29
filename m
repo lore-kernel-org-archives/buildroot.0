@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 622F6C00140
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 00:11:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C932C00140
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 00:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0CE6B83DFC;
-	Fri, 29 Jul 2022 00:11:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CE6B83DFC
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7411417AA;
+	Fri, 29 Jul 2022 00:11:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7411417AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h2U2LqOeryai; Fri, 29 Jul 2022 00:11:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pQPlDno2phiv; Fri, 29 Jul 2022 00:11:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A24E82B8C;
-	Fri, 29 Jul 2022 00:11:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A24E82B8C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99FE04179F;
+	Fri, 29 Jul 2022 00:11:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99FE04179F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 005771BF397
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 00:09:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EE3CB1BF397
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 00:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CEFD940B05
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 00:09:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEFD940B05
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4C9240241
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 00:09:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4C9240241
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id evuHeQi2Wm6Y for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 00:09:50 +0000 (UTC)
+ with ESMTP id OkyoaBjeyhEL for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 00:09:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4ED44400DB
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
- [IPv6:2607:f8b0:4864:20::536])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4ED44400DB
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 00:09:50 +0000 (UTC)
-Received: by mail-pg1-x536.google.com with SMTP id 72so2796614pge.0
- for <buildroot@buildroot.org>; Thu, 28 Jul 2022 17:09:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 528384049B
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com
+ [IPv6:2607:f8b0:4864:20::1034])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 528384049B
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 00:09:54 +0000 (UTC)
+Received: by mail-pj1-x1034.google.com with SMTP id
+ c19-20020a17090ae11300b001f2f94ed5c6so6008925pjz.1
+ for <buildroot@buildroot.org>; Thu, 28 Jul 2022 17:09:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
  :in-reply-to:references:mime-version:content-transfer-encoding;
- bh=V1lh0WdFxH1aFzo+scrpuR2Ao9m2Fwc2wXTwET/NCzU=;
- b=T+3jNr5M5nlg8bi+WjemY/z84QVW/CtZycBk5Y+JRNjanySglKmY3+oMGp7ttcJi0e
- NRcTjPH6N+5xfQYQQ19PxbDRQbLC3nqTe5GbfGYncuYIuuXQFXIJM9jad7/LExKsASQo
- bN3JOK1qZM0IrPXy8tF/HFCkE+CVpjvxA99xxj6vTpRcZ9rf2neUosrO5HMoblveKNCe
- maTEGuuONlKl1or4/NO5Zr0VyxO58VIEgGQWYsDWyeN3qfHIftbCI511aRG7/nlhf/ZU
- a7MvYJQX9gt16+VbJ16SwsIdRyx0hYejO7/FjR3C+/Un6KIPIQnp5m7x31wRI1zBjLwy
- tHVg==
-X-Gm-Message-State: AJIora+M49qXLZMwwpYXurHOOiQqlmEz6y8ICMw8JNpITuZE1wGjGkf/
- RFpBfkyULcIb/nsrFrDvCO2z1CjNX3s=
-X-Google-Smtp-Source: AGRyM1usu71AIBfiLFPlZcRAz6ZQqBDyYPXI255+pXLbyX73QhXJTulQp1M/HDZeux5O5YwP1GFx6w==
-X-Received: by 2002:a05:6a00:bcb:b0:52b:34e3:c043 with SMTP id
- x11-20020a056a000bcb00b0052b34e3c043mr935420pfu.64.1659053389138; 
- Thu, 28 Jul 2022 17:09:49 -0700 (PDT)
+ bh=Od2r5TYwXDhtlK9fsjzmuBCF0RMegoQ9RMbSRqQ184g=;
+ b=8LNVZO/H6UfkcCTzh2IfqDASheKagkOQwUfd7W464EiNb+NdkUXUx0ZYS6CNF+zMlr
+ cnxIH8auVPvFAy9TASKDkUb8rx/Ep2YRF+akv5p+KPWWq6v7GEsXITmodURULbHDIaCZ
+ lQChvXl3uh7N8LJM/oKUU5yD4/+x1r7lPpELqLb1dNTSIT7vrxgYbtOgDJzcmP927dqb
+ /ILJNYk7aGlUdZy5Dwo5uSB47T9EEdWMdkJtGvTaUxLYi5cK0PkaEtATwU9+yHpp6pii
+ bCLRIxlrMdepVf/6LwRvFEFKZv/bXjPFE7sqYhIhNLNSP6L8Z3FviceAvnsh1rCeSe4A
+ liiA==
+X-Gm-Message-State: ACgBeo1KIJRXnPSKQ5/YrN+qCuFIDB06HrLfEk8sCP5oKaYvcpCJo8mv
+ Mdc86VyVRP4vP23txL7p/rCVI/Rv26w=
+X-Google-Smtp-Source: AA6agR6ckzaO3g7e0plCYoEhtm8z5GFgJGr0pVWslVQsmNknR15Kl+uhHS3AGQkCSKm87R0PWTpUtA==
+X-Received: by 2002:a17:903:32ce:b0:16d:4341:1b1b with SMTP id
+ i14-20020a17090332ce00b0016d43411b1bmr1228778plr.126.1659053393141; 
+ Thu, 28 Jul 2022 17:09:53 -0700 (PDT)
 Received: from localhost.localdomain ([45.124.203.18])
  by smtp.gmail.com with ESMTPSA id
- z25-20020aa79f99000000b005292729cc5csm1332275pfr.160.2022.07.28.17.09.45
+ z25-20020aa79f99000000b005292729cc5csm1332275pfr.160.2022.07.28.17.09.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 28 Jul 2022 17:09:48 -0700 (PDT)
+ Thu, 28 Jul 2022 17:09:52 -0700 (PDT)
 From: Joel Stanley <joel@jms.id.au>
 To: buildroot@buildroot.org,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 Jul 2022 09:39:03 +0930
-Message-Id: <20220729000904.1295295-9-joel@jms.id.au>
+Date: Fri, 29 Jul 2022 09:39:04 +0930
+Message-Id: <20220729000904.1295295-10-joel@jms.id.au>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220729000904.1295295-1-joel@jms.id.au>
 References: <20220729000904.1295295-1-joel@jms.id.au>
@@ -73,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=V1lh0WdFxH1aFzo+scrpuR2Ao9m2Fwc2wXTwET/NCzU=;
- b=cNMsE2it7sg9aCIHVRga2tBQKc2A2ME7ibGNbWb5CZTVZndbHkzBq1WKl5ibKt+l23
- b3Zg/SkxY5G3wFiTZXPtghLbv/9bJtxXPRChueQub7g8iwraAD4OlcfBMOZ85VzTnidC
- KeDfRXbF4WgBKAPIlDA/76RXt1Hd5wrAm0M4UfrYaWJdMo1OX1NsCpB36vtXW32nR3HI
- 6xteGwcCVU+TROIRzZMZR3Y3ufsfjzgHgQKF1za4xu2ovzecHb2o1amSjDVUOCbmpt/Z
- P0eqbNvasGZXUJaCQUYovD3PJSaNus+s9aYe+pStuvaVV5Kx5DLQLMHJe9x1ie5lEn+u
- gWbQ==
+ bh=Od2r5TYwXDhtlK9fsjzmuBCF0RMegoQ9RMbSRqQ184g=;
+ b=Pvhf3aKh8GNLDFMg/0gIIlLM5FzZj3vTaL/3TWD6QeomBKk5CX0+RbKHlvxD9a7KDc
+ OipdWdWiMmSyUDp1tkEkIWE2rGhmDFMw1qUFsrhTKSlyrxh8ykMHd+/C3YxfW4zvbclM
+ MN3nI+/cGaB3Bc/LlrS8gsfxT7DJzqPY76K+JF5wwZ44CGcUe36V595KXzoOST6USX2E
+ KCkc2F/l5+ijsrQnU3QrmqHYjrYEK8R7cSp411Y0UlOYTr8ASNw5KR7Y7/I1eEsRyFR9
+ e1SwWlUdbUnxFiVfwZ690l9Usjb/lgweN0G8xF3YFyye3eDF9vR02uI7CYan1e5T1uZn
+ gPBg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=cNMsE2it
-Subject: [Buildroot] [PATCH 8/9] package/zlib-ng: Revert Power8 special
- casing
+ header.a=rsa-sha256 header.s=20210112 header.b=Pvhf3aKh
+Subject: [Buildroot] [PATCH 9/9] package/openblas: Add Power9 and Power10
+ targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,32 +105,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With "arch/powerpc: Enable powerpc64le only on CPUs that support it"
-buildroot will no longer build a toolchain that breaks feature
-detection.
-
-Remove the special casing so the build system can do feature detection.
+Now that buildroot supports these CPUs set the target type.
 
 Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- package/zlib-ng/zlib-ng.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/openblas/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
-index 938acd4181a6..fb497b8c11d0 100644
---- a/package/zlib-ng/zlib-ng.mk
-+++ b/package/zlib-ng/zlib-ng.mk
-@@ -23,10 +23,4 @@ ifeq ($(BR2_arm),y)
- ZLIB_NG_CONF_OPTS += -DWITH_ACLE=1 -DWITH_NEON=1
- endif
- 
--ifeq ($(BR2_powerpc_power8),y)
--ZLIB_NG_CONF_OPTS += -DWITH_POWER8=ON
--else
--ZLIB_NG_CONF_OPTS += -DWITH_POWER8=OFF
--endif
--
- $(eval $(cmake-package))
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index 0144e93a3faf..1d403c432e88 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -22,6 +22,8 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 	default "POWER6"       if BR2_powerpc_power6
+ 	default "POWER7"       if BR2_powerpc_power7
+ 	default "POWER8"       if BR2_powerpc_power8
++	default "POWER9"       if BR2_powerpc_power9
++	default "POWER10"      if BR2_powerpc_power10
+ 	default "PPCG4"        if BR2_powerpc_7400 || BR2_powerpc_7450
+ 	default "PPC970"       if BR2_powerpc_970
+ 	default "PPC440"       if BR2_powerpc_440
 -- 
 2.35.1
 
