@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AA23C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 299CCC00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:58:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4A3C40C69;
-	Fri, 29 Jul 2022 19:56:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4A3C40C69
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9885D8472D;
+	Fri, 29 Jul 2022 19:58:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9885D8472D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h2EZK_fMuY3n; Fri, 29 Jul 2022 19:56:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9ezVX9xVjhqo; Fri, 29 Jul 2022 19:58:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03D6640C4F;
-	Fri, 29 Jul 2022 19:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03D6640C4F
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8882846E7;
+	Fri, 29 Jul 2022 19:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8882846E7
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0B9D31BF33A
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:56:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5E7551BF33A
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:58:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E870C60EDB
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:56:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E870C60EDB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A42460EDB
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:58:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A42460EDB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uvDpbZePHpwL for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 19:56:27 +0000 (UTC)
+ with ESMTP id CnNeLW4WetGn for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 19:58:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33AF260DE5
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:56:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33AF260DE5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8122A60DE5
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:58:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8122A60DE5
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D089186945; Fri, 29 Jul 2022 19:42:35 +0000 (UTC)
+ id 2918C86953; Fri, 29 Jul 2022 19:44:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 21:56:17 +0200
+Date: Fri, 29 Jul 2022 21:57:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1e1d45a9bcb38e37d1b27388b267a790b56eb642
-X-Git-Newrev: c28b27032b926c2e5ce70a6feefbad34fb753772
+X-Git-Oldrev: c28b27032b926c2e5ce70a6feefbad34fb753772
+X-Git-Newrev: 43daab350d633512df07159b7ba3f90673335c0f
 X-Patchwork-Hint: ignore
-Message-Id: <20220729194235.D089186945@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-autotools.mk: fix runtime path
+Message-Id: <20220729194423.2918C86953@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/Config.in: update gcc version
+ for gcc bug 68485
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +64,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c28b27032b926c2e5ce70a6feefbad34fb753772
+commit: https://git.buildroot.net/buildroot/commit/?id=43daab350d633512df07159b7ba3f90673335c0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 505b5a6cdd337c2fd5965aa875a1a53419d62ed1 wrongly stated that "a
-configure script bundled with a package may be generated with an older
-version of Autotools, that may not yet support the --runstatedir option.
-This will give an "Unsupported arguments" warning and the option will be
-ignored.". Indeed, this will raise the following build failure with
-attr, libtirpc, readline, etc.:
-
-configure: error: unrecognized option: `--runstatedir=/run'
-
-So to support configure scripts using older version, the variable is set
-directly instead of using the --runstatedir argument.
-
-Fixes:
- - http://autobuild.buildroot.org/results/c853f14773d875be30e32ae24daf80e181fef34e
- - http://autobuild.buildroot.org/results/045211cd66cf78c3d89d2d8ac41ec4edf0b0ee58
- - http://autobuild.buildroot.org/results/8c5160eef99de2f1f72f33d5e5ea94d417855b2c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-autotools.mk | 2 +-
+ toolchain/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 548f69cbb8..b6224b349d 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -187,7 +187,7 @@ define $(2)_CONFIGURE_CMDS
- 		--exec-prefix=/usr \
- 		--sysconfdir=/etc \
- 		--localstatedir=/var \
--		--runstatedir=/run \
-+		runstatedir=/run \
- 		--program-prefix="" \
- 		--disable-gtk-doc \
- 		--disable-gtk-doc-html \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 6071342d01..3cc747c1cc 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -139,7 +139,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. This bug still
+-# exists in gcc 9.x
++# exists in gcc 12.x
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_68485
+ 	bool
+ 	default y if BR2_microblaze
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
