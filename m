@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED917C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 11:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41CD9C25B07
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 11:26:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F60141B78;
-	Fri, 29 Jul 2022 11:25:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F60141B78
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAE7141B90;
+	Fri, 29 Jul 2022 11:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAE7141B90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kN6pZASHRBo8; Fri, 29 Jul 2022 11:25:51 +0000 (UTC)
+	with ESMTP id Vm-qDCgwaNO0; Fri, 29 Jul 2022 11:26:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B00E441B5D;
-	Fri, 29 Jul 2022 11:25:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B00E441B5D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F94A1BF279
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 11:25:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B080E4151E;
+	Fri, 29 Jul 2022 11:26:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B080E4151E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5AE871BF279
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 11:25:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01AC184013
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 11:25:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01AC184013
+ by smtp2.osuosl.org (Postfix) with ESMTP id 315D640BCF
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 11:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 315D640BCF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fjk1vd0PCy2f for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fN0I6TcveAe0 for <buildroot@lists.busybox.net>;
  Fri, 29 Jul 2022 11:25:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 170F084012
+ by smtp2.osuosl.org (Postfix) with ESMTP id 332B540BA0
  for <buildroot@buildroot.org>; Fri, 29 Jul 2022 11:25:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 170F084012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 332B540BA0
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 864DA868ED; Fri, 29 Jul 2022 11:11:30 +0000 (UTC)
+ id A441F868F0; Fri, 29 Jul 2022 11:11:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 13:23:28 +0200
+Date: Fri, 29 Jul 2022 13:25:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a8b45de60cf9137da5b829c432e8cb9bb50685da
-X-Git-Newrev: 834aefa8daf9aa2c69f087cba02455e3c5b13f8c
+X-Git-Oldrev: 642bb93c9fdbab56ae5b460f139dc4806f13721a
+X-Git-Newrev: c7dbd08b59bbe652458ae29c14443abcf70998b9
 X-Patchwork-Hint: ignore
-Message-Id: <20220729111130.864DA868ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
- version 2.36.5
+Message-Id: <20220729111130.A441F868F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cryptsetup: bump version to 2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,121 +63,171 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=834aefa8daf9aa2c69f087cba02455e3c5b13f8c
+commit: https://git.buildroot.net/buildroot/commit/?id=c7dbd08b59bbe652458ae29c14443abcf70998b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bugfix release, including the patch that can be now removed, and
-security patches for CVE-2022-32792, CVE-2022-32816, and CVE-2022-2294.
+- Drop local patches that have been upstreamed
+- Remove AUTORECONF since configure.ac patches have been upstreamed
+- Add --disable-asciidoc to avoid generating manual pages that require
+asciidoctor leading to build failure
 
-Release notes:
-
-  https://webkitgtk.org/2022/07/28/webkitgtk2.36.5-released.html
-
-Accompanying security advisory:
-
-  https://webkitgtk.org/security/WSA-2022-0007.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...e-r295034-WebKitTestRunner-shouldn-t-link.patch | 58 ----------------------
- package/webkitgtk/webkitgtk.hash                   |  8 +--
- package/webkitgtk/webkitgtk.mk                     |  2 +-
- 3 files changed, 5 insertions(+), 63 deletions(-)
+ ...01-Add-check-program-for-symver-attribute.patch | 56 ----------------------
+ ...002-configure.ac-replace-argp_usage-check.patch | 40 ----------------
+ package/cryptsetup/cryptsetup.hash                 |  4 +-
+ package/cryptsetup/cryptsetup.mk                   | 10 ++--
+ 4 files changed, 5 insertions(+), 105 deletions(-)
 
-diff --git a/package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch b/package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
+diff --git a/package/cryptsetup/0001-Add-check-program-for-symver-attribute.patch b/package/cryptsetup/0001-Add-check-program-for-symver-attribute.patch
 deleted file mode 100644
-index d1edd36660..0000000000
---- a/package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
+index 04f59a2050..0000000000
+--- a/package/cryptsetup/0001-Add-check-program-for-symver-attribute.patch
 +++ /dev/null
-@@ -1,58 +0,0 @@
--From a780527a1b79538f1e1f5144e9b522d0927a2312 Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Wed, 13 Jul 2022 00:53:48 +0300
--Subject: [PATCH] Revert "Merge r295034 - WebKitTestRunner shouldn't link
-- object files of JavaScriptCore and WebCore"
+@@ -1,56 +0,0 @@
+-From 7c6ec620de3f99d4212f4a54aa576df1b97020ab Mon Sep 17 00:00:00 2001
+-From: Ondrej Kozina <okozina@redhat.com>
+-Date: Wed, 2 Feb 2022 11:34:57 +0100
+-Subject: [PATCH] Add check program for symver attribute.
 -
--This reverts commit 7916fda00b347ff263fbfe72c065032d1d9b523c.
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--[Upstream status: https://bugs.webkit.org/show_bug.cgi?id=241002]
--
+-Fixes: #709.
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ----
-- Source/JavaScriptCore/CMakeLists.txt     | 12 +++++++++---
-- Tools/WebKitTestRunner/CMakeLists.txt    |  1 -
-- Tools/WebKitTestRunner/PlatformGTK.cmake |  4 ++++
-- Tools/WebKitTestRunner/PlatformWin.cmake |  4 ++++
-- 4 files changed, 17 insertions(+), 4 deletions(-)
+- configure.ac               | 11 +++++++++++
+- lib/libcryptsetup_symver.h |  8 +++-----
+- 2 files changed, 14 insertions(+), 5 deletions(-)
 -
--diff --git a/Source/JavaScriptCore/CMakeLists.txt b/Source/JavaScriptCore/CMakeLists.txt
--index 95a1300ce1b3..238208eb1137 100644
----- a/Source/JavaScriptCore/CMakeLists.txt
--+++ b/Source/JavaScriptCore/CMakeLists.txt
--@@ -456,7 +456,7 @@ if (MSVC AND NOT ENABLE_C_LOOP)
--         COMMAND ${MASM_EXECUTABLE} ${LLINT_MASM_FLAGS} ${JavaScriptCore_DERIVED_SOURCES_DIR}/LowLevelInterpreterWin.obj ${JavaScriptCore_DERIVED_SOURCES_DIR}/LowLevelInterpreterWin.asm
--         VERBATIM)
--     list(APPEND JavaScriptCore_SOURCES ${JavaScriptCore_DERIVED_SOURCES_DIR}/LowLevelInterpreterWin.obj)
---    add_library(LowLevelInterpreterLib STATIC llint/LowLevelInterpreter.cpp)
--+    add_library(LowLevelInterpreterLib OBJECT llint/LowLevelInterpreter.cpp)
-- else ()
--     # As there's poor toolchain support for using `.file` directives in
--     # inline asm (i.e. there's no way to avoid clashes with the `.file`
--@@ -465,7 +465,7 @@ else ()
--     # an object file. We only need to do this for LowLevelInterpreter.cpp
--     # and cmake doesn't allow us to introduce a compiler wrapper for a
--     # single source file, so we need to create a separate target for it.
---    add_library(LowLevelInterpreterLib STATIC llint/LowLevelInterpreter.cpp
--+    add_library(LowLevelInterpreterLib OBJECT llint/LowLevelInterpreter.cpp
--         ${JavaScriptCore_DERIVED_SOURCES_DIR}/${LLIntOutput})
-- endif ()
+-diff --git a/configure.ac b/configure.ac
+-index a0e5990d..b052f8cf 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -554,6 +554,17 @@ if test "x$enable_static_cryptsetup" = "xyes"; then
+- 	PKG_CONFIG=$saved_PKG_CONFIG
+- fi
 - 
--@@ -1496,7 +1496,13 @@ if (CMAKE_COMPILER_IS_GNUCXX AND GCC_OFFLINEASM_SOURCE_MAP)
--         COMPILE_OPTIONS "-fno-lto")
-- endif ()
+-+dnl Check compiler support for symver function attribute
+-+saved_CFLAGS=$CFLAGS
+-+CFLAGS="-O0 -Werror"
+-+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+-+	void _test_sym(void);
+-+	__attribute__((__symver__("sym@VERSION_4.2"))) void _test_sym(void) {}
+-+]],
+-+[[ _test_sym() ]]
+-+)],[ AC_DEFINE([HAVE_ATTRIBUTE_SYMVER], 1, [Define to 1 to use __attribute__((symver))])])
+-+CFLAGS=$saved_CFLAGS
+-+
+- AC_MSG_CHECKING([for systemd tmpfiles config directory])
+- PKG_CHECK_VAR([systemd_tmpfilesdir], [systemd], [tmpfilesdir], [], [systemd_tmpfilesdir=no])
+- AC_MSG_RESULT([$systemd_tmpfilesdir])
+-diff --git a/lib/libcryptsetup_symver.h b/lib/libcryptsetup_symver.h
+-index 2a804b6a..3558310d 100644
+---- a/lib/libcryptsetup_symver.h
+-+++ b/lib/libcryptsetup_symver.h
+-@@ -67,11 +67,9 @@
+-  *   under CRYPT_SYMBOL_EXPORT_OLD(int, crypt_func_X, ...) macro
+-  */
 - 
---list(APPEND JavaScriptCore_PRIVATE_LIBRARIES LowLevelInterpreterLib)
--+# When building JavaScriptCore as an object library, we need to make sure the
--+# lowlevelinterpreter lib objects get propogated.
--+if (${JavaScriptCore_LIBRARY_TYPE} STREQUAL "OBJECT")
--+    list(APPEND JavaScriptCore_PRIVATE_LIBRARIES $<TARGET_OBJECTS:LowLevelInterpreterLib>)
--+else ()
--+    list(APPEND JavaScriptCore_SOURCES $<TARGET_OBJECTS:LowLevelInterpreterLib>)
--+endif ()
+--#ifdef __has_attribute
+--#  if __has_attribute(symver)
+--#    define _CRYPT_SYMVER(_local_sym, _public_sym, _ver_str, _maj, _min)     \
+--       __attribute__((__symver__(#_public_sym _ver_str #_maj "." #_min)))
+--#  endif
+-+#if HAVE_ATTRIBUTE_SYMVER
+-+#  define _CRYPT_SYMVER(_local_sym, _public_sym, _ver_str, _maj, _min)     \
+-+     __attribute__((__symver__(#_public_sym _ver_str #_maj "." #_min)))
+- #endif
 - 
-- WEBKIT_COMPUTE_SOURCES(JavaScriptCore)
-- list(APPEND JavaScriptCore_SOURCES
+- #if !defined(_CRYPT_SYMVER) && defined(__GNUC__)
 --- 
--2.37.1
+-2.25.1
 -
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 7f67ef4a7a..ae86c97c0a 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.36.4.tar.xz.sums
--md5  bb5f96d54804e22fd52478665d1dac7a  webkitgtk-2.36.4.tar.xz
--sha1  c4f2d3c8581d1abe2a959e99f2846bea5d5ddf3c  webkitgtk-2.36.4.tar.xz
--sha256  b6bebe1f85a479d968c19e44a4704622ef8cef61636ad1b2406b77d16ae2e2a8  webkitgtk-2.36.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.36.5.tar.xz.sums
-+md5  a876da9d8906468f4e1e3d08729cdeec  webkitgtk-2.36.5.tar.xz
-+sha1  49ff8873500a2ce82bad8879095277bb4dfd21de  webkitgtk-2.36.5.tar.xz
-+sha256  d5532fa884c943dc48f1911473dd663aba407a3b35caa7b04bac1419b41e5908  webkitgtk-2.36.5.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 28cd593d01..8949cb2b1c 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch b/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
+deleted file mode 100644
+index 66e3be350c..0000000000
+--- a/package/cryptsetup/0002-configure.ac-replace-argp_usage-check.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 21515ad7a3b000ee6038f82bbb428ab527002bbd Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 24 Apr 2022 19:47:53 +0200
+-Subject: [PATCH] configure.ac: replace argp_usage check
+-
+-Replace check for argp_usage by argp_parse as argp_usage is not used by
+-cryptsetup. Moreover, this will fix the following build failure raised
+-with argp-standalone in version 1.4.0 and
+-https://github.com/ericonr/argp-standalone/commit/e7ff8d9787d2641e55f6ac4afb777da60ef98043:
+-
+-/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `parse_opt':
+-cryptsetup-ssh.c:(.text+0x14c): undefined reference to `argp_state_help'
+-/home/autobuild/autobuild/instance-10/output-1/host/lib/gcc/i686-buildroot-linux-musl/10.3.0/../../../../i686-buildroot-linux-musl/bin/ld: tokens/ssh/cryptsetup_ssh-cryptsetup-ssh.o: in function `main':
+-cryptsetup-ssh.c:(.text+0x7db): undefined reference to `argp_parse'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/cb3fdae4e0da603f304501f65127800346cb3915
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://gitlab.com/cryptsetup/cryptsetup/-/issues/737]
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d31fb0a7..e47179f2 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -413,7 +413,7 @@ if test "x$enable_ssh_token" = "xyes"; then
+- 	AC_CHECK_DECLS([ssh_session_is_known_server], [], [], [#include <libssh/libssh.h>])
+- 	AC_CHECK_HEADER([argp.h], [], AC_MSG_ERROR([You need argp library.]))
+- 	saved_LIBS=$LIBS
+--	AC_SEARCH_LIBS([argp_usage],[argp])
+-+	AC_SEARCH_LIBS([argp_parse],[argp])
+- 	AC_SUBST(ARGP_LIBS, $LIBS)
+- 	LIBS=$saved_LIBS
+- fi
+--- 
+-2.35.1
+-
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index dce2686d31..5f59b30560 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.4/sha256sums.asc
+-sha256  fc0df945188172264ec5bf1d0bda08264fadc8a3f856d47eba91f31fe354b507  cryptsetup-2.4.3.tar.xz
++# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.5/sha256sums.asc
++sha256  9184a6ebbd9ce7eb211152e7f741a6c82f2d1cc0e24a84ec9c52939eee0f0542  cryptsetup-2.5.0.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 20cf5d6346..01902c3f6a 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.36.4
-+WEBKITGTK_VERSION = 2.36.5
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-CRYPTSETUP_VERSION_MAJOR = 2.4
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
++CRYPTSETUP_VERSION_MAJOR = 2.5
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
+@@ -18,12 +18,8 @@ CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
+ CRYPTSETUP_CPE_ID_VENDOR = cryptsetup_project
+ CRYPTSETUP_INSTALL_STAGING = YES
+ 
+-# 0001-Add-check-program-for-symver-attribute.patch
+-# 0002-configure.ac-replace-argp_usage-check.patch
+-CRYPTSETUP_AUTORECONF = YES
+-
+ CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
+-CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2
++CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2 --disable-asciidoc
+ 
+ # cryptsetup uses OpenSSL by default, but can be configured to use libgcrypt,
+ # nettle, libnss or kernel crypto modules instead
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
