@@ -1,72 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DA95C19F2B
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 09:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF33CC00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 09:14:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CDFE83F91;
-	Fri, 29 Jul 2022 09:12:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CDFE83F91
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54CCE4187A;
+	Fri, 29 Jul 2022 09:14:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54CCE4187A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9T6j3enldE1k; Fri, 29 Jul 2022 09:12:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rbTNphrYep3h; Fri, 29 Jul 2022 09:14:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CEAE83F7E;
-	Fri, 29 Jul 2022 09:12:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CEAE83F7E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 593FF1BF339
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 09:12:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E131641842;
+	Fri, 29 Jul 2022 09:14:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E131641842
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CA7B91BF339
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 09:14:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23CAE60D69
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 09:12:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23CAE60D69
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6092404B0
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 09:14:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6092404B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9tfXeKSzeHja for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 09:12:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id llvRi2YIWvg8 for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 09:14:23 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A643F60B32
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A643F60B32
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 09:12:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B91654000E;
- Fri, 29 Jul 2022 09:12:30 +0000 (UTC)
-Date: Fri, 29 Jul 2022 11:12:29 +0200
-To: Jagan Teki <jagan@amarulasolutions.com>, Marcin Niestroj
- <m.niestroj@grinn-global.com>, Suniel Mahesh <sunil@amarulasolutions.com>,
- Julien Olivain <ju.o@free.fr>, Davide Viti <zinosat@gmail.com>, Louis
- Aussedat <aussedat.louis@gmail.com>, "Yann E. MORIN"
- <yann.morin.1998@free.fr>, Marek Belisko <marek.belisko@open-nandra.com>,
- =?UTF-8?B?SsO2cmc=?= Krause <joerg.krause@embedded.rocks>, Mike Harmony
- <mike.harmony@snapav.com>, Filip Skoneczny <fskoneczny@gmail.com>
-Message-ID: <20220729111229.4acffff8@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8DE94016A
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E8DE94016A
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 09:14:22 +0000 (UTC)
+Received: from iago.. (unknown [151.35.227.255])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 8939FBDECCB6;
+ Fri, 29 Jul 2022 11:14:18 +0200 (CEST)
+From: Andreas Ziegler <br015@umbiko.net>
+To: buildroot@buildroot.org
+Date: Fri, 29 Jul 2022 11:13:23 +0200
+Message-Id: <20220729091323.2933595-1-br015@umbiko.net>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <46b4d64c-1779-bcaf-3fdf-05f33b341c9a@mind.be>
+References: <46b4d64c-1779-bcaf-3fdf-05f33b341c9a@mind.be>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659085952;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=xP/1TaHp4nBPpbA69mGGi+hOhL6I+lpq6J+RHNQyF+E=;
- b=WIorQ62vtlZoBLuUBsPpbKI1qddkCfYR8g1T5/L0YAPk7ZKW5IzwuFDicoBhMDaWLNUHWe
- eRKCRZXMelCSaZYgI3Ne6YqGU8vOeKM2Q8M820EtDLVeXE5OSOR+h6r2EC/MzAZeHumR71
- kdkm2/9SWsK+sPFKHdhzQEq8bbSqNTEWabRPHIAuhXUTwepYM0eByF0cS36hpl72kKn9yC
- SEQwlMLykrvf65zIDpZ1Bc0XJ/E0PCjPbj6s5u6T+cmNvnm9KF+70I9wnxoGVU3Bu5hLRy
- r3QXvlVOBHXL+E8Pc6bS2BL/sh9Y5HLjXn8O9JJg9UxiufEO5DlrL8oXMBT5YA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WIorQ62v
-Subject: [Buildroot] Help to fix your Buildroot defconfigs
+X-Virus-Scanned: clamav-milter 0.103.6 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: [Buildroot] [PATCH 1/1] package/zziplib: create symlinks only if
+ target is missing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,112 +61,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Andreas Ziegler <br015@umbiko.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Symlink creation should only happen for versioned libraries. Modify CMake 
+rules to prevent overwriting existing libraties with recursive links.
 
-You are receiving this e-mail because you are the maintainer of one or
-several defconfigs in Buildroot, which are now failing to build in our
-CI.
+Fixes the following autobuild failures:
+http://autobuild.buildroot.net/results/dd1/dd1974dbc1a22a96a3cedb117417e66119821514/
+http://autobuild.buildroot.net/results/df8/df8406402ccff7cec34ae5858b8da57d1a4ae9c1/
+http://autobuild.buildroot.net/results/743/7433a2ad111e2f014c81f196d3d1e2f63dffa858/
+http://autobuild.buildroot.net/results/79f/79f88e9ec14cda7d07cf689eee864791ba949892/
+...
+http://autobuild.buildroot.net/results/892/8922efbbbfe79e8286a411acce4086b5c77c57c0/
+http://autobuild.buildroot.net/results/dfa/dfa8ade3a4c1750e6dd58e652f60af2a44f80dd8/
+http://autobuild.buildroot.net/results/9cd/9cd4147486f32d642513ba14efca3a02d5745ab9/
 
-Could you please have a look at the failure (see links below), and
-submit patches to address the issues affecting your defconfigs?
+Regression test cases:
+http://autobuild.buildroot.net/results/ba7/ba711034c0abe980f677e26de41739223e2f66e9/
+http://autobuild.buildroot.net/results/032/032aaff121fb114f388c67dbca3ad2b02f670e38/
+http://autobuild.buildroot.net/results/6c5/6c56b645a2b723920f07b98474452824fba5e2c1/
 
-If you are no longer interested in maintaining your defconfig, let us
-know, and we will remove it from Buildroot.
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+---
+ ...reate-symlinks-only-if-target-is-mis.patch | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch
 
-We would like all those issues to be fixed for our upcoming Buildroot
-2022.08 release due end of August. Therefore, if we do not receive a
-fix by then, the failing defconfig will be removed.
-
-Here is the complete list of failing defconfigs, alongside with the
-failure reason and the link to the build log:
-
-pine64_sopine_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800954
-
-pine64_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800951
-
-orangepi_zero_plus_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800936
-
-orangepi_win_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800929
-
-orangepi_rk3399_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800927
-
-orangepi_prime_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800927
-
-orangepi_pc2_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800927
-
-orangepi_one_plus_defconfig -> syntax error in U-Boot Device Tree
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800907
-
-imx8mpico_defconfig -> syntax error in U-Boot Device Tree
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800735
-
-imx8mmpico_defconfig -> syntax error in U-Boot Device Tree
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800730
-
-friendlyarm_nanopi_r1_defconfig -> U-Boot builds need Python2, which is no longer in Buildroot
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800656
-
-friendlyarm_nanopi_neo_plus2_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800653
-
-friendlyarm_nanopi_neo_defconfig -> U-Boot builds need Python2, which is no longer in Buildroot
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800648
-
-friendlyarm_nanopi_neo4_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800643
-
-friendlyarm_nanopi_neo2_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800637
-
-friendlyarm_nanopi_m4_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800634
-
-friendlyarm_nanopi_m1_plus_defconfig -> U-Boot builds need Python2, which is no longer in Buildroot
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800629
-
-friendlyarm_nanopi_a64_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800622
-
-friendlyarm_nanopc_t4_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800619
-
-bananapro_defconfig -> U-Boot builds need Python2, which is no longer in Buildroot
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800516
-
-bananapi_m64_defconfig -> arm-trusted-firmware fails to build
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800514
-
-bananapi_m2_plus_defconfig -> U-Boot builds need Python2, which is no longer in Buildroot
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800509
-
-bananapi_m1_plus_defconfig -> U-Boot builds need Python2, which is no longer in Buildroot
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800507
-
-bananapi_m1_defconfig -> syntax error in U-Boot Device Tree
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800505
-
-Thanks for your contribution to Buildroot!
-
-Thomas
+diff --git a/package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch b/package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch
+new file mode 100644
+index 0000000000..25f9808b8c
+--- /dev/null
++++ b/package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch
+@@ -0,0 +1,59 @@
++From 2b94e8dcc58696f23be07888913eddaa035273d8 Mon Sep 17 00:00:00 2001
++From: Andreas Ziegler <br015@umbiko.net>
++Date: Fri, 29 Jul 2022 10:29:29 +0200
++Subject: [PATCH] ZZIP_LIBLATEST: create symlinks only if target is missing
++
++Signed-off-by: Andreas Ziegler <br015@umbiko.net>
++---
++ zzip/CMakeLists.txt | 18 +++++++++++++++---
++ 1 file changed, 15 insertions(+), 3 deletions(-)
++
++diff --git a/zzip/CMakeLists.txt b/zzip/CMakeLists.txt
++index 4fa6b9c..fe20dd6 100644
++--- a/zzip/CMakeLists.txt
+++++ b/zzip/CMakeLists.txt
++@@ -350,8 +350,12 @@ if(ZZIP_LIBLATEST)
++   endif()
++     get_target_property(libname libzzip OUTPUT_NAME)
++     get_target_property(librelease libzzip RELEASE_POSTFIX)
+++    set(libzzip_target "${lib}${libname}${dll}")
+++    add_custom_command(OUTPUT ${libzzip_target} 
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${libzzip_target}
+++        )
++     add_custom_target(libzzip_latest ALL
++-        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${dll}
+++        DEPENDS ${libzzip_target}
++         )
++     install(FILES
++         ${outdir}/${lib}${libname}${dll}
++@@ -359,8 +363,12 @@ if(ZZIP_LIBLATEST)
++     if(ZZIPFSEEKO)
++     get_target_property(libname libzzipfseeko OUTPUT_NAME)
++     get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
+++    set(libzzipfseeko_target "${lib}${libname}${dll}")
+++    add_custom_command(OUTPUT ${libzzipfseeko_target} 
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${libzzipfseeko_target}
+++        )
++     add_custom_target(libzzipfseeko_latest ALL
++-        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${dll}
+++        DEPENDS ${libzzipfseeko_target}
++         )
++     install(FILES
++         ${outdir}/${lib}${libname}${dll}
++@@ -369,8 +377,12 @@ if(ZZIP_LIBLATEST)
++     if(ZZIPMMAPPED)
++     get_target_property(libname libzzipmmapped OUTPUT_NAME)
++     get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
+++    set(libzzipmmaped_target "${lib}${libname}${dll}")
+++    add_custom_command(OUTPUT ${libzzipmmaped_target} 
+++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${libzzipmmaped_target}
+++        )
++     add_custom_target(libzzipmmaped_latest ALL
++-        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${dll}
+++        DEPENDS ${libzzipmmaped_target}
++         )
++     install(FILES
++         ${outdir}/${lib}${libname}${dll}
++-- 
++2.34.1
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
