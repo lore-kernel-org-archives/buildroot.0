@@ -1,60 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F16DBC00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 17:44:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73D94C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 17:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CC1A4052E;
-	Fri, 29 Jul 2022 17:44:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CC1A4052E
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE93984180;
+	Fri, 29 Jul 2022 17:47:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE93984180
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ICAFazCzvP4U; Fri, 29 Jul 2022 17:44:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uegV9NNkaBsP; Fri, 29 Jul 2022 17:47:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E472402EB;
-	Fri, 29 Jul 2022 17:44:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E472402EB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DA4484177;
+	Fri, 29 Jul 2022 17:47:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DA4484177
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3BCB91BF3FB
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 17:44:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 168931BF3FB
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 17:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2475060B16
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 17:44:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2475060B16
+ by smtp3.osuosl.org (Postfix) with ESMTP id E64DE60B16
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 17:47:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E64DE60B16
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sBKCKvBZRVev for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 17:44:51 +0000 (UTC)
+ with ESMTP id Ta4ONlUx6raw for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 17:47:09 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B0A1607F1
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6B0A1607F1
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 17:44:51 +0000 (UTC)
-Received: from fwd79.dcpf.telekom.de (fwd79.aul.t-online.de [10.223.144.105])
- by mailout04.t-online.de (Postfix) with SMTP id BBD4C52D0
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:44:47 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.206.67]) by fwd79.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3DB3607F1
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C3DB3607F1
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 17:47:08 +0000 (UTC)
+Received: from fwd85.dcpf.telekom.de (fwd85.aul.t-online.de [10.223.144.111])
+ by mailout07.t-online.de (Postfix) with SMTP id 973927DB7
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:46:52 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.206.67]) by fwd85.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1oHU2W-1Ac0i90; Fri, 29 Jul 2022 19:44:44 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56506)
+ esmtp id 1oHU4X-2MLanR0; Fri, 29 Jul 2022 19:46:49 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44004)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1oHU2W-0001R5-1V
- for buildroot@buildroot.org; Fri, 29 Jul 2022 19:44:44 +0200
+ (envelope-from <bernd.kuhls@t-online.de>) id 1oHU4X-0001nB-1B
+ for buildroot@buildroot.org; Fri, 29 Jul 2022 19:46:49 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 19:44:44 +0200
-Message-Id: <20220729174444.352284-1-bernd.kuhls@t-online.de>
+Date: Fri, 29 Jul 2022 19:46:49 +0200
+Message-Id: <20220729174649.356266-1-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1659116684-014551EF-E92CC7CE/0/0 CLEAN NORMAL
-X-TOI-MSGID: f1e7a46a-fdb3-40f7-88cc-4f32e7623a90
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-nv: bump
- version to 2.1.22
+X-TOI-EXPURGATEID: 150726::1659116809-01447E04-68914BFA/0/0 CLEAN NORMAL
+X-TOI-MSGID: 9ff04910-efd5-4f23-b6d4-4dd8e38093b8
+Subject: [Buildroot] [PATCH 1/1] package/kodi-peripheral-xarcade: bump
+ version to 19.0.4-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,46 +71,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://lists.x.org/archives/xorg-announce/2022-July/003196.html
-
-Switched tarball from bz2 to xz
-Switched _SITE to https
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash  | 5 +++--
- .../x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk    | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash
-index e1835687aa..ec7d198c18 100644
---- a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash
-+++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.hash
-@@ -1,4 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2017-January/002761.html
--sha256  1f98649e6ff0e8214b9d5dcac661f1d004be8e73823d8247b9c7025fd81db32d  xf86-video-nv-2.1.21.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2022-July/003196.html
-+sha256  6218932db5c389878d853b11b8fbb667c321b65276f55aa6842a56fb1a30d288  xf86-video-nv-2.1.22.tar.xz
-+sha512  a54767e9060404cafbb028ea36e582e8cfb7431a746cfc1d698c435fa73e41c4dfc12f84e50d002a582ac61e2d4c377f4defdf407250ee9e8656e5ff989b3cda  xf86-video-nv-2.1.22.tar.xz
- # Locally calculated
- sha256  10d10e1ec37594d481c3de8dda22a40b731ebd43be7ccd462baaa7394738a9f3  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
-index 1e5fc26ddb..2aab60aaf9 100644
---- a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
-+++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+index 3ceabd4759..0ae1ffaa50 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  589b5355bf9b0b5183ecf2d93a4a80ca1ae317a9fdf4efb9c14eb7114b4ec13a  kodi-peripheral-xarcade-19.0.3-Matrix.tar.gz
++sha256  1327ecd05e2e66a4faf809efee4c5b99627912d971db26a0a905f0299e4f876b  kodi-peripheral-xarcade-19.0.4-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+index ef3cc6fef1..9ee26ea2fe 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_NV_VERSION = 2.1.21
--XDRIVER_XF86_VIDEO_NV_SOURCE = xf86-video-nv-$(XDRIVER_XF86_VIDEO_NV_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_NV_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_NV_VERSION = 2.1.22
-+XDRIVER_XF86_VIDEO_NV_SOURCE = xf86-video-nv-$(XDRIVER_XF86_VIDEO_NV_VERSION).tar.xz
-+XDRIVER_XF86_VIDEO_NV_SITE = https://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NV_LICENSE = MIT
- XDRIVER_XF86_VIDEO_NV_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_NV_DEPENDENCIES = xserver_xorg-server xorgproto
+-KODI_PERIPHERAL_XARCADE_VERSION = 19.0.3-Matrix
++KODI_PERIPHERAL_XARCADE_VERSION = 19.0.4-Matrix
+ KODI_PERIPHERAL_XARCADE_SITE = $(call github,kodi-game,peripheral.xarcade,$(KODI_PERIPHERAL_XARCADE_VERSION))
+ KODI_PERIPHERAL_XARCADE_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_XARCADE_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
 
