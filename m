@@ -4,69 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB67FC00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 09:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B04E7C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 09:57:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EB5F6105D;
-	Fri, 29 Jul 2022 09:43:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EB5F6105D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C48D6104E;
+	Fri, 29 Jul 2022 09:57:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C48D6104E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AUHKmZcANHzL; Fri, 29 Jul 2022 09:43:00 +0000 (UTC)
+	with ESMTP id VBSbzJ_JUYe4; Fri, 29 Jul 2022 09:57:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CC7F60E3C;
-	Fri, 29 Jul 2022 09:42:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CC7F60E3C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 83C5D1BF339
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 09:42:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49D6C60BAA;
+	Fri, 29 Jul 2022 09:57:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49D6C60BAA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E2321BF36C
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 09:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 09E6683F54
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 09:42:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09E6683F54
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38E5360BAA
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 09:57:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38E5360BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dunW59EADB0F for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 09:42:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id My8C4ZSZopwy for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 09:57:05 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DFDE8250B
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9DFDE8250B
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 09:42:55 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3529720009;
- Fri, 29 Jul 2022 09:42:52 +0000 (UTC)
-Date: Fri, 29 Jul 2022 11:42:51 +0200
-To: Christian Stewart <christian@paral.in>
-Message-ID: <20220729114251.217a4104@windsurf>
-In-Reply-To: <CA+h8R2rq1GonYRs0o=BN_gcJnJwYCVosjY9FEeZs-3os97Kt8w@mail.gmail.com>
-References: <20220724234718.676572-1-christian@paral.in>
- <20220726191133.26dba919@windsurf>
- <CA+h8R2rq1GonYRs0o=BN_gcJnJwYCVosjY9FEeZs-3os97Kt8w@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4F1E6064D
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E4F1E6064D
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 09:57:04 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0A6276000E
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 09:57:01 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>) id 1oHMjt-004Fh1-0b
+ for buildroot@buildroot.org; Fri, 29 Jul 2022 11:57:01 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 29 Jul 2022 11:57:00 +0200
+Message-ID: <877d3wqm1f.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659087772;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=xeixjKxWmnqmfvKTohfxwddc5d1yyHD+2g5CYqQwNHk=;
- b=niFjdy9vDJvFUF1eNoICq6NSs/dqNp0JBl5CYOJ9f3CMGadhRK//vVz3zS+RvCXoH9jnfb
- FgZeu8O2QaddRHW0MDnShdzrJWI2S1IGhK83DF5EP1C+eeiEs0jarU4TPfZlbgpKTeYJ4J
- H9Kpj02sryER8AYVZQ95Ub5yIJMnXHGKheD7VS7wzpuaUjw1KU5iDGu/D/sDzUKGJEhTmA
- ue9k9GBUoCNSGYZBW/eYco0zljXrv83SK8Ne3PPoaCfKwqLtVPJXqbmwr7387WXjMcaT7O
- ovml29TpxtrSVCtvgEBzqQyjYlTWM6Qq1yc4tJPgACg/ZrT1ui7tPD2cA5oX4Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=niFjdy9v
-Subject: Re: [Buildroot] [RFC PATCH v1 1/1] package/android-tools: update to
- version 5.1.1.r38
+Subject: [Buildroot] Buildroot 2022.02.4 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,67 +60,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Christian Stewart via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Christian,
-
-On Thu, 28 Jul 2022 08:24:18 -0700
-Christian Stewart <christian@paral.in> wrote:
-
-> ACK on your comments.
-> 
-> However, I think even this updated version is still extremely old.
-> 
-> It doesn't have all of the arguments like --page-size or even --version
-> 
-> The Gentoo package reports version 31.0.3-android-tools
-> 
-> That's way way way more recent than 5.x, right?
-> 
-> I'm a bit confused on these version schemes.
-> 
-> https://github.com/nmeum/android-tools
-
-I have no idea how this is maintained. It's probably a bit crappy as
-this is forked from the Android code base. So far, we were using the
-android-tools packaged in Ubuntu, therefore available on Launchpad.
-
-This other Github repository you're pointing to perhaps uses a
-different version scheme.
-
-> This package has a Cmake version of building it which seems much
-> cleaner, and also brings in all the other tools like simg.
-> 
-> To be able to build it, it requires using the Git submodules method:
-> 
-> ANDROID_TOOLS_VERSION = 31.0.3p1
-> ANDROID_TOOLS_SITE = https://github.com/nmeum/android-tools
-> ANDROID_TOOLS_SITE_METHOD = git
-> ANDROID_TOOLS_LICENSE = Apache-2.0
-> ANDROID_TOOLS_GIT_SUBMODULES = YES
-> 
-> And carries its own patches for adb, etc.
-> 
-> Would it be desirable to switch to this version instead? I certainly
-> would prefer it for my purposes.
-
-This seems like a reasonable solution. I see that a Go compiler is
-needed. Is it because the android tools developed by Google are now
-written in Go?
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
+ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
+MjIuMDIuNCBpcyByZWxlYXNlZCAtIEdvIGRvd25sb2FkIGl0IGF0OgoKaHR0cDovL2J1aWxkcm9v
+dC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIyLjAyLjQudGFyLmd6CgpvcgoKaHR0cDovL2J1
+aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIyLjAyLjQudGFyLnh6CgpPciBnZXQg
+aXQgZnJvbSBHaXQ6CgpnaXQ6Ly9naXQuYnVpbGRyb290Lm9yZy9idWlsZHJvb3QKCkJ1aWxkcm9v
+dCAyMDIyLjAyLjQgaXMgYSBidWdmaXggcmVsZWFzZSBvbiB0aGUgY3VycmVudCBsb25nIHRlcm0K
+cmVsZWFzZSwgZml4aW5nIGEgbnVtYmVyIG9mIGltcG9ydGFudCAvIHNlY3VyaXR5IHJlbGF0ZWQg
+aXNzdWVzCmRpc2NvdmVyZWQgc2luY2UgdGhlIDIwMjIuMDIuMyByZWxlYXNlLgoKLSBEaXNhYmxl
+IGJpZyBlbmRpYW4gbm8tbW11IG9uIEFSTSBhcyBpdCBpcyBub3Qgc3VwcG9ydGVkIGJ5IGVsZjJm
+bHQKCi0gVGlnaHRlbiBkZXBlbmRlbmNpZXMgZm9yIGV4dGVybmFsIEJvb3RsaW4gdG9vbGNoYWlu
+cyB0byBlbnN1cmUgdGhleQogIGNhbiBvbmx5IGJlIHNlbGVjdGVkIGluIGNvbXBhdGlibGUgY29u
+ZmlndXJhdGlvbnMKCi0gU3VwcG9ydCBleHRlcm5hbCB0b29sY2hhaW5zIHdpdGhvdXQgZ2Ric2Vy
+dmVyCgotIFNlY3VyaXR5IGZpeGVzIGZvciBhcGFjaGUsIGN1cHMsIGdob3N0c2NyaXB0LCBnc3Qx
+LXBsdWdpbnMtZ29vZCwKICBsaWJjdXJsLCBsaWJvcGVuc3NsLCBsaWJwanNpcCwgbGlic25kZmls
+ZSwgbG9ncm90YXRlLCBwaHAsCiAgcHl0aG9uLXBpbGxvdywgcWRlY29kZXIsIHNvZmlhLXNpcCwg
+dGNwcmVwbGF5LCB0b3IsIHZpbQoKLSBGaXhlcyBmb3IgZG93bmxvYWQvY29tcGlsYXRpb24vcnVu
+dGltZS9saWNlbnNlIGlzc3VlcyBpbiBhdmFoaSwgYmR3Z2MsCiAgYmluZCwgYnBmdG9vbCwgZGFy
+a2h0dHBkLCBkbWFsbG9jLCBlY3J5cHRmcy11dGlscywgZnhsb2FkLCBnbnV0bHMsCiAgZ3N0LW9t
+eCwgZ3N0MS1kZXZ0b29scywgZ3N0MS1saWJhdiwgZ3N0MS1wbHVnaW5zLWJhZCwKICBnc3QxLXBs
+dWdpbnMtYmFzZSwgZ3N0MS1wbHVnaW5zLXVnbHksIGdzdDEtcHl0aG9uLCBnc3QxLXJ0c3Atc2Vy
+dmVyLAogIGdzdDEtdmFhcGksIGdzdHJlYW1lcjEsIGdzdHJlYW1lcjEtZWRpdGluZy1zZXJ2aWNl
+cywgZ3Rlc3QsIGlwdGFibGVzLAogIGtleXV0aWxzLCBsY20yLCBsaWJhYnNlaWwtY3BwLCBsaWJj
+YW1lcmEsIGxpYmVhc3RsLCBsaWJncGdtZSwgbGliZ3RrMywKICBsaWJtZGJ4LCBsaWJtZWRpYWFy
+dCwgbGlibW9kc2VjdXJpdHksIGxpYm5ldGNvbmYyLCBsaWJzYW1wbGVyYXRlLAogIGxpYnRhbGxv
+YywgbHVhaml0LCBuZ2lueCwgbm9pcCwgcGF4dGVzdCwgcG9zdGdyZXNxbCwgcHJvY3JhbmtfbGlu
+dXgsCiAgcHVyZS1mdHBkLCByYWJiaXRtcS1zZXJ2ZXIsIHJwaS11c2VybGFuZCwgcnVzdGMsIHN5
+c3RlbWQsIHRjcHJlcGxheSwKICB0aW55cHJveHksIHVhY21lLCB1Ym9vdC11dGlscywgd2F0Y2hk
+b2dkLCB3ZWJraXRndGssIHdlc3RvbiwKICB3aXJlZ3VhcmQtbGludXgtY29tcGF0LCB3cGFfc3Vw
+cGxpY2FudCwgd3Bld2Via2l0LCB6c3RkCgpGb3IgbW9yZSBkZXRhaWxzLCBzZWUgdGhlIENIQU5H
+RVMgZmlsZToKCmh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L3BsYWluL0NIQU5H
+RVM/aWQ9MjAyMi4wMi40CgpVc2VycyBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMgYXJlIHN0cm9u
+Z2x5IGVuY291cmFnZWQgdG8gdXBncmFkZS4KCk1hbnkgdGhhbmtzIHRvIGFsbCB0aGUgcGVvcGxl
+IGNvbnRyaWJ1dGluZyB0byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hvcnRsb2cgLXNuIDIwMjIuMDIu
+My4uCgogICAgNDkgIEZhYnJpY2UgRm9udGFpbmUKICAgIDE3ICBKYW1lcyBIaWxsaWFyZAogICAg
+MTQgIFRob21hcyBQZXRhenpvbmkKICAgIDEyICBCZXJuZCBLdWhscwogICAgIDMgIEFuZ2VsbyBD
+b21wYWdudWNjaQogICAgIDIgIEZyYW5jb2lzIFBlcnJhZAogICAgIDIgIFBldGVyIEtvcnNnYWFy
+ZAogICAgIDEgIEFsZXhhbmRlciBNdWtoaW4KICAgICAxICBCYXJ1Y2ggU2lhY2gKICAgICAxICBE
+YW5vbWkgTWFuY2hlZ28KICAgICAxICBEb21pbmlrIE1pY2hhZWwgUmF1aAogICAgIDEgIE5pY29s
+YSBEaSBMaWV0bwogICAgIDEgIE5pY29sYXMgQ2F2YWxsYXJpCiAgICAgMSAgTmljb2xhcyBQT0lS
+T1QKICAgICAxICBRdWVudGluIFNjaHVsegogICAgIDEgIFNoYWhhYiBWYWhlZGkKICAgICAxICDQ
+m9C10L7QvdC40LQg0K7RgNGM0LXQsiAoTGVvbmlkIFl1cmlldikKCi0tIApCeWUsIFBldGVyIEtv
+cnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
