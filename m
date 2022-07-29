@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B8F2C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 18:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD24C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 18:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B58984614;
-	Fri, 29 Jul 2022 18:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B58984614
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BD608461B;
+	Fri, 29 Jul 2022 18:46:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BD608461B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lsmaHdQGVUFZ; Fri, 29 Jul 2022 18:46:22 +0000 (UTC)
+	with ESMTP id sJF-Lh5xbe-g; Fri, 29 Jul 2022 18:46:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0DCE8426B;
-	Fri, 29 Jul 2022 18:46:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0DCE8426B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7CCF71BF575
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B9C784654;
+	Fri, 29 Jul 2022 18:46:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B9C784654
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BCAD1C2744
  for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 18:45:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5866960B4A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 756AB41BD5
  for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 18:45:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5866960B4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 756AB41BD5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NSRr74ZtlJFQ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BxWFQ2-RTOvB for <buildroot@lists.busybox.net>;
  Fri, 29 Jul 2022 18:45:53 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84F5960B3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79A9841BA9
 Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 84F5960B3F
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 18:45:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 79A9841BA9
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 18:45:51 +0000 (UTC)
 Received: from email.seznam.cz
- by email-smtpc12b.ng.seznam.cz (email-smtpc12b.ng.seznam.cz [10.23.14.105])
- id 34140c8b8234b3d03413b2fc; Fri, 29 Jul 2022 20:45:49 +0200 (CEST)
+ by email-smtpc26b.ng.seznam.cz (email-smtpc26b.ng.seznam.cz [10.23.18.37])
+ id 39a4eb838f8454d839a355f4; Fri, 29 Jul 2022 20:45:50 +0200 (CEST)
 Received: from localhost.localdomain (mail.ms-free.net [185.147.46.46])
  by email-relay28.ng.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
  Fri, 29 Jul 2022 20:45:47 +0200 (CEST)  
 From: Petr Vorel <pevik@seznam.cz>
 To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 20:45:42 +0200
-Message-Id: <20220729184542.213544-4-pevik@seznam.cz>
+Date: Fri, 29 Jul 2022 20:45:41 +0200
+Message-Id: <20220729184542.213544-3-pevik@seznam.cz>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220729184542.213544-1-pevik@seznam.cz>
 References: <20220729184542.213544-1-pevik@seznam.cz>
 MIME-Version: 1.0
-X-szn-frgn: <0bec1d38-250c-4bc8-82c0-a4d1f1882e3c>
+X-szn-frgn: <5a44fa52-d5a2-4ed4-b306-c37f6c9ee94d>
 X-szn-frgc: <0>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=seznam.cz; s=beta; 
- t=1659120349; bh=p/YFc3aQ8n1ezdB4gySwPy46J+Lbyp7Php+wYyGiXaA=;
+ t=1659120350; bh=jJD56O9dSw2P9Er450byWzJuvlyHBWmPzVhNmO6vt+Y=;
  h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:X-szn-frgn:
  X-szn-frgc;
- b=aftmnbamCoAsSmt+v1nqafpx5IlngJwsj9ZqpXUCHBgcI6sUYZgVSGM69pIT5cTlq
- 193Rjew4zZ6XX9fMugjW1DJWyZmQVNveMVBJIWq4s5Ti29xF11lXO3GvJ2MyDVuSTu
- TqPXwOfnpC7frwH+dVuHXfw7N045lgKX9cH2/Yqk=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=AfqLFFE+Ru52AqONVomsPZunxUGes3uOvXLKx5vs/nhCc69wj8IsGZFMH07T9BlmD
+ fI6p2wjh2NBAzM3Z5FksyFtP43CLEfQdPP3WcUzuxCt+aSZv4v+TY3wMBofwM5Bkm/
+ JC5RKGAHNrl++0gJ0rzR+3tfSFb3PjAUAyF2tRBA=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=seznam.cz header.i=@seznam.cz
- header.a=rsa-sha256 header.s=beta header.b=aftmnbam
-Subject: [Buildroot] [PATCH 3/3] package/modem-manager: bind version to
- 1.18.10
+ header.a=rsa-sha256 header.s=beta header.b=AfqLFFE+
+Subject: [Buildroot] [PATCH 2/3] package/libqmi: bump version to 1.30.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,37 +84,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Petr Vorel <petr.vorel@gmail.com>
 
-This version require libqmi 1.30.8 (updated in previous commit).
-
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index ea91f42fe0..33098609d9 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index ef2da77a2a..dee2a94d93 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
 @@ -1,4 +1,4 @@
- # Locally computed
--sha256  d4f804b31cf504239c5f1d4973c62095c00cba1ee9abb503718dac6d146a470a  ModemManager-1.18.6.tar.xz
-+sha256  16255f8229eeeb2dfecb8dd1370360d46f1015ec85e6fba5c1cbd9f4371d65eb  ModemManager-1.18.10.tar.xz
+ # Locally computed:
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index d7e2c55bf8..8c53216874 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
+-sha256  82ddd3f77c602b1e0c11d3e41d0563ede11f95036ebfcf929bc89157b13928e6  libqmi-1.30.4.tar.gz
++sha256  b2e0285690f94fe6d0cc3c422514117b187c8ddb90133c2900993e13343f5a5e  libqmi-1.30.8.tar.gz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index b33e2fdc47..6b7f45729e 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MODEM_MANAGER_VERSION = 1.18.6
-+MODEM_MANAGER_VERSION = 1.18.10
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-LIBQMI_VERSION = 1.30.4
++LIBQMI_VERSION = 1.30.8
+ LIBQMI_SITE = https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$(LIBQMI_VERSION)
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+ LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
 -- 
 2.37.1
 
