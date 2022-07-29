@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9A1CC00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC28DC00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:47:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 139F641047;
-	Fri, 29 Jul 2022 19:47:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 139F641047
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6164A41185;
+	Fri, 29 Jul 2022 19:47:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6164A41185
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ggtApqKZ1SE1; Fri, 29 Jul 2022 19:47:05 +0000 (UTC)
+	with ESMTP id F_drEQupooYb; Fri, 29 Jul 2022 19:47:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1A5D840C62;
-	Fri, 29 Jul 2022 19:47:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A5D840C62
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B36241BF33A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75BC241051;
+	Fri, 29 Jul 2022 19:47:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75BC241051
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B5BEA1C11A5
  for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C70740C6D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BC9183FAA
  for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:47:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C70740C6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BC9183FAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nwKEQX1luCe5 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vs8Ocx9Dt65f for <buildroot@lists.busybox.net>;
  Fri, 29 Jul 2022 19:47:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D54B840C62
+ by smtp1.osuosl.org (Postfix) with ESMTP id CBAAC83FA8
  for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:47:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D54B840C62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBAAC83FA8
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 83B768692F; Fri, 29 Jul 2022 19:33:09 +0000 (UTC)
+ id 7A14F86934; Fri, 29 Jul 2022 19:33:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 21:46:49 +0200
+Date: Fri, 29 Jul 2022 21:46:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 54f983ad63c155944f4f053af9bfce3360dabf7f
-X-Git-Newrev: d120dacf6a4d848e3eb31aa387fd72143f98d5a7
+X-Git-Oldrev: 4cceb19b00c7ba76b41b6595cb93b760e0458adf
+X-Git-Newrev: 54f983ad63c155944f4f053af9bfce3360dabf7f
 X-Patchwork-Hint: ignore
-Message-Id: <20220729193309.83B768692F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/modem-manager: bind version to
- 1.18.10
+Message-Id: <20220729193309.7A14F86934@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libqmi: bump version to 1.30.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d120dacf6a4d848e3eb31aa387fd72143f98d5a7
+commit: https://git.buildroot.net/buildroot/commit/?id=54f983ad63c155944f4f053af9bfce3360dabf7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This version require libqmi 1.30.8 (updated in previous commit).
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index ea91f42fe0..33098609d9 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index ef2da77a2a..dee2a94d93 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
 @@ -1,4 +1,4 @@
- # Locally computed
--sha256  d4f804b31cf504239c5f1d4973c62095c00cba1ee9abb503718dac6d146a470a  ModemManager-1.18.6.tar.xz
-+sha256  16255f8229eeeb2dfecb8dd1370360d46f1015ec85e6fba5c1cbd9f4371d65eb  ModemManager-1.18.10.tar.xz
+ # Locally computed:
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index d7e2c55bf8..8c53216874 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
+-sha256  82ddd3f77c602b1e0c11d3e41d0563ede11f95036ebfcf929bc89157b13928e6  libqmi-1.30.4.tar.gz
++sha256  b2e0285690f94fe6d0cc3c422514117b187c8ddb90133c2900993e13343f5a5e  libqmi-1.30.8.tar.gz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index b33e2fdc47..6b7f45729e 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MODEM_MANAGER_VERSION = 1.18.6
-+MODEM_MANAGER_VERSION = 1.18.10
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-LIBQMI_VERSION = 1.30.4
++LIBQMI_VERSION = 1.30.8
+ LIBQMI_SITE = https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/$(LIBQMI_VERSION)
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+ LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
