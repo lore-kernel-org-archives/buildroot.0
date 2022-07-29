@@ -1,49 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2C36C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96994C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 377B74091A;
-	Fri, 29 Jul 2022 19:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 377B74091A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 436418149A;
+	Fri, 29 Jul 2022 19:58:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 436418149A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IMa5tQyVL9bv; Fri, 29 Jul 2022 19:58:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L9SDZ3P0HsM4; Fri, 29 Jul 2022 19:58:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B7CE408BE;
-	Fri, 29 Jul 2022 19:58:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B7CE408BE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AB42D1BF33A
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:58:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C9208141F;
+	Fri, 29 Jul 2022 19:58:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C9208141F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 11EA41BF33A
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:58:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 85C1940896
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:58:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85C1940896
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDE7440C4F
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:58:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDE7440C4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IHuj5jjWXC71 for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 19:58:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C07740860
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:58:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C07740860
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 33F7C86955; Fri, 29 Jul 2022 19:44:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 21:58:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 43daab350d633512df07159b7ba3f90673335c0f
-X-Git-Newrev: 4900fc717cea67a6e2692c714377d27093a5f76a
-X-Patchwork-Hint: ignore
-Message-Id: <20220729194423.33F7C86955@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mariadb: work around gcc bug 68485
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wsXW4_oH1_-D for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 19:58:19 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC8C2401A2
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CC8C2401A2
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:58:18 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B9A6E1BF204;
+ Fri, 29 Jul 2022 19:58:16 +0000 (UTC)
+Date: Fri, 29 Jul 2022 21:58:15 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220729215815.311acdad@windsurf>
+In-Reply-To: <20220729154637.11397-1-fontaine.fabrice@gmail.com>
+References: <20220729154637.11397-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659124697;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=o4HEF+T1/czpWeZzjF/LWqQwZ09oK+IXlCiH6d+7lC8=;
+ b=ch77PRTORaiOQKK7N1TQU4SZDA9pYgbALplTlvHke9ncP/K4kUO3CsJXuvfc8o8BEZtQk5
+ mRxXAjTJMb2kR6SpdWvwvQuqe7N/2NK5UmQAWIEDcBkVIGJYqzXGjLTYRp43Wfyc6XS6Ci
+ eL1PmYkjRWgD7X6shx5ElejWgck7bkhTsk7eejTyIpO9Kz6XoaWuF1PjFkICFAJuy2D8bg
+ fjam56xOpbFx4kNy8mfuuhcmw6t1z1B1nCXUMpl6n2QDX4g+0wCSBy6j7YGl+43olxJu+9
+ 4zZP1lQ/Ybmw5kz1l6pPRmz0hedJsCviAdAWk6w2cHw6eRu6/+9zE7WX/IpNEw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ch77PRTO
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] package/pkg-autotools: fix runtime path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +78,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4900fc717cea67a6e2692c714377d27093a5f76a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 29 Jul 2022 17:46:37 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-With Microblaze Gcc version <= 12.x the build fails due to gcc bug
-68485: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. The bug
-show up when building mariadb with optimization but not when building
-with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_68458=y,
-we force using -O0.
+> Commit 505b5a6cdd337c2fd5965aa875a1a53419d62ed1 wrongly stated that "a
+> configure script bundled with a package may be generated with an older
+> version of Autotools, that may not yet support the --runstatedir option.
+> This will give an "Unsupported arguments" warning and the option will be
+> ignored.". Indeed, this will raise the following build failure with
+> attr, libtirpc, readline, etc.:
+> 
+> configure: error: unrecognized option: `--runstatedir=/run'
+> 
+> So to support configure scripts using older version, the variable is set
+> directly instead of using the --runstatedir argument.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/c853f14773d875be30e32ae24daf80e181fef34e
+>  - http://autobuild.buildroot.org/results/045211cd66cf78c3d89d2d8ac41ec4edf0b0ee58
+>  - http://autobuild.buildroot.org/results/8c5160eef99de2f1f72f33d5e5ea94d417855b2c
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Remove revert sentence
 
-Fixes:
-http://autobuild.buildroot.net/results/9b5/9b5dce4958b602c80140440addb1f072332e53c2/
+Applied to master, thanks.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mariadb/mariadb.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 06fd1484b6..4c855985b1 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -82,6 +82,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- MARIADB_CXXFLAGS += -latomic
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+MARIADB_CXXFLAGS += -O0
-+endif
-+
- MARIADB_CONF_OPTS += \
- 	-DCMAKE_CXX_FLAGS="$(MARIADB_CXXFLAGS)" \
- 	-DINSTALL_DOCDIR=share/doc/mariadb-$(MARIADB_VERSION) \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
