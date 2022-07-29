@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C2CDC00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 20:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BB76C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 20:50:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C03CF404F5;
-	Fri, 29 Jul 2022 20:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C03CF404F5
+	by smtp2.osuosl.org (Postfix) with ESMTP id D18E440643;
+	Fri, 29 Jul 2022 20:50:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D18E440643
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9MiYHXogZDjv; Fri, 29 Jul 2022 20:49:56 +0000 (UTC)
+	with ESMTP id 2K391GMDY7mx; Fri, 29 Jul 2022 20:50:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E0A5A40526;
-	Fri, 29 Jul 2022 20:49:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0A5A40526
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7DC5F1BF35D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9CBCB408F5;
+	Fri, 29 Jul 2022 20:50:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CBCB408F5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A844A1C11A5
  for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 20:49:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58C5560601
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8FE94414E7
  for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 20:49:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58C5560601
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FE94414E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HzQueR5VKe2w for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fivl008ERFsh for <buildroot@lists.busybox.net>;
  Fri, 29 Jul 2022 20:49:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E5CC605C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7692A41526
  for <buildroot@buildroot.org>; Fri, 29 Jul 2022 20:49:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E5CC605C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7692A41526
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 1115F869CD; Fri, 29 Jul 2022 20:36:01 +0000 (UTC)
+ id 06F07869CA; Fri, 29 Jul 2022 20:36:01 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 22:45:11 +0200
+Date: Fri, 29 Jul 2022 22:44:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 15c972f32a9e4c8fb3e18646885141ab0fa52fc0
-X-Git-Newrev: 32b341fa34b23f81ee2dc8dea7b7b45035c3e8fa
+X-Git-Oldrev: 3e15fe6a5e91def9fce5b7d19b1f78c072bdab41
+X-Git-Newrev: 15c972f32a9e4c8fb3e18646885141ab0fa52fc0
 X-Patchwork-Hint: ignore
-Message-Id: <20220729203601.1115F869CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual: add integration section for
- systemd with dbus
+Message-Id: <20220729203601.06F07869CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: introduce "Integration
+ topics" chapter
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,66 +63,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32b341fa34b23f81ee2dc8dea7b7b45035c3e8fa
+commit: https://git.buildroot.net/buildroot/commit/?id=15c972f32a9e4c8fb3e18646885141ab0fa52fc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a section to the "Integration topics" chapter about how we integrate
-systemd. Add a first subsection about how dbus and dbus-broker work with
-systemd.
+We want to add more information in the manual about how a system created
+with buildroot works overall. We currently already have a chapter about
+SELinux, but we want to add more information like that, e.g. details
+about how systemd in Buildroot works.
 
-This is just the start of the integration information about systemd.
+Create a new chapter "Integration topics" with an introductory blurb,
+and move the SELinux topic under it (as a section rather than a
+chapter).
+
+"Integration topics" is not the best title, but we couldn't find
+anything better.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[yann.morin.1998@free.fr: remove selinux from main manual.txt]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- docs/manual/integration-systemd.txt | 27 +++++++++++++++++++++++++++
- docs/manual/integration.txt         |  2 ++
- 2 files changed, 29 insertions(+)
+ .../{selinux-support.txt => integration-selinux-support.txt} |  6 +++---
+ docs/manual/integration.txt                                  | 12 ++++++++++++
+ docs/manual/manual.txt                                       |  2 +-
+ 3 files changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/integration-systemd.txt b/docs/manual/integration-systemd.txt
+diff --git a/docs/manual/selinux-support.txt b/docs/manual/integration-selinux-support.txt
+similarity index 96%
+rename from docs/manual/selinux-support.txt
+rename to docs/manual/integration-selinux-support.txt
+index 21137ae6c3..1f6bcf47eb 100644
+--- a/docs/manual/selinux-support.txt
++++ b/docs/manual/integration-selinux-support.txt
+@@ -2,7 +2,7 @@
+ // vim: set syntax=asciidoc:
+ 
+ [[selinux]]
+-== Using SELinux in Buildroot
++=== Using SELinux in Buildroot
+ 
+ https://selinuxproject.org[SELinux] is a Linux kernel security module
+ enforcing access control policies. In addition to the traditional file
+@@ -30,7 +30,7 @@ upstream https://github.com/SELinuxProject/refpolicy[refpolicy]
+ project, enabled with +BR2_PACKAGE_REFPOLICY+.
+ 
+ [[enabling-selinux]]
+-=== Enabling SELinux support
++==== Enabling SELinux support
+ 
+ To have proper support for +SELinux+ in a Buildroot generated system,
+ the following configuration options must be enabled:
+@@ -42,7 +42,7 @@ In addition, your filesystem image format must support extended
+ attributes.
+ 
+ [[selinux-policy-tweaking]]
+-=== SELinux policy tweaking
++==== SELinux policy tweaking
+ 
+ The +SELinux refpolicy+ contains modules that can be enabled or
+ disabled when being built. Each module provide a number of +SELinux+
+diff --git a/docs/manual/integration.txt b/docs/manual/integration.txt
 new file mode 100644
-index 0000000000..44248b43ff
+index 0000000000..bdfbfa59de
 --- /dev/null
-+++ b/docs/manual/integration-systemd.txt
-@@ -0,0 +1,27 @@
++++ b/docs/manual/integration.txt
+@@ -0,0 +1,12 @@
 +// -*- mode:doc; -*-
 +// vim: set syntax=asciidoc:
 +
-+[[integration-systemd]]
-+=== Systemd
++[[integration]]
++== Integration topics
 +
-+This chapter describes the decisions taken in Buildroot's integration of
-+systemd, and how various use cases can be implemented.
++This chapter discusses how various things are integrated at system
++level. Buildroot is highly configurable, almost everything discussed
++here can be changed or overridden by xref:rootfs-custom[rootfs overlay
++or custom skeleton] configuration.
 +
-+==== DBus daemon
-+
-+Systemd requires a DBus daemon. There are two options for it: traditional dbus
-+(+BR2_PACKAGE_DBUS+) and bus1 dbus-broker (+BR2_PACKAGE_DBUS_BROKER+). At
-+least one of them must be chosen. If both are included in the configuration,
-+dbus-broker will be used as system bus, but the traditional dbus-daemon is
-+still installed as well and can be used as session bus. Also its tools (e.g.
-++dbus-send+) can be used (systemd itself has +busctl+ as an alternative). In
-+addition, the traditional dbus package is the only one that provides +libdbus+,
-+which is used by many packages as dbus integration library.
-+
-+Both in the dbus and in the dbus-broker case, the daemon runs as user +dbus+.
-+The DBus configuration files are also identical for both.
-+
-+To make sure that only one of the two daemons is started as system bus, the
-+systemd activation files of the dbus package (+dbus.socket+ and the
-++dbus.service+ symlink in +multi-user.target.wants+) are removed when
-+dbus-broker is selected.
-diff --git a/docs/manual/integration.txt b/docs/manual/integration.txt
-index bdfbfa59de..be56bf6567 100644
---- a/docs/manual/integration.txt
-+++ b/docs/manual/integration.txt
-@@ -9,4 +9,6 @@ level. Buildroot is highly configurable, almost everything discussed
- here can be changed or overridden by xref:rootfs-custom[rootfs overlay
- or custom skeleton] configuration.
++include::integration-selinux-support.txt[]
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index b5cc044805..fab66dbda5 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -38,7 +38,7 @@ include::common-usage.txt[]
  
-+include::integration-systemd.txt[]
-+
- include::integration-selinux-support.txt[]
+ include::customize.txt[]
+ 
+-include::selinux-support.txt[]
++include::integration.txt[]
+ 
+ include::faq-troubleshooting.txt[]
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
