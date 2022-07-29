@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD1F2C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:52:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F5E2C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:54:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 314DB846F5;
-	Fri, 29 Jul 2022 19:52:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 314DB846F5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45189813EC;
+	Fri, 29 Jul 2022 19:54:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45189813EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gYECasBsAWVW; Fri, 29 Jul 2022 19:52:57 +0000 (UTC)
+	with ESMTP id tgmdBgTeuGbw; Fri, 29 Jul 2022 19:53:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DBF78469C;
-	Fri, 29 Jul 2022 19:52:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DBF78469C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39820812B2;
+	Fri, 29 Jul 2022 19:53:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39820812B2
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 819E21C11A5
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:52:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B8EF71BF33A
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68C6E8469C
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68C6E8469C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79182812B2
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:53:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79182812B2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KLVs_J2TYLrN for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 19:52:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA082845C4
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA082845C4
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 566C086941; Fri, 29 Jul 2022 19:38:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 21:52:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5df2f9ff1cc15f3d71514b7c5ff6bd6380f57fd0
-X-Git-Newrev: 1e1d45a9bcb38e37d1b27388b267a790b56eb642
-X-Patchwork-Hint: ignore
-Message-Id: <20220729193849.566C086941@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain/Config.in: update gcc bug 99410
+ with ESMTP id 8p6tYb1PN8L6 for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 19:53:54 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E649880C80
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E649880C80
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:53:53 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 94BF2240002;
+ Fri, 29 Jul 2022 19:53:50 +0000 (UTC)
+Date: Fri, 29 Jul 2022 21:53:47 +0200
+To: Petr Vorel <pevik@seznam.cz>
+Message-ID: <20220729215347.00d0a47e@windsurf>
+In-Reply-To: <20220729184542.213544-1-pevik@seznam.cz>
+References: <20220729184542.213544-1-pevik@seznam.cz>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659124431;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=kC0R7QiGO1ZXICZxSsxfdJhfbxUj0oICO9SVv1+CuVs=;
+ b=DC06R6fK3K+NisjxA2HWxneUGbTJdKpD1glb4QmcOIsbYj2HGak7qJHV9SUeUNA37tsHNJ
+ gRBzcjk2RIDLSXa3qvzKtIabwr8XesFK4QRRVKkAkpyQ3pipx6GB2gdS/nuq/Bb13Z4CQO
+ IvABaUfepCJOsl5gup7Qs2zJci6ef4EXWX2C8CQnb4M4OOyLL+Dqdc6/SIt1CE21LBj/z2
+ haspN5is6HOkqsSvTPDDsRSDd46NHL6x6ax63BGbzGw6sjhBpY4HfIzmPJSmJOmXuc2uA8
+ LNKiTEEanukHis87rIss6zhGOTud+HuxqnIAQEFWwqA9+U8l+v0VhkW0Ia3mVw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=DC06R6fK
+Subject: Re: [Buildroot] [PATCH 0/3] modem-manager,
+ libqmi and libmbim updates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>,
+ Aleksander Morgado <aleksander@aleksander.es>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e1d45a9bcb38e37d1b27388b267a790b56eb642
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 29 Jul 2022 20:45:39 +0200
+Petr Vorel <pevik@seznam.cz> wrote:
 
-Gcc bug 99410 reappeared while building with gcc 11.x and while
-testing it also shows up with gcc 12.x, so let's enable this bug for
-all gcc versions except gcc 8.x.
+> Petr Vorel (3):
+>   package/libmbim: bump version to 1.26.4
+>   package/libqmi: bump version to 1.30.8
+>   package/modem-manager: bind version to 1.18.10
 
-Fixes:
+Series applied, thanks!
 
-  http://autobuild.buildroot.net/results/64e54ef5ba3a3dee391b788315615d57a1dd9fa2/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- toolchain/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index ed3f6c6645..6071342d01 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -186,12 +186,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
- 
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
- # Error: branch offset out of range on Nios II. This bug
--# no longer exists in gcc 8.x but reappeared on gcc 9.x and has been
--# fixed on gcc 11.x.
-+# no longer exists in gcc 8.x but reappeared on gcc 9.x and still exists
-+# on gcc 12.x
- config BR2_TOOLCHAIN_HAS_GCC_BUG_99410
- 	bool
- 	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
--	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9 && !BR2_TOOLCHAIN_GCC_AT_LEAST_11
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	depends on BR2_nios2
- 
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
