@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F35F3C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 05:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 513C8C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 05:28:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 507354052B;
-	Fri, 29 Jul 2022 05:22:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 507354052B
+	by smtp1.osuosl.org (Postfix) with ESMTP id C382F83F09;
+	Fri, 29 Jul 2022 05:28:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C382F83F09
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cO30mUMM-o_G; Fri, 29 Jul 2022 05:22:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wK6nnYpoacwI; Fri, 29 Jul 2022 05:28:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DB2E4033F;
-	Fri, 29 Jul 2022 05:22:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DB2E4033F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 543D81BF34A
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 05:22:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFD7A83EFF;
+	Fri, 29 Jul 2022 05:28:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFD7A83EFF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 200451BF34A
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 05:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CAF34033F
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 05:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CAF34033F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0536760ADF
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 05:28:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0536760ADF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E5jI8XmlO4dy for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 05:22:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JwDY_SrLbcte for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 05:28:22 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B58FE400C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0999607BC
 Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B58FE400C5
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 05:22:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A0999607BC
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 05:28:21 +0000 (UTC)
 Received: from 91-153-34-64.elisa-laajakaista.fi ([91.153.34.64] helo=kodama)
  by fanzine2.igalia.com with esmtpsa 
  (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1oHIRh-00AbDS-9c; Fri, 29 Jul 2022 07:21:57 +0200
+ id 1oHIXr-00AbW5-Dv; Fri, 29 Jul 2022 07:28:19 +0200
 Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 32b6877e;
- Fri, 29 Jul 2022 05:21:45 +0000 (UTC)
+ by kodama (OpenSMTPD) with ESMTPA id 0b78b880;
+ Fri, 29 Jul 2022 05:28:09 +0000 (UTC)
 From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 08:21:45 +0300
-Message-Id: <20220729052145.792037-1-aperez@igalia.com>
+Date: Fri, 29 Jul 2022 08:28:09 +0300
+Message-Id: <20220729052809.793581-1-aperez@igalia.com>
 X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
@@ -55,16 +55,16 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
  In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
  List-Post:List-Owner:List-Archive;
- bh=tK3WnjLVhZ88WahVn9K7ngz1sN+dpGdW+MeJBQs75G0=; b=jZHkS4QREmtJpdVFdpNLaxsAAi
- vNmPd0tQQkM/nWvWKwWG2LAy4BBkZKsYaslzJk4rGgEMQlXn7D6ORZjioZQ5q0lePSFCJfBLBER4v
- 9OdriPKO6gp4XEQVcq0RelhJlAmVGCLf5AGo69f5hcmoU9g3BGxhZWdHgXSwv7iUzRskfH+7PdRzU
- YFjJHFarIlHDJsvCXlCVxPUubuyV7pVvKl7IWHyMvOharQwU2jB9meL1aM6Z6p8jSVtBEYw3ZhVzf
- +wvIBjrvZg7opDSbfjknrvln+f+WCxFj0qL6XTKTzlyGiaoFjOK7VSH7aSDA5ju75ZNWdNr1a8rnF
- iNUgurSQ==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=uwS9nVKMQUOBONWJMNM7x5VOfI6BeTlvJ0B1VMsdtbQ=; b=B2kixneUMuAvT2+6L5HnGy6+x+
+ Wqwf6OUUl1mRAlIs/4Cq9BloQ9ulRakLiU3Bsswp2FlAjJGWjOYIaTaHBDU+nIFPcrnz45Du7K2IK
+ wTKPQuW7VR0yR9bV+M04uy00cv1+aqr93QIqIjV5i7c0YJVD8jvncTLwxCmvuRcnszqyUdCQ0Bm//
+ /5LTqiRMb5sT25AF6sDatHlwGLxpJO+iLJcFaYd0T7GNMy0SnEjxWA3flZsq91kN4ltFZXvzOVTL1
+ 8BM8V013uwk5v+T2Bspxdyu5S7Ih2QmpVgPlwvdxvex8D345r7tTkD5F2/TAdhaqYcK0f/PEAybfI
+ SDO1sw7Q==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=jZHkS4QR
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
+ header.a=rsa-sha256 header.s=20170329 header.b=B2kixneU
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to version
  2.36.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -88,24 +88,24 @@ security patches for CVE-2022-32792, CVE-2022-32816, and CVE-2022-2294.
 
 Release notes:
 
-  https://wpewebkit.org/release/wpewebkit-2.36.5.html
+  https://webkitgtk.org/2022/07/28/webkitgtk2.36.5-released.html
 
 Accompanying security advisory:
 
-  https://wpewebkit.org/security/WSA-2022-0007.html
+  https://webkitgtk.org/security/WSA-2022-0007.html
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
  ...5034-WebKitTestRunner-shouldn-t-link.patch | 58 -------------------
- package/wpewebkit/wpewebkit.hash              |  9 +--
- package/wpewebkit/wpewebkit.mk                |  2 +-
- 3 files changed, 6 insertions(+), 63 deletions(-)
- delete mode 100644 package/wpewebkit/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
+ package/webkitgtk/webkitgtk.hash              |  8 +--
+ package/webkitgtk/webkitgtk.mk                |  2 +-
+ 3 files changed, 5 insertions(+), 63 deletions(-)
+ delete mode 100644 package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
 
-diff --git a/package/wpewebkit/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch b/package/wpewebkit/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
+diff --git a/package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch b/package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
 deleted file mode 100644
 index d1edd36660..0000000000
---- a/package/wpewebkit/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
+--- a/package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
 +++ /dev/null
 @@ -1,58 +0,0 @@
 -From a780527a1b79538f1e1f5144e9b522d0927a2312 Mon Sep 17 00:00:00 2001
@@ -166,36 +166,35 @@ index d1edd36660..0000000000
 --- 
 -2.37.1
 -
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 2a8205d40c..827df1e89a 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,8 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.36.4.tar.xz.sums
--md5  ba8e5f5444fd50f53906a7376b25bb26  wpewebkit-2.36.4.tar.xz
--sha1  91259642da6fe55446c3352eeeafdaa188fc14bd  wpewebkit-2.36.4.tar.xz
--sha256  307a3bedf5d4299a861f773f631c39a44c3e6276c3af37f7cbefaed2c8d7c021  wpewebkit-2.36.4.tar.xz
-+
-+# From https://wpewebkit.org/releases/wpewebkit-2.36.5.tar.xz.sums
-+md5  99b9b0c3c8757edf03ddf550bea448e2  wpewebkit-2.36.5.tar.xz
-+sha1  d7deb766d1ff48b7f9d685fcd67ccc23e2962288  wpewebkit-2.36.5.tar.xz
-+sha256  f2461d533cd3820ea1855e2c8b0b0624b39add1389dc3ac09c2f27891a7a8caa  wpewebkit-2.36.5.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 7f67ef4a7a..ae86c97c0a 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.36.4.tar.xz.sums
+-md5  bb5f96d54804e22fd52478665d1dac7a  webkitgtk-2.36.4.tar.xz
+-sha1  c4f2d3c8581d1abe2a959e99f2846bea5d5ddf3c  webkitgtk-2.36.4.tar.xz
+-sha256  b6bebe1f85a479d968c19e44a4704622ef8cef61636ad1b2406b77d16ae2e2a8  webkitgtk-2.36.4.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.36.5.tar.xz.sums
++md5  a876da9d8906468f4e1e3d08729cdeec  webkitgtk-2.36.5.tar.xz
++sha1  49ff8873500a2ce82bad8879095277bb4dfd21de  webkitgtk-2.36.5.tar.xz
++sha256  d5532fa884c943dc48f1911473dd663aba407a3b35caa7b04bac1419b41e5908  webkitgtk-2.36.5.tar.xz
  
  # Hashes for license files:
  sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index cf58a4c14d..0deb36f28f 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index cbe36720da..0dbb72f970 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.36.4
-+WPEWEBKIT_VERSION = 2.36.5
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-WEBKITGTK_VERSION = 2.36.4
++WEBKITGTK_VERSION = 2.36.5
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
 2.37.1
 
