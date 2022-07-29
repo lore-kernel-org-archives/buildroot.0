@@ -1,75 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFF27C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 12:47:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F07D4C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 15:46:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2397840CF8;
-	Fri, 29 Jul 2022 12:47:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2397840CF8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49FCA42162;
+	Fri, 29 Jul 2022 15:46:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49FCA42162
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0Xh6323Qi2HH; Fri, 29 Jul 2022 12:47:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xj81ftN_nQ4J; Fri, 29 Jul 2022 15:46:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42469404AE;
-	Fri, 29 Jul 2022 12:47:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42469404AE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C27E31BF3F9
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 12:47:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29F5141BE3;
+	Fri, 29 Jul 2022 15:46:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29F5141BE3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F3CEB1BF33F
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 15:46:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9945D83459
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 12:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9945D83459
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD7A341C03
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 15:46:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD7A341C03
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QFQCP4P6COiG for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 12:47:24 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D3CD829F2
-Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D3CD829F2
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 12:47:23 +0000 (UTC)
-Received: from [192.168.50.173] ([146.241.73.23])
- by Aruba Outgoing Smtp  with ESMTPSA
- id HPOjo3O14bMeiHPOjoNzlh; Fri, 29 Jul 2022 14:47:21 +0200
-Message-ID: <de1a9d0e-6e11-3b45-c0a5-363a62d669fa@benettiengineering.com>
-Date: Fri, 29 Jul 2022 14:47:21 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KzdHaZDebU76 for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 15:46:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9671141BE1
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9671141BE1
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 15:46:42 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id m13so2524570wrq.6
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 08:46:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=lfQMgzwasXGe8fI3rl6hwGZJZ/i7ZVvf4HJhjnKXDG8=;
+ b=J3ZSIRIPg4F47qzKe/CI3kpPU2LUeIVr3bfZGbUVsOhfpclUbIu+pLSETf1cj3iZ6/
+ GyUwcYcr8VgeV4v9o2OyOmar5uo5vIGlCWOPD83uV3d4Xdc6ht1SnnBJQuLaywGNFYhZ
+ 4DSE1TbZ7porM+Dio8JSmUZqn1t/HyTVuJ8qwUERnYBWT1Hyc6s4428LfrSYr1qTe777
+ 0EPL5c8WqPjOgf08hHauyaqcw+gvpbFq8gPa8+b05vOW11kzVBmOCo0A8wn6dFT3twk3
+ dxuaPZAxrZsLS7aPV/8ccmLebq2ZRuTqfE7FO1tUXc4XdE22u+Uz6MiCmE6qWOK8R/GK
+ 7iqg==
+X-Gm-Message-State: ACgBeo1aOSTpPCd82452dBqogHff+r/CLx36W1b7daFVGY64eygNKkve
+ BF8Etv18ZW26m5ulr1sgzQ+hjMt1kVc=
+X-Google-Smtp-Source: AA6agR6bcTQLQn+tfcJPaONN3AhA/6bAwnxGdre4HeY8A5z9OG7wn2GIFCg3mchAjXeug3iW7HBA7w==
+X-Received: by 2002:adf:f1d0:0:b0:21e:c8e1:e82f with SMTP id
+ z16-20020adff1d0000000b0021ec8e1e82fmr2805126wro.635.1659109600411; 
+ Fri, 29 Jul 2022 08:46:40 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ k13-20020adfe8cd000000b0021e3e73dec6sm4871614wrn.72.2022.07.29.08.46.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 29 Jul 2022 08:46:39 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 29 Jul 2022 17:46:37 +0200
+Message-Id: <20220729154637.11397-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220729121055.168510-1-giulio.benetti@benettiengineering.com>
- <20220729141205.2bde03b3@windsurf>
- <b24dfe19-b57b-23fc-8822-3fd87d2b0e05@benettiengineering.com>
- <20220729143340.18a16873@windsurf>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220729143340.18a16873@windsurf>
-X-CMAE-Envelope: MS4xfMvsteo2NXNgDNjfwe4pM4DCKMtzJOOItgnzW1tGR2/zKitMl7L5u4DzIZypt9QGkmla7Nen/dEIF8Z2u3fUD/8uFAIN0HpxkvOa5J6W/Ae3CE8zWBIy
- fOtb3L4aJtTcYhrsq/pU03xYzcakXccbHPkNUJMZPj7z86+KdNkqYzQREG2Jbjr4+HMxI+ROO9OJw9sc7WzyxYzIDqAW7z4wYSu5x46NGGXtxVjs+JhcxHeE
- /n26/DC6xM8DkKEBKb93MgC7vb5squhhrOcZdH1xNkwPjAcuWOsW7acjwGCKBv68elaAGhENXCr2foK0Fn3jXlj67yoyw1dquD2cEJpaK4s8PynjLlrmETPj
- OdwrFT5m
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1659098841; bh=sgP3AchXMnxN+zdM42piuTV3WrlUEvIDB632G+DBHt8=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=fkBfi8cnG6upbGmx/GwS2Z5SwlktrW8Y0UJzz6YOnu/8dKrEEkoYulX5JGlgM9xHp
- 7s5yZ5ALuv/iH9EgF3D4bwqEBWKKBWfGnpHOFy/SpKFYqAy40HJTRw+gwojixTbXBH
- 5DqpKKortBbk0xo6KyTmIaj/ZoBMm0Qh5FnjnvveSgOyuCSqn3fQwmUdareNd6nTl9
- h/e3+ufjD80NAgmvRPzOlj05Pu89avHFKqluuRy32JhHk9anzv+nrzulKcWQsWjmtZ
- 7sWcYoYjbe8tLa/svxCupQ/V+DoevQdU01lTVnjGJB7ffFn9q4SlOMe3ixrze3NuA7
- tColE2nKsxq3Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=fkBfi8cn
-Subject: Re: [Buildroot] [PATCH 1/2] toolchain/Config.in: update gcc version
- for gcc bug 68485
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=lfQMgzwasXGe8fI3rl6hwGZJZ/i7ZVvf4HJhjnKXDG8=;
+ b=lP3rJu0L8webjF3MjKPR6rqBEp+M1Puslm6/WtSGdK28ihDNy3qt2Xx9O/CFM0e3dV
+ 5bte88o0t8STq77cTmr+hjGPZm6jHcl/5A9sunvqVAK2EiYOAGjLLV7dQP7jWjADb17S
+ /K80MtJElrm2pdfDeS1oPq0xdr5a/TZgAcWsUiUBgRlMY/kyFRhiq4NklrlknjTrR6d2
+ j9ao/ngxpVNG8tsTQRnjKJ0fYa9JDM96r9EoeaJrws90Btb+1Obh5dj7OtCQUJrt4VAR
+ 4Yt22ixl2lIU4xT/eHFZEJ1i5IP6ixuMXWXKpvtXmdTCc+/R5tKKdCJCS13YUTQ+K+wx
+ PiHw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=lP3rJu0L
+Subject: [Buildroot] [PATCH v2, 1/1] package/pkg-autotools: fix runtime path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,39 +93,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Commit 505b5a6cdd337c2fd5965aa875a1a53419d62ed1 wrongly stated that "a
+configure script bundled with a package may be generated with an older
+version of Autotools, that may not yet support the --runstatedir option.
+This will give an "Unsupported arguments" warning and the option will be
+ignored.". Indeed, this will raise the following build failure with
+attr, libtirpc, readline, etc.:
 
+configure: error: unrecognized option: `--runstatedir=/run'
 
-On 29/07/22 14:33, Thomas Petazzoni via buildroot wrote:
-> On Fri, 29 Jul 2022 14:29:53 +0200
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> On 29/07/22 14:12, Thomas Petazzoni via buildroot wrote:
->>> On Fri, 29 Jul 2022 14:10:54 +0200
->>> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
->>>    
->>>>    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. This bug still
->>>> -# exists in gcc 9.x
->>>> +# exists in gcc 11.x
->>>
->>> What about the recently introduced gcc 12.x ? :-)
->>
->> You're right, gcc 12.x is still affected, do you want me to re-send?
-> 
-> Not needed, will fix when applying. Thanks!
+So to support configure scripts using older version, the variable is set
+directly instead of using the --runstatedir argument.
 
-Perfect, thank you!
+Fixes:
+ - http://autobuild.buildroot.org/results/c853f14773d875be30e32ae24daf80e181fef34e
+ - http://autobuild.buildroot.org/results/045211cd66cf78c3d89d2d8ac41ec4edf0b0ee58
+ - http://autobuild.buildroot.org/results/8c5160eef99de2f1f72f33d5e5ea94d417855b2c
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Remove revert sentence
+
+ package/pkg-autotools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 548f69cbb8..b6224b349d 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -187,7 +187,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--exec-prefix=/usr \
+ 		--sysconfdir=/etc \
+ 		--localstatedir=/var \
+-		--runstatedir=/run \
++		runstatedir=/run \
+ 		--program-prefix="" \
+ 		--disable-gtk-doc \
+ 		--disable-gtk-doc-html \
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
