@@ -4,68 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 513C8C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 05:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5AA1C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 06:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C382F83F09;
-	Fri, 29 Jul 2022 05:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C382F83F09
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A0248136D;
+	Fri, 29 Jul 2022 06:48:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A0248136D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wK6nnYpoacwI; Fri, 29 Jul 2022 05:28:25 +0000 (UTC)
+	with ESMTP id BsZBBJibdadE; Fri, 29 Jul 2022 06:48:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFD7A83EFF;
-	Fri, 29 Jul 2022 05:28:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFD7A83EFF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 200451BF34A
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 05:28:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3AE181362;
+	Fri, 29 Jul 2022 06:48:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3AE181362
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BCDA1BF3B9
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 06:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0536760ADF
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 05:28:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0536760ADF
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9514416A3
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 06:48:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9514416A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JwDY_SrLbcte for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 05:28:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d5X_PDxmMfBR for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 06:48:44 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0999607BC
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A0999607BC
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 05:28:21 +0000 (UTC)
-Received: from 91-153-34-64.elisa-laajakaista.fi ([91.153.34.64] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1oHIXr-00AbW5-Dv; Fri, 29 Jul 2022 07:28:19 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 0b78b880;
- Fri, 29 Jul 2022 05:28:09 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 08:28:09 +0300
-Message-Id: <20220729052809.793581-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.37.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E1AB41615
+Received: from 1.mo552.mail-out.ovh.net (1.mo552.mail-out.ovh.net
+ [178.32.96.117])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0E1AB41615
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 06:48:43 +0000 (UTC)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.143.159])
+ by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 1379F23199;
+ Fri, 29 Jul 2022 06:48:40 +0000 (UTC)
+Received: from kaod.org (37.59.142.102) by DAG4EX2.mxp5.local (172.16.2.32)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Fri, 29 Jul
+ 2022 08:48:39 +0200
+X-OVh-ClientIp: 90.89.72.120
+Message-ID: <685ab467-1c43-9faa-7081-37525717c305@kaod.org>
+Date: Fri, 29 Jul 2022 08:48:34 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=uwS9nVKMQUOBONWJMNM7x5VOfI6BeTlvJ0B1VMsdtbQ=; b=B2kixneUMuAvT2+6L5HnGy6+x+
- Wqwf6OUUl1mRAlIs/4Cq9BloQ9ulRakLiU3Bsswp2FlAjJGWjOYIaTaHBDU+nIFPcrnz45Du7K2IK
- wTKPQuW7VR0yR9bV+M04uy00cv1+aqr93QIqIjV5i7c0YJVD8jvncTLwxCmvuRcnszqyUdCQ0Bm//
- /5LTqiRMb5sT25AF6sDatHlwGLxpJO+iLJcFaYd0T7GNMy0SnEjxWA3flZsq91kN4ltFZXvzOVTL1
- 8BM8V013uwk5v+T2Bspxdyu5S7Ih2QmpVgPlwvdxvex8D345r7tTkD5F2/TAdhaqYcK0f/PEAybfI
- SDO1sw7Q==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=B2kixneU
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to version
- 2.36.5
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To: Joel Stanley <joel@jms.id.au>, <buildroot@buildroot.org>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+References: <20220729000904.1295295-1-joel@jms.id.au>
+ <20220729000904.1295295-3-joel@jms.id.au>
+From: =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20220729000904.1295295-3-joel@jms.id.au>
+X-Originating-IP: [37.59.142.102]
+X-ClientProxiedBy: DAG5EX2.mxp5.local (172.16.2.42) To DAG4EX2.mxp5.local
+ (172.16.2.32)
+X-Ovh-Tracer-GUID: dbdbfbbd-32f0-4ca4-a4ae-b920208c8f56
+X-Ovh-Tracer-Id: 9423782223028849446
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduiedgheejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeekteejtdelkeejvdevffduhfetteelieefgeefffeugffhfeekheffueefledujeenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehmphgvsegvlhhlvghrmhgrnhdrihgurdgruhdpoffvtefjohhsthepmhhoheehvd
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-102R004575c50ac-bb1a-4032-b6fc-ba9c52cba27a,
+ FAFF5065920E43DA0D2CF6C40E58A39B80E28978) smtp.auth=clg@kaod.org
+Subject: Re: [Buildroot] [PATCH 2/9] arch/powerpc: Clarify generic CPUs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,128 +79,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Michael Ellerman <mpe@ellerman.id.au>, Romain Naour <romain.naour@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bugfix release, including the patch that can be now removed, and
-security patches for CVE-2022-32792, CVE-2022-32816, and CVE-2022-2294.
-
-Release notes:
-
-  https://webkitgtk.org/2022/07/28/webkitgtk2.36.5-released.html
-
-Accompanying security advisory:
-
-  https://webkitgtk.org/security/WSA-2022-0007.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- ...5034-WebKitTestRunner-shouldn-t-link.patch | 58 -------------------
- package/webkitgtk/webkitgtk.hash              |  8 +--
- package/webkitgtk/webkitgtk.mk                |  2 +-
- 3 files changed, 5 insertions(+), 63 deletions(-)
- delete mode 100644 package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
-
-diff --git a/package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch b/package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
-deleted file mode 100644
-index d1edd36660..0000000000
---- a/package/webkitgtk/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From a780527a1b79538f1e1f5144e9b522d0927a2312 Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Wed, 13 Jul 2022 00:53:48 +0300
--Subject: [PATCH] Revert "Merge r295034 - WebKitTestRunner shouldn't link
-- object files of JavaScriptCore and WebCore"
--
--This reverts commit 7916fda00b347ff263fbfe72c065032d1d9b523c.
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--[Upstream status: https://bugs.webkit.org/show_bug.cgi?id=241002]
--
-----
-- Source/JavaScriptCore/CMakeLists.txt     | 12 +++++++++---
-- Tools/WebKitTestRunner/CMakeLists.txt    |  1 -
-- Tools/WebKitTestRunner/PlatformGTK.cmake |  4 ++++
-- Tools/WebKitTestRunner/PlatformWin.cmake |  4 ++++
-- 4 files changed, 17 insertions(+), 4 deletions(-)
--
--diff --git a/Source/JavaScriptCore/CMakeLists.txt b/Source/JavaScriptCore/CMakeLists.txt
--index 95a1300ce1b3..238208eb1137 100644
----- a/Source/JavaScriptCore/CMakeLists.txt
--+++ b/Source/JavaScriptCore/CMakeLists.txt
--@@ -456,7 +456,7 @@ if (MSVC AND NOT ENABLE_C_LOOP)
--         COMMAND ${MASM_EXECUTABLE} ${LLINT_MASM_FLAGS} ${JavaScriptCore_DERIVED_SOURCES_DIR}/LowLevelInterpreterWin.obj ${JavaScriptCore_DERIVED_SOURCES_DIR}/LowLevelInterpreterWin.asm
--         VERBATIM)
--     list(APPEND JavaScriptCore_SOURCES ${JavaScriptCore_DERIVED_SOURCES_DIR}/LowLevelInterpreterWin.obj)
---    add_library(LowLevelInterpreterLib STATIC llint/LowLevelInterpreter.cpp)
--+    add_library(LowLevelInterpreterLib OBJECT llint/LowLevelInterpreter.cpp)
-- else ()
--     # As there's poor toolchain support for using `.file` directives in
--     # inline asm (i.e. there's no way to avoid clashes with the `.file`
--@@ -465,7 +465,7 @@ else ()
--     # an object file. We only need to do this for LowLevelInterpreter.cpp
--     # and cmake doesn't allow us to introduce a compiler wrapper for a
--     # single source file, so we need to create a separate target for it.
---    add_library(LowLevelInterpreterLib STATIC llint/LowLevelInterpreter.cpp
--+    add_library(LowLevelInterpreterLib OBJECT llint/LowLevelInterpreter.cpp
--         ${JavaScriptCore_DERIVED_SOURCES_DIR}/${LLIntOutput})
-- endif ()
-- 
--@@ -1496,7 +1496,13 @@ if (CMAKE_COMPILER_IS_GNUCXX AND GCC_OFFLINEASM_SOURCE_MAP)
--         COMPILE_OPTIONS "-fno-lto")
-- endif ()
-- 
---list(APPEND JavaScriptCore_PRIVATE_LIBRARIES LowLevelInterpreterLib)
--+# When building JavaScriptCore as an object library, we need to make sure the
--+# lowlevelinterpreter lib objects get propogated.
--+if (${JavaScriptCore_LIBRARY_TYPE} STREQUAL "OBJECT")
--+    list(APPEND JavaScriptCore_PRIVATE_LIBRARIES $<TARGET_OBJECTS:LowLevelInterpreterLib>)
--+else ()
--+    list(APPEND JavaScriptCore_SOURCES $<TARGET_OBJECTS:LowLevelInterpreterLib>)
--+endif ()
-- 
-- WEBKIT_COMPUTE_SOURCES(JavaScriptCore)
-- list(APPEND JavaScriptCore_SOURCES
---- 
--2.37.1
--
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 7f67ef4a7a..ae86c97c0a 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.36.4.tar.xz.sums
--md5  bb5f96d54804e22fd52478665d1dac7a  webkitgtk-2.36.4.tar.xz
--sha1  c4f2d3c8581d1abe2a959e99f2846bea5d5ddf3c  webkitgtk-2.36.4.tar.xz
--sha256  b6bebe1f85a479d968c19e44a4704622ef8cef61636ad1b2406b77d16ae2e2a8  webkitgtk-2.36.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.36.5.tar.xz.sums
-+md5  a876da9d8906468f4e1e3d08729cdeec  webkitgtk-2.36.5.tar.xz
-+sha1  49ff8873500a2ce82bad8879095277bb4dfd21de  webkitgtk-2.36.5.tar.xz
-+sha256  d5532fa884c943dc48f1911473dd663aba407a3b35caa7b04bac1419b41e5908  webkitgtk-2.36.5.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index cbe36720da..0dbb72f970 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.36.4
-+WEBKITGTK_VERSION = 2.36.5
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
--- 
-2.37.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gNy8yOS8yMiAwMjowOCwgSm9lbCBTdGFubGV5IHdyb3RlOgo+IEluIHRoZSBjYXNlIHdoZXJl
+IGEgc3BlY2lmaWMgQ1BVIGlzIG5vdCBzZWxlY3RlZCwgc2V0IGFuIGFwcHJvcHJpYXRlCj4gZ2Nj
+IHRhcmdldCBmb3IgdGhlIGFyY2hpdGVjdHVyZS4KPiAKPiBGb3IgY2xhcml0eSB0aGlzIGludHJv
+ZHVjZXMgYSBCUjJfZ2VuZXJpY19wb3dlcnBjNjQgYXMgYSBnZW5lcmljIDY0IGJpdAo+IENQVSBh
+cyB0aGlzIG1ha2VzIHRoZSBpdCBjbGVhcmVyIHdoZW4gYnJvd3NpbmcgbWVudWNvbmZpZy4KPiAK
+PiBXZSBjYW4ndCBoYXZlIGEgZ2VuZXJpYyBwcGM2NGxlIEdDQywgYXMgYXR0ZW1wdGluZyB0byBj
+b25maWd1cmUgZ2xpYmMKPiBmb3IgcG93ZXJwYzY0bGUgZmFpbHM6Cj4gCj4gICBjb25maWd1cmU6
+IGVycm9yOiAqKiogIFBPV0VSOCBvciBuZXdlciBpcyByZXF1aXJlZCBvbiBwb3dlcnBjNjRsZS4K
+PiAgIF9fYnVpbHRpbl9zaWduYml0IGlzIGJyb2tlbi4gIEdDQyA3LjQgb3IgbmV3ZXIgaXMgcmVx
+dWlyZWQgdG8gcmVzb2x2ZQo+ICAgKFBSODM4NjIpLiBUaGUgY29tcGlsZXIgbXVzdCBzdXBwb3J0
+IC1tYWJpPWllZWVsb25nZG91YmxlIGFuZAo+ICAgLW1sb25nLWRvdWJsZS0xMjggc2ltdWx0YW5l
+b3VzbHkuCj4gCj4gSGVuY2Ugc2V0IFBvd2VyOCBhcyB0aGUgZGVmYXVsdCBDUFUgZm9yIHBvd2Vy
+cGM2NGxlLgoKcG93ZXI4IGlzIG5vdyA4IHllYXJzIG9sZC4gSXMgdGhlcmUgYW55IHZhbHVlIGlu
+IGFkZGluZyBhIHBvd2VyOQp0YXJnZXQgPwoKUmV2aWV3ZWQtYnk6IEPDqWRyaWMgTGUgR29hdGVy
+IDxjbGdAa2FvZC5vcmc+CgpUaGFua3MsCgpDLgoKPiAKPiBTaWduZWQtb2ZmLWJ5OiBKb2VsIFN0
+YW5sZXkgPGpvZWxAam1zLmlkLmF1Pgo+IC0tLQo+ICAgYXJjaC9Db25maWcuaW4ucG93ZXJwYyB8
+IDEzICsrKysrKysrKystLS0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCAz
+IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9hcmNoL0NvbmZpZy5pbi5wb3dlcnBjIGIv
+YXJjaC9Db25maWcuaW4ucG93ZXJwYwo+IGluZGV4IGVmMGU4NWZlYzY4MC4uOGQzOTJiZmRlODE0
+IDEwMDY0NAo+IC0tLSBhL2FyY2gvQ29uZmlnLmluLnBvd2VycGMKPiArKysgYi9hcmNoL0NvbmZp
+Zy5pbi5wb3dlcnBjCj4gQEAgLTksMTIgKzksMTcgQEAgY29uZmlnIEJSMl9QT1dFUlBDX0NQVV9I
+QVNfU1BFCj4gICAKPiAgIGNob2ljZQo+ICAgCXByb21wdCAiVGFyZ2V0IEFyY2hpdGVjdHVyZSBW
+YXJpYW50Igo+IC0JZGVmYXVsdCBCUjJfZ2VuZXJpY19wb3dlcnBjCj4gKwlkZWZhdWx0IEJSMl9n
+ZW5lcmljX3Bvd2VycGMgaWYgIUJSMl9BUkNIX0lTXzY0Cj4gKwlkZWZhdWx0IEJSMl9nZW5lcmlj
+X3Bvd2VycGM2NCBpZiBCUjJfQVJDSF9JU182NAo+ICsJZGVmYXVsdCBCUjJfcG93ZXJwY19wb3dl
+cjggaWYgQlIyX3Bvd2VycGM2NGxlCj4KPiAgIAloZWxwCj4gICAJICBTcGVjaWZpYyBDUFUgdmFy
+aWFudCB0byB1c2UKPiAgIGNvbmZpZyBCUjJfZ2VuZXJpY19wb3dlcnBjCj4gLQlib29sICJnZW5l
+cmljIgo+IC0JIyBObyBDIGxpYnJhcnkgc3VwcG9ydHMgdGhpcyB2YXJpYW50IG9uIHBwYzY0bGUK
+PiArCWJvb2wgImdlbmVyaWMgKDMyIGJpdCkiCj4gKwlkZXBlbmRzIG9uICFCUjJfQVJDSF9JU182
+NAo+ICtjb25maWcgQlIyX2dlbmVyaWNfcG93ZXJwYzY0Cj4gKwlib29sICJnZW5lcmljICg2NCBi
+aXQpIgo+ICsJZGVwZW5kcyBvbiBCUjJfQVJDSF9JU182NAo+ICAgCWRlcGVuZHMgb24gIUJSMl9w
+b3dlcnBjNjRsZQo+ICAgY29uZmlnIEJSMl9wb3dlcnBjXzQwMQo+ICAgCWJvb2wgIjQwMSIKPiBA
+QCAtMjIwLDYgKzIyNSw4IEBAIGNvbmZpZyBCUjJfR0NDX1RBUkdFVF9DUFUKPiAgIAlkZWZhdWx0
+ICJwb3dlcjYiCWlmIEJSMl9wb3dlcnBjX3Bvd2VyNgo+ICAgCWRlZmF1bHQgInBvd2VyNyIJaWYg
+QlIyX3Bvd2VycGNfcG93ZXI3Cj4gICAJZGVmYXVsdCAicG93ZXI4IglpZiBCUjJfcG93ZXJwY19w
+b3dlcjgKPiArCWRlZmF1bHQgInBvd2VycGM2NCIJaWYgQlIyX2dlbmVyaWNfcG93ZXJwYzY0Cj4g
+KwlkZWZhdWx0ICJwb3dlcnBjIglpZiBCUjJfZ2VuZXJpY19wb3dlcnBjCj4gICAKPiAgIGNvbmZp
+ZyBCUjJfUkVBREVMRl9BUkNIX05BTUUKPiAgIAlkZWZhdWx0ICJQb3dlclBDIglpZiBCUjJfcG93
+ZXJwYwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
