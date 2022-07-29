@@ -4,52 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18D69C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 16:37:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7113C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 16:43:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8DC8341047;
-	Fri, 29 Jul 2022 16:37:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DC8341047
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74CA44105F;
+	Fri, 29 Jul 2022 16:43:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74CA44105F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rKdTNDUQjyLj; Fri, 29 Jul 2022 16:37:32 +0000 (UTC)
+	with ESMTP id uKCq0ndoWB1i; Fri, 29 Jul 2022 16:43:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 99C3E40C4C;
-	Fri, 29 Jul 2022 16:37:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99C3E40C4C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D546A1BF3BE
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 16:37:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B697B40C4C;
+	Fri, 29 Jul 2022 16:43:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B697B40C4C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0028F1BF3BE
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 16:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B00124101B
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 16:37:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B00124101B
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF79C812F6
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 16:43:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF79C812F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GBcq_NsoSHK4 for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 16:37:28 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6845540C4C
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6845540C4C
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 16:37:28 +0000 (UTC)
-Received: from iago.. (unknown [151.57.14.191])
- by serv15.avernis.de (Postfix) with ESMTPSA id C9456BDECD56;
- Fri, 29 Jul 2022 18:37:23 +0200 (CEST)
-From: Andreas Ziegler <br015@umbiko.net>
-To: buildroot@buildroot.org
-Date: Fri, 29 Jul 2022 18:37:18 +0200
-Message-Id: <20220729163718.58963-1-br015@umbiko.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220729091323.2933595-1-br015@umbiko.net>
-References: <20220729091323.2933595-1-br015@umbiko.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xW_l-jwPyW1E for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 16:43:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEFB18127C
+Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DEFB18127C
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 16:43:45 +0000 (UTC)
+Received: from [192.168.50.173] ([146.241.73.23])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id HT5Toq5JZPF2eHT5Uo7hnb; Fri, 29 Jul 2022 18:43:44 +0200
+Message-ID: <11965ba9-5849-597b-acc2-8264579d10dc@benettiengineering.com>
+Date: Fri, 29 Jul 2022 18:43:43 +0200
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 0.103.6 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: [Buildroot] [PATCH v2 1/1] package/zziplib: create symlinks only if
- target is missing
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+To: buildroot@buildroot.org
+References: <20220729162430.1028453-1-giulio.benetti@benettiengineering.com>
+ <20220729162430.1028453-2-giulio.benetti@benettiengineering.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220729162430.1028453-2-giulio.benetti@benettiengineering.com>
+X-CMAE-Envelope: MS4xfOpcQlZKeG0u44pdTIV1HCjJuXF51+82dsa4OdlnAdWwtqJf409ri8TFJZ3JYkEACoXLl18RjwdcXYIC3FIA87/9ReiqCueaWjIoBXPRtiKW75WVKH3m
+ wSjOP9oSqWByRdT+nEUey36NL1layOHBLaaOjxkLB6+rn/LuvcbIRjI3Sg582z7CjH+qwLXAxuu9uq/ZAinf2var4+Rf+ne54TCYCMOMOEk7QT8TMBaLtdMP
+ eXTEFMPbZ7PSsjc5yC2JhILIXgg5asEFiK0nd1NMIBi4ujpBDWojtyeQRIKU0YCFPB0RYPtrEWuKRkqGT5tqiSaSrJdTkA+6zYKhV9dAw1puz1QUvHOqAwt/
+ yvHt+sRdHnREKaJrGGaftnXByrtpQF9F53WJF+xc+rNjDzsoI90=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1659113024; bh=jrwLwhIBWY8c7QxTUIUTdm1Z3WM0NZqQHYB+ZJcVtDk=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=h2UKYvz9P4oj7H2Ut6SrSndYsyODETa4O4/OHs624eyqnecwCxmE1ZRRsORJL2kZ4
+ cSV8V5U7qOIblOdM3Gnybeini5ygsSEJz6rLo6MdDQkajkURQWtygG5Mg/gWBKZWZz
+ bJ5AUZeQKgPRLbb+n/OC/xA6GUuhTXAhg5E8gAL0C5bJTU3Qs5uYNjgCsMqnbhWAR5
+ 1EWpwZ98BWmEan3NaB+wsEa1on09S5OmvFmGDigtU8p/W8hoI8OR0Lq1vLRKGQw3B1
+ Kv0SWS6Er2D09BWjk6r6c5m1/YFO1t25ENzywSnL+MNYTkPEZN9oBy5iFAFHmc/OPh
+ CgETPoFZAO2uQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=h2UKYvz9
+Subject: Re: [Buildroot] [PATCH 2/2] toolchain/Config.in: update gcc bug
+ 99410
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,111 +79,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Romain Naour <romain.naour@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Andreas Ziegler <br015@umbiko.net>
-Content-Type: text/plain; charset="us-ascii"
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Symlink creation to base file names is only needed for versioned libraries. 
-Modify CMake rules to prevent overwriting existing libraties with recursive
-links.
+On 29/07/22 18:24, Giulio Benetti wrote:
+> Gcc bug 99410 reappeared while building with gcc 11.x and while testing it
+> also shows up with gcc 12.x, so let's enable this bug for all gcc versions
+> except gcc 8.x.
+> 
+> Fixes:
+> autobuild.buildroot.net/results/64e/64e54ef5ba3a3dee391b788315615d57a1dd9fa2/
 
-Fixes the following autobuild failures:
-http://autobuild.buildroot.net/results/dd1/dd1974dbc1a22a96a3cedb117417e66119821514/
-http://autobuild.buildroot.net/results/df8/df8406402ccff7cec34ae5858b8da57d1a4ae9c1/
-http://autobuild.buildroot.net/results/743/7433a2ad111e2f014c81f196d3d1e2f63dffa858/
-http://autobuild.buildroot.net/results/79f/79f88e9ec14cda7d07cf689eee864791ba949892/
-...
-http://autobuild.buildroot.net/results/892/8922efbbbfe79e8286a411acce4086b5c77c57c0/
-http://autobuild.buildroot.net/results/dfa/dfa8ade3a4c1750e6dd58e652f60af2a44f80dd8/
-http://autobuild.buildroot.net/results/9cd/9cd4147486f32d642513ba14efca3a02d5745ab9/
+Sorry, I've forgotten http://
 
-Regression test cases:
-http://autobuild.buildroot.net/results/ba7/ba711034c0abe980f677e26de41739223e2f66e9/
-http://autobuild.buildroot.net/results/032/032aaff121fb114f388c67dbca3ad2b02f670e38/
-http://autobuild.buildroot.net/results/6c5/6c56b645a2b723920f07b98474452824fba5e2c1/
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
----
-Changes v1 -> v2:
- - correct file name in generator expressions
-
- ...reate-symlinks-only-if-target-is-mis.patch | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch
-
-diff --git a/package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch b/package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch
-new file mode 100644
-index 0000000000..1fe4824a83
---- /dev/null
-+++ b/package/zziplib/0002-ZZIP_LIBLATEST-create-symlinks-only-if-target-is-mis.patch
-@@ -0,0 +1,59 @@
-+From 5977725ecea038f32a86938703ca1ed2b080b31c Mon Sep 17 00:00:00 2001
-+From: Andreas Ziegler <br015@umbiko.net>
-+Date: Fri, 29 Jul 2022 12:32:27 +0200
-+Subject: [PATCH] ZZIP_LIBLATEST: create symlinks only if target is missing
-+
-+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-+---
-+ zzip/CMakeLists.txt | 18 +++++++++++++++---
-+ 1 file changed, 15 insertions(+), 3 deletions(-)
-+
-+diff --git a/zzip/CMakeLists.txt b/zzip/CMakeLists.txt
-+index 4fa6b9c..dd1e56a 100644
-+--- a/zzip/CMakeLists.txt
-++++ b/zzip/CMakeLists.txt
-+@@ -350,8 +350,12 @@ if(ZZIP_LIBLATEST)
-+   endif()
-+     get_target_property(libname libzzip OUTPUT_NAME)
-+     get_target_property(librelease libzzip RELEASE_POSTFIX)
-++    set(libzzip_target "${lib}${libname}${dll}")
-++    add_custom_command(OUTPUT ${libzzip_target} 
-++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${libzzip_target}
-++        )
-+     add_custom_target(libzzip_latest ALL
-+-        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzip> ${lib}${libname}${dll}
-++        DEPENDS ${libzzip_target}
-+         )
-+     install(FILES
-+         ${outdir}/${lib}${libname}${dll}
-+@@ -359,8 +363,12 @@ if(ZZIP_LIBLATEST)
-+     if(ZZIPFSEEKO)
-+     get_target_property(libname libzzipfseeko OUTPUT_NAME)
-+     get_target_property(librelease libzzipfseeko RELEASE_POSTFIX)
-++    set(libzzipfseeko_target "${lib}${libname}${dll}")
-++    add_custom_command(OUTPUT ${libzzipfseeko_target} 
-++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${libzzipfseeko_target}
-++        )
-+     add_custom_target(libzzipfseeko_latest ALL
-+-        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipfseeko> ${lib}${libname}${dll}
-++        DEPENDS ${libzzipfseeko_target}
-+         )
-+     install(FILES
-+         ${outdir}/${lib}${libname}${dll}
-+@@ -369,8 +377,12 @@ if(ZZIP_LIBLATEST)
-+     if(ZZIPMMAPPED)
-+     get_target_property(libname libzzipmmapped OUTPUT_NAME)
-+     get_target_property(librelease libzzipmmapped RELEASE_POSTFIX)
-++    set(libzzipmmapped_target "${lib}${libname}${dll}")
-++    add_custom_command(OUTPUT ${libzzipmmapped_target} 
-++        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${libzzipmmapped_target}
-++        )
-+     add_custom_target(libzzipmmaped_latest ALL
-+-        COMMAND ${CMAKE_COMMAND} -E create_symlink $<TARGET_FILE_NAME:libzzipmmapped> ${lib}${libname}${dll}
-++        DEPENDS ${libzzipmmapped_target}
-+         )
-+     install(FILES
-+         ${outdir}/${lib}${libname}${dll}
-+-- 
-+2.34.1
-+
 -- 
-2.34.1
+Giulio Benetti
+Benetti Engineering sas
+
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   toolchain/Config.in | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 722bdb2de0..a71a0db83b 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -186,12 +186,13 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
+>   
+>   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
+>   # Error: branch offset out of range on Nios II. This bug
+> -# no longer exists in gcc 8.x but reappeared on gcc 9.x and has been
+> -# fixed on gcc 11.x.
+> +# no longer exists in gcc 8.x but reappeared on gcc 9.x and still exists
+> +# on gcc 12.x
+>   config BR2_TOOLCHAIN_HAS_GCC_BUG_99410
+>   	bool
+> -	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+> -	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9 && !BR2_TOOLCHAIN_GCC_AT_LEAST_11
+> +	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
+> +		     BR2_TOOLCHAIN_GCC_AT_LEAST_10 || BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
+> +		     BR2_TOOLCHAIN_GCC_AT_LEAST_12
+>   	depends on BR2_nios2
+>   
+>   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
 
 _______________________________________________
 buildroot mailing list
