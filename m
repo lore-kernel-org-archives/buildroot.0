@@ -1,97 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AECBBC00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2481C00144
+	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 19:40:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 275F1421F5;
-	Fri, 29 Jul 2022 19:00:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 275F1421F5
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5TIIYonWsi5Z; Fri, 29 Jul 2022 19:00:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D959D421C4;
-	Fri, 29 Jul 2022 19:00:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D959D421C4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CAF9D1BF575
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:00:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2864842B4
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:00:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2864842B4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 343C383F5B;
+	Fri, 29 Jul 2022 19:40:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 343C383F5B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iNEHNH7OjG6T for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 19:00:52 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9hszDOrlODiF; Fri, 29 Jul 2022 19:40:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45E1D83F38;
+	Fri, 29 Jul 2022 19:40:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45E1D83F38
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A110C1BF33A
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:40:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 888FB60DE5
+ for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 19:40:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 888FB60DE5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lSe2QvKzO5A7 for <buildroot@lists.busybox.net>;
+ Fri, 29 Jul 2022 19:40:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 572C1841AA
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
- [IPv6:2a00:1450:4864:20::631])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 572C1841AA
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:00:52 +0000 (UTC)
-Received: by mail-ej1-x631.google.com with SMTP id z23so10083215eju.8
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 12:00:52 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1D0360A6C
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C1D0360A6C
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 19:40:40 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id v17so7041459edc.1
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 12:40:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
  :content-language:to:cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=S3HrGZXrY4c36xcB4eyZUdEnhqCYDJjcMS6vwA4PZYM=;
- b=g4VfOf3V0C0JrcIuVzWzd6wIl+8V2PeLvz1eXLbZKZCivb5C4DX76106Lba8pUNuZ9
- sj+2UQZTbxqG02oMKeJlwXmNgJul6eYNSXaKk1qbqHIC10Cz5iZulahp/qpxPhv7/ZFG
- oDl9AnpoId3/czha4Y5mBJScqYnLcSqootkxwMnbpca986b9GtNKgZtVq33CV48Bt5GU
- WnwbUGq3tFl+++z98A4UIOTWbAHCNJiMwcWb3bLwvOmWzu55UUD3bRlasD/yb4DILoPh
- LpFjfFdVUVfDAorv/rcKV0T5mZDBU1Duow5wUPP7rn8z/Ifx5hpy9raJG3BamvgR+znB
- 7YBQ==
-X-Gm-Message-State: AJIora8IDB+7e6EKJvIsSNI29BtNeUeAuaYriaGd4T7VrLzbuZ6/pZiZ
- zzQ1y8CyLMTCSQVc/7sktLX389ISWs4C3A==
-X-Google-Smtp-Source: AGRyM1uafKzy3Xq9iTDu/a/EH5d/ZXnfEihdxD0x8dOabFkvaKTmS2s/hAud9CY2Gy+i5O3yzkPmwg==
-X-Received: by 2002:a17:907:2808:b0:72b:50cd:2c8a with SMTP id
- eb8-20020a170907280800b0072b50cd2c8amr3807338ejc.246.1659121250170; 
- Fri, 29 Jul 2022 12:00:50 -0700 (PDT)
+ bh=X45RDScQYFyv4O46SUrkp1zX/C6sWgpxmqZpM/rEcoQ=;
+ b=QiXzADLS2FeYBn+/uGCKqmudF5SuFMAsD3J2DqciM356KrrEha5feQFRshvUraI9nK
+ vuqtTl0zzchMPa6QMsz6P3ljBcj6MElRI0JD870PJQJFNITSNKdCDJnnQrwJJPcDi7qs
+ dVGA8K6cdmC0yyfa5u6vMPXKR82q0Z6evOyp/L4k9zrKMw/L8SAl2zd6a3/HQWKXLAHt
+ E11fUPCKGXLrYWROyFg8xG9cQ5VR3V9Ji5E4BYX43fHsVm3/AuhFcPH1YM235H3gReCs
+ ivk8/Qw+a64detApT3wM6EiRowjx4Rt2Izfmpr9KPrAydmwUASDBmNoEDc612nKncthx
+ lP2Q==
+X-Gm-Message-State: AJIora9to6MybDE/ZznM2sYDguDwlGJGgMX8RkYeupc5SzoZeSCcd1aW
+ d8xCDhs7wb1swT/xxYLBLtVZjA==
+X-Google-Smtp-Source: AGRyM1vIWA6SJMFAKJ+7aWcJJrzXgBqDlZ84V8xt6CTaqRNdlYm2destlPc2bOttMkB3gkR2SDer9A==
+X-Received: by 2002:a05:6402:4511:b0:43b:a182:8a0a with SMTP id
+ ez17-20020a056402451100b0043ba1828a0amr5058341edb.410.1659123638779; 
+ Fri, 29 Jul 2022 12:40:38 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- l2-20020a1709063d2200b0072fe6408526sm2014212ejf.9.2022.07.29.12.00.49
+ g1-20020a17090604c100b0072b91a3d7e9sm2077057eja.28.2022.07.29.12.40.38
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 29 Jul 2022 12:00:49 -0700 (PDT)
-Message-ID: <130b7fd7-20bd-656b-ed20-b0710fc5594f@mind.be>
-Date: Fri, 29 Jul 2022 21:00:48 +0200
+ Fri, 29 Jul 2022 12:40:38 -0700 (PDT)
+Message-ID: <413b2523-0ea9-f051-f2c8-6aec483bf8fc@mind.be>
+Date: Fri, 29 Jul 2022 21:40:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
-References: <20220728211259.121416-1-angelo@amarulasolutions.com>
- <20220729104754.2beb327c@windsurf>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20220729162430.1028453-1-giulio.benetti@benettiengineering.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220729104754.2beb327c@windsurf>
+In-Reply-To: <20220729162430.1028453-1-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=message-id:date:mime-version:user-agent:subject:content-language:to
  :cc:references:from:organization:in-reply-to
  :content-transfer-encoding;
- bh=S3HrGZXrY4c36xcB4eyZUdEnhqCYDJjcMS6vwA4PZYM=;
- b=I0ymxsPe583FYtW1OnsnHcEuq+XwtqhXy/VE6v9/InNyVNyHFenaZI5m7hJQDOAvT1
- ztThAexXwcm5HhXH1nFRxtetnBEc78OZHtUoc7PP2VtDLvK/kFvar4Fkg9mAhNCqWvpM
- sg+a2Vw8o1oKzyKcya3dQDQE3tWDnzScwvWxIKJEVxYzQIsEuOYVhggAsBk4uZNtQuby
- U12/ge28y+6/y0OOlC7M0NxPM5mLr1CJ3keNfeYJdWPNHPTr2wXzFjX+q+CqVRL4JtEo
- UnxonHcugGEPci2nA2QYmmT9Tv4qx4BaMsaE+6Q8FZZw9QRI0XrxJN9zBe/hID3B21lj
- k1fg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=X45RDScQYFyv4O46SUrkp1zX/C6sWgpxmqZpM/rEcoQ=;
+ b=ZI6ZhwuWREuYS5T/zL1ihPzLa4yn0xe1GyJmMB4jw8BJvhbxGtNqcsmskTrzsrt0NT
+ oE4elJNpL8qJWEaIfn0KjmuzP8oeaPiTUUpbwlZVZchM1M0KpcKO24apjgqkQzDE7RBE
+ hqv8pjQWFdfIrVnq+yC3Cl4p+gYr/mgTapomNLqTQAIrNL4TNAI/3g7j4ZRJ0n3xlf2h
+ Uwalne2tRFwjqkWcbwzHCHD4u1Z/YPMuSpnZaF2HHCnIrcIJ/rv13HPR2wYab1wjlgbf
+ z59pofKbp/lynJBOmshz/MKKkw6vZhT7S4TGNfqnbH7CMUrshzcnAJuIuiIDqmSG1GOi
+ OkBQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=I0ymxsPe
-Subject: Re: [Buildroot] [PATCH v2] package/libdill: new package
+ header.a=rsa-sha256 header.s=google header.b=ZI6ZhwuW
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain/Config.in: fix
+ BR2_TOOLCHAIN_HAS_GCC_BUG_99140 number
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,7 +103,10 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -111,77 +114,49 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 29/07/2022 10:47, Thomas Petazzoni via buildroot wrote:
-> Hello Angelo,
+On 29/07/2022 18:24, Giulio Benetti wrote:
+> While introducing gcc bug 99410 I've named BR2_TOOLCHAIN_HAS_GCC_BUG_ to
+> 99140 that is wrong. So let's fix this by changing bug option to
+> BR2_TOOLCHAIN_HAS_GCC_BUG_99410.
 > 
-> On Thu, 28 Jul 2022 23:12:59 +0200
-> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   package/belle-sip/belle-sip.mk | 2 +-
+>   toolchain/Config.in            | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
->> Libdill is a C library that makes writing structured concurrent programs
->> easy.
->>
->> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-[snip]
->> diff --git a/package/libdill/libdill.mk b/package/libdill/libdill.mk
->> new file mode 100644
->> index 0000000000..822f07b939
->> --- /dev/null
->> +++ b/package/libdill/libdill.mk
->> @@ -0,0 +1,26 @@
->> +################################################################################
->> +#
->> +# libdill
->> +#
->> +################################################################################
->> +
->> +LIBDILL_VERSION = fa01648cf2a8d06e53c965b45eeacfb3ac57bd04
->> +LIBDILL_SITE = $(call github,sustrik,libdill,$(LIBDILL_VERSION))
->> +LIBDILL_LICENSE = MIT
->> +LIBDILL_LICENSE_FILES = COPYING
->> +LIBDILL_CPE_ID_VENDOR = libdill
->> +LIBDILL_CPE_ID_PRODUCT = libdill
-> 
-> Could you add a link in the commit log that shows you have verified these?
+> diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
+> index 11b96f3fd9..51e017000c 100644
+> --- a/package/belle-sip/belle-sip.mk
+> +++ b/package/belle-sip/belle-sip.mk
+> @@ -35,7 +35,7 @@ endif
+>   
+>   BELLE_SIP_CFLAGS = $(TARGET_CFLAGS)
+>   
+> -ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99140),y)
+> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99410)
 
-  See for example how Fabrice does it:
-
-cpe:2.3:a:osgeo:gdal is a valid CPE identifier for this package:
-
- 
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aosgeo%3Agdal
-
-
-  (We should add this to the manual as well.)
-
-
->> +LIBDILL_INSTALL_STAGING = YES
->> +# Fetched from Github, with no configure script
->> +LIBDILL_AUTORECONF = YES
->> +
->> +ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> 
-> ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-> 
->> +LIBDILL_CONF_OPTS += --disable-threads
-
-  What kind of concurrent programming can you do without threads?
+  Something went wrong here... ,y) dropped off.
 
   Regards,
   Arnout
 
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
->> +LIBDILL_DEPENDENCIES = openssl
->> +LIBDILL_CONF_OPTS += --enable-tls
-> 
-> No "else" clause to explicitly disable?
-> 
->> +endif
-> 
-> Thanks!
-> 
-> Thomas
+>   BELLE_SIP_CFLAGS += -O0
+>   endif
+>   
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 6d12b6fed7..722bdb2de0 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -188,7 +188,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
+>   # Error: branch offset out of range on Nios II. This bug
+>   # no longer exists in gcc 8.x but reappeared on gcc 9.x and has been
+>   # fixed on gcc 11.x.
+> -config BR2_TOOLCHAIN_HAS_GCC_BUG_99140
+> +config BR2_TOOLCHAIN_HAS_GCC_BUG_99410
+>   	bool
+>   	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+>   	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9 && !BR2_TOOLCHAIN_GCC_AT_LEAST_11
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
