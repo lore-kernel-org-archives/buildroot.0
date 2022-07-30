@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A77CC04A68
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 10:23:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F587C04A68
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 10:33:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D47661172;
-	Sat, 30 Jul 2022 10:23:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D47661172
+	by smtp1.osuosl.org (Postfix) with ESMTP id E288E8135D;
+	Sat, 30 Jul 2022 10:33:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E288E8135D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id we7lyhNmZ-9K; Sat, 30 Jul 2022 10:23:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OwLuXvyuv40x; Sat, 30 Jul 2022 10:33:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FAB86114E;
-	Sat, 30 Jul 2022 10:23:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FAB86114E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8BD301BF37B
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 10:23:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE41181331;
+	Sat, 30 Jul 2022 10:33:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE41181331
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 01EA71BF37B
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 10:33:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 66ABA40278
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 10:23:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66ABA40278
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA11C409C0
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 10:33:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA11C409C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6LBAxeL_Jy0c for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 10:22:59 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0FD940145
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F0FD940145
- for <buildroot@buildroot.org>; Sat, 30 Jul 2022 10:22:58 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ed0d:5473:88a:e206])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 6003C6012A;
- Sat, 30 Jul 2022 12:22:51 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 30 Jul 2022 12:22:51 +0200
-Date: Sat, 30 Jul 2022 12:22:51 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220730102251.GN3168@scaer>
-References: <20220727221055.1838031-1-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220727221055.1838031-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1659176575;
- bh=PzoiqTvhaJiX1281JVoNZ/gg1m2IK2HzG+Q5FsBJ+AI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=XK1HyaYPNWF9cRLuCkjM2P2dORD5qk9oVQBBoccga6rKQd8NM5CFHprGXUBuBrD83
- 3NXr+F5TbwWaB3kkTWqYd7nq3Oy2eDrTQ41FFJkK7Tn3zyEQuYK0eoTIb3KCn270wx
- OfGgKbrq4OIyqnea5WxYZrtN7s9EDqCOHsTtSb+9ZOE0Tqh6TaBwhefJfCWCCp5zxA
- 0P1aR9nuGOp0vQNFoBwoFHuQvu+s+WSCWdKE2CiHlMh3XxSwMyW36xTyUkKW9X16qa
- 6ywnM/NzVNEKzr7tWruL+clIl4yqj06eXWRNNcD2FbCKhXtE0aApgbYuqtRbEpp8Qq
- /ZbExM6Z/7h0A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=XK1HyaYP
-Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: use statically linked
- host tools
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qBVGS_M85zjI for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 10:33:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 516D440883
+ for <buildroot@buildroot.org>; Sat, 30 Jul 2022 10:33:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 516D440883
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 87CDD85EF8; Sat, 30 Jul 2022 10:19:52 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 30 Jul 2022 12:32:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 32b341fa34b23f81ee2dc8dea7b7b45035c3e8fa
+X-Git-Newrev: c857b8ff0e19c35807b58893931542bfdc7ac9fc
+X-Patchwork-Hint: ignore
+Message-Id: <20220730101952.87CDD85EF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Makefile, docs/manual, support,
+ toolchain: remove Eclipse integration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,148 +57,228 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c857b8ff0e19c35807b58893931542bfdc7ac9fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-07-27 16:10 -0600, James Hilliard spake thusly:
-> This lets us remove the HOST_SYSTEMD_FIX_RPATH hack.
+Back many years ago, we developed an Eclipse plugin that simplified
+the usage of Buildroot toolchains. Enabling the BR2_ECLIPSE_REGISTER=y
+was registering the Buildroot toolchain into a special file in your
+HOME folder that the Eclipse plugin would recognize to allow to
+directly use the Buildroot cross-compiler.
 
-This will require a lot more explanations than just that.
+This Eclipse plugin has not been maintained for years. The last commit
+in the repository dates back from September 2017. Since then Eclipse
+has moved on, and the plugin is no longer compatible with current
+versions of Eclipse.
 
-Please, compare the length of the explanations in 35c11a027c88
-(package/systemd: add host variant), that went to extra details about
-the issue, with your patch that has just one terse line that does not
-explain anything.
+Also, Eclipse is probably no longer that widely used in the embedded
+Linux space, as other more modern IDEs have become more popular.
 
-The commit log is not about stating _what_ is done, but _why_ it is.
-A small note about the _what_ can be needed to summarise it, and what
-you wrote is enough. But you need to really extend the explanations on
-_why_ it is correct to now do so.
+All in all, it's time to say good bye to this Eclipse integration.
 
-Which it is not entirely either:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in.legacy                           |  9 ++++
+ Makefile                                   |  8 ----
+ docs/manual/common-usage.txt               |  2 -
+ docs/manual/eclipse-integration.txt        | 30 ------------
+ support/scripts/eclipse-register-toolchain | 76 ------------------------------
+ toolchain/Config.in                        |  7 ---
+ 6 files changed, 9 insertions(+), 123 deletions(-)
 
-    $ readelf -d host/bin/systemctl
-    [--SNIP--]
-     0x000000000000001d (RUNPATH)            Library runpath: [/usr/lib/systemd:/home/ymorin/dev/buildroot/O/misc/per-package/host-systemd/host/lib]
-
-So, this is wrong, because it is going to use my system's systemd libs,
-not the host ones. Also, it still looks into the per-package directory
-instead of $(HOST_DIR). This does not prevent it to work, but is
-semantically incorrect. It will however break in a system that does not
-have the systemd libraries installed, or has incompatible libraries
-(e.g. too old or too recent). So, the rpath fixup hook is stil needed.
-
-Maybe you can do for systemctl as was done for the other tools? Or maybe
-upstream should have a global option to build everything shared or
-static, instead of one such option for each tool...
-
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...nalctl-allow-statically-linked-build.patch | 68 +++++++++++++++++++
->  package/systemd/systemd.mk                    | 28 +++-----
->  2 files changed, 76 insertions(+), 20 deletions(-)
->  create mode 100644 package/systemd/0002-journalctl-allow-statically-linked-build.patch
-> 
-> diff --git a/package/systemd/0002-journalctl-allow-statically-linked-build.patch b/package/systemd/0002-journalctl-allow-statically-linked-build.patch
-> new file mode 100644
-> index 0000000000..98ffb72cca
-> --- /dev/null
-> +++ b/package/systemd/0002-journalctl-allow-statically-linked-build.patch
-> @@ -0,0 +1,68 @@
-> +From d2dadbdc5618776e07e98baf8795cc8adebf05a1 Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Wed, 27 Jul 2022 15:28:09 -0600
-> +Subject: [PATCH] journalctl: allow statically linked build
-> +
-> +The journalctl tool may be needed on cross compilation hosts in order
-> +to run --update-catalog against a target rootfs.
-> +
-> +To avoid reliability issues caused by shared linking allow journalctl
-> +to be linked statically.
-> +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[Upstream status:
-> +https://github.com/systemd/systemd/pull/24140]
-
-That has been accepted now.
-
-We are usually not too fond of feature backports, except maybe when they
-fix a build/run breakage that we can't easily fix otherwise. But in this
-case, we do not have a breakage, just ugly code, and the build succeeds,
-and the system runs. So, I think that this cleanup can very well wait
-for after we update to an upstream version that has this feature.
-
-> @@ -781,6 +781,13 @@ HOST_SYSTEMD_CONF_OPTS = \
->  	--libdir=lib \
->  	--sysconfdir=/etc \
->  	--localstatedir=/var \
-> +	-Dlink-udev-shared=false \
-> +	-Dlink-systemctl-shared=false \
-> +	-Dlink-networkd-shared=false \
-> +	-Dlink-timesyncd-shared=false \
-> +	-Dlink-journalctl-shared=false \
-> +	-Dlink-boot-shared=false \
-> +	-Dstandalone-binaries=true \
-
-What is this new 'standalone' mode, and how is it related to statically
-linking tools?
-
->  	-Dmode=release \
->  	-Dutmp=false \
->  	-Dhibernate=false \
-> @@ -854,24 +861,5 @@ HOST_SYSTEMD_DEPENDENCIES = \
->  
->  HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
->  
-> -# Fix RPATH After installation
-> -# * systemd provides a install_rpath instruction to meson because the binaries
-> -#   need to link with libsystemd which is not in a standard path
-> -# * meson can only replace the RPATH, not append to it
-> -# * the original rpath is thus lost.
-> -# * the original path had been tweaked by buildroot via LDFLAGS to add
-> -#   $(HOST_DIR)/lib
-> -# * thus re-tweak rpath after the installation for all binaries that need it
-> -HOST_SYSTEMD_HOST_TOOLS = busctl journalctl systemctl systemd-* udevadm
-> -
-> -define HOST_SYSTEMD_FIX_RPATH
-> -	for f in $(addprefix $(HOST_DIR)/bin/,$(HOST_SYSTEMD_HOST_TOOLS)); do \
-> -		[ -e $$f ] || continue; \
-> -		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $${f} \
-> -		|| exit 1; \
-> -	done
-> -endef
-> -HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
-
-That we will eventually be able to drop this hook, is very good news,
-though. But I think that is not urgent, and that we can wait for the
-next version bump.
-
-Regards,
-Yann E. MORIN.
-
->  $(eval $(meson-package))
->  $(eval $(host-meson-package))
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 24b4236ade..80c443d9fb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,15 @@ endif
+ 
+ comment "Legacy options removed in 2022.08"
+ 
++config BR2_ECLIPSE_REGISTER
++	bool "Eclipse integration removed"
++	select BR2_LEGACY
++	help
++	  The Buildroot integration with the Eclipse IDE has been
++	  removed, as the corresponding Eclipse plugin is no longer
++	  maintained, and is no longer usable with current versions of
++	  Eclipse.
++
+ config BR2_csky
+ 	bool "csky architecture removed"
+ 	select BR2_LEGACY
+diff --git a/Makefile b/Makefile
+index bf101ff770..fb0ef32c6b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -646,14 +646,6 @@ STRIP_FIND_SPECIAL_LIBS_CMD = \
+ 	\( -name 'ld-*.so*' -o -name 'libpthread*.so*' \) \
+ 	-print0
+ 
+-ifeq ($(BR2_ECLIPSE_REGISTER),y)
+-define TOOLCHAIN_ECLIPSE_REGISTER
+-	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` \
+-		$(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+-endef
+-TARGET_FINALIZE_HOOKS += TOOLCHAIN_ECLIPSE_REGISTER
+-endif
+-
+ # Generate locale data.
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+ GLIBC_GENERATE_LOCALES = $(call qstrip,$(BR2_GENERATE_LOCALE))
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 9ba87a8339..9abd3799dd 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -417,6 +417,4 @@ effects:
+   be empty and it's only at the very end of the build that they will
+   be populated.
+ 
+-include::eclipse-integration.txt[]
+-
+ include::advanced.txt[]
+diff --git a/docs/manual/eclipse-integration.txt b/docs/manual/eclipse-integration.txt
+deleted file mode 100644
+index 1f726d8240..0000000000
+--- a/docs/manual/eclipse-integration.txt
++++ /dev/null
+@@ -1,30 +0,0 @@
+-// -*- mode:doc; -*-
+-// vim: set syntax=asciidoc:
+-
+-=== Integration with Eclipse
+-
+-While a part of the embedded Linux developers like classical text
+-editors like Vim or Emacs, and command-line based interfaces, a number
+-of other embedded Linux developers like richer graphical interfaces to
+-do their development work. Eclipse being one of the most popular
+-Integrated Development Environment, Buildroot integrates with Eclipse
+-in order to ease the development work of Eclipse users.
+-
+-Our integration with Eclipse simplifies the compilation, remote
+-execution and remote debugging of applications and libraries that are
+-built on top of a Buildroot system. It does not integrate the
+-Buildroot configuration and build processes themselves with
+-Eclipse. Therefore, the typical usage model of our Eclipse integration
+-would be:
+-
+-* Configure your Buildroot system with +make menuconfig+, +make
+-  xconfig+ or any other configuration interface provided with
+-  Buildroot.
+-* Build your Buildroot system by running +make+.
+-* Start Eclipse to develop, execute and debug your own custom
+-  applications and libraries, that will rely on the libraries built
+-  and installed by Buildroot.
+-
+-The Buildroot Eclipse integration installation process and usage is
+-described in detail at
+-https://github.com/mbats/eclipse-buildroot-bundle/wiki.
+diff --git a/support/scripts/eclipse-register-toolchain b/support/scripts/eclipse-register-toolchain
+deleted file mode 100755
+index 891d29ee6f..0000000000
+--- a/support/scripts/eclipse-register-toolchain
++++ /dev/null
+@@ -1,76 +0,0 @@
+-#!/bin/sh
+-
+-# This script registers the toolchain of a Buildroot project into the
+-# Eclipse plugin. To do so, it adds a new line for the Buildroot
+-# toolchain into the $HOME/.buildroot-eclipse.toolchains file, which
+-# the Eclipse Buildroot plugin reads to discover automatically the
+-# available Buildroot toolchains on the system.
+-#
+-# This script should typically not be called manually. Instead, one
+-# should enable the BR2_ECLIPSE_REGISTER configuration option, which
+-# will lead Buildroot to automatically call this script with the
+-# appropriate arguments.
+-#
+-# Usage:
+-#  eclipse-register-toolchain project-directory toolchain-prefix architecture
+-#
+-#   project-directory is the absolute path to the Buildroot project
+-#   output directory (which contains the host/, target/, build/,
+-#   images/, etc. subdirectories). It should be an absolute and
+-#   canonical path.
+-#
+-#   toolchain-prefix is the prefix of the cross-compilation tools, i.e
+-#   'arm-linux-' if the cross-compiler executable is 'arm-linux-gcc'.
+-#
+-#   architecture is the lower-cased name of the architecture targetted
+-#   by the Buildroot project.
+-
+-if test $# -ne 3; then
+-    echo "Invalid number of arguments."
+-    echo "Usage: $0 project-directory toolchain-prefix architecture"
+-    exit 1
+-fi
+-
+-project_directory=$1
+-toolchain_prefix=$2
+-architecture=$3
+-
+-if test ! -d ${project_directory} ; then
+-    echo "Non-existing project directory ${project_directory}"
+-    exit 1
+-fi
+-
+-if test ! -d ${project_directory}/host ; then
+-    echo "Your project directory does not look like a Buildroot output"
+-    exit 1
+-fi
+-
+-if test ! -e ${project_directory}/host/bin/${toolchain_prefix}gcc ; then
+-    echo "Cannot find the cross-compiler in the project directory"
+-    exit 1
+-fi
+-
+-TOOLCHAIN_ECLIPSE_FILE=${HOME}/.buildroot-eclipse.toolchains
+-
+-# First, we remove all lines from the ${TOOLCHAIN_ECLISPE_FILE} that
+-# correspond to toolchains that no longer exist.
+-if test -f ${TOOLCHAIN_ECLIPSE_FILE} ; then
+-    mv ${TOOLCHAIN_ECLIPSE_FILE} ${TOOLCHAIN_ECLIPSE_FILE}.tmp
+-    cat ${TOOLCHAIN_ECLIPSE_FILE}.tmp | while read toolchain ; do
+-	path=$(echo ${toolchain} | cut -f1 -d ':')
+-        # Filter lines corresponding to still existing projects
+-	echo "Testing ${path} ..."
+-	if ! test -d ${path} ; then
+-	    continue
+-	fi
+-	# .. and the current project
+-	if test ${path} = ${project_directory} ; then
+-	    continue
+-	fi
+-	echo ${toolchain} >> ${TOOLCHAIN_ECLIPSE_FILE}
+-    done
+-    rm ${TOOLCHAIN_ECLIPSE_FILE}.tmp
+-fi
+-
+-# Add the toolchain
+-echo "${project_directory}:${toolchain_prefix}:${architecture}" >> ${TOOLCHAIN_ECLIPSE_FILE}
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 3cc747c1cc..3ab594a1d3 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -331,13 +331,6 @@ config BR2_TARGET_LDFLAGS
+ 	  Note that options with a '$' sign (eg.
+ 	  -Wl,-rpath='$ORIGIN/../lib') are not supported.
+ 
+-config BR2_ECLIPSE_REGISTER
+-	bool "Register toolchain within Eclipse Buildroot plug-in"
+-	help
+-	  This options tells Buildroot to generate the necessary
+-	  configuration files to make your toolchain appear within
+-	  Eclipse, through the Eclipse Buildroot plugin.
+-
+ # Options for packages to depend on, if they require at least a
+ # specific version of the kernel headers.
+ # Toolchains should choose the adequate option (ie. the highest
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
