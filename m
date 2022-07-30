@@ -1,73 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AC16C00144
-	for <buildroot@archiver.kernel.org>; Fri, 29 Jul 2022 22:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8734EC04A68
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 06:12:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D98DB400DA;
-	Fri, 29 Jul 2022 22:28:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D98DB400DA
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vwgvuPBXhSm4; Fri, 29 Jul 2022 22:28:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A7AC2400FF;
-	Fri, 29 Jul 2022 22:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7AC2400FF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 351D61BF45A
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 22:28:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0FD8781489
- for <buildroot@lists.busybox.net>; Fri, 29 Jul 2022 22:28:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FD8781489
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFEB283E50;
+	Sat, 30 Jul 2022 06:12:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFEB283E50
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id db68szkdXzZI for <buildroot@lists.busybox.net>;
- Fri, 29 Jul 2022 22:28:53 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFC2781464
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFC2781464
- for <buildroot@buildroot.org>; Fri, 29 Jul 2022 22:28:52 +0000 (UTC)
-Received: from [192.168.50.173] ([146.241.73.23])
- by Aruba Outgoing Smtp  with ESMTPSA
- id HYTTog4pkrvmbHYTToI6kd; Sat, 30 Jul 2022 00:28:51 +0200
-Message-ID: <05580609-f5ed-5e54-1ed5-44f7d392b84c@benettiengineering.com>
-Date: Sat, 30 Jul 2022 00:28:51 +0200
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O_5DjRsSXU0r; Sat, 30 Jul 2022 06:12:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A752583E2C;
+	Sat, 30 Jul 2022 06:12:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A752583E2C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C8A11BF386
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 06:12:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7340860AE9
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 06:12:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7340860AE9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CHnqXOQnjc29 for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 06:12:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D02960776
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com
+ [IPv6:2607:f8b0:4864:20::f35])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3D02960776
+ for <buildroot@buildroot.org>; Sat, 30 Jul 2022 06:12:23 +0000 (UTC)
+Received: by mail-qv1-xf35.google.com with SMTP id u8so2922684qvv.1
+ for <buildroot@buildroot.org>; Fri, 29 Jul 2022 23:12:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=SInk8wiqs7uUARozs+t9vUN49GBA8/Pb3tHEFaOfxbU=;
+ b=M67xIu7JCBqE9WFR5d9tCC/XKaztu5Rmrn8zg5D5dd39Ef7GHV/juu+OabfhGUeHcT
+ ZUf0L29FiKFT8+8SX+vcFjGhOHsd8Ryi/qvGd3dYboDLOu9sjrr972D1oJ3GStuVi2WT
+ iLmnr25hRUOyzxgxQ/kBxfguhs6UucyLu8gteKACg4cR4A1eD1gwOdZgnmKRLtP/rv7U
+ ZsNi5gruuoTXTw/LN8eWloj24TfLkG2UyNAy/UQTvwsumWyDKC/7Opb5JLpNU1s6VqIU
+ riyMvpq4pv+6/FE484QSMz7mXtDjuGlskkY4uGQULq/9rlMnlgkrg3cKnZVHt0F0tivR
+ /htg==
+X-Gm-Message-State: ACgBeo3mqiYYN59R8YXtMxLdfH1TXVWUkpfCZDnJzz1LIRml8IsIibHY
+ Tc0Op8zitOHt/9OcYTMTwL9JkoVoDlE=
+X-Google-Smtp-Source: AA6agR4u+pwIbaNhV0nR+7Cs3h3XwJKoT0lroIU0iHOHmMCiJx/IRQCBLC1OuHIvQIwoExtBrt2Wdg==
+X-Received: by 2002:a05:6214:d4b:b0:476:5d58:9b63 with SMTP id
+ 11-20020a0562140d4b00b004765d589b63mr15336qvr.33.1659161541751; 
+ Fri, 29 Jul 2022 23:12:21 -0700 (PDT)
+Received: from jesse-desktop.jtp-bos.lab
+ (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com.
+ [146.115.144.188]) by smtp.gmail.com with ESMTPSA id
+ bm7-20020a05620a198700b006b629f86244sm4080768qkb.50.2022.07.29.23.12.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 29 Jul 2022 23:12:21 -0700 (PDT)
+From: Jesse Taube <mr.bossman075@gmail.com>
+X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 30 Jul 2022 02:12:19 -0400
+Message-Id: <20220730061219.3061864-1-Mr.Bossman075@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Content-Language: en-US
-To: Jesse Taube <mr.bossman075@gmail.com>, buildroot@buildroot.org
-References: <20220723160901.272373-1-Mr.Bossman075@gmail.com>
- <c8857f2a-8344-e215-2d3b-f492ed9662fc@benettiengineering.com>
- <84f1cfa0-cb94-246e-656a-bea65b43eb81@gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <84f1cfa0-cb94-246e-656a-bea65b43eb81@gmail.com>
-X-CMAE-Envelope: MS4xfOzN/xNYQGonkENsZYQ/u6grwvqVWGu2IYtX/BajYNnzYDN+wG+37KZIq1TasONQ6n7FdESRLKnRJOstsKAqeOYlF4QLsU/0SbnCbubPuUPbLoThFrze
- i9rC5YifJcFvzq/P9bc/rfpAn3UHLLBisA1gLWhNzEyJH67FO7KLxG9dEIqlPTDJxSn9fFzI6as0VKpFtfEzRG7nykAc34pG2T10DDQGItevnvcMgpD0KC9h
- Z8KcW9H+cLW+as5GTqOnhwzIzOsAqmcBQeyWElLqxBZEl7v+6VJ8kZih5F9/T8Wt4dE8N2qhGBj9qdiEDUHH9dAqPJOGc/XXpqzz1MpMdCAKUbgjdYQWWuzY
- KU9ksbsd
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1659133731; bh=mnz9t8v0n3P1sQL50ujC2ddbkO+NPDaz3mjDBXwxSq8=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=cgIFvAh46hg7gKd1tUEfidUp5ajQ0PU7frdLYDlI9f0o818ZDmGMjJ1YAMhu02DZl
- KrmdWCsLMGB3Xqjh3pfuNs+fnDQvPj79KoLupyCfQ1OUWmxS1qaaD1S3q4GzEo96vh
- vPvXa7PIBLxT6buFF+yxuV5G6hqrs7j13htbaKJWxooetbdR+UCIWw+A/YKul4GvLK
- zJvZKLs/2KzRyyh6ai3B0amMZh1F95EYYyYOEEjQEM4bOno4WP/BkJO1E1LLtRK/Ah
- dNKIg6bmX5zYSdcHmUUsifLzGt8fqQeof5VAVruyLeShRxOe0r//2BpywxbsBvRSiN
- cmQSyP3rrqFwA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=cgIFvAh4
-Subject: Re: [Buildroot] [PATCH v1] configs/imxrt1050-evk: new defconfig
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=SInk8wiqs7uUARozs+t9vUN49GBA8/Pb3tHEFaOfxbU=;
+ b=dEs+s2YPtGAzNNVoiEAWKLfXvxY7CamXK6HtgZdFuOys85t5X9kTU3puO0rS0cz2HI
+ 9QY8M3x1nP1nuj6FfKCdRKZiwB0iVH/uatjMFHwlTkAvu2HQAIrcOu/EaCcUSdYUyrT4
+ EN6TaFJOWdt/H6T9FNv2XCbKv5nv+OQYwFmvjUMKGQo5zH6XFmReL838oiajkiOOYlfq
+ 1aDfWu3ohsVMDIpQyn/ElJv446MhVaM/8TfXBOl0zP0aWEe4e/XgyBSJtkEL/Fv2rC2k
+ QqeXYOluo8QJbHqcGXPBK4jnvkQJLrMbBwsWttmgC8W0+g3VD8ApgauwSeWNOQ0Br/WK
+ gRZg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=dEs+s2YP
+Subject: [Buildroot] [PATCH v2] configs/imxrt1050-evk: New defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,178 +94,220 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: maeva.manuel@oss.nxp.com, festevam@gmail.com, stephane.viau@oss.nxp.com
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: maeva.manuel@oss.nxp.com,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>, festevam@gmail.com,
+ stephane.viau@oss.nxp.com, Jesse Taube <Mr.Bossman075@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMzAvMDcvMjIgMDA6MTEsIEplc3NlIFRhdWJlIHdyb3RlOgo+IAo+IAo+IE9uIDcvMjkvMjIg
-MTg6MDUsIEdpdWxpbyBCZW5ldHRpIHdyb3RlOgo+PiBIaSBKZXNzZSEKPj4KPj4gT24gMjMvMDcv
-MjIgMTg6MDksIEplc3NlIFRhdWJlIHdyb3RlOgo+Pj4gVGhlIGlteHJ0MTA1MC1ldmsgaXMgYSBk
-ZXZlbG9wbWVudCBib2FyZCBmcm9tIE5YUC4KPj4KPj4gUGxlYXNlIGhlcmUgcHJvdmlkZSBhIGJy
-aWVmIGRlc2NyaXB0aW9uIG9mIHRoZSBib2FyZCBhbmQKPj4gYW4gVVJMIHBvaW50aW5nIHRvIHRo
-ZSBib2FyZCBwYWdlLgo+Pgo+Pj4gU2lnbmVkLW9mZi1ieTogSmVzc2UgVGF1YmUgPE1yLkJvc3Nt
-YW4wNzVAZ21haWwuY29tPgo+Pj4gQ2M6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBi
-ZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+Pj4gLS0tCj4+PiDCoMKgIERFVkVMT1BFUlPCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgfMKgIDYgKysrKwo+Pj4gwqDCoCBib2FyZC9mcmVlc2NhbGUvaW14cnQxMDUwZXZrL2dlbmlt
-YWdlLmNmZ8KgwqAgfCAzNCArKysrKysrKysrKysrKysrKysKPj4+IMKgwqAgYm9hcmQvZnJlZXNj
-YWxlL2lteHJ0MTA1MGV2ay9wb3N0LWJ1aWxkLnNowqAgfMKgIDQgKysrCj4+PiDCoMKgIGJvYXJk
-L2ZyZWVzY2FsZS9pbXhydDEwNTBldmsvcmVhZG1lLnR4dMKgwqDCoMKgIHwgMjMgKysrKysrKysr
-KysrCj4+PiDCoMKgIGJvYXJkL2ZyZWVzY2FsZS9pbXhydDEwNTBldmsvdWJvb3QuZnJhZ21lbnQg
-fMKgIDIgKysKPj4+IMKgwqAgY29uZmlncy9pbXhydDEwNTAtZXZrX2RlZmNvbmZpZ8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCB8IDQwIAo+Pj4gKysrKysrKysrKysrKysrKysrKysrCj4+PiDCoMKg
-IDYgZmlsZXMgY2hhbmdlZCwgMTA5IGluc2VydGlvbnMoKykKPj4+IMKgwqAgY3JlYXRlIG1vZGUg
-MTAwNjQ0IGJvYXJkL2ZyZWVzY2FsZS9pbXhydDEwNTBldmsvZ2VuaW1hZ2UuY2ZnCj4+PiDCoMKg
-IGNyZWF0ZSBtb2RlIDEwMDc1NSBib2FyZC9mcmVlc2NhbGUvaW14cnQxMDUwZXZrL3Bvc3QtYnVp
-bGQuc2gKPj4+IMKgwqAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2ZyZWVzY2FsZS9pbXhydDEw
-NTBldmsvcmVhZG1lLnR4dAo+Pj4gwqDCoCBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvZnJlZXNj
-YWxlL2lteHJ0MTA1MGV2ay91Ym9vdC5mcmFnbWVudAo+Pj4gwqDCoCBjcmVhdGUgbW9kZSAxMDA2
-NDQgY29uZmlncy9pbXhydDEwNTAtZXZrX2RlZmNvbmZpZwo+Pj4KPj4+IGRpZmYgLS1naXQgYS9E
-RVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+Pj4gaW5kZXggMGFmZDY5N2I2Yy4uMjA2YmFjOTllMCAx
-MDA2NDQKPj4+IC0tLSBhL0RFVkVMT1BFUlMKPj4+ICsrKyBiL0RFVkVMT1BFUlMKPj4+IEBAIC0x
-MDk2LDkgKzEwOTYsMTEgQEAgRjrCoMKgwqAgcGFja2FnZS93ZWJwLwo+Pj4gwqDCoCBGOsKgwqDC
-oCBwYWNrYWdlL3hhcGlhbi8KPj4+IMKgwqAgTjrCoMKgwqAgR2l1bGlvIEJlbmV0dGkgPGdpdWxp
-by5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Cj4+PiArRjrCoMKgwqAgYm9hcmQvZnJl
-ZXNjYWxlL2lteHJ0MTA1MGV2ay8qCj4+PiDCoMKgIEY6wqDCoMKgIGJvYXJkL29saW1leC9hKgo+
-Pj4gwqDCoCBGOsKgwqDCoCBjb25maWdzL2FtYXJ1bGFfdnlhc2FfcmszMjg4X2RlZmNvbmZpZwo+
-Pj4gwqDCoCBGOsKgwqDCoCBjb25maWdzL2FzdXNfdGlua2VyX3JrMzI4OF9kZWZjb25maWcKPj4+
-ICtGOsKgwqDCoCBjb25maWdzL2lteHJ0MTA1MC1ldmtfZGVmY29uZmlnCj4+Cj4+IFRoYW5rIHlv
-dSBmb3IgYWRkaW5nIG1lIDotKQo+Pgo+Pj4gwqDCoCBGOsKgwqDCoCBjb25maWdzL29saW1leF9h
-Kgo+Pj4gwqDCoCBGOsKgwqDCoCBwYWNrYWdlL2F0Lwo+Pj4gwqDCoCBGOsKgwqDCoCBwYWNrYWdl
-L2JpbnV0aWxzLwo+Pj4gQEAgLTE0MjEsNiArMTQyMywxMCBAQCBGOsKgwqDCoCBwYWNrYWdlL3dt
-Y3RybC8KPj4+IMKgwqAgRjrCoMKgwqAgcGFja2FnZS94MTFyNy94ZHJpdmVyX3hmODYtdmlkZW8t
-aW14Lwo+Pj4gwqDCoCBGOsKgwqDCoCBwYWNrYWdlL3gxMXI3L3hkcml2ZXJfeGY4Ni12aWRlby1p
-bXgtdml2Lwo+Pj4gK046wqDCoMKgIEplc3NlIFRhdWJlIDxNci5Cb3NzbWFuMDc1QGdtYWlsLmNv
-bT4KPj4+ICtGOsKgwqDCoCBib2FyZC9mcmVlc2NhbGUvaW14cnQxMDUwZXZrLyoKPj4+ICtGOsKg
-wqDCoCBjb25maWdzL2lteHJ0MTA1MC1ldmtfZGVmY29uZmlnCj4+PiArCj4+PiDCoMKgIE46wqDC
-oMKgIEppYW5odWkgWmhhbyA8emhhb2poMzI5QGdtYWlsLmNvbT4KPj4+IMKgwqAgRjrCoMKgwqAg
-cGFja2FnZS9saWJ1aHR0cGQvCj4+PiDCoMKgIEY6wqDCoMKgIHBhY2thZ2UvbGlidXdzYy8KPj4+
-IGRpZmYgLS1naXQgYS9ib2FyZC9mcmVlc2NhbGUvaW14cnQxMDUwZXZrL2dlbmltYWdlLmNmZyAK
-Pj4+IGIvYm9hcmQvZnJlZXNjYWxlL2lteHJ0MTA1MGV2ay9nZW5pbWFnZS5jZmcKPj4+IG5ldyBm
-aWxlIG1vZGUgMTAwNjQ0Cj4+PiBpbmRleCAwMDAwMDAwMDAwLi5lOWYyMjQ1MTZmCj4+PiAtLS0g
-L2Rldi9udWxsCj4+PiArKysgYi9ib2FyZC9mcmVlc2NhbGUvaW14cnQxMDUwZXZrL2dlbmltYWdl
-LmNmZwo+Pj4gQEAgLTAsMCArMSwzNCBAQAo+Pj4gK2ltYWdlIGJvb3QudmZhdCB7Cj4+PiArwqDC
-oMKgIHZmYXQgewo+Pj4gK8KgwqDCoMKgwqDCoMKgIGZpbGVzID0gewo+Pj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgInVJbWFnZSIsCj4+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAiaW14cnQx
-MDUwLWV2ay5kdGIiLAo+Pj4gK8KgwqDCoMKgwqDCoMKgIH0KPj4+ICvCoMKgwqAgfQo+Pj4gK8Kg
-wqDCoCBzaXplID0gNk0KPj4+ICt9Cj4+PiArCj4+PiAraW1hZ2Ugc2RjYXJkLmltZyB7Cj4+PiAr
-wqDCoMKgIGhkaW1hZ2Uge30KPj4+ICvCoMKgwqAgcGFydGl0aW9uIFNQTCB7Cj4+PiArwqDCoMKg
-wqDCoMKgwqAgaW4tcGFydGl0aW9uLXRhYmxlID0gIm5vIgo+Pj4gK8KgwqDCoMKgwqDCoMKgIGlt
-YWdlID0gIlNQTCIKPj4+ICvCoMKgwqDCoMKgwqDCoCBvZmZzZXQgPSAxSwo+Pj4gK8KgwqDCoMKg
-wqDCoMKgIHNpemUgPSAxMjdLCj4+PiArwqDCoMKgIH0KPj4+ICvCoMKgwqAgcGFydGl0aW9uIHUt
-Ym9vdCB7Cj4+PiArwqDCoMKgwqDCoMKgwqAgaW4tcGFydGl0aW9uLXRhYmxlID0gIm5vIgo+Pj4g
-K8KgwqDCoMKgwqDCoMKgIGltYWdlID0gInUtYm9vdC5pbWciCj4+PiArwqDCoMKgwqDCoMKgwqAg
-b2Zmc2V0ID0gMTI4Swo+Pj4gK8KgwqDCoMKgwqDCoMKgIHNpemUgPSA1MTJLCj4+PiArwqDCoMKg
-IH0KPj4+ICvCoMKgwqAgcGFydGl0aW9uIGJvb3Qgewo+Pj4gK8KgwqDCoMKgwqDCoMKgIHBhcnRp
-dGlvbi10eXBlID0gMHhjCj4+PiArwqDCoMKgwqDCoMKgwqAgYm9vdGFibGUgPSAidHJ1ZSIKPj4+
-ICvCoMKgwqDCoMKgwqDCoCBpbWFnZSA9ICJib290LnZmYXQiCj4+PiArwqDCoMKgIH0KPj4+ICvC
-oMKgwqAgcGFydGl0aW9uIHJvb3RmcyB7Cj4+PiArwqDCoMKgwqDCoMKgwqAgcGFydGl0aW9uLXR5
-cGUgPSAweDgzCj4+PiArwqDCoMKgwqDCoMKgwqAgaW1hZ2UgPSAicm9vdGZzLmV4dDQiCj4+PiAr
-wqDCoMKgIH0KPj4+ICt9Cj4+Cj4+IGdlbmltYWdlLmNmZyBoYXMgYSBzdGFuZGFyZCBmb3JtYXQg
-dG8gZm9sbG93IHRoYXQgeW91IGNhbiBmaW5kIGluCj4+IEJ1aWxkcm9vdCdzIG1hbnVhbDoKPj4g
-aHR0cHM6Ly9idWlsZHJvb3Qub3JnL2Rvd25sb2Fkcy9tYW51YWwvbWFudWFsLmh0bWwjd3JpdGlu
-Zy1nZW5pbWFnZS1jZmcKPiBPSC4uLiBJIGRpZG4ndCBzZWUgdGhpcy4KPj4gWW91J3JlIG1pc3Np
-bmcgbW9zdCBhbGwgbmV3bGluZXMgYWZ0ZXIgZXZlcnkgY2xvc2luZyBjdXJseSBwYXJlbnRoZXNp
-cy4KPj4KPj4+IGRpZmYgLS1naXQgYS9ib2FyZC9mcmVlc2NhbGUvaW14cnQxMDUwZXZrL3Bvc3Qt
-YnVpbGQuc2ggCj4+PiBiL2JvYXJkL2ZyZWVzY2FsZS9pbXhydDEwNTBldmsvcG9zdC1idWlsZC5z
-aAo+Pj4gbmV3IGZpbGUgbW9kZSAxMDA3NTUKPj4+IGluZGV4IDAwMDAwMDAwMDAuLjQ3NTU3NTY2
-ZjkKPj4+IC0tLSAvZGV2L251bGwKPj4+ICsrKyBiL2JvYXJkL2ZyZWVzY2FsZS9pbXhydDEwNTBl
-dmsvcG9zdC1idWlsZC5zaAo+Pj4gQEAgLTAsMCArMSw0IEBACj4+PiArIyEvYmluL3NoCj4+PiAr
-cm0gb3V0cHV0L2ltYWdlcy91SW1hZ2UKPj4+ICtta2ltYWdlIC1BIGFybSAtTyBsaW51eCAtVCBr
-ZXJuZWwgLUMgbm9uZSAtYSAweDgwMDA4MDAwIC1lIAo+Pj4gMHg4MDAwODAwMCAtbiAiTGludXgg
-a2VybmVsIiAtZCBvdXRwdXQvaW1hZ2VzL0ltYWdlIG91dHB1dC9pbWFnZXMvdUltYWdlCj4+Cj4+
-IFRoaXMgXl5eIGNhbiBiZSBhY2hpZXZlZCBieSB1c2luZyBCUjJfTElOVVhfS0VSTkVMX1VJTUFH
-RT15IGluc3RlYWQgb2YKPj4gdGhlIGRlZmF1bHQgc2VsZWN0ZWQgQlIyX0xJTlVYX0tFUk5FTF9a
-SU1BR0UuCj4gQlIyX0xJTlVYX0tFUk5FTF9VSU1BR0U9eSBkb2Vzbid0IGxldCBtZSBzZWxlY3Qg
-Y29tcHJlc3Npb24gYC1DIG5vbmVgIAo+IHUtYm9vdCBydW5zIG91dCBvZiBtZW1vcnkgYXMgaXQg
-aXMgcnVubmluZyBpbiB0aGUgNTEya0IgYWRkcmVzcyBzcGFjZSAKPiBhbmQgbm90IHRoZSAzMk1C
-CgpPaywgSSd2ZSBmb3Jnb3R0ZW4gYWJvdXQgdGhhdC4gU28geW91IGNhbiBnbyB3aXRoIHRoYXQg
-c2NyaXB0IGJ1dCB0YWtlCmFzIGFuIGV4YW1wbGUgdGhpcyBvbmU6Cmh0dHBzOi8vZ2l0bGFiLmNv
-bS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2Jsb2IvbWFzdGVyL2JvYXJkL25leGJveC9hOTV4
-L3Bvc3QtYnVpbGQuc2gKClRoaXMgYmVjYXVzZSB5b3UgaGF2ZSB0byB1c2UgQnVpbGRyb290J3Mg
-dmFyaWFibGUgZm9yIGV4ZWN1dGFibGVzIGFuZApwYXRocyBsaWtlICRNS0lNQUdFLCAkQklOQVJJ
-RVNfRElSIGFuZCBzbyBvbgoKS2luZCByZWdhcmRzIQotLSAKR2l1bGlvIEJlbmV0dGkKQmVuZXR0
-aSBFbmdpbmVlcmluZyBzYXMKCj4+PiArLi9zdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2ggJDIg
-JDMKPj4KPj4gVGhpcyBeXl4gY2FuIGJlIGFjaGlldmVkIHdpdGg6Cj4+IEJSMl9ST09URlNfUE9T
-VF9JTUFHRV9TQ1JJUFQKPj4gYW5kCj4+IEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUwo+Pgo+
-PiB5b3UgY2FuIHRha2UgYXMgcmVmZXJlbmNlOgo+PiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRy
-b290Lm9yZy9idWlsZHJvb3QvLS9ibG9iL21hc3Rlci9jb25maWdzL29saW1leF9hMzNfb2xpbnV4
-aW5vX2RlZmNvbmZpZyNMNDYtNDcKPj4KPj4KPj4+IGRpZmYgLS1naXQgYS9ib2FyZC9mcmVlc2Nh
-bGUvaW14cnQxMDUwZXZrL3JlYWRtZS50eHQgCj4+PiBiL2JvYXJkL2ZyZWVzY2FsZS9pbXhydDEw
-NTBldmsvcmVhZG1lLnR4dAo+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4+IGluZGV4IDAwMDAw
-MDAwMDAuLmQ5YzE4M2EzOGYKPj4+IC0tLSAvZGV2L251bGwKPj4+ICsrKyBiL2JvYXJkL2ZyZWVz
-Y2FsZS9pbXhydDEwNTBldmsvcmVhZG1lLnR4dAo+Pj4gQEAgLTAsMCArMSwyMyBAQAo+Pj4gK05Y
-UCBpLk1YUlQxMDUwIEVWSyBib2FyZAo+Pj4gKy0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+Pj4gKwo+
-Pj4gK1RvIGJ1aWxkIGEgbWluaW1hbCBzdXBwb3J0IGZvciB0aGlzIGJvYXJkOgo+Pj4gKwo+Pj4g
-KyQgbWFrZSBpbXhydDEwNTAtZXZrX2RlZmNvbmZpZwo+Pj4gKyQgbWFrZQo+Pj4gKwo+Pj4gK0J1
-aWxkcm9vdCBwcmVwYXJlcyBhIGJvb3RhYmxlICJzZGNhcmQuaW1nIiBpbWFnZSBpbiB0aGUgb3V0
-cHV0L2ltYWdlcy8KPj4+ICtkaXJlY3RvcnksIHJlYWR5IHRvIGJlIGZsYXNoZWQgaW50byB0aGUg
-U0QgY2FyZDoKPj4+ICsKPj4+ICskIHN1ZG8gZGQgc3RhdHVzPXByb2dyZXNzIG9mbGFnPXN5bmMg
-YnM9NGsgCj4+PiBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9L2Rldi88c2QtY2FyZC1k
-ZXZpY2U+OyBzeW5jCj4+Cj4+IFRoaXM6Cj4+IGBgYAo+PiDCoMKgwqDCoMKgICMgZGQgaWY9b3V0
-cHV0L2ltYWdlcy9zZGNhcmQuaW1nIG9mPS9kZXYvc2RYCj4+Cj4+IFdoZXJlICdzZFgnIGlzIHRo
-ZSBkZXZpY2Ugbm9kZSBvZiB0aGUgdVNELgo+PiBgYGAKPj4gaXMgc3VmZmljaWVudC4KPj4KPj4+
-ICtKdW1wZXIgc2V0dGluZ3M6Cj4+PiArCj4+PiArwqDCoCBTVzc6IDEgMCAxIDAKPj4+ICsKPj4+
-ICtXaGVyZSAwIG1lYW5zIGJvdHRvbSBwb3NpdGlvbiBhbmQgMSBtZWFucyB0b3AgcG9zaXRpb24g
-KGZyb20gdGhlCj4+PiArc3dpdGNoIGxhYmVsIG51bWJlcnMgcmVmZXJlbmNlKS4KPj4+ICsKPj4+
-ICtDb25uZWN0IHRoZSBVU0IgY2FibGUgYmV0d2VlbiB0aGUgRVZLIGFuZCB0aGUgUEMgZm9yIHRo
-ZSBjb25zb2xlLgo+Pj4gKwo+Pj4gK0luc2VydCB0aGUgbWljcm8gU0QgY2FyZCBpbiB0aGUgYm9h
-cmQsIHBvd2VyIGl0IHVwIGFuZCBVLUJvb3QgCj4+PiBtZXNzYWdlcyBzaG91bGQgY29tZSB1cC4K
-Pj4+IGRpZmYgLS1naXQgYS9ib2FyZC9mcmVlc2NhbGUvaW14cnQxMDUwZXZrL3Vib290LmZyYWdt
-ZW50IAo+Pj4gYi9ib2FyZC9mcmVlc2NhbGUvaW14cnQxMDUwZXZrL3Vib290LmZyYWdtZW50Cj4+
-PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+Pj4gaW5kZXggMDAwMDAwMDAwMC4uMWM1YmI2YWYzNQo+
-Pj4gLS0tIC9kZXYvbnVsbAo+Pj4gKysrIGIvYm9hcmQvZnJlZXNjYWxlL2lteHJ0MTA1MGV2ay91
-Ym9vdC5mcmFnbWVudAo+Pj4gQEAgLTAsMCArMSwyIEBACj4+PiArQ09ORklHX1VTRV9CT09UQ09N
-TUFORD15Cj4+PiArQ09ORklHX0JPT1RDT01NQU5EPSJzZXRlbnYgYm9vdGFyZ3MgY29uc29sZT10
-dHlMUDAgCj4+PiByb290PS9kZXYvbW1jYmxrMHAyIHJ3IGVhcmx5Y29uIHJvb3R3YWl0O2xvYWQg
-bW1jIDA6MSAweDgwODAwMDAwIAo+Pj4gaW14cnQxMDUwLWV2ay5kdGI7bG9hZCBtbWMgMDoxIDB4
-ODAwMDAwMDAgdUltYWdlO2Jvb3RtIDB4ODAwMDAwMDAgLSAKPj4+IDB4ODA4MDAwMDAiCj4+PiBk
-aWZmIC0tZ2l0IGEvY29uZmlncy9pbXhydDEwNTAtZXZrX2RlZmNvbmZpZyAKPj4+IGIvY29uZmln
-cy9pbXhydDEwNTAtZXZrX2RlZmNvbmZpZwo+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4+IGlu
-ZGV4IDAwMDAwMDAwMDAuLjAzYTQ3YzFmZDYKPj4+IC0tLSAvZGV2L251bGwKPj4+ICsrKyBiL2Nv
-bmZpZ3MvaW14cnQxMDUwLWV2a19kZWZjb25maWcKPj4+IEBAIC0wLDAgKzEsNDAgQEAKPj4+ICsj
-IEFyY2hpdGVjdHVyZQo+Pj4gK0JSMl9hcm09eQo+Pj4gK0JSMl9jb3J0ZXhfbTc9eQo+Pj4gKwo+
-Pj4gKyMgSW1hZ2UKPj4+ICtCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9mcmVl
-c2NhbGUvaW14cnQxMDUwZXZrL3Bvc3QtYnVpbGQuc2giCj4+PiArQlIyX1JPT1RGU19QT1NUX1ND
-UklQVF9BUkdTPSItYyAKPj4+IGJvYXJkL2ZyZWVzY2FsZS9pbXhydDEwNTBldmsvZ2VuaW1hZ2Uu
-Y2ZnIgo+Pgo+PiBBZnRlciBtb2RpZmllZCBsaWtlIGFib3ZlIGZvciBwb3N0LWJ1aWxkLnNoIHlv
-dSBoYXZlIHRvIG1vZGlmeSB0aGVzZSAyCj4+IGxpbmVzIF5eXiBhbmQgZHJvcCBwb3N0LWJ1aWxk
-LnNoIHNjcmlwdC4KPj4KPj4+ICsKPj4+ICsjIEtlcm5lbAo+Pj4gK0JSMl9MSU5VWF9LRVJORUw9
-eQo+Pj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+Pj4gK0JSMl9MSU5VWF9L
-RVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjUuMTktcmM1Igo+Pgo+PiBIZXJlIGl0IHdvdWxk
-IGJlIGJldHRlciB1c2luZyBhIHN0YWJsZSB2ZXJzaW9uLiA1IGRheXMgYWdvIExpbnV4Cj4+IDUu
-MTktcmM4IGhhcyBiZWVuIHJlbGVhc2VkIHNvIEkgZXhwZWN0IHRoZSBmaW5hbCByZWxlYXNlIHRv
-IGxhbmQKPj4gb24gU3VuZGF5IG9yIGluIHRoZSBiZWdpbm5pbmcgb2YgdGhlIG5leHQgd2Vlay4g
-U28gcGxlYXNlLCB1c2UgdmVyc2lvbgo+PiA1LjE5Lgo+Pgo+Pj4gK0JSMl9MSU5VWF9LRVJORUxf
-REVGQ09ORklHPSJpbXhydCIKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0lNQUdFX1RBUkdFVF9DVVNU
-T009eQo+Pj4gK0JSMl9MSU5VWF9LRVJORUxfSU1BR0VfVEFSR0VUX05BTUU9IkltYWdlIgo+Pj4g
-K0JSMl9MSU5VWF9LRVJORUxfSU1BR0VfTkFNRT0iSW1hZ2UiCj4+Cj4+IEFzIHBvaW50ZWQgYWJv
-dmUgaGVyZSBeXl4gdXNlIHVJbWFnZS4KPj4KPj4+ICtCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQ
-T1JUPXkKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0iaW14cnQxMDUwLWV2
-ayIKPj4+ICsKPj4+ICsjIEZpbGVzeXN0ZW0KPj4+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkK
-Pj4+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQyXzQ9eQo+Pj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VY
-VDJfTEFCRUw9InJvb3QiCj4+PiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpFPSIzTSIKPj4+
-ICsKPj4+ICsKPj4+ICsjIEJvb3Rsb2FkZXIKPj4+ICtCUjJfVEFSR0VUX1VCT09UPXkKPj4+ICtC
-UjJfVEFSR0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJRz0iaW14cnQxMDUwLWV2ayIKPj4+ICtCUjJf
-VEFSR0VUX1VCT09UX0NPTkZJR19GUkFHTUVOVF9GSUxFUz0iYm9hcmQvZnJlZXNjYWxlL2lteHJ0
-MTA1MGV2ay91Ym9vdC5mcmFnbWVudCIKPj4+ICtCUjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9JTUc9
-eQo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfU1BMPXkKPj4+ICtCUjJfVEFSR0VUX1VCT09UX1NQTF9O
-QU1FPSJTUEwiCj4+PiArCj4+PiArIyBSZXF1aXJlZCB0b29scyB0byBjcmVhdGUgdGhlIFNEIGNh
-cmQgaW1hZ2UKPj4+ICtCUjJfUEFDS0FHRV9IT1NUX0dFTklNQUdFPXkKPj4+ICtCUjJfUEFDS0FH
-RV9IT1NUX01LUEFTU1dEPXkKPj4+ICsKPj4+ICsjIE1pc2MKPj4+ICtCUjJfQklOVVRJTFNfVkVS
-U0lPTl8yXzM2X1g9eQo+Pgo+PiBJIHJlbWVtYmVyIHRoZXJlIGlzIGEgcmVhc29uIHRvIGZvcmNl
-IHVzaW5nIGJpbnV0aWxzIDIuMzYsIG1heWJlIHRoZQo+PiB0aHVtYjIgQURSIGJ1ZyBpbiB1LWJv
-b3Q/IElmIHllcywgcGxlYXNlIGJyaWVmbHkgZXhwbGFpbiB3aHkgdGhpcyBpcwo+PiBoZXJlLgo+
-Pgo+PiBJJ3ZlIGdpdmVuIGEgYnVpbGQgdXNpbmcgQnVpbGRyb290J3MgdXRpbHMvZG9ja2VyLXJ1
-biBidXQgaXQgZmFpbHMgZHVlCj4+IHRvIG1pc3NpbmcgQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19P
-UEVOU1NMPXkuIFNvIHBsZWFzZSBuZXh0IHRpbWUgYnVpbGQKPj4gd2l0aCB1dGlscy9kb2NrZXIt
-cnVuIHRvIGNhdGNoIGFueSBwb3NzaWJsZSBtaXNzaW5nIGhvc3QgZGVwZW5kZW5jeS4KPj4KPj4g
-V2FpdGluZyBmb3IgVjIgdGhlbi4KPj4KPj4gVGhhbmtzIGZvciBjb250cmlidXRpbmchCj4+IEtp
-bmQgcmVnYXJkcwo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4g
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Add defconfig for imxrt1050-evk is a development board from NXP.
+
+The i.MXRTxxxx family spreads from i.MXRT1020 to i.MXRT1170 with the
+first one supporting 1 USB OTG & 100M ethernet with a cortex-M7@500Mhz
+up to the latter with i.MXRT1170 with cortex-M7@1Ghz and
+cortex-M4@400Mhz, 2MB of internal SRAM, 2D GPU, 2x 1Gb and
+1x 100Mb ENET. The i.MXRT family is NXP's answer to STM32F7xx, as it
+uses only simple SDRAM, it gives the chance of a 4 or less layer PCBs.
+Seeing that these chips are comparable to the STM32F7xxs which have
+buildroot ported to them it seems reasonable to add support for them.
+
+https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/i-mx-rt1050-evaluation-kit:MIMXRT1050-EVK
+
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ DEVELOPERS                                  |  6 +++
+ board/freescale/imxrt1050evk/genimage.cfg   | 40 +++++++++++++++++++
+ board/freescale/imxrt1050evk/post-build.sh  |  6 +++
+ board/freescale/imxrt1050evk/readme.txt     | 24 +++++++++++
+ board/freescale/imxrt1050evk/uboot.fragment |  2 +
+ configs/imxrt1050-evk_defconfig             | 44 +++++++++++++++++++++
+ 6 files changed, 122 insertions(+)
+ create mode 100644 board/freescale/imxrt1050evk/genimage.cfg
+ create mode 100755 board/freescale/imxrt1050evk/post-build.sh
+ create mode 100644 board/freescale/imxrt1050evk/readme.txt
+ create mode 100644 board/freescale/imxrt1050evk/uboot.fragment
+ create mode 100644 configs/imxrt1050-evk_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0afd697b6c..206bac99e0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1096,9 +1096,11 @@ F:	package/webp/
+ F:	package/xapian/
+ 
+ N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
++F:	board/freescale/imxrt1050evk/*
+ F:	board/olimex/a*
+ F:	configs/amarula_vyasa_rk3288_defconfig
+ F:	configs/asus_tinker_rk3288_defconfig
++F:	configs/imxrt1050-evk_defconfig
+ F:	configs/olimex_a*
+ F:	package/at/
+ F:	package/binutils/
+@@ -1421,6 +1423,10 @@ F:	package/wmctrl/
+ F:	package/x11r7/xdriver_xf86-video-imx/
+ F:	package/x11r7/xdriver_xf86-video-imx-viv/
+ 
++N:	Jesse Taube <Mr.Bossman075@gmail.com>
++F:	board/freescale/imxrt1050evk/*
++F:	configs/imxrt1050-evk_defconfig
++
+ N:	Jianhui Zhao <zhaojh329@gmail.com>
+ F:	package/libuhttpd/
+ F:	package/libuwsc/
+diff --git a/board/freescale/imxrt1050evk/genimage.cfg b/board/freescale/imxrt1050evk/genimage.cfg
+new file mode 100644
+index 0000000000..7e1e932d37
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/genimage.cfg
+@@ -0,0 +1,40 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"uImage",
++			"imxrt1050-evk.dtb",
++		}
++	}
++
++	size = 6M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition SPL {
++		in-partition-table = "no"
++		image = "SPL"
++		offset = 1K
++		size = 127K
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot.img"
++		offset = 128K
++		size = 512K
++	}
++
++	partition boot {
++		partition-type = 0xc
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/freescale/imxrt1050evk/post-build.sh b/board/freescale/imxrt1050evk/post-build.sh
+new file mode 100755
+index 0000000000..476958a691
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/post-build.sh
+@@ -0,0 +1,6 @@
++#!/bin/sh
++MKIMAGE=$HOST_DIR/bin/mkimage
++
++if [ -e $BINARIES_DIR/Image ]; then
++	$MKIMAGE -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 -n "Linux kernel" -d $BINARIES_DIR/Image $BINARIES_DIR/uImage
++fi
+diff --git a/board/freescale/imxrt1050evk/readme.txt b/board/freescale/imxrt1050evk/readme.txt
+new file mode 100644
+index 0000000000..bbbcd5307f
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/readme.txt
+@@ -0,0 +1,24 @@
++NXP i.MXRT1050 EVK board
++---------------------
++
++To build a minimal support for this board:
++
++$ make imxrt1050-evk_defconfig
++$ make
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be flashed into the SD card:
++
++$ dd if=output/images/sdcard.img of=/dev/sdX
++Where 'sdX' is the device node of the uSD.
++
++Jumper settings:
++
++   SW7: 1 0 1 0
++
++Where 0 means bottom position and 1 means top position (from the
++switch label numbers reference).
++
++Connect the USB cable between the EVK and the PC for the console.
++
++Insert the micro SD card in the board, power it up and U-Boot messages should come up.
+diff --git a/board/freescale/imxrt1050evk/uboot.fragment b/board/freescale/imxrt1050evk/uboot.fragment
+new file mode 100644
+index 0000000000..1c5bb6af35
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/uboot.fragment
+@@ -0,0 +1,2 @@
++CONFIG_USE_BOOTCOMMAND=y
++CONFIG_BOOTCOMMAND="setenv bootargs console=ttyLP0 root=/dev/mmcblk0p2 rw earlycon rootwait;load mmc 0:1 0x80800000 imxrt1050-evk.dtb;load mmc 0:1 0x80000000 uImage;bootm 0x80000000 - 0x80800000"
+diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
+new file mode 100644
+index 0000000000..22da281e3a
+--- /dev/null
++++ b/configs/imxrt1050-evk_defconfig
+@@ -0,0 +1,44 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_m7=y
++
++# Image
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/imxrt1050evk/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19-rc5"
++BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
++BR2_LINUX_KERNEL_IMAGE_NAME="Image"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imxrt1050-evk"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_LABEL="root"
++BR2_TARGET_ROOTFS_EXT2_SIZE="3M"
++
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="SPL"
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++
++# Required tools to create the SD card image
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MKPASSWD=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++
++# Misc
++BR2_BINUTILS_VERSION_2_36_X=y
++# thumb2 ADR bug introduced in 2.37 fix is not yet in u-boot
+-- 
+2.36.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
