@@ -1,72 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D65E7C04A68
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 12:11:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89A9BC04A68
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 12:18:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5A67640586;
-	Sat, 30 Jul 2022 12:11:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A67640586
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12EA981AD1;
+	Sat, 30 Jul 2022 12:18:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12EA981AD1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zefzFwjNG45f; Sat, 30 Jul 2022 12:11:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R0PkkfiXBQEL; Sat, 30 Jul 2022 12:18:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33B4A40145;
-	Sat, 30 Jul 2022 12:11:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33B4A40145
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D81781BF391
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:11:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C9F88149A;
+	Sat, 30 Jul 2022 12:18:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C9F88149A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DD5E11BF391
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:18:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC18B61164
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:11:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC18B61164
+ by smtp4.osuosl.org (Postfix) with ESMTP id C005841703
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:18:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C005841703
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id izwMG4-QiSm3 for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 12:11:12 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA2006105B
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AA2006105B
- for <buildroot@buildroot.org>; Sat, 30 Jul 2022 12:11:12 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ed0d:5473:88a:e206])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id E46F660137;
- Sat, 30 Jul 2022 14:11:03 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 30 Jul 2022 14:11:03 +0200
-Date: Sat, 30 Jul 2022 14:11:03 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220730121103.GR3168@scaer>
-References: <20220727184850.2857314-1-thomas.petazzoni@bootlin.com>
- <20220727184850.2857314-3-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220727184850.2857314-3-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1659183070;
- bh=vsESsSAVuJ2JI4d16lmYbucS6VrWJYK80OfApMN2eEk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=rLjKGpGTv02CDQXf2W63yUXyReolM63/7YY+ilhBCrbK4bfMReNh6AkNOlMKDSQ6T
- +4pDfHV+xRJLpqBqfO3Q5utu36tOPTeAvsMyfj0xCFrcqbkN1hUh8GNkcOPptTQMdv
- py8yzdTvEp2J3xW3N+M74XrQ4XPKGlng/Q2ns9mOOsTxPvqTPzkjCCACFxwPlBss7O
- 7FAPg4Py8PgRu22rulRTN9vDjRaqkDQR+9bmZOIUVpgwL8bwc7mDb6tBEVDt3KkJVy
- POpoUIk3ycAoFsKs8CQFY3PO3BhY8Zbbp+kHO9467Tc8AjgL8NM0vsZ7lFd7h58eH3
- OxN7x699Z/aPA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=rLjKGpGT
-Subject: Re: [Buildroot] [PATCH 3/3] toolchain/toolchain-wrapper: don't
- hardcode CCACHE_BASEDIR
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e8NvM-LNIJUr for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 12:18:28 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D8BE416FC
+ for <buildroot@buildroot.org>; Sat, 30 Jul 2022 12:18:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D8BE416FC
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 9B502868B0; Sat, 30 Jul 2022 12:04:35 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 30 Jul 2022 14:17:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ae6e1444055e684ae15712eff79d7df06b74d2dc
+X-Git-Newrev: 5c54c3ef3db26d3630c79fc1bad10469b889d0dd
+X-Patchwork-Hint: ignore
+Message-Id: <20220730120435.9B502868B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Makefile: workaround make 4.3 issue for
+ 'printvars and 'show-vars'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,114 +57,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Buildroot List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5c54c3ef3db26d3630c79fc1bad10469b889d0dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-07-27 20:48 +0200, Thomas Petazzoni via buildroot spake thusly:
-> The CCACHE_BASEDIR variable was hardcoded to $(BASE_DIR), and
-> therefore when moving around the toolchain-wrapper as part of the SDK,
-> the CCACHE_BASEDIR would still point to the original location of the
-> Buildroot build.
-> 
-> Instead of doing this, leverage the logic we already have in the
-> toolchain wrapper, which determines based on the toolchain wrapper
-> location itself what is the base directory.
-> 
-> So now, toolchain-wrapper.mk is only passing a boolean to
-> toolchain-wrapper.c, that tells whether the BR2_USE_CCACHE_BASEDIR
-> option is enabled or not.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  toolchain/toolchain-wrapper.c  | 6 +++---
->  toolchain/toolchain-wrapper.mk | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index 37b24dd24a..bed90d6292 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -538,9 +538,9 @@ int main(int argc, char **argv)
->  		return 3;
->  	}
->  #endif
-> -#ifdef BR_CCACHE_BASEDIR
-> -	/* Allow compilercheck to be overridden through the environment */
-> -	if (setenv("CCACHE_BASEDIR", BR_CCACHE_BASEDIR, 0)) {
-> +#ifdef BR_USE_CCACHE_BASEDIR
-> +	/* Allow basedir to be overridden through the environment */
-> +	if (setenv("CCACHE_BASEDIR", absbasedir, 0)) {
+Event though the bug with make 4.3 has been reported and fixed, there
+has not been a release of make with the fix for a long time, see [1].
 
-You forgot the one instance in the debug code, lines 524 and 525.
+As the root cause seems the 'filter' command cannot handle large
+chunks of data, like .VARIABLES, we can workaround the problem by
+using a foreach command over .VARIABLES, then use the filter command.
 
-And once this is fixed, you'll notice that the old and the new
-CCACHE_BASEDIR will be different:
+It might not be logical to program it that way, but at least the
+functionality is now usable.
 
-    (before)$ BR2_DEBUG_WRAPPER=2 ./host/bin/arm-linux-gcc --help
-    ...
-    Toolchain wrapper executing:
-        CCACHE_BASEDIR='/home/ymorin/dev/buildroot/O/master'
-        '/home/ymorin/dev/buildroot/O/master/host/opt/ext-toolchain/bin/arm-linux-gcc.br_real'
-        ...
+[1] https://savannah.gnu.org/bugs/?59093#comment10
 
-    (after)$ BR2_DEBUG_WRAPPER=2 ./host/bin/arm-linux-gcc --help
-    ...
-    Toolchain wrapper executing:
-        CCACHE_BASEDIR='/home/ymorin/dev/buildroot/O/master/host'
-        '/home/ymorin/dev/buildroot/O/master/host/opt/ext-toolchain/bin/arm-linux-gcc.br_real'
-        ...
+Signed-off-by: Henri Roosen <henri.roosen@ginzinger.com>
+[yann.morin.1998@free.fr: add comment to reference the bug]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Makefile | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-So as you can see, before, CCACHE_BASEDIR was pointing to BASE_DIR, but
-now it points to HOST_DIR. This is one-level too deep, as it will not
-match the path where packages are actually built, which is
-BASE_DIR/build, and hapenned to be CCACHE_BASEDIR/build.
-
-Even though I had the debug code path fixed, the second issue was not
-trivial enough for me to fix when applying, so I amrked the patch as
-changes requested.
-
-Regards,
-Yann E. MORIN.
-
->  		perror(__FILE__ ": Failed to set CCACHE_BASEDIR");
->  		return 3;
->  	}
-> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-> index cbf46f15fa..c87120f0f7 100644
-> --- a/toolchain/toolchain-wrapper.mk
-> +++ b/toolchain/toolchain-wrapper.mk
-> @@ -70,7 +70,7 @@ endif
->  endif
->  
->  ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
-> -TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
-> +TOOLCHAIN_WRAPPER_ARGS += -DBR_USE_CCACHE_BASEDIR
->  endif
->  
->  ifeq ($(BR2_PIC_PIE),y)
-> -- 
-> 2.37.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Makefile b/Makefile
+index fb0ef32c6b..a743e42f91 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1048,23 +1048,19 @@ ifeq ($(NEED_WRAPPER),y)
+ 	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
+ endif
+ 
+-.PHONY: check-make-version
+-check-make-version:
+-ifneq ($(filter $(RUNNING_MAKE_VERSION),4.3),)
+-	@echo "Make 4.3 doesn't support 'printvars' and 'show-vars' recipes"
+-	@exit 1
+-endif
+-
+ # printvars prints all the variables currently defined in our
+ # Makefiles. Alternatively, if a non-empty VARS variable is passed,
+ # only the variables matching the make pattern passed in VARS are
+ # displayed.
+ # show-vars does the same, but as a JSON dictionnary.
++#
++# Note: we iterate of .VARIABLES and filter each variable individually,
++# to workaround a bug in make 4.3; see https://savannah.gnu.org/bugs/?59093
+ .PHONY: printvars
+-printvars: check-make-version
++printvars:
+ 	@:
+ 	$(foreach V, \
+-		$(sort $(filter $(VARS),$(.VARIABLES))), \
++		$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
+ 		$(if $(filter-out environment% default automatic, \
+ 				$(origin $V)), \
+ 		$(if $(QUOTED_VARS),\
+@@ -1072,13 +1068,14 @@ printvars: check-make-version
+ 			$(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
+ # ')))) # Syntax colouring...
+ 
++# See details above, same as for printvars
+ .PHONY: show-vars
+ show-vars: VARS?=%
+-show-vars: check-make-version
++show-vars:
+ 	@:
+ 	$(info $(call clean-json, { \
+ 			$(foreach V, \
+-				$(sort $(filter $(VARS),$(.VARIABLES))), \
++				$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
+ 				$(if $(filter-out environment% default automatic, $(origin $V)), \
+ 					"$V": { \
+ 						"expanded": $(call mk-json-str,$($V))$(comma) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
