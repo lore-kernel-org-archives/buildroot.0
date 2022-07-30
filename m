@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89A9BC04A68
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 12:18:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDE4AC04A68
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 12:20:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12EA981AD1;
-	Sat, 30 Jul 2022 12:18:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12EA981AD1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8067E8403F;
+	Sat, 30 Jul 2022 12:20:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8067E8403F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R0PkkfiXBQEL; Sat, 30 Jul 2022 12:18:32 +0000 (UTC)
+	with ESMTP id 1tOcOFf7MV_x; Sat, 30 Jul 2022 12:20:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C9F88149A;
-	Sat, 30 Jul 2022 12:18:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C9F88149A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 898E78403B;
+	Sat, 30 Jul 2022 12:20:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 898E78403B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DD5E11BF391
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:18:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E0A511BF391
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C005841703
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:18:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C005841703
+ by smtp4.osuosl.org (Postfix) with ESMTP id B960A417E5
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:20:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B960A417E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e8NvM-LNIJUr for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 12:18:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D8BE416FC
- for <buildroot@buildroot.org>; Sat, 30 Jul 2022 12:18:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D8BE416FC
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 9B502868B0; Sat, 30 Jul 2022 12:04:35 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 30 Jul 2022 14:17:24 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae6e1444055e684ae15712eff79d7df06b74d2dc
-X-Git-Newrev: 5c54c3ef3db26d3630c79fc1bad10469b889d0dd
-X-Patchwork-Hint: ignore
-Message-Id: <20220730120435.9B502868B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Makefile: workaround make 4.3 issue for
+ with ESMTP id S_JaUnVnaXe5 for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 12:19:59 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60B51417DC
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 60B51417DC
+ for <buildroot@buildroot.org>; Sat, 30 Jul 2022 12:19:59 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:ed0d:5473:88a:e206])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id A405060129;
+ Sat, 30 Jul 2022 14:19:55 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 30 Jul 2022 14:19:55 +0200
+Date: Sat, 30 Jul 2022 14:19:55 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Roosen Henri <Henri.Roosen@ginzinger.com>
+Message-ID: <20220730121955.GS3168@scaer>
+References: <c73779fc937946ae6279b66998d6017ba0ffd507.camel@ginzinger.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <c73779fc937946ae6279b66998d6017ba0ffd507.camel@ginzinger.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1659183597;
+ bh=z7K9tGHgL23ILD/A7GMDAkPPqu/zMfs9k/0NV4EEZ24=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=lJnbCqmtG6U7p07S/XD3N8lW05iLoceyav8/h8iPCRNZfowMWntkKs3QZ1gu94hNx
+ czegnRTemYOgZoPBxZBzjGBI1PLCVktHbBcPwJuKyDyIUaivaykLtrJToqV2aLxDE6
+ c3XMD8KO4AD/UgQGfpeUx7T7Hf+IYjet/FkmYoZdyqkPTIuvvTNZMtQQdhWnjL9XDv
+ i6B3ufG1Pvyj8MHtgJ5jgrIaXCW3FUzdb6Xb179KSAx4Fg87VD29hc5B/46/GMPcyh
+ LpFdWh6Zvejhdhwsb3j8633rHvOu1566Eex4ZOIBuQFXPt22XkWprnxkVoBsIx8Pgk
+ XhRznoc/rroXA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=lJnbCqmt
+Subject: Re: [Buildroot] [PATCH 1/1] Makefile: workaround make 4.3 issue for
  'printvars and 'show-vars'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,85 +77,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c54c3ef3db26d3630c79fc1bad10469b889d0dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Event though the bug with make 4.3 has been reported and fixed, there
-has not been a release of make with the fix for a long time, see [1].
-
-As the root cause seems the 'filter' command cannot handle large
-chunks of data, like .VARIABLES, we can workaround the problem by
-using a foreach command over .VARIABLES, then use the filter command.
-
-It might not be logical to program it that way, but at least the
-functionality is now usable.
-
-[1] https://savannah.gnu.org/bugs/?59093#comment10
-
-Signed-off-by: Henri Roosen <henri.roosen@ginzinger.com>
-[yann.morin.1998@free.fr: add comment to reference the bug]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- Makefile | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index fb0ef32c6b..a743e42f91 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1048,23 +1048,19 @@ ifeq ($(NEED_WRAPPER),y)
- 	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
- endif
- 
--.PHONY: check-make-version
--check-make-version:
--ifneq ($(filter $(RUNNING_MAKE_VERSION),4.3),)
--	@echo "Make 4.3 doesn't support 'printvars' and 'show-vars' recipes"
--	@exit 1
--endif
--
- # printvars prints all the variables currently defined in our
- # Makefiles. Alternatively, if a non-empty VARS variable is passed,
- # only the variables matching the make pattern passed in VARS are
- # displayed.
- # show-vars does the same, but as a JSON dictionnary.
-+#
-+# Note: we iterate of .VARIABLES and filter each variable individually,
-+# to workaround a bug in make 4.3; see https://savannah.gnu.org/bugs/?59093
- .PHONY: printvars
--printvars: check-make-version
-+printvars:
- 	@:
- 	$(foreach V, \
--		$(sort $(filter $(VARS),$(.VARIABLES))), \
-+		$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
- 		$(if $(filter-out environment% default automatic, \
- 				$(origin $V)), \
- 		$(if $(QUOTED_VARS),\
-@@ -1072,13 +1068,14 @@ printvars: check-make-version
- 			$(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
- # ')))) # Syntax colouring...
- 
-+# See details above, same as for printvars
- .PHONY: show-vars
- show-vars: VARS?=%
--show-vars: check-make-version
-+show-vars:
- 	@:
- 	$(info $(call clean-json, { \
- 			$(foreach V, \
--				$(sort $(filter $(VARS),$(.VARIABLES))), \
-+				$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
- 				$(if $(filter-out environment% default automatic, $(origin $V)), \
- 					"$V": { \
- 						"expanded": $(call mk-json-str,$($V))$(comma) \
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVucmksIEFsbCwKCk9uIDIwMjItMDctMjkgMjE6NDkgKzAwMDAsIFJvb3NlbiBIZW5yaSBzcGFr
+ZSB0aHVzbHk6Cj4gRXZlbnQgdGhvdWdoIHRoZSBidWcgd2l0aCBtYWtlIDQuMyBoYXMgYmVlbiBy
+ZXBvcnRlZCBhbmQgZml4ZWQsIHRoZXJlCj4gaGFzIG5vdCBiZWVuIGEgcmVsZWFzZSBvZiBtYWtl
+IHdpdGggdGhlIGZpeCBmb3IgYSBsb25nIHRpbWUsIHNlZSBbMV0uCj4gCj4gQXMgdGhlIHJvb3Qg
+Y2F1c2Ugc2VlbXMgdGhlICdmaWx0ZXInIGNvbW1hbmQgY2Fubm90IGhhbmRsZSBsYXJnZQo+IGNo
+dW5rcyBvZiBkYXRhLCBsaWtlIC5WQVJJQUJMRVMsIHdlIGNhbiB3b3JrYXJvdW5kIHRoZSBwcm9i
+bGVtIGJ5Cj4gdXNpbmcgYSBmb3JlYWNoIGNvbW1hbmQgb3ZlciAuVkFSSUFCTEVTLCB0aGVuIHVz
+ZSB0aGUgZmlsdGVyIGNvbW1hbmQuCj4gCj4gSXQgbWlnaHQgbm90IGJlIGxvZ2ljYWwgdG8gcHJv
+Z3JhbSBpdCB0aGF0IHdheSwgYnV0IGF0IGxlYXN0IHRoZQo+IGZ1bmN0aW9uYWxpdHkgaXMgbm93
+IHVzYWJsZS4KCkF3ZXNvbWUhIEp1c3QgYXdlc29tZSEg8J+RjQoKSSBqdXN0IGFkZGVkIGEgc21h
+bGwgY29tbWVudCBpbiB0aGUgTWFrZWZpbGUgdG8gZXhwbGFpbiB0aGF0LCBhbmQKcmVmZXJlbmNl
+IHRoZSBidWcuCgo+IFsxXSBodHRwczovL3NhdmFubmFoLmdudS5vcmcvYnVncy8/NTkwOTMjY29t
+bWVudDEwCj4gCj4gU2lnbmVkLW9mZi1ieTogSGVucmkgUm9vc2VuIDxoZW5yaS5yb29zZW5AZ2lu
+emluZ2VyLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUu
+IE1PUklOLgoKPiAtLS0KPiAgTWFrZWZpbGUgfCAxNSArKysrLS0tLS0tLS0tLS0KPiAgMSBmaWxl
+IGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdp
+dCBhL01ha2VmaWxlIGIvTWFrZWZpbGUKPiBpbmRleCBiZjEwMWZmNzcwLi5hODU2ZjY5Njg1IDEw
+MDY0NAo+IC0tLSBhL01ha2VmaWxlCj4gKysrIGIvTWFrZWZpbGUKPiBAQCAtMTA1NiwyMyArMTA1
+NiwxNiBAQCBpZmVxICgkKE5FRURfV1JBUFBFUikseSkKPiAgCSQoUSkkKFRPUERJUikvc3VwcG9y
+dC9zY3JpcHRzL21rbWFrZWZpbGUgJChUT1BESVIpICQoTykKPiAgZW5kaWYKPiAgCj4gLS5QSE9O
+WTogY2hlY2stbWFrZS12ZXJzaW9uCj4gLWNoZWNrLW1ha2UtdmVyc2lvbjoKPiAtaWZuZXEgKCQo
+ZmlsdGVyICQoUlVOTklOR19NQUtFX1ZFUlNJT04pLDQuMyksKQo+IC0JQGVjaG8gIk1ha2UgNC4z
+IGRvZXNuJ3Qgc3VwcG9ydCAncHJpbnR2YXJzJyBhbmQgJ3Nob3ctdmFycycgcmVjaXBlcyIKPiAt
+CUBleGl0IDEKPiAtZW5kaWYKPiAtCj4gICMgcHJpbnR2YXJzIHByaW50cyBhbGwgdGhlIHZhcmlh
+YmxlcyBjdXJyZW50bHkgZGVmaW5lZCBpbiBvdXIKPiAgIyBNYWtlZmlsZXMuIEFsdGVybmF0aXZl
+bHksIGlmIGEgbm9uLWVtcHR5IFZBUlMgdmFyaWFibGUgaXMgcGFzc2VkLAo+ICAjIG9ubHkgdGhl
+IHZhcmlhYmxlcyBtYXRjaGluZyB0aGUgbWFrZSBwYXR0ZXJuIHBhc3NlZCBpbiBWQVJTIGFyZQo+
+ICAjIGRpc3BsYXllZC4KPiAgIyBzaG93LXZhcnMgZG9lcyB0aGUgc2FtZSwgYnV0IGFzIGEgSlNP
+TiBkaWN0aW9ubmFyeS4KPiAgLlBIT05ZOiBwcmludHZhcnMKPiAtcHJpbnR2YXJzOiBjaGVjay1t
+YWtlLXZlcnNpb24KPiArcHJpbnR2YXJzOgo+ICAJQDoKPiAgCSQoZm9yZWFjaCBWLCBcCj4gLQkJ
+JChzb3J0ICQoZmlsdGVyICQoVkFSUyksJCguVkFSSUFCTEVTKSkpLCBcCj4gKwkJJChzb3J0ICQo
+Zm9yZWFjaCBYLCAkKC5WQVJJQUJMRVMpLCAkKGZpbHRlciAkKFZBUlMpLCQoWCkpKSksIFwKPiAg
+CQkkKGlmICQoZmlsdGVyLW91dCBlbnZpcm9ubWVudCUgZGVmYXVsdCBhdXRvbWF0aWMsIFwKPiAg
+CQkJCSQob3JpZ2luICRWKSksIFwKPiAgCQkkKGlmICQoUVVPVEVEX1ZBUlMpLFwKPiBAQCAtMTA4
+MiwxMSArMTA3NSwxMSBAQCBwcmludHZhcnM6IGNoZWNrLW1ha2UtdmVyc2lvbgo+ICAKPiAgLlBI
+T05ZOiBzaG93LXZhcnMKPiAgc2hvdy12YXJzOiBWQVJTPz0lCj4gLXNob3ctdmFyczogY2hlY2st
+bWFrZS12ZXJzaW9uCj4gK3Nob3ctdmFyczoKPiAgCUA6Cj4gIAkkKGluZm8gJChjYWxsIGNsZWFu
+LWpzb24sIHsgXAo+ICAJCQkkKGZvcmVhY2ggViwgXAo+IC0JCQkJJChzb3J0ICQoZmlsdGVyICQo
+VkFSUyksJCguVkFSSUFCTEVTKSkpLCBcCj4gKwkJCQkkKHNvcnQgJChmb3JlYWNoIFgsICQoLlZB
+UklBQkxFUyksICQoZmlsdGVyICQoVkFSUyksJChYKSkpKSwgXAo+ICAJCQkJJChpZiAkKGZpbHRl
+ci1vdXQgZW52aXJvbm1lbnQlIGRlZmF1bHQgYXV0b21hdGljLCAkKG9yaWdpbiAkVikpLCBcCj4g
+IAkJCQkJIiRWIjogeyBcCj4gIAkJCQkJCSJleHBhbmRlZCI6ICQoY2FsbCBtay1qc29uLXN0ciwk
+KCRWKSkkKGNvbW1hKSBcCj4gLS0gCj4gMi4zMC4yCj4gCj4gCgoKCj4gX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
+Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
+LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4K
+fCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9O
+IHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVz
+aWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYx
+IDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAg
+VGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAv
+IFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
+LS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
