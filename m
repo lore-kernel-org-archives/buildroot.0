@@ -4,65 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A15E8C04A68
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 14:51:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE8F7C19F29
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 16:23:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A65B61177;
-	Sat, 30 Jul 2022 14:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A65B61177
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69A8761033;
+	Sat, 30 Jul 2022 16:23:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69A8761033
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ssWXDCQhSFcl; Sat, 30 Jul 2022 14:51:33 +0000 (UTC)
+	with ESMTP id 6_fmfr1JQsPd; Sat, 30 Jul 2022 16:23:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F84A61170;
-	Sat, 30 Jul 2022 14:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F84A61170
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BFE001BF3D2
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 14:51:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E91A660784;
+	Sat, 30 Jul 2022 16:23:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E91A660784
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F17D71BF84C
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 16:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A1E883F5F
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 14:51:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A1E883F5F
+ by smtp3.osuosl.org (Postfix) with ESMTP id CCA5460784
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 16:23:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCA5460784
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vDGiHdrbVMh5 for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 14:51:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF9D083F4F
- for <buildroot@uclibc.org>; Sat, 30 Jul 2022 14:51:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF9D083F4F
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B22DC86987; Sat, 30 Jul 2022 14:37:36 +0000 (UTC)
-From: bugzilla@busybox.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QtfKTd16QFXd for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 16:23:41 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9BB7605D5
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A9BB7605D5
+ for <buildroot@uclibc.org>; Sat, 30 Jul 2022 16:23:41 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1oHpFa-00080h-GZ
+ for buildroot@uclibc.org; Sat, 30 Jul 2022 18:23:38 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Sat, 30 Jul 2022 14:51:29 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02.3
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: wg@grandegger.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14926-163-MZMsmR2gKz@https.bugs.busybox.net/>
-In-Reply-To: <bug-14926-163@https.bugs.busybox.net/>
-References: <bug-14926-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14926] package/nodejs: build for host fails with
- GTEST errors
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 30 Jul 2022 18:23:20 +0200
+Message-ID: <pan$781e4$7f830434$f8b8178c$4f096736@ID-313208.user.individual.net>
+References: <20210810120134.3972324-1-fontaine.fabrice@gmail.com>
+ <20210812234247.3618da82__12747.8516822279$1628804602$gmane$org@windsurf>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH 1/1] package/flatbuffers: fix locale
+ independent on musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,24 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14926
+Am Thu, 12 Aug 2021 23:42:47 +0200 schrieb Thomas Petazzoni:
 
---- Comment #9 from wg@grandegger.com ---
-Hello Yann, all,
+> I have seen the feedback from upstream that this workaround potentially
+> breaks bionic and BSD systems, but as we don't care about these in
+> Buildroot, I applied your patch to master as a work-around. Hopefully
+> upstream will implement a better/long-term solution.
 
-on 2022.02.4 I cherry-picked:
+Hi Thomas,
 
-  16a8c68 package/gtest: drop host-gtest
-  a336b73 package/gtest: bump to version 1.12
+unfortunately upstream rejected the patch without an alternative 
+solution. Now I stumbled across the bug while building kodi with a non-
+local uClibc toolchain and being unable to fix the flatbuffers headers.
 
-As expected, the build issues with host-nodejs are gone!
-That fix is fine for me!
+This is the defconfig:
 
-Wolfgang
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON3_PY_ONLY=y
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Would it be acceptable to include this fix in the kodi package
+https://github.com/bkuhls/buildroot/commit/
+fa6d0d742d970836ef81b8ecbf5c1885d4be94dc
+
+although the problem really exists in the flatbuffer package which does 
+not store the result of its configure checks for strtoll_l and strtoull_l?
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
