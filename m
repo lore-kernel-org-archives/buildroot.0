@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 783C5C04A68
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 12:03:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D65E7C04A68
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 12:11:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2047840BA2;
-	Sat, 30 Jul 2022 12:03:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2047840BA2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5A67640586;
+	Sat, 30 Jul 2022 12:11:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A67640586
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LVtzOj0psMnK; Sat, 30 Jul 2022 12:03:26 +0000 (UTC)
+	with ESMTP id zefzFwjNG45f; Sat, 30 Jul 2022 12:11:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53C9E40B3B;
-	Sat, 30 Jul 2022 12:03:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53C9E40B3B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2B9A11BF392
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:03:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 33B4A40145;
+	Sat, 30 Jul 2022 12:11:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33B4A40145
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D81781BF391
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:11:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 125804097A
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:03:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 125804097A
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC18B61164
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:11:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC18B61164
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7IG48G8J_0Pf for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 12:03:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1E22402EA
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C1E22402EA
- for <buildroot@buildroot.org>; Sat, 30 Jul 2022 12:03:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id izwMG4-QiSm3 for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 12:11:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA2006105B
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AA2006105B
+ for <buildroot@buildroot.org>; Sat, 30 Jul 2022 12:11:12 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:ed0d:5473:88a:e206])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id EEF1D60131;
- Sat, 30 Jul 2022 14:03:10 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id E46F660137;
+ Sat, 30 Jul 2022 14:11:03 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 30 Jul 2022 14:03:06 +0200
-Date: Sat, 30 Jul 2022 14:03:06 +0200
+ Sat, 30 Jul 2022 14:11:03 +0200
+Date: Sat, 30 Jul 2022 14:11:03 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220730120306.GQ3168@scaer>
+Message-ID: <20220730121103.GR3168@scaer>
 References: <20220727184850.2857314-1-thomas.petazzoni@bootlin.com>
- <20220727184850.2857314-2-thomas.petazzoni@bootlin.com>
+ <20220727184850.2857314-3-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220727184850.2857314-2-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220727184850.2857314-3-thomas.petazzoni@bootlin.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1659182595;
- bh=XqJCHtomVO6w6j9GvMDhLSrUthtFbniM6tMh69ueLJ0=;
+ d=free.fr; s=smtp-20201208; t=1659183070;
+ bh=vsESsSAVuJ2JI4d16lmYbucS6VrWJYK80OfApMN2eEk=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=jKDOfCVWV3Gr3pxIXC2R+kcpLdff6emnwNKjMeUASJ5on7QVvpoJnBneZFDPJH3vz
- /RWUpaYW3gMGRdnocrqHhrKGtt4GmfVe0J4Bq60xLkUxW0AfFGJvVgCBrK2GbrXxzn
- +C/pKpsV/06P9q5/Z69BqrjpK84oRHU113CVNSIXGNzcHrMmAzc+b+ThC1GDPUWwcn
- I0hMbG6bamNVlY42VhnmSQ1Lsy3BtVzFPXdoxmRYJf6ggEwyspMrxMzUVYPEUeqe7S
- LwCllpvvHhjxxuvnDoMuxWvJjqMACRUMD9uU93VfKkT538KPmOORYN3GE5vJwZLJbT
- tDX0rhPZkKsjg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=rLjKGpGTv02CDQXf2W63yUXyReolM63/7YY+ilhBCrbK4bfMReNh6AkNOlMKDSQ6T
+ +4pDfHV+xRJLpqBqfO3Q5utu36tOPTeAvsMyfj0xCFrcqbkN1hUh8GNkcOPptTQMdv
+ py8yzdTvEp2J3xW3N+M74XrQ4XPKGlng/Q2ns9mOOsTxPvqTPzkjCCACFxwPlBss7O
+ 7FAPg4Py8PgRu22rulRTN9vDjRaqkDQR+9bmZOIUVpgwL8bwc7mDb6tBEVDt3KkJVy
+ POpoUIk3ycAoFsKs8CQFY3PO3BhY8Zbbp+kHO9467Tc8AjgL8NM0vsZ7lFd7h58eH3
+ OxN7x699Z/aPA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jKDOfCVW
-Subject: Re: [Buildroot] [PATCH 2/3] docs/manual/ccache-support.txt:
- document the new BR2_USE_CCACHE variable
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rLjKGpGT
+Subject: Re: [Buildroot] [PATCH 3/3] toolchain/toolchain-wrapper: don't
+ hardcode CCACHE_BASEDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,7 +78,9 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
  Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -88,37 +90,87 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Thomas, All,
 
 On 2022-07-27 20:48 +0200, Thomas Petazzoni via buildroot spake thusly:
+> The CCACHE_BASEDIR variable was hardcoded to $(BASE_DIR), and
+> therefore when moving around the toolchain-wrapper as part of the SDK,
+> the CCACHE_BASEDIR would still point to the original location of the
+> Buildroot build.
+> 
+> Instead of doing this, leverage the logic we already have in the
+> toolchain wrapper, which determines based on the toolchain wrapper
+> location itself what is the base directory.
+> 
+> So now, toolchain-wrapper.mk is only passing a boolean to
+> toolchain-wrapper.c, that tells whether the BR2_USE_CCACHE_BASEDIR
+> option is enabled or not.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  toolchain/toolchain-wrapper.c  | 6 +++---
+>  toolchain/toolchain-wrapper.mk | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index 37b24dd24a..bed90d6292 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -538,9 +538,9 @@ int main(int argc, char **argv)
+>  		return 3;
+>  	}
+>  #endif
+> -#ifdef BR_CCACHE_BASEDIR
+> -	/* Allow compilercheck to be overridden through the environment */
+> -	if (setenv("CCACHE_BASEDIR", BR_CCACHE_BASEDIR, 0)) {
+> +#ifdef BR_USE_CCACHE_BASEDIR
+> +	/* Allow basedir to be overridden through the environment */
+> +	if (setenv("CCACHE_BASEDIR", absbasedir, 0)) {
 
-Applied to master, thanks.
+You forgot the one instance in the debug code, lines 524 and 525.
+
+And once this is fixed, you'll notice that the old and the new
+CCACHE_BASEDIR will be different:
+
+    (before)$ BR2_DEBUG_WRAPPER=2 ./host/bin/arm-linux-gcc --help
+    ...
+    Toolchain wrapper executing:
+        CCACHE_BASEDIR='/home/ymorin/dev/buildroot/O/master'
+        '/home/ymorin/dev/buildroot/O/master/host/opt/ext-toolchain/bin/arm-linux-gcc.br_real'
+        ...
+
+    (after)$ BR2_DEBUG_WRAPPER=2 ./host/bin/arm-linux-gcc --help
+    ...
+    Toolchain wrapper executing:
+        CCACHE_BASEDIR='/home/ymorin/dev/buildroot/O/master/host'
+        '/home/ymorin/dev/buildroot/O/master/host/opt/ext-toolchain/bin/arm-linux-gcc.br_real'
+        ...
+
+So as you can see, before, CCACHE_BASEDIR was pointing to BASE_DIR, but
+now it points to HOST_DIR. This is one-level too deep, as it will not
+match the path where packages are actually built, which is
+BASE_DIR/build, and hapenned to be CCACHE_BASEDIR/build.
+
+Even though I had the debug code path fixed, the second issue was not
+trivial enough for me to fix when applying, so I amrked the patch as
+changes requested.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  docs/manual/ccache-support.txt | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/docs/manual/ccache-support.txt b/docs/manual/ccache-support.txt
-> index ea64628615..ab4f10be23 100644
-> --- a/docs/manual/ccache-support.txt
-> +++ b/docs/manual/ccache-support.txt
-> @@ -55,3 +55,15 @@ first.
->  See https://ccache.samba.org/manual.html#_compiling_in_different_directories[the
->  ccache manual's section on "Compiling in different directories"] for
->  more details about this rewriting of absolute paths.
-> +
-> +When +ccache+ is enabled in Buildroot using the +BR2_CCACHE=y+ option:
-> +
-> +* +ccache+ is used during the Buildroot build itself
-> +
-> +* +ccache+ is not used when building outside of Buildroot, for example
-> +  when directly calling the cross-compiler or using the SDK
-> +
-> +One can override this behavior using the +BR2_USE_CCACHE+ environment
-> +variable: when set to +1+, usage of ccache is enabled (default during
-> +the Buildroot build), when unset or set to a value different from +1+,
-> +usage of ccache is disabled.
+>  		perror(__FILE__ ": Failed to set CCACHE_BASEDIR");
+>  		return 3;
+>  	}
+> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+> index cbf46f15fa..c87120f0f7 100644
+> --- a/toolchain/toolchain-wrapper.mk
+> +++ b/toolchain/toolchain-wrapper.mk
+> @@ -70,7 +70,7 @@ endif
+>  endif
+>  
+>  ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
+> -TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
+> +TOOLCHAIN_WRAPPER_ARGS += -DBR_USE_CCACHE_BASEDIR
+>  endif
+>  
+>  ifeq ($(BR2_PIC_PIE),y)
 > -- 
 > 2.37.1
 > 
