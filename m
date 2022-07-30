@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7264FC04A68
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 16:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3C90C04A68
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 16:07:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 036EA4032E;
-	Sat, 30 Jul 2022 16:01:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 036EA4032E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28EAB83F02;
+	Sat, 30 Jul 2022 16:07:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28EAB83F02
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rKNRlt8A1FrZ; Sat, 30 Jul 2022 16:01:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id D76fCUGkDA25; Sat, 30 Jul 2022 16:07:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15A4A4018F;
-	Sat, 30 Jul 2022 16:01:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15A4A4018F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9893D1BF470
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 16:01:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45EC083E9D;
+	Sat, 30 Jul 2022 16:07:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45EC083E9D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 38EFE1BF376
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 16:07:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D4524018F
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 16:01:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D4524018F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10CA9417C6
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 16:07:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10CA9417C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c-bYKXqF9UIZ for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 16:01:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B20B400BF
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4B20B400BF
- for <buildroot@buildroot.org>; Sat, 30 Jul 2022 16:01:34 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ed0d:5473:88a:e206])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 45FE860140;
- Sat, 30 Jul 2022 18:01:25 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 30 Jul 2022 18:01:24 +0200
-Date: Sat, 30 Jul 2022 18:01:24 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220730160124.GW3168@scaer>
-References: <20220729204457.7266-1-giulio.benetti@benettiengineering.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220729204457.7266-1-giulio.benetti@benettiengineering.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1659196890;
- bh=dYDQZP5EhkB8cMU0d9AcffeD4ih8gikQuGTCuWA2Jgk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=IP12YzIY7SmEmLybFkrQgPvZ1+r5pcf7GCTjWZtITJFODWKe/c8NEQMIxBDwt77/J
- FNDUd+Ummp4bBgDw09i8g7TC5xWHEfNuSHYfefBtZWDR9QPiJJNErw9M85T+oxhpKz
- Uf/06RP94+f/8hb4PUN4orn6Tz51jL3RtFdYNT/D5tjQiw+UBII1Er5w87MIblYEJy
- JMPOvtmKH375DnDB6Y4yuJiq6M1OOEPcTZo0nj3CoBShwcVpaCUhzLzOm5jYvB336C
- 53uT3M4W/3KjCJ8zkZmFU3cvOJOWjVKMSz8ipXRG8POY19b/4dmP53CMlcdMkypeez
- 2dQOEYlT5lapQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=IP12YzIY
-Subject: Re: [Buildroot] [PATCH] toolchain/Config.in: improve gcc bug 43744
- condition
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0f2N6d4tlmOm for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 16:07:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0393B417C3
+ for <buildroot@buildroot.org>; Sat, 30 Jul 2022 16:07:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0393B417C3
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 9FD4286A1B; Sat, 30 Jul 2022 15:53:37 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 30 Jul 2022 18:06:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 81e7e2e773a7ea59bbb129233183b481066ecf6e
+X-Git-Newrev: d4b13b21024a894a2fc682090f3e01d53bd699e9
+X-Patchwork-Hint: ignore
+Message-Id: <20220730155337.9FD4286A1B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdill: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,67 +56,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Giulio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d4b13b21024a894a2fc682090f3e01d53bd699e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-07-29 22:44 +0200, Giulio Benetti spake thusly:
-> This makes the condition easier to read and it's easier to maintain the
-> gcc bug too because we don't have to take care about new gcc versions.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Libdill is a C library that makes writing structured concurrent programs
+easy.
 
-Series of two patches applied to master, thanks.
+There has been no release in more than two years, so we use the latest
+commit on the master branch.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+[yann.morin.1998@free.fr:
+  - explain use of a sha1
+  - fix check-package warnings
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/libdill/Config.in    |  7 +++++++
+ package/libdill/libdill.hash |  3 +++
+ package/libdill/libdill.mk   | 28 ++++++++++++++++++++++++++++
+ 5 files changed, 40 insertions(+)
 
-> ---
->  toolchain/Config.in | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index 3cc747c1cc..d2fc347d36 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -113,12 +113,9 @@ config BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
->  # reappeared on gcc 9.x and is still not fixed on gcc 11.x
->  config BR2_TOOLCHAIN_HAS_GCC_BUG_43744
->  	bool
-> -	default y if BR2_sh4
-> -	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
-> -		BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
-> -		BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
-> -		BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
-> -		BR2_TOOLCHAIN_GCC_AT_LEAST_12
-> +	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-> +	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9
-> +	depends on BR2_sh4
->  
->  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. This bug no
->  # longer exists in gcc 8.x.
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3d33e83e5a..88e0d02c69 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -164,6 +164,7 @@ F:	package/i2c-tools/
+ F:	package/jq/
+ F:	package/libapparmor/
+ F:	package/libb64/
++F:	package/libdill/
+ F:	package/mender/
+ F:	package/mender-artifact/
+ F:	package/mono/
+diff --git a/package/Config.in b/package/Config.in
+index 4ff1fb2f3c..fd0598c537 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1999,6 +1999,7 @@ menu "Other"
+ 	source "package/libcrossguid/Config.in"
+ 	source "package/libcsv/Config.in"
+ 	source "package/libdaemon/Config.in"
++	source "package/libdill/Config.in"
+ 	source "package/libeastl/Config.in"
+ 	source "package/libee/Config.in"
+ 	source "package/libev/Config.in"
+diff --git a/package/libdill/Config.in b/package/libdill/Config.in
+new file mode 100644
+index 0000000000..2376fc9698
+--- /dev/null
++++ b/package/libdill/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBDILL
++	bool "libdill"
++	help
++	  Libdill is a C library that makes writing structured
++	  concurrent programs easy.
++
++	  http://libdill.org
+diff --git a/package/libdill/libdill.hash b/package/libdill/libdill.hash
+new file mode 100644
+index 0000000000..4a1fb91a57
+--- /dev/null
++++ b/package/libdill/libdill.hash
+@@ -0,0 +1,3 @@
++# sha256 locally computed
++sha256  6df7527e8f1e91f5106c21c5bfeaa69eee470bec476c74585143e3e439864404  libdill-fa01648cf2a8d06e53c965b45eeacfb3ac57bd04.tar.gz
++sha256  3f78d9c42c8919cb6dc63e51de17b9eb40a49d9cdd876ce59e77392721e8c2c6  COPYING
+diff --git a/package/libdill/libdill.mk b/package/libdill/libdill.mk
+new file mode 100644
+index 0000000000..117e8254e0
+--- /dev/null
++++ b/package/libdill/libdill.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# libdill
++#
++################################################################################
++
++LIBDILL_VERSION = fa01648cf2a8d06e53c965b45eeacfb3ac57bd04
++LIBDILL_SITE = $(call github,sustrik,libdill,$(LIBDILL_VERSION))
++LIBDILL_LICENSE = MIT
++LIBDILL_LICENSE_FILES = COPYING
++LIBDILL_INSTALL_STAGING = YES
++# Fetched from Github, with no configure script
++LIBDILL_AUTORECONF = YES
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBDILL_CONF_OPTS += --enable-threads
++else
++LIBDILL_CONF_OPTS += --disable-threads
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBDILL_DEPENDENCIES += openssl
++LIBDILL_CONF_OPTS += --enable-tls
++else
++LIBDILL_CONF_OPTS += --disable-tls
++endif
++
++$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
