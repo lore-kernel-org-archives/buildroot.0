@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6EA2C04A68
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 07:30:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A15E8C04A68
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 14:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E887E422BA;
-	Sat, 30 Jul 2022 07:30:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E887E422BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A65B61177;
+	Sat, 30 Jul 2022 14:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A65B61177
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c4E0UhtcZk63; Sat, 30 Jul 2022 07:30:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ssWXDCQhSFcl; Sat, 30 Jul 2022 14:51:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1F41422AF;
-	Sat, 30 Jul 2022 07:30:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1F41422AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F84A61170;
+	Sat, 30 Jul 2022 14:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F84A61170
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7C3D91BF82D
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 07:30:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BFE001BF3D2
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 14:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 54B9684035
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 07:30:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54B9684035
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A1E883F5F
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 14:51:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A1E883F5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aV-AUssBgSUm for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 07:30:00 +0000 (UTC)
+ with ESMTP id vDGiHdrbVMh5 for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 14:51:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B1AC8402B
- for <buildroot@uclibc.org>; Sat, 30 Jul 2022 07:30:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B1AC8402B
+ by smtp1.osuosl.org (Postfix) with ESMTP id DF9D083F4F
+ for <buildroot@uclibc.org>; Sat, 30 Jul 2022 14:51:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF9D083F4F
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 282B285D2D; Sat, 30 Jul 2022 07:16:08 +0000 (UTC)
+ id B22DC86987; Sat, 30 Jul 2022 14:37:36 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 30 Jul 2022 07:30:00 +0000
+Date: Sat, 30 Jul 2022 14:51:29 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,15 +47,15 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2022.02.3
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Who: wg@grandegger.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-14926-163-SFaectsMBm@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-14926-163-MZMsmR2gKz@https.bugs.busybox.net/>
 In-Reply-To: <bug-14926-163@https.bugs.busybox.net/>
 References: <bug-14926-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,28 +81,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14926
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+--- Comment #9 from wg@grandegger.com ---
+Hello Yann, all,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jacmet@uclibc.org,
-                   |                            |yann.morin.1998@free.fr
+on 2022.02.4 I cherry-picked:
 
---- Comment #8 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Wolfgang, All,
+  16a8c68 package/gtest: drop host-gtest
+  a336b73 package/gtest: bump to version 1.12
 
-The only package that used to need host-gtest was gtest itself. On master,
-we bumped gtest to a newer version that no longer requires host-gtest, so
-we dropped it.
+As expected, the build issues with host-nodejs are gone!
+That fix is fine for me!
 
-The version bump seems very minor, so maybe it would be worth backporting
-to the stable branch so we can drop host-gtest and fix this host-nodejs
-issue.
-
-Peter?
-
-Regards,
-Yann E. MORIN.
+Wolfgang
 
 -- 
 You are receiving this mail because:
