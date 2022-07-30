@@ -4,68 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDE4AC04A68
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 12:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0D70C04A68
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 12:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8067E8403F;
-	Sat, 30 Jul 2022 12:20:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8067E8403F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54B1184056;
+	Sat, 30 Jul 2022 12:22:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54B1184056
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1tOcOFf7MV_x; Sat, 30 Jul 2022 12:20:03 +0000 (UTC)
+	with ESMTP id BGZw5by53rda; Sat, 30 Jul 2022 12:22:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 898E78403B;
-	Sat, 30 Jul 2022 12:20:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 898E78403B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E0A511BF391
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:20:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65B968403C;
+	Sat, 30 Jul 2022 12:22:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65B968403C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 25DD31BF391
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B960A417E5
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:20:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B960A417E5
+ by smtp1.osuosl.org (Postfix) with ESMTP id F42068403C
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:22:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F42068403C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S_JaUnVnaXe5 for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 12:19:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a8EF1ybP8VYo for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 12:22:23 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60B51417DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02AEB81D18
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 60B51417DC
- for <buildroot@buildroot.org>; Sat, 30 Jul 2022 12:19:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 02AEB81D18
+ for <buildroot@buildroot.org>; Sat, 30 Jul 2022 12:22:22 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:ed0d:5473:88a:e206])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id A405060129;
- Sat, 30 Jul 2022 14:19:55 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 3124560129;
+ Sat, 30 Jul 2022 14:22:17 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 30 Jul 2022 14:19:55 +0200
-Date: Sat, 30 Jul 2022 14:19:55 +0200
+ Sat, 30 Jul 2022 14:22:16 +0200
+Date: Sat, 30 Jul 2022 14:22:16 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Roosen Henri <Henri.Roosen@ginzinger.com>
-Message-ID: <20220730121955.GS3168@scaer>
-References: <c73779fc937946ae6279b66998d6017ba0ffd507.camel@ginzinger.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220730122216.GT3168@scaer>
+References: <20220101214034.2152144-1-giulio.benetti@benettiengineering.com>
+ <CADvTj4r09-gBxrbbJCd-gXCaOzZsMGUgv=E-SELMUieGdTorcA@mail.gmail.com>
+ <229dd860-e5ff-64a4-f97e-00cc3de26075@benettiengineering.com>
+ <b48adde2-4418-178c-0148-ef7d46cdfe4a@mind.be>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <c73779fc937946ae6279b66998d6017ba0ffd507.camel@ginzinger.com>
+In-Reply-To: <b48adde2-4418-178c-0148-ef7d46cdfe4a@mind.be>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1659183597;
- bh=z7K9tGHgL23ILD/A7GMDAkPPqu/zMfs9k/0NV4EEZ24=;
+ d=free.fr; s=smtp-20201208; t=1659183741;
+ bh=zTYViV4q+lbQ+bfIyvJxtzxeVzkN4J24B8yNtbiosLs=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=lJnbCqmtG6U7p07S/XD3N8lW05iLoceyav8/h8iPCRNZfowMWntkKs3QZ1gu94hNx
- czegnRTemYOgZoPBxZBzjGBI1PLCVktHbBcPwJuKyDyIUaivaykLtrJToqV2aLxDE6
- c3XMD8KO4AD/UgQGfpeUx7T7Hf+IYjet/FkmYoZdyqkPTIuvvTNZMtQQdhWnjL9XDv
- i6B3ufG1Pvyj8MHtgJ5jgrIaXCW3FUzdb6Xb179KSAx4Fg87VD29hc5B/46/GMPcyh
- LpFdWh6Zvejhdhwsb3j8633rHvOu1566Eex4ZOIBuQFXPt22XkWprnxkVoBsIx8Pgk
- XhRznoc/rroXA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=grx7tU2WlIsXe9fp5YMYXGKiXQhM1oNn0vY/VDS3Jcd/3Um96P9dUC9KM0qjIMEuG
+ CAPNSH1ic+jy/aW1/ox+PjTAoa9g2Fu4VceZsM7usZXQrSYFJT3ZVRzSD7AY/va1Rb
+ 5Wok2KmbfwBpUTpHMsPC8VmVrmFMshARFlNwN8dIyHhQiEHpsd+mbvz2YgJja8Vpdr
+ 4gZE6yMKoB+hOL5aId6qCs5tsDbFDeYuYsrvNhFY+iT1jy4Tdsd3As6/uNwL5G2Dmv
+ aI7aM8oWnnUOiWPcES3fKIGVklmKdqeWTwV+lUwgBJk+c+ikoMgyGglhMbdw2a4wJG
+ 58LU96/li4t+Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lJnbCqmt
-Subject: Re: [Buildroot] [PATCH 1/1] Makefile: workaround make 4.3 issue for
- 'printvars and 'show-vars'
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=grx7tU2W
+Subject: Re: [Buildroot] [PATCH] Makefile: disable 'printvars' and
+ 'show-vars' recipes for Make 4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,66 +80,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVucmksIEFsbCwKCk9uIDIwMjItMDctMjkgMjE6NDkgKzAwMDAsIFJvb3NlbiBIZW5yaSBzcGFr
-ZSB0aHVzbHk6Cj4gRXZlbnQgdGhvdWdoIHRoZSBidWcgd2l0aCBtYWtlIDQuMyBoYXMgYmVlbiBy
-ZXBvcnRlZCBhbmQgZml4ZWQsIHRoZXJlCj4gaGFzIG5vdCBiZWVuIGEgcmVsZWFzZSBvZiBtYWtl
-IHdpdGggdGhlIGZpeCBmb3IgYSBsb25nIHRpbWUsIHNlZSBbMV0uCj4gCj4gQXMgdGhlIHJvb3Qg
-Y2F1c2Ugc2VlbXMgdGhlICdmaWx0ZXInIGNvbW1hbmQgY2Fubm90IGhhbmRsZSBsYXJnZQo+IGNo
-dW5rcyBvZiBkYXRhLCBsaWtlIC5WQVJJQUJMRVMsIHdlIGNhbiB3b3JrYXJvdW5kIHRoZSBwcm9i
-bGVtIGJ5Cj4gdXNpbmcgYSBmb3JlYWNoIGNvbW1hbmQgb3ZlciAuVkFSSUFCTEVTLCB0aGVuIHVz
-ZSB0aGUgZmlsdGVyIGNvbW1hbmQuCj4gCj4gSXQgbWlnaHQgbm90IGJlIGxvZ2ljYWwgdG8gcHJv
-Z3JhbSBpdCB0aGF0IHdheSwgYnV0IGF0IGxlYXN0IHRoZQo+IGZ1bmN0aW9uYWxpdHkgaXMgbm93
-IHVzYWJsZS4KCkF3ZXNvbWUhIEp1c3QgYXdlc29tZSEg8J+RjQoKSSBqdXN0IGFkZGVkIGEgc21h
-bGwgY29tbWVudCBpbiB0aGUgTWFrZWZpbGUgdG8gZXhwbGFpbiB0aGF0LCBhbmQKcmVmZXJlbmNl
-IHRoZSBidWcuCgo+IFsxXSBodHRwczovL3NhdmFubmFoLmdudS5vcmcvYnVncy8/NTkwOTMjY29t
-bWVudDEwCj4gCj4gU2lnbmVkLW9mZi1ieTogSGVucmkgUm9vc2VuIDxoZW5yaS5yb29zZW5AZ2lu
-emluZ2VyLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUu
-IE1PUklOLgoKPiAtLS0KPiAgTWFrZWZpbGUgfCAxNSArKysrLS0tLS0tLS0tLS0KPiAgMSBmaWxl
-IGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdp
-dCBhL01ha2VmaWxlIGIvTWFrZWZpbGUKPiBpbmRleCBiZjEwMWZmNzcwLi5hODU2ZjY5Njg1IDEw
-MDY0NAo+IC0tLSBhL01ha2VmaWxlCj4gKysrIGIvTWFrZWZpbGUKPiBAQCAtMTA1NiwyMyArMTA1
-NiwxNiBAQCBpZmVxICgkKE5FRURfV1JBUFBFUikseSkKPiAgCSQoUSkkKFRPUERJUikvc3VwcG9y
-dC9zY3JpcHRzL21rbWFrZWZpbGUgJChUT1BESVIpICQoTykKPiAgZW5kaWYKPiAgCj4gLS5QSE9O
-WTogY2hlY2stbWFrZS12ZXJzaW9uCj4gLWNoZWNrLW1ha2UtdmVyc2lvbjoKPiAtaWZuZXEgKCQo
-ZmlsdGVyICQoUlVOTklOR19NQUtFX1ZFUlNJT04pLDQuMyksKQo+IC0JQGVjaG8gIk1ha2UgNC4z
-IGRvZXNuJ3Qgc3VwcG9ydCAncHJpbnR2YXJzJyBhbmQgJ3Nob3ctdmFycycgcmVjaXBlcyIKPiAt
-CUBleGl0IDEKPiAtZW5kaWYKPiAtCj4gICMgcHJpbnR2YXJzIHByaW50cyBhbGwgdGhlIHZhcmlh
-YmxlcyBjdXJyZW50bHkgZGVmaW5lZCBpbiBvdXIKPiAgIyBNYWtlZmlsZXMuIEFsdGVybmF0aXZl
-bHksIGlmIGEgbm9uLWVtcHR5IFZBUlMgdmFyaWFibGUgaXMgcGFzc2VkLAo+ICAjIG9ubHkgdGhl
-IHZhcmlhYmxlcyBtYXRjaGluZyB0aGUgbWFrZSBwYXR0ZXJuIHBhc3NlZCBpbiBWQVJTIGFyZQo+
-ICAjIGRpc3BsYXllZC4KPiAgIyBzaG93LXZhcnMgZG9lcyB0aGUgc2FtZSwgYnV0IGFzIGEgSlNP
-TiBkaWN0aW9ubmFyeS4KPiAgLlBIT05ZOiBwcmludHZhcnMKPiAtcHJpbnR2YXJzOiBjaGVjay1t
-YWtlLXZlcnNpb24KPiArcHJpbnR2YXJzOgo+ICAJQDoKPiAgCSQoZm9yZWFjaCBWLCBcCj4gLQkJ
-JChzb3J0ICQoZmlsdGVyICQoVkFSUyksJCguVkFSSUFCTEVTKSkpLCBcCj4gKwkJJChzb3J0ICQo
-Zm9yZWFjaCBYLCAkKC5WQVJJQUJMRVMpLCAkKGZpbHRlciAkKFZBUlMpLCQoWCkpKSksIFwKPiAg
-CQkkKGlmICQoZmlsdGVyLW91dCBlbnZpcm9ubWVudCUgZGVmYXVsdCBhdXRvbWF0aWMsIFwKPiAg
-CQkJCSQob3JpZ2luICRWKSksIFwKPiAgCQkkKGlmICQoUVVPVEVEX1ZBUlMpLFwKPiBAQCAtMTA4
-MiwxMSArMTA3NSwxMSBAQCBwcmludHZhcnM6IGNoZWNrLW1ha2UtdmVyc2lvbgo+ICAKPiAgLlBI
-T05ZOiBzaG93LXZhcnMKPiAgc2hvdy12YXJzOiBWQVJTPz0lCj4gLXNob3ctdmFyczogY2hlY2st
-bWFrZS12ZXJzaW9uCj4gK3Nob3ctdmFyczoKPiAgCUA6Cj4gIAkkKGluZm8gJChjYWxsIGNsZWFu
-LWpzb24sIHsgXAo+ICAJCQkkKGZvcmVhY2ggViwgXAo+IC0JCQkJJChzb3J0ICQoZmlsdGVyICQo
-VkFSUyksJCguVkFSSUFCTEVTKSkpLCBcCj4gKwkJCQkkKHNvcnQgJChmb3JlYWNoIFgsICQoLlZB
-UklBQkxFUyksICQoZmlsdGVyICQoVkFSUyksJChYKSkpKSwgXAo+ICAJCQkJJChpZiAkKGZpbHRl
-ci1vdXQgZW52aXJvbm1lbnQlIGRlZmF1bHQgYXV0b21hdGljLCAkKG9yaWdpbiAkVikpLCBcCj4g
-IAkJCQkJIiRWIjogeyBcCj4gIAkJCQkJCSJleHBhbmRlZCI6ICQoY2FsbCBtay1qc29uLXN0ciwk
-KCRWKSkkKGNvbW1hKSBcCj4gLS0gCj4gMi4zMC4yCj4gCj4gCgoKCj4gX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
-Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
-LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4K
-fCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9O
-IHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVz
-aWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYx
-IDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAg
-VGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAv
-IFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
-LS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Arnout, Giulio, James, All,
+
+On 2022-07-27 10:38 +0200, Arnout Vandecappelle spake thusly:
+> On 26/07/2022 23:52, Giulio Benetti wrote:
+> >On 21/07/22 05:55, James Hilliard wrote:
+> >>On Sat, Jan 1, 2022 at 2:40 PM Giulio Benetti
+> >><giulio.benetti@benettiengineering.com> wrote:
+> >>>Make 4.3 is buggy and leads to a "Segmentation fault (core dumped)" when
+> >>>calling 'make printvars' or 'make show-vars', so let's refuse to execute
+> >>>those recipes if Make 4.3 by adding 'check-make-version' recipe as
+> >>>depedendency of 'printvars' and 'show-vars' as suggested by Yann E. Morin.
+> >>FYI autobuilder threads seem to die when this gets hit:
+[--SNIP--]
+> >Do you have an autobuilder failure link?
+> >So I can reproduce it here and find a work-around for it.
+>  It's the autobuilder script (from the buildroot-test repository) itself
+> that crashes. I suspect it isn't able to send in its results after that.
+> There is a separate process for each autobuilder instance, but I don't think
+> they are restarted when they crash so eventually all instances will die.
+> 
+>  Note that this is only invoked if a reproducibility error was detected.
+> 
+>  @James: do like Thomas, install an earlier make on your system :-)
+
+That will no longer ne necessary, as we now have a working workaround
+for that, that I just pushed:
+
+    5c54c3ef3db2 Makefile: workaround make 4.3 issue for 'printvars and 'show-vars'
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
