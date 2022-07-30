@@ -1,60 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95D9CC19F28
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 10:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF0B8C04A68
+	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 12:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F4C361172;
-	Sat, 30 Jul 2022 10:55:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F4C361172
+	by smtp2.osuosl.org (Postfix) with ESMTP id 03D8B40B86;
+	Sat, 30 Jul 2022 12:02:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03D8B40B86
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j3wu_Gk-myOR; Sat, 30 Jul 2022 10:55:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xUW3nz8I5BQW; Sat, 30 Jul 2022 12:02:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D6876110E;
-	Sat, 30 Jul 2022 10:55:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D6876110E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0792040217;
+	Sat, 30 Jul 2022 12:02:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0792040217
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DD2A51BF37B
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 10:55:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B51C01BF392
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1C0C8401E
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 10:55:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1C0C8401E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FAEE83F91
+ for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 12:02:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FAEE83F91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yQLeJ1z9072Z for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 10:55:45 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5605B84012
-Received: from mailout03.t-online.de (mailout03.t-online.de [194.25.134.81])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5605B84012
- for <buildroot@buildroot.org>; Sat, 30 Jul 2022 10:55:45 +0000 (UTC)
-Received: from fwd87.dcpf.telekom.de (fwd87.aul.t-online.de [10.223.144.113])
- by mailout03.t-online.de (Postfix) with SMTP id 745E96328;
- Sat, 30 Jul 2022 12:55:42 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.192.98]) by fwd87.t-online.de
- with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1oHk87-1uZvaT0; Sat, 30 Jul 2022 12:55:35 +0200
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55030)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1oHk86-0006mQ-23;
- Sat, 30 Jul 2022 12:55:34 +0200
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-To: buildroot@buildroot.org
-Date: Sat, 30 Jul 2022 12:55:34 +0200
-Message-Id: <20220730105534.645046-1-bernd.kuhls@t-online.de>
-X-Mailer: git-send-email 2.30.2
+ with ESMTP id Im2CgDuS1Sc2 for <buildroot@lists.busybox.net>;
+ Sat, 30 Jul 2022 12:02:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63F8E83F73
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 63F8E83F73
+ for <buildroot@buildroot.org>; Sat, 30 Jul 2022 12:02:27 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:ed0d:5473:88a:e206])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id D497F60130;
+ Sat, 30 Jul 2022 14:02:19 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 30 Jul 2022 14:02:19 +0200
+Date: Sat, 30 Jul 2022 14:02:19 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220730120219.GP3168@scaer>
+References: <20220727184850.2857314-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1659178535-0144746C-D71423B7/0/0 CLEAN NORMAL
-X-TOI-MSGID: 8310cefb-166c-4bab-a9f9-d9eefc274086
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: fix build error with c++
- disabled
+Content-Disposition: inline
+In-Reply-To: <20220727184850.2857314-1-thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1659182544;
+ bh=Z/RhXwUzDRpzFUlj6DADjUSxIC+9EZ80OYw4m95qHyo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=G6QRdb1YyEzmEGoR9TgqvJgIRV9ioizuRRUjOKiovi3B6ihzubTvr735l3eFwbmaf
+ QZZZUIjwR94mTYSMp6C4b+unZCKc9GkLTRG8w7vGgOgxszD2hMPQjC+O0pTXWmYIYZ
+ C44TjPojDzURPLgU63eHGTp9+gmsCC6T/kujDYNgtpFSCQwGBc2KeIT32jvfvTfK1v
+ NLyFWPC+pBFu6jGffogGEorOyEqetQrVH6RsbWUxGO/JNfuUv8JjM9CUhOYc26BSQ6
+ FQNcHJ0gTP2F3vEv83BB9tfAt+u0zxJ8s4bcXFkKLGbGGmmivfYEH8E2dS1Vqm0A9S
+ Fw9JLBYQmnRxQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=G6QRdb1Y
+Subject: Re: [Buildroot] [PATCH 1/3] docs/manual/ccache-support.txt: expand
+ explanation about ccache cache location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,70 +77,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The vp8 encoder depends on c++ support since commit
-06a1a05b55aa64720d4ede9b07c385cc8f06625d
+Thomas, All,
 
-src/transcoding/codec/codecs/libs/libvpx.c:23:10: fatal error: vpx/vp8cx.h: No such file or directory
-   23 | #include <vpx/vp8cx.h>
+On 2022-07-27 20:48 +0200, Thomas Petazzoni via buildroot spake thusly:
+> The manual explanation seemed to imply that the cache is always in
+> ~/.buildroot-ccache/, but it's just the default value. Clarify this
+> point.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/152/152dec2f7148a23fa1a434d2c6ad31de6d1b2466/
-http://autobuild.buildroot.net/results/009/0090b100eca4f94d2f0081ce0db7ff9b4ae0ca79/
+Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/tvheadend/Config.in    | 3 ++-
- package/tvheadend/tvheadend.mk | 7 +++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index c033b29819..99a24ec011 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -66,7 +66,8 @@ config BR2_PACKAGE_TVHEADEND_TRANSCODING
- 	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
- 	select BR2_PACKAGE_FFMPEG_GPL # needed for x264 support
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
--	select BR2_PACKAGE_LIBVPX
-+	# vp8 encoder needs c++
-+	select BR2_PACKAGE_LIBVPX if BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_X264
- 	help
- 	  Enable transcoding support.
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 1d1a714505..8ceb7493c8 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -47,6 +47,12 @@ TVHEADEND_DEPENDENCIES += rpi-userland
- else
- TVHEADEND_CONF_OPTS += --disable-omx
- endif
-+ifeq ($(BR2_PACKAGE_LIBVPX)$(BR2_INSTALL_LIBSTDCPP),yy)
-+TVHEADEND_CONF_OPTS += --enable-libvpx
-+TVHEADEND_DEPENDENCIES += libvpx
-+else
-+TVHEADEND_CONF_OPTS += --disable-libvpx
-+endif
- ifeq ($(BR2_PACKAGE_X265),y)
- TVHEADEND_CONF_OPTS += --enable-libx265
- TVHEADEND_DEPENDENCIES += x265
-@@ -59,6 +65,7 @@ TVHEADEND_CONF_OPTS += \
- 	--disable-libopus \
- 	--disable-omx \
- 	--disable-vaapi \
-+	--disable-libvpx \
- 	--disable-libx264 \
- 	--disable-libx265
- endif
+> ---
+>  docs/manual/ccache-support.txt | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/docs/manual/ccache-support.txt b/docs/manual/ccache-support.txt
+> index f6746ad7d8..ea64628615 100644
+> --- a/docs/manual/ccache-support.txt
+> +++ b/docs/manual/ccache-support.txt
+> @@ -15,10 +15,12 @@ speed up the build process.
+>  +Enable compiler cache+ in +Build options+. This will automatically
+>  build +ccache+ and use it for every host and target compilation.
+>  
+> -The cache is located in +$HOME/.buildroot-ccache+. It is stored
+> -outside of Buildroot output directory so that it can be shared by
+> -separate Buildroot builds. If you want to get rid of the cache, simply
+> -remove this directory.
+> +The cache is located in the directory defined by the +BR2_CCACHE_DIR+
+> +configuration option, which defaults to
+> ++$HOME/.buildroot-ccache+. This default location is outside of
+> +Buildroot output directory so that it can be shared by separate
+> +Buildroot builds. If you want to get rid of the cache, simply remove
+> +this directory.
+>  
+>  You can get statistics on the cache (its size, number of hits,
+>  misses, etc.) by running +make ccache-stats+.
+> -- 
+> 2.37.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.30.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
