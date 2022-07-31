@@ -1,75 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FF93C19F2A
-	for <buildroot@archiver.kernel.org>; Sat, 30 Jul 2022 21:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D81E4C19F28
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 00:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C3BF82B08;
-	Sat, 30 Jul 2022 21:26:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C3BF82B08
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32BA7400EF;
+	Sun, 31 Jul 2022 00:36:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32BA7400EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qR0MzlrCJ2kn; Sat, 30 Jul 2022 21:26:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9T8IG3Qa5cdA; Sun, 31 Jul 2022 00:36:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 489AB827A9;
-	Sat, 30 Jul 2022 21:26:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 489AB827A9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 197CE1BF3A9
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 21:26:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2AE5940498;
+	Sun, 31 Jul 2022 00:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AE5940498
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AB2CB1BF968
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 00:35:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6D29827A9
- for <buildroot@lists.busybox.net>; Sat, 30 Jul 2022 21:26:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6D29827A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92F2460E52
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 00:35:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92F2460E52
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a3TTIKFOlP0y for <buildroot@lists.busybox.net>;
- Sat, 30 Jul 2022 21:26:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95906827A0
-Received: from 3.mo548.mail-out.ovh.net (3.mo548.mail-out.ovh.net
- [188.165.32.156])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 95906827A0
- for <buildroot@buildroot.org>; Sat, 30 Jul 2022 21:26:39 +0000 (UTC)
-Received: from mxplan5.mail.ovh.net (unknown [10.108.1.10])
- by mo548.mail-out.ovh.net (Postfix) with ESMTPS id DD475203E0;
- Sat, 30 Jul 2022 21:18:03 +0000 (UTC)
-Received: from kaod.org (37.59.142.100) by DAG4EX2.mxp5.local (172.16.2.32)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Sat, 30 Jul
- 2022 23:18:03 +0200
-X-OVh-ClientIp: 90.89.72.120
-Message-ID: <5ba970ce-7cd0-acb3-c6be-7ddeafbad876@kaod.org>
-Date: Sat, 30 Jul 2022 23:18:02 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CYsMCiW2WNwr for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 00:35:56 +0000 (UTC)
+X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBB7D60B18
+Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBB7D60B18
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 00:35:55 +0000 (UTC)
+Received: from [192.168.50.173] ([146.241.73.23])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id Hwp7oWVL19RZ3Hwp8oeiMw; Sun, 31 Jul 2022 02:28:50 +0200
+Message-ID: <3a838cf0-9121-4069-60d4-2601b16a801c@benettiengineering.com>
+Date: Sun, 31 Jul 2022 02:28:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+To: Xuanhao Shi <x-shi@ti.com>, buildroot@buildroot.org
+References: <20220728164006.16652-1-x-shi@ti.com>
+ <20220728164006.16652-2-x-shi@ti.com>
 Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220729000904.1295295-1-joel@jms.id.au>
- <20220729000904.1295295-4-joel@jms.id.au>
- <b1b0b11a-6c49-9d7c-5d1b-b6ec8e6a2966@kaod.org>
- <20220729213721.GH1554632@scaer>
-From: =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20220729213721.GH1554632@scaer>
-X-Originating-IP: [37.59.142.100]
-X-ClientProxiedBy: DAG4EX2.mxp5.local (172.16.2.32) To DAG4EX2.mxp5.local
- (172.16.2.32)
-X-Ovh-Tracer-GUID: 2b3af380-e9dd-4965-8565-03c06a23ec94
-X-Ovh-Tracer-Id: 11532311273731558249
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdduledgudeiudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhephfehieejleffgfekteduledvffeiiefgudehfedukeeijeevhfdtvefhfedtffdtnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrddutddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhmpdfovfetjfhoshhtpehmohehgeek
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-100R00368052127-72f8-4b83-a30a-7836c9022b5d,
- 1DC0F860CB010FCE1C63BA575B84B2D58309CB31) smtp.auth=clg@kaod.org
-Subject: Re: [Buildroot] [PATCH 3/9] arch/powerpc: Enable powerpc64le only
- on CPUs that support it
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220728164006.16652-2-x-shi@ti.com>
+X-CMAE-Envelope: MS4xfNHeugEKDg4neEI99JsiQiwiiO9gKQX3W9SSzZnBkILmbyW136jG7LEy4jreCMyRZuGsTe7jU4otK+zuSh7G+fMuoB0SKLyaok3JnABTgxsxhKXWQfmF
+ QAiijJhV8NJF2LFQOFnIykAJXPMoPtsNpc8HU01wc1bDzQM3cqQsjoVOuWWb3D38gSxZ80LWyJeShl1jn+VDu1TKFrAnhdJzqUlPDA+UgEFOOS8Uwm2fjPDD
+ aiwhZI/n1q0Sqpc3746iu7XIgIG9Aje5daAdgyqiGYsdIlBkLWlNMSX8pDXn+kff4lGHoOGM+fgd5akXZDoqsnvhz6tZ/YcnPdbeUC3HGLxrIkUY+OSdclc2
+ MYVJDMsO
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1659227330; bh=0v3hDw7lZH9/7rVJViI7VhNrKYEB4bnjGa7oKZjTnms=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=ikSeN4lcxalqmK1H9zcySMXMNyk07De9l79aRfV3qVlbUJpBk0dXftJK9XC3ntmsg
+ nc/9G9pZOouNGNuh1iHzgrdB+yY9JiZdQqRJHkku0lDEfoIqaX+ZPPfqcvzLcDDXhB
+ /XMrmbUiYlM1jkX28BbLYb8SjHolk6VA0HnHhSbC8BLNC9Ul/zsPxwXV4mTkZwz8jl
+ KXO6qnNXlGyuE9K+LaIG1TSclCsqy6Wly56s+1WAGqXkMt/fFs9xe4qeFygBHiYmoI
+ QRqdD+bdsA8EZteT+MD0DWKiOAOsuAxI+k1rsUdcGeAzdFEt+3QwUzQx8fHpCVyyEQ
+ 5Gg6pau21FAag==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=ikSeN4lc
+Subject: Re: [Buildroot] [PATCH v2 1/4] package/arm-gnu-toolchain: revert to
+ version 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,33 +79,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Michael Ellerman <mpe@ellerman.id.au>, Joel Stanley <joel@jms.id.au>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Romain Naour <romain.naour@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Suniel Mahesh <sunil@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Anand Gadiyar <gadiyar@ti.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gNy8yOS8yMiAyMzozNywgWWFubiBFLiBNT1JJTiB3cm90ZToKPiBDw6lkcmljLCBKb2VsLCBB
-bGwsCj4gCj4gT24gMjAyMi0wNy0yOSAwODo1MiArMDIwMCwgQ8OpZHJpYyBMZSBHb2F0ZXIgc3Bh
-a2UgdGh1c2x5Ogo+PiBPbiA3LzI5LzIyIDAyOjA4LCBKb2VsIFN0YW5sZXkgd3JvdGU6Cj4+PiBJ
-bnZhbGlkIGNvbmZpZ3VyYXRpb25zIGxlYWQgdG8gYnVpbGQgZmFpbHVyZXMsIHN1Y2ggYXMgdHJ5
-aW5nIHRvIGVuYWJsZQo+Pj4gcHBjNjRsZSBmb3IgdGhlIHBwYzk3MDoKPj4+Cj4+PiAgICBodHRw
-Oi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9mZGE4ODY3NjhmY2UyNWNjZDliNTJi
-NjM1ZmY1YjEzZGE3YmEyZDBjLwo+Pj4KPj4+IEluIG9yZGVyIHRvIHJ1biBhIHBwYzY0bGUgdXNl
-cnNwYWNlIGEga2VybmVsIHRoYXQgcnVucyBpbiB0aGlzIG1vZGUgaXMKPj4+IHJlcXVpcmVkLiBU
-aGUgb25seSBDUFUgc3VwcG9ydGVkIGluIGJ1aWxkcm9vdCB0aGF0IGNhbiBib290IGEgcHBjNjRs
-ZQo+Pj4ga2VybmVsIGlzIFBvd2VyOCwgc28gbWFyayBhbGwgb2YgdGhlIG90aGVyIDY0LWJpdCBj
-YXBhYmxlIENQVXMgYXMgbm90Cj4+PiBzdXBwb3J0aW5nIHBwYzY0bGUuCj4+IEkgZG9uJ3QgdGhp
-bmsgd2UgY2FyZSBtdWNoIGJ1dCBQb3dlcjcgY291bGQgcnVuIGFsc28gaW4gTEUuCj4gCj4gSm9l
-bCBzZWVtZWQgdG8gc3RhdGUgdGhhdCBvbmx5IHRoZSBwb3dlcjggY2FuIGJlIExFLCBzbyB3aG8n
-cyByaWdodD8gOy0pCj4KPiBJbiBhbnkgY2FzZSwgaWYgbWFvcmUgdmFyaWFudHMgdHVybiBvdXQg
-dG8gYmUgTEUtY29tcGF0aWJsZSwgaXQgaXMgc3RpbGwKPiBwb3NzaWJsZSB0byBlbmFibGUgaHRl
-bSBpbiBmb2xsb3d1cCBwYXRjaGVzLgoKSG9uZXN0bHkgd2UgZG9uJ3QgcmVhbGx5IGNhcmUgYWJv
-dXQgUG93ZXI3L0xFLiBJdCBuZXZlciBjYW1lIG91dCBvZgp0aGUgbGFiLiBQb3dlcjggd2FzIHRo
-ZSBmaXJzdCByZWxlYXNlZCwgbGV0J3Mga2VlcCBpdCB0aGF0IHdheS4KCkMuCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hi Xuanhao,
+
+On 28/07/22 18:40, Xuanhao Shi wrote:
+> Revert the toolchain to version 10.x because of bug in 11.x:
+> when the pre-packaged GCC was built, it could be targeting
+> a newer x86_64 architecture than the processor being used.
+> Confirmed fix will be implemented in the next release: >
+> https://bugs.linaro.org/show_bug.cgi?id=5825#c19
+
+have you tried any possible work-around for this ^^^ bug?
+At the moment I don't see any other build failure using
+gcc-arm-11.2-2022.02-x86_64-arm-none-eabi, probably because every
+package that is built with it doesn't have float type in the code(I
+presume).
+
+Does the gcc bug show up while building ti-k3-image-gen or ti-k3-r5-loader?
+
+I'd prefer to find a work-around if possible rather than downgrading
+host-arm-gnu-toolchain, also because this would impact another package
+that depends on it:
+arm-trusted-firmware
+
+Please let me know, maybe I can help finding a work-around for that
+float ICE.
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+> Signed-off-by: Xuanhao Shi <x-shi@ti.com>
+> ---
+>   package/arm-gnu-toolchain/arm-gnu-toolchain.hash | 2 +-
+>   package/arm-gnu-toolchain/arm-gnu-toolchain.mk   | 6 +++---
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
+> index 48b1b55c73..168d99cd45 100644
+> --- a/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
+> +++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.hash
+> @@ -1,2 +1,2 @@
+>   # Locally calculated
+> -sha256 8c5acd5ae567c0100245b0556941c237369f210bceb196edfe5a2e7532c60326  gcc-arm-11.2-2022.02-x86_64-arm-none-eabi.tar.xz
+> +sha256 97dbb4f019ad1650b732faffcc881689cedc14e2b7ee863d390e0a41ef16c9a3  gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+> diff --git a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
+> index 3bfd516751..87e12874ea 100644
+> --- a/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
+> +++ b/package/arm-gnu-toolchain/arm-gnu-toolchain.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -ARM_GNU_TOOLCHAIN_VERSION = 11.2-2022.02
+> -ARM_GNU_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(ARM_GNU_TOOLCHAIN_VERSION)/binrel/
+> -ARM_GNU_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
+> +ARM_GNU_TOOLCHAIN_VERSION = 10.3-2021.10
+> +ARM_GNU_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-rm/$(ARM_GNU_TOOLCHAIN_VERSION)
+> +ARM_GNU_TOOLCHAIN_SOURCE = gcc-arm-none-eabi-$(ARM_GNU_TOOLCHAIN_VERSION)-x86_64-linux.tar.bz2
+>   ARM_GNU_TOOLCHAIN_LICENSE = GPL-3.0+
+>   
+>   HOST_ARM_GNU_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
