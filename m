@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AE35C00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 09:48:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB02C00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 09:49:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 108BA4091E;
-	Sun, 31 Jul 2022 09:48:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 108BA4091E
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA37682F76;
+	Sun, 31 Jul 2022 09:49:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA37682F76
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0kqc6sBo1xnJ; Sun, 31 Jul 2022 09:48:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CVaEuBFnKsUZ; Sun, 31 Jul 2022 09:49:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A29C40502;
-	Sun, 31 Jul 2022 09:48:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A29C40502
+	by smtp1.osuosl.org (Postfix) with ESMTP id 90DDD81C21;
+	Sun, 31 Jul 2022 09:49:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90DDD81C21
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1A1F51BF342
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 09:48:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0DE791BF342
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 09:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4970881279
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 09:48:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4970881279
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA3B1812E3
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 09:48:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA3B1812E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xh14GZKCjuBl for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 09:48:29 +0000 (UTC)
+ with ESMTP id GjauNYbL3gPm for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 09:48:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DEB681372
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8DEB681372
- for <buildroot@busybox.net>; Sun, 31 Jul 2022 09:48:29 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id l4so10694834wrm.13
- for <buildroot@busybox.net>; Sun, 31 Jul 2022 02:48:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9553881394
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9553881394
+ for <buildroot@busybox.net>; Sun, 31 Jul 2022 09:48:30 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id k8so8546603wrd.5
+ for <buildroot@busybox.net>; Sun, 31 Jul 2022 02:48:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=Y70+QjjC6MPH5TSqySCiuvUERZ2UhdDpJLx7tN2Y+gU=;
- b=j77Qiq89LBykwAfQ2C5eMBguJ3/R99CX8VhxH+7cbwJsD03edWNQi61286LFA2JIUQ
- VTi233XUR8yoNeuJ55CthGUuRd9b4z06c4PQeKEpg/x7G22s1oZxQb933FqUGyiWHR7i
- FYYJE/W8iT9FNVypJZDquOH0CN3LaAJJiviNU6Ajt3Bib53k/QZ/tuwlJQlXrUMQzuB1
- +rYi+91R4Xsix1PnyR51szKWN/5CgSNdf4/LFy3Grd2BQfRWoZFYRu1Jb6xD2pcuSNY3
- xkBGHMlGjcThXpSoNnMhC5UXLR4+Tq4GFcSX0XkAN3eTKZX/dIPeBGRg9mSYhAvRxS7s
- w/vA==
-X-Gm-Message-State: ACgBeo0YRio1NTt5/fG3ihCYQa04Yu4Qavt51qRfKNqmjvol5Y2vTE5x
- yhGO3hNG0S5kc8J4d4V5OzY7dACILFg=
-X-Google-Smtp-Source: AA6agR7JJr/NAAv+2GPswO1Zl8jtD+ytF5O3cUHajIPHxe7fDMX2ccE/kQvyqIekDqd/o5czDKSlvA==
-X-Received: by 2002:a5d:4dcc:0:b0:21e:e644:6af8 with SMTP id
- f12-20020a5d4dcc000000b0021ee6446af8mr7150495wru.219.1659260907766; 
- Sun, 31 Jul 2022 02:48:27 -0700 (PDT)
+ bh=4ajvaXS9p08ZPCmfvk6ejHgERkBkxZpL1Nygoo9ALa4=;
+ b=InoCAwAEF9Bic7dqQ2k6pMmAXK3n15uaVDHiSlwtXIbf2r00gDHR9ghxK3Fs1fjwh8
+ hAwHYVVA7q1OXEspTAOpwu+wW8jsMm7aaTY23XGJ41IHJCazthSQtpgwlcyynk5epwU7
+ 96XYiwLJUbv9ork3i6vLamVZITquFLyyzJy/AStWcv10ciHMNpMQAn6sZC5Z69G1MT3r
+ +Uu7P4mvPGRPm+U9U2+uiVAogdCHSPDM502yxvshU+hn5MyyuG/3SmFjbxemySkFgyN2
+ rvdQc2fq702i9J8l1Fb4/hQFjfpJfMWLjDR6tb1kg9FMqV5v1oU8DuquiAZPRb6lHe2/
+ ylJw==
+X-Gm-Message-State: ACgBeo2LhQjluWLJ0KWRj9ctGxuG6YP8YiaTGDWRwGqTkTw6Kolz4/7/
+ fKlGZza4ZbGipTCyD4Z7gm4M/Ot04F8=
+X-Google-Smtp-Source: AA6agR4adZE2fRHri1cDX0HC7cicPXZO+d7DY9r8CxJM3ptpmt0yqavcrAYHbqNiPHAti0NV6lpJGA==
+X-Received: by 2002:a05:6000:1d98:b0:21b:aead:9b6c with SMTP id
+ bk24-20020a0560001d9800b0021baead9b6cmr7228469wrb.531.1659260908842; 
+ Sun, 31 Jul 2022 02:48:28 -0700 (PDT)
 Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
  bi9-20020a05600c3d8900b003a0375c4f73sm10241477wmb.44.2022.07.31.02.48.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 Jul 2022 02:48:27 -0700 (PDT)
+ Sun, 31 Jul 2022 02:48:28 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Sun, 31 Jul 2022 11:48:07 +0200
-Message-Id: <20220731094808.1347975-3-francois.perrad@gadz.org>
+Date: Sun, 31 Jul 2022 11:48:08 +0200
+Message-Id: <20220731094808.1347975-4-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220731094808.1347975-1-francois.perrad@gadz.org>
 References: <20220731094808.1347975-1-francois.perrad@gadz.org>
@@ -73,18 +73,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=Y70+QjjC6MPH5TSqySCiuvUERZ2UhdDpJLx7tN2Y+gU=;
- b=SN/2xGqf50jwb9WkF40lOscdKdIS+Xff7032UqCRPlit3bbSFsqL/qc8y9DBwBDaFe
- VG1pp5eobV8pvvTZh24as3YpfybgAo6WlVngj7btXmCiusak/oE6OENmRRCBUiOFKq0b
- iRxX/JkxG5gYzDjlh7vs/AfK1mFLo6RDCfmb849U2OSH/xMnRR8jk8rEozZEfHxFaBKt
- Y061sJlDaiLrIonvOMV+ndq8/8+wmeEAnKchdeGZq69hBtuWIjHEzNOFGtxF24zqAak3
- fBL6fzhx2d6m9+MiFYb5ZX7Qyq0aS6ExRzEsZN65d+gIfeTsxfgfhKWF/lLddOe/tfNH
- EZeg==
+ bh=4ajvaXS9p08ZPCmfvk6ejHgERkBkxZpL1Nygoo9ALa4=;
+ b=RL0G6kvZzwEac3AQJkyZm+ROFIu2AMS/IlgJQgzFcKMM4pFYxScUm+kHxqbhI6h8aM
+ sswIhowqDl86UivGXi/p5SZQaC+O+h8OrIcYlG/TCdOFJnLj/poNsx1isY9KTUkdvlDu
+ VsKDv/6KNghHSaAYg3CspqNtHQd7rAZrY8K0qNOjEs0x3KbuX9negG2f3K5KYcR7QF+Q
+ oU2n1Ul//JNeAc5b+IEBDvO5XThth9s5ezt9Rlri8whxAaWcjfT1ylbvZVgl1xOKY3GS
+ ZDwtAMVcpz90ggUyNDJ7LOl6ZREWWdXAgY6yzowRx4DrJHczD3xDus2thASIo1B661zS
+ 4w+Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=SN/2xGqf
-Subject: [Buildroot] [PATCH 2/3] package/qoriq-cadence-dp-firmware: add
- install in target
+ header.a=rsa-sha256 header.s=20210112 header.b=RL0G6kvZ
+Subject: [Buildroot] [PATCH 3/3] board/freescale/ls1028ardb: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,42 +100,206 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-this firmware must be installed with the kernel,
-there are 2 cases:
-- in $(TARGET_DIR)/boot
-- in $(BINARIES), in order to be bundled into a boot partition
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk  | 6 ++++++
- 1 file changed, 6 insertions(+)
+ DEVELOPERS                                    |  2 +
+ board/freescale/ls1028ardb/genimage.cfg       | 23 +++++++
+ board/freescale/ls1028ardb/readme.txt         | 60 +++++++++++++++++++
+ .../boot/extlinux/extlinux.conf               |  4 ++
+ configs/ls1028ardb_defconfig                  | 60 +++++++++++++++++++
+ 5 files changed, 149 insertions(+)
+ create mode 100644 board/freescale/ls1028ardb/genimage.cfg
+ create mode 100644 board/freescale/ls1028ardb/readme.txt
+ create mode 100644 board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
+ create mode 100644 configs/ls1028ardb_defconfig
 
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-index 23643d24e..a8172cb1d 100644
---- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-@@ -10,8 +10,10 @@ QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_
- QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP-Binary-EULA
- QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING
- QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
-+ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),)
- QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
- QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
-+endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 780ec2041..7bca42074 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -980,9 +980,11 @@ N:	Francisco Gonzalez <gzmorell@gmail.com>
+ F:	package/ser2net/
  
- # Helper for self-extracting binaries distributed by NXP.
- #
-@@ -42,6 +44,10 @@ define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
- 	$(call QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
- endef
- 
-+define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(TARGET_DIR)/boot/ls1028a-dp-fw.bin
-+endef
+ N:	Francois Perrad <francois.perrad@gadz.org>
++F:	board/freescale/ls1028ardb/
+ F:	board/olimex/a20_olinuxino
+ F:	board/olimex/imx233_olinuxino/
+ F:	board/olimex/stmp1_olinuxino/
++F:	configs/ls1028ardb_defconfig
+ F:	configs/olimex_a20_olinuxino_*
+ F:	configs/olimex_imx233_olinuxino_defconfig
+ F:	configs/olimex_stmp157_olinuxino_lime_defconfig
+diff --git a/board/freescale/ls1028ardb/genimage.cfg b/board/freescale/ls1028ardb/genimage.cfg
+new file mode 100644
+index 000000000..3efef0bff
+--- /dev/null
++++ b/board/freescale/ls1028ardb/genimage.cfg
+@@ -0,0 +1,23 @@
++image sdcard.img {
++	hdimage {
++	}
 +
- define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
- endef
++	partition fsbl {
++		offset = 4K
++		in-partition-table = "no"
++		image = "bl2_sd.pbl"
++	}
++
++	partition ssbl {
++		offset = 1M
++		in-partition-table = "no"
++		image = "fip.bin"
++	}
++
++	partition rootfs {
++		offset = 8M
++		partition-type = 0x83
++		bootable = "true"
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/freescale/ls1028ardb/readme.txt b/board/freescale/ls1028ardb/readme.txt
+new file mode 100644
+index 000000000..9fc8e989c
+--- /dev/null
++++ b/board/freescale/ls1028ardb/readme.txt
+@@ -0,0 +1,60 @@
++**************
++NXP LS1028ARDB
++**************
++
++This file documents the Buildroot support for the LS1028A Reference Design Board.
++
++for more details about the board and the QorIQ Layerscape SoC, see the following pages:
++  - https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
++  - https://www.nxp.com/LS1028A
++
++Build
++=====
++
++First, configure Buildroot for the LS1028ARDB board:
++
++  make ls1028ardb_defconfig
++
++Build all components:
++
++  make
++
++You will find in output/images/ the following files:
++  - bl2_sd.pbl
++  - fip.bin
++  - fsl-ls1028a-rdb.dtb
++  - Image
++  - PBL.bin
++  - rootfs.ext2
++  - rootfs.ext4 -> rootfs.ext2
++  - sdcard.img
++  - u-boot.bin
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a SD card. Launch the following
++command as root:
++
++  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/freescale/ls1028ardb/genimage.cfg.
++
++Boot the LS1028ARDB board
++=========================
++
++To boot your newly created system:
++- insert the SD card in the SD slot of the board;
++- Configure the switches SW2[1:4] = 1000 (select SD Card boot option)
++- put a DB9F cable into the UART1 Port and connect using a terminal
++  emulator at 115200 bps, 8n1;
++- power on the board.
+diff --git a/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
+new file mode 100644
+index 000000000..c08ddde10
+--- /dev/null
++++ b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++label ls1028ardb-buildroot
++  kernel /boot/Image
++  devicetree /boot/fsl-ls1028a-rdb.dtb
++  append root=/dev/mmcblk0p1 rootwait
+diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
+new file mode 100644
+index 000000000..e3e4760cd
+--- /dev/null
++++ b/configs/ls1028ardb_defconfig
+@@ -0,0 +1,60 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a72=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="ls1028a"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_OVERLAY="board/freescale/ls1028ardb/rootfs_overlay"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1028ardb/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/linux"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="LSDK-21.08"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-rdb"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Target package
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Bootloaders
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/atf"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="LSDK-21.08"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BOOT_MODE=sd"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/u-boot"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="LSDK-21.08"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1028ardb_tfa"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++
++# Host utilities
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_QORIQ_RCW_INTREE="ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.bin"
 -- 
 2.34.1
 
