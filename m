@@ -1,90 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72A3DC00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 14:34:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 494F3C00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 14:37:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E21D061054;
-	Sun, 31 Jul 2022 14:34:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E21D061054
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VYqu5G0IlaAT; Sun, 31 Jul 2022 14:34:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF0AF60F3F;
-	Sun, 31 Jul 2022 14:34:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF0AF60F3F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C88111BF2CB
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 14:34:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3B6B40275
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 14:34:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3B6B40275
+	by smtp2.osuosl.org (Postfix) with ESMTP id D1D5740CF2;
+	Sun, 31 Jul 2022 14:37:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1D5740CF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gkQGNHs9LqAY for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 14:34:28 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7SdScmVjlcCG; Sun, 31 Jul 2022 14:37:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 03F6E40275;
+	Sun, 31 Jul 2022 14:37:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03F6E40275
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B5B7E1BF2CB
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 14:37:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 907D982974
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 14:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 907D982974
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8JpqnAtleLGT for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 14:37:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC97740194
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com
- [IPv6:2607:f8b0:4864:20::931])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC97740194
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 14:34:27 +0000 (UTC)
-Received: by mail-ua1-x931.google.com with SMTP id q46so3622432uaq.0
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 07:34:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7B7881C2F
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com
+ [IPv6:2607:f8b0:4864:20::92b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C7B7881C2F
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 14:37:18 +0000 (UTC)
+Received: by mail-ua1-x92b.google.com with SMTP id s18so1015388uac.10
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 07:37:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:subject:references
  :message-id:cc:to:from:date:x-gm-message-state:from:to:cc;
- bh=K59c9b39E1YjTehraWn8D/X5F9EvVY2EqDr8cLLFfzo=;
- b=B/xPzH55zNJ4gqfsxllGF+/mgRGdMSUxsyGWranK2U5dxBgKJ2LrnjvfYboYUrotAU
- mnxY1MO5Sie5TjNF6Zki5tWfwLZRSZ54GsPBuMwyi3zs3sWSE4vmLxevpfM8nQQGeQAb
- D31IyDB3PqErsAdQDU7kRui3vN6cOzmfsTEcdw/nJNDNIOYWA+YYapIoXkgGI1ak3k5n
- 88WCX6QCfJkhr/DHEuOHAcnHld6CYKLghzsUcwSTuLdt/Wr0/XdAPwMchD0OwzUbHfAG
- 2Ci1IiYCjN29qd0yrd0oH1RzUKIyNH7WeKs01veSIgJR679d2nwonYm7NMpLPr6HHtFA
- IQIw==
-X-Gm-Message-State: ACgBeo1lfnHpyQk8rrwdlLIwl5bkja2gTFj6EMBihhrZH19c4keB3m0W
- UHFkGq1+7jHAWzkq/gPqYFdCibl1jzk=
-X-Google-Smtp-Source: AA6agR6a8VtxId2EyPVcLT8EhLCia0v2hRYXeOtnp2gN+Po74z8EsxP7xxd1vUTnkk+ibDZSw9kQUg==
-X-Received: by 2002:a05:6130:1097:b0:383:770c:d494 with SMTP id
- cd23-20020a056130109700b00383770cd494mr4739099uab.101.1659278066636; 
- Sun, 31 Jul 2022 07:34:26 -0700 (PDT)
+ bh=UsLaUmw975UsgQj+BEq66FGNEThPHbq7vrYpy3IEJ44=;
+ b=vta7aGrTFYk7V5HMVBwr7WxeoVdkm/H1KyJftnQsrjSvHSdbdAycklu/nU0oNhC9ju
+ Lney16T5gfeLMtSWKyuU3Ti4HcR+i9+yCfaIEW6KM2fQm50s+DVKdo3vIvc1ZEm6R+pb
+ ftHwr1bH4v6o3t265pF/g+Bvn4Y19r+yDTvDCUzuuUi8Pg9SILI2eddtOZD8YLA3IouH
+ TuAXR93N+pCjFN2k3xh4dj83QbI0wCYZmUK/rKaYaPszfb7S8i+ue+PRsvhgx2bvOJMT
+ LDlXHYQYkYu9UIgI3BsrKlVzQkGevHraIVsYp5Y3gMozw73U2ajfxcTk0Qv9sfFvXms+
+ KnhQ==
+X-Gm-Message-State: ACgBeo1STtC10BULHFOS/yqYj/Rg9+ijs1a7M+awdZUqCnrLHtmEFbfO
+ asOYx0r6kB22a4SLnVbOTIM=
+X-Google-Smtp-Source: AA6agR5461Z0MlCOzLQtZQ2AY17ce89/qEdQjVLbXJ0riUXOKaqZH4rZY7pl0i+hPgtmiGvqdE9NHQ==
+X-Received: by 2002:ab0:2150:0:b0:384:ba63:69f9 with SMTP id
+ t16-20020ab02150000000b00384ba6369f9mr4733559ual.100.1659278237667; 
+ Sun, 31 Jul 2022 07:37:17 -0700 (PDT)
 Received: from gmail.com ([191.187.223.18]) by smtp.gmail.com with ESMTPSA id
- m37-20020ab013a8000000b0038342b58f6csm4418052uae.17.2022.07.31.07.34.24
+ x82-20020a1f3155000000b003743e7c87c5sm4315725vkx.5.2022.07.31.07.37.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 Jul 2022 07:34:25 -0700 (PDT)
-Date: Sun, 31 Jul 2022 11:34:24 -0300
+ Sun, 31 Jul 2022 07:37:16 -0700 (PDT)
+Date: Sun, 31 Jul 2022 11:37:15 -0300
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: romain.naour@smile.fr
-Message-ID: <62e692f0d91cc_bff73a78-1a3@xultri.mail>
-References: <9abfda1c-d67b-7102-a78e-e17a06da90d5@smile.fr>
+Message-ID: <62e6939b97dd4_bff73b04129@xultri.mail>
+References: <ba33b6d8-53e0-e3e0-4b37-de13643bc9a1@smile.fr>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
- boundary="--==_mimepart_62e692ef4048e_bff73a78-251";
- charset=UTF-8
+ boundary="--==_mimepart_62e6939a1a03_bff73b040f0"; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:subject:references
  :message-id:cc:to:from:date:from:to:cc;
- bh=K59c9b39E1YjTehraWn8D/X5F9EvVY2EqDr8cLLFfzo=;
- b=ObVGKZ2egiJ3LWgpAHjWz1VCy4j96SkndPnuTOePPp+v1V51oj38QPCEsJRLo9Q2lu
- hTIcYbYvMAax+A9bNQCaB7rZB7WSbRrwsmROSwoyMtCjqNu5QOc6bo6ds47VfuY+3/Fr
- lPCkl1wLz/hO4pSvfGs1lQm/h8b/gG1VTvNfF3Gwc7ro0vhqddELOx6yjQaX1edYszV3
- MRsduISZh44/umAxCRA3GkdFJKRh0mRhCujL0Em9nnmYS5pS9BEcQrYMHJsmeJLO+uZY
- x6MAdYM24o/O5fUKTuRxhtTCyf/Ind8uiZmyZmMMAptfC80hzkKWLvDqy33NnyHO9Q5t
- S2EA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=UsLaUmw975UsgQj+BEq66FGNEThPHbq7vrYpy3IEJ44=;
+ b=AQYYj9/af3ix6K9ieKxnR+SVOucwi4VED64tfV2XH1218FtwFV6OozVppa0PPc2hZL
+ I2UhW3rRWxusowxO+vYfwTcWuiQrMsFaqDKzUHc80tzWydz8wTf0mHZ7ZV2UiDZrjvde
+ HEqe3RsKeuZELbxhU8zFizGMNRSqtYGzNpsoBDj90U11/smYOb8AhtyVdh0qjjr6CONd
+ AZBCsWvtJuW1+DED5wbmmu4x9JS/26lPafRxYyY4bLXG1NOuPgz2rK3ah5Zwed4DdTeV
+ AY/864TNkk/XOkZ1NC5hZxjsM0tHQGQMdzLHuUdDda7qcMweMpUL35gDQVOzRFp6WG/w
+ 6ruQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ObVGKZ2e
-Subject: Re: [Buildroot] [PATCH 07/16] Makefile: run check-* inside docker
- image
+ header.a=rsa-sha256 header.s=20210112 header.b=AQYYj9/a
+Subject: Re: [Buildroot] [PATCH 08/16] docs/manual: check-package before
+ submitting patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,86 +95,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: thomas.de_schampheleire@nokia.com, buildroot@buildroot.org
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
-----==_mimepart_62e692ef4048e_bff73a78-251
+----==_mimepart_62e6939a1a03_bff73b040f0
 Content-Type: text/plain;
  charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hello,=0D
+=0D
+On Wed, Jul 27, 2022 at 10:22 AM, Romain Naour wrote:=0D
+=0D
+> Le 24/07/2022 =C3=A0 07:49, Ricardo Martincoski a =C3=A9crit=C2=A0:=0D
+>> Add 'make check-package' to the default workflow of submitting patches=
+,=0D
+>> just after the rebase and before using format-patch.=0D
+>> =0D
+>> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>=0D
+>> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>=0D
+>> ---=0D
+>>  docs/manual/contribute.txt | 6 ++++++=0D
+>>  1 file changed, 6 insertions(+)=0D
+>> =0D
+>> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt=0D=
 
-On Wed, Jul 27, 2022 at 10:16 AM, Romain Naour wrote:
+>> index e588c69be6..c5652af7a0 100644=0D
+>> --- a/docs/manual/contribute.txt=0D
+>> +++ b/docs/manual/contribute.txt=0D
+>> @@ -294,6 +294,12 @@ $ git fetch --all --tags=0D
+>>  $ git rebase origin/master=0D
+>>  ---------------------=0D
+>>  =0D
+>> +Now run some basic checks for the changes you committed:=0D
+> =0D
+> "some basic checks" may be not really meaningful for newcomers.=0D
+=0D
+Indeed.=0D
+=0D
+> =0D
+> I would add a small description of what check-package really does.=0D
+=0D
+Maybe:=0D
+Now check the coding style for the changes you committed:=0D
+=0D
+Notice that the hyperlink to the section that describes what it does is r=
+ight=0D
+above the added text.=0D
+=0D
+282 Buildroot provides a handy tool to check for common coding style=0D
+283 mistakes on files you created or modified, called +check-package+ (se=
+e=0D
+284 xref:check-package[] for more information).=0D
+285=0D
+286 =3D=3D=3D=3D Preparing a patch series=0D
+287=0D
+288 Starting from the changes committed in your local git view, _rebase_=0D=
 
-[snip]
->> +check_inside_docker := $(shell if [ "`groups`" = 'br-user' ]; then echo y; else echo n; fi)
->> +
->> +# List of target that need to run inside docker image to ensure reproducible results
->> +inside_docker_targets := check-package check-flake8
->> +
->> +ifeq ($(check_inside_docker),n)
->> +$(inside_docker_targets):
->> +	$(Q)utils/docker-run $(MAKE) V=$(V) $@
-> 
-> While I understand the reproducibility issue, I'm not sure I really wand my make
-> check-package command starting starting a docker container.
+289 your development branch on top of the upstream tree before generating=
+=0D
+290 a patch set. To do so, run:=0D
+291=0D
+292 ---------------------=0D
+293 $ git fetch --all --tags=0D
+294 $ git rebase origin/master=0D
+295 ---------------------=0D
+296 =0D
+297 Now check the coding style for the changes you committed:=0D
+298 =0D
+299 ---------------------=0D
+300 $ make check-package=0D
+301 ---------------------=0D
+302 =0D
+303 Now, you are ready to generate then submit your patch set.=0D
+=0D
+=0D
+Regards,=0D
+Ricardo=
 
-I really prefer a 'good default' with reproducible results.
-Advanced users can always call check-package directly.
-
-But perhaps some developer can hit some corporate policies when developing
-patches inside the company:
-- can't run docker at all
-- can't download docker images from the internet
-For that poor souls, I will withdraw this patch and resend. :)
-
-Well... we could instead change de manual to say:
-
-299 ---------------------
-300 $ utils/docker-run make check-package
-301 ---------------------
-
-> 
-> I guess Buildroot user (or CI build machine) can do the same if they want.
-
-CI builds already run inside the same docker image, so no change there.
-
-I was trying to accomplish with this series, among other things, a way to
-ensure the same results locally when compared to CI builds.
-
-One interesting reproducibility issue that is already taken into account by this
-series, even outside the docker image:
-patch 14
-file utils/check-package
-line 98
-
-I developed outside the docker image and when I run on CI build the python files
-were being not tested and ignored by check-package.
-See the reason:
-
-$ utils/docker-run python3 -c \
-  "import magic;" \
-  "print(magic.from_file('utils/brmake', mime=True));" \
-  "print(magic.from_file('utils/check-package', mime=True))"; 
-text/x-shellscript
-text/x-script.python
-
-$ python3 -c \
-  "import magic;" \
-  "print(magic.from_file('utils/brmake', mime=True));" \
-  "print(magic.from_file('utils/check-package', mime=True))"; 
-text/x-shellscript
-text/x-python
-
-But as I say above, I will withdraw this patch and resend the series.
-
-
-Regards,
-Ricardo
-----==_mimepart_62e692ef4048e_bff73a78-251
+----==_mimepart_62e6939a1a03_bff73b040f0
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -186,4 +186,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
-----==_mimepart_62e692ef4048e_bff73a78-251--
+----==_mimepart_62e6939a1a03_bff73b040f0--
