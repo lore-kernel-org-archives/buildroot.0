@@ -1,89 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB02C00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 09:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1C92C00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 10:10:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA37682F76;
-	Sun, 31 Jul 2022 09:49:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA37682F76
+	by smtp3.osuosl.org (Postfix) with ESMTP id 645E560E7C;
+	Sun, 31 Jul 2022 10:10:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 645E560E7C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CVaEuBFnKsUZ; Sun, 31 Jul 2022 09:49:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rHff3TB2VWHN; Sun, 31 Jul 2022 10:10:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90DDD81C21;
-	Sun, 31 Jul 2022 09:49:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90DDD81C21
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0DE791BF342
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 09:48:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E7E960E6B;
+	Sun, 31 Jul 2022 10:10:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E7E960E6B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 42C0C1BF30A
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 10:10:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA3B1812E3
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 09:48:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA3B1812E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C8FB60E6B
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 10:10:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C8FB60E6B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GjauNYbL3gPm for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 09:48:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9553881394
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9553881394
- for <buildroot@busybox.net>; Sun, 31 Jul 2022 09:48:30 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id k8so8546603wrd.5
- for <buildroot@busybox.net>; Sun, 31 Jul 2022 02:48:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=4ajvaXS9p08ZPCmfvk6ejHgERkBkxZpL1Nygoo9ALa4=;
- b=InoCAwAEF9Bic7dqQ2k6pMmAXK3n15uaVDHiSlwtXIbf2r00gDHR9ghxK3Fs1fjwh8
- hAwHYVVA7q1OXEspTAOpwu+wW8jsMm7aaTY23XGJ41IHJCazthSQtpgwlcyynk5epwU7
- 96XYiwLJUbv9ork3i6vLamVZITquFLyyzJy/AStWcv10ciHMNpMQAn6sZC5Z69G1MT3r
- +Uu7P4mvPGRPm+U9U2+uiVAogdCHSPDM502yxvshU+hn5MyyuG/3SmFjbxemySkFgyN2
- rvdQc2fq702i9J8l1Fb4/hQFjfpJfMWLjDR6tb1kg9FMqV5v1oU8DuquiAZPRb6lHe2/
- ylJw==
-X-Gm-Message-State: ACgBeo2LhQjluWLJ0KWRj9ctGxuG6YP8YiaTGDWRwGqTkTw6Kolz4/7/
- fKlGZza4ZbGipTCyD4Z7gm4M/Ot04F8=
-X-Google-Smtp-Source: AA6agR4adZE2fRHri1cDX0HC7cicPXZO+d7DY9r8CxJM3ptpmt0yqavcrAYHbqNiPHAti0NV6lpJGA==
-X-Received: by 2002:a05:6000:1d98:b0:21b:aead:9b6c with SMTP id
- bk24-20020a0560001d9800b0021baead9b6cmr7228469wrb.531.1659260908842; 
- Sun, 31 Jul 2022 02:48:28 -0700 (PDT)
-Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
- by smtp.gmail.com with ESMTPSA id
- bi9-20020a05600c3d8900b003a0375c4f73sm10241477wmb.44.2022.07.31.02.48.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 Jul 2022 02:48:28 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Sun, 31 Jul 2022 11:48:08 +0200
-Message-Id: <20220731094808.1347975-4-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220731094808.1347975-1-francois.perrad@gadz.org>
-References: <20220731094808.1347975-1-francois.perrad@gadz.org>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 40O1wu8gn-y9 for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 10:10:33 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F4C960E61
+Received: from smtpcmd0756.aruba.it (smtpcmd0756.aruba.it [62.149.156.56])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F4C960E61
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 10:10:32 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.73.23])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id I5u2o6IGjrvmbI5u3oSafQ; Sun, 31 Jul 2022 12:10:31 +0200
+Message-ID: <b9966345-bafc-1656-d67c-90fc2bbb738c@benettiengineering.com>
+Date: Sun, 31 Jul 2022 12:10:27 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=4ajvaXS9p08ZPCmfvk6ejHgERkBkxZpL1Nygoo9ALa4=;
- b=RL0G6kvZzwEac3AQJkyZm+ROFIu2AMS/IlgJQgzFcKMM4pFYxScUm+kHxqbhI6h8aM
- sswIhowqDl86UivGXi/p5SZQaC+O+h8OrIcYlG/TCdOFJnLj/poNsx1isY9KTUkdvlDu
- VsKDv/6KNghHSaAYg3CspqNtHQd7rAZrY8K0qNOjEs0x3KbuX9negG2f3K5KYcR7QF+Q
- oU2n1Ul//JNeAc5b+IEBDvO5XThth9s5ezt9Rlri8whxAaWcjfT1ylbvZVgl1xOKY3GS
- ZDwtAMVcpz90ggUyNDJ7LOl6ZREWWdXAgY6yzowRx4DrJHczD3xDus2thASIo1B661zS
- 4w+Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=RL0G6kvZ
-Subject: [Buildroot] [PATCH 3/3] board/freescale/ls1028ardb: new board
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220728164006.16652-1-x-shi@ti.com>
+ <20220728164006.16652-3-x-shi@ti.com>
+ <f8d347ce-9c81-6ffd-a44e-ccfd72af7739@benettiengineering.com>
+ <20220731102737.3eb2525d@windsurf>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220731102737.3eb2525d@windsurf>
+X-CMAE-Envelope: MS4xfIsh+7EZOTW3IvEsuxjIBjhFBOA4UHdG7z27/QuEkDqRCQ5pr7VSu76sBYTxH1ulNNw85zlUNA2jaE1t8WR7B/cebuxhuxfUkzLhvKav30t1jOixV9S7
+ SEZ1CAOKlwk+u9s31A7FnuDmI0uVaP+r6H3sQxIc/egeNYhWGWLHKaMdMd74ubPLmsm5F+VhHXXN1VVzaN079MnhL7X+t5ptAQ6VtIakIo3/uwztsc5dWwew
+ SBlmChFBk70jAj6+ic+pqEsRsAFKBN2FxBPOUnapxL57Jzt8dWPQy9LX8ymU9SPHauu1/YT45vjPkofwOyhX5/Lc+xAzE1qe7n3lPZVMmj3QL0hWJcsSLky9
+ yrYSJhvM
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1659262231; bh=xmDpuZCe1drN94bD5JKcbIj6QHE5HteqWa/MiUQQdKc=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=eA+h6eUKHvMZFMyTx+U+DaOBgUn4JeQEnc2kEebNiaFerxc6PxxUN6lRNfjaeKPw4
+ 3H9bv3oDVabtBl6HhHDSfVisM4Zxek2hJ73grZtVCTYApOLuPjM11M2awAplbnrOgf
+ 9NroSDk79Y07dnjgB/9z0mYMAc99mt0fJza6qAmMFN1Lz9AAAI1OtH44u7JVh3gabb
+ UCaiddASX788v2iIsZeMQBVAWi1SsFM1N3p7Z/Dk/ViGv9tnUN4KColQ4i4P5MDnIp
+ K7RTgd8j+qWqI7nNj9QUKRVh9TRO50GtVoUfKyUMpOkaU/QSL0C5n1H2GBKyyuuRkn
+ x5VFOgdul68PA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=eA+h6eUK
+Subject: Re: [Buildroot] [PATCH v2 2/4] boot/ti-k3-r5-loader: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,214 +80,153 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Xuanhao Shi <x-shi@ti.com>, buildroot@buildroot.org,
+ Suniel Mahesh <sunil@amarulasolutions.com>, Anand Gadiyar <gadiyar@ti.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- DEVELOPERS                                    |  2 +
- board/freescale/ls1028ardb/genimage.cfg       | 23 +++++++
- board/freescale/ls1028ardb/readme.txt         | 60 +++++++++++++++++++
- .../boot/extlinux/extlinux.conf               |  4 ++
- configs/ls1028ardb_defconfig                  | 60 +++++++++++++++++++
- 5 files changed, 149 insertions(+)
- create mode 100644 board/freescale/ls1028ardb/genimage.cfg
- create mode 100644 board/freescale/ls1028ardb/readme.txt
- create mode 100644 board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
- create mode 100644 configs/ls1028ardb_defconfig
+Hi Thomas,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 780ec2041..7bca42074 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -980,9 +980,11 @@ N:	Francisco Gonzalez <gzmorell@gmail.com>
- F:	package/ser2net/
- 
- N:	Francois Perrad <francois.perrad@gadz.org>
-+F:	board/freescale/ls1028ardb/
- F:	board/olimex/a20_olinuxino
- F:	board/olimex/imx233_olinuxino/
- F:	board/olimex/stmp1_olinuxino/
-+F:	configs/ls1028ardb_defconfig
- F:	configs/olimex_a20_olinuxino_*
- F:	configs/olimex_imx233_olinuxino_defconfig
- F:	configs/olimex_stmp157_olinuxino_lime_defconfig
-diff --git a/board/freescale/ls1028ardb/genimage.cfg b/board/freescale/ls1028ardb/genimage.cfg
-new file mode 100644
-index 000000000..3efef0bff
---- /dev/null
-+++ b/board/freescale/ls1028ardb/genimage.cfg
-@@ -0,0 +1,23 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition fsbl {
-+		offset = 4K
-+		in-partition-table = "no"
-+		image = "bl2_sd.pbl"
-+	}
-+
-+	partition ssbl {
-+		offset = 1M
-+		in-partition-table = "no"
-+		image = "fip.bin"
-+	}
-+
-+	partition rootfs {
-+		offset = 8M
-+		partition-type = 0x83
-+		bootable = "true"
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/freescale/ls1028ardb/readme.txt b/board/freescale/ls1028ardb/readme.txt
-new file mode 100644
-index 000000000..9fc8e989c
---- /dev/null
-+++ b/board/freescale/ls1028ardb/readme.txt
-@@ -0,0 +1,60 @@
-+**************
-+NXP LS1028ARDB
-+**************
-+
-+This file documents the Buildroot support for the LS1028A Reference Design Board.
-+
-+for more details about the board and the QorIQ Layerscape SoC, see the following pages:
-+  - https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
-+  - https://www.nxp.com/LS1028A
-+
-+Build
-+=====
-+
-+First, configure Buildroot for the LS1028ARDB board:
-+
-+  make ls1028ardb_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find in output/images/ the following files:
-+  - bl2_sd.pbl
-+  - fip.bin
-+  - fsl-ls1028a-rdb.dtb
-+  - Image
-+  - PBL.bin
-+  - rootfs.ext2
-+  - rootfs.ext4 -> rootfs.ext2
-+  - sdcard.img
-+  - u-boot.bin
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on a SD card. Launch the following
-+command as root:
-+
-+  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-+
-+*** WARNING! This will destroy all the card content. Use with care! ***
-+
-+For details about the medium image layout, see the definition in
-+board/freescale/ls1028ardb/genimage.cfg.
-+
-+Boot the LS1028ARDB board
-+=========================
-+
-+To boot your newly created system:
-+- insert the SD card in the SD slot of the board;
-+- Configure the switches SW2[1:4] = 1000 (select SD Card boot option)
-+- put a DB9F cable into the UART1 Port and connect using a terminal
-+  emulator at 115200 bps, 8n1;
-+- power on the board.
-diff --git a/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 000000000..c08ddde10
---- /dev/null
-+++ b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label ls1028ardb-buildroot
-+  kernel /boot/Image
-+  devicetree /boot/fsl-ls1028a-rdb.dtb
-+  append root=/dev/mmcblk0p1 rootwait
-diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
-new file mode 100644
-index 000000000..e3e4760cd
---- /dev/null
-+++ b/configs/ls1028ardb_defconfig
-@@ -0,0 +1,60 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a72=y
-+
-+# Toolchain
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="ls1028a"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_ROOTFS_OVERLAY="board/freescale/ls1028ardb/rootfs_overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1028ardb/genimage.cfg"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/linux"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="LSDK-21.08"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-rdb"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Target package
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloaders
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/atf"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="LSDK-21.08"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BOOT_MODE=sd"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/u-boot"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="LSDK-21.08"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1028ardb_tfa"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+
-+# Host utilities
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_QORIQ_RCW_INTREE="ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.bin"
+On 31/07/22 10:27, Thomas Petazzoni via buildroot wrote:
+> Hello,
+> 
+> On Sun, 31 Jul 2022 02:54:09 +0200
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+> 
+>>> +config BR2_TARGET_TI_K3_R5_LOADER_BOARD
+>>> +	string "Board to configure for"
+>>> +	depends on BR2_TARGET_TI_K3_R5_LOADER
+>>> +	help
+>>> +	  Specify the board to configure the bootloader for.
+>>> +	  This should be the name of a board under board/ti
+>>> +	  For example, "am64x_evm".
+>>
+>> Here ^^^ I would substitute "config" with "choice", this way everything
+>> is easier from the user point of view. On patch 4/4 you're adding 2
+>> boards, so I think it makes sense to add every possible choice(2 for the
+>> moment).
+> 
+> I am afraid I will disagree here. For this type of option, we
+> definitely prefer to have a free-form string rather than an exhaustive
+> list of possible options. See U-Boot/Linux/Barebox and other packages
+> that have configurable defconfigs.
+> 
+> So please keep the string option.
+> 
+> 
+>>> +TI_K3_R5_LOADER_VERSION = 2022.10-rc1
+>>
+>> -rc1 version is the possibly buggiest version you can pick. There are
+>> other 2 possible solutions:
+>> 1. use 2022.07 and backport all needed patches on a dedicated
+>> repository instead of using official u-boot repository
+>> 2. wait a bit for at least rc2/3(soon) and later when 2022.10 is
+>> released, bump it
+> 
+> I'd say it's fine for the time being to have -rc1, with the assumption
+> that as soon as 2022.10 is out, we bump to it. After all, this package
+> is very specific to TI boards, so if this -rc1 has been tested as
+> working in this particular context, that's fine.
+> 
+>>> +TI_K3_R5_LOADER_SITE = https://ftp.denx.de/pub/u-boot
+>>> +TI_K3_R5_LOADER_SOURCE = u-boot-$(TI_K3_R5_LOADER_VERSION).tar.bz2
+>>> +TI_K3_R5_LOADER_LICENSE = GPL-2.0+
+>>> +TI_K3_R5_LOADER_LICENSE_FILES = Licenses/gpl-2.0.txt
+>>> +TI_K3_R5_LOADER_CPE_ID_VENDOR = denx
+>>> +TI_K3_R5_LOADER_CPE_ID_PRODUCT = u-boot
+>>> +TI_K3_R5_LOADER_INSTALL_IMAGES = YES
+>>> +TI_K3_R5_LOADER_DEPENDENCIES = \
+>>> +	host-pkgconf \
+>>> +	$(BR2_MAKE_HOST_DEPENDENCY) \
+>>
+>> What is this ^^^ needed for?
+> 
+> I guess this is mainly because it's copy/pasted from uboot.mk, and the
+> explanation is:
+> 
+> # u-boot 2020.01+ needs make 4.0+
+> 
+>>> +	host-arm-gnu-toolchain
+>>> +
+>>> +TI_K3_R5_LOADER_MAKE = $(BR2_MAKE)
+>>
+>> This ^^^ looks superflous, you can directly use $(BR2_MAKE) below
+> 
+> This is also modeled after uboot.mk, though I would agree with you.
+> 
+>>> +TI_K3_R5_LOADER_KCONFIG_DEPENDENCIES = \
+>>> +	toolchain \
+>>> +	$(BR2_MAKE_HOST_DEPENDENCY) \
+>>> +	$(BR2_BISON_HOST_DEPENDENCY) \
+>>> +	$(BR2_FLEX_HOST_DEPENDENCY)
+>>
+>> "toolchain" should imply all above _HOST_DEPENDENCY. But here you're
+>> using host-arm-gnu-toolchain, so toolchain shouldn't be needed, or yes?
+> 
+> Again, this is modeled after uboot.mk. But indeed, here the toolchain
+> dependency does not make sense, since CROSS_COMPILE points to the
+> toolchain installed by host-arm-gnu-toolchain. So here, we should
+> replace "toolchain" by "host-arm-gnu-toolchain".
+> 
+>>> +TI_K3_R5_LOADER_BOARD = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_BOARD))
+>>
+>> This ^^^ can be avoided too since you use it one line below with a
+>> suffix only
+> 
+> I think it's fine, as it makes the following line more readable.
+> 
+>>> +TI_K3_R5_LOADER_KCONFIG_DEFCONFIG = $(TI_K3_R5_LOADER_BOARD)_r5_defconfig
+>>> +TI_K3_R5_LOADER_MAKE_OPTS += \
+>>> +	CROSS_COMPILE=$(HOST_ARM_GNU_TOOLCHAIN_INSTALL_DIR)/bin/arm-none-eabi- \
+>>> +	ARCH=arm
+>>
+>> What is the reason why you need to use arm-gnu-toolchain to build u-boot
+>> SPL? Can you please explain it in commit log?
+> 
+> This has been explained already in previous iterations of the patch
+> series.
+> 
+> This package is about building a special U-Boot, which targets a
+> Cortex-R5 core, that acts as a kind of "co-processor". Since the main
+> processor is an ARM64 core, and an ARM64 toolchain can only be 64-bit
+> code, we need a separate toolchain to be able to build ARM 32-bit code
+> for the Cortex-R5 core.
+
+Oh, thank you for the explanation, I didn't go so in depth, now
+the entire situation changes. I had to go more in depth before
+reviewing.
+
+>>> +define TI_K3_R5_LOADER_BUILD_CMDS
+>>> +	$(TI_K3_R5_LOADER_MAKE) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)
+>>> +endef
+>>> +
+>>> +define TI_K3_R5_LOADER_INSTALL_IMAGES_CMDS
+>>> +	cp $(@D)/spl/u-boot-spl.bin $(BINARIES_DIR)/r5-u-boot-spl.bin
+>>> +endef
+>>> +
+>>> +$(eval $(kconfig-package))
+>>
+>> Why do you use kconfig-package? You reimplement anyway BUILD_CMDS and
+>> INSTALL_IMAGES_CMDS, so generic-package should be fine.
+> 
+> kconfig-package is special, it does not implement BUILD_CMDS,
+> INSTALL_TARGET_CMDS or INSTALL_IMAGES_CMDS. Look at uboot.mk, linux.mk,
+> busybox.mk and others that use kconfig-package. kconfig-package only
+> provides logic for the configuration step, with xxx-menuconfig,
+> xxx-xconfig, xxx-savedefconfig targets and all, but implementing the
+> BUILD_CMDS and others CMDS variables is left to the package .mk file.
+
+Ah, so it fits perfectly for this case.
+
+Thank you Thomas for explaining. I went too fast on reviewing.
+
+Kind regards
 -- 
-2.34.1
-
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
