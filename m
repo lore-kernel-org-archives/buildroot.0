@@ -1,67 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35A77C00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 10:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9225C00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 11:12:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8D6182BA7;
-	Sun, 31 Jul 2022 10:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8D6182BA7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 201E0416F2;
+	Sun, 31 Jul 2022 11:12:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 201E0416F2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZDmLfX65H5O1; Sun, 31 Jul 2022 10:43:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z91bN4ySD7wx; Sun, 31 Jul 2022 11:12:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBEDF82B08;
-	Sun, 31 Jul 2022 10:43:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBEDF82B08
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D40C1BF30A
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 10:43:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E84B84175C;
+	Sun, 31 Jul 2022 11:12:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E84B84175C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ECA161BF589
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 11:12:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7554182B08
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 10:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7554182B08
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3BD54175C
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 11:12:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3BD54175C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fHIr78QSMNNF for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 10:43:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4552C81B6D
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4552C81B6D
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 10:43:04 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.73.23])
- by Aruba Outgoing Smtp  with ESMTPSA
- id I6PWo6huxrvmbI6PWoSnkW; Sun, 31 Jul 2022 12:43:02 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id idjRuq6LC1Mz for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 11:12:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 330CD416F2
+Received: from mailout02.t-online.de (mailout02.t-online.de [194.25.134.17])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 330CD416F2
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 11:12:46 +0000 (UTC)
+Received: from fwd77.dcpf.telekom.de (fwd77.aul.t-online.de [10.223.144.103])
+ by mailout02.t-online.de (Postfix) with SMTP id 9BA02F1C
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 13:12:42 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.192.98]) by fwd77.t-online.de
+ with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
+ esmtp id 1oI6sD-4dwgDJ0; Sun, 31 Jul 2022 13:12:41 +0200
+Received: from bruckner.lan.fli4l ([192.168.1.1]:50818)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd.kuhls@t-online.de>) id 1oI6sC-0001Au-2b
+ for buildroot@buildroot.org; Sun, 31 Jul 2022 13:12:40 +0200
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 31 Jul 2022 12:43:01 +0200
-Message-Id: <20220731104301.5987-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 31 Jul 2022 13:12:40 +0200
+Message-Id: <20220731111240.12145-1-bernd.kuhls@t-online.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfOTet9F4QN1Zg97Dx7/D8o88B80apHGq99fkjvZwwIFtqto25YFKR3vBZSjBVF4yEUpiX9/CGssWDQJT0vz1z5Btdq2mxBTqg4JDw+zcvaTTDfxabDUr
- A5IqfIRmcQe56Q0PYpgAsixFH068a+x5VGx2JICQOTpGByBxI/cZV+mfsS/LH0JohlrQOstuCkJQJXtqHz7XwE7iJPz4A8Ca7VdvV0Rlu2SiClEKiOzf1Usj
- IVViBoYoLRb3zr9Q+GcR+mUm7rjKxf/zUoYtttpJZ+KvZ12kq51k+ju6VJZIYePv
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1659264182; bh=DrAHCvwkT9GcO6UU91FPvKLR7xHhVHkZdUNia9yFlPU=;
- h=From:To:Subject:Date:MIME-Version;
- b=WlUFgoITAC/hQTyB4A2bn61Ugxy8T7ymqOSHvj8UqBlTz74SDpK1F7dkKjCshcYpj
- 3gMmgMe8dx0dHySifM+sA2sXAw1SBp2tgHW9Fn+nGbd1NE/QfxWE0M3Y5X4sPMtMbW
- IQ03OjJW7iibmPlA8/zd//huzfX69wQ7wJxcYf4GwQpUB9tfo3xRQajdEvL/ccAIpe
- //gr2dp/hGvuepyXnRBldVwCxbADZfX7LbxeoshZ4wEDAoocACybmd9mgAuwSqlKEa
- X/36ssAA9OI3xMXnxWP8XUWQxzrpsMN/gtdyYoLfLbB0hz1RYIyL21I2nXy19u0V/p
- s7CB5MxYHenig==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=WlUFgoIT
-Subject: [Buildroot] [PATCH] DEVELOPERS: remoove useless whitespaces before
- tabs
+X-TOI-EXPURGATEID: 150726::1659265961-01447895-5144B689/0/0 CLEAN NORMAL
+X-TOI-MSGID: bf334d79-3076-4134-8dd6-ce5c50e5c994
+Subject: [Buildroot] [PATCH 1/1] package/apache: ignore various CVEs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,34 +65,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- DEVELOPERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/apache/apache.mk | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 88e0d02c69..8bfe9b4d5c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2744,8 +2744,8 @@ F:	board/pine64/rockpro64
- F:	board/radxa/rockpi-4
- F:	board/radxa/rockpi-n8
- F:	board/radxa/rockpi-n10
--F: 	configs/friendlyarm_nanopc_t4_defconfig
--F: 	configs/friendlyarm_nanopi_m4_defconfig
-+F:	configs/friendlyarm_nanopc_t4_defconfig
-+F:	configs/friendlyarm_nanopi_m4_defconfig
- F:	configs/orangepi_rk3399_defconfig
- F:	configs/roc_pc_rk3399_defconfig
- F:	configs/rock_pi_4_defconfig
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 315282baac..e199194e84 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -11,6 +11,33 @@ APACHE_LICENSE = Apache-2.0
+ APACHE_LICENSE_FILES = LICENSE
+ APACHE_CPE_ID_VENDOR = apache
+ APACHE_CPE_ID_PRODUCT = http_server
++# only Windows affected
++APACHE_IGNORE_CVES += CVE-1999-0289
++# only Debian affected
++APACHE_IGNORE_CVES += CVE-1999-0678
++# unrelated to Linux
++APACHE_IGNORE_CVES += CVE-1999-1412
++# disputed CVE
++APACHE_IGNORE_CVES += CVE-2007-0086
++# unrelated to Apache
++APACHE_IGNORE_CVES += CVE-2007-0450
++# fixed in version 2.2.5
++APACHE_IGNORE_CVES += CVE-2007-4465 CVE-2008-2168
++# fixed in version 2.2.7
++APACHE_IGNORE_CVES += CVE-2007-5000 CVE-2007-6420 CVE-2007-6420 \
++	CVE-2007-6421 CVE-2007-6422 CVE-2007-6423 CVE-2008-0455
++# fixed in version 2.2.10
++APACHE_IGNORE_CVES += CVE-2008-2939
++# fixed in version 2.2.12
++APACHE_IGNORE_CVES += CVE-2009-1195 CVE-2009-1890 CVE-2009-1891
++# fixed in version 2.2.14
++APACHE_IGNORE_CVES += CVE-2009-2699
++# fixed in version 2.2.15
++APACHE_IGNORE_CVES += CVE-2010-0408 CVE-2010-0425 CVE-2010-0434
++# fixed in version 2.2.16
++APACHE_IGNORE_CVES += CVE-2010-1452
++# fixed in version 2.4.10
++APACHE_IGNORE_CVES += CVE-2014-0231
+ APACHE_SELINUX_MODULES = apache
+ # Needed for mod_php
+ APACHE_INSTALL_STAGING = YES
 -- 
-2.34.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
