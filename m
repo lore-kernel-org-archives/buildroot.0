@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 696E7C00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 08:27:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2ACFC00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 08:30:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD39460E67;
-	Sun, 31 Jul 2022 08:27:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD39460E67
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5DFDA60E67;
+	Sun, 31 Jul 2022 08:30:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DFDA60E67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jzc7R66c8GZq; Sun, 31 Jul 2022 08:27:49 +0000 (UTC)
+	with ESMTP id p60bnzhb5dSt; Sun, 31 Jul 2022 08:30:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A267760E42;
-	Sun, 31 Jul 2022 08:27:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A267760E42
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E52EC1BF395
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 08:27:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B19560E42;
+	Sun, 31 Jul 2022 08:30:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B19560E42
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A5561BF395
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 08:30:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 942A582F20
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 08:27:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 942A582F20
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8C3F403EA
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 08:30:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8C3F403EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mjH4r2-YsAQO for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 08:27:44 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A36682D0C
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9A36682D0C
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 08:27:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lj1JUEjahKp1 for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 08:30:08 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8A2B4057C
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B8A2B4057C
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 08:30:07 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 59E7E20004;
- Sun, 31 Jul 2022 08:27:39 +0000 (UTC)
-Date: Sun, 31 Jul 2022 10:27:37 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id A15ED60005;
+ Sun, 31 Jul 2022 08:30:03 +0000 (UTC)
+Date: Sun, 31 Jul 2022 10:30:02 +0200
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220731102737.3eb2525d@windsurf>
-In-Reply-To: <f8d347ce-9c81-6ffd-a44e-ccfd72af7739@benettiengineering.com>
+Message-ID: <20220731103002.6cf358cf@windsurf>
+In-Reply-To: <3a3b2627-666f-a41b-a400-5e6d2671ff9c@benettiengineering.com>
 References: <20220728164006.16652-1-x-shi@ti.com>
- <20220728164006.16652-3-x-shi@ti.com>
- <f8d347ce-9c81-6ffd-a44e-ccfd72af7739@benettiengineering.com>
+ <20220728164006.16652-4-x-shi@ti.com>
+ <3a3b2627-666f-a41b-a400-5e6d2671ff9c@benettiengineering.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659256060;
+ d=bootlin.com; s=gm1; t=1659256204;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=AVNxLLo6jHlFZom4xTWFaoX2RAPjU8GCAkezIyIe6YM=;
- b=dLvE14z39M589n/j0DIzgCakd3aBpQHz5HidDXrZLVj2sOOBQo5eBkO4Q6QPs1ZNaXjCcV
- yhnXW1N2oE3022E1OdvhXZH12J8zRxJDKUFH4JsR3zEatKq07Y0brfXiCRxij6i2Moc//6
- O6ybYRwrriP+btzbHyH1D0gnphPYmUUSqDZROFOK4Zh0JYZNCzmZ4mdHtQuHG098aieSOx
- OtKdnaN7/dIVtl5ZFQhqK1z+IzskJJCUNinEsU/wMCq1WU6kzOjsFNgEOETDkG4DjIb90p
- bFO3VleyJPMikwT2BTpjHwv9PEKbTP7U9RPjINH04NGnQmSWe0BccqGsUmR0Iw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=qM14CIFFhUF+EUdaAT9dS508e/QKr22uNbmuaWm+Zh4=;
+ b=kzs5Ps8rJV9U65mAc3Ncz+efuV0sd59P5CgcbOmyalAG7irsKbYou6zjEjlgp2ZApLPyBe
+ KOa6idDEPXY6ZjajeFt0oVl0MXNv2N3Lg82YGTRNZesNT0knKMeUAoMyfxYQxK/S/Ov+LE
+ 1Br/S8xN+U24eY8WVO6aw0SV/K86AeaStvhROtEmZqlCwvMDsyuIvmgug3ptKAqN2Q9v88
+ ObmxxhzMypUwj0VFdEZf/mtKLPLfUAqs7LatUsgrSSc+miihLrFf1fTdND7uAvLKQI8Pbj
+ gmbfz9g8I89LlmbFnZvwEMGiLQB3APCLfndmeeB1ofGe/Kn9re/ZBbyRebUJuQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dLvE14z3
-Subject: Re: [Buildroot] [PATCH v2 2/4] boot/ti-k3-r5-loader: add new package
+ header.s=gm1 header.b=kzs5Ps8r
+Subject: Re: [Buildroot] [PATCH v2 3/4] boot/ti-k3-image-gen: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,128 +88,49 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello,
 
-On Sun, 31 Jul 2022 02:54:09 +0200
+On Sun, 31 Jul 2022 03:04:28 +0200
 Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-
-> > +config BR2_TARGET_TI_K3_R5_LOADER_BOARD
-> > +	string "Board to configure for"
-> > +	depends on BR2_TARGET_TI_K3_R5_LOADER
+> > +config BR2_TARGET_TI_K3_IMAGE_GEN_SOC
+> > +	string "SOC type for image gen"
+> > +	depends on BR2_TARGET_TI_K3_IMAGE_GEN
 > > +	help
-> > +	  Specify the board to configure the bootloader for.
-> > +	  This should be the name of a board under board/ti
-> > +	  For example, "am64x_evm".  
+> > +	  The target SoC option for image gen.
+> > +	  For example, "am64x" for AM64X boards.  
 > 
-> Here ^^^ I would substitute "config" with "choice", this way everything
-> is easier from the user point of view. On patch 4/4 you're adding 2
-> boards, so I think it makes sense to add every possible choice(2 for the
-> moment).
+> As in previous patch I would add a "choice" instead of a "config"
 
-I am afraid I will disagree here. For this type of option, we
-definitely prefer to have a free-form string rather than an exhaustive
-list of possible options. See U-Boot/Linux/Barebox and other packages
-that have configurable defconfigs.
+As explained on a previous patch, it's fine to keep a free-form string
+here.
 
-So please keep the string option.
-
-
-> > +TI_K3_R5_LOADER_VERSION = 2022.10-rc1  
+> > +config BR2_TARGET_TI_K3_IMAGE_GEN_CONFIG
+> > +	string "CONFIG type for image gen"
+> > +	depends on BR2_TARGET_TI_K3_IMAGE_GEN
+> > +	help
+> > +	  The board config option for image gen.
+> > +	  Usually "sk" or "evm".  
 > 
-> -rc1 version is the possibly buggiest version you can pick. There are
-> other 2 possible solutions:
-> 1. use 2022.07 and backport all needed patches on a dedicated
-> repository instead of using official u-boot repository
-> 2. wait a bit for at least rc2/3(soon) and later when 2022.10 is
-> released, bump it
+> Ditto
 
-I'd say it's fine for the time being to have -rc1, with the assumption
-that as soon as 2022.10 is out, we bump to it. After all, this package
-is very specific to TI boards, so if this -rc1 has been tested as
-working in this particular context, that's fine.
+And here (and especially here actually, we clearly don't want to have
+an explicit list of all boards in Buildroot, it means that people
+creating their own boards wouldn't be able to use this package, as
+their board would not be listed here).
 
-> > +TI_K3_R5_LOADER_SITE = https://ftp.denx.de/pub/u-boot
-> > +TI_K3_R5_LOADER_SOURCE = u-boot-$(TI_K3_R5_LOADER_VERSION).tar.bz2
-> > +TI_K3_R5_LOADER_LICENSE = GPL-2.0+
-> > +TI_K3_R5_LOADER_LICENSE_FILES = Licenses/gpl-2.0.txt
-> > +TI_K3_R5_LOADER_CPE_ID_VENDOR = denx
-> > +TI_K3_R5_LOADER_CPE_ID_PRODUCT = u-boot
-> > +TI_K3_R5_LOADER_INSTALL_IMAGES = YES
-> > +TI_K3_R5_LOADER_DEPENDENCIES = \
-> > +	host-pkgconf \
-> > +	$(BR2_MAKE_HOST_DEPENDENCY) \  
+
+> > +TI_K3_IMAGE_GEN_VERSION = 08.04.00.005
+> > +TI_K3_IMAGE_GEN_SITE = https://git.ti.com/cgit/k3-image-gen/k3-image-gen/snapshot
+> > +TI_K3_IMAGE_GEN_SOURCE = k3-image-gen-$(TI_K3_IMAGE_GEN_VERSION).tar.gz
+> > +TI_K3_IMAGE_GEN_LICENSE = BSD-3-Clause
+> > +TI_K3_IMAGE_GEN_LICENSE_FILES = system-firmware-image-gen-1.0-manifest.html
+> > +TI_K3_IMAGE_GEN_INSTALL_IMAGES = YES
+> > +TI_K3_IMAGE_GEN_DEPENDENCIES = host-arm-gnu-toolchain ti-k3-r5-loader  
 > 
-> What is this ^^^ needed for?
+> host-arm-gnu-toolchain is already a dependency of ti-k3-r5-loader so
+> it should be already built a this point
 
-I guess this is mainly because it's copy/pasted from uboot.mk, and the
-explanation is:
-
-# u-boot 2020.01+ needs make 4.0+
-
-> > +	host-arm-gnu-toolchain
-> > +
-> > +TI_K3_R5_LOADER_MAKE = $(BR2_MAKE)  
-> 
-> This ^^^ looks superflous, you can directly use $(BR2_MAKE) below
-
-This is also modeled after uboot.mk, though I would agree with you.
-
-> > +TI_K3_R5_LOADER_KCONFIG_DEPENDENCIES = \
-> > +	toolchain \
-> > +	$(BR2_MAKE_HOST_DEPENDENCY) \
-> > +	$(BR2_BISON_HOST_DEPENDENCY) \
-> > +	$(BR2_FLEX_HOST_DEPENDENCY)  
-> 
-> "toolchain" should imply all above _HOST_DEPENDENCY. But here you're
-> using host-arm-gnu-toolchain, so toolchain shouldn't be needed, or yes?
-
-Again, this is modeled after uboot.mk. But indeed, here the toolchain
-dependency does not make sense, since CROSS_COMPILE points to the
-toolchain installed by host-arm-gnu-toolchain. So here, we should
-replace "toolchain" by "host-arm-gnu-toolchain".
-
-> > +TI_K3_R5_LOADER_BOARD = $(call qstrip,$(BR2_TARGET_TI_K3_R5_LOADER_BOARD))  
-> 
-> This ^^^ can be avoided too since you use it one line below with a
-> suffix only
-
-I think it's fine, as it makes the following line more readable.
-
-> > +TI_K3_R5_LOADER_KCONFIG_DEFCONFIG = $(TI_K3_R5_LOADER_BOARD)_r5_defconfig
-> > +TI_K3_R5_LOADER_MAKE_OPTS += \
-> > +	CROSS_COMPILE=$(HOST_ARM_GNU_TOOLCHAIN_INSTALL_DIR)/bin/arm-none-eabi- \
-> > +	ARCH=arm  
-> 
-> What is the reason why you need to use arm-gnu-toolchain to build u-boot 
-> SPL? Can you please explain it in commit log?
-
-This has been explained already in previous iterations of the patch
-series.
-
-This package is about building a special U-Boot, which targets a
-Cortex-R5 core, that acts as a kind of "co-processor". Since the main
-processor is an ARM64 core, and an ARM64 toolchain can only be 64-bit
-code, we need a separate toolchain to be able to build ARM 32-bit code
-for the Cortex-R5 core.
-
-> > +define TI_K3_R5_LOADER_BUILD_CMDS
-> > +	$(TI_K3_R5_LOADER_MAKE) -C $(@D) $(TI_K3_R5_LOADER_MAKE_OPTS)
-> > +endef
-> > +
-> > +define TI_K3_R5_LOADER_INSTALL_IMAGES_CMDS
-> > +	cp $(@D)/spl/u-boot-spl.bin $(BINARIES_DIR)/r5-u-boot-spl.bin
-> > +endef
-> > +
-> > +$(eval $(kconfig-package))  
-> 
-> Why do you use kconfig-package? You reimplement anyway BUILD_CMDS and
-> INSTALL_IMAGES_CMDS, so generic-package should be fine.
-
-kconfig-package is special, it does not implement BUILD_CMDS,
-INSTALL_TARGET_CMDS or INSTALL_IMAGES_CMDS. Look at uboot.mk, linux.mk,
-busybox.mk and others that use kconfig-package. kconfig-package only
-provides logic for the configuration step, with xxx-menuconfig,
-xxx-xconfig, xxx-savedefconfig targets and all, but implementing the
-BUILD_CMDS and others CMDS variables is left to the package .mk file.
+It seems that ti-k3-image-gen also uses this bare-metal toolchain
+directly, so it's fine and correct to have this dependency.
 
 Best regards,
 
