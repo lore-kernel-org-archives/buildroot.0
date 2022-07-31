@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2154C00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 19:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20FE4C00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 19:38:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5317781DAB;
-	Sun, 31 Jul 2022 19:38:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5317781DAB
+	by smtp4.osuosl.org (Postfix) with ESMTP id B27BD417B2;
+	Sun, 31 Jul 2022 19:38:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B27BD417B2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2OXwYY4Pnxki; Sun, 31 Jul 2022 19:38:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33B47408F9;
+	Sun, 31 Jul 2022 19:38:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33B47408F9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A82821BF2EB
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:36:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8335982A7F
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:36:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8335982A7F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FjFMQIbv0N8C; Sun, 31 Jul 2022 19:38:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1BD981C58;
-	Sun, 31 Jul 2022 19:38:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1BD981C58
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6B6E01BF2EB
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:36:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45EDC400E2
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:36:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45EDC400E2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2fF5blXXSRj3 for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 19:36:24 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id au_0Pk1MDL8J for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 19:36:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E038400CE
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com
- [IPv6:2607:f8b0:4864:20::a35])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8E038400CE
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 19:36:24 +0000 (UTC)
-Received: by mail-vk1-xa35.google.com with SMTP id q191so2333443vkb.6
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 12:36:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EF4782977
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com
+ [IPv6:2607:f8b0:4864:20::e2a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6EF4782977
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 19:36:27 +0000 (UTC)
+Received: by mail-vs1-xe2a.google.com with SMTP id k129so9309830vsk.2
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 12:36:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=MtsjwRYSjwtCJWdNADi03FrjooBpRMxXA8o3FHuAP18=;
- b=lVaZJ8xzy5OZLo7Xz1bZ6axExSfLpCF/jlU54rhqcCXQ8JJDaQJ4yJgmA/7hgps2Em
- DH+qbLqqe+tVuT4wq5gCJVOyw9M8P1U5w2h7oUivzszC2tivIZzPTorJ+D79ZDG7Cwa4
- bzFWovNQriwZF+z8Dpmqa1SMYREX5J6yA+IYxk86D8OXBi+lI0zinAsEh7tevpKvTL1X
- Ct8qbPRX2WPR/m4DAPBZ3p76CH9YWeVy7wEyI6wKaUD/zOt9HwE2eSZJpO9wMxQ/DISl
- c9JDZXXg2Smj2orfeWgZ9AjSS4NCF62werp494tAe1noCrrDUMZVZbROHxPSZyTUTK2T
- 9NVg==
-X-Gm-Message-State: AJIora++PCvtWL9hY/zMvX2LmeDJ0yvS8Zg04F0X28NoeZAJiwLoVCSf
- qwZb5X9SQ3BcqdzJL2JfPeOuB5Pmblo=
-X-Google-Smtp-Source: AGRyM1snQK9vZaQPOGgeFbg/eyGTDeJ+VsEIwlvSCYadpP6QVzU/oO7rRoO3Ayne/iNu1aNVvfuDPw==
-X-Received: by 2002:a1f:9fd6:0:b0:377:39e:5dec with SMTP id
- i205-20020a1f9fd6000000b00377039e5decmr4870207vke.0.1659296183488; 
- Sun, 31 Jul 2022 12:36:23 -0700 (PDT)
+ bh=R1YwVVs5Cr5NJ3BzeaXtiSuuH6bFoxRnGTszwArzho8=;
+ b=ZgkJbL96/2hYn0NDF+KnikU2uovVYcG0GujMc4d838dJLgLrJTwkAOtuEn4CjjRCQv
+ GZaK40G/Ic/Kb5vfCLo0BvUpiXdTJnvGFhEqPLQ7ASvgO9FJv+CxcqyVVPvFwB5E3Xup
+ ymTId8doYaEX43rZNeyFAu9yq64a56KzovZ+DFs83dtzJqhUqguoMd20NigH3Mii1s47
+ OqvP1/ugSWdiB4iSgfecq0vdvOnUzSsKwiqIuWi9qCOCpUs/BBRUytB3fV77Vm1HoeFT
+ Ft//Iyhb9vFIOFYIVgbEsAqbcKOl+6AuiDrPuPUmQzDi32xzM4/RsuKIhysMH1k4QHkt
+ Og/Q==
+X-Gm-Message-State: AJIora97BlGDX8qMbCJ+E4EXoyRIC4PdbFOMvD1xZitAPjc6D6DU8NHx
+ 5LM7ZGP9RCA+asdgGFiixYc8nza0ZDA=
+X-Google-Smtp-Source: AGRyM1t0rnHxi+LATa5uGeORI/N3Vubi3HiknLWFNS1O5b6jPb4LQYtd0vbbLFmBU9QmgYSADxR9xQ==
+X-Received: by 2002:a05:6102:f0b:b0:35e:e757:838c with SMTP id
+ v11-20020a0561020f0b00b0035ee757838cmr4695433vss.8.1659296186265; 
+ Sun, 31 Jul 2022 12:36:26 -0700 (PDT)
 Received: from localhost.localdomain ([191.187.223.18])
  by smtp.gmail.com with ESMTPSA id
- v5-20020a056102074500b0037ddf9489f2sm1418667vsg.13.2022.07.31.12.36.20
+ v5-20020a056102074500b0037ddf9489f2sm1418667vsg.13.2022.07.31.12.36.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 Jul 2022 12:36:22 -0700 (PDT)
+ Sun, 31 Jul 2022 12:36:24 -0700 (PDT)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 31 Jul 2022 16:35:20 -0300
-Message-Id: <20220731193521.1217825-14-ricardo.martincoski@gmail.com>
+Date: Sun, 31 Jul 2022 16:35:21 -0300
+Message-Id: <20220731193521.1217825-15-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220731193521.1217825-1-ricardo.martincoski@gmail.com>
 References: <20220731193521.1217825-1-ricardo.martincoski@gmail.com>
@@ -72,18 +72,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=MtsjwRYSjwtCJWdNADi03FrjooBpRMxXA8o3FHuAP18=;
- b=B5sZ8NJzfFrxdAH91CFZtTrgsBxlxwu5C+r+nWaV91X9eObffFVrfEM42VADOKo6pr
- hj1kU92SXDLjS1VvdmSNpXrx0nbjpEm7U87UG+2DgQC+cv5q/s9vB72kUMmBQ6BYFB1n
- OV/4rEknH0Io++loSGRRIvUFA2+76uwAx9gwcDkGyPt1UeU8izg690uhOAxdGgd7M3ri
- owSF4Nbz9yVRTMPDFqN4qH35MisCtgFY5bE7EVSE3wEomIjv+aMBhWtiv3K7NczVkUTD
- DpLiUQVUfvHDo9DxK2K49iEMead9XqtU/Lxbt7zEwDYe4HF4wPn3WIiLjaMl1TC2qIvi
- Uu4A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=R1YwVVs5Cr5NJ3BzeaXtiSuuH6bFoxRnGTszwArzho8=;
+ b=IorX7mcyjuMadDabvNB1mUHXpyr3ftTLelIDcZt02LNn9b3OjyUogxSqoOuvJR/KDP
+ SRL98TbI2ttNq9c9l8rPmSCuWt7MCKpeqtA8XjiX4CCYI4QHaIJHhCPTBHcyt59am9oA
+ 1ko5p72jXylVCJ56jpT9BSw/ie1NMbzbfsNRGMszbQCEjp7J0eKIhCPE4ice1OEEVO7i
+ yiJf/NbzJ4KfJQgjCTVYhLmMWKtNR+pBeuU3bXMlNE4nO1vCvHY+P2dnlL7+EV5Z2lnm
+ 09Bvql3iIhbLrA+vvU9CSh6ghlFMLPdlmOUfqIGOXW3nOsUdiRJqq3XqRVv0tbk47z2d
+ uXwA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=B5sZ8NJz
-Subject: [Buildroot] [PATCH v2 13/14] utils/checkpackagelib: warn about
- $(HOST_DIR)/usr
+ header.a=rsa-sha256 header.s=20210112 header.b=IorX7mcy
+Subject: [Buildroot] [RFC 14/14] utils/git_hooks: new script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,93 +94,189 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-It's been ages (5 years at the next release) that we've not installed
-host packages in $(HOST_DIR)/usr, but we still have a few packages that
-reference it or install things in there. See [1]
+Add a pre-commit hook that can be used by any buildroot developer to
+prevent local commits that introduce warnings that check-package would
+catch.
+It can also be used by maintainers.
+This hook checks only the files added/changed by the commit, so it runs
+fast.
+It also skips the check when working in branches that do not have this
+infra.
+But when there is a change to check-package itself in the commit being
+performed, the shole tree is checked, since new warnings in the tree can
+occur.
 
-Add a new check_function that warns when a file is added installing to
-or referencing $(HOST_DIR)/usr .
+At same time, add an option -T to utils/docker-run so docker can run
+without a tty, otherwise calling it from inside the commit hook would
+lead to this error:
+ the input device is not a TTY
 
-[1] "d9ff62c4cd pacakge: drop remnants of $(HOST_DIR)/usr"
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
 Changes v1 -> v2:
-  - update commit message, the patch was applied
+  - new patch, only a RFC!
 
-NOTE to the maintainer applying this patch: please re-generate the list
-of ignored warnings while applying:
-$ utils/docker-run make .checkpackageignore
+Please someone do a thorough review on this patch.
+Last time I wrote a pre-commit hook was more than 10 years ago. :)
+
+Output from local tests:
+
+$ git checkout origin/2022.05.x
+$ echo >> utils/check-package
+$ git add -u
+$ git commit -m 'another branch'
+check-package will run in the full tree...
+the input device is not a TTY
+the input device is not a TTY
+check-package SKIPPED for commit.
+[detached HEAD aaf6ab603a] another branch
+ 1 file changed, 1 insertion(+)
+$
+
+$ git checkout make-check-package-standardize-flake8
+$ echo >> utils/check-package
+$ git add -u
+$ git commit -m 'check full tree'
+check-package will run in the full tree...
+utils/check-package:0: run 'flake8' and fix the warnings
+check-package FAILED for commit.
+$
+
+$ git checkout make-check-package-standardize-flake8
+$ git rm support/libtool/buildroot-libtool-v2.4.patch
+$ git commit -m 'check full tree'
+check-package will run in the full tree...
+Commit successfully checked with check-package.
+[make-check-package-standardize-flake8 b761eccc68] check full tree
+ 1 file changed, 89 deletions(-)
+ delete mode 100644 support/libtool/buildroot-libtool-v2.4.patch
+$
+ # notice the entry on .checkpackageignore remains for deleted files
+ # but it can be removed from time to time by using:
+ # $ utils/docker-run make .checkpackageignore
+
+$ git checkout make-check-package-standardize-flake8
+$ sed -e 's,  , ,g' -i package/atop/atop.hash
+$ git add -u
+$ git commit -m 'only changed'
+package/atop/atop.hash:2: separation does not match expectation (http://nightly.buildroot.org/#adding-packages-hash)
+package/atop/atop.hash:5: separation does not match expectation (http://nightly.buildroot.org/#adding-packages-hash)
+check-package FAILED for commit.
+$
+
+$ git checkout make-check-package-standardize-flake8
+$ cp package/busybox/S02sysctl package/busybox/S02sysctl2
+$ git add package/busybox/S02sysctl2
+$ git commit -m 'only added'
+package/busybox/S02sysctl2:0: DAEMON variable not defined (http://nightly.buildroot.org/#adding-packages-start-script)
+check-package FAILED for commit.
+$
 ---
- utils/checkpackagelib/lib_mk.py      | 12 ++++++++++++
- utils/checkpackagelib/test_lib_mk.py | 23 +++++++++++++++++++++++
- 2 files changed, 35 insertions(+)
+ DEVELOPERS                 |  1 +
+ utils/docker-run           | 13 ++++++++++-
+ utils/git_hooks/pre-commit | 46 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+), 1 deletion(-)
+ create mode 100644 utils/git_hooks/pre-commit
 
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index b50a19ac62..eaef19b2ec 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -21,6 +21,18 @@ continue_conditional = ["elif", "else"]
- end_conditional = ["endif"]
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 88e0d02c69..5908ca7f33 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2499,6 +2499,7 @@ F:	support/testing/tests/utils/test_check_package.py
+ F:	utils/check-package
+ F:	utils/checkpackagelib/
+ F:	utils/docker-run
++F:	utils/git_hooks/
  
+ N:	Richard Braun <rbraun@sceen.net>
+ F:	package/curlftpfs/
+diff --git a/utils/docker-run b/utils/docker-run
+index f42dc33d0e..bcddcd5a1b 100755
+--- a/utils/docker-run
++++ b/utils/docker-run
+@@ -1,12 +1,23 @@
+ #!/usr/bin/env bash
+ set -o errexit -o pipefail
++
++tty="-t"
++while getopts "T" OPT; do
++    case "${OPT}" in
++    T) tty=;;
++    *) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ DIR=$(dirname "${0}")
+ MAIN_DIR=$(readlink -f "${DIR}/..")
+ # shellcheck disable=SC2016
+ IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
+         sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
  
-+class DoNotInstallToHostdirUsr(_CheckFunction):
-+    INSTALL_TO_HOSTDIR_USR = re.compile(r"^[^#].*\$\(HOST_DIR\)/usr")
+-exec docker run -it --rm \
++# shellcheck disable=SC2086
++exec docker run -i ${tty} --rm \
+     --user "$(id -u)":"$(id -g)" \
+     --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}" \
+     --workdir "${MAIN_DIR}" \
+diff --git a/utils/git_hooks/pre-commit b/utils/git_hooks/pre-commit
+new file mode 100644
+index 0000000000..c8764c4d57
+--- /dev/null
++++ b/utils/git_hooks/pre-commit
+@@ -0,0 +1,46 @@
++#!/bin/sh
++# In order to prevent commits with check-package warnings, do the following:
++# cp utils/git_hooks/pre-commit .git/hooks/pre-commit
++# chmod +x .git/hooks/pre-commit
 +
-+    def check_line(self, lineno, text):
-+        if self.INSTALL_TO_HOSTDIR_USR.match(text.rstrip()):
-+            if self.filename in ['package/skeleton/skeleton.mk']:
-+                return
-+            return ["{}:{}: install files to $(HOST_DIR)/ instead of $(HOST_DIR)/usr/"
-+                    .format(self.filename, lineno),
-+                    text]
++# shellcheck disable=SC1091
++. git-sh-setup
++cd_to_toplevel
 +
++full_tree=0
++if git diff --cached --name-only HEAD | grep -q '^utils/\(checkpackagelib\|check-package\)'; then
++    full_tree=1
++else
++    removed_typechanged=$(git diff --cached --name-only --diff-filter=acmr HEAD | wc -l)
++    if [ "$removed_typechanged" != 0 ]; then
++        full_tree=1
++    fi
++fi
 +
- class Indent(_CheckFunction):
-     COMMENT = re.compile(r"^\s*#")
-     CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional + continue_conditional)))
-diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-index 49fa216fcd..db6641f14c 100644
---- a/utils/checkpackagelib/test_lib_mk.py
-+++ b/utils/checkpackagelib/test_lib_mk.py
-@@ -3,6 +3,29 @@ import checkpackagelib.test_util as util
- import checkpackagelib.lib_mk as m
- 
- 
-+DoNotInstallToHostdirUsr = [
-+    ('real case',
-+     'libapparmor.mk',
-+     'LIBAPPARMOR_CONF_OPTS += \\\n'
-+     '\t--with-python \\\n'
-+     '\tPYTHON=$(HOST_DIR)/usr/bin/python3 \\\n'
-+     '\tPYTHON_CONFIG=$(STAGING_DIR)/usr/bin/python3-config \\\n'
-+     '\tSWIG=$(SWIG)\n',
-+     [['libapparmor.mk:3: install files to $(HOST_DIR)/ instead of $(HOST_DIR)/usr/',
-+       '\tPYTHON=$(HOST_DIR)/usr/bin/python3 \\\n']]),
-+    ('ignore comment',
-+     'any',
-+     '# following code do not install to $(HOST_DIR)/usr/\n',
-+     []),
-+    ]
++if [ $full_tree = 1 ]; then
++    echo "check-package will run in the full tree..."
++    # shellcheck disable=SC2046 disable=SC2006
++    utils/docker-run -T utils/check-package -q `git ls-files`
++    result=$?
++else
++    added_changed_renamed=$(git diff --cached --name-only --diff-filter=ACMR HEAD | wc -l)
++    if [ "$added_changed_renamed" = 0 ]; then
++        echo "No files in commit to be passed to check-package."
++        exit 0
++    fi
++    git diff --cached --name-only --diff-filter=ACMR -z HEAD | \
++        xargs -0 utils/docker-run -T utils/check-package -q
++    result=$?
++fi
 +
-+
-+@pytest.mark.parametrize('testname,filename,string,expected', DoNotInstallToHostdirUsr)
-+def test_DoNotInstallToHostdirUsr(testname, filename, string, expected):
-+    warnings = util.check_file(m.DoNotInstallToHostdirUsr, filename, string)
-+    assert warnings == expected
-+
-+
- Indent = [
-     ('ignore comment at beginning of line',
-      'any',
++if [ $result = 0 ]; then
++    echo "Commit successfully checked with check-package."
++    exit 0
++fi
++if utils/docker-run -T true; then
++    echo "check-package FAILED for commit."
++    exit $result
++else
++    # probably in a branch without 'utils/docker-run -T'
++    echo "check-package SKIPPED for commit."
++fi
 -- 
 2.25.1
 
