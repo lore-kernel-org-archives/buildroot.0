@@ -1,51 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BD86C00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 06:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EDF2C00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 06:26:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25D39831EF;
-	Sun, 31 Jul 2022 06:25:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25D39831EF
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z6emzbEcfQBk; Sun, 31 Jul 2022 06:25:33 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 464AF831CB;
-	Sun, 31 Jul 2022 06:25:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 464AF831CB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 185EE1BF5A0
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 06:24:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E721B60E49
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 06:24:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E721B60E49
+	by smtp3.osuosl.org (Postfix) with ESMTP id D75EA60E67;
+	Sun, 31 Jul 2022 06:26:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D75EA60E67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ujSkjyAHnYOP for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 06:24:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1BD9F60B33
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 06:24:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BD9F60B33
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6DF5486A94; Sun, 31 Jul 2022 06:10:52 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rxy7k1UvvjAg; Sun, 31 Jul 2022 06:26:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D65C960E49;
+	Sun, 31 Jul 2022 06:26:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D65C960E49
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CB1D21BF5A0
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 06:26:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0B04417A8
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 06:26:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0B04417A8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UOwh2qzc9XW1 for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 06:26:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8716B4167C
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8716B4167C
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 06:26:44 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3B4661C0003;
+ Sun, 31 Jul 2022 06:26:41 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oI2PP-004j6e-PN; Sun, 31 Jul 2022 08:26:39 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 31 Jul 2022 08:22:58 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: a8705c4706451ed936e8a426dc2fcfcf453dd8de
-X-Git-Newrev: a19bd265d59113cc6976e113fff55961a5c914e8
-X-Patchwork-Hint: ignore
-Message-Id: <20220731061052.6DF5486A94@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/pango: bump to
- version 1.50.8
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20220710072531.303298-1-bernd.kuhls@t-online.de>
+ <20220710072531.303298-2-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jul 2022 08:26:39 +0200
+In-Reply-To: <20220710072531.303298-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 10 Jul 2022 09:25:31 +0200")
+Message-ID: <87edy1pzkw.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 2/2] package/Config.in: move pipewire to
+ 'Audio and video applications'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +65,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a19bd265d59113cc6976e113fff55961a5c914e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 76625df05206fab6948df411d6133c3ed499701b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > The previous location 'Libraries / Graphics' does not fit the purpose
+ > of this package, we display it next to Pulseaudio instead.
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 7864df7a21..9a73001c9f 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.7.sha256sum
--sha256  0477f369a3d4c695df7299a6989dc004756a7f4de27eecac405c6790b7e3ad33  pango-1.50.7.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.8.sha256sum
-+sha256  cf626f59dd146c023174c4034920e9667f1d25ac2c1569516d63136c311255fa  pango-1.50.8.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index c1c7ceeed6..30b1de9d23 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PANGO_VERSION_MAJOR = 1.50
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).7
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).8
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
