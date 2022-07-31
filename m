@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2602C00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 19:36:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15179C00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 19:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27CE740FBD;
-	Sun, 31 Jul 2022 19:36:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27CE740FBD
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA0C140FE2;
+	Sun, 31 Jul 2022 19:36:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA0C140FE2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zaHIzbc90djo; Sun, 31 Jul 2022 19:36:22 +0000 (UTC)
+	with ESMTP id vWlDZta3bLGJ; Sun, 31 Jul 2022 19:36:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D32C400CE;
-	Sun, 31 Jul 2022 19:36:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D32C400CE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7D0621BF2EB
+	by smtp2.osuosl.org (Postfix) with ESMTP id A23B140FD5;
+	Sun, 31 Jul 2022 19:36:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A23B140FD5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D5C781BF2EB
  for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:35:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55B95414E6
+ by smtp1.osuosl.org (Postfix) with ESMTP id B0CD082977
  for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:35:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55B95414E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0CD082977
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s5-M0CbhtEe9 for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 19:35:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0vGk_jKeURAF for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 19:35:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 306EC414E4
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com
- [IPv6:2607:f8b0:4864:20::a35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 306EC414E4
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 19:35:51 +0000 (UTC)
-Received: by mail-vk1-xa35.google.com with SMTP id w129so4600356vkg.10
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 12:35:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF8998294A
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com
+ [IPv6:2607:f8b0:4864:20::a2e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CF8998294A
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 19:35:53 +0000 (UTC)
+Received: by mail-vk1-xa2e.google.com with SMTP id l13so456651vka.12
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 12:35:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=F+ULQwsVVoF2s4jgmtRfmsSLzLVtAPh6CAAS+P4FlmU=;
- b=dup4K1n2ZOt1aA/BlTbA/g+gfYly+8GX/iB5BlxZ/obhoAMpFgHbjV3tXDIXwWgcxU
- Oc1npwQCCuwshVbifQtnFnvM9AxAkpWevjr0YcsEUVrAlBoxUuYBW5bHh2YSyK8EVoy1
- 2YoajJJaL6gVt0zc1oG68JKp0oKvE0BalTFi4HbwjduQhzRnIyzEKViqW1SAI7bxtG7y
- JfbABoFkx0ov9xbbSRB6n3OVt/ZZPCeNdYlpmf4Vsggg15+iMJHfVXBBh7RNEPYDZ3Gm
- ZhNO9oyiZ2+aN6/r0oMGVZuQWg/Edtf29skT/6S+OfMo6GDfiln5SkERGYRfTQr2L48c
- dxQA==
-X-Gm-Message-State: AJIora9qEVdivyTy0iwJA5lfZsN3NhlZAHATr4t2pOwfRazLyReGSnZz
- PjkauX2jCusWvPQS0Qcqydjl0WiDgN0=
-X-Google-Smtp-Source: AGRyM1vZbMEaIZIgQstII6zt3JPbpqlp4v26HFS6OEcE/xtZQNQyraj7J1fW4Kyukt4IjG8Ey/byKg==
-X-Received: by 2002:a05:6122:221f:b0:343:f3d4:87cb with SMTP id
- bb31-20020a056122221f00b00343f3d487cbmr4836569vkb.13.1659296150022; 
- Sun, 31 Jul 2022 12:35:50 -0700 (PDT)
+ bh=NE/8y4roHPjLJilfCJ0nkXdYNSsinessdsLj39qo1W8=;
+ b=dG/ue63dRAGK48TNydsP3voQ/6HMGXUQPFCZir/OCe1/RVEn/K7VAS8CMFhlwUtagu
+ g4UTMDRs3PGN0rB7Fb4jroe3/8aUs93JB1Mboph/Kojd4K5YKbP2O4pC3J+x9SID+3wj
+ q1Ls+vy8coJPLMPztFUOgjmoTxB6tZaPCObXibSSQnZm6bplZZzf2JRl/vIfdrZR5HYa
+ R0rggVtBkKE6I8Y8gBsCdxvNfGpR8bRM5naFfOAoKpRf9lY0zNpfKWhnn4+zx33+nzRg
+ KQWxPHj+r/n5Fm2T93eqeBj1n5OPvLHmMa5M3JHqF7vDaeQoj9p1BY1rzCQKBFAOhdXS
+ KF0Q==
+X-Gm-Message-State: AJIora9nuYHWogmNhbGM9f1b4vN4iPBmzN+c24Ph4OaWmWKjoDOnIO5c
+ pCWs/zNSUR2YW+hEZgW0D24qdxD5z4w=
+X-Google-Smtp-Source: AGRyM1sOpP1RWZ9986IxgRfeku5AyX8T4GvkHXBKJaR2TzGWhsnP+2cD1ImWQIbLZWEDuKr7gHRESQ==
+X-Received: by 2002:a05:6122:1791:b0:376:5b12:e54e with SMTP id
+ o17-20020a056122179100b003765b12e54emr4811689vkf.17.1659296152731; 
+ Sun, 31 Jul 2022 12:35:52 -0700 (PDT)
 Received: from localhost.localdomain ([191.187.223.18])
  by smtp.gmail.com with ESMTPSA id
- v5-20020a056102074500b0037ddf9489f2sm1418667vsg.13.2022.07.31.12.35.47
+ v5-20020a056102074500b0037ddf9489f2sm1418667vsg.13.2022.07.31.12.35.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 Jul 2022 12:35:48 -0700 (PDT)
+ Sun, 31 Jul 2022 12:35:51 -0700 (PDT)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 31 Jul 2022 16:35:09 -0300
-Message-Id: <20220731193521.1217825-3-ricardo.martincoski@gmail.com>
+Date: Sun, 31 Jul 2022 16:35:10 -0300
+Message-Id: <20220731193521.1217825-4-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220731193521.1217825-1-ricardo.martincoski@gmail.com>
 References: <20220731193521.1217825-1-ricardo.martincoski@gmail.com>
@@ -72,18 +72,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=F+ULQwsVVoF2s4jgmtRfmsSLzLVtAPh6CAAS+P4FlmU=;
- b=mU+jeZAVpXtOMVcttzUplrl9HL4ZP8pA99LfwNjk/D+9qjTUoI3ejLtv2aEx9bX42p
- 8iZjyoANJR+a5lLJ7Dw47sSBLdrQAFfyL/Hzt+2JbYTrGaZ8ok2lAIAZxPan/ngC0z8P
- Wl7X9GW+oU1x3gXUXztKZ304Dv/NGfGE5uh0PuIui60jHEabCGpK4tV0OilVtAoqR3t7
- tIpBW2/GHjw5rO/6AAVjvphoRHQoWNGWkiCFp6Fcn4RSIgr09GYGYZ2n+u/FGPMnj/5H
- bnKYCbV/svlWlr2lS0IVDhMme0ZYptNKEmA+0ZtB/zCl6v0pKOpFysq1TT2p4AUFjs1L
- G8QA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=NE/8y4roHPjLJilfCJ0nkXdYNSsinessdsLj39qo1W8=;
+ b=Dl3Z1lO9krrRWCx028tvuR0YRrFJWkwUY/0/bGnRLJ5ZQq4YpTRV79B72S5A1D/ub6
+ PLLcefLPIULFq7w4SwzyKgDgxIfwcNnYQ6vyDzBATRWKJeJ2nD41ql63CBJyTZTRbqRK
+ y2C9vt1Y1HRxzSW09Gcdqm6tEcAbmEhODpabwnZYoiGh2/GbX7TVtgjwT3UJpUXZ6/Kj
+ ohc9TGFIai+gnP9AOveFtetTnqaM59blQmLokmVvUyO+2rATfsG50hMdCtnRi7oNpGJQ
+ LGMztpSMoyqKjSu2rWz65AInRU5gUIwk8qqQ8C3AhkuYoNpTF6qGBCdN/2RQI6XQFK9r
+ Q2YQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mU+jeZAV
-Subject: [Buildroot] [PATCH v2 02/14] support/testing: test check-package
- ignore list
+ header.a=rsa-sha256 header.s=20210112 header.b=Dl3Z1lO9
+Subject: [Buildroot] [PATCH v2 03/14] Makefile: add target to update
+ .checkpackageignore
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,97 +101,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Extend test_check_package to also check the ignore list functionality.
-Check:
-- the entries in the ignore list use relative path;
-- an entry in the ignore list actually ignores the warning;
-- an outdated entry in the ignore list generates a warning by its own,
-  preventing the ignoring list to grow indefinitely.
+When a developer fixes an ignored warning from check-package, he/she
+needs to update .checkpackageignore
+By running './utils/docker-run make check-package' the developer
+receives a warning about this.
+Make that change easier to make, by adding a helper target on Makefile.
 
-For this to work, add 3 test fixtures, listing entries for an
-pre-existing file in the br2-external used in the test.
+Add an option --failed-only to check-package that generates output in
+the format:
+<filename> <check_function> [<check_function> ...]
+This is the very same format used by check-package ignore file.
+
+Add the phony target .checkpackageignore
+
+So one can update the ignore file using:
+$ ./utils/docker-run make .checkpackageignore
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
 Changes v1 -> v2:
-  - none
+  - on check-package, do not return error code when --failed-only is
+    used
+  - add a target to the makefile
+  - completely rewrite commit message, in order to clarify why it is
+    needed
 ---
- .../utils/br2-external/.checkpackageignore    |  1 +
- .../br2-external/package/.checkpackageignore  |  1 +
- .../package/.checkpackageignore_outdated      |  1 +
- .../testing/tests/utils/test_check_package.py | 31 +++++++++++++++++++
- 4 files changed, 34 insertions(+)
- create mode 100644 support/testing/tests/utils/br2-external/.checkpackageignore
- create mode 100644 support/testing/tests/utils/br2-external/package/.checkpackageignore
- create mode 100644 support/testing/tests/utils/br2-external/package/.checkpackageignore_outdated
+ Makefile            |  5 +++++
+ utils/check-package | 13 ++++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/utils/br2-external/.checkpackageignore b/support/testing/tests/utils/br2-external/.checkpackageignore
-new file mode 100644
-index 0000000000..efb7680173
---- /dev/null
-+++ b/support/testing/tests/utils/br2-external/.checkpackageignore
-@@ -0,0 +1 @@
-+package/external/external.mk PackageHeader
-diff --git a/support/testing/tests/utils/br2-external/package/.checkpackageignore b/support/testing/tests/utils/br2-external/package/.checkpackageignore
-new file mode 100644
-index 0000000000..5f4a5e1187
---- /dev/null
-+++ b/support/testing/tests/utils/br2-external/package/.checkpackageignore
-@@ -0,0 +1 @@
-+external/external.mk PackageHeader
-diff --git a/support/testing/tests/utils/br2-external/package/.checkpackageignore_outdated b/support/testing/tests/utils/br2-external/package/.checkpackageignore_outdated
-new file mode 100644
-index 0000000000..1df59f3bed
---- /dev/null
-+++ b/support/testing/tests/utils/br2-external/package/.checkpackageignore_outdated
-@@ -0,0 +1 @@
-+external/external.mk Indent NewlineAtEof PackageHeader
-diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
-index c70ba02324..f21b9e939f 100644
---- a/support/testing/tests/utils/test_check_package.py
-+++ b/support/testing/tests/utils/test_check_package.py
-@@ -75,6 +75,12 @@ class TestCheckPackage(unittest.TestCase):
-         generated = int(stderr[1].split()[0])
-         self.assertGreater(generated, 0)
+diff --git a/Makefile b/Makefile
+index a743e42f91..e49080b110 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1244,6 +1244,11 @@ check-package:
+ 	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name '*.patch' \) \
+ 		-exec ./utils/check-package --exclude=Sob {} +
  
-+    def assert_no_warnings_generated_for_file(self, stderr):
-+        """Infer from check-package stderr if no warning was generated and fail otherwise."""
-+        self.assertIn("warnings generated", stderr[1], stderr)
-+        generated = int(stderr[1].split()[0])
-+        self.assertEqual(generated, 0)
++.PHONY: .checkpackageignore
++.checkpackageignore:
++	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name '*.patch' \) \
++		-exec ./utils/check-package --exclude=Sob --failed-only {} > .checkpackageignore +
 +
-     def test_run(self):
-         """Test the various ways the script can be called in a simple top to
-         bottom sequence."""
-@@ -201,3 +207,28 @@ class TestCheckPackage(unittest.TestCase):
-         self.assert_file_was_processed(m)
-         self.assert_warnings_generated_for_file(m)
-         self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(abs_file), w)
+ include docs/manual/manual.mk
+ -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(sort $(wildcard $(dir)/docs/*/*.mk)))
+ 
+diff --git a/utils/check-package b/utils/check-package
+index 00be29d02a..d896e8b117 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -72,11 +72,17 @@ def parse_args():
+                         help="do not run the specified functions (debug)")
+     parser.add_argument("--dry-run", action="store_true", help="print the "
+                         "functions that would be called for each file (debug)")
++    parser.add_argument("--failed-only", action="store_true", help="print only"
++                        " the name of the functions that failed (debug)")
+ 
+     flags = parser.parse_args()
+ 
+     flags.ignore_list = get_ignored_parsers_per_file(flags.intree_only, flags.ignore_filename)
+ 
++    if flags.failed_only:
++        flags.dry_run = False
++        flags.verbose = -1
 +
-+        # br2-external with ignore list
-+        topdir_path = infra.filepath("tests/utils/br2-external")
-+        topdir_file = os.path.join(topdir_path, "package/external/external.mk")
-+        subdir_path = infra.filepath("tests/utils/br2-external/package")
-+        subdir_file = os.path.join(subdir_path, "external/external.mk")
+     return flags
+ 
+ 
+@@ -230,6 +236,11 @@ def check_file_using_lib(fname):
+                   .format(fname, should_fail, IGNORE_FILENAME))
+             nwarnings += 1
+ 
++    if flags.failed_only:
++        if len(failed) > 0:
++            f = " ".join(sorted(failed))
++            print("{} {}".format(fname, f))
 +
-+        w, m = call_script(["check-package", "--ignore-list=./.checkpackageignore", "-b", topdir_file],
-+                           self.WITH_UTILS_IN_PATH, topdir_path)
-+        self.assert_file_was_processed(m)
-+        self.assert_no_warnings_generated_for_file(m)
-+
-+        w, m = call_script(["check-package", "--ignore-list=./.checkpackageignore", "-b", subdir_file],
-+                           self.WITH_UTILS_IN_PATH, subdir_path)
-+        self.assert_file_was_processed(m)
-+        self.assert_no_warnings_generated_for_file(m)
-+
-+        w, m = call_script(["check-package", "--ignore-list=./.checkpackageignore_outdated", "-b", subdir_file],
-+                           self.WITH_UTILS_IN_PATH, subdir_path)
-+        self.assert_file_was_processed(m)
-+        self.assert_warnings_generated_for_file(m)
-+        self.assertIn("{}:0: Indent was expected to fail, did you fixed the file and forgot to update .checkpackageignore?"
-+                      .format(subdir_file), w)
-+        self.assertIn("{}:0: NewlineAtEof was expected to fail, did you fixed the file and forgot to update .checkpackageignore?"
-+                      .format(subdir_file), w)
+     return nwarnings, nlines
+ 
+ 
+@@ -268,7 +279,7 @@ def __main__():
+         print("{} lines processed".format(total_lines), file=sys.stderr)
+         print("{} warnings generated".format(total_warnings), file=sys.stderr)
+ 
+-    if total_warnings > 0:
++    if total_warnings > 0 and not flags.failed_only:
+         sys.exit(1)
+ 
+ 
 -- 
 2.25.1
 
