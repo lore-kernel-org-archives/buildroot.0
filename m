@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EAF7C00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 19:37:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3DBDC00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 19:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C99A540FCB;
-	Sun, 31 Jul 2022 19:37:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C99A540FCB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96BF740FE2;
+	Sun, 31 Jul 2022 19:38:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96BF740FE2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hGrl1uHITfFl; Sun, 31 Jul 2022 19:37:52 +0000 (UTC)
+	with ESMTP id lSmgyKgH3anj; Sun, 31 Jul 2022 19:38:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92CC6400CE;
-	Sun, 31 Jul 2022 19:37:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92CC6400CE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 74EC31BF2EB
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:36:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6174240FEB;
+	Sun, 31 Jul 2022 19:38:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6174240FEB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B36CA1BF2EB
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50852400CE
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50852400CE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8EB6561091
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:36:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EB6561091
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WGF20Fo5Y4vy for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 19:36:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 03HhC54WeHwx for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 19:36:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BB3B400B9
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com
- [IPv6:2607:f8b0:4864:20::e2f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7BB3B400B9
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 19:36:12 +0000 (UTC)
-Received: by mail-vs1-xe2f.google.com with SMTP id 125so9292958vsx.7
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 12:36:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6E4760773
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com
+ [IPv6:2607:f8b0:4864:20::935])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B6E4760773
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 19:36:15 +0000 (UTC)
+Received: by mail-ua1-x935.google.com with SMTP id f10so3793191uap.2
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 12:36:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=CyOMpob65O4dClSTTTNKcb9KSmVoe+E++aNZv47BmBo=;
- b=WDrLjs+MnrGchzIMA0g1Xs5Jl3a+SGg4Cza0XR2BVBoTLaKpz1Pkdy3g/utfYvSShR
- T2cs75BYyAjW6VXjmORzF5717FvxDGgVMuX67oUg74SQeA5USUsIgfviH3rvtIb7cw7y
- 2qjnc3UBRwf8SZeJQXeFsAxfwdAGez1l8P60yt9xs7krEQvp5dA5h+Sg4+8ZmmpIFtU1
- pH43cDNAGZANTUdi3+J5ZJSxVP4FoEPuOureTiY6k8rAEdWKzFcI/VTY3yRZNyp0D8tZ
- Q0yYHDB5+6HDDgbA981HHwX4QJIX9b5/sofnbRSCxLrqtUo1B8Gn0poBpOeQ+N5thr9V
- hVwg==
-X-Gm-Message-State: ACgBeo1faiIxhLZlCChQTg7SV+XDDQnjInWPF6XPFrv4inEO5j/PLreX
- Ro4i7VxK0oBF0ouctKtdFG/cnlbsWso=
-X-Google-Smtp-Source: AA6agR5E+CY2hiHoEJTj7BmgMdc9hsChZRO5X8xCyjw6eP4307KlBe8J+McSgTqTo/afhQNHWzrVnQ==
-X-Received: by 2002:a67:dd12:0:b0:384:ce1e:1e84 with SMTP id
- y18-20020a67dd12000000b00384ce1e1e84mr596163vsj.39.1659296171392; 
- Sun, 31 Jul 2022 12:36:11 -0700 (PDT)
+ bh=vLTXew5MtrVXHnUIxiUmhppFqq0MHOzuwytwSTr8utY=;
+ b=UUhfs4dHh29iP3wQVVY3wQpDSzNfwib50OhvHlUYR6df9yxgIRWbVVhj+Pr6dqqHY0
+ ML+pFfe9z6199OTm8QscSnNAav6lty2Lv/1mQJcouNUBpPwC5ructk816xNsr2DKUwXh
+ CkomWFTAiD8hRFDKs15e8SQ2CUVehuDIsaSeZvGNUYtVJOIMBq1olpg1vGDOHG9JWYvl
+ OgKF3Ni5eQJRfrnzHV3jV5AeJabK4ONhTqAzEdeGLk8I2XWpSB3xeBC5/jxnmIBTumya
+ NBED6zlzDsMxp8ZOF+u+0IzsZnIJiZT3SxI2pBLjWjN36Rp4iKqQF1rg6r0qKnRbJA+1
+ zYaw==
+X-Gm-Message-State: ACgBeo2yjwgBFKkJMMOGzNoms9M59g+YYyv1RQiGKTiyZrbtm8EdDc/M
+ 8oJhva30GANNr06Ld2MBLMMelafM3Ug=
+X-Google-Smtp-Source: AA6agR5ZrEm04Rz+xSTtUSQgrJFxgH67WE97CdkMIiwWzRqmOfu43Q6ArBChECRlXf2A+E6kmeS8Fg==
+X-Received: by 2002:ab0:69c5:0:b0:383:4295:fc9d with SMTP id
+ u5-20020ab069c5000000b003834295fc9dmr4727160uaq.92.1659296174616; 
+ Sun, 31 Jul 2022 12:36:14 -0700 (PDT)
 Received: from localhost.localdomain ([191.187.223.18])
  by smtp.gmail.com with ESMTPSA id
- v5-20020a056102074500b0037ddf9489f2sm1418667vsg.13.2022.07.31.12.36.09
+ v5-20020a056102074500b0037ddf9489f2sm1418667vsg.13.2022.07.31.12.36.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 31 Jul 2022 12:36:10 -0700 (PDT)
+ Sun, 31 Jul 2022 12:36:12 -0700 (PDT)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 31 Jul 2022 16:35:16 -0300
-Message-Id: <20220731193521.1217825-10-ricardo.martincoski@gmail.com>
+Date: Sun, 31 Jul 2022 16:35:17 -0300
+Message-Id: <20220731193521.1217825-11-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220731193521.1217825-1-ricardo.martincoski@gmail.com>
 References: <20220731193521.1217825-1-ricardo.martincoski@gmail.com>
@@ -72,18 +72,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=CyOMpob65O4dClSTTTNKcb9KSmVoe+E++aNZv47BmBo=;
- b=houEoYCPK2MXGQjnuVnmqknEJdzByKrXiKvJoe6RsoqiiSInLg3cTNgBfm9fOWLI5V
- 43sGD4Y2iHzZoXQ0OUvIy1xALeoLyOlPuwIycunybPMasO2Oxy/O+2zXWSnW7aknTidD
- 1N/ot5BW4RkyLFVJZoktruPqSU38wFnIaOg4Ztz6P3SrpDcTBFRd6DoTMmxjeyxAAPlI
- DF+wnuSLh+5MVuz3gSgQd9IhXfIZ8bQi24cFwTg5REY9D8oxYytORbDYFFg95uPmumg7
- vXpdsbyN/62zU5uBPqxNU3gOl4FOYwOhuUC8ra5oy/5qkeZcNqM+SVksblIqRn2VXKY1
- alcw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=vLTXew5MtrVXHnUIxiUmhppFqq0MHOzuwytwSTr8utY=;
+ b=T/k8w9AjAuuZvD/b4/HeM6LmmtozzJo3+xFrFeW8U46f6iA70v3p18c1N6qeuelv/j
+ raVwoBHiuN+Ju89MeKWsXARyBGBMppIjcl2BpH13KNfy+DTGMLbZTr368+KLBlIpHkLR
+ 0E1JvAQTk35CncRAgg+4Lsxu1dIIVrjR9hT6RXsuVEOMmn9akYTkrAfhAOUeuugNLJKP
+ c9zvH703mABbZrq8AM8udsdYtxAlgGexQeeCkibFm8hEv+ZWRqB1UKstNVbEpFBYlPR9
+ zNGzo3yHtqx0BYL/JUhqKQ7BBnaHx06l3pHKcPzVtuDM3LeZLBSK2jMvwIcyb4ylJJ+9
+ sWEA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=houEoYCP
-Subject: [Buildroot] [PATCH v2 09/14] utils/check-package: check files in
- board/
+ header.a=rsa-sha256 header.s=20210112 header.b=T/k8w9Aj
+Subject: [Buildroot] [PATCH v2 10/14] utils/check-package: check files in
+ support/
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,9 +101,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When a SysV init script is inside package/ it does not need to be
-executable.
-But this check does not apply in the case the script is in a fs_overlay.
+The .mk files inside both support/dependencies and support/misc are not
+package recipes, they are makefiles, so check-package doesn't understand
+them. Therefore ignore such files.
+
+In the test infra, some br2-externals are used as fixtures to provide
+(sometimes) failure cases, so ignore files in these directories.
+
+Files inside support/kconfig are files copied from linux upstream, so do
+not generate warnings for them.
+
+support/gnuconfig contains auto-generated config.{guess,sub} files,
+so do not generate shellcheck warnings for them.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
@@ -114,154 +123,86 @@ NOTE to the maintainer applying this patch: please re-generate the list
 of ignored warnings while applying:
 $ utils/docker-run make .checkpackageignore
 ---
- .checkpackageignore               | 91 +++++++++++++++++++++++++++++++
- utils/check-package               |  1 +
- utils/checkpackagelib/lib_sysv.py |  3 +
- utils/checkpackagelib/tool.py     |  5 ++
- 4 files changed, 100 insertions(+)
+ .checkpackageignore | 41 +++++++++++++++++++++++++++++++++++++++++
+ utils/check-package |  6 ++++++
+ 2 files changed, 47 insertions(+)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 615fe22e52..d528b0122e 100644
+index d528b0122e..91efb7fa1a 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -1,3 +1,94 @@
-+board/aarch64-efi/post-image.sh Shellcheck
-+board/amarula/a64-relic/post-build.sh Shellcheck
-+board/amarula/vyasa/post-build.sh Shellcheck
-+board/andes/ae350/post-build.sh Shellcheck
-+board/arcturus/aarch64-ucls1012a/post-build.sh Shellcheck
-+board/arcturus/aarch64-ucls1012a/post-image.sh Shellcheck
-+board/aspeed/common/post-image.sh Shellcheck
-+board/asus/tinker/post-build.sh Shellcheck
-+board/atmel/flasher.sh Shellcheck
-+board/beaglebone/post-build.sh Shellcheck
-+board/beagleboneai/post-build.sh Shellcheck
-+board/beaglev/post-build.sh Shellcheck
-+board/beelink/gs1/post-build.sh Shellcheck
-+board/boundarydevices/common/post-build.sh Shellcheck
-+board/boundarydevices/common/post-image.sh Shellcheck
-+board/canaan/k210-soc/post-build.sh Shellcheck
-+board/canaan/k210-soc/rootfs_overlay/sbin/init Shellcheck
-+board/chromebook/elm/sign.sh Shellcheck
-+board/chromebook/mksd.sh Shellcheck
-+board/chromebook/snow/linux-4.15-dts-tpm.patch ApplyOrder
-+board/chromebook/snow/sign.sh Shellcheck
-+board/cubietech/cubieboard2/post-image.sh Shellcheck
-+board/firefly/roc-rk3399-pc/post-build.sh Shellcheck
-+board/freescale/common/imx/imx8-bootloader-prepare.sh Shellcheck
-+board/freescale/common/imx/post-image.sh Shellcheck
-+board/freescale/common/mxs/post-image.sh Shellcheck
-+board/friendlyarm/nanopc-t4/post-build.sh Shellcheck
-+board/friendlyarm/nanopi-m4/post-build.sh Shellcheck
-+board/friendlyarm/nanopi-neo-plus2/post-build.sh Shellcheck
-+board/friendlyarm/nanopi-neo4/post-build.sh Shellcheck
-+board/friendlyarm/nanopi-r2s/post-build.sh Shellcheck
-+board/hardkernel/odroidc2/post-image.sh Shellcheck
-+board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload Shellcheck Variables
-+board/hardkernel/odroidxu4/post-image.sh EmptyLastLine Shellcheck
-+board/intel/galileo/post-build.sh Shellcheck
-+board/intel/galileo/rootfs_overlay/etc/init.d/S09modload Shellcheck Variables
-+board/kontron/bl-imx8mm/post-build.sh Shellcheck
-+board/kontron/pitx-imx8m/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch NumberedSubject
-+board/kontron/pitx-imx8m/post-build.sh Shellcheck
-+board/kontron/smarc-sal28/post-build.sh Shellcheck
-+board/lego/ev3/post-image.sh Shellcheck
-+board/lemaker/bananapro/post-build.sh Shellcheck
-+board/lemaker/bananapro/post-image.sh Shellcheck
-+board/mender/x86_64/post-image-efi.sh ConsecutiveEmptyLines
-+board/minnowboard/post-build.sh Shellcheck
-+board/nexbox/a95x/post-build.sh Shellcheck
-+board/nexbox/a95x/post-image.sh Shellcheck
-+board/octavo/osd32mp1-red/patches/uboot/0001-Add-OSD32MP1-RED-Device-Tree-support.patch NumberedSubject
-+board/octavo/osd32mp1-red/patches/uboot/0002-configs-stm32mp15_trusted_defconfig-disable-environm.patch NumberedSubject
-+board/olimex/a13_olinuxino/post-build.sh Shellcheck
-+board/olimex/a20_olinuxino/post-build.sh Shellcheck
-+board/olimex/a33_olinuxino/post-build.sh Shellcheck
-+board/olpc/post-build.sh Shellcheck
-+board/orangepi/common/post-build.sh Shellcheck
-+board/orangepi/orangepi-lite2/post-build.sh Shellcheck
-+board/orangepi/orangepi-one-plus/post-build.sh Shellcheck
-+board/orangepi/orangepi-rk3399/post-build.sh Shellcheck
-+board/pine64/rock64/post-build.sh Shellcheck
-+board/pine64/rockpro64/post-build.sh Shellcheck
-+board/qemu/aarch64-sbsa/assemble-flash-images Shellcheck
-+board/qemu/post-image.sh Shellcheck
-+board/qemu/x86/post-build.sh Shellcheck
-+board/qemu/x86_64/post-build.sh Shellcheck
-+board/radxa/rockpi-4/post-build.sh Shellcheck
-+board/radxa/rockpi-n10/post-build.sh Shellcheck
-+board/radxa/rockpi-n8/post-build.sh Shellcheck
-+board/raspberrypi/post-build.sh Shellcheck
-+board/raspberrypi/post-image.sh Shellcheck
-+board/roseapplepi/post-build.sh Shellcheck
-+board/sifive/hifive-unleashed/post-build.sh Shellcheck
-+board/sinovoip/m1-plus/post-build.sh Shellcheck
-+board/solidrun/clearfog/post-build.sh Shellcheck
-+board/solidrun/macchiatobin/post-build-mainline.sh Shellcheck
-+board/solidrun/macchiatobin/post-build.sh Shellcheck
-+board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh Shellcheck
-+board/stmicroelectronics/common/stm32mp157/post-image.sh Shellcheck
-+board/stmicroelectronics/stm32f429-disco/flash.sh Shellcheck
-+board/stmicroelectronics/stm32f469-disco/flash_sd.sh Shellcheck
-+board/stmicroelectronics/stm32f469-disco/flash_xip.sh Shellcheck
-+board/stmicroelectronics/stm32f469-disco/post-build.sh Shellcheck
-+board/synopsys/axs10x/post-build.sh Shellcheck
-+board/technologic/ts4900/post-image.sh Shellcheck
-+board/toradex/apalis-imx6/post-image.sh Shellcheck
-+board/udoo/common/post-build.sh Shellcheck
-+board/zynq/post-build.sh Shellcheck
-+board/zynq/post-image.sh Shellcheck
-+board/zynqmp/kria/kv260/kv260.sh Shellcheck TrailingSpace
-+board/zynqmp/kria/patches/uboot/0001-arm64-zynqmp-zynqmp-sm-k26-revA-Fix-DP-PLL-configura.patch NumberedSubject
-+board/zynqmp/post-build.sh Shellcheck
-+board/zynqmp/post-image.sh Shellcheck
-+board/zynqmp/zcu106/patches/uboot/0001-arm64-zynqmp-zynqmp-zcu102-revA-Fix-DP-PLL-configura.patch NumberedSubject
- package/alsamixergui/0001-misc-fixes.patch Sob
- package/am33x-cm3/S93-am335x-pm-firmware-load Variables
- package/android-tools/0008-Include-sysmacros.h-to-compile-with-glibc-2.28.patch Sob
+@@ -294,6 +294,47 @@ package/x11r7/xdriver_xf86-video-savage/0001-cross-compile.patch Sob
+ package/x11r7/xdriver_xf86-video-tdfx/0001-cross.patch Sob
+ package/x11r7/xserver_xorg-server/S40xorg Shellcheck Variables
+ package/xl2tp/xl2tpd TrailingSpace
++support/dependencies/check-host-asciidoc.sh Shellcheck
++support/dependencies/check-host-cmake.sh Shellcheck
++support/dependencies/check-host-gzip.sh Shellcheck
++support/dependencies/check-host-lzip.sh Shellcheck
++support/dependencies/check-host-make.sh Shellcheck
++support/dependencies/check-host-python3.sh Shellcheck
++support/dependencies/check-host-tar.sh Shellcheck
++support/dependencies/check-host-xzcat.sh Shellcheck
++support/dependencies/dependencies.sh Shellcheck
++support/download/bzr ConsecutiveEmptyLines Shellcheck
++support/download/cargo-post-process Shellcheck
++support/download/check-hash Shellcheck
++support/download/cvs Shellcheck
++support/download/dl-wrapper Shellcheck
++support/download/file Shellcheck
++support/download/git Shellcheck
++support/download/go-post-process Shellcheck
++support/download/hg Shellcheck
++support/download/scp Shellcheck
++support/download/sftp Shellcheck
++support/download/svn Shellcheck
++support/download/wget Shellcheck
++support/gnuconfig/update Shellcheck
++support/libtool/buildroot-libtool-v1.5.patch ApplyOrder Sob
++support/libtool/buildroot-libtool-v2.2.patch ApplyOrder Sob
++support/libtool/buildroot-libtool-v2.4.4.patch ApplyOrder
++support/libtool/buildroot-libtool-v2.4.patch ApplyOrder Sob
++support/misc/relocate-sdk.sh Shellcheck
++support/scripts/apply-patches.sh Shellcheck
++support/scripts/br2-external Shellcheck
++support/scripts/check-bin-arch Shellcheck
++support/scripts/check-host-rpath Shellcheck
++support/scripts/fix-configure-powerpc64.sh EmptyLastLine
++support/scripts/fix-rpath Shellcheck
++support/scripts/generate-gitlab-ci-yml Shellcheck
++support/scripts/mkmakefile ConsecutiveEmptyLines Shellcheck
++support/scripts/mkusers Shellcheck
++support/scripts/setlocalversion Shellcheck
++support/testing/tests/core/post-build.sh Shellcheck
++support/testing/tests/package/test_opkg/post-build.sh Shellcheck
++support/testing/tests/utils/test_get_developers/0001-package-binutils-change-.mk.patch NumberedSubject
+ utils/brmake Shellcheck
+ utils/config Shellcheck
+ utils/docker-run Shellcheck
 diff --git a/utils/check-package b/utils/check-package
-index 094b7b9c07..004352261b 100755
+index 004352261b..423b53ffb8 100755
 --- a/utils/check-package
 +++ b/utils/check-package
-@@ -101,6 +101,7 @@ CONFIG_IN_FILENAME = re.compile(r"Config\.\S*$")
- DO_CHECK_INTREE = re.compile(r"|".join([
-     r"Config.in",
-     r"arch/",
-+    r"board/",
-     r"boot/",
+@@ -106,6 +106,7 @@ DO_CHECK_INTREE = re.compile(r"|".join([
      r"fs/",
      r"linux/",
-diff --git a/utils/checkpackagelib/lib_sysv.py b/utils/checkpackagelib/lib_sysv.py
-index 386d085afc..dc4afd71b8 100644
---- a/utils/checkpackagelib/lib_sysv.py
-+++ b/utils/checkpackagelib/lib_sysv.py
-@@ -21,6 +21,9 @@ class Indent(_CheckFunction):
- 
- 
- class NotExecutable(checkpackagelib.tool.NotExecutable):
-+    def ignore(self):
-+        return 'etc/init.d/' in self.filename
-+
-     def hint(self):
-         return ", just make sure you use '$(INSTALL) -D -m 0755' in the .mk file"
- 
-diff --git a/utils/checkpackagelib/tool.py b/utils/checkpackagelib/tool.py
-index e719fdd407..632aaa9f9e 100644
---- a/utils/checkpackagelib/tool.py
-+++ b/utils/checkpackagelib/tool.py
-@@ -4,7 +4,12 @@ from checkpackagelib.base import _Tool
- 
- 
- class NotExecutable(_Tool):
-+    def ignore(self):
-+        return False
-+
-     def run(self):
-+        if self.ignore():
-+            return
-         if os.access(self.filename, os.X_OK):
-             return ["{}:0: This file does not need to be executable{}".format(self.filename, self.hint())]
- 
+     r"package/",
++    r"support/",
+     r"system/",
+     r"toolchain/",
+     r"utils/",
+@@ -115,6 +116,11 @@ DO_NOT_CHECK_INTREE = re.compile(r"|".join([
+     r"fs/common\.mk$",
+     r"package/doc-asciidoc\.mk$",
+     r"package/pkg-\S*\.mk$",
++    r"support/dependencies/[^/]+\.mk$",
++    r"support/gnuconfig/config\.",
++    r"support/kconfig/",
++    r"support/misc/[^/]+\.mk$",
++    r"support/testing/tests/.*br2-external/",
+     r"toolchain/helpers\.mk$",
+     r"toolchain/toolchain-external/pkg-toolchain-external\.mk$",
+     ]))
 -- 
 2.25.1
 
