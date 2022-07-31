@@ -1,66 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9578C00140
-	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 18:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15196C00140
+	for <buildroot@archiver.kernel.org>; Sun, 31 Jul 2022 19:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F0C7E40E43;
-	Sun, 31 Jul 2022 18:17:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0C7E40E43
+	by smtp4.osuosl.org (Postfix) with ESMTP id 487A74021E;
+	Sun, 31 Jul 2022 19:23:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 487A74021E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3FPj7wGknZM0; Sun, 31 Jul 2022 18:17:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WwGkI2WhRXaE; Sun, 31 Jul 2022 19:23:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F04B40DC6;
-	Sun, 31 Jul 2022 18:17:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F04B40DC6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 279F440224;
+	Sun, 31 Jul 2022 19:23:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 279F440224
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 140A81BF290
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 18:17:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5EBC61BF3E8
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:23:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E2C0060EBB
- for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 18:17:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2C0060EBB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 391C461069
+ for <buildroot@lists.busybox.net>; Sun, 31 Jul 2022 19:23:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 391C461069
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xArupi0jgKdH for <buildroot@lists.busybox.net>;
- Sun, 31 Jul 2022 18:17:15 +0000 (UTC)
+ with ESMTP id FswPBkTrkxL2 for <buildroot@lists.busybox.net>;
+ Sun, 31 Jul 2022 19:23:13 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3FF660773
-Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3FF660773
- for <buildroot@buildroot.org>; Sun, 31 Jul 2022 18:17:14 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.73.23])
- by Aruba Outgoing Smtp  with ESMTPSA
- id IDV1owFvEbMeiIDV1okjQH; Sun, 31 Jul 2022 20:17:12 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Sun, 31 Jul 2022 20:17:10 +0200
-Message-Id: <20220731181710.191802-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A73CD60E2C
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A73CD60E2C
+ for <buildroot@buildroot.org>; Sun, 31 Jul 2022 19:23:12 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D6F2C20002;
+ Sun, 31 Jul 2022 19:23:08 +0000 (UTC)
+Date: Sun, 31 Jul 2022 21:23:06 +0200
+To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Message-ID: <20220731212306.5483d946@windsurf>
+In-Reply-To: <62e6922ed41f6_bff739ec-35d@xultri.mail>
+References: <6430c454-08d4-cb3b-b766-c72ea7abb691@smile.fr>
+ <62e6922ed41f6_bff739ec-35d@xultri.mail>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfK2tZ8AGZC1CPx252A9POa6D+RU3gbxrcwLa2BMXMqs4kNxxryK/PbLYtPdF9xnN/2Ew5SE5Hgrca0lmoQFlE7m7m4H9SQDWMkLXYR8K2zkTf5OHQHW3
- yyIdyHoVnpJm+1SEnmzGctZ48KYmnAI2FkEnGtXpTK7Pgxzhvb+gtklEs+iQ03i4alxC+7hWdWC7JeBb/5YrrQ5MR97eLJsHgLOKNz4nEqPclT3OEQpNe86e
- T5ORi/AyyZUkJsVnISB8i5qgsZAC1lu0f+TJGqaE43kSkWJjI/BPmZniMbxWUTNF
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1659291432; bh=NeiDjxN4K24+i1fxlugPO0LmnauW0WmRhaW3LhGGgaM=;
- h=From:To:Subject:Date:MIME-Version;
- b=lC8FKkcg1Ant6wk97WdCMkgbcoSypbWuPokop/ZBFYY7Yk/LDKwst3+UmM6Hb2bX2
- 4jvCMxHwH5r7fFNboj8TKF/7APr8MJPHnBVIft0hiMBgBH455hag1rpIFGw55/Mx1E
- cg7YJatEEDhqc27yaJ1PWghl+tXvLek/RK4DWDoKL5QQQma4zEyBsIxC+r15iloKjp
- +MaLbWpogZQilYpWfhlwBhaIUgVEeMqpF53KbHDsV4k1/zRov57JoS1Ir0VCW+hkHP
- 4Ahc86Feh3txlo+3PDa2TDNTKViWTlwSE2iU6tmePBy0BX2P6RWvNnm84NMIJ9+dtK
- buYECVGpu5juA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659295389;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=4WoxWlbI8U69b2A9d18V0twgpGW7mhoHi2PPmmnpFgI=;
+ b=gMXz1A9qT5YE+VdmDQGCoQcn5wVYkgJ4BJEjKesMCKKDa8mg78qkQefJtKpQY+i3X9NMeZ
+ cQjZKN/zXTNr9lK+xniG+kCuCjPkxPg3SH5bijKTqp5nBBl+izEfLBCJ9ObQtg8Jzt3n05
+ VW4zDHBdWjRJ0ptMIpeo478UTRaBRRpl2ftRlNAqlgpDLMbQ9bITPmuZK/5RIyOL/tHb8X
+ f3ET+2Pbx+S0N53t12f6CeBhHdNeNDzmw0J8OshiYfn4/9PyfyLCGYS98tNnWrJvbdrERr
+ D2vxE2sU3j3HTA6DB5OvEwGiqV1R9raohowwVNIYOpBnhBZFkpg5I9QPvnistw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=lC8FKkcg
-Subject: [Buildroot] [PATCH] package/harfbuzz: bump version to 5.1.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gMXz1A9q
+Subject: Re: [Buildroot] [PATCH 06/16] Makefile: make check-package assume a
+ git tree
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,43 +77,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: romain.naour@smile.fr, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Ricardo,
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index b1d236a055..9ec5c63f55 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d0094299a36346b9f5540aa159b358425c022b19fcdf72165eaf94046a179166  harfbuzz-5.0.1.tar.xz
-+sha256  2edb95db668781aaa8d60959d21be2ff80085f31b12053cdd660d9a50ce84f05  harfbuzz-5.1.0.tar.xz
- sha256  4345e1735f8bc6d812fed5180cabb5a5e88a4109d332652f2a45c13cfa5ee692  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index c9ff28a526..75d55106ea 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 5.0.1
-+HARFBUZZ_VERSION = 5.1.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+On Sun, 31 Jul 2022 11:31:10 -0300
+Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+
+> Thank you for your review on the series.
+> I will respin. I just changed the series to Changes Requested.
+
+You have probably seen that we have fixed all hash files in one big
+commit. The trigger for this was your series, for which the "warning
+ignore" file was mostly filled with ignores for hash file formatting
+issues.
+
+So it will be one thing less to worry about in your series, as all
+hashes are now correct.
+
+Thanks a lot!
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
