@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CD4DC00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 22:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14432C00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 22:09:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BDDD401EC;
-	Mon,  1 Aug 2022 22:08:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BDDD401EC
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2717606C0;
+	Mon,  1 Aug 2022 22:09:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2717606C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rxfLCIM1u-zM; Mon,  1 Aug 2022 22:08:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a1NH4AdvFR54; Mon,  1 Aug 2022 22:09:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AB224018C;
-	Mon,  1 Aug 2022 22:08:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AB224018C
+	by smtp3.osuosl.org (Postfix) with ESMTP id C868A60675;
+	Mon,  1 Aug 2022 22:09:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C868A60675
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CE5D41BF31F
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 22:08:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F3D6D1BF31F
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 22:09:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A94FA60675
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 22:08:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A94FA60675
+ by smtp3.osuosl.org (Postfix) with ESMTP id A548B60675
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 22:09:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A548B60675
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LSTTLHrIwLIL for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 22:08:31 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8DAEB605B0
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 22:08:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DAEB605B0
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 1927D86C6D; Mon,  1 Aug 2022 21:54:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 2 Aug 2022 00:07:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b265fa5c7f2257c51b0ff363c2ff017b2e91d680
-X-Git-Newrev: 88cac04de3c256cfdb629a181c5e0d5d4b3725c2
-X-Patchwork-Hint: ignore
-Message-Id: <20220801215433.1927D86C6D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/llvm: Support for RISC-V on the
+ with ESMTP id qg0nY_zgbGJs for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 22:09:23 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8CC6605B0
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E8CC6605B0
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 22:09:22 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8A26C1BF207;
+ Mon,  1 Aug 2022 22:09:19 +0000 (UTC)
+Date: Tue, 2 Aug 2022 00:09:18 +0200
+To: Abel Bernabeu <abel@x-silicon.com>
+Message-ID: <20220802000918.00ea20f2@windsurf>
+In-Reply-To: <20220723215448.2532160-1-abel@x-silicon.com>
+References: <20220723215448.2532160-1-abel@x-silicon.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659391760;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=9L4nhjYg4c4e6IV3su/a7nJTe609c23jLiN5sUNaBFc=;
+ b=knwZt8iKuHsRIRYoDyyXywz34fGSdDL7oIo1A5wQS7J4skhNFUaLa318oY1eI0FMAeqf86
+ QnM6I5ArgGjtbspNPi/StMKwqlyic52eEAvPnT7HJxc1dbfyZh6Q+uT9WPCfCrHh9pinZd
+ tUUnoKv3jfNlQAWntLIG6yRvmLSWyObi8y+/kDkwAr9G0dW775PcP0dUdo0WmgmAArQb+b
+ f7qaw7XMwrPob5fRStIjCmtwqBAlRMsurVCID3vHEuQU2UBmLMRKvULdknt51O9aNXBRdq
+ 6ogqkb983QAnnXy52ysEt13D6uTaljVwjsx/CRg6747ioS9AjB/5B1F+7shyeQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=knwZt8iK
+Subject: Re: [Buildroot] [PATCH 1/2] package/llvm: Support for RISC-V on the
  LLVM package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,67 +78,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>,
+ Mark Corbin <mark@dibsco.co.uk>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88cac04de3c256cfdb629a181c5e0d5d4b3725c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 23 Jul 2022 23:54:47 +0200
+Abel Bernabeu <abel@x-silicon.com> wrote:
 
-The initial support for the LLVM package did not include RISC-V, and
-needed to be added. Some special casing is needed for the
-LLVM_TARGETS_TO_BUILD variable, which expects a RISCV value regardless
-of whether riscv32 or riscv64 is chosen.
+> The initial support for the LLVM package did not include RISC-V, and
+> needed to be added.
+> 
+> There is a new configuration parameter added
+> (BR2_PACKAGE_LLVM_TARGETS_TO_BUILD) for dealing with the fact that
+> the LLVM target and the architecture have different naming for RISC-V.
+> While the target for RISC-V is "RISCV" irrespective of the ISA being
+> 32 or 64 bits, the architecture does contain the number of bits
+> leading to "riscv32" and "riscv64".
+> 
+> For previously supported architectures the naming for target and
+> architecture matched and thus this parameter had not been needed, but
+> it is now needed for RISC-V.
+> 
+> Signed-off-by: Abel Bernabeu <abel@x-silicon.com>
+> ---
+>  package/llvm/Config.in | 10 ++++++++++
+>  package/llvm/llvm.mk   |  2 +-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 
-Signed-off-by: Abel Bernabeu <abel@x-silicon.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/llvm/Config.in | 3 +++
- package/llvm/llvm.mk   | 7 ++++++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+I have simplified the RISCV quirk by moving it to the llvm.mk file:
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index c1887e36dd..768af4971e 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -4,12 +4,15 @@ config BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	default y if BR2_x86_64
- 	default y if BR2_aarch64
- 	default y if BR2_arm || BR2_armeb
-+	default y if BR2_riscv
- 
- config BR2_PACKAGE_LLVM_TARGET_ARCH
- 	string
- 	default "AArch64" if BR2_aarch64
- 	default "ARM" if BR2_arm || BR2_armeb
- 	default "X86" if BR2_i386 || BR2_x86_64
-+	default "riscv32" if BR2_riscv && !BR2_ARCH_IS_64
-+	default "riscv64" if BR2_riscv && BR2_ARCH_IS_64
- 
- config BR2_PACKAGE_LLVM
- 	bool "llvm"
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 4670773ca3..977c0a08c2 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -41,8 +41,13 @@ HOST_LLVM_CONF_OPTS += -DCMAKE_INSTALL_RPATH="$(HOST_DIR)/lib"
- # Get target architecture
- LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
- 
--# Build backend for target architecture. This include backends like AMDGPU.
-+# Build backend for target architecture. This include backends like
-+# AMDGPU. We need to special case RISCV.
-+ifneq ($(filter riscv%,$(LLVM_TARGET_ARCH)),)
-+LLVM_TARGETS_TO_BUILD = RISCV
-+else
- LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
-+endif
- HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
- LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
- 
+# Build backend for target architecture. This include backends like
+# AMDGPU. We need to special case RISCV.
+ifneq ($(filter riscv%,$(LLVM_TARGET_ARCH)),)
+LLVM_TARGETS_TO_BUILD = RISCV
+else
+LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+endif
+
+Applied with this change, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
