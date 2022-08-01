@@ -4,65 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66619C00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 17:02:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5FA0C19F2B
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 17:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EB0A60BD0;
-	Mon,  1 Aug 2022 17:02:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EB0A60BD0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D43560BB9;
+	Mon,  1 Aug 2022 17:02:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D43560BB9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GZQbZm5Sno-4; Mon,  1 Aug 2022 17:02:22 +0000 (UTC)
+	with ESMTP id NM3vcjkZFfJq; Mon,  1 Aug 2022 17:02:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A42160BB9;
-	Mon,  1 Aug 2022 17:02:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A42160BB9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5ABEE1BF315
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:02:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 754CD60BC4;
+	Mon,  1 Aug 2022 17:02:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 754CD60BC4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C4BF1BF315
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:02:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35B4A404F3
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:02:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35B4A404F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6551A409FF
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:02:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6551A409FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QRu1HGkh3Nsi for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 17:02:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B985E4018B
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B985E4018B
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 17:02:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 27oHi6ec88eq for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 17:02:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 080BB409EB
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 080BB409EB
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 17:02:09 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 982BB240006;
- Mon,  1 Aug 2022 17:01:57 +0000 (UTC)
-Date: Mon, 1 Aug 2022 19:01:56 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220801190156.027cc349@windsurf>
-In-Reply-To: <20220731181710.191802-1-giulio.benetti@benettiengineering.com>
-References: <20220731181710.191802-1-giulio.benetti@benettiengineering.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 0DFC620009;
+ Mon,  1 Aug 2022 17:02:07 +0000 (UTC)
+Date: Mon, 1 Aug 2022 19:02:06 +0200
+To: Sen Hastings <sen@phobosdpl.com>
+Message-ID: <20220801190206.217f4117@windsurf>
+In-Reply-To: <20220728232357.270130-1-sen@phobosdpl.com>
+References: <20220728232357.270130-1-sen@phobosdpl.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659373318;
+ d=bootlin.com; s=gm1; t=1659373328;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=VOvvQP2ArQoHSnhJ5390z22w8J+zDsE3YMh6bDKJfbE=;
- b=o+vW8c/7GdLxhMBOjTj6BUuBimxrsu2oXFcFKSK3r2HRni7RTHZbBopNtM8otb9WmOAbMA
- g15ecmaBAg/xfSf2TTRq2ZV+W/1XegJ14/nyboLQ6jcYzIE0LwG4JUc0HVkdSwcJKMU9QK
- CvXtO5X46NaNT06lQwH9cUxlNlWCr+SZ1Pt/3doLTYxE5msyM84N3EKzORl9PS3RYP0MHE
- Hj/2lmfME2GVdtKdiYh1KuAUF1TW042114qr61ggwZwoCvvMFHiFQkOKRu6hgQhor1jU0M
- FEq78MDHs/JD72OXaEfTg17/oqQd9ZPQ5LrncvYuRa2GEqYPcAhklfsL52HX+g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=+iVDepKOiiz6ZleiAsiVgYe1HFoDR+WkbLm5ydArPT8=;
+ b=fQoSrKc2QcKE70cfTbWn4AANlfEHjIrDMYA5IAdWK4oAr9l8SJSx75Ukc2oA1OJ5eAjIBw
+ y598Ck/wX9o3Y9IiAZ0S6a4Ol6bcjGwZ7gM151Wbe7NoC4AJlUJUHmZLLVvlD3lYLt+AYQ
+ DoKLubNSshtW9HVU7E5tUOtIKK7+lpL2GO9TXqdbWoTmLYxz6FIYGdVbIssv6lcPQJebkH
+ x24993PHMdDUB5RjrDGLs01/Li5oLzpwiGVFO+x/SB7HxfK/ctQD2KGwWg7BmmK8MpM4QN
+ lDSn27yIZcKxyXvW2g3b/d4BMVYyz2cMjG3RC6ivQMlVCD8HqdVoIGDfVfCsSg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=o+vW8c/7
-Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump version to 5.1.0
+ header.s=gm1 header.b=fQoSrKc2
+Subject: Re: [Buildroot] [PATCH 1/3] support/scripts/pkg-stats: make cells
+ with many CVEs collapsible
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,14 +84,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 31 Jul 2022 20:17:10 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Thu, 28 Jul 2022 18:23:55 -0500
+Sen Hastings <sen@phobosdpl.com> wrote:
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Sometimes a package can have a lot of CVEs.
+> Rather than have the CVE cell make a really tall row
+> (that means you have to scroll a bunch) this collapses the CVE
+> cell to a fixed size scrollable element with a
+> sticky button that lets you expand and collapse it.
+> 
+> If Javascript is enabled:
+> 
+> A stylesheet is generated and appended before content rendering,
+> amending the cells style to have a fixed height and overflow.
+> 
+> Also, the expand/contract button is unhidden.
+> 
+> This means the CVE cells are rendered in a collapsed state
+> instead of being rendered in an expanded state and then
+> slamming shut.
+> 
+> This avoids a "flash" and *helps* (vertically at least) manage CLS
+> (cumulative layout shift).
+> 
+> see: https://web.dev/cls/
+> 
+> If Javascript is disabled:
+> 
+> The cells stay fully open and the expand/contract button stays hidden.
+> 
+> Signed-off-by: Sen Hastings <sen@phobosdpl.com>
 > ---
->  package/harfbuzz/harfbuzz.hash | 2 +-
->  package/harfbuzz/harfbuzz.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  support/scripts/pkg-stats | 38 ++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 36 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
