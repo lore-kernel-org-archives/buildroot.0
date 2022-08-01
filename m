@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5244DC00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 17:40:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E91E3C00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 17:43:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF13F823AA;
-	Mon,  1 Aug 2022 17:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF13F823AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BCD9410E4;
+	Mon,  1 Aug 2022 17:43:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BCD9410E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7Ds1Ni0_FIEI; Mon,  1 Aug 2022 17:40:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id by9W8bxh0Vyf; Mon,  1 Aug 2022 17:43:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE2A481B14;
-	Mon,  1 Aug 2022 17:40:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE2A481B14
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4DA8B1BF33D
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:40:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87B74410D5;
+	Mon,  1 Aug 2022 17:43:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87B74410D5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 91FC81BF33D
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:43:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 326B64047D
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 326B64047D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7806A410D5
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:43:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7806A410D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s1i8n0x-9WJi for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 17:40:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jxyGc1_t_a7h for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 17:42:58 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1402B400F2
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1402B400F2
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 17:40:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36425410D3
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 36425410D3
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 17:42:58 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DA5821C0005;
- Mon,  1 Aug 2022 17:40:34 +0000 (UTC)
-Date: Mon, 1 Aug 2022 19:40:33 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id AAD5540004;
+ Mon,  1 Aug 2022 17:42:55 +0000 (UTC)
+Date: Mon, 1 Aug 2022 19:42:54 +0200
 To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-Message-ID: <20220801194033.0cb5457a@windsurf>
-In-Reply-To: <20220727192948.18653-3-guillaume.bressaix@gmail.com>
+Message-ID: <20220801194254.118219ec@windsurf>
+In-Reply-To: <20220727192948.18653-4-guillaume.bressaix@gmail.com>
 References: <20220727192948.18653-1-guillaume.bressaix@gmail.com>
- <20220727192948.18653-3-guillaume.bressaix@gmail.com>
+ <20220727192948.18653-4-guillaume.bressaix@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659375635;
+ d=bootlin.com; s=gm1; t=1659375776;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=pXUarBoF9SXsGxVkqoXyMQ/fQ0AvjADrDgkDKOHSSgs=;
- b=p5c9j6bXrQQIPGhkLEyaSxlWKsh0EHZVRqHe7zN44gjmQVYzfFxOllfMTDCw2Ok1OG7XhD
- tEWiav8v/5hAGnIhMZW1c7Pqybq6NqOHECQjK5GRNfRe1loBIahoGBLrm4jMsKiZsmAwJ+
- lhrGBFKrpoFQTQZrAO+HMO9voV/B3hB8ScSzjt8PTMpkkAHue/Ki/xrg1tRTiOtiEgUDu/
- 2TQEMeV2ykh6SK0dXGz8cKiTvx5BaEVtjz7sOlMhkvHf9Vyxv6ycLXGcjz0XYlNNtm7p++
- J9zFRbak6QSrMULnm0NOhS7brfH6LevnHcG6o6MMWjLnNwyblPk28lMlFV5W8Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=at1pivmr2FpVaxuL+vwJavb+wctviMHhTDVUPvZybl4=;
+ b=jTfFE5cHtcJ8OsozeuoS+T5uMslds+zD4hPZeUAaHDdzKAUy9o8xMref/NvT1oyuIujB4O
+ dOZWQW0VKsL0U8Usx7zu81rBdZA6BLJ0IhbJTjjjgFZ9JmnrmEo8+C4383ZKfBmkSJJKzl
+ aJWZV1rtKA05yk0WxXSnwcWZvn+sCtnAY0QUMwiGw5pw1m/EjdDWAB7cfjJfQhWJoeLWT/
+ 6qSz9c/EbNwS9SNS0tAf03MKWc2QcL6Pj3EvYG5vZuObMXJT2h77S0Y/DRWnXXsVhxJM57
+ n5GnLMxm5XVlVC/RJQnO+kO35rtRAyhWFS4bP6GH0kpqqhx/Gk/zvdd82m01nA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=p5c9j6bX
-Subject: Re: [Buildroot] [PATCH v5 3/4] package/python-pythran: new
- host-only package
+ header.s=gm1 header.b=jTfFE5cH
+Subject: Re: [Buildroot] [PATCH v5 4/4] package/python-scipy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,31 +86,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 27 Jul 2022 21:29:47 +0200
+Hello,
+
+On Wed, 27 Jul 2022 21:29:48 +0200
 "Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
 
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> From: Jagan Teki <jagan@amarulasolutions.com>
 > 
-> Generated with scanpypi and converted to host.
-> 
-> It is a dependency of python-scipy.
-> 
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> [Arnout:
+>  - Indent hash file with two spaces.
+>  - Bump to 1.7.3 to fix build failure with recent GCC.
+>  - Get from github instead of PyPI.
+>  - Add host-meson and host-python-pythran dependencies.
+>  - Properly propagate Config.in dependencies.
+>  - Correct usage of BR2_INSTALL_LIBSTDCPP symbol.
+>  - Remove F77, no longer used.
+> ]
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> [Guillaume:
+>  - -lnpymath: npymath.ini localization problem
+>  - -lnpyrandom resolution problem
+>  - fix legal-info for latest version LICENSE.txt
+>  - zlib is a scipy::io module runtime requirement
+>  - update serie for scipy 1.8.1 (latest)
+> ]
 > Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
->  package/python-pythran/python-pythran.hash |  6 ++++++
->  package/python-pythran/python-pythran.mk   | 19 +++++++++++++++++++
->  2 files changed, 25 insertions(+)
->  create mode 100644 package/python-pythran/python-pythran.hash
->  create mode 100644 package/python-pythran/python-pythran.mk
 
-Applied to master with an entry in the DEVELOPERS file pointing to
-Guillaume, assuming he is willing to maintain this package. Thanks!
+I have applied, with the following changes:
+
+    [Thomas:
+     - add runtime test
+     - drop dependency on OpenBLAS, which is not needed in a minimal
+       configuration
+     - remove PYTHON_SCIPY_NPY_PKG_CONFIG_PATH logic as it is no longer
+       needed
+    ]
+
+Could you please:
+
+ (1) Review the runtime test, to see if it can be improved with some
+     better testing.
+
+ (2) Review the OpenBLAS dependency, to see if it needs to be added as
+     an optional dependency in some way.
+
+> +# Provide system configuration options to numpy distutils extenions, telling
+> +# to find all include files and libraries in staging directory.
+> +define PYTHON_SCIPY_CONFIGURE_CMDS
+> +	-rm -f $(@D)/site.cfg
+> +	echo "[DEFAULT]" >> $(@D)/site.cfg
+> +	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
+> +	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+> +endef
+
+This part is a bit annoying, as it's duplicated from python-numpy.mk. I
+looked a bit, but couldn't really find a good way of avoiding this
+duplication.
+
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
