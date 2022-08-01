@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C57E3C00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 20:00:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36DBDC00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 20:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60B43605A2;
-	Mon,  1 Aug 2022 20:00:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60B43605A2
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6851605B7;
+	Mon,  1 Aug 2022 20:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6851605B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E9m5f_Aj4Ytz; Mon,  1 Aug 2022 20:00:02 +0000 (UTC)
+	with ESMTP id St1VyDVuh_Yp; Mon,  1 Aug 2022 20:09:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E6ED6059F;
-	Mon,  1 Aug 2022 20:00:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E6ED6059F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E553D1BF290
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 19:59:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3036605B1;
+	Mon,  1 Aug 2022 20:09:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3036605B1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A6BC81BF293
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE76A409DA
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 19:59:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE76A409DA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 820A940122
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:09:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 820A940122
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pFGFnSXIAkak for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 19:59:52 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 454684077D
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 454684077D
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 19:59:52 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4C3C720002;
- Mon,  1 Aug 2022 19:59:49 +0000 (UTC)
-Date: Mon, 1 Aug 2022 21:59:48 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20220801215948.1d0d749d@windsurf>
-In-Reply-To: <20220726175344.7126-1-ju.o@free.fr>
-References: <20220726175344.7126-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659383989;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=A46N98EDVQCDNjDQU4SNytFgluRbGkKxsDmKbbhYum0=;
- b=TDjuC4s+d8UVZPeIJJqpTT2K2M0o/0o3sLZkc8hU988jBGQdZ4MxDT4yH5EVG3+eIXFsfc
- mYpT6qALcEwvWdLiZYpoTxYQOf+6d3vAxYLxBE+bYcT1/mvVO61Yi9UPM9jW3fmGBoXj9B
- izc3aTlgL0fO3hJ77Zr2nMTVV5yNIt46AAXTjas9loYmwcrs44/1b9zLIxo59hHQlXkzkm
- RStXjfrEnvZD26xpyC8HyMJCSFlIqyVT6thMg5I7H8sBdp8lStCo1bIy4zCNORNL1CCZ9+
- zty0MZttZx+/6cXTsfuKTnnTF6DdD6PjP9M501IX30g9b24caTPlM4j6+ex8Tg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TDjuC4s+
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add test for ola
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oRbeaa6PTJY0 for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 20:09:17 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5D0D400A8
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 20:09:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5D0D400A8
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 6FBC686C08; Mon,  1 Aug 2022 19:55:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 1 Aug 2022 22:05:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3a520c64f62c666df4058821932321b4d377baa6
+X-Git-Newrev: ccc3900326fd185c854b3b572c6cc776c7c0746f
+X-Patchwork-Hint: ignore
+Message-Id: <20220801195519.6FBC686C08@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libutp: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,31 +57,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 26 Jul 2022 19:53:44 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ccc3900326fd185c854b3b572c6cc776c7c0746f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This test relies on the OLA Dummy plugin presenting a test device
-> and port.  It starts the daemon, performs few configuration commands,
-> covers the Python bindings and also test the OLA web interface.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> This OLA test was suggested in:
-> https://lists.buildroot.org/pipermail/buildroot/2022-July/647089.html
+Follow transmission switching from branch post-3.3-transmission to
+branch post-3.4-transmission:
+https://github.com/transmission/transmission/commit/745adf8332b9686afa55407f9be20de21002a187
 
-Applied to master, thanks.
+This branch contains a copyright year bump for the license file:
+https://github.com/transmission/libutp/commit/365254427e5358a0c390aa5a60df5f449b9c0f00
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libutp/libutp.hash | 4 ++--
+ package/libutp/libutp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libutp/libutp.hash b/package/libutp/libutp.hash
+index 38d46b0ae5..f347dc3f2c 100644
+--- a/package/libutp/libutp.hash
++++ b/package/libutp/libutp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c515e6f9add47d3d202389e8a62feb765f0ae41d6398cc238e44028be520774e  libutp-fda9f4b3db97ccb243fcbed2ce280eb4135d705b.tar.gz
+-sha256  4441418beb8e352b6e2aa09083b4c51a86814a49878dbb1a81936b466cd5badd  LICENSE
++sha256  484f802d044f774fa5f669476ecdd9cb6110c383781c39adc03bbf6575090771  libutp-059c9449a104e440e4f913756a5f560dd4ae76a9.tar.gz
++sha256  73b400bf61dde52223dae1642205ca187f1a6b24a508dcce52bf386c27a0e58c  LICENSE
+diff --git a/package/libutp/libutp.mk b/package/libutp/libutp.mk
+index c926c290d2..394c1e9cb9 100644
+--- a/package/libutp/libutp.mk
++++ b/package/libutp/libutp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUTP_VERSION = fda9f4b3db97ccb243fcbed2ce280eb4135d705b
++LIBUTP_VERSION = 059c9449a104e440e4f913756a5f560dd4ae76a9
+ LIBUTP_SITE = $(call github,transmission,libutp,$(LIBUTP_VERSION))
+ LIBUTP_LICENSE = MIT
+ LIBUTP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
