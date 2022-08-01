@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 905DBC00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 17:02:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A747C00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 17:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2708A60BC6;
-	Mon,  1 Aug 2022 17:02:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2708A60BC6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F2884109D;
+	Mon,  1 Aug 2022 17:04:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F2884109D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5y71bSi6_jdc; Mon,  1 Aug 2022 17:02:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wDuHlMK2mNqO; Mon,  1 Aug 2022 17:04:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2628B60BD7;
-	Mon,  1 Aug 2022 17:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2628B60BD7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A58651BF315
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:02:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E44E4410A7;
+	Mon,  1 Aug 2022 17:04:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E44E4410A7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E8521BF33D
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:04:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 811BF404F3
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:02:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 811BF404F3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7963881D4D
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 17:04:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7963881D4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eREzXbS0K-VJ for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 17:02:32 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5221B4018B
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Bw5B7MfAf9Ct for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 17:04:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AAC581409
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5221B4018B
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 17:02:32 +0000 (UTC)
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7AAC581409
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 17:04:20 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 59C1C1BF206;
- Mon,  1 Aug 2022 17:02:28 +0000 (UTC)
-Date: Mon, 1 Aug 2022 19:02:27 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 7CE8D1BF205;
+ Mon,  1 Aug 2022 17:04:18 +0000 (UTC)
+Date: Mon, 1 Aug 2022 19:04:17 +0200
 To: Sen Hastings <sen@phobosdpl.com>
-Message-ID: <20220801190227.397f706d@windsurf>
-In-Reply-To: <20220728232357.270130-3-sen@phobosdpl.com>
+Message-ID: <20220801190417.061c2858@windsurf>
+In-Reply-To: <20220728232357.270130-2-sen@phobosdpl.com>
 References: <20220728232357.270130-1-sen@phobosdpl.com>
- <20220728232357.270130-3-sen@phobosdpl.com>
+ <20220728232357.270130-2-sen@phobosdpl.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659373349;
+ d=bootlin.com; s=gm1; t=1659373458;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=nw3H/IAqZU7jMlyd0hDgVK7S+yOvNi+S7ZWjeIz+E6A=;
- b=AxSrQ8hAFKVphmfHs6KuS9Tov62LlCNI9WIonUXAtivcbNuBbkSyxI7ipV0m1kKplHYuFE
- oSnl1e7iInb47nVIctRbN7/wFj3z6aHaP3pnPfrFtceD4voukr8nHvhxgS4stJrUzRF20y
- SomWCuDmxuLh3QR8fD3kuMrMxuNiH9EP2UPY84JksgTCztVgmW0rdZgsIoc/hEBAEpbas3
- cujUx6sAU6Bi6BOjR5ptBduEOq04ixLBgZKgO1DVywygT5dN2gb8i2FD8qLkoAnHxFza5W
- 3YYbZo15oIcJeXKYxAWC4s0YwRhT0gL3dS1pZAKB1K8ItHrfSWDvMaGiezFw3w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=hmIHd6/xPmM5QGRuVS5zPHR+XI2XLmwxzhpt7jVaziY=;
+ b=TYCM7hWwkIm0QOIAdnQMBsg6hF/oRu8+y9YKvPPeaMgmb897Qc6zBvH2oHFuP4Uwu9Kxz1
+ V/Fs5kxNldhxEcui2Fi2KzqEGz2o79pda+aGPhZEpuyfqLWGGTRQM+3ufxyQSHtfIOkJsS
+ 3snckTC6VzRNbYuXF6uZePb+vUIsA6UV9tKG2NT705ixUBxsJImoT2gKxmd1XlGYuxMDwg
+ Do0VbwKnoC+SwlHhftprKFPd3C+Zwii1sPJ6YSWAXogwSo7fsQwusUh8V6o10+ZwJ2rEXE
+ DzKUGslj/vzXoUHBcsM7r/gpPq1KZgPQSH7sFH7KNQdClv7TCGIFQ1IftLm2Aw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AxSrQ8hA
-Subject: Re: [Buildroot] [PATCH 3/3] support/scripts/pkg-stats: re-implement
- the sortable_hint
+ header.s=gm1 header.b=TYCM7hWw
+Subject: Re: [Buildroot] [PATCH 2/3] support/scripts/pkg-stats: adjust
+ column widths
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,33 +85,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 28 Jul 2022 18:23:57 -0500
+On Thu, 28 Jul 2022 18:23:56 -0500
 Sen Hastings <sen@phobosdpl.com> wrote:
 
-> This attempts to re-implement the "sortable_hint" feature without
-> relying on words. The column headers and CVE expand/contract buttons
-> change color and cursor style on hover.
+> This adjusts the column widths, mostly for asthetics/legibility.
 > 
-> If Javascript is enabled:
+> It is primarily for chrome based browsers, which like to
+> linebreak on explicit hyphens, meaning every CVE takes multiple lines.
 > 
-> Just like [PATCH 1/3] more rules are applied to the
-> generated stylesheet before content is loaded.
-> 
-> If Javascript is disabled:
-> 
-> The headers stay pearly white. :-)
+> see: https://github.com/w3c/csswg-drafts/issues/3434
 > 
 > Signed-off-by: Sen Hastings <sen@phobosdpl.com>
-> ---
->  support/scripts/pkg-stats | 20 +++++++-------------
->  1 file changed, 7 insertions(+), 13 deletions(-)
 
-Applied to master, thanks.
+This doesn't behave extremely well here as it prevents wrapping of the
+package .mk file path in the first column, making this first column
+larger than it was. I guess wrapping on "/" would be ideally for this
+first column.
+
+Here the table continues to exceed the width of my large browser window
+(with or without this patch), which is not very nice :-/
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
