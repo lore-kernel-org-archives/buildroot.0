@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 243AFC00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 21:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD751C00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 21:07:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3D6E813D8;
-	Mon,  1 Aug 2022 21:07:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3D6E813D8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1w5iIE92FmYf; Mon,  1 Aug 2022 21:07:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90C09813D1;
-	Mon,  1 Aug 2022 21:07:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90C09813D1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8DB7C1BF319
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 21:06:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73E0E402F8
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 21:06:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73E0E402F8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AD8240309;
+	Mon,  1 Aug 2022 21:07:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AD8240309
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TxeByDmSGsI2 for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 21:06:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C81B402ED
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 21:06:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C81B402ED
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B65A186C61; Mon,  1 Aug 2022 20:52:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 1 Aug 2022 23:06:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 32e9f1813c4bd90783dd3f36e5a1ebd35daf5f45
-X-Git-Newrev: 9bf4575036183a049c22fe9be124da43cbf200b8
-X-Patchwork-Hint: ignore
-Message-Id: <20220801205258.B65A186C61@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imx8mmpico: bump bsp components to
- version tn-hardknott_5.10.72-2.2.0
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id adHMPND8sMmu; Mon,  1 Aug 2022 21:07:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3264F402F8;
+	Mon,  1 Aug 2022 21:07:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3264F402F8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B01FD1BF319
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 21:07:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 690C5813D1
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 21:07:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 690C5813D1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MgGppTXmdUL6 for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 21:07:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59654813D6
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 59654813D6
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 21:07:14 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7462820005;
+ Mon,  1 Aug 2022 21:07:12 +0000 (UTC)
+Date: Mon, 1 Aug 2022 23:07:11 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20220801230711.3d2a4227@windsurf>
+In-Reply-To: <20220730203711.439923-1-ju.o@free.fr>
+References: <20220730203711.439923-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659388032;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6T2G6yzdQN7klrkyAaeO/fh5poZQT227OkCowZadcNI=;
+ b=l6S+VzDvGenwvSGQ8XWGN8L5VK05w78IjG+GUMPfiX215KskZRPcnNR4pb5+Xy5ixuSZCw
+ ELvid7KGLuwr39OQNVhsdgXF7MIgxDfPCCGKP9iTIltxRv3GfcjXdEyvWY1qK+v/HBwfud
+ tNbOVTKbwMpPrqNU9pTK2gfKxd8sfKg4VTHfemAVPIy9N+/UpxLNmLKZnvQSiu8SoPy28j
+ 0FIjkBXIwEZIJEffiAA9NPx9MJanf+KkyCdAs6vemLPF48fpA2ejwRlaZeqO3R0GUIZQRm
+ HWSCLb/2vIXV/g2a2scxmEc6JzCx2OwTo4uqMK1vWjOkDleOTsf5MFelFupviA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=l6S+VzDv
+Subject: Re: [Buildroot] [PATCH 1/2] configs/imx8mmpico: bump bsp components
+ to version tn-hardknott_5.10.72-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,123 +78,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bf4575036183a049c22fe9be124da43cbf200b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 30 Jul 2022 22:37:10 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Those components are aligned with NXP BSP lf-5.10.72-2.2.0.
+> Those components are aligned with NXP BSP lf-5.10.72-2.2.0.
+> 
+> This commit also refresh the readme.txt file:
+> - update no longer working URLs,
+> - enhance flashing instructions (use ${mmcdev} uboot variable),
+> - add "bs=1M" option to dd for better flashing performances.
+> 
+> Fixes:
+> - https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800730
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  board/technexion/imx8mmpico/readme.txt | 18 +++++++++++-------
+>  configs/imx8mmpico_defconfig           | 11 ++++++-----
+>  2 files changed, 17 insertions(+), 12 deletions(-)
 
-This commit also refresh the readme.txt file:
-- update no longer working URLs,
-- enhance flashing instructions (use ${mmcdev} uboot variable),
-- add "bs=1M" option to dd for better flashing performances.
+Both applied, thanks!
 
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800730
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/technexion/imx8mmpico/readme.txt | 18 +++++++++++-------
- configs/imx8mmpico_defconfig           | 11 ++++++-----
- 2 files changed, 17 insertions(+), 12 deletions(-)
-
-diff --git a/board/technexion/imx8mmpico/readme.txt b/board/technexion/imx8mmpico/readme.txt
-index 3095d67b2c..56a8c9bdfe 100644
---- a/board/technexion/imx8mmpico/readme.txt
-+++ b/board/technexion/imx8mmpico/readme.txt
-@@ -46,7 +46,7 @@ J2: jumper on pins 2 and 4.
- 
- In case the board was flashed with a wrong u-boot, or the eMMC is
- erased, u-boot can be loaded by USB Serial Download boot mode, using
--imx-usb-loader. See [3] and [4].
-+imx-usb-loader. See [3].
- 
- For flashing:
- - Plug the micro USB cable from the Debug USB Port, to your computer
-@@ -54,9 +54,13 @@ For flashing:
- 
- In the U-Boot prompt launch:
- 
--=> ums 0 mmc 1
-+=> ums 0 mmc ${mmcdev}
- 
- This will mount the eMMC content in the host PC as a mass storage device.
-+Note: the ${mmcdev} id may change from one uboot version to another. The
-+actual id can be confirmed by running commands "mmc rescan" then
-+"mmc list", to find the eMMC entry. Finally it's possible to enter
-+directly the mmc device id, for example: "ums 0 mmc 2".
- 
- To determine the device associated to the eMMC card have a look in the
- /proc/partitions file:
-@@ -70,12 +74,13 @@ Buildroot prepares a bootable "sdcard.img" image in the output/images/
- directory, ready to be dumped on the eMMC. Launch the following
- command as root:
- 
--  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-+  dd bs=1M if=output/images/sdcard.img of=/dev/<your-sd-device>
- 
- *** WARNING! This will destroy all the eMMC content. Use with care! ***
- 
- This operation can take several minutes, depending on the image
--size. When tested, a 2MB/s transfer rate was observed.
-+size. When tested, a 10MB/s transfer rate was observed. Note: the
-+blocksize "bs=1M" parameter gives better transfer performances.
- 
- For details about the medium image layout, see the definition in
- board/freescale/common/imx/genimage.cfg.template.
-@@ -91,6 +96,5 @@ To boot your newly created system:
- Enjoy!
- 
- [1]. https://www.technexion.com/products/system-on-modules/pico/pico-compute-modules/detail/PICO-IMX8M-MINI
--[2]. https://www.technexion.com/products/pico-evaluation-kits/detail/PICOPIIMX8MM1GDEV
--[3]. https://www.technexion.com/support/knowledgebase/boot-configuration-settings-for-pico-baseboards/
--[4]. https://www.technexion.com/support/knowledgebase/loading-bootable-software-images-onto-the-emmc-of-picosom-on-pico-pi/
-+[2]. https://www.technexion.com/products/system-on-modules/evk/pico-pi-imx8m-mini/
-+[3]. https://developer.technexion.com/docs/recover-to-factory-settings-pico-imx8m-mini
-diff --git a/configs/imx8mmpico_defconfig b/configs/imx8mmpico_defconfig
-index f04946a8d1..7c19c8c81b 100644
---- a/configs/imx8mmpico_defconfig
-+++ b/configs/imx8mmpico_defconfig
-@@ -1,13 +1,14 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-pico-pi.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux,9146d4dcb2dda0c7614f74f824cfb20d29bd85f8)/linux-9146d4dcb2dda0c7614f74f824cfb20d29bd85f8.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux-tn-imx,tn-hardknott_5.10.72-2.2.0_20220207)/linux-tn-im-tn-hardknott_5.10.72-2.2.0_20220207.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="tn_imx8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-pico-pi freescale/imx8mm-pico-pi-ili9881c freescale/imx8mm-pico-pi-sn65dsi84-hj070na"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-pico-pi freescale/imx8mm-pico-pi-ili9881c"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_FREESCALE_IMX=y
- BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
- BR2_PACKAGE_FIRMWARE_IMX=y
-@@ -18,13 +19,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.72-2.2.0"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-edm,9a070a5b4460124054bc459edfc9d1b43e5403bb)/u-boot-edm-9a070a5b4460124054bc459edfc9d1b43e5403bb.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-tn-imx,tn-hardknott_5.10.72-2.2.0_20220207)/u-boot-tn-imx-tn-hardknott_5.10.72-2.2.0_20220207.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pico-imx8mm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
