@@ -1,74 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DE6BC00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 22:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8E4EC00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 22:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D297A813B1;
-	Mon,  1 Aug 2022 22:13:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D297A813B1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 78CBC4017B;
+	Mon,  1 Aug 2022 22:16:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78CBC4017B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v7ZTVDPsQK0N; Mon,  1 Aug 2022 22:13:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DpjHIJOZQQjR; Mon,  1 Aug 2022 22:16:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D280C8137F;
-	Mon,  1 Aug 2022 22:13:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D280C8137F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1BA381BF31F
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 22:13:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 507244015E;
+	Mon,  1 Aug 2022 22:16:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 507244015E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CF8DD1BF31F
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 22:16:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DCD5401DA
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 22:13:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DCD5401DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9D3F6068B
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 22:16:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9D3F6068B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QgDMw57fHl0k for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 22:13:03 +0000 (UTC)
-X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB54C4022E
-Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB54C4022E
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 22:13:02 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.73.23])
- by Aruba Outgoing Smtp  with ESMTPSA
- id IdXxoMCUUTCpUIdXyoQYmd; Tue, 02 Aug 2022 00:05:58 +0200
-Message-ID: <93edea73-13ab-daea-34af-c86fa6225caf@benettiengineering.com>
-Date: Tue, 2 Aug 2022 00:05:57 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LatNzRag8omj for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 22:16:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B2F960675
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0B2F960675
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 22:16:33 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2042C60003;
+ Mon,  1 Aug 2022 22:16:31 +0000 (UTC)
+Date: Tue, 2 Aug 2022 00:16:29 +0200
+To: TIAN Yuanhao <tianyuanhao3@163.com>
+Message-ID: <20220802001629.111c5177@windsurf>
+In-Reply-To: <20220511114508.3617270-1-tianyuanhao3@163.com>
+References: <20220511114508.3617270-1-tianyuanhao3@163.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Content-Language: en-US
-To: Jesse T <mr.bossman075@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220730061219.3061864-1-Mr.Bossman075@gmail.com>
- <20220801225044.63ead8d4@windsurf>
- <CAJFTR8SkMjAe1=V411g9BmdzYDZv+5mtLMQ29w=2BJj4LS1sWw@mail.gmail.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <CAJFTR8SkMjAe1=V411g9BmdzYDZv+5mtLMQ29w=2BJj4LS1sWw@mail.gmail.com>
-X-CMAE-Envelope: MS4xfL28qTyZCaH2LY7dFRkfyijby2BRInZ7VJYTqgBzZvKAsa3MOi20zFQX78XZnGswzILlDkA/m3yJNhL/GUZJMxRBcqB3g2Fbylh16tMNLjccRAfLYrzM
- n1lJ7hbh0nGeZoNBQ2+QlCAJjg2YPgVfE3hoZc7IwAXUN2+qXG3NBA2tFXMl0EN5f9iy2I+/zjbOrbF1yhwZPmrUg87e+ok09Gz68DfVgCqotku+nyypjnc4
- 5T+u31+4rgb8lH2VB4l4wsS9AE8G1sTR9V401MB+cH3gnjLNJN+61/ioeWosDneqzbOE/woPhKE1qlwnPteWl89mhJhsZpm6/FBuF1P1j7YAyTo1NALjEXNC
- gqyzobLhZXlgDGTgaOGwVd8/q5Riu1OgbbzJryTKyhfxKXm0Gzs=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1659391558; bh=OU0EUIithdeHIksIMR8cmanc/d2SDx6QwCeodsLajTI=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=TkBri+lnzd6g4mGZmClvKqM32byqgZ7S4sjaDhpurCdoNpozx8zjwAVsTpR8hcXkH
- mtGttJ2BTo0rtpEZF3P0/6xYDP/k+B1lBGdSIfDt0HzN9k4T6FeAx1McnKdMMKMJlW
- wcuhEjRxlmUnn3QcE3kKm6nddrJyMeVR+0TdiLjUopOWhWd6bxacG/QYDVIO6ci4Us
- /G6kcePfYiJb9rE84IvoGXumse3Vr/MBFRs9TIwrN+LhMG2eOEBGcg/w1jVdJFNdyE
- NSREcnbiynlJ2OlDsEPTwOpb7VGM9Lw0qLoLJmcIHbWNqo3KoU2JBOv36s2jFW8gWK
- RuZP5xkqxsYVA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=TkBri+ln
-Subject: Re: [Buildroot] [PATCH v2] configs/imxrt1050-evk: New defconfig
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659392191;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=XPIGbnBd3KWlcTsp2EAEmVmz8DZalS0oZ2SX+B3JH0A=;
+ b=fZBT9l1qUwpHegLjhHaSPIj42LEzMysl6vYE9CvO5zM45J7lI+3EdSIdOwIG5/YROsaLVq
+ SIr7WMnq+6uu568a100rDL3SldJeaFat9VSckDv6mTi7BgfIx+kCA3+ro/rDvdu5e/v0VM
+ vnjLGTjJ/DciX6yK56YWtJGYKKsdCLHfvk70I0+rMLcbetk+R9hy+U2VSKBwQYpfoC45bA
+ p71EA8lN3uQWHl08Sy71BWhg7v6swsL3oCvXAHvI5r+zprQFD2Ey/DE33dl0ET+5yIgrUA
+ /AKro6e7qIbPN4gkVOE0492E3ehwhpA0mGWdp//DaYmlp89Rh77+p0j+syESKQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fZBT9l1q
+Subject: Re: [Buildroot] [PATCH 1/1] package/apk-tools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,197 +75,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: maeva.manuel@oss.nxp.com, Fabio Estevam <festevam@gmail.com>,
- stephane.viau@oss.nxp.com, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jesse,
+Hello,
 
-On 01/08/22 23:46, Jesse T wrote:
-> On Mon, Aug 1, 2022 at 4:50 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello Jesse,
->>
->> Thanks for your contribution!
->>
->> On Sat, 30 Jul 2022 02:12:19 -0400
->> Jesse Taube <mr.bossman075@gmail.com> wrote:
->>
->>> Add defconfig for imxrt1050-evk is a development board from NXP.
->>>
->>> The i.MXRTxxxx family spreads from i.MXRT1020 to i.MXRT1170 with the
->>> first one supporting 1 USB OTG & 100M ethernet with a cortex-M7@500Mhz
->>> up to the latter with i.MXRT1170 with cortex-M7@1Ghz and
->>> cortex-M4@400Mhz, 2MB of internal SRAM, 2D GPU, 2x 1Gb and
->>> 1x 100Mb ENET. The i.MXRT family is NXP's answer to STM32F7xx, as it
->>> uses only simple SDRAM, it gives the chance of a 4 or less layer PCBs.
->>> Seeing that these chips are comparable to the STM32F7xxs which have
->>> buildroot ported to them it seems reasonable to add support for them.
->>>
->>> https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/i-mx-rt1050-evaluation-kit:MIMXRT1050-EVK
->>>
->>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
->>> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>
->> Thanks a lot, it looks mostly good, but I have a few comments/questions.
->>
->>>   N:   Giulio Benetti <giulio.benetti@benettiengineering.com>
->>> +F:   board/freescale/imxrt1050evk/*
->>>   F:   board/olimex/a*
->>>   F:   configs/amarula_vyasa_rk3288_defconfig
->>>   F:   configs/asus_tinker_rk3288_defconfig
->>> +F:   configs/imxrt1050-evk_defconfig
->>>   F:   configs/olimex_a*
->>>   F:   package/at/
->>>   F:   package/binutils/
->>
->> Any reason to add Giulio here?
-> 
-> We worked on Linux and U-Boot together.
-> 
->>
->>> diff --git a/board/freescale/imxrt1050evk/post-build.sh b/board/freescale/imxrt1050evk/post-build.sh
->>> new file mode 100755
->>> index 0000000000..476958a691
->>> --- /dev/null
->>> +++ b/board/freescale/imxrt1050evk/post-build.sh
->>> @@ -0,0 +1,6 @@
->>> +#!/bin/sh
->>> +MKIMAGE=$HOST_DIR/bin/mkimage
->>> +
->>> +if [ -e $BINARIES_DIR/Image ]; then
->>
->> Why is this test needed? The Image file will be produced by the kernel
->> build, so it should be there. If it's not, we should really error out
->> hard. So I think doing without the test is better.
-> 
-> I was using board/nexbox/a95x/post-build.sh as a base, I can drop it.
-> 
->>> +     $MKIMAGE -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 -n "Linux kernel" -d $BINARIES_DIR/Image $BINARIES_DIR/uImage
->>> +fi
->>> diff --git a/board/freescale/imxrt1050evk/readme.txt b/board/freescale/imxrt1050evk/readme.txt
->>> new file mode 100644
->>> index 0000000000..bbbcd5307f
->>> --- /dev/null
->>> +++ b/board/freescale/imxrt1050evk/readme.txt
->>> @@ -0,0 +1,24 @@
->>> +NXP i.MXRT1050 EVK board
->>> +---------------------
->>
->> Add the few missing '-'
->>
->> Also, as requested by Giulio, a short intro about the board + a link
->> would be useful here.
->>
->>
->>> +# Kernel
->>> +BR2_LINUX_KERNEL=y
->>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19-rc5"
->>
->> 5.19 is out now, so you can use a non-rc version :)
-> 
-> Sorry I forgot to change when submitting...
-> 
->>> +BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
->>> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
->>> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
->>> +BR2_LINUX_KERNEL_IMAGE_NAME="Image"
->>> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
->>> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imxrt1050-evk"
->>> +
->>> +# Filesystem
->>> +BR2_TARGET_ROOTFS_EXT2=y
->>> +BR2_TARGET_ROOTFS_EXT2_4=y
->>> +BR2_TARGET_ROOTFS_EXT2_LABEL="root"
->>> +BR2_TARGET_ROOTFS_EXT2_SIZE="3M"
->>
->> Why limit to 3 MB ? Is there a strong reason?
-> 
-> Because that's the nearest ceil(MB) size of the ext4 filesystem.
-> I like dd-ing the images fast.
-> 
-> Also, leave the label
->> undefined.
->>
->>> +# Bootloader
->>> +BR2_TARGET_UBOOT=y
->>
->> Please used a version of U-Boot explicitly defined in the defconfig.
-> 
-> Read below.
-> 
->>
->>> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
->>> +BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
->>> +BR2_TARGET_UBOOT_FORMAT_IMG=y
->>> +BR2_TARGET_UBOOT_SPL=y
->>> +BR2_TARGET_UBOOT_SPL_NAME="SPL"
->>> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->>> +
->>> +# Required tools to create the SD card image
->>> +BR2_PACKAGE_HOST_GENIMAGE=y
->>> +BR2_PACKAGE_HOST_MKPASSWD=y
->>> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
->>> +
->>> +# Misc
->>> +BR2_BINUTILS_VERSION_2_36_X=y
->>> +# thumb2 ADR bug introduced in 2.37 fix is not yet in u-boot
->>
->> Do you have some detail on this bug? Like a link to the bug report, or
->> something like this? Note that binutils 2.39 is soon going to arrive,
->> so we will get rid of binutils 2.36... which means we will very soon
->> have a problem with this defconfig.
->>
-> 
-> https://patchwork.ozlabs.org/project/uboot/patch/20220712110023.3163770-1-andre.przywara@arm.com/
-> 
-> The patch above removes the need for binutils 2.36 and a U-Boot
-> version hasn't been released with that commit yet.
+Thanks for your contribution.
 
-Then the best practice is to backport the patch above locally to
-binutils package for every version. But when trying to compile using an
-external toolchain(not generated by Buildroot like official ARM
-toolchain) then it will fail to boot.
+On Wed, 11 May 2022 04:45:08 -0700
+TIAN Yuanhao <tianyuanhao3@163.com> wrote:
 
-As Thomas mentioned binutils 2.36.1 will be removed soon in favor of
-2.39 that will contain that patch, but 2.37 and 2.38 will create
-problems, as well as all the external ones.
+> Alpine Package Keeper (apk) is a package manager developed for Alpine
+> Linux.
+> 
+> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+> ---
+> 
+> I did read [1] before I submitted this patch.
+> 
+> I need a package manager in an embedded system and I found there are
+> some Buildroot based projects having similar things like [2] and [3].
+> Given the popularity of Alpine Linux in containers, I would like to
+> choose apk as the package manager.
+> 
+> There is a performance comparison of package managers at [4].
+> 
+> An interesting finding is that OpenWrt seems to be planning to switch
+> from opkg to apk [5].
+> 
+> In conclusion, I think Buildroot should have apk.
+> 
+> [1]: http://patchwork.ozlabs.org/project/buildroot/patch/1426736888-29437-5-git-send-email-steven@uplinklabs.net/
+> [2]: https://github.com/batocera-linux/batocera.linux/blob/5.27/package/batocera/utils/pacman/pacman.mk
+> [3]: https://github.com/gportay/linux-distros-br2-external/blob/master/package/apk-tools/apk-tools.mk
+> [4]: https://michael.stapelberg.ch/posts/2019-08-17-linux-package-managers-are-slow/#measurements
+> [5]: https://github.com/openwrt/openwrt/pull/4294
 
-Do you think there is a possible work-around for u-boot to avoid the
-binutils bug? If yes one possibility is to add a local patch for u-boot
-for this defconfig only with the work-around. This will make the board
-to work everytime. It's a patch that doesn't have to be upstreamed but
-only a local work-around.
+Thanks for your contribution and this argumentation. I will need some
+feedback from other Buildroot maintainers before we can merge this
+patch.
 
-What about that Thomas?
+Could you describe a bit more how you are going to use it in the
+context of Buildroot (which, as a reminder, doesn't support generate
+binary packages) ?
 
-Best regards
+
+> diff --git a/package/apk-tools/Config.in b/package/apk-tools/Config.in
+> new file mode 100644
+> index 0000000000..a7926a7c70
+> --- /dev/null
+> +++ b/package/apk-tools/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_APK_TOOLS
+> +	bool "apk-tools"
+> +	depends on !BR2_STATIC_LIBS # unconditionally shared
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # compound literals
+
+Then you need a Config.in "comment", look at how other packages do this.
+
+> +	depends on BR2_USE_MMU # fork()
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  Alpine Package Keeper (apk) is a package manager developed for
+> +	  Alpine Linux.
+> +
+> +	  https://gitlab.alpinelinux.org/alpine/apk-tools
+> diff --git a/package/apk-tools/apk-tools.hash b/package/apk-tools/apk-tools.hash
+> new file mode 100644
+> index 0000000000..a9ec2fb2ce
+> --- /dev/null
+> +++ b/package/apk-tools/apk-tools.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  6362d8a14bb0460f15a041754148344cbfc0a953461c702717e0d263d054db4d  apk-tools-v2.12.9.tar.bz2
+> +sha256  b3c87315aae4c9f276c37168f2655dd8bd990544d7a0bbfb929664155c7ab257  LICENSE
+> diff --git a/package/apk-tools/apk-tools.mk b/package/apk-tools/apk-tools.mk
+> new file mode 100644
+> index 0000000000..b92092cd73
+> --- /dev/null
+> +++ b/package/apk-tools/apk-tools.mk
+> @@ -0,0 +1,53 @@
+> +################################################################################
+> +#
+> +# apk-tools
+> +#
+> +################################################################################
+> +
+> +# Regenerate help.h when changing the version number
+> +APK_TOOLS_VERSION = 2.12.9
+> +APK_TOOLS_SITE = https://gitlab.alpinelinux.org/alpine/apk-tools/-/archive/v$(APK_TOOLS_VERSION)
+> +APK_TOOLS_SOURCE = apk-tools-v$(APK_TOOLS_VERSION).tar.bz2
+> +APK_TOOLS_LICENSE = GPL-2.0
+> +APK_TOOLS_LICENSE_FILES = LICENSE
+> +
+> +APK_TOOLS_DEPENDENCIES = host-pkgconf openssl zlib
+> +
+> +APK_TOOLS_MAKE_OPTS = \
+> +	CROSS_COMPILE="$(TARGET_CROSS)" \
+> +	LUA=no \
+> +	SCDOC=: \
+> +	V=1 \
+
+V=1 should probably be conditional on the $(QUIET) variable.
+
+> +	cmd_genhelp=:
+
+I think we prefer to use /bin/true instead of : in such situations.
+
+> +
+> +ifeq ($(BR2_SHARED_LIBS),y)
+> +APK_TOOLS_MAKE_OPTS += \
+> +	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)"
+> +else
+> +APK_TOOLS_MAKE_OPTS += \
+> +	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY) --static" \
+
+This should not be needed, in the BR2_STATIC_LIBS case, pkg-config
+already uses --static.
+
+> +	STATIC=y
+
+Isn't this forcing static linking? Your Config.in prevents
+BR2_STATIC_LIBS=y configuration, so in the else clause of
+BR2_SHARED_LIBS, you only have BR2_SHARED_STATIC_LIBS=y, a case where
+we want to link dynamically but (ideally) build/install both shared and
+static libraries (even though clearly many of our packages do not
+comply with this).
+
+> +endif
+> +
+> +define APK_TOOLS_CONFIGURE_CMDS
+> +	$(SED) 's/#\S\+\s\(APK_DEFAULT_ARCH\)\s.*/#define \1 $(BR2_ARCH)/' \
+> +		$(@D)/src/apk_defines.h
+> +	# Copy the pre-generated help.h so we don't need host-lua
+> +	$(INSTALL) -D -m 644 $(APK_TOOLS_PKGDIR)/help.h $(@D)/src/help.h
+
+Please add host-lua as a dependency. This pre-generated help.h is
+really horrible :-/
+
+> +define APK_TOOLS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> +		$(APK_TOOLS_MAKE_OPTS)
+> +endef
+> +
+> +define APK_TOOLS_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
+> +		$(APK_TOOLS_MAKE_OPTS) \
+> +		DESTDIR=$(TARGET_DIR)
+> +	# Prepare an empty apk database
+> +	$(INSTALL) -D -m 644 /dev/null $(TARGET_DIR)/etc/apk/world
+
+What are you trying to do here? Seems weird to install /dev/null.
+
+Best regards,
+
+Thomas
 -- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
-
-> This is the reason for no U-Boot version.
-> 
-> Thanks,
-> Jesse T
-> 
->> Best regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, co-owner and CEO, Bootlin
->> Embedded Linux and Kernel engineering and training
->> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
