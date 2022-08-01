@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6860C00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 15:28:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C950FC00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 15:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FA5560B88;
-	Mon,  1 Aug 2022 15:28:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FA5560B88
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5594E409A6;
+	Mon,  1 Aug 2022 15:30:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5594E409A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TbSAWgdL8eai; Mon,  1 Aug 2022 15:28:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w05tT26b5Ydx; Mon,  1 Aug 2022 15:30:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44F9E600D1;
-	Mon,  1 Aug 2022 15:28:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44F9E600D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id F397140996;
+	Mon,  1 Aug 2022 15:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F397140996
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CDF311BF343
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 15:28:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ED0621BF343
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 15:30:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A9658600D1
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 15:28:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9658600D1
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5245600CC
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 15:30:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5245600CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C4CY6fdogbaK for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 15:28:45 +0000 (UTC)
+ with ESMTP id KHKnxEziliFm for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 15:30:20 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C04AF600CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE83C60B7D
 Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C04AF600CC
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 15:28:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DE83C60B7D
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 15:30:19 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:a573:58bd:e1d1:c541])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 2DC8019F73F;
- Mon,  1 Aug 2022 17:28:38 +0200 (CEST)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 3A16419F746;
+ Mon,  1 Aug 2022 17:30:14 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 01 Aug 2022 17:28:37 +0200
-Date: Mon, 1 Aug 2022 17:28:37 +0200
+ Mon, 01 Aug 2022 17:30:13 +0200
+Date: Mon, 1 Aug 2022 17:30:13 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Message-ID: <20220801152837.GB3168@scaer>
+To: Roosen Henri <Henri.Roosen@ginzinger.com>
+Message-ID: <20220801153013.GC3168@scaer>
 References: <c73779fc937946ae6279b66998d6017ba0ffd507.camel@ginzinger.com>
  <20220730121955.GS3168@scaer>
  <c25e9cda-9f84-6049-fc24-a8f442d8455e@theobroma-systems.com>
+ <57a89f2ad4d1ffe52344135368be359347d600ac.camel@ginzinger.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <c25e9cda-9f84-6049-fc24-a8f442d8455e@theobroma-systems.com>
+In-Reply-To: <57a89f2ad4d1ffe52344135368be359347d600ac.camel@ginzinger.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1659367721;
- bh=w9c4W5GvBcw0sq7UaZjNOqfPlFIpjSc5L6MPbMflpCk=;
+ d=free.fr; s=smtp-20201208; t=1659367817;
+ bh=FzffuyanqhPqiF4nt/IeKvQbK+CWt0Zh+J9PXFnVrIo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=pO7rwSbaSZqxUy5j9jgRASGQyk4YzhNZyOHEwQ5JJcRbhCAaPh4uDIGMuBoA1ZnFH
- sddUqph9apCCyQIVeDMXHWTpBb4ItMtTYVeDPSkpclpQEa/ZuZZdR67PDywKfPNY5v
- F2NjizJ1yYIeOy8VfYft7ziTJwJ+X28QvhJrLMXMdB6F3scGcPiOrucBooEqUpgrg2
- JBpRanxGHFSUIKuDIaWLNwfoszCCNm7nCmSwtFDOHIDwTMhAk/90qqeBvD1Pm81uZA
- ioq4yZaWLAtyu1sieJEthWWbU58BowP8v2JoZPMJknqjglMKAGcFL4SN04EbQyoMP9
- TgOrVlrIPe/JQ==
+ b=ClMDnCckao7F5g0XF+mYBk1Kv9rbnTU6QR031L5tCGLqoBmoEmpl6aSKwT6NzpAm6
+ b1fQcvDD7FW6BP7Ig7CehwCLY9ljjTRfoqs9rCZn0OapL+9mK7f8F2sMeVx2KqAK1j
+ 0jQRpLPxXh3w/Dp8T0NfiID4avOBh9mYgkNW2xqRoaCBDQmlNXi07m7WKaEnKrXO8V
+ HwETRcV+2F6aPq6rRUGtzDwHxFlDuZ1AenlCb29dwBohKKg2xCe0YuK6yadO6yy3rP
+ DGHZVK7YUjIc3wzhABFAb0SDOOST41CScKwoM51mVPjlJpumorI30a1c5zUzzbutqO
+ hXeisMKuu8pSw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pO7rwSba
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ClMDnCck
 Subject: Re: [Buildroot] [PATCH 1/1] Makefile: workaround make 4.3 issue for
  'printvars and 'show-vars'
 X-BeenThere: buildroot@buildroot.org
@@ -79,45 +80,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Roosen Henri <Henri.Roosen@ginzinger.com>,
+Cc: "quentin.schulz@theobroma-systems.com"
+ <quentin.schulz@theobroma-systems.com>,
  "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UXVlbnRpbiwgQWxsLAoKT24gMjAyMi0wOC0wMSAxNTozNiArMDIwMCwgUXVlbnRpbiBTY2h1bHog
-c3Bha2UgdGh1c2x5Ogo+IE9uIDcvMzAvMjIgMTQ6MTksIFlhbm4gRS4gTU9SSU4gd3JvdGU6Cj4g
-Pk9uIDIwMjItMDctMjkgMjE6NDkgKzAwMDAsIFJvb3NlbiBIZW5yaSBzcGFrZSB0aHVzbHk6Cj4g
-Pj5FdmVudCB0aG91Z2ggdGhlIGJ1ZyB3aXRoIG1ha2UgNC4zIGhhcyBiZWVuIHJlcG9ydGVkIGFu
-ZCBmaXhlZCwgdGhlcmUKPiA+PmhhcyBub3QgYmVlbiBhIHJlbGVhc2Ugb2YgbWFrZSB3aXRoIHRo
-ZSBmaXggZm9yIGEgbG9uZyB0aW1lLCBzZWUgWzFdLgo+ID4+Cj4gPj5BcyB0aGUgcm9vdCBjYXVz
-ZSBzZWVtcyB0aGUgJ2ZpbHRlcicgY29tbWFuZCBjYW5ub3QgaGFuZGxlIGxhcmdlCj4gPj5jaHVu
-a3Mgb2YgZGF0YSwgbGlrZSAuVkFSSUFCTEVTLCB3ZSBjYW4gd29ya2Fyb3VuZCB0aGUgcHJvYmxl
-bSBieQo+ID4+dXNpbmcgYSBmb3JlYWNoIGNvbW1hbmQgb3ZlciAuVkFSSUFCTEVTLCB0aGVuIHVz
-ZSB0aGUgZmlsdGVyIGNvbW1hbmQuCj4gPj4KPiA+Pkl0IG1pZ2h0IG5vdCBiZSBsb2dpY2FsIHRv
-IHByb2dyYW0gaXQgdGhhdCB3YXksIGJ1dCBhdCBsZWFzdCB0aGUKPiA+PmZ1bmN0aW9uYWxpdHkg
-aXMgbm93IHVzYWJsZS4KPiA+QXdlc29tZSEgSnVzdCBhd2Vzb21lISDwn5GNCj4gSnVzdCBhIGhl
-YWRzLXVwIHRoYXQgYG1ha2UgcHJpbnR2YXJzYCBpcyBicm9rZW4gKEkndmUgc2VudCBhIHBhdGNo
-IGZvciBpdAo+IGp1c3Qgbm93KSBhbmQgYWxzbyB0aGF0IEkgZ2V0IGEgc2VnZmF1bHQgZm9yIGBt
-YWtlIHNob3ctdmFyc2AgKGBtYWtlCj4gc2hvdy12YXJzIFZBUlM9IkJVU1lCT1hfJSIgd29ya3Mg
-anVzdCBmaW5lKS4KCkdhaCwgSSB3YXMgcHJldHR5IHN1cmUgaXQgd29ya2VkIGZvciBtZSwgYnV0
-IGluZGVlZCBzaG93LXZhcnMgZmFpbHMsCndoaWxlIHByaW50dmFycyBkb2VzIHdvcmsuLi4KCiAg
-ICAkIC4vdXRpbHMvZG9ja2VyLXJ1bgogICAgZG9ja2VyJCBtYWtlIGRlZmNvbmZpZzsgbWFrZSBh
-bGx5ZXNwYWNrYWdlY29uZmlnCgogICAgZG9ja2VyJCBtYWtlIHByaW50dmFycyA+L2Rldi9udWxs
-IDI+JjE7IGVjaG8gJD8KICAgIDAKICAgIGRvY2tlciQgbWFrZSBwcmludHZhcnMgVkFSUz0lID4v
-ZGV2L251bGwgMj4mMTsgZWNobyAkPwogICAgMAoKICAgIGRvY2tlciQgbWFrZSBzaG93LXZhcnMg
-Pi9kZXYvbnVsbCAyPiYxOyBlY2hvICQ/CiAgICBTZWdtZW50YXRpb24gZmF1bHQgKGNvcmUgZHVt
-cGVkKQogICAgMTM5CgpHcnIuLi4gOi0oCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKLS0gCi4t
-LS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0u
-LS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVk
-ZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAz
-NzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAg
-ICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFgg
-IEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1h
-LWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3ku
-ICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0t
-LS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cg==
+Henri, Quentin, All,
+
+On 2022-08-01 14:49 +0000, Roosen Henri spake thusly:
+> On Mon, 2022-08-01 at 15:36 +0200, Quentin Schulz wrote:
+> > On 7/30/22 14:19, Yann E. MORIN wrote:
+> > > On 2022-07-29 21:49 +0000, Roosen Henri spake thusly:
+> > > > As the root cause seems the 'filter' command cannot handle large
+> > > > chunks of data, like .VARIABLES, we can workaround the problem by
+> > > > using a foreach command over .VARIABLES, then use the filter
+> > > > command.
+> > Just a heads-up that `make printvars` is broken (I've sent a patch
+> > for 
+> > it just now) and also that I get a segfault for `make show-vars`
+> > (`make 
+> > show-vars VARS="BUSYBOX_%" works just fine).
+> 
+> Thanks for the heads-up! I can reproduce your tests-results.
+> 
+> I made the workaround to get the 'make pkg-stats' functionality up and
+> running again on recent systems with make 4.3. So I did my testing for
+> 'make printvars' and 'make show-vars' with the VARS variable set to:
+> 
+> "VARS=%_LICENSE %_LICENSE_FILES %_VERSION %_IGNORE_CVES %_CPE_ID"
+> 
+> Sorry I missed testing the empty VARS (=all).
+> 
+> We might revert the workaround for 'show-vars' and install the make 4.3
+> check again. For 'printvars' we might keep the workaround, as until now
+> no segfault could be reproduced and I think the 'pkg-stats'
+> functionality is a nice to have.
+> 
+> What do you think?
+
+Yes, please partially revert the change to protect just show-vars, so
+that the autobuilders and plg-stats are still happy with printvars.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
