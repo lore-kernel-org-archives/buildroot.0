@@ -4,102 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AB5BC00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 18:53:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C064EC00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 18:54:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E17056072A;
-	Mon,  1 Aug 2022 18:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E17056072A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64C8A60B8C;
+	Mon,  1 Aug 2022 18:54:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64C8A60B8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5q8OlWbyPCGY; Mon,  1 Aug 2022 18:53:30 +0000 (UTC)
+	with ESMTP id uIPxrjUQMlr2; Mon,  1 Aug 2022 18:54:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F005E605B5;
-	Mon,  1 Aug 2022 18:53:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F005E605B5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 73FC71BF337
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 18:53:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A7596072A;
+	Mon,  1 Aug 2022 18:54:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A7596072A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 49A571BF337
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 18:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4BC2C605B5
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 18:53:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BC2C605B5
+ by smtp1.osuosl.org (Postfix) with ESMTP id E6ABF81395
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 18:54:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6ABF81395
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WKmTifGOeJ7F for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 18:53:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28B26605A4
-Received: from delivery26.mailspamprotection.com
- (delivery26.mailspamprotection.com [185.56.85.152])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 28B26605A4
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 18:53:26 +0000 (UTC)
-Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
- helo=es87.siteground.eu)
- by se26.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
- (Exim 4.92) (envelope-from <dimi@tpm.dev>)
- id 1oIaXY-0000BH-L0; Mon, 01 Aug 2022 13:53:23 -0500
-Received: from [127.0.0.1] (port=31586 helo=es87.siteground.eu)
- by es87.siteground.eu with esmtpa (Exim 4.90-.1)
- (envelope-from <dimi@tpm.dev>)
- id 1oIaXW-000BfG-Ia; Mon, 01 Aug 2022 18:53:18 +0000
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uYR1-BuqPBgm for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 18:54:10 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49C4981344
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 49C4981344
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 18:54:10 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EF2A01C0006;
+ Mon,  1 Aug 2022 18:54:06 +0000 (UTC)
+Date: Mon, 1 Aug 2022 20:54:05 +0200
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220801205405.6e9a83a3@windsurf>
+In-Reply-To: <83ec6649-bd17-46dc-ae6f-ec30063358c2@mind.be>
+References: <20220731113249.93158-1-bernd.kuhls@t-online.de>
+ <83ec6649-bd17-46dc-ae6f-ec30063358c2@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Mon, 01 Aug 2022 21:53:18 +0300
-From: Dimi Tomov <dimi@tpm.dev>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20220722225120.2472bbab@windsurf>
-References: <20220614192445.2390329-1-ben.hutchings@mind.be>
- <20220722225120.2472bbab@windsurf>
-Message-ID: <b4e1a3f6777f709531b2619e0136a971@tpm.dev>
-X-Sender: dimi@tpm.dev
-Organization: TPM.dev
-X-Originating-IP: 35.214.247.6
-X-SpamExperts-Domain: es87.siteground.eu
-X-SpamExperts-Username: 35.214.247.6
-X-SpamExperts-Outgoing-Class: ham
-X-SpamExperts-Outgoing-Evidence: Combined (0.05)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT/punAH+4+sTc9Iy2XnXwxYPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5zHcgQ1GLCGZipGdBYX2IdejIhOyETOLJV5VgRmbWjZJbyi
- BzP+GhcIfQHbATYPLaf2RzUtF3sGx1OL1gSuiUFzpsTXNfl2OTzOk92IQdWevo8wUiRihvC73ecr
- qaqBbHB9tIxEz54OpJ3WlNIBVDXiBMmyNbDn7R5kilAhwr3KtE82Y55K6y9ZgAjMP1BdBtH99j24
- fCKFjJ00TfwRkP5Nim7uLhpYYJK3x23WQwPUUy7K60IW4/F/dWke8muiACEDtkk3QQOVL9hnwCPn
- of/p12Kq0X+vYLUKAMtfkvFCdcJd2gOf7PmKQDdYkFqWLMVaG2Xk5Dlma9rwsgne6VKzz+hXY236
- UJ7NMFIpB2psCWeupYYdzPm7YfRDaULOU2kfgMf4XRgCk/48zRqgqXKN2lJzhbC5sYrXgIPy4N0E
- H/ShdP00nxzh/m35ytL/WYih7iAUACC9x9WSYyrCeKS5bUjJJPVsoak2L6UN8XlZCQoCGrlIzmqo
- F6CrEjw8HUvhPepG2LHjJMOL7cEyEf/vUmqtf6x3rmjgUk0qjhwi16md5hc1genUt5SKamQF/bmi
- FMJX/lb6Jg9m3TrkqSdymVC7P8f8ImOGzkFR/x9EEDwX8glEDxkXwLkCckHFIUNOB2XvjaW5uTwP
- c8WgwrrudZBcpDAIWdCADSwEOtnmZWoMdUyXUOAkAA03/kA2wnXIHYi/jghIJpVkvIZQze0Bvz75
- tgYDfBFwFCAEbR5DfsTCxFvcxYv7uZXgUgSusGRX0RoiO3m12ZhcmBL3vZzFL4ZtKqHqj8IV0jkI
- hjPbZ0QahySd4u/u/+AtakUCzjdApyh/zCpmuDVeP4FW1xtfJOS5h+TTw0EG3/H9PQJ+BpPIh5PA
- FNig8x78dPTncSuSKVM5sn/V80FEjDhvbJroiWrFfcvTzpdI3AEG059XQQ6vSZVIoXNyXOAkCXnq
- yUl3OnKG9eRDP2/Ogb+c8D2ouQcPlXheOO7LhmKiyWvN6lRwU7KthS1ONjXrKvAIshoKMxok0xbe
- 7OP4XRubBt5odkikeAaZM4DPxsqVMpYXkjkPLSQifVL7ETp0RrghNI74wgLK6zscwmSrWmL+3Klk
- FyrtVW4KaRSURqFyxA+5hyiCBqrB4vMmHpjmx6wTDBzM6OBIiRlZBT2QtsvZWZbMVzPVNsBDv2tx
- UnzopboTLg==
-X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=tpm.dev; 
- s=default; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
- In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=nSYANd3YHrThoFDYifnRy/DaKY05Z7eXh3F+QOZb1B0=; b=CsNoEmGu8ZT3+sXREMM02J63Hc
- +Zifa0PI8iz15cagcHlaj1MIXBpZaZrCI/E8mSV9oemgrJ57yyhWWkJW3FJeMkOuy9/uBb8z/Ukxd
- dRbQYXNetBqNMe87e/j1AkfrYcKWIgQBcMp04cege7qDoZFU5OrudisY8D4MYqR05v3iGgqFK2Xkj
- Lqx9kSmkiyIEc9G7uYwd8Kea34hKNOLNnac/uipAF1x48qq4SNxT5vaQjJKxaxMsWSx2mY/GgSewq
- sJ2OgVUhPAto79g1NsNQqnGXIKBKNbGMxzx36wIhb/31/3LUIOaA57O928+/kQE9D+UExCcPYiEcA
- 3eFf0jNQ==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=tpm.dev header.i=@tpm.dev
- header.a=rsa-sha256 header.s=default header.b=CsNoEmGu
-X-Mailman-Original-Authentication-Results: mailspamprotection.com; auth=pass
- smtp.auth=35.214.247.6@es87.siteground.eu
-Subject: Re: [Buildroot] [PATCH] package/wolfssl: Disable broken asm
- implementations on 32-bit Arm
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659380047;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=axc8qVrTT4GqfE7sRINLe74I2a6aUQhssNRVUyG9BRM=;
+ b=Vz1vCWHLsXJfASc7b+ZDwQ2J9n0aigrxBLDbJU5VKCMRxRCswuAPSBofB/AjZWTEiOFpli
+ +1d8nYnAVIJblLS2wuwTbJsVcTJgQb3ptdwaOs5jT+mJuQNNwtcHG+cF45Vfdj+ALkblK4
+ r1qzGJYoazh6FQFghA2UBA+SAV9pCtnk0n7qwivjbypSuugL+L3j7usB9R8Belurd+AV03
+ w1sY9cVFWIf+V/0J3wgPO6HznsWovKaussORIKcqxkNB+F06WJIiwd02v1qrh478dtHJ/U
+ WWXCZ/kvHKxBPgN29PModQYvR+67x5aOvondFyR9RQ5QU0QMGPRslpWR3dev9A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Vz1vCWHL
+Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: ignore CVE-2021-38291
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,92 +76,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ben Hutchings <ben.hutchings@mind.be>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Matthew Weber <Matthew.Weber@collins.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,,
+Hello,
 
-Sorry for my late response, it seems my email filters are not properly 
-set for buildroot.
+On Mon, 1 Aug 2022 20:02:44 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-My domain expertise is with wolfTPM and the related wolfSSL 
-capabilities, such as crypto callbacks, AES CFB, etc.
-
-I can only assume that the optimization was designed for a specific SoC 
-and later generalized.
-
-Thanks,
-
-Dimi
-
-On 2022-07-22 11:51 PM, Thomas Petazzoni wrote:
-> Hello Dimi,
+> >   FFMPEG_CPE_ID_VENDOR = ffmpeg
+> > +# fixed in version 4.4.1  
 > 
-> Could you give some feedback on the below patch that touches wolfssl?
-> Do me it looks good, but perhaps you want to improve something in
-> upstream wolfssl in relation to this issue, such as detecting the CPU
-> architecture capabilities automatically?
+>   For this one, I went and checked, and it is the NVD that is wrong. It has 
+> cpe:2.3:a:ffmpeg:ffmpeg:*:*:*:*:*:*:*:*
 > 
-> Best regards,
-> 
-> Thomas Petazzoni
-> 
-> On Tue, 14 Jun 2022 21:24:45 +0200
-> Ben Hutchings <ben.hutchings@mind.be> wrote:
-> 
->> wolfSSL has ARMv8-A assembly implementations of some functions for
->> both A64 and A32 ISAs.  However, some of the A32 versions use r11,
->> which is usually not allowed:
->> 
->> wolfcrypt/src/port/arm/armv8-aes.c: In function 'wc_AesCbcEncrypt':
->> wolfcrypt/src/port/arm/armv8-aes.c:3303:5: error: fp cannot be used in 
->> 'asm' here
->>  3303 |     }
->>       |     ^
->> 
->> That can be fixed by adding the compiler flag -fomit-frame-pointer,
->> but then there is another failure:
->> 
->> /tmp/ccV19DQV.s: Assembler messages:
->> /tmp/ccV19DQV.s:248: Error: first transfer register must be even -- 
->> `ldrd r11,r10,[r14,#4*14]'
->> make[3]: *** [Makefile:5858: 
->> wolfcrypt/src/port/arm/src_libwolfssl_la-armv8-chacha.lo] Error 1
->> 
->> This is definitely not a valid instruction in A32, which suggests that
->> this code isn't being tested at all upstream.  So disable it here.
->> 
->> Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
->> ---
->>  package/wolfssl/wolfssl.mk | 4 +---
->>  1 file changed, 1 insertion(+), 3 deletions(-)
->> 
->> diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
->> index 58b6f296ab..ff6a65c397 100644
->> --- a/package/wolfssl/wolfssl.mk
->> +++ b/package/wolfssl/wolfssl.mk
->> @@ -33,14 +33,12 @@ WOLFSSL_CONF_OPTS += --disable-sslv3
->>  endif
->> 
->>  # enable ARMv8 hardware acceleration
->> -ifeq ($(BR2_ARM_CPU_ARMV8A),y)
->> +ifeq ($(BR2_aarch64),y)
->>  WOLFSSL_CONF_OPTS += --enable-armasm
->>  # the flag -mstrict-align is needed to prevent build errors caused by
->>  # some inline assembly in parts of the AES structure using the "m"
->>  # constraint
->> -ifeq ($(BR2_aarch64),y)
->>  WOLFSSL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -mstrict-align"
->> -endif
->>  else
->>  WOLFSSL_CONF_OPTS += --disable-armasm
->>  endif
+>   So the proper approach here is to fix it in the NVD. I'm not actually sure how 
+> to do that. Matt, Thomas, do you know?
 
+Yes: send an e-mail to nvd@nist.gov.
+
+Here is an example e-mail I sent:
+
+========================================================
+Hello,
+
+CVE-2014-3675 is marked in the NVD database as affecting all versions
+of cpe:2.3:a:redhat:shim:-:*:*:*:*:*:*:*. However, this CVE has been
+fixed by upstream commit
+https://github.com/rhboot/shim/commit/e253c2a2c07bc526de1528ed9839b2b584025fa2#diff-874c9b6e2bf4c63b0f0a443f612426773d76e4f09dd313fbe0ad3fd6d42c22d4, which has been part of shim releases since version 0.8.
+
+The problematic code has been introduced in shim 0.3. To the affected
+versions are all versions >= 0.3 and < 0.8.
+
+Could this be addressed in the CVE-2014-3675 entry ?
+
+Thanks a lot,
+
+Thomas
+========================================================
+
+I had to provide more details later on such as:
+
+========================================================
+Your CVE-2014-3675 CVE report points to:
+
+  https://www.openwall.com/lists/oss-security/2014/10/13/4
+
+Which indicates:
+
+"""
+1. OOB read access when parsing DHCPv6 packets (remote DoS).
+   The severity is low. (CVE-2014-3675)
+2. Heap overflow when parsing IPv6 addresses provided by tftp:// DHCPv6
+   boot option (RCE).
+   The severity is low to medium, as secure boot via PXE6 should
+   rarely be seen ITW. Furthermore UEFI firmware seems to fail
+   to properly verify provided PXE images at the first place. (CVE-2014-3676)
+
+For both issues above there is a patch proposal:
+
+http://suse.com/~krahmer/priv/shim1.diff
+"""
+
+This patch is exactly commit
+https://github.com/rhboot/shim/commit/e253c2a2c07bc526de1528ed9839b2b584025fa2
+in upstream shim.
+
+And based on the shim Git repository, we can check that commit
+e253c2a2c07bc526de1528ed9839b2b584025fa2  was first part of the 0.8
+release:
+
+$ git describe --contains e253c2a2c07bc526de1528ed9839b2b584025fa2
+0.8~5
+
+This CVE, and the fix for it, is related to the netboot code in
+netboot.c. This entire netboot.c code was introduced in upstream commit
+d8e330b95368ce43da47e114eb1d699eedb18e57
+(https://github.com/rhboot/shim/commit/d8e330b95368ce43da47e114eb1d699eedb18e57).
+
+And this commit itself was first included in the 0.3 release:
+
+$ git describe --contains d8e330b95368ce43da47e114eb1d699eedb18e57
+0.3~34
+
+So any version prior to 0.3 is not affected by this issue, as shim
+simply did not have netboot support.
+
+This reasoning applies to both CVE-2014-3675 and CVE-2014-3676.
+
+So the affected versions are >= 0.3 and < 0.8.
+
+Does this help ?
+
+Thanks a lot,
+========================================================
+
+Thomas
 -- 
-Founder of TPM.dev
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
