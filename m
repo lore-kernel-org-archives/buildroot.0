@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 359A8C00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 20:53:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67025C00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 20:53:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C599F605A0;
-	Mon,  1 Aug 2022 20:53:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C599F605A0
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDE1140878;
+	Mon,  1 Aug 2022 20:53:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDE1140878
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pBEx2xfZxeLi; Mon,  1 Aug 2022 20:53:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56C974025F;
+	Mon,  1 Aug 2022 20:53:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56C974025F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DD9581BF9AD
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:53:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B8E1660596
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:53:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8E1660596
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0y_CaQ3kvP6N; Mon,  1 Aug 2022 20:53:16 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E253360590;
-	Mon,  1 Aug 2022 20:53:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E253360590
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B802C1BF25B
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:53:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9ED838137A
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ED838137A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AnduwzwCL7XG for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 20:53:12 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eEZ4PcaE1eLD for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 20:53:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB96B81379
+ by smtp3.osuosl.org (Postfix) with ESMTP id F31A5600C7
  for <buildroot@buildroot.org>; Mon,  1 Aug 2022 20:53:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB96B81379
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F31A5600C7
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 84E5D86C48; Mon,  1 Aug 2022 20:39:14 +0000 (UTC)
+ id 9F5C186C4A; Mon,  1 Aug 2022 20:39:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Aug 2022 22:40:11 +0200
+Date: Mon, 1 Aug 2022 22:52:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7a41d937b4cb63daee6caf7df2a6c502a36ce7d1
-X-Git-Newrev: 1a1d8717d13a376cfc5ec757bb9a5912c3750ef6
+X-Git-Oldrev: fe6aa1f5c91ba33d71b8d43ddfa2b485542a04ee
+X-Git-Newrev: df36e51ee1a545f6fc50a237cc9ff23f099cd806
 X-Patchwork-Hint: ignore
-Message-Id: <20220801203914.84E5D86C48@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/clamav: ignore CVE-2016-1405
+Message-Id: <20220801203914.9F5C186C4A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cog: add udev dependency to drm
+ platform support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,28 +64,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a1d8717d13a376cfc5ec757bb9a5912c3750ef6
+commit: https://git.buildroot.net/buildroot/commit/?id=df36e51ee1a545f6fc50a237cc9ff23f099cd806
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The DRM platform support already has the 'BR2_PACKAGE_HAS_UDEV' symbol in
+package/cog/Config.in
+
+We just need to specify 'udev' as a dependency in the cog.mk file.
+The udev virtual package is pulled by libinput anyway, but this makes it
+more explicit.
+
+Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/clamav/clamav.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/cog/cog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 10856ed971..bb95cb8d2b 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -12,6 +12,8 @@ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
- 	COPYING.unrar COPYING.zlib
- CLAMAV_CPE_ID_VENDOR = clamav
- CLAMAV_SELINUX_MODULES = clamav
-+# affects only Cisco devices
-+CLAMAV_IGNORE_CVES += CVE-2016-1405
- CLAMAV_DEPENDENCIES = \
- 	host-pkgconf \
- 	libcurl \
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index da660eb7c1..95b6220629 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -28,7 +28,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+ COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
+-COG_DEPENDENCIES += libdrm libinput libgbm libegl
++COG_DEPENDENCIES += libdrm libinput libgbm libegl udev
+ else
+ COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
