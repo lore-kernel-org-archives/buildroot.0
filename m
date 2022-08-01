@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39785C00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 20:53:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48A78C00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 20:53:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B5EAC4012D;
-	Mon,  1 Aug 2022 20:53:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5EAC4012D
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2BA4408D0;
+	Mon,  1 Aug 2022 20:53:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2BA4408D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kmo8582ON769; Mon,  1 Aug 2022 20:53:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cCcmjao6XeW6; Mon,  1 Aug 2022 20:53:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31A1140126;
-	Mon,  1 Aug 2022 20:53:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31A1140126
+	by smtp4.osuosl.org (Postfix) with ESMTP id A189540261;
+	Mon,  1 Aug 2022 20:53:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A189540261
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3D56A1BF25B
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:53:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BAAF21BF25B
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9109605A0
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9109605A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 19125600C7
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 20:53:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19125600C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uZcliY0YRC6r for <buildroot@lists.busybox.net>;
+ with ESMTP id 2jtoDLI5nTuu for <buildroot@lists.busybox.net>;
  Mon,  1 Aug 2022 20:53:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A43A60590
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 20:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A43A60590
+ by smtp3.osuosl.org (Postfix) with ESMTP id E590B60073
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 20:53:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E590B60073
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id AA6A486C4B; Mon,  1 Aug 2022 20:39:14 +0000 (UTC)
+ id 9236586C49; Mon,  1 Aug 2022 20:39:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Aug 2022 22:52:59 +0200
+Date: Mon, 1 Aug 2022 22:40:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: df36e51ee1a545f6fc50a237cc9ff23f099cd806
-X-Git-Newrev: 8bbf5cb7cf0769e4ffb83de29d406a37623edee2
+X-Git-Oldrev: 1a1d8717d13a376cfc5ec757bb9a5912c3750ef6
+X-Git-Newrev: fe6aa1f5c91ba33d71b8d43ddfa2b485542a04ee
 X-Patchwork-Hint: ignore
-Message-Id: <20220801203914.AA6A486C4B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cog: add dep on libgbm's dmabuf &
- plane-count-modifier features
+Message-Id: <20220801203914.9236586C49@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/clamav: security bump version to
+ 0.103.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bbf5cb7cf0769e4ffb83de29d406a37623edee2
+commit: https://git.buildroot.net/buildroot/commit/?id=fe6aa1f5c91ba33d71b8d43ddfa2b485542a04ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cog uses the dmabuf and plane-count-modifier features from libgbm.
-These are provided by mesa3d, but may not be provided by other libgbm
-providers.
+Release notes:
+https://blog.clamav.net/2022/07/clamav-01037-01041-and-01051-patch.html
 
-So, make this a dependency.
+By bumping the vendored UnRAR library to version 6.1.7 in commit
+https://github.com/Cisco-Talos/clamav/commit/b709eac4003ad01b609615cbbb86c7d5b3821d92
 
-Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+CVE-2022-30333 was fixed.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cog/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cog/Config.in b/package/cog/Config.in
-index 484eb85c70..d2a910f9b8 100644
---- a/package/cog/Config.in
-+++ b/package/cog/Config.in
-@@ -41,6 +41,8 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_PACKAGE_HAS_LIBGBM
-+	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
-+	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBINPUT
- 	help
-@@ -56,6 +58,8 @@ config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
- comment "DRM platform needs EGL and GBM"
- 	depends on \
- 		!BR2_PACKAGE_HAS_LIBEGL || \
--		!BR2_PACKAGE_HAS_LIBGBM
-+		!BR2_PACKAGE_HAS_LIBGBM || \
-+		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF || \
-+		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 579b0ec89e..60439400ee 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  aaa12e3dc19f1d323b1c50d7a10fa8af557e4390149e864d59bde39b6ad9ba33  clamav-0.103.6.tar.gz
++sha256  1e34c31f600cb3b5bd1bf76690590cdeebe9409b330959b1c0f77d421bb17e50  clamav-0.103.7.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index bb95cb8d2b..dfdc416601 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
+-CLAMAV_VERSION = 0.103.6
++CLAMAV_VERSION = 0.103.7
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
