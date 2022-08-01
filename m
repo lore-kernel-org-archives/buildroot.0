@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14B44C00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 16:50:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CDE1C19F2A
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 16:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99049409F2;
-	Mon,  1 Aug 2022 16:50:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99049409F2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98A4360BBF;
+	Mon,  1 Aug 2022 16:50:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98A4360BBF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tuow1pfpM0iq; Mon,  1 Aug 2022 16:50:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4D1E60BA6;
+	Mon,  1 Aug 2022 16:50:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4D1E60BA6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AF421BF315
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 16:50:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14ADE409EB
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 16:50:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14ADE409EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hB85eKUq5YYv; Mon,  1 Aug 2022 16:50:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E95A409EB;
-	Mon,  1 Aug 2022 16:50:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E95A409EB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EB0DA1BF315
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 16:50:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3AB940529
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 16:50:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3AB940529
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m8k4G6nN4xeA for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RKNssIg732ve for <buildroot@lists.busybox.net>;
  Mon,  1 Aug 2022 16:50:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 03B24404F3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E037409EA
  for <buildroot@buildroot.org>; Mon,  1 Aug 2022 16:50:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03B24404F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E037409EA
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 0E5A886A1F; Mon,  1 Aug 2022 16:36:19 +0000 (UTC)
+ id 18A7E86B0A; Mon,  1 Aug 2022 16:36:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Aug 2022 18:47:07 +0200
+Date: Mon, 1 Aug 2022 18:49:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d45b5377c12367941a2cd7502ec773e99bb52f52
-X-Git-Newrev: 559648a25774ae2be8668a871b1a8a8ef673b2d2
+X-Git-Oldrev: 559648a25774ae2be8668a871b1a8a8ef673b2d2
+X-Git-Newrev: 9a6ed21a4b8f0be79fde4cb3dd53d1c4b55c44c8
 X-Patchwork-Hint: ignore
-Message-Id: <20220801163619.0E5A886A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: re-implement
- the sortable_hint
+Message-Id: <20220801163619.18A7E86B0A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iptables: add nf_log.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,78 +63,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=559648a25774ae2be8668a871b1a8a8ef673b2d2
+commit: https://git.buildroot.net/buildroot/commit/?id=9a6ed21a4b8f0be79fde4cb3dd53d1c4b55c44c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This attempts to re-implement the "sortable_hint" feature without
-relying on words. The column headers and CVE expand/contract buttons
-change color and cursor style on hover.
+iptables generally bundles the netfilter header files inside its own
+tar-ball.
 
-If Javascript is enabled:
+Since iptables 1.8.8, it started to make use of netfilter/nf_log.h, but
+didn't include it in the iptables tar-ball. This can lead to build
+failures.
 
-Just like [PATCH 1/3] more rules are applied to the
-generated stylesheet before content is loaded.
+Add a patch that rectifies this for iptables 1.8.8.
 
-If Javascript is disabled:
-
-The headers stay pearly white. :-)
-
-Signed-off-by: Sen Hastings <sen@phobosdpl.com>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 20 +++++++-------------
- 1 file changed, 7 insertions(+), 13 deletions(-)
+ package/iptables/0003-netfilter-add-nf_log.h.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 8ce4e3f260..91d42206ca 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -750,11 +750,13 @@ var lastColumnName = false;
- const styleElement = document.createElement('style');
- document.head.insertAdjacentElement("afterend", styleElement);
- const styleSheet = styleElement.sheet;
--const collapseRule = ".collapse{ height: 200px; overflow: hidden scroll;}"
--const buttonRule = ".see-more{ display: block;}"
-+addedCSSRules = [
-+".collapse{ height: 200px; overflow: hidden scroll;}",
-+".see-more{ display: block;}",
-+".label:hover,.see-more:hover { cursor: pointer; background: #d2ffc4;}"
-+];
- 
--styleSheet.insertRule(collapseRule);
--styleSheet.insertRule(buttonRule);
-+addedCSSRules.forEach(rule => styleSheet.insertRule(rule));
- 
- function sortGrid(sortLabel){
- 	let i = 0;
-@@ -816,8 +818,7 @@ function sortGrid(sortLabel){
- 		let rule = "." + listing[0] + " { grid-row: " + i + "; }";
- 		styleSheet.insertRule(rule);
-         });
--	styleSheet.insertRule(collapseRule);
--	styleSheet.insertRule(buttonRule);
-+	addedCSSRules.forEach(rule => styleSheet.insertRule(rule));
- };
- 
- function expandField(fieldId){
-@@ -887,17 +888,10 @@ function expandField(fieldId){
- 
- <a href=\"#results\">Results</a><br/>
- 
--<p id=\"sortable_hint\"></p>
- """  # noqa - tabs and spaces
- 
- 
- html_footer = """
--<script>
--if (typeof sortGrid === "function") {
--  document.getElementById("sortable_hint").innerHTML =
--  "hint: the table can be sorted by clicking the column headers"
--}
--</script>
- </body>
- </html>
- """
+diff --git a/package/iptables/0003-netfilter-add-nf_log.h.patch b/package/iptables/0003-netfilter-add-nf_log.h.patch
+new file mode 100644
+index 0000000000..50112faf86
+--- /dev/null
++++ b/package/iptables/0003-netfilter-add-nf_log.h.patch
+@@ -0,0 +1,38 @@
++From 15ea3fa147dea25d8cae3c2ac417142f2e0f029e Mon Sep 17 00:00:00 2001
++From: Markus Mayer <mmayer@broadcom.com>
++To: Netfilter Mailing List <netfilter-devel@vger.kernel.org>
++Date: Thu, 16 Jun 2022 15:29:58 -0700
++Subject: [PATCH] netfilter: add nf_log.h
++
++Since libxt_NFLOG is now using the UAPI version of nf_log.h, it should
++be bundled alongside the other netfilter kernel headers.
++
++This copy of nf_log.h was taken from Linux 5.18.
++
++Signed-off-by: Markus Mayer <mmayer@broadcom.com>
++Upstream: https://git.netfilter.org/iptables/commit/?id=9ea7e6aa638d0dfa14613f6f97e6dc06c857e609
++---
++diff --git a/include/linux/netfilter/nf_log.h b/include/linux/netfilter/nf_log.h
++new file mode 100644
++index 000000000000..2ae00932d3d2
++--- /dev/null
+++++ b/include/linux/netfilter/nf_log.h
++@@ -0,0 +1,15 @@
+++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+++#ifndef _NETFILTER_NF_LOG_H
+++#define _NETFILTER_NF_LOG_H
+++
+++#define NF_LOG_TCPSEQ		0x01	/* Log TCP sequence numbers */
+++#define NF_LOG_TCPOPT		0x02	/* Log TCP options */
+++#define NF_LOG_IPOPT		0x04	/* Log IP options */
+++#define NF_LOG_UID		0x08	/* Log UID owning local socket */
+++#define NF_LOG_NFLOG		0x10	/* Unsupported, don't reuse */
+++#define NF_LOG_MACDECODE	0x20	/* Decode MAC header */
+++#define NF_LOG_MASK		0x2f
+++
+++#define NF_LOG_PREFIXLEN	128
+++
+++#endif /* _NETFILTER_NF_LOG_H */
++-- 
++2.25.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
