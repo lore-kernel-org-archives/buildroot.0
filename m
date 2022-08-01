@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A9DDC00144
-	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 21:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B7B9C00144
+	for <buildroot@archiver.kernel.org>; Mon,  1 Aug 2022 21:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F298D60596;
-	Mon,  1 Aug 2022 21:04:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F298D60596
+	by smtp2.osuosl.org (Postfix) with ESMTP id CF4C9400C7;
+	Mon,  1 Aug 2022 21:07:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF4C9400C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ecvSv3p5PB-T; Mon,  1 Aug 2022 21:04:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e2cppIvKnhWm; Mon,  1 Aug 2022 21:07:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 029A5605C9;
-	Mon,  1 Aug 2022 21:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 029A5605C9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2203C1BF319
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 21:04:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8E31400B9;
+	Mon,  1 Aug 2022 21:06:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8E31400B9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 40F6E1BF319
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 21:06:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F09CD402F8
- for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 21:04:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F09CD402F8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25457400B9
+ for <buildroot@lists.busybox.net>; Mon,  1 Aug 2022 21:06:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25457400B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H6r8xbvs5rJP for <buildroot@lists.busybox.net>;
- Mon,  1 Aug 2022 21:04:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ILpzCrD7gc5s for <buildroot@lists.busybox.net>;
+ Mon,  1 Aug 2022 21:06:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C953E402ED
- for <buildroot@buildroot.org>; Mon,  1 Aug 2022 21:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C953E402ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24923400AC
+ for <buildroot@buildroot.org>; Mon,  1 Aug 2022 21:06:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24923400AC
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7034186C50; Mon,  1 Aug 2022 20:50:48 +0000 (UTC)
+ id BF33D86C64; Mon,  1 Aug 2022 20:52:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 1 Aug 2022 22:57:19 +0200
+Date: Mon, 1 Aug 2022 23:06:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8bbf5cb7cf0769e4ffb83de29d406a37623edee2
-X-Git-Newrev: 32e9f1813c4bd90783dd3f36e5a1ebd35daf5f45
+X-Git-Oldrev: 9bf4575036183a049c22fe9be124da43cbf200b8
+X-Git-Newrev: b265fa5c7f2257c51b0ff363c2ff017b2e91d680
 X-Patchwork-Hint: ignore
-Message-Id: <20220801205048.7034186C50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing/tests: improve
- get-developers test
+Message-Id: <20220801205258.BF33D86C64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx8mpico: bump bsp components to
+ version tn-hardknott_5.10.72-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,113 +64,116 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32e9f1813c4bd90783dd3f36e5a1ebd35daf5f45
+commit: https://git.buildroot.net/buildroot/commit/?id=b265fa5c7f2257c51b0ff363c2ff017b2e91d680
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change the test into a characterization test for all warnings and errors
-get-developers can return when parsing the DEVELOPERS files.
+Those components are aligned with NXP BSP lf-5.10.72-2.2.0.
 
-It will be helpful when changing the behavior of get-developers to bail
-out on all syntax checking warnings.
+This commit also refresh the readme.txt file:
+- update no longer working URLs,
+- enhance flashing instructions (use ${mmcdev} uboot variable),
+- add "bs=1M" option to dd for better flashing performances.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Fixes:
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800735
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/utils/test_get_developers.py | 67 ++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ board/technexion/imx8mpico/readme.txt | 18 +++++++++++-------
+ configs/imx8mpico_defconfig           |  9 +++++----
+ 2 files changed, 16 insertions(+), 11 deletions(-)
 
-diff --git a/support/testing/tests/utils/test_get_developers.py b/support/testing/tests/utils/test_get_developers.py
-index e4420bc6dc..12710fe8d3 100644
---- a/support/testing/tests/utils/test_get_developers.py
-+++ b/support/testing/tests/utils/test_get_developers.py
-@@ -51,6 +51,7 @@ class TestGetDevelopers(unittest.TestCase):
-         self.assertIn("Syntax error in DEVELOPERS file, line 0: 'text1'", err)
-         self.assertEqual(rc, 1)
-         self.assertEqual(len(out), 0)
-+        self.assertEqual(len(err), 1)
+diff --git a/board/technexion/imx8mpico/readme.txt b/board/technexion/imx8mpico/readme.txt
+index 1a04e44572..c20bfc0f44 100644
+--- a/board/technexion/imx8mpico/readme.txt
++++ b/board/technexion/imx8mpico/readme.txt
+@@ -45,7 +45,7 @@ J2: jumper on pins 2 and 4.
  
-         # -v generating error, called from path
-         developers = b'text2\n'
-@@ -58,6 +59,61 @@ class TestGetDevelopers(unittest.TestCase):
-         self.assertIn("Syntax error in DEVELOPERS file, line 0: 'text2'", err)
-         self.assertEqual(rc, 1)
-         self.assertEqual(len(out), 0)
-+        self.assertEqual(len(err), 1)
-+
-+        # -v generating error for file entry with no developer entry
-+        developers = b'# comment\n' \
-+                     b'\n' \
-+                     b'F:\tutils/get-developers\n' \
-+                     b'\n' \
-+                     b'N:\tAuthor2 <email>\n' \
-+                     b'F:\tutils/get-developers\n'
-+        out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
-+        self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
-+        self.assertEqual(rc, 0)
-+        self.assertEqual(len(out), 0)
-+        self.assertEqual(len(err), 1)
-+
-+        # -v generating error for developer entry with no file entries
-+        developers = b'# comment\n' \
-+                     b'# comment\n' \
-+                     b'\n' \
-+                     b'N:\tAuthor1 <email>\n' \
-+                     b'N:\tAuthor2 <email>\n' \
-+                     b'N:\tAuthor3 <email>\n' \
-+                     b'F:\tutils/get-developers\n'
-+        out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
-+        self.assertIn("Syntax error in DEVELOPERS file, line 1", err)
-+        self.assertIn("Syntax error in DEVELOPERS file, line 2", err)
-+        self.assertEqual(rc, 0)
-+        self.assertEqual(len(out), 0)
-+        self.assertEqual(len(err), 2)
-+
-+        # -v not generating error for developer entry with empty list of file entries
-+        developers = b'# comment\n' \
-+                     b'# comment\n' \
-+                     b'\n' \
-+                     b'N:\tAuthor1 <email>\n' \
-+                     b'\n' \
-+                     b'N:\tAuthor2 <email>\n' \
-+                     b'\n' \
-+                     b'N:\tAuthor3 <email>\n' \
-+                     b'F:\tutils/get-developers\n'
-+        out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
-+        self.assertEqual(rc, 0)
-+        self.assertEqual(len(out), 0)
-+        self.assertEqual(len(err), 0)
-+
-+        # -v generating warning for old file entry
-+        developers = b'N:\tAuthor <email>\n' \
-+                     b'F:\tpath/that/does/not/exists/1\n' \
-+                     b'F:\tpath/that/does/not/exists/2\n'
-+        out, err, rc = call_get_developers("get-developers", ["-v"], self.WITH_UTILS_IN_PATH, topdir, developers)
-+        self.assertIn("WARNING: 'path/that/does/not/exists/1' doesn't match any file", err)
-+        self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file", err)
-+        self.assertEqual(rc, 0)
-+        self.assertEqual(len(out), 0)
-+        self.assertEqual(len(err), 2)
+ In case the board was flashed with a wrong u-boot, or the eMMC is
+ erased, u-boot can be loaded by USB Serial Download boot mode, using
+-imx-usb-loader. See [3] and [4].
++imx-usb-loader. See [3].
  
-         # -c generating warning and printing lots of files with no developer
-         developers = b'N:\tAuthor <email>\n' \
-@@ -68,6 +124,17 @@ class TestGetDevelopers(unittest.TestCase):
-         self.assertIn("WARNING: 'path/that/does/not/exists/2' doesn't match any file", err)
-         self.assertEqual(rc, 0)
-         self.assertGreater(len(out), 1000)
-+        self.assertEqual(len(err), 2)
-+
-+        # -c printing lots of files with no developer
-+        developers = b'# comment\n' \
-+                     b'\n' \
-+                     b'N:\tAuthor <email>\n' \
-+                     b'F:\tutils/get-developers\n'
-+        out, err, rc = call_get_developers("./utils/get-developers", ["-c"], self.WITH_EMPTY_PATH, topdir, developers)
-+        self.assertEqual(rc, 0)
-+        self.assertGreater(len(out), 1000)
-+        self.assertEqual(len(err), 0)
+ For flashing:
+ - Plug the micro USB cable from the Debug USB Port, to your computer
+@@ -53,9 +53,13 @@ For flashing:
  
-         # -p lists more than one developer
-         developers = b'N:\tdev1\n' \
+ In the U-Boot prompt launch:
+ 
+-=> ums 0 mmc 0
++=> ums 0 mmc ${mmcdev}
+ 
+ This will mount the eMMC content in the host PC as a mass storage device.
++Note: the ${mmcdev} id may change from one uboot version to another. The
++actual id can be confirmed by running commands "mmc rescan" then
++"mmc list", to find the eMMC entry. Finally it's possible to enter
++directly the mmc device id, for example: "ums 0 mmc 2".
+ 
+ To determine the device associated to the eMMC card have a look in the
+ /proc/partitions file:
+@@ -69,12 +73,13 @@ Buildroot prepares a bootable "sdcard.img" image in the output/images/
+ directory, ready to be dumped on the eMMC. Launch the following
+ command as root:
+ 
+-  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++  dd bs=1M if=output/images/sdcard.img of=/dev/<your-sd-device>
+ 
+ *** WARNING! This will destroy all the eMMC content. Use with care! ***
+ 
+ This operation can take several minutes, depending on the image
+-size. When tested, a 2MB/s transfer rate was observed.
++size. When tested, a 10MB/s transfer rate was observed. Note: the
++blocksize "bs=1M" parameter gives better transfer performances.
+ 
+ For details about the medium image layout, see the definition in
+ board/freescale/common/imx/genimage.cfg.template.
+@@ -90,6 +95,5 @@ To boot your newly created system:
+ Enjoy!
+ 
+ [1]. https://www.technexion.com/products/system-on-modules/pico/pico-compute-modules/detail/PICO-IMX8M
+-[2]. https://www.technexion.com/products/system-on-modules/pico-evaluation-kits/detail/PICO-PI-IMX8M-BASIC
+-[3]. https://www.technexion.com/support/knowledgebase/boot-configuration-settings-for-pico-baseboards/
+-[4]. https://www.technexion.com/support/knowledgebase/loading-bootable-software-images-onto-the-emmc-of-picosom-on-pico-pi/
++[2]. https://www.technexion.com/products/system-on-modules/evk/pico-pi-imx8m/
++[3]. https://developer.technexion.com/docs/pico-evaluation-kit-boot-mode-settings#picoimx8m-and-picoimx8mmini
+diff --git a/configs/imx8mpico_defconfig b/configs/imx8mpico_defconfig
+index 5478f267fc..55746fb67e 100644
+--- a/configs/imx8mpico_defconfig
++++ b/configs/imx8mpico_defconfig
+@@ -1,13 +1,14 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-pico-pi.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux,9146d4dcb2dda0c7614f74f824cfb20d29bd85f8)/linux-9146d4dcb2dda0c7614f74f824cfb20d29bd85f8.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux-tn-imx,tn-hardknott_5.10.72-2.2.0_20220207)/linux-tn-im-tn-hardknott_5.10.72-2.2.0_20220207.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="tn_imx8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-pico-pi freescale/imx8mq-pico-pi-dcss-ili9881c"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_FREESCALE_IMX=y
+ BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
+ BR2_PACKAGE_FIRMWARE_IMX=y
+@@ -18,13 +19,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="lf-5.10.72-2.2.0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-edm,9a070a5b4460124054bc459edfc9d1b43e5403bb)/u-boot-edm-9a070a5b4460124054bc459edfc9d1b43e5403bb.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-tn-imx,tn-hardknott_5.10.72-2.2.0_20220207)/u-boot-tn-imx-tn-hardknott_5.10.72-2.2.0_20220207.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pico-imx8mq"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
