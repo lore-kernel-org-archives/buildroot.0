@@ -1,87 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2F9FC00140
-	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 13:30:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6EECC00140
+	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 13:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F1D5408A6;
-	Tue,  2 Aug 2022 13:30:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F1D5408A6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45C8760C27;
+	Tue,  2 Aug 2022 13:30:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45C8760C27
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1REaX-GqzrQX; Tue,  2 Aug 2022 13:30:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O1RYbPTj1YEt; Tue,  2 Aug 2022 13:30:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0688340863;
-	Tue,  2 Aug 2022 13:30:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0688340863
+	by smtp3.osuosl.org (Postfix) with ESMTP id 525CB60B86;
+	Tue,  2 Aug 2022 13:30:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 525CB60B86
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A6EA81BF329
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 13:30:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 284381BF329
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 13:30:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B8B1408A6
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 13:30:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B8B1408A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0216F40761
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 13:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0216F40761
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gak83wCjWhFa for <buildroot@lists.busybox.net>;
- Tue,  2 Aug 2022 13:30:19 +0000 (UTC)
+ with ESMTP id IxC1lOsBAlHR for <buildroot@lists.busybox.net>;
+ Tue,  2 Aug 2022 13:30:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A7D440761
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D81B40863
 Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com
  [IPv6:2607:f8b0:4864:20::f35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7A7D440761
- for <buildroot@buildroot.org>; Tue,  2 Aug 2022 13:30:19 +0000 (UTC)
-Received: by mail-qv1-xf35.google.com with SMTP id m10so10696109qvu.4
- for <buildroot@buildroot.org>; Tue, 02 Aug 2022 06:30:19 -0700 (PDT)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1D81B40863
+ for <buildroot@buildroot.org>; Tue,  2 Aug 2022 13:30:20 +0000 (UTC)
+Received: by mail-qv1-xf35.google.com with SMTP id m10so10696152qvu.4
+ for <buildroot@buildroot.org>; Tue, 02 Aug 2022 06:30:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=lCBpCxbGt7DnphMRtznCulpiAzZVaC/MRAZoGyOZbeA=;
- b=p+pugLc7qCz9xuNvyMOB0O0cb8jJsya1iv/B1MbQQDcfkgFftYF9DeG0rBBQ9Tuls+
- iTiXfXi1cXZHOvmaducGkEsLlI5XGTlSKWLY2qB682aZ+r396TdnvTaNv0dFpCbj8yjh
- n4unanbOl5dxxZcH2WamLqE9MpKdsC1FAGvalR3hy6G4WO5IZDDrglY88ZcSkLo3wouI
- zjSHq1/LMvFMpn3tN756WC/oyu4GUTPX2NW+m58jft9+3apjVybqpjax0AjUroy+buHq
- /WerFNEcfw/i+fGncLuZHP8LiAs/mpRLP6ikHYlZI+sW7nkprIPtjgV6EaQHrdtF56/Z
- ttlQ==
-X-Gm-Message-State: ACgBeo1xp5fBx/0UwXvxYlq8oj1rdiy+FDLgb8z96TTqjy4IL+kmccgB
- cZUDjLWlriV2nb8DG6BRXcIDJCbZrfBVVw==
-X-Google-Smtp-Source: AA6agR66oIyC/Kb4Phdxgw4bSjBHxqR9Y14bDYDo01HITkfD9Xp6EjjwTtVnodRqnngL4D9gCCGauw==
-X-Received: by 2002:a05:6214:20a5:b0:474:6683:ed78 with SMTP id
- 5-20020a05621420a500b004746683ed78mr17922137qvd.11.1659447018239; 
- Tue, 02 Aug 2022 06:30:18 -0700 (PDT)
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=IvMvG0NHBARwpZU1t/b4d7gSebDdW28YLyuqQamB66I=;
+ b=M+ErY1yKL4vbw2evDMFM5jNxbTMvF5G1Ds1EV0eEDON/CBkhOEM6iB89e1zYPDAwRU
+ 7E2be45cYuT5uCjzG3tfBAuOXWautDFFgrtmQgROH+QB62aVY8h8FjAFSxDv2sLNPq8r
+ FvF/h83tMD1aF6b91I2V/mmwyly/3Ki+vrONc1kAemKd19pLqH+nPfnsXCXMeckofuJq
+ Z9zbFlN1li831VuanBS25QeGt/NGO22se4RBIt8PJv+cXuNGOq9ceKUfzNAJffA2HNS3
+ ug8+lQv/cTA9ckByguGyBZsOc7ShzyKGzBSt6pxOqFcIXyYNFDJMxJ0ME3N686G0FWjA
+ TXKw==
+X-Gm-Message-State: ACgBeo2Fi7lVGzbbS7yffVxmGATwFSzhGnyLGlMz4IPKYLTBftAdTS+d
+ C7Kcz+bQtEoGAj1/XLRbU9SIFMg8cuYSIQ==
+X-Google-Smtp-Source: AA6agR4wKEREQ+hp9HpL7m/i2bjuuRQxtRFeRQth42mFGQyJmuz4rt6DhU/GVjEfvqpEuXne19piKg==
+X-Received: by 2002:ad4:594e:0:b0:474:4e75:3579 with SMTP id
+ eo14-20020ad4594e000000b004744e753579mr18833449qvb.74.1659447019559; 
+ Tue, 02 Aug 2022 06:30:19 -0700 (PDT)
 Received: from hefring.. ([50.212.55.89]) by smtp.gmail.com with ESMTPSA id
- t17-20020ac87611000000b003051f450049sm8894638qtq.8.2022.08.02.06.30.16
+ t17-20020ac87611000000b003051f450049sm8894638qtq.8.2022.08.02.06.30.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Aug 2022 06:30:17 -0700 (PDT)
+ Tue, 02 Aug 2022 06:30:19 -0700 (PDT)
 From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
 X-Google-Original-From: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
 To: buildroot@buildroot.org
-Date: Tue,  2 Aug 2022 09:30:06 -0400
-Message-Id: <20220802133009.1282520-1-Ben.Wolsieffer@hefring.com>
+Date: Tue,  2 Aug 2022 09:30:07 -0400
+Message-Id: <20220802133009.1282520-2-Ben.Wolsieffer@hefring.com>
 X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220802133009.1282520-1-Ben.Wolsieffer@hefring.com>
+References: <20220802133009.1282520-1-Ben.Wolsieffer@hefring.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=hefring-com.20210112.gappssmtp.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=lCBpCxbGt7DnphMRtznCulpiAzZVaC/MRAZoGyOZbeA=;
- b=cHjJgdjJXiQiGdHfmGGlnL0a4wBqnyl6t13oID/tohbqw4LWGnkOSwPotzXuDVoyg5
- 7KgIXppfnnDxjoVJz2O7prwJ9SWoXA5NV4WPvXPMVzDPBGO1RT0CbRe1I0FVHSOTgVas
- JKhNkCqeO1NVP+AhZ7cUXLeDWWrc7JQOgbYj97ktOslpPjQoIryX1B8/RKHJCFcUkuEQ
- LWJXjZpVsj5jsvAeMuScMXw5HzagWaqBhcu49Oa88SA95yqvN9nmiBiJnO7N17IChpZi
- mqij1AVbUfaT333R9SD7VfdmDretZGZkF2F21UUsrQonOU7166ntdGzmJw1FZ3g91JD8
- +QzA==
+ h=from:to:cc:subject:date:message-id:in-reply-to:references
+ :mime-version:content-transfer-encoding;
+ bh=IvMvG0NHBARwpZU1t/b4d7gSebDdW28YLyuqQamB66I=;
+ b=Hc9abmGX+fG6+QHBuhGJRORbq3N13huV4YG2UhhEo2HD2iqwci0dhOShXYRJPtXOut
+ cEw0Uj305n+PLWcmrctgEzHvvczkF1RSrFLxM20bRFoVcjTiiMKZFEdbY5oRySwI49gM
+ g7X2l436Q6X+ldcUHsPa7+oUktujuhd0ITEcC3eRCU4CusyUDs4k0ndVUdiby1npNUo/
+ UoPaw0rNRbSZdP/Vw5uRIhzCVbZksAcaB6gevy6P64HTPWAx+GfJCb+TpFICbAE4m99m
+ P5M6EOUJbUXkjj3FYIzrTbt2Qi7egC9PJwy2y/JtYwjC9j1PR3WAvFKzjVmW6u4EgNvh
+ JARA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=hefring-com.20210112.gappssmtp.com
  header.i=@hefring-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=cHjJgdjJ
-Subject: [Buildroot] [PATCH 0/2] Add support for FDPIC binaries on ARM
+ header.s=20210112 header.b=Hc9abmGX
+Subject: [Buildroot] [PATCH 1/2] Revert "arch: drop now useless support for
+ FDPIC"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,24 +104,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This series re-introduces support for the FDPIC binary format, which is
-now usable on ARM.
+This reverts commit 58dcd28dfbed481becb822b009583a63efbc6ffa.
 
-The first patch reverts the removal of general FDPIC support, while the
-second adds support for FDPIC specifically on ARM.
+ARM supports FDPIC, so this code is needed once again.
 
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Ben Wolsieffer (2):
-  Revert "arch: drop now useless support for FDPIC"
-  arch/arm: add support for FDPIC
-
- arch/Config.in           | 15 +++++++++++++++
- package/Makefile.in      | 30 +++++++++++++++++++++---------
+Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
+---
+ arch/Config.in           | 14 ++++++++++++++
  package/uclibc/uclibc.mk |  8 ++++++++
- 3 files changed, 44 insertions(+), 9 deletions(-)
+ 2 files changed, 22 insertions(+)
 
+diff --git a/arch/Config.in b/arch/Config.in
+index 1c0c400a98..c5d481b9e5 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -12,6 +12,9 @@ config BR2_SOFT_FLOAT
+ config BR2_USE_MMU
+ 	bool
+ 
++config BR2_ARCH_HAS_FDPIC_SUPPORT
++	bool
++
+ choice
+ 	prompt "Target Architecture"
+ 	default BR2_i386
+@@ -418,6 +421,7 @@ endif
+ choice
+ 	prompt "Target Binary Format"
+ 	default BR2_BINFMT_ELF if BR2_USE_MMU
++	default BR2_BINFMT_FDPIC if BR2_ARCH_HAS_FDPIC_SUPPORT
+ 	default BR2_BINFMT_FLAT
+ 
+ config BR2_BINFMT_ELF
+@@ -429,6 +433,16 @@ config BR2_BINFMT_ELF
+ 	  and executables used across different architectures and
+ 	  operating systems.
+ 
++config BR2_BINFMT_FDPIC
++	bool "FDPIC"
++	depends on BR2_ARCH_HAS_FDPIC_SUPPORT
++	select BR2_BINFMT_SUPPORTS_SHARED
++	help
++	  ELF FDPIC binaries are based on ELF, but allow the individual
++	  load segments of a binary to be located in memory
++	  independently of each other. This makes this format ideal for
++	  use in environments where no MMU is available.
++
+ config BR2_BINFMT_FLAT
+ 	bool "FLAT"
+ 	depends on !BR2_USE_MMU
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 0e17a8e65d..ff98a05c16 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -56,6 +56,14 @@ UCLIBC_LOCALES = \
+ endif
+ 
+ # noMMU binary formats
++ifeq ($(BR2_BINFMT_FDPIC),y)
++define UCLIBC_BINFMT_CONFIG
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
++	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
++endef
++endif
+ ifeq ($(BR2_BINFMT_FLAT_ONE),y)
+ define UCLIBC_BINFMT_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT)
 -- 
 2.37.0
 
