@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99B7EC00140
-	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 22:13:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10375C00140
+	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 22:15:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E19AA81749;
-	Tue,  2 Aug 2022 22:13:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E19AA81749
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8758881854;
+	Tue,  2 Aug 2022 22:15:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8758881854
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EKC0GMe_87KW; Tue,  2 Aug 2022 22:13:13 +0000 (UTC)
+	with ESMTP id ALP8GCEyrnoN; Tue,  2 Aug 2022 22:15:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17401814C9;
-	Tue,  2 Aug 2022 22:13:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17401814C9
+	by smtp1.osuosl.org (Postfix) with ESMTP id B47C181772;
+	Tue,  2 Aug 2022 22:15:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B47C181772
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 49F7C1BF48B
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:13:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 702351BF48B
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:15:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31C5D60E25
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:13:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31C5D60E25
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57B706058C
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:15:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57B706058C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wyZnwWFR_DUY for <buildroot@lists.busybox.net>;
- Tue,  2 Aug 2022 22:13:10 +0000 (UTC)
+ with ESMTP id 6XvLbs3x-vrd for <buildroot@lists.busybox.net>;
+ Tue,  2 Aug 2022 22:15:30 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1509E60ABF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59F37600CB
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1509E60ABF
- for <buildroot@buildroot.org>; Tue,  2 Aug 2022 22:13:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 59F37600CB
+ for <buildroot@buildroot.org>; Tue,  2 Aug 2022 22:15:30 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EA42D1BF203;
- Tue,  2 Aug 2022 22:13:07 +0000 (UTC)
-Date: Wed, 3 Aug 2022 00:13:06 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 9D6A21BF205;
+ Tue,  2 Aug 2022 22:15:28 +0000 (UTC)
+Date: Wed, 3 Aug 2022 00:15:27 +0200
 To: Ben Wolsieffer <ben.wolsieffer@hefring.com>
-Message-ID: <20220803001306.01608551@windsurf>
-In-Reply-To: <20220802202142.1770838-3-Ben.Wolsieffer@hefring.com>
+Message-ID: <20220803001527.5aee21c7@windsurf>
+In-Reply-To: <20220802202142.1770838-4-Ben.Wolsieffer@hefring.com>
 References: <20220802202142.1770838-1-Ben.Wolsieffer@hefring.com>
- <20220802202142.1770838-3-Ben.Wolsieffer@hefring.com>
+ <20220802202142.1770838-4-Ben.Wolsieffer@hefring.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659478388;
+ d=bootlin.com; s=gm1; t=1659478529;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=vMEncnUSmA3dlVHlxPvWho4GWtM+PBy2dTZlxMzTb5s=;
- b=i/MgY9n65f2WkZxg05AtsrOnz65Tg0XycOf6iW2uEYDeEeOwcl5iBX1wB7sNg12l+/Jv6S
- 1o7BnzM3T603zQuthoePjLQXxSOZUDeHrAi4Z22GTK2l3rbo4bbGUmbW5UPFwz1UQIE628
- FDIN3w/UmnVwWPHlOdMAdo3U1X/IW9FPhavXwEwlD5T8sHv4Sl5p2wjxVB3semH0sifou5
- ivbc+U+P5NJjgPhente0yneMTynbyR0ocQ3pEyPvwaR11/cR7nSqTFc4HZYwRSwKdt1Hua
- OjrJKczlxx0UK4HGI3ivXl5PoRRWeOEWS3ABxJehZ3lWC7r8k8meGYR+FNo3rA==
+ bh=Abax8ErpLiDipWUeAGYAXu6DyapHSLO63J7p8+Mnnxw=;
+ b=A8kDWk0+Cx3nBvITfWeVe7PI0ToCd5RQ29rJeUQEmlFZapJV6NaG3AxVacO+mUGzafxOck
+ Uw8jOeWw7FcstsQIAnAHqDJumyJePuBs9YOK6jVlEcJSE2S82ibXteEOkD8ocQkVa0kUUJ
+ PNZFoFKcoOtAF/3DlXR0YsNILpth2kjAYkFX9gLhw68zu5C0x0g+jgDQGqG/capc9WO0V/
+ fftpEM3neL3RynoDho1ygrw+Nw4UB9Ido6wXE0qWbAy7RsML/o9olGf26zlBJptikKraMA
+ 5MtEpLfvWKhFERKGg5D0eO5imL/LTEMHKdU4iNAaRwT9Sc/J3AdLcgB8x5872Q==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=i/MgY9n6
-Subject: Re: [Buildroot] [PATCH v2 2/4] arch/arm: add support for FDPIC
+ header.s=gm1 header.b=A8kDWk0+
+Subject: Re: [Buildroot] [PATCH v2 3/4] boot/uboot: pass -mno-fdpic if FDPIC
+ is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,26 +85,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  2 Aug 2022 16:21:40 -0400
+On Tue,  2 Aug 2022 16:21:41 -0400
 Ben Wolsieffer <ben.wolsieffer@hefring.com> wrote:
 
-> Linux on ARM supports FDPIC binaries intended for use on no-MMU systems.
-> This patch enables support for building a toolchain that produces FDPIC
-> binaries.
-> 
-> The target name for an FDPIC toolchain must be
-> arm-<vendor>-uclinuxfdpiceabi, which doesn't follow the standard format
-> and requires a special case.
-> 
-> According to the kernel help for CONFIG_BINFMT_ELF_FDPIC, "It is also
-> possible to run FDPIC ELF binaries on MMU linux," so FDPIC support is
-> available on all ARM platforms, not just no-MMU.
-> 
-> Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
+> If the FDPIC ABI is enabled by default in the toolchain, it must be
+> explicitly disabled when building U-Boot.
 
-I am (genuinely) surprised it's all what's needed. All of
-binutils/gcc/gdb automagically now that we're using FDPIC just by
-looking at the uclinuxfdpiceabi part of the tuple?
+Missing SoB.
+
+Who added -mfdpic by default? Directly the compiler?
+
+If -mfdpic was added by our toolchain wrapper, then the toolchain
+wrapper (toolchain/toolchain-wrapper.c) already has a few checks to
+avoid adding -fPIE when building the kernel/U-Boot.
 
 Thanks!
 
