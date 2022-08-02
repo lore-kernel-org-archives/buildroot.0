@@ -1,89 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0C7EC00140
-	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 17:34:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54BC8C00140
+	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 17:44:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C0DF40943;
-	Tue,  2 Aug 2022 17:34:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C0DF40943
+	by smtp2.osuosl.org (Postfix) with ESMTP id D7BAC40982;
+	Tue,  2 Aug 2022 17:44:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7BAC40982
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vLJPr33ibC5Q; Tue,  2 Aug 2022 17:34:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q6YMF367yb-R; Tue,  2 Aug 2022 17:44:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56E4E40942;
-	Tue,  2 Aug 2022 17:34:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56E4E40942
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C89E11BF5DD
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 17:34:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E7ED440949;
+	Tue,  2 Aug 2022 17:43:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7ED440949
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EF6FB1BF5DD
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 17:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3CE881322
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 17:34:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3CE881322
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA58F60D9C
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 17:43:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA58F60D9C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qf7kmphqRxi0 for <buildroot@lists.busybox.net>;
- Tue,  2 Aug 2022 17:34:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 014D0812EA
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 014D0812EA
- for <buildroot@busybox.net>; Tue,  2 Aug 2022 17:34:22 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- r1-20020a05600c35c100b003a326685e7cso871651wmq.1
- for <buildroot@busybox.net>; Tue, 02 Aug 2022 10:34:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
- :references:mime-version:content-transfer-encoding;
- bh=RQK0KOJ0AErPA7yCXTC7uPJ0j0ofayvu4vJmNB2yyX8=;
- b=6M2Ry2NSesPTvxRKARxGxFGImoMDDPd17Up/YwYY6rr+ySsQ2IavXjoA7Bs4XX9hlZ
- 0reknp5ZNIOdK8/NIe5yKcxO3mQF3j/IJBZ6J73hdZsVwPGwi6Z46xwGC4URyDiEDM3v
- gIrpHS8dIv47a69hIZs+gFbcxYnzFuuJNrQoXRu9yGekyK4iCFFfo3y+YtI7hXKtvq/4
- 2TQr6fYOl1hnYO7+OX+vY15HTlwkR2EoBlGy4i6ONWfNUXKdUtHjBMFumZfIvVFBEHUa
- 5tKBZgqM9VXxQClDjhjof5FqS5MxidXjBBxAF0fsbP5u6Y0BlR/ntdf+FwFDuBe9+21y
- L2zQ==
-X-Gm-Message-State: ACgBeo3MTLQim8Y4hVFWF6t+SQTNjPGXt33vmSzvOkNVAcYIXl0mxnBR
- fmD/awPge2rvid6bg3ND/QOgM87aSWloHA==
-X-Google-Smtp-Source: AA6agR6BQLCYmGDkAYsVwP9NKzkcmkz6/FMTfuGyoEaPOGaPAw3rAZCzgsa5iKnYYYyV+KqHBpoK1w==
-X-Received: by 2002:a05:600c:434b:b0:3a3:175a:a964 with SMTP id
- r11-20020a05600c434b00b003a3175aa964mr363543wme.2.1659461660905; 
- Tue, 02 Aug 2022 10:34:20 -0700 (PDT)
-Received: from pc-140.home ([2a01:cb1c:794:2300:d109:33e7:bc94:49e5])
- by smtp.gmail.com with ESMTPSA id
- ay23-20020a05600c1e1700b003a4e5f85087sm3594215wmb.38.2022.08.02.10.34.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Aug 2022 10:34:19 -0700 (PDT)
-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-To: buildroot@busybox.net
-Date: Tue,  2 Aug 2022 19:33:30 +0200
-Message-Id: <20220802173330.15176-2-guillaume.bressaix@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220802173330.15176-1-guillaume.bressaix@gmail.com>
-References: <20220802173330.15176-1-guillaume.bressaix@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aYD0g6fi0D6Q for <buildroot@lists.busybox.net>;
+ Tue,  2 Aug 2022 17:43:55 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C462E606E6
+Received: from mxd1.seznam.cz (mxd1.seznam.cz [77.75.78.210])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C462E606E6
+ for <buildroot@buildroot.org>; Tue,  2 Aug 2022 17:43:54 +0000 (UTC)
+Received: from email.seznam.cz
+ by email-smtpc1a.ko.seznam.cz (email-smtpc1a.ko.seznam.cz [10.53.10.15])
+ id 5e06eca3e82653f85e0152d4; Tue, 02 Aug 2022 19:43:44 +0200 (CEST)
+Received: from localhost.localdomain (mail.ms-free.net [185.147.46.46])
+ by email-relay25.ng.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+ Tue, 02 Aug 2022 19:43:40 +0200 (CEST)  
+From: Petr Vorel <pevik@seznam.cz>
+To: buildroot@buildroot.org
+Date: Tue,  2 Aug 2022 19:43:34 +0200
+Message-Id: <20220802174334.285384-1-pevik@seznam.cz>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=from:to:cc:subject:date:message-id:in-reply-to:references
- :mime-version:content-transfer-encoding;
- bh=RQK0KOJ0AErPA7yCXTC7uPJ0j0ofayvu4vJmNB2yyX8=;
- b=HqU5HnadNu5vWBd/5gg1n2HSJkCUSYUZSJ+U6GydRGFoNmuCFTQCJ8RlJBu0y5ystw
- u+2I5Lk1neuk3712RYEs8CjwjuEnmXuxbi95pRsSh31RiNUZ46aQQpGb8qGYNoeg51tl
- TwwKIekiXMC5FPL/QJc236S1La/ePEwbnXFwJJgdEc5g6oonLEU4q6Zew7CFb5+JAody
- 0klIo7O+zPMtI7Vjiom1JbJsWVWlM9EH8lAPezHHZ6A/EkdlbH+Alqzeo4MbbezzzxDF
- 7nnlG+umt+sSh6ixrvgP8Ii40LnFG9neKakbyW/dz+PnAwhOU0iORBkCK9nmjBlzFd98
- 0CmA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=HqU5Hnad
-Subject: [Buildroot] [PATCH 2/2] support/testing: test_python_scipy
+ d=seznam.cz; s=beta; 
+ t=1659462224; bh=xc56Faji/IxOy6X46MNPlkgAAHlq1Fw4nq0Mz3LQWTM=;
+ h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding;
+ b=QUVJssZo7a1PWLDpgvcemsVcDCqz1kYUbXjdmxwzOPkbH9PBDGmIzCrQWvdT7Ca6c
+ HIDmHsRi7/sPuLA9oFENTEHhHntGmSiS1hbNQ4H347PfT8Ya6Az6OhP+ZFug/Vjsg0
+ XxP2ecFKfayVSMOCdltAVdz9CNMe0G9rDqOo9au4=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=seznam.cz header.i=@seznam.cz
+ header.a=rsa-sha256 header.s=beta header.b=QUVJssZo
+Subject: [Buildroot] [PATCH 1/1] package/bind: bump version to 9.16.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,39 +70,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Test io module, to demonstrate the runtime dependency is correctly matched
+From: Petr Vorel <petr.vorel@gmail.com>
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- support/testing/tests/package/sample_python_scipy.py | 4 ++++
- 1 file changed, 4 insertions(+)
+Hi,
 
-diff --git a/support/testing/tests/package/sample_python_scipy.py b/support/testing/tests/package/sample_python_scipy.py
-index df0c7ce5fe..d36f2273e7 100644
---- a/support/testing/tests/package/sample_python_scipy.py
-+++ b/support/testing/tests/package/sample_python_scipy.py
-@@ -1,4 +1,5 @@
- import numpy
-+import scipy.io
- import scipy.special
- import scipy.integrate
+Build tested via test-pkg.
+
+Kind regards,
+Petr
+
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 2c10a0429b..171edc8806 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.16.27/bind-9.16.27.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.16.31/bind-9.16.31.tar.xz.asc
+ # with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
+-sha256  90902aaf104c81019d75d6f8b2f7ec40fcd249406f894b44e4a9c6b5e08bf566  bind-9.16.27.tar.xz
++sha256  8ca2cb6c37b605c70f7a25f0cf8a94d2040e025824db2341b92625efd96e7cfb  bind-9.16.31.tar.xz
+ sha256  daf6f1eddf5983ed664a2d125b619e56e2e93917c19d0d41c7586ea153ba2155  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 5eb3e69bed..e5bf2be318 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -10,3 +11,6 @@ assert(com == 15.0)
- 
- t = scipy.integrate.trapezoid([5,8,10])
- assert(t == 15.5)
-+
-+mdic = {"t": t, "label": "example"}
-+scipy.io.savemat("example.mat", mdic)
+-BIND_VERSION = 9.16.27
++BIND_VERSION = 9.16.31
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
 -- 
-2.20.1
+2.36.1
 
 _______________________________________________
 buildroot mailing list
