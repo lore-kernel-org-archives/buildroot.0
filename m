@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7D12C00140
-	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 17:31:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 148B3C00140
+	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 17:33:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7FAA040942;
-	Tue,  2 Aug 2022 17:31:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FAA040942
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0A2981323;
+	Tue,  2 Aug 2022 17:33:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0A2981323
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cq-LpnRCqRyY; Tue,  2 Aug 2022 17:31:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rgvUWSsc9JMd; Tue,  2 Aug 2022 17:33:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B6F640931;
-	Tue,  2 Aug 2022 17:31:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B6F640931
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4E88812EA;
+	Tue,  2 Aug 2022 17:33:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4E88812EA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5F8161BF5DD
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 17:31:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 76D471BF5DD
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 17:33:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41D4681747
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 17:31:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41D4681747
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51E5A812EA
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 17:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51E5A812EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sjINpQDMfFHV for <buildroot@lists.busybox.net>;
- Tue,  2 Aug 2022 17:31:47 +0000 (UTC)
+ with ESMTP id 5znUn4D-Qq_L for <buildroot@lists.busybox.net>;
+ Tue,  2 Aug 2022 17:33:46 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7716481699
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74E64812D2
 Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
  [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7716481699
- for <buildroot@busybox.net>; Tue,  2 Aug 2022 17:31:47 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id l22so18763270wrz.7
- for <buildroot@busybox.net>; Tue, 02 Aug 2022 10:31:47 -0700 (PDT)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 74E64812D2
+ for <buildroot@busybox.net>; Tue,  2 Aug 2022 17:33:46 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id j1so10369830wrw.1
+ for <buildroot@busybox.net>; Tue, 02 Aug 2022 10:33:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=UsIv7F8Sr9vEyfGHsX2fdHMH2vGxdlfjHnIqM5lsGJ8=;
- b=pluNBPB6XYk2LfEbwqi9z2+nydoBng6JNrKi9T/SjXC/KWF5PKpDhm3c8Fb1XiFVDP
- QmsFGKtznQ8FwODtapNC9ENy5chcCouMPCYmXWzrmaFLnXpb2TGypL6hZrfAMOx9nvxw
- K7SoA56//FxIPBBHlxG+3J8iSw7Ohp8dC+l8G3HA/ZqXCXNnwGax1tHGhxxv630m/xuD
- wz5JK3dRcxlNO4IwEU1aitXJSMEo6HhrW66WSVDoxpG/c82GTzADV/CVKdW9IGUL9IdJ
- 1uIO36vStQSk5vVO9+dypbjRMP/qPQLHcEZ/frCR3/ZQUHjbS7WfG66OKIrDfNK5LkAR
- 6POA==
-X-Gm-Message-State: ACgBeo3XEwtHLLGHalVc1ac6wpBO+5/kX6BzQM4aHWBZ7dw+7oQO3awW
- 1HlNFrVa9tvn2wrb3Hvd4N67U5ap2Z4uqA==
-X-Google-Smtp-Source: AA6agR4czmavdKVb/bzh4d+KCMkWEy6iqJwhrpPbSSkttagG5x3ysQMUcMVH37F1+SYcjDKZuc/LRw==
-X-Received: by 2002:adf:ea03:0:b0:21f:151e:780e with SMTP id
- q3-20020adfea03000000b0021f151e780emr12490053wrm.25.1659461505492; 
- Tue, 02 Aug 2022 10:31:45 -0700 (PDT)
+ bh=SRsFR8ZCv4LJB3/G9BPeFPVIXnFsifAZFvJ19W1IVWU=;
+ b=mE0fCXCZMS0TAiy+0zM7UUCNqB2Lm5FAtoALlm25oVOWPMfHwJeQHYLdWYdOew4mvc
+ ct54JwIkPrG4X3T6KoRqkBKD5qW6LY65UBuGuKVe71se8lxD5ddUcsgS10KZtaa2rXHr
+ ktEqnq3L42GAiso36M+rVe/9ihSmuFyaqn0+GknhelRHHcUtxN65XtqorD6HvjC3RGyQ
+ mPcZaECC0SzB4rL7v5ew0aCwNHlRLGvUhJMeufN612iFieUYkZjgYYfpC5Us7aDKb3xV
+ g+LQSEZMlaUqmgov+5pjxGEJEuQTBcjEsqIkKYheCw6bPRJo9CZ9qopcLPgnzaVZNV1i
+ U8kg==
+X-Gm-Message-State: ACgBeo248nDXlLmLmMVH7VcJ/TYrfyhPqWy7v8Ph9kc80JgUjNTbtuv/
+ /aGF72aD9/cDtmS/jZBp5XRGk/YMiU8slg==
+X-Google-Smtp-Source: AA6agR7rMbZZrGxt7XcdFlWKMX6BtdBNBgEmtjqT73Mxt7NBU8yvP0sW6JXc0cu24GsDPQqW5dUovA==
+X-Received: by 2002:a5d:4f81:0:b0:21e:2cd7:25df with SMTP id
+ d1-20020a5d4f81000000b0021e2cd725dfmr14225773wru.439.1659461624460; 
+ Tue, 02 Aug 2022 10:33:44 -0700 (PDT)
 Received: from pc-140.home ([2a01:cb1c:794:2300:d109:33e7:bc94:49e5])
  by smtp.gmail.com with ESMTPSA id
- f12-20020a05600c154c00b003a31169a7f4sm26750156wmg.12.2022.08.02.10.31.43
+ ay23-20020a05600c1e1700b003a4e5f85087sm3594215wmb.38.2022.08.02.10.33.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 02 Aug 2022 10:31:44 -0700 (PDT)
+ Tue, 02 Aug 2022 10:33:43 -0700 (PDT)
 From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 To: buildroot@busybox.net
-Date: Tue,  2 Aug 2022 19:31:21 +0200
-Message-Id: <20220802173121.14438-1-guillaume.bressaix@gmail.com>
+Date: Tue,  2 Aug 2022 19:33:29 +0200
+Message-Id: <20220802173330.15176-1-guillaume.bressaix@gmail.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=UsIv7F8Sr9vEyfGHsX2fdHMH2vGxdlfjHnIqM5lsGJ8=;
- b=KWZEaWlhL9or5TpqDf+Fad7Xevei97UkVCYf6Nr6RL8ydrU7Hi7AzPOHJO1R9SfXJq
- wurbUHD0XJqHdMFU08fZdIV7uYQAjP0QpxAe8sBML5GpgvVRtbdCClIm/46ZDoTd3aX4
- U02lyRvCVwxmDHG4a8DmNcHASOH4YF5kOIsGUcSmKHbKbhn2gCgGHmcS6pomvJC9MZiX
- 8zojNgTdvjvSVLHuV+Fa3n4VET3ZaiqUXUS0FsjYneq1anVcvj8cpETd9y5tJyeJbgv1
- MC14HuomVSJLym4QTzZpXmkPIpjs3UTYn55z/o3Kvz2eQsUlsrziHn+WxtGMi8DcG57I
- UT2g==
+ bh=SRsFR8ZCv4LJB3/G9BPeFPVIXnFsifAZFvJ19W1IVWU=;
+ b=qEpRHQLDAfWHr3N/learVNe/JvBmffbOxoSZh8DsDWlJ5t5CFGqCPTYgP7QGqcnGBZ
+ Gu44hfjLozcriE74A0NFMPeZxfFVlj2c8rBPkbx5N/f8a0ELwURtbaSIqcjlOipaoQQK
+ Bm/5hVA0x5JDUm2ic9M7fxt5T8ABmHi4MVSoFYEXqICrLYJr23iqlMh4GpRnOuQnRpy1
+ z4PVO6+5eqWuohC3i4fmgjpCg0dIk4uaMgiTLgUG0sIUyNQ76lZnCsTlcJcH7sPHQoMG
+ R0cmEI8YiNpyU2v9LUaa8PBxL2IxUTM41Dg1v5a8wM9/5odoBIP4lGoFjnotMxdMGb36
+ z+uQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=KWZEaWlh
-Subject: [Buildroot] [PATCH 1/1] support/testing: test_python_scipy relax
- timeout value
+ header.a=rsa-sha256 header.s=20210112 header.b=qEpRHQLD
+Subject: [Buildroot] [PATCH 1/2] package/python-scipy: fix io runtime
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,28 +100,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We might get a failure here on slow build machines,
-as scipy is fairly long to import.
+We need python built with the --zlib feature, for the io
+module to import properly and be usable
 
 Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
-Test did fail on my laptop for example
+I did not provide the correct BR flag here. Let's test this module anyway
+with the runtime test (see the following commit).
+It turns out the scipy.io module is the only one that does not work right away
 ---
- support/testing/tests/package/test_python_scipy.py | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-scipy/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_python_scipy.py b/support/testing/tests/package/test_python_scipy.py
-index fec4f4319f..007bc9ffa5 100644
---- a/support/testing/tests/package/test_python_scipy.py
-+++ b/support/testing/tests/package/test_python_scipy.py
-@@ -20,6 +20,7 @@ class TestPythonPy3SciPy(TestPythonPackageBase):
-         # BR2_TARGET_ROOTFS_TAR is not set
-         """
-     sample_scripts = ["tests/package/sample_python_scipy.py"]
-+    timeout = 30
- 
-     def login(self):
-         ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
+diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
+index 0fa6c9e311..229b5997ad 100644
+--- a/package/python-scipy/Config.in
++++ b/package/python-scipy/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_PYTHON_SCIPY
+ 	depends on BR2_TOOLCHAIN_HAS_FORTRAN # lapack
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LAPACK
+-	select BR2_PACKAGE_ZLIB # runtime scipy::io
++	select BR2_PACKAGE_PYTHON3_ZLIB # runtime scipy::io
+ 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+ 	select BR2_PACKAGE_PYTHON_PYBIND
+ 	help
 -- 
 2.20.1
 
