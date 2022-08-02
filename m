@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31EE9C00140
-	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 22:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DBFEC00140
+	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 22:05:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C724B409F8;
-	Tue,  2 Aug 2022 22:05:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C724B409F8
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1CC44037C;
+	Tue,  2 Aug 2022 22:05:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1CC44037C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tsI4BpuvM5rF; Tue,  2 Aug 2022 22:05:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TbN8zqaGSiWz; Tue,  2 Aug 2022 22:05:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51CA3409E3;
-	Tue,  2 Aug 2022 22:05:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51CA3409E3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 202421BF48B
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:05:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1734740134;
+	Tue,  2 Aug 2022 22:05:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1734740134
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 26ECD1BF48B
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDA61409E3
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:05:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDA61409E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E95360ABF
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:05:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E95360ABF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wY54vgu33cKX for <buildroot@lists.busybox.net>;
- Tue,  2 Aug 2022 22:05:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2079409C0
- for <buildroot@buildroot.org>; Tue,  2 Aug 2022 22:05:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2079409C0
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EE99886CE6; Tue,  2 Aug 2022 21:51:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 2 Aug 2022 23:19:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cc6e9231c8fa5b4eb5b45bba3ff9745da3e09ef7
-X-Git-Newrev: d21d3900bfd510a3ea976e9f3effb0c601d879d2
-X-Patchwork-Hint: ignore
-Message-Id: <20220802215108.EE99886CE6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-rtoml: new package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RPyMZuFyHIQb for <buildroot@lists.busybox.net>;
+ Tue,  2 Aug 2022 22:05:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA4F0600C6
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CA4F0600C6
+ for <buildroot@buildroot.org>; Tue,  2 Aug 2022 22:05:38 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8291160004;
+ Tue,  2 Aug 2022 22:05:35 +0000 (UTC)
+Date: Wed, 3 Aug 2022 00:05:34 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220803000534.522901be@windsurf>
+In-Reply-To: <20220511211845.2277928-1-james.hilliard1@gmail.com>
+References: <20220511211845.2277928-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659477935;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=IieOc2kUbQtSRql03lL8E4570GbH9cyvHD5G+KdvebA=;
+ b=auetTmKp+RnIIyVHtpfxyeErj8FaNxjgpidwE0e9FXrrz/TjoKv3wDhm12cNckH914PFG2
+ IC0UIG1oBX4CFdaC3bUEN0rBzmC3ZMv0KzypjSsHj5QxFF4KNT92RmJKklMOaIonhoqtHE
+ DeLe78Sn8R7vVvyeC+hk3QEkp507qP0U7hdiFfGZ7oLxaLemzPHPmPthHoodx3lH9tFlvX
+ K5tbk+IGWP0rsZm9Gjoc1+67M4FIUm4YB0gMJp5c4aOMRdREUlsIaBVs+o9kPNtDhRsZIj
+ jEUNBdDkoXAfqPE7x3PPB8uvulmgdKIMlZ1bKJV6ayWSkytU237hkf/gYTHrag==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=auetTmKp
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-rtoml: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,199 +77,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d21d3900bfd510a3ea976e9f3effb0c601d879d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 11 May 2022 15:18:45 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- package/python-rtoml/Config.in                     |  7 ++++
- package/python-rtoml/python-rtoml.hash             |  4 ++
- package/python-rtoml/python-rtoml.mk               | 22 ++++++++++
- .../testing/tests/package/sample_python_rtoml.py   | 48 ++++++++++++++++++++++
- support/testing/tests/package/test_python_rtoml.py | 28 +++++++++++++
- 7 files changed, 113 insertions(+)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/Config.in                      |  1 +
+>  package/python-rtoml/Config.in         |  7 +++++++
+>  package/python-rtoml/python-rtoml.hash |  4 ++++
+>  package/python-rtoml/python-rtoml.mk   | 22 ++++++++++++++++++++++
+>  4 files changed, 34 insertions(+)
+>  create mode 100644 package/python-rtoml/Config.in
+>  create mode 100644 package/python-rtoml/python-rtoml.hash
+>  create mode 100644 package/python-rtoml/python-rtoml.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fa6efd210c..63bb80fc9d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1375,6 +1375,7 @@ F:	package/python-pycares/
- F:	package/python-pydyf/
- F:	package/python-pypa-build/
- F:	package/python-pyphen/
-+F:	package/python-rtoml/
- F:	package/python-snappy/
- F:	package/python-sockjs/
- F:	package/python-terminaltables/
-@@ -1389,6 +1390,8 @@ F:	package/serd/
- F:	package/sord/
- F:	package/sratom/
- F:	package/zchunk/
-+F:	support/testing/tests/package/sample_python_rtoml.py
-+F:	support/testing/tests/package/test_python_rtoml.py
- 
- N:	James Knight <james.knight@collins.com>
- F:	package/atkmm/
-diff --git a/package/Config.in b/package/Config.in
-index cb73fc8e83..61783ba400 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1223,6 +1223,7 @@ menu "External python modules"
- 	source "package/python-rpi-gpio/Config.in"
- 	source "package/python-rpi-ws281x/Config.in"
- 	source "package/python-rsa/Config.in"
-+	source "package/python-rtoml/Config.in"
- 	source "package/python-rtslib-fb/Config.in"
- 	source "package/python-ruamel-yaml/Config.in"
- 	source "package/python-s3transfer/Config.in"
-diff --git a/package/python-rtoml/Config.in b/package/python-rtoml/Config.in
-new file mode 100644
-index 0000000000..410976f138
---- /dev/null
-+++ b/package/python-rtoml/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_RTOML
-+	bool "python-rtoml"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	help
-+	  A better TOML library for python implemented in rust.
-+
-+	  https://github.com/samuelcolvin/rtoml
-diff --git a/package/python-rtoml/python-rtoml.hash b/package/python-rtoml/python-rtoml.hash
-new file mode 100644
-index 0000000000..04d22ed1a4
---- /dev/null
-+++ b/package/python-rtoml/python-rtoml.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated after vendoring
-+sha256  821a430ab6587bdaaf7cb95044e8e0d99c77c6aed0adce5a370045b270f7ee20  rtoml-0.8.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  cd5ffde80e6d3286a2e2e5f02fb2cb07b823931ca368e7c735a6c5f5aebe7103  LICENSE
-diff --git a/package/python-rtoml/python-rtoml.mk b/package/python-rtoml/python-rtoml.mk
-new file mode 100644
-index 0000000000..9afe8c0315
---- /dev/null
-+++ b/package/python-rtoml/python-rtoml.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# python-rtoml
-+#
-+################################################################################
-+
-+PYTHON_RTOML_VERSION = 0.8.0
-+PYTHON_RTOML_SOURCE = rtoml-$(PYTHON_RTOML_VERSION).tar.gz
-+PYTHON_RTOML_SITE = https://files.pythonhosted.org/packages/33/a6/b42d8e0e28bec9fd7fdbafb2d76db3f8578f151a669eba564d422756d909
-+PYTHON_RTOML_SETUP_TYPE = setuptools
-+PYTHON_RTOML_LICENSE = MIT
-+PYTHON_RTOML_LICENSE_FILES = LICENSE
-+PYTHON_RTOML_DEPENDENCIES = host-python-setuptools-rust host-rustc
-+PYTHON_RTOML_ENV = \
-+	$(PKG_CARGO_ENV) \
-+	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
-+# We need to vendor the Cargo crates at download time
-+PYTHON_RTOML_DOWNLOAD_POST_PROCESS = cargo
-+PYTHON_RTOML_DOWNLOAD_DEPENDENCIES = host-rustc
-+PYTHON_RTOML_DL_ENV = $(PKG_CARGO_ENV)
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_rtoml.py b/support/testing/tests/package/sample_python_rtoml.py
-new file mode 100644
-index 0000000000..ba1ce1634c
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_rtoml.py
-@@ -0,0 +1,48 @@
-+from datetime import datetime, timezone, timedelta
-+import rtoml
-+
-+obj = {
-+    'title': 'TOML Example',
-+    'owner': {
-+        'dob': datetime(1979, 5, 27, 7, 32, tzinfo=timezone(timedelta(hours=-8))),
-+        'name': 'Tom Preston-Werner',
-+    },
-+    'database': {
-+        'connection_max': 5000,
-+        'enabled': True,
-+        'ports': [8001, 8001, 8002],
-+        'server': '192.168.1.1',
-+    },
-+}
-+
-+loaded_obj = rtoml.load("""\
-+# This is a TOML document.
-+
-+title = "TOML Example"
-+
-+[owner]
-+name = "Tom Preston-Werner"
-+dob = 1979-05-27T07:32:00-08:00 # First class dates
-+
-+[database]
-+server = "192.168.1.1"
-+ports = [8001, 8001, 8002]
-+connection_max = 5000
-+enabled = true
-+""")
-+
-+assert loaded_obj == obj
-+
-+assert rtoml.dumps(obj) == """\
-+title = "TOML Example"
-+
-+[owner]
-+dob = 1979-05-27T07:32:00-08:00
-+name = "Tom Preston-Werner"
-+
-+[database]
-+connection_max = 5000
-+enabled = true
-+server = "192.168.1.1"
-+ports = [8001, 8001, 8002]
-+"""
-diff --git a/support/testing/tests/package/test_python_rtoml.py b/support/testing/tests/package/test_python_rtoml.py
-new file mode 100644
-index 0000000000..aed2fbc59f
---- /dev/null
-+++ b/support/testing/tests/package/test_python_rtoml.py
-@@ -0,0 +1,28 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+import os
-+
-+
-+class TestPythonPy3rtoml(TestPythonPackageBase):
-+    __test__ = True
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_NEON=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_RTOML=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    sample_scripts = ["tests/package/sample_python_rtoml.py"]
-+    timeout = 30
-+
-+    def login(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
+I have applied, after adding a runtime test, and adding the missing
+entry to the DEVELOPERS file.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
