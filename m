@@ -4,46 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D98D2C00140
-	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 22:06:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92658C00140
+	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 22:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77089409F7;
-	Tue,  2 Aug 2022 22:06:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77089409F7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D9E6409FC;
+	Tue,  2 Aug 2022 22:06:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D9E6409FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bNUtXsyIlTs8; Tue,  2 Aug 2022 22:06:27 +0000 (UTC)
+	with ESMTP id HZgl6x06lqQj; Tue,  2 Aug 2022 22:06:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B157E409C0;
-	Tue,  2 Aug 2022 22:06:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B157E409C0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5C4C81BF48B
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:06:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FFF1409ED;
+	Tue,  2 Aug 2022 22:06:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FFF1409ED
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AC2B11BF48B
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:06:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 341C7409C0
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:06:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 341C7409C0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8694960ABF
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 22:06:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8694960ABF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mozjGC0I2KZq for <buildroot@lists.busybox.net>;
- Tue,  2 Aug 2022 22:06:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9D4740338
- for <buildroot@buildroot.org>; Tue,  2 Aug 2022 22:06:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9D4740338
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E9D6186CF0; Tue,  2 Aug 2022 21:52:22 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 3 Aug 2022 00:05:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d21d3900bfd510a3ea976e9f3effb0c601d879d2
-X-Git-Newrev: 33c1ad44a12118a5c4b69c3584831ad0d901e84f
-X-Patchwork-Hint: ignore
-Message-Id: <20220802215222.E9D6186CF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gocryptfs: fix build against riscv
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HSRCPTY8bls6 for <buildroot@lists.busybox.net>;
+ Tue,  2 Aug 2022 22:06:31 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B4C7600C6
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1B4C7600C6
+ for <buildroot@buildroot.org>; Tue,  2 Aug 2022 22:06:30 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B69DA200008;
+ Tue,  2 Aug 2022 22:06:28 +0000 (UTC)
+Date: Wed, 3 Aug 2022 00:06:27 +0200
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20220803000627.74f6a12f@windsurf>
+In-Reply-To: <20220625224224.1446787-1-christian@paral.in>
+References: <20220625224224.1446787-1-christian@paral.in>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659477989;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=jUuKnjNn5hm7kSDIMaluKqeHZdvHIrYBUi9sKTl1BLc=;
+ b=no9Tt9gTGCKmJfIv3BgIEhhfQPR0MzHn/EE9aT9DYUOAEOPnvR/mwrvs+mu6J5pjh10bU1
+ NShBdVV9Yhxtfr3/dU6OoIypQteffGZlU0RFHUvm9FrvuDhV7px6IWW2NDjGzEBigNwBpm
+ 8ZZ0lBvHAwwvcueDkDtgvozP4Odtjmg5JqYyPsBfm6AAWbwut1bT45pMATn7a45rCmEX7z
+ WBckmAmv43YlhjROmCO+cst1Ao2BinhGPfaZktUkix8fU5SgR1HNoNLWtW5AWurdoJYcKK
+ S4QS08sK94Ej7MvQ+Z68m5AUnsjSD7rP/PiponeUa7vCyXQVCPnfWUjFzqiPuw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=no9Tt9gT
+Subject: Re: [Buildroot] [PATCH 1/1] package/gocryptfs: fix build against
+ riscv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,187 +78,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Anisse Astier <anisse@astier.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33c1ad44a12118a5c4b69c3584831ad0d901e84f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 25 Jun 2022 15:42:24 -0700
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-Replace dependency jacobsa/crypto with a fork with support for riscv64.
+> Replace dependency jacobsa/crypto with a fork with support for riscv64.
+> 
+> Fixes:
+> - http://autobuild.buildroot.net/results/caa60874781c4077273884eb37281cc9e02ef9ac/
+> - https://github.com/rfjakob/gocryptfs/issues/666
+> 
+> Upstream PR: https://github.com/jacobsa/crypto/issues/13
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  ...-fix-jacobsa-crypto-build-on-riscv64.patch | 152 ++++++++++++++++++
+>  1 file changed, 152 insertions(+)
+>  create mode 100644 package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch
 
-Fixes:
-- http://autobuild.buildroot.net/results/caa60874781c4077273884eb37281cc9e02ef9ac/
-- https://github.com/rfjakob/gocryptfs/issues/666
+Applied to master, thanks.
 
-Upstream PR: https://github.com/jacobsa/crypto/issues/13
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...o.mod-fix-jacobsa-crypto-build-on-riscv64.patch | 152 +++++++++++++++++++++
- 1 file changed, 152 insertions(+)
-
-diff --git a/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch b/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch
-new file mode 100644
-index 0000000000..90e3cc262d
---- /dev/null
-+++ b/package/gocryptfs/0001-go.mod-fix-jacobsa-crypto-build-on-riscv64.patch
-@@ -0,0 +1,152 @@
-+From e9b64ab75e8539a52d60ecb299fc5425f0d27dc7 Mon Sep 17 00:00:00 2001
-+From: Christian Stewart <christian@paral.in>
-+Date: Sat, 25 Jun 2022 14:57:38 -0700
-+Subject: [PATCH] go.mod: fix jacobsa/crypto build on riscv64
-+
-+Replace dependency jacobsa/crypto with a fork with support for riscv64.
-+
-+Issue: https://github.com/rfjakob/gocryptfs/issues/666
-+
-+Upstream PR: https://github.com/jacobsa/crypto/issues/13
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+---
-+ go.mod                                        |  9 ++---
-+ go.sum                                        |  4 +-
-+ .../jacobsa/crypto/cmac/hash_generic.go       | 40 +++++++++++++++++++
-+ vendor/modules.txt                            | 13 +-----
-+ 4 files changed, 48 insertions(+), 18 deletions(-)
-+ create mode 100644 vendor/github.com/jacobsa/crypto/cmac/hash_generic.go
-+
-+diff --git a/go.mod b/go.mod
-+index 29f7c2c..533fcdd 100644
-+--- a/go.mod
-++++ b/go.mod
-+@@ -2,19 +2,18 @@ module github.com/rfjakob/gocryptfs/v2
-+ 
-+ go 1.16
-+ 
-++// Fixes build against risc-v
-++// See: https://github.com/jacobsa/crypto/issues/13
-++replace github.com/jacobsa/crypto => github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607 // xorblock-generic-1
-++
-+ require (
-+ 	github.com/hanwen/go-fuse/v2 v2.1.1-0.20210825171523-3ab5d95a30ae
-+ 	github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115
-+-	github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd // indirect
-+-	github.com/jacobsa/oglemock v0.0.0-20150831005832-e94d794d06ff // indirect
-+-	github.com/jacobsa/ogletest v0.0.0-20170503003838-80d50a735a11 // indirect
-+-	github.com/jacobsa/reqtrace v0.0.0-20150505043853-245c9e0234cb // indirect
-+ 	github.com/pkg/xattr v0.4.3
-+ 	github.com/rfjakob/eme v1.1.2
-+ 	github.com/sabhiram/go-gitignore v0.0.0-20201211210132-54b8a0bf510f
-+ 	github.com/spf13/pflag v1.0.5
-+ 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
-+-	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect
-+ 	golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
-+ 	golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b
-+ )
-+diff --git a/go.sum b/go.sum
-+index be0be5f..c26b80e 100644
-+--- a/go.sum
-++++ b/go.sum
-+@@ -1,9 +1,9 @@
-++github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607 h1:N8UVJlxKDhrvHTKXC7oVVfhVvGbgaw2mmlnCgGkfOFc=
-++github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607/go.mod h1:Om5VFfyh5VipAEOOVoHAUa4hebUCKxQUjggFPTLeH08=
-+ github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
-+ github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-+ github.com/hanwen/go-fuse/v2 v2.1.1-0.20210825171523-3ab5d95a30ae h1:4CB6T4YTUVvnro5ba8ju1QCbOuyGAeF3vvKlo50EJ4k=
-+ github.com/hanwen/go-fuse/v2 v2.1.1-0.20210825171523-3ab5d95a30ae/go.mod h1:B1nGE/6RBFyBRC1RRnf23UpwCdyJ31eukw34oAKukAc=
-+-github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115 h1:YuDUUFNM21CAbyPOpOP8BicaTD/0klJEKt5p8yuw+uY=
-+-github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115/go.mod h1:LadVJg0XuawGk+8L1rYnIED8451UyNxEMdTWCEt5kmU=
-+ github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd h1:9GCSedGjMcLZCrusBZuo4tyKLpKUPenUUqi34AkuFmA=
-+ github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd/go.mod h1:TlmyIZDpGmwRoTWiakdr+HA1Tukze6C6XbRVidYq02M=
-+ github.com/jacobsa/oglemock v0.0.0-20150831005832-e94d794d06ff h1:2xRHTvkpJ5zJmglXLRqHiZQNjUoOkhUyhTAhEQvPAWw=
-+diff --git a/vendor/github.com/jacobsa/crypto/cmac/hash_generic.go b/vendor/github.com/jacobsa/crypto/cmac/hash_generic.go
-+new file mode 100644
-+index 0000000..235e3fc
-+--- /dev/null
-++++ b/vendor/github.com/jacobsa/crypto/cmac/hash_generic.go
-+@@ -0,0 +1,40 @@
-++// Copyright 2012 Aaron Jacobs. All Rights Reserved.
-++// Author: aaronjjacobs@gmail.com (Aaron Jacobs)
-++//
-++// Licensed under the Apache License, Version 2.0 (the "License");
-++// you may not use this file except in compliance with the License.
-++// You may obtain a copy of the License at
-++//
-++//     http://www.apache.org/licenses/LICENSE-2.0
-++//
-++// Unless required by applicable law or agreed to in writing, software
-++// distributed under the License is distributed on an "AS IS" BASIS,
-++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-++// See the License for the specific language governing permissions and
-++// limitations under the License.
-++
-++// +build riscv64
-++
-++// This code doesn't require that it's safe to perform unaligned word-sized loads, but has a poor performance.
-++
-++package cmac
-++
-++import (
-++	"unsafe"
-++)
-++
-++// XOR the blockSize bytes starting at a and b, writing the result over dst.
-++func xorBlock(
-++	dstPtr unsafe.Pointer,
-++	aPtr unsafe.Pointer,
-++	bPtr unsafe.Pointer) {
-++	// Convert.
-++	a := (*[blockSize]byte)(aPtr)
-++	b := (*[blockSize]byte)(bPtr)
-++	dst := (*[blockSize]byte)(dstPtr)
-++
-++	// Compute.
-++	for i := 0; i < blockSize; i++ {
-++		dst[i] = a[i] ^ b[i]
-++	}
-++}
-+diff --git a/vendor/modules.txt b/vendor/modules.txt
-+index 662f0c3..9b47daa 100644
-+--- a/vendor/modules.txt
-++++ b/vendor/modules.txt
-+@@ -5,19 +5,11 @@ github.com/hanwen/go-fuse/v2/fuse
-+ github.com/hanwen/go-fuse/v2/internal
-+ github.com/hanwen/go-fuse/v2/internal/utimens
-+ github.com/hanwen/go-fuse/v2/splice
-+-# github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115
-++# github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115 => github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607
-+ ## explicit
-+ github.com/jacobsa/crypto/cmac
-+ github.com/jacobsa/crypto/common
-+ github.com/jacobsa/crypto/siv
-+-# github.com/jacobsa/oglematchers v0.0.0-20150720000706-141901ea67cd
-+-## explicit
-+-# github.com/jacobsa/oglemock v0.0.0-20150831005832-e94d794d06ff
-+-## explicit
-+-# github.com/jacobsa/ogletest v0.0.0-20170503003838-80d50a735a11
-+-## explicit
-+-# github.com/jacobsa/reqtrace v0.0.0-20150505043853-245c9e0234cb
-+-## explicit
-+ # github.com/pkg/xattr v0.4.3
-+ ## explicit
-+ github.com/pkg/xattr
-+@@ -40,8 +32,6 @@ golang.org/x/crypto/pbkdf2
-+ golang.org/x/crypto/poly1305
-+ golang.org/x/crypto/scrypt
-+ golang.org/x/crypto/ssh/terminal
-+-# golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d
-+-## explicit
-+ # golang.org/x/sys v0.0.0-20210817190340-bfb29a6856f2
-+ ## explicit
-+ golang.org/x/sys/cpu
-+@@ -52,3 +42,4 @@ golang.org/x/sys/windows
-+ # golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b
-+ ## explicit
-+ golang.org/x/term
-++# github.com/jacobsa/crypto => github.com/aperturerobotics/jacobsa-crypto v0.0.0-20220403053904-77863254e607
-+-- 
-+2.35.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
