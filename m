@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 376AFC00140
-	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 21:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D764BC00140
+	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 21:42:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D909A60E35;
-	Tue,  2 Aug 2022 21:37:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D909A60E35
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63CA160E37;
+	Tue,  2 Aug 2022 21:42:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63CA160E37
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IjDYPMeVWhof; Tue,  2 Aug 2022 21:37:58 +0000 (UTC)
+	with ESMTP id w9B4uy6njHJA; Tue,  2 Aug 2022 21:42:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFEAA60E2C;
-	Tue,  2 Aug 2022 21:37:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFEAA60E2C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8F49D1BF28F
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 21:37:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C96560E33;
+	Tue,  2 Aug 2022 21:42:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C96560E33
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 081781BF28F
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 21:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A4AE4037C
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 21:37:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A4AE4037C
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6F6981771
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 21:42:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6F6981771
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qch6ey9Y6ShT for <buildroot@lists.busybox.net>;
- Tue,  2 Aug 2022 21:37:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3kb8ScL4ARln for <buildroot@lists.busybox.net>;
+ Tue,  2 Aug 2022 21:42:28 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09BAF40354
-Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09BAF40354
- for <buildroot@buildroot.org>; Tue,  2 Aug 2022 21:37:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C4918176B
+Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C4918176B
+ for <buildroot@buildroot.org>; Tue,  2 Aug 2022 21:42:28 +0000 (UTC)
 Received: from [192.168.50.173] ([146.241.73.23])
  by Aruba Outgoing Smtp  with ESMTPSA
- id IzaKoawon34GkIzaKonE8s; Tue, 02 Aug 2022 23:37:52 +0200
-Message-ID: <97eb0b50-ac5d-76d6-57f3-efd2d99304db@benettiengineering.com>
-Date: Tue, 2 Aug 2022 23:37:52 +0200
+ id Izekob1RS34GkIzekonFxb; Tue, 02 Aug 2022 23:42:27 +0200
+Message-ID: <ec581e94-906f-a7dc-2f49-0599648fb187@benettiengineering.com>
+Date: Tue, 2 Aug 2022 23:42:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.0
 Content-Language: en-US
 To: Xuanhao Shi <x-shi@ti.com>, buildroot@buildroot.org
 References: <20220802200522.4619-1-x-shi@ti.com>
- <20220802200522.4619-4-x-shi@ti.com>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220802200522.4619-4-x-shi@ti.com>
-X-CMAE-Envelope: MS4xfHTDAS+PQ43tf3wdQuonRlsLYVLwWweOaQC592n1oPDefL85iW8pD1C9igRj2gs43n5BIAk4oj/kszFPxgFC4GevUiayorxUtjntlAQZsDFjp85mp4Qe
- QzwBVXyVhjSd/ND5ltgwg8TK6iu+ObF6KH1rCrnRrgi6QDMrTnQFldYP/Bu4EXBAzqdAMDcOg2lfIDT1fdAX7kRrbjcAH633m+JKVSUsQA/1KdGvt3Kgmktx
- BAd0zmBxBkWgd6teMiLVaiaGLnCKSgWtgoTDqQ0vHSTKzMnF84RQkLntZecXzD7kgFU+PJGyfxMj5ELJlbu0Ew==
+In-Reply-To: <20220802200522.4619-1-x-shi@ti.com>
+X-CMAE-Envelope: MS4xfIKy8iwq5YRUJcvs4j+8xUHdRTXn7Iq3HyRW9qI0DHlAh0GN9pPlnslJVvgBDk5MCH1NHYoD8rOjMAUX4GfbAp8G+HSoN5wL/F1YbMsKFJJcrk14WzdN
+ x/sJiq8+anI9Ij4uBt2NU95Q8KZuXHOOfnE+poA+bnVA00aOMeYTllI3MzW5dxbPtS3Khi5xmZe7D6esL8knPedbpk7ppw+SScFnEn2LYBmlormABD4HCNjz
+ c4OEiy02BPjSZddGiHy9unGHXbkoeJovkfoDKUwMLOmMtsImbPoVYTQsbyXhapNIeyq5GqLDwa7Pu/i/JeaVsQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1659476272; bh=elFU2HHrGBG6G3zIZNw3KnN4vseoEam0SP0a5cWsZdc=;
+ t=1659476547; bh=CN8eyvKUlGuzA286DS3qBdDgAHhU9AbcfIX4+4C8Fo4=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Sd7guqENMtPPZSI9ZtodMJbF2H7Jc3eWtbkahRZgbCJIEMW31nBsqey3e4iEdktV1
- OaeRgurGEATXatINFOlQTH5W8skzD7S4mGrd6LyTt3L9/1Z4ucYHZ/6APizloy2uVj
- DHThl0TGEbpSc/Kv0ol0fhNbljkkfJrUHs32XXCEqLw9JFqf6NX8dWXxiGtVOyhyfX
- wI9GGPfthWUk63TmnDs90dzv4BqJ4AMniKdgQ7CqfKsgWzWRlziMrC1tGTEomcuzov
- 7+5yYCBxz54htVoaHaMX42L/ILV/nY8g5W85stisu45eO7c7W5HSFhtoV8LiVIhdQe
- o0n8r/A277bOA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=ih1fUDM/AkCOM4k8TcP4W1PA0dFNsbomy1tDCmJcI4FiXm6c3jj4JZD8hEwoiRqUN
+ n2GjmfSj4Wr46mu29oq5hY+9Sq5ycVpwKBkIvPqxSrW0YUBoQhfXMoE3zAShKPKo2P
+ tsWsffChzu8OPNttXO/OYf/m1YSpB4hVHOUfrE1DjzL1CXiBxXf5PH33uS1Zx99z0G
+ LYJzeJjUUJ/N6co61a+pdoBmN1HJjDR2JsK/ukUuGZ/Bq72S/t0P/uhMndSGRLBCxh
+ /23uSr5lfPBVUBzwlVRxqonUMjBdXaWl4U8uP4I6oqHtOkPgpHvMzwqN/D3ebkaaU2
+ QkgOsiWCplnGg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Sd7guqEN
-Subject: Re: [Buildroot] [PATCH 3/3] board/ti/am64x_sk: add new board
+ header.a=rsa-sha256 header.s=a1 header.b=ih1fUDM/
+Subject: Re: [Buildroot] [PATCH v3 0/3] add support for TI's AM6X boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,118 +78,83 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Anand Gadiyar <gadiyar@ti.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgWHVhbmhhbywgQW5hbmQsIFRob21hcywgQWxsLAoKT24gMDIvMDgvMjIgMjI6MDUsIFh1YW5o
-YW8gU2hpIHZpYSBidWlsZHJvb3Qgd3JvdGU6Cj4gQWRkcyBzdXBwb3J0IGZvciB0aSdzIGFtNjR4
-X3NrIGJvYXJkLgo+IEFkZHMgdGhlIGNvbmZpZ3MgZm9yIGdlbmVyYXRpbmcgb3V0cHV0IHNkY2Fy
-ZCBpbWFnZS4KPiBBZGRzIHRoZSBkZWZjb25maWdzIGZvciBhbTY0eF9zay4KCkhlcmUgd2UgbmVl
-ZCBhIGJyaWVmIGRlc2NyaXB0aW9uIG9mIHRoZSBib2FyZCBhbmQgYW4gVVJMIHBvaW50aW5nCnRv
-IHRoZSBib2FyZCBVUkwgdG9vCgo+IFNpZ25lZC1vZmYtYnk6IFh1YW5oYW8gU2hpIDx4LXNoaUB0
-aS5jb20+Cj4gLS0tCj4gICBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgfCAgNCArKysK
-PiAgIGJvYXJkL3RpL2FtNjR4X3NrL2dlbmltYWdlLmNmZyB8IDI3ICsrKysrKysrKysrKysrKysr
-KysKPiAgIGJvYXJkL3RpL2FtNjR4X3NrL3JlYWRtZS50eHQgICB8IDQ5ICsrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysKPiAgIGNvbmZpZ3MvYW02NHhfc2tfZGVmY29uZmlnICAgICB8
-IDQ4ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICAgNCBmaWxlcyBjaGFuZ2Vk
-LCAxMjggaW5zZXJ0aW9ucygrKQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjR4
-X3NrL2dlbmltYWdlLmNmZwo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3RpL2FtNjR4X3Nr
-L3JlYWRtZS50eHQKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdzL2FtNjR4X3NrX2RlZmNv
-bmZpZwo+IAo+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IGIy
-MWRlZjExMWMuLmUzZDk5NDQzZTkgMTAwNjQ0Cj4gLS0tIGEvREVWRUxPUEVSUwo+ICsrKyBiL0RF
-VkVMT1BFUlMKPiBAQCAtMTI4LDggKzEyOCwxMCBAQCBGOglwYWNrYWdlL2xpYnhtbHJwYy8KPiAg
-IEY6CXBhY2thZ2UvcHl0aG9uLWRvY29wdC8KPiAgIAo+ICAgTjoJQW5hbmQgR2FkaXlhciA8Z2Fk
-aXlhckB0aS5jb20+Cj4gK0Y6CWJvYXJkL3RpL2FtNjR4X3NrLwo+ICAgRjoJYm9vdC90aS1rMy1p
-bWFnZS1nZW4vCj4gICBGOglib290L3RpLWszLXI1LWxvYWRlci8KPiArRjoJY29uZmlncy9hbTY0
-eF9za19kZWZjb25maWcKPiAgIAo+ICAgTjoJQW5kcsOpIFp3aW5nIDxuZXJ2QGRhd25jcm93LmRl
-Pgo+ICAgRjoJcGFja2FnZS9saWJrcmI1Lwo+IEBAIC0zMDI2LDggKzMwMjgsMTAgQEAgTjoJV29q
-Y2llY2ggTml6acWEc2tpIDxuaXppYWtAc3BveC5vcmc+Cj4gICBGOglwYWNrYWdlL2Z3dXAvCj4g
-ICAKPiAgIE46CVh1YW5oYW8gU2hpIDxYMTUwMDAxNzdAZ21haWwuY29tPgo+ICtGOglib2FyZC90
-aS9hbTY0eF9zay8KPiAgIEY6CWJvb3QvdGktazMtaW1hZ2UtZ2VuLwo+ICAgRjoJYm9vdC90aS1r
-My1yNS1sb2FkZXIvCj4gK0Y6CWNvbmZpZ3MvYW02NHhfc2tfZGVmY29uZmlnCj4gICAKPiAgIE46
-CVlhaXIgQmVuIEF2cmFoYW0gPHlhaXJiYUBwcm90b25tYWlsLmNvbT4KPiAgIEY6CXBhY2thZ2Uv
-Y2FzeW5jLwo+IGRpZmYgLS1naXQgYS9ib2FyZC90aS9hbTY0eF9zay9nZW5pbWFnZS5jZmcgYi9i
-b2FyZC90aS9hbTY0eF9zay9nZW5pbWFnZS5jZmcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
-ZGV4IDAwMDAwMDAwMDAuLjI2MzA0ZmU5OGYKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQv
-dGkvYW02NHhfc2svZ2VuaW1hZ2UuY2ZnCj4gQEAgLTAsMCArMSwyNyBAQAo+ICtpbWFnZSBib290
-LnZmYXQgewo+ICsJdmZhdCB7Cj4gKwkJZmlsZXMgPSB7Cj4gKwkJCSJ0aWJvb3QzLmJpbiIsCj4g
-KwkJCSJ0aXNwbC5iaW4iLAo+ICsJCQkidS1ib290LmltZyIsCj4gKwkJfQo+ICsJfQo+ICsKPiAr
-CXNpemUgPSAxNk0KPiArfQo+ICsKPiAraW1hZ2Ugc2RjYXJkLmltZyB7Cj4gKwloZGltYWdlIHsK
-PiArCX0KPiArCj4gKwlwYXJ0aXRpb24gdS1ib290IHsKPiArCQlwYXJ0aXRpb24tdHlwZSA9IDB4
-Qwo+ICsJCWJvb3RhYmxlID0gInRydWUiCj4gKwkJaW1hZ2UgPSAiYm9vdC52ZmF0Igo+ICsJfQo+
-ICsKPiArCXBhcnRpdGlvbiByb290ZnMgewo+ICsJCXBhcnRpdGlvbi10eXBlID0gMHg4Mwo+ICsJ
-CWltYWdlID0gInJvb3Rmcy5leHQ0Igo+ICsJfQo+ICt9Cj4gZGlmZiAtLWdpdCBhL2JvYXJkL3Rp
-L2FtNjR4X3NrL3JlYWRtZS50eHQgYi9ib2FyZC90aS9hbTY0eF9zay9yZWFkbWUudHh0Cj4gbmV3
-IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi45ZTE4NGM5ODY2Cj4gLS0tIC9k
-ZXYvbnVsbAo+ICsrKyBiL2JvYXJkL3RpL2FtNjR4X3NrL3JlYWRtZS50eHQKPiBAQCAtMCwwICsx
-LDQ5IEBACj4gK1RleGFzIEluc3R1bWVudHMgQU02NHggRXZhbHVhdGlvbiBNb2R1bGVzCj4gKwo+
-ICtEZXNjcmlwdGlvbgo+ICs9PT09PT09PT09PQo+ICsKPiArVGhlc2UgY29uZmlndXJhdGlvbnMg
-d2lsbCBidWlsZCBhIGNvbXBsZXRlIGltYWdlIGFuZAo+ICtkZXZpY2UgdHJlZSBibG9icyBmb3Ig
-dGhlIHRoZSBUSSBBTTY0eF9zayBib2FyZC4KPiArCj4gK0hvdyB0byBidWlsZCBpdAo+ICs9PT09
-PT09PT09PT09PT0KPiArCj4gK1NlbGVjdCB0aGUgZGVmYXVsdCBjb25maWd1cmF0aW9uIGZvciB0
-aGUgdGFyZ2V0Ogo+ICskIG1ha2UgYW02NHhfc2tfZGVmY29uZmlnCj4gKwo+ICtPcHRpb25hbDog
-bW9kaWZ5IHRoZSBjb25maWd1cmF0aW9uOgo+ICskIG1ha2UgbWVudWNvbmZpZwo+ICsKPiArQnVp
-bGQ6Cj4gKyQgbWFrZQo+ICsKPiArUmVzdWx0IG9mIHRoZSBidWlsZDoKPiArPT09PT09PT09PT09
-PT09PT09PQo+ICtvdXRwdXQvaW1hZ2VzLwo+ICsrLS0gc29jCj4gKystLSB0aS1jb25uZWN0aXZp
-dHkKPiArKy0tIGJsMzEuYmluCj4gKystLSBib290LnZmYXQKPiArKy0tIEltYWdlCj4gKystLSBr
-My1hbTY0Mi1zay5kdGIKPiArKy0tIHI1LXUtYm9vdC1zcGwuYmluCj4gKystLSByb290ZnMuZXh0
-Mgo+ICsrLS0gcm9vdGZzLmV4dDQKPiArKy0tIHJvb3Rmcy50YXIKPiArKy0tIHNkY2FyZC5pbWcK
-PiArKy0tIHRlZS5iaW4KPiArKy0tIHRlZS1oZWFkZXJfdjIuYmluCj4gKystLSB0ZWUtcGFnZWFi
-bGVfdjIuYmluCj4gKystLSB0ZWUtcGFnZXJfdjIuYmluCj4gKystLSB0aWJvb3QzLmJpbgo+ICsr
-LS0gdGlzcGwuYmluCj4gKystLSB1LWJvb3QuaW1nCj4gKwo+ICtUbyBjb3B5IHRoZSBpbWFnZSBm
-aWxlIHRvIHRoZSBzZGNhcmQgdXNlIGRkOgo+ICskIGRkIGlmPW91dHB1dC9pbWFnZXMvc2RjYXJk
-LmltZyBvZj0vZGV2L3NkWAo+ICsKPiArSW5zZXJ0IHRoZSBTRGNhcmQgaW50byB0aGUgQU02NHhf
-c2sgYm9hcmQsIGFuZCBwb3dlciBpdCB1cCB3aXRoCj4gK2EgVVNCIFR5cGUtQyBjb25uZWN0b3Iu
-IFRoZSBzeXN0ZW0gc2hvdWxkIGNvbWUgdXAuIFlvdSBjYW4gdXNlCj4gK2EgbWljcm8tVVNCIHRv
-IGNvbm5lY3QgdG8gdGhlIGNvbm5lY3RvciBsYWJsZWQgTUFJTl9VQVJUMCB0bwo+ICtjb21tdW5p
-Y2F0ZSB3aXRoIHRoZSBib2FyZC4KPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9hbTY0eF9za19kZWZj
-b25maWcgYi9jb25maWdzL2FtNjR4X3NrX2RlZmNvbmZpZwo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0
-Cj4gaW5kZXggMDAwMDAwMDAwMC4uNjBhNGVmY2FmMAo+IC0tLSAvZGV2L251bGwKPiArKysgYi9j
-b25maWdzL2FtNjR4X3NrX2RlZmNvbmZpZwo+IEBAIC0wLDAgKzEsNDggQEAKPiArQlIyX2FhcmNo
-NjQ9eQo+ICtCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJzdXBwb3J0L3NjcmlwdHMvZ2Vu
-aW1hZ2Uuc2giCj4gK0JSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iLWMgYm9hcmQvdGkvYW02
-NHhfc2svZ2VuaW1hZ2UuY2ZnIgo+ICtCUjJfTElOVVhfS0VSTkVMPXkKPiArQlIyX0xJTlVYX0tF
-Uk5FTF9DVVNUT01fVkVSU0lPTj15Cj4gK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05f
-VkFMVUU9IjUuMTkiCj4gK0JSMl9MSU5VWF9LRVJORUxfVVNFX0FSQ0hfREVGQVVMVF9DT05GSUc9
-eQo+ICtCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPiArQlIyX0xJTlVYX0tFUk5FTF9J
-TlRSRUVfRFRTX05BTUU9InRpL2szLWFtNjQyLXNrIgo+ICtCUjJfTElOVVhfS0VSTkVMX0lOU1RB
-TExfVEFSR0VUPXkKPiArQlIyX1BBQ0tBR0VfTElOVVhfRklSTVdBUkU9eQo+ICtCUjJfUEFDS0FH
-RV9MSU5VWF9GSVJNV0FSRV9USV9XTDE4WFg9eQo+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkK
-PiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl80PXkKPiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl9T
-SVpFPSIxMjBNIgo+ICtCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFPXkKPiArQlIyX1RB
-UkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lPTj15Cj4gK0JSMl9UQVJHRVRf
-QVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9InYyLjcuMCIKPiArQlIy
-X1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0iazMiCj4gK0JSMl9UQVJHRVRf
-QVJNX1RSVVNURURfRklSTVdBUkVfVEFSR0VUX0JPQVJEPSJsaXRlIgo+ICtCUjJfVEFSR0VUX0FS
-TV9UUlVTVEVEX0ZJUk1XQVJFX0JMMzJfT1BURUU9eQo+ICtCUjJfVEFSR0VUX0FSTV9UUlVTVEVE
-X0ZJUk1XQVJFX0FERElUSU9OQUxfVkFSSUFCTEVTPSJTUEQ9b3B0ZWVkIgo+ICtCUjJfVEFSR0VU
-X09QVEVFX09TPXkKPiArQlIyX1RBUkdFVF9PUFRFRV9PU19DVVNUT01fR0lUPXkKPiArQlIyX1RB
-UkdFVF9PUFRFRV9PU19DVVNUT01fUkVQT19VUkw9Imh0dHBzOi8vZ2l0aHViLmNvbS9PUC1URUUv
-b3B0ZWVfb3MuZ2l0Igo+ICtCUjJfVEFSR0VUX09QVEVFX09TX0NVU1RPTV9SRVBPX1ZFUlNJT049
-IjMuMTguMCIKPiArQlIyX1RBUkdFVF9PUFRFRV9PU19ORUVEU19QWVRIT05fQ1JZUFRPR1JBUEhZ
-PXkKPiArQlIyX1RBUkdFVF9PUFRFRV9PU19QTEFURk9STT0iazMiCj4gK0JSMl9UQVJHRVRfVElf
-SzNfSU1BR0VfR0VOPXkKPiArQlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fU09DPSJhbTY0eCIK
-PiArQlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fQ09ORklHPSJldm0iCj4gK0JSMl9UQVJHRVRf
-VElfSzNfUjVfTE9BREVSX0JPQVJEPSJhbTY0eF9ldm0iCj4gK0JSMl9UQVJHRVRfVUJPT1Q9eQo+
-ICtCUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09ORklHPXkKPiArQlIyX1RBUkdFVF9V
-Qk9PVF9DVVNUT01fVkVSU0lPTj15Cj4gK0JSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT05f
-VkFMVUU9IjIwMjIuMTAtcmMxIgo+ICtCUjJfVEFSR0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJRz0i
-YW02NHhfZXZtX2E1MyIKPiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQo+ICtCUjJfVEFS
-R0VUX1VCT09UX05FRURTX09QRU5TU0w9eQo+ICtCUjJfVEFSR0VUX1VCT09UX05FRURTX0FURl9C
-TDMxPXkKPiArIyBCUjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9CSU4gaXMgbm90IHNldAo+ICtCUjJf
-VEFSR0VUX1VCT09UX0ZPUk1BVF9JTUc9eQo+ICtCUjJfVEFSR0VUX1VCT09UX1NQTD15Cj4gK0JS
-Ml9UQVJHRVRfVUJPT1RfU1BMX05BTUU9InRpc3BsLmJpbiIKPiArQlIyX1RBUkdFVF9VQk9PVF9D
-VVNUT01fTUFLRU9QVFM9IlRFRT0kKEJJTkFSSUVTX0RJUikvdGVlLXBhZ2VyX3YyLmJpbiIKPiAr
-QlIyX1BBQ0tBR0VfSE9TVF9ET1NGU1RPT0xTPXkKPiArQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFH
-RT15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfTVRPT0xTPXkKCkkndmUgYnVpbHQgdGhpcyBkZWZjb25m
-aWcgc3VjY2Vzc2Z1bGx5IGFuZCBldmVyeXRoaW5nIGxvb2tzIGdvb2QgdG8gbWUKZXhjZXB0IEkn
-dmUgc2VlbiBvbmx5IG5vdyB5b3UgYWRkIGFsc28gQW5hbmQgYXMgbWFpbnRhaW5lciBvdGhlciB0
-aGFuCnlvdSwgc28gd2l0aCBhIG1vdGl2YXRpb24gb2YgdGhpcyBhbmQgdGhlICppbXByb3ZlbWVu
-dCByZXF1ZXN0ZWQgYWJvdmUKaW4gY29tbWl0IGxvZyo6ClJldmlld2VkLWJ5OiBHaXVsaW8gQmVu
-ZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4KCkJlc3QgcmVnYXJk
-cwotLSAKR2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBFbmdpbmVlcmluZyBzYXMKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hi Xuanhao,
+
+can you please set this patch:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=311753
+as superseded since there is V3 now?
+
+Thanks a lot
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+On 02/08/22 22:05, Xuanhao Shi via buildroot wrote:
+> The series applied the changes requested by Thomas Petazzoni and
+> Giulio Benetti to the previous patch for adding support to TI's
+> AM6X boards ([1]). Specifically, it added support for the
+> AM64x_sk board only for now, but more k3 boards will be added
+> in the future.
+> 
+> [1] https://lists.buildroot.org/pipermail/buildroot/2022-July/647882.html
+> 
+> Changes in v3:
+> - Fix boot/ti-k3-r5-loader package's build options and dependencies.
+> - Fix boot/ti-k3-image-gen package's config
+> - Add more details in board/ti/am64x_sk's readme
+> - Trim configs/am64x_sk's toolchain options and
+>    fix uboot and genimage dependencies.
+> - Remove board/ti/am62x_sk and configs/am62x_sk for now due to some
+>    firmware dependency problems. Will be added back in the future.
+> 
+> Changes in v2:
+> - Revert arm-gnu-toolchain back to version 10.x due to a bug.
+>    When the pre-packaged GCC was built, it could be targeting
+>    a newer x86_64 architecture than the processor being used.
+> - Add boot/ti-k3-r5-loader package that builds a separate U-Boot
+>    for the R5 cores on TI's K3 devices.
+> - Add boot/ti-k3-image-gen package that builds the full boot binary
+>    tiboot3.bin from the spl built from ti-k3-r5-loader.
+> - Add board/ti directory to include sdcard config and board information
+>    for AM64x_sk and AM62x_sk boards.
+> - Add the Buildroot defconfigs for AM64x_sk and AM62x_sk.
+> - Add to DEVELOPERS list.
+> 
+> Xuanhao Shi (3):
+>    boot/ti-k3-r5-loader: add new package
+>    boot/ti-k3-image-gen: add new package
+>    board/ti/am64x_sk: add new board
+> 
+>   DEVELOPERS                                | 12 ++++++
+>   board/ti/am64x_sk/genimage.cfg            | 27 +++++++++++++
+>   board/ti/am64x_sk/readme.txt              | 49 +++++++++++++++++++++++
+>   boot/Config.in                            |  2 +
+>   boot/ti-k3-image-gen/Config.in            | 24 +++++++++++
+>   boot/ti-k3-image-gen/ti-k3-image-gen.hash |  2 +
+>   boot/ti-k3-image-gen/ti-k3-image-gen.mk   | 33 +++++++++++++++
+>   boot/ti-k3-r5-loader/Config.in            | 13 ++++++
+>   boot/ti-k3-r5-loader/ti-k3-r5-loader.hash |  2 +
+>   boot/ti-k3-r5-loader/ti-k3-r5-loader.mk   | 45 +++++++++++++++++++++
+>   configs/am64x_sk_defconfig                | 48 ++++++++++++++++++++++
+>   11 files changed, 257 insertions(+)
+>   create mode 100644 board/ti/am64x_sk/genimage.cfg
+>   create mode 100644 board/ti/am64x_sk/readme.txt
+>   create mode 100644 boot/ti-k3-image-gen/Config.in
+>   create mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.hash
+>   create mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.mk
+>   create mode 100644 boot/ti-k3-r5-loader/Config.in
+>   create mode 100644 boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+>   create mode 100644 boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+>   create mode 100644 configs/am64x_sk_defconfig
+> 
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
