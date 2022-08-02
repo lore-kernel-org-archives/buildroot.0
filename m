@@ -1,86 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B65A5C00140
-	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 05:33:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B23A3C00140
+	for <buildroot@archiver.kernel.org>; Tue,  2 Aug 2022 07:46:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AF5681344;
-	Tue,  2 Aug 2022 05:33:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AF5681344
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id esKVizyYk_Nr; Tue,  2 Aug 2022 05:33:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1957A81281;
-	Tue,  2 Aug 2022 05:33:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1957A81281
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 74D921BF296
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 05:33:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D99440879
- for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 05:33:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D99440879
+	by smtp4.osuosl.org (Postfix) with ESMTP id 081D6401C1;
+	Tue,  2 Aug 2022 07:46:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 081D6401C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0tPRSuufi6GE for <buildroot@lists.busybox.net>;
- Tue,  2 Aug 2022 05:33:34 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D311C40017
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D311C40017
- for <buildroot@buildroot.org>; Tue,  2 Aug 2022 05:33:33 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id i14so5307859ejg.6
- for <buildroot@buildroot.org>; Mon, 01 Aug 2022 22:33:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=t6EwWJ9eoMN0NrIBIHzigPGYqHBA67j7tNRqzNKWAy4=;
- b=7nBd6NAQ4+P3XbL/XxKLs37sm0Wyivz5Xt2lFPFUS5f3nrj8dHS3sLv4Ki5A1FzTBq
- VruCoydtowQQpAkr4sDYcXCXQWZxYxXnJaI2Zwfdu8ONT0HCNP0Tfh5RDDdqeo2920Qu
- ML/HXKYG4qpVpjw891NsVFE0DxfmakRPuiSJvBThpfBRDIVaYdF/YG9K9hUVPa/q6jKZ
- Q7GNDhhDSSR1raPoTrLkHNlLVQNtIArLUOLxk8jFN1zuMJHDLvMvyd4b+WXwYjkIYDvN
- 71YG+pR/76/e4GitC8ygmz0KG/s9S+Km5LQCcaq7n+gZoZRm+lSmykpt44O00aWnMgDs
- cdzw==
-X-Gm-Message-State: AJIora9uH9fXHRPy7FkhourvG5vX4T8ngK99alACSVTDly33sHp1Qh5y
- /nfF4nTHDhD8Wy5uU5AnZA0SPVvr9x8ZiGsx3gbJCKHp980=
-X-Google-Smtp-Source: AGRyM1unN6IKCga5rTpW/6MbYySXwJ8fOYDJbsMJV6+SzELa4VNJJj1EmqOOxukMPGrwSR4VC+AjChG1S3ePlGyxoB4=
-X-Received: by 2002:a17:906:3f51:b0:712:3945:8c0d with SMTP id
- f17-20020a1709063f5100b0071239458c0dmr14427684ejj.302.1659418411888; Mon, 01
- Aug 2022 22:33:31 -0700 (PDT)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id doyYT4O-TaBZ; Tue,  2 Aug 2022 07:46:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A631C40193;
+	Tue,  2 Aug 2022 07:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A631C40193
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D617D1BF263
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 07:46:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B147840497
+ for <buildroot@lists.busybox.net>; Tue,  2 Aug 2022 07:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B147840497
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7VW2Rv41kyd3 for <buildroot@lists.busybox.net>;
+ Tue,  2 Aug 2022 07:46:21 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1144340195
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1144340195
+ for <buildroot@buildroot.org>; Tue,  2 Aug 2022 07:46:20 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 99363240006;
+ Tue,  2 Aug 2022 07:46:17 +0000 (UTC)
+Date: Tue, 2 Aug 2022 09:46:16 +0200
+To: Jesse T <mr.bossman075@gmail.com>
+Message-ID: <20220802094616.2a60881c@windsurf>
+In-Reply-To: <CAJFTR8SkMjAe1=V411g9BmdzYDZv+5mtLMQ29w=2BJj4LS1sWw@mail.gmail.com>
+References: <20220730061219.3061864-1-Mr.Bossman075@gmail.com>
+ <20220801225044.63ead8d4@windsurf>
+ <CAJFTR8SkMjAe1=V411g9BmdzYDZv+5mtLMQ29w=2BJj4LS1sWw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220727192948.18653-1-guillaume.bressaix@gmail.com>
- <20220727192948.18653-4-guillaume.bressaix@gmail.com>
- <20220801194254.118219ec@windsurf>
- <CAJe0E3e4wE+v16v9JQE-NDaXH+_9icVtHfPbTBW=ng5rr2EEYg@mail.gmail.com>
- <20220801205907.545f6693@windsurf>
-In-Reply-To: <20220801205907.545f6693@windsurf>
-From: Guillaume Bres <guillaume.bressaix@gmail.com>
-Date: Tue, 2 Aug 2022 07:33:05 +0200
-Message-ID: <CAJe0E3dc1YGh_-369RjWkyHdN-WkcQW1d8PqDvr5i9h-pPqoqw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=t6EwWJ9eoMN0NrIBIHzigPGYqHBA67j7tNRqzNKWAy4=;
- b=fbiJs44BL/QsKydX8OgEN+RzgnfqSeU915bMxeKzXA9dqEEX225IWUezTs1/iEITHv
- 83JvYdiWhW0xPVmfsGlPhg6bOge0x4IVj0tGTSQCJYwwKIDFrr6vDEzhfWvx/AEtzvZ9
- wPwl729fv1ZJFRQO3BTdzFUH2m1nD8n374BSIu12cm2/2Qr7Cvy9q/gRUD7TmRrjBXh/
- wvUko14vucfpXsKk7fjmVQCTWGhGBJxBGTJB+K29UTFjSXxU03Qw8Cb8t+RnlqNd9o/y
- cXjGtl5nioR0Snm3oNysm5Hz3meuIZbgmZ0EPJZC5SDSm0yEq7DIx2h8eTpPwcgoBx2z
- 3wpg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=fbiJs44B
-Subject: Re: [Buildroot] [PATCH v5 4/4] package/python-scipy: new package
+ d=bootlin.com; s=gm1; t=1659426378;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6SeqBVhd1CXUN59knCI57U6cfBS1dJpa2xH0q53yoS8=;
+ b=dzUbg3db4Frrq3Euy+pP6wfxPm+6urtW4uBacnqfXwx7S4TJ3qHKuzowsjoxmqUu8hxDBn
+ k+CnrOfKpvSr6MLKZE0mxXOgYK1rHEV0IlmZG4ETaKaATuuqaopgWhzRjlAJGGGGdeocrz
+ kKM21KIrlQVYhowGhz8WBTlrJugEoKrLaG+wZLtTQs4bXtnv8eLHhdRyf2CTVuexhM3rOp
+ CmVx4bCUqx+JaD8FJhmxX2f1+z+GYOzrBN1wJiNkym77SvirU1SsI/nV2hAqA65WJTQLjH
+ 1Uw/7RQ9GCWC3VfknykW1AD9M0fa1QPhjsJfBwZIW8xtLvJB8BdasW7tfo9axQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dzUbg3db
+Subject: Re: [Buildroot] [PATCH v2] configs/imxrt1050-evk: New defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,129 +77,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: jmfriedt <jmfriedt@femto-st.fr>, "gwenhael.goavec" <gwen@trabucayre.com>,
- Jagan Teki <jagan@amarulasolutions.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2413688818304402597=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabio Estevam <festevam@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ maeva.manuel@oss.nxp.com, stephane.viau@oss.nxp.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2413688818304402597==
-Content-Type: multipart/alternative; boundary="000000000000f9739005e53b74ba"
+Hello Jesse,
 
---000000000000f9739005e53b74ba
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Mon, 1 Aug 2022 17:46:48 -0400
+Jesse T <mr.bossman075@gmail.com> wrote:
 
-Hello Thomas
+> > Any reason to add Giulio here?  
+> 
+> We worked on Linux and U-Boot together.
 
->Could you give some details on what didn't work? Our runtime test
->infrastructure is (I believe?) reasonably simple and straightforward to
->use, with tons of existing examples
-I was trying to get the runtime test (the emulator) to execute the scipy
-fulltest ("python -c import scipy; scipy.test()"), as I was thinking it
-would be the best thing to do.
-But it's not a straightforward scenario and it's super heavy, you need the
-repo sources and the pytest suite.
+Then I think it is worth mentioning in the commit log, as it is
+surprising to see two people added in the DEVELOPERS file, without any
+explanation.
 
-Running small but several portions of the lib is probably the best thing to
-do.
+> > Why is this test needed? The Image file will be produced by the kernel
+> > build, so it should be there. If it's not, we should really error out
+> > hard. So I think doing without the test is better.  
+> 
+> I was using board/nexbox/a95x/post-build.sh as a base, I can drop it.
 
-Guillaume W. Bres
-Software engineer
-<guillaume.bressaix@gmail.com>
+Yes, I think this test doesn't make sense, so you can drop it.
 
+> > > +# Filesystem
+> > > +BR2_TARGET_ROOTFS_EXT2=y
+> > > +BR2_TARGET_ROOTFS_EXT2_4=y
+> > > +BR2_TARGET_ROOTFS_EXT2_LABEL="root"
+> > > +BR2_TARGET_ROOTFS_EXT2_SIZE="3M"  
+> >
+> > Why limit to 3 MB ? Is there a strong reason?  
+> 
+> Because that's the nearest ceil(MB) size of the ext4 filesystem.
+> I like dd-ing the images fast.
 
-Le lun. 1 ao=C3=BBt 2022 =C3=A0 20:59, Thomas Petazzoni <thomas.petazzoni@b=
-ootlin.com>
-a =C3=A9crit :
+You can use bmap-tools to speed up writing a SD card image that is
+large but mostly empty.
 
-> On Mon, 1 Aug 2022 19:58:23 +0200
-> Guillaume Bres <guillaume.bressaix@gmail.com> wrote:
->
-> > thank you Thomas for merging this serie and also for adding the runtime
-> > test, I did try to provide it but could not get it to work.
->
-> Could you give some details on what didn't work? Our runtime test
-> infrastructure is (I believe?) reasonably simple and straightforward to
-> use, with tons of existing examples.
->
-> The one thing that was tricky here is that most Python test cases use a
-> CPIO filesystem loaded as an initrd, but that doesn't work for SciPy as
-> the filesystem is too large for an initrd. Which is why my test case
-> uses an ext2 filesystem on a hard drive.
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
+> https://patchwork.ozlabs.org/project/uboot/patch/20220712110023.3163770-1-andre.przywara@arm.com/
+> 
+> The patch above removes the need for binutils 2.36 and a U-Boot
+> version hasn't been released with that commit yet.
+> This is the reason for no U-Boot version.
 
---000000000000f9739005e53b74ba
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+As explained by Giulio, you should use a well-defined version of
+U-Boot, and backport the U-Boot patch.
 
-<div dir=3D"ltr"><div>Hello Thomas<br><br></div>&gt;Could you give some det=
-ails on what didn&#39;t work? Our runtime test<br>
-&gt;infrastructure is (I believe?) reasonably simple and straightforward to=
-<br>
-&gt;use, with tons of existing examples<div>I was trying to get the runtime=
- test (the emulator) to execute the scipy fulltest (&quot;python -c import =
-scipy; scipy.test()&quot;), as I was thinking it would be the best thing to=
- do.<br></div><div>But it&#39;s not a straightforward scenario and it&#39;s=
- super heavy, you need the repo sources and the pytest suite.<br><br></div>=
-<div>Running small but several portions of the lib is probably the best thi=
-ng to do.<br><br clear=3D"all"><div><div><div dir=3D"ltr" class=3D"gmail_si=
-gnature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D"lt=
-r"><div dir=3D"ltr"><div dir=3D"ltr"><div><div><div><font face=3D"arial,hel=
-vetica,sans-serif">Guillaume W. Bres<br></font></div><font face=3D"arial,he=
-lvetica,sans-serif">Software engineer</font><br></div><font face=3D"arial,h=
-elvetica,sans-serif"></font></div><font face=3D"arial,helvetica,sans-serif"=
->&lt;<a href=3D"mailto:guillaume.bressaix@gmail.com" target=3D"_blank">guil=
-laume.bressaix@gmail.com</a>&gt;<br></font></div></div></div></div></div></=
-div><br></div></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" c=
-lass=3D"gmail_attr">Le=C2=A0lun. 1 ao=C3=BBt 2022 =C3=A0=C2=A020:59, Thomas=
- Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petaz=
-zoni@bootlin.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"=
-gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(20=
-4,204,204);padding-left:1ex">On Mon, 1 Aug 2022 19:58:23 +0200<br>
-Guillaume Bres &lt;<a href=3D"mailto:guillaume.bressaix@gmail.com" target=
-=3D"_blank">guillaume.bressaix@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; thank you Thomas for merging this serie and also for adding the runtim=
-e<br>
-&gt; test, I did try to provide it but could not get it to work.<br>
-<br>
-Could you give some details on what didn&#39;t work? Our runtime test<br>
-infrastructure is (I believe?) reasonably simple and straightforward to<br>
-use, with tons of existing examples.<br>
-<br>
-The one thing that was tricky here is that most Python test cases use a<br>
-CPIO filesystem loaded as an initrd, but that doesn&#39;t work for SciPy as=
-<br>
-the filesystem is too large for an initrd. Which is why my test case<br>
-uses an ext2 filesystem on a hard drive.<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
+Thanks a lot!
 
---000000000000f9739005e53b74ba--
-
---===============2413688818304402597==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2413688818304402597==--
