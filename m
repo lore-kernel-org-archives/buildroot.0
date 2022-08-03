@@ -1,83 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04945C19F28
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 12:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0D61C19F29
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 14:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4FF378127C;
-	Wed,  3 Aug 2022 12:34:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FF378127C
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF55F402D1;
+	Wed,  3 Aug 2022 14:55:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF55F402D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DZR206g5Y1pL; Wed,  3 Aug 2022 12:34:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NnmHOzojCflQ; Wed,  3 Aug 2022 14:55:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C1D281266;
-	Wed,  3 Aug 2022 12:34:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C1D281266
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5871402E3;
+	Wed,  3 Aug 2022 14:55:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5871402E3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C5B631BF2B7
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 12:34:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 00FCA1BF2A1
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 14:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0DC181263
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 12:34:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0DC181263
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD5B1813EB
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 14:55:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD5B1813EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dD_bg-mKppFM for <buildroot@lists.busybox.net>;
- Wed,  3 Aug 2022 12:34:40 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C00558125E
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C00558125E
- for <buildroot@buildroot.org>; Wed,  3 Aug 2022 12:34:39 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id tl27so13362343ejc.1
- for <buildroot@buildroot.org>; Wed, 03 Aug 2022 05:34:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=BnrpS1h6xlyBsy05nyDslmOilAO5uMMVRBhOATZfRK0=;
- b=aag0W7Oy3secSBq4F4xF1ut1HYd+bFEbJu/Pa84wZZlbCPUx8Ed5+4/h1ylT2ThevC
- /Qaf6nE0w0W3xf7uN2bp6WTxcMLlFftUlidIcm2MsV2wJblyW/NaM9CmPqALOPJoJ2cu
- IMF01d0qQa1V0VpSWtxl6Os38D9+/EapHMie+uVPvxya4gWQfN6i942VjP3qaky4/waE
- SADVwCc/HkPhQqn21THz1Jls1HttQex5VR8AJp/joN6L6uiVooir632hqMG8RB9092n+
- q9HseSDr1SXCea3FicBb0Phx4x7k7iRzPhhPR65/TZ/wr/P7zrBSZSoJfX7zyKSqTp8R
- rqYw==
-X-Gm-Message-State: ACgBeo2ALk698hCKXn/Yatnv/ahyJrUcN2YxapSgVyXsNG1Sq8/MELJ0
- TXogl/wIoy5a8cKcEaCO4WL79TViwAg=
-X-Google-Smtp-Source: AA6agR5j3CMVAKdwp1bYitPQmQ3N3qA2suhQE5aaO9x90Jus7FVkVHuf/chNHPMw4jTrO/0ycz0UXA==
-X-Received: by 2002:a17:906:8a73:b0:730:9af8:b335 with SMTP id
- hy19-20020a1709068a7300b007309af8b335mr8244232ejc.14.1659530077583; 
- Wed, 03 Aug 2022 05:34:37 -0700 (PDT)
-Received: from development1.visionsystems.de (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 6-20020a170906318600b0072ed72072aesm7229830ejy.192.2022.08.03.05.34.36
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Wed, 03 Aug 2022 05:34:36 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Wed,  3 Aug 2022 14:34:31 +0200
-Message-Id: <20220803123431.2343-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.17.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20210112;
- h=message-id:date:subject:cc:to:from:from:to:cc;
- bh=BnrpS1h6xlyBsy05nyDslmOilAO5uMMVRBhOATZfRK0=;
- b=hmoKmj4f5YryR6ZE4TAozr3iMxTvcTDjMEsfNvq9gkU/NC0N5xEMKSk7fW/ETWsmfg
- D0eTSTOokdy7XrM+yJj2TaIGWxN/3ZSJIj1+UPtIedlABEEiEL7iOOTRxYFI80vZNMT7
- qgI2w6x9MzueSkusrihJjcrJySCWS9MPVDQekukDTeV+wFKlr+Nz4losT6BpB3krg2Qg
- vNO8AfxDqDr0zfNJeQlILinuzzq0XUi76xBy9jcHRUbiwRlgj0dTpn5nnQtnHyUJ1N7X
- zXNeEnbDjvaGe+wks4IPVlVwlWkuVsEDwJUFPmw7IfrzZM9EAwmBqWWSmQ0a7RkBZJl+
- RUgw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=hmoKmj4f
-Subject: [Buildroot] [PATCH] package/python-jsonschema: add missing runtime
- dependency
+ with ESMTP id irqpGDnh10jE for <buildroot@lists.busybox.net>;
+ Wed,  3 Aug 2022 14:55:47 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A81D7813DE
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A81D7813DE
+ for <buildroot@busybox.net>; Wed,  3 Aug 2022 14:55:46 +0000 (UTC)
+Received: from [192.168.0.243] ([151.127.53.97]) by mrelayeu.kundenserver.de
+ (mreue012 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1MT7ip-1nrZbs1b3f-00UdSc; Wed, 03 Aug 2022 16:55:43 +0200
+Message-ID: <6cb50305-a57f-e69b-72cb-b7b950cdfbee@green-communications.fr>
+Date: Wed, 3 Aug 2022 16:55:38 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>, buildroot@busybox.net
+References: <20220803093754.19637-1-guillaume.bressaix@gmail.com>
+Content-Language: en-US, fr
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+In-Reply-To: <20220803093754.19637-1-guillaume.bressaix@gmail.com>
+X-Provags-ID: V03:K1:KD5CkEwJ6NMlc18Tjr9ezw+j/T2w357ZLsJRnXN5PmrXi6ZM0fV
+ CdkfqscuPXpjcUfdu28kyiKtLMobdd94XLafkX9jfkO9K9V3kAktZyYWd+RAlpQ3eNH3Nyj
+ P+umr6UKOOFdK0YMepn5oj/xNYdBQOL7JXgUaZqBJ8asLAev0+wLz9z4Ak6vKNzU9Z4MEu8
+ OuLiE4wrnpYjG/dBnkrCw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cpYlNgEu1l4=:/CCQuiKZYrxg2z7lRuAC5k
+ Nfntoft3CtCs+Zd2YxW16MXLjxsq1OEzOXElJLkRUFQmhRO5L3vt0w5jwD+BsKVW3I0ran6ZY
+ MkkYIYQQux2rwHc9Uegny4Gv6XRqUzFsK7qQQjnTBat2OIliiUQyyMbc6y0He2Z1Imr0s/YCs
+ 2FaneNE8ZM/dl/TUbgSA/aWKzdjHZa3WCMBlRXZmH6dztiCBOU1clh8q5awM6MP0vkjwyt3aR
+ mFL0v64GYWhMhyFP8ltq0uvzoCIolfLPVWcw9S9XqMJShoMY6v+sFkkGnyGFHRZn0kDNqTv2N
+ 1PpdXL4KoenPnqj7szt9fawRu53W6Lk2PW+B16WTLadK0bVTgV3VhXBHb+mQG7WiLlAziTOJF
+ Yogic5Y/nWo1LNULdeOQ6d/oefYXPmeKpDtsEU4t1X8oycLYnmg7xdtfpxI8Ct1doVaGo/V9m
+ LyMsnK1lsa6DQeBBRElpvEZA29oQxbaL+YzB10zlNGxPASxTF7QWME9o3kyyz0zJk7KNfsWXH
+ SSkUYq0S/A+PheiIxbgO9l53dpIImQ1ckNHDmubWrkZfDJVrVRO0NP37YRaWdhxo8GGBLzodb
+ oLUxjJVetKImNrhAoGh3bvdn9nKVPQg/2bmcqFnHCfUfIw6mM204QWC6Ro4GKFBseU4KFh9Rs
+ 2M2Ajlh8TjbIo7mdZLrjTBYHQBjPxiRjFTa9qwkQdFLPwizTVNqzlv4uJGh8iVsqj7ndLxNVe
+ TqY7HUraP0lXcIvavEA9Xb/LtSfizNblbZnAnrc9YnGp9TLkAQ31nZ1vbQ54kyI5aawdxyRad
+ vjQ6L4J
+Subject: Re: [Buildroot] [RFC 1/1] package/python-scipy: bump version to
+ 1.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,38 +78,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Asaf Kahlon <asafka7@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On 03/08/2022 11:37, Guillaume W. Bres wrote:
+> Scipy is moving to a Meson build infrastructure.
+> 
+> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> ---
+> I'm expecting meson to simplify things a lot for us.
+> But we're not there yet..
+> 
+> I'm referring to this page, which is the only one available at the moment,
+> on how to build the package with the new infra
+> 
+> https://scipy.github.io/devdocs/dev/contributor/meson.html
+> 
+> My current setup has pretty much everything figured out, but meson
+> does not locate the fortran cross-compiler. Could anyone help me?
+> 
+> output/build/python-scipy-v1.9.0/meson.build:41:0: ERROR: 'fortran' compiler binary not defined in cross or native file
+ >
+> [...]
+> 
+> With my current setup, I am able to
+> - fetch the git submoule like in the 1st tutorial
+> - initiate the meson configure step
+> - meson figures out pretty much everything correctly (gcc, etc..)
+> - meson fails to locate "fortran" the gfortran cross-compiler.
+> I have tried PYTHON_SCIPY_NINJA_ENV and PYTHON_SCIPY_CONF_ENV,
+> but none of these have any effect.
 
-python-attrs package is required since version 2.6.0.
+The correct solution would probably be to add proper fortran support to
+support/misc/cross-compilation.conf.in and package/pkg-meson.mk.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-jsonschema/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Alternatively, peeking at the meson source code (mesonbuild/env*.py), 
+the environment variable is probably called FC.
 
-diff --git a/package/python-jsonschema/Config.in b/package/python-jsonschema/Config.in
-index 7b30d46fc6..d9508c3705 100644
---- a/package/python-jsonschema/Config.in
-+++ b/package/python-jsonschema/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_JSONSCHEMA
- 	bool "python-jsonschema"
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_PYRSISTENT # runtime
- 	help
- 	  An implementation of JSON Schema validation for Python.
--- 
-2.17.0
+Try:
 
+PYTHON_SCIPY_CONF_ENV += FC=$(TARGET_FC)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
