@@ -1,92 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F85EC19F2B
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 21:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E413C19F2D
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 21:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02E2D60A77;
-	Wed,  3 Aug 2022 21:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02E2D60A77
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CEC58177A;
+	Wed,  3 Aug 2022 21:07:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CEC58177A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jdIlvP5xbfFi; Wed,  3 Aug 2022 21:04:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C6G-k7wF_HCi; Wed,  3 Aug 2022 21:07:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16252608B7;
-	Wed,  3 Aug 2022 21:04:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16252608B7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FB1D8174F;
+	Wed,  3 Aug 2022 21:07:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FB1D8174F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8D6761BF325
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 21:04:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EB90F1BF325
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 21:07:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 68E75401D8
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 21:04:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68E75401D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id C746140332
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 21:07:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C746140332
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZhGFsCCit2aB for <buildroot@lists.busybox.net>;
- Wed,  3 Aug 2022 21:04:33 +0000 (UTC)
+ with ESMTP id LrYiUC8UdpIO for <buildroot@lists.busybox.net>;
+ Wed,  3 Aug 2022 21:07:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9186540332
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com
- [IPv6:2607:f8b0:4864:20::f30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9186540332
- for <buildroot@buildroot.org>; Wed,  3 Aug 2022 21:04:33 +0000 (UTC)
-Received: by mail-qv1-xf30.google.com with SMTP id i7so13838645qvr.8
- for <buildroot@buildroot.org>; Wed, 03 Aug 2022 14:04:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B428401D8
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com
+ [IPv6:2607:f8b0:4864:20::841])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2B428401D8
+ for <buildroot@buildroot.org>; Wed,  3 Aug 2022 21:07:16 +0000 (UTC)
+Received: by mail-qt1-x841.google.com with SMTP id l5so557808qtv.4
+ for <buildroot@buildroot.org>; Wed, 03 Aug 2022 14:07:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:date:to:cc:subject:message-id:references
  :mime-version:content-disposition:in-reply-to;
- bh=zXeHGNsVGWPtwMMGqjwibF9kN6LiU7EjJOo8o300DSg=;
- b=lxyGHGqYm3eX5IoEjL5RsfDacwmU58mV4tW1wbyryuTjsDqiDn3YBu2Ohk0fqR+r04
- XMj66I8r2rp10t03xEOkvMEeqWFfkXBLgNTaQuGLG5sHM5W87anYh/e4ABM7l0zIfEhu
- fXjyq/kFvXK1m8V8MXRlmQN8Ospogsa/YUmeY00N2yR/Rtyg3NsFXJAUdd+UTeAFrtCe
- uQL37WYZOXhkbo9+JxbM+L/i4PW4oPDQToezAmt3l3jOs1YxIzi/LLb+mAy/gw1uPF7X
- kJ1RadjLZ6cy5ePQC13yzEf0xgTlZBH+URABOcchaJuc/RUU1Uy/bxxCF1qHvj1+CKyS
- yeug==
-X-Gm-Message-State: ACgBeo37ry8rrRprXnTJbegZ7v3bcCz+lr/fIWsyktpQGvXcOTYLMk2W
- jO6aiDp6dc+dTNTbeSyk7EZW7g==
-X-Google-Smtp-Source: AA6agR7XISWTbOfq/be3wiZWQnF3qWUZGhVXbu28APvCa95A3kWBGPb+HrSrMqugnBP71KmPB6fOOA==
-X-Received: by 2002:a0c:9101:0:b0:473:9b:d92a with SMTP id
- q1-20020a0c9101000000b00473009bd92amr23504612qvq.17.1659560672381; 
- Wed, 03 Aug 2022 14:04:32 -0700 (PDT)
+ bh=hbl8NJZ1Tz6L9HabkXNxP4V5AGrLWSr+W7hPx4iCNpk=;
+ b=WCtT2jWXVUtkuqZnY1WLFnXfYckIGRI+YSZPXhabI+n6+oOZuuAmzXT5axW5UyTwHY
+ 9xP4DCuuRWoG3LYMMHoAn06orrAVsBJs3Rk6IHyZ6VmE7kDmDiSXiB93diaXRPdmjX2i
+ CsJJBjB1c9mkFdU0h0wTqQeMEzRSUWmRadsFjHmjmp5/k0ooGEjEW2G1GB15BgK5jgQr
+ XpDRnwfacmy3m8vE9XFM9Wb/KcVMJvuZ9d5olwiN7jgIa0y8M1gUplceCmoCYAEpmxuI
+ pMgeO3F11Cza36T18MNqqPB+hPbX4lmQZemBm2QpQcpXZcuJ7lSUrDvFl6wn++6ESrR7
+ CP5g==
+X-Gm-Message-State: ACgBeo1pGxr2OrOJbPWFzAOOHf29UzOITAxaNWzROnElfiHBht+TLN7d
+ AKSyvl6+y5jsmBFx9By5dgiPKw==
+X-Google-Smtp-Source: AA6agR6U/eykOCLXurDvIMBT/Kj0M56q9ngm1Lu4VoqUtOmcZH9e/XB5LbTbVgGmK9KnliKpR5uQXQ==
+X-Received: by 2002:ac8:5b83:0:b0:33f:eebc:3ef4 with SMTP id
+ a3-20020ac85b83000000b0033feebc3ef4mr2382102qta.665.1659560835097; 
+ Wed, 03 Aug 2022 14:07:15 -0700 (PDT)
 Received: from hefring ([50.212.55.89]) by smtp.gmail.com with ESMTPSA id
- f36-20020a05622a1a2400b0031eb5342520sm3658706qtb.15.2022.08.03.14.04.31
+ t17-20020ac87611000000b003051f450049sm11591481qtq.8.2022.08.03.14.07.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Aug 2022 14:04:31 -0700 (PDT)
+ Wed, 03 Aug 2022 14:07:14 -0700 (PDT)
 From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
 X-Google-Original-From: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
-Date: Wed, 3 Aug 2022 17:04:30 -0400
+Date: Wed, 3 Aug 2022 17:07:13 -0400
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <Yuri3sT/jSnhKBSs@hefring>
+Message-ID: <YurjgRP6eQWSspWi@hefring>
 References: <20220802202142.1770838-1-Ben.Wolsieffer@hefring.com>
- <20220802202142.1770838-2-Ben.Wolsieffer@hefring.com>
- <20220803001203.3b341222@windsurf>
+ <20220802202142.1770838-4-Ben.Wolsieffer@hefring.com>
+ <20220803001527.5aee21c7@windsurf>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220803001203.3b341222@windsurf>
+In-Reply-To: <20220803001527.5aee21c7@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=hefring-com.20210112.gappssmtp.com; s=20210112;
  h=from:date:to:cc:subject:message-id:references:mime-version
  :content-disposition:in-reply-to;
- bh=zXeHGNsVGWPtwMMGqjwibF9kN6LiU7EjJOo8o300DSg=;
- b=1hToJtNVV4imAMF9bwbEGoDIdMQBT638Pjj4aIQK+1MUlQrE5mb3TGqZGpZ2YpAtxN
- kvGo4IbL4DrtFlIxPL2Bjqhc1ea1PDV0VAWzjUDzC0y9vjpxfwZ4EAgzLirBMlg3BOjB
- irf8bVkLxTvP23QXHVpNlZJvl3m7wDya+DouKEpfC7PQNu6Ls10UXvlduEUo5j5VwhIw
- OISy+H/H+yIBWRQHgr2lXIV50uZZWou9HUZGMIPQR1KUapMfQ9m+npJ2z1ofIpKVhqgy
- SBBLviW8qWc4HwnhlIj3eeTqR4S2bXuRL2D+BT+gkT2G35Gc2oajSKRWLhsYerpHM6xg
- lS/w==
+ bh=hbl8NJZ1Tz6L9HabkXNxP4V5AGrLWSr+W7hPx4iCNpk=;
+ b=6yoJjfgZAFkUmqiiasOfL7UiCNBwCaMiZ0HjfMte9UDJFaDC8v6RiPIOVR4aHavZMI
+ I1blmtdJEK2ELUtcyVpr4YVaKkVY0+H0gJdY8S53npv5VRju3Ew58Caqp1yctGscwqli
+ nHcBDOFLBwhnCk+b/eKo+bOdhSYiDLz8eu0D02iGvQ+i50O9Y1hO8KSZtWeIvL0EGblO
+ F10lc3c/p2M5L8D24Jasp9gVmMnvR1NDSefo045q2DGBMHBYNK/sgc5yNA296BqNnw/T
+ UNFerAQ6eGWU8xGyyw3HOolvSn5q2KOTQDASKjQKuZ5RIDTCAz9d6pYGQ2D+tCE5siRz
+ 03EA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=hefring-com.20210112.gappssmtp.com
  header.i=@hefring-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=1hToJtNV
-Subject: Re: [Buildroot] [PATCH v2 1/4] Revert "arch: drop now useless
- support for FDPIC"
+ header.s=20210112 header.b=6yoJjfgZ
+Subject: Re: [Buildroot] [PATCH v2 3/4] boot/uboot: pass -mno-fdpic if FDPIC
+ is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,40 +104,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Aug 03, 2022 at 12:12:03AM +0200, Thomas Petazzoni wrote:
-> Hello Ben,
-> 
-> On Tue,  2 Aug 2022 16:21:39 -0400
+On Wed, Aug 03, 2022 at 12:15:27AM +0200, Thomas Petazzoni wrote:
+> On Tue,  2 Aug 2022 16:21:41 -0400
 > Ben Wolsieffer <ben.wolsieffer@hefring.com> wrote:
 > 
-> > @@ -418,6 +421,7 @@ endif
-> >  choice
-> >  	prompt "Target Binary Format"
-> >  	default BR2_BINFMT_ELF if BR2_USE_MMU
-> > +	default BR2_BINFMT_FDPIC if BR2_ARCH_HAS_FDPIC_SUPPORT
+> > If the FDPIC ABI is enabled by default in the toolchain, it must be
+> > explicitly disabled when building U-Boot.
 > 
-> This default means that existing defconfigs for ARM noMMU, which
-> currently use FLAT binaries will "automatically" switch to FDPIC.
+> Missing SoB.
+
+Sorry, will fix.
+
+> Who added -mfdpic by default? Directly the compiler?
+> 
+> If -mfdpic was added by our toolchain wrapper, then the toolchain
+> wrapper (toolchain/toolchain-wrapper.c) already has a few checks to
+> avoid adding -fPIE when building the kernel/U-Boot.
 > 
 
-I didn't look too closely at this revert before, but yes, it probably
-doesn't make sense to enable it by default when adding support for FDPIC
-to an existing architecture.
-
-> On another topic, I am wondering what happens with external toolchains?
-> For example at https://toolchains.bootlin.com/releases_armv7m.html we
-> have ARMv7-M toolchains that produce FLAT binaries. So probably it
-> means that the toolchain-external-bootlin package needs to be amended
-> to only offer the existing ARMv7-M toolchain when FLAT binaries are
-> selected.
-> 
-> I haven't really thought of all the implications, but to me it seems
-> like the case of external toolchains should be considered, to see what
-> is the impact of the FDPIC support.
-
-The fact that FDPIC requires a certain toolchain target unfortunately
-means that the existing prebuilt toolchains can't support it. Perhaps I
-should add a BR2_TOOLCHAIN_HAS_FDPIC_SUPPORT option?
+-mfdpic is enabled by default when the toolchain is configured for
+arm-*-uclinuxfdpiceabi.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
