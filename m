@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C9B9C19F2B
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 21:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F189C19F2B
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 21:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 130D840271;
-	Wed,  3 Aug 2022 21:29:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 130D840271
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2866D81C40;
+	Wed,  3 Aug 2022 21:32:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2866D81C40
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G4cK1RrC8Zz0; Wed,  3 Aug 2022 21:28:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rxPcag4H9R2L; Wed,  3 Aug 2022 21:32:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C01940226;
-	Wed,  3 Aug 2022 21:28:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C01940226
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00A4281B53;
+	Wed,  3 Aug 2022 21:32:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00A4281B53
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D83DB1BF325
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 21:28:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D29C01BF325
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 21:32:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1CD740226
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 21:28:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1CD740226
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC66340294
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 21:32:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC66340294
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4qsKxm4OWjuF for <buildroot@lists.busybox.net>;
- Wed,  3 Aug 2022 21:28:53 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAF7240202
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EAF7240202
- for <buildroot@buildroot.org>; Wed,  3 Aug 2022 21:28:52 +0000 (UTC)
+ with ESMTP id hbn00r5pMowj for <buildroot@lists.busybox.net>;
+ Wed,  3 Aug 2022 21:32:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEEE74028C
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DEEE74028C
+ for <buildroot@buildroot.org>; Wed,  3 Aug 2022 21:32:26 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E301520003;
- Wed,  3 Aug 2022 21:28:47 +0000 (UTC)
-Date: Wed, 3 Aug 2022 23:28:46 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 22342240006;
+ Wed,  3 Aug 2022 21:32:22 +0000 (UTC)
+Date: Wed, 3 Aug 2022 23:32:21 +0200
 To: Joel Stanley <joel@jms.id.au>
-Message-ID: <20220803232846.30e7e22f@windsurf>
-In-Reply-To: <20220729000904.1295295-3-joel@jms.id.au>
+Message-ID: <20220803233221.34e098da@windsurf>
+In-Reply-To: <20220729000904.1295295-4-joel@jms.id.au>
 References: <20220729000904.1295295-1-joel@jms.id.au>
- <20220729000904.1295295-3-joel@jms.id.au>
+ <20220729000904.1295295-4-joel@jms.id.au>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659562130;
+ d=bootlin.com; s=gm1; t=1659562344;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=CLVZ8hESQE9nU1yWaJYbMef79uR3MoRHG3VqjLYmVGM=;
- b=npVHpCY34JnijOx2KAgYX5zwriVTKPdyht7NvbN8DcCDbTHWzJ0QyfKOXmucyka7uIOKLZ
- rYCSe7LIGh1J4gIWrCHRt6P9tAUT5hbEjiUTohxdjyg6IKZ1rhH9FjrdzRrOGWaeNCtu73
- woJDLSZzhgSuVqhobuvfbZGiB8NODZO1oY3DrbwK7pr8/ZDCF++RL/a1W0BzhS3FFaGXM7
- GoYn/G2Y1Urrb2+2IILAMYnLdkA4vEGf6GtdbSnsrofqIXBtOeDDXvhgdMAl5HGoXIOS6A
- 3zd6AFBIojrnN03ILfOMs7dakrx+AwOyleNqmooOaRt6gegqU3BPEuxWydqcDw==
+ bh=zeaLfFjMfYhV68QuJLeAVVqEX7N2k7zTmp2344DMzdA=;
+ b=OHNUYjOqLCrNaeqHCWdu+9WVmHRuVvrXnGkIP04LjVjE64kGQA29gwTAn40lk4EUQxbjDO
+ ebjI844fQyR9Ng8yxB7DcwcTNKmWZM2FT7OTNXStVaVhv3RRUJxkY6B7nILfTqsVKvUbrd
+ 6stgVnqSJ1tTxoQywlkCfpZnb4Xq7A87gaRIyek13zjUSen0DbTGspx3aSPxSvlx89QoF5
+ ldvbBL/x8nIUvuhvJWV0QLa9UcNibpznK/tkc3PxnFY+RDVgkOXEM2Z92uvfEeXf0SObbh
+ QCprhymjdOAxBeTYC2XU7vyzO81SOQ7t+C54nxI1FC3Sx2yOi3DkFOgGk9t9lA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=npVHpCY3
-Subject: Re: [Buildroot] [PATCH 2/9] arch/powerpc: Clarify generic CPUs
+ header.s=gm1 header.b=OHNUYjOq
+Subject: Re: [Buildroot] [PATCH 3/9] arch/powerpc: Enable powerpc64le only
+ on CPUs that support it
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,79 +87,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 29 Jul 2022 09:38:57 +0930
+Hello,
+
+Can we try to use positive logic here? See below what I mean.
+
+On Fri, 29 Jul 2022 09:38:58 +0930
 Joel Stanley <joel@jms.id.au> wrote:
 
-> In the case where a specific CPU is not selected, set an appropriate
-> gcc target for the architecture.
-> 
-> For clarity this introduces a BR2_generic_powerpc64 as a generic 64 bit
-> CPU as this makes the it clearer when browsing menuconfig.
-> 
-> We can't have a generic ppc64le GCC, as attempting to configure glibc
-> for powerpc64le fails:
-> 
->  configure: error: ***  POWER8 or newer is required on powerpc64le.
->  __builtin_signbit is broken.  GCC 7.4 or newer is required to resolve
->  (PR83862). The compiler must support -mabi=ieeelongdouble and
->  -mlong-double-128 simultaneously.
-> 
-> Hence set Power8 as the default CPU for powerpc64le.
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  arch/Config.in.powerpc | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
-> 
 > diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-> index ef0e85fec680..8d392bfde814 100644
+> index 8d392bfde814..7c6ae84348e9 100644
 > --- a/arch/Config.in.powerpc
 > +++ b/arch/Config.in.powerpc
-> @@ -9,12 +9,17 @@ config BR2_POWERPC_CPU_HAS_SPE
->  
->  choice
->  	prompt "Target Architecture Variant"
-> -	default BR2_generic_powerpc
-> +	default BR2_generic_powerpc if !BR2_ARCH_IS_64
-> +	default BR2_generic_powerpc64 if BR2_ARCH_IS_64
-> +	default BR2_powerpc_power8 if BR2_powerpc64le
-
-This default will never be used, because BR2_ARCH_IS_64 is true when
-BR2_powerpc64le is true. So on powerpc64le, "default
-BR2_generic_powerpc64 if BR2_ARCH_IS_64" will match.
-
-So a better solution is:
-
-+	default BR2_generic_powerpc if BR2_powerpc
-+	default BR2_generic_powerpc64 if BR2_powerpc64
-+	default BR2_powerpc_power8 if BR2_powerpc64le
-
->  	help
->  	  Specific CPU variant to use
->  config BR2_generic_powerpc
-> -	bool "generic"
+> @@ -71,11 +71,9 @@ config BR2_powerpc_604e
+>  	depends on !BR2_ARCH_IS_64
+>  config BR2_powerpc_620
+>  	bool "620"
 > -	# No C library supports this variant on ppc64le
-> +	bool "generic (32 bit)"
-> +	depends on !BR2_ARCH_IS_64
-
-I think the (32 bit) is useless, because this one will only show up on
-32-bit powerpc.
-
-> +config BR2_generic_powerpc64
-> +	bool "generic (64 bit)"
-> +	depends on BR2_ARCH_IS_64
 >  	depends on !BR2_powerpc64le
 
-Ditto here.
+So powerpc_620 is usable as PowerPC 32-bit, or PowerPC 64-bit BE ? If
+so, then:
 
-However, a help text for both of these options would be useful, as
-these "generic" options are always a bit magic as to what CPUs they
-support exactly. The help text should also say that they map to
--mcpu=powerpc and -mcpu=powerpc64 respectively.
+	depends on BR2_powerpc || BR2_powerpc64
 
-As Yann requested, the commit log needs to be changed, as "In the case
-where a specific CPU is not selected, set an appropriate gcc target for
-the architecture." is incorrect, as a specific CPU is always selected.
+>  config BR2_powerpc_630
+>  	bool "630"
+> -	# No C library supports this variant on ppc64le
+>  	depends on !BR2_powerpc64le
+
+Ditto.
+
+>  config BR2_powerpc_740
+>  	bool "740"
+> @@ -102,6 +100,7 @@ config BR2_powerpc_860
+>  	depends on !BR2_ARCH_IS_64
+
+Ditto.
+
+>  config BR2_powerpc_970
+>  	bool "970"
+> +	depends on !BR2_powerpc64le
+
+Ditto.
+
+>  	select BR2_POWERPC_CPU_HAS_ALTIVEC
+>  config BR2_powerpc_8540
+>  	bool "8540 / e500v1"
+> @@ -129,21 +128,25 @@ config BR2_powerpc_e6500
+>  	select BR2_POWERPC_CPU_HAS_ALTIVEC
+>  config BR2_powerpc_power4
+>  	bool "power4"
+> -	# No C library supports this variant on ppc64le
+>  	depends on !BR2_powerpc64le
+>  config BR2_powerpc_power5
+>  	bool "power5"
+> -	# No C library supports this variant on ppc64le
+>  	depends on !BR2_powerpc64le
+> +	depends on BR2_ARCH_IS_64
+
+And here:
+
+	depends on BR2_powerpc64
+
+>  config BR2_powerpc_power6
+>  	bool "power6"
+> +	depends on !BR2_powerpc64le
+> +	depends on BR2_ARCH_IS_64
+
+Ditto:
+
+	depends on BR2_powerpc64
+
+>  	select BR2_POWERPC_CPU_HAS_ALTIVEC
+>  config BR2_powerpc_power7
+>  	bool "power7"
+> +	depends on !BR2_powerpc64le
+> +	depends on BR2_ARCH_IS_64
+
+Ditto:
+
+	depends on BR2_powerpc64
+
+>  	select BR2_POWERPC_CPU_HAS_ALTIVEC
+>  	select BR2_POWERPC_CPU_HAS_VSX
+>  config BR2_powerpc_power8
+>  	bool "power8"
+> +	depends on BR2_ARCH_IS_64
+
+And hgere:
+
+	depends on BR2_powerpc64 || BR2_powerpc64le
+
+It would be useful to do that in a consistent way for all PowerPC cores
+in this choice, so that it is very clear for which of powerpc,
+powerpc64 and powerpc64le each PowerPC core is valid.
 
 Thanks!
 
