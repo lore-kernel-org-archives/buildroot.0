@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B941AC19F2B
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 20:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 664C9C19F2D
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 20:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A9E560B3D;
-	Wed,  3 Aug 2022 20:48:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A9E560B3D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cy2EihwOIRp4; Wed,  3 Aug 2022 20:48:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 656D260B4F;
-	Wed,  3 Aug 2022 20:48:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 656D260B4F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 31CDB1BF9B9
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:47:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DBDE401D8
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:47:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DBDE401D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A0FE402E2;
+	Wed,  3 Aug 2022 20:48:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A0FE402E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gy15GrovqQg7 for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YxaukxsHnB-5; Wed,  3 Aug 2022 20:48:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE8AC4023B;
+	Wed,  3 Aug 2022 20:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE8AC4023B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6477A1BF3CA
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:47:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3FE666080A
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:47:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FE666080A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IpQfegNkdrYX for <buildroot@lists.busybox.net>;
  Wed,  3 Aug 2022 20:47:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3EBDA401CC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 48BA9607C1
  for <buildroot@buildroot.org>; Wed,  3 Aug 2022 20:47:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EBDA401CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48BA9607C1
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 58D1D86DF5; Wed,  3 Aug 2022 20:32:59 +0000 (UTC)
+ id 666CA86DC7; Wed,  3 Aug 2022 20:32:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Aug 2022 22:43:13 +0200
+Date: Wed, 3 Aug 2022 22:44:48 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0f14e1e97f1e42faf32f5a433b1e83a5602f9625
-X-Git-Newrev: 0c3797f01f6e89cefbf36ad0e41bdd38eb75e28a
+X-Git-Oldrev: 0c3797f01f6e89cefbf36ad0e41bdd38eb75e28a
+X-Git-Newrev: bea4897f7014de0794a406e8a50c10802a72a92a
 X-Patchwork-Hint: ignore
-Message-Id: <20220803203259.58D1D86DF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gnupg2: security
- bump to version 2.3.7
+Message-Id: <20220803203259.666CA86DC7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/wpewebkit:
+ security bump to version 2.36.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,167 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c3797f01f6e89cefbf36ad0e41bdd38eb75e28a
+commit: https://git.buildroot.net/buildroot/commit/?id=bea4897f7014de0794a406e8a50c10802a72a92a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix CVE-2022-34903: GnuPG through 2.3.6, in unusual situations where an
-attacker possesses any secret-key information from a victim's keyring
-and other constraints (e.g., use of GPGME) are met, allows signature
-forgery via injection into the status line.
+Bugfix release, fixes a WPEWebProcess leak, MPRIS/MediaSession support,
+adds a missing ATSPI a11y interface, and security patches for
+CVE-2022-22677 and CVE-2022-26710.
 
-https://lists.gnupg.org/pipermail/gnupg-announce/2022q3/000474.html
+Release notes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://wpewebkit.org/release/wpewebkit-2.36.4.html
+
+Accompanying security advisory:
+
+  https://wpewebkit.org/security/WSA-2022-0006.html
+
+One patch is not included in the packaged release, and another with a
+build fix imported, which is actually a revert of a patch that made it
+into the release but can cause linking issues when using LTO.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5a0a9227ba67e1ebabea562dbec113d74e6e8092)
+(cherry picked from commit 8cd727c3afbe2947c92c360568bee8c877bd73ab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/gnupg2.hash | 10 +++++-----
- package/gnupg2/gnupg2.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...re-when-cross-building-for-64-bit-ARM-htt.patch | 32 ------------
+ ...e-r295034-WebKitTestRunner-shouldn-t-link.patch | 58 ++++++++++++++++++++++
+ package/wpewebkit/wpewebkit.hash                   |  8 +--
+ package/wpewebkit/wpewebkit.mk                     |  2 +-
+ 4 files changed, 63 insertions(+), 37 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index caf5dcc883..ec2654be7b 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
+diff --git a/package/wpewebkit/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch b/package/wpewebkit/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch
+deleted file mode 100644
+index 7c9c8666ad..0000000000
+--- a/package/wpewebkit/0001-Build-failure-when-cross-building-for-64-bit-ARM-htt.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From b0c63502f004db68b485354967bb1c56c071f4eb Mon Sep 17 00:00:00 2001
+-From: Adrian Perez de Castro <aperez@igalia.com>
+-Date: Tue, 31 May 2022 00:48:21 +0300
+-Subject: [PATCH] Build failure when cross-building for 64-bit ARM
+- https://bugs.webkit.org/show_bug.cgi?id=241109
+-
+-Unreviewed build fix.
+-
+-* Source/WebCore/bindings/js/JSDOMMapLike.cpp: Add missing
+-  JavaScriptCore/HashMapImplInlines.h header inclusion.
+-
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-Upstream status: https://github.com/WebKit/WebKit/pull/1165
+----
+- Source/WebCore/bindings/js/JSDOMMapLike.cpp | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/Source/WebCore/bindings/js/JSDOMMapLike.cpp b/Source/WebCore/bindings/js/JSDOMMapLike.cpp
+-index e132c39fa54..2cb4b1b59a3 100644
+---- a/Source/WebCore/bindings/js/JSDOMMapLike.cpp
+-+++ b/Source/WebCore/bindings/js/JSDOMMapLike.cpp
+-@@ -28,6 +28,7 @@
+- 
+- #include "WebCoreJSClientData.h"
+- #include <JavaScriptCore/CatchScope.h>
+-+#include <JavaScriptCore/HashMapImplInlines.h>
+- #include <JavaScriptCore/JSMap.h>
+- #include <JavaScriptCore/VMTrapsInlines.h>
+- 
+--- 
+-2.36.1
+-
+diff --git a/package/wpewebkit/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch b/package/wpewebkit/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
+new file mode 100644
+index 0000000000..d1edd36660
+--- /dev/null
++++ b/package/wpewebkit/0001-Revert-Merge-r295034-WebKitTestRunner-shouldn-t-link.patch
+@@ -0,0 +1,58 @@
++From a780527a1b79538f1e1f5144e9b522d0927a2312 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Wed, 13 Jul 2022 00:53:48 +0300
++Subject: [PATCH] Revert "Merge r295034 - WebKitTestRunner shouldn't link
++ object files of JavaScriptCore and WebCore"
++
++This reverts commit 7916fda00b347ff263fbfe72c065032d1d9b523c.
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++[Upstream status: https://bugs.webkit.org/show_bug.cgi?id=241002]
++
++---
++ Source/JavaScriptCore/CMakeLists.txt     | 12 +++++++++---
++ Tools/WebKitTestRunner/CMakeLists.txt    |  1 -
++ Tools/WebKitTestRunner/PlatformGTK.cmake |  4 ++++
++ Tools/WebKitTestRunner/PlatformWin.cmake |  4 ++++
++ 4 files changed, 17 insertions(+), 4 deletions(-)
++
++diff --git a/Source/JavaScriptCore/CMakeLists.txt b/Source/JavaScriptCore/CMakeLists.txt
++index 95a1300ce1b3..238208eb1137 100644
++--- a/Source/JavaScriptCore/CMakeLists.txt
+++++ b/Source/JavaScriptCore/CMakeLists.txt
++@@ -456,7 +456,7 @@ if (MSVC AND NOT ENABLE_C_LOOP)
++         COMMAND ${MASM_EXECUTABLE} ${LLINT_MASM_FLAGS} ${JavaScriptCore_DERIVED_SOURCES_DIR}/LowLevelInterpreterWin.obj ${JavaScriptCore_DERIVED_SOURCES_DIR}/LowLevelInterpreterWin.asm
++         VERBATIM)
++     list(APPEND JavaScriptCore_SOURCES ${JavaScriptCore_DERIVED_SOURCES_DIR}/LowLevelInterpreterWin.obj)
++-    add_library(LowLevelInterpreterLib STATIC llint/LowLevelInterpreter.cpp)
+++    add_library(LowLevelInterpreterLib OBJECT llint/LowLevelInterpreter.cpp)
++ else ()
++     # As there's poor toolchain support for using `.file` directives in
++     # inline asm (i.e. there's no way to avoid clashes with the `.file`
++@@ -465,7 +465,7 @@ else ()
++     # an object file. We only need to do this for LowLevelInterpreter.cpp
++     # and cmake doesn't allow us to introduce a compiler wrapper for a
++     # single source file, so we need to create a separate target for it.
++-    add_library(LowLevelInterpreterLib STATIC llint/LowLevelInterpreter.cpp
+++    add_library(LowLevelInterpreterLib OBJECT llint/LowLevelInterpreter.cpp
++         ${JavaScriptCore_DERIVED_SOURCES_DIR}/${LLIntOutput})
++ endif ()
++ 
++@@ -1496,7 +1496,13 @@ if (CMAKE_COMPILER_IS_GNUCXX AND GCC_OFFLINEASM_SOURCE_MAP)
++         COMPILE_OPTIONS "-fno-lto")
++ endif ()
++ 
++-list(APPEND JavaScriptCore_PRIVATE_LIBRARIES LowLevelInterpreterLib)
+++# When building JavaScriptCore as an object library, we need to make sure the
+++# lowlevelinterpreter lib objects get propogated.
+++if (${JavaScriptCore_LIBRARY_TYPE} STREQUAL "OBJECT")
+++    list(APPEND JavaScriptCore_PRIVATE_LIBRARIES $<TARGET_OBJECTS:LowLevelInterpreterLib>)
+++else ()
+++    list(APPEND JavaScriptCore_SOURCES $<TARGET_OBJECTS:LowLevelInterpreterLib>)
+++endif ()
++ 
++ WEBKIT_COMPUTE_SOURCES(JavaScriptCore)
++ list(APPEND JavaScriptCore_SOURCES
++-- 
++2.37.1
++
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 253b4756d0..2a8205d40c 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
 @@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2021q2/000460.html
--sha1  81684626720c91060ae9920936c768df9fc8b2f6  gnupg-2.2.32.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2022q3/000474.html
-+sha1  9255a70a984bfbfa5312a9a52a1cf47cb0d1fc84  gnupg-2.3.7.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.32.tar.bz2.sig
--# using key 6DAA6E64A76D2840571B4902528897B826403ADA
--sha256  b2571b35f82c63e7d278aa6a1add0d73453dc14d3f0854be490c844fca7e0614  gnupg-2.2.32.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.3.7.tar.bz2.sig
-+# using key 02F38DFF731FF97CB039A1DA549E695E905BA208
-+sha256  ee163a5fb9ec99ffc1b18e65faef8d086800c5713d15a672ab57d3799da83669  gnupg-2.3.7.tar.bz2
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 0a2cebfab3..7d8424c136 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
+-# From https://wpewebkit.org/releases/wpewebkit-2.36.3.tar.xz.sums
+-md5  8bc53f86a3489da31fdbb581e1b87f7a  wpewebkit-2.36.3.tar.xz
+-sha1  44a3d99ae48481917ddc478c5f91e6a4faa21ff5  wpewebkit-2.36.3.tar.xz
+-sha256  66275debca7497daff3a7826734cd56262a807adb76c5dccdf257c89968c2fc8  wpewebkit-2.36.3.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.36.4.tar.xz.sums
++md5  ba8e5f5444fd50f53906a7376b25bb26  wpewebkit-2.36.4.tar.xz
++sha1  91259642da6fe55446c3352eeeafdaa188fc14bd  wpewebkit-2.36.4.tar.xz
++sha256  307a3bedf5d4299a861f773f631c39a44c3e6276c3af37f7cbefaed2c8d7c021  wpewebkit-2.36.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index c3d3b3ed89..cf58a4c14d 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.32
-+GNUPG2_VERSION = 2.3.7
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-WPEWEBKIT_VERSION = 2.36.3
++WPEWEBKIT_VERSION = 2.36.4
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
