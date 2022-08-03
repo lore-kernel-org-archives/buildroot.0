@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E54FC19F28
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 20:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB02FC19F2B
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 20:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7FCF81764;
-	Wed,  3 Aug 2022 20:21:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7FCF81764
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7148C8176B;
+	Wed,  3 Aug 2022 20:27:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7148C8176B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZODq5KW5coFF; Wed,  3 Aug 2022 20:21:48 +0000 (UTC)
+	with ESMTP id 9NP-rCegLZ-t; Wed,  3 Aug 2022 20:27:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21E398146D;
-	Wed,  3 Aug 2022 20:21:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21E398146D
+	by smtp1.osuosl.org (Postfix) with ESMTP id A860481761;
+	Wed,  3 Aug 2022 20:27:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A860481761
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 940F51BF3CA
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:21:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 16CD31BF3CA
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:27:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C514401A1
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:21:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C514401A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5B8F401A1
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:27:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5B8F401A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 20f-proPBbBk for <buildroot@lists.busybox.net>;
- Wed,  3 Aug 2022 20:21:43 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C71840156
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6C71840156
- for <buildroot@buildroot.org>; Wed,  3 Aug 2022 20:21:43 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EFF4C20003;
- Wed,  3 Aug 2022 20:21:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oJKs6-0003Cd-DD; Wed, 03 Aug 2022 22:21:38 +0200
+ with ESMTP id p9cQGpOQS-bF for <buildroot@lists.busybox.net>;
+ Wed,  3 Aug 2022 20:27:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3491240156
+ for <buildroot@buildroot.org>; Wed,  3 Aug 2022 20:27:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3491240156
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 555AF86DC8; Wed,  3 Aug 2022 20:12:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220710211503.851359-1-fontaine.fabrice@gmail.com>
-Date: Wed, 03 Aug 2022 22:21:38 +0200
-In-Reply-To: <20220710211503.851359-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 10 Jul 2022 23:15:03 +0200")
-Message-ID: <87h72tt6wd.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mutt: bump to version 2.2.6
+To: buildroot@buildroot.org
+Date: Wed, 3 Aug 2022 22:19:44 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: d351ad08e0f1ca0b4f19267fd9d039e4d0f1d62d
+X-Git-Newrev: ec022c7e49408b3f697f7bcab74a5382458ca9f2
+X-Patchwork-Hint: ignore
+Message-Id: <20220803201257.555AF86DC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/mutt: bump to
+ version 2.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,23 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ec022c7e49408b3f697f7bcab74a5382458ca9f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > This is a bug-fix release, fixing a variety of small issues.
- > https://gitlab.com/muttmua/mutt/-/blob/mutt-2-2-6-rel/ChangeLog
+This is a bug-fix release, fixing a variety of small issues.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://gitlab.com/muttmua/mutt/-/blob/mutt-2-2-6-rel/ChangeLog
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 14da23e861ac9b7f0652ff1839f513be48caac28)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index 1f6082ee35..0bec59def4 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ff8b781159794adcca126b551d5e419174b7b38a582a159bfe4e13451a757e47  mutt-2.2.5.tar.gz
++sha256  ffa2d93517cfc606fe01daffc5f12e42062a1c134d3b9af78484ebc5430888d3  mutt-2.2.6.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 2c6b087b92..5b1119c79b 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUTT_VERSION = 2.2.5
++MUTT_VERSION = 2.2.6
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
