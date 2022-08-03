@@ -1,87 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9FFEC19F28
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 20:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1505C19F2C
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 20:19:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AE70607EC;
-	Wed,  3 Aug 2022 20:06:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AE70607EC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E5BB410A1;
+	Wed,  3 Aug 2022 20:19:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E5BB410A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6MrCPjpf6spQ; Wed,  3 Aug 2022 20:06:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EcocfVL1awbA; Wed,  3 Aug 2022 20:19:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1539607A3;
-	Wed,  3 Aug 2022 20:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1539607A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAC5840331;
+	Wed,  3 Aug 2022 20:19:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAC5840331
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA3841BF3CA
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:06:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3FC2F1BF3CA
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:19:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3B59401D3
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:06:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3B59401D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FCE440331
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:19:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FCE440331
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EaRDkvS6Pwqe for <buildroot@lists.busybox.net>;
- Wed,  3 Aug 2022 20:06:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96D804011E
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com
- [IPv6:2607:f8b0:4864:20::f32])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 96D804011E
- for <buildroot@buildroot.org>; Wed,  3 Aug 2022 20:06:39 +0000 (UTC)
-Received: by mail-qv1-xf32.google.com with SMTP id l18so10330149qvt.13
- for <buildroot@buildroot.org>; Wed, 03 Aug 2022 13:06:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=agUswavpRjNhvOIUURwqiuj9n4fNbbJ1ziCDLQoA3Is=;
- b=45yEMwa9U53Utv/QArocywoW1X9uxMfpVItasSx7yvfdRDxD7F/rme6Gvv6dPgNlmD
- uj3CBKIoFr/AELQdB4UMnNfMvwJzlgv3ilU04ELhI0u9V4SEyuREg2TDWiiAQ6VW98oH
- PpMbtOWEkyrsUA6Q36E7fdNpZyzOxpQqJ0AYTgpug5mXjbH+lVKSpcO7jyqWLeCIxNPL
- i9M/UdcpqaOi6glrdn1lKtzZXMh01PQCmGAqfHMPGjrLh9DTS6l9foVnhymvE3LtrAkV
- Azt3KXKL3gbyh9GfI6EGlxduWxIIKFG0jl8QY68YgJ8vd+7rFQlQ9pYMFeKHtSIrQcnH
- M6rQ==
-X-Gm-Message-State: ACgBeo2bbfvIgwqcaeWwyor/OVBQZ5crLHcyMX/ft+cIlxpQO82zAf8R
- th9cMOwKpA+3SVLbG98E3U5N8CeRCJ5H5g==
-X-Google-Smtp-Source: AA6agR4KKUQKE9TcH4zJiVmXCKkYgZUyP1gXh2dN5vpj+HJQ3/SdCHKW/y1g6Do1zWzaN5se3GR0cQ==
-X-Received: by 2002:a05:6214:2306:b0:473:f77a:85a7 with SMTP id
- gc6-20020a056214230600b00473f77a85a7mr23224084qvb.106.1659557198250; 
- Wed, 03 Aug 2022 13:06:38 -0700 (PDT)
-Received: from hefring.. ([50.212.55.89]) by smtp.gmail.com with ESMTPSA id
- u12-20020a05620a430c00b006af1f0af045sm13293650qko.107.2022.08.03.13.06.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Aug 2022 13:06:37 -0700 (PDT)
-From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
-X-Google-Original-From: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
-To: buildroot@buildroot.org
-Date: Wed,  3 Aug 2022 16:06:29 -0400
-Message-Id: <20220803200629.3172370-1-Ben.Wolsieffer@hefring.com>
-X-Mailer: git-send-email 2.37.0
-MIME-Version: 1.0
+ with ESMTP id OLRY4-Vfk2aP for <buildroot@lists.busybox.net>;
+ Wed,  3 Aug 2022 20:19:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D55B240275
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D55B240275
+ for <buildroot@buildroot.org>; Wed,  3 Aug 2022 20:19:11 +0000 (UTC)
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+From: =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+In-Reply-To: <20220803215825.30affd56@windsurf>
+Date: Wed, 3 Aug 2022 22:19:06 +0200
+Message-Id: <222B2DCF-D2D6-498D-85FE-51793DCD79B7@cutebit.org>
+References: <A46AAF2E-D74E-4308-A9B3-3B18C3E1CD09@cutebit.org>
+ <20220803215825.30affd56@windsurf>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=hefring-com.20210112.gappssmtp.com; s=20210112;
- h=from:to:cc:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=agUswavpRjNhvOIUURwqiuj9n4fNbbJ1ziCDLQoA3Is=;
- b=LRd5URC7sQoW5x62YOo2PrD7TUOFnsG9vbhf6KA48GHBFxq8wU3AM8ifcKBov1FQ2S
- 7EAUKwEnlGNREGbDHx/+9+NL3irppPGdiQ0DVFMHnkI1/qcwWqQiAEnWrHjdrl5jQly1
- kisXZ0L1ht37RFEbv4LiBdBfhLbVbQNib/boLLd7SUDJspGVbl0tQmyfnWh1piPkEuIm
- LT+JQN7D3q8Dzaz/VkBM9+aoUq5NhIda6rewVxeYCO4XbsqkgpwXqtHoUUSCS7dkQMwq
- Bn7XCHZa2Lr4ajbvfp1vDkVIiNR9w08EfFvHGjhMOYFYAOyTGiNy7CaRDdEbHatHIVQY
- xNQA==
+ d=cutebit.org; s=mail; 
+ t=1659557947; bh=f7StgMGNkku3sN4OJt/umOLwWqT+iKmq4/35F7a803k=;
+ h=Subject:From:In-Reply-To:Date:Cc:References:To;
+ b=pCrxsX6Oy04wu1Pg1NL6v8NlO6pfRffoJGRi+0GXaSpQr0PepTJFyL07vO+lGHuTH
+ pdQx5Vdtfl09A1k5LYkeXM0KCbVC30ZuhoYbiXTR6p+yV3QIPP0SaLxu0opkaUkJfK
+ kNZQGFI+ekgJ3q1/uKCHz/G5jOFJUxrmj3D37Txg=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=hefring-com.20210112.gappssmtp.com
- header.i=@hefring-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=LRd5URC7
-Subject: [Buildroot] [PATCH v2] package/uclibc: fix usage of DODEBUG option
+ dkim=pass (1024-bit key) header.d=cutebit.org header.i=@cutebit.org
+ header.a=rsa-sha256 header.s=mail header.b=pCrxsX6O
+Subject: Re: [Buildroot] [PATCH 1/1 RESEND] package/python-construct: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,68 +66,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The DODEBUG option passes -O0 and -DDEBUG to the compiler, which has a
-significant impact on runtime behavior and performance. Currently,
-DODEBUG is enabled by BR2_ENABLE_DEBUG, but it makes more sense for it
-to be enabled by BR_ENABLE_RUNTIME_DEBUG.
-
-This patch implements the above change, and also disables the DOSTRIP
-option, allowing Builroot to decide whether binaries should be stripped.
-
-Lastly, this patch adds $(TARGET_DEBUGGING) to the compiler flags, to
-enable debug symbols when appropriate.
-
-Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
----
-Changes in v2:
-  - Always disable DOSTRIP.
-  - Only add $(TARGET_DEBUGGING) to CFLAGS, to avoid any unintended side
-    effects.
-
- package/uclibc/uclibc.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 0e17a8e65d..7e237c48e6 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -216,7 +216,7 @@ endif
- #
- # Debug
- #
--ifeq ($(BR2_ENABLE_DEBUG),y)
-+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
- define UCLIBC_DEBUG_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,DODEBUG)
- endef
-@@ -374,7 +374,7 @@ endif
- # Commands
- #
- 
--UCLIBC_EXTRA_CFLAGS = $(TARGET_ABI)
-+UCLIBC_EXTRA_CFLAGS = $(TARGET_ABI) $(TARGET_DEBUGGING)
- 
- # uClibc-ng does not build with LTO, so explicitly disable it
- # when using a compiler that may have support for LTO
-@@ -396,6 +396,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(call KCONFIG_SET_OPT,RUNTIME_PREFIX,"/")
- 	$(call KCONFIG_SET_OPT,DEVEL_PREFIX,"/usr")
- 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib")
-+	$(call KCONFIG_DISABLE_OPT,DOSTRIP)
- 	$(UCLIBC_MMU_CONFIG)
- 	$(UCLIBC_BINFMT_CONFIG)
- 	$(UCLIBC_AARCH64_PAGE_SIZE_CONFIG)
--- 
-2.37.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Cj4gT24gMy4gOC4gMjAyMiwgYXQgMjE6NTgsIFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRh
+enpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+IAo+IEhlbGxvIE1hcnRpbiwKCkhpIFRob21hcyEK
+Cj4gCj4gT24gV2VkLCAzIEF1ZyAyMDIyIDE3OjQyOjQ4ICswMjAwCj4gTWFydGluIFBvdmnFoWVy
+IDxwb3ZpaytsaW5AY3V0ZWJpdC5vcmc+IHdyb3RlOgo+IAo+PiBjb25zdHJ1Y3QgaXMgYSBQeXRo
+b24gbGlicmFyeSBmb3IgZGVjbGFyYXRpdmUgc2VyaWFsaXphdGlvbi8KPj4gZGVzZXJpYWxpemF0
+aW9uIG9mIHN0cnVjdHVyZWQgYmluYXJ5IGRhdGEuCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBNYXJ0
+aW4gUG92acWhZXIgPHBvdmlrK2xpbkBjdXRlYml0Lm9yZz4KPj4gLS0tCj4+IEkgZG9uJ3Qga25v
+dyBpZiB5b3Ugc2V0IGEgYmFyIGZvciB0aGUgaW5jbHVzaW9uIG9mIHBhY2thZ2VzIGluCj4+IGJ1
+aWxkcm9vdCwgYnV0IEkgdGhpbmsgYnkgaXRzIG5hdHVyZSBjb25zdHJ1Y3QgbWFrZXMgZm9yIGEg
+dXNlZnVsCj4+IHBhY2thZ2Ugb24gZW1iZWRkZWQgc3lzdGVtcy4KPiAKPiBUaGFua3MgZm9yIHlv
+dXIgY29udHJpYnV0aW9uISBJdCBsb29rZWQgZ29vZCwgYnV0IHRoZXJlIHdhcyBvbmUgaXNzdWU6
+Cj4gdGhlIHBhdGNoIHdhcyBkYW1hZ2VkLCBwZXJoYXBzIGJlY2F1c2UgeW91IGRpZG4ndCBzZW5k
+IGl0IHVzaW5nIGdpdAo+IHNlbmQtZW1haWw/CgpZZWFoLCBJIHNlbnQgZmlyc3QgZW1haWwgd2l0
+aCBnaXQgc2VuZC1lbWFpbCwgZ290IGEgYm91bmNlIGJhY2sgYmVjYXVzZQpJIHdhc27igJl0IHN1
+YnNjcmliZWQgdG8gdGhlIE1MLCB0aGVuIEkgdG9vayBteSBjaGFuY2VzIHJlc2VuZGluZyB1c2lu
+Zwp0aGUgQXBwbGUgTWFpbCBjbGllbnQuIFVzZWZ1bCB0byBrbm93IHRoYXQgZG9lc27igJl0IHdv
+cmsuCgo+IFNvIEkgZml4ZWQgdXAgdGhlIGRhbWFnZSwgYnV0IGFsc28gYWRkZWQgYSB0ZXN0IGlu
+IG91ciBydW50aW1lIHRlc3QKPiBpbmZyYXN0cnVjdHVyZSBmb3IgdGhpcyBuZXcgcGFja2FnZS4g
+VGhpcyBhbGxvd3MgdG8gdmVyaWZ5IHRoYXQgdGhlCj4gcGFja2FnZSB3b3JrcyBhdCBydW50aW1l
+LCB3aGljaCBpcyBxdWl0ZSBpbXBvcnRhbnQgZm9yIFB5dGhvbiBtb2R1bGVzLgo+IAo+IFNlZToK
+PiAKPiAgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9weXRob25fY29uc3RydWN0
+LnB5Cj4gCj4gd2hpY2ggYnVpbGRzIGEgc2ltcGxlIEJ1aWxkcm9vdCBjb25maWd1cmF0aW9uIHdp
+dGggcHl0aG9uLWNvbnN0cnVjdAo+IGVuYWJsZWQsIGJvb3RzIGl0IHVuZGVyIFFlbXUsIGFuZCBy
+dW5zOgo+IAo+ICBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX2Nv
+bnN0cnVjdC5weQo+IAo+IGluc2lkZSB0aGlzIGVudmlyb25tZW50LgoKQ29vbCEKCj4+ICtQWVRI
+T05fQ09OU1RSVUNUX0RFUEVOREVOQ0lFUyA9IGhvc3QtcHl0aG9uLXNldHVwdG9vbHMtc2NtCj4g
+Cj4gSSBhbHNvIGRyb3BwZWQgdGhpcyBkZXBlbmRlbmN5LCBiZWNhdXNlIEkgY291bGRuJ3Qgc2Vl
+IGluIHNldHVwLnB5IHdoeQo+IHRoaXMgZGVwZW5kZW5jeSB3b3VsZCBiZSBuZWVkZWQsIGFuZCBh
+IHRlc3QgYnVpbGQgd2l0aG91dCB0aGlzCj4gZGVwZW5kZW5jeSBzaG93ZWQgaXQgd2FzIHdvcmtp
+bmcuIEhvcGVmdWxseSBJIHdhcyBub3Qgd3Jvbmcgb24gdGhpcyA6LSkKCk1vc3QgbGlrZWx5IHlv
+dSBhcmUgbm90IHdyb25nLiBJIGNvcGllZCBpdCBmcm9tIGVsc2V3aGVyZSBhbmQgdGhvdWdodAp0
+aGF0IG1lYW50IHNldHVwdG9vbHMgaW4gZ2VuZXJhbCwgYnV0IEkgZ3Vlc3MgdGhlIC1zY20gcG9z
+dGZpeCBtYXR0ZXJzCmhlcmUuCgo+IFNlZSB0aGUgZmluYWwgY29tbWl0IGF0Ogo+IAo+ICBodHRw
+czovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9jb21taXQvYzA1Y2FhNzU1
+NzIzNzM3ZTkxZmZkNTdlNzM2Mjk4Y2IxOWM5Yzg3Zgo+IAo+IEFnYWluLCB0aGFua3MgZm9yIHlv
+dXIgY29udHJpYnV0aW9uIQoKVGhhbmtzIGZvciB0aGUgZmluYWwgdG91Y2hlcyBvbiBpdCEgTG9v
+a2luZyBmb3J3YXJkIHRvIGhhdmluZyB0aGlzIGluCmJ1aWxkcm9vdCBvdXQtb2YtdGhlLWJveC4K
+Cj4gCj4gVGhvbWFzCgpNYXJ0aW4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
