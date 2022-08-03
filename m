@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2385CC19F2B
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 20:27:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EBABC19F2B
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 20:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6E93606C6;
-	Wed,  3 Aug 2022 20:27:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6E93606C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2AE8160A97;
+	Wed,  3 Aug 2022 20:27:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AE8160A97
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E2I_SMCALkAf; Wed,  3 Aug 2022 20:27:28 +0000 (UTC)
+	with ESMTP id H6dSry1x--vh; Wed,  3 Aug 2022 20:27:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9259D607F9;
-	Wed,  3 Aug 2022 20:27:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9259D607F9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B87641BF3CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 273A160A80;
+	Wed,  3 Aug 2022 20:27:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 273A160A80
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C87371BF9B9
  for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FA66606C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0582401A1
  for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 20:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FA66606C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0582401A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d0hPztYGl-QE for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KofBkvjzbVLw for <buildroot@lists.busybox.net>;
  Wed,  3 Aug 2022 20:27:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C2C386063B
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9C9F40156
  for <buildroot@buildroot.org>; Wed,  3 Aug 2022 20:27:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2C386063B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9C9F40156
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E584C86DD1; Wed,  3 Aug 2022 20:13:06 +0000 (UTC)
+ id EFE0886DD2; Wed,  3 Aug 2022 20:13:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 3 Aug 2022 22:19:54 +0200
+Date: Wed, 3 Aug 2022 22:22:08 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: aff92f7130a1edc92fcebb2e79023621274215a1
-X-Git-Newrev: a87616b597f597a6baa9b7fe4cf99e49729b3ba3
+X-Git-Oldrev: a87616b597f597a6baa9b7fe4cf99e49729b3ba3
+X-Git-Newrev: a2349b7493f217d38c6e36c8fb2c8882a357746b
 X-Patchwork-Hint: ignore
-Message-Id: <20220803201306.E584C86DD1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/mutt: bump to
- version 2.2.6
+Message-Id: <20220803201306.EFE0886DD2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] {linux,
+ linux-headers}: bump 4.{9, 14, 19}.x / 5.{4, 10, 15, 17}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a87616b597f597a6baa9b7fe4cf99e49729b3ba3
+commit: https://git.buildroot.net/buildroot/commit/?id=a2349b7493f217d38c6e36c8fb2c8882a357746b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-This is a bug-fix release, fixing a variety of small issues.
-
-https://gitlab.com/muttmua/mutt/-/blob/mutt-2-2-6-rel/ChangeLog
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 14da23e861ac9b7f0652ff1839f513be48caac28)
+(cherry picked from commit 5645990b8827c6344c76c4fbd41be715519229b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 1f6082ee35..0bec59def4 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ff8b781159794adcca126b551d5e419174b7b38a582a159bfe4e13451a757e47  mutt-2.2.5.tar.gz
-+sha256  ffa2d93517cfc606fe01daffc5f12e42062a1c134d3b9af78484ebc5430888d3  mutt-2.2.6.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 2c6b087b92..5b1119c79b 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index e4922fd44e..de9bf0ad7a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--MUTT_VERSION = 2.2.5
-+MUTT_VERSION = 2.2.6
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.17.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.17.15" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.115-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.109-cip5-rt4" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 9e4c41d94f..c8707ac711 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  ea47fd08a16bd9001aacc8b88abd24af489bd87a364dd0545e0b6823a68bef53  linux-5.17.13.tar.xz
+-sha256  b2390d7d977c66036ef0ceb294e408f2bdaab6dfeeb8ff4f4e0a84b71f8d8754  linux-5.15.45.tar.xz
+-sha256  5b7a756004158ece2f5e41795ba523ec201743a736e34ce41cbe09177f7d0e8b  linux-5.10.120.tar.xz
+-sha256  c2ad17b3fc70cd05d9e0766abe9b5aa9409fc2cc86a200eaa57c8f837afe36a8  linux-5.4.197.tar.xz
++sha256  4a1c922a490eeabf5b44d4fde36de9ba5b71711b7352c6258716da41160db628  linux-5.17.15.tar.xz
++sha256  f3aa717243051f3fcca90ebfe26fe5c3a596c2f6047846e8d1724ea90df77b07  linux-5.15.53.tar.xz
++sha256  aae72f052b80858f77d40009faf9ccf09c38c8b33f56346d16c05f7e6a429cfe  linux-5.10.129.tar.xz
++sha256  fdc1b10a19d85b37eb0957ddd81acec1d5484f36c496493d8cdad75278737a47  linux-5.4.204.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  7ea3369b915c99b38528dbf68c491f3f9324b2f4e56eac980dd7524d2fc30d1b  linux-4.9.317.tar.xz
+-sha256  6637c8470c3093a477d2de6fa9e0f63c55810438a411c73bcd723634371657a3  linux-4.14.282.tar.xz
+-sha256  00ad2f5a36c91221a2ade0078b93bf84b60d494bd1ef51eaccb5bdb6277dba3a  linux-4.19.246.tar.xz
++sha256  621978d371b8f0a64e28e3b734af74d5a8d99b81298a99f336b17883e3a4e409  linux-4.9.322.tar.xz
++sha256  78b5494c205d9839b1905b2553c22596dee57c87586a8124186415c8b8f8f616  linux-4.14.287.tar.xz
++sha256  3787c8adccea6e35928dea855af0eb2e849966553505448972d6b3cf037acaf4  linux-4.19.251.tar.xz
+ # Locally computed
+ sha256  f3559be277be9200897022282be18cfc0278d1d8baec8058305b04b9cd72002a  linux-cip-5.10.115-cip7.tar.gz
+ sha256  71fba4ed5cb48fa7869e9fe271b68b77fed26775ce5cf2f50891aa8f71c388b3  linux-cip-5.10.109-cip5-rt4.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index d17686be4c..678c3d35f7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -379,13 +379,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.9.317"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.282"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.246"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.197"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.120"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.45"	if BR2_KERNEL_HEADERS_5_15
+-	default "5.17.13"	if BR2_KERNEL_HEADERS_5_17
++	default "4.9.322"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.287"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.251"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.204"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.129"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.53"	if BR2_KERNEL_HEADERS_5_15
++	default "5.17.15"	if BR2_KERNEL_HEADERS_5_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
