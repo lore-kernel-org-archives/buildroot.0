@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1D47C19F2B
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 22:03:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9CA3C19F2B
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 22:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 88796404C8;
-	Wed,  3 Aug 2022 22:03:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88796404C8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C2AB403D0;
+	Wed,  3 Aug 2022 22:19:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C2AB403D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i3iKou8IeWPN; Wed,  3 Aug 2022 22:03:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VbQAIUf4yT0R; Wed,  3 Aug 2022 22:19:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A67540297;
-	Wed,  3 Aug 2022 22:03:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A67540297
+	by smtp4.osuosl.org (Postfix) with ESMTP id DADE24035D;
+	Wed,  3 Aug 2022 22:19:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DADE24035D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8199F1BF325
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 22:02:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 45CB31BF40B
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 22:19:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 60DC981A50
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 22:02:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60DC981A50
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2150F8149D
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 22:19:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2150F8149D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xNNz2I0-4CJx for <buildroot@lists.busybox.net>;
- Wed,  3 Aug 2022 22:02:57 +0000 (UTC)
+ with ESMTP id BPaFEg3DjSte for <buildroot@lists.busybox.net>;
+ Wed,  3 Aug 2022 22:19:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6940A81761
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com
- [IPv6:2607:f8b0:4864:20::102d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6940A81761
- for <buildroot@buildroot.org>; Wed,  3 Aug 2022 22:02:57 +0000 (UTC)
-Received: by mail-pj1-x102d.google.com with SMTP id
- d65-20020a17090a6f4700b001f303a97b14so3578267pjk.1
- for <buildroot@buildroot.org>; Wed, 03 Aug 2022 15:02:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 341168149B
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com
+ [IPv6:2607:f8b0:4864:20::1032])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 341168149B
+ for <buildroot@buildroot.org>; Wed,  3 Aug 2022 22:19:31 +0000 (UTC)
+Received: by mail-pj1-x1032.google.com with SMTP id
+ q7-20020a17090a7a8700b001f300db8677so3601016pjf.5
+ for <buildroot@buildroot.org>; Wed, 03 Aug 2022 15:19:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc;
- bh=0yDbY6ypqAnAiOSxpT3o+beX1rIA72BZEx3IU/xe/ro=;
- b=lxD/2txMTQ+3N2CYRbtd34t2bzwCjhV6TH0n39/Jj9bHemgcBGu4jfRSm2h/VNrYhN
- pL0RnX+z7VCIRzWZdOzlZAYKYfB6/xSnHm6PDeDBmP4jikL7E/iOiOCeHiXz76h02Vzv
- Zrwn2cYO7fHYT7dT98ORAOYdJR+P9JRkVeLaSoCHLsUW92V1bsahs7zetTk7IdiJeBcT
- 73nKKH2+Hv/mfeQooSYW1zuROATwvdipwznlSZY2SnzrSJZUfURFx7knSrRs+ya2y2yl
- 5Oey7yv/Hedq3HZzEFgWRl83VP+c3Mzol5FrZo2OnsDaBkvUvI5wFy9fCH61WVo/LLGt
- 6kmw==
-X-Gm-Message-State: ACgBeo3109lHsSSoswLhJUfdnqWTIdNC/hRuaj2po1s8DqjJgG6JREFq
- N83o7ZfKfYr2jqdNGiA07HNxDXxEsKZK5IGHcKnYueEnUTRPgKH7
-X-Google-Smtp-Source: AA6agR5LxRcTQf7NDAhgwqQgvQtq7DIPz/PwbJulM6sGXQgrCr41EcJjsig2mrro9xBA9nzgEk60WNuuueokkvwjXbA=
+ bh=kxqgiPigzw4l2/P9OopiIHptDUgAlFRZbPXnr56BD/w=;
+ b=ulPpA6/s0quaIFwk9tSfamLu+ajel/MJbd5TtZwU6k45YjsjYw1p9XaQv9zfaw/s3B
+ KVpMxK2h3qO2ugr26sVBpop18cSHfB0duqwapVHkLnN+FbpKaVMjrhxPl/gIZspmdDvX
+ Z1Z2n2dOGt1meyc4jbUka7h6HPeqLeaFKkwIIAUMSvjoFremMYzB+IN/9nNnjKWfBAuy
+ aQ4rt47r+kIMpjj9p/3XUTk/GusiYSeS6CWgJ/B6IMpGTU9URT0asV6RlidkIUxdiKnB
+ yiscv/KL2BRbtu3KNPwZfNHWt4ztpzSvQR2INxIQiZULsOpnI41OxVuUc87TNTyL6E4k
+ Z2Wg==
+X-Gm-Message-State: ACgBeo27ElZJFoS2wA76f/aFSLfEiQjAAYeZqd/rndxISkpJRgl1+9QH
+ YzPTNP1f+qWDEtxbaVQS9ILbVO+LUOXUjsjYOpY=
+X-Google-Smtp-Source: AA6agR6+BKNNAwK2lbuBZI09TrjyhPbV7sfdY2yjMDsY+KAxurprqSTf1Wnv3fGCWxzwtglB+yg3HUgLJy6xOlFzASs=
 X-Received: by 2002:a17:902:6b82:b0:16d:d268:3842 with SMTP id
- p2-20020a1709026b8200b0016dd2683842mr27377762plk.16.1659564176686; Wed, 03
- Aug 2022 15:02:56 -0700 (PDT)
+ p2-20020a1709026b8200b0016dd2683842mr27435693plk.16.1659565171232; Wed, 03
+ Aug 2022 15:19:31 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220313171355.271345-1-james.hilliard1@gmail.com>
- <20220803233856.3d609d8c@windsurf>
-In-Reply-To: <20220803233856.3d609d8c@windsurf>
+ <20220313171355.271345-2-james.hilliard1@gmail.com>
+ <20220803234641.346d9c9c@windsurf>
+In-Reply-To: <20220803234641.346d9c9c@windsurf>
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 3 Aug 2022 16:02:43 -0600
-Message-ID: <CADvTj4r9D=kUa-N+HC2tVTt7Oxna=ZMSp-H5POaYzE2DsXCD-w@mail.gmail.com>
+Date: Wed, 3 Aug 2022 16:19:17 -0600
+Message-ID: <CADvTj4r1KvjSmqaYjTkFzvtiZBxx3zMDG0o5ct8iadtGZ3_hVQ@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc;
- bh=0yDbY6ypqAnAiOSxpT3o+beX1rIA72BZEx3IU/xe/ro=;
- b=EsmxSXHx+X2L/I0sgBClpkIyiQOg3RPltSuu6OSZl3VKig9JWbaEiJaUdoJqsDk/ks
- Euf6C1wWXdAvZmuMlQaubUDkWjcsW2lf9wLUBDzlO+bAISZisP1SMsuXE8I6pG7bNQlx
- Xatenp6lQKuTl1VMcYnFt2QbFs6zgkFaDUEPDv5wpWRtOGK8DrIu4RbUNB+Zbpo6EbII
- kRRfmbmrycH4OVc2yI9dV9XUbJkJmknCaAG2n2Y3o6l3Weg48vqEJZg/hY/qcnSjFuoL
- l2DNTSb52i6YU2Eoebnt7+8WfvySIPWRreQadv9c+pC85uScBqZx8dcwYkc4m9gQXc3j
- WAeQ==
+ bh=kxqgiPigzw4l2/P9OopiIHptDUgAlFRZbPXnr56BD/w=;
+ b=gV+tRrFgAYRaWyuP53Ptw/X1NyMo3rA3ZBdCnW3tF5JwEssWKwgPQi2wUnbtsNzLk5
+ pOA5DxfJoi+aXgeXpD+6TVLXUHi+SIZFDYnJDu6CSj6lqx7edWEQOQlsUN0SrgDJTBv7
+ eLmHowuMkBAi9z7E6W8UGKix2344r7XzNI+QscMl5N27mFhjfLTWUfnCd/YfEUyzN0uH
+ KijrdjdGLSaHpPXIs1a6KFM+6omLmaH8W0ERQ+r1iGfFmEId46QLHxdvI35cXZcb28HS
+ jeH1GcII8w+8LlM88XjQgPjjBPG57bJDx1qvNHpvrU2liwi9vW4aQvu98ZD16KACGImu
+ Gbsg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EsmxSXHx
-Subject: Re: [Buildroot] [PATCH v2 1/2] utils/scanpypi: ensure tmp_extract
- is cleaned up on exception
+ header.a=rsa-sha256 header.s=20210112 header.b=gV+tRrFg
+Subject: Re: [Buildroot] [PATCH v2 2/2] utils/scanpypi: add flit package
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,59 +98,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Aug 3, 2022 at 3:38 PM Thomas Petazzoni
+On Wed, Aug 3, 2022 at 3:46 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> On Sun, 13 Mar 2022 11:13:54 -0600
+> On Sun, 13 Mar 2022 11:13:55 -0600
 > James Hilliard <james.hilliard1@gmail.com> wrote:
 >
-> > +            s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
-> > +            imp.load_module('__main__', s_file, s_path, s_desc)
-> > +            if self.metadata_name in self.setup_args:
-> > +                pass
-> > +            elif self.metadata_name.replace('_', '-') in self.setup_args:
-> > +                self.metadata_name = self.metadata_name.replace('_', '-')
-> > +            elif self.metadata_name.replace('-', '_') in self.setup_args:
-> > +                self.metadata_name = self.metadata_name.replace('-', '_')
+> > +def toml_load(f):
+> > +    with open(f, 'rb') as fh:
+> > +        ex = None
+> > +
+> > +        # Try regular tomli first
+> > +        try:
+> > +            from tomli import load
+> > +            return load(fh)
+> > +        except ImportError as e:
+> > +            ex = e
+> > +
+> > +        # Try pip's vendored tomli
+> > +        try:
+> > +            from pip._vendor.tomli import load
 > > +            try:
-> > +                self.setup_metadata = self.setup_args[self.metadata_name]
-> > +            except KeyError:
-> > +                # This means setup was not called
-> > +                print('ERROR: Could not determine package metadata for {pkg}.\n'
-> > +                      .format(pkg=self.real_name))
-> > +                raise
-> > +        finally:
-> > +            os.chdir(current_dir)
-> > +            sys.path.remove(self.tmp_extract)
-> >
+> > +                return load(fh)
+> > +            except TypeError:
+> > +                # Fallback to handle older version
+> > +                try:
+> > +                    fh.seek(0)
+> > +                    w = io.TextIOWrapper(fh, encoding="utf8", newline="")
+> > +                    return load(w)
+> > +                finally:
+> > +                    w.detach()
+> > +        except ImportError as e:
+> > +            pass
+> > +
+> > +        # Try regular toml last
+> > +        try:
+> > +            from toml import load
+> > +            fh.seek(0)
+> > +            w = io.TextIOWrapper(fh, encoding="utf8", newline="")
+> > +            try:
+> > +                return load(w)
+> > +            finally:
+> > +                w.detach()
+> > +        except ImportError:
+> > +            pass
+> > +
+> > +        print('This package needs tomli')
+> > +        raise ex
+>
+> I'm confused by how "ex" gets used here. It's initially none, and it's
+> set to the ImportError exception if the tomli module couldn't be used.
+>
 > >      def get_requirements(self, pkg_folder):
 > >          """
+> >          Retrieve dependencies from the metadata found in the setup.py script of
+> > @@ -694,9 +767,12 @@ def main():
+> >              except ImportError as err:
+> >                  if 'buildutils' in str(err):
+> >                      print('This package needs buildutils')
+> > +                    continue
+> >                  else:
+> > -                    raise
+> > -                continue
+> > +                    try:
+> > +                        package.load_pyproject()
+> > +                    except Exception as e:
+> > +                        raise
 >
-> Are you sure this work correctly?
+> I really don't like the construction here. We're doing this:
+>
+>         try:
+>                 ... do an attempt with traditional setup.py ...
+>         expect ImportError as err:
+>                 ...
+>                 try:
+>                         ... do an attempt with pyproject.toml ...
+>                 expect Exception as e:
+>                         ...
+>
+> So, if get a third and then a fourth method of Python module packaging,
+> we will end up with:
 
-Looks right to me.
+All new python packaging methods are supposed to contain a pyproject.toml
+file per pep517 so I think we can probably defer refactoring this for now.
+
+The only supported packaging method in the absence of a pyproject.toml
+will be setuptools(distutils is effectively being moved inside of setuptools
+to avoid breaking older packages that are not migrated to setuptools, so
+once distutils is removed from python our current distutils packages will
+need to be moved to setuptools infrastructure, but that should more or
+less just work automatically).
 
 >
-> If I understand correctly self.tmp_extract is where the Python package
-> source code is extracted. So if you remove it at the end of
-> load_setup(), how will your new load_pyproject() added in PATCH 2/2 be
-> able to use the package source code?
-
-We're not deleting self.tmp_extract, we're just ensuring we current dir and
-sys.path states are cleaned up properly on failure, load_pyproject() does the
-same thing. Always restoring initial state at the end means load_pyproject()
-doesn't need to deal with current dir and sys.path global state changes induced
-by load_setup().
-
+>         try:
+>                 ... do an attempt with traditional setup.py ...
+>         expect ImportError as err:
+>                 ...
+>                 try:
+>                         ... do an attempt with pyproject.toml ...
+>                 expect Exception as e:
+>                         ...
+>                         try:
+>                                 ... do an attempt with another method
+>                         except:
+>                                 try:
+>                                         ... do an attempt with another method
+>                                 except:
 >
-> Also, why is this removal needed, as anyway the full tmp_path gets
-> removed at the end of the main() function?
-
-sys.path.remove(self.tmp_extract) is not the same as shutil.rmtree(tmp_path)
-
-We're restoring the module search path at the end to avoid leaking global state
-changes when there's an exception.
-
+> Clearly ugly. Can we have a better construct? I would know how to do
+> that in C, but I'm not very good at Python-ic constructs.
+>
+> Thanks!
 >
 > Thomas
 > --
