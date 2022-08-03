@@ -1,56 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A14A4C19F28
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 15:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8276C19F28
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 15:46:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3536610C1;
-	Wed,  3 Aug 2022 15:42:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3536610C1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C13682884;
+	Wed,  3 Aug 2022 15:46:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C13682884
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fAGpvYmM6YOg; Wed,  3 Aug 2022 15:42:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZuhKc7X3MkOZ; Wed,  3 Aug 2022 15:46:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F8EC610B8;
-	Wed,  3 Aug 2022 15:42:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F8EC610B8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A6A6B1BF3D1
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 15:42:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E8BD82862;
+	Wed,  3 Aug 2022 15:46:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E8BD82862
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CCC301BF3D1
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 15:46:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8EAFA610B8
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 15:42:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EAFA610B8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D8DE82862
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 15:46:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D8DE82862
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FMCe2bsmKAtD for <buildroot@lists.busybox.net>;
- Wed,  3 Aug 2022 15:42:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PpxW10vDEsCl for <buildroot@lists.busybox.net>;
+ Wed,  3 Aug 2022 15:46:48 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6526E60D67
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6526E60D67
- for <buildroot@buildroot.org>; Wed,  3 Aug 2022 15:42:53 +0000 (UTC)
-From: =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Message-Id: <A46AAF2E-D74E-4308-A9B3-3B18C3E1CD09@cutebit.org>
-Date: Wed, 3 Aug 2022 17:42:48 +0200
-To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cutebit.org; s=mail; 
- t=1659541369; bh=jPmb/0K8UaxroIDsFnea4fTq4+SwLYKjkECoXFxhQrE=;
- h=From:Subject:Date:Cc:To;
- b=BVSVFHqTn6V63d0Jz1VTZd3cjgRuv+GnpBZbqPDvdowiopv+/zqYi3HNBhB+VRCnj
- Q61xPcZnSqjRpWzA16Lol1ApP0+rwF0aax9jWotF2vfQ2tqWqE/tL6qpYPrT+BE2eg
- /qeXR5mwcNrsMy9IT1DD5IGvFNlLRmjxeo1JN0g0=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=cutebit.org header.i=@cutebit.org
- header.a=rsa-sha256 header.s=mail header.b=BVSVFHqT
-Subject: [Buildroot] [PATCH 1/1 RESEND] package/python-construct: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8E5B8283D
+Received: from smtpcmd14162.aruba.it (smtpcmd14162.aruba.it [62.149.156.162])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8E5B8283D
+ for <buildroot@busybox.net>; Wed,  3 Aug 2022 15:46:47 +0000 (UTC)
+Received: from [192.168.50.173] ([146.241.73.23])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id JGa5otICGcdGJJGa5oPRWr; Wed, 03 Aug 2022 17:46:46 +0200
+Message-ID: <47a03d39-9d14-8741-ba46-0e6f895bac70@benettiengineering.com>
+Date: Wed, 3 Aug 2022 17:46:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20220803074349.7590-1-francois.perrad@gadz.org>
+ <20220803074349.7590-2-francois.perrad@gadz.org>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220803074349.7590-2-francois.perrad@gadz.org>
+X-CMAE-Envelope: MS4xfFMnIcMPQ7B0/BB+zdk8y5Nrqdz0UajJ1YLtzJqTUbxYQKrHqSYneOpI2rwMT3P2cg1KHjAYm7HN3s44VF9Ri7LFyJIHtAqvcqgI1fqI/hjx2dsAiPtF
+ +IOX9tHxxY8V1x6xSXj62J0omuLfcx/gR1e6iChl9IrjhRGFXeSHR5dc/D8npRxU3n9xkKhk/82jt5i8maM7NDyPUWXKqIJGzOEhIEEiESY2eStbpPSRY5nX
+ cJbguj/yDX+1oXnZMHLGhg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1659541606; bh=icFTX2x+XpU9F/xnt2b3IUdO4rqRhHSFWeOQjulemns=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=JMb5a70IxWRdkj7roZwCq0OpEt3mTuLKXCi0baY7KeQFjw3zuIhMEa8tC6r9o4NK8
+ +3wk3E5lB8YElLRSweVbhuKhk1HrgsOlLJr1xXJSk7bp2KkIu6egU48i/HbvcmJh3b
+ VmHP2LbesmUq1COBg+rgAF1S8G1GjNWGV1XX6cElZ/d2ZJdb+DaZ+wXkX9T5BIPBY5
+ OpJ+doDbL9d1rtD11xJzBkNyMOlTzcoNO5VMS7UPhROk63GTkTx7dlsm5g71J6RC+X
+ K5ONg8oqBmLvwkLALwPOkYXXIfPdfe5/JfqWiUhJBSKL8CuauEKKDuEYFtDN4xssY4
+ SeshmBixcaCbw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=JMb5a70I
+Subject: Re: [Buildroot] [PATCH v2 1/3] boot/arm-trusted-firmware: allow to
+ generate BL2 from RCW
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,76 +78,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Y29uc3RydWN0IGlzIGEgUHl0aG9uIGxpYnJhcnkgZm9yIGRlY2xhcmF0aXZlIHNlcmlhbGl6YXRp
-b24vCmRlc2VyaWFsaXphdGlvbiBvZiBzdHJ1Y3R1cmVkIGJpbmFyeSBkYXRhLgoKU2lnbmVkLW9m
-Zi1ieTogTWFydGluIFBvdmnFoWVyIDxwb3ZpaytsaW5AY3V0ZWJpdC5vcmc+Ci0tLQpJIGRvbid0
-IGtub3cgaWYgeW91IHNldCBhIGJhciBmb3IgdGhlIGluY2x1c2lvbiBvZiBwYWNrYWdlcyBpbgpi
-dWlsZHJvb3QsIGJ1dCBJIHRoaW5rIGJ5IGl0cyBuYXR1cmUgY29uc3RydWN0IG1ha2VzIGZvciBh
-IHVzZWZ1bApwYWNrYWdlIG9uIGVtYmVkZGVkIHN5c3RlbXMuCgpERVZFTE9QRVJTICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDMgKysrCnBhY2thZ2UvQ29uZmlnLmluICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSArCnBhY2thZ2UvcHl0aG9uLWNvbnN0cnVj
-dC9Db25maWcuaW4gICAgICAgICAgICAgfCAgNiArKysrKysKcGFja2FnZS9weXRob24tY29uc3Ry
-dWN0L3B5dGhvbi1jb25zdHJ1Y3QuaGFzaCB8ICA1ICsrKysrCnBhY2thZ2UvcHl0aG9uLWNvbnN0
-cnVjdC9weXRob24tY29uc3RydWN0Lm1rICAgfCAxNSArKysrKysrKysrKysrKysKNSBmaWxlcyBj
-aGFuZ2VkLCAzMCBpbnNlcnRpb25zKCspCmNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3B5dGhv
-bi1jb25zdHJ1Y3QvQ29uZmlnLmluCmNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3B5dGhvbi1j
-b25zdHJ1Y3QvcHl0aG9uLWNvbnN0cnVjdC5oYXNoCmNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L3B5dGhvbi1jb25zdHJ1Y3QvcHl0aG9uLWNvbnN0cnVjdC5tawoKZGlmZiAtLWdpdCBhL0RFVkVM
-T1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IDYzYmI4MGZjOWQuLmE5MWU1NjZiZGQgMTAwNjQ0Ci0t
-LSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVSUwpAQCAtMTkyNCw2ICsxOTI0LDkgQEAgRjoJ
-cGFja2FnZS90c2xpYi8KRjoJcGFja2FnZS94MTFyNy94ZHJpdmVyX3hmODYtaW5wdXQtdHNsaWIv
-CkY6CXBhY2thZ2UveDExdm5jLwoKK046ICBNYXJ0aW4gUG92acWhZXIgPHBvdmlrK2xpbkBjdXRl
-Yml0Lm9yZz4KK0Y6ICBwYWNrYWdlL3B5dGhvbi1jb25zdHJ1Y3QvCisKTjoJTWFzYWhpcm8gWWFt
-YWRhIDx5YW1hZGEubWFzYWhpcm9Ac29jaW9uZXh0LmNvbT4KRjoJYm9hcmQvYXJtL2ZvdW5kYXRp
-b24tdjgvCkY6CWNvbmZpZ3MvYXJtX2ZvdW5kYXRpb252OF9kZWZjb25maWcKZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25maWcuaW4KaW5kZXggNjE3ODNiYTQwMC4u
-NzY2M2NlMGZiZiAxMDA2NDQKLS0tIGEvcGFja2FnZS9Db25maWcuaW4KKysrIGIvcGFja2FnZS9D
-b25maWcuaW4KQEAgLTk5MCw2ICs5OTAsNyBAQCBtZW51ICJFeHRlcm5hbCBweXRob24gbW9kdWxl
-cyIKCXNvdXJjZSAicGFja2FnZS9weXRob24tY29sb3J6ZXJvL0NvbmZpZy5pbiIKCXNvdXJjZSAi
-cGFja2FnZS9weXRob24tY29uZmlnc2hlbGwtZmIvQ29uZmlnLmluIgoJc291cmNlICJwYWNrYWdl
-L3B5dGhvbi1jb25zdGFudGx5L0NvbmZpZy5pbiIKKwlzb3VyY2UgInBhY2thZ2UvcHl0aG9uLWNv
-bnN0cnVjdC9Db25maWcuaW4iCglzb3VyY2UgInBhY2thZ2UvcHl0aG9uLWNvdWNoZGIvQ29uZmln
-LmluIgoJc291cmNlICJwYWNrYWdlL3B5dGhvbi1jcmF5b25zL0NvbmZpZy5pbiIKCXNvdXJjZSAi
-cGFja2FnZS9weXRob24tY3JjMTYvQ29uZmlnLmluIgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRo
-b24tY29uc3RydWN0L0NvbmZpZy5pbiBiL3BhY2thZ2UvcHl0aG9uLWNvbnN0cnVjdC9Db25maWcu
-aW4KbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uYWNlNDdjOTk4OQotLS0g
-L2Rldi9udWxsCisrKyBiL3BhY2thZ2UvcHl0aG9uLWNvbnN0cnVjdC9Db25maWcuaW4KQEAgLTAs
-MCArMSw2IEBACitjb25maWcgQlIyX1BBQ0tBR0VfUFlUSE9OX0NPTlNUUlVDVAorCWJvb2wgInB5
-dGhvbi1jb25zdHJ1Y3QiCisJaGVscAorCSAgQSBwb3dlcmZ1bCBkZWNsYXJhdGl2ZSBzeW1tZXRy
-aWMgcGFyc2VyL2J1aWxkZXIgZm9yIGJpbmFyeSBkYXRhLgorCisJICBodHRwczovL2NvbnN0cnVj
-dC5yZWFkdGhlZG9jcy5pby8KZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLWNvbnN0cnVjdC9w
-eXRob24tY29uc3RydWN0Lmhhc2ggYi9wYWNrYWdlL3B5dGhvbi1jb25zdHJ1Y3QvcHl0aG9uLWNv
-bnN0cnVjdC5oYXNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjJjM2I4
-OTgxMjEKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL3B5dGhvbi1jb25zdHJ1Y3QvcHl0aG9u
-LWNvbnN0cnVjdC5oYXNoCkBAIC0wLDAgKzEsNSBAQAorIyBtZDUsIHNoYTI1NiBmcm9tIGh0dHBz
-Oi8vcHlwaS5vcmcvcHJvamVjdC9jb25zdHJ1Y3QKK21kNSAgZTQyNmQzZGQxNTY2MDY2ZTRlZjFh
-MDNmZTQ3NGRlYzAgIGNvbnN0cnVjdC0yLjEwLjY4LnRhci5neiAKK3NoYTI1NiAgN2IyYTNmZDhl
-NWY1OTdhNWFhMWQ2MTRjM2JkNTE2ZmEwNjVkYjAxNzA0YzcyYTFlZmFhZWVjNmVmMjNkOGI0NSAg
-Y29uc3RydWN0LTIuMTAuNjgudGFyLmd6IAorIyBMb2NhbGx5IGNvbXB1dGVkIHNoYTI1NiBjaGVj
-a3N1bXMKK3NoYTI1NiAgMTU1MmQ3MGFjZmQwZDNmZTQ2NGNlMTNkMzAxMTNkZGM2ZmU0YmFjMjFl
-NTIyMTJhY2M5ODUwOWUzY2MxYThmNCAgTElDRU5TRQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRo
-b24tY29uc3RydWN0L3B5dGhvbi1jb25zdHJ1Y3QubWsgYi9wYWNrYWdlL3B5dGhvbi1jb25zdHJ1
-Y3QvcHl0aG9uLWNvbnN0cnVjdC5tawpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAw
-MDAwLi5kYjhkYzBjZjI2Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9weXRob24tY29uc3Ry
-dWN0L3B5dGhvbi1jb25zdHJ1Y3QubWsKQEAgLTAsMCArMSwxNSBAQAorIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMKKyMKKyMgcHl0aG9uLWNvbnN0cnVjdAorIworIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMKKworUFlUSE9OX0NPTlNUUlVDVF9WRVJTSU9OID0gMi4xMC42OAorUFlUSE9OX0NPTlNUUlVD
-VF9TT1VSQ0UgPSBjb25zdHJ1Y3QtJChQWVRIT05fQ09OU1RSVUNUX1ZFUlNJT04pLnRhci5negor
-UFlUSE9OX0NPTlNUUlVDVF9TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3JnL3Bh
-Y2thZ2VzL2UwL2I3L2E0YTAzMmU5NGJjZmRmZjQ4MWYyZTZmZWNkNDcyNzk0ZDlkYTA5ZjQ3NGEy
-MTg1ZWQzM2IyYzdjYWQ2NAorUFlUSE9OX0NPTlNUUlVDVF9TRVRVUF9UWVBFID0gc2V0dXB0b29s
-cworUFlUSE9OX0NPTlNUUlVDVF9MSUNFTlNFID0gTUlUCitQWVRIT05fQ09OU1RSVUNUX0xJQ0VO
-U0VfRklMRVMgPSBMSUNFTlNFCitQWVRIT05fQ09OU1RSVUNUX0RFUEVOREVOQ0lFUyA9IGhvc3Qt
-cHl0aG9uLXNldHVwdG9vbHMtc2NtCisKKyQoZXZhbCAkKHB5dGhvbi1wYWNrYWdlKSkKLS0gCjIu
-MzcuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hi Francois,
+
+On 03/08/22 09:43, Francois Perrad wrote:
+> This patch adds option BR2_TARGETARM_TRUSTED_FIRMWARE_RCW that allows
+> TF-A to encapsulate a pre-loader RCW (Reset Configuration Word) file
+> into BL2.
+> 
+> Upcoming NXP QorIQ family board needs this option.
+
+You've forgotten your SoB and my Reviewed-by here
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+> ---
+>   boot/arm-trusted-firmware/Config.in               | 6 ++++++
+>   boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++++
+>   2 files changed, 12 insertions(+)
+> 
+> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+> index b1fc03e10..0f91953bf 100644
+> --- a/boot/arm-trusted-firmware/Config.in
+> +++ b/boot/arm-trusted-firmware/Config.in
+> @@ -85,6 +85,12 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP
+>   	  platforms were ATF encapsulates the second stage bootloader
+>   	  (such as U-Boot).
+>   
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW
+> +	bool "Include RCW"
+> +	select BR2_PACKAGE_HOST_QORIQ_RCW
+> +	help
+> +	  Include the RCW in BL2.
+> +
+>   config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
+>   	bool "Build BL31 image"
+>   	help
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index 35a95a7ec..eb9b656fe 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -133,6 +133,12 @@ define ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL
+>   endef
+>   endif
+>   
+> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW),y)
+> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-qoriq-rcw
+> +ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += pbl
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RCW=$(BINARIES_DIR)/PBL.bin
+> +endif
+> +
+>   ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31),y)
+>   ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += bl31
+>   endif
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
