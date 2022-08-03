@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B188C19F28
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 07:44:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B76FC19F28
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 07:44:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFA7640342;
-	Wed,  3 Aug 2022 07:44:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFA7640342
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EC894086E;
+	Wed,  3 Aug 2022 07:44:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EC894086E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b7W2J5ntC0mJ; Wed,  3 Aug 2022 07:44:18 +0000 (UTC)
+	with ESMTP id 6hbjBAmvekMr; Wed,  3 Aug 2022 07:44:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7643640340;
-	Wed,  3 Aug 2022 07:44:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7643640340
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00D99408EA;
+	Wed,  3 Aug 2022 07:44:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00D99408EA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8DD751BF4E5
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 07:44:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0446A1BF4E5
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 07:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68B80817C0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9AF1C812EA
  for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 07:44:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68B80817C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AF1C812EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r1YvTLvD4yNx for <buildroot@lists.busybox.net>;
- Wed,  3 Aug 2022 07:44:04 +0000 (UTC)
+ with ESMTP id vAgjzcZtJwga for <buildroot@lists.busybox.net>;
+ Wed,  3 Aug 2022 07:44:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 221C5812EA
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 221C5812EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD39281678
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD39281678
  for <buildroot@busybox.net>; Wed,  3 Aug 2022 07:44:04 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id m4so8141597ejr.3
- for <buildroot@busybox.net>; Wed, 03 Aug 2022 00:44:03 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id m4so8141632ejr.3
+ for <buildroot@busybox.net>; Wed, 03 Aug 2022 00:44:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
  :references:mime-version:content-transfer-encoding;
- bh=9ofiN6AlGKgR0p5SRN/P1LqcVk0BPo/vKfhGgfupWHg=;
- b=0nSyivXSuvSNtmmHf4xBRVV/BIjgAG74+mQpbdX4XryYCFjN5xEtqdF45LSAWEAdOM
- 50kl4lwGJeElNf/9STB/Vh4TLsAFYZ59y2vKB9qezSLsWyaoxVLHuAGXn//bq6V797tD
- VAEUQb8qC/cMYnZdEsBBFDto0TUdYgroCPMQVB4mu0gNrCYkERvsOdKu6W+xax3Bh9lb
- e/LmlkMRYuCi+Wy8gupBDFXmsvEmRT8ChKkl7+lAj9/NQ55IkiPqk7nlUH6ImgsPn1k5
- qfrnxnEaYeA2Qhclnd8dezmYYsUSkNDoI7eryCBW7Z3LfeA0niTnkZfG69RbmJJqkr86
- ej1g==
-X-Gm-Message-State: AJIora+kcwZkaR+yuuKfjLEKt5265CjHHJxwiByill0HPS5N8ChFvF0j
- unjr8nYpPRz5ZgiZ8zxHQQOfHTTywKU=
-X-Google-Smtp-Source: AGRyM1vNfim3vYz4CykybyQPOPDdm0KCyjksEqAG0+102kH/I87N1E3K0TcfGxGGlMDLzcbEe5t3SQ==
-X-Received: by 2002:a17:907:7255:b0:72b:50b8:82d6 with SMTP id
- ds21-20020a170907725500b0072b50b882d6mr19681072ejc.677.1659512642168; 
- Wed, 03 Aug 2022 00:44:02 -0700 (PDT)
+ bh=TgSQFBsqe9uN0jSdAeBsGsrCUhKUI0AMsk2VK1eksNs=;
+ b=2syGjMQ1i1EPy97O1SXHTYWUr+YOJs9nSOpxixl47+f8qoH6jDCvPsNrYXt/GAJKO8
+ WKH6yButqiszEL9ui/6wAJ9lkZkRSxFRt/TGWl5+Sh8iaHNmRPGnNwbBXaLJbuiOzRJ1
+ 4RcC8MWeQeeQlvyjk6059Fm7WJTy28UoIkPXhmeOTiEEizfWy9JNFZr3bc7tzeHAHVxC
+ q4+T8hbhRnysdhst2QyOz06+I6l3THB16oDoz6bEXeAjiZdRAfZt804mdRIsjkUlbah6
+ 0cdlB6YRXDE7zmmmBNYyMxcmNzTmatzAhSMDKOJF+6Pc5YuM6FLVo2T6dvAilZvUy1lW
+ eW8A==
+X-Gm-Message-State: ACgBeo3ucoC2NUkqj6rjfGHXeKLqmOldAD+9WzW7BhZv0T7g3G9qFA6y
+ UmkVwzOijOZaMvuahOowTQ1/qhvIxCs=
+X-Google-Smtp-Source: AA6agR7GpyKcnYtdwX+sxfh4lq7lA+M/IfIjxQzSKvJkU0cOho/QUZTvwoESGcXjN1kmaCFx1QtNhg==
+X-Received: by 2002:a17:907:3d90:b0:730:a7d2:23f0 with SMTP id
+ he16-20020a1709073d9000b00730a7d223f0mr3670501ejc.358.1659512643088; 
+ Wed, 03 Aug 2022 00:44:03 -0700 (PDT)
 Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- u15-20020aa7d88f000000b0043ccd4d15eesm9173758edq.64.2022.08.03.00.44.01
+ u15-20020aa7d88f000000b0043ccd4d15eesm9173758edq.64.2022.08.03.00.44.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Aug 2022 00:44:01 -0700 (PDT)
+ Wed, 03 Aug 2022 00:44:02 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Wed,  3 Aug 2022 09:43:47 +0200
-Message-Id: <20220803074349.7590-2-francois.perrad@gadz.org>
+Date: Wed,  3 Aug 2022 09:43:48 +0200
+Message-Id: <20220803074349.7590-3-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220803074349.7590-1-francois.perrad@gadz.org>
 References: <20220803074349.7590-1-francois.perrad@gadz.org>
@@ -73,18 +73,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=from:to:cc:subject:date:message-id:in-reply-to:references
  :mime-version:content-transfer-encoding;
- bh=9ofiN6AlGKgR0p5SRN/P1LqcVk0BPo/vKfhGgfupWHg=;
- b=EYypZk6aez05s6ujHySRrdgABp9wdjl7aVGwlM2fcIkFMam/CCcpVlZEwnZJ9WnrFh
- lrfMJZl+AGt1o86igCVhQoaDPQ5BM+gfCkGXXAcwf8pKXzO+SmVm7qITa8CxVaRnWf5K
- nMdDB41HEVRpA+lFR4eV8uKQ1yhpebgOUY0QUd+JHGa4WhlCg2DFLs43m9WM1gbh2DXh
- orS1ga80kDftW7s83ccX9E7LAM/KF4wBM8vLbsPnd094hiz+GEgimL+IfWOocLiLacw/
- 2qMMjV1riZLupUD2D7g4z9rOAPvF3c6itH1tPKDUR26Zl745QQpzrFhxPIAeI1+C3fmZ
- qnKQ==
+ bh=TgSQFBsqe9uN0jSdAeBsGsrCUhKUI0AMsk2VK1eksNs=;
+ b=MBmaDN+7wYp+akQAQ7azcdLidKmsEf41OBD10IVV1r+s3zh3enlZbGgnm+bQJkFkpn
+ 4D8ZKQsoFEYy66e9En3OlTvk116QMmryX0dgkTtXFNOJF9abcSwvpcy/8VIw16tjTHRv
+ VJRvvV9y7VeGm/LN32Nc9EQKrNOj0FDcE0qNZfnYCv3U9tDuxmYBGqzXlun6ybTwRwX8
+ mT0WWmrTY+RM8VLnjE2HHqz46wf9BgI8pb0rDS/2tZcTFJeusI1gPEtiLcsUXaytDGdh
+ rXCdYbrfSCkRYzRJ0mLIqfBgFFHqVJ4IVBrsGesh2RMrEUsRG/XpSGpEOfEA1Vp61NCr
+ Ql/A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EYypZk6a
-Subject: [Buildroot] [PATCH v2 1/3] boot/arm-trusted-firmware: allow to
- generate BL2 from RCW
+ header.a=rsa-sha256 header.s=20210112 header.b=MBmaDN+7
+Subject: [Buildroot] [PATCH v2 2/3] package/qoriq-cadence-dp-firmware: add
+ install in target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,50 +101,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds option BR2_TARGETARM_TRUSTED_FIRMWARE_RCW that allows
-TF-A to encapsulate a pre-loader RCW (Reset Configuration Word) file
-into BL2.
-
-Upcoming NXP QorIQ family board needs this option.
+This patch adds the firmware to $(TARGET_DIR)/boot other than
+to $(BINARIES) folder. This is needed in the case
+BR2_LINUX_KERNEL_INSTALL_TARGET is not set
 ---
- boot/arm-trusted-firmware/Config.in               | 6 ++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++++
- 2 files changed, 12 insertions(+)
+ .../qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk  | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index b1fc03e10..0f91953bf 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -85,6 +85,12 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP
- 	  platforms were ATF encapsulates the second stage bootloader
- 	  (such as U-Boot).
- 
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW
-+	bool "Include RCW"
-+	select BR2_PACKAGE_HOST_QORIQ_RCW
-+	help
-+	  Include the RCW in BL2.
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
- 	bool "Build BL31 image"
- 	help
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 35a95a7ec..eb9b656fe 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -133,6 +133,12 @@ define ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL
- endef
- endif
- 
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW),y)
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-qoriq-rcw
-+ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += pbl
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RCW=$(BINARIES_DIR)/PBL.bin
+diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+index 23643d24e..a8172cb1d 100644
+--- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
++++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
+@@ -10,8 +10,10 @@ QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_
+ QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP-Binary-EULA
+ QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING
+ QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
++ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),)
+ QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
+ QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
 +endif
+ 
+ # Helper for self-extracting binaries distributed by NXP.
+ #
+@@ -42,6 +44,10 @@ define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
+ 	$(call QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
+ endef
+ 
++define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(TARGET_DIR)/boot/ls1028a-dp-fw.bin
++endef
 +
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31),y)
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += bl31
- endif
+ define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
+ endef
 -- 
 2.34.1
 
