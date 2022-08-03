@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E67BC19F28
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 16:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19B15C19F28
+	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 16:36:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2AFB41C06;
-	Wed,  3 Aug 2022 16:36:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2AFB41C06
+	by smtp4.osuosl.org (Postfix) with ESMTP id 937B841C41;
+	Wed,  3 Aug 2022 16:36:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 937B841C41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wlWmhbgdQi31; Wed,  3 Aug 2022 16:36:37 +0000 (UTC)
+	with ESMTP id e1KnzXfPwBFz; Wed,  3 Aug 2022 16:36:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACB9141BDA;
-	Wed,  3 Aug 2022 16:36:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACB9141BDA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4239E40354;
+	Wed,  3 Aug 2022 16:36:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4239E40354
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 453DD1BF3D5
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 16:36:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5F06D1BF3D5
+ for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 16:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20B0960B5B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38FCD608B7
  for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 16:36:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20B0960B5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38FCD608B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YxFuzmvd84CT for <buildroot@lists.busybox.net>;
+ with ESMTP id 8p1gZSzBxdV1 for <buildroot@lists.busybox.net>;
  Wed,  3 Aug 2022 16:36:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E723608B7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 763B160A6D
  for <buildroot@buildroot.org>; Wed,  3 Aug 2022 16:36:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E723608B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 763B160A6D
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id EDA4186D77; Wed,  3 Aug 2022 16:22:31 +0000 (UTC)
+ id 01A7D86D7B; Wed,  3 Aug 2022 16:22:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 3 Aug 2022 18:35:40 +0200
+Date: Wed, 3 Aug 2022 18:35:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3dceb0402a0647136393cedd93b49287dae9cc6c
-X-Git-Newrev: af8a75fa0d65923b70c5fbcea4f00fb72c4860a6
+X-Git-Oldrev: af8a75fa0d65923b70c5fbcea4f00fb72c4860a6
+X-Git-Newrev: 08c78cf315d3770a1df30be58b9c246dfc67252a
 X-Patchwork-Hint: ignore
-Message-Id: <20220803162231.EDA4186D77@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-scipy: fix scipy::io module
- runtime dependency
+Message-Id: <20220803162232.01A7D86D7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/tests/test_python_scipy:
+ add scipy::io module testing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,31 +64,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af8a75fa0d65923b70c5fbcea4f00fb72c4860a6
+commit: https://git.buildroot.net/buildroot/commit/?id=08c78cf315d3770a1df30be58b9c246dfc67252a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We need python built with the --zlib feature, for the io
-module to import properly and be usable
+Test the scipy::io module, to demonstrate that runtime dependencies
+are correct.
 
 Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-scipy/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/package/sample_python_scipy.py | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
-index 0fa6c9e311..229b5997ad 100644
---- a/package/python-scipy/Config.in
-+++ b/package/python-scipy/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_PYTHON_SCIPY
- 	depends on BR2_TOOLCHAIN_HAS_FORTRAN # lapack
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LAPACK
--	select BR2_PACKAGE_ZLIB # runtime scipy::io
-+	select BR2_PACKAGE_PYTHON3_ZLIB # runtime scipy::io
- 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
- 	select BR2_PACKAGE_PYTHON_PYBIND
- 	help
+diff --git a/support/testing/tests/package/sample_python_scipy.py b/support/testing/tests/package/sample_python_scipy.py
+index df0c7ce5fe..d36f2273e7 100644
+--- a/support/testing/tests/package/sample_python_scipy.py
++++ b/support/testing/tests/package/sample_python_scipy.py
+@@ -1,4 +1,5 @@
+ import numpy
++import scipy.io
+ import scipy.special
+ import scipy.integrate
+ 
+@@ -10,3 +11,6 @@ assert(com == 15.0)
+ 
+ t = scipy.integrate.trapezoid([5,8,10])
+ assert(t == 15.5)
++
++mdic = {"t": t, "label": "example"}
++scipy.io.savemat("example.mat", mdic)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
