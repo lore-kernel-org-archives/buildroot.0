@@ -1,67 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8473C19F2A
-	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 12:43:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9611C19F2D
+	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 13:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F8F040AF4;
-	Thu,  4 Aug 2022 12:43:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F8F040AF4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CA57823CF;
+	Thu,  4 Aug 2022 13:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CA57823CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1sh4QDfTa_ZM; Thu,  4 Aug 2022 12:43:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id po_sF_JEzUbH; Thu,  4 Aug 2022 13:12:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 230C240ACE;
-	Thu,  4 Aug 2022 12:43:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 230C240ACE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DB53D1BF9CB
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 12:43:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D23781DCA;
+	Thu,  4 Aug 2022 13:12:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D23781DCA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 035B61BF421
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 13:12:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C36A440ACE
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 12:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C36A440ACE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D1FE60EAA
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 13:12:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D1FE60EAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AA7F__C2XAQa for <buildroot@lists.busybox.net>;
- Thu,  4 Aug 2022 12:43:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AkXHPzMUAma9 for <buildroot@lists.busybox.net>;
+ Thu,  4 Aug 2022 13:12:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDA3F40407
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BDA3F40407
- for <buildroot@buildroot.org>; Thu,  4 Aug 2022 12:43:46 +0000 (UTC)
-Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id D6C795C0A73;
- Thu,  4 Aug 2022 14:43:44 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A94560E7D
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1A94560E7D
+ for <buildroot@buildroot.org>; Thu,  4 Aug 2022 13:12:11 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id ACD611BF211;
+ Thu,  4 Aug 2022 13:12:08 +0000 (UTC)
+Date: Thu, 4 Aug 2022 15:12:07 +0200
+To: Stefan Agner <stefan@agner.ch>
+Message-ID: <20220804151207.3ad0fbe1@windsurf>
+In-Reply-To: <32cdca079efa80b745bb60af23ad9e99f3cabbf4.1659613508.git.stefan@agner.ch>
+References: <32cdca079efa80b745bb60af23ad9e99f3cabbf4.1659613508.git.stefan@agner.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Thu, 04 Aug 2022 14:43:44 +0200
-From: Stefan Agner <stefan@agner.ch>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-In-Reply-To: <20220625175355.GF2608@scaer>
-References: <82b5bbe664c06c5864debb660850e0cf@agner.ch>
- <20220625175355.GF2608@scaer>
-Message-ID: <7cbe82b8824b1ef02000e683ddf2d556@agner.ch>
-X-Sender: stefan@agner.ch
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1659617024;
+ d=bootlin.com; s=gm1; t=1659618729;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=phxM0DfDoVqXBWbwop+Z0a81yPB3wcuna4+Cnfqpddw=;
- b=nwJDces53fN7qNPlLtsAesHevn/FdzBKKIv6Szp+Xn+a/4HkIJe6G8+h33UhqxvZmJ8puN
- xQz3y7sMpCMSC9u6oE3yC8ViMlDiE36cfBvLNkji8PSkDvwcLyaluf1xgQQbuWmGYtELbq
- fb+omx7NuTTWVzxPP/J1AWEzb7DzmZk=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=nwJDces5
-Subject: Re: [Buildroot] Build error when building two GRUB2 configurations
- (race condition)
+ bh=UFjHp1X+wTMBvvgAhEwP3OphszitKV+dv5FYHMSsQHo=;
+ b=HKSbpiZTLrCwERuMB18Bs7RqMUpuL/+gmUcMb2tLmj70f66QPxHbGLsay6660AyGOX5vrZ
+ fpJphalm872duRjbGu6o8w2TzdgZ9AjYEMDZxSHqiYZdIkBxTHKnLif+neGjxVG5AD0Ogf
+ SMMcvVjPquDVyrMVUvpfH6Fz7uNRESn0jGcuOg/2evZh2wnVMvCrmNCAOUccGSGah0zbr8
+ XgQqdtHCxOfzZMr6/54Kw6tp34QuL/gVorVS3KmdiLKuJS3TQpsJ7REuRdV543wsF5pzya
+ yrmqZI19SFU8YI36mKRZ4MULbt99LqEu36TMnMVUaDAb0OEP34u/xw6P1q1tsw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HKSbpiZT
+Subject: Re: [Buildroot] [PATCH] [master] boot/grub2: fix build race
+ condition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,50 +76,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: kory.maincent@bootlin.com
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: yann.morin.1998@free.fr, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2022-06-25 19:53, Yann E. MORIN wrote:
-> Stefan, All,
+Hello Stefan,
+
+On Thu,  4 Aug 2022 13:45:27 +0200
+Stefan Agner <stefan@agner.ch> wrote:
+
+> Sometimes buildroot fails with:
+> ../grub-core/kern/emu/hostfs.c:20:10: fatal error: config-util.h: No such file or directory
+>    20 | #include <config-util.h>
+>       |          ^~~~~~~~~~~~~~~
 > 
-> On 2022-06-25 09:44 -0700, Stefan Agner spake thusly:
->> In Home Assistant OS we use the capability to build two GRUB2 binaries
->> by enabling these two configurations:
->>
->> BR2_TARGET_GRUB2_I386_EFI=y
->> BR2_TARGET_GRUB2_X86_64_EFI=y
->>
->> Every now and then a from scratch build seems to fail with the following
->> error:
->>
->> config.status: creating config-util.h
->> In file included from ../include/grub/disk.h:***,
->>                  from ../include/grub/file.h:26,
->>                  from ../grub-core/kern/emu/hostfs.c:23:
->> ./config.h:38:10: fatal error: ./config-util.h: No such file or
->> directory
->>    38 | #include <config-util.h>
->>       |          ^~~~~~~~~~~~~~~
->> compilation terminated.
+> Add a patch which fixes the Makefile to correctly generate config-util.h
+> first.
 > 
-> I had the same issue even with a single grub2 config enabled. This is a
-> grub2 issue, and it was supposedly fixed with upstream commit
-> 42f4054faf3c (Makefile: Make libgrub.pp depend on config-util.h) and we
-> do have this patch backported as:
-> boot/grub2/0150-Makefile-Make-libgrub.pp-depend-on-config-util.h.patch
+> Signed-off-by: Stefan Agner <stefan@agner.ch>
 
-I've tracked this down today.
+Thanks for this patch.
 
-It seems a very similar fix is required for grub_fstest.pp. I sent a
-patch upstream to the GRUB mailing list and to the buildroot mailing
-list:
-https://lists.buildroot.org/pipermail/buildroot/2022-August/648479.html
+> ---
+>  ...ub_fstest.pp-depend-on-config-util.h.patch | 24 +++++++++++++++++++
+>  boot/grub2/grub2.mk                           |  6 +++++
+>  2 files changed, 30 insertions(+)
+>  create mode 100644 boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
+> 
+> diff --git a/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch b/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
+> new file mode 100644
+> index 0000000000..96e6852e86
+> --- /dev/null
+> +++ b/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
 
---
-Stefan
+We require all patches to have a proper commit log, with commit title +
+description, and a Signed-off-by line. Also, we need to have the
+upstream status of the patch, i.e where it has been submitted (or taken
+from).
+
+Could you rework your patch accordingly?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
