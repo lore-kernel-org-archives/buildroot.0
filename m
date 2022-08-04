@@ -1,82 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22E59C00144
-	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 05:23:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA88AC00144
+	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 05:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 525E240531;
-	Thu,  4 Aug 2022 05:23:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 525E240531
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D3FA41701;
+	Thu,  4 Aug 2022 05:24:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D3FA41701
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vx1fWFXHbsOW; Thu,  4 Aug 2022 05:23:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gODHwACsUNIE; Thu,  4 Aug 2022 05:23:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45015403F9;
-	Thu,  4 Aug 2022 05:23:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45015403F9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 301D81BF2BF
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 05:23:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB89A408AC;
+	Thu,  4 Aug 2022 05:23:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB89A408AC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EB17C1BF2BF
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 05:23:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 056CE403F9
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 05:23:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 056CE403F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id D3E3280B18
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 05:23:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3E3280B18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D5Y7dTE8dxTj for <buildroot@lists.busybox.net>;
- Thu,  4 Aug 2022 05:23:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gpJMIYKNDNX5 for <buildroot@lists.busybox.net>;
+ Thu,  4 Aug 2022 05:23:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4C1C4026F
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A4C1C4026F
- for <buildroot@buildroot.org>; Thu,  4 Aug 2022 05:23:42 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id a89so23924621edf.5
- for <buildroot@buildroot.org>; Wed, 03 Aug 2022 22:23:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1922680B10
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1922680B10
+ for <buildroot@buildroot.org>; Thu,  4 Aug 2022 05:23:48 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id o22so8450622edc.10
+ for <buildroot@buildroot.org>; Wed, 03 Aug 2022 22:23:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=VAz2j+d+RT7JVAv1Gfpf4d+SJYi/rvAolXHrwv4wQ4k=;
- b=26NpZTUwUgHotgVS43kSsl9Z7+MP7VDFqnEwdyL6/qTCijPmXyiIaSuuIfPW0ZaKNQ
- Lm/KZ+CBNPxVLxn+wiZ5K5hs+8RbBJGOXzN7kVRKgmhurVareHH7z+u3ey3OIV09ki5N
- R/em50nsP2NggUE23mrMBKIfmCBHJ17/InU2/xUFFU3DhxZzi2XUzrR4Poj9CxsODMEN
- HIXkiCRQkM6QzjbYB8UvNjmpe12fyOfbK56rHMWZz/pKg8XU3GxXJwdNKYDarncgz/jS
- FJ3qH9hznOPjLalCyzoTxP0DV4AzctkYqljLk9B2Ugh/uUzJoWMkbU+QDNJTR64ZQISM
- 7Xvw==
-X-Gm-Message-State: ACgBeo2ZboeF6P192e7a0FYhABIufDILw5jKjgytV00FS3NLam3jfNdB
- /G19k6mcLjBBjSqtU+QP6rraaiv7/uE=
-X-Google-Smtp-Source: AA6agR5rzqQPBF6pGjdDxAJqw3EKU2qRQiVYrtIjdv57F/0XuDgLPMDpX8WQIMNM7UDALDmwAWoSuw==
-X-Received: by 2002:a05:6402:4392:b0:43e:5033:40f8 with SMTP id
- o18-20020a056402439200b0043e503340f8mr242278edc.245.1659590620337; 
- Wed, 03 Aug 2022 22:23:40 -0700 (PDT)
+ h=references:in-reply-to:message-id:date:subject:cc:to:from
+ :x-gm-message-state:from:to:cc;
+ bh=pgG4YPbjK6FK4CFK7yUNACsF++qJpmxDSNfE+9qCbaY=;
+ b=ua3VwIS8YtO+1tg8AsYT375TiZd5620I1V6NbZiv+1W6+JXojKCN5nJ+1mYK4aZaQ4
+ +swuc4Vcoyw5mVJo5eHJdXMbaS7rgTmoXtwXVp/xyXCDJpd8aNF16UmQzsnZyWwdb7n+
+ YiL4+lBhBcV+x3jOEaYe2JTJrNt3UeGZPh2W1F9cGRdMvzDqarA9egxzrDYiFkwKyOxj
+ d+QjxQxYKg1tstPepJd2mX55fICWYeW/JwHqwffAmYEJw6hDOOCVH3pyT9f/oCj9V+zd
+ T3CaeVQy3ntACEa0gL+qxzTihFQZu74Ai7GIIStkrEvxk9EZJrJ/KyW+wpTdPe5z36lV
+ 751w==
+X-Gm-Message-State: ACgBeo0Ui+hIpDjqYjehejH1oYopc3WiuqUsMMiSMdME2M7+WoCUd0MK
+ UoEHL3p3BEwp4Kym0VSAXIz6kNLnGOw=
+X-Google-Smtp-Source: AA6agR5qE5dn2uqmDPHuYw39HT6fLoGx7g1lH21zGXADss45sfrvfkwV3wuE3hH1LD5w1tNdQPs57A==
+X-Received: by 2002:a05:6402:414b:b0:43b:6b1a:c230 with SMTP id
+ x11-20020a056402414b00b0043b6b1ac230mr275940eda.42.1659590625846; 
+ Wed, 03 Aug 2022 22:23:45 -0700 (PDT)
 Received: from development1.visionsystems.de (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- kx4-20020a170907774400b00730b942f6aasm1084153ejc.81.2022.08.03.22.23.39
+ kx4-20020a170907774400b00730b942f6aasm1084153ejc.81.2022.08.03.22.23.45
  (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Wed, 03 Aug 2022 22:23:39 -0700 (PDT)
+ Wed, 03 Aug 2022 22:23:45 -0700 (PDT)
+From: yegorslists@googlemail.com
 To: buildroot@buildroot.org
-Date: Thu,  4 Aug 2022 07:23:31 +0200
-Message-Id: <20220804052332.19537-1-yegorslists@googlemail.com>
+Date: Thu,  4 Aug 2022 07:23:32 +0200
+Message-Id: <20220804052332.19537-2-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.17.0
+In-Reply-To: <20220804052332.19537-1-yegorslists@googlemail.com>
+References: <20220804052332.19537-1-yegorslists@googlemail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=googlemail.com; s=20210112;
- h=message-id:date:subject:cc:to:from:from:to:cc;
- bh=VAz2j+d+RT7JVAv1Gfpf4d+SJYi/rvAolXHrwv4wQ4k=;
- b=iXoHc2p2/sci375Kv2VKAOwTJGfQC7M2CkaCpoH8kN1m4xe+iSjbrkXt1gKFF0eW/w
- gP4gTRP5IB27ytk/trhR9kwgVgceJucVeh2RSVF5ylbSgBE3KQ7MIQIxUnN+Tf3jokvd
- INy0NlvKJ9/LLCj7zZwMU53M9aKhHx24msaAFJElY/uYCFMtVDv9IAFY6g8if8dnq+Nv
- HlXbws3tn2+JPGBfeK46m39XzZbROhm1bj+++UelyGTRbIZ5uKSuySATBY7EN1KTi78i
- lL2iu6tZLBj/f672wN6mtC9OqhUn2+cTfDUsv6Voaw5M/jeX9y1QeJBwGtmCd30f+eAf
- bOfw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+ :cc;
+ bh=pgG4YPbjK6FK4CFK7yUNACsF++qJpmxDSNfE+9qCbaY=;
+ b=Y5nCi+AAeYvxUV5vQD5SoDVoL7roNlTN3TlFx+v0U3kmJ9ru3ja6RJ9RnQAP6xiG7X
+ KDXHrYMRVTactZ0j4vX/FPOYmlkM1f7t+JMfGyGMdbvTIF6mlgeLbN/E/9vuJwX1Wlgw
+ R62IuVmd/6MHGuet4jdASXCqnrK0RpvV1VCZMTgjaNPzfV5w1tAt0VgPGiiiRZZteYSn
+ myZ6udBSwZR7rq/9swN5CcRiTzMbK1V8Btf+ULIgPGLNRKRYXkHoSK7wjcvsrSLvcI2+
+ rKVGwxuVECay2cyNNCPTEerN9gUcJju+xJxeAklJOJnThSgzC/I2IgGB7VaE9tF+grHQ
+ /sDA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20210112 header.b=iXoHc2p2
-Subject: [Buildroot] [PATCH 1/2] package/python-dtschema: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=Y5nCi+AA
+Subject: [Buildroot] [PATCH 2/2] support/testing: add test for
+ python-dtschema
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,8 +94,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
 Cc: Asaf Kahlon <asafka7@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -101,75 +105,50 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                            |  1 +
- package/python-dtschema/Config.in            | 10 ++++++++++
- package/python-dtschema/python-dtschema.hash |  5 +++++
- package/python-dtschema/python-dtschema.mk   | 15 +++++++++++++++
- 4 files changed, 31 insertions(+)
- create mode 100644 package/python-dtschema/Config.in
- create mode 100644 package/python-dtschema/python-dtschema.hash
- create mode 100644 package/python-dtschema/python-dtschema.mk
+ DEVELOPERS                                           |  1 +
+ .../testing/tests/package/sample_python_dtschema.py  |  1 +
+ .../testing/tests/package/test_python_dtschema.py    | 12 ++++++++++++
+ 3 files changed, 14 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_dtschema.py
+ create mode 100644 support/testing/tests/package/test_python_dtschema.py
 
-diff --git a/package/Config.in b/package/Config.in
-index 61783ba400..93bd5571cb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1022,6 +1022,7 @@ menu "External python modules"
- 	source "package/python-docutils/Config.in"
- 	source "package/python-dominate/Config.in"
- 	source "package/python-dpkt/Config.in"
-+	source "package/python-dtschema/Config.in"
- 	source "package/python-ecdsa/Config.in"
- 	source "package/python-engineio/Config.in"
- 	source "package/python-entrypoints/Config.in"
-diff --git a/package/python-dtschema/Config.in b/package/python-dtschema/Config.in
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 63bb80fc9d..4ca9567b46 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3131,6 +3131,7 @@ F:	package/x11r7/xapp_xinput-calibrator/
+ F:	package/zlog/
+ F:	support/testing/tests/package/test_libftdi1.py
+ F:	support/testing/tests/package/test_python_can.py
++F:	support/testing/tests/package/test_python_dtschema.py
+ F:	utils/scanpypi
+ 
+ N:	Yunhao Tian <t123yh.xyz@gmail.com>
+diff --git a/support/testing/tests/package/sample_python_dtschema.py b/support/testing/tests/package/sample_python_dtschema.py
 new file mode 100644
-index 0000000000..961d0e04b2
+index 0000000000..786c3d5a71
 --- /dev/null
-+++ b/package/python-dtschema/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_DTSCHEMA
-+	bool "python-dtschema"
-+	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
-+	select BR2_PACKAGE_PYTHON_PYLIBFDT # runtime
-+	select BR2_PACKAGE_PYTHON_RFC3987 # runtime
-+	select BR2_PACKAGE_PYTHON_RUAMEL_YAML # runtime
-+	help
-+	  DeviceTree validation schema and tools.
-+
-+	  https://github.com/devicetree-org/dt-schema
-diff --git a/package/python-dtschema/python-dtschema.hash b/package/python-dtschema/python-dtschema.hash
++++ b/support/testing/tests/package/sample_python_dtschema.py
+@@ -0,0 +1 @@
++import dtschema
+diff --git a/support/testing/tests/package/test_python_dtschema.py b/support/testing/tests/package/test_python_dtschema.py
 new file mode 100644
-index 0000000000..7b183e28e3
+index 0000000000..e3a4a309c1
 --- /dev/null
-+++ b/package/python-dtschema/python-dtschema.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/dtschema/json
-+md5  ed75defac9a7297a567f278994b14d5b  dtschema-2022.8.tar.gz
-+sha256  1befe7c9f74cea248a8b524cf6185ac48912a5b2aae96854d77cb94584433ca4  dtschema-2022.8.tar.gz
-+# Locally computed sha256 checksums
-+sha256  ca0d66263406dc684fe9db60577b234f65ffdf620d7e041c708e969447b69111  LICENSE.txt
-diff --git a/package/python-dtschema/python-dtschema.mk b/package/python-dtschema/python-dtschema.mk
-new file mode 100644
-index 0000000000..263061dc98
---- /dev/null
-+++ b/package/python-dtschema/python-dtschema.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-dtschema
-+#
-+################################################################################
++++ b/support/testing/tests/package/test_python_dtschema.py
+@@ -0,0 +1,12 @@
++from tests.package.test_python import TestPythonPackageBase
 +
-+PYTHON_DTSCHEMA_VERSION = 2022.8
-+PYTHON_DTSCHEMA_SOURCE = dtschema-$(PYTHON_DTSCHEMA_VERSION).tar.gz
-+PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/95/be/cb576760b9578cb69da020aeb80f3c2d05ff46b4090ab350c1e05691329e
-+PYTHON_DTSCHEMA_SETUP_TYPE = setuptools
-+PYTHON_DTSCHEMA_LICENSE = BSD-2-Clause
-+PYTHON_DTSCHEMA_LICENSE_FILES = LICENSE.txt
-+PYTHON_DTSCHEMA_DEPENDENCIES = host-python-setuptools-scm
 +
-+$(eval $(python-package))
++class TestPythonPy3Dtschema(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_DTSCHEMA=y
++        """
++    sample_scripts = ["tests/package/sample_python_dtschema.py"]
++    timeout = 40
 -- 
 2.17.0
 
