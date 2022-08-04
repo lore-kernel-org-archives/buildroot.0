@@ -1,73 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFF8EC19F2B
-	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 08:00:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E50EFC19F2B
+	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 08:02:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47345408F8;
-	Thu,  4 Aug 2022 08:00:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47345408F8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D2CF8142F;
+	Thu,  4 Aug 2022 08:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D2CF8142F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mSXmqU6P2JOh; Thu,  4 Aug 2022 08:00:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 62-TWKUAGhOY; Thu,  4 Aug 2022 08:02:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 050CC408E9;
-	Thu,  4 Aug 2022 08:00:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 050CC408E9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E935D1BF2C1
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 08:00:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7E5B81409;
+	Thu,  4 Aug 2022 08:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7E5B81409
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3397A1BF2C1
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 08:02:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C07CC408E8
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 08:00:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C07CC408E8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BCD581409
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 08:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BCD581409
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Au4RSkAFAWlY for <buildroot@lists.busybox.net>;
- Thu,  4 Aug 2022 08:00:30 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65C9A40A0E
-Received: from eu-smtp-delivery-151.mimecast.com
- (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 65C9A40A0E
- for <buildroot@buildroot.org>; Thu,  4 Aug 2022 08:00:30 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-323-GMgf1YKDOtqQQgtnyaNaag-1; Thu, 04 Aug 2022 09:00:27 +0100
-X-MC-Unique: GMgf1YKDOtqQQgtnyaNaag-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Thu, 4 Aug 2022 09:00:26 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Thu, 4 Aug 2022 09:00:26 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Yann E.MORIN' <yann.morin.1998@free.fr>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [git commit] Makefile: error out printvars target
- when VARS is empty or unset
-Thread-Index: AQHYp1txIfI6aiZ/TkCXXQTBYm2lP62eYXFQ
-Date: Thu, 4 Aug 2022 08:00:26 +0000
-Message-ID: <ffe375e2a41b4e069ce2632c28cea51d@AcuMS.aculab.com>
-References: <20220803165240.BEDEB86D85@busybox.osuosl.org>
-In-Reply-To: <20220803165240.BEDEB86D85@busybox.osuosl.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5iMaYnJtlby8 for <buildroot@lists.busybox.net>;
+ Thu,  4 Aug 2022 08:02:51 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD3CB81405
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AD3CB81405
+ for <buildroot@busybox.net>; Thu,  4 Aug 2022 08:02:50 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5E2CC60014;
+ Thu,  4 Aug 2022 08:02:47 +0000 (UTC)
+Date: Thu, 4 Aug 2022 10:02:46 +0200
+To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Message-ID: <20220804100246.354814ca@windsurf>
+In-Reply-To: <20220804071504.4062-1-guillaume.bressaix@gmail.com>
+References: <20220804071504.4062-1-guillaume.bressaix@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Subject: Re: [Buildroot] [git commit] Makefile: error out printvars target
- when VARS is empty or unset
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659600167;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Y4ICFbZb8maML4wyTMJ6MluoczEd/Z72KAuJdQmBxeM=;
+ b=XGE88U407j4PeFOn+V4wVwCtCbWFx8TT3EhsHtYXUQMFvpNu3IgrojuRsR2efwqdB6YvB+
+ iFI6onay+ATckow/zRDMkfabTq9cidP1Oxg8bTcP9XhG/0yebTtIIJV8fWyfb6L84kQ24y
+ v6oUxA9Q3pAhoSoOH9qgcT5+tYIJqwq0vJEaQqV86YVBW/RjWd9QD+/FuH1fcgfGvdmIvi
+ PBfFv7lEg6Vm7eNOyZdp4EFuCW/CkyoTZXWPoRUN9nKYlhsCudWacscfPTpvioJqaD4DtO
+ R3WvgWOrAp1ydWH9wHO0cLtklJxcdxnYiWyLsIvfOjXxNLbCS/lJs0GDPXAroA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XGE88U40
+Subject: Re: [Buildroot] [RFC v2 1/2] package/pkg-meson: scipy needs fortran
+ cross compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,60 +76,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yann E.MORIN
-> Sent: 03 August 2022 18:05
-> 
-> printvars returns nothing when VARS is not passed or empty. This is done
-> on purpose, see commit fd5bd12379dc ("Makefile: printvars: don't print
-> anything when VARS is not set").
-> 
-> An error message making explicit what is required from the user in order
-> to use printvars is however better than silently doing nothing.
-> 
-> This adds a check for a non-empty VARS variable.
-> 
-> Cc: Quentin Schulz <foss+buildroot@0leil.net>
-> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Hello,
+
+On Thu,  4 Aug 2022 09:15:03 +0200
+"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
+
 > ---
->  Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 07b594ea8a..5f266e36b2 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1058,6 +1058,10 @@ endif
->  # to workaround a bug in make 4.3; see https://savannah.gnu.org/bugs/?59093
->  .PHONY: printvars
->  printvars:
-> +ifndef VARS
-> +	@echo "Please pass a non-empty VARS to 'make printvars'"
+>  package/pkg-meson.mk                   | 2 ++
+>  support/misc/cross-compilation.conf.in | 3 +++
+>  2 files changed, 5 insertions(+)
 
-Shouldn't that have a >&2 ??
+This needs a non-empty commit log + your Signed-off-by line.
 
-	David
+Best regards,
 
-	
-> +	@exit 1
-> +endif
->  	@:
->  	$(foreach V, \
->  		$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
