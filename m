@@ -1,72 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84B64C19F2B
-	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 07:59:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFF8EC19F2B
+	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 08:00:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0756C8141E;
-	Thu,  4 Aug 2022 07:59:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0756C8141E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47345408F8;
+	Thu,  4 Aug 2022 08:00:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47345408F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tR4NX1cWoJ6h; Thu,  4 Aug 2022 07:59:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mSXmqU6P2JOh; Thu,  4 Aug 2022 08:00:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CF8F81400;
-	Thu,  4 Aug 2022 07:59:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CF8F81400
+	by smtp2.osuosl.org (Postfix) with ESMTP id 050CC408E9;
+	Thu,  4 Aug 2022 08:00:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 050CC408E9
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 157221BF232
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 07:59:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E935D1BF2C1
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 08:00:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F17FE40643
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 07:59:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F17FE40643
+ by smtp2.osuosl.org (Postfix) with ESMTP id C07CC408E8
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 08:00:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C07CC408E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u1P6pMqdR3G2 for <buildroot@lists.busybox.net>;
- Thu,  4 Aug 2022 07:59:12 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FF9D40503
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2FF9D40503
- for <buildroot@buildroot.org>; Thu,  4 Aug 2022 07:59:11 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B8EB7240008;
- Thu,  4 Aug 2022 07:59:08 +0000 (UTC)
-Date: Thu, 4 Aug 2022 09:59:07 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220804095907.4b22adc0@windsurf>
-In-Reply-To: <CADvTj4r9D=kUa-N+HC2tVTt7Oxna=ZMSp-H5POaYzE2DsXCD-w@mail.gmail.com>
-References: <20220313171355.271345-1-james.hilliard1@gmail.com>
- <20220803233856.3d609d8c@windsurf>
- <CADvTj4r9D=kUa-N+HC2tVTt7Oxna=ZMSp-H5POaYzE2DsXCD-w@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id Au4RSkAFAWlY for <buildroot@lists.busybox.net>;
+ Thu,  4 Aug 2022 08:00:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65C9A40A0E
+Received: from eu-smtp-delivery-151.mimecast.com
+ (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 65C9A40A0E
+ for <buildroot@buildroot.org>; Thu,  4 Aug 2022 08:00:30 +0000 (UTC)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-323-GMgf1YKDOtqQQgtnyaNaag-1; Thu, 04 Aug 2022 09:00:27 +0100
+X-MC-Unique: GMgf1YKDOtqQQgtnyaNaag-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Thu, 4 Aug 2022 09:00:26 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Thu, 4 Aug 2022 09:00:26 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Yann E.MORIN' <yann.morin.1998@free.fr>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] [git commit] Makefile: error out printvars target
+ when VARS is empty or unset
+Thread-Index: AQHYp1txIfI6aiZ/TkCXXQTBYm2lP62eYXFQ
+Date: Thu, 4 Aug 2022 08:00:26 +0000
+Message-ID: <ffe375e2a41b4e069ce2632c28cea51d@AcuMS.aculab.com>
+References: <20220803165240.BEDEB86D85@busybox.osuosl.org>
+In-Reply-To: <20220803165240.BEDEB86D85@busybox.osuosl.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659599949;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=q1kmLMU+XJm9yb8CeHeuVvfTD2LD7UHf/S7jeJjScr4=;
- b=BOokC2YamgEZN3ExFlPsUhnwEmzJXGP8jepHSHsD2tJthsUsj8VKuHB1jFu23au8BTGx0n
- JBc0vjKZ3wADP1ajFDgjZXsEZCt7nRZfQlKfWQotLJVOZntHSjIWdE9BGbCc2p8gYluzw/
- Uc7qzkHCwQaLw/q5ivsvWiRtCoYQagccXm52L7gHWOJKhRRnADOY8sW5Jg73g2+gN5jwWJ
- Kul4CpQm2In6jnYQ1t4Yt35mbb1ht4LihPwQpKJEX1GecDO5AzRLzdtfFOtdotA3rYYfpp
- y4gD0ALH1e79PfX37XZjzVC3Cwg7O8MqC7bFUUfMmq5deuv6hKaXxK4kB8sPlw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=BOokC2Ya
-Subject: Re: [Buildroot] [PATCH v2 1/2] utils/scanpypi: ensure tmp_extract
- is cleaned up on exception
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Subject: Re: [Buildroot] [git commit] Makefile: error out printvars target
+ when VARS is empty or unset
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,48 +79,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-On Wed, 3 Aug 2022 16:02:43 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
-
-> > If I understand correctly self.tmp_extract is where the Python package
-> > source code is extracted. So if you remove it at the end of
-> > load_setup(), how will your new load_pyproject() added in PATCH 2/2 be
-> > able to use the package source code?  
+From: Yann E.MORIN
+> Sent: 03 August 2022 18:05
 > 
-> We're not deleting self.tmp_extract, we're just ensuring we current dir and
-> sys.path states are cleaned up properly on failure, load_pyproject() does the
-> same thing. Always restoring initial state at the end means load_pyproject()
-> doesn't need to deal with current dir and sys.path global state changes induced
-> by load_setup().
+> printvars returns nothing when VARS is not passed or empty. This is done
+> on purpose, see commit fd5bd12379dc ("Makefile: printvars: don't print
+> anything when VARS is not set").
 > 
-> >
-> > Also, why is this removal needed, as anyway the full tmp_path gets
-> > removed at the end of the main() function?  
+> An error message making explicit what is required from the user in order
+> to use printvars is however better than silently doing nothing.
 > 
-> sys.path.remove(self.tmp_extract) is not the same as shutil.rmtree(tmp_path)
+> This adds a check for a non-empty VARS variable.
 > 
-> We're restoring the module search path at the end to avoid leaking global state
-> changes when there's an exception.
+> Cc: Quentin Schulz <foss+buildroot@0leil.net>
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 07b594ea8a..5f266e36b2 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1058,6 +1058,10 @@ endif
+>  # to workaround a bug in make 4.3; see https://savannah.gnu.org/bugs/?59093
+>  .PHONY: printvars
+>  printvars:
+> +ifndef VARS
+> +	@echo "Please pass a non-empty VARS to 'make printvars'"
 
-Aaah, yes, my bad! I guess I shouldn't have reviewed this past midnight.
+Shouldn't that have a >&2 ??
 
-I'll go ahead and apply PATCH 1/2.
+	David
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+	
+> +	@exit 1
+> +endif
+>  	@:
+>  	$(foreach V, \
+>  		$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
