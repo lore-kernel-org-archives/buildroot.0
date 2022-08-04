@@ -1,79 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21485C19F29
-	for <buildroot@archiver.kernel.org>; Wed,  3 Aug 2022 23:30:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 105C0C19F29
+	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 02:41:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6319A4088D;
-	Wed,  3 Aug 2022 23:30:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6319A4088D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6162360B72;
+	Thu,  4 Aug 2022 02:41:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6162360B72
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id isrMIRedkQaN; Wed,  3 Aug 2022 23:30:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uvopfSd105Sy; Thu,  4 Aug 2022 02:41:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1939C4086E;
-	Wed,  3 Aug 2022 23:30:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1939C4086E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6CF691BF35C
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 23:30:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A91560B60;
+	Thu,  4 Aug 2022 02:41:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A91560B60
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C6D71BF255
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 02:41:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 558C8404C8
- for <buildroot@lists.busybox.net>; Wed,  3 Aug 2022 23:30:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 558C8404C8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 672A360B60
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 02:41:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 672A360B60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id noQiZ7STdWe1 for <buildroot@lists.busybox.net>;
- Wed,  3 Aug 2022 23:30:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sknW5WI9DIPV for <buildroot@lists.busybox.net>;
+ Thu,  4 Aug 2022 02:41:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A917E401B7
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com
- [IPv6:2607:f8b0:4864:20::52e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A917E401B7
- for <buildroot@buildroot.org>; Wed,  3 Aug 2022 23:30:19 +0000 (UTC)
-Received: by mail-pg1-x52e.google.com with SMTP id f65so16419208pgc.12
- for <buildroot@buildroot.org>; Wed, 03 Aug 2022 16:30:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52CA760B5C
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com
+ [209.85.215.176])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 52CA760B5C
+ for <buildroot@buildroot.org>; Thu,  4 Aug 2022 02:41:36 +0000 (UTC)
+Received: by mail-pg1-f176.google.com with SMTP id r186so16738750pgr.2
+ for <buildroot@buildroot.org>; Wed, 03 Aug 2022 19:41:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc;
- bh=GFnr+G7yXZFqwyDVJA9CkeddjFQglfPBX7ftgzzuVMg=;
- b=kEaErOkNb7RoF6YPzreomw5Mph9XJGp9cs+R713h7bD8ZobGYaClbRc3oV9DtRHPXq
- RYP/B5NUnnDzCfdP7nzsNXcTFbpVJ+dFs3YUGOBtzgDdrDTHdweJVylNNBsZwgJwVhzK
- A/ng3EnmequuGAZtRTIuhhLdZUmCJM5XVYtBeqlk/9TZVpae3tiA3/dluXgXy+Dm/5rM
- vmivSaOigxIkBOg9EEgZZpo/FkLS8Pid5/tNvGEPjw9lmZg37p1C4JAfIFhsKeXQ5EDV
- 6sCBqRis20L37N9hvt8kh7d+pgzWdF1jFuoIjrk+vx3P/lmNQj8TMr+Ow1xCaKMt8e6P
- sRKA==
-X-Gm-Message-State: ACgBeo2klpaC94OMBgXojqM4l1RNCoFXm/Bk/gfR1ZjFz5H8yco4WZ/8
- Tt1Uisb4v6dfWVJW/husbtommz4mBtC8m7djfxDLgHn8egI=
-X-Google-Smtp-Source: AA6agR42hVfeMmk0+gw5zrJGFa2lAVRhK9TvaX0yb/twVQOAdax4KUQN1yCvHQEm9mhkb4V0d5749/VEMkidx4DnCu0=
-X-Received: by 2002:a63:6fce:0:b0:41c:86b0:f361 with SMTP id
- k197-20020a636fce000000b0041c86b0f361mr6053997pgc.163.1659569418366; Wed, 03
- Aug 2022 16:30:18 -0700 (PDT)
-MIME-Version: 1.0
-From: Jameson Collins <jameson.collins@gmail.com>
-Date: Wed, 3 Aug 2022 19:30:07 -0400
-Message-ID: <CACoTCHeTKbTU4QSBs4qtyUXKDNOH+5u4Y-rGhy4QeuvK=kAENw@mail.gmail.com>
+ h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=S3i+y5Uf+AcJ+V/+Mie5wXOK6R0D4rzbzGQUSaiq6Ks=;
+ b=eEe2ZzJ26lOzsMxrkM301cMWG/CVBap8/5CpJw35KdtyAOiZMNgFSpIdNj26HTT+WT
+ yvDyrrz3TdGkWn8m9lvNBx99JbmrtXPV3zrKr8wqUht2TakdHQJEurwDI9kgZq3pLtW4
+ HXO8ayIA8YAMVff70pvaUu68xXGOufq9zDOXNtq1G9dsLzaFojRwUppubhmYGYysl9m8
+ eiEuCMOF6ZO63sEY3xhW/+ob+Ms/D942SOGvFZU/A8PgG/nx7wA3GNwjdF+IKsH5xBDs
+ 8BjxohhvPwSLOeiTJgAmXwD3YqMHkVNAT1MSoq79Er+qIp2Wx5lYE2cSHBEuI1/94Omh
+ Ltbw==
+X-Gm-Message-State: ACgBeo1miNQ6XW03jHVxfCPbh5aITsjdNWdbFCKMs7pbKE8Tu3ADwVy9
+ nJgDZRYn0ILUettWOmgjKKwciaaxoXbsfw==
+X-Google-Smtp-Source: AA6agR6uP46IcflEgheS3k/9XFFDxJSqApJVizWFPb10JBstRFji5/vs1ebhMhcvHrVYIIVanlGmLA==
+X-Received: by 2002:a63:8143:0:b0:41b:ee3b:1b66 with SMTP id
+ t64-20020a638143000000b0041bee3b1b66mr16571406pgd.31.1659580894999; 
+ Wed, 03 Aug 2022 19:41:34 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ g12-20020a170902868c00b00168e83eda56sm2697303plo.3.2022.08.03.19.41.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 03 Aug 2022 19:41:33 -0700 (PDT)
 To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=to:subject:message-id:date:from:mime-version:from:to:cc;
- bh=GFnr+G7yXZFqwyDVJA9CkeddjFQglfPBX7ftgzzuVMg=;
- b=fhDXpAGZ4dTg8yexowvI55L8ZqmAMUAShEIDCFchyvTd0zM6cf38JFSHTIiCMajUi9
- +SFgDh3cekAC+DFok4njU4gyaIO5FCf/X5/ndNNITPUp4M33LP/L0be0zoBm+tkh6E8L
- iG1uEOe4AZOxJy1U9l8KIfZUTNPH0Zwr0igsoG95G1jJn9P1zWR9ZU7ohLVmoSTSEtYN
- cgNFFC5YRg+HFr0PbL7o9gWoUxpTgdWPk99p6JndE2V0FWPsllO/94tMLsACoAwFElRp
- h2MZO7yTMQxVi9/HmmeQLHiUSVr1+1MsG1twzB08F2eBm08dsS1hVqS3QmgPgPAh9vDL
- hnjA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=fhDXpAGZ
-Subject: [Buildroot] Defining a package with no dependencies
+Date: Wed,  3 Aug 2022 19:41:26 -0700
+Message-Id: <20220804024126.1103291-1-christian@paral.in>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,54 +77,178 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4171874981535884688=="
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4171874981535884688==
-Content-Type: multipart/alternative; boundary="000000000000a9741205e55e9d76"
+Go 1.19 is a major release with changes to the implementation of the toolchain,
+runtime, and libraries.
 
---000000000000a9741205e55e9d76
-Content-Type: text/plain; charset="UTF-8"
+Dropped patch 0002-cmd-dist-use-gohostarch... as it was merged upstream.
 
-If I have a package that doesn't build anything, doesn't depend on
-anything, and doesn't have anything depending on it, is it possible to tell
-buildroot to build this package without first building the toolchain?
+https://go.dev/doc/go1.19
 
-An example of a package like this might be the `flash-my-board` recipe that
-is shown in the manual.  Yes, in this case the package doesn't make any
-sense unless boot.bin existed, but you can see how it might be useful to
-have a package that performs a task and not necessarily generate a build
-product.
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ ...explicit-option-for-crosscompilation.patch |  4 +-
+ ...use-gohostarch-for-ssa-rewrite-check.patch | 95 -------------------
+ package/go/go.hash                            |  2 +-
+ package/go/go.mk                              |  2 +-
+ 4 files changed, 4 insertions(+), 99 deletions(-)
+ delete mode 100644 package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
 
-Thanks,
-Jay
-
---000000000000a9741205e55e9d76
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>If I have a package that doesn&#39;t build anything, =
-doesn&#39;t depend on anything, and doesn&#39;t have anything depending=C2=
-=A0on it, is it possible to tell buildroot to build this package without fi=
-rst building the toolchain?</div><div><br></div><div>An example of a packag=
-e like this might be the `flash-my-board` recipe that is shown in the manua=
-l.=C2=A0 Yes, in this case the package doesn&#39;t make any sense unless bo=
-ot.bin existed, but you can see how it might be useful to have a package th=
-at performs a task and not necessarily generate a build product.</div><div>=
-<br></div><div>Thanks,</div><div>Jay</div></div>
-
---000000000000a9741205e55e9d76--
-
---===============4171874981535884688==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+index 3a9b47474c..992a83a644 100644
+--- a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
++++ b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+@@ -1,4 +1,4 @@
+-From 335c6245674088de616324398137416c7a1cbe8f Mon Sep 17 00:00:00 2001
++From 6aed475557032a7ff9009e9b4b691b40b561876a Mon Sep 17 00:00:00 2001
+ From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ Date: Tue, 8 May 2018 16:08:44 +0200
+ Subject: [PATCH] build.go: explicit option for crosscompilation
+@@ -17,7 +17,7 @@ Signed-off-by: Anisse Astier <anisse@astier.eu>
+  1 file changed, 2 insertions(+), 1 deletion(-)
+ 
+ diff --git a/src/cmd/dist/build.go b/src/cmd/dist/build.go
+-index f99f1f4e43..08a9f24f59 100644
++index 7c44c4a605..03500920c4 100644
+ --- a/src/cmd/dist/build.go
+ +++ b/src/cmd/dist/build.go
+ @@ -286,12 +286,13 @@ func xinit() {
+diff --git a/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch b/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
+deleted file mode 100644
+index 2346208640..0000000000
+--- a/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
++++ /dev/null
+@@ -1,95 +0,0 @@
+-From 38d841a18ab0bcb63554fed6b38012e504599891 Mon Sep 17 00:00:00 2001
+-From: Christian Stewart <christian@paral.in>
+-Date: Wed, 1 Jun 2022 20:52:12 +0000
+-Subject: [PATCH] cmd/dist: use gohostarch for ssa rewrite check
+-
+-Fix a build failure when bootstrapping the Go compiler with go-bootstrap 1.4
+-while the environment contains GOARCH=riscv64.
+-
+-Building Go toolchain1 using go-1.4-bootstrap-20171003.
+-src/cmd/compile/internal/ssa/rewriteRISCV64.go:4814
+-invalid operation: y << x (shift count type int64, must be unsigned integer)
+-
+-This is because:
+-
+- - buildtool.go:198: calls bootstrapRewriteFile(src)
+- - bootstrapRewriteFile: buildtool.go:283 calls:
+- - isUnneededSSARewriteFile: checks os.Getenv("GOARCH")
+- - isUnneededSSARewriteFile: returns "", false
+- - bootstrapRewriteFile: calls bootstrapFixImports
+- - boostrapFixImports: generates code go1.4 cannot compile
+-
+-Instead of checking "GOARCH" in the environment, use the gohostarch variable.
+-
+-Change-Id: Ie9c190498555c4068461fead6278a62e924062c6
+-GitHub-Last-Rev: 300d7a7fea0a67c696970fd271e2ce709674a658
+-GitHub-Pull-Request: golang/go#52362
+-Reviewed-on: https://go-review.googlesource.com/c/go/+/400376
+-Reviewed-by: Bryan Mills <bcmills@google.com>
+-TryBot-Result: Gopher Robot <gobot@golang.org>
+-Reviewed-by: Dmitri Shuralyov <dmitshur@google.com>
+-Auto-Submit: Bryan Mills <bcmills@google.com>
+-Run-TryBot: Bryan Mills <bcmills@google.com>
+-Reviewed-by: Joel Sing <joel@sing.id.au>
+-Run-TryBot: Joel Sing <joel@sing.id.au>
+----
+- src/cmd/dist/buildtool.go | 16 ++++++----------
+- 1 file changed, 6 insertions(+), 10 deletions(-)
+-
+-diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
+-index 036f8c52fa..2d8ace52d8 100644
+---- a/src/cmd/dist/buildtool.go
+-+++ b/src/cmd/dist/buildtool.go
+-@@ -16,7 +16,6 @@ import (
+- 	"os"
+- 	"path/filepath"
+- 	"regexp"
+--	"runtime"
+- 	"strings"
+- )
+- 
+-@@ -239,11 +238,11 @@ var ssaRewriteFileSubstring = filepath.FromSlash("src/cmd/compile/internal/ssa/r
+- 
+- // isUnneededSSARewriteFile reports whether srcFile is a
+- // src/cmd/compile/internal/ssa/rewriteARCHNAME.go file for an
+--// architecture that isn't for the current runtime.GOARCH.
+-+// architecture that isn't for the given GOARCH.
+- //
+- // When unneeded is true archCaps is the rewrite base filename without
+- // the "rewrite" prefix or ".go" suffix: AMD64, 386, ARM, ARM64, etc.
+--func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
+-+func isUnneededSSARewriteFile(srcFile, goArch string) (archCaps string, unneeded bool) {
+- 	if !strings.Contains(srcFile, ssaRewriteFileSubstring) {
+- 		return "", false
+- 	}
+-@@ -258,13 +257,10 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
+- 	archCaps = fileArch
+- 	fileArch = strings.ToLower(fileArch)
+- 	fileArch = strings.TrimSuffix(fileArch, "splitload")
+--	if fileArch == os.Getenv("GOHOSTARCH") {
+-+	if fileArch == goArch {
+- 		return "", false
+- 	}
+--	if fileArch == strings.TrimSuffix(runtime.GOARCH, "le") {
+--		return "", false
+--	}
+--	if fileArch == strings.TrimSuffix(os.Getenv("GOARCH"), "le") {
+-+	if fileArch == strings.TrimSuffix(goArch, "le") {
+- 		return "", false
+- 	}
+- 	return archCaps, true
+-@@ -273,9 +269,9 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
+- func bootstrapRewriteFile(srcFile string) string {
+- 	// During bootstrap, generate dummy rewrite files for
+- 	// irrelevant architectures. We only need to build a bootstrap
+--	// binary that works for the current runtime.GOARCH.
+-+	// binary that works for the current gohostarch.
+- 	// This saves 6+ seconds of bootstrap.
+--	if archCaps, ok := isUnneededSSARewriteFile(srcFile); ok {
+-+	if archCaps, ok := isUnneededSSARewriteFile(srcFile, gohostarch); ok {
+- 		return fmt.Sprintf(`// Code generated by go tool dist; DO NOT EDIT.
+- 
+- package ssa
+--- 
+-2.35.1
+-
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 2a0f02abfd..2b877145e9 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  9920d3306a1ac536cdd2c796d6cb3c54bc559c226fc3cc39c32f1e0bd7f50d2a  go1.18.5.src.tar.gz
++sha256  9419cc70dc5a2523f29a77053cafff658ed21ef3561d9b6b020280ebceab28b9  go1.19.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 16602e590b..2220953e55 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.18.5
++GO_VERSION = 1.19
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4171874981535884688==--
