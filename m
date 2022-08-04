@@ -4,60 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E149EC19F2A
-	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 12:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8473C19F2A
+	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 12:43:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F0E540B59;
-	Thu,  4 Aug 2022 12:39:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F0E540B59
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F8F040AF4;
+	Thu,  4 Aug 2022 12:43:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F8F040AF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CeoQu9cTZNyc; Thu,  4 Aug 2022 12:39:19 +0000 (UTC)
+	with ESMTP id 1sh4QDfTa_ZM; Thu,  4 Aug 2022 12:43:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 090B640B7C;
-	Thu,  4 Aug 2022 12:39:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 090B640B7C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2B0571BF9CB
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 12:39:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 230C240ACE;
+	Thu,  4 Aug 2022 12:43:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 230C240ACE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DB53D1BF9CB
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 12:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D7E18274E
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 12:39:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D7E18274E
+ by smtp2.osuosl.org (Postfix) with ESMTP id C36A440ACE
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 12:43:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C36A440ACE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YraG1qv29u03 for <buildroot@lists.busybox.net>;
- Thu,  4 Aug 2022 12:39:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AA7F__C2XAQa for <buildroot@lists.busybox.net>;
+ Thu,  4 Aug 2022 12:43:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F07D8828A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDA3F40407
 Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F07D8828A9
- for <buildroot@buildroot.org>; Thu,  4 Aug 2022 12:39:14 +0000 (UTC)
-Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id B85E35C2FA5;
- Thu,  4 Aug 2022 14:39:11 +0200 (CEST)
-From: Stefan Agner <stefan@agner.ch>
-To: yann.morin.1998@free.fr,
-	buildroot@buildroot.org
-Date: Thu,  4 Aug 2022 14:39:10 +0200
-Message-Id: <573007e6c5d1d25be3a1e5eec19466f6919ae905.1659616743.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.37.1
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BDA3F40407
+ for <buildroot@buildroot.org>; Thu,  4 Aug 2022 12:43:46 +0000 (UTC)
+Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
+ by mail.kmu-office.ch (Postfix) with ESMTPSA id D6C795C0A73;
+ Thu,  4 Aug 2022 14:43:44 +0200 (CEST)
 MIME-Version: 1.0
+Date: Thu, 04 Aug 2022 14:43:44 +0200
+From: Stefan Agner <stefan@agner.ch>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+In-Reply-To: <20220625175355.GF2608@scaer>
+References: <82b5bbe664c06c5864debb660850e0cf@agner.ch>
+ <20220625175355.GF2608@scaer>
+Message-ID: <7cbe82b8824b1ef02000e683ddf2d556@agner.ch>
+X-Sender: stefan@agner.ch
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1659616751;
+ d=agner.ch; s=dkim; t=1659617024;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=TRWBOB7E4kkfNlAY5prWMW7Vt9xUIHBBHdMnBHtJW0w=;
- b=NRWkkhQ5d30JDa6sNkF+tBhHR3Yq+ICoH6wIT80I1lpYmKFa9RJjv1jox+MgTdE3dcrYWS
- K2MeLWcHFb8hp6CuddEPnkbd3Lg+p68qAmVgh40HoVEXMNPPR6gXzjFXJ9QRwYnDjft/5j
- uO/DsgZ8G0/gBicoan8nSKlmrz1Blig=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=phxM0DfDoVqXBWbwop+Z0a81yPB3wcuna4+Cnfqpddw=;
+ b=nwJDces53fN7qNPlLtsAesHevn/FdzBKKIv6Szp+Xn+a/4HkIJe6G8+h33UhqxvZmJ8puN
+ xQz3y7sMpCMSC9u6oE3yC8ViMlDiE36cfBvLNkji8PSkDvwcLyaluf1xgQQbuWmGYtELbq
+ fb+omx7NuTTWVzxPP/J1AWEzb7DzmZk=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=NRWkkhQ5
-Subject: [Buildroot] [PATCH] [2022.02.x] boot/grub2: fix build race condition
+ header.a=rsa-sha256 header.s=dkim header.b=nwJDces5
+Subject: Re: [Buildroot] Build error when building two GRUB2 configurations
+ (race condition)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,71 +73,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: stefan@agner.ch
+Cc: kory.maincent@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sometimes buildroot fails with:
-../grub-core/kern/emu/hostfs.c:20:10: fatal error: config-util.h: No such file or directory
-   20 | #include <config-util.h>
-      |          ^~~~~~~~~~~~~~~
+On 2022-06-25 19:53, Yann E. MORIN wrote:
+> Stefan, All,
+> 
+> On 2022-06-25 09:44 -0700, Stefan Agner spake thusly:
+>> In Home Assistant OS we use the capability to build two GRUB2 binaries
+>> by enabling these two configurations:
+>>
+>> BR2_TARGET_GRUB2_I386_EFI=y
+>> BR2_TARGET_GRUB2_X86_64_EFI=y
+>>
+>> Every now and then a from scratch build seems to fail with the following
+>> error:
+>>
+>> config.status: creating config-util.h
+>> In file included from ../include/grub/disk.h:***,
+>>                  from ../include/grub/file.h:26,
+>>                  from ../grub-core/kern/emu/hostfs.c:23:
+>> ./config.h:38:10: fatal error: ./config-util.h: No such file or
+>> directory
+>>    38 | #include <config-util.h>
+>>       |          ^~~~~~~~~~~~~~~
+>> compilation terminated.
+> 
+> I had the same issue even with a single grub2 config enabled. This is a
+> grub2 issue, and it was supposedly fixed with upstream commit
+> 42f4054faf3c (Makefile: Make libgrub.pp depend on config-util.h) and we
+> do have this patch backported as:
+> boot/grub2/0150-Makefile-Make-libgrub.pp-depend-on-config-util.h.patch
 
-Add a patch which fixes the Makefile to correctly generate config-util.h
-first.
+I've tracked this down today.
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
----
- ...ub_fstest.pp-depend-on-config-util.h.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 boot/grub2/0151-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
+It seems a very similar fix is required for grub_fstest.pp. I sent a
+patch upstream to the GRUB mailing list and to the buildroot mailing
+list:
+https://lists.buildroot.org/pipermail/buildroot/2022-August/648479.html
 
-diff --git a/boot/grub2/0151-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch b/boot/grub2/0151-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
-new file mode 100644
-index 0000000000..f25291b504
---- /dev/null
-+++ b/boot/grub2/0151-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
-@@ -0,0 +1,36 @@
-+From 2ad0b32a5c7a94c10b982139934a931c547929b3 Mon Sep 17 00:00:00 2001
-+Message-Id: <2ad0b32a5c7a94c10b982139934a931c547929b3.1659606262.git.stefan@agner.ch>
-+From: Stefan Agner <stefan@agner.ch>
-+Date: Thu, 4 Aug 2022 11:43:12 +0200
-+Subject: [PATCH] Makefile: Make grub_fstest.pp depend on config-util.h
-+
-+If you build with "make -j25", sometimes you see:
-+/build/output_generic_x86_64/host/bin/x86_64-buildroot-linux-gnu-gcc -E -DHAVE_CONFIG_H -I. -I..  -Wall -W -DGRUB_UTIL=1 -D_FILE_OFFSET_BITS=64 -I./include -DGRUB_FILE=\"util/grub-fstest.c\" -I. -I.. -I. -I.. -I../include -I./include -I../grub-core/lib/libgcrypt-grub/src/ -I./grub-core/lib/gnulib -I../grub-core/lib/gnulib  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fno-stack-protector -D_FILE_OFFSET_BITS=64 \
-+  -D'GRUB_MOD_INIT(x)=@MARKER@x@' ../util/grub-fstest.c ../grub-core/kern/emu/hostfs.c ../grub-core/disk/host.c ../grub-core/osdep/init.c > grub_fstest.pp || (rm -f grub_fstest.pp; exit 1)
-+config.status: creating config-util.h
-+../grub-core/kern/emu/hostfs.c:20:10: fatal error: config-util.h: No such file or directory
-+   20 | #include <config-util.h>
-+      |          ^~~~~~~~~~~~~~~
-+compilation terminated.
-+
-+Signed-off-by: Stefan Agner <stefan@agner.ch>
-+---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 42e121feb..43635d5ff 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -60,7 +60,7 @@ libgrub_a_init.c: libgrub_a_init.lst $(top_srcdir)/geninit.sh
-+ CLEANFILES += libgrub_a_init.c
-+ 
-+ # For grub-fstest
-+-grub_fstest.pp: $(grub_fstest_SOURCES)
-++grub_fstest.pp: config-util.h $(grub_fstest_SOURCES)
-+ 	$(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(grub_fstest_CPPFLAGS) $(CPPFLAGS) \
-+ 	  -D'GRUB_MOD_INIT(x)=@MARKER@x@' $^ > $@ || (rm -f $@; exit 1)
-+ CLEANFILES += grub_fstest.pp
-+-- 
-+2.37.1
-+
--- 
-2.37.1
-
+--
+Stefan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
