@@ -1,65 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22C5EC19F2A
-	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 13:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 638C0C19F2A
+	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 14:05:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B09DF416C0;
-	Thu,  4 Aug 2022 13:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B09DF416C0
+	by smtp1.osuosl.org (Postfix) with ESMTP id E181082A26;
+	Thu,  4 Aug 2022 14:05:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E181082A26
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aDC1bezJjrft; Thu,  4 Aug 2022 13:38:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x19Zynh63KDD; Thu,  4 Aug 2022 14:05:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79362409AB;
-	Thu,  4 Aug 2022 13:38:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79362409AB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19CF7829B6;
+	Thu,  4 Aug 2022 14:05:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19CF7829B6
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 205BF1BF421
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 13:38:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 29CAF1BF32E
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 14:05:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EFC7C404D8
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 13:38:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFC7C404D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12963404D8
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 14:05:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12963404D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jnG0Lwz69llO for <buildroot@lists.busybox.net>;
- Thu,  4 Aug 2022 13:38:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B05F40193
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0B05F40193
- for <buildroot@buildroot.org>; Thu,  4 Aug 2022 13:38:32 +0000 (UTC)
-Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id 1FFCF5C0A73;
- Thu,  4 Aug 2022 15:38:29 +0200 (CEST)
-MIME-Version: 1.0
-Date: Thu, 04 Aug 2022 15:38:28 +0200
-From: Stefan Agner <stefan@agner.ch>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20220804151207.3ad0fbe1@windsurf>
+ with ESMTP id bFlaGlEsHoOV for <buildroot@lists.busybox.net>;
+ Thu,  4 Aug 2022 14:05:23 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 983AC401B7
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 983AC401B7
+ for <buildroot@buildroot.org>; Thu,  4 Aug 2022 14:05:22 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 9FEC41C0003;
+ Thu,  4 Aug 2022 14:05:19 +0000 (UTC)
+Date: Thu, 4 Aug 2022 16:05:18 +0200
+To: Stefan Agner <stefan@agner.ch>
+Message-ID: <20220804160518.75e7a753@windsurf>
+In-Reply-To: <26aed3ae6ff8f346b8269669817df0ef@agner.ch>
 References: <32cdca079efa80b745bb60af23ad9e99f3cabbf4.1659613508.git.stefan@agner.ch>
  <20220804151207.3ad0fbe1@windsurf>
-Message-ID: <26aed3ae6ff8f346b8269669817df0ef@agner.ch>
-X-Sender: stefan@agner.ch
+ <26aed3ae6ff8f346b8269669817df0ef@agner.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1659620309;
+ d=bootlin.com; s=gm1; t=1659621920;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=1WChilrfsQtVH4dMyvzTUT5AA0rFb/iQ5RswUJSI2u8=;
- b=BQ41gayOd29Y5q7G4h04mu5E3R29PAvMmAn1ooLmJGsLPJNioGrl2B3HYDdZYHNL4oX65S
- Z8HN7gzrYXpZs2HN/obz2e5iFBcJqIu3MtGP/JyUb4iJPRrYAFxnuLDWw1e3UIGQsb50SW
- SY6xDBs2gBbOwAAfcWQVOrGrOyCfGr8=
+ bh=BI45U99DFCe1JPMcil7kh41qrknSSfeWiKEqTLxJ1FE=;
+ b=DNnoOy15+KdahcfJNontBon4gdAkb+fxKHo3qcR7ctIJ1fvpqcLXFq1b27NXpiCYxw95ej
+ vVCpN/aZf9chAda0GdxcQKK6yHxH068ww9IkzpHl10adonCaVfdZuDg8a0rj1O0NQ+9A4T
+ r7VmAoLH5YZ5xbGwEb6wmAn2fx5WfrNc5pRUtgmaFql5V+9zvps5MrADXzF1uubzm0ZTJM
+ D1km01CYK+NJ9AkvgEc1yGVT3UCSROSDmgdAfwfTBOGeHo/PIjfcxEwTbb8nJTUJXsycnA
+ 6Re+mUVkUaQPWf7q9NCejLO23cxn2LwqaF0qYuJgClvan3I9mqUmO/W9bj+aew==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=BQ41gayO
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=DNnoOy15
 Subject: Re: [Buildroot] [PATCH] [master] boot/grub2: fix build race
  condition
 X-BeenThere: buildroot@buildroot.org
@@ -73,64 +78,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: yann.morin.1998@free.fr, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2022-08-04 15:12, Thomas Petazzoni wrote:
-> Hello Stefan,
-> 
-> On Thu,  4 Aug 2022 13:45:27 +0200
-> Stefan Agner <stefan@agner.ch> wrote:
-> 
->> Sometimes buildroot fails with:
->> ../grub-core/kern/emu/hostfs.c:20:10: fatal error: config-util.h: No such file or directory
->>    20 | #include <config-util.h>
->>       |          ^~~~~~~~~~~~~~~
->>
->> Add a patch which fixes the Makefile to correctly generate config-util.h
->> first.
->>
->> Signed-off-by: Stefan Agner <stefan@agner.ch>
-> 
-> Thanks for this patch.
-> 
->> ---
->>  ...ub_fstest.pp-depend-on-config-util.h.patch | 24 +++++++++++++++++++
->>  boot/grub2/grub2.mk                           |  6 +++++
->>  2 files changed, 30 insertions(+)
->>  create mode 100644 boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
->>
->> diff --git a/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch b/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
->> new file mode 100644
->> index 0000000000..96e6852e86
->> --- /dev/null
->> +++ b/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
-> 
-> We require all patches to have a proper commit log, with commit title +
-> description, and a Signed-off-by line. Also, we need to have the
-> upstream status of the patch, i.e where it has been submitted (or taken
-> from).
+On Thu, 04 Aug 2022 15:38:28 +0200
+Stefan Agner <stefan@agner.ch> wrote:
 
-The problem is, this patch is not generated from a source repository but
-simply using patch from the release tarball. The source repository does
-not contain Makefile.in, which needs to be patched...
-
-So a "proper commit log" as such is not possible. I can of course fake
-it and make it look like the patch got generated from a commit, but not
-sure if that is sensible?
-
-Best regards
-Stefan
-
+> > We require all patches to have a proper commit log, with commit title +
+> > description, and a Signed-off-by line. Also, we need to have the
+> > upstream status of the patch, i.e where it has been submitted (or taken
+> > from).  
 > 
-> Could you rework your patch accordingly?
+> The problem is, this patch is not generated from a source repository but
+> simply using patch from the release tarball. The source repository does
+> not contain Makefile.in, which needs to be patched...
 > 
-> Thanks a lot!
-> 
-> Thomas
+> So a "proper commit log" as such is not possible. I can of course fake
+> it and make it look like the patch got generated from a commit, but not
+> sure if that is sensible?
+
+Regardless of how the patch is generated, we want it to have a commit
+log + description as well as an upstream status.
+
+A basic way:
+
+	tar xf grub-2.06.tar.xz
+	cd grub-2.06
+	git init
+	git add .
+	git commit -s -m "Initial import"
+	and now do your changes
+
+Of course, it's not going to be a patch that we can apply to the
+upstream Git repository, but at least you will have the proper tooling to
+create a patch that a commit title, description, SoB and contains an
+indicate of its upstream status.
+
+Alternatively, I see you're avoiding autoreconf. Any reason to do so?
+Autoreconf doesn't work? (I know with some older grub versions,
+autoreconf was problematic, so perhaps it is still the case).
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
