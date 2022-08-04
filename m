@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 105C0C19F29
-	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 02:41:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26663C19F29
+	for <buildroot@archiver.kernel.org>; Thu,  4 Aug 2022 02:44:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6162360B72;
-	Thu,  4 Aug 2022 02:41:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6162360B72
+	by smtp4.osuosl.org (Postfix) with ESMTP id 984964148A;
+	Thu,  4 Aug 2022 02:44:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 984964148A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uvopfSd105Sy; Thu,  4 Aug 2022 02:41:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wMMmzzTNmz7o; Thu,  4 Aug 2022 02:44:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A91560B60;
-	Thu,  4 Aug 2022 02:41:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A91560B60
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8C6D71BF255
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 02:41:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 277B64148F;
+	Thu,  4 Aug 2022 02:44:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 277B64148F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C9191BF255
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 02:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 672A360B60
- for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 02:41:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 672A360B60
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61DBE402D7
+ for <buildroot@lists.busybox.net>; Thu,  4 Aug 2022 02:44:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61DBE402D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sknW5WI9DIPV for <buildroot@lists.busybox.net>;
- Thu,  4 Aug 2022 02:41:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id URmQSO7gTHKV for <buildroot@lists.busybox.net>;
+ Thu,  4 Aug 2022 02:44:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52CA760B5C
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com
- [209.85.215.176])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 52CA760B5C
- for <buildroot@buildroot.org>; Thu,  4 Aug 2022 02:41:36 +0000 (UTC)
-Received: by mail-pg1-f176.google.com with SMTP id r186so16738750pgr.2
- for <buildroot@buildroot.org>; Wed, 03 Aug 2022 19:41:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F61D40151
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com
+ [209.85.215.178])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7F61D40151
+ for <buildroot@buildroot.org>; Thu,  4 Aug 2022 02:44:43 +0000 (UTC)
+Received: by mail-pg1-f178.google.com with SMTP id s206so16753596pgs.3
+ for <buildroot@buildroot.org>; Wed, 03 Aug 2022 19:44:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=S3i+y5Uf+AcJ+V/+Mie5wXOK6R0D4rzbzGQUSaiq6Ks=;
- b=eEe2ZzJ26lOzsMxrkM301cMWG/CVBap8/5CpJw35KdtyAOiZMNgFSpIdNj26HTT+WT
- yvDyrrz3TdGkWn8m9lvNBx99JbmrtXPV3zrKr8wqUht2TakdHQJEurwDI9kgZq3pLtW4
- HXO8ayIA8YAMVff70pvaUu68xXGOufq9zDOXNtq1G9dsLzaFojRwUppubhmYGYysl9m8
- eiEuCMOF6ZO63sEY3xhW/+ob+Ms/D942SOGvFZU/A8PgG/nx7wA3GNwjdF+IKsH5xBDs
- 8BjxohhvPwSLOeiTJgAmXwD3YqMHkVNAT1MSoq79Er+qIp2Wx5lYE2cSHBEuI1/94Omh
- Ltbw==
-X-Gm-Message-State: ACgBeo1miNQ6XW03jHVxfCPbh5aITsjdNWdbFCKMs7pbKE8Tu3ADwVy9
- nJgDZRYn0ILUettWOmgjKKwciaaxoXbsfw==
-X-Google-Smtp-Source: AA6agR6uP46IcflEgheS3k/9XFFDxJSqApJVizWFPb10JBstRFji5/vs1ebhMhcvHrVYIIVanlGmLA==
-X-Received: by 2002:a63:8143:0:b0:41b:ee3b:1b66 with SMTP id
- t64-20020a638143000000b0041bee3b1b66mr16571406pgd.31.1659580894999; 
- Wed, 03 Aug 2022 19:41:34 -0700 (PDT)
+ bh=tNmwlB/XhuGQg450+eBbAKSepTzVWhhg3oncZTZcykI=;
+ b=xaSEJw7nl7i/Tbk7FIU0CeTlKWT2PzeWt7jMHre2ojz8s/pH0Bdi9yGDrkLl9qblIs
+ tQSPftxbcLlRzJzBArXiFGSqcX7gqJgCekHD8Z8HVckBy7+oe16jq5iPn6Gd+22WDRvq
+ /j4lIYNJQBF03YA6+z7wJx43Oq8v5i3/y4o4jypWKnaC40pvjO6Wkdg3y25YXrNkBM79
+ GHZ4K8oBd8NiJ3Md6sAcFiFEqLDPVvbDP/C2WJFxvgOFGKHEK5jjZ4N8AAAaLYXXhtsF
+ w0ISrxphEvMU4nrHckIPaKOSC4xYKe+OuSk63MatQvGCEwVaQCCa1QcYFhlmNrZF7rGQ
+ ZaAg==
+X-Gm-Message-State: ACgBeo001lXTz3E0hi3US4f2uWBpzT+K/sEED23p1uFCXRYzn9HKv5Yg
+ nWqXpsDh7lwMvqTTktCOhmDBNXlRqRO50A==
+X-Google-Smtp-Source: AA6agR4Xqsybbl9VPY/t5gOctIMAaXeLXB2vnzOJBlLPx/sZ1cnJAdbFSJbPH8Qto6rTTKI0PrJYgA==
+X-Received: by 2002:a05:6a00:2342:b0:52e:6c99:a55a with SMTP id
+ j2-20020a056a00234200b0052e6c99a55amr1370465pfj.32.1659581082336; 
+ Wed, 03 Aug 2022 19:44:42 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- g12-20020a170902868c00b00168e83eda56sm2697303plo.3.2022.08.03.19.41.32
+ i12-20020a170902c94c00b0016ed8af2ec0sm2766769pla.29.2022.08.03.19.44.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Aug 2022 19:41:33 -0700 (PDT)
+ Wed, 03 Aug 2022 19:44:41 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed,  3 Aug 2022 19:41:26 -0700
-Message-Id: <20220804024126.1103291-1-christian@paral.in>
+Date: Wed,  3 Aug 2022 19:44:38 -0700
+Message-Id: <20220804024438.1118030-1-christian@paral.in>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.19
+Subject: [Buildroot] [PATCH v2 1/1] package/go: fix go on riscv64 in sv57
+ mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,164 +88,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Go 1.19 is a major release with changes to the implementation of the toolchain,
-runtime, and libraries.
+On machines supporting Riscv SV57 mode like Qemu, Go programs currently crash
+with the following type of error:
 
-Dropped patch 0002-cmd-dist-use-gohostarch... as it was merged upstream.
+runtime: lfstack.push invalid packing: node=0xffffff5908a940 cnt=0x1
+packed=0xffff5908a9400001 -> node=0xffff5908a940
 
-https://go.dev/doc/go1.19
+The upstream PR fixes this error, but has not yet been merged.
+
+Upstream: https://go-review.googlesource.com/c/go/+/409055/4
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+
+---
+
+v1 -> v2:
+
+ - updated to upstream patchset version 4
+ - note: the upstream patchset has been code-reviewed and approved
+ - rebased against go 1.19 (patch is #0002)
+ - see: https://patchwork.ozlabs.org/project/buildroot/patch/20220804024126.1103291-1-christian@paral.in/
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- ...explicit-option-for-crosscompilation.patch |  4 +-
- ...use-gohostarch-for-ssa-rewrite-check.patch | 95 -------------------
- package/go/go.hash                            |  2 +-
- package/go/go.mk                              |  2 +-
- 4 files changed, 4 insertions(+), 99 deletions(-)
- delete mode 100644 package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
+ ...02-runtime-support-riscv64-SV57-mode.patch | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/go/0002-runtime-support-riscv64-SV57-mode.patch
 
-diff --git a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
-index 3a9b47474c..992a83a644 100644
---- a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
-+++ b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
-@@ -1,4 +1,4 @@
--From 335c6245674088de616324398137416c7a1cbe8f Mon Sep 17 00:00:00 2001
-+From 6aed475557032a7ff9009e9b4b691b40b561876a Mon Sep 17 00:00:00 2001
- From: Angelo Compagnucci <angelo@amarulasolutions.com>
- Date: Tue, 8 May 2018 16:08:44 +0200
- Subject: [PATCH] build.go: explicit option for crosscompilation
-@@ -17,7 +17,7 @@ Signed-off-by: Anisse Astier <anisse@astier.eu>
-  1 file changed, 2 insertions(+), 1 deletion(-)
- 
- diff --git a/src/cmd/dist/build.go b/src/cmd/dist/build.go
--index f99f1f4e43..08a9f24f59 100644
-+index 7c44c4a605..03500920c4 100644
- --- a/src/cmd/dist/build.go
- +++ b/src/cmd/dist/build.go
- @@ -286,12 +286,13 @@ func xinit() {
-diff --git a/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch b/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
-deleted file mode 100644
-index 2346208640..0000000000
---- a/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
-+++ /dev/null
-@@ -1,95 +0,0 @@
--From 38d841a18ab0bcb63554fed6b38012e504599891 Mon Sep 17 00:00:00 2001
--From: Christian Stewart <christian@paral.in>
--Date: Wed, 1 Jun 2022 20:52:12 +0000
--Subject: [PATCH] cmd/dist: use gohostarch for ssa rewrite check
--
--Fix a build failure when bootstrapping the Go compiler with go-bootstrap 1.4
--while the environment contains GOARCH=riscv64.
--
--Building Go toolchain1 using go-1.4-bootstrap-20171003.
--src/cmd/compile/internal/ssa/rewriteRISCV64.go:4814
--invalid operation: y << x (shift count type int64, must be unsigned integer)
--
--This is because:
--
-- - buildtool.go:198: calls bootstrapRewriteFile(src)
-- - bootstrapRewriteFile: buildtool.go:283 calls:
-- - isUnneededSSARewriteFile: checks os.Getenv("GOARCH")
-- - isUnneededSSARewriteFile: returns "", false
-- - bootstrapRewriteFile: calls bootstrapFixImports
-- - boostrapFixImports: generates code go1.4 cannot compile
--
--Instead of checking "GOARCH" in the environment, use the gohostarch variable.
--
--Change-Id: Ie9c190498555c4068461fead6278a62e924062c6
--GitHub-Last-Rev: 300d7a7fea0a67c696970fd271e2ce709674a658
--GitHub-Pull-Request: golang/go#52362
--Reviewed-on: https://go-review.googlesource.com/c/go/+/400376
--Reviewed-by: Bryan Mills <bcmills@google.com>
--TryBot-Result: Gopher Robot <gobot@golang.org>
--Reviewed-by: Dmitri Shuralyov <dmitshur@google.com>
--Auto-Submit: Bryan Mills <bcmills@google.com>
--Run-TryBot: Bryan Mills <bcmills@google.com>
--Reviewed-by: Joel Sing <joel@sing.id.au>
--Run-TryBot: Joel Sing <joel@sing.id.au>
-----
-- src/cmd/dist/buildtool.go | 16 ++++++----------
-- 1 file changed, 6 insertions(+), 10 deletions(-)
--
--diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
--index 036f8c52fa..2d8ace52d8 100644
----- a/src/cmd/dist/buildtool.go
--+++ b/src/cmd/dist/buildtool.go
--@@ -16,7 +16,6 @@ import (
-- 	"os"
-- 	"path/filepath"
-- 	"regexp"
---	"runtime"
-- 	"strings"
-- )
-- 
--@@ -239,11 +238,11 @@ var ssaRewriteFileSubstring = filepath.FromSlash("src/cmd/compile/internal/ssa/r
-- 
-- // isUnneededSSARewriteFile reports whether srcFile is a
-- // src/cmd/compile/internal/ssa/rewriteARCHNAME.go file for an
---// architecture that isn't for the current runtime.GOARCH.
--+// architecture that isn't for the given GOARCH.
-- //
-- // When unneeded is true archCaps is the rewrite base filename without
-- // the "rewrite" prefix or ".go" suffix: AMD64, 386, ARM, ARM64, etc.
---func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
--+func isUnneededSSARewriteFile(srcFile, goArch string) (archCaps string, unneeded bool) {
-- 	if !strings.Contains(srcFile, ssaRewriteFileSubstring) {
-- 		return "", false
-- 	}
--@@ -258,13 +257,10 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
-- 	archCaps = fileArch
-- 	fileArch = strings.ToLower(fileArch)
-- 	fileArch = strings.TrimSuffix(fileArch, "splitload")
---	if fileArch == os.Getenv("GOHOSTARCH") {
--+	if fileArch == goArch {
-- 		return "", false
-- 	}
---	if fileArch == strings.TrimSuffix(runtime.GOARCH, "le") {
---		return "", false
---	}
---	if fileArch == strings.TrimSuffix(os.Getenv("GOARCH"), "le") {
--+	if fileArch == strings.TrimSuffix(goArch, "le") {
-- 		return "", false
-- 	}
-- 	return archCaps, true
--@@ -273,9 +269,9 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
-- func bootstrapRewriteFile(srcFile string) string {
-- 	// During bootstrap, generate dummy rewrite files for
-- 	// irrelevant architectures. We only need to build a bootstrap
---	// binary that works for the current runtime.GOARCH.
--+	// binary that works for the current gohostarch.
-- 	// This saves 6+ seconds of bootstrap.
---	if archCaps, ok := isUnneededSSARewriteFile(srcFile); ok {
--+	if archCaps, ok := isUnneededSSARewriteFile(srcFile, gohostarch); ok {
-- 		return fmt.Sprintf(`// Code generated by go tool dist; DO NOT EDIT.
-- 
-- package ssa
---- 
--2.35.1
--
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 2a0f02abfd..2b877145e9 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  9920d3306a1ac536cdd2c796d6cb3c54bc559c226fc3cc39c32f1e0bd7f50d2a  go1.18.5.src.tar.gz
-+sha256  9419cc70dc5a2523f29a77053cafff658ed21ef3561d9b6b020280ebceab28b9  go1.19.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 16602e590b..2220953e55 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.18.5
-+GO_VERSION = 1.19
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+diff --git a/package/go/0002-runtime-support-riscv64-SV57-mode.patch b/package/go/0002-runtime-support-riscv64-SV57-mode.patch
+new file mode 100644
+index 0000000000..9b5393e1e4
+--- /dev/null
++++ b/package/go/0002-runtime-support-riscv64-SV57-mode.patch
+@@ -0,0 +1,65 @@
++From 6618c7af436488fa12018cdcd31eeedb3a698745 Mon Sep 17 00:00:00 2001
++From: Dmitry Vyukov <dvyukov@google.com>
++Date: Fri, 27 May 2022 18:55:35 +0200
++Subject: [PATCH] runtime: support riscv64 SV57 mode
++
++Riscv64 has SV57 mode when user-space VA is 56 bits.
++Linux kernel recently got support for this mode and Go binaries started crashing as:
++
++runtime: lfstack.push invalid packing: node=0xffffff5908a940 cnt=0x1
++packed=0xffff5908a9400001 -> node=0xffff5908a940
++
++Adjust lfstack code to use only 8 top bits of pointers on riscv64.
++
++For context see:
++https://groups.google.com/g/syzkaller-bugs/c/lU0GQTZoNQQ/m/O_c3vmE3AAAJ
++
++Update #54104
++
++Change-Id: Ib5d3d6a79c0c6eddf11618d73fcc8bc1832a9c25
++
++---
++
++Upstream: https://go-review.googlesource.com/c/go/+/409055/4
++---
++ src/runtime/lfstack_64bit.go | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/src/runtime/lfstack_64bit.go b/src/runtime/lfstack_64bit.go
++index 154130cf63..39fa647b9e 100644
++--- a/src/runtime/lfstack_64bit.go
+++++ b/src/runtime/lfstack_64bit.go
++@@ -36,12 +36,21 @@ const (
++ 	// We use one bit to distinguish between the two ranges.
++ 	aixAddrBits = 57
++ 	aixCntBits  = 64 - aixAddrBits + 3
+++
+++	// Riscv64 SV57 mode gives 56 bits of userspace VA.
+++	// lfstack code supports it, but broader support for SV57 mode is incomplete,
+++	// and there may be other issues (see #54104).
+++	riscv64AddrBits = 56
+++	riscv64CntBits  = 64 - riscv64AddrBits + 3
++ )
++ 
++ func lfstackPack(node *lfnode, cnt uintptr) uint64 {
++ 	if GOARCH == "ppc64" && GOOS == "aix" {
++ 		return uint64(uintptr(unsafe.Pointer(node)))<<(64-aixAddrBits) | uint64(cnt&(1<<aixCntBits-1))
++ 	}
+++	if GOARCH == "riscv64" {
+++		return uint64(uintptr(unsafe.Pointer(node)))<<(64-riscv64AddrBits) | uint64(cnt&(1<<riscv64CntBits-1))
+++	}
++ 	return uint64(uintptr(unsafe.Pointer(node)))<<(64-addrBits) | uint64(cnt&(1<<cntBits-1))
++ }
++ 
++@@ -54,5 +63,8 @@ func lfstackUnpack(val uint64) *lfnode {
++ 	if GOARCH == "ppc64" && GOOS == "aix" {
++ 		return (*lfnode)(unsafe.Pointer(uintptr((val >> aixCntBits << 3) | 0xa<<56)))
++ 	}
+++	if GOARCH == "riscv64" {
+++		return (*lfnode)(unsafe.Pointer(uintptr(val >> riscv64CntBits << 3)))
+++	}
++ 	return (*lfnode)(unsafe.Pointer(uintptr(val >> cntBits << 3)))
++ }
++-- 
++2.35.1
++
 -- 
 2.35.1
 
