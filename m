@@ -4,68 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 815C4C25B08
-	for <buildroot@archiver.kernel.org>; Fri,  5 Aug 2022 16:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70FA9C00140
+	for <buildroot@archiver.kernel.org>; Fri,  5 Aug 2022 16:29:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC3A0812E9;
-	Fri,  5 Aug 2022 16:29:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC3A0812E9
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF7B080AC0;
+	Fri,  5 Aug 2022 16:29:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF7B080AC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B_uQpCKs1l9N; Fri,  5 Aug 2022 16:29:17 +0000 (UTC)
+	with ESMTP id srVzVhcv-Lc8; Fri,  5 Aug 2022 16:29:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B13A480C02;
-	Fri,  5 Aug 2022 16:29:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B13A480C02
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EE2671BF9CB
- for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 16:29:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30E648125D;
+	Fri,  5 Aug 2022 16:29:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30E648125D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F2061BF9CB
+ for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 16:29:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D64BA60E69
- for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 16:29:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D64BA60E69
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2AAD7404F6
+ for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 16:29:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AAD7404F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ihQTNCuPwgVl for <buildroot@lists.busybox.net>;
- Fri,  5 Aug 2022 16:29:13 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEB7060E09
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AEB7060E09
- for <buildroot@buildroot.org>; Fri,  5 Aug 2022 16:29:13 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:5864:4f9d:d5e2:80b0])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 0499B19F58A;
- Fri,  5 Aug 2022 18:29:06 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 05 Aug 2022 18:29:06 +0200
-Date: Fri, 5 Aug 2022 18:29:06 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220805162906.GC3621445@scaer>
-References: <20220804203555.29029-1-thomas.petazzoni@bootlin.com>
- <20220804203555.29029-2-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220804203555.29029-2-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1659716950;
- bh=yUeVOfwYkobFiMqC6ujJ2VuYHrVa/F0bbDEZPLICQ2A=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=U5LC4x706gMauaxbHc4y5/FRLXPHU97cqheRMKnzUeOZqcrhcWqiLbBSKBos+NHUH
- 6ECLnd3dZDfu4Pe+3zFczpjEWtqpQHNbP+lH7O1rqoX6UOMLCqCDKiGGdzsW/USVdo
- 9WUAvDRTASf6Qai/zDMU2oguvdxIJ5xRRCZZEzZz9bK7iB8tuImV7fgr4yLxYbsC7K
- w5tVCXwtR/euY6C7HTT9wxxVZTYci7Hf6FTE5DV5PvQ3i3aTHMDa3QcGG4T2fT7VRj
- YENXfkxOp7xwQsXSIgAcyoKQchARFMoHaY0dWnr32xJmU+qvC87+IK5HaoMt7CVoLK
- mKMX+h0MpIYcg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=U5LC4x70
-Subject: Re: [Buildroot] [PATCH 2/2] package/pistache: enable on uClibc
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7_oSnSXm6q1J for <buildroot@lists.busybox.net>;
+ Fri,  5 Aug 2022 16:29:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61C244032A
+ for <buildroot@buildroot.org>; Fri,  5 Aug 2022 16:29:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61C244032A
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 5D7C486E90; Fri,  5 Aug 2022 16:15:29 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 5 Aug 2022 18:01:44 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 192b754bf420c1fd55f4590f97fd36175db64ff4
+X-Git-Newrev: 240aae4793022e4fe26ed7fa745d30e33a02fc4b
+X-Patchwork-Hint: ignore
+Message-Id: <20220805161529.5D7C486E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pistache: fix dependency on
+ rapidjson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,123 +57,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Ruschival <thomas@ruschival.de>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhvbWFzwrIsIEFsbCwKClRob21hcyBSLiwgYSBub3RlIGZvciB5b3UgdG93YXJkIHRoZSBlbmQu
-Li4KCk9uIDIwMjItMDgtMDQgMjI6MzUgKzAyMDAsIFRob21hcyBQZXRhenpvbmkgdmlhIGJ1aWxk
-cm9vdCBzcGFrZSB0aHVzbHk6Cj4gcGlzdGFjaGUgY291bGRuJ3QgYnVpbGQgb24gdUNsaWJjIGR1
-ZSB0byBqdXN0IG9uZSBtaXNzaW5nCj4gZGVmaW5pdGlvbi4gSW4gYWRkaXRpb24sIHRoZSBDb25m
-aWcuaW4gY29tbWVudCB3YXMgd3JvbmcgYXMgaXQgc2FpZAo+IHRoYXQgYSBnbGliYyB0b29sY2hh
-aW4gd2FzIG5lZWRlZCwgd2hpbGUgaW4gZmFjdCBpdCBjb3VsZCBiZSBnbGliYyBvcgo+IG11c2wu
-CgpBcyBJIHVuZGVyc3RhbmQsIHRoaXMgcGF0Y2ggaXMgbm90IHJlYWxseSB1cHN0cmVhbWFibGUs
-IG9yIGF0IGxlYXN0IG5vdAppbiB0aGlzIHN0YXRlLgoKSG93ZXZlciwgdGhpcyBtZWFucyB3ZSB3
-aWxsIGhhdmUgdG8gY2Fycnkgb3ZlciBhbmQgb3ZlciwgYmVjYXVzZQpleGlzdGluZyB1Y2xpYmMt
-YmFzZWQgdG9vbGNoYWlucyB3aWxsIHN0aWxsIGJlIHVzYWQgaW4gdGhlIGZ1dHVyZSwgZXZlbgp3
-aGVuIG5ld2VyIHVjbGliYy1uZyBjb250YWlucyB0aGUgbmV3IGRlZmluaXRpb25zLCBzbyB3ZSBj
-YW4ndCBkcm9wIHRoaXMKcGF0Y2ggYmVjYXVzZSBpdCBtYXkgYWx3YXlzIG5lZWRlZCB3aGVuIHVz
-aW5nIGV4dGVybmFsIHRvb2xjaGFpbnMuLi4KClNvLCBJIHRoaW5rIGEgdmVyc2lvbiB0aGF0IGlz
-IHVwc3RyZWFtYWJsZSB3b3VsZCBiZSBuaWNlLi4uCgpUaG9tYXMgUi46IFRob21hcyBQLiBub3Rp
-Y2VkIGEgdmVyeSBuYXN0eSBiZWhhICB2aW91ciBmb3IgcGlzdGFjaGU6IGl0CndpbGwgZm9yY2li
-bHkgcmVnaXN0ZXIgZ2l0IGhvb2tzIHdoZW4gaXQgaXMgYnVpbHQsIGlmIGl0IGZpbmRzIHRoYXQg
-aXQKaXMgYnVpbHQgaW4gYSBnaXQgdHJlZS4KClRoaXMgaXMgdmVyeSBuYXN0eSwgYmVjYXVzZSBp
-biBvdXIgY2FzZSwgZGV2ZWxvcHBpbmcgQnVpbGRyb290IHRoZQpwaXN0YWNoZSBzb3VyY2VzIGFy
-ZSBleHRhY3RlZCBmcm9tIGEgdGFyYmFsbCwgYnV0IHRoZXJlIGlzIGEgZ2l0IHRyZWUgdG8KYmUg
-Zm91bmQgaGlnaGVyIHVwOiBpdCBmaW5kcyBCdWlsZHJvb3QncyBvd24gZ2l0IHRyZWUsIHMgcmVn
-aXN0ZXJzIGdpdApob29rcyBpbiB0aGF0IHJlcG9zaXRvcnksIGFuZCB0aGUgcmVzdWx0cyBpcyBv
-YnZpb3VzbHkgd3JvbmcgYW5kCnByZXZlbnRzIHByb3Blcmx5IHdvcmtpbmc6CgogICAgdGhvbWFz
-QHdpbmRzdXJmOn4vcHJvamV0cy9idWlsZHJvb3QgKHBpc3RhY2hlLWZpeCkkIG1ha2UgcGlzdGFj
-aGUtZXh0cmFjdAogICAgcGlzdGFjaGUtM2VjOWQ3YzRmOGI4MjhmZGQzOTE1NTBmZmY4MWIwMWU3
-MmRkNjI2OS50YXIuZ3o6IE9LIChzaGEyNTY6IGYyYjNlOGIyNTgxY2ZlZDVlMDM2ZDFiOTdhOWI5
-N2RjNzAyMmIzZGRhYWI2OWM0NjkxMjM4ZmFmZjMxOTliYzEpCiAgICA+Pj4gcGlzdGFjaGUgM2Vj
-OWQ3YzRmOGI4MjhmZGQzOTE1NTBmZmY4MWIwMWU3MmRkNjI2OSBFeHRyYWN0aW5nCiAgICBnemlw
-IC1kIC1jIC9ob21lL3Rob21hcy9kbC9waXN0YWNoZS9waXN0YWNoZS0zZWM5ZDdjNGY4YjgyOGZk
-ZDM5MTU1MGZmZjgxYjAxZTcyZGQ2MjY5LnRhci5neiB8IHRhciAtLXN0cmlwLWNvbXBvbmVudHM9
-MSAtQyAvaG9tZS90aG9tYXMvcHJvamV0cy9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL3Bpc3RhY2hl
-LTNlYzlkN2M0ZjhiODI4ZmRkMzkxNTUwZmZmODFiMDFlNzJkZDYyNjkgICAteGYgLQoKICAgIHRo
-b21hc0B3aW5kc3VyZjp+L3Byb2pldHMvYnVpbGRyb290IChwaXN0YWNoZS1maXgpJCBnaXQgY29t
-bWl0CiAgICBncmVwOiB2ZXJzaW9uLnR4dDogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQogICAg
-VXBkYXRlIHRoZSBjb21taXQgZGF0ZSBpbiB2ZXJzaW9uLnR4dCBiZWZvcmUgY29tbWl0dGluZwoK
-ICAgIHRob21hc0B3aW5kc3VyZjp+L3Byb2pldHMvYnVpbGRyb290IChwaXN0YWNoZS1maXgpJCBn
-cmVwIHBpc3RhY2hlIC5naXQvY29uZmlnCiAgICAgICAgICAgIGhvb2tzUGF0aCA9IC9ob21lL3Ro
-b21hcy9wcm9qZXRzL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvcGlzdGFjaGUtM2VjOWQ3YzRmOGI4
-MjhmZGQzOTE1NTBmZmY4MWIwMWU3MmRkNjI2OS8uaG9va3MKClNlZTogaHR0cHM6Ly9naXRodWIu
-Y29tL3Bpc3RhY2hlaW8vcGlzdGFjaGUvYmxvYi9tYXN0ZXIvbWVzb24uYnVpbGQjTDEzNyA6Cgog
-ICAgaWYgbm90IG1lc29uLmlzX3N1YnByb2plY3QoKQogICAgICAgIGdpdCA9IGZpbmRfcHJvZ3Jh
-bSgnZ2l0JywgcmVxdWlyZWQ6IGZhbHNlKQogICAgICAgIGlmIGdpdC5mb3VuZCgpCiAgICAgICAg
-ICAgIHJ1bl9jb21tYW5kKGdpdCwgJ2NvbmZpZycsICctLWxvY2FsJywgJ2NvcmUuaG9va3NQYXRo
-JywgbWVzb24uc291cmNlX3Jvb3QoKS8nLmhvb2tzJywgY2hlY2s6IGZhbHNlKQogICAgICAgIGVu
-ZGlmCiAgICBlbmRpZgoKQ291bGQgeW91IGxvb2sgaW50byBwcm9wb3NpbmcgYSBjaGFuZ2UgdXBz
-dHJlYW0sIHRoYXQgYXQgdGhlIHZlcnkgbGVhc3QKbWFrZXMgdGhhdCBob29rIHJlZ2lzdHJhdGlv
-biBvcHRpb25hbD8KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IENjOiBUaG9tYXMgUnVzY2hp
-dmFsIDx0aG9tYXNAcnVzY2hpdmFsLmRlPgo+IENjOiBBcm5vdXQgVmFuZGVjYXBwZWxsZSAoRXNz
-ZW5zaXVtL01pbmQpIDxhcm5vdXRAbWluZC5iZT4KPiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0
-YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgo+IC0tLQo+ICAuLi5wb3J0LmNj
-LWZhbGxiYWNrLXZhbHVlLWZvci1SVVNBR0VfVEgucGF0Y2ggfCAzMyArKysrKysrKysrKysrKysr
-KysrCj4gIHBhY2thZ2UvcGlzdGFjaGUvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICB8ICA0
-ICstLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDM0IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0p
-Cj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3Bpc3RhY2hlLzAwMDEtc3JjLWNvbW1vbi10
-cmFuc3BvcnQuY2MtZmFsbGJhY2stdmFsdWUtZm9yLVJVU0FHRV9USC5wYXRjaAo+IAo+IGRpZmYg
-LS1naXQgYS9wYWNrYWdlL3Bpc3RhY2hlLzAwMDEtc3JjLWNvbW1vbi10cmFuc3BvcnQuY2MtZmFs
-bGJhY2stdmFsdWUtZm9yLVJVU0FHRV9USC5wYXRjaCBiL3BhY2thZ2UvcGlzdGFjaGUvMDAwMS1z
-cmMtY29tbW9uLXRyYW5zcG9ydC5jYy1mYWxsYmFjay12YWx1ZS1mb3ItUlVTQUdFX1RILnBhdGNo
-Cj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4zMjc5MzNlMjZkCj4g
-LS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvcGlzdGFjaGUvMDAwMS1zcmMtY29tbW9uLXRy
-YW5zcG9ydC5jYy1mYWxsYmFjay12YWx1ZS1mb3ItUlVTQUdFX1RILnBhdGNoCj4gQEAgLTAsMCAr
-MSwzMyBAQAo+ICtGcm9tIDVmZWVkNmQyZjg2NzUwYmZlMWU3YzI2ZDZmZDRlOGQyMTk1ZWE4MWYg
-TW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IFRob21hcyBQZXRhenpvbmkgPHRob21h
-cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gK0RhdGU6IFRodSwgNCBBdWcgMjAyMiAxOTo1NDoy
-MyArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIHNyYy9jb21tb24vdHJhbnNwb3J0LmNjOiBmYWxs
-YmFjayB2YWx1ZSBmb3IgUlVTQUdFX1RIUkVBRAo+ICsKPiArdUNsaWJjLW5nIGN1cnJlbnRseSBk
-b2VzIG5vdCBkZWZpbmUgUlVTQUdFX1RIUkVBRCwgc28gbGV0J3MgYWRkIGEKPiArZmFsbGJhY2sg
-dmFsdWUgdW50aWwgaXQgZ2V0cyBmaXhlZCBpbiB1Q2xpYmMtbmcuIFRoZSB2YWx1ZSBpcyB0aGUg
-c2FtZQo+ICtvbiBhbGwgTGludXggc3lzdGVtcywgcmVnYXJkbGVzcyBvZiB0aGUgQ1BVIGFyY2hp
-dGVjdHVyZS4KPiArCj4gK1NpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5w
-ZXRhenpvbmlAYm9vdGxpbi5jb20+Cj4gK1Vwc3RyZWFtIGJ1ZzogaHR0cHM6Ly9tYWlsbWFuLm9w
-ZW5hZGsub3JnL21haWxtYW4zL2h5cGVya2l0dHkvbGlzdC9kZXZlbEB1Y2xpYmMtbmcub3JnL3Ro
-cmVhZC9NRVhPVVNGU0g0NlVGUzNBRU1FSUVQVEw1VTRIVkVGTC8KPiArLS0tCj4gKyBzcmMvY29t
-bW9uL3RyYW5zcG9ydC5jYyB8IDQgKysrKwo+ICsgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9u
-cygrKQo+ICsKPiArZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vdHJhbnNwb3J0LmNjIGIvc3JjL2Nv
-bW1vbi90cmFuc3BvcnQuY2MKPiAraW5kZXggNjJlZmI4Yy4uMGYzYWJiMCAxMDA2NDQKPiArLS0t
-IGEvc3JjL2NvbW1vbi90cmFuc3BvcnQuY2MKPiArKysrIGIvc3JjL2NvbW1vbi90cmFuc3BvcnQu
-Y2MKPiArQEAgLTUxNSw2ICs1MTUsMTAgQEAgbmFtZXNwYWNlIFBpc3RhY2hlOjpUY3AKPiArIAo+
-ICsgICAgICAgICBydXNhZ2Ugbm93Owo+ICsgCj4gKysjaWYgIWRlZmluZWQoUlVTQUdFX1RIUkVB
-RCkKPiArKyNkZWZpbmUgUlVTQUdFX1RIUkVBRCAxCj4gKysjZW5kaWYKPiArKwo+ICsgICAgICAg
-ICBhdXRvIHJlcyA9IGdldHJ1c2FnZShSVVNBR0VfVEhSRUFELCAmbm93KTsKPiArICAgICAgICAg
-aWYgKHJlcyA9PSAtMSkKPiArICAgICAgICAgICAgIGxvYWRSZXF1ZXN0Xy5yZWplY3Qoc3RkOjpy
-dW50aW1lX2Vycm9yKCJDb3VsZCBub3QgY29tcHV0ZSB1c2FnZSIpKTsKPiArLS0gCj4gKzIuMzcu
-MQo+ICsKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9waXN0YWNoZS9Db25maWcuaW4gYi9wYWNrYWdl
-L3Bpc3RhY2hlL0NvbmZpZy5pbgo+IGluZGV4IDUzYTRiNzNhNTguLjNhY2YxZjUzZjAgMTAwNjQ0
-Cj4gLS0tIGEvcGFja2FnZS9waXN0YWNoZS9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL3Bpc3Rh
-Y2hlL0NvbmZpZy5pbgo+IEBAIC00LDcgKzQsNiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUElTVEFD
-SEUKPiAgCWRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUgo+ICAJZGVwZW5kcyBvbiBCUjJfVE9PTENI
-QUlOX0hBU19USFJFQURTCj4gIAlkZXBlbmRzIG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUAo+IC0J
-ZGVwZW5kcyBvbiAhQlIyX1RPT0xDSEFJTl9VU0VTX1VDTElCQwo+ICAJZGVwZW5kcyBvbiAhQlIy
-X1RPT0xDSEFJTl9IQVNfQklOVVRJTFNfQlVHXzI3NTk3Cj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0Vf
-UkFQSURKU09OCj4gIAloZWxwCj4gQEAgLTE0LDkgKzEzLDggQEAgY29uZmlnIEJSMl9QQUNLQUdF
-X1BJU1RBQ0hFCj4gIAo+ICAJICBodHRwczovL2dpdGh1Yi5jb20vb2t0YWwvcGlzdGFjaGUKPiAg
-Cj4gLWNvbW1lbnQgInBpc3RhY2hlIG5lZWRzIGEgZ2xpYmMgdG9vbGNoYWluIHcvIEMrKywgZ2Nj
-ID49IDcsIHRocmVhZHMsIHdjaGFyLCBub3QgYmludXRpbHMgYnVnIDI3NTk3Igo+ICtjb21tZW50
-ICJwaXN0YWNoZSBuZWVkcyBhIHRvb2xjaGFpbiB3LyBDKyssIGdjYyA+PSA3LCB0aHJlYWRzLCB3
-Y2hhciwgbm90IGJpbnV0aWxzIGJ1ZyAyNzU5NyIKPiAgCWRlcGVuZHMgb24gIUJSMl9JTlNUQUxM
-X0xJQlNURENQUCB8fCBcCj4gLQkJICAgQlIyX1RPT0xDSEFJTl9VU0VTX1VDTElCQyB8fCBcCj4g
-IAkJICAgIUJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzcgfHwgXAo+ICAJCSAgICFCUjJfVE9P
-TENIQUlOX0hBU19USFJFQURTIHx8IFwKPiAgCQkgICAhQlIyX1VTRV9XQ0hBUiB8fCBcCj4gLS0g
-Cj4gMi4zNy4xCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-PiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
-Ci0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
-LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGlt
-ZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICsz
-MyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAg
-X19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0t
-LS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9y
-aW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25z
-cGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0t
-LS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=240aae4793022e4fe26ed7fa745d30e33a02fc4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+rapidjson has been added as a dependency of pistache as part of commit
+2f3218567953185008ec862f814bebecb9d6ed82 ("package/pistache: bump
+version & switch to meson build"), using a "depends on". However, as
+it is a library dependency, a "select" is normally used in Buildroot.
+
+rapidjson's only dependency is on C++ support, which is already a
+dependency of pistache.
+
+In addition, use = instead of += for the rapidjson dependency in the
+.mk file, as it's an unconditional dependency.
+
+Cc: Thomas Ruschival <thomas@ruschival.de>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pistache/Config.in   | 2 +-
+ package/pistache/pistache.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pistache/Config.in b/package/pistache/Config.in
+index 806c27077a..53a4b73a58 100644
+--- a/package/pistache/Config.in
++++ b/package/pistache/Config.in
+@@ -4,9 +4,9 @@ config BR2_PACKAGE_PISTACHE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_PACKAGE_RAPIDJSON
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
++	select BR2_PACKAGE_RAPIDJSON
+ 	help
+ 	  Pistache is a modern and elegant HTTP and REST framework
+ 	  for C++. It is entirely written in pure C++17 and provides
+diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
+index 65d9b2412c..f4de5e3b2a 100644
+--- a/package/pistache/pistache.mk
++++ b/package/pistache/pistache.mk
+@@ -10,7 +10,7 @@ PISTACHE_LICENSE = Apache-2.0
+ PISTACHE_LICENSE_FILES = LICENSE
+ 
+ PISTACHE_INSTALL_STAGING = YES
+-PISTACHE_DEPENDENCIES += rapidjson
++PISTACHE_DEPENDENCIES = rapidjson
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ PISTACHE_DEPENDENCIES += openssl
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
