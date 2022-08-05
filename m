@@ -1,73 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 143EEC00140
-	for <buildroot@archiver.kernel.org>; Fri,  5 Aug 2022 07:23:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E86C00140
+	for <buildroot@archiver.kernel.org>; Fri,  5 Aug 2022 07:24:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D13481430;
-	Fri,  5 Aug 2022 07:23:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D13481430
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF3846F937;
+	Fri,  5 Aug 2022 07:23:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF3846F937
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MmY3n6Ihv83y; Fri,  5 Aug 2022 07:23:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UUso7KiPFUtg; Fri,  5 Aug 2022 07:23:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D351813E3;
-	Fri,  5 Aug 2022 07:23:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D351813E3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F41601BF869
- for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 07:23:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B1F760E08;
+	Fri,  5 Aug 2022 07:23:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B1F760E08
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 855BF1BF869
+ for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 07:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC4A241085
- for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 07:23:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC4A241085
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60C5A60B93
+ for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 07:23:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60C5A60B93
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a-TLgb3OJeNZ for <buildroot@lists.busybox.net>;
- Fri,  5 Aug 2022 07:23:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YlB-ro_c_Y6H for <buildroot@lists.busybox.net>;
+ Fri,  5 Aug 2022 07:23:45 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FF5840CC5
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.39])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5FF5840CC5
- for <buildroot@buildroot.org>; Fri,  5 Aug 2022 07:23:42 +0000 (UTC)
-Received: from opfedar06.francetelecom.fr (unknown [xx.xx.xx.8])
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8A4660B8F
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.35])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C8A4660B8F
+ for <buildroot@buildroot.org>; Fri,  5 Aug 2022 07:23:44 +0000 (UTC)
+Received: from opfednr00.francetelecom.fr (unknown [xx.xx.xx.64])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits))
  (No client certificate requested)
- by opfedar23.francetelecom.fr (ESMTP service) with ESMTPS id 4LzcXD3Cw4zBs1d
- for <buildroot@buildroot.org>; Fri,  5 Aug 2022 09:23:40 +0200 (CEST)
+ by opfednr21.francetelecom.fr (ESMTP service) with ESMTPS id 4LzcXG2rQ9z5vx8
+ for <buildroot@buildroot.org>; Fri,  5 Aug 2022 09:23:42 +0200 (CEST)
 Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Fri, 05 Aug 2022 09:23:38 +0200
+ Fri, 05 Aug 2022 09:23:40 +0200
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Fri, 5 Aug 2022 09:23:36 +0200
-Message-ID: <31813_1659684220_62ECC57C_31813_212_5_89e764dbf0f4937be712b62946582072287cd163.1659683862.git.yann.morin@orange.com>
+Date: Fri, 5 Aug 2022 09:23:37 +0200
+Message-ID: <2785_1659684222_62ECC57E_2785_486_1_310870c5ee2407ccbb8926d2a37897df5f90c30c.1659683862.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <89e764dbf0f4937be712b62946582072287cd163.1659683862.git.yann.morin@orange.com>
+References: <89e764dbf0f4937be712b62946582072287cd163.1659683862.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX406.corporate.adroot.infra.ftgroup
- (10.115.27.15) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX201.corporate.adroot.infra.ftgroup (10.115.26.6)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1659684220;
- bh=Ig97jBptqART6BQgpuTcX31pm/4DytFRhCeeoVTa5Sg=;
+ d=orange.com; s=ORANGE001; t=1659684222;
+ bh=xSsArvGly0oCNNijeBncNooVIBpQVnJ53RYlOz7NlRk=;
  h=From:To:Subject:Date:Message-ID:MIME-Version:
  Content-Transfer-Encoding:Content-Type;
- b=qcMRH6NcP3lx3bUh8ZgjYch6947vVteQR02Dx1B/Hqvdiubozby6+i9H6AOpKKbQk
- 9vDFREFKL7a8eu+b9N64MXRuymu20n+C7adNIxq2E99lgC38vqgnHa1RO4RWPRsRBT
- IeROhphv/Oc0glqxL0azafoSSuwC6+akXiVnNw5WxTPlI0Ja6HShyA8GrzZcs4S4+S
- hSGTcezF81VX2YOqvYNsrtnUDy1Mfi5bYd4rVnxwMXLiO/9eHgroPtR0f8bTmyomek
- kILU917ito6mMpShsiNZjHsYAsatnWUl5R+py4r2fin8GSFoxj1LsuLgH4o5xkJVoj
- JHJqmEjhBBPAg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=ePW/76f0Vf/aMtad8LrSgbdxGvJ9fQVURV3lZHPmebvVg8qcKUckU4iXTHyjB6Euh
+ 1S7Fd2HcikTyP9QYEVfWrRqmZ4puNLrPbtAZO06tDGJpxhbu8L72tDDEeeaOsf9mKl
+ 7DrMS2AUU52bdmjxIOtZz/hzy+ve+CAmwID443EFWlum70gdAkaF9TKUdylLqk3qit
+ 3X3QEz72e4NqmNbEG60MTsgTgmVmW9KxFnf3UINuXMn55lRlkm8m+U1g+sPxpx4muf
+ 45kNWI8PXYdi70+3cXkZeIyZPLLkocdD5TkO4nlqwUm9GKX/Sio6yBcl6V+IFkCum1
+ 8L17C3obPLekQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=qcMRH6Nc
-Subject: [Buildroot] [PATCH 1/3] package/lshw: allso uses hwdata' PNP IDs
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=ePW/76f0
+Subject: [Buildroot] [PATCH 2/3] package/lshw: reformat
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,31 +89,63 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Commit 29bccabdebff (lshw: use data files provided by hwdata) removed
-the hardware info DBs installed by lshw, in favour of those provided by
-hwdata, as the former are way out-dated while the latter are more
-up-to-date.
+lshw was introduced in early 2012, and since then our coding standards
+have evolved substancially, and so lshw is lagging way behind nowadays.
 
-However, it forgot to also select the PNP ID database, to replace the
-one lshw would install.
+Reformat it with the current styles:
+  - mandatory dependencies go before build variables
+  - one item per line in multi-line assignments
+  - space after the last item in a multi-line assignment
+  - don't hard-code the build target 'all' in the common make opts
+  - split long command lines
+  - format build and install command lines similarly for ease of
+    comparison
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 ---
- package/lshw/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/lshw/lshw.mk | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/package/lshw/Config.in b/package/lshw/Config.in
-index 5e0e47b6e2..fb557aacff 100644
---- a/package/lshw/Config.in
-+++ b/package/lshw/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LSHW
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_HWDATA # runtime
- 	select BR2_PACKAGE_HWDATA_PCI_IDS
-+	select BR2_PACKAGE_HWDATA_PNP_IDS
- 	select BR2_PACKAGE_HWDATA_USB_IDS
- 	help
- 	  lshw (Hardware Lister) is a small tool to provide
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index 9f1ff8938a..45b22e88e3 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -10,20 +10,29 @@ LSHW_SOURCE = lshw-B.$(LSHW_VERSION).tar.gz
+ LSHW_LICENSE = GPL-2.0
+ LSHW_LICENSE_FILES = COPYING
+ 
+-LSHW_MAKE_OPTS = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)" \
+-	RPM_OPT_FLAGS="$(TARGET_CFLAGS)" all
++LSHW_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++
++LSHW_MAKE_OPTS = \
++	CC="$(TARGET_CC)" \
++	CXX="$(TARGET_CXX)" \
++	AR="$(TARGET_AR)" \
++	RPM_OPT_FLAGS="$(TARGET_CFLAGS)"
++
+ LSHW_MAKE_ENV = \
+ 	$(TARGET_MAKE_ENV) \
+ 	LIBS=$(TARGET_NLS_LIBS)
+-LSHW_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ 
+ define LSHW_BUILD_CMDS
+-	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src $(LSHW_MAKE_OPTS)
++	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src \
++		$(LSHW_MAKE_OPTS) \
++		all
+ endef
+ 
+ define LSHW_INSTALL_TARGET_CMDS
+-	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) \
+-		$(LSHW_MAKE_OPTS) install
++	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src \
++		$(LSHW_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) \
++		install
+ 	$(RM) -rf $(TARGET_DIR)/usr/share/lshw
+ endef
+ 
 -- 
 2.25.1
 
