@@ -1,79 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE339C00140
-	for <buildroot@archiver.kernel.org>; Fri,  5 Aug 2022 06:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD7BC00140
+	for <buildroot@archiver.kernel.org>; Fri,  5 Aug 2022 07:12:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6DF8F40B99;
-	Fri,  5 Aug 2022 06:21:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DF8F40B99
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MLMqF3orr06V; Fri,  5 Aug 2022 06:21:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69899408E0;
-	Fri,  5 Aug 2022 06:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69899408E0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2A2731BF418
- for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 06:21:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0368941D50
- for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 06:21:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0368941D50
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E0AD41D25;
+	Fri,  5 Aug 2022 07:12:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0AD41D25
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id drEugzyDxHde for <buildroot@lists.busybox.net>;
- Fri,  5 Aug 2022 06:21:42 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 447A941D4B
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 447A941D4B
- for <buildroot@buildroot.org>; Fri,  5 Aug 2022 06:21:41 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id j1so2142313wrw.1
- for <buildroot@buildroot.org>; Thu, 04 Aug 2022 23:21:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc;
- bh=rjxxVhreETXOtCCuoS3S/2D23PyXV3EeAMXmIYm+mbg=;
- b=op/LeicW+2TACZxq2Rirka5DN5j8IZsvkq6ExJzrbAolaSch9QhUBHQuLGwTx2CM6A
- ZYx3+sjahXGuSD517ZDjlpI5h4nSM3czD+PKRboAU1utExkHOgKpCMN6ZMT3KwCv5oJo
- OBCq9Tm3kNz4ajcTK1j5TnSCGEnKncC/fsaeszhITFmMAVU2KDKqT6lZK4oqg8oEbZx2
- A4rCu2b+6YrGgB72slFyUNbAC4VubIdsYElWsRXaDrz0usb28UoxmpFIlyV4L8Ex1vt0
- f93QNdDHZur0apkX9NA6/QL2T38UtjcayzplxtHkNvX3/8SdmRHxOwB2aELt4F9WPv2H
- ltGg==
-X-Gm-Message-State: ACgBeo0DNTt5tZgovnmPMvUUh+ipreQCV8MTSIWlLhLA2gf3V/oqCWDk
- 24FgtmiN9HmnYKCxKTcSSIrxfeBqFFpbjG3C+I0=
-X-Google-Smtp-Source: AA6agR5tj8qTX6M/gOkgTAaNWsLGcXUpk2HknB1zM5ZM3oGemZ1rt2auoG+ES4IKKTyLVneFrgHn26uGssJ6tgrnGFc=
-X-Received: by 2002:a05:6000:1ac8:b0:220:6af3:935d with SMTP id
- i8-20020a0560001ac800b002206af3935dmr3239679wry.549.1659680499125; Thu, 04
- Aug 2022 23:21:39 -0700 (PDT)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 03RedBWcqcOs; Fri,  5 Aug 2022 07:12:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A71B341CA2;
+	Fri,  5 Aug 2022 07:12:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A71B341CA2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BCC51BF869
+ for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 07:12:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45D4C40CE2
+ for <buildroot@lists.busybox.net>; Fri,  5 Aug 2022 07:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45D4C40CE2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jDbztEyib_7H for <buildroot@lists.busybox.net>;
+ Fri,  5 Aug 2022 07:12:18 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F18BC401DF
+Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F18BC401DF
+ for <buildroot@buildroot.org>; Fri,  5 Aug 2022 07:12:17 +0000 (UTC)
+Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
+ by mail.kmu-office.ch (Postfix) with ESMTPSA id 6CB0C5C8A5A;
+ Fri,  5 Aug 2022 09:12:14 +0200 (CEST)
+From: Stefan Agner <stefan@agner.ch>
+To: thomas.petazzoni@bootlin.com,
+	buildroot@buildroot.org
+Date: Fri,  5 Aug 2022 09:12:13 +0200
+Message-Id: <c225549c7b76f63429e7fddcb13e38de3c8d30c9.1659683491.git.stefan@agner.ch>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220802013359.96843-1-christian@paral.in>
-In-Reply-To: <20220802013359.96843-1-christian@paral.in>
-From: Joel Stanley <joel@jms.id.au>
-Date: Fri, 5 Aug 2022 06:21:26 +0000
-Message-ID: <CACPK8XcLM6wZymBELyAhFb-Zpn2XBAC0iuigC1fN=gHF6QjR+Q@mail.gmail.com>
-To: Christian Stewart <christian@paral.in>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jms.id.au; s=google;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc;
- bh=rjxxVhreETXOtCCuoS3S/2D23PyXV3EeAMXmIYm+mbg=;
- b=la6FAUtvparKVIM75uNT4UUPqVMt7pWNr1/5N25spS1UmZgdzjdh/iVz91pwH82/kd
- dKVNL/k9Gw/R2nTpM7fFrhbZ5wiqFaiijT0ZJ9CgH7NCBOUhvv7hZYWqp/EgO47alRcu
- lGGANeeYcoQWC/UY0l2DHgu7fExM3JfGdFgfM=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au
- header.a=rsa-sha256 header.s=google header.b=la6FAUtv
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: security bump to 1.18.5
+ d=agner.ch; s=dkim; t=1659683534;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:
+ content-transfer-encoding:content-transfer-encoding:in-reply-to:
+ references; bh=s+7Ql1UYnmOdLYcGV8VfY6oCc6xUzkMAQlPzWJim6A4=;
+ b=i7GKkbpsHrZ6EcjuBvlMlQWWQkiKvbv90hcNKPDi2VC4y8NRoG0VUdUCSAF0T7xVUwywph
+ Q2VxMCJBSWXv0aAGIfNl5yVFZWVtYAe3BqAg2dt68tHqVzzWWK+O42d1m7liTKL8WKWqAj
+ 9okNsBmS2nE8aE9+LTGufnRuiPdn0/k=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
+ header.a=rsa-sha256 header.s=dkim header.b=i7GKkbps
+Subject: [Buildroot] [PATCH v2] boot/grub2: fix build race condition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,70 +69,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: yann.morin.1998@free.fr, stefan@agner.ch
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 2 Aug 2022 at 01:38, Christian Stewart via buildroot
-<buildroot@buildroot.org> wrote:
->
-> go1.18.4 includes security fixes to the compress/gzip, encoding/gob,
-> encoding/xml, go/parser, io/fs, net/http, and path/filepath packages, as well as
-> bug fixes to the compiler, the go command, the linker, the runtime, and the
-> runtime/metrics package.
->
-> go1.18.5 includes security fixes to the encoding/gob and math/big packages, as
-> well as bug fixes to the compiler, the go command, the runtime, and the testing
-> package.
->
-> https://go.dev/doc/devel/release#go1.18.minor
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
+Sometimes buildroot fails with:
+../grub-core/kern/emu/hostfs.c:20:10: fatal error: config-util.h: No such file or directory
+   20 | #include <config-util.h>
+      |          ^~~~~~~~~~~~~~~
 
-This includes the fixes for go on ppc64le that I posted here:
+Add a patch which fixes the Makefile to correctly generate config-util.h
+first.
 
-https://patchwork.ozlabs.org/project/buildroot/patch/20220511114003.162006-2-joel@jms.id.au/
+Note: This readds a work around to avoid re-running autoconf. This has
+previously been used to avoid having to run the rather complex build
+file generation machinery of GRUB2. See 7e64a050fb ("boot/grub2: Fix
+GRUB i386-pc build with Ubuntu gcc").
 
-This patch was never merged, but it can be dropped now.
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+---
+ ...ub_fstest.pp-depend-on-config-util.h.patch | 45 +++++++++++++++++++
+ boot/grub2/grub2.mk                           |  6 +++
+ 2 files changed, 51 insertions(+)
+ create mode 100644 boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
 
-> ---
->  package/go/go.hash | 4 ++--
->  package/go/go.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/go/go.hash b/package/go/go.hash
-> index 45af1fc06f..2a0f02abfd 100644
-> --- a/package/go/go.hash
-> +++ b/package/go/go.hash
-> @@ -1,3 +1,3 @@
-> -# From https://golang.org/dl/
-> -sha256  0012386ddcbb5f3350e407c679923811dbd283fcdc421724931614a842ecbc2d  go1.18.3.src.tar.gz
-> +# From https://go.dev/dl
-> +sha256  9920d3306a1ac536cdd2c796d6cb3c54bc559c226fc3cc39c32f1e0bd7f50d2a  go1.18.5.src.tar.gz
->  sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index 172bf16b6f..16602e590b 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -GO_VERSION = 1.18.3
-> +GO_VERSION = 1.18.5
->  GO_SITE = https://storage.googleapis.com/golang
->  GO_SOURCE = go$(GO_VERSION).src.tar.gz
->
-> --
-> 2.35.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch b/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
+new file mode 100644
+index 0000000000..ea8787de7a
+--- /dev/null
++++ b/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
+@@ -0,0 +1,45 @@
++From bb08b723fa7bc56439c7bc166cff361628e73453 Mon Sep 17 00:00:00 2001
++Message-Id: <bb08b723fa7bc56439c7bc166cff361628e73453.1659683176.git.stefan@agner.ch>
++From: Stefan Agner <stefan@agner.ch>
++Date: Fri, 5 Aug 2022 08:59:52 +0200
++Subject: [PATCH] Makefile: Make grub_fstest.pp depend on config-util.h
++
++Warning: This commit does not apply to the GRUB git repository. This
++patch applies against the release tarballs.
++
++Upstream status: https://lists.gnu.org/archive/html/grub-devel/2022-08/msg00045.html
++Signed-off-by: Stefan Agner <stefan@agner.ch>
++---
++ Makefile.am | 2 +-
++ Makefile.in | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index bf9c1ba..f08cfc0 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -51,7 +51,7 @@ libgrub_a_init.c: libgrub_a_init.lst $(top_srcdir)/geninit.sh
++ CLEANFILES += libgrub_a_init.c
++ 
++ # For grub-fstest
++-grub_fstest.pp: $(grub_fstest_SOURCES)
+++grub_fstest.pp: config-util.h $(grub_fstest_SOURCES)
++ 	$(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(grub_fstest_CPPFLAGS) $(CPPFLAGS) \
++ 	  -D'GRUB_MOD_INIT(x)=@MARKER@x@' $^ > $@ || (rm -f $@; exit 1)
++ CLEANFILES += grub_fstest.pp
++diff --git a/Makefile.in b/Makefile.in
++index 13f2eef..2c1d20b 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -13312,7 +13312,7 @@ libgrub_a_init.c: libgrub_a_init.lst $(top_srcdir)/geninit.sh
++ 	sh $(top_srcdir)/geninit.sh `cat $<` > $@ || (rm -f $@; exit 1)
++ 
++ # For grub-fstest
++-grub_fstest.pp: $(grub_fstest_SOURCES)
+++grub_fstest.pp: config-util.h $(grub_fstest_SOURCES)
++ 	$(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(grub_fstest_CPPFLAGS) $(CPPFLAGS) \
++ 	  -D'GRUB_MOD_INIT(x)=@MARKER@x@' $^ > $@ || (rm -f $@; exit 1)
++ 
++-- 
++2.37.1
++
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 57593330dd..6c9c80dc15 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -13,6 +13,12 @@ GRUB2_DEPENDENCIES = host-bison host-flex host-grub2
+ HOST_GRUB2_DEPENDENCIES = host-bison host-flex
+ GRUB2_INSTALL_IMAGES = YES
+ 
++define GRUB2_AVOID_AUTORECONF
++       $(Q)touch $(@D)/Makefile.in
++endef
++GRUB2_POST_PATCH_HOOKS += GRUB2_AVOID_AUTORECONF
++HOST_GRUB2_POST_PATCH_HOOKS += GRUB2_AVOID_AUTORECONF
++
+ # CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
+ # doesn't exist upstream, but is added by the Redhat/Fedora
+ # packaging. Not applicable to Buildroot.
+-- 
+2.37.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
