@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2B23C25B0E
-	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 21:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 591BCC19F2D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 21:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8664381A95;
-	Sat,  6 Aug 2022 21:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8664381A95
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC0F683E46;
+	Sat,  6 Aug 2022 21:24:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC0F683E46
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8OIaxtdhqTK0; Sat,  6 Aug 2022 21:23:33 +0000 (UTC)
+	with ESMTP id L-MoDzWBjcIK; Sat,  6 Aug 2022 21:24:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67EA9813EE;
-	Sat,  6 Aug 2022 21:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67EA9813EE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BFE581BF3FF
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 21:23:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0625581A95;
+	Sat,  6 Aug 2022 21:24:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0625581A95
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B3631BF3FF
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 21:24:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 059F9415A7
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 21:23:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 059F9415A7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B95583E41
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 21:24:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B95583E41
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k5x3HZPfoZHJ for <buildroot@lists.busybox.net>;
- Sat,  6 Aug 2022 21:23:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5_kjuimgeSHU for <buildroot@lists.busybox.net>;
+ Sat,  6 Aug 2022 21:24:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 968FA417D5
- for <buildroot@buildroot.org>; Sat,  6 Aug 2022 21:23:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 968FA417D5
+ by smtp1.osuosl.org (Postfix) with ESMTP id A789081A95
+ for <buildroot@buildroot.org>; Sat,  6 Aug 2022 21:24:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A789081A95
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id C8F9186E4D; Sat,  6 Aug 2022 21:08:53 +0000 (UTC)
+ id E390486E50; Sat,  6 Aug 2022 21:09:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 6 Aug 2022 23:22:30 +0200
+Date: Sat, 6 Aug 2022 23:23:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2c6d007fc0c165d9da3bc39b48d2f2b07ce0aaf0
-X-Git-Newrev: 72a009fa98a37825624f70dc2a1cf825a5999a0a
+X-Git-Oldrev: 72a009fa98a37825624f70dc2a1cf825a5999a0a
+X-Git-Newrev: c0a44ba0dfbf4767a48f3c63cece57a707e8d678
 X-Patchwork-Hint: ignore
-Message-Id: <20220806210853.C8F9186E4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lshw: bump to latest HEAD
+Message-Id: <20220806210958.E390486E50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/friendlyarm_nanopi_neo: drop
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,227 +59,208 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4324901376076152186=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72a009fa98a37825624f70dc2a1cf825a5999a0a
+--===============4324901376076152186==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=c0a44ba0dfbf4767a48f3c63cece57a707e8d678
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lshw is seldom released, the last one being more than two years ago.
-Although the amount of changes is not huge, there have been some
-significant changes and fixes, so it warrants a bump to the current
-HEAD of the git repo.
+nanopi-neo no longer builds, as uboot needs python2 on the host:
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053540
 
-lshw tries to build the translations with msgfmt, but as a development
-and debugging aid, or as a backend to other scripts, translations are
-not really useful. We disable that by overriding the LANGUAGES
-variables to an empty list.
+I no longer have access to that board, so I can't test an update to
+either uboot or the kernel anymore.
 
-Patches are dropped: the basename() patch has been superseded by an
-upstream change (introduced shortname() as a wrapper to it), and the
-LONG_BIT fix has been applied. It was a bit difficult to find, as
-upstream has not applied the patches, nor kept authorship, nor kept the
-commit logs...
+Drop the board.
 
-Of noteworthy attention, this fixes the JSON output format (at least for
-the flaws we were hitting in our cases).
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...01-Fix-musl-build-basename-is-in-libgen.h.patch | 101 ---------------------
- ...02-Fix-musl-build-wrong-usage-of-LONG_BIT.patch |  38 --------
- package/lshw/lshw.hash                             |   2 +-
- package/lshw/lshw.mk                               |   6 +-
- 4 files changed, 4 insertions(+), 143 deletions(-)
+ DEVELOPERS                                |  2 --
+ board/friendlyarm/nanopi-neo/boot.cmd     |  8 ------
+ board/friendlyarm/nanopi-neo/genimage.cfg | 34 ------------------------
+ board/friendlyarm/nanopi-neo/readme.txt   | 42 ------------------------------
+ configs/friendlyarm_nanopi_neo_defconfig  | 43 -------------------------------
+ 5 files changed, 129 deletions(-)
 
-diff --git a/package/lshw/0001-Fix-musl-build-basename-is-in-libgen.h.patch b/package/lshw/0001-Fix-musl-build-basename-is-in-libgen.h.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ac000f1ba1..18f4d1f0e6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3038,8 +3038,6 @@ F:	package/gloox/
+ F:	package/tpm2-pkcs11/
+ 
+ N:	Yann E. MORIN <yann.morin.1998@free.fr>
+-F:	board/friendlyarm/nanopi-neo/
+-F:	configs/friendlyarm_nanopi_neo_defconfig
+ F:	fs/squashfs/
+ F:	package/asterisk/
+ F:	package/cegui/
+diff --git a/board/friendlyarm/nanopi-neo/boot.cmd b/board/friendlyarm/nanopi-neo/boot.cmd
 deleted file mode 100644
-index 0917260d4c..0000000000
---- a/package/lshw/0001-Fix-musl-build-basename-is-in-libgen.h.patch
+index 7874057859..0000000000
+--- a/board/friendlyarm/nanopi-neo/boot.cmd
 +++ /dev/null
-@@ -1,101 +0,0 @@
--From 6bc5abf99ef01e5aeea4f5bce5f5bff7f1b8ddd9 Mon Sep 17 00:00:00 2001
--From: Sergio Prado <sergio.prado@e-labworks.com>
--Date: Sat, 4 Jul 2020 20:02:53 -0300
--Subject: [PATCH] Fix musl build: basename() is in libgen.h.
+@@ -1,8 +0,0 @@
+-setenv fdt_high ffffffff
 -
--Also, its argument is not const, so add const_cast.
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 -
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
--Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-----
-- src/core/sysfs.cc | 19 ++++++++++---------
-- 1 file changed, 10 insertions(+), 9 deletions(-)
+-fatload mmc 0 $kernel_addr_r zImage
+-fatload mmc 0 $fdt_addr_r sun8i-h3-nanopi-neo.dtb
 -
--diff --git a/src/core/sysfs.cc b/src/core/sysfs.cc
--index 32d65642f157..c2fa84fe8d0f 100644
----- a/src/core/sysfs.cc
--+++ b/src/core/sysfs.cc
--@@ -16,6 +16,7 @@
-- #include <sys/stat.h>
-- #include <sys/types.h>
-- #include <sys/mount.h>
--+#include <libgen.h>
-- 
-- 
-- __ID("@(#) $Id$");
--@@ -100,7 +101,7 @@ static string sysfs_getbustype(const string & path)
--   {
--     devname =
--       string(fs.path + "/bus/") + string(namelist[i]->d_name) +
---      "/devices/" + basename(path.c_str());
--+      "/devices/" + basename(const_cast<char*>(path.c_str()));
-- 
--     if (samefile(devname, path))
--       return string(namelist[i]->d_name);
--@@ -140,7 +141,7 @@ static string sysfstobusinfo(const string & path)
-- 
--   if (bustype == "usb")
--   {
---    string name = basename(path.c_str());
--+    string name = basename(const_cast<char*>(path.c_str()));
--     if (matches(name, "^[0-9]+-[0-9]+(\\.[0-9]+)*:[0-9]+\\.[0-9]+$"))
--     {
--       size_t colon = name.rfind(":");
--@@ -151,7 +152,7 @@ static string sysfstobusinfo(const string & path)
-- 
--   if (bustype == "virtio")
--   {
---    string name = basename(path.c_str());
--+    string name = basename(const_cast<char*>(path.c_str()));
--     if (name.compare(0, 6, "virtio") == 0)
--       return "virtio@" + name.substr(6);
--     else
--@@ -159,10 +160,10 @@ static string sysfstobusinfo(const string & path)
--   }
-- 
--   if (bustype == "vio")
---    return string("vio@") + basename(path.c_str());
--+    return string("vio@") + basename(const_cast<char*>(path.c_str()));
-- 
--   if (bustype == "ccw")
---    return string("ccw@") + basename(path.c_str());
--+    return string("ccw@") + basename(const_cast<char*>(path.c_str()));
-- 
--   if (bustype == "ccwgroup")
--   {
--@@ -240,7 +241,7 @@ string entry::driver() const
--   string driverlink = This->devpath + "/driver";
--   if (!exists(driverlink))
--     return "";
---  return basename(readlink(driverlink).c_str());
--+  return basename(const_cast<char*>(readlink(driverlink).c_str()));
-- }
-- 
-- 
--@@ -328,7 +329,7 @@ string entry::name_in_class(const string & classname) const
-- 
-- string entry::name() const
-- {
---  return basename(This->devpath.c_str());
--+  return basename(const_cast<char*>(This->devpath.c_str()));
-- }
-- 
-- 
--@@ -340,12 +341,12 @@ entry entry::parent() const
-- 
-- string entry::classname() const
-- {
---  return basename(dirname(This->devpath).c_str());
--+  return basename(const_cast<char*>(dirname(This->devpath).c_str()));
-- }
-- 
-- bool entry::isvirtual() const
-- {
---  return string(basename(dirname(dirname(This->devpath)).c_str())) == "virtual";
--+  return string(basename(const_cast<char*>(dirname(dirname(This->devpath)).c_str()))) == "virtual";
-- }
-- 
-- string entry::string_attr(const string & name, const string & def) const
---- 
--2.17.1
--
-diff --git a/package/lshw/0002-Fix-musl-build-wrong-usage-of-LONG_BIT.patch b/package/lshw/0002-Fix-musl-build-wrong-usage-of-LONG_BIT.patch
+-bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
 deleted file mode 100644
-index dd8bdb5beb..0000000000
---- a/package/lshw/0002-Fix-musl-build-wrong-usage-of-LONG_BIT.patch
+index 92af667552..0000000000
+--- a/board/friendlyarm/nanopi-neo/genimage.cfg
 +++ /dev/null
-@@ -1,38 +0,0 @@
--From 246b9e07f22d551fae0718315273760c087b79ca Mon Sep 17 00:00:00 2001
--From: Sergio Prado <sergio.prado@e-labworks.com>
--Date: Sat, 4 Jul 2020 20:28:26 -0300
--Subject: [PATCH] Fix musl build: wrong usage of LONG_BIT
+@@ -1,34 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"sun8i-h3-nanopi-neo.dtb",
+-			"boot.scr"
+-		}
+-	}
 -
--LONG_BIT is not a sysconf value, it is either 32 or 64. Using it as
--a sysconf value will give weird results.
+-	size = 10M
+-}
 -
--Originally it was sysconf(_SC_LONG_BIT) (before it was "fixed" by the
--gentoo guys). But this is useless: it will always return a value
--equal to LONG_BIT: it's either compiled 32-bit or 64-bit so a runtime
--lookup doesn't make sense. For this reason, musl has removed the
--definition of _SC_LONG_BIT.
+-image sdcard.img {
+-	hdimage {
+-	}
 -
--Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
--Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-- src/core/abi.cc | 4 +---
-- 1 file changed, 1 insertion(+), 3 deletions(-)
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-sunxi-with-spl.bin"
+-		offset = 8K
+-		size = 1016K # 1MB - 8KB
+-	}
 -
--diff --git a/src/core/abi.cc b/src/core/abi.cc
--index adff7b55acfa..76c664c03ce7 100644
----- a/src/core/abi.cc
--+++ b/src/core/abi.cc
--@@ -20,9 +20,7 @@ __ID("@(#) $Id: mem.cc 1352 2006-05-27 23:54:13Z ezix $");
-- bool scan_abi(hwNode & system)
-- {
--   // are we compiled as 32- or 64-bit process ?
---  long sc = sysconf(LONG_BIT);
---  if(sc==-1) sc = sysconf(_SC_LONG_BIT);
---  if(sc!=-1) system.setWidth(sc);
--+  system.setWidth(LONG_BIT);
-- 
--   pushd(PROC_SYS);
-- 
---- 
--2.17.1
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
 -
-diff --git a/package/lshw/lshw.hash b/package/lshw/lshw.hash
-index 0b60b3b572..5626d7131e 100644
---- a/package/lshw/lshw.hash
-+++ b/package/lshw/lshw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9bb347ac87142339a366a1759ac845e3dbb337ec000aa1b99b50ac6758a80f80  lshw-B.02.19.2.tar.gz
-+sha256  c62c89d4b3305d897bd644524bbc816c1793c41c9fea10381b75f9d5b074e056  lshw-d76afbaaf40e953243da921844cddff8185324f3.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
-index 45b22e88e3..bf286647b6 100644
---- a/package/lshw/lshw.mk
-+++ b/package/lshw/lshw.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--LSHW_VERSION = 02.19.2
--LSHW_SITE = http://ezix.org/software/files
--LSHW_SOURCE = lshw-B.$(LSHW_VERSION).tar.gz
-+LSHW_VERSION = d76afbaaf40e953243da921844cddff8185324f3
-+LSHW_SITE = $(call github,lyonel,lshw,$(LSHW_VERSION))
- LSHW_LICENSE = GPL-2.0
- LSHW_LICENSE_FILES = COPYING
- 
-@@ -16,6 +15,7 @@ LSHW_MAKE_OPTS = \
- 	CC="$(TARGET_CC)" \
- 	CXX="$(TARGET_CXX)" \
- 	AR="$(TARGET_AR)" \
-+	LANGUAGES= \
- 	RPM_OPT_FLAGS="$(TARGET_CFLAGS)"
- 
- LSHW_MAKE_ENV = \
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/friendlyarm/nanopi-neo/readme.txt b/board/friendlyarm/nanopi-neo/readme.txt
+deleted file mode 100644
+index 84fb9cc484..0000000000
+--- a/board/friendlyarm/nanopi-neo/readme.txt
++++ /dev/null
+@@ -1,42 +0,0 @@
+-Intro
+-=====
+-
+-The instructions herein are valid for the FriendlyARM NanoPi NEO,
+-both the 256MiB and 512MiB versions. They should also work for the
+-NanoPi NEO Air, but this is untested so far.
+-
+-The FriendlyARM Nanopi NEO is a 4x4cm² board with an Allwiner H3 SoC:
+-  - quad-core Cortex-A7 @1.2GHz
+-  - 256 or 512MiB of DDR
+-  - uSDCard as only storage option
+-  - 3x USB 2.0 host (one socket, two on expansion pin-holes)
+-  - 1x USB 2.0 OTG (also used as power source)
+-  - 10/100 ethernet MAC
+-  - GPIOs, SPI, I2c...
+-
+-Support for the Nanopi NEO in U-Boot and Linux is very recent, so only
+-core, basic features are available.
+-
+-Unfortunately, support for the ethernet MAC and the USB OTG are not
+-yet upstream, but are being actively worked on.
+-
+-
+-How to build
+-============
+-
+-    $ make friendlyarm_nanopi_neo_defconfig
+-    $ make
+-
+-Note: you will need access to the internet to download the required
+-sources.
+-
+-You will then obtain an image ready to be written to your micro SDcard:
+-
+-    $ dd if=output/images/sdcard.img of=/dev/sdX bs=1M
+-
+-Notes:
+-  - replace 'sdX' with the actual device with your micro SDcard,
+-  - you may need to be root to do that (use 'sudo').
+-
+-Insert the micro SDcard in your NanoPi NEO and power it up. The console
+-is on the serial line, 115200 8N1.
+diff --git a/configs/friendlyarm_nanopi_neo_defconfig b/configs/friendlyarm_nanopi_neo_defconfig
+deleted file mode 100644
+index 1519d828d6..0000000000
+--- a/configs/friendlyarm_nanopi_neo_defconfig
++++ /dev/null
+@@ -1,43 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a7=y
+-BR2_ARM_FPU_VFPV4=y
+-
+-BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
+-
+-# Linux headers same as kernel, a 5.3 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+-
+-# Use a -rc kernel to get the DTS
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.13"
+-BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-nanopi-neo"
+-
+-# Use an -rc tag because the defconfig is very recent
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/friendlyarm/nanopi-neo/boot.cmd"
+-
+-# Build an sdcard image
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo/genimage.cfg"
+-# BR2_TARGET_ROOTFS_TAR is not set
+-
+-# Additional tools
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+
+--===============4324901376076152186==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4324901376076152186==--
