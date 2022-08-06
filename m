@@ -1,67 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5A0C19F2D
-	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 15:44:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84E43C19F2D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 15:47:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85FCA828C5;
-	Sat,  6 Aug 2022 15:44:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85FCA828C5
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC26860AC9;
+	Sat,  6 Aug 2022 15:47:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC26860AC9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bbG30tc5xxCz; Sat,  6 Aug 2022 15:47:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFFD960A98;
+	Sat,  6 Aug 2022 15:47:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFFD960A98
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C8D81BF5A8
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 15:47:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E8A2C828F2
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 15:47:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8A2C828F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tFb-VFPWF2pB; Sat,  6 Aug 2022 15:44:03 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FB1B82890;
-	Sat,  6 Aug 2022 15:44:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FB1B82890
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC8361BF5A8
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 15:44:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 959D74161F
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 15:44:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 959D74161F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TAh0TAW8Ptq3 for <buildroot@lists.busybox.net>;
- Sat,  6 Aug 2022 15:43:59 +0000 (UTC)
-X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67AB841609
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YwMSoVOiI4i9 for <buildroot@lists.busybox.net>;
+ Sat,  6 Aug 2022 15:47:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3C23828C5
 Received: from smtpcmd09100.aruba.it (smtpcmd09100.aruba.it [62.149.156.100])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67AB841609
- for <buildroot@buildroot.org>; Sat,  6 Aug 2022 15:43:58 +0000 (UTC)
-Received: from localhost.localdomain ([86.32.63.136])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A3C23828C5
+ for <buildroot@buildroot.org>; Sat,  6 Aug 2022 15:47:24 +0000 (UTC)
+Received: from [192.168.8.155] ([86.32.63.136])
  by Aruba Outgoing Smtp  with ESMTPSA
- id KLrAoNOrUij11KLrAokWmP; Sat, 06 Aug 2022 17:36:53 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Sat,  6 Aug 2022 17:36:51 +0200
-Message-Id: <20220806153651.4013424-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+ id KM1LoNaC3ij11KM1LokdES; Sat, 06 Aug 2022 17:47:23 +0200
+Message-ID: <bad4b4a5-2e2b-0ec9-93a9-98fa4495736a@benettiengineering.com>
+Date: Sat, 6 Aug 2022 17:47:22 +0200
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfKxkAGheK/q1Qb5XPRez/wfHvIqoOZ3aCR2khUEmDb/3CSwNcwfnoxdPY+ICuw2A6JIA/fw2N/mARDOpRiRvSJ44M+yDs9ATwhqajGUfGokK9ZZ4cILj
- 9+kXpoJuj/hu0JJDFzYDcB0bcopMnOuxJKhxbVLQSCVs0WM3u5G8jCl51IaeJqaXF6PHV2kFdy8CcRdtqRKd5TKIYpxhmHNt3KtJixccefdXdiIh/nuy4QUN
- CpjaG1KHauefMgnx7/kPpTL17x9ZPD4NmVW8LTzkGO/gJumUdEdi3nEENDosenO81BAofww0kBpTBJhl8AQRVw==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <20220806154610.4106492-1-giulio.benetti@benettiengineering.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220806154610.4106492-1-giulio.benetti@benettiengineering.com>
+X-CMAE-Envelope: MS4xfDVG1wB1QRbRvaV7N+v6u1vlF2P8gC5e2wkLroPsZlS458iE4GIU2bXayjZRS8eln6W1ULZ2h0jbQ48WX/W2pzfaEH83EEQ6f2mG93ufbJ1ChVjFeePh
+ tFq806eGuyXk5eLijgAyu1d35xWdtf3YWrSBo4YEdJPxmZp2wo86twFTXBc2uiNCC37nWnZL8gKojXg5XNbieeN7wOFDHJDTr3bShUfn9/FVMp3Lo/jvTYHj
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1659800213; bh=J1z4eHLBhYhDqv4BK1/fxm9mILgMIeuD3nljZBcEkyw=;
- h=From:To:Subject:Date:MIME-Version;
- b=Le+o3emhRMD+B8gnktBJvQkLUIAvKfMlEk/dwxJU8Ebs65VPNM0wGki3hMXKo95YL
- DZyMmGJE7koVyfcnCC1hiIb6IeBRBlmPA4Ru9RPvqFt8U3mx8DUOaM5Ffwfw1/Yhi7
- vXcx+Z+OINU1f56mGIJF2Ss/mj7vz70IwLCzJgGTUfDqlEdOO2IcgdBbsD6U8U/F5u
- qFBtnwSt/AqO0oyew9y+HYVPnrjcbnhb3y91rn0dx31OzKKcAR1/hdArY9G9KTkkJl
- F+BfwHkt/hz2Z5rXm5gFyF8CUU+D4cGAFgiJdvsg8R+9Agn8gHSI9uVibW9PoRG2Ks
- p+ieulpyzSfkQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1659800843; bh=ApJSGF86fH+bW4lmrSWYeWlWOBMEqcRzKZfC7BWVtHQ=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=eoQWz/2ehcwzwIZU/TGS5EjvuyFK9nzr3RL7n1yBlXdUKZ6KfPBuHXFpth2hw2snQ
+ svu76Ooc3hu3u1iEP+442fnBmlRPiPSShCxo5dI2piFZXOsJdkjH7gcVrHy4R/9Nce
+ BskSNqoF1R0nEKSsm65UH9fw5AyAplam6hihaZNkuwrO8YH9LPRRTRUB7ybb123sCe
+ O/fuI09l+3MylUObgMNlaYmec6e5qb0W5zGH2RlTZo71uXGvt+pnsgPoag5SiU4oAP
+ TcjQZ+Et8JKRXtpkDVMQbS0GwACoO3nBPGNLBfaO2gAWLl11K7q+O6CalZ5VDnVI34
+ 7l0yqeSFySKRg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Le+o3emh
-Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to
- missing missing libnspr in link list
+ header.a=rsa-sha256 header.s=a1 header.b=eoQWz/2e
+Subject: Re: [Buildroot] [PATCH] package/cryptsetup: fix host building
+ trying to call asciidoctor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,47 +76,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-FREEBL_NO_DEPEND is usually set to 1 and this means that:
-```
-build libfreebl3.so with no NSPR and libnssutil3.so dependencies by
-default
-```
-But PR_SetError() and other PR_*() APIs are contained right in
-NSPR(libnspr) that we already build and it's a libnss dependency, so let's
-make libnss to link with libnspr by default by setting FREEBL_NO_DEPEND to
-0.
+On 06/08/22 17:46, Giulio Benetti wrote:
+> While bumping version I've fixed build failure due to missing host
+> asciidoctor by passing --disable-asciidoc to CRYPTSETUP_CONF_OPTS but that
+> is missing in HOST_CRYPTSETUP_CONF_OPTS and this leads the same build
+> failure of target building. So let's fix it by adding --disable-asciidoc
+> to host HOST_CRYPTSETUP_CONF_OPTS too.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/0c1/0c1a6a8e59653afaa09303550f74475b4a3898bf/build-end.log
 
-Fixes:
-http://autobuild.buildroot.net/results/c5b440bae5cd6dc6d5f1a632a6b5950b32d13f66/
+s/build-end.log/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libnss/libnss.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+sorry, I was too fast to submit.
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 4283ef520f..bc878adc35 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -57,7 +57,8 @@ LIBNSS_BUILD_VARS = \
- 	OS_ARCH="Linux" \
- 	OS_RELEASE="2.6" \
- 	OS_TEST=$(BR2_PACKAGE_LIBNSS_ARCH) \
--	NSS_ENABLE_WERROR=0
-+	NSS_ENABLE_WERROR=0 \
-+	FREEBL_NO_DEPEND=0
- 
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
- # Disable Altivec if not supported
+Best regards
 -- 
-2.34.1
+Giulio Benetti
+Benetti Engineering sas
+
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   package/cryptsetup/cryptsetup.mk | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+> index 01902c3f6a..4a52bb62dd 100644
+> --- a/package/cryptsetup/cryptsetup.mk
+> +++ b/package/cryptsetup/cryptsetup.mk
+> @@ -65,7 +65,8 @@ HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
+>   	--disable-kernel_crypto \
+>   	--disable-ssh-token \
+>   	--enable-blkid \
+> -	--with-tmpfilesdir=no
+> +	--with-tmpfilesdir=no \
+> +	--disable-asciidoc
+>   
+>   $(eval $(autotools-package))
+>   $(eval $(host-autotools-package))
 
 _______________________________________________
 buildroot mailing list
