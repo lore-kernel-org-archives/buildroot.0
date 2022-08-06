@@ -1,70 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84E43C19F2D
-	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 15:47:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1107C19F2D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 15:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC26860AC9;
-	Sat,  6 Aug 2022 15:47:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC26860AC9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5433B408F9;
+	Sat,  6 Aug 2022 15:53:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5433B408F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bbG30tc5xxCz; Sat,  6 Aug 2022 15:47:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tasGAM4GWI7m; Sat,  6 Aug 2022 15:53:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFFD960A98;
-	Sat,  6 Aug 2022 15:47:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFFD960A98
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1C8D81BF5A8
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 15:47:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11AC740359;
+	Sat,  6 Aug 2022 15:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11AC740359
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BABC1BF5A8
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 15:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8A2C828F2
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 15:47:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8A2C828F2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FDCA404E5
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 15:53:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FDCA404E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YwMSoVOiI4i9 for <buildroot@lists.busybox.net>;
- Sat,  6 Aug 2022 15:47:25 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3C23828C5
-Received: from smtpcmd09100.aruba.it (smtpcmd09100.aruba.it [62.149.156.100])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3C23828C5
- for <buildroot@buildroot.org>; Sat,  6 Aug 2022 15:47:24 +0000 (UTC)
-Received: from [192.168.8.155] ([86.32.63.136])
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7IqQbmx2KF1y for <buildroot@lists.busybox.net>;
+ Sat,  6 Aug 2022 15:53:16 +0000 (UTC)
+X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F15B9400DB
+Received: from smtpcmd0766.aruba.it (smtpcmd0766.aruba.it [62.149.156.66])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F15B9400DB
+ for <buildroot@buildroot.org>; Sat,  6 Aug 2022 15:53:15 +0000 (UTC)
+Received: from localhost.localdomain ([86.32.63.136])
  by Aruba Outgoing Smtp  with ESMTPSA
- id KM1LoNaC3ij11KM1LokdES; Sat, 06 Aug 2022 17:47:23 +0200
-Message-ID: <bad4b4a5-2e2b-0ec9-93a9-98fa4495736a@benettiengineering.com>
-Date: Sat, 6 Aug 2022 17:47:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Content-Language: en-US
-To: buildroot@buildroot.org
-References: <20220806154610.4106492-1-giulio.benetti@benettiengineering.com>
+ id KM0AoCJboHDAJKM0BocLMH; Sat, 06 Aug 2022 17:46:11 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220806154610.4106492-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfDVG1wB1QRbRvaV7N+v6u1vlF2P8gC5e2wkLroPsZlS458iE4GIU2bXayjZRS8eln6W1ULZ2h0jbQ48WX/W2pzfaEH83EEQ6f2mG93ufbJ1ChVjFeePh
- tFq806eGuyXk5eLijgAyu1d35xWdtf3YWrSBo4YEdJPxmZp2wo86twFTXBc2uiNCC37nWnZL8gKojXg5XNbieeN7wOFDHJDTr3bShUfn9/FVMp3Lo/jvTYHj
+To: buildroot@buildroot.org
+Date: Sat,  6 Aug 2022 17:46:10 +0200
+Message-Id: <20220806154610.4106492-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfAcSlv+S9VMrzrGYmQT+t4v/seJwX+MkOiJGHxJXn4HqgX7uJVSklMot/nYFOj/oXeKnqQR7+3TE84D3N3XrArCdcH5MclU7Dd8sFkfTdTA6KAVMkqp8
+ 0lasz0b0rFyoDC7eApmZY/xIgHul09h+p2u0f4h6XL1L+9slepFsrZ6SGTXpmH+Cl5eVfXgsi6Z7dbNRhi+Vl+MHQhK3CoeNC6D3OSufIJoZWqfDHyTWKbjb
+ CViPAfryDVpSTaiPM0bQCsv1CQgj7AVaN8PSs/4KSkA=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1659800843; bh=ApJSGF86fH+bW4lmrSWYeWlWOBMEqcRzKZfC7BWVtHQ=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=eoQWz/2ehcwzwIZU/TGS5EjvuyFK9nzr3RL7n1yBlXdUKZ6KfPBuHXFpth2hw2snQ
- svu76Ooc3hu3u1iEP+442fnBmlRPiPSShCxo5dI2piFZXOsJdkjH7gcVrHy4R/9Nce
- BskSNqoF1R0nEKSsm65UH9fw5AyAplam6hihaZNkuwrO8YH9LPRRTRUB7ybb123sCe
- O/fuI09l+3MylUObgMNlaYmec6e5qb0W5zGH2RlTZo71uXGvt+pnsgPoag5SiU4oAP
- TcjQZ+Et8JKRXtpkDVMQbS0GwACoO3nBPGNLBfaO2gAWLl11K7q+O6CalZ5VDnVI34
- 7l0yqeSFySKRg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1659800771; bh=JHKrtiEZQijo/GNUTrHwIGfMnFxYdB/0z3HSX9igtRo=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=SRx0BjgzTkoXbzgzTOiXfqpBSLsgH5C+sop9ffwrme27uWLhKJqpVkklwbiSUYuM0
+ aa/NRyLnwjZVKmE4ReNLWZfY5T4Wtd7+6vcqzuKyNVOR3FoLrHqGQZRH5OCQy6B6u7
+ XOfQNLkbxyo+Fd3HU5i0ZpVq01g6PDD1+2ZL0kXuwTNVX1tqYe30+sHSNr7XTm/877
+ ap1GGab4q6oYB3ATDPkS6vLX6n+ux3FmzBSntgztB6XL/EzmZ8/ZgPrDrSwnFoW67U
+ /wHWVtqMC3kk4Mg4oY4ySvHE/HnR9K82HQ3lB5MC3DJW3MIIBmUqXM3E814BsnmVIB
+ 1Z66lpJf/AjNg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=eoQWz/2e
-Subject: Re: [Buildroot] [PATCH] package/cryptsetup: fix host building
- trying to call asciidoctor
+ header.a=rsa-sha256 header.s=a1 header.b=SRx0Bjgz
+Subject: [Buildroot] [PATCH] package/cryptsetup: fix host building trying to
+ call asciidoctor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,49 +73,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/08/22 17:46, Giulio Benetti wrote:
-> While bumping version I've fixed build failure due to missing host
-> asciidoctor by passing --disable-asciidoc to CRYPTSETUP_CONF_OPTS but that
-> is missing in HOST_CRYPTSETUP_CONF_OPTS and this leads the same build
-> failure of target building. So let's fix it by adding --disable-asciidoc
-> to host HOST_CRYPTSETUP_CONF_OPTS too.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/0c1/0c1a6a8e59653afaa09303550f74475b4a3898bf/build-end.log
+While bumping version I've fixed build failure due to missing host
+asciidoctor by passing --disable-asciidoc to CRYPTSETUP_CONF_OPTS but that
+is missing in HOST_CRYPTSETUP_CONF_OPTS and this leads the same build
+failure of target building. So let's fix it by adding --disable-asciidoc
+to host HOST_CRYPTSETUP_CONF_OPTS too.
 
-s/build-end.log/
+Fixes:
+http://autobuild.buildroot.net/results/0c1/0c1a6a8e59653afaa09303550f74475b4a3898bf/build-end.log
 
-sorry, I was too fast to submit.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/cryptsetup/cryptsetup.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Best regards
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 01902c3f6a..4a52bb62dd 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -65,7 +65,8 @@ HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
+ 	--disable-kernel_crypto \
+ 	--disable-ssh-token \
+ 	--enable-blkid \
+-	--with-tmpfilesdir=no
++	--with-tmpfilesdir=no \
++	--disable-asciidoc
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/cryptsetup/cryptsetup.mk | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> index 01902c3f6a..4a52bb62dd 100644
-> --- a/package/cryptsetup/cryptsetup.mk
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -65,7 +65,8 @@ HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
->   	--disable-kernel_crypto \
->   	--disable-ssh-token \
->   	--enable-blkid \
-> -	--with-tmpfilesdir=no
-> +	--with-tmpfilesdir=no \
-> +	--disable-asciidoc
->   
->   $(eval $(autotools-package))
->   $(eval $(host-autotools-package))
+2.34.1
 
 _______________________________________________
 buildroot mailing list
