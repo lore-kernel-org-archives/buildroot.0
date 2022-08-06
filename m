@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F25ECC19F2D
-	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 21:24:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DCF9C19F2D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 21:25:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8165E60F84;
-	Sat,  6 Aug 2022 21:24:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8165E60F84
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD40E40AAC;
+	Sat,  6 Aug 2022 21:25:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD40E40AAC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZSNYdgxKiti3; Sat,  6 Aug 2022 21:24:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xS-go7LZtPui; Sat,  6 Aug 2022 21:25:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 908EC60F6E;
-	Sat,  6 Aug 2022 21:24:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 908EC60F6E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0457F1BF3FF
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 21:24:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CD4AF40117;
+	Sat,  6 Aug 2022 21:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD4AF40117
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5221A1BF3FF
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 21:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D198C4162C
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 21:24:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D198C4162C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B30E408BA
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 21:25:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B30E408BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nrqes79AGHcO for <buildroot@lists.busybox.net>;
- Sat,  6 Aug 2022 21:24:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E811A41626
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E811A41626
- for <buildroot@buildroot.org>; Sat,  6 Aug 2022 21:24:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B0EA6200003;
- Sat,  6 Aug 2022 21:24:44 +0000 (UTC)
-Date: Sat, 6 Aug 2022 23:24:43 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20220806232443.1a74cb77@windsurf>
-In-Reply-To: <20220806210800.176207-1-yann.morin.1998@free.fr>
-References: <20220806210800.176207-1-yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659821084;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=q/hWs6cGG/7OXFNSTFeaFsBP1j1lHtMep6dPE3/+L3E=;
- b=c6t6hWQGyk6INisqReoz1h5Z/YbsUA289dq2p7C1NAiUtsU2O8GO6CM8oTJeYqjrA3Nqtp
- 12wH94EZLJIqQZC+gsxDrCQict0gHIj7IwB6G1ZXvicX0f/3JFsxrfWRjgmniRgpcO1GC9
- Wuvx4yYtxnDiyFWQRqZmWgau6FVHLxwyukzMZsPLnFlJHDMThxDlDbwMUv1595wvz+7DnD
- +IfkPJ3rcoSj2d3TZRJImmM3C3ojQ+igG7xICB4t705IoGHmcuumpfgRVguJ5o1foEboav
- m/e8osS6+Cc/g+9EuDNn8L+LS8DZ//XDWcT9QU8oKtluFfmptAa0SOI4OLIR+A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=c6t6hWQG
-Subject: Re: [Buildroot] [PATCH] board/friendlyarm: drop nanopi-neo
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id znHTj-xSLaHF for <buildroot@lists.busybox.net>;
+ Sat,  6 Aug 2022 21:25:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 823D640117
+ for <buildroot@buildroot.org>; Sat,  6 Aug 2022 21:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 823D640117
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id BDC7086EC0; Sat,  6 Aug 2022 21:11:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 6 Aug 2022 23:24:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c0a44ba0dfbf4767a48f3c63cece57a707e8d678
+X-Git-Newrev: 72b613e3540751ade71431536c3d02a76e25d667
+X-Patchwork-Hint: ignore
+Message-Id: <20220806211114.BDC7086EC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/runc: bump to version 1.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,44 +57,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  6 Aug 2022 23:08:00 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=72b613e3540751ade71431536c3d02a76e25d667
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> nanopi-neo no longer builds, as uboot needs python2 on the host:
->     https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053540
-> 
-> I no longer have access to that board, so I can't test an update to
-> either uboot or the kernel anymore.
-> 
-> Drop the board.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  board/friendlyarm/nanopi-neo/boot.cmd     |  8 -----
->  board/friendlyarm/nanopi-neo/genimage.cfg | 34 ------------------
->  board/friendlyarm/nanopi-neo/readme.txt   | 42 ----------------------
->  configs/friendlyarm_nanopi_neo_defconfig  | 43 -----------------------
->  4 files changed, 127 deletions(-)
->  delete mode 100644 board/friendlyarm/nanopi-neo/boot.cmd
->  delete mode 100644 board/friendlyarm/nanopi-neo/genimage.cfg
->  delete mode 100644 board/friendlyarm/nanopi-neo/readme.txt
->  delete mode 100644 configs/friendlyarm_nanopi_neo_defconfig
+This is the third release of the 1.1.z series of runc, and contains various
+minor improvements and bugfixes.
 
-Applied to master after changing the commit title to use
-"configs/friendlyarm_nanopi_neo: remove defconfig", and removing
-entries in the DEVELOPERS file. Thanks!
+https://github.com/opencontainers/runc/releases/tag/v1.1.3
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index f8133d13c1..d94a0c20ca 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0ccce82b1d9c058d8fd7443d261c96fd7a803f2775bcb1fec2bdb725bc7640f6  runc-1.1.2.tar.gz
++sha256  fc1c70e095d662e38a5889bc6de41857762ce022caaf8be2852663198c533a63  runc-1.1.3.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index b87d07acca..aef52de618 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = 1.1.2
++RUNC_VERSION = 1.1.3
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
+ RUNC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
