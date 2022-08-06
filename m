@@ -1,66 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4494EC19F2D
-	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 19:58:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6811C19F2D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 20:00:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96B19416DC;
-	Sat,  6 Aug 2022 19:58:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96B19416DC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5449140579;
+	Sat,  6 Aug 2022 20:00:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5449140579
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tPpHW13x_eRI; Sat,  6 Aug 2022 19:58:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t2mJbUZRW3Wh; Sat,  6 Aug 2022 20:00:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 314F14155F;
-	Sat,  6 Aug 2022 19:58:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 314F14155F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8ECDE1BF352
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 19:58:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E80D340578;
+	Sat,  6 Aug 2022 19:59:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E80D340578
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 790D11BF267
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 19:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5562582EC7
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 19:58:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5562582EC7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 545D560F39
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 19:59:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 545D560F39
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SN395tR079xb for <buildroot@lists.busybox.net>;
- Sat,  6 Aug 2022 19:58:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O8eEwoLA-bHl for <buildroot@lists.busybox.net>;
+ Sat,  6 Aug 2022 19:59:56 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DABFC82CE4
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DABFC82CE4
- for <buildroot@buildroot.org>; Sat,  6 Aug 2022 19:58:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCD8860BB9
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DCD8860BB9
+ for <buildroot@buildroot.org>; Sat,  6 Aug 2022 19:59:55 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id A2DA2240007;
- Sat,  6 Aug 2022 19:58:07 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat,  6 Aug 2022 21:58:01 +0200
-Message-Id: <20220806195802.451076-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.37.1
+ by mail.gandi.net (Postfix) with ESMTPSA id A2F271BF203;
+ Sat,  6 Aug 2022 19:59:51 +0000 (UTC)
+Date: Sat, 6 Aug 2022 21:59:49 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20220806215949.69ba40cf@windsurf>
+In-Reply-To: <20220730121103.GR3168@scaer>
+References: <20220727184850.2857314-1-thomas.petazzoni@bootlin.com>
+ <20220727184850.2857314-3-thomas.petazzoni@bootlin.com>
+ <20220730121103.GR3168@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659815889;
+ d=bootlin.com; s=gm1; t=1659815993;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=osSPiqc86QrUzsmm2XGgSbkpf1/JMLx2NETT0RINHh4=;
- b=d5qiEHnZmNm2dMgbCOPSjfRiFIuA/EtkjQNwck5HvtOFxC7tJL+5jBQIYPzJYOOELx7zhi
- 5VAqkiwgarfRsqQ6YvWGclnq7PJyRlw4ckBfe4nlJgKfwfqH7pEk5H8hduwu68IrU1eOBC
- dw9+T3uen1KNA/tOY0ogVFFyOx+EdKUNlzhYo/tJVCECfBAUrys5uPDCHi63gTcGFbQ1EC
- naa9PsoOhKk+Vh7E+qrw4KAWGt5n2yMUKx9Y0Ju/YCwO3a+OVSqQKKxZs/wz3NggD73601
- 95FNfCk5m6YL7FEsmTg12htPdCEqwdea8xTSz9Vqc4VW+wlf76c2d7XzL8mhRg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=egJxVAQvVVuJ9hY3r2Qup/O/O8HQYGHeYn3aJbF1TJw=;
+ b=P+GpfMzCVH7WTXWaHwZ/bYmalMqVAmBs1B6bYzQPfghaF+gO8EdP1n2aX0tbd2y561XwNZ
+ MwvUnS5ep17/eV+KkQN33Enj0eSgT3lWYAvHdcwTKM9bwW21xW+rsvcljyZiSrclRChUoC
+ RnGR3R0f2icinZdeMCpjL09z+CZRc0krAcV9kiNUzgsYS/ZB4N1NS4pSk3WDcSNlT0WEiF
+ Ivkd4B4v7OEq7Oib55lim0rMKUaQzHEOQYKXX9dLv9YY6P7Ru/qLdWR0ELsOwvAyg/wEDL
+ 9bz2SIEf8E5aOW6cgH2Mr8ZllIKTk2aQUEYqZIP7+PSy62MO6p0kbBn+UIeSFw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=d5qiEHnZ
-Subject: [Buildroot] [PATCH] toolchain/toolchain-wrapper.c: set CCACHE env
- variables only when ccache is enabled
+ header.s=gm1 header.b=P+GpfMzC
+Subject: Re: [Buildroot] [PATCH 3/3] toolchain/toolchain-wrapper: don't
+ hardcode CCACHE_BASEDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,122 +80,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Romain Naour <romain.naour@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit modifies the toolchain-wrapper to make sure that the
-CCACHE_COMPILERCHECK and CCACHE_BASEDIR are only set if ccache support
-is enabled. Indeed, when BR2_USE_CCACHE is not set (or to a value
-different than 1), we don't call the compiler with ccache, so there is
-no reason to set those ccache environment variables, and they could
-potentially conflict with a separate usage of ccache, outside of
-Buildroot, for example when using the Buildroot SDK.
+Howdy,
 
-In particular, the value of CCACHE_BASEDIR doesn't not make any sense
-when the Buildroot toolchain is not used during the Buildroot build,
-as it points to the output directory $(BASE_DIR).
+On Sat, 30 Jul 2022 14:11:03 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-We pay attention to also not show those variables as being set in the
-BR2_DEBUG_WRAPPER dump.
+> And once this is fixed, you'll notice that the old and the new
+> CCACHE_BASEDIR will be different:
+> 
+>     (before)$ BR2_DEBUG_WRAPPER=2 ./host/bin/arm-linux-gcc --help
+>     ...
+>     Toolchain wrapper executing:
+>         CCACHE_BASEDIR='/home/ymorin/dev/buildroot/O/master'
+>         '/home/ymorin/dev/buildroot/O/master/host/opt/ext-toolchain/bin/arm-linux-gcc.br_real'
+>         ...
+> 
+>     (after)$ BR2_DEBUG_WRAPPER=2 ./host/bin/arm-linux-gcc --help
+>     ...
+>     Toolchain wrapper executing:
+>         CCACHE_BASEDIR='/home/ymorin/dev/buildroot/O/master/host'
+>         '/home/ymorin/dev/buildroot/O/master/host/opt/ext-toolchain/bin/arm-linux-gcc.br_real'
+>         ...
+> 
+> So as you can see, before, CCACHE_BASEDIR was pointing to BASE_DIR, but
+> now it points to HOST_DIR. This is one-level too deep, as it will not
+> match the path where packages are actually built, which is
+> BASE_DIR/build, and hapenned to be CCACHE_BASEDIR/build.
+> 
+> Even though I had the debug code path fixed, the second issue was not
+> trivial enough for me to fix when applying, so I amrked the patch as
+> changes requested.
 
-To help a little bit with this, a ccache_enabled boolean is introduced
-to indicate when ccache is being used.
+You're totally right. And in fact, it makes the change useless. Indeed,
+CCACHE_BASEDIR only makes sense when ccache is used during the
+Buildroot build, because it points to $(BASE_DIR)... which once we are
+outside of Buildroot, in the SDK, would no longer point to anything
+sensible.
 
-There is still quite a bit of #ifdef-ery involved, but it's not easy
-to find a simpler way to organize the code.
+So instead, I've sent a different patch that sets the
+CCACHE_COMPILERCHECK and CCACHE_BASEDIR environment variables, only if
+ccache support is used (BR2_USE_CCACHE=1). Let me know what you think.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- toolchain/toolchain-wrapper.c | 49 +++++++++++++++++++----------------
- 1 file changed, 27 insertions(+), 22 deletions(-)
+Thanks again for the good review!
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 37b24dd24a..ee1fdf3c71 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -507,10 +507,28 @@ int main(int argc, char **argv)
- 
- 	exec_args = args;
- #ifdef BR_CCACHE
--	/* If BR2_USE_CCACHE is not defined, or its value is not 1,
--	 * skip the ccache call */
-+	/* If BR2_USE_CCACHE is set and its value is 1, enable ccache
-+	 * usage */
- 	char *br_use_ccache = getenv("BR2_USE_CCACHE");
--	if (!br_use_ccache || strncmp(br_use_ccache, "1", strlen("1")))
-+	bool ccache_enabled = br_use_ccache && !strncmp(br_use_ccache, "1", strlen("1"));
-+
-+	if (ccache_enabled) {
-+#ifdef BR_CCACHE_HASH
-+		/* Allow compilercheck to be overridden through the environment */
-+		if (setenv("CCACHE_COMPILERCHECK", "string:" BR_CCACHE_HASH, 0)) {
-+			perror(__FILE__ ": Failed to set CCACHE_COMPILERCHECK");
-+			return 3;
-+		}
-+#endif
-+#ifdef BR_CCACHE_BASEDIR
-+		/* Allow compilercheck to be overridden through the environment */
-+		if (setenv("CCACHE_BASEDIR", BR_CCACHE_BASEDIR, 0)) {
-+			perror(__FILE__ ": Failed to set CCACHE_BASEDIR");
-+			return 3;
-+		}
-+#endif
-+	} else
-+		/* ccache is disabled, skip it */
- 		exec_args++;
- #endif
- 
-@@ -518,12 +536,14 @@ int main(int argc, char **argv)
- 	if (debug > 0) {
- 		fprintf(stderr, "Toolchain wrapper executing:");
- #ifdef BR_CCACHE_HASH
--		fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
--			(debug == 2) ? "\n    " : " ");
-+		if (ccache_enabled)
-+			fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
-+				(debug == 2) ? "\n    " : " ");
- #endif
- #ifdef BR_CCACHE_BASEDIR
--		fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
--			(debug == 2) ? "\n    " : " ");
-+		if (ccache_enabled)
-+			fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
-+				(debug == 2) ? "\n    " : " ");
- #endif
- 		for (i = 0; exec_args[i]; i++)
- 			fprintf(stderr, "%s'%s'",
-@@ -531,21 +551,6 @@ int main(int argc, char **argv)
- 		fprintf(stderr, "\n");
- 	}
- 
--#ifdef BR_CCACHE_HASH
--	/* Allow compilercheck to be overridden through the environment */
--	if (setenv("CCACHE_COMPILERCHECK", "string:" BR_CCACHE_HASH, 0)) {
--		perror(__FILE__ ": Failed to set CCACHE_COMPILERCHECK");
--		return 3;
--	}
--#endif
--#ifdef BR_CCACHE_BASEDIR
--	/* Allow compilercheck to be overridden through the environment */
--	if (setenv("CCACHE_BASEDIR", BR_CCACHE_BASEDIR, 0)) {
--		perror(__FILE__ ": Failed to set CCACHE_BASEDIR");
--		return 3;
--	}
--#endif
--
- 	if (execv(exec_args[0], exec_args))
- 		perror(path);
- 
+Best regards,
+
+Thomas
 -- 
-2.37.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
