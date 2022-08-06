@@ -1,50 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 329F1C19F2D
-	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 09:09:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F466C19F2D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 13:39:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A37A460A98;
-	Sat,  6 Aug 2022 09:09:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A37A460A98
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71AF183DF1;
+	Sat,  6 Aug 2022 13:39:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71AF183DF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x-dIGjs6cXrE; Sat,  6 Aug 2022 09:08:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Oc87UKL-u8Lc; Sat,  6 Aug 2022 13:39:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9763B60F3E;
-	Sat,  6 Aug 2022 09:08:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9763B60F3E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 439BB1BF852
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 09:08:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95DB282EDB;
+	Sat,  6 Aug 2022 13:39:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95DB282EDB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1706C1BF2B5
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 13:39:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E71A60A9B
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 09:08:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E71A60A9B
+ by smtp2.osuosl.org (Postfix) with ESMTP id C38C840168
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 13:39:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C38C840168
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pgK73A08B0ID for <buildroot@lists.busybox.net>;
- Sat,  6 Aug 2022 09:08:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D40E60F3E
- for <buildroot@buildroot.org>; Sat,  6 Aug 2022 09:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D40E60F3E
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 8FD6F868A0; Sat,  6 Aug 2022 08:54:46 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 6 Aug 2022 11:05:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e7c9f152771b9e5fad83fdd4aa5bc3d88bb8645
-X-Git-Newrev: 1e5338ed06f74ebd8c216ba504fc1dc1e1a2f76b
-X-Patchwork-Hint: ignore
-Message-Id: <20220806085446.8FD6F868A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/grub2: fix build race condition
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yo4c_LHOth1z for <buildroot@lists.busybox.net>;
+ Sat,  6 Aug 2022 13:39:29 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7728D400DB
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7728D400DB
+ for <buildroot@buildroot.org>; Sat,  6 Aug 2022 13:39:29 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 03636240003;
+ Sat,  6 Aug 2022 13:39:25 +0000 (UTC)
+Date: Sat, 6 Aug 2022 15:39:24 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20220806153924.2cb54040@windsurf>
+In-Reply-To: <20220805165705.GH3621445@scaer>
+References: <20220804204656.31915-1-thomas.petazzoni@bootlin.com>
+ <20220805165705.GH3621445@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659793166;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Khr7ul1qO+DdyTRH31M2aJoXBbvmOwoygD19MRLgozo=;
+ b=aRlj2OMPypPi8A38i1CormJI0bpi9bn9ervJHhCRWrBDS1dn9HLz9An/dWiYDQ+VsA/Fkd
+ j71th5pHkoN1oYmcYSq+NT0E/vrC1+Sh0AsennIgYs2u5gt46d1JU8wXwsKQDllSTeTxz5
+ 5XOrxyGHAzTUPA+ZUmisCO1zDl4AU8Zlu5/q/nGZH4sZSb+21wZiKyHACncyMqd46EP6wE
+ PiYkay0UQN+yDn/G+wTMWtpKuMeoC/FAvc2pupFwAMJwYv8+IsbwZARN+2s6qR5+QAjxbh
+ /vuiZTrNImjsjAQ9UQUJjb7GKr8/kOPNYY4yGAXHCMELRqlnzw1FQcvIRbEjUw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=aRlj2OMP
+Subject: Re: [Buildroot] [PATCH] package/weston: add option to build
+ seatd-based launcher
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,109 +77,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e5338ed06f74ebd8c216ba504fc1dc1e1a2f76b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Sometimes buildroot fails with:
-../grub-core/kern/emu/hostfs.c:20:10: fatal error: config-util.h: No such file or directory
-   20 | #include <config-util.h>
-      |          ^~~~~~~~~~~~~~~
+On Fri, 5 Aug 2022 18:57:05 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Add a patch which fixes the Makefile to correctly generate config-util.h
-first.
+> On 2022-08-04 22:46 +0200, Thomas Petazzoni via buildroot spake thusly:
+> > Since version 10, the weston-launch command has been deprecated, and
+> > can only be built with -Ddeprecated-weston-launch=true, which
+> > Buildroot does not do.
+> > 
+> > So the only launcher currently available is logind, provided by
+> > systemd.  
+> 
+> Forgot to add in my previous reply...
+> 
+> Is a launcher mandatory? Should we en sure that at least one is present?
+> I.e. if dbus+systemd is not set, then select seatd?
 
-Note: This re-adds a workaround to avoid re-running autoconf. This has
-previously been used to avoid having to run the rather complex build
-file generation machinery of GRUB2. See 7e64a050fb ("boot/grub2: Fix
-GRUB i386-pc build with Ubuntu gcc"), but now we just need to touch
-Makefile.in.
+I am not 100% clear on this. My current understanding is indeed that a
+launcher is needed.
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
-[yann.morin.1998@free.fr:
-  - add comment with patch name before hook
-  - slightly extend commit log that we only touch Makefile.in
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...ke-grub_fstest.pp-depend-on-config-util.h.patch | 45 ++++++++++++++++++++++
- boot/grub2/grub2.mk                                |  7 ++++
- 2 files changed, 52 insertions(+)
+However, it would be possible to use the logind launcher with elogind,
+which is Gentoo's extract of logind from systemd as a standalone
+project: https://wiki.gentoo.org/wiki/Elogind. Of course, we don't
+currently have elogind as a Buildroot package.
 
-diff --git a/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch b/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
-new file mode 100644
-index 0000000000..ea8787de7a
---- /dev/null
-+++ b/boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
-@@ -0,0 +1,45 @@
-+From bb08b723fa7bc56439c7bc166cff361628e73453 Mon Sep 17 00:00:00 2001
-+Message-Id: <bb08b723fa7bc56439c7bc166cff361628e73453.1659683176.git.stefan@agner.ch>
-+From: Stefan Agner <stefan@agner.ch>
-+Date: Fri, 5 Aug 2022 08:59:52 +0200
-+Subject: [PATCH] Makefile: Make grub_fstest.pp depend on config-util.h
-+
-+Warning: This commit does not apply to the GRUB git repository. This
-+patch applies against the release tarballs.
-+
-+Upstream status: https://lists.gnu.org/archive/html/grub-devel/2022-08/msg00045.html
-+Signed-off-by: Stefan Agner <stefan@agner.ch>
-+---
-+ Makefile.am | 2 +-
-+ Makefile.in | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index bf9c1ba..f08cfc0 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -51,7 +51,7 @@ libgrub_a_init.c: libgrub_a_init.lst $(top_srcdir)/geninit.sh
-+ CLEANFILES += libgrub_a_init.c
-+ 
-+ # For grub-fstest
-+-grub_fstest.pp: $(grub_fstest_SOURCES)
-++grub_fstest.pp: config-util.h $(grub_fstest_SOURCES)
-+ 	$(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(grub_fstest_CPPFLAGS) $(CPPFLAGS) \
-+ 	  -D'GRUB_MOD_INIT(x)=@MARKER@x@' $^ > $@ || (rm -f $@; exit 1)
-+ CLEANFILES += grub_fstest.pp
-+diff --git a/Makefile.in b/Makefile.in
-+index 13f2eef..2c1d20b 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -13312,7 +13312,7 @@ libgrub_a_init.c: libgrub_a_init.lst $(top_srcdir)/geninit.sh
-+ 	sh $(top_srcdir)/geninit.sh `cat $<` > $@ || (rm -f $@; exit 1)
-+ 
-+ # For grub-fstest
-+-grub_fstest.pp: $(grub_fstest_SOURCES)
-++grub_fstest.pp: config-util.h $(grub_fstest_SOURCES)
-+ 	$(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(grub_fstest_CPPFLAGS) $(CPPFLAGS) \
-+ 	  -D'GRUB_MOD_INIT(x)=@MARKER@x@' $^ > $@ || (rm -f $@; exit 1)
-+ 
-+-- 
-+2.37.1
-+
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 57593330dd..4e7e0fa898 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -13,6 +13,13 @@ GRUB2_DEPENDENCIES = host-bison host-flex host-grub2
- HOST_GRUB2_DEPENDENCIES = host-bison host-flex
- GRUB2_INSTALL_IMAGES = YES
- 
-+# 0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch
-+define GRUB2_AVOID_AUTORECONF
-+	$(Q)touch $(@D)/Makefile.in
-+endef
-+GRUB2_POST_PATCH_HOOKS += GRUB2_AVOID_AUTORECONF
-+HOST_GRUB2_POST_PATCH_HOOKS += GRUB2_AVOID_AUTORECONF
-+
- # CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
- # doesn't exist upstream, but is added by the Redhat/Fedora
- # packaging. Not applicable to Buildroot.
+The options would be:
+
+ - logind launcher, with systemd
+ - logind launcher, with elogind
+ - libseat launcher, with seatd
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
