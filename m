@@ -4,69 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6811C19F2D
-	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 20:00:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A19F4C19F2D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 20:11:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5449140579;
-	Sat,  6 Aug 2022 20:00:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5449140579
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4105C40587;
+	Sat,  6 Aug 2022 20:11:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4105C40587
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t2mJbUZRW3Wh; Sat,  6 Aug 2022 20:00:01 +0000 (UTC)
+	with ESMTP id 8Jy0P_NT4r6X; Sat,  6 Aug 2022 20:11:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E80D340578;
-	Sat,  6 Aug 2022 19:59:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E80D340578
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 790D11BF267
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 19:59:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 798A440579;
+	Sat,  6 Aug 2022 20:11:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 798A440579
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C7BA1BF47A
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 20:11:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 545D560F39
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 19:59:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 545D560F39
+ by smtp2.osuosl.org (Postfix) with ESMTP id E558E40579
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 20:11:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E558E40579
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O8eEwoLA-bHl for <buildroot@lists.busybox.net>;
- Sat,  6 Aug 2022 19:59:56 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCD8860BB9
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DCD8860BB9
- for <buildroot@buildroot.org>; Sat,  6 Aug 2022 19:59:55 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A2F271BF203;
- Sat,  6 Aug 2022 19:59:51 +0000 (UTC)
-Date: Sat, 6 Aug 2022 21:59:49 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20220806215949.69ba40cf@windsurf>
-In-Reply-To: <20220730121103.GR3168@scaer>
-References: <20220727184850.2857314-1-thomas.petazzoni@bootlin.com>
- <20220727184850.2857314-3-thomas.petazzoni@bootlin.com>
- <20220730121103.GR3168@scaer>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659815993;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=egJxVAQvVVuJ9hY3r2Qup/O/O8HQYGHeYn3aJbF1TJw=;
- b=P+GpfMzCVH7WTXWaHwZ/bYmalMqVAmBs1B6bYzQPfghaF+gO8EdP1n2aX0tbd2y561XwNZ
- MwvUnS5ep17/eV+KkQN33Enj0eSgT3lWYAvHdcwTKM9bwW21xW+rsvcljyZiSrclRChUoC
- RnGR3R0f2icinZdeMCpjL09z+CZRc0krAcV9kiNUzgsYS/ZB4N1NS4pSk3WDcSNlT0WEiF
- Ivkd4B4v7OEq7Oib55lim0rMKUaQzHEOQYKXX9dLv9YY6P7Ru/qLdWR0ELsOwvAyg/wEDL
- 9bz2SIEf8E5aOW6cgH2Mr8ZllIKTk2aQUEYqZIP7+PSy62MO6p0kbBn+UIeSFw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=P+GpfMzC
-Subject: Re: [Buildroot] [PATCH 3/3] toolchain/toolchain-wrapper: don't
- hardcode CCACHE_BASEDIR
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qQonp9FL2LG4 for <buildroot@lists.busybox.net>;
+ Sat,  6 Aug 2022 20:11:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00D4C40140
+ for <buildroot@buildroot.org>; Sat,  6 Aug 2022 20:11:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00D4C40140
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 5722986D1E; Sat,  6 Aug 2022 19:57:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 6 Aug 2022 22:09:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 82e61bed8208857d5d13c384c89086c4dd4e1e79
+X-Git-Newrev: 5fef2f2669ac7dd00119e5371571c1030fa69570
+X-Patchwork-Hint: ignore
+Message-Id: <20220806195706.5722986D1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/sipeed_maix*sdcard: add missing
+ quotes around string option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,65 +58,89 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Buildroot List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Howdy,
+commit: https://git.buildroot.net/buildroot/commit/?id=5fef2f2669ac7dd00119e5371571c1030fa69570
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 30 Jul 2022 14:11:03 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+The build of those 4 defconfigs was failing in Gitlab CI as the
+defconfig check doesn't pass, due to the BR2_TARGET_ROOTFS_EXT2_SIZE
+string option value missing double quotes:
 
-> And once this is fixed, you'll notice that the old and the new
-> CCACHE_BASEDIR will be different:
-> 
->     (before)$ BR2_DEBUG_WRAPPER=2 ./host/bin/arm-linux-gcc --help
->     ...
->     Toolchain wrapper executing:
->         CCACHE_BASEDIR='/home/ymorin/dev/buildroot/O/master'
->         '/home/ymorin/dev/buildroot/O/master/host/opt/ext-toolchain/bin/arm-linux-gcc.br_real'
->         ...
-> 
->     (after)$ BR2_DEBUG_WRAPPER=2 ./host/bin/arm-linux-gcc --help
->     ...
->     Toolchain wrapper executing:
->         CCACHE_BASEDIR='/home/ymorin/dev/buildroot/O/master/host'
->         '/home/ymorin/dev/buildroot/O/master/host/opt/ext-toolchain/bin/arm-linux-gcc.br_real'
->         ...
-> 
-> So as you can see, before, CCACHE_BASEDIR was pointing to BASE_DIR, but
-> now it points to HOST_DIR. This is one-level too deep, as it will not
-> match the path where packages are actually built, which is
-> BASE_DIR/build, and hapenned to be CCACHE_BASEDIR/build.
-> 
-> Even though I had the debug code path fixed, the second issue was not
-> trivial enough for me to fix when applying, so I amrked the patch as
-> changes requested.
+WARN: defconfig ./configs/sipeed_maixduino_sdcard_defconfig can't be used:
+      Missing: BR2_TARGET_ROOTFS_EXT2_SIZE=64M
 
-You're totally right. And in fact, it makes the change useless. Indeed,
-CCACHE_BASEDIR only makes sense when ccache is used during the
-Buildroot build, because it points to $(BASE_DIR)... which once we are
-outside of Buildroot, in the SDK, would no longer point to anything
-sensible.
+Fixes:
 
-So instead, I've sent a different patch that sets the
-CCACHE_COMPILERCHECK and CCACHE_BASEDIR environment variables, only if
-ccache support is used (BR2_USE_CCACHE=1). Let me know what you think.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/2812054080 (sipeed_maixduino_sdcard_defconfig)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/2812054070 (sipeed_maix_go_sdcard_defconfig)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/2812054049 (sipeed_maix_dock_sdcard_defconfig)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/2812054037 (sipeed_maix_bit_sdcard_defconfig)
 
-Thanks again for the good review!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/sipeed_maix_bit_sdcard_defconfig  | 2 +-
+ configs/sipeed_maix_dock_sdcard_defconfig | 2 +-
+ configs/sipeed_maix_go_sdcard_defconfig   | 2 +-
+ configs/sipeed_maixduino_sdcard_defconfig | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
+index 4ad3b2e1db..e42c3ee425 100644
+--- a/configs/sipeed_maix_bit_sdcard_defconfig
++++ b/configs/sipeed_maix_bit_sdcard_defconfig
+@@ -36,7 +36,7 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
+ # Filesystem
+ BR2_INIT_NONE=y
+ BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE=64M
++BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+ BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/canaan/k210-soc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
+index de79ff950b..d1a1b2886d 100644
+--- a/configs/sipeed_maix_dock_sdcard_defconfig
++++ b/configs/sipeed_maix_dock_sdcard_defconfig
+@@ -36,7 +36,7 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
+ # Filesystem
+ BR2_INIT_NONE=y
+ BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE=64M
++BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+ BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/canaan/k210-soc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+diff --git a/configs/sipeed_maix_go_sdcard_defconfig b/configs/sipeed_maix_go_sdcard_defconfig
+index 7338b0c09d..65a6815c20 100644
+--- a/configs/sipeed_maix_go_sdcard_defconfig
++++ b/configs/sipeed_maix_go_sdcard_defconfig
+@@ -36,7 +36,7 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
+ # Filesystem
+ BR2_INIT_NONE=y
+ BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE=64M
++BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+ BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/canaan/k210-soc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+diff --git a/configs/sipeed_maixduino_sdcard_defconfig b/configs/sipeed_maixduino_sdcard_defconfig
+index b4f1994239..5785d7acf3 100644
+--- a/configs/sipeed_maixduino_sdcard_defconfig
++++ b/configs/sipeed_maixduino_sdcard_defconfig
+@@ -36,7 +36,7 @@ BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
+ # Filesystem
+ BR2_INIT_NONE=y
+ BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE=64M
++BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+ BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/canaan/k210-soc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
