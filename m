@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C13E2C19F2D
-	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 22:22:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D79FCC19F2D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 22:22:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E3E1417D8;
-	Sat,  6 Aug 2022 22:22:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E3E1417D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5ECC182D49;
+	Sat,  6 Aug 2022 22:22:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ECC182D49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fTVmDXSFbqnj; Sat,  6 Aug 2022 22:22:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KnzlJoU6wvV3; Sat,  6 Aug 2022 22:22:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD7C041761;
-	Sat,  6 Aug 2022 22:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD7C041761
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DADD828DA;
+	Sat,  6 Aug 2022 22:22:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DADD828DA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EFAE81BF580
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 22:22:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 88B9B1BF580
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 22:22:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6FC4401DF
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 22:22:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6FC4401DF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64378402E2
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 22:22:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64378402E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D6EQeP_8mq1g for <buildroot@lists.busybox.net>;
- Sat,  6 Aug 2022 22:22:04 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA49840327
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AA49840327
- for <buildroot@buildroot.org>; Sat,  6 Aug 2022 22:22:03 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EA9941BF205;
- Sat,  6 Aug 2022 22:22:01 +0000 (UTC)
-Date: Sun, 7 Aug 2022 00:22:00 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220807002200.0e42e15c@windsurf>
-In-Reply-To: <20220806154610.4106492-1-giulio.benetti@benettiengineering.com>
-References: <20220806154610.4106492-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id usp_fR_ERjW5 for <buildroot@lists.busybox.net>;
+ Sat,  6 Aug 2022 22:22:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41B6B401DF
+Received: from smtpcmd03120.aruba.it (smtpcmd03120.aruba.it [62.149.158.120])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41B6B401DF
+ for <buildroot@buildroot.org>; Sat,  6 Aug 2022 22:22:06 +0000 (UTC)
+Received: from localhost.localdomain ([86.32.63.136])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id KSBHoy4Go5XbvKSBJoQj1E; Sun, 07 Aug 2022 00:22:05 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Sun,  7 Aug 2022 00:22:02 +0200
+Message-Id: <20220806222203.1115664-2-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220806222203.1115664-1-giulio.benetti@benettiengineering.com>
+References: <20220806222203.1115664-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659824522;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=I2ChqtfbPgVbE1SjwIYWVw0Uc01FDlfmiBGDA4/8I1Q=;
- b=NApeua2AJ4eVa2B+9t41WmC0XMzY93NAx4TkbkSnKA8M3mWBW5wWfWJ+Svy8vcw9aO0Hf6
- 6J5VwPdCuXKSc368B0sTq20nvDkfjUI8N9T6bsPL+QrxaDmQPoQGC29JfkEKJQzxRVenJ/
- tkg08VIeUpU7naA/Ad0zeFYiKjnc981Q8xdckCaOvDI8FWyvaBzrFxUTs053NOQQZJQX6j
- 2b4j/sXiL3b4VTF/qo/oEGQLQ6tfVcL/FHxVMxJPoPgB8v8h2pl6+kAYp9dnJrt5IG0pRj
- N4utCujmxIT5pelL7Eq99Y8+eOB4eLBvH0DR4PTR6Z6mVjF6gQdrRCAnfCg+Bg==
+X-CMAE-Envelope: MS4xfJuvYLUffpk/3yLTBziBH0kfV3Y4C305EqjN+BbF8rBZlodzWW+ZBAdrlvOYEodgqXpVMd0bVNYlurGCmK5Fr1f8WOUs3ubXuWg5w0xgH42Dm2/OrWJc
+ LBuK2T5pzLZVsNddriAFOg6qRWhiZI5YwFPz9x37+hXH/9emUPWDnceECdl3Rma2U0Dq81jpel1gKBhUyILbBaZb/MUGd/givInr02eqOrVA6esgtBcYF9fO
+ OP1Ec5vhiRVNrpZ8u+oLRvv++JTsnRDxOdifXFAVYOnqed1GBA6gpMH1IB7vbpjNcJhTfZRlN6sywCF65BMj4Ctxia4fwyaXfGI3K7NwTSOVCZQUsjNXspA7
+ Dv3acWLO5EL/2qjZyZX3a9NcZZuGx6wgbqH2i2P7a+AW877uLt45C2QBuqvXNH7tooC2fq4sMCoeLoR+JI/excasy3sjIQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1659824525; bh=G6OwAXoNaG+AXjuMhgmTWWBrN8V69kzmVzlh4MxFfGI=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=ZBhgTBflJoDe1KgX1uijQM8Kq5sp5xAZua98VFvG6MHymmAQs/n3wGveTX1BEebAR
+ a06HNuOt6VhLNMJU8K456FcbKMuHnRIUJufSnabbSqmEQ9YBJ1TU9oJI6KHRU4sGKO
+ 1GnlCw/vucVT/f+4/w0RT0fyQUQFQogrnWllSjDC9nszM2QT/K6eUbQyvM5UkjwSwM
+ cFPuHqG804cLqfFwsIrq3Bpclp+zGYKSz/Y8f15KExNcgd71iIU7tPTY5ke9PU5esf
+ ytdxNGr+/wNhjz8aGYGZFpEWiuGv/zAXQXpK8jI/gMxCNUIkdHUYsmGmI2RL9asqKb
+ DygPrdLCKsuyA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NApeua2A
-Subject: Re: [Buildroot] [PATCH] package/cryptsetup: fix host building
- trying to call asciidoctor
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=ZBhgTBfl
+Subject: [Buildroot] [PATCH 2/2] package/syslog-ng: work around gcc bug
+ 101915
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,38 +76,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>, Chris Packham <judge.packham@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  6 Aug 2022 17:46:10 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+With Microblaze Gcc version 12.1.0 the build fails due to gcc bug
+101915: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101915. The bug
+show up when building syslog-ng with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_101915=y,
+we force using -O0.
 
-> While bumping version I've fixed build failure due to missing host
-> asciidoctor by passing --disable-asciidoc to CRYPTSETUP_CONF_OPTS but that
-> is missing in HOST_CRYPTSETUP_CONF_OPTS and this leads the same build
-> failure of target building. So let's fix it by adding --disable-asciidoc
-> to host HOST_CRYPTSETUP_CONF_OPTS too.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/0c1/0c1a6a8e59653afaa09303550f74475b4a3898bf/build-end.log
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/cryptsetup/cryptsetup.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Fixes:
+http://autobuild.buildroot.net/results/b57/b57d51ed320a8e1bbfcf8d44875c113d868f82ee/
 
-Applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/syslog-ng/syslog-ng.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 6cad6a5ecd..64b3b24498 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -17,6 +17,13 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ SYSLOG_NG_AUTORECONF = YES
+ SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
+ 	--disable-java --disable-java-modules --disable-mongodb
++SYSLOG_NG_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101915),y)
++SYSLOG_NG_CFLAGS += -O0
++endif
++
++SYSLOG_NG_CONF_ENV = CFLAGS="$(SYSLOG_NG_CFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_GEOIP),y)
+ SYSLOG_NG_DEPENDENCIES += geoip
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
