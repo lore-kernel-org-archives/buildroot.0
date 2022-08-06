@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A7C1C19F2D
-	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 22:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88811C19F2D
+	for <buildroot@archiver.kernel.org>; Sat,  6 Aug 2022 22:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0FD62401DF;
-	Sat,  6 Aug 2022 22:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FD62401DF
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GNulflH7vA0D; Sat,  6 Aug 2022 22:10:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C7DC4013A;
-	Sat,  6 Aug 2022 22:10:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C7DC4013A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9E2C91BF580
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 22:10:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86BEA60F85
- for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 22:10:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86BEA60F85
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A19360F94;
+	Sat,  6 Aug 2022 22:13:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A19360F94
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pm6xM48C310Q for <buildroot@lists.busybox.net>;
- Sat,  6 Aug 2022 22:10:14 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC35960BA9
- for <buildroot@buildroot.org>; Sat,  6 Aug 2022 22:10:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC35960BA9
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id E11BF86ECF; Sat,  6 Aug 2022 21:56:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 7 Aug 2022 00:01:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 88dd3fcd7277fdb61c911d7ae454df886e423377
-X-Git-Newrev: cd933d676f210789730ecb25b23d902620d72072
-X-Patchwork-Hint: ignore
-Message-Id: <20220806215604.E11BF86ECF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-meson.mk: fix handling of
- fortran compiler flags
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m2JL68UhYr18; Sat,  6 Aug 2022 22:13:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A5BF60F85;
+	Sat,  6 Aug 2022 22:13:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A5BF60F85
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EE031BF580
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 22:13:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 162B1812A4
+ for <buildroot@lists.busybox.net>; Sat,  6 Aug 2022 22:13:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 162B1812A4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k1rE8eKhNThM for <buildroot@lists.busybox.net>;
+ Sat,  6 Aug 2022 22:13:53 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3EB881095
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B3EB881095
+ for <buildroot@busybox.net>; Sat,  6 Aug 2022 22:13:52 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 06BC460004;
+ Sat,  6 Aug 2022 22:13:49 +0000 (UTC)
+Date: Sun, 7 Aug 2022 00:13:48 +0200
+To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Message-ID: <20220807001348.351cd42c@windsurf>
+In-Reply-To: <20220805143625.16542-1-guillaume.bressaix@gmail.com>
+References: <20220805143625.16542-1-guillaume.bressaix@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659824030;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=5yg6nGY4OuvEYlXh6hyJfOmAFQZll61/TC/7lp7K858=;
+ b=VoK1UiYJh02OUs78cmLJc6+wrH9fdhQ4XddW0wXzKee8Qf4szaiz4t9xhbBlEypM/JZ1uK
+ 7FPi8iCFSqtqLJN1tgdH3/cB/0akfNTo9TU/qBqdG6Flx3qBthG6PMBZAeux9zr69iOgwm
+ RiFKjpE+evcF/mfmIlnGAQzGSh2pAwmcRdZTlXfUmrwFGy31qb29IDdvRtOvHEdb8nIE+z
+ cmLiogRQRMkw7cWCHYirlxtk94pSNTyyoHTzbKflEt4rFp0nYECgeIEFbYy7owD0hQp8OZ
+ +Rp1im3G/XdzQIdWWh1R1uGysOXgxvWndOCFdYQ84auuVLkHi1c63qtauBC+wg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=VoK1UiYJ
+Subject: Re: [Buildroot] [RFC v3 1/2] package/pkg-meson.mk: support fortran
+ cross-compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,71 +78,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net, "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd933d676f210789730ecb25b23d902620d72072
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Commit
-88dd3fcd7277fdb61c911d7ae454df886e423377 ("package/pkg-meson.mk: add
-support for fortran cross-compilation") incorrectly handled the
-FCFLAGS value to create the cross-compilation.conf file. This commit
-fixes that by making the PKG_MESON_CROSSCONFIG_SED macro take a 4th
-argument containing the fcflags, and adjusting the call sites, as well
-as the PKG_MESON_INSTALL_CROSS_CONF macro.
++Yann in Cc, as there is an open issue, see below.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pkg-meson.mk | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+On Fri,  5 Aug 2022 16:36:24 +0200
+"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 32d41170f3..0632ab21cf 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -71,7 +71,7 @@ endif
- # Generates sed patterns for patching the cross-compilation.conf template,
- # since Flags might contain commas the arguments are passed indirectly by
- # variable name (stripped to deal with whitespaces).
--# Arguments are variable containing cflags, cxxflags, ldflags.
-+# Arguments are variable containing cflags, cxxflags, ldflags, fcflags
- define PKG_MESON_CROSSCONFIG_SED
-         -e "s%@TARGET_CC@%$(TARGET_CC)%g" \
-         -e "s%@TARGET_CXX@%$(TARGET_CXX)%g" \
-@@ -81,7 +81,7 @@ define PKG_MESON_CROSSCONFIG_SED
-         -e "s%@TARGET_ARCH@%$(PKG_MESON_TARGET_CPU_FAMILY)%g" \
-         -e "s%@TARGET_CPU@%$(GCC_TARGET_CPU)%g" \
-         -e "s%@TARGET_ENDIAN@%$(call qstrip,$(call LOWERCASE,$(BR2_ENDIAN)))%g" \
--        -e "s%@TARGET_FCFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
-+        -e "s%@TARGET_FCFLAGS@%$(call make-sq-comma-list,$($(strip $(4))))%g" \
-         -e "s%@TARGET_CFLAGS@%$(call make-sq-comma-list,$($(strip $(1))))%g" \
-         -e "s%@TARGET_LDFLAGS@%$(call make-sq-comma-list,$($(strip $(3))))%g" \
-         -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
-@@ -129,7 +129,7 @@ define $(2)_CONFIGURE_CMDS
- 	mkdir -p $$($$(PKG)_SRCDIR)/build
- 	sed -e "/^\[binaries\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES),\n$$(x)):" \
- 	    -e "/^\[properties\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES),\n$$(x)):" \
--	    $$(call PKG_MESON_CROSSCONFIG_SED,$(2)_CFLAGS,$(2)_CXXFLAGS,$(2)_LDFLAGS) \
-+	    $$(call PKG_MESON_CROSSCONFIG_SED,$(2)_CFLAGS,$(2)_CXXFLAGS,$(2)_LDFLAGS,$(2)_FCFLAGS) \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) \
- 	CC_FOR_BUILD="$$(HOSTCC)" \
-@@ -248,9 +248,10 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	sed -e "s%@TARGET_CFLAGS@%$(call make-sq-comma-list,$(TARGET_CFLAGS))@PKG_TARGET_CFLAGS@%g" \
- 	    -e "s%@TARGET_LDFLAGS@%$(call make-sq-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_LDFLAGS@%g" \
- 	    -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CXXFLAGS@%g" \
-+	    -e "s%@TARGET_FCFLAGS@%$(call make-sq-comma-list,$(TARGET_FCFLAGS))@PKG_TARGET_FCFLAGS@%g" \
- 	    $(call PKG_MESON_CROSSCONFIG_SED) \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
--	sed $(call PKG_MESON_CROSSCONFIG_SED,TARGET_CFLAGS,TARGET_CXXFLAGS,TARGET_LDFLAGS) \
-+	sed $(call PKG_MESON_CROSSCONFIG_SED,TARGET_CFLAGS,TARGET_CXXFLAGS,TARGET_LDFLAGS,TARGET_FCFLAGS) \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
- endef
- 
+> python-scipy is moving to a meson build infrastructure,
+> and requires fortran cross-compilation
+> 
+> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> ---
+>  package/pkg-meson.mk                   | 2 ++
+>  support/misc/cross-compilation.conf.in | 3 +++
+>  2 files changed, 5 insertions(+)
+
+I applied to master... but I went too fast, there were several
+incorrect things in this commit.
+
++        -e "s%@TARGET_FCFLAGS@%$(call make-sq-comma-list,$($(strip $(2))))%g" \
+
+this is wrong: $(2) in PKG_MESON_CROSSCONFIG_SED contains the CXXFLAGS,
+not the FCFLAGS. So I changed that to $(4), and passed FCFLAGS as a
+fourth argument to this macro.
+
+Also, you were missing setting FCFLAGS in the
+PKG_MESON_INSTALL_CROSS_CONF macro.
+
+I fixed this in a follow-up commit:
+https://git.buildroot.org/buildroot/commit/?id=cd933d676f210789730ecb25b23d902620d72072.
+I hope I got it right.
+
+Now, on to the open issue which explains why I have added Yann in Cc.
+We are currently setting the C++ compiler and Fortran compiler path in
+Meson's cross-compilation.conf unconditionally... even when the
+toolchain has no C++ or Fortran support. So it means we're pointing to
+compilers that don't exist.
+
+Ideally, the cross-compilation.conf should be generated with no
+reference to a C++ or Fortran compiler, or a /bin/false reference, and
+ditto for the CXXFLAGS/FCFLAGS when there is no C++ or Fortran support.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
