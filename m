@@ -1,88 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FBCDC19F2A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 12:41:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 565CAC19F2A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 12:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B06E8132A;
-	Sun,  7 Aug 2022 12:41:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B06E8132A
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF4A7401C9;
+	Sun,  7 Aug 2022 12:42:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF4A7401C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K16dMMEfIxpQ; Sun,  7 Aug 2022 12:41:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nAsENt2df6Uo; Sun,  7 Aug 2022 12:42:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F1168131D;
-	Sun,  7 Aug 2022 12:41:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F1168131D
+	by smtp2.osuosl.org (Postfix) with ESMTP id D3E3A40119;
+	Sun,  7 Aug 2022 12:42:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3E3A40119
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 314D51BF2F0
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:41:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2CBC41BF2F0
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:42:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1958D81329
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:41:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1958D81329
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0838A8131A
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:42:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0838A8131A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eo-UhyGtvc88 for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 12:41:11 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5E638131A
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E5E638131A
- for <buildroot@buildroot.org>; Sun,  7 Aug 2022 12:41:10 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id z12so8080343wrs.9
- for <buildroot@buildroot.org>; Sun, 07 Aug 2022 05:41:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=Wem0KtF2iRJLSKQZ2ow5j2FoxCaYQgQDL80Kx/aTdC8=;
- b=rj0fLQfTW44ScsRLcgKJ7TWp/EXmI2MDlSCH1zGd09cODGdxQSsmUVt1Oe9Y2HZlkc
- 7o5Sxd+7h7E+efzgkmJDDpT3QRgQoJKSxS2RsV6X3sT8ChjI3yyNQ1Wh1Q9DlnSwqWxt
- 3BtVnw6E3+aaB+3+zC5Jm4F6hNRYC39fBqBEECVnsdQRRnrtkPE4zufiuPKFyz36ItQp
- /5hVME/crpbeXpJjiMNICpCyabKj9FDfwMRIZW3vwvuMKnXBDCIps9a7CFT75ZhRzdY9
- IkOp8JARldsKD0NF+zYXkzuZ1PXVQTjFyoqGggBDUhHyxhntMwCCbXuTnnoQFYdNegRb
- N13g==
-X-Gm-Message-State: ACgBeo0L8L2B1lWOkXbU7H39KxLjDzMmMUtI2oYJWfy0wjngQ5Zt73d+
- JUySLYHHPUx4i3ea+Fh0YWEmeJK0DOY=
-X-Google-Smtp-Source: AA6agR77XJRqWC23VgBY8GB9XdRCQ9i5QQGgOXrFwXUPRegozTrRt+aVDzNuA1RkbxqvKMLwc0yccA==
-X-Received: by 2002:a05:6000:1888:b0:222:c96d:862f with SMTP id
- a8-20020a056000188800b00222c96d862fmr1311104wri.706.1659876068902; 
- Sun, 07 Aug 2022 05:41:08 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
- by smtp.gmail.com with ESMTPSA id
- v128-20020a1cac86000000b003a327b98c0asm10810560wme.22.2022.08.07.05.41.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Aug 2022 05:41:08 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id 5giFbRCdS7Ad for <buildroot@lists.busybox.net>;
+ Sun,  7 Aug 2022 12:42:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 451A481300
+ for <buildroot@buildroot.org>; Sun,  7 Aug 2022 12:42:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 451A481300
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 0FF6C86F04; Sun,  7 Aug 2022 12:28:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun,  7 Aug 2022 14:41:04 +0200
-Message-Id: <20220807124104.3750685-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=Wem0KtF2iRJLSKQZ2ow5j2FoxCaYQgQDL80Kx/aTdC8=;
- b=KzFIvNsaSGLZT2E7ohpG18zAMdVcyiXmpyImrYXSgS5MzLqZJjxFCI5DZw/DltTHPd
- V/aFuw3S9djjhvRMmm7iEn0Fa5KZjkzzyB0fMtHwS9xySkjKPEhE4vzroId1+5BgmlNR
- XM+FdcyM5oqmOMs/EpkjYIjsqjN6PtVuA2vVeVGN9INNx42loMcLNY8fzt0yWwlcUuAe
- 68bGUVGA3aodvyLwTQfig8VS1RMuOZ9Kmo/6g5D3GYQiVmd+X0Wp51bHS/0i196KHhMA
- TGTm22IkKjmCuq0ZpSh9iJPRmOFVCqtCEH4W2xLmTuWDSjeidW7z89laTkKxUw/7OiJr
- eaEw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=KzFIvNsa
-Subject: [Buildroot] [PATCH 1/1] package/freeradius-server: bump to version
- 3.2.0
+Date: Sun, 7 Aug 2022 14:42:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 59fdc58ef5b9e27a6124b3c86b18904c117644a9
+X-Git-Newrev: d8f540bef04638f6b16cedc03a70f1bd98a0283c
+X-Patchwork-Hint: ignore
+Message-Id: <20220807122804.0FF6C86F04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lapack: fix build without
+ BUILD_COMPLEX
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,50 +56,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/FreeRADIUS/freeradius-server/releases/tag/release_3_2_0
+commit: https://git.buildroot.net/buildroot/commit/?id=d8f540bef04638f6b16cedc03a70f1bd98a0283c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix the following build failure without BUILD_COMPLEX raised since bump
+to version 3.10.1 in commit b3e96b1fb0d0a7245cea6921fcdd7986762e5ec1 and
+https://github.com/Reference-LAPACK/lapack/commit/bd1fba15d0d6f54891cb822f4ab2e8afd0a3ea4b:
+
+CMake Error at LAPACKE/CMakeLists.txt:38 (message):
+  LAPACKE_BUILD_COMPLEX requires BUILD_COMPLEX to be ON
+
+CMake Error at LAPACKE/CMakeLists.txt:38 (message):
+  LAPACKE_BUILD_COMPLEX16 requires BUILD_COMPLEX16 to be ON
+
+Fixes:
+ - http://autobuild.buildroot.org/results/418d15f734c87a70edf0d670c0548d550e6e70ba
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freeradius-server/freeradius-server.hash | 4 ++--
- package/freeradius-server/freeradius-server.mk   | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/lapack/lapack.mk | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/freeradius-server/freeradius-server.hash b/package/freeradius-server/freeradius-server.hash
-index cd0281c478..33ec09e7b0 100644
---- a/package/freeradius-server/freeradius-server.hash
-+++ b/package/freeradius-server/freeradius-server.hash
-@@ -1,4 +1,4 @@
- # Locally computed, after checking
--# ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-3.0.25.tar.gz.sig
--sha256  4883a68bb3cee46025359a97c1691ce655e8babfd6dc3c021d00e109a2ff4c10  freeradius-server-3.0.25.tar.gz
-+# ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-3.2.0.tar.bz2.sig
-+sha256  a3071cd78ffcb4706217561d822ee4c760daeb277a63f36a9f11d412c3c39e56  freeradius-server-3.2.0.tar.bz2
- sha256  0a0e46014fc2efd5144a30359c0e6e1ea9fa3dd407d3318204150efd7b4caf6a  COPYRIGHT
-diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
-index 4c526d2342..65a72ab532 100644
---- a/package/freeradius-server/freeradius-server.mk
-+++ b/package/freeradius-server/freeradius-server.mk
-@@ -4,7 +4,9 @@
- #
- ################################################################################
+diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
+index 2d069c1c93..3db2797202 100644
+--- a/package/lapack/lapack.mk
++++ b/package/lapack/lapack.mk
+@@ -14,9 +14,17 @@ LAPACK_SUPPORTS_IN_SOURCE_BUILD = NO
+ LAPACK_CONF_OPTS = -DLAPACKE=ON -DCBLAS=ON
  
--FREERADIUS_SERVER_VERSION = 3.0.25
-+FREERADIUS_SERVER_VERSION = 3.2.0
-+FREERADIUS_SERVER_SOURCE = \
-+	freeradius-server-$(FREERADIUS_SERVER_VERSION).tar.bz2
- FREERADIUS_SERVER_SITE = ftp://ftp.freeradius.org/pub/freeradius
- FREERADIUS_SERVER_LICENSE = GPL-2.0
- FREERADIUS_SERVER_LICENSE_FILES = COPYRIGHT
--- 
-2.35.1
-
+ ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
+-LAPACK_CONF_OPTS += -DBUILD_COMPLEX=ON -DBUILD_COMPLEX16=ON
++LAPACK_CONF_OPTS += \
++	-DBUILD_COMPLEX=ON \
++	-DBUILD_COMPLEX16=ON \
++	-DLAPACKE_BUILD_COMPLEX=ON \
++	-DLAPACKE_BUILD_COMPLEX16=ON
+ else
+-LAPACK_CONF_OPTS += -DBUILD_COMPLEX=OFF -DBUILD_COMPLEX16=OFF
++LAPACK_CONF_OPTS += \
++	-DBUILD_COMPLEX=OFF \
++	-DBUILD_COMPLEX16=OFF \
++	-DLAPACKE_BUILD_COMPLEX=OFF \
++	-DLAPACKE_BUILD_COMPLEX16=OFF
+ endif
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
