@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B77E0C19F2A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 12:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8265C19F2A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 12:45:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6027A81328;
-	Sun,  7 Aug 2022 12:42:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6027A81328
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C78582741;
+	Sun,  7 Aug 2022 12:45:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C78582741
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J8mD48O6wP3u; Sun,  7 Aug 2022 12:42:31 +0000 (UTC)
+	with ESMTP id nwchexunS7Dw; Sun,  7 Aug 2022 12:45:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95F9E8131A;
-	Sun,  7 Aug 2022 12:42:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95F9E8131A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0F9831BF2F0
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:42:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B47582779;
+	Sun,  7 Aug 2022 12:45:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B47582779
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C4FE81BF2F0
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:45:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DCB1D410C6
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:42:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCB1D410C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id A0B3140119
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:45:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0B3140119
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GlSzyGBLH95n for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 12:42:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 880024089B
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 880024089B
- for <buildroot@buildroot.org>; Sun,  7 Aug 2022 12:42:18 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B1D0B240004;
- Sun,  7 Aug 2022 12:42:16 +0000 (UTC)
-Date: Sun, 7 Aug 2022 14:42:15 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220807144215.43b7119f@windsurf>
-In-Reply-To: <20220807093135.209053-1-fontaine.fabrice@gmail.com>
-References: <20220807093135.209053-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659876137;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=v6fDQLniQLWy3SRfWIu59Fp/K9hsYbj3F/QJIIi/qng=;
- b=IYRZ0pNLANPNc5mw/gJcFB0up/nzEGenwixlRFYAv0iJE30LQQmy/LvKuytpRyV/H/NBo8
- XVR0MWJBl/PsbNcZEkmb3K7kN7pjX4KX8myUamSjxypqTuAsRMf24a/hHCeWz+aTYut5+K
- JrBDWN7QdQcftuGjD1tVRAd5QN8IL1lX8VOWVwlYiA4DqXmoD4+yM13REn/7VsmLcr5Avu
- 7Scj/Ao+fLGvs4fGvhl0/4KOQ5UedXODAfTXfkmWzmMdeIUCx1hv79UdhdHV9H4zm8/bFR
- xlxW7WFOFbLWmeppTYHYZCbi2TtyINJEdlm2+7kyDzL+IGSSO4QqmBP102sZZA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IYRZ0pNL
-Subject: Re: [Buildroot] [PATCH 1/1] package/lapack: fix build without
- BUILD_COMPLEX
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C5PW2QvKgSX1 for <buildroot@lists.busybox.net>;
+ Sun,  7 Aug 2022 12:45:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF99C400FE
+ for <buildroot@buildroot.org>; Sun,  7 Aug 2022 12:45:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF99C400FE
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 9B40B86F0D; Sun,  7 Aug 2022 12:31:03 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 7 Aug 2022 14:44:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d8f540bef04638f6b16cedc03a70f1bd98a0283c
+X-Git-Newrev: 7bf8aed70c12aa785294f4b6d767873a5f4b38a9
+X-Patchwork-Hint: ignore
+Message-Id: <20220807123103.9B40B86F0D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsyslog: imhttp support needs
+ apr-util
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,40 +58,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Benjamin Kamath <kamath.ben@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  7 Aug 2022 11:31:35 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7bf8aed70c12aa785294f4b6d767873a5f4b38a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure without BUILD_COMPLEX raised since bump
-> to version 3.10.1 in commit b3e96b1fb0d0a7245cea6921fcdd7986762e5ec1 and
-> https://github.com/Reference-LAPACK/lapack/commit/bd1fba15d0d6f54891cb822f4ab2e8afd0a3ea4b:
-> 
-> CMake Error at LAPACKE/CMakeLists.txt:38 (message):
->   LAPACKE_BUILD_COMPLEX requires BUILD_COMPLEX to be ON
-> 
-> CMake Error at LAPACKE/CMakeLists.txt:38 (message):
->   LAPACKE_BUILD_COMPLEX16 requires BUILD_COMPLEX16 to be ON
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/418d15f734c87a70edf0d670c0548d550e6e70ba
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/lapack/lapack.mk | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+imhttp support needs apr-util in addition to civetweb since bump to
+version 8.2204.1 in commit bc469ee6329555284b2fe9162597917122fbbe3a
+and
+https://github.com/rsyslog/rsyslog/commit/a8b8d6c1f969286adac3d465e6ac018968550667. Without
+apr-util, the build fails with:
 
-Applied to master, thanks.
+configure: error: Package requirements (apr-util-1 >= 1.0) were not met:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Package 'apr-util-1', required by 'virtual:world', not found
+
+Instead of having the user needing to figure out that apr-util is
+needed for imhttp support, have the top-level rsyslog option selects
+apr-util when civetweb-lib is enabled
+
+Fixes:
+ - http://autobuild.buildroot.org/results/4454ae5321df0c04c9dee19693f3908e69fbf23d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rsyslog/Config.in  | 1 +
+ package/rsyslog/rsyslog.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
+index 8c024e69c7..3ba326191a 100644
+--- a/package/rsyslog/Config.in
++++ b/package/rsyslog/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_RSYSLOG
+ 	# even though rsyslog already depends on threads for itself:
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	select BR2_PACKAGE_APR_UTIL if BR2_PACKAGE_CIVETWEB_LIB
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LIBESTR
+ 	select BR2_PACKAGE_LIBLOGGING
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 1788d29281..a6e32ecea1 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -53,7 +53,7 @@ RSYSLOG_CONF_OPTS += \
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_CIVETWEB_LIB),y)
+-RSYSLOG_DEPENDENCIES += civetweb
++RSYSLOG_DEPENDENCIES += apr-util civetweb
+ RSYSLOG_CONF_OPTS += --enable-imhttp
+ else
+ RSYSLOG_CONF_OPTS += --disable-imhttp
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
