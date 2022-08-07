@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1EDEC19F2A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 12:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 818DCC19F2A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 12:56:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A8E5827AA;
-	Sun,  7 Aug 2022 12:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A8E5827AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2D8C60AF0;
+	Sun,  7 Aug 2022 12:56:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2D8C60AF0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Elvqc8bykE23; Sun,  7 Aug 2022 12:55:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2mJi5Y1h1x4Q; Sun,  7 Aug 2022 12:56:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78A2C827A1;
-	Sun,  7 Aug 2022 12:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78A2C827A1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F84E60ADF;
+	Sun,  7 Aug 2022 12:55:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F84E60ADF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CDEF41BF2F0
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:55:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C37F11BF2F0
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:55:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B220E4162C
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:55:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B220E4162C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D1874162C
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:55:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D1874162C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L5jqP0p3vA0K for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 12:55:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A59341626
- for <buildroot@buildroot.org>; Sun,  7 Aug 2022 12:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A59341626
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5E99886F2C; Sun,  7 Aug 2022 12:40:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 7 Aug 2022 14:52:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7674400360b0c9cdf195e3cf2478c30756559014
-X-Git-Newrev: 08be3dfa15e97134c150a46c42fa2059be90b1c6
-X-Patchwork-Hint: ignore
-Message-Id: <20220807124058.5E99886F2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dtschema: new package
+ with ESMTP id oZTfId8wEsIn for <buildroot@lists.busybox.net>;
+ Sun,  7 Aug 2022 12:55:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3403841626
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3403841626
+ for <buildroot@buildroot.org>; Sun,  7 Aug 2022 12:55:55 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 174B91C0002;
+ Sun,  7 Aug 2022 12:55:53 +0000 (UTC)
+Date: Sun, 7 Aug 2022 14:55:53 +0200
+To: yegorslists--- via buildroot <buildroot@buildroot.org>
+Message-ID: <20220807145553.023c66ce@windsurf>
+In-Reply-To: <20220804052332.19537-1-yegorslists@googlemail.com>
+References: <20220804052332.19537-1-yegorslists@googlemail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1659876954;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=zhZZvaAO3HkfFwkfAq8NoyhHRhgdu6gNt+tYRyoqZ00=;
+ b=phomfiXcvr3kjkkm1XFgo/Yq2Ss4T86ImbrVwjuMY1Hs5qBmfeb+g7IKh6WuHxc3oJ1hNb
+ jN0nFT4MLvz6BDfrb+HdwFCdIenrEvdXyKx1LlOfIviTQSKOY3zeyAXHqqAz/Tmy4lcBDz
+ Zp0zq95mmI02ETthPtAWJ7qRs+B7lpxXLgJTBNw9ZVsiT1Q9hjjFYIqBtBB9PkszuGCosq
+ MRjCEhJjslLjInodkuLd1zeg+m3HaZB+r1rCidIfbIg8Nbqb7UjuNvv0Mxc5sdtsHoX60P
+ vULE3TfJ6JEtIVDHI9YHdXZerHLhkFYYl2zZtzCL8XOcgxgq+ZdcoUWY74wCxA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=phomfiXc
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-dtschema: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,84 +77,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08be3dfa15e97134c150a46c42fa2059be90b1c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  4 Aug 2022 07:23:31 +0200
+yegorslists--- via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                            |  1 +
- package/python-dtschema/Config.in            | 10 ++++++++++
- package/python-dtschema/python-dtschema.hash |  5 +++++
- package/python-dtschema/python-dtschema.mk   | 15 +++++++++++++++
- 4 files changed, 31 insertions(+)
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/Config.in                            |  1 +
+>  package/python-dtschema/Config.in            | 10 ++++++++++
+>  package/python-dtschema/python-dtschema.hash |  5 +++++
+>  package/python-dtschema/python-dtschema.mk   | 15 +++++++++++++++
+>  4 files changed, 31 insertions(+)
+>  create mode 100644 package/python-dtschema/Config.in
+>  create mode 100644 package/python-dtschema/python-dtschema.hash
+>  create mode 100644 package/python-dtschema/python-dtschema.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 96c54ca672..57733f80b5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1024,6 +1024,7 @@ menu "External python modules"
- 	source "package/python-docutils/Config.in"
- 	source "package/python-dominate/Config.in"
- 	source "package/python-dpkt/Config.in"
-+	source "package/python-dtschema/Config.in"
- 	source "package/python-ecdsa/Config.in"
- 	source "package/python-engineio/Config.in"
- 	source "package/python-entrypoints/Config.in"
-diff --git a/package/python-dtschema/Config.in b/package/python-dtschema/Config.in
-new file mode 100644
-index 0000000000..961d0e04b2
---- /dev/null
-+++ b/package/python-dtschema/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_DTSCHEMA
-+	bool "python-dtschema"
-+	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
-+	select BR2_PACKAGE_PYTHON_PYLIBFDT # runtime
-+	select BR2_PACKAGE_PYTHON_RFC3987 # runtime
-+	select BR2_PACKAGE_PYTHON_RUAMEL_YAML # runtime
-+	help
-+	  DeviceTree validation schema and tools.
-+
-+	  https://github.com/devicetree-org/dt-schema
-diff --git a/package/python-dtschema/python-dtschema.hash b/package/python-dtschema/python-dtschema.hash
-new file mode 100644
-index 0000000000..7b183e28e3
---- /dev/null
-+++ b/package/python-dtschema/python-dtschema.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/dtschema/json
-+md5  ed75defac9a7297a567f278994b14d5b  dtschema-2022.8.tar.gz
-+sha256  1befe7c9f74cea248a8b524cf6185ac48912a5b2aae96854d77cb94584433ca4  dtschema-2022.8.tar.gz
-+# Locally computed sha256 checksums
-+sha256  ca0d66263406dc684fe9db60577b234f65ffdf620d7e041c708e969447b69111  LICENSE.txt
-diff --git a/package/python-dtschema/python-dtschema.mk b/package/python-dtschema/python-dtschema.mk
-new file mode 100644
-index 0000000000..263061dc98
---- /dev/null
-+++ b/package/python-dtschema/python-dtschema.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-dtschema
-+#
-+################################################################################
-+
-+PYTHON_DTSCHEMA_VERSION = 2022.8
-+PYTHON_DTSCHEMA_SOURCE = dtschema-$(PYTHON_DTSCHEMA_VERSION).tar.gz
-+PYTHON_DTSCHEMA_SITE = https://files.pythonhosted.org/packages/95/be/cb576760b9578cb69da020aeb80f3c2d05ff46b4090ab350c1e05691329e
-+PYTHON_DTSCHEMA_SETUP_TYPE = setuptools
-+PYTHON_DTSCHEMA_LICENSE = BSD-2-Clause
-+PYTHON_DTSCHEMA_LICENSE_FILES = LICENSE.txt
-+PYTHON_DTSCHEMA_DEPENDENCIES = host-python-setuptools-scm
-+
-+$(eval $(python-package))
+Thanks, both applied. On the second patch, adding the sample test
+script in DEVELOPERS file was missing (the test itself was added, but
+not the sample script), so I fixed that up when applying.
+
+Thanks again!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
