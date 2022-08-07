@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5299BC19F2A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 12:51:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5999DC19F2A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 12:55:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBDEA401C9;
-	Sun,  7 Aug 2022 12:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBDEA401C9
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF59340486;
+	Sun,  7 Aug 2022 12:55:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF59340486
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9nF6CDNQPfZH; Sun,  7 Aug 2022 12:51:37 +0000 (UTC)
+	with ESMTP id fvq0St3DBw_W; Sun,  7 Aug 2022 12:55:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A81940119;
-	Sun,  7 Aug 2022 12:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A81940119
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B545B1BF2F0
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:51:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1ECD340461;
+	Sun,  7 Aug 2022 12:55:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1ECD340461
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BE92E1BF2F0
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:55:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 836A782779
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 836A782779
+ by smtp4.osuosl.org (Postfix) with ESMTP id 985424162D
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:55:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 985424162D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mvaeaYEokzXc for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 12:51:33 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80E8E82741
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 80E8E82741
- for <buildroot@buildroot.org>; Sun,  7 Aug 2022 12:51:33 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 50A7B240002;
- Sun,  7 Aug 2022 12:51:31 +0000 (UTC)
-Date: Sun, 7 Aug 2022 14:51:30 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220807145130.64896f73@windsurf>
-In-Reply-To: <20220807124104.3750685-1-fontaine.fabrice@gmail.com>
-References: <20220807124104.3750685-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659876691;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ArjYqGt/Wxr5luineayhPe4NKKJiQ8U+EzWbKwhBSzY=;
- b=btTGYWnC45sbE5O44lkZyrEm192y9bpSgXyrUTIogAfll2MDqsvXCJsarQYGg01p6A9GgM
- koE8gbSl5/8RZ5JhHTeyAO1XRl6gxKihb3kW8wVx/HJPjE95Ou6VFxyw2nB+Tezuo+4DKO
- JQCDtyhqgD9MHElaweLeHf8EbQ+RMwqmydd9q/Iq9lvx/MM4248zbZWU5tZtzQxTLml/4J
- GX3UqSjGFzm7PyxMrtRV1iEoaKPMoAwiuuoYZJ+gOw3FZM4jhY3pZgJcIfqNTzxlsmTt+z
- Y3EGDQusFFXD8qknBgc90jAHYK2Y3aMw4WJf/KHoIfLj5kA/MBnu9jpM22MXSg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=btTGYWnC
-Subject: Re: [Buildroot] [PATCH 1/1] package/freeradius-server: bump to
- version 3.2.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BDM9x1hqHewW for <buildroot@lists.busybox.net>;
+ Sun,  7 Aug 2022 12:55:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A749B4162C
+ for <buildroot@buildroot.org>; Sun,  7 Aug 2022 12:55:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A749B4162C
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 6795C86F19; Sun,  7 Aug 2022 12:40:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 7 Aug 2022 14:54:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 08be3dfa15e97134c150a46c42fa2059be90b1c6
+X-Git-Newrev: b25c3f1d43a44c9edd87d2497874c3536a9b300d
+X-Patchwork-Hint: ignore
+Message-Id: <20220807124058.6795C86F19@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add test for
+ python-dtschema
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,31 +58,63 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  7 Aug 2022 14:41:04 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b25c3f1d43a44c9edd87d2497874c3536a9b300d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/FreeRADIUS/freeradius-server/releases/tag/release_3_2_0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/freeradius-server/freeradius-server.hash | 4 ++--
->  package/freeradius-server/freeradius-server.mk   | 4 +++-
->  2 files changed, 5 insertions(+), 3 deletions(-)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                              |  2 ++
+ support/testing/tests/package/sample_python_dtschema.py |  1 +
+ support/testing/tests/package/test_python_dtschema.py   | 12 ++++++++++++
+ 3 files changed, 15 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 18f4d1f0e6..edc02bf1c4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3135,8 +3135,10 @@ F:	package/wpa_supplicant/
+ F:	package/x11r7/xapp_xconsole/
+ F:	package/x11r7/xapp_xinput-calibrator/
+ F:	package/zlog/
++F:	support/testing/tests/package/sample_python_dtschema.py
+ F:	support/testing/tests/package/test_libftdi1.py
+ F:	support/testing/tests/package/test_python_can.py
++F:	support/testing/tests/package/test_python_dtschema.py
+ F:	utils/scanpypi
+ 
+ N:	Yunhao Tian <t123yh.xyz@gmail.com>
+diff --git a/support/testing/tests/package/sample_python_dtschema.py b/support/testing/tests/package/sample_python_dtschema.py
+new file mode 100644
+index 0000000000..786c3d5a71
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_dtschema.py
+@@ -0,0 +1 @@
++import dtschema
+diff --git a/support/testing/tests/package/test_python_dtschema.py b/support/testing/tests/package/test_python_dtschema.py
+new file mode 100644
+index 0000000000..e3a4a309c1
+--- /dev/null
++++ b/support/testing/tests/package/test_python_dtschema.py
+@@ -0,0 +1,12 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Dtschema(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_DTSCHEMA=y
++        """
++    sample_scripts = ["tests/package/sample_python_dtschema.py"]
++    timeout = 40
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
