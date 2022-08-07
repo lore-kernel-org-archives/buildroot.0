@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A28D6C19F2A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 14:22:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0573C19F2A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 14:49:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18BD781A23;
-	Sun,  7 Aug 2022 14:22:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18BD781A23
+	by smtp3.osuosl.org (Postfix) with ESMTP id 300FA60B11;
+	Sun,  7 Aug 2022 14:49:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 300FA60B11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jxRAmR7cP7qJ; Sun,  7 Aug 2022 14:22:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XbO2Nzh_Sffy; Sun,  7 Aug 2022 14:49:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2312581A18;
-	Sun,  7 Aug 2022 14:22:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2312581A18
+	by smtp3.osuosl.org (Postfix) with ESMTP id 337F060ADF;
+	Sun,  7 Aug 2022 14:49:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 337F060ADF
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A44A11BF3C0
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 14:22:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EAB3D1BF96B
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 14:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69C4C404C7
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 14:22:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69C4C404C7
+ by smtp2.osuosl.org (Postfix) with ESMTP id C64D5404C7
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 14:49:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C64D5404C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tBJCCHE6itZb for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 14:22:27 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD8CE400B9
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AD8CE400B9
- for <buildroot@buildroot.org>; Sun,  7 Aug 2022 14:22:26 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 765D5240004;
- Sun,  7 Aug 2022 14:22:24 +0000 (UTC)
-Date: Sun, 7 Aug 2022 16:22:23 +0200
-To: Christian Stewart via buildroot <buildroot@buildroot.org>
-Message-ID: <20220807162223.3b7f0268@windsurf>
-In-Reply-To: <20220725000111.683564-1-christian@paral.in>
-References: <20220725000111.683564-1-christian@paral.in>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659882144;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=RzBnq0mIY1OF7o8iYZs1VRReFppA7dcbOJ5uGbjL7ps=;
- b=ZugWiZSJ54jnouk6Lds1xqCwOLhsrg+boa7TWxOZJ4VnjiAoFAPvSPVHOHHe2wDG2pmMZf
- qKG36dWiOPc6YstfatNau99238NvFuQRLqST/rnMrBB16CqVxzHj7vaMrdLJ16Vp0QUBUZ
- taTUChQ6NmVZ2O4ISUx9QEBb/4j1vxYH3Id+ewW9xJQyhDT2EiRSDn0BWK6Bq7AheM+lJR
- nqf5RWkW4hRXZ2DjzCQDZ9c5umhjYuoaz+4uFKqcX/NZioK/JFenLCcWYPnE6CQnuXn3+L
- 0OfWfSduWd2ctP+UA+2zv1uU8l/cVUxI0cvfC87EV+X08/IWuT6ENAnclOih3A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZugWiZSJ
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/rtl8821cu: new package
+ with ESMTP id 8tOiG2lhnT-s for <buildroot@lists.busybox.net>;
+ Sun,  7 Aug 2022 14:49:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC1BD400B9
+ for <buildroot@buildroot.org>; Sun,  7 Aug 2022 14:49:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC1BD400B9
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 5A11886F69; Sun,  7 Aug 2022 14:35:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 7 Aug 2022 16:38:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1b638e4817d8b1148eef60506e201b39141859d6
+X-Git-Newrev: acf68180de66c710a8e19bae7325cf253e0b5849
+X-Patchwork-Hint: ignore
+Message-Id: <20220807143537.5A11886F69@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-zlmdb: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,113 +57,110 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Christian,
+commit: https://git.buildroot.net/buildroot/commit/?id=acf68180de66c710a8e19bae7325cf253e0b5849
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 24 Jul 2022 17:01:11 -0700
-Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+Required by python-crossbar.
 
-> Adds support for USB rtl8821cu wifi cards.
-> 
-> Similar to rtl8821au and rtl8812au-aircrack-ng packages.
-> 
-> https://github.com/morrownr/8821cu-20210118
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/Config.in                             |    1 +
->  ...platform-specific-and-build-on-targe.patch | 1225 +++++++++++++++++
->  ...ate-time-remove-date-and-time-macros.patch |   30 +
->  package/rtl8821cu/Config.in                   |   10 +
->  package/rtl8821cu/rtl8821cu.hash              |    3 +
->  package/rtl8821cu/rtl8821cu.mk                |   19 +
->  6 files changed, 1288 insertions(+)
+Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-zlmdb/Config.in         | 22 ++++++++++++++++++++++
+ package/python-zlmdb/python-zlmdb.hash |  5 +++++
+ package/python-zlmdb/python-zlmdb.mk   | 14 ++++++++++++++
+ 5 files changed, 43 insertions(+)
 
-Entry in DEVELOPERS file is missing.
-
-> diff --git a/package/rtl8821cu/0001-makefile-remove-platform-specific-and-build-on-targe.patch b/package/rtl8821cu/0001-makefile-remove-platform-specific-and-build-on-targe.patch
-> new file mode 100644
-> index 0000000000..ec838eb1b8
-> --- /dev/null
-> +++ b/package/rtl8821cu/0001-makefile-remove-platform-specific-and-build-on-targe.patch
-> @@ -0,0 +1,1225 @@
-> +From de579638554590973ce0086f39be4bd6a8ef1c15 Mon Sep 17 00:00:00 2001
-> +From: Christian Stewart <christian@paral.in>
-> +Date: Mon, 7 Mar 2022 11:33:23 -0800
-> +Subject: [PATCH] makefile: remove platform-specific and build-on-target
-> + sections
-> +
-> +Simplify the makefile, removing broken platform-specific sections.
-> +
-> + - unset platform i386-pc
-> + - remove all platform sections
-> + - remove sections assuming build-on-target
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-> +
-> +makefile: remove sections assuming build-on-target
-> +
-> +Removed all sections which assume the driver is being built on the target.
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-
-Why this patch seems to have 2 commits logs one after the other?
-
-Also, can we find a change that is acceptable by upstream, instead of this huge patch?
-
-> diff --git a/package/rtl8821cu/0002-error-date-time-remove-date-and-time-macros.patch b/package/rtl8821cu/0002-error-date-time-remove-date-and-time-macros.patch
-> new file mode 100644
-> index 0000000000..d51c11fa64
-> --- /dev/null
-> +++ b/package/rtl8821cu/0002-error-date-time-remove-date-and-time-macros.patch
-> @@ -0,0 +1,30 @@
-> +From aece6cb25704d86bfea9a4ad8b79970471ac5059 Mon Sep 17 00:00:00 2001
-> +From: Christian Stewart <christian@paral.in>
-> +Date: Mon, 7 Mar 2022 11:44:38 -0800
-> +Subject: [PATCH] error date-time: remove date and time macros
-> +
-> +Fixes: -Werror=date-time
-> +
-> +error: macro "__TIME__" might prevent reproducible builds
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-> +---
-> + core/rtw_debug.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/core/rtw_debug.c b/core/rtw_debug.c
-> +index d1a41e1..e16efa5 100755
-> +--- a/core/rtw_debug.c
-> ++++ b/core/rtw_debug.c
-> +@@ -42,7 +42,7 @@ const char *rtw_log_level_str[] = {
-> + void dump_drv_version(void *sel)
-> + {
-> + 	RTW_PRINT_SEL(sel, "%s %s\n", DRV_NAME, DRIVERVERSION);
-> +-	RTW_PRINT_SEL(sel, "build time: %s %s\n", __DATE__, __TIME__);
-> ++	RTW_PRINT_SEL(sel, "build time: [unset] [unset]\n");
-> + }
-> + 
-> + #ifdef CONFIG_PROC_DEBUG
-> +-- 
-> +2.35.1
-> +
-
-It would be nice to not force -Werror=date-time, because in Buildroot,
-when BR2_REPRODUCIBLE=y, we make sure that the __DATE__ and __TIME__
-macros from gcc expand to a well-defined and constant value.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 531839c817..23ed6c8487 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -779,6 +779,7 @@ F:	package/gstreamer1/gst1-plugins-bayer2rgb-neon/
+ 
+ N:	Emile Cormier <emile.cormier.jr@gmail.com>
+ F:	package/python-appdirs/
++F:	package/python-zlmdb/
+ 
+ N:	Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ F:	docs/manual/adding-packages-meson.txt
+diff --git a/package/Config.in b/package/Config.in
+index 2e1bf500e0..a09ad342d9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1327,6 +1327,7 @@ menu "External python modules"
+ 	source "package/python-yatl/Config.in"
+ 	source "package/python-zc-lockfile/Config.in"
+ 	source "package/python-zeroconf/Config.in"
++	source "package/python-zlmdb/Config.in"
+ 	source "package/python-zope-interface/Config.in"
+ 	source "package/python-zopfli/Config.in"
+ endmenu
+diff --git a/package/python-zlmdb/Config.in b/package/python-zlmdb/Config.in
+new file mode 100644
+index 0000000000..ac4ee05442
+--- /dev/null
++++ b/package/python-zlmdb/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_PYTHON_ZLMDB
++	bool "python-zlmdb"
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
++	select BR2_PACKAGE_PYTHON_CBOR2 # runtime
++	select BR2_PACKAGE_PYTHON_CFFI # runtime
++	select BR2_PACKAGE_PYTHON_CLICK # runtime
++	select BR2_PACKAGE_PYTHON_FLATBUFFERS # runtime
++	select BR2_PACKAGE_PYTHON_LMDB # runtime
++	select BR2_PACKAGE_PYTHON_NUMPY # runtime
++	select BR2_PACKAGE_PYTHON_PYNACL # runtime
++	select BR2_PACKAGE_PYTHON_PYYAML # runtime
++	select BR2_PACKAGE_PYTHON_TXAIO # runtime
++	help
++	  Object-relational zero-copy in-memory database layer for
++	  LMDB.
++
++	  https://github.com/crossbario/zlmdb
++
++comment "python-zlmdb needs glibc or musl"
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+diff --git a/package/python-zlmdb/python-zlmdb.hash b/package/python-zlmdb/python-zlmdb.hash
+new file mode 100644
+index 0000000000..d98dc7d12a
+--- /dev/null
++++ b/package/python-zlmdb/python-zlmdb.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/zlmdb/json
++md5  d730a394b74108933a65c9fbe76aba36  zlmdb-22.3.1.tar.gz
++sha256  0d416a47b1ee627186af8e5c99e5246f6b277df44ba5c6bb67e947eabf948e5a  zlmdb-22.3.1.tar.gz
++# Locally computed sha256 checksums
++sha256  8a139bf325dcca11e0e476ce537bf791a6cfbeed8899a9b6ddc55238e180d230  LICENSE
+diff --git a/package/python-zlmdb/python-zlmdb.mk b/package/python-zlmdb/python-zlmdb.mk
+new file mode 100644
+index 0000000000..a040622d9d
+--- /dev/null
++++ b/package/python-zlmdb/python-zlmdb.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-zlmdb
++#
++################################################################################
++
++PYTHON_ZLMDB_VERSION = 22.3.1
++PYTHON_ZLMDB_SOURCE = zlmdb-$(PYTHON_ZLMDB_VERSION).tar.gz
++PYTHON_ZLMDB_SITE = https://files.pythonhosted.org/packages/71/87/bb3cebd5312e670e33551317c7fc5e4b6a4a9af39075a71cd541b32cc0bf
++PYTHON_ZLMDB_SETUP_TYPE = setuptools
++PYTHON_ZLMDB_LICENSE = MIT
++PYTHON_ZLMDB_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
