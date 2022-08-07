@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77379C25B08
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 00:39:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF0A7C19F2D
+	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 00:39:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A24F81BA8;
-	Sun,  7 Aug 2022 00:39:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A24F81BA8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88E6640C03;
+	Sun,  7 Aug 2022 00:39:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88E6640C03
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JW9jvTr19lXx; Sun,  7 Aug 2022 00:39:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ie3gPeHITJea; Sun,  7 Aug 2022 00:39:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2022F81AD7;
-	Sun,  7 Aug 2022 00:39:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2022F81AD7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8AF6C1BF3A1
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 00:38:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CAB640359;
+	Sun,  7 Aug 2022 00:39:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CAB640359
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 961831BF3A1
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 00:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 733928139B
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 00:38:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 733928139B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68B1141835
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 00:38:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68B1141835
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qgfQ0SgIr9Qe for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 00:38:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id awQTubO5n9q8 for <buildroot@lists.busybox.net>;
+ Sun,  7 Aug 2022 00:38:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 763A48138F
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
- [IPv6:2607:f8b0:4864:20::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 763A48138F
- for <buildroot@buildroot.org>; Sun,  7 Aug 2022 00:38:55 +0000 (UTC)
-Received: by mail-oi1-x230.google.com with SMTP id c185so6725042oia.7
- for <buildroot@buildroot.org>; Sat, 06 Aug 2022 17:38:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04FEA41725
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com
+ [IPv6:2607:f8b0:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 04FEA41725
+ for <buildroot@buildroot.org>; Sun,  7 Aug 2022 00:38:56 +0000 (UTC)
+Received: by mail-ot1-x330.google.com with SMTP id
+ y10-20020a9d634a000000b006167f7ce0c5so4341039otk.0
+ for <buildroot@buildroot.org>; Sat, 06 Aug 2022 17:38:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=cORskjcRsCKZiOW6wsLgvPF45HCNzNYOslPBHWKC0/Q=;
- b=CAV69LZ7NQOzxuclQ7EIqJsyj9x4HbUkPhtaGSq+ZfbvkpfUBed5JA0jgocY7gRXk7
- 0t85YC9il/zvU/W637f9zdhTSQeGbwkro2wOq5/eu8rnWnfTfGkn9zFbkrPIya2hdgSk
- QgYv1OhsUeQ42Vi46Bm/bu4rRXDZOGUbePWBAzPsGtFCZLS/cuGIylZsPb5PL+nHcfSC
- SYi5k72plGn9/lVqE+2RjCRkj7ORqdeKIec9mclbh3ZsRKZCuioIELpVi2EU3/+Qx1SL
- pWPD2G1PtLZGvw8p5Cv651tWS6Ge2Pk+MENyH4tbLYIV5UKtr4uHEAOA3kEaQHiGWtyu
- ZCqQ==
-X-Gm-Message-State: ACgBeo299z9sZuZVLu/99Vgyapvx93P2Iqym8uiqfdcFPItalpjKDw12
- rJqV8bYOrcdxxfpNwzfYWgW1Pa+bVjQ=
-X-Google-Smtp-Source: AA6agR59I+ltmNz9K+z/r6vsA05USqBWGtfC+mmO88bgDQOjWlAQl+oOhJybBgqAVO9ni8rpsIhfgg==
-X-Received: by 2002:a05:6808:1404:b0:342:a150:9c00 with SMTP id
- w4-20020a056808140400b00342a1509c00mr5454949oiv.266.1659832733880; 
- Sat, 06 Aug 2022 17:38:53 -0700 (PDT)
+ bh=wqQagIJVeqfX5oLueWKBe2nOloUgbd2g3E1s9ncAWw0=;
+ b=p792kMP4J15VPIuGRxrYGxnl0ekpnKOZ1w5JtbsPhV0X3btxQ/fMYQioKK1FVoq1oa
+ Tu7DEXHP2FvDwdShJW/vDJuY7NIYItLaS3t4cUHhzaULiilaPLGSVKHGlnGqUhP+5f9u
+ VZMJnU06nW1VjOVDywKmnFUw/6BKx3UJMjPlJtR55IX9ODZ9jXQ9+UA5DxABplForb7H
+ 6vZo/KlVJ0o+s4GXhg0kcDYP2LV4dvD5k8CEy9cNi7mM0xtch/Yo7aVvSIai50NMwF3E
+ LbLUdf1aMBo2wjzkCPyLUnOcSSAizEUMMbJrnJKln51p4jtezHb939QLxrHXmAxB0WGu
+ CNqA==
+X-Gm-Message-State: ACgBeo0Q7vJZjXh2ayobq2QpJ82lAkcCoYnyCII6D3PbKfZ9pjPwXyza
+ djZcC0iJjvMTAwQMmA70Yj04uT7Jk7g=
+X-Google-Smtp-Source: AA6agR5/wL3JqkQQXJhyjc8hONffXDkJomWX2rHEQwqrI6usNbUtMmoKHRSViNaGE548rVjYK5t6RA==
+X-Received: by 2002:a05:6830:3985:b0:636:aa59:ea1 with SMTP id
+ bs5-20020a056830398500b00636aa590ea1mr3630186otb.44.1659832735382; 
+ Sat, 06 Aug 2022 17:38:55 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net.
  [71.33.138.207]) by smtp.gmail.com with ESMTPSA id
- j8-20020a9d7f08000000b0061cac699458sm1469298otq.38.2022.08.06.17.38.52
+ j8-20020a9d7f08000000b0061cac699458sm1469298otq.38.2022.08.06.17.38.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 06 Aug 2022 17:38:53 -0700 (PDT)
+ Sat, 06 Aug 2022 17:38:54 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  6 Aug 2022 18:38:29 -0600
-Message-Id: <20220807003832.1177015-2-james.hilliard1@gmail.com>
+Date: Sat,  6 Aug 2022 18:38:30 -0600
+Message-Id: <20220807003832.1177015-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220807003832.1177015-1-james.hilliard1@gmail.com>
 References: <20220807003832.1177015-1-james.hilliard1@gmail.com>
@@ -72,17 +73,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=cORskjcRsCKZiOW6wsLgvPF45HCNzNYOslPBHWKC0/Q=;
- b=IrGw/ZNLK6qQzzydnkdam+2tcum5y+r4F478OWpHmRY3rX2iDJXudpMeFd3CdGQe2h
- 9zs+FpJazJmNIJiAdoGUoMnv5zF9C+MlCtIIQdfuKi3aHQTRCqXvPV6mwzcrS8QFD24p
- dxWBGvwbyE6KQJsA8uCuSzikAY/mA4IEcofRapFj9f3HGeopl4spp9BjbYq/YQQaSK1t
- Fdlzyevj/+E3tGNdAJbJgnKnNia2r95U68NwC+qHeKZldo9Yjk+Ax1+VWrS6LxpyUM2n
- 66h6W6fV9Dswl2nIi5BgraUG/JLvY0219wh9X20CpDYvHNmF0YJVWYOrGEnZb7knOYTz
- X9hA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=wqQagIJVeqfX5oLueWKBe2nOloUgbd2g3E1s9ncAWw0=;
+ b=NXLI7Aaf6wldV/fO6faHRRHrBGb8giZu3/akrIZej67YT9T5pFK5S2CHH8Y6SUlGg+
+ 2ICHIAaZGgO5jkJ3l71QH/Ie66/2HPnCzmieNq3Ycv4FtMqCTonmvho7/qkfh9YjGEdp
+ 730aEh3fAGPsKNtM2LhqOfOIiDn5CVrf9xXDbXeI4k12N/ijEK/zDN3tREyITf+e5b+0
+ SvYfsKM7ns+XlPdpBGKtXDaJIj/FKktbapwdB6SPk0zskTnfAIN/Dm2BLcY5HyN/pmKe
+ lEZiYVRA2C2WtRWNpxHufhpBvrHdCBLa0FdG3SfLUWtqqOARywB1l+Odt8Li2KLbKya7
+ 47hg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=IrGw/ZNL
-Subject: [Buildroot] [PATCH v4 2/5] package/python-maturin: migrate to
+ header.a=rsa-sha256 header.s=20210112 header.b=NXLI7Aaf
+Subject: [Buildroot] [PATCH v4 3/5] package/python-cryptography: migrate to
  setuptools-rust infrastructure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -104,39 +105,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The python-maturin build backend while itself is a pep517 backend
-uses setuptools-rust for bootstrapping purposes.
+We can now significantly simplify the python-cryptography build using
+the new setuptools-rust setup type introduced in the python package
+infrastructure.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-maturin/python-maturin.mk | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+Changes v2 -> v3:
+  - rebase
+---
+ .../python-cryptography.mk                    | 30 +++----------------
+ 1 file changed, 4 insertions(+), 26 deletions(-)
 
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index 9ac11f264b..f883243947 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
-@@ -7,19 +7,9 @@
- PYTHON_MATURIN_VERSION = 0.12.20
- PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
- PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/39/ba/fec598956393230341def42367c6ad0efbee6ddc899f8858e5b25a7f37a5
--PYTHON_MATURIN_SETUP_TYPE = setuptools
-+PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
- PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
- PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
--HOST_PYTHON_MATURIN_DEPENDENCIES = \
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 28ccc8a65c..73cfa38001 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -7,36 +7,14 @@
+ PYTHON_CRYPTOGRAPHY_VERSION = 37.0.4
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+ PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/89/d9/5fcd312d5cce0b4d7ee8b551a0ea99e4ea9db0fdbf6dd455a19042e3370b
+-PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
++PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools-rust
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+ PYTHON_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography_project
+ PYTHON_CRYPTOGRAPHY_CPE_ID_PRODUCT = cryptography
+-PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
 -	host-python-setuptools-rust \
--	host-python-tomli \
--	host-rustc
--HOST_PYTHON_MATURIN_ENV = \
+-	host-python-cffi \
+-	host-rustc \
+-	openssl
+-HOST_PYTHON_CRYPTOGRAPHY_DEPENDENCIES = \
+-	host-python-setuptools-rust \
+-	host-python-cffi \
+-	host-rustc \
+-	host-openssl
+-PYTHON_CRYPTOGRAPHY_ENV = \
+-	$(PKG_CARGO_ENV) \
+-	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+-HOST_PYTHON_CRYPTOGRAPHY_ENV = \
 -	$(HOST_PKG_CARGO_ENV) \
 -	PYO3_CROSS_LIB_DIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)"
 -# We need to vendor the Cargo crates at download time
--PYTHON_MATURIN_DOWNLOAD_POST_PROCESS = cargo
--PYTHON_MATURIN_DOWNLOAD_DEPENDENCIES = host-rustc
--HOST_PYTHON_MATURIN_DL_ENV = $(HOST_PKG_CARGO_ENV)
-+HOST_PYTHON_MATURIN_DEPENDENCIES = host-python-tomli
+-PYTHON_CRYPTOGRAPHY_DOWNLOAD_POST_PROCESS = cargo
+-PYTHON_CRYPTOGRAPHY_DOWNLOAD_DEPENDENCIES = host-rustc
+-PYTHON_CRYPTOGRAPHY_DL_ENV = \
+-	$(PKG_CARGO_ENV) \
+-	BR_CARGO_MANIFEST_PATH=src/rust/Cargo.toml
+-HOST_PYTHON_CRYPTOGRAPHY_DL_ENV = \
+-	$(HOST_PKG_CARGO_ENV) \
+-	BR_CARGO_MANIFEST_PATH=src/rust/Cargo.toml
++PYTHON_CRYPTOGRAPHY_CARGO_MANIFEST_PATH = src/rust/Cargo.toml
++PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi openssl
++HOST_PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi host-openssl
  
+ $(eval $(python-package))
  $(eval $(host-python-package))
 -- 
 2.34.1
