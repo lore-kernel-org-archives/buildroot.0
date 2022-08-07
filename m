@@ -1,72 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78391C19F2A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 16:10:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 689DDC19F2A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 16:12:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 253614051C;
-	Sun,  7 Aug 2022 16:10:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 253614051C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8MF6yM3vXH-7; Sun,  7 Aug 2022 16:10:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F7E740543;
-	Sun,  7 Aug 2022 16:10:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F7E740543
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5D0711BF681
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 16:10:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33FFD8149A
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 16:10:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33FFD8149A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 061B481BA8;
+	Sun,  7 Aug 2022 16:12:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 061B481BA8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M7RvGuQAdo7S for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 16:10:08 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mdPg4P8Z831P; Sun,  7 Aug 2022 16:12:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C6E98149A;
+	Sun,  7 Aug 2022 16:12:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C6E98149A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 49AF21BF681
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 16:12:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2FC4E4151E
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 16:12:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FC4E4151E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1IfcGW2vlrZV for <buildroot@lists.busybox.net>;
+ Sun,  7 Aug 2022 16:12:26 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF20581428
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF20581428
- for <buildroot@buildroot.org>; Sun,  7 Aug 2022 16:10:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 748AD41517
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 748AD41517
+ for <buildroot@buildroot.org>; Sun,  7 Aug 2022 16:12:25 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 6D16D60005;
- Sun,  7 Aug 2022 16:10:02 +0000 (UTC)
-Date: Sun, 7 Aug 2022 18:10:00 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id E09221BF207;
+ Sun,  7 Aug 2022 16:12:21 +0000 (UTC)
+Date: Sun, 7 Aug 2022 18:12:20 +0200
 To: Emile Cormier <emile.cormier.jr@gmail.com>
-Message-ID: <20220807181000.4ad50de7@windsurf>
-In-Reply-To: <CAM70yxD-pbF7awEqoP-y5kKG_VZj1oTXZYb8s-zw6rE_nAM5dw@mail.gmail.com>
+Message-ID: <20220807181220.7688111e@windsurf>
+In-Reply-To: <20220403221953.1158787-5-emile.cormier.jr@gmail.com>
 References: <20220403221953.1158787-1-emile.cormier.jr@gmail.com>
- <20220403221953.1158787-3-emile.cormier.jr@gmail.com>
- <20220807165300.2137b391@windsurf>
- <CAM70yxD-pbF7awEqoP-y5kKG_VZj1oTXZYb8s-zw6rE_nAM5dw@mail.gmail.com>
+ <20220403221953.1158787-5-emile.cormier.jr@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659888604;
+ d=bootlin.com; s=gm1; t=1659888742;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=tM3z7gyzn1akM22BsZXvA+mazfBw558kkEUqmYLq/6g=;
- b=hs3fcUD6LECOOllP6+BlMRuOJ2RfHr3dICb/hWd58A5Kj8i3AOIhM6ytpSBles5MQs4ltQ
- /G7TC5o5oVqsNRYL8lzOPkYfrW3Y352yatXRbu1Y9Llxx6qV91wE/TOXhBHzvmAF0mOGwK
- fM11j88t6jTu+2PtYpgtLOZio9WVjL4jzHWVM15ZNP9JB7mdSStNhzJ8WfwVIpjbvi78nj
- x1pv1a22TVatgnDYidZAqlMvStTgCMi+KsCbWzDFv7YcC4pwoqtrAuqB1Xu3eNwmvx7pJM
- PXZMUT5cCd3WleMRMdAKc80DlkI/Jlu9Z7RyVzjdbEmWMzg5XoOvyxgSYQmIdw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=BIJtIj7lloFnCFLDhQXNfcs55Lnbky9YcMAAgxz7q6Y=;
+ b=FG+FIqxzZ9eFNWT+NInuYSPpZ843n04eGUjvk3zYJbNxYRHINKEppM7pDWmw4drvq9pZ4j
+ mi00P3MLy8lkla9WL4zufqMRo8pn1Uql/xtEpAUNz5b4WWKmvyKffHxz36kVoofBIoC0Yk
+ ByOaUSAfG43i5WQY/xr7S8Hx9IbInZr1EPdfTkIzWYNAY383EeLk1xX0oQF418t8nL6qgn
+ 7/qDpHMtwlDtH1JA5TneNYD5Neaj+sEoYHrYEl3SbTW+qLxh3H6sLDGckrmTTfzB0SiYgb
+ FPAvJKSwPXOTShgQxR6+5LsNQfmDIoUY/A+/LMuWRbO9pj7EPYLf2bro/t+dgg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hs3fcUD6
-Subject: Re: [Buildroot] [PATCH 3/6] package/python-zlmdb: add new package
+ header.s=gm1 header.b=FG+FIqxz
+Subject: Re: [Buildroot] [PATCH 5/6] package/python-autobahn: add missing
+ subpackages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,29 +87,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Hello Emile,
 
-On Sun, 7 Aug 2022 12:37:46 -0300
+I have applied, with a few changes, see below.
+
+On Sun,  3 Apr 2022 19:19:52 -0300
 Emile Cormier <emile.cormier.jr@gmail.com> wrote:
 
-> I'm in the process of migrating away from Crossbar, due to dynamic
-> authentication/authorization no longer working and the author not
-> interested in backporting bug fixes to older versions. I can no longer
-> devote any time to support Crossbar on Buildroot. Please do what you will
-> with these patch requests.
+> From: ecorm <ecorm@users.noreply.github.com>
+> 
+> Added missing python-autobahn subpackages required by python-crossbar.
+> Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
 
-Ah, too bad :-/
+Fixed up the From: and missing empty line, as usual.
 
-Do you still have some time to comment on
-https://patchwork.ozlabs.org/project/buildroot/patch/20220403221953.1158787-6-emile.cormier.jr@gmail.com/
-? I was looking at it, and wanted to ask a few questions.
+> +if BR2_PACKAGE_PYTHON_AUTOBAHN
+> +
+> +config BR2_PACKAGE_PYTHON_AUTOBAHN_TWISTED
+> +	bool "Twisted support"
+> +	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+> +	select BR2_PACKAGE_PYTHON_TWISTED # runtime
+> +	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
+> +
+> +config BR2_PACKAGE_PYTHON_AUTOBAHN_ACCELERATE
+> +	bool "C-based WebSocket acceleration"
+> +	select BR2_PACKAGE_PYTHON_WSACCEL # runtime
+> +
+> +config BR2_PACKAGE_PYTHON_AUTOBAHN_COMPRESS
+> +	bool "Non-standard WebSocket compression support"
+> +	select BR2_PACKAGE_PYTHON_SNAPPY # runtime
+> +
+> +config BR2_PACKAGE_PYTHON_AUTOBAHN_SERIALIZATION
+> +	bool "Accelerated JSON, MessagePack, CBOR, UBJSON, and FlatBuffers serialization support"
+> +	select BR2_PACKAGE_PYTHON_CBOR # runtime
 
-> Sorry, I'm not familiar with zlmdb; the only reason I introduced it was to
-> satisfy a dependency by Crossbar.
+I do see the cbor2 dependency being expressed in setup.py, but not the
+cbor dependency. Also, I only cbor2 being imported in the autobahn code
+base, so I dropped this line. Of course, if there is something I
+missed, let me know.
 
-ACK, no worries.
+> +	select BR2_PACKAGE_PYTHON_CBOR2 # runtime
+> +	select BR2_PACKAGE_PYTHON_FLATBUFFERS # runtime
+> +	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
+> +	select BR2_PACKAGE_PYTHON_UBJSON # runtime
+> +	select BR2_PACKAGE_PYTHON_UJSON # runtime
+> +
+> +config BR2_PACKAGE_PYTHON_AUTOBAHN_ENCRYPTION
+> +	bool "TLS and WAMP-cryptosign encryption/authentication support"
+> +	select BR2_PACKAGE_PYTHON_PYNACL # runtime
+> +	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+> +	select BR2_PACKAGE_PYTHON_PYQRCODE # runtime
+> +	select BR2_PACKAGE_PYTHON_PYTRIE # runtime
+> +	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
+> +
+> +config BR2_PACKAGE_PYTHON_AUTOBAHN_SCRAM
+> +	bool "WAMP-SCRAM authentication support"
+> +	select BR2_PACKAGE_PYTHON_ARGON2_CFFI # runtime
+> +	select BR2_PACKAGE_PYTHON_PASSLIB # runtime
 
-Best regards,
+The other thing I changed is to sort those sub-options alphabetically
+by their option name.
+
+Applied with those changes!
+
+Thanks,
 
 Thomas
 -- 
