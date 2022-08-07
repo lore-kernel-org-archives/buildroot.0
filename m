@@ -1,69 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A0FDC19F2A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 17:33:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A47DC19F2A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 17:38:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD8C360B71;
-	Sun,  7 Aug 2022 17:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD8C360B71
+	by smtp4.osuosl.org (Postfix) with ESMTP id B66DA4088C;
+	Sun,  7 Aug 2022 17:38:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B66DA4088C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Mw_kiS7q6LOS; Sun,  7 Aug 2022 17:38:15 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8599D4054A;
+	Sun,  7 Aug 2022 17:38:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8599D4054A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 34DC01BF3D6
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 17:38:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F9BD60B2E
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 17:38:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F9BD60B2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J5kN4qcP031m; Sun,  7 Aug 2022 17:33:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D60D260B67;
-	Sun,  7 Aug 2022 17:33:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D60D260B67
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 40C341BF3D6
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 17:32:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B9F682560
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 17:32:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B9F682560
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lMoCxr2Ssel7 for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 17:32:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C71F581BA8
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C71F581BA8
- for <buildroot@buildroot.org>; Sun,  7 Aug 2022 17:32:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9D34D1BF204;
- Sun,  7 Aug 2022 17:32:44 +0000 (UTC)
-Date: Sun, 7 Aug 2022 19:32:43 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220807193243.24c657c5@windsurf>
-In-Reply-To: <20220807135357.3940300-1-fontaine.fabrice@gmail.com>
-References: <20220807135357.3940300-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qR4pAZwA21oB for <buildroot@lists.busybox.net>;
+ Sun,  7 Aug 2022 17:38:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C1B560B2B
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com
+ [IPv6:2607:f8b0:4864:20::b32])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4C1B560B2B
+ for <buildroot@buildroot.org>; Sun,  7 Aug 2022 17:38:11 +0000 (UTC)
+Received: by mail-yb1-xb32.google.com with SMTP id 7so10649196ybw.0
+ for <buildroot@buildroot.org>; Sun, 07 Aug 2022 10:38:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc;
+ bh=48uh5GR5f2HFGiwGi76Fs7KFG3OR52DIr+PfvrDlYi8=;
+ b=cfTUWu7UCljbTQp4OdCGtgQqONm7uElSIObQc5mvmLNcQMWXkWUKmpmwRmmkO33EWP
+ TQBVx79mqUdUFPGd32VHSktFX/J4XNzvLNgs8JK/PumsGg1SsPbXsUmdD9E+RZIJHbL1
+ ODEh2cIj8iD08QVYrzabhZ1JkHmkC0iL3etUTCgEdoMFD2B0EhYbMzKOhJ7TGoRaKZWI
+ MlEpHZ04zSmi6VgkYcSXUplBrHDSZvsyUbhr5VfFg22fwu2lAFv8KuoD4b8kk1DYVws3
+ WO8q08T6ipQQD+KzJwNnjBXIa0cOC0+H9lEZ+GaORSVioTIQc4akPFg8CSo5SBeXa0UR
+ 65Eg==
+X-Gm-Message-State: ACgBeo3WgNPCuFELa//AS8hOiRc2IYSaXUSr8chUzwlmI8r1UG18kpDG
+ K/ljkqghZwRDjigxOLZWhRqOzd1DlMp1AAfhW94=
+X-Google-Smtp-Source: AA6agR6d2Fwmc7gURsnxubSmqOZSMjHj2uVEVrQZun3sUBU5G1CBhCiyDwWqFfRtkN2NpDzdJso41HOXICYmnYF94dg=
+X-Received: by 2002:a25:8b92:0:b0:66d:553a:f309 with SMTP id
+ j18-20020a258b92000000b0066d553af309mr13079600ybl.322.1659893890209; Sun, 07
+ Aug 2022 10:38:10 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220403221953.1158787-1-emile.cormier.jr@gmail.com>
+ <20220403221953.1158787-5-emile.cormier.jr@gmail.com>
+ <20220807181220.7688111e@windsurf>
+ <CAM70yxBzagJt5b-3_vKO=AaknpvLbKhyLMPhbs=VC5XO0RgbOQ@mail.gmail.com>
+ <20220807191843.465aa42d@windsurf>
+In-Reply-To: <20220807191843.465aa42d@windsurf>
+From: Emile Cormier <emile.cormier.jr@gmail.com>
+Date: Sun, 7 Aug 2022 14:37:59 -0300
+Message-ID: <CAM70yxB7dHeOz-NQtVoot+8Q6E-OX7tCpCTLGD5S+mHz7V2wHg@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659893564;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=y02IFsP+RCfF2VcFUpyGuU+oyfQ4sYCP8Ed4yu2d2uM=;
- b=aI3IpMC44j4DkNpT/oFNHJ+8hIJzcpg3avcRGHLqznLJEcPRiqFVWoyQlnLNjU5Zz5P9+u
- HLi8pZ25HVuuplBGy8+S7K2RUNNdnYGI87ABT+L1jVuxBKRGKsP8xZWamL7oTlYfn+fbvD
- hmZmph8Rd+tFoXi8fwsGACGk6fk1saI60fJPDxo3HX3KnRjR79NPIUjfab+x2pAXl48tUC
- QcogKwmxtw6UOiRA/WqOObzGtjBJcvMCzLTlcEKELfHGk7q0/2FVUA36fv5OvvRJc+PBMr
- OoZBnyJgNUezYHQ7JozmRswcaSlVQOhyyjgTZyFGPglhGhxwL8mIMe0rJcek6Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aI3IpMC4
-Subject: Re: [Buildroot] [PATCH 1/1] package/waffle: bump to version 1.7.0
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc;
+ bh=48uh5GR5f2HFGiwGi76Fs7KFG3OR52DIr+PfvrDlYi8=;
+ b=XmiXp1feUUEvcTT1GqyBmzimeEWHAF2C6/72iE2Yow7j6uOqRSMy09ZGjr/buTBBN5
+ b16h3o6rPjn572cp1SdFdBH/o95iKyOm8dODaj6r39PGHBmKajib0QRqCg1wvjy3Gylv
+ xvTIxpza6CONrkeq/vyZwKJyfW1wHJT4uC7OYsdrirb812YMY4B7+yFilWRHfYSOAATw
+ F1HouHv/R8lVn6yg1rDG3sZJmfF40dKL91E2xrFCe/phWMnSN9HtJqRYPwQen3PLsK4Z
+ l6NfYFOGtQhY0iu7Hz0JxgFgCj4qiZlb2NkO+P7lcTFCVO0bYaH6d4iNBswqn/SDx56X
+ L4qQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=XmiXp1fe
+Subject: Re: [Buildroot] [PATCH 5/6] package/python-autobahn: add missing
+ subpackages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,51 +93,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4644849039844383069=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  7 Aug 2022 15:53:57 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+--===============4644849039844383069==
+Content-Type: multipart/alternative; boundary="000000000000b0ddc205e5aa294c"
 
-> This bump will fix the following build failure raised since bump of
-> wayland to version 1.20.0 in commit
-> f94ba5c31cf7f863e6fae996fc042a56e20118f3 thanks to
-> https://gitlab.freedesktop.org/mesa/waffle/-/commit/71d46212a9d23a951d5d38f0bfd1cdf1194c8c8e
-> and
-> https://gitlab.freedesktop.org/mesa/waffle/-/commit/2c33597245bb74f19104f0a858cd40e80b26991d:
-> 
-> /home/giuliobenetti/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/9.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: ../../lib/libwaffle-1.so.0.6.1: undefined reference to `wl_proxy_get_version'
-> /home/giuliobenetti/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/9.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: ../../lib/libwaffle-1.so.0.6.1: undefined reference to `wl_proxy_marshal_flags'
-> 
-> https://gitlab.freedesktop.org/mesa/waffle/-/tags/v1.7.0
-> https://gitlab.freedesktop.org/mesa/waffle/-/tags/v1.6.3
-> https://gitlab.freedesktop.org/mesa/waffle/-/tags/v1.6.2
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1fb1540b0ae6037140f386f44d6e17735f0674c4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...lags-from-.pc-files-to-waffle-cflags.patch |  2 +
->  ...yland-fix-build-against-version-1-20.patch | 59 +++++++++++++++++++
->  package/waffle/waffle.hash                    |  4 +-
->  package/waffle/waffle.mk                      |  6 +-
->  4 files changed, 67 insertions(+), 4 deletions(-)
->  create mode 100644 package/waffle/0002-wayland-fix-build-against-version-1-20.patch
+--000000000000b0ddc205e5aa294c
+Content-Type: text/plain; charset="UTF-8"
 
-Applied to master, thanks.
+On Sun, Aug 7, 2022 at 2:18 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> > Are you sure you were checking in the 22.1.1  version of Autobahn?
+>
+> No, I'm checking in version 22.6.1, because that's the one we have in
+> Buildroot now.
+>
+
+Oh I see. My patch request was for the Autobahn v22.1.1 that was included
+in Buildroot at the time. If the Autobahn version was bumped up to 22.6.1
+then you'll have to recheck all the dependencies if you haven't already.
+
+If you're planning on bumping Crossbar to the latest, be warned that you'll
+end up in dependency hell as it introduces a bunch of new dependencies for
+the XBR and crypto features. Crossbar performs checks at runtime to bracket
+the versions of these dependencies and you may have to patch some of the
+dependency version ranges (or patch the runtime version checks).
+
+--000000000000b0ddc205e5aa294c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail=
+_attr">On Sun, Aug 7, 2022 at 2:18 PM Thomas Petazzoni &lt;<a href=3D"mailt=
+o:thomas.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt; wrote:=
+<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8=
+ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+&gt; Are you sure you were checking in the 22.1.1=C2=A0 version of Autobahn=
+?<br>
+<br>
+No, I&#39;m checking in version 22.6.1, because that&#39;s the one we have =
+in<br>
+Buildroot now.<br></blockquote><div><br></div><div>Oh I see. My patch reque=
+st was for the Autobahn v22.1.1 that was included in Buildroot at the time.=
+ If the Autobahn version was bumped up to 22.6.1 then you&#39;ll have to re=
+check all the dependencies if you haven&#39;t already.</div><div><br></div>=
+<div>If you&#39;re planning on bumping Crossbar to the latest, be warned th=
+at you&#39;ll end up in dependency hell as it introduces a bunch of new dep=
+endencies for the XBR and crypto features. Crossbar performs checks at runt=
+ime to bracket the versions of these dependencies and you may have to patch=
+ some of the dependency version ranges (or patch the runtime version checks=
+).<br></div></div></div>
+
+--000000000000b0ddc205e5aa294c--
+
+--===============4644849039844383069==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4644849039844383069==--
