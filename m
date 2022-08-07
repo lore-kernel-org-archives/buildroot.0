@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22E69C19F2A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 21:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8F18C19F2A
+	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 21:15:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7606F60BC8;
-	Sun,  7 Aug 2022 21:06:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7606F60BC8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F99181CE7;
+	Sun,  7 Aug 2022 21:15:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F99181CE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CqoJxn5sWnjt; Sun,  7 Aug 2022 21:06:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b127z6unxgsk; Sun,  7 Aug 2022 21:15:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9848F60783;
-	Sun,  7 Aug 2022 21:06:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9848F60783
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5AE1D1BF368
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 21:06:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CA9281BFA;
+	Sun,  7 Aug 2022 21:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CA9281BFA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CAC91BF368
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 21:15:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FAF0401A4
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 21:06:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FAF0401A4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 378C481BFA
+ for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 21:15:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 378C481BFA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xdhM6r8244Vy for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 21:06:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TVoDO9SxZ05D for <buildroot@lists.busybox.net>;
+ Sun,  7 Aug 2022 21:15:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB3CA40181
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DB3CA40181
- for <buildroot@buildroot.org>; Sun,  7 Aug 2022 21:06:16 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id tl27so13327176ejc.1
- for <buildroot@buildroot.org>; Sun, 07 Aug 2022 14:06:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28F1881BD9
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 28F1881BD9
+ for <buildroot@buildroot.org>; Sun,  7 Aug 2022 21:15:50 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id v3so8968728wrp.0
+ for <buildroot@buildroot.org>; Sun, 07 Aug 2022 14:15:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=SgksL4tsG3kQ72aW9IgjO87rLEPcPadCqpN0jikbV08=;
- b=KKfvho0Hbh/GMq2MSpEW8euexiDCqxfzBYu0Ac2q8UddNr+iBLr1eIMlBWEtZUta5i
- WesyosoiJu6OUu4pU2CHJFDr33BKKPNzU6FBFoCAuc8DsA42qgOKY/vKSGn8eqr8N/WI
- c8FVaroTkwZ8r870Y1XfDwduKD4JO5D/tq8LEJ3NJON8zrsMrxj+Xw0Owt7fvRq/FPEL
- m1zBoGLJGDkRUNolqS/fkRaDxOxfoQUk1yj0zsYn1kAg0QnJ25vUE+ojuKBsPgOc/cC9
- bY44U4e9Rdy1tmZI9ZqNnQDTZ3ifFvLY5nC1hS50PFR/nc816R6sLfTN2D7rGADM2B35
- 4vOQ==
-X-Gm-Message-State: ACgBeo2TuVlivz2VN8WBlgDnFdYkImCFDnkpCkojlInUSKfjNcNAYN5N
- y+c/Jjws26IL3npWwAlnxd+/vrCUxY8=
-X-Google-Smtp-Source: AA6agR7lxAHgYoLhInVMRa8a/ukbkIE67D4Lr+yhm2GQgAV53UBaULgzl2JYafUjcoMpMjHlyNWQNw==
-X-Received: by 2002:a17:906:8441:b0:730:7bd1:17ca with SMTP id
- e1-20020a170906844100b007307bd117camr12011921ejy.229.1659906374256; 
- Sun, 07 Aug 2022 14:06:14 -0700 (PDT)
-Received: from t450s.fritz.box (ip4d15a215.dynamic.kabel-deutschland.de.
- [77.21.162.21]) by smtp.gmail.com with ESMTPSA id
- p20-20020a17090628d400b0073065747de1sm4156844ejd.51.2022.08.07.14.06.12
+ bh=7aNCLgwBetzjx31epk/Be2o4DFrPT5g9zUg8zDN0eFk=;
+ b=QQOKfpsko1uxQmeqXm7ka6BQl9+Q1wo4WoKhhFtDazlmQ1zKmU3iposO9JlYPE1fZw
+ p0gT0hBsqcs+FWkWST/pCmpn5PSkabJ0uqGcqbKWJ5Yl46ZEN0kPxA/7oR09CH4uwqJ+
+ aRukC61ghuyIeQP56lX9DNnLNFOIg8thUs2cRKcdlthoV3p+xTVOyzdqpKlsfYwNkKz6
+ ERpaIEbrdeVxlmhWSsz4Bj7vNRl4nqqDnbSftCIu3FhJGu8RPEanf+sk7lCLmfrklmva
+ 0r8hsD9hR7dxNmqSHhaweNxY/jniLGuEeTbYwKmyTAx/A3mrGOGU4JWguqkVStuRJL5+
+ XIqQ==
+X-Gm-Message-State: ACgBeo1aMpfzoo4KE76FM1EhzXYzEJcS+kGp064PS2w31EB7jxh/orE5
+ gf5IKFzq11EvOJL9rRI3pBod2fI3Hlg=
+X-Google-Smtp-Source: AA6agR4r4RCGDz/gS5jMg27iOk3p9/YhUMYngpG6WID0hzLGkQxQI2TErETdg+pu2cZKQYBRrsL3kA==
+X-Received: by 2002:adf:fc47:0:b0:220:5f01:6a10 with SMTP id
+ e7-20020adffc47000000b002205f016a10mr10101421wrs.7.1659906948062; 
+ Sun, 07 Aug 2022 14:15:48 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ j5-20020adfa545000000b002211fc70174sm11084160wrb.99.2022.08.07.14.15.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 07 Aug 2022 14:06:13 -0700 (PDT)
-From: Heiko Thiery <heiko.thiery@gmail.com>
+ Sun, 07 Aug 2022 14:15:47 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  7 Aug 2022 23:03:18 +0200
-Message-Id: <20220807210317.9415-1-heiko.thiery@gmail.com>
-X-Mailer: git-send-email 2.20.1
+Date: Sun,  7 Aug 2022 23:15:41 +0200
+Message-Id: <20220807211541.178167-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=SgksL4tsG3kQ72aW9IgjO87rLEPcPadCqpN0jikbV08=;
- b=P8PmpFtmX5LNjo/KXV06BqpI5pdbBRS6XyjY85INRFPvfLUvDx6ZmJJkQmDVo2NgfN
- unrwwFQfzQKy9lgyM//ec37e4LBHeuS9lD+MsXCxQitgZRVIAjauhRFvTk1CD6r3Q4Zn
- JM2wzn5y2VOCRNmoYIiV7sSHUKBLLvmMKJYS+iBMaGKX6jUsnR888r3GnrqeFyadkjkW
- OYIH01mOMMXCwOfQrqHt4yVf9IyMz4h72QiZpdf7gMUI1UDgA5yWLQDMwsfuBljlWnMZ
- DrqsI9i/dNQ3S0xOpVOLRDncwvGLMj/SH3txGh6qnoWHsE2UwkO7vcR0XSmNJ10O5q9A
- t0pA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=7aNCLgwBetzjx31epk/Be2o4DFrPT5g9zUg8zDN0eFk=;
+ b=dsibBTFRe3r7Agh7JXF0uipXgr1UQHUhSUxxHsnQn/YXTSos2CTe62JP8RD0jKDuyS
+ 9IRoE+8G2T9+phDPaNF/o6QnIRDKfuXlbNQo5g0DqhZyyD4Qp5HQfmeoaPmXDVpczGTx
+ e1RUvqO1yYv+BmUG9VvbjzhpfzpHVDWeYjQ6he0/PlBCZNI4P6IipzI4x6GmVq8bQrDu
+ IS53bsA0RR/0tBDhOdldprp2ulbqzd7R9iGYa9X90/hZWg7ST/ghuCxvPJlXABSMtfqg
+ /5UD0pwUZZi+x1p6arrYSUh2WGguMCQQOrLINxDshWcWcjn4LF/+TVlcht8rK5jfqUB9
+ bJDQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=P8PmpFtm
-Subject: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: fix build
- failure with u-boot 2022.04
+ header.a=rsa-sha256 header.s=20210112 header.b=dsibBTFR
+Subject: [Buildroot] [PATCH 1/1] package/waffle: fix build without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,91 +93,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With U-Boot 2022.04 libuuid is required for building the host tool
-mkeficapsule. The lib is included in the util-linux package. Thus the
-BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX config is needed.
+Drop C++ dependency as nacl is disabled (and will be dropped by upstream
+in next release) to avoid the following build failure raised since bump
+to version 1.6.1 in commit 814f36fdcc39bbafa1e2aaf637c7c6b59e7f37dd:
 
-In addition an U-boot patch is required to fix an issue in U-Boot for
-linking the mkeficapsule tool against -luuid and -lgnutls.
+CMake Error at /usr/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake:62 (message):
+  The C++ compiler
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053608
+    "/usr/bin/clang++"
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  is not able to compile a simple test program.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a702495074b0393682c619781c349ce62e123133
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...le-use-pkg-config-to-get-luuid-and-l.patch | 33 +++++++++++++++++++
- configs/kontron_bl_imx8mm_defconfig           |  2 ++
- 2 files changed, 35 insertions(+)
- create mode 100644 board/kontron/bl-imx8mm/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch
+ package/waffle/0003-drop-C-dependency.patch | 46 +++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/waffle/0003-drop-C-dependency.patch
 
-diff --git a/board/kontron/bl-imx8mm/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch b/board/kontron/bl-imx8mm/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch
+diff --git a/package/waffle/0003-drop-C-dependency.patch b/package/waffle/0003-drop-C-dependency.patch
 new file mode 100644
-index 0000000000..9530a45efe
+index 0000000000..89c0cd09f2
 --- /dev/null
-+++ b/board/kontron/bl-imx8mm/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-config-to-get-luuid-and-l.patch
-@@ -0,0 +1,33 @@
-+From f3523977e8f5f6b2173708777001332431ebc609 Mon Sep 17 00:00:00 2001
-+From: Heiko Thiery <heiko.thiery@gmail.com>
-+Date: Tue, 19 Jul 2022 16:17:09 +0200
-+Subject: [PATCH 1/2] tools: mkeficapsule: use pkg-config to get -luuid and -lgnutls
++++ b/package/waffle/0003-drop-C-dependency.patch
+@@ -0,0 +1,46 @@
++From a54a5d086c5f7e0751f68ac1a2942d8077922ebc Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 7 Aug 2022 16:18:22 +0200
++Subject: [PATCH] drop C++ dependency
 +
-+Instead of hardcoding -luuid -lgnutls as the flags needed to build
-+mkeficapsule, use pkg-config when available.
++C++ dependency has been added for nacl backend which has been added by
++https://gitlab.freedesktop.org/mesa/waffle/-/commit/6ca943584e593aec2bd4f9c66d91859e63e02d61
++and dropped by
++https://gitlab.freedesktop.org/mesa/waffle/-/commit/a7c7152b054e6d2b9af36ed9db9a0df44731b279
 +
-+We gracefully fallback on the previous behavior of hardcoding -luuid
-+-lgnutls if pkg-config is not available or fails with an error.
-+
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet]
 +---
-+ tools/Makefile | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ CMakeLists.txt            | 2 +-
++ src/waffle/CMakeLists.txt | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/tools/Makefile b/tools/Makefile
-+index 9f2339666a..9f6b282ad8 100644
-+--- a/tools/Makefile
-++++ b/tools/Makefile
-+@@ -242,7 +242,8 @@ hostprogs-$(CONFIG_MIPS) += mips-relocs
-+ hostprogs-$(CONFIG_ASN1_COMPILER)	+= asn1_compiler
-+ HOSTCFLAGS_asn1_compiler.o = -idirafter $(srctree)/include
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index acece86..04ea68c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -23,7 +23,7 @@
++ # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++ # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 + 
-+-HOSTLDLIBS_mkeficapsule += -lgnutls -luuid
-++HOSTLDLIBS_mkeficapsule += \
-++	$(shell pkg-config --libs gnutls uuid 2> /dev/null || echo "-lgnutls -luuid")
-+ hostprogs-$(CONFIG_TOOLS_MKEFICAPSULE) += mkeficapsule
++-project(waffle1 C CXX)
+++project(waffle1 C)
 + 
-+ # We build some files with extra pedantic flags to try to minimize things
++ cmake_minimum_required(VERSION 2.8.12)
++ 
++diff --git a/src/waffle/CMakeLists.txt b/src/waffle/CMakeLists.txt
++index 8014b51..276f276 100644
++--- a/src/waffle/CMakeLists.txt
+++++ b/src/waffle/CMakeLists.txt
++@@ -238,7 +238,7 @@ include_directories(
++     ${XCB_INCLUDE_DIRS}
++     )
++ 
++-add_library(${waffle_libname} SHARED ${waffle_sources} ${waffle_cxx_sources})
+++add_library(${waffle_libname} SHARED ${waffle_sources})
++ 
++ # Debian's packaging system emits warnings if wflinfo directly links to any
++ # library that it doesn't directly use. Silence the warnings by annotating
 +-- 
-+2.30.2
++2.35.1
 +
-diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
-index ff376662e9..c747ce02d7 100644
---- a/configs/kontron_bl_imx8mm_defconfig
-+++ b/configs/kontron_bl_imx8mm_defconfig
-@@ -5,6 +5,7 @@ BR2_ARM_FPU_VFPV3=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
-+BR2_GLOBAL_PATCH_DIR="board/kontron/bl-imx8mm/patches"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
-@@ -48,6 +49,7 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_BIN=y
- BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
-+BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
- BR2_TARGET_UBOOT_SPL=y
 -- 
-2.20.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
