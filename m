@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59BC6C00140
-	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 15:20:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9631C00140
+	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 15:20:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E211E826F5;
-	Mon,  8 Aug 2022 15:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E211E826F5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77B1A60E68;
+	Mon,  8 Aug 2022 15:20:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77B1A60E68
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1yGzRAiXQEx6; Mon,  8 Aug 2022 15:20:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lU9E5S9U9hLk; Mon,  8 Aug 2022 15:20:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20C9F82435;
-	Mon,  8 Aug 2022 15:20:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20C9F82435
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E920C1BF2FA
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 15:19:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93DFD60E48;
+	Mon,  8 Aug 2022 15:20:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93DFD60E48
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 067DE1BF2FA
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 15:20:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D224440A09
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 15:19:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D224440A09
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4E36408A1
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 15:20:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4E36408A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gT5oosROiMjQ for <buildroot@lists.busybox.net>;
- Mon,  8 Aug 2022 15:19:57 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF47C40A01
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AF47C40A01
- for <buildroot@buildroot.org>; Mon,  8 Aug 2022 15:19:56 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DDEF540011;
- Mon,  8 Aug 2022 15:19:54 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oL4Xq-000Akg-7y; Mon, 08 Aug 2022 17:19:54 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ojdKLSPO4XC4 for <buildroot@lists.busybox.net>;
+ Mon,  8 Aug 2022 15:20:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDF8B405AA
+ for <buildroot@buildroot.org>; Mon,  8 Aug 2022 15:19:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDF8B405AA
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 3B7DD86FD5; Mon,  8 Aug 2022 15:05:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220717210828.2592538-1-fontaine.fabrice@gmail.com>
-Date: Mon, 08 Aug 2022 17:19:54 +0200
-In-Reply-To: <20220717210828.2592538-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 17 Jul 2022 23:08:28 +0200")
-Message-ID: <87wnbircdh.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/lxc: fix build without linux-pam
+To: buildroot@buildroot.org
+Date: Mon, 8 Aug 2022 17:19:29 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: f61bf4dc704345e67d8e2917901a243a43b602b2
+X-Git-Newrev: 7e69d057f7744b75f236a0d518829382ddcd3bea
+X-Patchwork-Hint: ignore
+Message-Id: <20220808150546.3B7DD86FD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/lxc: fix build
+ without linux-pam
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +57,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7e69d057f7744b75f236a0d518829382ddcd3bea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix typo added by commit
- > 86deafe8635738c3f9efcbda5b22883504d59129:
+Fix typo added by commit
+86deafe8635738c3f9efcbda5b22883504d59129:
 
- > make: *** No rule to make target '--disable-pam', needed by
- > '/nvmedata/autobuild/instance-0/output-1/build/lxc-4.0.12/.stamp_configured'.
- > Stop.
+make: *** No rule to make target '--disable-pam', needed by '/nvmedata/autobuild/instance-0/output-1/build/lxc-4.0.12/.stamp_configured'.  Stop.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/ce1be5a8152f7c9aa0f6e59abff035f97a3fd423
+Fixes:
+ - http://autobuild.buildroot.org/results/ce1be5a8152f7c9aa0f6e59abff035f97a3fd423
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6bb54bf8357300755a590ce5da5c11fdb18aca82)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lxc/lxc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index abe4f0804a..cece27411e 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -55,7 +55,7 @@ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ LXC_CONF_OPTS += --enable-pam
+ LXC_DEPENDENCIES += linux-pam
+ else
+-LXC_DEPENDENCIES += --disable-pam
++LXC_CONF_OPTS += --disable-pam
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
