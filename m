@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AACCC00140
-	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 20:27:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8BDC00140
+	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 20:28:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF1094091F;
-	Mon,  8 Aug 2022 20:27:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF1094091F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3629D40167;
+	Mon,  8 Aug 2022 20:28:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3629D40167
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a5hSzKtePdyb; Mon,  8 Aug 2022 20:28:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 204C24014A;
+	Mon,  8 Aug 2022 20:28:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 204C24014A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 63C191BF365
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:27:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3DE6840909
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:27:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DE6840909
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IymVUV6ShAMh; Mon,  8 Aug 2022 20:27:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DBC540909;
-	Mon,  8 Aug 2022 20:27:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DBC540909
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C6D1B1BF365
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:27:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1D59607F2
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:27:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1D59607F2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zdt2VlAXgClA for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T-QUlFoVrR0F for <buildroot@lists.busybox.net>;
  Mon,  8 Aug 2022 20:27:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B9F0607B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58D01408FE
  for <buildroot@buildroot.org>; Mon,  8 Aug 2022 20:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B9F0607B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58D01408FE
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 378A787013; Mon,  8 Aug 2022 20:13:30 +0000 (UTC)
+ id 1F10A87011; Mon,  8 Aug 2022 20:13:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 8 Aug 2022 22:27:35 +0200
+Date: Mon, 8 Aug 2022 22:24:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6826595759d1978633008479d305abb8a894d442
-X-Git-Newrev: bfafb08c62a214fc24f6f33ce4c0b18ad6f67dfd
+X-Git-Oldrev: bcc080cb260c4516dfb5402f89eac80d7e31e2be
+X-Git-Newrev: 37f05c2497a05c9d007ed03c224f4a4d18a21b21
 X-Patchwork-Hint: ignore
-Message-Id: <20220808201330.378A787013@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-crossbar: adjust
- dependencies based on requirements-min.txt
+Message-Id: <20220808201330.1F10A87011@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-qrcode: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,288 +63,128 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfafb08c62a214fc24f6f33ce4c0b18ad6f67dfd
+commit: https://git.buildroot.net/buildroot/commit/?id=37f05c2497a05c9d007ed03c224f4a4d18a21b21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit makes sure that the python-crossbar package pulls in the
-right dependencies, based on the requirements-min.txt.
+Needed by python-autobahn encryption subpackage.
 
-It does so by:
-
- - Changing the 0002-Remove-idna-requirement patch by a more thorough
-   patch that drops all indirect dependencies from
-   requirements-min.txt, making it easier to have a 1:1 mapping
-   between lines in requirements-min.txt and Buildroot selects.
-
- - Changing the
-   0003-crossbar-webservice-wap-use-markupsafe-instead-of-we patch to
-   update requirements-min.txt to indicate the new MarkupSafe
-   dependency. Here again, to have a 1:1 mapping between lines in
-   requirements-min.txt and Buildroot selects.
-
- - Updating the Buildroot selects to match requirements-min.txt, with
-   relevant comments when it does not.
-
- - Fixing up the Crossbar test case to no longer force autobahn to use
-   umsgpack. Instead, we now use the default of msgpack that is
-   expected by autobahn.
-
-Fixes bug #14556, https://bugs.busybox.net/show_bug.cgi?id=14556.
-
-Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-Remove-idna-requirement.patch             | 29 ---------
- ...ements-min.txt-drop-indirect-dependencies.patch | 74 ++++++++++++++++++++++
- ...bservice-wap-use-markupsafe-instead-of-we.patch | 19 +++++-
- package/python-crossbar/Config.in                  | 39 +++++++++---
- .../tests/package/sample_python_crossbar.py        |  1 -
- 5 files changed, 119 insertions(+), 43 deletions(-)
+ DEVELOPERS                                            |  1 +
+ package/Config.in                                     |  1 +
+ package/python-qrcode/Config.in                       | 18 ++++++++++++++++++
+ package/python-qrcode/python-qrcode.hash              |  5 +++++
+ package/python-qrcode/python-qrcode.mk                | 14 ++++++++++++++
+ support/testing/tests/package/sample_python_qrcode.py |  3 +++
+ support/testing/tests/package/test_python_qrcode.py   | 12 ++++++++++++
+ 7 files changed, 54 insertions(+)
 
-diff --git a/package/python-crossbar/0002-Remove-idna-requirement.patch b/package/python-crossbar/0002-Remove-idna-requirement.patch
-deleted file mode 100644
-index 5e19a467c2..0000000000
---- a/package/python-crossbar/0002-Remove-idna-requirement.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 9164d21cc66c1f78de37c9383528c5d528cbdbeb Mon Sep 17 00:00:00 2001
--From: Asaf Kahlon <asafka7@gmail.com>
--Date: Wed, 26 Sep 2018 15:33:43 +0300
--Subject: [PATCH] Remove idna requirement.
--
--The latest version of idna is 2.7, but it seems like idna is not a direct
--dependency anymore (a short "git grep" shows it's only written in requirement
--and readme files).
--
--Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-----
-- requirements-min.txt | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/requirements-min.txt b/requirements-min.txt
--index 92fb0f8f..13cdac87 100644
----- a/requirements-min.txt
--+++ b/requirements-min.txt
--@@ -8,7 +8,6 @@ click>=6.7
-- constantly>=15.1.0
-- cryptography>=2.6.1
-- h2>=3.2.0
---idna<2.6,>=2.5
-- importlib-resources>=4.1.1
-- incremental>=17.5.0
-- jinja2>=2.10.1
---- 
--2.17.1
--
-diff --git a/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch b/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 23ed6c8487..d2bd0d809a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2912,6 +2912,7 @@ F:	package/python3/
+ F:	package/python-augeas/
+ F:	package/python-flask-expects-json/
+ F:	package/python-git/
++F:	package/python-qrcode/
+ F:	package/python-serial/
+ F:	package/python-unittest-xml-reporting/
+ F:	package/qextserialport/
+diff --git a/package/Config.in b/package/Config.in
+index a09ad342d9..d1c098c48f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1214,6 +1214,7 @@ menu "External python modules"
+ 	source "package/python-pyxb/Config.in"
+ 	source "package/python-pyyaml/Config.in"
+ 	source "package/python-pyzmq/Config.in"
++	source "package/python-qrcode/Config.in"
+ 	source "package/python-raven/Config.in"
+ 	source "package/python-redis/Config.in"
+ 	source "package/python-reentry/Config.in"
+diff --git a/package/python-qrcode/Config.in b/package/python-qrcode/Config.in
 new file mode 100644
-index 0000000000..12027d779c
+index 0000000000..9a17cc1f08
 --- /dev/null
-+++ b/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
-@@ -0,0 +1,74 @@
-+From 3ae2b36e48fc0f75f0bb6c89f893ece033bccd87 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 7 Aug 2022 18:44:29 +0200
-+Subject: [PATCH] requirements-min.txt: drop indirect dependencies
++++ b/package/python-qrcode/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_PYTHON_QRCODE
++	bool "python-qrcode"
++	help
++	  Pure python QR Code generator
 +
-+For some interesting reason, the crossbar maintainers have decided to
-+include indirect dependencies in their requirements-min.txt, i.e
-+dependencies that they don't use directly, but that packages they
-+depend on themselves depend on.
++	  https://github.com/lincolnloop/python-qrcode
 +
-+This makes the packaging in Buildroot confusing, as it means not all
-+dependencies in requirements-min.txt should be taken into
-+account. Also some of these indirect dependencies cause issues due to
-+upper bounds set on the version (which is the case for idna and
-+urllib3).
++if BR2_PACKAGE_PYTHON_QRCODE
 +
-+This patch therefore clarifies the situation by removing such indirect
-+dependencies from requirements-min.txt. As the patch is obviously not
-+upstreamable, it will require some maintenance effort, but that effort
-+is anyway already there to sort out direct dependencies from indirect
-+dependencies when updating the Buildroot packaging for crossbar.
++config BR2_PACKAGE_PYTHON_QRCODE_SVG
++	bool "SVG support"
++	select BR2_PACKAGE_PYTHON3_PYEXPAT
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ requirements-min.txt | 12 ------------
-+ 1 file changed, 12 deletions(-)
++config BR2_PACKAGE_PYTHON_QRCODE_PIL
++	bool "PIL support"
++	select BR2_PACKAGE_PYTHON_PILLOW
 +
-+diff --git a/requirements-min.txt b/requirements-min.txt
-+index 5ac4e0ee..cdd82d27 100644
-+--- a/requirements-min.txt
-++++ b/requirements-min.txt
-+@@ -1,20 +1,13 @@
-+-attrs>=17.2.0
-+ autobahn[asyncio,twisted,encryption,compress,serialization,scram]>=21.3.1
-+ bitstring>=3.1.5
-+-bcrypt>=3.1.6
-+ cbor>=1.0.0
-+ click>=6.7
-+ colorama>=0.4.4
-+-constantly>=15.1.0
-+ cryptography>=2.6.1
-+-h2>=3.2.0
-+-idna<2.6,>=2.5
-+ importlib-resources>=4.1.1
-+-incremental>=17.5.0
-+ jinja2>=2.10.1
-+ lmdb>=0.92
-+ mistune>=0.7.4
-+-netaddr>=0.7.19
-+ passlib>=1.7.1
-+ priority>=1.3.0
-+ psutil>=5.2.2
-+@@ -28,7 +21,6 @@ pyqrcode>=1.2.1
-+ pytrie>=0.3
-+ pyyaml>=4.2b4
-+ sdnotify>=0.3.1
-+-service_identity>=17.0.0
-+ setproctitle>=1.1.10
-+ setuptools>=36.2.7
-+ treq>=20.4.1
-+@@ -37,10 +29,6 @@ twisted[tls,conch,http2,osx_platform]>=20.3.0; sys_platform == 'darwin'
-+ twisted[tls,conch,http2,windows_platform]>=20.3.0; sys_platform == 'win32'
-+ txaio>=21.2.1
-+ txtorcon>=20.0.0
-+-u-msgpack-python>=2.4.1
-+-# urllib3 is an indirect dependency, but we force a recent version because of https://nvd.nist.gov/vuln/detail/CVE-2019-11324
-+-# workaround for version conflict in requests vs sth else:
-+-urllib3<1.25,>=1.21.1
-+ vmprof>=0.4.12; platform_machine=='x86_64' or platform_machine=='i386' or platform_machine=='arm'
-+ watchdog>=0.8.3
-+ werkzeug>=0.14.1
-+-- 
-+2.37.1
++endif
+diff --git a/package/python-qrcode/python-qrcode.hash b/package/python-qrcode/python-qrcode.hash
+new file mode 100644
+index 0000000000..1ab84dd355
+--- /dev/null
++++ b/package/python-qrcode/python-qrcode.hash
+@@ -0,0 +1,5 @@
++# md5 from https://pypi.python.org/pypi/qrcode/json
++md5  124103c685e96ba3b7a1616760f31c11  qrcode-7.3.1.tar.gz
++sha256  375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578  qrcode-7.3.1.tar.gz
++# Locally computed
++sha256  40dfb903c94ee3f789500131311186548ecba5cefd3557623d7700e2522ab994  LICENSE
+diff --git a/package/python-qrcode/python-qrcode.mk b/package/python-qrcode/python-qrcode.mk
+new file mode 100644
+index 0000000000..23e7dd3b88
+--- /dev/null
++++ b/package/python-qrcode/python-qrcode.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-qrcode
++#
++################################################################################
 +
-diff --git a/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch b/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
-index 65ffc508ab..ab2d4709bd 100644
---- a/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
-+++ b/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
-@@ -1,4 +1,4 @@
--From ac5fc826e33492bb0c4283a954389d7fd355fa61 Mon Sep 17 00:00:00 2001
-+From a6866509b0387ab6d6f99f68cd82bcac922fe839 Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Mon, 30 May 2022 19:38:11 +0200
- Subject: [PATCH] crossbar/webservice/wap: use markupsafe instead of werkzeug
-@@ -15,7 +15,8 @@ Replace with escape from markupsafe like upstream commit [2]
- Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
-  crossbar/webservice/wap.py | 7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
-+ requirements-min.txt       | 1 +
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
- 
- diff --git a/crossbar/webservice/wap.py b/crossbar/webservice/wap.py
- index 825558b1..6daa9b21 100644
-@@ -35,6 +36,18 @@ index 825558b1..6daa9b21 100644
-  
-  from jinja2 import Environment, FileSystemLoader
-  from jinja2.sandbox import SandboxedEnvironment
-+diff --git a/requirements-min.txt b/requirements-min.txt
-+index cdd82d27..50cb1489 100644
-+--- a/requirements-min.txt
-++++ b/requirements-min.txt
-+@@ -7,6 +7,7 @@ cryptography>=2.6.1
-+ importlib-resources>=4.1.1
-+ jinja2>=2.10.1
-+ lmdb>=0.92
-++MarkupSafe>=1.1.1
-+ mistune>=0.7.4
-+ passlib>=1.7.1
-+ priority>=1.3.0
- -- 
--2.35.3
-+2.37.1
- 
-diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
-index 60b60b1740..fb06f7672a 100644
---- a/package/python-crossbar/Config.in
-+++ b/package/python-crossbar/Config.in
-@@ -1,23 +1,35 @@
- config BR2_PACKAGE_PYTHON_CROSSBAR
- 	bool "python-crossbar"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
--	# All the following dependencies are runtime dependencies
--	select BR2_PACKAGE_PYTHON_ATTRS
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-+	# All the following dependencies are runtime dependencies. It
-+	# matches almost 1:1 the requirements-min.txt from crossbar
-+	# with the following exceptions:
-+	# - importlib-resources is in Python itself, so no external
-+	#   module is needed
-+	# - vmprof, while listed as a needed dependency, isn't
-+	#   actually strictly necesary
-+	# - wsaccel is not a direct dependency, it is there to make
-+	#   sure autobahn has the 'accelerate' feature, when the
-+	#   Python implementation is CPython, and our package does
-+	#   enable autobahn[accelerate]
- 	select BR2_PACKAGE_PYTHON_AUTOBAHN
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN_ACCELERATE
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN_COMPRESS
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN_ENCRYPTION
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN_SCRAM
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN_SERIALIZATION
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN_TWISTED
- 	select BR2_PACKAGE_PYTHON_BITSTRING
- 	select BR2_PACKAGE_PYTHON_CBOR
--	select BR2_PACKAGE_PYTHON_CBOR2
- 	select BR2_PACKAGE_PYTHON_CLICK
--	select BR2_PACKAGE_PYTHON_CONSTANTLY
-+	select BR2_PACKAGE_PYTHON_COLORAMA
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
--	select BR2_PACKAGE_PYTHON_H2
--	select BR2_PACKAGE_PYTHON_IDNA
--	select BR2_PACKAGE_PYTHON_INCREMENTAL
- 	select BR2_PACKAGE_PYTHON_JINJA2
- 	select BR2_PACKAGE_PYTHON_LMDB
- 	select BR2_PACKAGE_PYTHON_MARKUPSAFE
- 	select BR2_PACKAGE_PYTHON_MISTUNE
--	select BR2_PACKAGE_PYTHON_NETADDR
- 	select BR2_PACKAGE_PYTHON_PASSLIB
- 	select BR2_PACKAGE_PYTHON_PRIORITY
- 	select BR2_PACKAGE_PYTHON_PSUTIL
-@@ -30,17 +42,19 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 	select BR2_PACKAGE_PYTHON_PYTRIE
- 	select BR2_PACKAGE_PYTHON_PYYAML
- 	select BR2_PACKAGE_PYTHON_SDNOTIFY
--	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
- 	select BR2_PACKAGE_PYTHON_SETPROCTITLE
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
- 	select BR2_PACKAGE_PYTHON_TREQ
- 	select BR2_PACKAGE_PYTHON_TWISTED
-+	select BR2_PACKAGE_PYTHON_TWISTED_CONCH
-+	select BR2_PACKAGE_PYTHON_TWISTED_HTTP2
-+	select BR2_PACKAGE_PYTHON_TWISTED_TLS
- 	select BR2_PACKAGE_PYTHON_TXAIO
- 	select BR2_PACKAGE_PYTHON_TXTORCON
--	select BR2_PACKAGE_PYTHON_U_MSGPACK
- 	select BR2_PACKAGE_PYTHON_UBJSON
- 	select BR2_PACKAGE_PYTHON_WATCHDOG
- 	select BR2_PACKAGE_PYTHON_WERKZEUG
-+	select BR2_PACKAGE_PYTHON_ZLMDB
- 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
- 	help
- 	  Crossbar.io is an open-source WAMP application router that
-@@ -48,3 +62,8 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 	  components that can talk in real-time with each other.
- 
- 	  https://pypi.python.org/pypi/crossbar
++PYTHON_QRCODE_VERSION = 7.3.1
++PYTHON_QRCODE_SOURCE = qrcode-$(PYTHON_QRCODE_VERSION).tar.gz
++PYTHON_QRCODE_SITE = https://files.pythonhosted.org/packages/94/9f/31f33cdf3cf8f98e64c42582fb82f39ca718264df61957f28b0bbb09b134
++PYTHON_QRCODE_SETUP_TYPE = setuptools
++PYTHON_QRCODE_LICENSE = BSD-3-Clause
++PYTHON_QRCODE_LICENSE_FILES = LICENSE
 +
-+comment "python-crossbar needs glibc or musl"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-diff --git a/support/testing/tests/package/sample_python_crossbar.py b/support/testing/tests/package/sample_python_crossbar.py
-index 374cccd837..8160a37219 100644
---- a/support/testing/tests/package/sample_python_crossbar.py
-+++ b/support/testing/tests/package/sample_python_crossbar.py
-@@ -1,5 +1,4 @@
- import os
- import crossbar
- 
--os.environ["AUTOBAHN_USE_UMSGPACK"] = "1"
- crossbar.run(["version"])
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_qrcode.py b/support/testing/tests/package/sample_python_qrcode.py
+new file mode 100644
+index 0000000000..3dcca329da
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_qrcode.py
+@@ -0,0 +1,3 @@
++import qrcode
++import qrcode.image.svg
++img = qrcode.make('Some data here', image_factory=qrcode.image.svg.SvgImage)
+diff --git a/support/testing/tests/package/test_python_qrcode.py b/support/testing/tests/package/test_python_qrcode.py
+new file mode 100644
+index 0000000000..ca8a2b01f9
+--- /dev/null
++++ b/support/testing/tests/package/test_python_qrcode.py
+@@ -0,0 +1,12 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Qrcode(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_QRCODE=y
++        BR2_PACKAGE_PYTHON_QRCODE_SVG=y
++        """
++    sample_scripts = ["tests/package/sample_python_qrcode.py"]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
