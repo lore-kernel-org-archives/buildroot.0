@@ -1,68 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A94AAC00140
-	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 10:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A709EC00140
+	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 10:30:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38563417B6;
-	Mon,  8 Aug 2022 10:20:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38563417B6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zk6XS9k0yelO; Mon,  8 Aug 2022 10:20:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8CFB41708;
-	Mon,  8 Aug 2022 10:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8CFB41708
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AE7311BF36D
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 10:20:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8921D60E13
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 10:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8921D60E13
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BA3B60E1D;
+	Mon,  8 Aug 2022 10:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BA3B60E1D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J5C62C5h8vr6 for <buildroot@lists.busybox.net>;
- Mon,  8 Aug 2022 10:20:25 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1323060E15
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1323060E15
- for <buildroot@buildroot.org>; Mon,  8 Aug 2022 10:20:24 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 701412000A;
- Mon,  8 Aug 2022 10:20:21 +0000 (UTC)
-Date: Mon, 8 Aug 2022 12:20:20 +0200
-To: Federico Pellegrin <fede@evolware.org>
-Message-ID: <20220808122020.0c1ec66a@windsurf>
-In-Reply-To: <CAM6O0Zgc_jfn+m1ZhRByLQ4QDDAYpAOQv-9aDRgruSYKWV5wUA@mail.gmail.com>
-References: <CAM6O0Zgc_jfn+m1ZhRByLQ4QDDAYpAOQv-9aDRgruSYKWV5wUA@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8y8ZpQpC4h_b; Mon,  8 Aug 2022 10:30:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F1A060E17;
+	Mon,  8 Aug 2022 10:30:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F1A060E17
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A2DEC1BF36D
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 10:30:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E3CC40609
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 10:30:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E3CC40609
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o8UaLthKMnfD for <buildroot@lists.busybox.net>;
+ Mon,  8 Aug 2022 10:30:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73C1E402E5
+Received: from mout-b-105.mailbox.org (mout-b-105.mailbox.org [195.10.208.50])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 73C1E402E5
+ for <buildroot@buildroot.org>; Mon,  8 Aug 2022 10:30:15 +0000 (UTC)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by mout-b-105.mailbox.org (Postfix) with ESMTPS id 4M1XX31zsfz9scY;
+ Mon,  8 Aug 2022 12:30:11 +0200 (CEST)
+Message-ID: <2e49d072-ab0a-4e7e-1d39-9844e98bf560@othermo.de>
+Date: Mon, 8 Aug 2022 12:30:10 +0200
 MIME-Version: 1.0
+Content-Language: en-US
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <CAM6O0Zgc_jfn+m1ZhRByLQ4QDDAYpAOQv-9aDRgruSYKWV5wUA@mail.gmail.com>
+ <35ea7a5d-e0b4-d98e-ca1d-716de2d25698@othermo.de>
+ <20220808121723.7d0d2bcb@windsurf>
+From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+In-Reply-To: <20220808121723.7d0d2bcb@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659954022;
+ d=othermo.de; s=MBO0001; t=1659954611;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=kp9IjKf7Xltu6RPbxIpYXfVUntb0YeH7W9WveXeqVYk=;
- b=l2gyPPj2tTJrZjyxNwxKzDepkIjM/BpqaPP0lCAD2o/DXSZ2ty0tp8nTSD5vXWLHEG+zso
- X+/kCl5MmCu5Lz/jnFvJYODglunUXeWcWFX5QhyUSxLolVYQj2XDD2uIYIYLJUqtOb5Aw3
- TGVuFoBuMkAH3XLynM/rbCHrgCheyek0Tohp77O9YuVKqLjsVs3RLs790rIgns9G9yRU4W
- eenufxb80huv+ckC+itSRVCzf8PCC+N6rNu3xsEe64s/Nhz93NVODyjLt+yoZaEwux+chg
- Lr4ikoj6ifa2Fclc4omNdr6FJjuh/IG85drJziLLxvJdZVMlMbJsg7W4PjUWrg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=l2gyPPj2
+ bh=MtNpOwT5nQ00AlSuW8Zmt2dkCVjfOEK6hYGFWiB1KdM=;
+ b=we2uzmqWHBi1tlH1jsLfpQp8T4hW86ZhfXDl/1oUhr9x8Y3+q0fXqksKrGsKgTaMhz9THC
+ JfXEA/8FXW4aFp2scF2TZdb5XG6gT3kos6gKAalNN7iXRs9ML77dhSvv87FB4q3Qu4QvS6
+ C5lcgkq7AWw5X1Uy6Q4VleR91G4ChejWNjUnCAfZEkIbzeDKgIaYKO5OI7mq1B5Ydghqm8
+ BS0fw/StrJO0e6+Z3zgPZ6H/td347FYCa26vn8LVMvkf8e5v1hODYJ4SHb3dWuy5Uo/ZjP
+ 1IzPKmaefoEjUZvGLAZyrw1uegPg29uRxfW3tkNxgFOncZnhdLODVmDgKedCSg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=othermo.de header.i=@othermo.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=we2uzmqW
 Subject: Re: [Buildroot] Python pyc only and problem with scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -75,72 +78,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Federico,
+Hi Thomas,
 
-On Mon, 8 Aug 2022 09:40:02 +0200
-Federico Pellegrin <fede@evolware.org> wrote:
-
-> I've found a minor problem related to the rt-tests package, but that maybe
-> is slightly more generic and wanted to report and in case understand which
-> approach would be best to fix it (and contribute a patch then if possible).
+On 08.08.22 12:17, Thomas Petazzoni via buildroot wrote:
+> Hello Marcus,
 > 
-> The specific problem: rt-tests, besides a few compiled executables,
-> installs also two tools which are written in Python, namely hwlatdetect and
-> get_cyclictest_snapshot. These are Python scripts which get installed in
-> the PYLIB and then a symbolic link is done from /usr/bin to them, so ie we
-> have: /usr/bin/hwlatdetect ->
-> /usr/lib/python3.10/site-packages//hwlatdetect.py
+> On Mon, 8 Aug 2022 12:05:54 +0200
+> Marcus Hoffmann <marcus.hoffmann@othermo.de> wrote:
 > 
-> Needless to say that once the pycompile.py script is run and original .py
-> files are removed, of course in the "PYC only" setup (which is the
-> default), then the link is broken and it will not work.
-> Additionally that pyc files will not work for scripts like that, so just
-> somehow fixing the link mentioned above would anyhow not work, as you need
-> to execute them eventually by explicitly naming the interpreter.
+>> I've noticed a similar problem for pip's PEP517 backend as well, which
+>> normally calls some internal helper script via python subprocess (and
+>> uses the .py name for that). This is fixable by using the .pyc suffix
+>> instead in that case though.
 > 
-> I could imagine that we could have some similar other cases when we are
-> installing Python scripts directly executed in PYLIB and not modules. But
-> I'm not sure that installing the scripts there is a good idea as well,
-> comparing with other distros that doesn't seem to be the case.
-> So maybe the problem is really in rt-tests after all and the location those
-> scripts get installed and I may just fix it that way (and contact upstream)?
-> Otherwise should it be more generic maybe could make sense to have a
-> facility to list some files that should not be converted to PYC?
+> Do you have some details on this?
 
-Thanks for your bug report.
+Sorry, I hadn't really gotten around to properly reporting but here's 
+some details:
 
-My initial gut feeling would indeed be that it is strange to install
-scripts in /usr/lib/python, and they should be installed in /usr/bin
-instead, so that /usr/lib/python is only for Python modules that can be
-byte-compiled. However, I am not an expert at all in terms of Python
-best practices and latest standards.
+https://github.com/pypa/pip/blob/main/src/pip/_vendor/pep517/in_process/__init__.py#L13 
+returns the path to the .py file in question and is called by
 
-But from a Buildroot perspective, it really makes a lot of sense to be
-able to do the byte-compilation at build-time (to save on startup time)
-and drop the .py files (to save on filesystem footprint).
+https://github.com/pypa/pip/blob/1880f4a58b4e4ed577a6337d666767784f6831d5/src/pip/_vendor/pep517/wrappers.py#L320-L326 
+via the subprocess call.
 
-For the rt-tests case, I would therefore suggest to move those scripts
-to /usr/bin.
+Why they are doing that, I couldn't figure out in the time I spent 
+looking at this.
 
-Of course, if that problem shows up in more packages, then yes we could
-think of a mechanism for packages to declare a number of py files that
-should not be byte-compiled, and that should be preserved on the target.
+This is happening for us when we `pip install` an internal package that 
+uses flit[1] as it's pep517 build backend.
 
-Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+[1]: https://github.com/pypa/flit
+
+> 
+> Thomas
+
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
