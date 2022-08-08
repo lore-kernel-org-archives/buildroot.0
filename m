@@ -4,86 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E561AC25B0D
-	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 08:12:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89B44C00140
+	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 08:15:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 52DF04058B;
-	Mon,  8 Aug 2022 08:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52DF04058B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 120694056B;
+	Mon,  8 Aug 2022 08:15:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 120694056B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N_1XaP77P0Hj; Mon,  8 Aug 2022 08:12:08 +0000 (UTC)
+	with ESMTP id dDQn7nhzFP0o; Mon,  8 Aug 2022 08:15:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5707F40329;
-	Mon,  8 Aug 2022 08:12:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5707F40329
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6B6AD1BF591
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 08:12:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5066540329;
+	Mon,  8 Aug 2022 08:15:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5066540329
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EC3F91BF591
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 08:15:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 404C482735
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 08:12:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 404C482735
+ by smtp2.osuosl.org (Postfix) with ESMTP id C53B440329
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 08:15:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C53B440329
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aG8K6ekar7WC for <buildroot@lists.busybox.net>;
- Mon,  8 Aug 2022 08:12:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B6Dq-4TFa45L for <buildroot@lists.busybox.net>;
+ Mon,  8 Aug 2022 08:15:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 440C08275C
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 440C08275C
- for <buildroot@buildroot.org>; Mon,  8 Aug 2022 08:12:04 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 17-20020a05600c241100b003a536b6d536so1899004wmp.2
- for <buildroot@buildroot.org>; Mon, 08 Aug 2022 01:12:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21F59400C5
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com
+ [209.85.218.42])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 21F59400C5
+ for <buildroot@buildroot.org>; Mon,  8 Aug 2022 08:15:01 +0000 (UTC)
+Received: by mail-ej1-f42.google.com with SMTP id k26so15185266ejx.5
+ for <buildroot@buildroot.org>; Mon, 08 Aug 2022 01:15:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=UfbWSsM9inRttm+fFQuCiuzFd9SuxY6ncW0J++vADpY=;
- b=v1mUMMJ/spLjO2dXVzXDcBLC9rPrbeJmHUaZzSNlSH5ZLhBlTZnvTepsiVQO2rBTM5
- 9emPkf6178oCVSI4FJKuNW2LPivJK6h3bIZhIC/9eA4fu9lAjGgo/I80h50c4YMbvfNV
- /8gPC6cFn2EW/7ZCpZFQ22HNEQ7AmMGabXUDRazuxrOyeley5nWjoQa3s5VkbZrB2ab3
- E/kPvy5viSwQ3szF0stZPRHCiRhh/4mKMvXjTa7GpM4dKSbRvG0kWAyLxBqByheducYd
- a1k5kr498+VZ0bRbu/HlwxJkIrIKheYb73pykPyyFDClgaDO7Fsu+UhCnY62SkkbGgs/
- IKwg==
-X-Gm-Message-State: ACgBeo2okTXyFwgoPG/athqDhmW2fcmzRHFdF0i1W1WuN8lnJbAFTY6v
- 32MIO/4Bo9QM5V7Tx2ockKd+p8XfcL4=
-X-Google-Smtp-Source: AA6agR7EvaAU+UJvfuR6tv1/FKSSeZ1ts3ljL+sEFtxmIpo+HuSmDjpVhtr7N8WKUQTtJzQ9k9CFvg==
-X-Received: by 2002:a1c:2542:0:b0:3a3:2dcd:8736 with SMTP id
- l63-20020a1c2542000000b003a32dcd8736mr17027768wml.57.1659946322110; 
- Mon, 08 Aug 2022 01:12:02 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+ bh=qFPGfdgnLS10Vi0kcJyMtBmf7s4qgrciZjeUIv83K64=;
+ b=wlvkR/QQwHBdR8u5bgWtvobB11LDurfZQvG/fEFiy+z+BZEtwKQbBXps3K3261E+X6
+ 8u58DmiIlY7iOmcwYhsDU2vNLX5F8KzHFsGU1GGW8FdNIzExz6otVCSc/3x1znaIVyOm
+ NfBBKzylaHfTB2wxCb3iPPlQoW5jNlnuw8qXxf9xI65gAqai4kNkRuqOR74/+HUrDCuz
+ ItahvQFFvSi7otDu/Im8JuL5HxRpFZhh7UexXJoYQphQDJ8HGFHR3F4w4P7vDpeE+nPG
+ dG4vwthW+lnVdeqsRWsKeR5teH9xToVYXN/SH4oN/FcESbEGULF4sfhCvdOHXtPt8kYT
+ ZGdQ==
+X-Gm-Message-State: ACgBeo3GLrJfoUYTBGe4CHp3wgmUbLZ2oS1Vol9uh+eTmLNUMLvZ37Bd
+ bx3HwNIZeuHiLH+QWgaXdtY=
+X-Google-Smtp-Source: AA6agR6QNDKQX4+xim/c6vU4XC+DQCDujXM9diEVPAKEZwXAQ5OMim1Z0BVliW/sdpvDGWRnhuOspg==
+X-Received: by 2002:a17:907:9620:b0:730:d5f4:d448 with SMTP id
+ gb32-20020a170907962000b00730d5f4d448mr12824729ejc.45.1659946499230; 
+ Mon, 08 Aug 2022 01:14:59 -0700 (PDT)
+Received: from localhost (ip-109-42-113-71.web.vodafone.de. [109.42.113.71])
  by smtp.gmail.com with ESMTPSA id
- u18-20020a5d4352000000b0021d69860b66sm13019569wrr.9.2022.08.08.01.12.01
+ a1-20020a170906684100b0072fb3704e49sm4739179ejs.46.2022.08.08.01.14.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Aug 2022 01:12:01 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  8 Aug 2022 10:11:41 +0200
-Message-Id: <20220808081141.582053-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ Mon, 08 Aug 2022 01:14:58 -0700 (PDT)
+Date: Mon, 8 Aug 2022 10:14:52 +0200
+From: Thomas Huth <huth@tuxfamily.org>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220808101452.566fd732@tuxfamily.org>
+In-Reply-To: <20220806224338.0159e15c@windsurf>
+References: <20220806224338.0159e15c@windsurf>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=UfbWSsM9inRttm+fFQuCiuzFd9SuxY6ncW0J++vADpY=;
- b=N1DYS6Kb+TXcO52l4xf5qikcOUyvX53/7evOoA2b3DbgCqYPGiIAf6baoX7Ytz9viF
- hDMahaDWiA33Rx9QGXPiWgyur0rtsznFAUWCmSIXvWlfloiXWmTRWvDDprNb5BcqYZ/Z
- fU557e7uiZGZbvGj0GaO+49rPDIMEAE/ByvUOHNEDjoV+PN/B7Tt25ey6QYF3bpSLxEe
- BxG++a6NeOoBNw2hEJ5dqS0e1Qg3BrKOtT246f4o07whlxb+yFSskpUG6iRYnnxGCUDY
- rfIf4lnGertHyCmIHxp5QwybfUXTHDd6PgVoVAzrENeHYbwlpgdmpUs5GexmxIDq1X2T
- Ci7w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=N1DYS6Kb
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to version
- 5.4.0
+Subject: Re: [Buildroot] Buildroot defconfigs about to be removed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,61 +80,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ Filip Skoneczny <fskoneczny@gmail.com>,
+ Marek Belisko <marek.belisko@open-nandra.com>,
+ Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, Davide Viti <zinosat@gmail.com>,
+ Mike Harmony <mike.harmony@snapav.com>, Peter Seiderer <ps.report@gmx.net>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Suniel Mahesh <sunil@amarulasolutions.com>,
+ Heiko Thiery <heiko.thiery@gmail.com>, Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following vulnerabilities:
- - [High] Potential for DTLS DoS attack. In wolfSSL versions before
-   5.4.0 the return-routability check is wrongly skipped in a specific
-   edge case. The check on the return-routability is there for stopping
-   attacks that either consume excessive resources on the server, or try
-   to use the server as an amplifier sending an excessive amount of
-   messages to a victim IP. If using DTLS 1.0/1.2 on the server side
-   users should update to avoid the potential DoS attack. CVE-2022-34293
- - [Medium] Ciphertext side channel attack on ECC and DH operations.
-   Users on systems where rogue agents can monitor memory use should
-   update the version of wolfSSL and change private ECC keys.
+Am Sat, 6 Aug 2022 22:43:38 +0200
+schrieb Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-https://github.com/wolfSSL/wolfssl/releases/tag/v5.4.0-stable
-https://www.wolfssl.com/docs/security-vulnerabilities/
+> Hello,
+> 
+> This is another reminder about the below defconfigs, which are failing
+> to build in Buildroot. If they are not fixed soon, they will be removed
+> before the 2022.08 release, expected to be released at the end of
+> August.
+> 
+> Please let us know if you are no longer interested in maintaining some
+> of those defconfigs.
+[...]
+> qemu_xtensa_lx60_nommu_defconfig -> elf2flt segfaults
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053940
+> 
+> qemu_m68k_mcf5208_defconfig -> elf2flt segfaults
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053827
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I'm interested in keeping the qemu defconfigs alive, please don't remove
+them yet. I'll try to figure out what's going wrong here.
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 63eebf93bb..01b21596e7 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  409b4646c5f54f642de0e9f3544c3b83de7238134f5b1ff93fb44527bf119d05  wolfssl-5.2.0.tar.gz
-+sha256  dc36cc19dad197253e5c2ecaa490c7eef579ad448706e55d73d79396e814098b  wolfssl-5.4.0.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 58b6f296ab..536fd863fe 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 5.2.0
-+WOLFSSL_VERSION = 5.4.0
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
--- 
-2.35.1
-
+ Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
