@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9313CC19F2A
-	for <buildroot@archiver.kernel.org>; Sun,  7 Aug 2022 12:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D52DC00140
+	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 20:28:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2049B4013B;
-	Sun,  7 Aug 2022 12:38:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2049B4013B
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3DAC40180;
+	Mon,  8 Aug 2022 20:28:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3DAC40180
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8YLJk4whO_8J; Sun,  7 Aug 2022 12:37:58 +0000 (UTC)
+	with ESMTP id i7tTGzWak3ls; Mon,  8 Aug 2022 20:28:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D07B740119;
-	Sun,  7 Aug 2022 12:37:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D07B740119
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3BAED1BF836
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:37:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A74B4014A;
+	Mon,  8 Aug 2022 20:28:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A74B4014A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 711101BF365
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:28:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 247EF60ABE
- for <buildroot@lists.busybox.net>; Sun,  7 Aug 2022 12:37:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 247EF60ABE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4AC9281458
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:28:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AC9281458
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 89oEOLWFmOac for <buildroot@lists.busybox.net>;
- Sun,  7 Aug 2022 12:37:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HWC_J6kDByFW for <buildroot@lists.busybox.net>;
+ Mon,  8 Aug 2022 20:28:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D27E60ABB
- for <buildroot@uclibc.org>; Sun,  7 Aug 2022 12:37:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D27E60ABB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9F73E81454
+ for <buildroot@uclibc.org>; Mon,  8 Aug 2022 20:28:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F73E81454
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 3E69986EDC; Sun,  7 Aug 2022 12:23:36 +0000 (UTC)
+ id 6AF8486EFB; Mon,  8 Aug 2022 20:13:48 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sun, 07 Aug 2022 12:37:47 +0000
+Date: Mon, 08 Aug 2022 20:28:02 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.05.1
+X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: trivial
+X-Bugzilla-Severity: normal
 X-Bugzilla-Who: thomas.petazzoni@bootlin.com
 X-Bugzilla-Status: RESOLVED
 X-Bugzilla-Resolution: FIXED
@@ -54,15 +54,14 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution bug_status
-Message-ID: <bug-14951-163-7FrPLbUNJb@https.bugs.busybox.net/>
-In-Reply-To: <bug-14951-163@https.bugs.busybox.net/>
-References: <bug-14951-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-14556-163-Ederc8jkZQ@https.bugs.busybox.net/>
+In-Reply-To: <bug-14556-163@https.bugs.busybox.net/>
+References: <bug-14556-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14951] boost compile error when running make
- silently
+Subject: [Buildroot] [Bug 14556] python-crossbar fails to build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,18 +78,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14951
+https://bugs.busybox.net/show_bug.cgi?id=14556
 
 Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
              Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
 Fixed by
-https://git.buildroot.org/buildroot/commit/?id=7bd277572e695ce390b52d0dec03fa8ee5485f64.
+https://git.buildroot.org/buildroot/commit/?id=bfafb08c62a214fc24f6f33ce4c0b18ad6f67dfd.
 Thanks!
 
 -- 
