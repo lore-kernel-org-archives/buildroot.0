@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C1D6C00140
-	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 13:31:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9DD8C00140
+	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 13:33:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E708B82AB9;
-	Mon,  8 Aug 2022 13:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E708B82AB9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C54E40A07;
+	Mon,  8 Aug 2022 13:33:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C54E40A07
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b9mncqAgNwAv; Mon,  8 Aug 2022 13:31:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id z-0M6to3MEL9; Mon,  8 Aug 2022 13:33:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBC978268F;
-	Mon,  8 Aug 2022 13:31:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBC978268F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D00C409E2;
+	Mon,  8 Aug 2022 13:33:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D00C409E2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0C7771BF356
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 13:31:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 264A11BF356
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 13:33:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E6F5360E4F
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 13:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6F5360E4F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 016EA60BF2
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 13:33:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 016EA60BF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LxvB_UP-L5vb for <buildroot@lists.busybox.net>;
- Mon,  8 Aug 2022 13:31:38 +0000 (UTC)
+ with ESMTP id Uv9jQHaRVAVb for <buildroot@lists.busybox.net>;
+ Mon,  8 Aug 2022 13:33:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FECC60E67
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9FECC60E67
- for <buildroot@buildroot.org>; Mon,  8 Aug 2022 13:31:38 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id q30so10877589wra.11
- for <buildroot@buildroot.org>; Mon, 08 Aug 2022 06:31:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C22F360ABE
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C22F360ABE
+ for <buildroot@buildroot.org>; Mon,  8 Aug 2022 13:33:10 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id v3so10988209wrp.0
+ for <buildroot@buildroot.org>; Mon, 08 Aug 2022 06:33:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=rboVx9cFlIqUK0wbdPIV9FSz+WDBXhNfmB4fx35QKEg=;
- b=f0/zvA55tRYxwhSD3kEQOwW7QU3BMfTUPsZ83q/KDQXm7v7AqHM8SlUUYevt8ZMZam
- XvOnf7sniDRIpyYraaLgHP6kWuJ/93TORkkumBg6ATNnIczgRUhi58//nWr26+034lMD
- E5M7Mbt3KFtJ4F/D9c4SWljuXink4/x99zZ/UA6n5yuGXXIjedk+AKmP9kcQJ4ZIldvR
- iReB5759h9n4170uOw3cT1Mk8AeVS2CgZ76XP40O7LA8GDv1wWjUd59GxJduAQ4nxFpE
- dfDbJ7HOhz9RkrFqVlWhZjoL3hNZeC4/lmt2D/2NgdCYrH8Cfliqlqls5bFium/xKJw3
- 3b+Q==
-X-Gm-Message-State: ACgBeo1UldVfdANPkl4Rn6lOY4Ctbcp/8P+XHOieFTUsnkDSYFr41+8c
- G4qgMkPd7o/5XesWtq830bIoOqJC7Yk=
-X-Google-Smtp-Source: AA6agR6FbYImOnpaQcsbxlfOZpsO3L/qdZ59jg7GbHhG3XB/WFPi7k1zRy8ml/FFN9rlGrUAlkAKVw==
-X-Received: by 2002:a5d:6608:0:b0:21f:127d:6f8c with SMTP id
- n8-20020a5d6608000000b0021f127d6f8cmr11644920wru.75.1659965496610; 
- Mon, 08 Aug 2022 06:31:36 -0700 (PDT)
+ bh=b/do3Y4NgZAnfhO8IcfqnvWUSH/aqbW4eOp9Bfd6vaA=;
+ b=64CiWvb8fe9zMDPIskBhdeiyZyiD5rGyx0F+V8fz2QqWgNvyWWZZpwsT3g/68TraiB
+ CyMCDqaVKHC27MdBcXuyukPepNGeTfMpIY0Lf+Nf7dkNOMZkQNKVpDA+kesysY4D1WEp
+ uZFrv0hex9jHCq4+KcviBOqrVoB95INZDh42Ts/E2E2eQv3aA3PvslWelzyX2gCzNPAy
+ yF7b2dR7E1L4DyQV8dGemQIzgdyEh+SPpWMOkUb+BDlHRhB2y5TKnlxNnNRcDo74F/4T
+ 0tbBVOQc1AVEOGpZ0Qn/Jb0ZyoUlhfUXVulnGKOMpwfseN6mDpnObwOgE8ei0MHI2w1F
+ JHAA==
+X-Gm-Message-State: ACgBeo3xwprLExAx+6dp2u10wPlQNoZ1UEQuLbmNZvCQ2KQr7ZdyoS+w
+ 9cEP/KkyRsEbLHlBYDW0eVPDoAUw48Q=
+X-Google-Smtp-Source: AA6agR4zr6UO5tZddu0o19pPgXT0B9cf8s1Ic3Qq7w4C6Ju+Zl9pUklsZjD5P6UXbH0zByFNo+m+Xg==
+X-Received: by 2002:a5d:5a99:0:b0:220:68c4:d7cb with SMTP id
+ bp25-20020a5d5a99000000b0022068c4d7cbmr11259924wrb.565.1659965588693; 
+ Mon, 08 Aug 2022 06:33:08 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- c16-20020a5d5290000000b0021e6c52c921sm13576265wrv.54.2022.08.08.06.31.35
+ a5-20020adffb85000000b0021e45afa7b0sm11163895wrr.109.2022.08.08.06.33.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 08 Aug 2022 06:31:36 -0700 (PDT)
+ Mon, 08 Aug 2022 06:33:08 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  8 Aug 2022 15:31:22 +0200
-Message-Id: <20220808133122.965563-1-fontaine.fabrice@gmail.com>
+Date: Mon,  8 Aug 2022 15:33:04 +0200
+Message-Id: <20220808133304.965683-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=rboVx9cFlIqUK0wbdPIV9FSz+WDBXhNfmB4fx35QKEg=;
- b=gyWvp1OAD7bjc2ojS4PnL/Xov48roX+R6g7z3/eDDAI0QgLWz/127sJm6pYiUdVov9
- R/1efz2eYkaEoDm+3TUZ7btj1cxAVxjTxjlYMU12S8RouDW0b/aKSyEK2xImjIjF4JMP
- 7mvZI0Ys+LXWp4+mTVw2fe9DX9qDBa275XVuaZDBq1U0Qn+Aq+E34LTL3KXXUD8G3yI+
- QSJYtt7hnBS/+F78QXMiGfBCzgR71qD6BDCxqeSysCCigf31Jj8XLzFuGngzevuuiHFq
- cN7/+DoBNj8yROJ5JNs6Y3Fm9A/aDn7pI8eiEFThF2u4fQXrSYVJcCWAQR6NBPFRqKV+
- +1NA==
+ bh=b/do3Y4NgZAnfhO8IcfqnvWUSH/aqbW4eOp9Bfd6vaA=;
+ b=XqzBZvM0WqrejAxeQANIm9USU2p4IOWranqh0rNCy/u+x6CJEUN0TG4k0PMxntHbjO
+ 2faZjYpg4z3WOZ4TEobWA+toF6cgAh+kKym8jqmwXsD6XhuqjcSNeioC/CC/J3RgOFGh
+ Hv6lMEMXjUiFiz9FoUcMfhvBjfdRmtHRPeTWvX3CBo9WECwLYv3LKJqOrYFNLRXRNKwb
+ SSjKMf2Pjag/oJb8b3/aeqsFAy8SKZpCRrbioKLKzrhOUTBoVn/3SbDjyC3fM4ZlDOFY
+ Vg3hZQEczlLxvWYluL/0LmZ44fH1069CfgkxcT/K4EtVbm7AJ6+QIJiMLb0VQa34GhvZ
+ VD1g==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=gyWvp1OA
-Subject: [Buildroot] [PATCH 1/1] package/bayer2rgb-neon: replace second patch
+ header.a=rsa-sha256 header.s=20210112 header.b=XqzBZvM0
+Subject: [Buildroot] [PATCH v2,1/1] package/bayer2rgb-neon: replace patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,10 +100,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Replace second patch by upstream patch
+Replace patch by upstream patch
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix title
+
  ...add-some-_always_inline_-annotations.patch | 75 +++++++++++++++++++
  ...-src-convert.c-remove-have_cplusplus.patch | 56 --------------
  2 files changed, 75 insertions(+), 56 deletions(-)
