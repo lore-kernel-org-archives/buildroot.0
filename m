@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28882C25B08
-	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 13:57:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64CE8C00140
+	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 14:28:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3EE2416DD;
-	Mon,  8 Aug 2022 13:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3EE2416DD
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFF93414E4;
+	Mon,  8 Aug 2022 14:28:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFF93414E4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7UD1nsLEizd5; Mon,  8 Aug 2022 13:57:47 +0000 (UTC)
+	with ESMTP id qkVK9yqpD98v; Mon,  8 Aug 2022 14:28:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91F344160A;
-	Mon,  8 Aug 2022 13:57:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91F344160A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0F1C31BF5A2
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 13:57:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A048540386;
+	Mon,  8 Aug 2022 14:28:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A048540386
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DA1331BF2A5
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 14:28:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6BF34160A
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 13:57:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6BF34160A
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF96381985
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 14:28:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF96381985
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1amjUoyt0RSm for <buildroot@lists.busybox.net>;
- Mon,  8 Aug 2022 13:57:41 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99BE1409A0
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 99BE1409A0
- for <buildroot@buildroot.org>; Mon,  8 Aug 2022 13:57:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DDC571814C0; Mon,  8 Aug 2022 15:57:36 +0200 (CEST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vohe7arPIJ4F for <buildroot@lists.busybox.net>;
+ Mon,  8 Aug 2022 14:28:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB452817BA
+ for <buildroot@buildroot.org>; Mon,  8 Aug 2022 14:28:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB452817BA
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 2D34A86FBC; Mon,  8 Aug 2022 14:14:31 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon,  8 Aug 2022 15:55:10 +0200
-Message-Id: <20220808135514.23648-1-buildroot@heine.tech>
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1659967057; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=NMpx8+7ItD7XieRgfr1lXnWg2Vw7VikfdmdIX/tXrRo=;
- b=iVEiWcuAEtFqg1KL5bEyGejaZcuqyHyc2xHGEEaH4oyzXsRuC1mIaadp8IyZe2V1WyYeWG
- CNxHl7EPjReWitQewjIApKlwdv+a75ZRI4JwUbsAtSps6cV0MaaKOj30m4JbPnCvJczuY8
- T1tLHoMjkXR+WFoPhO6R7K1i7pYhixY=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=iVEiWcuA
-Subject: [Buildroot] [PATCH] package/fmt: bump to version 9.0.0
+Date: Mon, 8 Aug 2022 16:28:38 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 2fb84046c3a1381431105a3fe6c5a57d0bc53fec
+X-Git-Newrev: c45193b8d0cf00a069ecca553bd0ca276b505ed1
+X-Patchwork-Hint: ignore
+Message-Id: <20220808141431.2D34A86FBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/i2pd: add
+ I2PD_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +57,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Semyon Kolganov <semenak94@mail.ru>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+commit: https://git.buildroot.net/buildroot/commit/?id=c45193b8d0cf00a069ecca553bd0ca276b505ed1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+
+cpe:2.3:a:i2pd:i2pd is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ai2pd%3Ai2pd
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 107cff4616e31acc97890643df5fc689665649cb)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/i2pd/i2pd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 79956c251b..c203e35867 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  23778bad8edba12d76e4075da06db591f3b0e3c6c04928ced4a7282ca3400e5d  fmt-8.1.1.zip
-+sha256  fc96dd2d2fdf2bded630787adba892c23cb9e35c6fd3273c136b0c57d4651ad6  fmt-9.0.0.zip
- sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index be7ffb022b..b7d67a0f28 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FMT_VERSION = 8.1.1
-+FMT_VERSION = 9.0.0
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
--- 
-2.37.1
-
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 8eea09493f..2b5c6a1f54 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -8,6 +8,7 @@ I2PD_VERSION = 2.40.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
++I2PD_CPE_ID_VENDOR = i2pd
+ I2PD_SUBDIR = build
+ I2PD_DEPENDENCIES = \
+ 	boost \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
