@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E613C00140
-	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 20:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3180C25B0C
+	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 20:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA92060AB8;
-	Mon,  8 Aug 2022 20:49:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA92060AB8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E5F34015F;
+	Mon,  8 Aug 2022 20:49:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E5F34015F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PIndBGvfd8F9; Mon,  8 Aug 2022 20:49:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sOs8IiqAApQE; Mon,  8 Aug 2022 20:49:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 00B71607E3;
-	Mon,  8 Aug 2022 20:49:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00B71607E3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 89E3E1BF283
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:48:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54C7340180;
+	Mon,  8 Aug 2022 20:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54C7340180
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E5D21BF283
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62864408BA
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:48:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62864408BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDE8A400A8
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 20:48:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDE8A400A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O6td8jcwquy9 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rl4bbFJTABWw for <buildroot@lists.busybox.net>;
  Mon,  8 Aug 2022 20:48:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 224B140571
+ by smtp2.osuosl.org (Postfix) with ESMTP id 38D1140180
  for <buildroot@buildroot.org>; Mon,  8 Aug 2022 20:48:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 224B140571
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38D1140180
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D937083840; Mon,  8 Aug 2022 20:34:33 +0000 (UTC)
+ id F0E5883563; Mon,  8 Aug 2022 20:34:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 8 Aug 2022 22:48:29 +0200
+Date: Mon, 8 Aug 2022 22:48:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 309e75c3101f99262c49b918fe76fd922232062b
-X-Git-Newrev: 0f3115b2ca9fbdcf7a4e02aba45104f2d423fdb8
+X-Git-Oldrev: 95507a3ea712901694cb65132b42529cf4913d59
+X-Git-Newrev: 5c83dc5451fb59ffa5cd40d30c4c532dd25e8333
 X-Patchwork-Hint: ignore
-Message-Id: <20220808203433.D937083840@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/genrandconfig: add refpolicy custom
- git handling
+Message-Id: <20220808203433.F0E5883563@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fmt: bump to version 9.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f3115b2ca9fbdcf7a4e02aba45104f2d423fdb8
+commit: https://git.buildroot.net/buildroot/commit/?id=5c83dc5451fb59ffa5cd40d30c4c532dd25e8333
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a custom case to make sure that a random configuration with an empty
-git location for refpolicy doesn't fail. It reverts to
-BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION in that case.
-
-Fixes:
- - http://autobuild.buildroot.org/results/98da07a1f9b88e2e8a028a55c8cf76c6ebc28304
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/genrandconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/fmt/fmt.hash | 2 +-
+ package/fmt/fmt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 75757917c2..a56f03681a 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -535,6 +535,13 @@ def fixup_config(sysinfo, configfile):
-         if 'BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT=y\n' in configlines:
-             return False
+diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
+index 79956c251b..c203e35867 100644
+--- a/package/fmt/fmt.hash
++++ b/package/fmt/fmt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  23778bad8edba12d76e4075da06db591f3b0e3c6c04928ced4a7282ca3400e5d  fmt-8.1.1.zip
++sha256  fc96dd2d2fdf2bded630787adba892c23cb9e35c6fd3273c136b0c57d4651ad6  fmt-9.0.0.zip
+ sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index be7ffb022b..b7d67a0f28 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+   if 'BR2_PACKAGE_REFPOLICY=y\n' in configlines and \
-+       'BR2_PACKAGE_REFPOLICY_CUSTOM_GIT=y\n' in configlines and \
-+       'BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL=""\n' in configlines:
-+        configlines.remove('BR2_PACKAGE_REFPOLICY_CUSTOM_GIT=y\n')
-+        configlines.append('BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION=y\n')
-+        configlines.remove('BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL=""\n')
-+
-     if 'BR2_PACKAGE_XVISOR=y\n' in configlines and \
-        'BR2_PACKAGE_XVISOR_USE_CUSTOM_CONFIG=y\n' in configlines and \
-        'BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE=""\n' in configlines:
+-FMT_VERSION = 8.1.1
++FMT_VERSION = 9.0.0
+ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
+ FMT_SOURCE = fmt-$(FMT_VERSION).zip
+ FMT_LICENSE = MIT with exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
