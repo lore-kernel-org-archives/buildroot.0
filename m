@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC358C25B0C
-	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 08:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EC27C00140
+	for <buildroot@archiver.kernel.org>; Mon,  8 Aug 2022 08:41:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CAFE818D4;
-	Mon,  8 Aug 2022 08:28:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CAFE818D4
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE9B660DF9;
+	Mon,  8 Aug 2022 08:41:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE9B660DF9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BOwWtB6v4jUy; Mon,  8 Aug 2022 08:28:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id I3hIHhkjMjCb; Mon,  8 Aug 2022 08:41:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5EB6818CA;
-	Mon,  8 Aug 2022 08:28:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5EB6818CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB08C60C1D;
+	Mon,  8 Aug 2022 08:41:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB08C60C1D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7F4C41BF591
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 08:28:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3C1701BF591
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 08:41:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 66E18818C9
- for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 08:28:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66E18818C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1669781D7C
+ for <buildroot@lists.busybox.net>; Mon,  8 Aug 2022 08:41:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1669781D7C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZBA79NG9rqKx for <buildroot@lists.busybox.net>;
- Mon,  8 Aug 2022 08:28:13 +0000 (UTC)
+ with ESMTP id kxb7aGNuA0W0 for <buildroot@lists.busybox.net>;
+ Mon,  8 Aug 2022 08:41:39 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 973AB81886
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 973AB81886
- for <buildroot@buildroot.org>; Mon,  8 Aug 2022 08:28:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC65681D70
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC65681D70
+ for <buildroot@buildroot.org>; Mon,  8 Aug 2022 08:41:38 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7766D1BF210;
- Mon,  8 Aug 2022 08:28:06 +0000 (UTC)
-Date: Mon, 8 Aug 2022 10:28:05 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 3726E240007;
+ Mon,  8 Aug 2022 08:41:35 +0000 (UTC)
+Date: Mon, 8 Aug 2022 10:41:33 +0200
 To: Heiko Thiery <heiko.thiery@gmail.com>
-Message-ID: <20220808102805.2ee4fa4c@windsurf>
-In-Reply-To: <CAEyMn7ZtrsEdo18p2pjvdhrROnSemX2spZyxN8Tj67RLTcZG-w@mail.gmail.com>
-References: <20220806224338.0159e15c@windsurf>
- <CAEyMn7ZtrsEdo18p2pjvdhrROnSemX2spZyxN8Tj67RLTcZG-w@mail.gmail.com>
+Message-ID: <20220808104133.6479c0a5@windsurf>
+In-Reply-To: <20220807210317.9415-1-heiko.thiery@gmail.com>
+References: <20220807210317.9415-1-heiko.thiery@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1659947290;
+ d=bootlin.com; s=gm1; t=1659948096;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=uvtTWWPyqgIBbABkhs+EifGLHrXH9fEQgt+WA2u2Tgg=;
- b=J9iKVvlMSW/+iAonmACx2uAIXiqiZULT1wi0zFlxatVgFYmJvlIlhjW8iWfz69C9xD3BGY
- z2O0Shr4ZV31qY7L8NEVNkO6yH3XHlcD8A57rAk+qu74WHKPzku98SAqI0Ld7yEWTtzLak
- Quj/bpxG4FHtlEgcOeoUZplR4Gs2UM49CHxCeejn2RAwpkqVfea7v74J3GYhOSErpSJbhX
- DQaKT7XiyHaeOl6H3tHeUAWkOTNbOoJPKSx0CyduvJ+u2ixMnsWN4gwXLnJcKCbpv8vxPn
- heX10QjAF7U/C0exZoqathsFTgcAXcaUxMteyJbdGXGk/rOV4/Qdju7ZPXBkvw==
+ bh=w0GOm0IWS2hva5IDzleg8+/9OfVhyCLMFsC7tmmWoRI=;
+ b=cK34oPZFKoiAvevh2w6SGUzGqKIbMI0ewQq+rW/JBPlzUC1rmDFwIP99FB+Lz/1QymFUJi
+ DD5tymTrdnwJKhfiLOzBs9Y7th6wj2NY5Jh0Zarfyb7OBYk/FTRyAaGHhUIvL6YvZcxOhb
+ Y9OIjoIJHP7if5NCDbODaC03imDNaK09lmCG25UrBC2dpbCaU4DodovabzZty8/W53iozp
+ JIKr77jc9X3VZ3OfCP9T5H9ecus3HlapewGra9NjqOBglgfbK+s+Aj+0/91v+GsJOKNmyp
+ AfsISNxZ1PnVJfcjJm64QreVKVbrcG9ncVQrJuHXWuIZih2JtWiKxdIH97W9Cw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=J9iKVvlM
-Subject: Re: [Buildroot] Buildroot defconfigs about to be removed
+ header.s=gm1 header.b=cK34oPZF
+Subject: Re: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: fix
+ build failure with u-boot 2022.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,17 +78,7 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Louis Aussedat <aussedat.louis@gmail.com>,
- Filip Skoneczny <fskoneczny@gmail.com>,
- Marek Belisko <marek.belisko@open-nandra.com>,
- Thomas Huth <huth@tuxfamily.org>,
- Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- Davide Viti <zinosat@gmail.com>, Mike Harmony <mike.harmony@snapav.com>,
- Peter Seiderer <ps.report@gmx.net>, Jagan Teki <jagan@amarulasolutions.com>,
- Suniel Mahesh <sunil@amarulasolutions.com>,
- Romain Naour <romain.naour@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -96,20 +86,31 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Heiko,
 
-On Sun, 7 Aug 2022 00:28:46 +0200
+Thanks for the patch!
+
+On Sun,  7 Aug 2022 23:03:18 +0200
 Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-> This is the first time I have been informed about this build failure.
-> I am surprised that I did not get any mail about this.
+> +-HOSTLDLIBS_mkeficapsule += -lgnutls -luuid
+> ++HOSTLDLIBS_mkeficapsule += \
+> ++	$(shell pkg-config --libs gnutls uuid 2> /dev/null || echo "-lgnutls -luuid")
 
-Sorry, your issue is potentially new. It's mainly the other issues that
-I have already reported in the past, and which did not get any
-feedback, on defconfigs that are not properly maintained (all those
-friendlyarm/bananapi/orangepi boards).
+Do you understand why this is needed?
 
-> Nonetheless I will fix that and send a patch.
+In the build failure reported by Gitlab CI, it fails to find libgnutls,
+even though host-gnutls has been built before. So the -lgnutls that was
+in HOSTLDLIBS_mkeficapsule should have been sufficient, provided
+$(HOST_LDFLAGS) are properly used.
 
-Thanks a lot!
+Of course, I have nothing against using pkg-config, but I was just
+wondering if we have an explanation on what was going on. And is
+pkg-config fixing it because it's return a full path to the library?
+
+Obviously, one issue with your patch is that it's going to fix the
+problem only for the kontron defconfig, which is why I was interested
+to see if there wasn't a better solution.
+
+Thanks!
 
 Thomas
 -- 
