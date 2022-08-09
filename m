@@ -1,71 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D37EC19F2D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 11:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6A3CC19F2D
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 11:34:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D55BA4043A;
-	Tue,  9 Aug 2022 11:34:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D55BA4043A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6280160E35;
+	Tue,  9 Aug 2022 11:34:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6280160E35
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0RWAI7llvida; Tue,  9 Aug 2022 11:34:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Me_Vh-MhKeya; Tue,  9 Aug 2022 11:34:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C20EC402CE;
-	Tue,  9 Aug 2022 11:34:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C20EC402CE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7775F1BF2C7
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:34:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68FB260E3A;
+	Tue,  9 Aug 2022 11:34:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68FB260E3A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 91B611BF2C7
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:34:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 50050402CE
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:34:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50050402CE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6BF5560E3A
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:34:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BF5560E3A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AK9K_WYBAejS for <buildroot@lists.busybox.net>;
- Tue,  9 Aug 2022 11:34:16 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAF3E40297
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DAF3E40297
- for <buildroot@buildroot.org>; Tue,  9 Aug 2022 11:34:15 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4E1ED240006;
- Tue,  9 Aug 2022 11:34:13 +0000 (UTC)
-Date: Tue, 9 Aug 2022 13:34:12 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220809133412.521708e3@windsurf>
-In-Reply-To: <20220809083325.1906594-2-fontaine.fabrice@gmail.com>
-References: <20220809083325.1906594-1-fontaine.fabrice@gmail.com>
- <20220809083325.1906594-2-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660044854;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=SFcGZCPF1SGHxCUhBgcbASRA0kY+U13rJ3BuE7AiHWo=;
- b=lF7VNyyeGo/SJ61p7kIxv9oTZd8SQrPrqdQuCcaIRJ4wGBpuug/9FU+mfRstbXDiCTalhQ
- lRLbh4gFV+KoSxXrjrX+yopk4015eNXjQmsOHJYz3oECsl0aZTKnrv85HZezvLMUXHyYZg
- +fWTnpW83ZFuZEFVP6y3RHf7RVQuj6Z/mslAZUn98hxD6kd4ExNud0dfCfayfzUFWUFlPo
- A9Ei2rCLngKi0VsKkpvcbhmUMbPmXbSXaYVuieBw2aRuQP9kr3Vq7tsKWOAHcRGcsmKcCA
- 6eCmrH2MKILA7eafwBCm2BlaaQt5oD6MDoRycVanU9R9ZW8skBsw5xl2Y/tCTA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lF7VNyye
-Subject: Re: [Buildroot] [PATCH 2/2] package/refpolicy: set default values
- for custom repo
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WCp4XcAvf-mF for <buildroot@lists.busybox.net>;
+ Tue,  9 Aug 2022 11:34:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B996160E26
+ for <buildroot@buildroot.org>; Tue,  9 Aug 2022 11:34:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B996160E26
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 1B27A87017; Tue,  9 Aug 2022 11:20:22 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 9 Aug 2022 13:32:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6b872dd68c5b7e934d31ce6d417e02749b31cc97
+X-Git-Newrev: 3ce97967e0a95be1585177de13ad7d4122f7fbc9
+X-Patchwork-Hint: ignore
+Message-Id: <20220809112022.1B27A87017@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/genrandconfig: fix indentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,40 +57,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Antoine Tenart <atenart@kernel.org>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=3ce97967e0a95be1585177de13ad7d4122f7fbc9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  9 Aug 2022 10:33:25 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Commit 0f3115b2ca9fbdcf7a4e02aba45104f2d423fdb8 broke the indentation
+(missing one space)
 
-> Set default values for custom repo to make sure that a random
-> configuration with an empty repo location or version for refpolicy
-> doesn't fail.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/98da07a1f9b88e2e8a028a55c8cf76c6ebc28304
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/genrandconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't think that's the right way of solving this, because it would be
-inconsistent with what we do for Linux, U-Boot, Barebox, TF-A and all
-those projects that have a configurable version/repository option.
-
-So I have instead applied your patch fixing the indentation in
-genrandconfig.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index a56f03681a..4846c316bb 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -535,7 +535,7 @@ def fixup_config(sysinfo, configfile):
+         if 'BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT=y\n' in configlines:
+             return False
+ 
+-   if 'BR2_PACKAGE_REFPOLICY=y\n' in configlines and \
++    if 'BR2_PACKAGE_REFPOLICY=y\n' in configlines and \
+        'BR2_PACKAGE_REFPOLICY_CUSTOM_GIT=y\n' in configlines and \
+        'BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL=""\n' in configlines:
+         configlines.remove('BR2_PACKAGE_REFPOLICY_CUSTOM_GIT=y\n')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
