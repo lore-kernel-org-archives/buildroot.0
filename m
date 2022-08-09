@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C654DC00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 10:22:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2661C00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 10:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A44882438;
-	Wed, 10 Aug 2022 10:22:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A44882438
+	by smtp4.osuosl.org (Postfix) with ESMTP id 274D14160A;
+	Wed, 10 Aug 2022 10:22:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 274D14160A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RcO_9_lMDl2g; Wed, 10 Aug 2022 10:22:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2D4B40246;
+	Wed, 10 Aug 2022 10:22:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2D4B40246
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E27B91BF48C
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 10:22:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE2E98242D
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 10:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE2E98242D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j1snuPhZs1CC; Wed, 10 Aug 2022 10:22:35 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 858538242D;
-	Wed, 10 Aug 2022 10:22:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 858538242D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B255E1BF9CB
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 10:22:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8DE1840B97
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 10:22:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DE1840B97
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6hj1958mmuWU for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 10:22:18 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ayJ_2a1qs0KL for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 10:22:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C9F964056E
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 10:22:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9F964056E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0CE6582422
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 10:22:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CE6582422
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 07C0787026; Wed, 10 Aug 2022 10:08:01 +0000 (UTC)
+ id 4261787035; Wed, 10 Aug 2022 10:08:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 9 Aug 2022 16:51:12 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2b506b7d5b0b987f3982f6f6a0b8d4cb7060f08b
-X-Git-Newrev: fc54c57625993349287841973af77c054d8236cd
+Date: Tue, 9 Aug 2022 16:50:38 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: fd0238db2a40422ec9c4a4d58c6429f155ef0281
+X-Git-Newrev: 4a94500c2189be2cf6f60f15942b061dad7b1f8b
 X-Patchwork-Hint: ignore
-Message-Id: <20220810100801.07C0787026@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libcamera: add
+Message-Id: <20220810100808.4261787035@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libcamera: add
  explicit dependency on libevent if libevent package to be built
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc54c57625993349287841973af77c054d8236cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4a94500c2189be2cf6f60f15942b061dad7b1f8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 The cam application requires libevent. Since there's no Kconfig option
 for it, cam building ability is checked by meson build system by default.
@@ -91,7 +91,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 6db81f1758..51c3cf7466 100644
+index 41d6a5abef..3f336cb797 100644
 --- a/package/libcamera/libcamera.mk
 +++ b/package/libcamera/libcamera.mk
 @@ -84,6 +84,13 @@ else
