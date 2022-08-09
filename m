@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2354CC19F2D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 07:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D37CC19F2D
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 07:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A503C408BE;
-	Tue,  9 Aug 2022 07:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A503C408BE
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFF92818A7;
+	Tue,  9 Aug 2022 07:59:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFF92818A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7b9GzY91_U_O; Tue,  9 Aug 2022 07:58:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DsrLr_JJO7Dn; Tue,  9 Aug 2022 07:59:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AD50408BA;
-	Tue,  9 Aug 2022 07:58:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AD50408BA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 295EE81351;
+	Tue,  9 Aug 2022 07:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 295EE81351
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5C3C21BF27E
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 07:57:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C10931BF27E
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 07:57:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42F91408B7
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 07:57:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42F91408B7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AA56408B7
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 07:57:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AA56408B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PTI7F5GZ40Rw for <buildroot@lists.busybox.net>;
- Tue,  9 Aug 2022 07:57:29 +0000 (UTC)
+ with ESMTP id k2FIkMFiz6dM for <buildroot@lists.busybox.net>;
+ Tue,  9 Aug 2022 07:57:30 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3677C4085F
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3677C4085F
- for <buildroot@buildroot.org>; Tue,  9 Aug 2022 07:57:29 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id e13so14050420edj.12
- for <buildroot@buildroot.org>; Tue, 09 Aug 2022 00:57:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87E484085F
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 87E484085F
+ for <buildroot@buildroot.org>; Tue,  9 Aug 2022 07:57:30 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id qn6so8991365ejc.11
+ for <buildroot@buildroot.org>; Tue, 09 Aug 2022 00:57:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=WfmDnltwfX6HBILSlv9sJmosjXpHQkf56MSSl3afL/g=;
- b=uyZsN8fDwAjc0V75NzBlFNQamopmSfJEIF6VDQDKAVUIjc7VdtsAKZeilk176bXIZQ
- oAF5DnBP/n8WGPRT22/ENj80k65xx6pZPBvSpgGBM+UMpI2lhHYdUaMmE/JN6r706f8q
- pv4WiFlK1AyzhwTQB2hj2VE1gq9S+aZd72OLPKPcs21AgDyfHqgPUO7dSRXrM7oPYe2f
- m5V4oU1o0psCsmknpgjJINALT1JJ3OM2SSvhDlDF7sfwQG2WwPDrjpMgnbf2eFCZMWow
- YONryWesQoeh1CPqOXuMA7nzjl7w6IBLYKZP3Ae63GJHy7tgAxDJAyHTJtq3fMQkl4R6
- 9Kvg==
-X-Gm-Message-State: ACgBeo1VfoUpP5mA7mg0bL36gRZSms2lluQa+GQ1pcJjGNZOAfotQsX/
- ZDKjDY8BeMO7rfSad7jMubmyz2o2Tfk=
-X-Google-Smtp-Source: AA6agR54uY7yKLPtKSxipXDaNcb43QbdVb5t7JqMk4Sqz1GBu1h/xGnKdFUvFJdm5TuBLcQW70dczA==
-X-Received: by 2002:a05:6402:40ce:b0:43d:f8a0:9c4f with SMTP id
- z14-20020a05640240ce00b0043df8a09c4fmr21089872edb.95.1660031847131; 
- Tue, 09 Aug 2022 00:57:27 -0700 (PDT)
+ bh=yIuFsiSEILE2elDzN8CZL7F/DWBHbbLyK9szwcw7uak=;
+ b=fuouQj5lxzHcEN2Bu34KMuAzwwBs6G6r32M8SXvH2b24JwYwBSu7xj7UZyiyeRwpQZ
+ wxBdiso/RrK2Zd9AWsggb2JqNJNCUuNSniS76G+tXSCwipC8T6X4q9XYgy4sgKbsOYRQ
+ qMLVkR9ph1fqBb/pB0jvt0cyL7EUqh3+Iaj/Ov4aRAGBZ803EAhOkZy4cNhkagSQVzA6
+ b85gU9KMrubdivEveRukLrdiAST46N7Qt7s066uO38QOfmR0uLeidKyvPdGzE381ipRk
+ /X0gseWLQ9yPgm1Guxvo3ud/bLY+lU2RwNkRgM/ZGwbIm/jAfmkbHKg92ghxmZ82TMwo
+ AKqQ==
+X-Gm-Message-State: ACgBeo2L/mIVwHEqhxgo99HLsKPsPz+aUwLukcVL3tnKX7Rw46gccCei
+ kYxqYYjJtXdw7INBr77POwnCW+Xy828=
+X-Google-Smtp-Source: AA6agR7liyOeQvV0ITSfDl68Jph85X+F/e2+VYKBLvLTbp2ubpK6ky3nXyM6W+8MR4WalV2naJH5Pg==
+X-Received: by 2002:a17:907:1c0a:b0:730:9a59:3891 with SMTP id
+ nc10-20020a1709071c0a00b007309a593891mr15999899ejc.453.1660031848559; 
+ Tue, 09 Aug 2022 00:57:28 -0700 (PDT)
 Received: from mercury.. ([188.27.130.4]) by smtp.gmail.com with ESMTPSA id
- pk9-20020a170906d7a900b0073065767404sm819341ejb.34.2022.08.09.00.57.25
+ pk9-20020a170906d7a900b0073065767404sm819341ejb.34.2022.08.09.00.57.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Aug 2022 00:57:26 -0700 (PDT)
+ Tue, 09 Aug 2022 00:57:28 -0700 (PDT)
 From: Alexandru Ardelean <ardeleanalex@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Aug 2022 10:56:57 +0300
-Message-Id: <20220809075704.86472-7-ardeleanalex@gmail.com>
+Date: Tue,  9 Aug 2022 10:56:58 +0300
+Message-Id: <20220809075704.86472-8-ardeleanalex@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220809075704.86472-1-ardeleanalex@gmail.com>
 References: <20220809075704.86472-1-ardeleanalex@gmail.com>
@@ -71,18 +71,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=WfmDnltwfX6HBILSlv9sJmosjXpHQkf56MSSl3afL/g=;
- b=PLHDKMlAiFtdZ/Al8nHh11gb1gqMBjekWQhua54/2Q+3OvW9zXn5h0/JvC4pk4QXCX
- GIdg4W8HUix6EoXbWzwcMoBGOMfSp2tnTHLWgv5oe31hWm3n9iAozYXn+hWD6qyO8wrc
- fUvol1018wElsvFumxuTRCdlp6ByZssdTH1iSBi+xecbZC4npXBp7CNQYDF903YbTIXq
- 5JhbQ4tK88JnSb199mFMcFQiauuKXChM0fbFySHi5uCACBNz8FC9fBkY/lvlDX4AFA4C
- E8R9GW3l2U28HbGPQYr90G6bdL0XLwcvWNWeAIAF/PVFg6CjgEwC6SU8auUvyS0umtF6
- BBIA==
+ bh=yIuFsiSEILE2elDzN8CZL7F/DWBHbbLyK9szwcw7uak=;
+ b=fgqMuNyZlwSg+f661fw8O6SF/2hJyk1nZUVnOCLkmixsbteJeMitlPLBqote4b13JY
+ WQtuadDHNXE2WLuANzSpR+0JVDuZkUwn6YgDdue7i65HDYmiGnd2LTw+ltwNz7zu96j4
+ pgsxfSYTTgP4je5Jxq9hthxIvjvUCV7iVbV54UV/jWlzHGGNlqedpDT1TtPITnF5Jy+p
+ KhT+fGyRMj7yUHsicYhUiIXL+Gs2U2M4LsF0mS1fXQJgJSVEnj9Z08I9XJKs3FbpVxAQ
+ ljVpZlO2xvZ9hY4jNoEAMsB4fRgtASQiqRPoWRqFLfdilvJi5Ho4mfMaoCKDTXGY4AbT
+ XNyw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=PLHDKMlA
-Subject: [Buildroot] [PATCH 06/13] package/nodejs: provide {CC, CXX, CFLAGS,
- CXXFLAGS, LDFLAGS}_host env vars to target-build
+ header.a=rsa-sha256 header.s=20210112 header.b=fgqMuNyZ
+Subject: [Buildroot] [PATCH 07/13] package/nodejs: don't install nodejs
+ host-tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,70 +101,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-nodejs has some cross-build infrastructure in place.
-When we want to build for the target, we need to use it.
-Previously, the logic was trying to use the v8-qemu-wrapper stuff, but that
-wasn't working.
-
-The proper way (or recommended by nodejs) is to provide these
-{CC,CXX,CFLAGS,CXXFLAGS,LDFLAGS}_host env vars, so that it builds the host
-tools to generate some code stuff.
+The target-build should build these host-tools now.
 
 Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
 ---
- package/nodejs/nodejs.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/nodejs/nodejs.mk | 11 -----------
+ 1 file changed, 11 deletions(-)
 
 diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index d15c027c70..4713971169 100644
+index 4713971169..e07e958407 100644
 --- a/package/nodejs/nodejs.mk
 +++ b/package/nodejs/nodejs.mk
-@@ -47,6 +47,13 @@ NODEJS_CONF_OPTS = \
- 	--dest-os=linux \
- 	--ninja
- 
-+NODEJS_CROSS_BUILD_ENV_VARS = \
-+	CC_host="$(HOSTCC)" \
-+	CXX_host="$(HOSTCXX)" \
-+	CFLAGS_host="$(HOST_CFLAGS)" \
-+	CXXFLAGS_host="$(HOST_CXXFLAGS)" \
-+	LDFLAGS_host="$(HOST_LDFLAGS)"
-+
- HOST_NODEJS_MAKE_OPTS = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
-@@ -182,6 +189,7 @@ endif
- define NODEJS_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) \
-+		$(NODEJS_CROSS_BUILD_ENV_VARS) \
- 		PATH=$(@D)/bin:$(BR_PATH) \
- 		LDFLAGS="$(NODEJS_LDFLAGS)" \
- 		LD="$(TARGET_CXX)" \
-@@ -199,6 +207,7 @@ endef
- 
- define NODEJS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
-+		$(NODEJS_CROSS_BUILD_ENV_VARS) \
- 		$(MAKE) -C $(@D) \
- 		$(NODEJS_MAKE_OPTS)
+@@ -114,13 +114,6 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		--ninja
  endef
-@@ -235,6 +244,7 @@ endif
  
- define NODEJS_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
-+		$(NODEJS_CROSS_BUILD_ENV_VARS) \
- 		$(MAKE) -C $(@D) install \
- 		DESTDIR=$(STAGING_DIR) \
- 		$(NODEJS_MAKE_OPTS)
-@@ -242,6 +252,7 @@ endef
+-NODEJS_HOST_TOOLS_V8 = \
+-	torque \
+-	gen-regexp-special-case \
+-	bytecode_builtins_list_generator
+-NODEJS_HOST_TOOLS_NODE = mkcodecache
+-NODEJS_HOST_TOOLS = $(NODEJS_HOST_TOOLS_V8) $(NODEJS_HOST_TOOLS_NODE)
+-
+ HOST_NODEJS_CXXFLAGS = $(HOST_CXXFLAGS)
  
- define NODEJS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
-+		$(NODEJS_CROSS_BUILD_ENV_VARS) \
+ define HOST_NODEJS_BUILD_CMDS
+@@ -133,10 +126,6 @@ define HOST_NODEJS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
  		$(MAKE) -C $(@D) install \
- 		DESTDIR=$(TARGET_DIR) \
- 		$(NODEJS_MAKE_OPTS)
+ 		$(HOST_NODEJS_MAKE_OPTS)
+-
+-	$(foreach f,$(NODEJS_HOST_TOOLS), \
+-		$(INSTALL) -m755 -D $(@D)/out/Release/$(f) $(HOST_DIR)/bin/$(f)
+-	)
+ endef
+ 
+ ifeq ($(BR2_i386),y)
 -- 
 2.34.1
 
