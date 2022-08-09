@@ -1,70 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D6F7C19F2D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 11:39:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06685C25B06
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 11:40:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF73E60E26;
-	Tue,  9 Aug 2022 11:39:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF73E60E26
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9444B81A3B;
+	Tue,  9 Aug 2022 11:40:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9444B81A3B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 825BSpH2vJfQ; Tue,  9 Aug 2022 11:39:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vetUx2jwm2Sc; Tue,  9 Aug 2022 11:40:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E02B3605B5;
-	Tue,  9 Aug 2022 11:39:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E02B3605B5
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5E4281A33;
+	Tue,  9 Aug 2022 11:40:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5E4281A33
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E2301BF2C7
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:39:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C344A1BF2C7
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:40:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1474540509
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:39:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1474540509
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7872E408A6
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:40:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7872E408A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N5He4nhQm1eQ for <buildroot@lists.busybox.net>;
- Tue,  9 Aug 2022 11:39:37 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7944D404F8
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7944D404F8
- for <buildroot@buildroot.org>; Tue,  9 Aug 2022 11:39:37 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BF149240006;
- Tue,  9 Aug 2022 11:39:33 +0000 (UTC)
-Date: Tue, 9 Aug 2022 13:39:32 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220809133932.721b8cd8@windsurf>
-In-Reply-To: <20220808215404.1804219-1-fontaine.fabrice@gmail.com>
-References: <20220808215404.1804219-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id n8QfhoYrIhgB for <buildroot@lists.busybox.net>;
+ Tue,  9 Aug 2022 11:40:48 +0000 (UTC)
+X-Greylist: delayed 00:06:59 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42E904089B
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com
+ [66.111.4.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 42E904089B
+ for <buildroot@buildroot.org>; Tue,  9 Aug 2022 11:40:48 +0000 (UTC)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+ by mailout.nyi.internal (Postfix) with ESMTP id E25935C007B;
+ Tue,  9 Aug 2022 07:33:46 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+ by compute4.internal (MEProxy); Tue, 09 Aug 2022 07:33:46 -0400
+X-ME-Sender: <xms:GkbyYnSWbpucrpLwpNYa1anRgi2URSRzuvNvH7AdccuU2S-zYJBFXg>
+ <xme:GkbyYoxjKBwblLVqKgpeDVeP9NDjmIiB-HsFbG5g906rSZLnYuNKDDu8eP7jSBF0m
+ foU6z2cUSkj_rd2Fss>
+X-ME-Received: <xmr:GkbyYs2CEmvcH31_-445YFPJt_fan6078oRAEEBZhv5A-D4DsD2a4vA1-OrfAByZZdwi95rpaCke>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddggeduucetufdoteggodetrfdotf
+ fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+ uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+ cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlihhsthgr
+ ihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgvqe
+ enucggtffrrghtthgvrhhnpefgieejjeehteeggfeuuefgtddugfegteeuuedvudevkeek
+ ueekfeeufeegjeetgeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsth
+ gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegr
+ lhhishhtrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:GkbyYnBLRdiv5vga6it30KFN6DKmpFAYTnW1VzFKlyK1MLOTToQTHg>
+ <xmx:GkbyYgiDyz5q7SuXzvCaEHVQ_RuX5Cs-2bEk7orf-hZ5FoVppBjNDw>
+ <xmx:GkbyYrqWptDMOLyT0T5A78Bi9j5WeSXVNGWWy3X_8ZNjvul-qv6mag>
+ <xmx:GkbyYsZUUH1NkUyTRLf-z3DeffOrRrtajw3BEdpdN43_pg3NcZkc3g>
+Feedback-ID: ifd214418:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 9 Aug 2022 07:33:45 -0400 (EDT)
+From: Alistair Francis <alistair@alistair23.me>
+To: buildroot@buildroot.org
+Date: Tue,  9 Aug 2022 21:33:29 +1000
+Message-Id: <20220809113329.249779-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660045174;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=dg3SKRbVQGU561z0UOKJqHQj9yRCZdNHBDGWnIPFr2E=;
- b=jdd8CIgzaNo0NSZzWFMmk9EBsobR1UtzAKl5ODyZGT9L0fRcIFyqUPL8VPMUxeS+mlcm1i
- dEzH0yy+xXn1hcii2fpNXcrIZsIEcSpcKMkJyIk0aP4Ppec9xS7QCyh3PLYhNmj4Xo19KG
- t2tRO4YK3+9Yx9R7XxXhQj3odrHxGa3zJumievkxwsAaOdF8nm2Co+WS3GIYEIoM2CywEW
- EvaxAzF6NisOl2dzMUzS2AHdVbaME5gdby4qalUY0dzfvDb3uTCSiPExGVQSVK+Sj7tzej
- D2j+hz/QNDOQrpr2EqjqWSlQC3kTo26vncfTV+lMQJfh/LR1gjRuoN2abtsJ4Q==
+ d=alistair23.me; 
+ h=cc:cc:content-transfer-encoding:date:date:from:from
+ :in-reply-to:message-id:mime-version:reply-to:sender:subject
+ :subject:to:to; s=fm1; t=1660044826; x=1660131226; bh=52FxlJVOBg
+ vWomCG2+DU6l4IGE4GVNwOHV4Q9yuRznc=; b=HOgCZsNjXSih/X5P/xUuHg6Nj5
+ Rva8wAu96h4RSvRXMaonJIdoZUsv9eojGAq1QftfPNrtVycbDBhTBsY39GRSUfdH
+ urLHypJtPnPhU877KkXSWOtl1SuNRErCdd9lb9rNKsnVbpEd47T+n3B3K0MlpMoc
+ yrsho7aGYCsxFtClhuqDy877VoyasQZddUGIlZtmkERfdZsUQ6Y0k16475US+AhL
+ poXDg1qP54aBL/h9yOY+m5LWdGMEGNR/7h0d3uxTEORu8Uv3VKGmmbawTKKuliqC
+ x8orHggRYHwVkdRL0IUbNHS7OL/lLvDjFZ5ZK5Az+5OUNIUPsJPzYyxqWDZg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+ messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+ :feedback-id:feedback-id:from:from:in-reply-to:message-id
+ :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+ :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+ 1660044826; x=1660131226; bh=52FxlJVOBgvWomCG2+DU6l4IGE4GVNwOHV4
+ Q9yuRznc=; b=dJrc8RiLx49c7z2BhT03ap0N/pDpl3qHp1D90a8nRoqXIloDKQQ
+ GVyEm+XCtIrCh9IkDwd7xaNfqAEW0WC8CY/5gOrN6RKQdOq9OsNa6/aXMs74ovik
+ 7j6FIappEVggy6OFgtepN+HsnDjF4gDUW/A3JZbpbjvG4b8VnyMJj8JN8rnCRinH
+ y37MyLL0OT2IN8X3ERDNvvl2u5KLL8CbgFYvxcbzhyesrYx0jqO1J4nTBSuHWgrt
+ mxKCf16udxBWmqu2d+qAlAXqh5XWfHcjWkz2NEYpSfTbmCQrRESyVgpR9lNi3DCe
+ KzJOnFMBI6HcVDNjB64u+gAPp5+xMg4n0NA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=alistair23.me
+ header.i=@alistair23.me header.a=rsa-sha256 header.s=fm1 header.b=HOgCZsNj; 
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jdd8CIgz
-Subject: Re: [Buildroot] [PATCH 1/1] package/xenomai: always set default
- version
+ unprotected) header.d=messagingengine.com header.i=@messagingengine.com
+ header.a=rsa-sha256 header.s=fm1 header.b=dJrc8RiL
+Subject: [Buildroot] [PATCH] pine64_sopine_defconfig: Use mainline ATF
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,63 +108,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+Cc: Alistair Francis <alistair@alistair23.me>,
+ Jagan Teki <jagan@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  8 Aug 2022 23:54:04 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Use the mainline ATF as it supports the Pine64 SoPine module.
 
-> Always set a default value for BR2_PACKAGE_XENOMAI_VERSION to avoid a
-> build failure when BR2_PACKAGE_XENOMAI_VERSION is empty with
-> BR2_PACKAGE_XENOMAI_CUSTOM_{GIT,VERSION}
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/d80c295a848b5be69324f5dfbd269b046dc68e8c
->  - http://autobuild.buildroot.org/results/4e57a499b43208e546dd962ca04b43408c0c082c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/xenomai/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-> index ec6d9e5d29..5c179eec72 100644
-> --- a/package/xenomai/Config.in
-> +++ b/package/xenomai/Config.in
-> @@ -73,8 +73,8 @@ config BR2_PACKAGE_XENOMAI_VERSION
->  	string "Custom Xenomai version" if \
->  		!BR2_PACKAGE_XENOMAI_LATEST_VERSION && \
->  		!BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
-> -	default "3.0.10" if BR2_PACKAGE_XENOMAI_LATEST_VERSION
->  	default "custom" if BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
-> +	default "3.0.10"
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
+---
+ configs/pine64_sopine_defconfig | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Meh, I don't like how Xenomai handles things differently than all other
-packages that have a configurable version.
-
-IMO, we should make Xenomai look like the other packages, which means:
-
- - Dropping default "https://gitlab.denx.de/Xenomai/xenomai.git"
-
- - Not have any default value for BR2_PACKAGE_XENOMAI_VERSION
-
-We really want consistency on how this "custom version" thing is
-handled.
-
-Thanks!
-
-Thomas
+diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
+index 6fa511477c..2295c9338d 100644
+--- a/configs/pine64_sopine_defconfig
++++ b/configs/pine64_sopine_defconfig
+@@ -7,10 +7,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ 
+ # Bootloader
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.37.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
