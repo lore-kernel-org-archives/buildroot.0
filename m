@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBAF6C19F2D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 11:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA1AAC19F2D
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 11:28:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79CCF404A3;
-	Tue,  9 Aug 2022 11:28:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79CCF404A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76D2D410E8;
+	Tue,  9 Aug 2022 11:28:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76D2D410E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lsBPrLQgTpbU; Tue,  9 Aug 2022 11:28:20 +0000 (UTC)
+	with ESMTP id AZT15oZypWsg; Tue,  9 Aug 2022 11:28:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 312CD4035D;
-	Tue,  9 Aug 2022 11:28:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 312CD4035D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B8C21BF9B4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BA58414C8;
+	Tue,  9 Aug 2022 11:28:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BA58414C8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AED71BF9B9
  for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:28:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 36E43819E6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 56BB560E0B
  for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:28:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36E43819E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56BB560E0B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s3Vht48V2dfa for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JZeaOxeHMaM8 for <buildroot@lists.busybox.net>;
  Tue,  9 Aug 2022 11:28:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CD3E814BA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AD1560B0F
  for <buildroot@buildroot.org>; Tue,  9 Aug 2022 11:28:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CD3E814BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AD1560B0F
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D791386FD4; Tue,  9 Aug 2022 11:13:48 +0000 (UTC)
+ id E296E86FDA; Tue,  9 Aug 2022 11:13:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 9 Aug 2022 13:27:35 +0200
+Date: Tue, 9 Aug 2022 13:27:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 61360da1051f30d232fd136fbb0edf4bba69e9ab
-X-Git-Newrev: 1b677db703dc0b976a707942bbc94ecd3f7b4b4b
+X-Git-Oldrev: 1b677db703dc0b976a707942bbc94ecd3f7b4b4b
+X-Git-Newrev: 87bf8ddc067558acb0c96e102a3b5d67b89b9dfa
 X-Patchwork-Hint: ignore
-Message-Id: <20220809111348.D791386FD4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ocrad: bump to version 0.28
+Message-Id: <20220809111348.E296E86FDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgudev: bump to version 237
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,61 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b677db703dc0b976a707942bbc94ecd3f7b4b4b
+commit: https://git.buildroot.net/buildroot/commit/?id=87bf8ddc067558acb0c96e102a3b5d67b89b9dfa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Add libpng mandatory dependency
-
-https://lists.gnu.org/archive/html/bug-ocrad/2022-01/msg00000.html
+https://gitlab.gnome.org/GNOME/libgudev/-/blob/237/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ocrad/Config.in  | 1 +
- package/ocrad/ocrad.hash | 2 +-
- package/ocrad/ocrad.mk   | 3 ++-
- 3 files changed, 4 insertions(+), 2 deletions(-)
+ package/libgudev/libgudev.hash | 4 ++--
+ package/libgudev/libgudev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ocrad/Config.in b/package/ocrad/Config.in
-index 38d37c612a..b6c4300f86 100644
---- a/package/ocrad/Config.in
-+++ b/package/ocrad/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_OCRAD
- 	bool "ocrad"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBPNG
- 	help
- 	  GNU Ocrad is an OCR (Optical Character Recognition) program
- 	  based on a feature extraction method.
-diff --git a/package/ocrad/ocrad.hash b/package/ocrad/ocrad.hash
-index b8db1723a3..cd5b0039ea 100644
---- a/package/ocrad/ocrad.hash
-+++ b/package/ocrad/ocrad.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  a9bfe67e9a040907aff5640dca56392476b6a89e48e37dc94ba846c5b6733b36  ocrad-0.27.tar.lz
-+sha256  34ccea576dbdadaa5979e6202344c3ff68737d829ca7b66f71c8497d36bbbf2e  ocrad-0.28.tar.lz
- sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
-index 914d53a59c..78638b770a 100644
---- a/package/ocrad/ocrad.mk
-+++ b/package/ocrad/ocrad.mk
-@@ -4,12 +4,13 @@
+diff --git a/package/libgudev/libgudev.hash b/package/libgudev/libgudev.hash
+index 1040ffb0c0..3933e55de4 100644
+--- a/package/libgudev/libgudev.hash
++++ b/package/libgudev/libgudev.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libgudev/236/libgudev-236.sha256sum
+-sha256  e50369d06d594bae615eb7aeb787de304ebaad07a26d1043cef8e9c7ab7c9524  libgudev-236.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libgudev/237/libgudev-237.sha256sum
++sha256  0d06b21170d20c93e4f0534dbb9b0a8b4f1119ffb00b4031aaeb5b9148b686aa  libgudev-237.tar.xz
+ 
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
+index eabd446d7b..27244c3072 100644
+--- a/package/libgudev/libgudev.mk
++++ b/package/libgudev/libgudev.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OCRAD_VERSION = 0.27
-+OCRAD_VERSION = 0.28
- OCRAD_SOURCE = ocrad-$(OCRAD_VERSION).tar.lz
- OCRAD_SITE = $(BR2_GNU_MIRROR)/ocrad
- OCRAD_LICENSE = GPL-2.0+
- OCRAD_LICENSE_FILES = COPYING
- OCRAD_INSTALL_STAGING = YES
-+OCRAD_DEPENDENCIES = libpng
- 
- # This is not a true autotools package.
- define OCRAD_CONFIGURE_CMDS
+-LIBGUDEV_VERSION = 236
++LIBGUDEV_VERSION = 237
+ LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
+ LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
+ LIBGUDEV_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
