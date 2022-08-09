@@ -4,84 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 822C2C19F2D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 08:38:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3FF1C25B07
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 09:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FC7B4055D;
-	Tue,  9 Aug 2022 08:38:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FC7B4055D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1F1804055A;
+	Tue,  9 Aug 2022 09:15:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F1804055A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SyDUTjyKTb8D; Tue,  9 Aug 2022 08:38:07 +0000 (UTC)
+	with ESMTP id tVNtFmRc3I9Q; Tue,  9 Aug 2022 09:15:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E9154055A;
-	Tue,  9 Aug 2022 08:38:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E9154055A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B71C41BF5F5
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 08:38:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CDC840283;
+	Tue,  9 Aug 2022 09:15:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CDC840283
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 01CDF1BF5EA
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 09:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BF0681801
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 08:38:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BF0681801
+ by smtp2.osuosl.org (Postfix) with ESMTP id D113640283
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 09:15:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D113640283
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M9ACUJNB4Mg3 for <buildroot@lists.busybox.net>;
- Tue,  9 Aug 2022 08:38:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RIeuhSoHL0ao for <buildroot@lists.busybox.net>;
+ Tue,  9 Aug 2022 09:15:52 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 749358176E
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 749358176E
- for <buildroot@busybox.net>; Tue,  9 Aug 2022 08:38:03 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id z2so14256761edc.1
- for <buildroot@busybox.net>; Tue, 09 Aug 2022 01:38:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F1B40151
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 94F1B40151
+ for <buildroot@buildroot.org>; Tue,  9 Aug 2022 09:15:51 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ ay36-20020a05600c1e2400b003a4e30d7995so8649707wmb.5
+ for <buildroot@buildroot.org>; Tue, 09 Aug 2022 02:15:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=CkRRHOZWIMSiD8YYsFXfDdD+O/fPmiyYlknWcl9xfCM=;
- b=HHGMMQOkDvT6XvawsVMIvgsTO1vr+qkNtIJMDi6WsTS64NHbS9bDJsktnOueVAMRGd
- 7QaukE0KuPRAc2LA1kFwyF3vsjCkqX465b8FRkz3BusU2LDchVVTfzX411t+pN+5rF+R
- p0UajYdQY9qeZiP9zcQlaaO4V53fvUX4QqcDvpOwJl4B06CJL4bNXZ9T3JPBzRviJDUb
- 8ceb1rNuUXJeI+ff1Y86gfztWMU4eHUr7iJLHl1cUM0p5wwFFe4cVooPdTTWKoey4gQJ
- N1Ntrz9pR5bXTr081zmuCeOJPj/XSaQ2U+HoLOvf4Qg3VCgtOCSzgSaRiatCJZ5nEO4J
- bLgQ==
-X-Gm-Message-State: ACgBeo0aou52Mo5Ob/g1ts8K6wUVdMnzEChhviqDqkfxoPvCTdJEYGQM
- zpi6KIBAuUQKcRFfrtjo6cSe77QVGTMA+hknwPo=
-X-Google-Smtp-Source: AA6agR6h2UOlhdnOeFzG1uW5mmvebP88xw5iJ37PkoI3o3o7ffsR4Cs4ZNjK/R6e52e0pIsuKtPJXvCaWj7s7GU0BMc=
-X-Received: by 2002:aa7:c946:0:b0:43d:3038:1381 with SMTP id
- h6-20020aa7c946000000b0043d30381381mr21042310edt.354.1660034281487; Tue, 09
- Aug 2022 01:38:01 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=kahxuT4cLKWDqTH9R/rm9PIsQnw1mHsitwcdwP9bTEc=;
+ b=fpyjHDxCyzJW0IlavIgEvaqOhmraWSSbJKyrJiKXYYh1imZHqcMA0b5qfVX5YGQ+nT
+ pV0X2PrSxFTz8YhiSoGkgc4uiXu2gkx7jrT5LkUNrgiJ6AH+uX3LyPqO6OVC3060gUyU
+ nqtR2Q+BuPCxwiOhJV6e18B32lqhL35Much3ufjN+pRkYXvVB0fUyJcp+8f674BGmvAZ
+ Hz79P2xEBFvnoV33OnCqtLw1ubfZWdkuLRlqwIiDstE2UhOx9HFN4k69oG//oEUhQm89
+ FrjFIaEnU5pMjafJbMRspxTI3EswnW/mRawOrJYFEkSnnXt9NyfU4sh2qET/D7m7pA4W
+ 5Ucg==
+X-Gm-Message-State: ACgBeo2JDW3ch+z+/47OFxALbgMv4iVAqi9anbZSktcitCKbhvHtx8KI
+ JghAIy9iTC3TsY7yOEJvArED6dIdp/RPHg==
+X-Google-Smtp-Source: AA6agR7boKwaLE6mexct2JZoiS5VIWIbxxwMSvfAKnlIRUoqYsdltfaNTRva3EBstcTSG2GpYiWo6w==
+X-Received: by 2002:a1c:2783:0:b0:3a2:fd82:bf46 with SMTP id
+ n125-20020a1c2783000000b003a2fd82bf46mr19938895wmn.29.1660036549643; 
+ Tue, 09 Aug 2022 02:15:49 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+ by smtp.gmail.com with ESMTPSA id
+ b17-20020a05600010d100b002206b4df832sm12936515wrx.110.2022.08.09.02.15.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 09 Aug 2022 02:15:49 -0700 (PDT)
+From: Romain Naour <romain.naour@smile.fr>
+To: buildroot@buildroot.org
+Date: Tue,  9 Aug 2022 11:15:47 +0200
+Message-Id: <20220809091547.27395-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-References: <20220805143625.16542-1-guillaume.bressaix@gmail.com>
- <20220805143625.16542-2-guillaume.bressaix@gmail.com>
- <CAJe0E3cL8MK4ipwq3tLDy_D6dqrEJ2gfi20J1rXEewW4fUSkcw@mail.gmail.com>
- <28767d03-5c5f-d40e-12d1-ebdc6b3a5900@mind.be>
- <20220808231302.08adad89@windsurf>
-In-Reply-To: <20220808231302.08adad89@windsurf>
-From: Guillaume Bres <guillaume.bressaix@gmail.com>
-Date: Tue, 9 Aug 2022 10:37:34 +0200
-Message-ID: <CAJe0E3fy_HBXg9nwBaWSOADuMLtPhJLr3weAx2n1R13h_+OMTQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=mime-version:references:in-reply-to:from:date:message-id:subject:to
- :cc;
- bh=CkRRHOZWIMSiD8YYsFXfDdD+O/fPmiyYlknWcl9xfCM=;
- b=Q7DJRNrNQGSkv9a/rokOjzeHDZL42abtjoV61/Mib1DvOmfFR3mNhu9ekMtFCXxQUT
- Ssyg7xQbaHMHYNgNfdJfENd06NHj81vujuRDc/wdj7IwZbw1BkgA0zxJ7atBqFkjReEw
- W7t36WOCCJOTECRURyGXYyVSzUYUaDzc6Jh3R8EJmYYl3NKzivDjBomDMuzpThPPa+2Z
- 2nHqVQt0RcxJ32F5yFdeagNdcibEPco5B1UPtZ8r3fJvkAdSH2UEecizG++4WasJBZOv
- vc20EKtfS3e2nirzN6MvLEs2hEeM4aRHGbd0gOO2s+qxUOEsUnm6NTNqySMO0qYGkFHB
- cWTQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Q7DJRNrN
-Subject: Re: [Buildroot] [RFC v3 2/2] package/python-scipy: bump version to
- 1.9.0
+ d=smile-fr.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=kahxuT4cLKWDqTH9R/rm9PIsQnw1mHsitwcdwP9bTEc=;
+ b=kqEbrVW6Ed99vjFgblzQ5Ejsngvo76i88atcSAL1FYHkq5R6gEuYrXYRBisoBObKbi
+ nFkoMKq7e6uH9uyZSeupUgwM0FCuMgPIcumFPxBgCqE6Hl8lsFiswn1Cmg4OL0HzmKXW
+ 9bFdcgGtA4bjC+1VOHKT+nTFIESPObTPlp0fjShwG9EDEsBgFhBSoQo18cePZcooYa1/
+ TZLTPXG+kF2tk52R2OTKDowFStRTWR2L+KV7O/3m/E5C2lVwGaWk7d0shGlGEBnEOg+y
+ Q/ZSlxZC8Nkco7Qubh7ATQSfEYVjx3MYF4znAk2rz/5qXQluY+a0/63YMZpUcPGwUhJ/
+ RqVA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
+ header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=kqEbrVW6
+Subject: [Buildroot] [PATCH] package/weston: remove md5 and sha1 hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,99 +96,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, ralf.gommers@gmail.com
-Content-Type: multipart/mixed; boundary="===============1524818890837565802=="
+Cc: Romain Naour <romain.naour@smile.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1524818890837565802==
-Content-Type: multipart/alternative; boundary="000000000000a9bfca05e5cad92b"
+Since weston 10.0.0, md5 and sha1 hashes are not published
+with the release announce email.
 
---000000000000a9bfca05e5cad92b
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+The values were probably calculated locally, so remove them
+since upstream provide stronger hashes.
 
-for information,
-pybind will soon become pkg-config knowledgeable, as this issue is about to
-get merged https://github.com/pybind/pybind11/pull/4077
+Fixes:
+f67a6e9b7a7be9adbc405b3126000056120a01af
 
-Guillaume W. Bres
-Software engineer
-<guillaume.bressaix@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/weston/weston.hash | 2 --
+ 1 file changed, 2 deletions(-)
 
-
-Le lun. 8 ao=C3=BBt 2022 =C3=A0 23:13, Thomas Petazzoni <thomas.petazzoni@b=
-ootlin.com>
-a =C3=A9crit :
-
-> On Mon, 8 Aug 2022 22:58:46 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
->
-> >   pybind is consistently annoying, it uses ldd and stuff to discover
-> paths...
->
-> Well, it's not just pybind. Python itself, in its ctype.find_library()
-> function, uses ldconfig, tries to use gcc on the target, and more funky
-> stuff that borks terribly in a Buildroot situation.
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
-
---000000000000a9bfca05e5cad92b
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">for information,<br>pybind will soon become pkg-config kno=
-wledgeable, as this issue is about to get merged <a href=3D"https://github.=
-com/pybind/pybind11/pull/4077">https://github.com/pybind/pybind11/pull/4077=
-</a><br><br clear=3D"all"><div><div dir=3D"ltr" class=3D"gmail_signature" d=
-ata-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div di=
-r=3D"ltr"><div dir=3D"ltr"><div><div><div><font face=3D"arial,helvetica,san=
-s-serif">Guillaume W. Bres<br></font></div><font face=3D"arial,helvetica,sa=
-ns-serif">Software engineer</font><br></div><font face=3D"arial,helvetica,s=
-ans-serif"></font></div><font face=3D"arial,helvetica,sans-serif">&lt;<a hr=
-ef=3D"mailto:guillaume.bressaix@gmail.com" target=3D"_blank">guillaume.bres=
-saix@gmail.com</a>&gt;<br></font></div></div></div></div></div></div><br></=
-div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=
-=C2=A0lun. 8 ao=C3=BBt 2022 =C3=A0=C2=A023:13, Thomas Petazzoni &lt;<a href=
-=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&g=
-t; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"=
-margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-lef=
-t:1ex">On Mon, 8 Aug 2022 22:58:46 +0200<br>
-Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be" target=3D"_blank=
-">arnout@mind.be</a>&gt; wrote:<br>
-<br>
-&gt;=C2=A0 =C2=A0pybind is consistently annoying, it uses ldd and stuff to =
-discover paths...<br>
-<br>
-Well, it&#39;s not just pybind. Python itself, in its ctype.find_library()<=
-br>
-function, uses ldconfig, tries to use gcc on the target, and more funky<br>
-stuff that borks terribly in a Buildroot situation.<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
-
---000000000000a9bfca05e5cad92b--
-
---===============1524818890837565802==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index 951d62a100..d58ca1ef70 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,6 +1,4 @@
+ # From https://lists.freedesktop.org/archives/wayland-devel/2022-June/042260.html
+-md5  dac91aecc97a85bf9664dec0d5c90ae3  weston-10.0.1.tar.xz
+-sha1  87cc339503f01317a0ca8d986b1b211c8aae99bb  weston-10.0.1.tar.xz
+ sha256  8a9e52506a865a7410981b04f8341b89b84106db8531ab1f9fdd37b5dc034115  weston-10.0.1.tar.xz
+ sha512  688d843096a95b463161b98e85ca3443b31ba2ee49fc8d456a2780cc96f576e9d097054e9f361997a66e9cc8373cf29e406a742dae3884b3b50b26acf1710c8c  weston-10.0.1.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+-- 
+2.34.3
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1524818890837565802==--
