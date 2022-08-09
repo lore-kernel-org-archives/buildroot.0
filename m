@@ -4,71 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1AE0C19F2D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 12:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1B6CC19F2D
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 12:53:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1798A408A9;
-	Tue,  9 Aug 2022 12:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1798A408A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DA7540284;
+	Tue,  9 Aug 2022 12:53:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DA7540284
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t8EMwV-9O6F7; Tue,  9 Aug 2022 12:52:44 +0000 (UTC)
+	with ESMTP id 509w4djOUgxA; Tue,  9 Aug 2022 12:53:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8010E408A2;
-	Tue,  9 Aug 2022 12:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8010E408A2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 83D131BF38A
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 12:52:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E482A401DF;
+	Tue,  9 Aug 2022 12:53:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E482A401DF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AFA3F1BF38A
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 12:52:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 581DE60E39
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 12:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 581DE60E39
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9348C812FF
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 12:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9348C812FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NTYEm2XlRoCE for <buildroot@lists.busybox.net>;
- Tue,  9 Aug 2022 12:52:39 +0000 (UTC)
-X-Greylist: delayed 22:33:18 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E21760E27
-Received: from 16.mo550.mail-out.ovh.net (16.mo550.mail-out.ovh.net
- [178.33.104.224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7E21760E27
- for <buildroot@buildroot.org>; Tue,  9 Aug 2022 12:52:39 +0000 (UTC)
-Received: from player716.ha.ovh.net (unknown [10.111.208.23])
- by mo550.mail-out.ovh.net (Postfix) with ESMTP id F337724567
- for <buildroot@buildroot.org>; Tue,  9 Aug 2022 12:52:36 +0000 (UTC)
-Received: from armadeus.com (lfbn-str-1-761-150.w92-148.abo.wanadoo.fr
- [92.148.248.150])
- (Authenticated sender: sebastien.szymanski@armadeus.com)
- by player716.ha.ovh.net (Postfix) with ESMTPSA id 12BE72D519A4E;
- Tue,  9 Aug 2022 12:52:33 +0000 (UTC)
-X-OVh-ClientIp: 92.148.248.150
-Message-ID: <248b5733-a84e-4e44-226d-f68f44be3929@armadeus.com>
-Date: Tue, 9 Aug 2022 14:50:00 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Dm9S5mx1PlYp for <buildroot@lists.busybox.net>;
+ Tue,  9 Aug 2022 12:52:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60DB1812F7
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
+ [IPv6:2a00:1450:4864:20::12d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 60DB1812F7
+ for <buildroot@buildroot.org>; Tue,  9 Aug 2022 12:52:55 +0000 (UTC)
+Received: by mail-lf1-x12d.google.com with SMTP id o2so9536476lfb.1
+ for <buildroot@buildroot.org>; Tue, 09 Aug 2022 05:52:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc;
+ bh=OlxoHG5/tsr3bdTBQhbO62wrVlIQgobHU5nGEW8KPBA=;
+ b=v7LeCcHERim8mdXws/EGMiPPccwYEtH7ip4i5nM7eOd1qlsFPm/ayx6vvIlsZqWE6C
+ GDThZSbcprLNJqemqm9yqpRt4jlBxRr8lS0Y2hEXjERrQFhekjqAcN29YYYUWxyMHn2e
+ TY7ia41cQ8HbK9MGM3PDfggDka08LUM85sNtsvWMHecYrt9OzOToDrH63c/Q8ZJAcUw5
+ eVWKmrFc4qKd7h1dnWNqd6D0/NpiL9AE8Fd1q+99rbYSwGqV+7xQMmxtl217xNTg+iFE
+ JlTGjV8kXkSiBiBN72rDsW2d6Jb+g5BmtrC1tYa/WZK0363NgOOcETc9fpClABL8G5I/
+ upOw==
+X-Gm-Message-State: ACgBeo1ZMnzTkeFcHZTlAyueU87gBFfFzu/7UvbAQGdxFoBZMgObAZIU
+ 4nVe9bqX9Qebqd+SZQnzKG2Q2FkfL99qrEtypcacqXAN
+X-Google-Smtp-Source: AA6agR7oRY6KPOJzZK/dWRa950omPfv6rq8KvEXqCT3/THQQlhfEpOTAWwDOslhgjNkeIeQ6hlPNaaWBa1jb0WxcXzQ=
+X-Received: by 2002:a05:6512:374a:b0:48a:8c6c:20d with SMTP id
+ a10-20020a056512374a00b0048a8c6c020dmr7998103lfs.234.1660049572522; Tue, 09
+ Aug 2022 05:52:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20220112094250.27022-1-sebastien.szymanski@armadeus.com>
- <20220112094250.27022-3-sebastien.szymanski@armadeus.com>
- <8076da43-1938-7672-ede7-f96de58fda77@mind.be>
- <85b83da1-fd3c-0e05-61cd-b3adcdfec58e@armadeus.com>
- <9c799ee7-07ad-61b3-2442-4e9f0e12d389@mind.be>
-From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-In-Reply-To: <9c799ee7-07ad-61b3-2442-4e9f0e12d389@mind.be>
-X-Ovh-Tracer-Id: 6382726575353293731
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddgheejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpefurogsrghsthhivghnpgfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeehheejkeelgeffgfeufedvuddtffegveekteeliefhtdekiefgveduvedtleeuffenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghenucfkpheptddrtddrtddrtddpledvrddugeekrddvgeekrdduhedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejudeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheehtd
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-99G003dc43ece5-a1f8-4f49-ade1-59d787d270e0,
- 84C18E406EBE78DE2815B00BBF71D61E8C5519CF)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: Re: [Buildroot] [PATCH 3/3] package/gstreamer1/gst1-imx2: new
- package
+References: <20220809075704.86472-1-ardeleanalex@gmail.com>
+ <20220809075704.86472-4-ardeleanalex@gmail.com>
+ <20220809134928.56a91c28@windsurf>
+In-Reply-To: <20220809134928.56a91c28@windsurf>
+From: Alexandru Ardelean <ardeleanalex@gmail.com>
+Date: Tue, 9 Aug 2022 15:52:41 +0300
+Message-ID: <CA+U=Dsqk+vC-v_1gj7DjAkzFcbXbP5WoP0C8+5m4MZ9wPpVM_w@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc;
+ bh=OlxoHG5/tsr3bdTBQhbO62wrVlIQgobHU5nGEW8KPBA=;
+ b=ZprJn8w10HRYzUynuuGu2CEsYjNU/n5fTn0aaaJ/jM/3J+5k5YBJ+geRicsZaULNJ1
+ qjk7mb88s4FEOq0IUJgUlFA8KJKSBskG3spz8sPc0fvkuI89ctqe0FzzUF1vBIB5MsOe
+ ASTuHwUNjhNEYtvH8otSxy2tRygGf4wKRrFVvcT7HrQIFr3gy0QqibPoRB56f11stDOQ
+ uJTpG7CPED20NwCX6/RmER86XmEzdd1VSlLtrWQMBbWxZ9aOymSwx6/vNXztqNlVXmbi
+ sBsQt8czz7VyqfiK6az5dzGe1wkLEmpmos1cGVv7f5+nW67k4sN4GLur+Pg9XPSTtGfo
+ 9ZEw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ZprJn8w1
+Subject: Re: [Buildroot] [PATCH 03/13] nodejs: remove v8-qemu-wrapper stuff
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,117 +90,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: fontaine.fabrice@gmail.com, aduskett@gmail.com, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gOC84LzIyIDIyOjM2LCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3cm90ZToKPiAKPiAKPiBPbiAw
-OC8wOC8yMDIyIDE2OjE0LCBTw6liYXN0aWVuIFN6eW1hbnNraSB3cm90ZToKPj4gSGkgQXJub3V0
-LAo+Pgo+PiBPbiA3LzI4LzIyIDIxOjUxLCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3cm90ZToKPj4+
-Cj4+Pgo+Pj4gT24gMTIvMDEvMjAyMiAxMDo0MiwgU8OpYmFzdGllbiBTenltYW5za2kgd3JvdGU6
-Cj4+Pj4gVGhpcyBpcyB2ZXJzaW9uIDIgb2YgZ3N0MS1pbXguCj4+Pgo+Pj4gwqDCoFBsZWFzZSBh
-ZGQgdGhlIGZvbGxvd2luZy4KPj4+Cj4+PiDCoMKgQWx0aG91Z2ggdGhpcyByZXBsYWNlcyB0aGUg
-Z3N0MS1pbXggcGFja2FnZSwgd2Ugd2FudCB0byBrZWVwIGJvdGggCj4+PiBiZWNhdXNlIHZlcnNp
-b24gMiByZW1vdmVzIHNvbWUgZWxlbWVudHMgdGhhdCBhcmUgcmVsZXZhbnQgb24gaS5NWDYgCj4+
-PiB3aXRob3V0IFgxMSBvciB3YXlsYW5kOiBpbXhnMmR2aWRlb3NpbmssIGlteGlwdXZpZGVvc2lu
-aywgaW14ZWdsdml2c2luay4KPj4+Cj4+Pgo+Pj4+IFNpZ25lZC1vZmYtYnk6IFPDqWJhc3RpZW4g
-U3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KPj4+PiAtLS0KPj4+
-PiDCoCBwYWNrYWdlL2dzdHJlYW1lcjEvQ29uZmlnLmluwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIHzCoCAxICsKPj4+PiDCoCBwYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1pbXgyL0NvbmZp
-Zy5pbsKgwqDCoMKgwqAgfCA3NSAKPj4+PiArKysrKysrKysrKysrKysrKysrKysKPj4+PiDCoCBw
-YWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1pbXgyL2dzdDEtaW14Mi5oYXNoIHzCoCAzICsKPj4+PiDC
-oCBwYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1pbXgyL2dzdDEtaW14Mi5ta8KgwqAgfCA3NSAKPj4+
-PiArKysrKysrKysrKysrKysrKysrKysKPj4+PiDCoCA0IGZpbGVzIGNoYW5nZWQsIDE1NCBpbnNl
-cnRpb25zKCspCj4+Pj4gwqAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ3N0cmVhbWVyMS9n
-c3QxLWlteDIvQ29uZmlnLmluCj4+Pj4gwqAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ3N0
-cmVhbWVyMS9nc3QxLWlteDIvZ3N0MS1pbXgyLmhhc2gKPj4+PiDCoCBjcmVhdGUgbW9kZSAxMDA2
-NDQgcGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtaW14Mi9nc3QxLWlteDIubWsKPj4+Pgo+Pj4+IGRp
-ZmYgLS1naXQgYS9wYWNrYWdlL2dzdHJlYW1lcjEvQ29uZmlnLmluIAo+Pj4+IGIvcGFja2FnZS9n
-c3RyZWFtZXIxL0NvbmZpZy5pbgo+Pj4+IGluZGV4IDhmZThhMzQzOTUuLjQzNmM3NjM3OWQgMTAw
-NjQ0Cj4+Pj4gLS0tIGEvcGFja2FnZS9nc3RyZWFtZXIxL0NvbmZpZy5pbgo+Pj4+ICsrKyBiL3Bh
-Y2thZ2UvZ3N0cmVhbWVyMS9Db25maWcuaW4KPj4+PiBAQCAtOSw2ICs5LDcgQEAgc291cmNlICJw
-YWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1wbHVnaW5zLWJhZC9Db25maWcuaW4iCj4+Pj4gwqAgc291
-cmNlICJwYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1wbHVnaW5zLXVnbHkvQ29uZmlnLmluIgo+Pj4+
-IMKgIHNvdXJjZSAicGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtZGV2dG9vbHMvQ29uZmlnLmluIgo+
-Pj4+IMKgIHNvdXJjZSAicGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtaW14L0NvbmZpZy5pbiIKPj4+
-PiArc291cmNlICJwYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1pbXgyL0NvbmZpZy5pbiIKPj4+Cj4+
-PiDCoMKgTm90ZSB0aGF0IHRoaXMgb25lIHNob3VsZCAqbm90KiBtb3ZlIHRvIHBhY2thZ2UvZnJl
-ZXNjYWxlLWlteCwgaXQncyAKPj4+IGNvcnJlY3QgdG8gcHV0IGl0IGhlcmUgaW4gZ3N0cmVhbWVy
-MS4KPj4+Cj4+Pj4gwqAgc291cmNlICJwYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1pbnRlcnBpcGUv
-Q29uZmlnLmluIgo+Pj4+IMKgIHNvdXJjZSAicGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtbGliYXYv
-Q29uZmlnLmluIgo+Pj4+IMKgIHNvdXJjZSAicGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtcHl0aG9u
-L0NvbmZpZy5pbiIKPj4+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtaW14
-Mi9Db25maWcuaW4gCj4+Pj4gYi9wYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1pbXgyL0NvbmZpZy5p
-bgo+Pj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+Pj4gaW5kZXggMDAwMDAwMDAwMC4uYjk1ZTZi
-ZGIyMQo+Pj4+IC0tLSAvZGV2L251bGwKPj4+PiArKysgYi9wYWNrYWdlL2dzdHJlYW1lcjEvZ3N0
-MS1pbXgyL0NvbmZpZy5pbgo+Pj4+IEBAIC0wLDAgKzEsNzUgQEAKPj4+PiArbWVudWNvbmZpZyBC
-UjJfUEFDS0FHRV9HU1QxX0lNWDIKPj4+PiArwqDCoMKgIGJvb2wgImdzdDEtaW14MiIKPj4+PiAr
-wqDCoMKgIGRlcGVuZHMgb24gQlIyX2FybSB8fCBCUjJfYWFyY2g2NCAjIE9ubHkgcmVsZXZhbnQg
-Zm9yIGkuTVgKPj4+PiArwqDCoMKgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfTElCSU1YRE1BQlVG
-RkVSCj4+Pgo+Pj4gwqDCoFRoaXMgc2hvdWxkIGJlIGEgc2VsZWN0Lgo+Pj4KPj4+IMKgwqBPbiB0
-aGUgb3RoZXIgaGFuZCwgaXQgc2hvdWxkIGFsc28gaGF2ZQo+Pj4KPj4+IMKgwqDCoMKgwqBkZXBl
-bmRzIG9uIEJSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9JTVgKPj4+Cj4+Pj4gK8KgwqDCoCBzZWxlY3Qg
-QlIyX1BBQ0tBR0VfR1NUMV9QTFVHSU5TX0JBU0UKPj4+PiArwqDCoMKgIGhlbHAKPj4+PiArwqDC
-oMKgwqDCoCBUaGlzIGlzIGEgc2V0IG9mIEdTdHJlYW1lciAxLjAgcGx1Z2lucyBmb3IgcGx1Z2lu
-cyBmb3IKPj4+PiArwqDCoMKgwqDCoCBGcmVlc2NhbGUncyBpLk1YIHBsYXRmb3Jtcywgd2hpY2gg
-bWFrZSB1c2Ugb2YgdGhlIGkuTVgKPj4+PiArwqDCoMKgwqDCoCBtdWx0aW1lZGlhIGNhcGFiaWxp
-dGllcy4KPj4+PiArCj4+Pj4gK8KgwqDCoMKgwqAgaHR0cHM6Ly9naXRodWIuY29tL0ZyZWVzY2Fs
-ZS9nc3RyZWFtZXItaW14Cj4+Pj4gKwo+Pj4+ICtpZiBCUjJfUEFDS0FHRV9HU1QxX0lNWDIKPj4+
-PiArCj4+Pj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9HU1QxX0lNWDJfRzJECj4+Pj4gK8KgwqDCoCBi
-b29sICJpbXhnMmQiCj4+Pj4gK8KgwqDCoCBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0lNWF9HUFVf
-RzJECj4+Pgo+Pj4gwqDCoEFsbCB0aGVzZSBkZXBlbmRzIG9uIHNob3VsZCBhbHNvIGJlIHR1cm5l
-ZCBpbiBzZWxlY3QsIGFuZCBwcm9wYWdhdGUgCj4+PiB0aGVpciBkZXBlbmRlbmNpZXMuIFNpbmNl
-IHRoZSBkZXBlbmRlbmNpZXMgYXJlIGFsbCBhcmNoaXRlY3R1cmUgCj4+PiBkZXBlbmRlbmNpZXMs
-IEkgdGhpbmssIHRoZXJlJ3Mgbm8gbmVlZCBmb3IgYSBjb21tZW50LiBZb3Ugb25seSBuZWVkIGEg
-Cj4+PiBjb21tZW50IGZvciB0aGUgbGludXggZGVwZW5kZW5jeS4KPj4KPj4gSSBoYXZlIGNvcGll
-ZCB0aGUgZ3N0MS1pbXggcGFja2FnZSB3aGljaCB1c2VzIGRlcGVuZHMgb24uIAo+IAo+ICDCoFdl
-bGwsIHdlJ3JlIHRyeWluZyB0byBpbXByb3ZlIHRoZSBzaXR1YXRpb24gOi0pCj4gCj4+IFdoZW4g
-dXNpbmcgc2VsZWN0IHRoZSBmb2xsb3dpbmcgaXNzdWUgYXBwZWFyczoKPj4KPj4gcGFja2FnZS9n
-c3RyZWFtZXIxL2dzdHJlYW1lcjEvQ29uZmlnLmluOjU6ZXJyb3I6IHJlY3Vyc2l2ZSBkZXBlbmRl
-bmN5IAo+PiBkZXRlY3RlZCEKPj4gcGFja2FnZS9nc3RyZWFtZXIxL2dzdHJlYW1lcjEvQ29uZmln
-LmluOjU6wqDCoMKgwqDCoCBzeW1ib2wgCj4+IEJSMl9QQUNLQUdFX0dTVFJFQU1FUjEgaXMgc2Vs
-ZWN0ZWQgYnkgQlIyX1BBQ0tBR0VfV0VCS0lUR1RLX01VTFRJTUVESUEKPj4gcGFja2FnZS93ZWJr
-aXRndGsvQ29uZmlnLmluOjk0OiBzeW1ib2wgCj4+IEJSMl9QQUNLQUdFX1dFQktJVEdUS19NVUxU
-SU1FRElBIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfV0VCS0lUR1RLCj4+IHBhY2thZ2Uvd2Via2l0
-Z3RrL0NvbmZpZy5pbjoyODogc3ltYm9sIEJSMl9QQUNLQUdFX1dFQktJVEdUSyBpcyAKPj4gc2Vs
-ZWN0ZWQgYnkgQlIyX1BBQ0tBR0VfTUlET1JJCj4+IHBhY2thZ2UvbWlkb3JpL0NvbmZpZy5pbjoy
-NDrCoMKgwqAgc3ltYm9sIEJSMl9QQUNLQUdFX01JRE9SSSBkZXBlbmRzIG9uIAo+PiBCUjJfUEFD
-S0FHRV9MSUJHVEszCj4+IHBhY2thZ2UvbGliZ3RrMy9Db25maWcuaW46MTU6wqDCoCBzeW1ib2wg
-QlIyX1BBQ0tBR0VfTElCR1RLMyBpcyBzZWxlY3RlZCAKPj4gYnkgQlIyX1BBQ0tBR0VfVlRFCj4+
-IHBhY2thZ2UvdnRlL0NvbmZpZy5pbjoxOsKgwqDCoMKgwqDCoMKgIHN5bWJvbCBCUjJfUEFDS0FH
-RV9WVEUgZGVwZW5kcyBvbiAKPj4gQlIyX1BBQ0tBR0VfSEFTX0xJQkVHTF9XQVlMQU5ECj4+IHBh
-Y2thZ2Uvb3BlbmdsL2xpYmVnbC9Db25maWcuaW46NDrCoMKgwqDCoMKgIHN5bWJvbCAKPj4gQlIy
-X1BBQ0tBR0VfSEFTX0xJQkVHTF9XQVlMQU5EIGlzIHNlbGVjdGVkIGJ5IAo+PiBCUjJfUEFDS0FH
-RV9JTVhfR1BVX1ZJVl9PVVRQVVRfV0wKPj4gcGFja2FnZS9mcmVlc2NhbGUtaW14L2lteC1ncHUt
-dml2L0NvbmZpZy5pbjo2NDogc3ltYm9sIAo+PiBCUjJfUEFDS0FHRV9JTVhfR1BVX1ZJVl9PVVRQ
-VVRfV0wgaXMgcGFydCBvZiBjaG9pY2UgPGNob2ljZT4KPj4gcGFja2FnZS9mcmVlc2NhbGUtaW14
-L2lteC1ncHUtdml2L0NvbmZpZy5pbjozOTogY2hvaWNlIDxjaG9pY2U+IAo+PiBjb250YWlucyBz
-eW1ib2wgPGNob2ljZT4KPj4gcGFja2FnZS9mcmVlc2NhbGUtaW14L2lteC1ncHUtdml2L0NvbmZp
-Zy5pbjozOTogY2hvaWNlIDxjaG9pY2U+IAo+PiBjb250YWlucyBzeW1ib2wgQlIyX1BBQ0tBR0Vf
-SU1YX0dQVV9WSVYKPj4gcGFja2FnZS9mcmVlc2NhbGUtaW14L2lteC1ncHUtdml2L0NvbmZpZy5p
-bjo5OsKgIHN5bWJvbCAKPj4gQlIyX1BBQ0tBR0VfSU1YX0dQVV9WSVYgaXMgc2VsZWN0ZWQgYnkg
-QlIyX1BBQ0tBR0VfSU1YX0dQVV9HMkQKPj4gcGFja2FnZS9mcmVlc2NhbGUtaW14L2lteC1ncHUt
-ZzJkL0NvbmZpZy5pbjo5OsKgIHN5bWJvbCAKPj4gQlIyX1BBQ0tBR0VfSU1YX0dQVV9HMkQgaXMg
-c2VsZWN0ZWQgYnkgQlIyX1BBQ0tBR0VfR1NUMV9JTVgyX0cyRAo+PiBwYWNrYWdlL2dzdHJlYW1l
-cjEvZ3N0MS1pbXgyL0NvbmZpZy5pbjoyMTrCoMKgwqDCoMKgIHN5bWJvbCAKPj4gQlIyX1BBQ0tB
-R0VfR1NUMV9JTVgyX0cyRCBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0dTVFJFQU1FUjEKPj4gRm9y
-IGEgcmVzb2x1dGlvbiByZWZlciB0byBEb2N1bWVudGF0aW9uL2tidWlsZC9rY29uZmlnLWxhbmd1
-YWdlLnR4dAo+PiBzdWJzZWN0aW9uICJLY29uZmlnIHJlY3Vyc2l2ZSBkZXBlbmRlbmN5IGxpbWl0
-YXRpb25zIgo+IAo+ICDCoEknbSB0cnlpbmcgdG8gc2VlIHRoZSBwcm9ibGVtIHdpdGggdGhpcyBk
-ZXBlbmRlbmN5IGNoYWluLCBidXQgSSBjYW4ndCAKPiBmaW5kIGl0Li4uIFBlcmhhcHMgaXQncyB0
-aGUgY2hvaWNlIGZvciBpbXgtZ3B1LXZpdiBvdXRwdXQgdGhhdCBpcyAKPiBjYXVzaW5nIHRoZSBw
-cm9ibGVtLgo+IAo+ICDCoFlvdSBkaWQgcHJvcGFnYXRlIHRoZSBkZXBlbmRlbmNpZXMsIHJpZ2h0
-PwoKWWVzLCBJIGRpZC4KClJlZ2FyZHMsCgo+IAo+ICDCoMKgwqDCoMKgwqDCoCBkZXBlbmRzIG9u
-IChCUjJfYXJtICYmIEJSMl9BUk1fRUFCSUhGKSB8fCBCUjJfYWFyY2g2NCAjIAo+IGlteC1ncHUt
-ZzJkCj4gIMKgwqDCoMKgwqDCoMKgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJD
-ICMgaW14LWdwdS1nMmQKPiAKPiAKPiAgwqBSZWdhcmRzLAo+ICDCoEFybm91dAo+IAo+Pgo+PiBU
-aGVyZSB3YXMgYSBzaW1pbGFyIGlzc3VlIGZvciBnc3QxLWlteDoKPj4KPj4gaHR0cHM6Ly9sb3Jl
-Lmtlcm5lbC5vcmcvYWxsLzIwMTYwOTIwMjI0MzU1Lmw3NmEza2dndXB1aXVnb2tAdDQ1MHMubGFu
-Lwo+Pgo+PiBTbywgSSB3aWxsIGtlZXAgZGVwZW5kcyBvbiBoZXJlLgo+Pgo+PiBSZWdhcmRzLAo+
-Pgo+PgoKCi0tIApTw6liYXN0aWVuIFN6eW1hbnNraSwgQXJtYWRldXMgU3lzdGVtcwpTb2Z0d2Fy
-ZSBlbmdpbmVlcgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+On Tue, Aug 9, 2022 at 2:49 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Tue,  9 Aug 2022 10:56:54 +0300
+> Alexandru Ardelean <ardeleanalex@gmail.com> wrote:
+>
+> > It's pretty broken, so we won't use it.
+> >
+> > Even with this wrapper, I get:
+> > ```
+> > debug-wasm-objects.tq src/wasm/wasm-objects.tq
+> > /bin/sh: 1: ../../out/Release/torque: Exec format error
+> > [324/2786] CXX obj/src/libnode.node_wasi.o
+> > ninja: build stopped: subcommand failed.
+> > make[2]: *** [Makefile:127: node] Error 1
+>
+> This is odd. Did you debug this a bit?
+
+not really, no
+i can try again
+but the error is so weird, that it discouraged me to check;
+
+>
+> On my side, trying to build:
+>
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_NODEJS=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+>
+> before applying your patch series, leads to a different error:
+>
+> ninja: error: obj.host/tools/v8_gypfiles/run_torque.ninja:1271: multiple rules generate gen/torque-generated/bit-fields.h [-w dupbuild=err]
+
+i think this is fixed in patch [4/13]:
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20220809075704.86472-5-ardeleanalex@gmail.com/
+
+apologies if the patches are not quite in the proper order yet;
+i can try to make the order better, so as to keep the principle that
+each patch doesn't break stuff as much as possible;
+
+
+>
+> The issue was reported at https://github.com/nodejs/node/issues/37441 a
+> while ago, it is not fixed apparently.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
