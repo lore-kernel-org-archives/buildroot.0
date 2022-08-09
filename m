@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D75AC25B06
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 11:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A510C25B07
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 11:49:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0218F81A5F;
-	Tue,  9 Aug 2022 11:47:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0218F81A5F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vHdiSZaDuYsb; Tue,  9 Aug 2022 11:47:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9F2D81A46;
-	Tue,  9 Aug 2022 11:47:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9F2D81A46
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7498C1BF2C7
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:47:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B1384109E
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:47:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B1384109E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1441E410B8;
+	Tue,  9 Aug 2022 11:49:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1441E410B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nqu3Uxlmkd4F for <buildroot@lists.busybox.net>;
- Tue,  9 Aug 2022 11:47:07 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NDbxNn9rECeE; Tue,  9 Aug 2022 11:49:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CEB9A409F2;
+	Tue,  9 Aug 2022 11:49:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEB9A409F2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D00341BF2C7
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:49:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A791940278
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 11:49:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A791940278
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hvKsUhPfqNVO for <buildroot@lists.busybox.net>;
+ Tue,  9 Aug 2022 11:49:32 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 086E6408C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D08740151
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 086E6408C6
- for <buildroot@buildroot.org>; Tue,  9 Aug 2022 11:47:06 +0000 (UTC)
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4D08740151
+ for <buildroot@buildroot.org>; Tue,  9 Aug 2022 11:49:32 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9C5CA60007;
- Tue,  9 Aug 2022 11:47:04 +0000 (UTC)
-Date: Tue, 9 Aug 2022 13:47:03 +0200
-To: Alistair Francis <alistair@alistair23.me>
-Message-ID: <20220809134703.05bfd118@windsurf>
-In-Reply-To: <20220809113329.249779-1-alistair@alistair23.me>
-References: <20220809113329.249779-1-alistair@alistair23.me>
+ by mail.gandi.net (Postfix) with ESMTPSA id 22E7760002;
+ Tue,  9 Aug 2022 11:49:30 +0000 (UTC)
+Date: Tue, 9 Aug 2022 13:49:28 +0200
+To: Alexandru Ardelean <ardeleanalex@gmail.com>
+Message-ID: <20220809134928.56a91c28@windsurf>
+In-Reply-To: <20220809075704.86472-4-ardeleanalex@gmail.com>
+References: <20220809075704.86472-1-ardeleanalex@gmail.com>
+ <20220809075704.86472-4-ardeleanalex@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660045625;
+ d=bootlin.com; s=gm1; t=1660045770;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=tQuITm9brAYH1+z/u/Ig1RBqP6ufQhZbMSYsjVex1+s=;
- b=myFS54NGtnRRXjdU4uiHRnrODpU0AGg2VbIEVqXI8ZRukuB4PY1R964l9X8A+n22di6AWc
- 8rOzuIWcMjC6Tj+yb3XmCyn6AEirETSXpyoWbVu8rB+Z7T55rQTH1VkBLX92GiqE9YsO0d
- o3AvFtlDLqiPjDQrHENaBNSn7R87FcGtZxt0EEU6JZ479Mai2k8N1I4NHDc8YQb5zGMORP
- DrcRrtSHyqoIy7UmNu6mAhjKE15BOBm89Sc3YxMYrQW/dLIQAYkSwwQdrBGDpxadKqoEq1
- v5wjfOei0CjQj0NWewEciDXUMM2vP8YjM884uphLr42hy1eAmJ6keRkgQM/M7Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=u6JTBSAKMZaCMR0s8b2K6Y6JXk4lpp4FB8CL5MZySnw=;
+ b=bkcvB6lhtFcPSLOzQgSYaropNf3MPpvl+/lVdepIMNA6pR0A4BTnyoqbK4zDEl2+TI6dct
+ ybwcnfxRSPGjv8BpGpnvbWuPdGnnV9DqvOIdzQyDkMUbfH+fzg2WoviTDfiCbTalq6IZ0s
+ JCfoeC+gyj5LspETthkspPR+S0t8WjRQGC6kVpb8NBQ4mKhRFiLDkPfNUo9nOvkkZqfWOM
+ yens275mSV7r9xfhkrHg8nhFSenJNX1lGxxnM2O6MPOOUx8yVmBhDdJ79Nw8oVqJ0RUeJF
+ VTYxl4h3i9wVzNQPd52XqYFE0k+rCD7EJbQziBkHPmQlimUAB3GAKMU2x5ENRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=myFS54NG
-Subject: Re: [Buildroot] [PATCH] pine64_sopine_defconfig: Use mainline ATF
+ header.s=gm1 header.b=bkcvB6lh
+Subject: Re: [Buildroot] [PATCH 03/13] nodejs: remove v8-qemu-wrapper stuff
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,51 +78,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
+Cc: fontaine.fabrice@gmail.com, aduskett@gmail.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Francis,
+Hello,
 
-On Tue,  9 Aug 2022 21:33:29 +1000
-Alistair Francis <alistair@alistair23.me> wrote:
+On Tue,  9 Aug 2022 10:56:54 +0300
+Alexandru Ardelean <ardeleanalex@gmail.com> wrote:
 
-> Use the mainline ATF as it supports the Pine64 SoPine module.
+> It's pretty broken, so we won't use it.
 > 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> ---
->  configs/pine64_sopine_defconfig | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
-> index 6fa511477c..2295c9338d 100644
-> --- a/configs/pine64_sopine_defconfig
-> +++ b/configs/pine64_sopine_defconfig
-> @@ -7,10 +7,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
->  
->  # Firmware
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+> Even with this wrapper, I get:
+> ```
+> debug-wasm-objects.tq src/wasm/wasm-objects.tq
+> /bin/sh: 1: ../../out/Release/torque: Exec format error
+> [324/2786] CXX obj/src/libnode.node_wasi.o
+> ninja: build stopped: subcommand failed.
+> make[2]: *** [Makefile:127: node] Error 1
 
-Thanks a lot! However, could you adjust the patch to use a fixed
-version of ATF, like is done for Linux or U-Boot in all our defconfigs?
+This is odd. Did you debug this a bit?
 
-Also, do you confirm this change was tested on hardware? Does it solve
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053812 ? If yes,
-then could you include something like this in your commit log:
+On my side, trying to build:
 
-Fixes:
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_NODEJS=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053812
+before applying your patch series, leads to a different error:
 
-Thanks!
+ninja: error: obj.host/tools/v8_gypfiles/run_torque.ninja:1271: multiple rules generate gen/torque-generated/bit-fields.h [-w dupbuild=err]
+
+The issue was reported at https://github.com/nodejs/node/issues/37441 a
+while ago, it is not fixed apparently.
+
+Best regards,
 
 Thomas
 -- 
