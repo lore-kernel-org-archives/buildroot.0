@@ -1,72 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F2BFC19F2D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 16:25:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C377EC19F2D
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 16:27:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C46E340A45;
-	Tue,  9 Aug 2022 16:25:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C46E340A45
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5BB6260BD1;
+	Tue,  9 Aug 2022 16:27:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BB6260BD1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y8dc8PgQnNxV; Tue,  9 Aug 2022 16:25:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kG89JfuD1VVE; Tue,  9 Aug 2022 16:27:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD1D940992;
-	Tue,  9 Aug 2022 16:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD1D940992
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8318460B4E;
+	Tue,  9 Aug 2022 16:27:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8318460B4E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5145A1BF860
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 16:25:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CAE2D1BF860
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 16:27:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 263018140C
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 16:25:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 263018140C
+ by smtp1.osuosl.org (Postfix) with ESMTP id A568881926
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 16:27:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A568881926
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id be54hFieMAjz for <buildroot@lists.busybox.net>;
- Tue,  9 Aug 2022 16:25:41 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0219381409
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0219381409
- for <buildroot@busybox.net>; Tue,  9 Aug 2022 16:25:40 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:55f2:8e98:fc59:1d5e])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 620DB13FA3C;
- Tue,  9 Aug 2022 18:25:34 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 09 Aug 2022 18:25:34 +0200
-Date: Tue, 9 Aug 2022 18:25:34 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220809162534.GE3168@scaer>
-References: <20220805143625.16542-1-guillaume.bressaix@gmail.com>
- <20220807001348.351cd42c@windsurf> <20220808194708.GA524369@scaer>
+ with ESMTP id 8AyDJ-Oxfzxs for <buildroot@lists.busybox.net>;
+ Tue,  9 Aug 2022 16:27:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9852481301
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9852481301
+ for <buildroot@buildroot.org>; Tue,  9 Aug 2022 16:27:26 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ a18-20020a05600c349200b003a30de68697so894287wmq.0
+ for <buildroot@buildroot.org>; Tue, 09 Aug 2022 09:27:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=EKNVN3QlsxPpjq62P0HDbu/lIa+9znkMRvshzk2cL+0=;
+ b=kwqVjWHwmtFflvpxT4DMZG9O+pv5cDxCZWwT9jl5VE35A4lm8UXvSEF+bld8T2eeOe
+ cm60DglStMuCWq7Yd5IZuZbsGf+fqF2+AleVqqZCEr+7CxsNrq6Z4zX3/zzYo/JcEMVC
+ XtFtUdmLLH5dbt7LPhrBC0qUSFFOtm56FXaT5fxyicjOe4BIbFxlZwIsoBWHDQuguyB0
+ bRWMnHb6vCbPWr4XU1HJWnTapUlJi3qMS/P7oeQRZxIhoBMQ/k2ACuWqC6bqhp8cg7xv
+ o8EaKqNl03he9/pUaQrcVG35S4kaAGh/afFr3T3cEADPb5e+NLMnBElw52812sc9VNiZ
+ G3pA==
+X-Gm-Message-State: ACgBeo0gbUGkfd8bSt336U3v1BkQlH8f6D2YlPW/frBpUFWjFFS3Wbq3
+ qvRnyhlwmPtX9Fnl2iU5xMHRRJOB+j8=
+X-Google-Smtp-Source: AA6agR6PgEmcJVEVCtm+9HI8ZguxBF21eogzYKHmeW++UunwHVoXQOodN6+4TxfVoH1LNHg3DAYBEA==
+X-Received: by 2002:a1c:7708:0:b0:3a5:5543:cec4 with SMTP id
+ t8-20020a1c7708000000b003a55543cec4mr2927721wmi.47.1660062444514; 
+ Tue, 09 Aug 2022 09:27:24 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
+ by smtp.gmail.com with ESMTPSA id
+ b18-20020a5d4b92000000b0021d6924b777sm13545554wrt.115.2022.08.09.09.27.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 09 Aug 2022 09:27:24 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue,  9 Aug 2022 18:27:14 +0200
+Message-Id: <20220809162714.1915094-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220808194708.GA524369@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660062337;
- bh=1vI7jjYNw6btMDtRtSs862ybXNvW2dcnCMq9k059cO8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=fne3zu5skXfcR9vW3EBLmeGqznjmL4w0oEeEJOeRaFIrfqDJS1wTZsZtBzR93AQPm
- Pv3c8NCfaytymwNLgNqUCdC70Tqx/Jqt7GYdC7hYOjaM23FZTory7CKt90OzUtBA35
- c3t08gApSXhIFF5AwjfqA8o1qqSTVklZz7zFmEg2PaAtBvSf54TL0PcirTjlCuF7lT
- WC+WAH9uHs6KTguD0XNFG8csL/DmHcMRW0PC3u+8No/mkuIb1McqulqeVDx9u8HYVz
- SEP7qgtRVR9p81T8f9i7VixF5i+KqvezZz3UokwhtOLYIQe7VXxV4I3+0WWQxYq0I/
- vFCA9Pl86y6/w==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=EKNVN3QlsxPpjq62P0HDbu/lIa+9znkMRvshzk2cL+0=;
+ b=XclgohnzOyGRd+JSiumz2oLaDq9j766k5AOvI3KriuAFe3ibWfn+0c5JjaQ81eYu+g
+ DEYkbc3PLydcD/RV/9oNLchErT+lM8NpJI1qEhLOM+msJBTe6AmzEKvWYdjS/sUEr/2s
+ O7i7lHt9Hdn26bTlw5rX0vupNtS2fRVPbtfNnFc2RXvfl8tai1I75JE/lkyPBv1mmXcL
+ e/GUp2y3Q8wverjJ04Nwh9HaLyPLtHiE7EgjXmIKnWoYJkJKAQsNe4wia3tTIF/+TmPu
+ UlEf8nXd0fXxfVzIgt+EfjJ7RmXgwydywyy1vY6V+0RnJkQiFYQ4eytgWDMiUK2nX0Db
+ qBCw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=fne3zu5s
-Subject: Re: [Buildroot] [RFC v3 1/2] package/pkg-meson.mk: support fortran
- cross-compilation
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Xclgohnz
+Subject: [Buildroot] [PATCH v2,
+ 1/1] utils/genrandconfig: disable libopenssl without atomics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,61 +95,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+libopenssl needs atomic or the build will fail (e.g. on sparcv8 without
+libatomic):
 
-On 2022-08-08 21:47 +0200, Yann E. MORIN spake thusly:
-> On 2022-08-07 00:13 +0200, Thomas Petazzoni spake thusly:
-> [--SNIP--]
-> > Now, on to the open issue which explains why I have added Yann in Cc.
-> > We are currently setting the C++ compiler and Fortran compiler path in
-> > Meson's cross-compilation.conf unconditionally... even when the
-> > toolchain has no C++ or Fortran support. So it means we're pointing to
-> > compilers that don't exist.
-> I think this is fine. They don't exist, so they can't be run, so meson
-> will not inadvertently be able to build a C++/Fortran/... program and we
-> will notice the issue.
-> 
-> > Ideally, the cross-compilation.conf should be generated with no
-> > reference to a C++ or Fortran compiler, or a /bin/false reference, and
-> > ditto for the CXXFLAGS/FCFLAGS when there is no C++ or Fortran support.
-> 
-> In the past, we used to use false as a C++ compiler (but not for meson
-> specifically), and it turned out that that caused quite some
-> hard-to-understand issues, see 4cd1ab15886a (core: alternate solution to
-> disable C++).
-> 
-> I'll ask the meson guys in irc://irc.oftc.net/#mesonbuild and se what
-> they have to say and suggest.
+${LDCMD:-/nvmedata/autobuild/instance-7/output-1/host/bin/sparc-buildroot-linux-uclibc-gcc}  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O0 -g2  -g2  -L.   \
+	-o apps/openssl apps/asn1pars.o apps/ca.o apps/ciphers.o apps/cms.o apps/crl.o apps/crl2p7.o apps/dgst.o apps/dhparam.o apps/dsa.o apps/dsaparam.o apps/ec.o apps/ecparam.o apps/enc.o apps/engine.o apps/errstr.o apps/gendsa.o apps/genpkey.o apps/genrsa.o apps/nseq.o apps/ocsp.o apps/openssl.o apps/passwd.o apps/pkcs12.o apps/pkcs7.o apps/pkcs8.o apps/pkey.o apps/pkeyparam.o apps/pkeyutl.o apps/prime.o apps/rand.o apps/rehash.o apps/req.o apps/rsa.o apps/rsautl.o apps/s_client.o apps/s_server.o apps/s_time.o apps/sess_id.o apps/smime.o apps/speed.o apps/spkac.o apps/srp.o apps/storeutl.o apps/ts.o apps/verify.o apps/version.o apps/x509.o \
+	 apps/libapps.a -lssl -lcrypto -ldl
+/nvmedata/autobuild/instance-7/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ./libssl.so: undefined reference to `__atomic_fetch_sub_4'
 
-So, @eliebrokeit there said, quoting:
+It should be noted that openssl3 has added OPENSSL_DEV_NO_ATOMICS but
+"this is intended for internal development only, to check the
+refcounting is properly coded.  It should never become a configuration
+option, hence the name of the macro.":
+https://github.com/openssl/openssl/commit/503d4745a115b82db01c1fb22baaddb153d27cdb
 
-    If you don't have one defined, cross builds won't try to autodetect
-    one, IIRC...
-    [...] however setting it to /bin/false will result in it detecting
-    that that doesn't work
-    I guess the safest bet is to deliberately poison it with /bin/false
+Fixes:
+ - http://autobuild.buildroot.org/results/bce526d538f43a541fdfbc0c9b4a7cecebbbc539
 
-So, when we do not have a compiler for a specific language, we should
-force it to /bin/false.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Arnout Vandecappelle and
+Yann E. Morin):
+ - Update utils/genrandconfig instead of trying to propagate this
+   dependency
 
-Guillaume, would you be willing to tackle that?
+ utils/genrandconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index fb20dedcbf..a00ff8ee8b 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -246,6 +246,11 @@ def fixup_config(sysinfo, configfile):
+     if 'BR2_ARM_CPU_ARMV7M=y\n' in configlines and \
+        'BR2_PACKAGE_LIBFFI=y\n' in configlines:
+         return False
++    # libopenssl needs atomic, but propagating this dependency in
++    # Buildroot is really too much work, so we handle this here.
++    if 'BR2_PACKAGE_LIBOPENSSL=y\n' in configlines and \
++       not 'BR2_TOOLCHAIN_HAS_ATOMIC=y\n' in configlines:
++        return False
+     if 'BR2_PACKAGE_SUNXI_BOARDS=y\n' in configlines:
+         configlines.remove('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE=""\n')
+         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
