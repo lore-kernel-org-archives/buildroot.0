@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 999DCC19F2D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 07:58:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3609EC19F2D
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 07:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FB7860BE0;
-	Tue,  9 Aug 2022 07:58:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FB7860BE0
+	by smtp2.osuosl.org (Postfix) with ESMTP id D1EAF4053E;
+	Tue,  9 Aug 2022 07:58:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1EAF4053E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FwhzSoo52x3p; Tue,  9 Aug 2022 07:58:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vGpYpm0ZYpmE; Tue,  9 Aug 2022 07:58:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FEC960BBE;
-	Tue,  9 Aug 2022 07:58:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FEC960BBE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CA4FC1BF27E
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 07:57:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB6514053C;
+	Tue,  9 Aug 2022 07:58:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB6514053C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B1451BF27E
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 07:57:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B246560BBE
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA24B40533
  for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 07:57:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B246560BBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA24B40533
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BDcYep6GrJh5 for <buildroot@lists.busybox.net>;
- Tue,  9 Aug 2022 07:57:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lx22WhB6a2m2 for <buildroot@lists.busybox.net>;
+ Tue,  9 Aug 2022 07:57:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 817096068A
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 817096068A
- for <buildroot@buildroot.org>; Tue,  9 Aug 2022 07:57:26 +0000 (UTC)
-Received: by mail-ej1-x62e.google.com with SMTP id gk3so20774141ejb.8
- for <buildroot@buildroot.org>; Tue, 09 Aug 2022 00:57:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED6E24052C
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id ED6E24052C
+ for <buildroot@buildroot.org>; Tue,  9 Aug 2022 07:57:27 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id a7so20833089ejp.2
+ for <buildroot@buildroot.org>; Tue, 09 Aug 2022 00:57:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=1BeTNGV21Zns165GiC3LPb/iwBlMGu3g6waM452bKKI=;
- b=lHWIXvtlXDmpcgPCsytVn0RHjWK5rMbOvL2h4oiHD7Zyg1iLfy7IahPDi9oLj3jg1H
- VtHKLtAgHVgQy1Hw61x4+FXGtdmwgEgmDYK9GS0uFgd3AFiavPhExvkbrm/G//aB2RgN
- fOjoeRgUmDF2G/ilai7P2zhFswnUmEhU+RFxZdNQtW0R2YbhH07HToNo1xfc4vXUXiIJ
- 6IOsbZXIllHK4bO2HWiEM4J1s5FK1zp7kK4aCLLobKksysixEQ9/lQ33ssS5tsNdVxos
- rlWA6qPhSKx7eu/KHLf43ojnEhFnaLz2yioR+knv4W+3zQSZjVX17nqemWzYs2OdI5ZX
- 91LA==
-X-Gm-Message-State: ACgBeo1zgX/EAm9bdCjurIacFAjmRW3yr2tvrbX19p+CYhLDb/VrY8xJ
- BbfGwgFY6CDzx1Txm5/Z1iAueNGsmcM=
-X-Google-Smtp-Source: AA6agR5EUGi1oW/MXbGLIBUjs1IklaZ+ig8M5gW4OLL64dxtV1gvTvFnRBWUWOzef/0LgaEtMa0oqA==
-X-Received: by 2002:a17:907:288a:b0:730:7ee5:e6a with SMTP id
- em10-20020a170907288a00b007307ee50e6amr15909936ejc.218.1660031844424; 
- Tue, 09 Aug 2022 00:57:24 -0700 (PDT)
+ bh=DiLdWz6LjpzPep2V4eZgo55ggMCaGadeY29r1gUEnvU=;
+ b=LOPnXcRsnqOq5anQBajBoUiUC/drNiqKdYGFE2nJTRzMZJUbQekAPPBIl4j4cEF0JR
+ TLHtixFFvPunyE5Nicy0Ca2XHKTL2SwCEa9zl5aIZVBR+pE6Nl6CTaOQaKi27PEAfdj+
+ d58CkQUhUP+SI4SNQjNms/q5Iw+4JazWT4S5hS0UgTjnTLobUFsRdtBTn4jb4sJuQSQf
+ WbuNXmQZPhrey9+4c33RW7ktwEsd4Zv97xu0RRdUaz949sydrpmUpD5wbeCPV9/BbsnE
+ u9hci5fb70gzAgwntyHBggMDZF3sqOeC+yINXTX+xchK4BYq2I5ITXtKHNRlawcR2guI
+ fblA==
+X-Gm-Message-State: ACgBeo2A7t0cKLXsYIFMGH6Oostce7ANbeNtpLBlWAKOz3yPNi3CyMke
+ ev76sJqPxRTvsqGItGMoMD1dEc4MzB4=
+X-Google-Smtp-Source: AA6agR7lkJ89mbux4u3/qzefJsBKhQZoKCP+8oYPg93TN9EQKiuG+J/LEGiK8dPXbQTznuVpUOXTlQ==
+X-Received: by 2002:a17:906:98d4:b0:730:b545:fb5d with SMTP id
+ zd20-20020a17090698d400b00730b545fb5dmr15644682ejb.532.1660031845767; 
+ Tue, 09 Aug 2022 00:57:25 -0700 (PDT)
 Received: from mercury.. ([188.27.130.4]) by smtp.gmail.com with ESMTPSA id
- pk9-20020a170906d7a900b0073065767404sm819341ejb.34.2022.08.09.00.57.23
+ pk9-20020a170906d7a900b0073065767404sm819341ejb.34.2022.08.09.00.57.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Aug 2022 00:57:24 -0700 (PDT)
+ Tue, 09 Aug 2022 00:57:25 -0700 (PDT)
 From: Alexandru Ardelean <ardeleanalex@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  9 Aug 2022 10:56:55 +0300
-Message-Id: <20220809075704.86472-5-ardeleanalex@gmail.com>
+Date: Tue,  9 Aug 2022 10:56:56 +0300
+Message-Id: <20220809075704.86472-6-ardeleanalex@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220809075704.86472-1-ardeleanalex@gmail.com>
 References: <20220809075704.86472-1-ardeleanalex@gmail.com>
@@ -71,18 +71,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=1BeTNGV21Zns165GiC3LPb/iwBlMGu3g6waM452bKKI=;
- b=D2/rxabooCXGklj8/tZF6ADHIwYVhLJvciiZOfNbzG9Lh4MW+20S+ydc7ReSqbnTB5
- Utl2U9n6iGJFQ7FGbw39Z9CltMBK4JMWRgLuGKG/DBtSoPegthanfDTFlMg5/lnKIM2l
- ZkdEEgzLI4yD9MesezaHfsR+ONJkIYz4lZT/cU8LAnlRAyEJcl7ae3+LHe4DAtrVt2GD
- ky/ZH/6uHmKa5SIGuxCZ2xlEgZwtH/swuBxOWAxVo7IXPOqy8e5kkNdqLQFMTTEbwo3o
- uiej0Zl0HNtg/Acg4QAJuEG3SiQ9oLgG6B/Z4nl/4Mlj7AQkvaB/0yMij9FRmplHBF0u
- WCYg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=DiLdWz6LjpzPep2V4eZgo55ggMCaGadeY29r1gUEnvU=;
+ b=pyq/tBFf8+T8b5123wDmzpEgPAZ3f5QZ7opcfK1M4KjPw1U2nWslaYGnujOfvnkJrz
+ 4LqzwL1Wr9fwUKOctLcOOy1siDlppPHjKhSn7aBoZHzzbAz4gELO5KHiwIeVNtXBObD4
+ jSNKuqenOmt3tDhYzY24xF1L4AxGUpy0+ZH/TfCGqkpJB6Nkl7VSQLIq2/iZhuaRZOSF
+ UzQ2MQIdCnCG1p1/3NxqqeoNbfCFuS6XAaMwpJDmsLRND28OhCDmEe3hDzWxFdq39uCD
+ HyqSBZ+tXMdfuZt66TD9DhdIhwqOxNNA/ybwfem/2FtPugBpjixdQMbQUDTTGvCvcGj6
+ DJ9A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=D2/rxabo
-Subject: [Buildroot] [PATCH 04/13] nodejs: fix 'Duplicate v8 target errors
- when cross-compiling' error
+ header.a=rsa-sha256 header.s=20210112 header.b=pyq/tBFf
+Subject: [Buildroot] [PATCH 05/13] package/nodejs: add host-{c-ares, libuv,
+ nghttp2} to deps
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,66 +101,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Reported also via:
-  https://github.com/nodejs/node/issues/37441
+Required for the host-tools when cross-building.
+The nodejs target-build requires some host tool support to be able to
+properly build.
 
-Patched in:
-  https://github.com/minrk/node/commit/5e533cb943eef68b270f55f0cba02c0ec67c699d
+Unfortunately, when building a 32-bit target on a 64-bit host, uses
+will need to install on the host the 32-bit bi-arch libs for
+'libicu libc-ares libuv1 libnghttp2 zlib1g', but that seems that is also
+the case (already) for some other packages that select symbols
+BR2_HOSTARCH_NEEDS_IA32_LIBS & BR2_HOSTARCH_NEEDS_IA32_COMPILER.
 
-The error is:
-```
->>> nodejs 16.15.0 Building
-PATH="<buildroot>/output/host/bin:<buildroot>/output/host/sbin:/home/aardelean/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin" PYTHON=<buildroot>/output/host/bin/python3 /usr/bin/make  -C <buildroot>/output/build/nodejs-16.15.0 PATH="<buildroot>/output/host/bin:<buildroot>/output/host/sbin:/home/aardelean/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin" AR="<buildroot>/output/host/bin/aarch64-none-linux-gnu-gcc-ar" AS="<buildroot>/output/host/bin/aarch64-none-linux-gnu-as" LD="<buildroot>/output/host/bin/aarch64-none-linux-gnu-ld" NM="<buildroot>/output/host/bin/aarch64-none-linux-gnu-gcc-nm" CC="<buildroot>/output/host/bin/aarch64-none-linux-gnu-gcc" GCC="<buildroot>/output/host/bin/aarch64-none-linux-gnu-gcc" CPP="<buildroot>/output/host/bin/aarch64-none-linux-gnu-cpp" CXX="<buildroot>/output/host/bin/aarch64-none-linux-gnu-g++" FC="<buildroot>/output/h
- ost/bin/aarch64-none-linux-gnu-gfortran" F77="<buildroot>/output/host/bin/aarch64-none-linux-gnu-gfortran" RANLIB="<buildroot>/output/host/bin/aarch64-none-linux-gnu-gcc-ranlib" READELF="<buildroot>/output/host/bin/aarch64-none-linux-gnu-readelf" STRIP="<buildroot>/output/host/bin/aarch64-none-linux-gnu-strip" OBJCOPY="<buildroot>/output/host/bin/aarch64-none-linux-gnu-objcopy" OBJDUMP="<buildroot>/output/host/bin/aarch64-none-linux-gnu-objdump" AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as" CC_FOR_BUILD="<buildroot>/output/host/bin/ccache /usr/bin/gcc" GCC_FOR_BUILD="<buildroot>/output/host/bin/ccache /usr/bin/gcc" CXX_FOR_BUILD="<buildroot>/output/host/bin/ccache /usr/bin/g++" LD_FOR_BUILD="/usr/bin/ld" CPPFLAGS_FOR_BUILD="-I<buildroot>/output/host/include" CFLAGS_FOR_BUILD="-O2 -I<buildroot>/output/host/include" CXXFLAGS_FOR_BUILD="-O2 -I<buildroot>/output/host/include" LDFLAGS_FOR_BUILD="-L<buildroot>/output/host/lib -Wl,-rpath,<buildroot>/output/host/lib" FCFLAGS_FOR_BUI
- LD="" DEFAULT_ASSEMBLER="<buildroot>/output/host/bin/aarch64-none-linux-gnu-as" DEFAULT_LINKER="<buildroot>/output/host/bin/aarch64-none-linux-gnu-ld" CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1" CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1" LDFLAGS="" FCFLAGS=" -Os -g0" FFLAGS=" -Os -g0" PKG_CONFIG="<buildroot>/output/host/bin/pkg-config" STAGING_DIR="<buildroot>/output/host/aarch64-buildroot-linux-gnu/sysroot" INTLTOOL_PERL=/usr/bin/perl NO_LOAD=cctest.target.mk PATH=<buildroot>/output/build/nodejs-16.15.0/bin:"<buildroot>/output/host/bin:<buildroot>/output/host/sbin:/home/aardelean/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin" LDFLAGS=" -latomic" LD="<buildroot>/output/host/bin/aarch64-none-linux-gnu-g++"
-ninja -C out/Release
-ninja: Entering directory `out/Release'
-ninja: error: obj.host/tools/v8_gypfiles/run_torque.ninja:1356: multiple rules generate gen/torque-generated/bit-fields.h [-w dupbuild=err]
-
-make[2]: *** [Makefile:127: node] Error 1
-make[1]: *** [package/pkg-generic.mk:293: <buildroot>/output/build/nodejs-16.15.0/.stamp_built] Error 2
-make: *** [Makefile:84: _all] Error 2
-
-```
-
-Maybe it's not the final patch, but it's good enough to get us going.
+So, we'll need to do the same later.
 
 Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
 ---
- ...lude-obj-name-in-shared-intermediate.patch | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 package/nodejs/0002-include-obj-name-in-shared-intermediate.patch
+ package/nodejs/Config.in      | 3 +++
+ package/nodejs/Config.in.host | 3 +++
+ package/nodejs/nodejs.mk      | 6 ++++++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/package/nodejs/0002-include-obj-name-in-shared-intermediate.patch b/package/nodejs/0002-include-obj-name-in-shared-intermediate.patch
-new file mode 100644
-index 0000000000..6628499362
---- /dev/null
-+++ b/package/nodejs/0002-include-obj-name-in-shared-intermediate.patch
-@@ -0,0 +1,24 @@
-+--- a/tools/gyp/pylib/gyp/generator/ninja.py	2022-04-27 01:03:31.000000000 +0300
-++++ b/tools/gyp/pylib/gyp/generator/ninja.py	2022-07-13 10:20:33.573771172 +0300
-+@@ -42,7 +42,7 @@
-+     # the start of a string, while $| is used for variables that can appear
-+     # anywhere in a string.
-+     "INTERMEDIATE_DIR": "$!INTERMEDIATE_DIR",
-+-    "SHARED_INTERMEDIATE_DIR": "$!PRODUCT_DIR/gen",
-++    "SHARED_INTERMEDIATE_DIR": "$!PRODUCT_DIR/$|OBJ/gen",
-+     "PRODUCT_DIR": "$!PRODUCT_DIR",
-+     "CONFIGURATION_NAME": "$|CONFIGURATION_NAME",
-+     # Special variables that may be used by gyp 'rule' targets.
-+@@ -285,6 +285,12 @@
-+         CONFIGURATION_NAME = "$|CONFIGURATION_NAME"
-+         path = path.replace(CONFIGURATION_NAME, self.config_name)
-+ 
-++        obj = "obj"
-++        if self.toolset != "target":
-++            obj += "." + self.toolset
-++
-++        path = path.replace("$|OBJ", obj)
-++
-+         return path
-+ 
-+     def ExpandRuleVariables(self, path, root, dirname, source, ext, name):
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 016aeb4e1a..fad211b750 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -28,6 +28,9 @@ config BR2_PACKAGE_NODEJS
+ 	# linking, but that's too much of a corner case to support it.
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_HOST_NODEJS
++	select BR2_PACKAGE_HOST_C_ARES
++	select BR2_PACKAGE_HOST_LIBUV
++	select BR2_PACKAGE_HOST_NGHTTP2
+ 	select BR2_PACKAGE_C_ARES
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_ZLIB
+diff --git a/package/nodejs/Config.in.host b/package/nodejs/Config.in.host
+index d023ffc36d..328c8872d3 100644
+--- a/package/nodejs/Config.in.host
++++ b/package/nodejs/Config.in.host
+@@ -2,6 +2,9 @@ config BR2_PACKAGE_HOST_NODEJS
+ 	bool "host nodejs"
+ 	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
+ 	depends on BR2_HOST_GCC_AT_LEAST_8
++	select BR2_PACKAGE_HOST_C_ARES
++	select BR2_PACKAGE_HOST_LIBUV
++	select BR2_PACKAGE_HOST_NGHTTPS2
+ 	select BR2_PACKAGE_HOST_PYTHON3
+ 	select BR2_PACKAGE_HOST_PYTHON3_BZIP2
+ 	select BR2_PACKAGE_HOST_PYTHON3_SSL
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index a8229eb4b1..d15c027c70 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -9,6 +9,9 @@ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = \
+ 	host-nodejs \
++	host-c-ares \
++	host-libuv \
++	host-nghttp2 \
+ 	host-ninja \
+ 	host-pkgconf \
+ 	host-python3 \
+@@ -18,6 +21,9 @@ NODEJS_DEPENDENCIES = \
+ 	zlib \
+ 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+ HOST_NODEJS_DEPENDENCIES = \
++	host-c-ares \
++	host-libuv \
++	host-nghttp2 \
+ 	host-icu \
+ 	host-libopenssl \
+ 	host-ninja \
 -- 
 2.34.1
 
