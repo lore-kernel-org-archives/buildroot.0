@@ -4,90 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA8B4C19F2D
-	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 13:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07D9EC25B07
+	for <buildroot@archiver.kernel.org>; Tue,  9 Aug 2022 13:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45C15415DA;
-	Tue,  9 Aug 2022 13:27:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45C15415DA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BE40410D0;
+	Tue,  9 Aug 2022 13:54:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BE40410D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gy7dnutt74KD; Tue,  9 Aug 2022 13:27:55 +0000 (UTC)
+	with ESMTP id NEr5_igg8jhI; Tue,  9 Aug 2022 13:54:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8886E415A6;
-	Tue,  9 Aug 2022 13:27:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8886E415A6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C6A341BF5E6
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 13:27:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39613410B0;
+	Tue,  9 Aug 2022 13:54:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39613410B0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ECC5A1BF267
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 13:54:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ACE8760BD1
- for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 13:27:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACE8760BD1
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1100408F1
+ for <buildroot@lists.busybox.net>; Tue,  9 Aug 2022 13:54:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1100408F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DNMg8ykU4NQh for <buildroot@lists.busybox.net>;
- Tue,  9 Aug 2022 13:27:36 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7820160E3A
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7820160E3A
- for <buildroot@buildroot.org>; Tue,  9 Aug 2022 13:27:36 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- p12-20020a7bcc8c000000b003a5360f218fso210951wma.3
- for <buildroot@buildroot.org>; Tue, 09 Aug 2022 06:27:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=3uAwV4N1oDp2whGd7CZeJmQzkFR0BgOn7u6fiA7rBOA=;
- b=gnXej/RqlPyyqdtADik/puNBNC3Wq4XnbI/GaaV8UiHIA5GsK1LPKYfLIRvG9Dtzny
- LTmUFBfveq/27eTF0JgOdfD1ZbxEeoXnJdmpRbfrk5vWvHFjWriu5QxcbMpDb+9BDCkB
- LVWO6RRfXr+Kahr8jAoaXT9KkU5aDwpwAgkDOgbWSfepX1+U0qzV2uuKM7DNohnkeoBg
- owzhCr779IZuyRx76eoRb1uJ6ykHasG+QVyiMtjgfFd+UULE2h8Osz93t3aQuTeCmkK2
- 2c9rZfyssaYsS8/PkZCuoBanD4RXjKQj/gx0Ljivk1t88Or02OcySj0vLDIAAFBpDGf4
- BBoQ==
-X-Gm-Message-State: ACgBeo1CRwsN+oieZMz+2ozjlnR+oq610w8c1xnsSSwnK+RXVQ0Yjm34
- nPQNi0OwuAz8ow7Wfq6JeiA3iT8YcqbJww==
-X-Google-Smtp-Source: AA6agR5Hz4GAg4YFTByxJ04z0LVvAcgVh9Hdn7gM5OVDrMIUNG83o92GzAe4ZvBJ7Yt5R4zyEzAtjQ==
-X-Received: by 2002:a05:600c:348d:b0:3a3:1fe6:6b38 with SMTP id
- a13-20020a05600c348d00b003a31fe66b38mr15816989wmq.144.1660051654652; 
- Tue, 09 Aug 2022 06:27:34 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
- by smtp.gmail.com with ESMTPSA id
- f6-20020a05600c4e8600b003a37d8b864esm18305288wmq.30.2022.08.09.06.27.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 09 Aug 2022 06:27:34 -0700 (PDT)
-From: Romain Naour <romain.naour@smile.fr>
-To: buildroot@buildroot.org
-Date: Tue,  9 Aug 2022 15:27:30 +0200
-Message-Id: <20220809132730.232111-2-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20220809132730.232111-1-romain.naour@smile.fr>
-References: <20220809132730.232111-1-romain.naour@smile.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fhA9nY-4gd1e for <buildroot@lists.busybox.net>;
+ Tue,  9 Aug 2022 13:54:30 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06AF840895
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 06AF840895
+ for <buildroot@buildroot.org>; Tue,  9 Aug 2022 13:54:29 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5B5E7240008;
+ Tue,  9 Aug 2022 13:54:27 +0000 (UTC)
+Date: Tue, 9 Aug 2022 15:54:26 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220809155426.7d950e64@windsurf>
+In-Reply-To: <CAPi7W831MWDk=uBqFzebZ9FmsZiVNxDfDfNMYfa5rqW6cgxOuA@mail.gmail.com>
+References: <20220808215404.1804219-1-fontaine.fabrice@gmail.com>
+ <20220809133932.721b8cd8@windsurf>
+ <CAPi7W831MWDk=uBqFzebZ9FmsZiVNxDfDfNMYfa5rqW6cgxOuA@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc;
- bh=3uAwV4N1oDp2whGd7CZeJmQzkFR0BgOn7u6fiA7rBOA=;
- b=G43Xv5L0GM6mZh5Hw28PFGzwvAEsouKvUl0TaQR0lcmW1p7p91LFjLG0a172T2hb4h
- nhLja7ad9F0AvImR9fJ7JWjNQennO5QPg/NPYcKpITopksujAy+lRG6JrDi0uKjqx3Xd
- pSNHf4WaKgjT1Tt8try6kgcYL21hFotiy50qB/pJk/ICHCra9G9M0143kqOjD7k3eD6U
- jMqy9Ow1UrU1MY36ssgubRFKWMJxl8+B1KZ6Eu5DeDBPFZcd/zlaUVzwXv/6jeUKVKLC
- eVvp8jJfPQGyN+g3oUB4pwbFWohJ0DmMPyN2oRPRm7SkWS4SANsFVLEhD8sT9UMfDQNU
- iylQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20210112.gappssmtp.com
- header.i=@smile-fr.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=G43Xv5L0
-Subject: [Buildroot] [PATCH 2/2] package/libinput: remove python tools
- scripts if python is missing
+ d=bootlin.com; s=gm1; t=1660053268;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Qb+lxb17dJNRMbfowSNkLKYtpzqKs+dCOWL4b9vTTr0=;
+ b=GuOfbvClbnYIa4sx6a2R5Dusr6LqNt0fL/WhYWAPREHQ56kR/MfaQ1S1yPshAkazQ4Mmmt
+ KaO6lr8LHiW+LYNA9hvWQ6Ngf8RpzmFtfzLFyxKbcnPJKPT4Il+eh1XvlPg/+0H5YsqhT7
+ 25ricBJHJxkejBYog781LXBDW3evH86U+1yOGpKbqoUQIW++zLBMYmzsUrzX1jICLfnNqo
+ gT/zGPDR8h+xQW+/ILhR5yyUUHKNyIRi9h6i8Hz98U4eFVM5tGrTL//yM7YLYuwxeEjZ8q
+ tDwXG0DXdXD1SgTLlbpwWZEgHc6xpVcKv6xvfhN+5K967Wf0CJwP7A844+Hprg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=GuOfbvCl
+Subject: Re: [Buildroot] [PATCH 1/1] package/xenomai: always set default
+ version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,113 +77,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Some libinput tools are actually python scripts and requires
-at least tree python modules: libevdev, pyudev and pyyaml:
+Hello,
 
-libinput]$ file *
-libinput-analyze:                   ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
-libinput-analyze-per-slot-delta:    Python script, UTF-8 Unicode text executable
-libinput-analyze-recording:         Python script, UTF-8 Unicode text executable
-libinput-analyze-touch-down-state:  Python script, UTF-8 Unicode text executable
-libinput-debug-events:              ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
-libinput-debug-tablet:              ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
-libinput-list-devices:              ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
-libinput-measure:                   ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
-libinput-measure-fuzz:              Python script, UTF-8 Unicode text executable
-libinput-measure-touchpad-pressure: Python script, UTF-8 Unicode text executable
-libinput-measure-touchpad-size:     Python script, UTF-8 Unicode text executable
-libinput-measure-touchpad-tap:      Python script, UTF-8 Unicode text executable
-libinput-measure-touch-size:        Python script, UTF-8 Unicode text executable
-libinput-quirks:                    ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
-libinput-record:                    ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, stripped
-libinput-replay:                    Python script, UTF-8 Unicode text executable
+On Tue, 9 Aug 2022 14:12:53 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-To avoid adding a python interpreter dependency on libinput package,
-add a new libinput option to keep these tools (installed by
-default) only when python is available on the target. Otherwise
-remove them from the target.
+> >  - Not have any default value for BR2_PACKAGE_XENOMAI_VERSION
+> >  
+> 
+> This will not be really consistent with other packages.
+> arm-trusted-firmware, barebox, optee-os, opensbi and uboot all have default
+> values for
+> BR2_TARGET_{ARM_TRUSTED_FIRMWARE,BAREBOX,OPENSBI,OPTEE_OS,UBOOT}_VERSION
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
----
-libinput install unconditionally python scripts without checking if python is available.
-It's not really nice to have to remove them from .mk.
----
- package/libinput/Config.in   | 22 ++++++++++++++++++++++
- package/libinput/libinput.mk | 20 ++++++++++++++++++++
- 2 files changed, 42 insertions(+)
+Well, not really for Git/Mercurial/SVN:
 
-diff --git a/package/libinput/Config.in b/package/libinput/Config.in
-index 14e4e70f96..1a8fcc7ed4 100644
---- a/package/libinput/Config.in
-+++ b/package/libinput/Config.in
-@@ -13,5 +13,27 @@ config BR2_PACKAGE_LIBINPUT
- 
- 	  http://freedesktop.org/wiki/Software/libinput/
- 
-+if BR2_PACKAGE_LIBINPUT
-+
-+config BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS
-+	bool "install python tools "
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_LIBEVDEV # runtime
-+	select BR2_PACKAGE_PYTHON_PYUDEV # runtime
-+	select BR2_PACKAGE_PYTHON_PYYAML # runtime
-+	help
-+	  Install python tools:
-+	  libinput-analyze-per-slot-delta,
-+	  libinput-analyze-recording,
-+	  libinput-analyze-touch-down-state,
-+	  libinput-measure-fuzz,
-+	  libinput-measure-touchpad-pressure,
-+	  libinput-measure-touchpad-size,
-+	  libinput-measure-touchpad-tap,
-+	  libinput-measure-touch-size,
-+	  libinput-replay
-+
-+endif
-+
- comment "libinput needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index a66b0afde5..8c8e0a49a3 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -30,4 +30,24 @@ else
- LIBINPUT_CONF_OPTS += -Ddebug-gui=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS),)
-+LIBINPUT_PYTHON_TOOLS = libinput-analyze-per-slot-delta \
-+	libinput-analyze-recording \
-+	libinput-analyze-touch-down-state \
-+	libinput-measure-fuzz \
-+	libinput-measure-touchpad-pressure \
-+	libinput-measure-touchpad-size \
-+	libinput-measure-touchpad-tap \
-+	libinput-measure-touch-size \
-+	libinput-replay
-+
-+define LIBINPUT_REMOVE_UNNEEDED_FILES
-+	for i in $(LIBINPUT_PYTHON_TOOLS) ; do \
-+		rm -f $(TARGET_DIR)/usr/libexec/libinput/$$i ; \
-+	done
-+endef
-+
-+LIBINPUT_POST_INSTALL_TARGET_HOOKS += LIBINPUT_REMOVE_UNNEEDED_FILES
-+endif
-+
- $(eval $(meson-package))
+config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
+        string "Custom repository version"
+        help
+          Revision to use in the typical format used by
+          Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
+
+So no default version.
+
+And:
+
+config BR2_TARGET_UBOOT_VERSION
+        string
+        default "2022.04"       if BR2_TARGET_UBOOT_LATEST_VERSION
+        default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+                if BR2_TARGET_UBOOT_CUSTOM_VERSION
+        default "custom"        if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+        default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
+                if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
+
+which only means that BR2_TARGET_BOOT_VERSION is automatically set to
+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION when Git/Mercurial/SVN is used.
+
+I wouldn't call that having a default version :-)
+
+I think we should use the same pattern everywhere.
+
+Best regards,
+
+Thomas
 -- 
-2.34.3
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
