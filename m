@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49E58C19F2A
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 15:32:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05958C00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 15:32:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB8508276B;
-	Wed, 10 Aug 2022 15:32:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB8508276B
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4EAE827A9;
+	Wed, 10 Aug 2022 15:32:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4EAE827A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uuZQFAsch_B1; Wed, 10 Aug 2022 15:32:14 +0000 (UTC)
+	with ESMTP id 1Iuh8xwSN0AF; Wed, 10 Aug 2022 15:32:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EB6581BFA;
-	Wed, 10 Aug 2022 15:32:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EB6581BFA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2640D1BF344
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:32:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4449827C5;
+	Wed, 10 Aug 2022 15:32:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4449827C5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 14A2F1BF344
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:32:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0244B6104D
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:32:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0244B6104D
+ by smtp2.osuosl.org (Postfix) with ESMTP id E4B9C409EF
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:32:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4B9C409EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id soILYaqOKa5r for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 15:32:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D47E760B9C
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D47E760B9C
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 15:32:04 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E1CA020004;
- Wed, 10 Aug 2022 15:32:02 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oLngg-002Y4y-1J; Wed, 10 Aug 2022 17:32:02 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QTBfWqZpC1Zy for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 15:32:12 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 231D04093B
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 15:32:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 231D04093B
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id D61D48708F; Wed, 10 Aug 2022 15:17:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20220710070704.215227-1-bernd.kuhls@t-online.de>
-Date: Wed, 10 Aug 2022 17:32:02 +0200
-In-Reply-To: <20220710070704.215227-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 10 Jul 2022 09:07:04 +0200")
-Message-ID: <87y1vwnmh9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: link with -latomic if
- needed
+To: buildroot@buildroot.org
+Date: Wed, 10 Aug 2022 17:28:53 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 4086bc1a9be9850b95657a42959b4bedc82ec050
+X-Git-Newrev: 7a013290748324589e53753b02300f847665e722
+X-Patchwork-Hint: ignore
+Message-Id: <20220810151753.D61D48708F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/mstpd: fix
+ install path of binaries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,28 +57,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7a013290748324589e53753b02300f847665e722
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fixes build error:
- > /nvmedata/autobuild/instance-1/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/10.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld:
- >  ../lib/.libs/libcurl.a(libcurl_la-easy.o): in function `curl_simple_lock_lock':
- > (.text+0x46c): undefined reference to `__atomic_exchange_1'
+As reported by Colin Foster at
+https://lore.kernel.org/buildroot/YsiEyscz0S5b9zj9@colin-ia-desktop/,
+the Linux kernel expects the bridge-stp binary to be installed as
+/sbin/bridge-stp. See
+https://elixir.bootlin.com/linux/v5.18/source/net/bridge/br_private.h#L53.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/1ed/1eddc48f24ab766cfc880c493ed9b230fc57bc09/
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Tested-by: Colin Foster <colin.foster@in-advantage.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 09874785c06747470915fc12befd45307ccd2bbd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mstpd/mstpd.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mstpd/mstpd.mk b/package/mstpd/mstpd.mk
+index 907d094242..07c41af8df 100644
+--- a/package/mstpd/mstpd.mk
++++ b/package/mstpd/mstpd.mk
+@@ -10,4 +10,8 @@ MSTPD_AUTORECONF = YES
+ MSTPD_LICENSE = GPL-2.0, RSA Data Security (md5)
+ MSTPD_LICENSE_FILES = LICENSE hmac_md5.c
+ 
++# The Linux kernel requires mstp binaries to be installed into /sbin,
++# not /usr/sbin.
++MSTPD_CONF_OPTS = --sbindir=/sbin
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
