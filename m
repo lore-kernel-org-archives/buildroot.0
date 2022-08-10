@@ -4,79 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEFA2C00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 19:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FB20C25B0C
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 19:49:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2150140607;
-	Wed, 10 Aug 2022 19:45:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2150140607
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1FC4C405E5;
+	Wed, 10 Aug 2022 19:49:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FC4C405E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KnERC6AnuiDO; Wed, 10 Aug 2022 19:45:04 +0000 (UTC)
+	with ESMTP id 931n0beEmSNH; Wed, 10 Aug 2022 19:49:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0B03A40580;
-	Wed, 10 Aug 2022 19:45:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B03A40580
+	by smtp2.osuosl.org (Postfix) with ESMTP id 924D04044D;
+	Wed, 10 Aug 2022 19:49:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 924D04044D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 704D31BF471
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 19:45:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F23B41BF471
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 19:49:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 495FD40580
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 19:45:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 495FD40580
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA2064044D
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 19:49:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA2064044D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 446HI38RYsjT for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 19:45:00 +0000 (UTC)
+ with ESMTP id LBDeGGrAoz5s for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 19:49:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13E3E40012
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com
- [IPv6:2001:4860:4864:20::36])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 13E3E40012
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 19:44:59 +0000 (UTC)
-Received: by mail-oa1-x36.google.com with SMTP id
- 586e51a60fabf-10e615a36b0so19048910fac.1
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 12:44:59 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A481140012
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com
+ [IPv6:2607:f8b0:4864:20::733])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A481140012
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 19:49:05 +0000 (UTC)
+Received: by mail-qk1-x733.google.com with SMTP id i13so4120555qkm.8
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 12:49:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc;
- bh=8ObQ8M9f7LRfqtLIu41krJ7S0USRfSjXMiXBUq75Ogo=;
- b=d+SSxuC8xGdXhLwI9uMGNqAZFDLg6Q8/tcXASfP10OSNyQ4SSud7wjzldo/+RivoS2
- 9CsmZTHfWVYsbl37I08tp5uoAPe6N4BPBxxvUlNy4gv5YJhE/86rlXnEEGkagBe2KB54
- HCYf8S/lwCgrk8gQiH/9yDR2cqApaEjiAYf1Uy4qSUa5bgQCHe7ECFTDPmsMdTZOFsAn
- LGyqXBl1R8rF/Yikk+TCJvOhLq6ZYlThApvpOAafvwkI6c5HyeXHp5f+Gyec+LXtvsJ7
- dQ5mwuM11sqF4O9fbTdh9xMNLUQkmWUSKMZBXqwOmdQISkF1h6zKXtXpPb1LHCNAoPJX
- 2bvg==
-X-Gm-Message-State: ACgBeo3fMleygmp5OKO3PjhF1qG4/jxZK8k/roh1PRkAcA9/EAvG8bMz
- 1zSbwptIl58P1z4i8vuRaPtBPsLhJ1zhbYxXEoHcmgaGW2Y=
-X-Google-Smtp-Source: AA6agR6HewPkDcYBiUn+3j5Kg7cyxLo6hiiwFaLFqDR/FmtJBP2Ehh3d2Vh51EogfgqNp++jdsx5XHWYxSOCYHjNgJY=
-X-Received: by 2002:a05:6870:b28a:b0:10f:72f:6c with SMTP id
- c10-20020a056870b28a00b0010f072f006cmr2078191oao.148.1660160699056; Wed, 10
- Aug 2022 12:44:59 -0700 (PDT)
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc;
+ bh=MrgENZWJCLTNOQy+yL43ZyzuK7Q7aoe8aEFXj0TzOvA=;
+ b=tpgIKhPsDRdx4CXCfj20yucrfpyPfKCfweOw1EDvdeTUMyHx+GiY7j92KsWsevfS+x
+ xsDqe2Cx3tm5Q6wXCedKAJDe2F2JL7n+XvNuwo8cZ9YxEzYRQV0iOqAEw0h0uAKJaLnr
+ CMy0hIobQ4J0hn8TrtmI30g+r+ALIMpd4VS5Rv06rE28yzgFGYntSDvfgHcEjIVjNwet
+ /BYJXoYDMTNEmjQSBhAnVqOZKulCef/Wplo/g9zZn20repJY1RL+LgHi9jS51GQnPEdZ
+ ymn/qgJSXjvC+S9IKBUmA1b2VyTbJiG4Egb0/SdNt08t/uKzvdRvjCot13sQMZZkfFb2
+ W8gQ==
+X-Gm-Message-State: ACgBeo3YP6dURHAMEO9/0F6MIZKolan/r9FhOQYTPXtehnvAva0K4UvR
+ HN3CE5dK6vskC1bxCCDrSco=
+X-Google-Smtp-Source: AA6agR5LitsMfakN23k1fXRWeL7RrFwbjA/dXF+2R9NpBLMXfpQggVWKjkmM03tMN4QOU3RLn5MGvA==
+X-Received: by 2002:a37:5c6:0:b0:6b9:7127:9e76 with SMTP id
+ 189-20020a3705c6000000b006b971279e76mr9047481qkf.220.1660160944349; 
+ Wed, 10 Aug 2022 12:49:04 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+ by smtp.googlemail.com with ESMTPSA id
+ c15-20020a379a0f000000b006b5cb0c512asm450559qke.101.2022.08.10.12.49.02
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 10 Aug 2022 12:49:03 -0700 (PDT)
+Message-ID: <f4d078b9-7eb9-31d8-884d-948938cd9406@gmail.com>
+Date: Wed, 10 Aug 2022 12:49:00 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20220810190652.2185416-1-f.fainelli@gmail.com>
-In-Reply-To: <20220810190652.2185416-1-f.fainelli@gmail.com>
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 10 Aug 2022 21:44:48 +0200
-Message-ID: <CAPi7W80J=R6vaU2BQ297K9-_93O9hUYB3tyCcJeLw+9jVVrV5Q@mail.gmail.com>
-To: Florian Fainelli <f.fainelli@gmail.com>
+ <CAPi7W80J=R6vaU2BQ297K9-_93O9hUYB3tyCcJeLw+9jVVrV5Q@mail.gmail.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAPi7W80J=R6vaU2BQ297K9-_93O9hUYB3tyCcJeLw+9jVVrV5Q@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc;
- bh=8ObQ8M9f7LRfqtLIu41krJ7S0USRfSjXMiXBUq75Ogo=;
- b=o0nPV1TgkvWCTqkUAEez5HUdeWNPlUurN/ANus3VQdnY5/Lg/4RXNiRM2gdRSRejmC
- gfGyXZQx2ub9ndYgkB23bLReVL68Rpn1ntV/2q+dieBrTkXHAkWjpC6b4h6GNSZ1rrwa
- XIsUXgSM5fZxjAZM1BINRuZfa4Lnf1kFKshwdQW5RlZECjoRX5AK+hfd1wKL2BWIGR4p
- +kwAL+kKUdvSTkl9XliewqNELlKGJoFVSy7R+UWwy7OYHwYbipeCVvvN376o7zpDNMin
- JQAPVNnkbUfT8WRQ6dsaHeiGxfbD62atJkzQr/QSP2zuUxbaN/ag9EzlvCOQo7QFL0Ly
- lg+Q==
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc;
+ bh=MrgENZWJCLTNOQy+yL43ZyzuK7Q7aoe8aEFXj0TzOvA=;
+ b=IDMqFlreaT5g4ebDXAJ78rlJpCOYIzaMapSSIIgZ/UCRaDr2iv/2IPFC/IIE3++TYe
+ 9wGJKzydKPJKKogTQRfuZ1T6AGfuzSJCDvUEcqoy8M+QaqoQxW9oV7C1GOSq8Sp4G5uq
+ MbeZHXd4VtlQRnYRDyCfqVmyiiV9icuWep11AZCq+LB0Qz/MxnJCFzXYHeki8+m/fNt5
+ h4noxgSa7/rD4hF7MAF1+j/8saawpM9ELODwJ31gMO7jDTttjaXisQAsIgCWj6ogbD/w
+ 3mIE+cRbzjCUkK9BX+y1hNXA7dbCwEbUsMDPcAWAY/hlHEO1y+WQWe9f8VrFsrr+2GL/
+ La6g==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=o0nPV1Tg
+ header.a=rsa-sha256 header.s=20210112 header.b=IDMqFlre
 Subject: Re: [Buildroot] [PATCH] package/linux-tools: Allow installation of
  perf scripts
 X-BeenThere: buildroot@buildroot.org
@@ -92,215 +102,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: bernd.kuhls@t-online.de, chrismcc@gmail.com, mmayer@broadcom.com,
  thomas.petazzoni@bootlin.com, buildroot@buildroot.org, yann.morin.1998@free.fr
-Content-Type: multipart/mixed; boundary="===============4458928276525726650=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4458928276525726650==
-Content-Type: multipart/alternative; boundary="000000000000bcc9a905e5e848e6"
-
---000000000000bcc9a905e5e848e6
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-Le mer. 10 ao=C3=BBt 2022 =C3=A0 21:07, Florian Fainelli <f.fainelli@gmail.=
-com> a
-=C3=A9crit :
-
-> In order to run the full gamut of "perf tests" installing the perf
-> scripts is required, otherwise we run into errors similar to those:
->
->         failed to open shell test directory:
-> /usr/libexec/perf-core/tests/shell
->
-> Make this possible by introducing a new option allowing us to install
-> perf scripts.
->
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  package/linux-tools/Config.in             | 6 ++++++
->  package/linux-tools/linux-tool-perf.mk.in | 6 ++++--
->  2 files changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.i=
-n
-> index 732ac65a2565..c0c097d888a9 100644
-> --- a/package/linux-tools/Config.in
-> +++ b/package/linux-tools/Config.in
-> @@ -76,6 +76,12 @@ comment "perf needs a toolchain w/ dynamic library"
->
->  if BR2_PACKAGE_LINUX_TOOLS_PERF
->
-> +config BR2_PACKAGE_LINUX_TOOLS_PERF_SCRIPTS
-> +       bool "Enable installation of perf scripts"
-> +       help
-> +         Enable the installation of the perf scripts under
-> +         /usr/libexec/perf-core/ which is necessary for running "perf
-> tests"
-> +
->  config BR2_PACKAGE_LINUX_TOOLS_PERF_TUI
->         bool "enable perf TUI"
->         depends on BR2_USE_MMU # slang
-> diff --git a/package/linux-tools/linux-tool-perf.mk.in
-> b/package/linux-tools/linux-tool-perf.mk.in
-> index 8ac4ebbc42f5..171aa06fed6b 100644
-> --- a/package/linux-tools/linux-tool-perf.mk.in
-> +++ b/package/linux-tools/linux-tool-perf.mk.in
-> @@ -163,8 +163,10 @@ endef
->  define PERF_INSTALL_TARGET_CMDS
->         $(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
->                 -C $(LINUX_DIR)/tools/perf O=3D$(LINUX_DIR)/tools/perf/
-> install
-> -       $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
-> -       $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
-> +       $(Q)if test "$(BR2_PACKAGE_LINUX_TOOLS_PERF_SCRIPTS)" =3D ""; the=
-n \
-> +               $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/ ; =
-\
-> +               $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/ ; \
-> +       fi
->
-
-
-For consistency with other packages, I would replace the above lines by
-something like:
-
-+
-+ifeq ((BR2_PACKAGE_LINUX_TOOLS_PERF_SCRIPTS),)
-+define BR2_PACKAGE_LINUX_TOOLS_PERF_REMOVE_PERF_SCRIPTS
-+               $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
-+               $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
-+endef
-+endif
-
--       $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
--       $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
-+      $(BR2_PACKAGE_LINUX_TOOLS_PERF_REMOVE_PERF_SCRIPTS)
-endef
-
-
->  define PERF_LINUX_CONFIG_FIXUPS
-> --
-> 2.25.1
->
-> Best Regards,
-
-Fabrice
-
---000000000000bcc9a905e5e848e6
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi,<br></div><br><div class=3D"gmail_quot=
-e"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mer. 10 ao=C3=BBt 2022 =C3=
-=A0=C2=A021:07, Florian Fainelli &lt;<a href=3D"mailto:f.fainelli@gmail.com=
-" target=3D"_blank">f.fainelli@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<br></d=
-iv><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bord=
-er-left:1px solid rgb(204,204,204);padding-left:1ex">In order to run the fu=
-ll gamut of &quot;perf tests&quot; installing the perf<br>
-scripts is required, otherwise we run into errors similar to those:<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 failed to open shell test directory: /usr/libex=
-ec/perf-core/tests/shell<br>
-<br>
-Make this possible by introducing a new option allowing us to install<br>
-perf scripts.<br>
-<br>
-Signed-off-by: Florian Fainelli &lt;<a href=3D"mailto:f.fainelli@gmail.com"=
- target=3D"_blank">f.fainelli@gmail.com</a>&gt;<br>
----<br>
-=C2=A0package/linux-tools/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0| 6 ++++++<br>
-=C2=A0package/linux-tools/<a href=3D"http://linux-tool-perf.mk.in" rel=3D"n=
-oreferrer" target=3D"_blank">linux-tool-perf.mk.in</a> | 6 ++++--<br>
-=C2=A02 files changed, 10 insertions(+), 2 deletions(-)<br>
-<br>
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in<=
-br>
-index 732ac65a2565..c0c097d888a9 100644<br>
---- a/package/linux-tools/Config.in<br>
-+++ b/package/linux-tools/Config.in<br>
-@@ -76,6 +76,12 @@ comment &quot;perf needs a toolchain w/ dynamic library&=
-quot;<br>
-<br>
-=C2=A0if BR2_PACKAGE_LINUX_TOOLS_PERF<br>
-<br>
-+config BR2_PACKAGE_LINUX_TOOLS_PERF_SCRIPTS<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;Enable installation of perf scripts&=
-quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Enable the installation of the perf scri=
-pts under<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/usr/libexec/perf-core/ which is necessa=
-ry for running &quot;perf tests&quot;<br>
-+<br>
-=C2=A0config BR2_PACKAGE_LINUX_TOOLS_PERF_TUI<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 bool &quot;enable perf TUI&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on BR2_USE_MMU # slang<br>
-diff --git a/package/linux-tools/<a href=3D"http://linux-tool-perf.mk.in" r=
-el=3D"noreferrer" target=3D"_blank">linux-tool-perf.mk.in</a> b/package/lin=
-ux-tools/<a href=3D"http://linux-tool-perf.mk.in" rel=3D"noreferrer" target=
-=3D"_blank">linux-tool-perf.mk.in</a><br>
-index 8ac4ebbc42f5..171aa06fed6b 100644<br>
---- a/package/linux-tools/<a href=3D"http://linux-tool-perf.mk.in" rel=3D"n=
-oreferrer" target=3D"_blank">linux-tool-perf.mk.in</a><br>
-+++ b/package/linux-tools/<a href=3D"http://linux-tool-perf.mk.in" rel=3D"n=
-oreferrer" target=3D"_blank">linux-tool-perf.mk.in</a><br>
-@@ -163,8 +163,10 @@ endef<br>
-=C2=A0define PERF_INSTALL_TARGET_CMDS<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 $(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) =
-\<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 -C $(LINUX_DIR)/too=
-ls/perf O=3D$(LINUX_DIR)/tools/perf/ install<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/s=
-cripts/<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/t=
-ests/<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(Q)if test &quot;$(BR2_PACKAGE_LINUX_TOOLS_PER=
-F_SCRIPTS)&quot; =3D &quot;&quot;; then \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(RM) -rf $(TARGET_=
-DIR)/usr/libexec/perf-core/scripts/ ; \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(RM) -rf $(TARGET_=
-DIR)/usr/libexec/perf-core/tests/ ; \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0fi<br></blockquote><div><br></div><div><br></di=
-v><div>For consistency with other packages, I would replace the above lines=
- by something like:</div><div><br></div><div><div><a class=3D"gmail_plusrep=
-ly" id=3D"gmail-m_962642925832699399m_-7677346634444368468plusReplyChip-0">=
-+</a><br></div><div>+ifeq ((BR2_PACKAGE_LINUX_TOOLS_PERF_SCRIPTS),)</div><d=
-iv>+define BR2_PACKAGE_LINUX_TOOLS_PERF_REMOVE_PERF_SCRIPTS</div><div><a cl=
-ass=3D"gmail_plusreply" id=3D"gmail-m_962642925832699399m_-7677346634444368=
-468plusReplyChip-1">+</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
-=C2=A0 $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/<br>
-<a class=3D"gmail_plusreply" id=3D"gmail-m_962642925832699399m_-76773466344=
-44368468plusReplyChip-2">+</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0=C2=A0 $(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/<br></div><di=
-v>
-+endef<br></div><div>+endif</div></div><div><br></div><div>-=C2=A0 =C2=A0 =
-=C2=A0 =C2=A0$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/t=
-ests/</div><div>+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $(BR2_PACKAGE_LINUX_TOOLS_P=
-ERF_REMOVE_PERF_SCRIPTS)</div><div>endef<br></div><br><blockquote class=3D"=
-gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(20=
-4,204,204);padding-left:1ex"><br>
-=C2=A0define PERF_LINUX_CONFIG_FIXUPS<br>
--- <br>
-2.25.1<br>
-<br></blockquote><div>Best Regards,</div><div><br></div><div>Fabrice<br></d=
-iv></div></div>
-
---000000000000bcc9a905e5e848e6--
-
---===============4458928276525726650==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4458928276525726650==--
+T24gOC8xMC8yMiAxMjo0NCwgRmFicmljZSBGb250YWluZSB3cm90ZToKW3NuaXBdCj4gRm9yIGNv
+bnNpc3RlbmN5IHdpdGggb3RoZXIgcGFja2FnZXMsIEkgd291bGQgcmVwbGFjZSB0aGUgYWJvdmUg
+bGluZXMgYnkgCj4gc29tZXRoaW5nIGxpa2U6Cj4gCj4gKwo+ICtpZmVxICgoQlIyX1BBQ0tBR0Vf
+TElOVVhfVE9PTFNfUEVSRl9TQ1JJUFRTKSwpCj4gK2RlZmluZSBCUjJfUEFDS0FHRV9MSU5VWF9U
+T09MU19QRVJGX1JFTU9WRV9QRVJGX1NDUklQVFMKPiArwqAgwqAgwqAgwqAgwqAgwqAgwqDCoCAk
+KFJNKSAtcmYgJChUQVJHRVRfRElSKS91c3IvbGliZXhlYy9wZXJmLWNvcmUvc2NyaXB0cy8KPiAr
+wqAgwqAgwqAgwqAgwqAgwqAgwqDCoCAkKFJNKSAtcmYgJChUQVJHRVRfRElSKS91c3IvbGliZXhl
+Yy9wZXJmLWNvcmUvdGVzdHMvCj4gK2VuZGVmCj4gK2VuZGlmCj4gCj4gLcKgIMKgIMKgIMKgJChS
+TSkgLXJmICQoVEFSR0VUX0RJUikvdXNyL2xpYmV4ZWMvcGVyZi1jb3JlL3NjcmlwdHMvCj4gLcKg
+IMKgIMKgIMKgJChSTSkgLXJmICQoVEFSR0VUX0RJUikvdXNyL2xpYmV4ZWMvcGVyZi1jb3JlL3Rl
+c3RzLwo+ICvCoMKgwqDCoMKgICQoQlIyX1BBQ0tBR0VfTElOVVhfVE9PTFNfUEVSRl9SRU1PVkVf
+UEVSRl9TQ1JJUFRTKQo+IGVuZGVmCgpMb29rcyBtdWNoIGJldHRlciwgSSB3aWxsIHNwaW4gYSB2
+MiBpZiB0aGVyZSBhcmUgbm8gb3RoZXIgY29tbWVudHMuCi0tIApGbG9yaWFuCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
