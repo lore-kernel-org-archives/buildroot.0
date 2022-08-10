@@ -1,83 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4155EC00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 11:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FF7CC00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 11:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 910A24173B;
-	Wed, 10 Aug 2022 11:51:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 910A24173B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E57940BC5;
+	Wed, 10 Aug 2022 11:52:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E57940BC5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hQYsNG4vX9bW; Wed, 10 Aug 2022 11:51:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YdTFfjZdSy0T; Wed, 10 Aug 2022 11:52:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0D1F41735;
-	Wed, 10 Aug 2022 11:51:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0D1F41735
+	by smtp2.osuosl.org (Postfix) with ESMTP id 328B240BC3;
+	Wed, 10 Aug 2022 11:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 328B240BC3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EEE9E1BF314
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 11:51:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EDCD71BF314
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 11:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D08A761040
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 11:51:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D08A761040
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5A7A60E57
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 11:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5A7A60E57
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wyC3pdRTEjy5 for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 11:51:04 +0000 (UTC)
+ with ESMTP id nmX1FTOuI8fO for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 11:52:37 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59D7F60BCF
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 59D7F60BCF
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 11:51:04 +0000 (UTC)
-X-IronPort-AV: E=Sophos;i="5.93,227,1654531200"; d="scan'208";a="312619540"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com)
- ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 10 Aug 2022 19:50:59 +0800
-IronPort-SDR: aUlm1ViKhnH66ZPbcEdk77NnJVmB0+1KD2hDhzsfxrwgq0B8w3VXIGkf2Hovr2VHBbFOs5U0Ux
- GxeJQkfsFBZe+5LS59v9W6ypOwgVloY7vne+K/tT1EOX7rLir+f+mFNFPQyWcPg7CWinbBm8vV
- n3+/J/khakfLHR+ZUhayqJClyCE74ts4tzojZtaDDCberiebzfINfqMxJqPgqw7eLBs6w3TXnM
- BBKP+leRR2G0XuGZJp0ihSkMhx/yc2upZxsFTD1JU5vf7kGIjEChjyD+gTbkXo5N4sRe3s5BX/
- nfh14YasvxfwhO4CWqIqHDfF
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
- by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 10 Aug 2022 04:11:54 -0700
-IronPort-SDR: ju+89h8fkcfCX61HUZL4jK6OoTb6bh0QdNYkdt82vCJe25tdlL1KpkQtCV3ohTBGzPXMELEER8
- ELSmQminqGtcMxDQtLOfC3ftVvgJX6c2H1aMK+RAsShntZu9vKrZF218+H4nHDCJ+xtuX6UO5r
- lNVRp/E/FhxolShSndtaKvmlKaPEOjoVo7XRnpoZcM/w/KhdzyE2Wq9d2YCKQXuKPyaWrQBNTx
- 1wJJBD7RNQXZ+c+9MQogLaD2UunfHxeHlF4M0F6UqZIOhdg/rDb4TJPatstGGnCuXUPt7nHIi+
- QlQ=
-WDCIronportException: Internal
-Received: from unknown (HELO x1-carbon.wdc.com) ([10.225.164.86])
- by uls-op-cesaip02.wdc.com with ESMTP; 10 Aug 2022 04:50:58 -0700
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Aug 2022 13:50:55 +0200
-Message-Id: <20220810115055.3898793-1-niklas.cassel@wdc.com>
-X-Mailer: git-send-email 2.37.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D306860BCF
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D306860BCF
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 11:52:36 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E374A240008;
+ Wed, 10 Aug 2022 11:52:34 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oLkGI-002TgL-25; Wed, 10 Aug 2022 13:52:34 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220712162923.1583408-1-fontaine.fabrice@gmail.com>
+Date: Wed, 10 Aug 2022 13:52:34 +0200
+In-Reply-To: <20220712162923.1583408-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 12 Jul 2022 18:29:23 +0200")
+Message-ID: <87sfm4pb7h.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1660132264; x=1691668264;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=zBoflTw/7JlyN2AY2/q3aSOKTnzlrKDcOipliR+t7p8=;
- b=Buzl7EbO3uy3/NFCV8X2obKisPIu79JkjkKeRbGonROHpVihCN1vyYxK
- PWIsdR8LECn9zuuz4aJCRYfbZp7NrWtPJ0T+OeuMsFInw3WLHVeZDBwBi
- Z/RCdRMNqatOKEQgh9oQPxGH7usxz0l+FtPr3bVeOef+pBWkplS6nhTdx
- CU+xVt240JUTmvTnLrhsowIm8SrI8NRjd6uDr1y7/Yvw88ak9r699IvY7
- KVZIlosboFfTPU5ZnqdrxayRllzoN7dGKKwYMq4Tcv6J2Hk3rnkzeRjBp
- KttycI7Ehb4a5yG+b9g/4ecn9ITMkTuGvIwUuRSG1u9ft2e/Nuxtx4aAA
- Q==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
- header.a=rsa-sha256 header.s=dkim.wdc.com header.b=Buzl7EbO
-Subject: [Buildroot] [PATCH] board/riscv/nommu: bump kernel version and drop
- no longer needed patch
+Subject: Re: [Buildroot] [PATCH 1/1] package/tcpreplay: select musl-fts if
+ needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,395 +63,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Niklas Cassel via buildroot <buildroot@buildroot.org>
-Reply-To: Niklas Cassel <niklas.cassel@wdc.com>
-Cc: Niklas Cassel <niklas.cassel@wdc.com>, damien.lemoal@opensource.wdc.com,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump the kernel version for all riscv nommu configs from 5.18 to 5.19.
-That way, we can remove the one and only riscv nommu patch,
-since this patch is included in kernel 5.19.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
----
- ...ot-stop-relocating-GOT-entries-prema.patch | 110 ------------------
- board/riscv/nommu/patches/linux/readme.txt    |   3 -
- configs/canaan_kd233_defconfig                |   5 +-
- configs/qemu_riscv64_nommu_virt_defconfig     |   5 +-
- configs/sipeed_maix_bit_defconfig             |   5 +-
- configs/sipeed_maix_bit_sdcard_defconfig      |   5 +-
- configs/sipeed_maix_dock_defconfig            |   5 +-
- configs/sipeed_maix_dock_sdcard_defconfig     |   5 +-
- configs/sipeed_maix_go_defconfig              |   5 +-
- configs/sipeed_maix_go_sdcard_defconfig       |   5 +-
- configs/sipeed_maixduino_defconfig            |   5 +-
- configs/sipeed_maixduino_sdcard_defconfig     |   5 +-
- 12 files changed, 10 insertions(+), 153 deletions(-)
- delete mode 100644 board/riscv/nommu/patches/linux/5.18/0001-binfmt_flat-do-not-stop-relocating-GOT-entries-prema.patch
- delete mode 100644 board/riscv/nommu/patches/linux/readme.txt
+ > Fix the following build failure raised since commit
+ > 4138151e447e69771e2579ea5a3daa89c56d41a8:
 
-diff --git a/board/riscv/nommu/patches/linux/5.18/0001-binfmt_flat-do-not-stop-relocating-GOT-entries-prema.patch b/board/riscv/nommu/patches/linux/5.18/0001-binfmt_flat-do-not-stop-relocating-GOT-entries-prema.patch
-deleted file mode 100644
-index e5513b729b..0000000000
---- a/board/riscv/nommu/patches/linux/5.18/0001-binfmt_flat-do-not-stop-relocating-GOT-entries-prema.patch
-+++ /dev/null
-@@ -1,110 +0,0 @@
--From 6045ab5fea4c849153ebeb0acb532da5f29d69c4 Mon Sep 17 00:00:00 2001
--From: Niklas Cassel <niklas.cassel@wdc.com>
--Date: Thu, 14 Apr 2022 11:10:18 +0200
--Subject: binfmt_flat: do not stop relocating GOT entries prematurely on riscv
--
--Upstream commit 6045ab5fea4c849153ebeb0acb532da5f29d69c4.
--
--bFLT binaries are usually created using elf2flt.
--
--The linker script used by elf2flt has defined the .data section like the
--following for the last 19 years:
--
--.data : {
--	_sdata = . ;
--	__data_start = . ;
--	data_start = . ;
--	*(.got.plt)
--	*(.got)
--	FILL(0) ;
--	. = ALIGN(0x20) ;
--	LONG(-1)
--	. = ALIGN(0x20) ;
--	...
--}
--
--It places the .got.plt input section before the .got input section.
--The same is true for the default linker script (ld --verbose) on most
--architectures except x86/x86-64.
--
--The binfmt_flat loader should relocate all GOT entries until it encounters
--a -1 (the LONG(-1) in the linker script).
--
--The problem is that the .got.plt input section starts with a GOTPLT header
--(which has size 16 bytes on elf64-riscv and 8 bytes on elf32-riscv), where
--the first word is set to -1. See the binutils implementation for riscv [1].
--
--This causes the binfmt_flat loader to stop relocating GOT entries
--prematurely and thus causes the application to crash when running.
--
--Fix this by skipping the whole GOTPLT header, since the whole GOTPLT header
--is reserved for the dynamic linker.
--
--The GOTPLT header will only be skipped for bFLT binaries with flag
--FLAT_FLAG_GOTPIC set. This flag is unconditionally set by elf2flt if the
--supplied ELF binary has the symbol _GLOBAL_OFFSET_TABLE_ defined.
--ELF binaries without a .got input section should thus remain unaffected.
--
--Tested on RISC-V Canaan Kendryte K210 and RISC-V QEMU nommu_virt_defconfig.
--
--[1] https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elfnn-riscv.c;hb=binutils-2_38#l3275
--
--Cc: <stable@vger.kernel.org>
--Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
--Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
--Link: https://lore.kernel.org/r/20220414091018.896737-1-niklas.cassel@wdc.com
--Fixed-by: kernel test robot <lkp@intel.com>
--Link: https://lore.kernel.org/lkml/202204182333.OIUOotK8-lkp@intel.com
--Signed-off-by: Kees Cook <keescook@chromium.org>
-----
-- fs/binfmt_flat.c | 27 ++++++++++++++++++++++++++-
-- 1 file changed, 26 insertions(+), 1 deletion(-)
--
--diff --git a/fs/binfmt_flat.c b/fs/binfmt_flat.c
--index 6268981500112..dca0b6875f9c3 100644
----- a/fs/binfmt_flat.c
--+++ b/fs/binfmt_flat.c
--@@ -440,6 +440,30 @@ static void old_reloc(unsigned long rl)
-- 
-- /****************************************************************************/
-- 
--+static inline u32 __user *skip_got_header(u32 __user *rp)
--+{
--+	if (IS_ENABLED(CONFIG_RISCV)) {
--+		/*
--+		 * RISC-V has a 16 byte GOT PLT header for elf64-riscv
--+		 * and 8 byte GOT PLT header for elf32-riscv.
--+		 * Skip the whole GOT PLT header, since it is reserved
--+		 * for the dynamic linker (ld.so).
--+		 */
--+		u32 rp_val0, rp_val1;
--+
--+		if (get_user(rp_val0, rp))
--+			return rp;
--+		if (get_user(rp_val1, rp + 1))
--+			return rp;
--+
--+		if (rp_val0 == 0xffffffff && rp_val1 == 0xffffffff)
--+			rp += 4;
--+		else if (rp_val0 == 0xffffffff)
--+			rp += 2;
--+	}
--+	return rp;
--+}
--+
-- static int load_flat_file(struct linux_binprm *bprm,
-- 		struct lib_info *libinfo, int id, unsigned long *extra_stack)
-- {
--@@ -789,7 +813,8 @@ static int load_flat_file(struct linux_binprm *bprm,
-- 	 * image.
-- 	 */
-- 	if (flags & FLAT_FLAG_GOTPIC) {
---		for (rp = (u32 __user *)datapos; ; rp++) {
--+		rp = skip_got_header((u32 __user *) datapos);
--+		for (; ; rp++) {
-- 			u32 addr, rp_val;
-- 			if (get_user(rp_val, rp))
-- 				return -EFAULT;
---- 
--cgit 
--
-diff --git a/board/riscv/nommu/patches/linux/readme.txt b/board/riscv/nommu/patches/linux/readme.txt
-deleted file mode 100644
-index ea754c9920..0000000000
---- a/board/riscv/nommu/patches/linux/readme.txt
-+++ /dev/null
-@@ -1,3 +0,0 @@
--RISC-V NOMMU Common Support
--
--This directory provides Linux kernel patches common to all RISC-V NO-MMU builds.
-diff --git a/configs/canaan_kd233_defconfig b/configs/canaan_kd233_defconfig
-index 278fb883bf..3aa5dccf08 100644
---- a/configs/canaan_kd233_defconfig
-+++ b/configs/canaan_kd233_defconfig
-@@ -10,9 +10,6 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
- # BR2_RISCV_USE_MMU is not set
- BR2_RISCV_ABI_LP64D=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # Binary format
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
-@@ -21,7 +18,7 @@ BR2_BINFMT_FLAT_ONE=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/kd233/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/qemu_riscv64_nommu_virt_defconfig b/configs/qemu_riscv64_nommu_virt_defconfig
-index 691cf31748..5fab255d88 100644
---- a/configs/qemu_riscv64_nommu_virt_defconfig
-+++ b/configs/qemu_riscv64_nommu_virt_defconfig
-@@ -3,9 +3,6 @@ BR2_riscv=y
- BR2_RISCV_64=y
- # BR2_RISCV_USE_MMU is not set
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # Busybox with hush
- BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
- 
-@@ -22,7 +19,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_virt"
- BR2_LINUX_KERNEL_IMAGE=y
- 
-diff --git a/configs/sipeed_maix_bit_defconfig b/configs/sipeed_maix_bit_defconfig
-index b31bc1309b..d2bac9e0b8 100644
---- a/configs/sipeed_maix_bit_defconfig
-+++ b/configs/sipeed_maix_bit_defconfig
-@@ -10,9 +10,6 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
- # BR2_RISCV_USE_MMU is not set
- BR2_RISCV_ABI_LP64D=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # Binary format
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
-@@ -21,7 +18,7 @@ BR2_BINFMT_FLAT_ONE=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-bit/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
-index e42c3ee425..e1c9dc417e 100644
---- a/configs/sipeed_maix_bit_sdcard_defconfig
-+++ b/configs/sipeed_maix_bit_sdcard_defconfig
-@@ -10,9 +10,6 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
- # BR2_RISCV_USE_MMU is not set
- BR2_RISCV_ABI_LP64D=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # System
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
-@@ -21,7 +18,7 @@ BR2_BINFMT_FLAT_ONE=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/sipeed_maix_dock_defconfig b/configs/sipeed_maix_dock_defconfig
-index d071e5d380..a7f0441e53 100644
---- a/configs/sipeed_maix_dock_defconfig
-+++ b/configs/sipeed_maix_dock_defconfig
-@@ -10,9 +10,6 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
- # BR2_RISCV_USE_MMU is not set
- BR2_RISCV_ABI_LP64D=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # Binary format
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
-@@ -21,7 +18,7 @@ BR2_BINFMT_FLAT_ONE=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-dock/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
-index d1a1b2886d..6b7f8d9c68 100644
---- a/configs/sipeed_maix_dock_sdcard_defconfig
-+++ b/configs/sipeed_maix_dock_sdcard_defconfig
-@@ -10,9 +10,6 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
- # BR2_RISCV_USE_MMU is not set
- BR2_RISCV_ABI_LP64D=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # System
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
-@@ -21,7 +18,7 @@ BR2_BINFMT_FLAT_ONE=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/sipeed_maix_go_defconfig b/configs/sipeed_maix_go_defconfig
-index 3055379db4..a68f9d3b72 100644
---- a/configs/sipeed_maix_go_defconfig
-+++ b/configs/sipeed_maix_go_defconfig
-@@ -10,9 +10,6 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
- # BR2_RISCV_USE_MMU is not set
- BR2_RISCV_ABI_LP64D=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # Binary format
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
-@@ -21,7 +18,7 @@ BR2_BINFMT_FLAT_ONE=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maix-go/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/sipeed_maix_go_sdcard_defconfig b/configs/sipeed_maix_go_sdcard_defconfig
-index 65a6815c20..a127872cd8 100644
---- a/configs/sipeed_maix_go_sdcard_defconfig
-+++ b/configs/sipeed_maix_go_sdcard_defconfig
-@@ -10,9 +10,6 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
- # BR2_RISCV_USE_MMU is not set
- BR2_RISCV_ABI_LP64D=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # System
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
-@@ -21,7 +18,7 @@ BR2_BINFMT_FLAT_ONE=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/sipeed_maixduino_defconfig b/configs/sipeed_maixduino_defconfig
-index 50c59bd4ad..c52adb5db7 100644
---- a/configs/sipeed_maixduino_defconfig
-+++ b/configs/sipeed_maixduino_defconfig
-@@ -10,9 +10,6 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
- # BR2_RISCV_USE_MMU is not set
- BR2_RISCV_ABI_LP64D=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # Binary format
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
-@@ -21,7 +18,7 @@ BR2_BINFMT_FLAT_ONE=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/maixduino/linux-cpio.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/sipeed_maixduino_sdcard_defconfig b/configs/sipeed_maixduino_sdcard_defconfig
-index 5785d7acf3..baaa2bc7bb 100644
---- a/configs/sipeed_maixduino_sdcard_defconfig
-+++ b/configs/sipeed_maixduino_sdcard_defconfig
-@@ -10,9 +10,6 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
- # BR2_RISCV_USE_MMU is not set
- BR2_RISCV_ABI_LP64D=y
- 
--# Patches
--BR2_GLOBAL_PATCH_DIR="board/riscv/nommu/patches"
--
- # System
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
-@@ -21,7 +18,7 @@ BR2_BINFMT_FLAT_ONE=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
- BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210_sdcard"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/linux-sdcard.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+ > Makefile:576: *** musl-fts is in the dependency chain of tcpreplay
+ > that has added it to its _DEPENDENCIES variable without selecting it
+ > or depending on it from Config.in.  Stop.
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/629aabd00cebcad980bf707a70642a67ad4472ca
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.05.x and 2022.02.x, thanks.
+
 -- 
-2.37.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
