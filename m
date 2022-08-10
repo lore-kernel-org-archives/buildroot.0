@@ -4,85 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3572EC00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 07:28:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8791C00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 07:46:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9392A40128;
-	Wed, 10 Aug 2022 07:28:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9392A40128
+	by smtp2.osuosl.org (Postfix) with ESMTP id 15682408E0;
+	Wed, 10 Aug 2022 07:46:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15682408E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jYipVNsO1YFU; Wed, 10 Aug 2022 07:28:36 +0000 (UTC)
+	with ESMTP id QuNY84Si8vj0; Wed, 10 Aug 2022 07:46:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A69D1408E0;
-	Wed, 10 Aug 2022 07:28:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A69D1408E0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 675EC1BF44A
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 07:28:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DEFD408CB;
+	Wed, 10 Aug 2022 07:46:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DEFD408CB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 11AB61BF44A
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 07:46:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40B8940331
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 07:28:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40B8940331
+ by smtp3.osuosl.org (Postfix) with ESMTP id E025760DE5
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 07:46:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E025760DE5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XE7RNpa7Pl_t for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 07:28:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id obeHzuZTFdgT for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 07:46:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D70C9402BB
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D70C9402BB
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 07:28:31 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- a18-20020a05600c349200b003a30de68697so1332459wmq.0
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 00:28:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D50E260D66
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D50E260D66
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 07:45:59 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ a18-20020a05600c349200b003a30de68697so1349208wmq.0
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 00:45:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=KzWkA742RWs/3WGur7uarh7FoDu3AXHUGPO7+ZAcuGc=;
- b=aPsSh9GXIih7a2NeGttyYtEhUl+EDPtW3qcmRQ3xlZvBYCs/7LHKH/MWwMP9NXd+03
- jEusfPxNUO5jdBtEuf7axmN7CIprUAXpFjB86cJvJJDWqQjWnTrIlys1FHfocOMEvIha
- WsPQKiu3u3kDxHpRl0Pa9cn+Wh2Sn3GBknr4WYDrdqvdiqQyo/sIUaCQKPJb2AtWR4m5
- eiKaZ5+bLf2JxhDvIuPb2/ua3Gm7olwkat9mMYVqC5zsjl8XdfeZlFVwjROr0XrGW3y5
- oDXNP6yn8QVnY1ob/TgYwgHPr/9qL+ADycDuwKBEsXJb6O+xKGYShAyBtxP8jkTaH59P
- 0Eaw==
-X-Gm-Message-State: ACgBeo3+FJH2rxHp9v9Ubk1BxqDkY+CMfb1/JG1UnXgLXVk+Y/9ylYG2
- 2thr7YHzaGRgdDqhJLeMxfsR7NfuUyY=
-X-Google-Smtp-Source: AA6agR6Mllc7lpeHwW8eOMNNay6YXXLCTwWLOJ4SOywe0DNWTKltLzzPN+nd/ITxUD6RLQdeqazyhw==
-X-Received: by 2002:a7b:ce11:0:b0:3a5:244:8b65 with SMTP id
- m17-20020a7bce11000000b003a502448b65mr1422490wmc.85.1660116509571; 
- Wed, 10 Aug 2022 00:28:29 -0700 (PDT)
+ bh=Xr5w5MEScX/XylSmuP03eAFCpNAxyOcwsp4mBQJarEs=;
+ b=N6WLVXRBkuQCpRhxq8Fle1AOlTChmIrNIoBaYnN+fa8eJIJ7Qa6VqkixNrJ9LTFYm0
+ ROai2dULyg3onu+qzVkKuRw6HkIKjwwUa3ormcCiPfps2oq+qtvq+5XOqdBI0Pywzx5K
+ O4PSJC8fIlq14XzC80rIYxqaW7V5I9ZvbF0x6cS7XzFxGxekzReMlAfB8MZ06Lo9P3+p
+ f+3zvIFe3lg0F3c1upwtURuKNJ3C9KenFOd/COsA9de49Jj72ajlNwBusBLhK4jpwjDd
+ 9YTao2PuUBo2tccXlz60HP4GTocB1KFViiLPKqROWiwuNrYeK58jzcMcV3qctTzsHtfU
+ f+iQ==
+X-Gm-Message-State: ACgBeo3r7TX/nNFVoNP+ejU+cXdF5wMr0aM2XYmnssXLw8oqqzruDlbM
+ 6khf3T6iGBsMylJoGg6q4w+pKl0H0NQ=
+X-Google-Smtp-Source: AA6agR6TZ+642lbKNv3U4CBKvrdLhGLGVL1OMXCys3jp73xQWQHsoLz3IUn0xwI1MufjWBsGVIxj2A==
+X-Received: by 2002:a05:600c:1f08:b0:3a3:1b00:c201 with SMTP id
+ bd8-20020a05600c1f0800b003a31b00c201mr1434648wmb.171.1660117557666; 
+ Wed, 10 Aug 2022 00:45:57 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b002be75de2a1caa253.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:2be7:5de2:a1ca:a253])
  by smtp.gmail.com with ESMTPSA id
- o2-20020a5d58c2000000b0021e2fccea97sm15103240wrf.64.2022.08.10.00.28.28
+ b6-20020adfee86000000b00220606afdf4sm15739058wro.43.2022.08.10.00.45.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Aug 2022 00:28:29 -0700 (PDT)
+ Wed, 10 Aug 2022 00:45:57 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 10 Aug 2022 09:28:01 +0200
-Message-Id: <20220810072801.2832510-1-fontaine.fabrice@gmail.com>
+Date: Wed, 10 Aug 2022 09:45:47 +0200
+Message-Id: <20220810074547.2833007-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=KzWkA742RWs/3WGur7uarh7FoDu3AXHUGPO7+ZAcuGc=;
- b=LPPtnbhRD38m5r17T9QNI1UjKKv45VTrmBCCmeSvJYL2IoJPG9Db1brv9IdtzMst9A
- z0UfwrPo0PdHOPmXkbwcB+f8UuqYzyRp9553FhUzFVFoqRvUP4EWSShfrD9x7CEYcQpe
- +z5cF11h3Jwh2NQQQwRVvzgZSpkMVZwiCtAQ+1zzkadS6u8XMOK4PO3lxhc+PDA9/PWz
- UQ+XLLMYCjaiY4YQzX1vCMIFfPc6Bp4ro5mC4MAPWtAW12soEnuYLv7dcGw/PZpMgnj6
- m0qOiKl8Cssy1PvLN5QDo/d3zGGKlvkHRpmg60IR3n6JP8JsL2+nFDc14wskyxTg55s6
- BEMA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Xr5w5MEScX/XylSmuP03eAFCpNAxyOcwsp4mBQJarEs=;
+ b=HQSQ/Vf/jLyRPb3uI4G6GK/TZgBjL13rbFasXN4InNjeldkvsInLoq+DEGQgoT8iPK
+ SUzzceU+3sDXvbeFLRpd81BgtUxM7YYAY12UhOf3KGcjJSaPRolqgKOMtAU/2nFqQmaj
+ tI2mbRQSffET5GwB50jRR8JuyMVsG0653Qgzt47GeaH3QSCK7et7qP+TCVDK1PY6ig5d
+ dB9MqoeCT6IgOJCO7GqJsOtymid0pQNwwpf24wS2Mr2Mtlfs0iF+as6paadaTGlKPvIf
+ a/GzOshrDZMVxfTDVI5rLUJYqULZuXM1IDKSaS5NSNRu4wowk/fY2uv9vUeGD5uA0dyk
+ jdvQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=LPPtnbhR
-Subject: [Buildroot] [PATCH 1/1] package/grpc: fix legal info
+ header.a=rsa-sha256 header.s=20210112 header.b=HQSQ/Vf/
+Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: improve ARM trusted
+ firmware fixup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,34 +95,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Robert Rose <robertroyrose@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 0fc2438ff6e3d14cc9e7b546e2909e386db33439 forgot to update hash of
-LICENSE (full text of MPLv2 included with
-https://github.com/grpc/grpc/commit/05fcd826f477ef1a024a2defa5e4b3d78f5e6eb4)
+Improve commit 541e794a959914d1189570c3674908eb5db08ce8 by adding a
+custom case to make sure that a random configuration with an empty
+platform for arm-trusted-firmware doesn't fail:
+
+make_helpers/plat_helpers.mk:15: *** "Error: Unknown platform. Please use PLAT=<platform name> to specify the platform".  Stop.
 
 Fixes:
- - http://autobuild.buildroot.org/results/98b820f85cd32596bde6bbee2cfc7e07ecfa454b
+ - http://autobuild.buildroot.org/results/1b67220008223d1bcbe70b76d643f9d04362ba6b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/grpc/grpc.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/genrandconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 84af11f5a1..d7c1b89aca 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
- sha256  9b1f348b15a7637f5191e4e673194549384f2eccf01fcef7cc1515864d71b424  grpc-1.48.0.tar.gz
--sha256  277adcc1dcef8359b1efb48e628635f88b40be8fbd64e82fd0169930d135d7a5  LICENSE
-+sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index a00ff8ee8b..54eae42063 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -428,6 +428,10 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_KERNEL_HEADERS_CUSTOM_TARBALL=y\n')
+         configlines.remove('BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION=""\n')
+ 
++    if 'BR2_TARGET_ARM_TRUSTED_FIRMWARE=y\n' in configlines and \
++       'BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=""\n' in configlines:
++        return False;
++
+     if 'BR2_TARGET_ARM_TRUSTED_FIRMWARE=y\n' in configlines and \
+        'BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y\n' in configlines and \
+        'BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=""\n' in configlines:
 -- 
 2.35.1
 
