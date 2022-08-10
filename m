@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6311EC00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 15:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EAC2C00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 15:06:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0757E6109C;
-	Wed, 10 Aug 2022 15:04:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0757E6109C
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6AFE81B6D;
+	Wed, 10 Aug 2022 15:06:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6AFE81B6D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fV5XzrjdTRnK; Wed, 10 Aug 2022 15:04:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nQEwg8xOoQb4; Wed, 10 Aug 2022 15:06:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 334F46101F;
-	Wed, 10 Aug 2022 15:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 334F46101F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BC0C31BF488
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:04:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC86081491;
+	Wed, 10 Aug 2022 15:06:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC86081491
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BE2301BF344
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:05:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9802C60BB3
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:04:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9802C60BB3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 999C281491
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:05:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 999C281491
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8UNDCqtycJMx for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 15:04:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8501661095
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 15:04:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8501661095
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4EA338707C; Wed, 10 Aug 2022 14:49:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ePfBPk-ESmVd for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 15:05:57 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D25581455
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6D25581455
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 15:05:57 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B32CB20009;
+ Wed, 10 Aug 2022 15:05:53 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oLnHM-002XOl-TM; Wed, 10 Aug 2022 17:05:52 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 10 Aug 2022 17:02:45 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 707df553dde446fcbc5ed7eac66fb53c9dcbdf34
-X-Git-Newrev: b54a351aca7df3c20e3727862ae69310f0634895
-X-Patchwork-Hint: ignore
-Message-Id: <20220810144952.4EA338707C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/perl: bump
- perl-cross to version 1.4
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220717221400.2907670-1-fontaine.fabrice@gmail.com>
+Date: Wed, 10 Aug 2022 17:05:52 +0200
+In-Reply-To: <20220717221400.2907670-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 18 Jul 2022 00:14:00 +0200")
+Message-ID: <877d3gp29b.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/apg: fix musl static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,62 +63,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b54a351aca7df3c20e3727862ae69310f0634895
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-This bump will fix the following static build failure with berkeleydb
-thanks to
-https://github.com/arsv/perl-cross/commit/31dac3e264a7f1f53dbf49570771123ebd514055:
+ > Drop APG_CFLAGS (which is empty) to correctly set CFLAGS with
+ > TARGET_CFLAGS (which will contain -static) passed by
+ > TARGET_CONFIGURE_OPTS. Moreover, pass TARGET_CFLAGS to FLAGS which is
+ > used to build apgbfm. This will fix the following musl static build
+ > failure raised since the addition of the package in commit
+ > 99eb1a7019a4333f99e93b844962db301a8c3f98:
 
-/nvmedata/autobuild/instance-6/output-1/host/lib/gcc/mipsel-buildroot-linux-uclibc/10.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: lib/auto/DB_File/DB_File.a(DB_File.o): in function `ParseOpenInfo':
-DB_File.c:(.text+0x7d30): undefined reference to `db_create'
+ > /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/armeb-buildroot-linux-musleabi/10.3.0/../../../../armeb-buildroot-linux-musleabi/bin/ld:
+ > /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/armeb-buildroot-linux-musleabi/10.3.0/libgcc.a(_dvmd_lnx.o):
+ > in function `__aeabi_ldiv0':
+ > /home/buildroot/autobuild/instance-2/output-1/build/host-gcc-final-10.3.0/build/armeb-buildroot-linux-musleabi/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499:
+ > undefined reference to `raise'
 
-Fixes:
- - http://autobuild.buildroot.org/results/e01a042185b2221bee815bb9096c4419eeb6e558
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/0e53957965363ceb7141bf8a612998abec893b17
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0425b12daf0d95abd4d5309426bc4af915a626b3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/perl/perl.hash | 4 ++--
- package/perl/perl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index d8344d9754..9ec2b42e34 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -3,8 +3,8 @@ md5  7d2ece7f50775ea1ff739831935a24bd  perl-5.34.1.tar.xz
- sha1  e7dbef3c1ea7caa73e2c705bba9e4bfb92ea98f0  perl-5.34.1.tar.xz
- sha256  6d52cf833ff1af27bb5e986870a2c30cec73c044b41e3458cd991f94374039f7  perl-5.34.1.tar.xz
- 
--# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.7/perl-cross-1.3.7.hash
--sha256  77f13ca84a63025053852331b72d4046c1f90ded98bd45ccedea738621907335  perl-cross-1.3.7.tar.gz
-+# Hash from: https://github.com/arsv/perl-cross/releases/download/1.4/perl-cross-1.4.hash
-+sha256  be9d9f9f7148edff7a2f9695ba3cb7e3975eff6b25a9a81dd311725fd757aa91  perl-cross-1.4.tar.gz
- 
- # Locally calculated
- sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 392fb8b6e2..27acfaeff2 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
- PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.3.7
-+PERL_CROSS_VERSION = 1.4
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
