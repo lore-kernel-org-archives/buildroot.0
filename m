@@ -1,90 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20C8EC00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 21:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C542C00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 21:58:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE7CE827C6;
-	Wed, 10 Aug 2022 21:31:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE7CE827C6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2840D4048F;
+	Wed, 10 Aug 2022 21:58:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2840D4048F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OmYiDX3Ts9R9; Wed, 10 Aug 2022 21:58:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C873B403D0;
+	Wed, 10 Aug 2022 21:58:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C873B403D0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 55C5C1BF40E
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:58:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 30AA8828DA
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:58:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30AA8828DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ND5e3LoWabzZ; Wed, 10 Aug 2022 21:31:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD2A08278F;
-	Wed, 10 Aug 2022 21:31:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD2A08278F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E40841BF40E
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:31:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CBD414091E
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:31:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBD414091E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bVnnxeaxzx3O for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 21:31:01 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F74C40531
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com
- [IPv6:2001:4860:4864:20::31])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7F74C40531
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 21:31:01 +0000 (UTC)
-Received: by mail-oa1-x31.google.com with SMTP id
- 586e51a60fabf-10d845dcf92so19311820fac.12
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 14:31:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:subject:from:to:content-language
- :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
- :cc; bh=fzQq2iK2usv2ZCEpXefxUEOG781R3qWu9TxOPTos7kA=;
- b=yKxqcwmpM2TcvlhjkL3d5j8h6N01gUdk+TTA8kP6gHZ63U6i/UE4zXKRU/UdaOEAa2
- RU6LIUWc8X6ftDkAfSVvCnUy94CThYhEfj9kRPBiWfnPVkKiK+FcKXA93G52Mc07oVI5
- gGuilRc0V9QcQJaRuEioWAmHUAASQ8fEN/4dhvbG15C2umm1X43T0ZgZM2Sk+6gDXSHU
- FSBbwGq2uoeLkU32+XUu/bbF5YFSQWSmsUoaRElUU8jUgq8XnxikbI9ucgzzINvZGE1P
- yclGFGFNCTva2tfhonwx9KGNpuP6kxax5bYLveBxaNsC41GWPV+nuP3US2uluSqmh3Se
- k6QQ==
-X-Gm-Message-State: ACgBeo0KKp4C0XH+mdv8PPLO6ju71OtgoRFOcXuNFXmFKjo25E9OeCeO
- tNaGQ7hGlZiy7Fk0RO+9XktCfJfmyRhI4g==
-X-Google-Smtp-Source: AA6agR6DP0fCNtGvXwriGaPzctisDi/EJftUsgJn5PS9hNS5KMPDg05NrA8eST7KuzSYC+YhAMrdPQ==
-X-Received: by 2002:a05:6870:1495:b0:115:8a17:32fb with SMTP id
- k21-20020a056870149500b001158a1732fbmr2411729oab.86.1660167060307; 
- Wed, 10 Aug 2022 14:31:00 -0700 (PDT)
-Received: from [10.0.0.73] (96-82-249-149-static.hfc.comcastbusiness.net.
- [96.82.249.149]) by smtp.gmail.com with ESMTPSA id
- a24-20020a05683012d800b00637032a39a3sm861885otq.6.2022.08.10.14.30.59
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 10 Aug 2022 14:31:00 -0700 (PDT)
-Message-ID: <fb969d0c-6c59-a3ce-0a72-ddd85a388df6@gmail.com>
-Date: Wed, 10 Aug 2022 15:30:59 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Content-Language: en-US
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5jI-JX0SsecO for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 21:58:11 +0000 (UTC)
+X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E839D815AB
+Received: from smtpcmd13158.aruba.it (smtpcmd13158.aruba.it [62.149.156.158])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E839D815AB
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 21:58:10 +0000 (UTC)
+Received: from localhost.localdomain ([86.32.63.136])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id LtbVowrmUTCpULtbVoCn28; Wed, 10 Aug 2022 23:51:06 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-From: Lance Fredrickson <lancethepants@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:subject:from:to:content-language
- :user-agent:mime-version:date:message-id:from:to:cc;
- bh=fzQq2iK2usv2ZCEpXefxUEOG781R3qWu9TxOPTos7kA=;
- b=dZAZ+gqCuDvjCKQPjhS42dZry6cW30b1IBYMOs3sPp41Vypr1qpJG/xF8v7VU+znbe
- Z0j0niIcMws1LPI10cLj4ViFWeATLn9rtpEEstg6ciTJExJS1RwNE9V4oMRCF7muXzxE
- S0aWgO9EwDpckOnT3+Z+CN42iv/IJAMjHycrsfNvqgNiBGU4mi4UZFdcuMkSNlsD0FGI
- JaUm+r+uMdu1P23533bOG54BYH+sgsomEPkpj9m3hKMN1t/0JFP+V73Mlu7pM3NrEjNL
- JtZlWKok3e0TAJBipiFbQ8Tutpz5u13J+bD8nWGM7m8u8IfQZdoglOMmPx89s3ZY5a6C
- r1rg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=dZAZ+gqC
-Subject: [Buildroot] [Aarch64] libstdc++ segfault at end of execution
+Date: Wed, 10 Aug 2022 23:51:04 +0200
+Message-Id: <20220810215104.107714-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfBfMpnNDuQCzMpmUxHArmTGYTGPf0SzaWISvTKimxcZAuXKS4/I2NZGMwBN1P1FyGODt3yoIom2qe0HEFQGFqPF9EWJv5wJnESOy8Yvfp9dqVLnMkG+d
+ aLmztRmKKJ+v1QCCJMJRX4qGC4Q6fSKt0QqUgDXxOuZZvTUPwjFUEPdQCWH5QzN99CCa05LbKELDjzo62hmr0b4XUld+13JrhAiPA9Cmoa6woMAUKEcFsVvu
+ /e7rHuAbMk1lLLiEY/POdqUyWSUJ9EY8KPTiExhz2rdHPIswuiCTR4t13aDDzMlbVZmU+H6qtvVtH25NBUzQotF30aEyiJipNe8i4hamUJCL2SPujRNX92+U
+ jEZXT6SQ
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1660168266; bh=NlHBvwuqfBQkJ8UxjGNWhFwb0DeZl43b+O6/0r5ub7U=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=m4bp6xzdlyTKlF/+LHXUrne+mfJhm5lqT/1CeiDi+hfmq81LN5OkQuyjrdAlwIQut
+ Aet22vPBp7aJ/telSLwcA4MREF2CaGBC/x4FAbL/cR3c0q73rHRenBjH6GHyio2YwI
+ 87Ppud8wYClCUh+evpSPf6uCLHL+6uJFJ2PyF36RVm0sgfmXOaIb7T2+xp3GdFIfsp
+ nClwX4BU1xxIKjYTHOpbup5IGG7bubqWpKwT01emL+Z4eYlZ0iZ2TZH4AtIfbHvhCg
+ 7WCnvZcVB58EGy+NF2Q+LgCjmXJGoZO+A+TLBTbLLfdVXJTXFY+NoJPl5dJgEKteQ7
+ VYZav77mPisLw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=m4bp6xzd
+Subject: [Buildroot] [PATCH] package/nfs-utils: improve local patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,18 +73,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-I'm having segfaulting issues with c++ on aarch64 using uclibc-ng.
-Anyone else using aarch64 with uclibc-ng?
-I submitted a bug to gcc so am linking that here for this description.
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106581
+As Thomas Petazzoni made me notice the actual local patch is not a good way
+at all to deal with pkg-config with Autotools. So let's rework the patch
+according to his comment that represents the standard of Autotools
+pkg-config usage.
 
-thanks,
-Lance Fredrickson
+I've resping this new patch upstream.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ ...ead-fix-linking-while-static-linking.patch | 39 +++++++++++++------
+ 1 file changed, 28 insertions(+), 11 deletions(-)
+
+diff --git a/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch b/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch
+index b8dcea63f7..9477415296 100644
+--- a/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch
++++ b/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch
+@@ -1,31 +1,48 @@
+-From a69014a1b4e5b8068630abe3109f31eb64b6a076 Mon Sep 17 00:00:00 2001
++From d9abb221cea81dee5956bd987c6efa680c03571a Mon Sep 17 00:00:00 2001
+ From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Wed, 10 Aug 2022 00:10:51 +0200
++Date: Wed, 10 Aug 2022 23:38:17 +0200
+ Subject: [PATCH] nfsrahead: fix linking while static linking
+ 
+--lmount must preceed -lblkid and to obtain this let's add:
+-`pkg-config --libs mount`
+-in place of:
+-`-lmount`
+-This ways the library order will always be correct.
++-lmount must preceed -lblkid and to obtain this let's add in configure.ac:
++PKG_CHECK_MODULES([LIBMOUNT], [mount])
++and in tools/nfsrahead/Makefile.am let's substitute explicit `-lmount`
++with:
++$(LIBMOUNT_LIBS)
++This way all the required libraries will be present and in the right order
++when static linking.
+ 
+ Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ ---
+ Pending Upstream:
+-https://patchwork.kernel.org/project/linux-nfs/patch/20220809223308.1421081-1-giulio.benetti@benettiengineering.com/
++https://patchwork.kernel.org/project/linux-nfs/patch/20220810214554.107094-1-giulio.benetti@benettiengineering.com/
+ ---
++ configure.ac                | 3 +++
+  tools/nfsrahead/Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
++ 2 files changed, 4 insertions(+), 1 deletion(-)
+ 
++diff --git a/configure.ac b/configure.ac
++index f1c46c5c..ff85200b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -273,6 +273,9 @@ AC_LIBCAP
++ dnl Check for -lxml2
++ AC_LIBXML2
++ 
+++dnl Check for -lmount
+++PKG_CHECK_MODULES([LIBMOUNT], [mount])
+++
++ # Check whether user wants TCP wrappers support
++ AC_TCP_WRAPPERS
++ 
+ diff --git a/tools/nfsrahead/Makefile.am b/tools/nfsrahead/Makefile.am
+-index 845ea0d5..280a2eb4 100644
++index 845ea0d5..7e08233a 100644
+ --- a/tools/nfsrahead/Makefile.am
+ +++ b/tools/nfsrahead/Makefile.am
+ @@ -1,6 +1,6 @@
+  libexec_PROGRAMS = nfsrahead
+  nfsrahead_SOURCES = main.c
+ -nfsrahead_LDFLAGS= -lmount
+-+nfsrahead_LDFLAGS= `pkg-config --libs mount`
+++nfsrahead_LDFLAGS= $(LIBMOUNT_LIBS)
+  nfsrahead_LDADD = ../../support/nfs/libnfsconf.la
+  
+  man5_MANS = nfsrahead.man
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
