@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB1EC00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 10:37:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 255ADC00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 10:37:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B865382468;
-	Wed, 10 Aug 2022 10:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B865382468
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1A2941604;
+	Wed, 10 Aug 2022 10:37:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1A2941604
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jL4M_EklBepT; Wed, 10 Aug 2022 10:37:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LxcwBSkwq7Uz; Wed, 10 Aug 2022 10:37:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF48E82438;
-	Wed, 10 Aug 2022 10:37:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF48E82438
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A24A415E6;
+	Wed, 10 Aug 2022 10:37:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A24A415E6
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4695D1BF48C
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 10:37:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C22061BF48C
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 10:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 223F960FFC
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 10:37:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 223F960FFC
+ by smtp3.osuosl.org (Postfix) with ESMTP id AAAF560FFC
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 10:37:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAAF560FFC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UBlMLzB8pLdB for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 10:37:19 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F08160E43
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3F08160E43
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 10:37:19 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 35AC924000C;
- Wed, 10 Aug 2022 10:37:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oLj5Q-002S78-Co; Wed, 10 Aug 2022 12:37:16 +0200
+ with ESMTP id g7c3oU6IO_qE for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 10:37:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E082460E43
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 10:37:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E082460E43
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 178488703F; Wed, 10 Aug 2022 10:23:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Titouan Christophe <titouanchristophe@gmail.com>
-References: <20220712114510.1434413-1-titouanchristophe@gmail.com>
-Date: Wed, 10 Aug 2022 12:37:16 +0200
-In-Reply-To: <20220712114510.1434413-1-titouanchristophe@gmail.com> (Titouan
- Christophe's message of "Tue, 12 Jul 2022 13:45:10 +0200")
-Message-ID: <871qtoqt9f.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/redis: bump to v7.0.3
+To: buildroot@buildroot.org
+Date: Wed, 10 Aug 2022 12:36:15 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: b77f52662091441b0cd0708f6c21239322ee0d18
+X-Git-Newrev: 081f4c2482b02010e9905038dad0a9d50fb3bfdd
+X-Patchwork-Hint: ignore
+Message-Id: <20220810102304.178488703F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/redis: bump to
+ v7.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Price <daniel.price@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=081f4c2482b02010e9905038dad0a9d50fb3bfdd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
- > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8ac8c047e366fb6123b1942b2cd78bbece4a389e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2022.05.x given the fixes, thanks.
-
-I see there is also a 7.0.4 release with security fixes, care to send a
-patch?
-
-================================================================================
-Redis 7.0.4 Released Monday Jul 18 12:00:00 IST 2022
-================================================================================
-
-Upgrade urgency: SECURITY, contains fixes to security issues.
-
-Security Fixes:
-* (CVE-2022-31144) A specially crafted XAUTOCLAIM command on a stream
-  key in a specific state may result with heap overflow, and potentially
-  remote code execution. The problem affects Redis versions 7.0.0 or
-  newer.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 582c3afa03..bff478fe7c 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  284d8bd1fd85d6a55a05ee4e7c31c31977ad56cbf344ed83790beeb148baa720  redis-7.0.0.tar.gz
++sha256  2cde7d17214ffe305953da9fff12333e8a72caa57fd4923e4872f6362a208e73  redis-7.0.3.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 3b91fbf8c8..b292782acf 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 7.0.0
++REDIS_VERSION = 7.0.3
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
