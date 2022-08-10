@@ -1,88 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22194C00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 20:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA6C3C00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 21:07:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB82E60D58;
-	Wed, 10 Aug 2022 20:03:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB82E60D58
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2ECD0405F3;
+	Wed, 10 Aug 2022 21:07:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2ECD0405F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Kr6IUZtluAI; Wed, 10 Aug 2022 20:03:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kDR9B7x7nNVB; Wed, 10 Aug 2022 21:07:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26B2360B9E;
-	Wed, 10 Aug 2022 20:03:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26B2360B9E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 474EA40527;
+	Wed, 10 Aug 2022 21:07:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 474EA40527
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7C3151BF48C
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 20:03:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B4C571BF40E
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:07:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FC3A60B9E
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 20:03:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FC3A60B9E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5961860EFE
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:07:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5961860EFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kyHDOFjbqlEj for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 20:02:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E58A60590
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8E58A60590
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 20:02:55 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id h13so18964692wrf.6
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 13:02:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=1RVmus2+heP+PBGnqkfo+TEGphvrb74eYYUEQp3Dodg=;
- b=IARRV0WpIK0d9927/qWb3o8/C6wyJBBjF8/ckTA6d+rQCjnpQRG1biln+oJ1bbTfrb
- Jex/ZJ8OuYmrrzWn2e253yhDdrOxyZPx7Hn/vK4LMFJvS9mJIKTANOIkbmLNvMniqUh7
- 6w7zIDVd5hhj7UJmKGA3VqEw42XGgCXH3ACpBX7zM2TmGN40R1ApqOtG/69iKqxkjMuZ
- 7ZvZfjHzLUu7TT+BmnBaEYGcSLClpTL6yk2kI5u75SEkIn/AiJB1V6ooI29IvFZbMMes
- M0+dpRrxPcpZMGuXNdD2xwc6U6/IpuKQLhPeEmhDLQg5U2+TmkWHxc0eZsxEiRbIL//R
- i+EQ==
-X-Gm-Message-State: ACgBeo3C/PXRa8eoY/KTdOxWS4YgnbVCwk2rbyI7SgAZNKfiYx2GzDYM
- GYC3ogMqm97bD+R2ntjblG2qKG/XE3c=
-X-Google-Smtp-Source: AA6agR5JjIONlpoUSqk4fleZDENJKA9lI8g4sUXuxPyTU+w3tX5Hc2Of/HYqteDlIt0f1yjZF4zbYg==
-X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
- c18-20020adffb12000000b0020c79b2a200mr18588947wrr.617.1660161773312; 
- Wed, 10 Aug 2022 13:02:53 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b0022aac6160205870c.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:22aa:c616:205:870c])
- by smtp.gmail.com with ESMTPSA id
- ba21-20020a0560001c1500b0021e5bec14basm16962952wrb.5.2022.08.10.13.02.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 10 Aug 2022 13:02:52 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 10 Aug 2022 22:02:41 +0200
-Message-Id: <20220810200241.34141-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id KfeUkSUuXCT8 for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 21:07:49 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07947607C1
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 07947607C1
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 21:07:48 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D9CA420004;
+ Wed, 10 Aug 2022 21:07:45 +0000 (UTC)
+Date: Wed, 10 Aug 2022 23:07:44 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220810230744.6b3b8bc7@windsurf>
+In-Reply-To: <20220809162714.1915094-1-fontaine.fabrice@gmail.com>
+References: <20220809162714.1915094-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=1RVmus2+heP+PBGnqkfo+TEGphvrb74eYYUEQp3Dodg=;
- b=DmGBvbW5TfsVLjvZ6jHHdHCBUSo8KZFcapQ4NtkX9wZtrqUds+gawcHhKlsImX7wJ0
- SsBaLBjxv+ZmBj2DrvLHWSFU/54EyVhbGtBHbPVyizgMfS1Sg6RJ2OdyqUk6Ytm/80XA
- 1o5Umgjee3TqB/tIh0frJmjFSTbGWDDD8VjGl4//ZrRv23w/Q7VFIPIpWLARcdpdzfSq
- /vKiSNuKiJ2F3j480G2b/Km5FegckqSLqZvOg4/wmQKclpzbgA50eliized/Nz6vK9a4
- OSpFHa9+Wuvd4PptshAkeFuMrDM6O8VSYRiiy9QdZ96tG0CpJ73SofhW4AQI3FuA8e0z
- y/qw==
+ d=bootlin.com; s=gm1; t=1660165666;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=029b92FeF6z6xaFuVvOQ9Am2pm2c4mnIPEHL/AStbUE=;
+ b=CbHU5XLns/F/I5wlABIpuSav0fILTK+pLbHFu0yh/DasdYREGA2lEFpdm3QBIo/TQK/JPo
+ Qj+v74LNk1RHpVrZpsZQ52PucAuCYLu6+GovF9NH7oNo85sNSCMtwQ+Um9yyTAr1/2hW8D
+ QUDOQoa8XSlEV2n5kRRrSEPAGolAhZraiA24BZrukhgEBQyA4YivFl9tt2ZLue35oX6Xxa
+ SlXuxiQ1SPxpzhkIa6111CkjBJV1k1VfRwtPVPFCl5eIaHDRNgfpFwcbNM1TtIMj9FPBn2
+ dWPErqJgFxjtJhhzkze3nxYKUDZy9UcYfdEPMnuWhBvH1pWACqDojCDkX9B6Ag==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20210112 header.b=DmGBvbW5
-Subject: [Buildroot] [PATCH 1/1] package/ljsyscall: fix build with aarch64_be
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CbHU5XLn
+Subject: Re: [Buildroot] [PATCH v2,
+ 1/1] utils/genrandconfig: disable libopenssl without atomics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,44 +76,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-luajit supports aarch64_be since commit
-28e5c2f2bdd147dbb9aefbc040fc618f46ee0663
+Hello Fabrice,
 
-However this raise a build failure with ljsyscall because aarch64_be
-directory does not exist so use arm64 instead
+On Tue,  9 Aug 2022 18:27:14 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-/usr/bin/install: cannot stat '/home/buildroot/autobuild/instance-1/output-1/build/ljsyscall-0.12/syscall/linux/aarch64_be/*.lua': No such file or directory
+> libopenssl needs atomic or the build will fail (e.g. on sparcv8 without
+> libatomic):
+> 
+> ${LDCMD:-/nvmedata/autobuild/instance-7/output-1/host/bin/sparc-buildroot-linux-uclibc-gcc}  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O0 -g2  -g2  -L.   \
+> 	-o apps/openssl apps/asn1pars.o apps/ca.o apps/ciphers.o apps/cms.o apps/crl.o apps/crl2p7.o apps/dgst.o apps/dhparam.o apps/dsa.o apps/dsaparam.o apps/ec.o apps/ecparam.o apps/enc.o apps/engine.o apps/errstr.o apps/gendsa.o apps/genpkey.o apps/genrsa.o apps/nseq.o apps/ocsp.o apps/openssl.o apps/passwd.o apps/pkcs12.o apps/pkcs7.o apps/pkcs8.o apps/pkey.o apps/pkeyparam.o apps/pkeyutl.o apps/prime.o apps/rand.o apps/rehash.o apps/req.o apps/rsa.o apps/rsautl.o apps/s_client.o apps/s_server.o apps/s_time.o apps/sess_id.o apps/smime.o apps/speed.o apps/spkac.o apps/srp.o apps/storeutl.o apps/ts.o apps/verify.o apps/version.o apps/x509.o \
+> 	 apps/libapps.a -lssl -lcrypto -ldl
+> /nvmedata/autobuild/instance-7/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ./libssl.so: undefined reference to `__atomic_fetch_sub_4'
 
-Fixes:
- - http://autobuild.buildroot.org/results/78397c83e84dbfc09990f92be93e0b8a10d014c5
+Why don't we link openssl with libatomic?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/ljsyscall/ljsyscall.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+libatomic provides atomic builtins on all architectures.
 
-diff --git a/package/ljsyscall/ljsyscall.mk b/package/ljsyscall/ljsyscall.mk
-index 12dfbcb4ae..b847739a08 100644
---- a/package/ljsyscall/ljsyscall.mk
-+++ b/package/ljsyscall/ljsyscall.mk
-@@ -18,7 +18,7 @@ else ifeq ($(BR2_powerpc),y)
- LJSYSCALL_ARCH = ppc
- else ifeq ($(BR2_arm)$(BR2_armeb),y)
- LJSYSCALL_ARCH = arm
--else ifeq ($(BR2_aarch64),y)
-+else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
- LJSYSCALL_ARCH = arm64
- else ifeq ($(BR2_mips)$(BR2_mipsel),y)
- LJSYSCALL_ARCH = mips
+It is normally already the case:
+
+                        $(if $(BR2_TOOLCHAIN_HAS_LIBATOMIC),-latomic) \
+
+in LIBOPENSSL_CONFIGURE_CMDS. But I see this linker flag is missing in
+the compile command line that causes the error.
+
+Best regards,
+
+Thomas
 -- 
-2.35.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
