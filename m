@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C7DBC00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 15:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEAB3C00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 15:34:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A33344049A;
-	Wed, 10 Aug 2022 15:32:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A33344049A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6017B409D5;
+	Wed, 10 Aug 2022 15:34:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6017B409D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k6CfDN5aO3QU; Wed, 10 Aug 2022 15:32:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FiZU64PT5qb7; Wed, 10 Aug 2022 15:34:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53877417C1;
-	Wed, 10 Aug 2022 15:32:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53877417C1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1A8EC1BF9CB
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:32:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 94271408E2;
+	Wed, 10 Aug 2022 15:34:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94271408E2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C8DCA1BF5E0
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:34:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA62E82768
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:32:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA62E82768
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1C9B40579
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 15:34:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1C9B40579
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6sPowNnUQuHW for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 15:32:12 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2CC5481BFA
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 15:32:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CC5481BFA
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E068B87090; Wed, 10 Aug 2022 15:17:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fFE0b4dHsCUU for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 15:34:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D0E040150
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9D0E040150
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 15:34:39 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 91D811C000B;
+ Wed, 10 Aug 2022 15:34:37 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oLnjA-002YCR-O4; Wed, 10 Aug 2022 17:34:36 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 10 Aug 2022 17:31:22 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7a013290748324589e53753b02300f847665e722
-X-Git-Newrev: 708c138ffee9e46944ba1bc4bed3526d7207db39
-X-Patchwork-Hint: ignore
-Message-Id: <20220810151753.E068B87090@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libcurl: link
- with -latomic if needed
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+References: <20220708150031.1189738-1-bernd.kuhls@t-online.de>
+Date: Wed, 10 Aug 2022 17:34:36 +0200
+In-Reply-To: <20220708150031.1189738-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 8 Jul 2022 17:00:30 +0200")
+Message-ID: <87tu6knmcz.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] package/stellarium: fix sha256 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,47 +63,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=708c138ffee9e46944ba1bc4bed3526d7207db39
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fixes build error:
+ > https://git.busybox.net/buildroot/commit/package/stellarium?id=5de73f0b685d7c2d096e3d28a50f2e89ed68c52c
+ > forgot to change the filename to be checked with the sha256 hash.
 
-/nvmedata/autobuild/instance-1/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/10.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld:
- ../lib/.libs/libcurl.a(libcurl_la-easy.o): in function `curl_simple_lock_lock':
-(.text+0x46c): undefined reference to `__atomic_exchange_1'
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Fixes:
-http://autobuild.buildroot.net/results/1ed/1eddc48f24ab766cfc880c493ed9b230fc57bc09/
+Committed to 2022.05.x, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4351da28a4c0de53bf6e4fece48afcb9566590cb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcurl/libcurl.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index e241bd1c88..5dc4eebefa 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -32,6 +32,10 @@ else
- LIBCURL_CONF_OPTS += --disable-threaded-resolver
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBCURL_CONF_OPTS += LIBS=-latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCURL_VERBOSE),y)
- LIBCURL_CONF_OPTS += --enable-verbose
- else
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
