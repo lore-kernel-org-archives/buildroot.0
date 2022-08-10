@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91344C00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 21:14:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23483C00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 21:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 207BF405F3;
-	Wed, 10 Aug 2022 21:14:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 207BF405F3
+	by smtp3.osuosl.org (Postfix) with ESMTP id B89BC60EFE;
+	Wed, 10 Aug 2022 21:15:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B89BC60EFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qTeKAWCASZpf; Wed, 10 Aug 2022 21:14:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AVsK1D4VR7BU; Wed, 10 Aug 2022 21:15:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F32140527;
-	Wed, 10 Aug 2022 21:14:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F32140527
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 647D91BF40E
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC6D960F2A;
+	Wed, 10 Aug 2022 21:15:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC6D960F2A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 729A01BF9CB
  for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:14:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4687E40527
+ by smtp1.osuosl.org (Postfix) with ESMTP id 46A3782861
  for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:14:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4687E40527
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46A3782861
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O-uV3POXo8k5 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hAR6SIhjIi_1 for <buildroot@lists.busybox.net>;
  Wed, 10 Aug 2022 21:14:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44C80404C4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E7F281D5F
  for <buildroot@buildroot.org>; Wed, 10 Aug 2022 21:14:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44C80404C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E7F281D5F
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7392E870B7; Wed, 10 Aug 2022 21:00:30 +0000 (UTC)
+ id 68B7C870B6; Wed, 10 Aug 2022 21:00:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 10 Aug 2022 23:14:36 +0200
+Date: Wed, 10 Aug 2022 23:13:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3485757c37ea443688589bd073c21c60f38d3a5b
-X-Git-Newrev: 11477df6b144c43c005f62b005a17630061cb781
+X-Git-Oldrev: 8bee47e43d692e67640fc76209df93c31ccb3dcd
+X-Git-Newrev: 3485757c37ea443688589bd073c21c60f38d3a5b
 X-Patchwork-Hint: ignore
-Message-Id: <20220810210030.7392E870B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nfs-utils: bump version to 2.6.2
+Message-Id: <20220810210030.68B7C870B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-orjson: bump to version
+ 3.7.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,108 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11477df6b144c43c005f62b005a17630061cb781
+commit: https://git.buildroot.net/buildroot/commit/?id=3485757c37ea443688589bd073c21c60f38d3a5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-nfs-utils 2.6.2 adds nfsrahead tool to set readahead through sysfs, but
-this tool is mandatory and requires libmount that in order requires
-libblkid. Also we need a local patch that is already pending upstream to
-avoid failing static linking:
-https://patchwork.kernel.org/project/linux-nfs/patch/20220809223308.1421081-1-giulio.benetti@benettiengineering.com/
-
-So let's select:
-- BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-- BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-and add the pending patch for fixing static linking failure due to wrong
-order of libraries in linker list(-lblkid must follow -lmount). This is
-achieved by using pkg-config that is already a dependency of this package.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...fsrahead-fix-linking-while-static-linking.patch | 34 ++++++++++++++++++++++
- package/nfs-utils/Config.in                        |  2 ++
- package/nfs-utils/nfs-utils.hash                   |  4 +--
- package/nfs-utils/nfs-utils.mk                     |  2 +-
- 4 files changed, 39 insertions(+), 3 deletions(-)
+ package/python-orjson/python-orjson.hash | 2 +-
+ package/python-orjson/python-orjson.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch b/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch
-new file mode 100644
-index 0000000000..b8dcea63f7
---- /dev/null
-+++ b/package/nfs-utils/0001-nfsrahead-fix-linking-while-static-linking.patch
-@@ -0,0 +1,34 @@
-+From a69014a1b4e5b8068630abe3109f31eb64b6a076 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 10 Aug 2022 00:10:51 +0200
-+Subject: [PATCH] nfsrahead: fix linking while static linking
-+
-+-lmount must preceed -lblkid and to obtain this let's add:
-+`pkg-config --libs mount`
-+in place of:
-+`-lmount`
-+This ways the library order will always be correct.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+Pending Upstream:
-+https://patchwork.kernel.org/project/linux-nfs/patch/20220809223308.1421081-1-giulio.benetti@benettiengineering.com/
-+---
-+ tools/nfsrahead/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/nfsrahead/Makefile.am b/tools/nfsrahead/Makefile.am
-+index 845ea0d5..280a2eb4 100644
-+--- a/tools/nfsrahead/Makefile.am
-++++ b/tools/nfsrahead/Makefile.am
-+@@ -1,6 +1,6 @@
-+ libexec_PROGRAMS = nfsrahead
-+ nfsrahead_SOURCES = main.c
-+-nfsrahead_LDFLAGS= -lmount
-++nfsrahead_LDFLAGS= `pkg-config --libs mount`
-+ nfsrahead_LDADD = ../../support/nfs/libnfsconf.la
-+ 
-+ man5_MANS = nfsrahead.man
-+-- 
-+2.34.1
-+
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index f00debc420..f3cb17918e 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -8,6 +8,8 @@ config BR2_PACKAGE_NFS_UTILS
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBTIRPC # IPv6 requires libtirpc
- 	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
- 	  The NFS Linux kernel server.
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index a73bf80e70..2efe693875 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
-@@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.6.1/sha256sums.asc
--sha256  60dfcd94a9f3d72a12bc7058d811787ec87a6d593d70da2123faf9aad3d7a1df  nfs-utils-2.6.1.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.6.2/sha256sums.asc
-+sha256  5200873e81c4d610e2462fc262fe18135f2dbe78b7979f95accd159ae64d5011  nfs-utils-2.6.2.tar.xz
- # Locally computed
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 44653e2707..ed205a26b1 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
+index dd511fd8fc..1de1d7cdc2 100644
+--- a/package/python-orjson/python-orjson.hash
++++ b/package/python-orjson/python-orjson.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  ffd677a941c08c9a6cbaf3f49dba12b353833e8028b70e76cd1091b39e096de0  orjson-3.7.7.tar.gz
++sha256  285091518bdbde8086c60c5ed6d7090eccc1c232b00138c964c410f1a7da654f  orjson-3.7.11.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
+ sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
+index e0071fa390..0a266e827a 100644
+--- a/package/python-orjson/python-orjson.mk
++++ b/package/python-orjson/python-orjson.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--NFS_UTILS_VERSION = 2.6.1
-+NFS_UTILS_VERSION = 2.6.2
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
+-PYTHON_ORJSON_VERSION = 3.7.7
++PYTHON_ORJSON_VERSION = 3.7.11
+ PYTHON_ORJSON_SOURCE = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
+-PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/8a/68/47bc5e624431d77445f06a2d3ba32777fda650f05a2f803ea1dc2b07b65a
++PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/fd/52/42520dbfd47191977140c49fa601624b9b4c6cc9d6a62d3e68970ee9eac6
+ PYTHON_ORJSON_SETUP_TYPE = pep517
+ PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
+ PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
