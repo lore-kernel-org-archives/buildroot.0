@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA36C00140
-	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 21:15:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13126C00140
+	for <buildroot@archiver.kernel.org>; Wed, 10 Aug 2022 21:15:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E8A740951;
-	Wed, 10 Aug 2022 21:15:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E8A740951
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BE9982919;
+	Wed, 10 Aug 2022 21:15:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BE9982919
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oOcVo3G6TJAU; Wed, 10 Aug 2022 21:15:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rd1_HtFgttU7; Wed, 10 Aug 2022 21:15:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 426F740457;
-	Wed, 10 Aug 2022 21:15:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 426F740457
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 85AB61BF40E
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:14:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D901682882;
+	Wed, 10 Aug 2022 21:15:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D901682882
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8525A1BF40E
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:15:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C7C5404AA
- for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:14:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C7C5404AA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6050D82882
+ for <buildroot@lists.busybox.net>; Wed, 10 Aug 2022 21:15:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6050D82882
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cayQdxR18jY7 for <buildroot@lists.busybox.net>;
- Wed, 10 Aug 2022 21:14:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A51940457
- for <buildroot@buildroot.org>; Wed, 10 Aug 2022 21:14:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A51940457
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 554B9870B2; Wed, 10 Aug 2022 21:00:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 10 Aug 2022 23:13:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: af972178bdee45469fffdaa3a53ecb9fd8a322f3
-X-Git-Newrev: ff859bd7ef8fbcec29260c4b03a8cfd31eafca23
-X-Patchwork-Hint: ignore
-Message-Id: <20220810210030.554B9870B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-setuptools-rust: bump to
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vEfvj_Qa5IIA for <buildroot@lists.busybox.net>;
+ Wed, 10 Aug 2022 21:15:17 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48AEF81D5F
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 48AEF81D5F
+ for <buildroot@buildroot.org>; Wed, 10 Aug 2022 21:15:17 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 35C211C0004;
+ Wed, 10 Aug 2022 21:15:14 +0000 (UTC)
+Date: Wed, 10 Aug 2022 23:15:10 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220810231510.72575c9c@windsurf>
+In-Reply-To: <20220810053102.2625513-1-james.hilliard1@gmail.com>
+References: <20220810053102.2625513-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1660166114;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=JNacj4GDZK/IBrRcTDQ77HjuBwGK5orcGtgLcVBNqIQ=;
+ b=A6hR/vLqcTZTHyh6M1D5qJfQ38tg+h8+pKirr7EnVsQ38ZGIZd+kWnX+m/gOwEPWSpCNsb
+ MWi8+iX6c9OkbdveXycbnug8mVqG4XzgJ6QHr1m196mFQTMaJKD8uMtHlTX98rPT+yu0Q1
+ 4sAiqxrsCNcS9p7dEAWSx8CRLSdGNJBwORghxtADUiW7wV8Prvll3QDLQInXSkBlyoGcsI
+ F1Tk6EBQfO41ScNHlKlSuc52NRLHf7e7mv3N8F0FCuBt8ib4r35WHZzT2le6kkVQWEfL/w
+ GxyrqwLAD6ehvvcBromM63V5xkmBdxt4ak7K3J/jLR46Nw9Tz5Lzn5k31vnmig==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=A6hR/vLq
+Subject: Re: [Buildroot] [PATCH 1/3] package/python-setuptools-rust: bump to
  version 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,50 +78,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Graeme Smecher <gsmecher@threespeedlogic.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff859bd7ef8fbcec29260c4b03a8cfd31eafca23
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  9 Aug 2022 23:31:00 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-setuptools-rust/python-setuptools-rust.hash | 4 ++--
- package/python-setuptools-rust/python-setuptools-rust.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-setuptools-rust/python-setuptools-rust.hash | 4 ++--
+>  package/python-setuptools-rust/python-setuptools-rust.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-setuptools-rust/python-setuptools-rust.hash b/package/python-setuptools-rust/python-setuptools-rust.hash
-index 3215f2b65d..066d5d8a48 100644
---- a/package/python-setuptools-rust/python-setuptools-rust.hash
-+++ b/package/python-setuptools-rust/python-setuptools-rust.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools-rust/json
--md5  c51ca03d0a6a91ffc3a036822a2deb54  setuptools-rust-1.4.1.tar.gz
--sha256  18ff850831f58ee21d5783825c99fad632da21e47645e9427fd7dec048029e76  setuptools-rust-1.4.1.tar.gz
-+md5  b38674b0b0f8b21063a07d442aa0d759  setuptools-rust-1.5.0.tar.gz
-+sha256  0b8aeb814afe0e9d7c31569ec0936d1f5201993530639244fa973e1742005671  setuptools-rust-1.5.0.tar.gz
- # Locally computed sha256 checksums
- sha256  b20668c1590582b3882854050ccfbdb7aee1f71a1ffe9eacc4c5aeb08a14161b  LICENSE
-diff --git a/package/python-setuptools-rust/python-setuptools-rust.mk b/package/python-setuptools-rust/python-setuptools-rust.mk
-index 44c736ed11..846ff84356 100644
---- a/package/python-setuptools-rust/python-setuptools-rust.mk
-+++ b/package/python-setuptools-rust/python-setuptools-rust.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SETUPTOOLS_RUST_VERSION = 1.4.1
-+PYTHON_SETUPTOOLS_RUST_VERSION = 1.5.0
- PYTHON_SETUPTOOLS_RUST_SOURCE = setuptools-rust-$(PYTHON_SETUPTOOLS_RUST_VERSION).tar.gz
--PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/ed/c6/8effd679eb1cb6d3fd9fc7837cf86c6e4c1ba7a33c3e5e35c741c04016c5
-+PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/20/84/a98f6714ec6aafe3ec2bfa26232af3302453882a1c135f9b518a36275e22
- PYTHON_SETUPTOOLS_RUST_SETUP_TYPE = setuptools
- PYTHON_SETUPTOOLS_RUST_LICENSE = MIT
- PYTHON_SETUPTOOLS_RUST_LICENSE_FILES = LICENSE
+All three applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
