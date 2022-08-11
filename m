@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2845C25B06
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 20:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AECAAC25B06
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 20:28:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F0F4830FB;
-	Thu, 11 Aug 2022 20:28:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F0F4830FB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E9D4830C2;
+	Thu, 11 Aug 2022 20:28:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E9D4830C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YFGPWPJ8noZj; Thu, 11 Aug 2022 20:28:07 +0000 (UTC)
+	with ESMTP id P_wagBRIoDrk; Thu, 11 Aug 2022 20:28:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E11C83046;
-	Thu, 11 Aug 2022 20:28:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E11C83046
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EACE83033;
+	Thu, 11 Aug 2022 20:28:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EACE83033
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 386431BF2B9
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:28:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1DCDD1BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20CC4830C5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 39B7082F6C
  for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:28:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20CC4830C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39B7082F6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2T13nQEP-Hth for <buildroot@lists.busybox.net>;
+ with ESMTP id 5fZAMd0YWSM7 for <buildroot@lists.busybox.net>;
  Thu, 11 Aug 2022 20:28:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FA1C82F6C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 35FE68301D
  for <buildroot@buildroot.org>; Thu, 11 Aug 2022 20:28:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FA1C82F6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35FE68301D
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2F7ED87331; Thu, 11 Aug 2022 20:13:43 +0000 (UTC)
+ id 3907187332; Thu, 11 Aug 2022 20:13:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 11 Aug 2022 22:26:53 +0200
+Date: Thu, 11 Aug 2022 22:27:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9e047b5c09b25506d1139bab5e2daba2db473035
-X-Git-Newrev: 95402089c314fbc03b934f5fcf9c29db043d758c
+X-Git-Oldrev: 95402089c314fbc03b934f5fcf9c29db043d758c
+X-Git-Newrev: 9dd179d43ffe9be98035f921a0db2bf051b632fb
 X-Patchwork-Hint: ignore
-Message-Id: <20220811201343.2F7ED87331@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elf2flt: remove broken patch
+Message-Id: <20220811201343.3907187332@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/elf2flt: fix fatal error
+ regression on m68k, xtensa, riscv64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,118 +64,192 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95402089c314fbc03b934f5fcf9c29db043d758c
+commit: https://git.buildroot.net/buildroot/commit/?id=9dd179d43ffe9be98035f921a0db2bf051b632fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove broken elf2flt patch:
-package/elf2flt/0003-elf2flt-fix-.eh_frame-section-handling.patch
+This series fixes a fatal error at link time on m68k, xtensa,
+and riscv64, caused by a bad upstream elf2flt commit.
 
-The patch modifies main(), but does not perform a similar change in
-output_relocs(), which might cause sectionp in output_relocs() to be
-initialized with an invalid address, causing random memory to be
-overwritten.
-
-This leads to a segfault when linking e.g. busybox for m68k.
-
-We cannot perform a similar change in output_relocs(), since at this
-point in time, data_len will always be non-zero.
-
-Revert this patch completely, so that we can add a working patch.
-
-Note that even with this patch reverted, elf2flt is still broken
-on archs like m68k and xtensa, resulting in the fatal error:
+Without this patch, m68k, xtensa, and riscv64 would result in
+a fatal error:
 ERROR: text=0x3bab8 overlaps data=0x33f60 ?
+
+With this patch, qemu_m68k_mcf5208_defconfig,
+qemu_riscv64_nommu_virt_defconfig, and
+qemu_xtensa_lx60_nommu_defconfig builds properly.
+
+riscv64 and m68k boots to login prompt.
+xtensa crashes when loading init, the same behavior as when
+reverting the bad upstream elf2flt commit completely.
 
 Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...> 0003-elf2flt-add-riscv-64-bits-support.patch} |  0
- ...03-elf2flt-fix-.eh_frame-section-handling.patch | 73 ----------------------
- 2 files changed, 73 deletions(-)
+ ...4-elf2flt-create-a-common-helper-function.patch | 76 ++++++++++++++++++++++
+ ...-fatal-error-regression-on-m68k-xtensa-ri.patch | 73 +++++++++++++++++++++
+ 2 files changed, 149 insertions(+)
 
-diff --git a/package/elf2flt/0004-elf2flt-add-riscv-64-bits-support.patch b/package/elf2flt/0003-elf2flt-add-riscv-64-bits-support.patch
-similarity index 100%
-rename from package/elf2flt/0004-elf2flt-add-riscv-64-bits-support.patch
-rename to package/elf2flt/0003-elf2flt-add-riscv-64-bits-support.patch
-diff --git a/package/elf2flt/0003-elf2flt-fix-.eh_frame-section-handling.patch b/package/elf2flt/0003-elf2flt-fix-.eh_frame-section-handling.patch
-deleted file mode 100644
-index e7e8c6f25b..0000000000
---- a/package/elf2flt/0003-elf2flt-fix-.eh_frame-section-handling.patch
-+++ /dev/null
-@@ -1,73 +0,0 @@
--From 8b7fdb1dedfb8a6e858b46e5af33029fe0462ab8 Mon Sep 17 00:00:00 2001
--From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
--Date: Tue, 10 May 2022 23:14:36 +0900
--Subject: [PATCH] elf2flt: fix .eh_frame section handling
--
--elf2flt.ld linker script positions the .eh_frame section in an output
--section after the .text and .data output sections.
--
--However, when elf2flt.c is supplied the ELF linked using the elf2flt.ld
--linker script, it only looks at the flags for each input section, and
--then puts it in either a bFLT text, data or bss output section.
--
--Commit ba379d08bb7 ("elf2flt: fix for segfault on some ARM ELFs")
--modified the section scanning loop of elf2flt main() function to put
--read-only relocation data sections in the bFLT text output section so
--that the .ARM.exidx section is placed in the .text flat output section.
--Previously a read-only relocation data section would be put in the data
--output section.
--
--On ARM, the .eh_frame section does not have the SEC_RELOC flag set, so
--it will still end up in the data output section. However, on
--architectures that generates the .eh_frame section with the SEC_RELOC
--flag set, this section will now be placed in the text output section.
--
--The logic in elf2flt will handle all sections in order, and since the
--input order is .text, .data, and .eh_frame, putting .eh_frame in text
--output section does not work, since elf2flt.c has already put the .data
--input section in the bFLT data output section. This leads to the
--following print (example for riscv64 architecture):
--
--buildroot/output/host/riscv64-buildroot-linux-uclibc/bin/elf2flt:
--ERROR: text=0x3bab8 overlaps data=0x33f60 ?
--
--The way that elf2flt is written, we cannot append to the text output
--section after an input section has been added to the data output
--section. It might be possible to change this, but that would require
--moving all the code the was already placed in the data output section.
--
--Instead, let's allow putting a read-only relocation data section in the
--text output section (so that .ARM.exidx will still be placed correctly),
--but only if there has not yet been anything placed in the data output
--section.
--
--That way .ARM.exidx will still be placed correctly, and .eh_frame will
--be placed correctly in the .data output section, regardless if it has
--flag SEC_RELOC set or not.
--
--Fixes: ba379d08bb7 ("elf2flt: fix for segfault on some ARM ELFs")
--Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
--Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-----
-- elf2flt.c | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/elf2flt.c b/elf2flt.c
--index 7ac0617..da25e93 100644
----- a/elf2flt.c
--+++ b/elf2flt.c
--@@ -1877,8 +1877,9 @@ int main(int argc, char *argv[])
--     bfd_vma sec_vma;
-- 
--     if ((s->flags & SEC_CODE) ||
---       ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
---                    (SEC_DATA | SEC_READONLY | SEC_RELOC))) {
--+        (((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
--+                     (SEC_DATA | SEC_READONLY | SEC_RELOC)) &&
--+          !data_len)) {
--       vma = &text_vma;
--       len = &text_len;
--     } else if (s->flags & SEC_DATA) {
---- 
--2.35.1
--
+diff --git a/package/elf2flt/0004-elf2flt-create-a-common-helper-function.patch b/package/elf2flt/0004-elf2flt-create-a-common-helper-function.patch
+new file mode 100644
+index 0000000000..6fee99d45a
+--- /dev/null
++++ b/package/elf2flt/0004-elf2flt-create-a-common-helper-function.patch
+@@ -0,0 +1,76 @@
++From 37e1e0ace8ccebf54ec2f5522bfc1f9db86946ad Mon Sep 17 00:00:00 2001
++From: Niklas Cassel <niklas.cassel@wdc.com>
++Date: Tue, 9 Aug 2022 12:13:50 +0200
++Subject: [PATCH] elf2flt: create a common helper function
++
++In order to make the code more maintainable,
++move duplicated code to a common helper function.
++
++No functional change intended.
++
++Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
++---
++ elf2flt.c | 19 +++++++++++--------
++ 1 file changed, 11 insertions(+), 8 deletions(-)
++
++diff --git a/elf2flt.c b/elf2flt.c
++index 669591e..9c32f9a 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -337,6 +337,13 @@ compare_relocs (const void *pa, const void *pb)
++ }
++ #endif
++ 
+++static bool
+++ro_reloc_data_section_should_be_in_text(asection *s)
+++{
+++  return (s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
+++	  (SEC_DATA | SEC_READONLY | SEC_RELOC);
+++}
+++
++ static uint32_t *
++ output_relocs (
++   bfd *abs_bfd,
++@@ -428,8 +435,7 @@ output_relocs (
++ 	 */
++ 	if ((!pic_with_got || ALWAYS_RELOC_TEXT) &&
++ 	    ((a->flags & SEC_CODE) ||
++-	    ((a->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
++-		         (SEC_DATA | SEC_READONLY | SEC_RELOC))))
+++	     ro_reloc_data_section_should_be_in_text(a)))
++ 		sectionp = text + (a->vma - text_vma);
++ 	else if (a->flags & SEC_DATA)
++ 		sectionp = data + (a->vma - data_vma);
++@@ -1893,8 +1899,7 @@ int main(int argc, char *argv[])
++     bfd_vma sec_vma;
++ 
++     if ((s->flags & SEC_CODE) ||
++-       ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
++-                    (SEC_DATA | SEC_READONLY | SEC_RELOC))) {
+++	ro_reloc_data_section_should_be_in_text(s)) {
++       vma = &text_vma;
++       len = &text_len;
++     } else if (s->flags & SEC_DATA) {
++@@ -1932,8 +1937,7 @@ int main(int argc, char *argv[])
++    * data sections.*/
++   for (s = abs_bfd->sections; s != NULL; s = s->next)
++     if ((s->flags & SEC_CODE) ||
++-       ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
++-                    (SEC_DATA | SEC_READONLY | SEC_RELOC)))
+++	ro_reloc_data_section_should_be_in_text(s))
++       if (!bfd_get_section_contents(abs_bfd, s,
++ 				   text + (s->vma - text_vma), 0,
++ 				   bfd_section_size(abs_bfd, s)))
++@@ -1962,8 +1966,7 @@ int main(int argc, char *argv[])
++    * data sections already included in the text output section.*/
++   for (s = abs_bfd->sections; s != NULL; s = s->next)
++     if ((s->flags & SEC_DATA) &&
++-       ((s->flags & (SEC_READONLY | SEC_RELOC)) !=
++-                    (SEC_READONLY | SEC_RELOC)))
+++	!ro_reloc_data_section_should_be_in_text(s))
++       if (!bfd_get_section_contents(abs_bfd, s,
++ 				   data + (s->vma - data_vma), 0,
++ 				   bfd_section_size(abs_bfd, s)))
++-- 
++2.37.1
++
+diff --git a/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch b/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
+new file mode 100644
+index 0000000000..278709cb1c
+--- /dev/null
++++ b/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
+@@ -0,0 +1,73 @@
++From 65ac5f9e69cfb989d970da74c41e478774d29be5 Mon Sep 17 00:00:00 2001
++From: Niklas Cassel <niklas.cassel@wdc.com>
++Date: Tue, 9 Aug 2022 21:06:05 +0200
++Subject: [PATCH] elf2flt: fix fatal error regression on m68k, xtensa,
++ riscv64
++
++Commit ba379d08bb78 ("elf2flt: fix for segfault on some ARM ELFs")
++changed the condition of which input sections that should be included
++in the .text output section from:
++((a->flags & (SEC_DATA | SEC_READONLY)) == (SEC_DATA | SEC_READONLY))
++to:
++((a->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
++(SEC_DATA | SEC_READONLY | SEC_RELOC))
++
++On ARM, the .eh_frame input section does not have the SEC_RELOC flag
++set, so this specific change had no effect on ARM.
++
++However, on e.g. m68k and riscv64, the .eh_frame input section does
++have the SEC_RELOC flag set, which means that after commit ba379d08bb78
++("elf2flt: fix for segfault on some ARM ELFs"), read-only relocation
++data sections were placed in .text output section, instead of .data
++output section.
++
++This will result in a fatal error on m68k, xtensa and riscv64:
++ERROR: text=0x3bab8 overlaps data=0x33f60 ?
++
++This is because elf2flt cannot append to .text after .data has been
++appended to.
++
++Note that the binutils maintainer says that the correct thing is
++to put read-only relocation data sections in .text:
++https://sourceware.org/legacy-ml/binutils/2019-10/msg00132.html
++
++So the proper fix is probably to rewrite elf2flt so that it can append
++to .text after .data has been appended to (which will require elf2flt
++to move/relocate everything that has already been appended to .data,
++since the virtual addresses are contiguous).
++
++However, for now, add an exception for m68k, xtensa and riscv64
++(specifically for the problematic input section, .eh_frame), so that we
++get the same behavior as older elf2flt releases, where we put read-only
++relocation data in .data, which was working perfectly fine.
++
++Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
++---
++ elf2flt.c | 11 +++++++++--
++ 1 file changed, 9 insertions(+), 2 deletions(-)
++
++diff --git a/elf2flt.c b/elf2flt.c
++index 9c32f9a..a680c89 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -340,8 +340,15 @@ compare_relocs (const void *pa, const void *pb)
++ static bool
++ ro_reloc_data_section_should_be_in_text(asection *s)
++ {
++-  return (s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
++-	  (SEC_DATA | SEC_READONLY | SEC_RELOC);
+++  if ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
+++      (SEC_DATA | SEC_READONLY | SEC_RELOC)) {
+++#if defined(TARGET_m68k) || defined(TARGET_riscv64) || defined(TARGET_xtensa)
+++    if (!strcmp(".eh_frame", s->name))
+++      return false;
+++#endif
+++    return true;
+++  }
+++  return false;
++ }
++ 
++ static uint32_t *
++-- 
++2.37.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
