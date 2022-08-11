@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DFD2C19F2A
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 17:33:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 437AAC19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 17:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2DE540BB4;
-	Thu, 11 Aug 2022 17:33:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2DE540BB4
+	by smtp2.osuosl.org (Postfix) with ESMTP id E27D240BEB;
+	Thu, 11 Aug 2022 17:33:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E27D240BEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MK8Tj9j8ZEwW; Thu, 11 Aug 2022 17:33:40 +0000 (UTC)
+	with ESMTP id tGsfxRXlvTUA; Thu, 11 Aug 2022 17:33:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C0E340393;
-	Thu, 11 Aug 2022 17:33:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C0E340393
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9D2981BF35F
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 17:33:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE42240BF4;
+	Thu, 11 Aug 2022 17:33:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE42240BF4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3842D1BF35F
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 17:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76A214055D
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 17:33:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76A214055D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1048E81A3B
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 17:33:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1048E81A3B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1tEak0z-_Wb3 for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 17:33:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81E4240079
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 81E4240079
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 17:33:26 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8B0EC240003;
- Thu, 11 Aug 2022 17:33:24 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oMC3f-002zXl-KE; Thu, 11 Aug 2022 19:33:23 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UnJY5Dgih7Xl for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 17:33:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3498481497
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 17:33:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3498481497
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 7A80987161; Thu, 11 Aug 2022 17:19:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220619210102.1021263-1-fontaine.fabrice@gmail.com>
- <20220619210102.1021263-2-fontaine.fabrice@gmail.com>
-Date: Thu, 11 Aug 2022 19:33:23 +0200
-In-Reply-To: <20220619210102.1021263-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 19 Jun 2022 23:01:01 +0200")
-Message-ID: <87k07ek7mk.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/3] package/bind: disable cmocka
+To: buildroot@buildroot.org
+Date: Thu, 11 Aug 2022 19:30:05 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 21bc60581559bd74a3e93cf804745fbbb52066fa
+X-Git-Newrev: ecfbd3d8409f34c38416fd365eced8097868b6ac
+X-Patchwork-Hint: ignore
+Message-Id: <20220811171916.7A80987161@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/{webkitgtk,
+ wpewebkit}: select audiofx for multimedia
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,21 +57,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ecfbd3d8409f34c38416fd365eced8097868b6ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Disable cmocka (wich is enabled by default)
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+When using webkit with multimedia support the scaletempo element may
+be needed, select the audiofx plugin which provides scaletempo.
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Fixes runtime warning:
+createGSTPlayBin: Failed to create scaletempo
 
--- 
-Bye, Peter Korsgaard
+See:
+https://github.com/WebKit/WebKit/blob/72b59ad50e079037073722bbdf469c0952e399fa/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamer.cpp#L2813
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fb77daa909a83d1d5815c27af0900a1b2eb79cc1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webkitgtk/Config.in | 1 +
+ package/wpewebkit/Config.in | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index eb2ebb9de0..2c255693c9 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -103,6 +103,7 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
++	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index ecf5c40313..73ac94a47b 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -96,6 +96,7 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
++	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUTODETECT
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
+ 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
