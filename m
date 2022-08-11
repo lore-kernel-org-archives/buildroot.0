@@ -4,48 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D4CDC19F2A
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 19:34:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3664DC19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 20:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3614410AE;
-	Thu, 11 Aug 2022 19:34:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3614410AE
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA47E417BA;
+	Thu, 11 Aug 2022 20:16:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA47E417BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IfoKuMTwmh_l; Thu, 11 Aug 2022 19:34:53 +0000 (UTC)
+	with ESMTP id BYWY5QUpB7wk; Thu, 11 Aug 2022 20:16:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8AEE74049A;
-	Thu, 11 Aug 2022 19:34:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AEE74049A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A85061BF3AA
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 19:34:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8211F417B3;
+	Thu, 11 Aug 2022 20:16:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8211F417B3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D4C891BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:16:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75A78813AE
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 19:34:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75A78813AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF7024013B
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:16:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF7024013B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fIkOnkpbJmnL for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 19:34:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E51881396
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 19:34:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E51881396
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 774A6872EC; Thu, 11 Aug 2022 19:20:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 11 Aug 2022 21:27:50 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: e2daea5fcc528dce89e57ae46b143028873f8202
-X-Git-Newrev: e95fa1c56ccc4e5e7468b129f5edfb27c24bb50d
-X-Patchwork-Hint: ignore
-Message-Id: <20220811192009.774A6872EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/zlib-ng: add
- upstream patch to fix build with uclibc
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1b_y3-rNsmxd for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 20:16:38 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35382400E2
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
+ [IPv6:2607:f8b0:4864:20::102b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 35382400E2
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 20:16:38 +0000 (UTC)
+Received: by mail-pj1-x102b.google.com with SMTP id a8so18636008pjg.5
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 13:16:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc;
+ bh=E4W5rqp5azjg5A+V7Wx+ywYJkJb28f+pO2p9mZZb9BE=;
+ b=4JVCzu+O7Ta+Z81fvr1ODrIMisZqIwJy9cQc4KZ3PESuXg4D/sREa18Gm4WstEZ9X1
+ +KKNhKBF2FnXLyvD36cFlQylDVxxfjxHvfN8I9oWvRWXhVvh1nrvc9yjUGF+4YwD9mDa
+ bIz7FTVeiL1hOXc+KyNsjuTzpIgDqhocRk3p2l4nt6od3R3/YyU5VZK1P8UqnLJLA5pR
+ CI4dNnl6BuYrMLsPkt7BfTATC1GWfjjNWIbwN46LXROwJt9O0thqAk2ly8wrLZkTAHPz
+ 1JWIUd45ujysL/cqnCfqhsy1s6iOM4I6gw3SDSgDQ/wgjC4CWFw1CVm8F3H/rjE2RJ3V
+ aM3A==
+X-Gm-Message-State: ACgBeo1GFanDuWLzK/xd0w97NAYgxasmr7KqaqVuT5G6s4zG/0rv3QBK
+ d0ikn/VhRN5vPj0ZaIncjVByVvkxjPjCuxqCf5OUhrUG9ptAgg==
+X-Google-Smtp-Source: AA6agR5CHAyE/KAK5kDXT/afa631bfC3EU+NcBlGVr6wnsSfTJu8cZlnKEPi71PwhAEEkSpthFYWHVVk229oSoKoioM=
+X-Received: by 2002:a17:903:22c1:b0:16e:fbcc:f298 with SMTP id
+ y1-20020a17090322c100b0016efbccf298mr861295plg.2.1660248997665; Thu, 11 Aug
+ 2022 13:16:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220810215104.107714-1-giulio.benetti@benettiengineering.com>
+ <20220810233824.714623-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220810233824.714623-1-giulio.benetti@benettiengineering.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 11 Aug 2022 22:16:26 +0200
+Message-ID: <CAB1t1CzcXYJXC0oj7+80mzhErncBPVV31ZOJ5DNUia1y0=d8HQ@mail.gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc;
+ bh=E4W5rqp5azjg5A+V7Wx+ywYJkJb28f+pO2p9mZZb9BE=;
+ b=HJMOsDap6SnI11+bfs7bHzKQTT36ckVjl40qfZaM2Z7R+zvtI1f/PpgSmxCKsZZgRO
+ +uEZ8AQqFGBirBeHF9/hP6fKOkFtW0Y1W0AhCbU8cjyw8lpUxnF2YoTboIgvyLTX/j+F
+ 3CUNSKYhjALXZJJ57Fy0WbpuqMIWIBQnTEGYcnUWe617h3nNhXcB7yMOjlXeCFyFVW4b
+ CnCZJog6y187LcHBySFoknar3I6tFGl1RFzu3rTf5/wx8ccS5/BTfVdO8UgRK73k3z+h
+ o9H9xU6j3FmsS/Gl/HUawznTzSeNuRg3SYY9VR1W4l7hW1clvQVFEbcyUmykVNSPt3B1
+ oylQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=HJMOsDap
+Subject: Re: [Buildroot] [PATCH v2] package/nfs-utils: improve local patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,132 +89,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============0803777434476234698=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e95fa1c56ccc4e5e7468b129f5edfb27c24bb50d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+--===============0803777434476234698==
+Content-Type: multipart/alternative; boundary="000000000000bea0d605e5fcd750"
 
-Fix the following build failure with uclibc on arm architectures (and
-similar on powerpc):
+--000000000000bea0d605e5fcd750
+Content-Type: text/plain; charset="UTF-8"
 
-/home/buildroot/autobuild/instance-2/output-1/build/zlib-ng-2.0.6/arch/arm/armfeature.c:4:12: fatal error: sys/auxv.h: No such file or directory
-    4 | #  include <sys/auxv.h>
-      |            ^~~~~~~~~~~~
-compilation terminated.
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-Fixes:
+--000000000000bea0d605e5fcd750
+Content-Type: text/html; charset="UTF-8"
 
-  http://autobuild.buildroot.net/results/1ac782825e897981d932b405ca60cd2ec4b3b8cb/
+<div dir="ltr">Reviewed-by: Petr Vorel &lt;<a href="mailto:petr.vorel@gmail.com">petr.vorel@gmail.com</a>&gt;</div>
 
-Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1666b661c6c103d05bbbea05f0f2b89ee4560527)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-that-sys-auxv.h-exists-at-configure-time.patch | 90 ++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+--000000000000bea0d605e5fcd750--
 
-diff --git a/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch b/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch
-new file mode 100644
-index 0000000000..ba8297cda7
---- /dev/null
-+++ b/package/zlib-ng/0003-zlib-ng-check-that-sys-auxv.h-exists-at-configure-time.patch
-@@ -0,0 +1,90 @@
-+From e1baa6b439c06f3d0e6be3e381cc746ffb55aee1 Mon Sep 17 00:00:00 2001
-+From: Mika Lindqvist <postmaster@raasu.org>
-+Date: Wed, 13 Apr 2022 01:22:29 +0300
-+Subject: [PATCH] Check that sys/auxv.h exists at configure time and add
-+ preprocessor define for it. * Protect including sys/auxv.h in all relevant
-+ files with the new preprocessor define * Test for both existence of both
-+ sys/auxv.h and getauxval() with both cmake and configure
-+
-+[Ben Hutchings: Backport to 2.0.6:
-+ - Drop the s390 changes
-+ - Change some filenames]
-+
-+Backported from: e1baa6b439c06f3d0e6be3e381cc746ffb55aee1
-+Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
-+---
-+ CMakeLists.txt        |    4 ++++
-+ arch/arm/armfeature.c |    2 +-
-+ arch/power/power.c    |    5 ++++-
-+ configure             |   13 +++++++++++++
-+ 4 files changed, 22 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 0dd196130..e4e4b7332 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -338,6 +338,10 @@ endif()
-+ #
-+ # Check for standard/system includes
-+ #
-++check_include_file(sys/auxv.h  HAVE_SYS_AUXV_H)
-++if(HAVE_SYS_AUXV_H)
-++    add_definitions(-DHAVE_SYS_AUXV_H)
-++endif()
-+ check_include_file(sys/sdt.h   HAVE_SYS_SDT_H)
-+ if(HAVE_SYS_SDT_H)
-+     add_definitions(-DHAVE_SYS_SDT_H)
-+diff --git a/arch/arm/arm_features.c b/arch/arm/arm_features.c
-+index 195c94992..f6b67687f 100644
-+--- a/arch/arm/armfeature.c
-++++ b/arch/arm/armfeature.c
-+@@ -1,6 +1,6 @@
-+ #include "../../zutil.h"
-+ 
-+-#if defined(__linux__)
-++#if defined(__linux__) && defined(HAVE_SYS_AUXV_H)
-+ #  include <sys/auxv.h>
-+ #  ifdef ARM_ASM_HWCAP
-+ #    include <asm/hwcap.h>
-+diff --git a/arch/power/power_features.c b/arch/power/power_features.c
-+index 9186b40d8..65599d9a7 100644
-+--- a/arch/power/power.c
-++++ b/arch/power/power.c
-+@@ -1,9 +1,12 @@
-+ /* POWER feature check
-+  * Copyright (C) 2020 Matheus Castanho <msc@linux.ibm.com>, IBM
-++ * Copyright (C) 2021-2022 Mika T. Lindqvist <postmaster@raasu.org>
-+  * For conditions of distribution and use, see copyright notice in zlib.h
-+  */
-+ 
-+-#include <sys/auxv.h>
-++#ifdef HAVE_SYS_AUXV_H
-++#  include <sys/auxv.h>
-++#endif
-+ #include "../../zutil.h"
-+ 
-+ Z_INTERNAL int power_cpu_has_arch_2_07;
-+diff --git a/configure b/configure
-+index aed1909cc..a357e1c8a 100755
-+--- a/configure
-++++ b/configure
-+@@ -776,6 +776,19 @@ else
-+   echo "Checking for strerror... No." | tee -a configure.log
-+ fi
-+ 
-++# check for getauxval() for architecture feature detection at run-time
-++cat > $test.c <<EOF
-++#include <sys/auxv.h>
-++int main() { return getauxval(0); }
-++EOF
-++if try $CC $CFLAGS -o $test $test.c $LDSHAREDLIBC; then
-++  echo "Checking for getauxval() in sys/auxv.h... Yes." | tee -a configure.log
-++  CFLAGS="${CFLAGS} -DHAVE_SYS_AUXV_H"
-++  SFLAGS="${SFLAGS} -DHAVE_SYS_AUXV_H"
-++else
-++  echo "Checking for getauxval() in sys/auxv.h... No." | tee -a configure.log
-++fi
-++
-+ # We need to remove zconf.h from source directory if building outside of it
-+ if [ "$SRCDIR" != "$BUILDDIR" ]; then
-+     rm -f $SRCDIR/zconf${SUFFIX}.h
+--===============0803777434476234698==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0803777434476234698==--
