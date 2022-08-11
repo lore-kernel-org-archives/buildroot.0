@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56BC2C19F2A
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8102C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D95864039D;
-	Thu, 11 Aug 2022 11:38:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D95864039D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BA7683032;
+	Thu, 11 Aug 2022 11:39:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BA7683032
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 02vuZtJ4ENeJ; Thu, 11 Aug 2022 11:39:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9CC78301D;
+	Thu, 11 Aug 2022 11:39:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9CC78301D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B684F1BF38C
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:39:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F5194032A
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:39:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F5194032A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BYrKCMHelAxW; Thu, 11 Aug 2022 11:38:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 02F014032A;
-	Thu, 11 Aug 2022 11:38:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02F014032A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 660421BF38C
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:38:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4109E60FBE
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:38:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4109E60FBE
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id leCBEZeiWwQ4 for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 11:38:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FB9360F5D
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:38:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FB9360F5D
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 562C787113; Thu, 11 Aug 2022 11:23:56 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1wQl60pgWGy9 for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 11:39:38 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B5AB4023B
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B5AB4023B
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:39:38 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id DE20920003;
+ Thu, 11 Aug 2022 11:39:34 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oM6XG-002qk0-0v; Thu, 11 Aug 2022 13:39:34 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 11 Aug 2022 13:36:05 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 6b80ec9cac889a9cf1cdff6bd8582caccb6e95be
-X-Git-Newrev: be070658aa5af1d4719a2c91849d9d7bec14b0bf
-X-Patchwork-Hint: ignore
-Message-Id: <20220811112356.562C787113@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libp11: needs
- threads
+To: Baruch Siach via buildroot <buildroot@buildroot.org>
+References: <4a323dc9772af9a5b5295ae2d1a65f0d314765d3.1658478797.git.baruch@tkos.co.il>
+Date: Thu, 11 Aug 2022 13:39:33 +0200
+In-Reply-To: <4a323dc9772af9a5b5295ae2d1a65f0d314765d3.1658478797.git.baruch@tkos.co.il>
+ (Baruch Siach via buildroot's message of "Fri, 22 Jul 2022 11:33:17
+ +0300")
+Message-ID: <87bksrm2kq.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/libcurl: fix dependency symbol typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +64,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net, "Yann E .
+ MORIN" <yann.morin.1998@free.fr>, Matt Weber <matthew.weber@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be070658aa5af1d4719a2c91849d9d7bec14b0bf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
 
-threads are mandatory since bump to version 0.4.12 in commit
-86ab91483dcb4b60de8c1daa20e2f42bd95ab5fb and
-https://github.com/OpenSC/libp11/commit/4bd92da60a670e3c25d9cb69fca3363f47a225c7:
+ > Commit 6d07e2618c0 ("package/uacme: requires TLS support in libcurl")
+ > mistyped the BR2_PACKAGE_LIBCURL_FORCE_TLS dependency making the fix
+ > ineffective.
 
-In file included from eng_back.c:30:
-p11_pthread.h:92:2: error: #error Locking not supported on this platform.
-   92 | #error Locking not supported on this platform.
-      |  ^~~~~
+ > Fixes:
+ > http://autobuild.buildroot.net/results/56ea6cb146df63d1575da9dae3035b3220de875f/
+ > http://autobuild.buildroot.net/results/280b0ed7f9cdb424917373f98c3e4e6b593c6d21/
 
-Fixes:
- - http://autobuild.buildroot.org/results/22adeb78ec4a807c362e6666825f50db6c0408f7
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Matt Weber <matthew.weber@collins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a81caea821199a2932f82ad24b1ee93c577a0477)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libp11/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Committed to 2022.05.x and 2022.02.x, thanks.
 
-diff --git a/package/libp11/Config.in b/package/libp11/Config.in
-index 4d7ff56895..ef1e5b4703 100644
---- a/package/libp11/Config.in
-+++ b/package/libp11/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBP11
- 	bool "libp11"
- 	depends on !BR2_STATIC_LIBS # dlopen
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  OpenSSL engine for PKCS#11 modules. Part of the OpenSC
-@@ -8,5 +9,5 @@ config BR2_PACKAGE_LIBP11
- 
- 	  https://github.com/OpenSC/OpenSC/wiki
- 
--comment "libp11 needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "libp11 needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
