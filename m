@@ -1,69 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC5B1C19F2A
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 21:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AADE4C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 21:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 531614154A;
-	Thu, 11 Aug 2022 21:02:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 531614154A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54E0360F6C;
+	Thu, 11 Aug 2022 21:02:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54E0360F6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Db2vGEkADFUe; Thu, 11 Aug 2022 21:02:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QpjyZomn7qjv; Thu, 11 Aug 2022 21:02:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1DED410AE;
-	Thu, 11 Aug 2022 21:02:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1DED410AE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 33A621BF2B9
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 21:01:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 735F860B59;
+	Thu, 11 Aug 2022 21:02:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 735F860B59
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D71B21BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 21:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D1F84154A
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 21:01:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D1F84154A
+ by smtp3.osuosl.org (Postfix) with ESMTP id C030060FA2
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 21:02:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C030060FA2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hIJDjmsVQ4Yo for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 21:01:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC2AE410AE
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DC2AE410AE
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 21:01:56 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id ECECB240005;
- Thu, 11 Aug 2022 21:01:54 +0000 (UTC)
-Date: Thu, 11 Aug 2022 23:01:54 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220811230154.05ff5eff@windsurf>
-In-Reply-To: <20220809220452.2741272-1-fontaine.fabrice@gmail.com>
-References: <20220809220452.2741272-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660251715;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=JkjpyVPQrhFm0j3b5k5fgrJJYo74TqwB/wytWDX4ZBU=;
- b=Z+F72lK7ADWSnYus44HOAJzSuIe5R/X2+imfLesEUIKUKPksSTHPFKIWl1EoDz0leMLL77
- NJY8hK2I380aMv9BuAABgExLY7PKn/d9zYMkKoPjKtTsUPSl+7aqN4k7mGwcSWBajy8EtX
- wUKo/bqwozJAKtbskDaSZSu4msVkzGXLp4YsTyhy7egGh3p0QG3j6/UfFXUSMA9arv2EDf
- UX4eDtHDXrjGEK9I55HN6YeXcnkTyB7R7baoPMwc3qRh/MtrcE6ri7/xa/qi7YOqtv7wbP
- s5yD5mJWtW0+LFW94TO4j/F5FsINwc+i4bPQ2N/7mlsel9srIbQqoXOGFBPWsg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Z+F72lK7
-Subject: Re: [Buildroot] [PATCH 1/1] package/freeradius-server: fix
- memcached dependency
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 329a_r-x00Sz for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 21:02:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0D8B1600B6
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 21:02:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D8B1600B6
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 047F4873A1; Thu, 11 Aug 2022 20:48:00 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 11 Aug 2022 23:02:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 726902e78c9645e19cbff28719f277bdbdf9526b
+X-Git-Newrev: 96f84b23751d378aecf8c617330b137905915818
+X-Patchwork-Hint: ignore
+Message-Id: <20220811204800.047F4873A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/grpc: fix legal info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,36 +57,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 10 Aug 2022 00:04:52 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=96f84b23751d378aecf8c617330b137905915818
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure raised since the addition of the package
-> in commit 736c4c1655d93652a9a7e79235bbe726b3d46176:
-> 
-> Makefile:575: *** mysql is in the dependency chain of freeradius-server that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c3a9c3822b4599c1b16d27840b5663506e37a41f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/freeradius-server/freeradius-server.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Commit 0fc2438ff6e3d14cc9e7b546e2909e386db33439 forgot to update hash of
+LICENSE (full text of MPLv2 included with
+https://github.com/grpc/grpc/commit/05fcd826f477ef1a024a2defa5e4b3d78f5e6eb4)
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/98b820f85cd32596bde6bbee2cfc7e07ecfa454b
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/grpc/grpc.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 84af11f5a1..d7c1b89aca 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256  9b1f348b15a7637f5191e4e673194549384f2eccf01fcef7cc1515864d71b424  grpc-1.48.0.tar.gz
+-sha256  277adcc1dcef8359b1efb48e628635f88b40be8fbd64e82fd0169930d135d7a5  LICENSE
++sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
