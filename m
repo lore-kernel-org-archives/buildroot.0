@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD471C19F2A
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 17:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28040C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 17:34:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7039F6108A;
-	Thu, 11 Aug 2022 17:34:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7039F6108A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gg_hi7W4mnPh; Thu, 11 Aug 2022 17:34:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3567C61126;
-	Thu, 11 Aug 2022 17:34:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3567C61126
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8971B1BF35F
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 17:33:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70E8A41299
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 17:33:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70E8A41299
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABC8541893;
+	Thu, 11 Aug 2022 17:34:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABC8541893
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YYmjRUQdBJF1 for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i3KK6Fd57A-M; Thu, 11 Aug 2022 17:34:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBDAB4188C;
+	Thu, 11 Aug 2022 17:34:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBDAB4188C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D3391BF35F
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 17:33:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 215AB827C6
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 17:33:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 215AB827C6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BqivKW8HT8Kb for <buildroot@lists.busybox.net>;
  Thu, 11 Aug 2022 17:33:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FB9C410BB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3F0DB81886
  for <buildroot@buildroot.org>; Thu, 11 Aug 2022 17:33:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FB9C410BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F0DB81886
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 70F948715F; Thu, 11 Aug 2022 17:19:16 +0000 (UTC)
+ id 84B0D87162; Thu, 11 Aug 2022 17:19:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Aug 2022 19:27:49 +0200
+Date: Thu, 11 Aug 2022 19:30:32 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2daae7260069311b71fb9aad3b4c07d74e0af09b
-X-Git-Newrev: 21bc60581559bd74a3e93cf804745fbbb52066fa
+X-Git-Oldrev: ecfbd3d8409f34c38416fd365eced8097868b6ac
+X-Git-Newrev: 1cd1782d8101434380920f3f8f567dec13a546e4
 X-Patchwork-Hint: ignore
-Message-Id: <20220811171916.70F948715F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/freerdp: fix
- build with libressl
+Message-Id: <20220811171916.84B0D87162@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/{webkitgtk,
+ wpewebkit}: select subenc for multimedia
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,156 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21bc60581559bd74a3e93cf804745fbbb52066fa
+commit: https://git.buildroot.net/buildroot/commit/?id=1cd1782d8101434380920f3f8f567dec13a546e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Import a patch for fixing the build with libressl 2.7.0 or newer,
-which has also been submitted upstream.
+When using webkit with multimedia support the subenc element may
+be needed, as such we should select the subenc plugin.
 
-Fixes:
+Fixes runtime warning:
+isGStreamerPluginAvailable: Plugin subenc not found. Please check your GStreamer installation
+WebKit wasn't able to find a WebVTT encoder. Subtitles handling will be degraded unless gst-plugins-bad is installed.
 
-  http://autobuild.buildroot.net/results/a924b2a8c690e5afd1b5078236baef3f425aeb96/
+See:
+https://github.com/WebKit/WebKit/blob/72b59ad50e079037073722bbdf469c0952e399fa/Source/WebCore/platform/graphics/gstreamer/TextCombinerGStreamer.cpp#L221
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Acked-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ee6ceaf397f5e3a9f0270b687ca31e96234a019e)
+(cherry picked from commit d8358ae1787f661e19dfe968993492c06afaa7b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Fix-building-with-LibreSSL-2.7.0-or-newer.patch | 126 +++++++++++++++++++++
- 1 file changed, 126 insertions(+)
+ package/webkitgtk/Config.in | 1 +
+ package/wpewebkit/Config.in | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/freerdp/0004-Fix-building-with-LibreSSL-2.7.0-or-newer.patch b/package/freerdp/0004-Fix-building-with-LibreSSL-2.7.0-or-newer.patch
-new file mode 100644
-index 0000000000..3edf1ff3b3
---- /dev/null
-+++ b/package/freerdp/0004-Fix-building-with-LibreSSL-2.7.0-or-newer.patch
-@@ -0,0 +1,126 @@
-+From 55a5a0a14ecef81c8ece1fea4a5a6004aebfeaff Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Mon, 27 Jun 2022 11:45:44 +0200
-+Subject: [PATCH] Fix building with LibreSSL 2.7.0 or newer
-+
-+With LibreSSL 2.7.0 (or newer versions) some more structs have made
-+opaque, which requires a few changes:
-+
-+- BIO_meth_new() and related functions are now defined by LibreSSL, the
-+  versions from opensslcompat.{h,c} does not need to be used anymore.
-+- HMAC_CTX is now opaque, HMAC_CTX_new(), EVP_MD_CTX_new, and related
-+  functions should be used instead in winpr's hash.c.
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+[Upstream status: https://github.com/FreeRDP/FreeRDP/commit/436f212be3950917e4bb209aa5064e423f0dd882]
-+---
-+ libfreerdp/crypto/opensslcompat.c |  3 ++-
-+ libfreerdp/crypto/opensslcompat.h |  3 ++-
-+ winpr/libwinpr/crypto/hash.c      | 21 ++++++++++++++-------
-+ 3 files changed, 18 insertions(+), 9 deletions(-)
-+
-+diff --git a/libfreerdp/crypto/opensslcompat.c b/libfreerdp/crypto/opensslcompat.c
-+index 701902dc2..314d6b51f 100644
-+--- a/libfreerdp/crypto/opensslcompat.c
-++++ b/libfreerdp/crypto/opensslcompat.c
-+@@ -19,7 +19,8 @@
-+ 
-+ #include "opensslcompat.h"
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
-+ 
-+ BIO_METHOD* BIO_meth_new(int type, const char* name)
-+ {
-+diff --git a/libfreerdp/crypto/opensslcompat.h b/libfreerdp/crypto/opensslcompat.h
-+index 169e8e4c2..3ad5b6bd4 100644
-+--- a/libfreerdp/crypto/opensslcompat.h
-++++ b/libfreerdp/crypto/opensslcompat.h
-+@@ -30,7 +30,8 @@
-+ 
-+ #include <openssl/opensslv.h>
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
-+ 
-+ #include <openssl/bio.h>
-+ #include <openssl/rsa.h>
-+diff --git a/winpr/libwinpr/crypto/hash.c b/winpr/libwinpr/crypto/hash.c
-+index 8265b2e90..5e94039e7 100644
-+--- a/winpr/libwinpr/crypto/hash.c
-++++ b/winpr/libwinpr/crypto/hash.c
-+@@ -151,7 +151,8 @@ WINPR_HMAC_CTX* winpr_HMAC_New(void)
-+ 	WINPR_HMAC_CTX* ctx = NULL;
-+ #if defined(WITH_OPENSSL)
-+ 	HMAC_CTX* hmac = NULL;
-+-#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
-++#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
-+ 
-+ 	if (!(hmac = (HMAC_CTX*)calloc(1, sizeof(HMAC_CTX))))
-+ 		return NULL;
-+@@ -185,7 +186,8 @@ BOOL winpr_HMAC_Init(WINPR_HMAC_CTX* ctx, WINPR_MD_TYPE md, const BYTE* key, siz
-+ 	if (!evp || !hmac)
-+ 		return FALSE;
-+ 
-+-#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || defined(LIBRESSL_VERSION_NUMBER)
-++#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
-+ 	HMAC_Init_ex(hmac, key, keylen, evp, NULL); /* no return value on OpenSSL 0.9.x */
-+ 	return TRUE;
-+ #else
-+@@ -221,7 +223,8 @@ BOOL winpr_HMAC_Update(WINPR_HMAC_CTX* ctx, const BYTE* input, size_t ilen)
-+ {
-+ #if defined(WITH_OPENSSL)
-+ 	HMAC_CTX* hmac = (HMAC_CTX*)ctx;
-+-#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || defined(LIBRESSL_VERSION_NUMBER)
-++#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
-+ 	HMAC_Update(hmac, input, ilen); /* no return value on OpenSSL 0.9.x */
-+ 	return TRUE;
-+ #else
-+@@ -253,7 +256,8 @@ BOOL winpr_HMAC_Final(WINPR_HMAC_CTX* ctx, BYTE* output, size_t olen)
-+ 
-+ #if defined(WITH_OPENSSL)
-+ 	hmac = (HMAC_CTX*)ctx;
-+-#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || defined(LIBRESSL_VERSION_NUMBER)
-++#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
-+ 	HMAC_Final(hmac, output, NULL); /* no return value on OpenSSL 0.9.x */
-+ 	return TRUE;
-+ #else
-+@@ -279,7 +283,8 @@ void winpr_HMAC_Free(WINPR_HMAC_CTX* ctx)
-+ 
-+ 	if (hmac)
-+ 	{
-+-#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
-++#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
-+ 		HMAC_CTX_cleanup(hmac);
-+ 		free(hmac);
-+ #else
-+@@ -332,7 +337,8 @@ WINPR_DIGEST_CTX* winpr_Digest_New(void)
-+ 	WINPR_DIGEST_CTX* ctx = NULL;
-+ #if defined(WITH_OPENSSL)
-+ 	EVP_MD_CTX* mdctx;
-+-#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
-++#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
-+ 	mdctx = EVP_MD_CTX_create();
-+ #else
-+ 	mdctx = EVP_MD_CTX_new();
-+@@ -464,7 +470,8 @@ void winpr_Digest_Free(WINPR_DIGEST_CTX* ctx)
-+ 
-+ 	if (mdctx)
-+ 	{
-+-#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
-++#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
-+ 		EVP_MD_CTX_destroy(mdctx);
-+ #else
-+ 		EVP_MD_CTX_free(mdctx);
-+-- 
-+2.36.1
-+
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 2c255693c9..b3a1ada767 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -93,6 +93,7 @@ config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX
++	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SUBENC
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 73ac94a47b..ce016bf74f 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -86,6 +86,7 @@ config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
+ 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX
++	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SUBENC
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
