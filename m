@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA3A0C19F2D
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:00:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0231C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:01:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33C5C610CB;
-	Thu, 11 Aug 2022 11:00:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33C5C610CB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FB92401EA;
+	Thu, 11 Aug 2022 11:01:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FB92401EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aEQOTwt9eZ3s; Thu, 11 Aug 2022 11:00:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SRluTH6MvnGk; Thu, 11 Aug 2022 11:01:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4F4B610C0;
-	Thu, 11 Aug 2022 11:00:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4F4B610C0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 35D571C116E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D412417EF;
+	Thu, 11 Aug 2022 11:01:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D412417EF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 46E441C1190
  for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:00:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F38B4038D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 216A74180D
  for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:00:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F38B4038D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 216A74180D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fwq4SoV5mywy for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5wye0r4KcPz4 for <buildroot@lists.busybox.net>;
  Thu, 11 Aug 2022 11:00:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67A3940382
+ by smtp4.osuosl.org (Postfix) with ESMTP id 377884179A
  for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:00:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67A3940382
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 377884179A
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4E477870FC; Thu, 11 Aug 2022 10:46:14 +0000 (UTC)
+ id 18F2E870FC; Thu, 11 Aug 2022 10:46:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Aug 2022 12:58:07 +0200
+Date: Thu, 11 Aug 2022 11:40:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 61ae6add9e5d4761536fa4ff24150d5f8f82a61d
-X-Git-Newrev: 1d8a1268a3aa621fd7a5559f6f27526c2eb04b28
+X-Git-Oldrev: 11477df6b144c43c005f62b005a17630061cb781
+X-Git-Newrev: 6fcdaa4c5096b51e16f295b0ba7939cc4db30f50
 X-Patchwork-Hint: ignore
-Message-Id: <20220811104614.4E477870FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: bump
- version to 8.15
+Message-Id: <20220811104614.18F2E870FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-tools: Allow installation of
+ perf scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d8a1268a3aa621fd7a5559f6f27526c2eb04b28
+commit: https://git.buildroot.net/buildroot/commit/?id=6fcdaa4c5096b51e16f295b0ba7939cc4db30f50
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New version contains updated binaries which are part of the NXP
-5.15.5-1.0.0 Yocto release.
+In order to run the full gamut of "perf tests" installing the perf
+scripts is required, otherwise we run into errors similar to those:
 
-Update the license hashes for formatting changes and addition of
-LC3plus/T2/Bluetooth SIG licenses.
+	failed to open shell test directory: /usr/libexec/perf-core/tests/shell
 
-Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
-[Peter: add SCR.txt license file as suggested by Stefan Hager]
+Make this possible by introducing a new option allowing us to install
+perf scripts.
+
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/firmware-imx/firmware-imx.hash | 7 ++++---
- package/freescale-imx/firmware-imx/firmware-imx.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/linux-tools/Config.in             |  7 +++++++
+ package/linux-tools/linux-tool-perf.mk.in | 12 +++++++++---
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
-index 98a0e73048..eb0c387af3 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.hash
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
-@@ -1,4 +1,5 @@
- # Locally calculated
--sha256  6b6747bf36ecc53e385234afdce01f69c5775adf0d6685c885281ca6e4e322ef  firmware-imx-8.12.bin
--sha256  ea58636bf34f589048fcd46e38497c47229fde8498df086ff5fb52f9ef8e15ee  COPYING
--sha256  50099e283cfd307f84f159aeb1a6f462351320273dbcdb80d7f2c9db0494b71c  EULA
-+sha256  937e196476b8e95b4b7f2501a14c8326d8a0649f8a3f9228b72373770a08deb3  firmware-imx-8.15.bin
-+sha256  35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  COPYING
-+sha256  30f61825583b4c26d29a798ad7e4c8ef2f2f390b1e964af302d2dc40e93cb0a4  EULA
-+sha256  40d02f6d6b4e94d9307529408f372f5a9908cf3d156ec533a4e54274b40f271e  SCR.txt
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 211a43c4ca..47c21585aa 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 732ac65a25..10b6538a59 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -76,6 +76,13 @@ comment "perf needs a toolchain w/ dynamic library"
  
--FIRMWARE_IMX_VERSION = 8.12
-+FIRMWARE_IMX_VERSION = 8.15
- FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ if BR2_PACKAGE_LINUX_TOOLS_PERF
  
- FIRMWARE_IMX_LICENSE = NXP Semiconductor Software License Agreement
--FIRMWARE_IMX_LICENSE_FILES = EULA COPYING
-+FIRMWARE_IMX_LICENSE_FILES = EULA COPYING SCR.txt
- FIRMWARE_IMX_REDISTRIBUTE = NO
++config BR2_PACKAGE_LINUX_TOOLS_PERF_SCRIPTS
++	bool "enable installation of perf scripts"
++	help
++	  Enable the installation of the perf scripts under
++	  /usr/libexec/perf-core/ which is necessary for running "perf
++	  tests"
++
+ config BR2_PACKAGE_LINUX_TOOLS_PERF_TUI
+ 	bool "enable perf TUI"
+ 	depends on BR2_USE_MMU # slang
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index d82d45973c..7bba440530 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -159,12 +159,18 @@ define PERF_BUILD_CMDS
+ endef
  
- FIRMWARE_IMX_INSTALL_IMAGES = YES
+ # After installation, we remove the Perl and Python scripts from the
+-# target.
++# target unless BR2_PACKAGE_LINUX_TOOLS_PERF_SCRIPTS is enabled
++ifeq ($(BR2_PACKAGE_LINUX_TOOLS_PERF_SCRIPTS),)
++define PERF_INSTALL_REMOVE_SCRIPTS
++	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
++	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
++endef
++endif
++
+ define PERF_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
+ 		-C $(LINUX_DIR)/tools/perf O=$(LINUX_DIR)/tools/perf/ install
+-	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
+-	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
++	$(PERF_INSTALL_REMOVE_SCRIPTS)
+ endef
+ 
+ define PERF_LINUX_CONFIG_FIXUPS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
