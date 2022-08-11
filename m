@@ -4,68 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50B9BC19F2D
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 08:53:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB811C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 09:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5CC04020B;
-	Thu, 11 Aug 2022 08:53:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5CC04020B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C27440239;
+	Thu, 11 Aug 2022 09:40:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C27440239
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Aoqi4i_8GDoy; Thu, 11 Aug 2022 08:53:35 +0000 (UTC)
+	with ESMTP id flD-D2Q8acKi; Thu, 11 Aug 2022 09:40:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D861B4025F;
-	Thu, 11 Aug 2022 08:53:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D861B4025F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 874471BF85D
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 08:53:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F4AB40201;
+	Thu, 11 Aug 2022 09:40:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F4AB40201
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EEEC51BF414
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 09:40:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 56BEA60AB2
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 08:53:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56BEA60AB2
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5D5F41820
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 09:40:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5D5F41820
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hpl0yEwD0zUP for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 08:53:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gqxCqiT4TSYO for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 09:40:55 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8667608F5
-Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E8667608F5
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 08:53:28 +0000 (UTC)
-Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1oM3wU-00077H-71; Thu, 11 Aug 2022 11:53:26 +0300
-From: Maxim Kochetkov <fido_max@inbox.ru>
-To: buildroot@buildroot.org
-Date: Thu, 11 Aug 2022 11:53:21 +0300
-Message-Id: <20220811085321.1644156-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.34.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC0FA4181D
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EC0FA4181D
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 09:40:54 +0000 (UTC)
+X-IronPort-AV: E=Sophos;i="5.93,228,1654531200"; d="scan'208";a="320529066"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com)
+ ([199.255.45.15])
+ by ob1.hgst.iphmx.com with ESMTP; 11 Aug 2022 17:40:54 +0800
+IronPort-SDR: FDlXGeT1V4VK0D27DtE+Oc7HhMZ8D9EugRu/7cXwt12OQFZsK4uihi2Bk039Lwek0+1gkvySQL
+ OC4pNz5gZPEED9xcruc5jpSFCf/P6EQ+5yk0z7OTZMOr3S+4XnzSPeRsWQBrlaYNqwwQbzfTsj
+ dmX06wMo3NjLsy7lm5I1DR2Zbo5tEP97Jvqj0JdKygBx62pWWv0/9g2zzdhqxS9cCK1zZkcUn9
+ lAFWiOXPkSEGGb3I3ii8WCIs5+eIJ4p4boWjQy6SksPrnurfPXCQHGyHAZJ6UIw2bmN1aRPUSw
+ mkdharmMyzHSLaq6k2u/JkN8
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+ by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 11 Aug 2022 01:56:28 -0700
+IronPort-SDR: p+tmHjqfE4bPbsqpP7KBa+kPk1PWhtw5J9NQIlJ9UMetC6rN6/d/jWmqp+gAKSLEhsa8uB9o8J
+ KXyKDndhPx71+yK6wEOLod1RQvkWJUTxZnZHa6jZ9YBO5lF4vwkNcqbrDsDgs4bClHFkKbLD6f
+ 3h3x48R7y8J8LlOtvElbTCDnvyZ3/RBthYcrSQq0sAd/eBgkQ9E6EXc341il7lQeFihmiek21k
+ 2NOfLqBQiu+VuAXCE3KfaeuO9QAUMksrP98LT9e91oh02PwoOJifBopB0juaJ6/zSYdUWIS/KZ
+ rZo=
+WDCIronportException: Internal
+Received: from unknown (HELO x1-carbon.wdc.com) ([10.225.164.89])
+ by uls-op-cesaip02.wdc.com with ESMTP; 11 Aug 2022 02:40:51 -0700
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Aug 2022 11:40:47 +0200
+Message-Id: <20220811094049.798010-1-niklas.cassel@wdc.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD999D8F08CF16C6CA73690FBA0B7D74E7E436A8D667CF9FF2800894C459B0CD1B96A1D89D6B19D3E2DFB116F3A158B422CC75206CFFF958D0D012184F85FB44711
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7E9C30BC00893CB9AEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637BFD6B3F1638522B88638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D86C3DDF07CED9F15061614FCA596AF8CC6F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE78A0F7C24A37A3D769FA2833FD35BB23D9E625A9149C048EE9647ADFADE5905B1C26CFBAC0749D213D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8B47272755C61AA17BA471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7C837C4FEFBD186071C4224003CC83647689D4C264860C145E
-X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C41E93BD56E7067354307CAA32FF218580205367B2BCC23E5BA121F24FC5A8CFC0E7E65F06B2D3BF1CAD91A466A1DEF99B6ED91DBE5ABE359A3485EE9140A7D39D976169AB2023FA38360583C7422455C3F1055A48C272B03013BDA61BF53F5E1DC6CDE5D1141D2B1CD2ACD226F2831DEFB8A2E6ECB3874B023FB726932CE69555AD91A466A1DEF99B296C473AB1E1421878B0D43A06A4C936638A446BE3E5C627BF0CFE790FC11A72BA7CCD254A1CF5E86CC74F0925D5E26B410CA545F18667F91A7EA1CDA0B5A7A0
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34D6AC337C1E637B8A98A4099816BE9416203204E37BC03845C246AEFBD04FFC870AADB48C11BD64A11D7E09C32AA3244C522112BE543AB3CE1B66637D0C05F6E633C9DC155518937F729B2BEF169E0186
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojfXJM3siCnCk0/DgdQNNkEA==
-X-Mailru-Sender: 689FA8AB762F7393CC2E0F076E87284E2A499E3F3EF773E7DF709C7CF67BB59198CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; s=mail4; 
- h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=QMtOIzvrz1v+PrTA9mIwKwNOO78mHbKLypxWBgsKq2k=; 
- t=1660208009;x=1660298009; 
- b=ZqeZZ/A2K0oZy8wLLW7T/OLUSRa/fFQHxTE63bjFUGI3Iy9AVg/r8P7JSCmsriSP/C+Wi8WTW3BaEZx6aiMFkkBQYBURwanviFnxOoGNZNsvQYar7sI01NrULX83aiB4eurcLbJPY8WuIwZ+7qCoN0O0rpO5mfdYI7MFomDyliCaYV6d/D2Di/5bKBOpI7x8wW2D4s4mCN7H6wHEePevSzuuX+9qcfYrKnuadbac1vnGoGqY2Z5VhPho2jI2+7YrLsq0/pzE3kJ9SYX/wU/BT7lCWFKeYvZg5ub9yvZDApS5L6cubTj07jL81m6bJxclAgRVXoHWV+WPzRjaVa6LqA==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=ZqeZZ/A2
-X-Mailman-Original-Authentication-Results: smtpng1.m.smailru.net; auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to 2.7.2
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+ t=1660210854; x=1691746854;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=G7FWB2PbIx1lmKMycp0UioYRWbkOCsKyTUcCBf+BQ40=;
+ b=SKONeIH6RrI5DT/WWaY+sg9yOYsStpMkmsBJxCBfHUwydZMoLrSNXqLa
+ EXIrq2x1UQ4uzgljsqFlhrDpvYutQHDcHE0JdPQj4+8YWaJUk2+f6n0Mz
+ B99ZcMVARHLjfXWdXhfcF90cO3K6YCnEUtjSq+dhZ87lLHwSvD/FDlbRS
+ m2Ei3Mf1eY/g06JwfiJl5Ki2ce5WaB7ZB/60A7fy33yPq+voOSSDGnC4q
+ EAu7BCtV1xy413cxj4X6HP6JEQYr7MVfI/fVnLENwU96ZsYE90Gd7cHB4
+ JjGkHEcZXwkH580AXjvuJGxbWbdPEfoxUEt4inoimxapaZbs61VtBkSY5
+ A==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
+ header.a=rsa-sha256 header.s=dkim.wdc.com header.b=SKONeIH6
+Subject: [Buildroot] [PATCH v2 0/2] fix elf2flt on m68k, xtensa, riscv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,44 +88,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+From: Niklas Cassel via buildroot <buildroot@buildroot.org>
+Reply-To: Niklas Cassel <niklas.cassel@wdc.com>
+Cc: Niklas Cassel <niklas.cassel@wdc.com>, damien.lemoal@opensource.wdc.com,
+ alistair@alistair23.me, geert@linux-m68k.org, buildroot@buildroot.org,
+ romain.naour@smile.fr, yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/timescale/timescaledb/releases/tag/2.7.2
+Hello buildroot folks,
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This series fixes a fatal error at link time on m68k, xtensa,
+and riscv64, caused by a bad upstream elf2flt commit.
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index 6a9d7b2379..281e30dd3a 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9b30952da1186733f144c1ec3aa0c6332379207e5035e81037bd34e1ec9cefb3  timescaledb-2.7.0.tar.gz
-+sha256  05560e0c37f702a377957adf96d8893c1ff437a8b4fd1478f351e40ba9730897  timescaledb-2.7.2.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index dce9ea031d..0268712399 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TIMESCALEDB_VERSION = 2.7.0
-+TIMESCALEDB_VERSION = 2.7.2
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+With this series, m68k and riscv64 boots to login prompt.
+
+xtensa crashes when loading init, the same behavior as when
+reverting the bad upstream elf2flt commit completely.
+
+Changes since v2:
+-Added xtensa to the list of archs that require different
+ handling from ARM.
+
+
+Kind regards,
+Niklas
+
+Niklas Cassel (2):
+  package/elf2flt: remove broken patch
+  package/elf2flt: fix fatal error regression on m68k, xtensa, riscv64
+
+ ...3-elf2flt-add-riscv-64-bits-support.patch} |  0
+ ...f2flt-fix-.eh_frame-section-handling.patch | 73 ------------------
+ ...2flt-create-a-common-helper-function.patch | 76 +++++++++++++++++++
+ ...l-error-regression-on-m68k-xtensa-ri.patch | 73 ++++++++++++++++++
+ 4 files changed, 149 insertions(+), 73 deletions(-)
+ rename package/elf2flt/{0004-elf2flt-add-riscv-64-bits-support.patch => 0003-elf2flt-add-riscv-64-bits-support.patch} (100%)
+ delete mode 100644 package/elf2flt/0003-elf2flt-fix-.eh_frame-section-handling.patch
+ create mode 100644 package/elf2flt/0004-elf2flt-create-a-common-helper-function.patch
+ create mode 100644 package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
+
 -- 
-2.34.1
+2.37.1
 
 _______________________________________________
 buildroot mailing list
