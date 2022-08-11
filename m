@@ -4,47 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0BC5C19F2A
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C605C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CA9A82EA1;
-	Thu, 11 Aug 2022 11:01:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CA9A82EA1
+	by smtp1.osuosl.org (Postfix) with ESMTP id E32DA812DB;
+	Thu, 11 Aug 2022 11:03:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E32DA812DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qzNauJiuVpJi; Thu, 11 Aug 2022 11:01:43 +0000 (UTC)
+	with ESMTP id FWtr7OS8HHOk; Thu, 11 Aug 2022 11:03:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 718B082CD4;
-	Thu, 11 Aug 2022 11:01:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 718B082CD4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A7761BF403
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:00:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D30081285;
+	Thu, 11 Aug 2022 11:03:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D30081285
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D32F01BF403
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F36140132
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:00:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F36140132
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACDFE408D0
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:03:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACDFE408D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YoxcX1dLLqzK for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 11:00:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D8C44026A
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:00:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D8C44026A
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 435F387100; Thu, 11 Aug 2022 10:46:14 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 11 Aug 2022 11:47:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bbcb4e586ea24858769bbfd91bc6d9ebd1a8191e
-X-Git-Newrev: 61ae6add9e5d4761536fa4ff24150d5f8f82a61d
-X-Patchwork-Hint: ignore
-Message-Id: <20220811104614.435F387100@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: update to 1.0.42
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ql0_0C3k_XHW for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 11:03:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC103408CF
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DC103408CF
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:03:28 +0000 (UTC)
+Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 688EABDE7443;
+ Thu, 11 Aug 2022 12:54:56 +0200 (CEST)
+MIME-Version: 1.0
+Date: Thu, 11 Aug 2022 10:54:56 +0000
+From: Andreas Ziegler <br015@umbiko.net>
+To: Lance Fredrickson <lancethepants@gmail.com>
+In-Reply-To: <mailman.8980.1660210862.92745.buildroot@buildroot.org>
+References: <mailman.8980.1660210862.92745.buildroot@buildroot.org>
+Message-ID: <4e30650d952bc4dbe44f0ffcd92810df@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 0.103.6 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: Re: [Buildroot] [Aarch64] libstdc++ segfault at end of execution
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,46 +60,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61ae6add9e5d4761536fa4ff24150d5f8f82a61d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Lance,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> I'm having segfaulting issues with c++ on aarch64 using uclibc-ng.
+> Anyone else using aarch64 with uclibc-ng?
+> I submitted a bug to gcc so am linking that here for this description.
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106581
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 3b29c351b5..0122d08789 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.41/uClibc-ng-1.0.41.tar.xz.sha256
--sha256  b32a92a0218d95922d6976464e6ef51e2ebacfbcdb605820458d9dbb8a61e025  uClibc-ng-1.0.41.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.42/uClibc-ng-1.0.42.tar.xz.sha256
-+sha256  ec6dae44ce86558885e56bc3bef6bd4d082397114e6e1fc15795f71e804d7016  uClibc-ng-1.0.42.tar.xz
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 0e17a8e65d..0ddf7dfa6d 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.41
-+UCLIBC_VERSION = 1.0.42
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+Some years ago, I switched from uClibc to musl on aarch64, because 
+uClibc did not fully implement thread-local storage, at least not in 
+combination with multi-threaded execution, on this architecture.
+
+The C++ library uses TLS for example to store exception related 
+information, which, in my case resulted in a segmentation fault whenever 
+the first exception handler was invoked, because the TLS area was 
+inaccessible from the current thread.
+
+My notes show that tests in 2021 still showed this problem.
+
+Kind regards,
+Andreas
+
+[1] https://www.etalabs.net/compare_libcs.html
+
+> thanks,
+> Lance Fredrickson
+
+
+------------------------------
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
