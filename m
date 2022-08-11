@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 868E2C19F2A
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 20:24:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B05C3C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 20:24:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E87960F5C;
-	Thu, 11 Aug 2022 20:24:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E87960F5C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DC748301D;
+	Thu, 11 Aug 2022 20:24:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DC748301D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pdi2akHKcYkN; Thu, 11 Aug 2022 20:24:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H72YtDl7BEBh; Thu, 11 Aug 2022 20:24:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12A3B60E40;
-	Thu, 11 Aug 2022 20:24:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12A3B60E40
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5107C1BF2B9
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:24:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8657482F49;
+	Thu, 11 Aug 2022 20:24:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8657482F49
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 80B6B1BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C88F4013B
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:24:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C88F4013B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68DFD82F6C
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:24:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68DFD82F6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id og0ivQvoHoLB for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 20:24:07 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A52E4400E2
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A52E4400E2
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 20:24:06 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 75E7A2000B;
- Thu, 11 Aug 2022 20:24:03 +0000 (UTC)
-Date: Thu, 11 Aug 2022 22:24:01 +0200
-To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Message-ID: <20220811222401.0163576a@windsurf>
-In-Reply-To: <20220811095221.1226557-1-buildroot@heine.tech>
-References: <20220811095221.1226557-1-buildroot@heine.tech>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660249443;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=EwPbWsaKmAwJyffdLTwquSc3NbXbvx9iVsNNshwpHYM=;
- b=Bfo6isW2WiUBuieOol+mF9XtIKF4H0uZ3MgFB0NilbVobITATL6JUjLtj8Pizxjrt5PyfR
- fAesbbNWb28+gymd7HZhWW+/csrFnkhSCR2Jbprp2t+o5fF5z9LSHrjamLvr1YuqR//dqt
- dmuvUYSWsILWJkwliFRwBlcSRJiGEozOedsJFTQmrGLsSmJ2avr0+1KsbnDKesr5QncN4C
- 4ygNoXYdLZk5fIpVWXccW9A22wkiEnupqVlz9O3AJ9jpV+J2Uge9FuOl43diQIDs7PFwuf
- Tg5f3W6QA4U2swsRqMxkzd1qgUyPMFXMZ/BCZz0eOMuXo6ey4rdaiBhgLwlcrg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Bfo6isW2
-Subject: Re: [Buildroot] [PATCH] package/boost: bump to version 1.80.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W41uENALXUvb for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 20:24:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE39482F31
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 20:24:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE39482F31
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id B0E278731C; Thu, 11 Aug 2022 20:10:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 11 Aug 2022 22:24:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ecf4c388dee6c4cbb4fef21749f34e66d1e3e0f0
+X-Git-Newrev: 1573761e605ac66265b972f7b9ffb3fa676831ba
+X-Patchwork-Hint: ignore
+Message-Id: <20220811201014.B0E278731C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-dvbviewer: bump version
+ to 19.1.0-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,38 +58,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Michael,
+commit: https://git.buildroot.net/buildroot/commit/?id=1573761e605ac66265b972f7b9ffb3fa676831ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 11 Aug 2022 11:52:22 +0200
-Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> - drop upstreamed patches
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-
-How many reverse dependencies of boost did you build with this new
-version? Major Boost versions tend to break stuff :-/
-
-Also, are there new Boost modules/libs that would require new options
-in package/boost/Config.in? By default, Boost enables all its
-modules/libs by default, so if we don't handle them explicitly, to be
-able to add them to the BOOST_WITHOUT_FLAGS variable of boost.mk, those
-new modules/libs will be enabled by default. Apparently
-https://www.boost.org/users/history/version_1_80_0.html, seems to say
-"No new libraries.".
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+index d6a3e1c29c..e3ff5bd1c1 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5a6d6ff8ee87f37e2a6580b2a880a2ede635a4d9615962996831362150a5a20e  kodi-pvr-dvbviewer-19.0.2-Matrix.tar.gz
++sha256  5ccb4fa952c8909169dddd0a4c8f393ef8c1e8d35b9df0332f66a5f6442d6e85  kodi-pvr-dvbviewer-19.1.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+index db7884fcf7..e4b00c06b5 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_DVBVIEWER_VERSION = 19.0.2-Matrix
++KODI_PVR_DVBVIEWER_VERSION = 19.1.0-Matrix
+ KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
+ KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
+ KODI_PVR_DVBVIEWER_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
