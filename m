@@ -4,155 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE104C19F2D
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 08:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63822C19F2D
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 08:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72CE34035C;
-	Thu, 11 Aug 2022 08:04:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72CE34035C
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE81A417E5;
+	Thu, 11 Aug 2022 08:39:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE81A417E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xj6bW5HE8Noz; Thu, 11 Aug 2022 08:04:31 +0000 (UTC)
+	with ESMTP id ktZ7_1lER6Kg; Thu, 11 Aug 2022 08:39:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17A9B40188;
-	Thu, 11 Aug 2022 08:04:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17A9B40188
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BC7E4177B;
+	Thu, 11 Aug 2022 08:39:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BC7E4177B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9AA2E1BF85D
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 08:04:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B53C11BF85D
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 08:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B75882E95
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 08:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B75882E95
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9C82D815AB
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 08:39:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C82D815AB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sHv3HkO_3csZ for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 08:04:27 +0000 (UTC)
+ with ESMTP id L6nH-YKJRNlV for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 08:39:19 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8BC182AF8
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E8BC182AF8
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 08:04:26 +0000 (UTC)
-X-IronPort-AV: E=Sophos;i="5.93,228,1654531200"; d="scan'208";a="213457420"
-Received: from mail-dm6nam10lp2105.outbound.protection.outlook.com (HELO
- NAM10-DM6-obe.outbound.protection.outlook.com) ([104.47.58.105])
- by ob1.hgst.iphmx.com with ESMTP; 11 Aug 2022 16:04:25 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mm1+N0hb8NlzZ9FqE5xq9N9m89GCiaDHBtWy6PBCYXyHRJpWI8uHJKh2IULIcpKyMsRD/zyvvZXnf6WFSxjIq03EjHIhlBY/vSgbp6UBDJ2gosQAsn5USHKBpdAPLfFUgZKmePl6qvfzC/Yw6vuq48kvNWit0MUqiExno14ipt1UBZXsLlL+gRikm/jpl8d1Hb/L4elWaQ9cIddCFwPlOn4QPa/1xbJknB06lA4MAfZ72OEH3hXB1Xw3SNZ9qiHqrzHukmx9Egm17xrzHVTtf2X0O3u9GBnKmTk8PH4XJom2ckISUWOma3b7TiuO5TfRHLk6FxtyigiSGusVO6/NLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xo3cLvHVHIsnIfyKkLwSagJEK8kryjgHiqLZZ1EwG/A=;
- b=X8q9bCt3PaaWMltr4eouheqCAdC/rwcN8dMgPadNSH4gbSUIabU+xXFItq8GhVopdNoEhXNnqjZKsW9pxGeHn0wf61nvp3c7W+jeonMyEEQhOY7leMgnxXG/ALYw2DQkG7wfaL+4WzCdXKYRf0hBh2J77hSV3cIhw8yhgeUxtVS2LyY0Vp5iBf0ul+iBMgCX9IBXqFuY43mOJDarJ6MqUVjYh9rQ/cE6+nC9Hx7YefoW9vkCGpdVyPUSrRKg4XZfC1LJc1VIhLSaCw0Pu8pxdRFhpNohPSnltPBkJWAQTYp5btVVGvBlCROdGF+3sTieRVDeMpJhTeD2CgMtI7PD9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-Received: from PH0PR04MB7158.namprd04.prod.outlook.com (2603:10b6:510:8::18)
- by BY5PR04MB6852.namprd04.prod.outlook.com (2603:10b6:a03:225::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Thu, 11 Aug
- 2022 08:04:24 +0000
-Received: from PH0PR04MB7158.namprd04.prod.outlook.com
- ([fe80::90ce:52e5:88f9:9a6d]) by PH0PR04MB7158.namprd04.prod.outlook.com
- ([fe80::90ce:52e5:88f9:9a6d%5]) with mapi id 15.20.5525.011; Thu, 11 Aug 2022
- 08:04:23 +0000
-To: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
-Thread-Topic: [Buildroot] [PATCH 0/2] fix elf2flt on m68k
-Thread-Index: AQHYrKFimhLf7KgFCUmxbgsKe/kQLa2oy1iAgACNUwA=
-Date: Thu, 11 Aug 2022 08:04:23 +0000
-Message-ID: <YvS4BqvVGdBTNqje@x1-carbon>
-References: <20220810100959.3160670-1-niklas.cassel@wdc.com>
- <YvRBefZJhyhGU5ie@waldemar-brodkorb.de>
-In-Reply-To: <YvRBefZJhyhGU5ie@waldemar-brodkorb.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 40d21aa4-e859-4e70-b4e5-08da7b701a8b
-x-ms-traffictypediagnostic: BY5PR04MB6852:EE_
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TbbSE4iwO5td42YwMI+rfHSdZJSRUlx3w2FyzhhZMrYMhYwWMer7mjdjU7x9Sy7L1cygfIzqDH5EUITR0FV50n1Ht6F3qVYbCT8JKFr493/DxNcXhZ40fQvquQe4ltxmxs3rk56Ti16rfIM96QrGJH2TYlEJ+R3YFR3+6P2sUWfjrV5tj4v8izlMDhmUyHQEVG4gcGBMLSQjmpFHHFRwJpFHZq5TeoB6qS3lnZ5Plfc3R7VfeLb81MVpvrJpIgH44IDta/tJtZ78cWRNT8sXoQpmQhfbgCkepypo17upf320CaBULzesK9TH8v3OmRl3RuufG3e+6EChMlEg8fA/9cRnLJzjwt1JrQVSHieUC+kVvJDNgT+zurCUoQ67wUt3bxQl/yeiY5bXBaRKYCT+lE/Nnzk/1/mhMpQAdo+mK0ksDDIjaCheddGa96/wQ8qZ/G2ovikfYxqNvm/I8TMAAPvjMTyd//2F6xH/RJFMR+7U9OsVlNL1fKT7AwH4Fn68kYMzz5yMMbQHnl+WlOn0f8KSbCURfkUPLuctULk6LvUEZ6ZwBGqYi2ZrYmb7o4Qn9fl1rK8L7LlY1aqm5bwzRiyY/7aWv+m5xfQZW1NbglPnqitlHZwSi5aiSVCfwIMBaSjJuFk2X5hYn6bJr0fHuEc0euyKDiOKdZlaw0foj0JCJ76dHd516IZ/90WKSGBKTv+v8IJnyr0aVWhjwUsStHBq9eAy/T70nzM20/Q8if4IacyF7qaPiA+j8lMJ0rd4ejp0wlJa49daFM1nZz165y+ha82wsvSpKcyo/uko5VfclHd2jAE7kKflLHh1Zn6XsbiZEKu37e9PT5U413Bz6g==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PH0PR04MB7158.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(4636009)(7916004)(346002)(366004)(39860400002)(136003)(376002)(396003)(54906003)(6916009)(66556008)(316002)(66476007)(66446008)(76116006)(91956017)(4326008)(64756008)(66946007)(33716001)(8676002)(5660300002)(8936002)(2906002)(38100700002)(82960400001)(122000001)(86362001)(38070700005)(6486002)(966005)(6506007)(478600001)(41300700001)(71200400001)(83380400001)(26005)(6512007)(9686003)(186003);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PfUVuEq8fV3ljCAeeNVyEshFoWdJfre21ED8c56JOpCmvAc2Hxt7sVwgON+l?=
- =?us-ascii?Q?reAN7QJLBH+HKJ9AZ0cvoLORpTNy07VY7ZIRvDJ2sk/3MU2h9UHz1rPLK9KJ?=
- =?us-ascii?Q?FbeFwdylSp1gksOEaC0spUJYv+S0Jvkxab97GBL7nbudRA154OpsQfc02BBh?=
- =?us-ascii?Q?U9CrDAN9RarW4h42fdF+p4hiJ6U28Xbl9XmqYZt7NQOZ/w7EvnLaNztLYjJO?=
- =?us-ascii?Q?ldsX2MKY6u3eVenr2Tk3ilgm36KZAsCaCNGprlydRhiznaAXes0Ga80XLPLC?=
- =?us-ascii?Q?HgUd6rq8zFxNx7Ia3LubKj4W6IWUfPonnFk5rlDqrlhRQj3XIENRmbwQ2M3T?=
- =?us-ascii?Q?76bBAOTGyh1EXAghTo8eVf8l3YayZu10r1DXSW8XKSOQzYSFhqtGCMk1U25S?=
- =?us-ascii?Q?Fit3NI+C8dhFJzcmsMPqNcuKZUp2WYpuk4ADRkkwXKwGrDItYKTtjBi7pQsI?=
- =?us-ascii?Q?IDqxuy9tUy2AwuwV/rE7zEQEwvE0BTnZbMtURpTxJBczkQks7Sgi017v+Q5w?=
- =?us-ascii?Q?hrqKPcB6BusEgqDR7itAbGe4W9cKYDeaQvUXWu1U2C+2XjIuJi2aaKywMi3G?=
- =?us-ascii?Q?w8rsDvXoOjzhFLFAF24XNB/itZIhcxwqtnD9Izfb2APETVLhumlbOADAC9w6?=
- =?us-ascii?Q?EX9gJnifrSid2bxOiMisxRXeMjdpkLBC/jnCyVHiUPM2nDJZyj3hQAkXAUFe?=
- =?us-ascii?Q?3K03EBkPV5+q2hCHdn7CteZ/P7LQMfSxpru5T6wBCz7k7g53+W/CIy+w8mTZ?=
- =?us-ascii?Q?HLc/rmyTbrXzBRkoA3Z1OpXB1joIl6WBWFnzXuWiPt8AZVkyd5mvYflGt9wW?=
- =?us-ascii?Q?6p7E1cDUeDTj4EKfoCubfW5j+rZW0Vwzj8nRXrSEoqLJ8msCDXwR2Ndcl6El?=
- =?us-ascii?Q?DgzxGnxI3IlAzshmATIwyQHUnyCP3lXFfLvNyDAu/3D+8572dS1wzhtLnv9y?=
- =?us-ascii?Q?ukqLqWPtKcTCfEHbNZKDAnOgBDQ6/xUnrNH08KYkrbg5gq87GurY6hVeMuiA?=
- =?us-ascii?Q?KrG5sKhfeUd8GL8CFJCo4mNfLzG+IcewtS6wB0jN+7/g5wSv4eOnqDf3ykrv?=
- =?us-ascii?Q?gKj3gv+zvgTihdcN84OmbHZOV/kqKhrl7/WXLpb3XE1dV61MjWgadyeh3EFJ?=
- =?us-ascii?Q?TTs6WHGKNqtduBjL0tdSLQtOknLqnnnyPnKyqzgEubjDM6jxX+lUEoAma5PQ?=
- =?us-ascii?Q?LVmZp8KrQXKoaeEh4n3xMvOvh7NyUM0p20uKK0TXexCG1v1A13p75b0BfyMr?=
- =?us-ascii?Q?MYxT2+RKxBa1rPuppG0kPasYadRz3Lc3ccOg2/9k+/MObVypbSqEKTGzz/a1?=
- =?us-ascii?Q?k90MdW1EvthoLnK/hc6SAOgb+kXOml+HLorhcX6WyDekW7PhuHRkMgtMohhQ?=
- =?us-ascii?Q?C7ndCfSiSnxDzyCdDzX1wG844Q5XENoTscT7ALnRpcHpnxYRSmRmKaDUkPK6?=
- =?us-ascii?Q?Vkz+iXaEaCSHYWSbwrAkWwv7wFL/vsSy98uNu82Z2EMTUVBYgtvnQcLLZFaG?=
- =?us-ascii?Q?ut7kM6cDRsJVS3e4e2dBt99uml/gyvLI4rzcC60wqZ0lnl5OY5y+6bkMeXMt?=
- =?us-ascii?Q?sdtzRtrXcixA5w3VsEWbgKBLGnDOXg5OphccdLGORMSa82tItT6gthRE3pPd?=
- =?us-ascii?Q?UQ=3D=3D?=
-Content-ID: <0FDD5BFB82DE5C43BC333146F7BEDCDC@namprd04.prod.outlook.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09039814B6
+Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 09039814B6
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 08:39:18 +0000 (UTC)
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1oM3il-0005lG-E4; Thu, 11 Aug 2022 11:39:15 +0300
+To: buildroot@buildroot.org
+Date: Thu, 11 Aug 2022 11:39:08 +0300
+Message-Id: <20220811083908.1604798-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 2jD22pv3X3FGMOldETz6NYk0104tbPgFQSj5WnqBxlqV3atKOBeWIY76PxAeW6JLqN+TdzShwefWYLAQHMntxVUq/WHlIcQvNZtB/NTAMpeRNZz4TmJnDaGeLyQurrZDQvjUFEUrLfUSxNRIFDxcKoKwZhmAFhrSGSpU3SrfS5dUOdh7G8sScGFwn0HY25qdMcXvSw3jMmWKDZJEuaPbsZheZ0eyiBjVJmxlBf2XQVOVSWW5F1+BeE10IzbkzRP7QG36vpxMs3xZxQBwwj5nF3wYgkW/u7xw17ccNivNQlO4F48UjY25NftqUiV2uQtq2kHsCOHzfz7GUGaSbEJRTY97GcIkLvuhynK76ke4oFsv+M4SUiR0NWip8BBe0Mh4qUqpm09Y6yN+kqrTTRIEm+zBokeVFpVQ8Qqi5qT1XINsrvyl3RRnBxP6fkHg2HDm7jdocBVG3SPYFSqQfH3NtAJcGqs8U0KZgrJl4OH8/Bi/cyOFddg2njrCzU7GBR2xKpBEaQihjIJjlYnERZnkKVmmr/boSgyalUEpIwzoM69zqQrqeWYxuhlCICJK2RJaCM5sn26vEiRnS3Zzl7GIDuuzheQbSwT2yVfpUHVoSOFqyHulHGctbaKR1UbD6z+L9x/BZh8VxuoEBTEstiVDHFwgz9jryYgJXZK08TOv+JtRi+IXgbpbc9pRYyXzut5nOm0wLKcnYzSZM84xead7lvEijE4B9GNjHd7/0GTzkwdzuQ93mnBfuHdcisclyKJag5u4bpLNsS7a1GE/yDT48xly7v4XtYBk8AJVbN+6I6rurQWsY/J7snlss/+oB9/m0W5u4lEdtFYeEJuyrRO2ne3zQzzcgEa7qgIATKnFzvjbtg61UuLUX/u4+FyEgq1i
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7158.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40d21aa4-e859-4e70-b4e5-08da7b701a8b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Aug 2022 08:04:23.7638 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sYsSkzEKS1n/iNiKLqtj5ThCzzsEEHJYbmkGdmztGC+XVq8TV83OQ+I4DjLrpGLriz9fWmAbZ2aD5u+nUhD9Ug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR04MB6852
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1660205066; x=1691741066;
- h=from:to:cc:subject:date:message-id:references:
- in-reply-to:content-id:content-transfer-encoding:
- mime-version;
- bh=wj0TbzWXKmbdUal/zLNbT83gKwrOywi+M6CX2Rds2XU=;
- b=ed7WWWn1EP+HIobGviRuC4vVsh4Qfnyvw19+CTso8+OB266mbULZwhKo
- sWHWs6siRVhGXAdsrBiYaHhUaP3BY2+YUhH5PRVI68nrQLl8XQGKMEZY2
- sC7QbotrHN6+HV8+e/gfjuoxfcMb5hbRh74XLiEaKNwYkL5cE34Dsbn25
- SFjl8q2XHKNoHFg0mMvJz1MaCjpmFT4JXuQIrsVkduc8HJVHxFvDSi7Z6
- /h7qQjdksxvkqtVMwNHFT0maVQpj4IcWQyvHj3JRO2jDf5xGcCmz4I3zK
- we7L2WZRWvSbrAYtN4cphP5MjCJeBNKP+ymnQV9MdxqcW9KZxyf4sv/Oa
- A==;
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xo3cLvHVHIsnIfyKkLwSagJEK8kryjgHiqLZZ1EwG/A=;
- b=lHy/4rBIyCrnAqz+vh0Ku4LRT6tIkohwqjpnP3R0ZUnIzMjoh1IjRnWyHo2Em0CkhP12YOKukwz3n/e802nXcxC3wSZy0n/XbGziC8d2YG3s17d1TFUatzJmoB/LqCV7gmle0FhuuPa2smtk8Hqos/vmEOybGCpfFL+kpdEex4E=
+X-Mailru-Src: smtp
+X-7564579A: 78E4E2B564C1792B
+X-77F55803: 4F1203BC0FB41BD999D8F08CF16C6CA763527849D3D48064A02E71D87CB93F0800894C459B0CD1B9CD3846C799ACDBD2C937DDA7EA37CD3C8D50EBB1FB29A7D82BEE0536B1032EF0
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7CB722B0DA92BDD91EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F790063748744D4CD6EC491D8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8D81C28D46DB9BDFCCE872B9C68218A106F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE7ECE82AE7387CF2AD9FA2833FD35BB23D9E625A9149C048EE4B6963042765DA4B618001F51B5FD3F9D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8BF80095D1E57F4578A471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7C46CC729E650C927943847C11F186F3C59DAA53EE0834AAEE
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C41E93BD56E7067354307CAA32FF218580205367B2BCC23E5B394E08B88321F52AE7E65F06B2D3BF1CAD91A466A1DEF99B6ED91DBE5ABE359A3485EE9140A7D39D21840F38DCE934C0360583C7422455C3F1055A48C272B0305B63D382EEF4D896C6CDE5D1141D2B1CD8A1E4703BF9AC2433DC59E2433F6D3AB29EE3CE58EF5EB6AD91A466A1DEF99B296C473AB1E1421878B0D43A06A4C936638A446BE3E5C627BF0CFE790FC11A72BA7CCD254A1CF5E849561FCEFED9105F410CA545F18667F91A7EA1CDA0B5A7A0
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D340FE9920E7E3E5C62AC81FEF493B757D360577246E21BD3BFE18898E1E1CBD9F49587263B1FFCCD491D7E09C32AA3244C47E84091328FFA187F8FA707534E863A7101BF96129E4011729B2BEF169E0186
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojfXJM3siCnCnsVP2rX2RDlQ==
+X-Mailru-Sender: 689FA8AB762F7393CC2E0F076E87284E5D0FF5A5D07FE3600A29131488B25A2198CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; s=mail4; 
+ h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
+ bh=s/uT7VBPHMWutzp8TN+HG9Aa683c8TOM/rZNd8af5yI=; 
+ t=1660207159;x=1660297159; 
+ b=uV77nxeJG3F/MWhkrOCwv3cb3b+P0tVXoOWw8WtmJKX+MnLUbGRDmcWxxDN5sqbCt+Kw+ttFooMRxja5nP6+0aqtuJxyUh9zeN86hbYF/ywp/L0lZ7s+f8KAP4HHAo4Yogbv4kV1fzMCOhkjv+U5QrQso2RXDrn0+dYOvWzWIQjjaifbXCEgClMpU1EY/sC2xXGT+vx+jcdNPtpbzVGRjkoEqGHIOzEQwislmZ+HRfUPAJIi6COsBEjpvNf9KWMS+T1HVY6mtpAJm1P9eavQ1qo9SY9PNgjLfqOgLi1G6d86vAROJGgCeu5CJVa+rxFMfL66rGp4E7ABVKdob25sCA==;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
- header.a=rsa-sha256 header.s=dkim.wdc.com header.b=ed7WWWn1; 
- dkim=pass (1024-bit key) header.d=sharedspace.onmicrosoft.com
- header.i=@sharedspace.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-sharedspace-onmicrosoft-com header.b=lHy/4rBI
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-Subject: Re: [Buildroot] [PATCH 0/2] fix elf2flt on m68k
+ dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
+ header.a=rsa-sha256 header.s=mail4 header.b=uV77nxeJ
+X-Mailman-Original-Authentication-Results: smtpng1.m.smailru.net; auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: [Buildroot] [PATCH 1/1] package/libgeos: bump version to 3.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -164,95 +75,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Niklas Cassel via buildroot <buildroot@buildroot.org>
-Reply-To: Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc: Damien Le Moal <Damien.LeMoal@wdc.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Aug 11, 2022 at 01:38:33AM +0200, Waldemar Brodkorb wrote:
-> Hi Niklas,
-> 
-> it still fails for qemu_xtensa_lx60_nommu_defconfig with:
-> /home/wbx/buildroot/output/host/xtensa-buildroot-uclinux-uclibc/bin/elf2flt:
-> ERROR: text=0x69904 overlaps data=0x569a0 ?
+Changelog: https://github.com/libgeos/geos/releases/tag/3.11.0
 
-This is because of the same bad upstream elf2flt commit
-ba379d08bb78 ("elf2flt: fix for segfault on some ARM ELFs"),
-which fixed segfaults on ARM, but seems to have introduced
-segfaults on some previously working archs.
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ package/libgeos/libgeos.hash | 2 +-
+ package/libgeos/libgeos.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-The solution is to also include xtensa in my patch:
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index 3b913b750c..34b2b855d6 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3c141b07d61958a758345d5f54e3c735834b2f4303edb9f67fb26914f0d44770  geos-3.10.3.tar.bz2
++sha256  79ab8cabf4aa8604d161557b52e3e4d84575acdc0d08cb09ab3f7aaefa4d858a  geos-3.11.0.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 443c884abe..55c975eb4a 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGEOS_VERSION = 3.10.3
++LIBGEOS_VERSION = 3.11.0
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
+-- 
+2.34.1
 
-+  if ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
-+      (SEC_DATA | SEC_READONLY | SEC_RELOC)) {
-+#if defined(TARGET_m68k) || defined(TARGET_riscv64) || defined(TARGET_xtensa)
-+    if (!strcmp(".eh_frame", s->name))
-+      return false;
-+#endif
-+    return true;
-+  }
-+  return false;
-
-Let me send a v2 with this shortly.
-
-However, if we keep adding additional, then we might
-eventually be able to change it into a:
-
-+#if defined (TARGET_arm)
-+#else
-+#endif
-
-
-Kind regards,
-Niklas
-
-> 
-> best regards
->  Waldemar
-> 
-> Niklas Cassel via buildroot wrote,
-> 
-> > Hello buildroot folks,
-> > 
-> > This series fixes a segfault at link time on m68k.
-> > 
-> > With this series, we have bootable m68k and riscv64.
-> > 
-> > (riscv64 was booting with the previous patch, but we
-> > were simply lucky that we didn't observe the same
-> > segfault there as well.)
-> > 
-> > 
-> > Kind regards,
-> > Niklas
-> > 
-> > Niklas Cassel (2):
-> >   package/elf2flt: remove broken patch
-> >   package/elf2flt: add another .eh_frame section handling patch
-> > 
-> >  ...3-elf2flt-add-riscv-64-bits-support.patch} |  0
-> >  ...f2flt-fix-.eh_frame-section-handling.patch | 73 ------------------
-> >  ...2flt-create-a-common-helper-function.patch | 76 +++++++++++++++++++
-> >  ...l-error-regression-on-m68k-and-riscv.patch | 72 ++++++++++++++++++
-> >  4 files changed, 148 insertions(+), 73 deletions(-)
-> >  rename package/elf2flt/{0004-elf2flt-add-riscv-64-bits-support.patch => 0003-elf2flt-add-riscv-64-bits-support.patch} (100%)
-> >  delete mode 100644 package/elf2flt/0003-elf2flt-fix-.eh_frame-section-handling.patch
-> >  create mode 100644 package/elf2flt/0004-elf2flt-create-a-common-helper-function.patch
-> >  create mode 100644 package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-and-riscv.patch
-> > 
-> > -- 
-> > 2.37.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> > 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
