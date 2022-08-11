@@ -1,50 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AECAAC25B06
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 20:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36C6EC19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 20:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E9D4830C2;
-	Thu, 11 Aug 2022 20:28:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E9D4830C2
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3A0160EA1;
+	Thu, 11 Aug 2022 20:28:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3A0160EA1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P_wagBRIoDrk; Thu, 11 Aug 2022 20:28:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OCoQ99KwaPFv; Thu, 11 Aug 2022 20:28:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EACE83033;
-	Thu, 11 Aug 2022 20:28:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EACE83033
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1DCDD1BF2B9
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:28:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07A1C60E32;
+	Thu, 11 Aug 2022 20:28:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07A1C60E32
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AF861BF2B9
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:28:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 39B7082F6C
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:28:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39B7082F6C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7613A41758
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 20:28:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7613A41758
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5fZAMd0YWSM7 for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 20:28:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35FE68301D
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 20:28:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35FE68301D
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 3907187332; Thu, 11 Aug 2022 20:13:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 11 Aug 2022 22:27:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 95402089c314fbc03b934f5fcf9c29db043d758c
-X-Git-Newrev: 9dd179d43ffe9be98035f921a0db2bf051b632fb
-X-Patchwork-Hint: ignore
-Message-Id: <20220811201343.3907187332@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elf2flt: fix fatal error
- regression on m68k, xtensa, riscv64
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G2m3ULydrnX6 for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 20:28:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FE1541756
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2FE1541756
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 20:28:51 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E9B0D240005;
+ Thu, 11 Aug 2022 20:28:48 +0000 (UTC)
+Date: Thu, 11 Aug 2022 22:28:47 +0200
+To: Niklas Cassel via buildroot <buildroot@buildroot.org>
+Message-ID: <20220811222847.013cd129@windsurf>
+In-Reply-To: <20220811094049.798010-1-niklas.cassel@wdc.com>
+References: <20220811094049.798010-1-niklas.cassel@wdc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1660249730;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=0Tl8bT6yGx5cpymUfeoxioPhkkwopIC2+69q7+C9B/k=;
+ b=muqRq7YVH3LhiT+uqShsiN8w8EtbntwnHtV3iO4GQ+P6xp2cz8ZGTIMvPrVs+aF0rylACu
+ w41rgj+UVcbMZy3GuYL1Qf1cFdaA20ZT6H8u9wCe/QBRp/kePUTdD+F1MmQpoxeTAGpKEq
+ Cwq7TeeDwDemqqJwwhtuHySuEKH6vuikZ59TM/p67NcWkf8aZ4qaA+z4nYTEZFHhrfI9Bm
+ XzFu0PA0bK4BZyKOCXPPsrqf/Q/XwopxVQ2219wdRA+ENtb3s7VHgsE9O/4sZLpAllEJe5
+ IE5IVrPxd3OSrAUTX3jK2xhY1ycplpmNM+f+0cKf+3Zj5nhpjdQ2o7cNNUn6xA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=muqRq7YV
+Subject: Re: [Buildroot] [PATCH v2 0/2] fix elf2flt on m68k, xtensa, riscv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,198 +77,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Niklas Cassel <niklas.cassel@wdc.com>, damien.lemoal@opensource.wdc.com,
+ alistair@alistair23.me, geert@linux-m68k.org, romain.naour@smile.fr,
+ yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dd179d43ffe9be98035f921a0db2bf051b632fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Niklas,
 
-This series fixes a fatal error at link time on m68k, xtensa,
-and riscv64, caused by a bad upstream elf2flt commit.
+On Thu, 11 Aug 2022 11:40:47 +0200
+Niklas Cassel via buildroot <buildroot@buildroot.org> wrote:
 
-Without this patch, m68k, xtensa, and riscv64 would result in
-a fatal error:
-ERROR: text=0x3bab8 overlaps data=0x33f60 ?
+> Niklas Cassel (2):
+>   package/elf2flt: remove broken patch
+>   package/elf2flt: fix fatal error regression on m68k, xtensa, riscv64
 
-With this patch, qemu_m68k_mcf5208_defconfig,
-qemu_riscv64_nommu_virt_defconfig, and
-qemu_xtensa_lx60_nommu_defconfig builds properly.
+Thanks a lot for your work, I have applied both patches.
 
-riscv64 and m68k boots to login prompt.
-xtensa crashes when loading init, the same behavior as when
-reverting the bad upstream elf2flt commit completely.
+Could you make sure to upstream them to the official elf2flt project?
 
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...4-elf2flt-create-a-common-helper-function.patch | 76 ++++++++++++++++++++++
- ...-fatal-error-regression-on-m68k-xtensa-ri.patch | 73 +++++++++++++++++++++
- 2 files changed, 149 insertions(+)
+Thanks!
 
-diff --git a/package/elf2flt/0004-elf2flt-create-a-common-helper-function.patch b/package/elf2flt/0004-elf2flt-create-a-common-helper-function.patch
-new file mode 100644
-index 0000000000..6fee99d45a
---- /dev/null
-+++ b/package/elf2flt/0004-elf2flt-create-a-common-helper-function.patch
-@@ -0,0 +1,76 @@
-+From 37e1e0ace8ccebf54ec2f5522bfc1f9db86946ad Mon Sep 17 00:00:00 2001
-+From: Niklas Cassel <niklas.cassel@wdc.com>
-+Date: Tue, 9 Aug 2022 12:13:50 +0200
-+Subject: [PATCH] elf2flt: create a common helper function
-+
-+In order to make the code more maintainable,
-+move duplicated code to a common helper function.
-+
-+No functional change intended.
-+
-+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-+---
-+ elf2flt.c | 19 +++++++++++--------
-+ 1 file changed, 11 insertions(+), 8 deletions(-)
-+
-+diff --git a/elf2flt.c b/elf2flt.c
-+index 669591e..9c32f9a 100644
-+--- a/elf2flt.c
-++++ b/elf2flt.c
-+@@ -337,6 +337,13 @@ compare_relocs (const void *pa, const void *pb)
-+ }
-+ #endif
-+ 
-++static bool
-++ro_reloc_data_section_should_be_in_text(asection *s)
-++{
-++  return (s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
-++	  (SEC_DATA | SEC_READONLY | SEC_RELOC);
-++}
-++
-+ static uint32_t *
-+ output_relocs (
-+   bfd *abs_bfd,
-+@@ -428,8 +435,7 @@ output_relocs (
-+ 	 */
-+ 	if ((!pic_with_got || ALWAYS_RELOC_TEXT) &&
-+ 	    ((a->flags & SEC_CODE) ||
-+-	    ((a->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
-+-		         (SEC_DATA | SEC_READONLY | SEC_RELOC))))
-++	     ro_reloc_data_section_should_be_in_text(a)))
-+ 		sectionp = text + (a->vma - text_vma);
-+ 	else if (a->flags & SEC_DATA)
-+ 		sectionp = data + (a->vma - data_vma);
-+@@ -1893,8 +1899,7 @@ int main(int argc, char *argv[])
-+     bfd_vma sec_vma;
-+ 
-+     if ((s->flags & SEC_CODE) ||
-+-       ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
-+-                    (SEC_DATA | SEC_READONLY | SEC_RELOC))) {
-++	ro_reloc_data_section_should_be_in_text(s)) {
-+       vma = &text_vma;
-+       len = &text_len;
-+     } else if (s->flags & SEC_DATA) {
-+@@ -1932,8 +1937,7 @@ int main(int argc, char *argv[])
-+    * data sections.*/
-+   for (s = abs_bfd->sections; s != NULL; s = s->next)
-+     if ((s->flags & SEC_CODE) ||
-+-       ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
-+-                    (SEC_DATA | SEC_READONLY | SEC_RELOC)))
-++	ro_reloc_data_section_should_be_in_text(s))
-+       if (!bfd_get_section_contents(abs_bfd, s,
-+ 				   text + (s->vma - text_vma), 0,
-+ 				   bfd_section_size(abs_bfd, s)))
-+@@ -1962,8 +1966,7 @@ int main(int argc, char *argv[])
-+    * data sections already included in the text output section.*/
-+   for (s = abs_bfd->sections; s != NULL; s = s->next)
-+     if ((s->flags & SEC_DATA) &&
-+-       ((s->flags & (SEC_READONLY | SEC_RELOC)) !=
-+-                    (SEC_READONLY | SEC_RELOC)))
-++	!ro_reloc_data_section_should_be_in_text(s))
-+       if (!bfd_get_section_contents(abs_bfd, s,
-+ 				   data + (s->vma - data_vma), 0,
-+ 				   bfd_section_size(abs_bfd, s)))
-+-- 
-+2.37.1
-+
-diff --git a/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch b/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
-new file mode 100644
-index 0000000000..278709cb1c
---- /dev/null
-+++ b/package/elf2flt/0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
-@@ -0,0 +1,73 @@
-+From 65ac5f9e69cfb989d970da74c41e478774d29be5 Mon Sep 17 00:00:00 2001
-+From: Niklas Cassel <niklas.cassel@wdc.com>
-+Date: Tue, 9 Aug 2022 21:06:05 +0200
-+Subject: [PATCH] elf2flt: fix fatal error regression on m68k, xtensa,
-+ riscv64
-+
-+Commit ba379d08bb78 ("elf2flt: fix for segfault on some ARM ELFs")
-+changed the condition of which input sections that should be included
-+in the .text output section from:
-+((a->flags & (SEC_DATA | SEC_READONLY)) == (SEC_DATA | SEC_READONLY))
-+to:
-+((a->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
-+(SEC_DATA | SEC_READONLY | SEC_RELOC))
-+
-+On ARM, the .eh_frame input section does not have the SEC_RELOC flag
-+set, so this specific change had no effect on ARM.
-+
-+However, on e.g. m68k and riscv64, the .eh_frame input section does
-+have the SEC_RELOC flag set, which means that after commit ba379d08bb78
-+("elf2flt: fix for segfault on some ARM ELFs"), read-only relocation
-+data sections were placed in .text output section, instead of .data
-+output section.
-+
-+This will result in a fatal error on m68k, xtensa and riscv64:
-+ERROR: text=0x3bab8 overlaps data=0x33f60 ?
-+
-+This is because elf2flt cannot append to .text after .data has been
-+appended to.
-+
-+Note that the binutils maintainer says that the correct thing is
-+to put read-only relocation data sections in .text:
-+https://sourceware.org/legacy-ml/binutils/2019-10/msg00132.html
-+
-+So the proper fix is probably to rewrite elf2flt so that it can append
-+to .text after .data has been appended to (which will require elf2flt
-+to move/relocate everything that has already been appended to .data,
-+since the virtual addresses are contiguous).
-+
-+However, for now, add an exception for m68k, xtensa and riscv64
-+(specifically for the problematic input section, .eh_frame), so that we
-+get the same behavior as older elf2flt releases, where we put read-only
-+relocation data in .data, which was working perfectly fine.
-+
-+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-+---
-+ elf2flt.c | 11 +++++++++--
-+ 1 file changed, 9 insertions(+), 2 deletions(-)
-+
-+diff --git a/elf2flt.c b/elf2flt.c
-+index 9c32f9a..a680c89 100644
-+--- a/elf2flt.c
-++++ b/elf2flt.c
-+@@ -340,8 +340,15 @@ compare_relocs (const void *pa, const void *pb)
-+ static bool
-+ ro_reloc_data_section_should_be_in_text(asection *s)
-+ {
-+-  return (s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
-+-	  (SEC_DATA | SEC_READONLY | SEC_RELOC);
-++  if ((s->flags & (SEC_DATA | SEC_READONLY | SEC_RELOC)) ==
-++      (SEC_DATA | SEC_READONLY | SEC_RELOC)) {
-++#if defined(TARGET_m68k) || defined(TARGET_riscv64) || defined(TARGET_xtensa)
-++    if (!strcmp(".eh_frame", s->name))
-++      return false;
-++#endif
-++    return true;
-++  }
-++  return false;
-+ }
-+ 
-+ static uint32_t *
-+-- 
-+2.37.1
-+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
