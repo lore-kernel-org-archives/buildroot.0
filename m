@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 850D6C19F2A
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AF55C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:48:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D76C82AF8;
-	Thu, 11 Aug 2022 11:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D76C82AF8
+	by smtp2.osuosl.org (Postfix) with ESMTP id B932340C86;
+	Thu, 11 Aug 2022 11:48:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B932340C86
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DhcR5sFO-cmw; Thu, 11 Aug 2022 11:48:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7QI_4dfDuo8O; Thu, 11 Aug 2022 11:48:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6ACA782A5D;
-	Thu, 11 Aug 2022 11:48:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ACA782A5D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D80BE1BF38C
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:48:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D88F3405DD;
+	Thu, 11 Aug 2022 11:48:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D88F3405DD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 167881C116E
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:48:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3FBB60F3E
+ by smtp2.osuosl.org (Postfix) with ESMTP id E69DD40531
  for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:48:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3FBB60F3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E69DD40531
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YLrQV_YWdwKY for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OSME0v8CttEs for <buildroot@lists.busybox.net>;
  Thu, 11 Aug 2022 11:48:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 136BB60AA5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25F5540382
  for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:48:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 136BB60AA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25F5540382
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DC52387135; Thu, 11 Aug 2022 11:33:58 +0000 (UTC)
+ id EA7AB87136; Thu, 11 Aug 2022 11:33:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 11 Aug 2022 13:46:39 +0200
+Date: Thu, 11 Aug 2022 13:46:40 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 2a6d96bbb5e15fa3d8007c2b8712adc718384da5
-X-Git-Newrev: 61054337b39a3e6da1133ae85d088910e82349e8
+X-Git-Oldrev: 61054337b39a3e6da1133ae85d088910e82349e8
+X-Git-Newrev: fe8b3034da31930465e2706c9746235d7c552aaa
 X-Patchwork-Hint: ignore
-Message-Id: <20220811113358.DC52387135@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/zeromq: force
- detection of more features
+Message-Id: <20220811113358.EA7AB87136@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/zeromq: drop
+ libuuid dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +58,63 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7317508437463472118=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61054337b39a3e6da1133ae85d088910e82349e8
+--===============7317508437463472118==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=fe8b3034da31930465e2706c9746235d7c552aaa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-ZeroMQ added SO_PRIORITY in version 4.3.4, SO_BINDTODEVICE in 4.2.3, and
-O_CLOEXEC since before 2.1.11. Checks for these feature are incompatible
-with cross compilation. Linux supports SO_PRIORITY, and SO_BINDTODEVICE
-since before 2.6. O_CLOEXEC is supported since 2.6.23. Keep them always
-enabled.
+ZeroMQ removed the libuuid dependency in version 3.1.0, 10+ years ago.
 
 Cc: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3d4a5a77e54dba425824a6434a05b3a3b8e88c05)
+(cherry picked from commit 62a94cbd8f0a2cf6cb8fe2b491a77bfb1a142305)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zeromq/zeromq.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/zeromq/Config.in | 2 --
+ package/zeromq/zeromq.mk | 1 -
+ 2 files changed, 3 deletions(-)
 
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+index cf5c644c39..209acf1a57 100644
+--- a/package/zeromq/Config.in
++++ b/package/zeromq/Config.in
+@@ -5,8 +5,6 @@ config BR2_PACKAGE_ZEROMQ
+ 	bool "zeromq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  ØMQ (ZeroMQ, 0MQ, zmq) looks like an embeddable networking
+ 	  library but acts like a concurrency framework. It gives you
 diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 182699403c..219827b42b 100644
+index 219827b42b..452c5f4291 100644
 --- a/package/zeromq/zeromq.mk
 +++ b/package/zeromq/zeromq.mk
-@@ -18,7 +18,10 @@ ZEROMQ_CPE_ID_PRODUCT = libzmq
- # SOCK_CLOEXEC, since linux v2.6.27.
- # Note: the flag TCP_KEEPALIVE is NOT available so we do not include it.
- ZEROMQ_CONF_ENV = libzmq_cv_sock_cloexec=yes \
-+	libzmq_cv_o_cloexec=yes \
- 	libzmq_cv_so_keepalive=yes \
-+	libzmq_cv_so_priority=yes \
-+	libzmq_cv_so_bindtodevice=yes \
- 	libzmq_cv_tcp_keepcnt=yes \
- 	libzmq_cv_tcp_keepidle=yes \
- 	libzmq_cv_tcp_keepintvl=yes
+@@ -7,7 +7,6 @@
+ ZEROMQ_VERSION = 4.3.4
+ ZEROMQ_SITE = https://github.com/zeromq/libzmq/releases/download/v$(ZEROMQ_VERSION)
+ ZEROMQ_INSTALL_STAGING = YES
+-ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_CONF_OPTS = --disable-Werror --without-documentation
+ ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
+
+--===============7317508437463472118==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7317508437463472118==--
