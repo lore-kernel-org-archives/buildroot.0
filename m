@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DE36C3F6B0
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:12:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD027C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB904417FA;
-	Thu, 11 Aug 2022 11:12:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB904417FA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 758BE417A3;
+	Thu, 11 Aug 2022 11:13:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 758BE417A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rZHtbrqhx04e; Thu, 11 Aug 2022 11:12:13 +0000 (UTC)
+	with ESMTP id KgOv2prstRcY; Thu, 11 Aug 2022 11:13:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 743C1417A3;
-	Thu, 11 Aug 2022 11:12:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 743C1417A3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0399A1BF38C
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:12:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36BFD402C5;
+	Thu, 11 Aug 2022 11:13:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36BFD402C5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 19FC61BF38C
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFD3960A74
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:12:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFD3960A74
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9DD98301D
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:13:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9DD98301D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Emm6j-tdiPvX for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 11:12:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E93B9607C1
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E93B9607C1
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:12:09 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 78A32FF807;
- Thu, 11 Aug 2022 11:12:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oM66g-002pLL-NG; Thu, 11 Aug 2022 13:12:06 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pBs4xxeRsj4q for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 11:13:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A5E282FCB
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:13:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A5E282FCB
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 083F387100; Thu, 11 Aug 2022 10:58:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Quentin Schulz <foss+buildroot@0leil.net>
-References: <20220719133144.2787205-1-foss+buildroot@0leil.net>
-Date: Thu, 11 Aug 2022 13:12:06 +0200
-In-Reply-To: <20220719133144.2787205-1-foss+buildroot@0leil.net> (Quentin
- Schulz's message of "Tue, 19 Jul 2022 15:31:44 +0200")
-Message-ID: <87k07fm3uh.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package: pcsc-lite: pcsc_demo is under
- BSD-3-Clause and not GPL-3.0-or-later
+To: buildroot@buildroot.org
+Date: Thu, 11 Aug 2022 13:02:58 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 708c138ffee9e46944ba1bc4bed3526d7207db39
+X-Git-Newrev: 4c79b933fbd15e14181fed091658895b2a63e69f
+X-Patchwork-Hint: ignore
+Message-Id: <20220811105848.083F387100@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/uacme: requires
+ TLS support in libcurl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,32 +57,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Quentin" == Quentin Schulz <foss+buildroot@0leil.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4c79b933fbd15e14181fed091658895b2a63e69f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
- > Since commit b01f19fb9361 ("pcsc_demo: change licence from GPLv3 to
- > BSD") in pcsclite, the license of pcsc_demo is BSD-3-Clause and not
- > GPL-3.0-or-later, so let's update the package license information.
+uacme configure script fails when libcurl does not support TLS. This
+means that BR2_PACKAGE_LIBCURL_TLS_NONE is incompatible with uacme.
 
- > Cc: Quentin Schulz <foss+buildroot@0leil.net>
- > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
- > ---
+Add a kconfig knob to libcurl, BR2_PACKAGE_LIBCURL_FORCE_TLS, so that
+_TLS_NONE is not an option. Select that from uacme.
 
- > Cc'ing Peter as maintainer of stable branches since this commit can be
- > backported to 2022.02.x and 2022.05.x branches since the commit in
- > pcsclite is in the tree since 1.9.2 (and 2022.02.x has 1.9.5).
+Note that, beside selecting BR2_PACKAGE_LIBCURL_FORCE_TLS, packages will
+have to also select a package that can be used as a crypto backend by
+libcurl. Use of BR2_PACKAGE_LIBCURL_FORCE_TLS is unlikely to become very
+common in the foreseeable future, so we don't need to optimize with
+automatic selection of crypto backend.
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+uacme already needs a crypto package for itself, so the above
+requirement is naturally met for uacme.
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+http://autobuild.buildroot.net/results/4e16f1d958ac3d30e26e7f17bdffc47834b0e2bd/
+http://autobuild.buildroot.net/results/4e16f1d958ac3d30e26e7f17bdffc47834b0e2bd/
+http://autobuild.buildroot.net/results/25280409b32282b4dd40b1e88127051439380f3d/
+
+Cc: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[yann.morin.1998@free.fr:
+  - keep the current forward select
+  - add the kconfig knob
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+[yann.morin.1998@free.fr: tweak commit log with Baruch's suggestions]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6d07e2618c085c7769f695125d6e3392d9d97093)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/Config.in | 7 +++++++
+ package/uacme/Config.in   | 1 +
+ 2 files changed, 8 insertions(+)
+
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index 3381decca8..bc2f8f47f2 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -45,6 +45,12 @@ config BR2_PACKAGE_LIBCURL_EXTRA_PROTOCOLS_FEATURES
+ 	  - DICT
+ 	  - Gopher
+ 
++# Packages must select that if they require a SSL/TLS-enabled libcurl.
++# Those packages must also select one crypto package that can be used
++# as a backend below.
++config BR2_PACKAGE_LIBCURL_FORCE_TLS
++	bool
++
+ choice
+ 	prompt "SSL/TLS library to use"
+ 
+@@ -77,6 +83,7 @@ comment "WolfSSL needs a toolchain w/ dynamic library"
+ 
+ config BR2_PACKAGE_LIBCURL_TLS_NONE
+ 	bool "None"
++	depends on !BR2_PACKAGE_LIBCURL_FORCE_SSL_TLS
+ 
+ endchoice
+ 
+diff --git a/package/uacme/Config.in b/package/uacme/Config.in
+index 58b7c534e7..796f54754e 100644
+--- a/package/uacme/Config.in
++++ b/package/uacme/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_UACME
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_MBEDTLS)
+ 	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBCURL_FORCE_TLS
+ 	help
+ 	  uacme is a client for the ACMEv2 protocol described in
+ 	  RFC8555, written in plain C with minimal dependencies
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
