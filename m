@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8102C19F2A
-	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:39:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16910C19F2A
+	for <buildroot@archiver.kernel.org>; Thu, 11 Aug 2022 11:41:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BA7683032;
-	Thu, 11 Aug 2022 11:39:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BA7683032
+	by smtp3.osuosl.org (Postfix) with ESMTP id 862CC61001;
+	Thu, 11 Aug 2022 11:41:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 862CC61001
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 02vuZtJ4ENeJ; Thu, 11 Aug 2022 11:39:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pvhjof-YiHLC; Thu, 11 Aug 2022 11:41:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9CC78301D;
-	Thu, 11 Aug 2022 11:39:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9CC78301D
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2AB660F5D;
+	Thu, 11 Aug 2022 11:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2AB660F5D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B684F1BF38C
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:39:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C77C51BF38C
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:41:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F5194032A
- for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:39:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F5194032A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B01B24032A
+ for <buildroot@lists.busybox.net>; Thu, 11 Aug 2022 11:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B01B24032A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1wQl60pgWGy9 for <buildroot@lists.busybox.net>;
- Thu, 11 Aug 2022 11:39:38 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B5AB4023B
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8B5AB4023B
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:39:38 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DE20920003;
- Thu, 11 Aug 2022 11:39:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oM6XG-002qk0-0v; Thu, 11 Aug 2022 13:39:34 +0200
+ with ESMTP id FcrJRMzuG1bg for <buildroot@lists.busybox.net>;
+ Thu, 11 Aug 2022 11:41:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0AB04023B
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 11:41:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0AB04023B
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id C36AC87118; Thu, 11 Aug 2022 11:26:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-References: <4a323dc9772af9a5b5295ae2d1a65f0d314765d3.1658478797.git.baruch@tkos.co.il>
-Date: Thu, 11 Aug 2022 13:39:33 +0200
-In-Reply-To: <4a323dc9772af9a5b5295ae2d1a65f0d314765d3.1658478797.git.baruch@tkos.co.il>
- (Baruch Siach via buildroot's message of "Fri, 22 Jul 2022 11:33:17
- +0300")
-Message-ID: <87bksrm2kq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libcurl: fix dependency symbol typo
+To: buildroot@buildroot.org
+Date: Thu, 11 Aug 2022 13:39:28 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: bdd83a3e544e05fa1e509cf478eabf0aac56fec9
+X-Git-Newrev: 0053bbbeaf7e1c36d6a947f3aadfaeb480911461
+X-Patchwork-Hint: ignore
+Message-Id: <20220811112646.C36AC87118@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libcurl: fix
+ dependency symbol typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,31 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, "Yann E .
- MORIN" <yann.morin.1998@free.fr>, Matt Weber <matthew.weber@collins.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0053bbbeaf7e1c36d6a947f3aadfaeb480911461
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Commit 6d07e2618c0 ("package/uacme: requires TLS support in libcurl")
- > mistyped the BR2_PACKAGE_LIBCURL_FORCE_TLS dependency making the fix
- > ineffective.
+Commit 6d07e2618c0 ("package/uacme: requires TLS support in libcurl")
+mistyped the BR2_PACKAGE_LIBCURL_FORCE_TLS dependency making the fix
+ineffective.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/56ea6cb146df63d1575da9dae3035b3220de875f/
- > http://autobuild.buildroot.net/results/280b0ed7f9cdb424917373f98c3e4e6b593c6d21/
+Fixes:
+http://autobuild.buildroot.net/results/56ea6cb146df63d1575da9dae3035b3220de875f/
+http://autobuild.buildroot.net/results/280b0ed7f9cdb424917373f98c3e4e6b593c6d21/
 
- > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Matt Weber <matthew.weber@collins.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Matt Weber <matthew.weber@collins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit bf1c9174aca83becc9f44828a8832f04c138fd23)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index bc2f8f47f2..218309ed56 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -83,7 +83,7 @@ comment "WolfSSL needs a toolchain w/ dynamic library"
+ 
+ config BR2_PACKAGE_LIBCURL_TLS_NONE
+ 	bool "None"
+-	depends on !BR2_PACKAGE_LIBCURL_FORCE_SSL_TLS
++	depends on !BR2_PACKAGE_LIBCURL_FORCE_TLS
+ 
+ endchoice
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
