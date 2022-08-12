@@ -1,103 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DB34C00140
-	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 11:26:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28836C00140
+	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 12:19:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF1B9418EB;
-	Fri, 12 Aug 2022 11:26:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF1B9418EB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DB7983419;
+	Fri, 12 Aug 2022 12:19:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DB7983419
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3yp2zkAZp9Oa; Fri, 12 Aug 2022 11:25:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zI163KaubaRS; Fri, 12 Aug 2022 12:19:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA0584189B;
-	Fri, 12 Aug 2022 11:25:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA0584189B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E40881BF287
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 11:25:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5D5482D49;
+	Fri, 12 Aug 2022 12:19:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5D5482D49
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 753691BF280
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 12:19:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC5F3610CA
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 11:25:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC5F3610CA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5055A8278F
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 12:19:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5055A8278F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wmpbnWwh6XUN for <buildroot@lists.busybox.net>;
- Fri, 12 Aug 2022 11:25:54 +0000 (UTC)
-X-Greylist: delayed 00:08:54 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C8976108A
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com
- [64.147.123.25])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8C8976108A
- for <buildroot@buildroot.org>; Fri, 12 Aug 2022 11:25:54 +0000 (UTC)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
- by mailout.west.internal (Postfix) with ESMTP id 6F35C320046F;
- Fri, 12 Aug 2022 07:16:58 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
- by compute1.internal (MEProxy); Fri, 12 Aug 2022 07:16:58 -0400
-X-ME-Sender: <xms:qTb2YuNnKeVWiBMONL4MYK5tkGBQXSeGbkbSMGx2jn8RMym8jxJhoA>
- <xme:qTb2Ys9JMa3PPacifwpfC1VR-qQfi3LPtR4oASUiu2BGv-HocSjdXg9V3Q-odx_OG
- hhQpl-NXR6kSofNsQo>
-X-ME-Received: <xmr:qTb2YlS_gIrFQDDq8KTmYcOPsk5vAo4uTRYS7Z2iaAyU99HDtSa_5p7uxct-b3tPxnRZCXYHD8Gb>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegiedgfeekucetufdoteggodetrfdotf
- fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
- uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
- cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlihhsthgr
- ihhrucfhrhgrnhgtihhsuceorghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgvqe
- enucggtffrrghtthgvrhhnpedufeevfeetheekledvfeejueeghefghfeileefveekgfek
- ledvhedvgeefhfdvheenucffohhmrghinhepghhithhlrggsrdgtohhmpdgsuhhilhgurh
- hoohhtrdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecu
- rfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsthgrihhrvdefrd
- hmvg
-X-ME-Proxy: <xmx:qTb2YutaCiOH34DsYJLpHbq-Vjl-WG2hM2YKE2s5otuYxmxqhiTrEw>
- <xmx:qTb2Ymec_w_EgEY2XUNdbDnfynBldsM5SW6rixTSWowVM2g2F8MG_A>
- <xmx:qTb2Yi2-NHjynZPrr9jUeRNnUAv_nj_R3msJ0GFxvmVQ-hL6_7mXRA>
- <xmx:qTb2YqG4Gyf3GFuJcEukvlWFMKrSy6O_JplOXpl-eSBTz4lLATQmXg>
-Feedback-ID: ifd214418:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Aug 2022 07:16:55 -0400 (EDT)
-From: Alistair Francis <alistair@alistair23.me>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jiMa5On93IsB for <buildroot@lists.busybox.net>;
+ Fri, 12 Aug 2022 12:19:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3364082D49
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3364082D49
+ for <buildroot@buildroot.org>; Fri, 12 Aug 2022 12:19:19 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id j7so1031315wrh.3
+ for <buildroot@buildroot.org>; Fri, 12 Aug 2022 05:19:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=WqOFoA5qGrMI5tZk7nEWUZwsZkq3C65sC7LkoRRtAZ8=;
+ b=usz6Y//vsUFKcJNfkX6j7nrWM9RdkHH3BfA7Xb9+U1zbF9d7yxV4x3C84PosLYsivI
+ +fXaKiPZugOWzUxFqqEJmbNW0eR258Nh3uB4L3G8ilweyjKjgwj2W6FUXzIv1wD9DzFq
+ ohY50kqYA3X4R1e6bVA5xLpdTxttZNE2br9cvC5mfhQ0XXmJ61FzMTpehoCwA7l5wjDE
+ bSDtL8+swWWko1rOP1vh76H3IQMtLiK6frBZSrDc9aLBx7WkZkNhcFnsaUXkRZgT3yj9
+ x/F1Mx+gvBmW47zgrhSg6UMShEFEkBHpNp3bwKAZktUQr1xJCMid/0qUeRZT9cTeDuS5
+ 5ThQ==
+X-Gm-Message-State: ACgBeo36k7RvLqCEnhh5OV2Oc8FEa3/kpBiU1groOtlA+KJsgMajtqVO
+ QGQwEZ3yVJHkoBfr6wFJWS2r2MLMpdk=
+X-Google-Smtp-Source: AA6agR5YG8PWPWZiH4uLG1UGm7/HisI7joGOhB8715gpw6fcN9iqifFQrLA4/ZrJtWvtD8J8uYD9Mg==
+X-Received: by 2002:a5d:47a4:0:b0:220:600f:34d8 with SMTP id
+ 4-20020a5d47a4000000b00220600f34d8mr2080775wrb.510.1660306757191; 
+ Fri, 12 Aug 2022 05:19:17 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b0048f45e83f19e0b55.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:48f4:5e83:f19e:b55])
+ by smtp.gmail.com with ESMTPSA id
+ d1-20020adfe881000000b0022062459ce5sm1793604wrm.30.2022.08.12.05.19.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 12 Aug 2022 05:19:16 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Aug 2022 21:16:51 +1000
-Message-Id: <20220812111651.329130-1-alistair@alistair23.me>
-X-Mailer: git-send-email 2.37.1
+Date: Fri, 12 Aug 2022 14:19:13 +0200
+Message-Id: <20220812121913.51447-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=alistair23.me; 
- h=cc:cc:content-transfer-encoding:date:date:from:from
- :in-reply-to:message-id:mime-version:reply-to:sender:subject
- :subject:to:to; s=fm1; t=1660303017; x=1660389417; bh=iiiHPLSRXi
- AIk+0pYmuYPReoQNj8u7nzqC4Ry/ns5h0=; b=pUrMUnemM0q5BR/x9S0g3dmWdC
- nLaxliPL/UnIP36jnRveD9rnaQfiQDJWSU441OyqDpecH87BIGdmp7yoVjawf9vL
- eXuyv9xAubsr3en7KVu9MfGHiTsSeBd39SFFBtr6kJKgRGW7vJEs58krzTFslmYu
- h+1V1kgQhHUDbIr1MeT0zKohebBWypc9oZ1DfpGk5Rc3uboMjvgclzb25KNLt5yj
- LsEo+XDRbFz9AllFFZVKAlG6Iws2IeGrI/8Wwbav1SEeHJSd9AF6vODs9IROELRp
- 2hob0GQeKFM9wQuBifmx3aS5EqwAJJ1IDeU1fj3sSdJT9RusoYy0WNw9kl1g==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
- :feedback-id:feedback-id:from:from:in-reply-to:message-id
- :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
- :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
- 1660303017; x=1660389417; bh=iiiHPLSRXiAIk+0pYmuYPReoQNj8u7nzqC4
- Ry/ns5h0=; b=Eqv8KIKJB/QQORfMaJ4NJ9c4n8sTfyuqvtrHvo9DdnoxmJLRZoZ
- 9ihtomIAwHAeasrD6B+CLoCg7Fw98qVxNSvzvc6TWqtAx10ntpT/e6YKe5TMKv/r
- w1iCJ1WVBKxe+yp202xM4GzBFXx9j4S8Jqba5U42O3rcHfYw4s9XszoGUA03cZ74
- GJaAxb5ouTj3hUtFKIk5M1V5Lr0fzywwYPjvvDZzvh+JX5Ut2JaGjHUesTaSrj+X
- nuWoHDfjdzkemPFWZUnPSUjIp4Z9N2cKKqwrSArrVttTgRONwE/kDryj2zrk2kjn
- eibmBlzlYuvoSSzcRY6Mi+dZVtHOQTt+6KQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=alistair23.me
- header.i=@alistair23.me header.a=rsa-sha256 header.s=fm1 header.b=pUrMUnem; 
- dkim=pass (2048-bit key,
- unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm1 header.b=Eqv8KIKJ
-Subject: [Buildroot] [PATCH v2] pine64_sopine_defconfig: Use mainline ATF
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=WqOFoA5qGrMI5tZk7nEWUZwsZkq3C65sC7LkoRRtAZ8=;
+ b=XhnoQ5ojlwAtwat6EV+NIyzKAHY8e3C3HXQmcSyUh/HwCP1bYJ2luzKA0aejY9jvho
+ uy9wnKNwb5j/jqb3sUZNONvzGtlM7vGDmGGY86K4j0n5G1nAtXd6okrfzqjrj2zX70Xe
+ eYJXxzD1YSH5epqFWtSYwNLwl0Gw29cTjHOYS9xxxAH2NKl9ONU4qzVuqhtrBvsyMvqr
+ MajnR8O6pBPu7JoDP/gN9pIziBycXudSz+b7cEjNCVavwqF4dypUXbXFCXG06aj4MCPU
+ Fpt4je7sUHOIe7++z5hCAxn7tfEy/vCWZMR8EMql98Y8lVkLBjSaBbNjMIMWD+HI+Ayb
+ bN6Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=XhnoQ5oj
+Subject: [Buildroot] [PATCH 1/1] package/libp11: fix build with gcc 4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,43 +93,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alistair Francis <alistair@alistair23.me>,
- Jagan Teki <jagan@amarulasolutions.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use the mainline ATF as it supports the Pine64 SoPine module.
+Fix the following build failure with gcc 4.8 raised since bump to
+version 0.4.12 in commit 86ab91483dcb4b60de8c1daa20e2f42bd95ab5fb and
+https://github.com/OpenSC/libp11/commit/639a4b6463278c0119a2ec60b261da3e5330fb33:
+
+p11_attr.c: In function 'pkcs11_zap_attrs':
+p11_attr.c:167:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (unsigned i = 0; i < 32; i++) {
+  ^
+p11_attr.c:167:2: note: use option -std=c99 or -std=gnu99 to compile your code
 
 Fixes:
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053812
+ - http://autobuild.buildroot.org/results/4391020fb5738cc8c26dc53783a6228bbf76473a
 
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- configs/pine64_sopine_defconfig | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ ...rc-p11_attr.c-fix-build-with-gcc-4.8.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch
 
-diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
-index 6fa511477c..f59f2387eb 100644
---- a/configs/pine64_sopine_defconfig
-+++ b/configs/pine64_sopine_defconfig
-@@ -7,10 +7,9 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
- 
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
- # Bootloader
+diff --git a/package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch b/package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..60fc16d9d0
+--- /dev/null
++++ b/package/libp11/0001-src-p11_attr.c-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,42 @@
++From ba44b87318ed89e489fa3ce0a5d66002afa2bd6c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 12 Aug 2022 11:54:54 +0200
++Subject: [PATCH] src/p11_attr.c: fix build with gcc 4.8
++
++Fix the following build failure with gcc 4.8 raised since version 0.4.12
++and
++https://github.com/OpenSC/libp11/commit/639a4b6463278c0119a2ec60b261da3e5330fb33:
++
++p11_attr.c: In function 'pkcs11_zap_attrs':
++p11_attr.c:167:2: error: 'for' loop initial declarations are only allowed in C99 mode
++  for (unsigned i = 0; i < 32; i++) {
++  ^
++p11_attr.c:167:2: note: use option -std=c99 or -std=gnu99 to compile your code
++
++Fixes:
++ - http://autobuild.buildroot.org/results/4391020fb5738cc8c26dc53783a6228bbf76473a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/OpenSC/libp11/commit/ba44b87318ed89e489fa3ce0a5d66002afa2bd6c]
++---
++ src/p11_attr.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/p11_attr.c b/src/p11_attr.c
++index d49456ff..d425241a 100644
++--- a/src/p11_attr.c
+++++ b/src/p11_attr.c
++@@ -162,9 +162,11 @@ void pkcs11_addattr_obj(PKCS11_TEMPLATE *tmpl, int type, pkcs11_i2d_fn enc, void
++ 
++ void pkcs11_zap_attrs(PKCS11_TEMPLATE *tmpl)
++ {
+++	unsigned int i;
+++
++ 	if (!tmpl->allocated)
++ 		return;
++-	for (unsigned i = 0; i < 32; i++) {
+++	for (i = 0; i < 32; i++) {
++ 		if (tmpl->allocated & (1<<i))
++ 			OPENSSL_free(tmpl->attrs[i].pValue);
++ 	}
 -- 
-2.37.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
