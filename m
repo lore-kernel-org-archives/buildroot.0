@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAC62C00140
-	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 15:14:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F6A2C00140
+	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 15:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B73160B0B;
-	Fri, 12 Aug 2022 15:14:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B73160B0B
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE1F783486;
+	Fri, 12 Aug 2022 15:14:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE1F783486
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XN_9mx-gQIeD; Fri, 12 Aug 2022 15:14:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VOFjbXilfl-2; Fri, 12 Aug 2022 15:14:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7730660773;
-	Fri, 12 Aug 2022 15:14:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7730660773
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 96D011BF40A
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 15:13:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0A5883367;
+	Fri, 12 Aug 2022 15:14:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0A5883367
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 21F631BF40A
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 15:14:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80416404C9
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 15:13:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80416404C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09FF582EBA
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 15:14:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09FF582EBA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id siX52O37nc5j for <buildroot@lists.busybox.net>;
- Fri, 12 Aug 2022 15:13:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XsHNOws1Xi7n for <buildroot@lists.busybox.net>;
+ Fri, 12 Aug 2022 15:13:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F01AB404AE
- for <buildroot@buildroot.org>; Fri, 12 Aug 2022 15:13:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F01AB404AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 26D118142F
+ for <buildroot@buildroot.org>; Fri, 12 Aug 2022 15:13:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26D118142F
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 375F9873AC; Fri, 12 Aug 2022 14:59:32 +0000 (UTC)
+ id 64195873BC; Fri, 12 Aug 2022 14:59:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Aug 2022 17:10:21 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 51a837b719c71b191909e033f9dcea2a293cb2d2
-X-Git-Newrev: 659310bc8f30427c62ca0ec8ff51414f0a371365
+Date: Fri, 12 Aug 2022 17:07:58 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: c25e77eec5738b31aa6093410b5745d9939844b7
+X-Git-Newrev: 1cebbbcdb59fd6efa8678d9bc37088f1bfba516b
 X-Patchwork-Hint: ignore
-Message-Id: <20220812145932.375F9873AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libcurl: fix
+Message-Id: <20220812145936.64195873BC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libcurl: fix
  build when !BR2_TOOLCHAIN_HAS_SYNC_1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=659310bc8f30427c62ca0ec8ff51414f0a371365
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1cebbbcdb59fd6efa8678d9bc37088f1bfba516b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 On platform that do not provide __atomic_exchange_1(), and when
 libatomic is not available (e.g., threads support disabled) link of
