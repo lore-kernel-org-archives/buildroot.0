@@ -1,85 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A15BFC00140
-	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 05:08:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAB2EC00140
+	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 06:32:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D860C80BE0;
-	Fri, 12 Aug 2022 05:08:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D860C80BE0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28152610D9;
+	Fri, 12 Aug 2022 06:32:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28152610D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RU5J4zrAdyhV; Fri, 12 Aug 2022 05:08:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Viz4vT2wfFL8; Fri, 12 Aug 2022 06:32:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4E748338B;
-	Fri, 12 Aug 2022 05:08:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4E748338B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C5C5610C4;
+	Fri, 12 Aug 2022 06:32:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C5C5610C4
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C3AA11BF86D
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 05:08:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CB9A51BF2BD
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 06:32:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 981EF4012D
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 05:08:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 981EF4012D
+ by smtp2.osuosl.org (Postfix) with ESMTP id ACCCE4053C
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 06:32:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACCCE4053C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id riEsHg5vs8IA for <buildroot@lists.busybox.net>;
- Fri, 12 Aug 2022 05:08:25 +0000 (UTC)
+ with ESMTP id 2_09QohiUFe5 for <buildroot@lists.busybox.net>;
+ Fri, 12 Aug 2022 06:32:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A6FA400DD
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
- [IPv6:2607:f8b0:4864:20::635])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6A6FA400DD
- for <buildroot@buildroot.org>; Fri, 12 Aug 2022 05:08:25 +0000 (UTC)
-Received: by mail-pl1-x635.google.com with SMTP id d10so732220plr.6
- for <buildroot@buildroot.org>; Thu, 11 Aug 2022 22:08:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E90294017A
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com
+ [IPv6:2001:4860:4864:20::32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E90294017A
+ for <buildroot@buildroot.org>; Fri, 12 Aug 2022 06:32:35 +0000 (UTC)
+Received: by mail-oa1-x32.google.com with SMTP id
+ 586e51a60fabf-10ea30a098bso24100326fac.8
+ for <buildroot@buildroot.org>; Thu, 11 Aug 2022 23:32:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc;
- bh=zGL8gXPtEmrkT3EqpPYBs/a3RB5sgnR1kDMnq9XPTqk=;
- b=v092rWhbkSzPKIZ2FKUqV4QqcebnNDqAdKe29yP2Vuvx1m5By9++568qQMgJa+1arT
- P2FLp4b6MMjjjkRHclzmec3DMV3CRx0e9lJ+B66MHpDKKQklBbi7SDFUNXPjP+1cLqZf
- vFjc+1qEHqfcU2POSY6a/Byo9PdJiXN2GioP8kotmhg0i97idl44RvTcUgvIQ7NwdziB
- r9fh6EMJ7CnP2HMZ4PieT5HdEc8T+1Ekd8wb4j376bepKXR3LpjCWaOtK76wEbQxJT1X
- R6Dnej2T3E7E1TyyTNwoMx8KOWORPV0whZfhS3hnWzqZ8MfRzEE/JVLOHdLenX3zmYOs
- 70FQ==
-X-Gm-Message-State: ACgBeo2+aE229on38j8FQ8aff+mXOQndCV1WKqIqoLdVLOy8Xrwy5aoY
- ar8Gbt3hl0u3i672LBDUPcfa7/X5LvnMzDtQGHU=
-X-Google-Smtp-Source: AA6agR74o8A9EhLZnkHcHNa4Sq4HUHurIjsVAUOElOtqG35/cn7klFA45QkfnbPp7IFWr/b4P7yEuCpUvUk/hnmJVDk=
-X-Received: by 2002:a17:90b:2684:b0:1f4:f2a7:f2b3 with SMTP id
- pl4-20020a17090b268400b001f4f2a7f2b3mr12353193pjb.70.1660280904680; Thu, 11
- Aug 2022 22:08:24 -0700 (PDT)
+ bh=5OL7sa3o3gouty+NxI9MU9DRrQrWa3H1bn4IsPrlqIc=;
+ b=J305YJr1B32v7Js+rIX0mJvl7ZFlI0bDFdv6I6+JLFVbe+1NHmZxkjo76byvmSLiY3
+ 0yqR7Fwes+qU6ZRkFvbPctF7lA4nPjbrXta1uOeqJcjW1mtayEdGL0uxlXxnf0vurAba
+ //DOO9aG6UVh1LO1XDwo7v/ja88koq01bgKedIA9UUY6D3vSQeQP7erfibZkXO4/6ftS
+ xZk30PPwTYim8zB9vhPS4tNrkquur/8BX4UnDaC3atDgrY92EjGoCUYgwYYs1oNT6HO8
+ HmsB+4u4/AxKr+tcQ3l+2sEAp5uMWZKLR7PwHsvp0yZ/Io5Gdsdfc9o6AuhZlM/Ud8Ni
+ O+tQ==
+X-Gm-Message-State: ACgBeo2FtscW7+5qBZ4Hvc1Glw7quWnwq25i1211TmxkqqZo0pXjQCBW
+ vo6wgDVsZAvuWQzE7HHDUbb1XBmvjtqPjAyFy1VNUw==
+X-Google-Smtp-Source: AA6agR6ZaOL898HWHkwda/82tEC4yBZzg1szsTiSrb3xMBkQrK39CPq/bOdGqhRB63Qt5TRgwmEYIAYlziRvJkMVzJk=
+X-Received: by 2002:a05:6870:b604:b0:116:a0ee:257a with SMTP id
+ cm4-20020a056870b60400b00116a0ee257amr1065229oab.95.1660285954817; Thu, 11
+ Aug 2022 23:32:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220727071557.3434892-1-james.hilliard1@gmail.com>
- <20220807155456.0be10777@windsurf>
- <CADvTj4ovUOQJ23nT-ZXgBEur10y9-QWRUuUXzu7EbikQLnYEaA@mail.gmail.com>
-In-Reply-To: <CADvTj4ovUOQJ23nT-ZXgBEur10y9-QWRUuUXzu7EbikQLnYEaA@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 11 Aug 2022 23:08:12 -0600
-Message-ID: <CADvTj4qtOBncCMduFMOAOPb3atT=K6NZW0fRZ9aD1hXSNGCzCQ@mail.gmail.com>
+References: <20220806224338.0159e15c@windsurf>
+ <CAEyMn7ZtrsEdo18p2pjvdhrROnSemX2spZyxN8Tj67RLTcZG-w@mail.gmail.com>
+ <20220808102805.2ee4fa4c@windsurf>
+In-Reply-To: <20220808102805.2ee4fa4c@windsurf>
+From: Suniel Mahesh <sunil@amarulasolutions.com>
+Date: Fri, 12 Aug 2022 12:02:24 +0530
+Message-ID: <CAM+7aWsJvo1yZT9+_2vz-OF8eR+tW1srrOgA_EzZ_AeO0rYX8w@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
+ d=amarulasolutions.com; s=google;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc;
- bh=zGL8gXPtEmrkT3EqpPYBs/a3RB5sgnR1kDMnq9XPTqk=;
- b=JUoPLAmiw73zpY8879B3HdAxn6o1r6t3F4YmWWwbK4yb2ajrwPnJIe5UL0HWhkGS9Y
- YtbPn8FO4e8DI4Rj4NP5VvzpvvBQOKY3+xDyEgbBHgX9Xuig9oZd42C7W95e5H+PhVZg
- ouLWvVcZhmJHbVOjt3KmzoNpD25FKV5pKBW3X0OZuocxWpNSk3rAtSvTjf+GOTcmS0fT
- sEwHb4bSd8651h9L9z1as8DjkcLeDKIcRrfuSQOmxAQ5yVUJKDXOJtrY0yw2ffNqHDP1
- 25QSsXbokUVYI7z0xeX249IFIQ3FeWB9CYClgvAhkQLVpSwJe98c5gxQPeMUHev4redT
- bQaQ==
+ bh=5OL7sa3o3gouty+NxI9MU9DRrQrWa3H1bn4IsPrlqIc=;
+ b=Ri17AejNrGkMEEqC79TTvHs8hi1ial4f/trog/wRZyyAejq/Su0ZKs4D0FM5TiBtdM
+ UYxTKeeHwYxYPmSxGlIo6nftHkehpuKlroNzoJtHui9ZfFzdM4RI8aXiOU+HGxCJ/fAb
+ 6wes9JygXPORckbGU8uTjQJBsonuIPsiomdqI=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=JUoPLAmi
-Subject: Re: [Buildroot] [PATCH v5 1/2] support/misc/toolchainfile.cmake.in:
- don't set PKG_CONFIG_SYSROOT_DIR
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=Ri17AejN
+Subject: Re: [Buildroot] Buildroot defconfigs about to be removed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,98 +89,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Samuel Martin <s.martin49@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- buildroot@buildroot.org, Norbert Lange <nolange79@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ Filip Skoneczny <fskoneczny@gmail.com>,
+ Marek Belisko <marek.belisko@open-nandra.com>,
+ Thomas Huth <huth@tuxfamily.org>,
+ Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, Davide Viti <zinosat@gmail.com>,
+ Mike Harmony <mike.harmony@snapav.com>, Peter Seiderer <ps.report@gmx.net>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ Heiko Thiery <heiko.thiery@gmail.com>, Romain Naour <romain.naour@gmail.com>
+Content-Type: multipart/mixed; boundary="===============3073091566680812928=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Aug 8, 2022 at 1:15 AM James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> On Sun, Aug 7, 2022 at 7:54 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello James,
-> >
-> > On Wed, 27 Jul 2022 01:15:56 -0600
-> > James Hilliard <james.hilliard1@gmail.com> wrote:
-> >
-> > > This doesn't appear to be required and seems to break for packages
-> > > using meson's pkgconfig.relocatable format.
-> >
-> > Thanks for your contribution. However, if you want us to merge this can
-> > of contribution needs much, much, much better commit logs and
-> > explanations.
-> >
-> > An explanation that starts with "this doesn't appear to be required"
-> > and continues with "seems to break" is the opposite of a convincing
-> > explanation.
-> >
-> > Here is the sort of commit log that we need:
-> >
-> > """
-> > Defining PKG_CONFIG_SYSROOT_DIR in the CMake toolchain file is not
-> > needed because it is already passed...
-> >
-> > In addition, passing this in the CMake toolchain file causes breakage
-> > of the following defconfig, once meson's pkgconfig.relocatable is
-> > enabled, with the following failure:
-> >
-> > [...]
-> >
-> > This failure occurs because ...
-> > """
-> >
-> > Note: I agree that passing PKG_CONFIG_SYSROOT_DIR in the CMake
-> > toolchain file is probably not needed because our pkg-config wrapper
-> > already passes the right value. However, I fail to see how that can
-> > make a difference. How something in the CMake toolchain file can affect
-> > the build of Meson based packages?
->
-> I think it's an issue with how it interacts with meson's pkg-config prefix in
-> relocatable mode AFAIU, seems cmake wasn't setting the prefix correctly,
-> which generally only seemed to cause issues with PKG_CONFIG_SYSROOT_DIR
-> from what I could tell.
->
-> I recall someone mentioned PKG_CONFIG_SYSROOT_DIR was needed for
-> external toolchains or something along those lines so I came up with
-> an alternative
-> approach to avoid removing PKG_CONFIG_SYSROOT_DIR.
+--===============3073091566680812928==
+Content-Type: multipart/alternative; boundary="0000000000009019b505e6057236"
 
-Oh, it was apparently needed by external builds using the SDK, see:
-https://lore.kernel.org/buildroot/23a6eba2-06fd-8579-9815-214b3656daf7@mind.be/
+--0000000000009019b505e6057236
+Content-Type: text/plain; charset="UTF-8"
+
+On Mon, Aug 8, 2022 at 1:58 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> Hello Heiko,
+>
+> On Sun, 7 Aug 2022 00:28:46 +0200
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > This is the first time I have been informed about this build failure.
+> > I am surprised that I did not get any mail about this.
+>
+> Sorry, your issue is potentially new. It's mainly the other issues that
+> I have already reported in the past, and which did not get any
+> feedback, on defconfigs that are not properly maintained (all those
+> friendlyarm/bananapi/orangepi boards).
+>
+
+Hi Thomas,
+
+I will try to fix the defconfigs related to friendlyarm/bananapi/orangepi
+boards ASAP.
+
+Thanks
+Suniel
 
 >
-> >
-> > We very much appreciate all the improvements you are submitting, many
-> > of them are very relevant and very useful. However, to have them
-> > merged, we need detailed and convincing argumentation, no vague commit
-> > logs that seem to indicate the change is actually papering over a
-> > problem rather than addressing it for real.
+> > Nonetheless I will fix that and send a patch.
 >
-> This was superseded by:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20220728014402.142320-1-james.hilliard1@gmail.com/
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
 
-I avoided removing PKG_CONFIG_SYSROOT_DIR due to the SDK issue.
+--0000000000009019b505e6057236
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> https://patchwork.ozlabs.org/project/buildroot/patch/20220728014402.142320-2-james.hilliard1@gmail.com/
->
-> I separated the pkg-config and relocatable format change out from the ninja
-> to meson build/install migration.
->
-> >
-> > Thanks!
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, co-owner and CEO, Bootlin
-> > Embedded Linux and Kernel engineering and training
-> > https://bootlin.com
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Mon, Aug 8, 2022 at 1:58 PM Thomas=
+ Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petaz=
+zoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" =
+style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
+dding-left:1ex">Hello Heiko,<br>
+<br>
+On Sun, 7 Aug 2022 00:28:46 +0200<br>
+Heiko Thiery &lt;<a href=3D"mailto:heiko.thiery@gmail.com" target=3D"_blank=
+">heiko.thiery@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; This is the first time I have been informed about this build failure.<=
+br>
+&gt; I am surprised that I did not get any mail about this.<br>
+<br>
+Sorry, your issue is potentially new. It&#39;s mainly the other issues that=
+<br>
+I have already reported in the past, and which did not get any<br>
+feedback, on defconfigs that are not properly maintained (all those<br>
+friendlyarm/bananapi/orangepi boards).<br></blockquote><div><br></div><div>=
+Hi Thomas,</div><div><br></div><div>I will try to fix the defconfigs relate=
+d to friendlyarm/bananapi/orangepi boards ASAP.</div><div><br></div><div>Th=
+anks</div><div>Suniel=C2=A0</div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-le=
+ft:1ex">
+<br>
+&gt; Nonetheless I will fix that and send a patch.<br>
+<br>
+Thanks a lot!<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div></div>
+
+--0000000000009019b505e6057236--
+
+--===============3073091566680812928==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3073091566680812928==--
