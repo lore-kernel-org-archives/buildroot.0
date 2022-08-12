@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F094C00140
-	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 20:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A618DC25B08
+	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 20:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 887CE60B86;
-	Fri, 12 Aug 2022 20:49:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 887CE60B86
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B3A860B97;
+	Fri, 12 Aug 2022 20:56:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B3A860B97
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xCNKJvHM4uvN; Fri, 12 Aug 2022 20:49:55 +0000 (UTC)
+	with ESMTP id cMKsVMDbYqnE; Fri, 12 Aug 2022 20:56:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A4C360B6B;
-	Fri, 12 Aug 2022 20:49:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A4C360B6B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AC71D1BF354
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 20:49:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58BF860B74;
+	Fri, 12 Aug 2022 20:56:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58BF860B74
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 622C81BF354
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 20:56:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 883C240543
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 20:49:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 883C240543
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37FD04181A
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 20:56:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37FD04181A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O_WH_UjzFqZB for <buildroot@lists.busybox.net>;
- Fri, 12 Aug 2022 20:49:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QdpAdLYGU8ek for <buildroot@lists.busybox.net>;
+ Fri, 12 Aug 2022 20:56:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A197402C3
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8A197402C3
- for <buildroot@buildroot.org>; Fri, 12 Aug 2022 20:49:51 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- r83-20020a1c4456000000b003a5cb389944so935951wma.4
- for <buildroot@buildroot.org>; Fri, 12 Aug 2022 13:49:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 025E3417DC
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 025E3417DC
+ for <buildroot@buildroot.org>; Fri, 12 Aug 2022 20:56:33 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id z17so2352541wrq.4
+ for <buildroot@buildroot.org>; Fri, 12 Aug 2022 13:56:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=Rg+xygtl89KcdhWTMvxPQBTgrPsopuayyn50xf60tDI=;
- b=Maa5T2J0KvkMso7jICUC4JaTJIDurOFDqz0tDyRlCV7zsGgqYO/blACRTYKoZHsmWB
- OGPUPmkX4m0RJe58fl2thsnhpuzfgy3GBuGdc6nqpq+YAQB6G61TANieVlP7hp7zsyLh
- mTYovdP2kCs7YaCMwgpCQ9ufS9EIT70Al+3IJ1d86CWH5gs19Cr8Ju5h13tq0a/VxBi+
- FprpTbhKW129pg2W2f25kUcrhUPUdQ1dUjuGJ5AZYcLATAGue7H2rRS6+qJR/kaE8CDG
- fsmvzV0PJDcbwJouiO3QhG15BA+d8UbXM5yCgSLoUgi2Hm4bjxufSqG5kLhcCLIyaYvH
- Ep6g==
-X-Gm-Message-State: ACgBeo2HEF2jBQ1rZEB3LXR4i6Sog/4kjcxUOCqig2MHcZIP/eYLWwLk
- JQqNVxFpp56g8GvyEJNPEbGd7O8ImKo=
-X-Google-Smtp-Source: AA6agR4ITuT6/ii2a0nEe0g5EE5tUrPrv9habVnwe1v/BTGxL05Ipc64n2voZQ0NS3QpYGwn4lr+yw==
-X-Received: by 2002:a05:600c:4e12:b0:3a5:dac2:5cec with SMTP id
- b18-20020a05600c4e1200b003a5dac25cecmr909201wmq.183.1660337389385; 
- Fri, 12 Aug 2022 13:49:49 -0700 (PDT)
+ bh=MfvoVcosWksr7MAOyicV6V/gEedgkgvW/D/KhXr6F9k=;
+ b=Red2fo9NpOD1pLgmr5X5F/vK7o7CwSd8S0tNTTgDFHyKYf5Bj7euyzntQ3C3PX3GZJ
+ ipZoDamWEKJQrCJk5eu1rnLbzsEQqq/4uQA4uAL4sp/kbAqvisbCNy0c0g6vR5zuj2np
+ i5cip+wpiLKn2gPHWUiQJj5wMsAD1wQE/DXmBvaULDCtPONFXv/p76BTUSNfgR+c7pWl
+ kMzakRYTZVA1z7ynpu9tcblGnypyH52t0kdto9FF79ArBH8QPWBMYznPht6CyUVutndS
+ /yBRDqd16fm6M+vWmUnno96dyd3zpsq3Har9G7LwKT3Q+jZGTtWKjEqAZSJSW/1TnqSW
+ t7bA==
+X-Gm-Message-State: ACgBeo3E8Mu8//qQ6pN7usUCknB2CjLptc9OLZe4+6g+wCjAtsCBRMJV
+ /bdikmm802D+LvVPPK3x67+SdJmSXWg=
+X-Google-Smtp-Source: AA6agR5cMMqbwbJ9Zmg3wrFQw/op7B582xBnQr4xGBEt80loygiCfPczv13/ecVdiTPH4y3amqAfhA==
+X-Received: by 2002:a5d:6c6f:0:b0:222:cdb9:f002 with SMTP id
+ r15-20020a5d6c6f000000b00222cdb9f002mr3057881wrz.198.1660337791889; 
+ Fri, 12 Aug 2022 13:56:31 -0700 (PDT)
 Received: from kali.home (2a01cb088e0b5b0001a8063f329e0108.ipv6.abo.wanadoo.fr.
  [2a01:cb08:8e0b:5b00:1a8:63f:329e:108])
  by smtp.gmail.com with ESMTPSA id
- d7-20020a1c7307000000b003a53ec3d847sm594637wmb.29.2022.08.12.13.49.48
+ d3-20020adfe843000000b0021edb2d07bbsm371034wrn.33.2022.08.12.13.56.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Aug 2022 13:49:48 -0700 (PDT)
+ Fri, 12 Aug 2022 13:56:31 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 12 Aug 2022 22:49:27 +0200
-Message-Id: <20220812204927.173993-1-fontaine.fabrice@gmail.com>
+Date: Fri, 12 Aug 2022 22:56:23 +0200
+Message-Id: <20220812205623.175869-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=Rg+xygtl89KcdhWTMvxPQBTgrPsopuayyn50xf60tDI=;
- b=HvUBs/0TUMiGNMqa1kAKxw+Bo/khXJi2h4yQYuw5GHEgnQ71qmlqCWRorSxGLJosLH
- 6vWnO4qHwddCeG94ljbRJuYODKMdZnHan6XJnn/7B0AVGqOmlhpH1DMcQW4KGhpgGoiU
- nD3Xyf6pCP9n2bywjVDPPJMzu9x82wuFXAk8eWCu8kzwnOx/Axf5TiImjf7PygY7wg8Z
- VyXAMo8m6O2KAKNniGtDRjXYV16R/C/448dOwR0seDtwbj28h0obhF9x4mOQNHPllw3t
- J09d4BdFx8avfUJ0mnDsll/kRa7eA0ZRKpX5URcI0rl79ObHw5+RdLSWb+yXcGuGGW+c
- 4GKA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=MfvoVcosWksr7MAOyicV6V/gEedgkgvW/D/KhXr6F9k=;
+ b=SiPDyXRJxjKc/UfdkvuWrGnRX54oR2jiwgj0o+j+DrSFA6/0vmKQ0cDZM+N3avWJad
+ 2rjoucpyoU/6uk50F0SjatSA8a09FlqLvojCVTznYL94/Va6iPG+HLk1gvAxON2diUUi
+ kQQ8F2cc2WYTMZwvAILHAhJZ2JpdbHMvSBh+iaOsxp55FH9Nt8gE+Spj5vN6tR/zofCr
+ cDctRsKl8n6HVAwukIVuy5GvA/236yK2vvxXbUCDddgffdbzMhS9wSqNlgmXqre25P2m
+ cxoephm5+jI+oQYU++ChT2C1LNHUaXkxUneES8Gzztekxq3MC9aNbUTStLc7px/BLd68
+ vaWQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=HvUBs/0T
-Subject: [Buildroot] [PATCH 1/1] package/opensc: requires DES in openssl
+ header.a=rsa-sha256 header.s=20210112 header.b=SiPDyXRJ
+Subject: [Buildroot] [PATCH 1/1] package/jack2: add host-pkgconf dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,42 +93,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Jos=C3=A9=20Pekkarinen?= <jose.pekkarinen@unikie.com>,
+Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable DES in openssl to avoid the following build failure raised since
-the addition of the package in commit
-8aaa7ecbce1d10cbcd880c3da5e429988f96176a:
+Fix the following build failure:
 
-In file included from sm-common.c:51:
-sm-common.h:33:1: error: unknown type name 'DES_LONG'
-   33 | DES_LONG DES_cbc_cksum_3des(const unsigned char *in, DES_cblock *output, long length,
-      | ^~~~~~~~
+Checking for program 'pkg-config'        : not found
+The above check failed, but the checkee is required for --alsa.
 
 Fixes:
- - http://autobuild.buildroot.org/results/25d0933406dea28201dadc90abd32072afab720b
+ - http://autobuild.buildroot.org/results/cbdc251980f5571f75281202ebffc04ddecbf28d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/opensc/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/jack2/jack2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/opensc/Config.in b/package/opensc/Config.in
-index 6a0329fb39..2cec096ac2 100644
---- a/package/opensc/Config.in
-+++ b/package/opensc/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_OPENSC
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_PCSC_LITE
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  OpenSC provides a set of libraries and utilities to work
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 9e56dcdfd8..9d6a3b6479 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -9,7 +9,7 @@ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK2_LICENSE_FILES = COPYING
+ JACK2_CPE_ID_VENDOR = jackaudio
+-JACK2_DEPENDENCIES = alsa-lib
++JACK2_DEPENDENCIES = host-pkgconf alsa-lib
+ JACK2_INSTALL_STAGING = YES
+ 
+ JACK2_CONF_OPTS = --alsa --example-tools=no
 -- 
 2.35.1
 
