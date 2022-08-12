@@ -4,85 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D59C00140
-	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 14:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B19CC00140
+	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 14:57:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E39E340C10;
-	Fri, 12 Aug 2022 14:39:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E39E340C10
+	by smtp2.osuosl.org (Postfix) with ESMTP id C5FFB40C19;
+	Fri, 12 Aug 2022 14:57:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5FFB40C19
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gjCygsl1IVBE; Fri, 12 Aug 2022 14:39:10 +0000 (UTC)
+	with ESMTP id rQ6h45h03K_I; Fri, 12 Aug 2022 14:57:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 07648404AE;
-	Fri, 12 Aug 2022 14:39:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07648404AE
+	by smtp2.osuosl.org (Postfix) with ESMTP id C36A2404C6;
+	Fri, 12 Aug 2022 14:57:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C36A2404C6
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F36741BF5AE
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 14:39:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7CDE61BF5AE
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 14:57:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD234418FB
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 14:39:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD234418FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 57589418F7
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 14:57:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57589418F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F_rOYrCrckK5 for <buildroot@lists.busybox.net>;
- Fri, 12 Aug 2022 14:39:05 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A44C410AC
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3A44C410AC
- for <buildroot@buildroot.org>; Fri, 12 Aug 2022 14:39:05 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id p10so1420287wru.8
- for <buildroot@buildroot.org>; Fri, 12 Aug 2022 07:39:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=FcttjswkFKVKk9dGqrMLOw5HwNyjfLc1c9S4XK3mEcs=;
- b=5yvPV2sNeVWhXcuMmKr2o3ovd/pZyVklJUzjjvFHrHpjQ/4ftPFPQKXfqdzzjM5ba0
- Jqfn2HiSueDR5QAt9v5ogFTWRqnNmzkBdbrsM94Kv58/PvNU0oHxP/CzQdpnWogvRiYR
- wKFWLmemxzQXN7yx3x8f4jpq/uafQGM/M6YC0JEKbAri1aXEMM+b6Pe0kI67b/JOb3j5
- iHlWSvqM3NSvWmHyxUl0esAHHEQEtMzdW11jR0OnI3Diq8hg3f3tlUQHBTc4EMaOspHI
- Wikxdu47DpxXQpLP0ZOrqtUPe189I4454KM6ZUxJdNS1GdpfEBOyctka5EbYVtyvofOg
- P6Vg==
-X-Gm-Message-State: ACgBeo1t4FjOkkQC2pGshX+CEjCD1ni6lKYT+5UyGkzQpxOh3XE+2Ncs
- wQM8gBjmPJs6s1M+yWcX4xxPc9DlDGM=
-X-Google-Smtp-Source: AA6agR4HqA4cMvyAKUUTG9OrXWemcLAuN2uDa2XPVRFf7RMZSSogJk8ZFXORsHHSo2QroPAHfN4QZg==
-X-Received: by 2002:a5d:6102:0:b0:220:6382:eab1 with SMTP id
- v2-20020a5d6102000000b002206382eab1mr2300187wrt.539.1660315143092; 
- Fri, 12 Aug 2022 07:39:03 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b000246974a2e4403fc.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:246:974a:2e44:3fc])
- by smtp.gmail.com with ESMTPSA id
- y7-20020adff147000000b0021e491fd250sm2075520wro.89.2022.08.12.07.39.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 12 Aug 2022 07:39:02 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id Z_7fn6tF_WWu for <buildroot@lists.busybox.net>;
+ Fri, 12 Aug 2022 14:57:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB90841610
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CB90841610
+ for <buildroot@buildroot.org>; Fri, 12 Aug 2022 14:57:26 +0000 (UTC)
+Received: from evilbit.green-communications.fr ([92.154.77.116]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.119]) with ESMTPSA (Nemesis)
+ id 1M1qfu-1oOhxc02X2-002GHA; Fri, 12 Aug 2022 16:57:24 +0200
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 To: buildroot@buildroot.org
-Date: Fri, 12 Aug 2022 16:38:59 +0200
-Message-Id: <20220812143859.130116-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Fri, 12 Aug 2022 16:56:52 +0200
+Message-Id: <20220812145652.24342-2-nicolas.cavallari@green-communications.fr>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220812145652.24342-1-nicolas.cavallari@green-communications.fr>
+References: <20220812145652.24342-1-nicolas.cavallari@green-communications.fr>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=FcttjswkFKVKk9dGqrMLOw5HwNyjfLc1c9S4XK3mEcs=;
- b=bBpJNU0/mqkPMeRSXmZUg0MYpoRbhNSuTjPBm6QCOMfhSg2zGIq2RqULPWoMNsKQzz
- cGmORCRaxfz2hfL2qusEvuH1HdNiqGFjOJpwBsqJCZba4tNcnyYlyu956fR+2DnO/u1y
- YnOdOU9guOhutawSwMegWSJUJ7fn4XTHTs3aYiMywLnf8pXm2u9D2RVJsn5m47C+4jcD
- L7cnQmScmb9KAcRTkbNTVm1RRE4yExt5QSwHvMmNoL9EsxDgy3OAmCLkkaD5t9PpY8J1
- gyiNrveMABUwdrJWW5L/gHMuvBJUFYwKSMWdgy2rL4yyQYQXoLLZfz/Hq5hfj2KlL53r
- xJJg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=bBpJNU0/
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/hawktracer: fix build without threads
+X-Provags-ID: V03:K1:DgyUbaCqLVBBXom4n19DrTkDHTqeCk7ghfA7jR8Cs9txpVQXCen
+ vBIdtXbh99un5ncD245ttUFiOUO1y0NqyJVl7LjSdRolONMdALosKQq3ebmsddgQBWz2Igp
+ Ptr2aPgS+SUsrzeHmpQiv+Mo6Va1v3HLZuXROyzQtG2y7ixJr8bItLL/9yhBvlUKhO8DgIp
+ U8g3ioaoUGIVCQ79Ib0Kg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:saRDCiRUbpQ=:v5odxj9VEYmvlI6R2mXm6S
+ 791kxH5PIHyOLUny2y0rmzbKxRNON40717TZnb42EwTyai/8K+ge0WH90tLJP5LjDlkUX45YK
+ WnRPHhi0tsoaAfPkWBKesDPBSGEElXi91PgxqnbPCmtkwdz4UeEanLbJZs5zzceNpoIt8KyE/
+ T6SqobPW+FnL6M9ehDntdsPKJdNm37CDTErbfoyfS4xZXalTzNjizlv8vwzpfAVaNdrTnccL1
+ kJeXG6oSpLqxZmp1jZvEqM4YqrKbJjarjbUbETC3uFhXVZutVy7VMtmgN1Vuu0m2TcmB+74DX
+ 3aosh8mNgVtyUv+trWCJVczuJVdyewr6Xo84D4v73BPogqQAU/QKquAdmOma7vSXZNvhSug2j
+ 36DoEuuzznlECQoXJ/Z7JNZ14/cwDwKZHQY56k3A3PgzdF5qwXARUYbIydDt4MrGs0ERmud4E
+ AZq+unhgSrtfBHB1YR9fXqqoAXQ2YVt/ClVlu50PECMCO78KDb7M4NX/WsFdmjPQzbdpcUiIQ
+ tVfGYA22TQMUPHqxGhrTSdQ6c1aNM8uq+Yp9OYuKmux190P8rTQl17v/lFYiicv3KifJjlbii
+ h0aLlleaoJvrjABwTOLAwGO3nKok03I1Y8o/xt8LO0XqF0iJXGrg/x2U1ZhXEWFjecdXaBQd5
+ oQm77bNvKvUH1yTDzczyDs38bsoKVRWQzcrEUp24ITKwtnjDtHoC+2oIkgo1i+r5NlINYAGEj
+ Z6IRfD42jqNKBB8H81/WRGdeZ5F7ijVqvJ6UGKdYuNj96o98bwjMera3BfV/DxYKtYteM6Yyp
+ q3TeeeW
+Subject: [Buildroot] [PATCH v3 2/2] package/libgit2: bump to 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,100 +75,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gilles Talis <gilles.talis@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure without threads raised since the
-addition of the package in commit
-94d8764ef938936aa5432f1f13bd1b2d8b62a159:
+It includes an option to build a command line program that can be used
+to replace git in simple cases.
 
-/home/giuliobenetti/autobuild/run/instance-2/output-1/build/hawktracer-e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8/lib/platform/linux/cpu_usage.c:5:10: fatal error: pthread.h: No such file or directory
-    5 | #include <pthread.h>
-      |          ^~~~~~~~~~~
+The upcoming sha256 repository support made them steal the sha256 code
+from RFC6234, hence the license change.
 
-Fixes:
- - http://autobuild.buildroot.org/results/7edc29e21e441e66ad7c4df1673e506950930913
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Update patch to avoid a build failure on macos
+v2 -> v3: link executable with -latomic
+Tested with test-pkg on top of af972178b
 
- ...eatures.cmake-fix-DENABLE_CPU_USAGE_.patch | 38 +++++++++++++++++++
- package/hawktracer/hawktracer.mk              |  8 +++-
- 2 files changed, 44 insertions(+), 2 deletions(-)
- create mode 100644 package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch
+v1 -> v2: fix scissor lines
 
-diff --git a/package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch b/package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch
-new file mode 100644
-index 0000000000..5c8e6e9e65
---- /dev/null
-+++ b/package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch
-@@ -0,0 +1,38 @@
-+From 65e78e2b972e2fab76b18732941ae611ec782dee Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 12 Aug 2022 14:51:33 +0200
-+Subject: [PATCH] cmake/platform_features.cmake: fix
-+ -DENABLE_CPU_USAGE_FEATURE=OFF
-+
-+Fix -DENABLE_CPU_USAGE_FEATURE=OFF to allow the user to disable
-+CPU_USAGE and avoid the following build failure without threads:
-+
-+/home/giuliobenetti/autobuild/run/instance-2/output-1/build/hawktracer-e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8/lib/platform/linux/cpu_usage.c:5:10: fatal error: pthread.h: No such file or directory
-+    5 | #include <pthread.h>
-+      |          ^~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7edc29e21e441e66ad7c4df1673e506950930913
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/amzn/hawktracer/pull/86]
-+---
-+ cmake/platform_features.cmake | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/cmake/platform_features.cmake b/cmake/platform_features.cmake
-+index 1abbd41..8d7cfd9 100644
-+--- a/cmake/platform_features.cmake
-++++ b/cmake/platform_features.cmake
-+@@ -18,7 +18,7 @@ macro(_validate_feature_enabled FEATURE_NAME VARIABLE)
-+ endmacro(_validate_feature_enabled)
-+ 
-+ macro(define_platform_feature FEATURE_NAME FEATURE_DEFAULT_FILE DEFAULT_ENABLE)
-+-    if (NOT "${DEFAULT_ENABLE}" STREQUAL "OFF" OR "${ENABLE_${FEATURE_NAME}_FEATURE}" STREQUAL "ON")
-++    if (NOT "${DEFAULT_ENABLE}" STREQUAL "OFF" AND NOT "${ENABLE_${FEATURE_NAME}_FEATURE}" STREQUAL "OFF")
-+         set(OPTION_VALUE ON)
-+     else()
-+         set(OPTION_VALUE OFF)
-+-- 
-+2.35.1
-+
-diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
-index f4654b2274..a14e2e2528 100644
---- a/package/hawktracer/hawktracer.mk
-+++ b/package/hawktracer/hawktracer.mk
-@@ -36,9 +36,13 @@ endif
+v1:
+Tested with test-pkg with various options on top of 417eb476fd.
+
+It works, except for bootlin-armv7m-uclibc which always fails with
+"MMU support available in C library, please enable BR2_USE_MMU"
+when configuring the toolchain.
+---
+ package/libgit2/Config.in    | 10 ++++++++++
+ package/libgit2/libgit2.hash |  4 ++--
+ package/libgit2/libgit2.mk   | 16 ++++++++++++++--
+ 3 files changed, 26 insertions(+), 4 deletions(-)
+
+diff --git a/package/libgit2/Config.in b/package/libgit2/Config.in
+index a6a9728ff0..5d28f054f2 100644
+--- a/package/libgit2/Config.in
++++ b/package/libgit2/Config.in
+@@ -12,3 +12,13 @@ config BR2_PACKAGE_LIBGIT2
  
- # Enable threads support if supported by toolchain
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=ON
-+HAWKTRACER_CONF_OPTS += \
-+	-DENABLE_CPU_USAGE_FEATURE=ON \
-+	-DENABLE_THREADS=ON
- else
--HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=OFF
-+HAWKTRACER_CONF_OPTS += \
-+	-DENABLE_CPU_USAGE_FEATURE=OFF \
-+	-DENABLE_THREADS=OFF
+ comment "libgit2 needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
++
++if BR2_PACKAGE_LIBGIT2
++
++config BR2_PACKAGE_LIBGIT2_CLI
++	bool "enable command line interface (git2_cli)"
++	help
++	  Enable a command-line interface for libgit2.
++	  It aims to be git-compatible.
++
++endif
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 3b5837f789..fb760fd4cc 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f48b961e463a9e4e7e7e58b21a0fb5a9b2a1d24d9ba4d15870a0c9b8ad965163  libgit2-1.4.3.tar.gz
+-sha256  0092f24acc306ee3287dc05b5e85cb9e0e48cd3f11c60c4625b1a673a5912616  COPYING
++sha256  8de872a0f201b33d9522b817c92e14edb4efad18dae95cf156cf240b2efff93e  libgit2-1.5.0.tar.gz
++sha256  0fc09da43d666b5b0cf5695defc3100d5cf387936b260ebab37e396d7e0dbc83  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 9b5e2b897d..9409011eb4 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,9 +4,14 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.4.3
++LIBGIT2_VERSION = 1.5.0
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+-LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch), CC0-1.0 (xoroshiro256)
++LIBGIT2_LICENSE = \
++	GPL-2.0 with linking exception, \
++	MIT (sha1), \
++	BSD-3-Clause (sha256), \
++	wildmatch license (wildmatch), \
++	CC0-1.0 (xoroshiro256)
+ LIBGIT2_LICENSE_FILES = COPYING
+ LIBGIT2_CPE_ID_VENDOR = libgit2_project
+ LIBGIT2_INSTALL_STAGING = YES
+@@ -44,8 +49,15 @@ else
+ LIBGIT2_CONF_OPTS += -DUSE_HTTPS=OFF
  endif
  
- $(eval $(cmake-package))
++ifeq ($(BR2_PACKAGE_LIBGIT2_CLI),y)
++LIBGIT2_CONF_OPTS += -DBUILD_CLI=ON
++else
++LIBGIT2_CONF_OPTS += -DBUILD_CLI=OFF
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ LIBGIT2_CONF_OPTS += \
++	-DCMAKE_EXE_LINKER_FLAGS=-latomic \
+ 	-DCMAKE_SHARED_LINKER_FLAGS=-latomic
+ endif
+ 
 -- 
-2.35.1
+2.36.1
 
 _______________________________________________
 buildroot mailing list
