@@ -1,72 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5A32C00140
-	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 13:52:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D59C00140
+	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 14:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6474883DB7;
-	Fri, 12 Aug 2022 13:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6474883DB7
+	by smtp2.osuosl.org (Postfix) with ESMTP id E39E340C10;
+	Fri, 12 Aug 2022 14:39:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E39E340C10
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ccfLkm8kMLN8; Fri, 12 Aug 2022 13:52:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gjCygsl1IVBE; Fri, 12 Aug 2022 14:39:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 910FE83459;
-	Fri, 12 Aug 2022 13:52:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 910FE83459
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 10BA91BF23C
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 13:52:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07648404AE;
+	Fri, 12 Aug 2022 14:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07648404AE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F36741BF5AE
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 14:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C62906115D
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 13:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C62906115D
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD234418FB
+ for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 14:39:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD234418FB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2fJAzD26XFIM for <buildroot@lists.busybox.net>;
- Fri, 12 Aug 2022 13:52:39 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BBF56115C
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8BBF56115C
- for <buildroot@buildroot.org>; Fri, 12 Aug 2022 13:52:39 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BF7AB1BF205;
- Fri, 12 Aug 2022 13:52:34 +0000 (UTC)
-Date: Fri, 12 Aug 2022 15:52:33 +0200
-To: Thomas Huth <huth@tuxfamily.org>
-Message-ID: <20220812155233.132edc8b@windsurf>
-In-Reply-To: <20220808215900.0fc19e1b@tuxfamily.org>
-References: <20220806224338.0159e15c@windsurf>
- <20220808101452.566fd732@tuxfamily.org>
- <20220808102653.5a7a0584@windsurf>
- <20220808215900.0fc19e1b@tuxfamily.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id F_rOYrCrckK5 for <buildroot@lists.busybox.net>;
+ Fri, 12 Aug 2022 14:39:05 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A44C410AC
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3A44C410AC
+ for <buildroot@buildroot.org>; Fri, 12 Aug 2022 14:39:05 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id p10so1420287wru.8
+ for <buildroot@buildroot.org>; Fri, 12 Aug 2022 07:39:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=FcttjswkFKVKk9dGqrMLOw5HwNyjfLc1c9S4XK3mEcs=;
+ b=5yvPV2sNeVWhXcuMmKr2o3ovd/pZyVklJUzjjvFHrHpjQ/4ftPFPQKXfqdzzjM5ba0
+ Jqfn2HiSueDR5QAt9v5ogFTWRqnNmzkBdbrsM94Kv58/PvNU0oHxP/CzQdpnWogvRiYR
+ wKFWLmemxzQXN7yx3x8f4jpq/uafQGM/M6YC0JEKbAri1aXEMM+b6Pe0kI67b/JOb3j5
+ iHlWSvqM3NSvWmHyxUl0esAHHEQEtMzdW11jR0OnI3Diq8hg3f3tlUQHBTc4EMaOspHI
+ Wikxdu47DpxXQpLP0ZOrqtUPe189I4454KM6ZUxJdNS1GdpfEBOyctka5EbYVtyvofOg
+ P6Vg==
+X-Gm-Message-State: ACgBeo1t4FjOkkQC2pGshX+CEjCD1ni6lKYT+5UyGkzQpxOh3XE+2Ncs
+ wQM8gBjmPJs6s1M+yWcX4xxPc9DlDGM=
+X-Google-Smtp-Source: AA6agR4HqA4cMvyAKUUTG9OrXWemcLAuN2uDa2XPVRFf7RMZSSogJk8ZFXORsHHSo2QroPAHfN4QZg==
+X-Received: by 2002:a5d:6102:0:b0:220:6382:eab1 with SMTP id
+ v2-20020a5d6102000000b002206382eab1mr2300187wrt.539.1660315143092; 
+ Fri, 12 Aug 2022 07:39:03 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b000246974a2e4403fc.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:246:974a:2e44:3fc])
+ by smtp.gmail.com with ESMTPSA id
+ y7-20020adff147000000b0021e491fd250sm2075520wro.89.2022.08.12.07.39.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 12 Aug 2022 07:39:02 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 12 Aug 2022 16:38:59 +0200
+Message-Id: <20220812143859.130116-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660312356;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ueVdGUN4cWTpa4NcwIIxNo/LTZR8QEzvwsv1b19Rfjg=;
- b=MHDDb0ZrSbu2X9mF8xQ8JGzKniz5gtUfavYAZ4gRbi/bShzt1F15qhubhEo4gDpCndMZBT
- JvLeLW712dHSlFpVEdgOcc17KZxDrdzfVRj+WzQVi0XU7EQW75W+WaSD2C0MTNJ/FbNHeM
- SwblGu0cD8CJBZHQts+J6zQZoZk9nJar4pQbh2oJ38QHHaK/SJBjZHNxYZQlFYwnnatAwI
- voYw2env8l/WoxwZDbaj1bCUqtnLQgL6yK3ScDzcMnkrXxhtPnAgq3msTSLICjYIYQ3AJH
- xPuQSQOPnDB0pbASXEqKLNGERtbmR+JTRnQv9JRtEJPafRyzLIsYR+pg+gVVEg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=fail reason="signature verification failed" (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MHDDb0Zr
-Subject: Re: [Buildroot] Buildroot defconfigs about to be removed
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=FcttjswkFKVKk9dGqrMLOw5HwNyjfLc1c9S4XK3mEcs=;
+ b=bBpJNU0/mqkPMeRSXmZUg0MYpoRbhNSuTjPBm6QCOMfhSg2zGIq2RqULPWoMNsKQzz
+ cGmORCRaxfz2hfL2qusEvuH1HdNiqGFjOJpwBsqJCZba4tNcnyYlyu956fR+2DnO/u1y
+ YnOdOU9guOhutawSwMegWSJUJ7fn4XTHTs3aYiMywLnf8pXm2u9D2RVJsn5m47C+4jcD
+ L7cnQmScmb9KAcRTkbNTVm1RRE4yExt5QSwHvMmNoL9EsxDgy3OAmCLkkaD5t9PpY8J1
+ gyiNrveMABUwdrJWW5L/gHMuvBJUFYwKSMWdgy2rL4yyQYQXoLLZfz/Hq5hfj2KlL53r
+ xJJg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=bBpJNU0/
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/hawktracer: fix build without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,49 +94,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Louis Aussedat <aussedat.louis@gmail.com>,
- Filip Skoneczny <fskoneczny@gmail.com>,
- Marek Belisko <marek.belisko@open-nandra.com>,
- Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
- "Yann E. MORIN\"  <yann.morin.1998@free.fr>"@osuosl.org,
- Suniel Mahesh <sunil@amarulasolutions.com>, Davide Viti <zinosat@gmail.com>,
- Mike Harmony <mike.harmony@snapav.com>, Peter Seiderer <ps.report@gmx.net>,
- Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org,
- Heiko Thiery <heiko.thiery@gmail.com>, Romain Naour <romain.naour@gmail.com>
+Cc: Gilles Talis <gilles.talis@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+Fix the following build failure without threads raised since the
+addition of the package in commit
+94d8764ef938936aa5432f1f13bd1b2d8b62a159:
 
-On Mon, 8 Aug 2022 21:59:00 +0200
-Thomas Huth <huth@tuxfamily.org> wrote:
+/home/giuliobenetti/autobuild/run/instance-2/output-1/build/hawktracer-e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8/lib/platform/linux/cpu_usage.c:5:10: fatal error: pthread.h: No such file or directory
+    5 | #include <pthread.h>
+      |          ^~~~~~~~~~~
 
-> Thanks for the pointers! I had a look at the source for a while, and from
-> what I can see, I came to the same conclusion that the modifications for
-> ARM should really not have been done for m68k / binutils 2.32.
-> 
-> I can get the mcf5208 board back working by applying a patch like this on
-> top of the current state in buildroot (fixes both, the segfault and the
-> section overlapping):
+Fixes:
+ - http://autobuild.buildroot.org/results/7edc29e21e441e66ad7c4df1673e506950930913
 
-FYI, a patch was posted and merged:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Update patch to avoid a build failure on macos
 
-  https://git.buildroot.org/buildroot/commit/?id=95402089c314fbc03b934f5fcf9c29db043d758c
-  https://git.buildroot.org/buildroot/commit/?id=9dd179d43ffe9be98035f921a0db2bf051b632fb
+ ...eatures.cmake-fix-DENABLE_CPU_USAGE_.patch | 38 +++++++++++++++++++
+ package/hawktracer/hawktracer.mk              |  8 +++-
+ 2 files changed, 44 insertions(+), 2 deletions(-)
+ create mode 100644 package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch
 
-Don't hesitate to give a test on your side!
-
-Best regards,
-
-Thomas
+diff --git a/package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch b/package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch
+new file mode 100644
+index 0000000000..5c8e6e9e65
+--- /dev/null
++++ b/package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch
+@@ -0,0 +1,38 @@
++From 65e78e2b972e2fab76b18732941ae611ec782dee Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 12 Aug 2022 14:51:33 +0200
++Subject: [PATCH] cmake/platform_features.cmake: fix
++ -DENABLE_CPU_USAGE_FEATURE=OFF
++
++Fix -DENABLE_CPU_USAGE_FEATURE=OFF to allow the user to disable
++CPU_USAGE and avoid the following build failure without threads:
++
++/home/giuliobenetti/autobuild/run/instance-2/output-1/build/hawktracer-e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8/lib/platform/linux/cpu_usage.c:5:10: fatal error: pthread.h: No such file or directory
++    5 | #include <pthread.h>
++      |          ^~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7edc29e21e441e66ad7c4df1673e506950930913
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/amzn/hawktracer/pull/86]
++---
++ cmake/platform_features.cmake | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/cmake/platform_features.cmake b/cmake/platform_features.cmake
++index 1abbd41..8d7cfd9 100644
++--- a/cmake/platform_features.cmake
+++++ b/cmake/platform_features.cmake
++@@ -18,7 +18,7 @@ macro(_validate_feature_enabled FEATURE_NAME VARIABLE)
++ endmacro(_validate_feature_enabled)
++ 
++ macro(define_platform_feature FEATURE_NAME FEATURE_DEFAULT_FILE DEFAULT_ENABLE)
++-    if (NOT "${DEFAULT_ENABLE}" STREQUAL "OFF" OR "${ENABLE_${FEATURE_NAME}_FEATURE}" STREQUAL "ON")
+++    if (NOT "${DEFAULT_ENABLE}" STREQUAL "OFF" AND NOT "${ENABLE_${FEATURE_NAME}_FEATURE}" STREQUAL "OFF")
++         set(OPTION_VALUE ON)
++     else()
++         set(OPTION_VALUE OFF)
++-- 
++2.35.1
++
+diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
+index f4654b2274..a14e2e2528 100644
+--- a/package/hawktracer/hawktracer.mk
++++ b/package/hawktracer/hawktracer.mk
+@@ -36,9 +36,13 @@ endif
+ 
+ # Enable threads support if supported by toolchain
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=ON
++HAWKTRACER_CONF_OPTS += \
++	-DENABLE_CPU_USAGE_FEATURE=ON \
++	-DENABLE_THREADS=ON
+ else
+-HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=OFF
++HAWKTRACER_CONF_OPTS += \
++	-DENABLE_CPU_USAGE_FEATURE=OFF \
++	-DENABLE_THREADS=OFF
+ endif
+ 
+ $(eval $(cmake-package))
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
