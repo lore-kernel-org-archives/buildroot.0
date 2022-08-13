@@ -1,71 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 652DEC00140
-	for <buildroot@archiver.kernel.org>; Fri, 12 Aug 2022 23:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 242FAC3F6B0
+	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 08:35:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A515341912;
-	Fri, 12 Aug 2022 23:16:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A515341912
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n-ia5nZeSM9q; Fri, 12 Aug 2022 23:16:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D7D64190A;
-	Fri, 12 Aug 2022 23:16:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D7D64190A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C1E1E1BF27C
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 23:16:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D4FE83774
- for <buildroot@lists.busybox.net>; Fri, 12 Aug 2022 23:16:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D4FE83774
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CC4283033;
+	Sat, 13 Aug 2022 08:35:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CC4283033
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B0i9kfZ0c5q9 for <buildroot@lists.busybox.net>;
- Fri, 12 Aug 2022 23:16:52 +0000 (UTC)
-X-Greylist: delayed 00:07:02 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA0DB831A0
-Received: from smtpcmd02111.aruba.it (smtpcmd02111.aruba.it [62.149.158.111])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA0DB831A0
- for <buildroot@buildroot.org>; Fri, 12 Aug 2022 23:16:50 +0000 (UTC)
-Received: from [192.168.8.155] ([86.32.63.136])
- by Aruba Outgoing Smtp  with ESMTPSA
- id MdmkoU3KJtk1HMdmkoBlsi; Sat, 13 Aug 2022 01:09:46 +0200
-Message-ID: <1762f288-2d9b-4d33-6f15-8a5f58aa4d2a@benettiengineering.com>
-Date: Sat, 13 Aug 2022 01:09:45 +0200
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AcEuGOL58x20; Sat, 13 Aug 2022 08:35:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9723682F13;
+	Sat, 13 Aug 2022 08:35:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9723682F13
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B7EA1BF5B5
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 08:35:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2EA9416D4
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 08:35:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2EA9416D4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5sR7Z0rFgngS for <buildroot@lists.busybox.net>;
+ Sat, 13 Aug 2022 08:35:27 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FC03416DE
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4FC03416DE
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 08:35:27 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 7C72E240005;
+ Sat, 13 Aug 2022 08:35:25 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Sat, 13 Aug 2022 10:35:19 +0200
+Message-Id: <20220813083521.1382565-3-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220813083521.1382565-1-thomas.petazzoni@bootlin.com>
+References: <20220813083521.1382565-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-To: buildroot@buildroot.org
-References: <20220806232132.1433066-1-giulio.benetti@benettiengineering.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220806232132.1433066-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfE3QdDbjxcflvxHjneLjA8Dkf+VEEZRoy5LJ63hMwFZ4wk+ceKE3r0enIRwjYLFD5+eQXscFk+vjp7hFzydDJuS9iiRCUe/LF+SygY6HkSm3pTPOmyDY
- ZqYIgVo38L1S1NSaLpqm2r+8iUvBmVZqjqwNpCrC8ipnp4lDC1yB6K6SjE7M1quX0sRdbXL6rkHLpoyb7LhDa5T9JJqsWvpu2Rm86ZYLDVk3XFociRgImOBo
- zxPYQyWzs8HEMH8hcssjcdORDG3dHH1VDZAxMpA+DuXj2xjCdH0NXGFIGluXXeOh
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1660345786; bh=jpz+AbvFQ4ASFW8GHbcpBWhXU1Kw/dHWPRpdpjBo/NI=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=inzozL5oAJvd56povPh7Y3qWBNHvTVKUaOfS4uPnkOYGoYjLvgIHJdDimrbyUt5pv
- axQQ83BWtzO891FGVZcHjT9j6Bq4ss5cStqtKPtcYHrDQNLO0qLeEkwZN/TAnL7M/r
- rG5oW8cQGiNXs4uptK9z2wit22tZ4C+YJdWAh2Bu67qLZTbIEMYO4EplehlI81+wUm
- ozxDRpvSv/zJEwShom/1pMW0GNxmzY6vDGxEgxToDNcevpn0/kZm8MEyOLIDdmcE47
- jw9lMlXxX6/vj40EMjGpDwOMwJXYjRyvyLHS/yt7O7c5Q/S3kXsyaHg6tiLjcNgSfs
- 7cZKO/YtCBqhw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=inzozL5o
-Subject: Re: [Buildroot] [PATCH] package/mali-driver: fix build failure with
- Linux version >= 5.15
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1660379725;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Pm7qqZg+roehqX8gpEDWe4bi5Ynr91c1Fb9qkgFKXzM=;
+ b=iMnGOjaVWv70tCnUGaSi/gwoCW53kh/N/4vO42eKiDXSd64pdZoU7DTP+JQrFCNH1MmwzJ
+ +G1btZLc7ECzDUqUyBp44PXXUQlAHDsq24Kr+8zxsvZz52a3PB2PcZ2NA3jQzfC3j8Xv3+
+ W0e+E0obdUqB3OBRcD1XWGMakleii87clHreiO6PJYPnc4v8duPXEfc7t9H1E01C0DhdNK
+ 1jTBelVrOxtyWAV4et1miZnQYJ/2uV007IDUbmhb1p96VYQ8Adv6ccqTmEa9Pqfe2txI5p
+ l9ncpZH6aMNPwIlFKgRC9syb+l+CFXWMx6H2v2QAylA7C0tMmyWYOnXrr2FkcA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iMnGOjaV
+Subject: [Buildroot] [PATCH 3/4] package/gdb: switch to GDB 11.x as the
+ default version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,77 +75,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?Q?Miqu=c3=a8l_Raynal?= <miquel.raynal@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi All,
+Now that GDB 12.x has been added, and GDB 9.x removed, we can make GDB
+11.x the default version.
 
-On 07/08/22 01:21, Giulio Benetti wrote:
-> Add patch for fixing build failure with Linux version >= 5.15. As explained
-> in the patch itself starting from Linux 5.15 if we use any DMA_BUF API
-> (dma_buf_*()) then we must import the DMA_BUF module with:
-> MODULE_IMPORT_NS(DMA_BUF);
-> 
-> Pending Pull Request:
-> https://github.com/bootlin/mali-driver/pull/3
+The handling of the GMP dependency needs a bit of change. Until now,
+the GMP dependency was needed when building full GDB (host or target)
+in version 11.x or 12.x, so we were explicitly checking whether those
+versions were enabled.
 
-This ^^^ patch has been merged today, so please drop this patch in favor
-of this one:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220812230643.95772-1-giulio.benetti@benettiengineering.com/
-that bumps version to latest including this fix.
+Now that only GDB 10.x and the ARC-specific version of GDB are the
+only remaining ones not needing GDB, we invert the logic: only those
+two versions do not trigger the addition of the GMP dependency.
 
-Best regards
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gdb/Config.in      |  3 +--
+ package/gdb/Config.in.host |  6 +++---
+ package/gdb/gdb.mk         | 14 +++++++-------
+ 3 files changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index c50c3d517a..273b3072ae 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -51,8 +51,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
+ 	bool "full debugger"
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_sh
+-	select BR2_PACKAGE_GMP if BR2_GDB_VERSION_11
+-	select BR2_PACKAGE_GMP if BR2_GDB_VERSION_12
++	select BR2_PACKAGE_GMP if !BR2_GDB_VERSION_10 && !BR2_arc
+ 	select BR2_PACKAGE_NCURSES
+ 
+ comment "full gdb on target needs a toolchain w/ wchar"
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 9876c4e8bc..33ffc632ee 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -41,7 +41,7 @@ config BR2_PACKAGE_HOST_GDB_SIM
+ 
+ choice
+ 	prompt "GDB debugger Version"
+-	default BR2_GDB_VERSION_10
++	default BR2_GDB_VERSION_11
+ 	depends on !BR2_arc
+ 	help
+ 	  Select the version of gdb you wish to use.
+@@ -63,8 +63,8 @@ endif
+ config BR2_GDB_VERSION
+ 	string
+ 	default "arc-2020.09-release-gdb" if BR2_arc
+-	default "10.2"	   if BR2_GDB_VERSION_10 || !BR2_PACKAGE_HOST_GDB
+-	default "11.2"     if BR2_GDB_VERSION_11
++	default "10.2"	   if BR2_GDB_VERSION_10
++	default "11.2"     if BR2_GDB_VERSION_11 || !BR2_PACKAGE_HOST_GDB
+ 	default "12.1"     if BR2_GDB_VERSION_12
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+ 
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index dd126b42ce..d2bbfcb290 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -65,8 +65,9 @@ GDB_DEPENDENCIES += host-flex host-bison
+ HOST_GDB_DEPENDENCIES += host-flex host-bison
+ endif
+ 
+-# Add the necessary host-gmp dependency for the newer releases of GDB
+-ifeq ($(BR2_GDB_VERSION_11)$(BR2_GDB_VERSION_12),y)
++# All newer versions of GDB need host-gmp, so it's only for older
++# versions that the dependency can be avoided.
++ifeq ($(BR2_GDB_VERSION_10)$(BR2_arc),)
+ HOST_GDB_DEPENDENCIES += host-gmp
+ endif
+ 
+@@ -154,11 +155,10 @@ GDB_CONF_OPTS += \
+ 	--without-curses
+ endif
+ 
+-# When GDB >= 11.x (because it's enabled for the host) and we're
+-# building the full gdb for the target, we need gmp as a
+-# dependency. For now the default gdb version in Buildroot doesn't
+-# require gmp.
+-ifeq ($(BR2_GDB_VERSION_11)$(BR2_GDB_VERSION_12):$(BR2_PACKAGE_GDB_DEBUGGER),y:y)
++# Starting from GDB 11.x, gmp is needed as a dependency to build full
++# gdb. So we avoid the dependency only for GDB 10.x and the special
++# version used on ARC.
++ifeq ($(BR2_GDB_VERSION_10)$(BR2_arc):$(BR2_PACKAGE_GDB_DEBUGGER),:y)
+ GDB_CONF_OPTS += \
+ 	--with-libgmp-prefix=$(STAGING_DIR)/usr
+ GDB_DEPENDENCIES += gmp
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   ...linux-fix-build-failure-with-linux-v.patch | 31 +++++++++++++++++++
->   1 file changed, 31 insertions(+)
->   create mode 100644 package/mali-driver/0001-mali_kbase_core_linux-fix-build-failure-with-linux-v.patch
-> 
-> diff --git a/package/mali-driver/0001-mali_kbase_core_linux-fix-build-failure-with-linux-v.patch b/package/mali-driver/0001-mali_kbase_core_linux-fix-build-failure-with-linux-v.patch
-> new file mode 100644
-> index 0000000000..07f2a58c7d
-> --- /dev/null
-> +++ b/package/mali-driver/0001-mali_kbase_core_linux-fix-build-failure-with-linux-v.patch
-> @@ -0,0 +1,31 @@
-> +From 26979e5f030eab9cde8d4197a819bbaa4cc21188 Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +Date: Sun, 7 Aug 2022 01:13:26 +0200
-> +Subject: [PATCH] mali_kbase_core_linux: fix build failure with linux version
-> + >= 5.15
-> +
-> +Since Linux 5.15 module using DMA_BUF needs to explictly MODULE_IMPORT_NS
-> +it, so let's add MODULE_IMPORT_NS(DMA_BUF); if Linux version is >= 5.15.0.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> +---
-> + r8p0/drivers/gpu/arm/midgard/mali_kbase_core_linux.c | 3 +++
-> + 1 file changed, 3 insertions(+)
-> +
-> +diff --git a/r8p0/drivers/gpu/arm/midgard/mali_kbase_core_linux.c b/r8p0/drivers/gpu/arm/midgard/mali_kbase_core_linux.c
-> +index d920f8d..d87bb8c 100644
-> +--- a/r8p0/drivers/gpu/arm/midgard/mali_kbase_core_linux.c
-> ++++ b/r8p0/drivers/gpu/arm/midgard/mali_kbase_core_linux.c
-> +@@ -4913,6 +4913,9 @@ module_exit(kbase_driver_exit);
-> +
-> + #endif /* CONFIG_OF */
-> +
-> ++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0)
-> ++MODULE_IMPORT_NS(DMA_BUF);
-> ++#endif
-> + MODULE_LICENSE("GPL");
-> + MODULE_VERSION(MALI_RELEASE_NAME " (UK version " \
-> + 		__stringify(BASE_UK_VERSION_MAJOR) "." \
-> +--
-> +2.34.1
-> +
+2.37.1
 
 _______________________________________________
 buildroot mailing list
