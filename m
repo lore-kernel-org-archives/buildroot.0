@@ -1,65 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A650C19F2D
-	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 09:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 831F2C19F2D
+	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 09:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D11060BBB;
-	Sat, 13 Aug 2022 09:36:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D11060BBB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 14999404ED;
+	Sat, 13 Aug 2022 09:54:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14999404ED
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eau6OgfCnSY9; Sat, 13 Aug 2022 09:54:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E6844019D;
+	Sat, 13 Aug 2022 09:54:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E6844019D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 862D11BF408
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 09:54:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E0DF60AE4
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 09:54:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E0DF60AE4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id otw3wYt7hn-2; Sat, 13 Aug 2022 09:36:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 441CF60B08;
-	Sat, 13 Aug 2022 09:36:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 441CF60B08
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 71CD41BF408
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 09:36:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 46E6E83330
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 09:36:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46E6E83330
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kai2Wss8NBFx for <buildroot@lists.busybox.net>;
- Sat, 13 Aug 2022 09:36:49 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FE0C8328E
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7FE0C8328E
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 09:36:49 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.166.36.35])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 11E9419F744;
- Sat, 13 Aug 2022 11:36:42 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Px0dF6ezqJrv for <buildroot@lists.busybox.net>;
+ Sat, 13 Aug 2022 09:54:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6070E60A47
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com
+ [IPv6:2607:f8b0:4864:20::c35])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6070E60A47
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 09:54:27 +0000 (UTC)
+Received: by mail-oo1-xc35.google.com with SMTP id
+ d63-20020a4a5242000000b0044880019622so537276oob.13
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 02:54:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=WeF5mVZgEBi4bJchIc9sjGIZtW4hEODXNR4TnlXBk0A=;
+ b=yoqi+Y5aN/i0/XCRIatcPqIDMSVnlNxROTbfMO162thzpkxUSqm82YMKGb2yuMX10x
+ bFix4nd3Xu/QK/HCAz+IXl0nJpoiOXGEysrqc5m460nrwqhN28ky+nX50JBTYpsMJQ5F
+ QksDDYRnl5Kaz3MQb/T4FKWk4blQYwx7CMNaCJU/C0bOcCA9gBokhFbRO4+M2Enre/VN
+ V8aDK1+9u49Sh9OGFxARsQluWpt30H2dQuLl/YVYqVemi3OWECewxwOuJEa5JuO1JUpI
+ itiFywN38gLXdX8iuGsYP9iLR8Roh9Z7d7EdnehP5ceTctBkixpjBLrd4VqVr8xtKbAY
+ YNdQ==
+X-Gm-Message-State: ACgBeo3z9Qr35LvFt7CzdZo+/BOzIraJr3nADjh3vjpALDyetNb79mEc
+ /niIP6F/lXLqIw/khVPE4oBcUdSDW+8=
+X-Google-Smtp-Source: AA6agR6aXasqxsNYR2JhMJoSFhtf5FrG/4vwTGBZxL7hIcq2JtnMkISLphuE0RJ+ewKSha5zPYoxRg==
+X-Received: by 2002:a4a:8c12:0:b0:435:9dbd:6c46 with SMTP id
+ u18-20020a4a8c12000000b004359dbd6c46mr2445752ooj.10.1660384465725; 
+ Sat, 13 Aug 2022 02:54:25 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net.
+ [71.33.138.207]) by smtp.gmail.com with ESMTPSA id
+ 3-20020aca0703000000b00334c2e81dfbsm802662oih.0.2022.08.13.02.54.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 13 Aug 2022 02:54:24 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 13 Aug 2022 11:36:27 +0200
-Message-Id: <20220813093627.369221-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.37.2
+Date: Sat, 13 Aug 2022 03:54:22 -0600
+Message-Id: <20220813095422.318927-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660383406;
- bh=TUWEwnIBYYaGvQATmSIsxjpDqd08feoSKFKZaGjBcEM=;
- h=From:To:Cc:Subject:Date:From;
- b=ZFyQwQvzm3QOo7hzutG5GfOCPXpsvPjOSTtP63lcFTYx01FdUwt3uxcMiZtXqaoOH
- DePAv6220nEBbd8qc6IYh1laVu/nxSNtN6w0W0O79WYFDJ9XooGQ85YhViQ9TxkHg2
- 8NzPgWqJfmuh1JjkPQSYpa7kJSZPV6XFyeV9XWo+N9y1krdQDN/o4CrUzrEPbVRPCj
- BC96PIEnWop5r9upujUkEiAKV+VD/Ual1zImBgmotzcrdC+lEOeaw5+9ndaCnJkF8E
- oGMeNGL4moKu5/q7WBx+xNVvw+C22rwzIUdibiFnbLm5wFiKSPLMkZUxmrqk7yMFad
- SMg9muEPjy5aw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZFyQwQvz
-Subject: [Buildroot] [PATCH next 1/1] package/linux-backports: bump version
- to 5.15.58
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=WeF5mVZgEBi4bJchIc9sjGIZtW4hEODXNR4TnlXBk0A=;
+ b=cSOQy7YXNpaDIBOV28pR9A/5EJJELBTwkKEMIU5jNdMB9bpNaRn2DKYmh4AtH1KLTh
+ tP8NgSo3O+oSs1JpRp4gG4uF2H88aq568hdit7oLVxbrXzrH2rQLpbxCwFLEqgt+lPiR
+ XOjgCccNIb5yuMqYxXcQyBytE1hzO/yRTR8zOgF+/ZFRot8mVMzUlIe0WJrkO+FCKg9Y
+ yIiHIsrTz4yxhNr4d3hysmgcHZcQZ4cUR5WDIn91Ckw8PaebkIlNaMEienSi5Lj44rtC
+ ml3eIqtB7uXBzYwqB+lrD/uD0CC8BH1MToOXNbWPRuQZcswWyjRKw0XORbdY07YdjB3a
+ z7HQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=cSOQy7YX
+Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.63.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,86 +93,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit also change the minimal supported kernel version from 3.10
-to 4.4. See [1].
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/tree/README?h=v5.15.58-1#n11
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Tested with backports defconfig "ath10k" with a kernel 5.4.24.
----
- package/linux-backports/Config.in            | 2 +-
- package/linux-backports/linux-backports.hash | 4 ++--
- package/linux-backports/linux-backports.mk   | 8 ++++----
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
-index 251d202fd2..b20db67308 100644
---- a/package/linux-backports/Config.in
-+++ b/package/linux-backports/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_LINUX_BACKPORTS
- 	  recent kernels, backported to older ones.
- 
- 	  This version of linux-backports supports kernels starting
--	  from 3.10.
-+	  from 4.4.
- 
- 	  https://backports.wiki.kernel.org
- 
-diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-index 3e103424f5..117b1612b2 100644
---- a/package/linux-backports/linux-backports.hash
-+++ b/package/linux-backports/linux-backports.hash
-@@ -1,5 +1,5 @@
--# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.8/sha256sums.asc
--sha256  19b4174d89bf11ee221458e11f1e8dace26558498774b823051156f522d2036b  backports-5.8-1.tar.xz
-+# From: https://cdn.kernel.org/pub/linux/kernel/projects/backports/stable/v5.15.58/sha256sums.asc
-+sha256  a3c2a2b7bbaf8943c65fd72f4e7d7ad5e205aeae28b26c835f9d8afa0f9810bf  backports-5.15.58-1.tar.xz
- # Locally computed
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
- sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-index 068dcffcc8..b4963d302f 100644
---- a/package/linux-backports/linux-backports.mk
-+++ b/package/linux-backports/linux-backports.mk
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 1133bed046..d22b21cdea 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.63.0/meson-0.63.0.tar.gz.asc
+-sha256  3b51d451744c2bc71838524ec8d96cd4f8c4793d5b8d5d0d0a9c8a4f7c94cd6f  meson-0.63.0.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.63.1/meson-0.63.1.tar.gz.asc
++sha256  06fe13297213d6ff0121c5d5aab25a56ef938ffec57414ed6086fda272cb65e9  meson-0.63.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 880dfffcf1..1e431f426a 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUX_BACKPORTS_VERSION_MAJOR = 5.8
-+LINUX_BACKPORTS_VERSION_MAJOR = 5.15.58
- LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
- LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
- LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
-@@ -94,7 +94,7 @@ $(eval $(kconfig-package))
- # instead.
- #
- # Furthermore, we want to check the kernel version, since linux-backports
--# only supports kernels >= 3.10. To avoid overriding linux-backports'
-+# only supports kernels >= 4.4. To avoid overriding linux-backports'
- # KCONFIG_STAMP_DOTCONFIG rule defined in the kconfig-package infra, we
- # use an intermediate stamp-file.
- #
-@@ -109,8 +109,8 @@ $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/$$(LINUX_KCONF
- 	$(Q)KVER=$(LINUX_VERSION_PROBED); \
- 	KVER_MAJOR=`echo $${KVER} | sed 's/^\([0-9]*\)\..*/\1/'`; \
- 	KVER_MINOR=`echo $${KVER} | sed 's/^[0-9]*\.\([0-9]*\).*/\1/'`; \
--	if [ $${KVER_MAJOR} -lt 3 -o \( $${KVER_MAJOR} -eq 3 -a $${KVER_MINOR} -lt 10 \) ]; then \
--		printf "Linux version '%s' is too old for linux-backports (needs 3.10 or later)\n" \
-+	if [ $${KVER_MAJOR} -lt 4 -o \( $${KVER_MAJOR} -eq 4 -a $${KVER_MINOR} -lt 4 \) ]; then \
-+		printf "Linux version '%s' is too old for linux-backports (needs 4.4 or later)\n" \
- 			"$${KVER}"; \
- 		exit 1; \
- 	fi
+-MESON_VERSION = 0.63.0
++MESON_VERSION = 0.63.1
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 -- 
-2.37.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
