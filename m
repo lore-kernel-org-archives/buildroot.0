@@ -1,72 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2890EC19F2D
-	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 14:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E49C19F2D
+	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 14:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A60EC60E2E;
-	Sat, 13 Aug 2022 14:22:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A60EC60E2E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C4684091E;
+	Sat, 13 Aug 2022 14:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C4684091E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 926vLk8qAsNJ; Sat, 13 Aug 2022 14:22:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CeuvQUpTFqc7; Sat, 13 Aug 2022 14:49:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D708760E1A;
-	Sat, 13 Aug 2022 14:22:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D708760E1A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CA51F1BF57F
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 14:22:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D07A40913;
+	Sat, 13 Aug 2022 14:49:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D07A40913
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EDBAC1BF57F
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 14:49:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8EC38414C2
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 14:22:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EC38414C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF4E740162
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 14:49:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF4E740162
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id geW7rdpg6t3r for <buildroot@lists.busybox.net>;
- Sat, 13 Aug 2022 14:22:15 +0000 (UTC)
-X-Greylist: delayed 00:07:04 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65BA5414C0
-Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65BA5414C0
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 14:22:14 +0000 (UTC)
-Received: from [172.20.10.5] ([151.43.52.59])
- by Aruba Outgoing Smtp  with ESMTPSA
- id Mruso0k3GAaN9MrutodGms; Sat, 13 Aug 2022 16:15:08 +0200
-Message-ID: <338aa94e-11ae-ae5b-dab0-ec90bfe956c9@benettiengineering.com>
-Date: Sat, 13 Aug 2022 16:15:04 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nGKzvEzYRt69 for <buildroot@lists.busybox.net>;
+ Sat, 13 Aug 2022 14:49:40 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98F4040913
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 98F4040913
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 14:49:39 +0000 (UTC)
+Received: by mail-lf1-x134.google.com with SMTP id x19so4835119lfq.7
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 07:49:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+ :from:x-gm-message-state:from:to:cc;
+ bh=dpfYXAvX4OSp8urICMUDoHw2qGVVDfnPpXyeMNhFVZE=;
+ b=AfABBiXJu36Kai3w9E4x+qJuBexUeS+CUjk9017navFa1/mZPfDfkYfHj7RKHsGxQx
+ ooUCp4sEmUAt2wU8FV38ezQnF3WBEn+3nRJGpPhebWk49vRw6mWyIvQKzV0iHeF8tXFC
+ KMrQAr7lbHVqDN6tjGZUXnHLK9Bp36Arpxm38ZD+cfQxq0PhMdtY0AWQvYfph1AQ0TCX
+ pi62JW1EatEDTQZ2fRuSdmF5NpqadrTSr80/GoRh3Yb6WCF0Q89MAFd5lFpu5w+w3BvV
+ jVJyf/yH5wTzlVynR/btboYcYmkOgk4KbigO/RGQG7ALe9HRI7hX/f9Y4nLpw9ya8Gkm
+ MIXw==
+X-Gm-Message-State: ACgBeo09uJkL4VmmA6iiXNHg1UklfEvf29SQFt2mgREZqXWSGPATxXht
+ JgynwdLZeM2d9cmB0EZTdkmgXe9Crb8=
+X-Google-Smtp-Source: AA6agR54UNexkhVGIACbjnAb62Fk1ZSQKz4Vm3ZErOC9IbAsU5W4pcIHbznMmeV3HWEnugXpDypkfg==
+X-Received: by 2002:a19:a40b:0:b0:491:f648:2245 with SMTP id
+ q11-20020a19a40b000000b00491f6482245mr150401lfc.200.1660402177083; 
+ Sat, 13 Aug 2022 07:49:37 -0700 (PDT)
+Received: from luthien ([94.254.51.204]) by smtp.gmail.com with ESMTPSA id
+ y18-20020ac24e72000000b0048b18700dddsm562640lfs.106.2022.08.13.07.49.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 13 Aug 2022 07:49:36 -0700 (PDT)
+From: Joachim Wiberg <troglobit@gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220813125641.43312d45@windsurf>
+References: <20220812124952.182664-1-troglobit@gmail.com>
+ <20220813125641.43312d45@windsurf>
+Date: Sat, 13 Aug 2022 16:49:35 +0200
+Message-ID: <87zgg8mc5c.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-To: Stefano Cottafavi <stefano.cottafavi@gmail.com>
-References: <20220807222529.1501004-1-giulio.benetti@benettiengineering.com>
- <CAPn86JAWEZNtkMjdD-fMAyiiW1-vfmzM=79qV7wgmiy7XHbJ-A@mail.gmail.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <CAPn86JAWEZNtkMjdD-fMAyiiW1-vfmzM=79qV7wgmiy7XHbJ-A@mail.gmail.com>
-X-CMAE-Envelope: MS4xfG7sfC4UE2h9Eiz2Cip8k1PWu/J0zXXn1pdF8tpBzGSc7FRjqUjO5L8DDMttUQstSyprCNqggQB+BDJhWsMXlbthwtsWRPQhjLEAOu704apJezMUg81l
- bZQ4+IejfgEkRKOMWYbGQD5W/HRdLNYGbxka42w7zRP29O+6G02mOxCm+g5GVceHBvstLrD+KW+oAAEM11tDwjk3Eq1iuecKLhKC0rGCoZ+zIdd5QUbnHSCt
- G44wCc3k39/lYDua2qJWMw==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1660400108; bh=enZIARwfnqt1xMw8ngkCnhOB6g7gU2KW6cHe2+s85Gc=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=HrWtAyvqDtsLBkJDwhZL7jOUktHoemKxTfjn7IYt4+Vw7fXjIfk+jDt4RV3eDJxVZ
- O4Xys9fKxk23Ht2OPKYKPY4e24RS0YI72xukXMWlch8F1fK2/Ev83oBquy6SIqVpJF
- H76yi5gVVyOC7qo++d2Fq5rZkq1HZX5Wjf4yKG4aufCFrJKTv59Kwz/VnwjjRxG1ll
- eZuUQ7bUeasz8KPxtb0Ueb2Dde89GCH2IiQA5SHbqlSoo2Iv0oksnY48gRb/ZjxG9W
- YgZW2aHaSkJiSFg+hL6vv1j44dbW1TM2iav9Nj9pL7PKu4WmHU+U0UDsxEfGNeUDEs
- bpQQqZRHhXWtg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=HrWtAyvq
-Subject: Re: [Buildroot] [PATCH 0/2] Fix Opencv4 bug found by a user in
- Mailing list
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+ :from:from:to:cc;
+ bh=dpfYXAvX4OSp8urICMUDoHw2qGVVDfnPpXyeMNhFVZE=;
+ b=T0F+RHeR9EnE/4HRgeNWLO59uYHwilnmDIz6I6kPonlkV92eeipfqWcadttVpos+Di
+ juybmhV972LodJRcofvuz530b6LwfotjBvc/judo/OTpQ7LnXkt6cAR19OBgO5BMIq+B
+ oU0M4TifaTGg81wiez6QIQQh81HGSGVanHpf/CmMrelWg7rJXAwEVaU6TZdSy5pkBAcB
+ siBrOuCmIVb1uwjPdy1ksMARxVSQ9RaP8HD1p/EREHDCmoQ3SK7fn0SZjnjEQ6sASmPG
+ +/B++ivmshRj8fpoVV53ObZFJt/BPNxyAsyjhoMTPwTgeLk7pSkd50dmntMYixerSycy
+ wB4A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=T0F+RHeR
+Subject: Re: [Buildroot] [PATCH 1/1] package/sysklogd: bump to version 2.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,41 +93,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgU3RlZmFubywKCkkgYWRkIE1MIGluIENjLAoKT24gMTMvMDgvMjIgMTY6MDYsIFN0ZWZhbm8g
-Q290dGFmYXZpIHdyb3RlOgo+IEhpIEdpdWxpbywKPiBzb3JyeSBmb3IgdGhlwqBsYXRlIHJlcGx5
-IGJ1dCBoYXZlIGJlZW4gZGlzdHJhY3RlZCBieSBtb3JlIHByZXNzaW5nIGlzc3Vlcy4KCk5vIHBy
-b2JsZW0KCj4gVG9kYXkgSSBtYW51YWxseSBhcHBsaWVkIHRoZSBwYXRjaGVzIGFuZCB0aGV5IHdv
-cmtlZCBsaWtlIGEgY2hhcm0uCj4gSW4gdGhlIG1lbnVjb25maWcgZGVwZW5kZW5jaWVzIGFyZSBz
-ZWxlY3RlZCBhdXRvbWF0aWNhbGx5IGFzIGV4cGVjdGVkCj4gYW5kIHRoZSBtb2R1bGVzIGFyZSBi
-dWlsdCBmaW5lIGFuZCBleHBvcnRlZCB0byB0aGUgc2RrLgoKVGhhbmsgeW91IGZvciB0ZXN0aW5n
-LgoKPiBUaGFua3MgYSBsb3QgZm9yIHRoZSBzdXBwb3J0LgoKWW91J3JlIHdlbGNvbWUgOi0pCgo+
-IGNpYW8KCkNpYW8KCkJlc3QgcmVnYXJkcwotLSAKR2l1bGlvIEJlbmV0dGkKQmVuZXR0aSBFbmdp
-bmVlcmluZyBzYXMKCj4gU3RlZmFubwo+IAo+IAo+IE9uIE1vbiwgQXVnIDgsIDIwMjIgYXQgMTI6
-MjUgQU0gR2l1bGlvIEJlbmV0dGkgCj4gPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmlu
-Zy5jb20gCj4gPG1haWx0bzpnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPj4g
-d3JvdGU6Cj4gCj4gICAgIFRoZXNlIHBhdGNoZXMgZml4ZXMgYSBidWcgU3RlZmFubyBDb3R0YWZh
-dmkgZm91bmQgYW5kIGFza2VkIGhlbHAgZm9yIGluCj4gICAgIE1haWxpbmcgTGlzdDoKPiAgICAg
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL3BpcGVybWFpbC9idWlsZHJvb3QvMjAyMi1BdWd1
-c3QvNjQ4NjE2Lmh0bWwgPGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9waXBlcm1haWwvYnVp
-bGRyb290LzIwMjItQXVndXN0LzY0ODYxNi5odG1sPgo+IAo+ICAgICBJdCB0dXJucyBvdXQgdGhh
-dCBvcGVuY3Y0IGxpYnJhcnkgb2JqZGV0ZWN0IHJlcXVpcmVzIGxpYnJhcnkgZG5uIGFuZAo+ICAg
-ICB0aGF0Cj4gICAgIGFsc28gZG5uIGxpYnJhcnkgcmVxdWlyZXMgcHJvdG9idWYuIFNvIHRoaXMg
-cGF0Y2hzZXQgc2VsZWN0IGJvdGggb3B0aW9ucwo+ICAgICBhY2NvcmRpbmdseS4KPiAKPiAgICAg
-QFN0ZWZhbm8sIGlmIHlvdSBjYW4sIHBsZWFzZSBnaXZlIGEgdHJ5IHRvIHRoZXNlIDIgcGF0Y2hl
-cyB3aXRob3V0Cj4gICAgIGVuYWJsaW5nIHRoZSAyIG9wdGlvbnMgSSd2ZSBwb2ludGVkIHlvdSBp
-biBNYWlsaW5nIExpc3QgYnkgaGFuZCBhbmQKPiAgICAgcmVwb3J0Cj4gICAgIHRoZSByZXN1bHQu
-Cj4gCj4gICAgIFRoYW5rIHlvdSEKPiAKPiAgICAgR2l1bGlvIEJlbmV0dGkgKDIpOgo+ICAgICAg
-wqAgcGFja2FnZS9vcGVuY3Y0OiBCUjJfUEFDS0FHRV9PUEVOQ1Y0X0xJQl9ETk4gcmVxdWlyZXMg
-cHJvdG9idWYKPiAgICAgIMKgIHBhY2thZ2Uvb3BlbmN2NDogQlIyX1BBQ0tBR0VfT1BFTkNWNF9M
-SUJfT0JKREVURUNUIHJlcXVpcmVzCj4gICAgICDCoCDCoCBCUjJfUEFDS0FHRV9PUEVOQ1Y0X0xJ
-Ql9ETk4KPiAKPiAgICAgIMKgcGFja2FnZS9vcGVuY3Y0L0NvbmZpZy5pbiB8IDIgKysKPiAgICAg
-IMKgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQo+IAo+ICAgICAtLSAKPiAgICAgMi4z
-NC4xCj4gCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+On Sat, Aug 13, 2022 at 12:56, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> On Fri, 12 Aug 2022 14:49:52 +0200
+> Joachim Wiberg <troglobit@gmail.com> wrote:
+>> Fixes garbled tag name in std log file output (critical), and addresses a
+>> minor issue with confusing project name from `syslogd -v` vs `logger -v`.
+> Even though we normally don't take version bumps in master at this
+> point, this seems like a minor release with very few changes, all of
+> them being bug fixes. So applied to master, thanks!
+
+Thank you Thomas, very appreciated!
+
+Best regards
+ /Joachim
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
