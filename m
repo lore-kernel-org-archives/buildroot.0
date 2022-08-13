@@ -1,89 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70EA9C19F2D
-	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 11:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F6F6C19F2D
+	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 11:51:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA9FC60C22;
-	Sat, 13 Aug 2022 11:31:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA9FC60C22
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1782405D1;
+	Sat, 13 Aug 2022 11:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1782405D1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4jrVM3K6wQEJ; Sat, 13 Aug 2022 11:51:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id DD070402E5;
+	Sat, 13 Aug 2022 11:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD070402E5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DF391BF3A8
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 11:51:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 687F260D72
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 11:51:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 687F260D72
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id czNsO9a3miMY; Sat, 13 Aug 2022 11:31:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BAA860BBB;
-	Sat, 13 Aug 2022 11:31:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BAA860BBB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3FE281BF3A8
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 11:31:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B3BC83E19
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 11:31:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B3BC83E19
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ncY43TaWtCjO for <buildroot@lists.busybox.net>;
- Sat, 13 Aug 2022 11:31:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E69D83E11
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E69D83E11
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 11:31:20 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- ay39-20020a05600c1e2700b003a5503a80cfso1628764wmb.2
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 04:31:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=C+QNFvyVeWI18dUhyMfHUKDr63INBwgEJQM1yxu6vEQ=;
- b=xENVjQrSrau4Bpg4s4bHFwVpt8ekyrdUrHqrrvpl5YGOB9Wr467NnShjQVVH8o4vuw
- Ic+EUuhM9Lxs3JKBU9LdVGWDJ7s0yb4Hdl4zH4MQB1lckKoCNiwHLIpS+RYqQurtTkaH
- iVS710piO0wwhFyFOWb8Qt+oKwhngEycOypzknFBm2WGitOAmG0Gvx6B6HSkP5twfL3j
- +i/V4cYmkqabXJOw3NeJtT1j1zEBkQKwn1SSa60m1a9CCF8AigSGhbSl5wnWFHYUFnBp
- hGGvueZlRfmbm7ugepKFNO/OaaYpHJ3vN3lM6+4QtBZfEYMpiVPfvkUJ3D55sxLWXB0B
- pqeg==
-X-Gm-Message-State: ACgBeo1fyhX3c7+9TxPnANkH4tV+Um/slC+MPajl5nX7qj7SjTclOze/
- YwcaMV5B0mMZMDVGdAzsa0rgJCilSkE=
-X-Google-Smtp-Source: AA6agR6PNvdT/JLNeo2C81qwtqEuEWtLPmg71Th71+4w8l26sTwsaaK25s1Je0zEXytqMur9VUuCFw==
-X-Received: by 2002:a7b:cd01:0:b0:3a4:f06c:d1ca with SMTP id
- f1-20020a7bcd01000000b003a4f06cd1camr11569188wmj.41.1660390278034; 
- Sat, 13 Aug 2022 04:31:18 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b001c2477c403353e95.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:1c24:77c4:335:3e95])
- by smtp.gmail.com with ESMTPSA id
- r17-20020adfdc91000000b0021f0c0c62d1sm1867449wrj.13.2022.08.13.04.31.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 13 Aug 2022 04:31:17 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 13 Aug 2022 13:31:14 +0200
-Message-Id: <20220813113114.986655-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WYCKXym0A8FJ for <buildroot@lists.busybox.net>;
+ Sat, 13 Aug 2022 11:51:45 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF9DA60D6F
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BF9DA60D6F
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 11:51:44 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:ac43:2f79:1c81:6f7d])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id A4BC960132;
+ Sat, 13 Aug 2022 13:51:37 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 13 Aug 2022 13:51:37 +0200
+Date: Sat, 13 Aug 2022 13:51:37 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Stefan Agner <stefan@agner.ch>
+Message-ID: <20220813115137.GA2741326@scaer>
+References: <2ba3394abf87c940fe036b2e18e1afc2a2d37ad0.1660320356.git.stefan@agner.ch>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=C+QNFvyVeWI18dUhyMfHUKDr63INBwgEJQM1yxu6vEQ=;
- b=eJbLk+9My26Qm/zglZdyfZ87ookeCPn7vhoCNALC3a4SXnVFxA/Xmz826lkuCS51yi
- a/OaW5Zl3qDzThoF+BzGrsVWAxfSbkj+5xX4aHgAsupfI9lzgd1Y2nFVd96bowpvhDB0
- NPyLbprO1iqOBgkzYpim5iT+wlsE3ddC/8YYKThoTlMOc5Gw2Yg0+JGTfLSaDhxBpkOp
- 8uk2qYKrk0rGv7MD45+IpChidZ9104tNx2OA9JfFE7tfp6xOsMNuVILPfBbcv2kDPvOX
- RX1LtiqQRZ5QD+H36CFppNwhWDs4q5YQj7xVOj0T/6584ujrIyfpSpDSNUr0hWy1G0sH
- IGQA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=eJbLk+9M
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/jack2: add host-pkgconf dependency
+Content-Disposition: inline
+In-Reply-To: <2ba3394abf87c940fe036b2e18e1afc2a2d37ad0.1660320356.git.stefan@agner.ch>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1660391500;
+ bh=EpbOvOS9X+ywEO09JGG4IyAzayqaAXPBB8cnJP00eT4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DkrrTpcvvz7wp769/SUDOLZerrLtYVJcLTqUE0dUOElnRYAjtcpYXe3k7a2Wcm+H7
+ CufWwSiCGaq2b7mcE+r3zCftxJj/lbtK867w/8jdYZTkxiMRGVL0rtxLxXLytvRZLO
+ zJCiTgQgOeu4L5q/7RpmnBchFn55EXsEeq5kyr6V+RQSrWeKV2dLsIwgOYo/mW6xB/
+ I5YHOeTBtWtjfcENHaOQ7PhNIpZe7BMc8QjzxpWbDwsjiU7sxSl/l812W3VyublxDS
+ a4RJBJvSJHTlATpBGNeDPFofyBNyMzdwOb+lqk6qWJOrJizZGau7c2NExHdGbdPJze
+ FooVpj8N8nb4g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DkrrTpcv
+Subject: Re: [Buildroot] [PATCH] package/docker-engine: use kernel modules
+ for extra network drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,49 +77,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure raised since commit
-69284b6700e5f45e25a583e87b86ed1eb95038fd:
+Stefan, All,
 
-Checking for program 'pkg-config'        : not found
-The above check failed, but the checkee is required for --alsa.
+On 2022-08-12 18:07 +0200, Stefan Agner spake thusly:
+> Docker network driver "overlay", "macvlan" and "ipvlan" are not used
+> by default. Make them a module.
+> 
+> The main aim here is to get rid of the dummy0 network interface which
+> is generated by the dummy driver by default. For consistency, make
+> all kernel drivers required for Docker network drivers a module. Also
+> add the currently missing CONFIG_BRIDGE_VLAN_FILTERING (mandatory
+> for the Docker network driver "overlay").
+> 
+> Signed-off-by: Stefan Agner <stefan@agner.ch>
+> ---
+>  package/docker-engine/docker-engine.mk | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+> index 293af1858c..730f2e3b86 100644
+> --- a/package/docker-engine/docker-engine.mk
+> +++ b/package/docker-engine/docker-engine.mk
+> @@ -124,10 +124,11 @@ define DOCKER_ENGINE_LINUX_CONFIG_FIXUPS
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
+> -	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
+> -	$(call KCONFIG_ENABLE_OPT,CONFIG_MACVLAN)
+> -	$(call KCONFIG_ENABLE_OPT,CONFIG_IPVLAN)
+> -	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
+> +	$(call KCONFIG_SET_OPT,CONFIG_DUMMY,m)
+> +	$(call KCONFIG_SET_OPT,CONFIG_MACVLAN,m)
+> +	$(call KCONFIG_SET_OPT,CONFIG_IPVLAN,m)
+> +	$(call KCONFIG_SET_OPT,CONFIG_VXLAN,m)
+> +	$(call KCONFIG_SET_OPT,CONFIG_BRIDGE_VLAN_FILTERING,m)
 
-Indeed, before this commit, host-pkgconf was pulled by libsndfile
-dependency
+That entirely overrides the options from the configuration file provided
+by the user, if they have and require any of those options set as =y.
 
-Fixes:
- - http://autobuild.buildroot.org/results/cbdc251980f5571f75281202ebffc04ddecbf28d
+I think that what we need, is to have a helper KCONFIG_ENABLE_OPT_MOD,
+which only sets an option to 'm' if it is not already 'y' (i.e. the
+opposite of KCONFIG_ENABLE_OPT).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Update commit log
+Regards,
+Yann E. MORIN.
 
- package/jack2/jack2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
+> -- 
+> 2.37.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index 9e56dcdfd8..9d6a3b6479 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -9,7 +9,7 @@ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
- JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
- JACK2_LICENSE_FILES = COPYING
- JACK2_CPE_ID_VENDOR = jackaudio
--JACK2_DEPENDENCIES = alsa-lib
-+JACK2_DEPENDENCIES = host-pkgconf alsa-lib
- JACK2_INSTALL_STAGING = YES
- 
- JACK2_CONF_OPTS = --alsa --example-tools=no
 -- 
-2.35.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
