@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD13C25B08
-	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 08:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 437CFC19F2D
+	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 09:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1499083E41;
-	Sat, 13 Aug 2022 08:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1499083E41
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAC9D417C9;
+	Sat, 13 Aug 2022 09:00:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAC9D417C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hz5IhnGzItfP; Sat, 13 Aug 2022 08:48:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q2xFpw6yLSxy; Sat, 13 Aug 2022 09:00:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 294E783E19;
-	Sat, 13 Aug 2022 08:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 294E783E19
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BD30C1BF5B5
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 08:48:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77999418E2;
+	Sat, 13 Aug 2022 09:00:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77999418E2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AF9761BF5B5
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 09:00:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A564060AB5
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 08:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A564060AB5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B0D04019D
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 09:00:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B0D04019D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aJhfjQ6Yr0ax for <buildroot@lists.busybox.net>;
- Sat, 13 Aug 2022 08:48:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 16Ap2FQ0rbno for <buildroot@lists.busybox.net>;
+ Sat, 13 Aug 2022 09:00:18 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59CB160AA3
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 59CB160AA3
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 08:48:21 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- m3-20020a05600c3b0300b003a5e0557150so133691wms.0
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 01:48:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E1EC40143
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3E1EC40143
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 09:00:18 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id j1so3476412wrw.1
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 02:00:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=bQnOMhUeDfrQ1SZogP4P68zbC7dR8qzQ+1EfBZJq7ZA=;
- b=Sa9+i7PzrJ1XZOskXrnUdYqp0xTVPEdQxq8y2zXd5/qNFLu7U+jOh9iKjABcVHaBed
- jZHTidV7Q+uiS2BiRVN2Vi6C3mY4xL7ZuqB7YdlKIizAgFjqBw5z0tc+6Nl/DfTtYG82
- mc/+FRajKk7B3DhUAY8DlbH2+1IjsXMbIZacYeDZQdXz0k/Nkuz9Zz2YZc+Kp2Z0YHRu
- 6x2XoQXlFRQkEVFjLVHXpGTBMMTkkFURtzvEsRW8P38NX+zuj6I92qDyjgsgd5BP3N1N
- qmATF7YU8Keq27uG14HpwhsX+jnyqbkjd5zHlznlhMzABn03OcDI+Sz7A6ts0Op4/JDe
- epfQ==
-X-Gm-Message-State: ACgBeo2JzrMWozachvxT6iHQxdFohiWxJEsk3TEf9SUGqLvunGsrlTLa
- 4aQrtCoJx5/NB0itDGqJM6X3zSp40Gg=
-X-Google-Smtp-Source: AA6agR455v/O1o/bnG1p/yzsL+uBVXWZNcCXhm243FgJ2+rWvB/ejlf5nDIJqQ2UGw+JhYg9miY81g==
-X-Received: by 2002:a05:600c:19cc:b0:3a3:3cfe:d548 with SMTP id
- u12-20020a05600c19cc00b003a33cfed548mr4957990wmq.6.1660380499327; 
- Sat, 13 Aug 2022 01:48:19 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b00fce1651edf2c89c7.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:fce1:651e:df2c:89c7])
+ :to:from:sender:x-gm-message-state:from:to:cc;
+ bh=dST6JVB0sqQbyyATAQhURQDLKLiuRmcriEHlxK2STQc=;
+ b=8Q8qwusaEQYSnea0gisleXjpxhmbOT8v7ds2zfBNbUnYO8uELWh5zEo9j5QhjN+pIU
+ oMr20yTXgc/joMe3eMoqwxu5LL/K/EjLmUzkk8e0pK3aewB6K5qHqU4intjtfjtxmKER
+ AA8Fb84umOErJytaG6NvARAOJuAcXqgNHpS446auNhw2BPA2J1xH98ke+ZzNGdqE6L+8
+ I3l4ywHTRLyHMyhhYVW3YYraAKw9LPQb7XZFWIKmZhh8CKrYDuudJ+pksTnVmQc5JHaA
+ Yaxnopih1tX7yzYSIqgcgMivjqvSckO3kZKAdnxM7x74iD56jBlIh+tmbBHXwFqvt5ko
+ 2w/A==
+X-Gm-Message-State: ACgBeo0y8rxYmrmQ6HE2ym/v0otJ2ndf/TT1/6BIUmP5YWZHZmT2EIzA
+ PGEHCkmYEWf4XDRDGUg4l4d8PLtMgis=
+X-Google-Smtp-Source: AA6agR4pIXeK9PgXfahRn+Ge5NpiKoovIJG8N6pyGyBXYdoK/fg3lX5UyqsAwURyFbU6IsN+Xd/Jvw==
+X-Received: by 2002:a05:6000:4084:b0:21e:c694:80db with SMTP id
+ da4-20020a056000408400b0021ec69480dbmr3735108wrb.681.1660381216446; 
+ Sat, 13 Aug 2022 02:00:16 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:ac43:2f79:1c81:6f7d])
  by smtp.gmail.com with ESMTPSA id
- n6-20020a05600c4f8600b003a5bd9448e5sm2155130wmq.28.2022.08.13.01.48.18
+ d6-20020adffbc6000000b002206d5fded3sm1480892wrs.104.2022.08.13.02.00.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 13 Aug 2022 01:48:19 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 13 Aug 2022 02:00:15 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 13 Aug 2022 10:48:15 +0200
-Message-Id: <20220813084815.696873-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sat, 13 Aug 2022 11:00:14 +0200
+Message-Id: <20220813090014.2734188-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=bQnOMhUeDfrQ1SZogP4P68zbC7dR8qzQ+1EfBZJq7ZA=;
- b=fqnLHxCoNFqzaKwKVGbtjXLky84mIr6ApCLZbCljKdJd+PaHjMYoVB8651BMUf6uR2
- lQUGlO5YwQPrnC1lqCRT8fYM1RpNE9eO4XrEcz7KcrZ92WGNQyFpnFaUR7pQlTIl/bhx
- Lf9jwMjQTRYP7El5N3vxLpaPRmKzNIgVPi1pdjJrEs+HyCmrAEAZKGAjNbhpXy8p+IA+
- AwFj20cM2iOTwYOMhHwQyqzqMrVHPAhLNwc4QcW98aeyRSZs2PcorwWtSh8LdyR9OsQn
- Qjc7fZJ+PWJK4bSlZhdt9k/EtH80NjxvUq9g2umx8JTpeQ3V/PDnx3c8qj/3wvK+sjU/
- oikA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ :to:from:sender:from:to:cc;
+ bh=dST6JVB0sqQbyyATAQhURQDLKLiuRmcriEHlxK2STQc=;
+ b=q1up1pfFUNrryUiuOaGjNYjIL+LInkVHrigr1KTrpU1qivXwq5pubuaSYiVOAg0LPG
+ Ex264hksz2QSwwdbfLVkRROCmyHLg3MPhZVJfhhq98faaxsxSofuBgWBMVvkoF2GLc02
+ f6Bi6yfCZNf5rXmTkn49s8UmA+ut1bvM3RC9yKyA06bqgJoq5710lT0oxyO9GjWXe6+c
+ PLxAJr0uUxiMVr3aYz2aWyn3f775rvdh7B5rNiEBiuT8Wo/Oi0FuSroOrFHLbdCTbWO8
+ DnnCu7EwlTOqCHQL+afJaQXZjAGSal0wLq2emxprFau1TeJu93uCMIzj3JaBi7OnSZB7
+ KXjw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=fqnLHxCo
-Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: fix dependencies
+ header.a=rsa-sha256 header.s=20210112 header.b=q1up1pfF
+Subject: [Buildroot] [PATCH] package/pkg-generic: don't exclude virtual
+ packages from packages list
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,89 +93,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mauro Condarelli <mc5686@mclink.it>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit efa5ff1489625eb862b1d7d161a169514cc9c881 forgot to add reverse
-dependencies resulting in the following build failure:
+Currently, with a configuration with an internal toolchain, and no other
+package is selected [0], especially when one wants to generate an SDK or
+a pre-built, pre-installed toolchain, running 'make' will only build
+glibc (and its dependencies), and not the full toolchain, as one would
+have expected, so there would be no host-final-gcc.
 
-Makefile:575: *** snappy is in the dependency chain of python-snappy that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+The reason is that 'toolchain' is a virtual package, so it is excluded
+from PACKAGES, the list of packages enabled in the configuration. so it
+is not a dependency of target-finalize, and so nothing pulls it in the
+build.
 
-Fixes:
- - http://autobuild.buildroot.org/results/fc4fdc29ff4ab3e1585a42ed6b063e9e50583fe9
+The reason for excluding virtual packages from that list is not obvious.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+When virtual packages were introduced in 743982441201 (packages: add
+infrastructure for virtual packages), there was no BR2_PACKAGE_FOO
+symbol for virtual packages (but there was BR2_PACKAGE_HAS_FOO), so
+there was no telling that the virtual package was enabled, like we had
+for the other kinds of packages (normal, bootloader, toolchain, or linux
+kernel).
+
+That caused issues, so in f674c428c2ef (core/pkg-virtual: do not check
+they are neabled [sic]), and then 3e1b33a5349b (pkg-generic: improve
+incorrectly used package detection), we explicitly excluded the virtual
+packages from causing a build failure when something depended on them,
+as we could not yet now whether a virtual package was actually enabled
+or not.
+
+Then, in 842ba7eceffb (pkg-generic: fix rdepends and phony targets of
+virtual packages), we eventually associated a virtual package to is
+BR2_PACKAGE_HAS_FOO, which allows treating virtual packages like the
+other kinds of packages. There, we explicitly kept virtual packages out
+of the list, though (the reasoning was that virtual packages install
+nothing in host/ or target/, so they do not directly contribute to the
+final content, so we do not need to rsync them, so this was an
+optimisation).
+
+However, virtual packages are in fact actual generic packages, and it is
+possible for virtual packages to actually provide content for the final
+image. Even though we do not have any virtual package that has actual
+_INSTALL_CMDS, we still have udev that provides a user for example;
+virtual packages in br2-external trees may also very well provide
+install commands (e.g. to install files common to their various
+implementations).
+
+So, there is currently no technical reason to exclude virtual packages
+from PACKAGES, the list of packages enabled in the configuration.
+
+Drop the excluding condition, and always add enabled package, whatever
+their kind, to the list of enabled packages.
+
+[0] defconfig to reproduce the issue:
+    BR2_INIT_NONE=y
+    BR2_SYSTEM_BIN_SH_NONE=y
+    # BR2_PACKAGE_BUSYBOX is not set
+    # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+    # BR2_TARGET_ROOTFS_TAR is not set
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-autobahn/Config.in | 9 +++++++++
- package/python-crossbar/Config.in | 6 ++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
-index c9caa1f1c4..527416a3cd 100644
---- a/package/python-autobahn/Config.in
-+++ b/package/python-autobahn/Config.in
-@@ -19,10 +19,15 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN_ACCELERATE
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b233b07548..f24e03a325 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1207,9 +1207,7 @@ $(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
+ $(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
  
- config BR2_PACKAGE_PYTHON_AUTOBAHN_COMPRESS
- 	bool "Non-standard WebSocket compression support"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-snappy -> snappy
- 	select BR2_PACKAGE_PYTHON_SNAPPY # runtime
+-ifneq ($$($(2)_IS_VIRTUAL),YES)
+ PACKAGES += $(1)
+-endif
  
-+comment "Non-standard WebSocket compression needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_PYTHON_AUTOBAHN_ENCRYPTION
- 	bool "TLS and WAMP-cryptosign encryption/authentication support"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pyopenssl -> python-cryptography
- 	select BR2_PACKAGE_PYTHON_PYNACL # runtime
- 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
- 	select BR2_PACKAGE_PYTHON_QRCODE # runtime
-@@ -37,12 +42,16 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN_SCRAM
- 
- config BR2_PACKAGE_PYTHON_AUTOBAHN_SERIALIZATION
- 	bool "Accelerated JSON, MessagePack, CBOR, UBJSON, and FlatBuffers serialization support"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-ujson
- 	select BR2_PACKAGE_PYTHON_CBOR2 # runtime
- 	select BR2_PACKAGE_PYTHON_FLATBUFFERS # runtime
- 	select BR2_PACKAGE_PYTHON_MSGPACK # runtime
- 	select BR2_PACKAGE_PYTHON_UBJSON # runtime
- 	select BR2_PACKAGE_PYTHON_UJSON # runtime
- 
-+comment "Accelerated JSON, MessagePack, CBOR, UBJSON, and FlatBuffers serialization needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_PYTHON_AUTOBAHN_TWISTED
- 	bool "Twisted support"
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
-index fb06f7672a..aadcb2c360 100644
---- a/package/python-crossbar/Config.in
-+++ b/package/python-crossbar/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-+	depends on BR2_INSTALL_LIBSTDCPP # python-autobahn's compress and serialization
- 	# All the following dependencies are runtime dependencies. It
- 	# matches almost 1:1 the requirements-min.txt from crossbar
- 	# with the following exceptions:
-@@ -63,7 +64,8 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 
- 	  https://pypi.python.org/pypi/crossbar
- 
--comment "python-crossbar needs glibc or musl"
-+comment "python-crossbar needs a glibc or musl toolchain w/ C++"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
-+		!BR2_INSTALL_LIBSTDCPP
+ ifneq ($$($(2)_PERMISSIONS),)
+ PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
 -- 
-2.35.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
