@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A9ADC19F2D
-	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 10:57:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9127C19F2D
+	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 10:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AC8C60E0A;
-	Sat, 13 Aug 2022 10:57:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AC8C60E0A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 812AB60BEB;
+	Sat, 13 Aug 2022 10:57:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 812AB60BEB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k_87Biqe-RFp; Sat, 13 Aug 2022 10:57:15 +0000 (UTC)
+	with ESMTP id Xr4b1OrH_Mcc; Sat, 13 Aug 2022 10:57:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C2E960D7F;
-	Sat, 13 Aug 2022 10:57:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C2E960D7F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7B9481BF3DA
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 10:57:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAD1160DDF;
+	Sat, 13 Aug 2022 10:57:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAD1160DDF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AB0B41BF3DA
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 10:57:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 48E68405BD
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 10:57:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48E68405BD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85803416AB
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 10:57:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85803416AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vB_XAAmmhtNd for <buildroot@lists.busybox.net>;
- Sat, 13 Aug 2022 10:57:03 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16DF9404DF
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 16DF9404DF
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 10:57:02 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A1E1E1C0003;
- Sat, 13 Aug 2022 10:57:00 +0000 (UTC)
-Date: Sat, 13 Aug 2022 12:56:59 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220813125659.4238ebf2@windsurf>
-In-Reply-To: <20220813095422.318927-1-james.hilliard1@gmail.com>
-References: <20220813095422.318927-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660388221;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=iI6FCUQnfj30OXTNaeuLdx6QCdOwZjKeailnOAf2AmA=;
- b=W72ARN2YqShKN99ri0e/z5/duHy/N1GXYkj3nBkOoVi8RqlI9jJO7c+1+H4o5oTFQsHM2M
- ojY5s1llD4xNltMFqVLAhPFx69Wy2ZSIqN8Atgbt3q6eGJ5uleOSTitLAPWlBbefDrGbwl
- A8TK9hq1leRrjV+lTSCmh5Uptzvk4fU9QfdS9JHvCZFHolPlBIkECQjOVC32fvJfcfKW5c
- 0RV6ZjXMykIQAMRKCOx0G9NVm4qidpEa2nr3R6HjivvBfLuw//c4Z0pt7YULZNMylNCMmU
- Y2bzCyOeWb3kBnN59IUl3+qiojO2RZb1f+5jNnPoL4Fx0xwjSJicfw/HsYM1VA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=W72ARN2Y
-Subject: Re: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.63.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iRfs5V0edzLQ for <buildroot@lists.busybox.net>;
+ Sat, 13 Aug 2022 10:57:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E33D416E3
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 10:57:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E33D416E3
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id DD55F86ACB; Sat, 13 Aug 2022 10:42:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 13 Aug 2022 12:57:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5d4f2ccea31c381e0defca7debc49618cefbef4f
+X-Git-Newrev: 88ae4ebd21d6996ae85ff47a9259325c43c1280a
+X-Patchwork-Hint: ignore
+Message-Id: <20220813104250.DD55F86ACB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ne10: fix build without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,28 +57,114 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 13 Aug 2022 03:54:22 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=88ae4ebd21d6996ae85ff47a9259325c43c1280a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/meson/meson.hash | 4 ++--
->  package/meson/meson.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Fix the following build failure without C++ raised since bump to version
+1.2.0 in commit 8cdf680799d7055a272190387064f87c7c638906 and
+https://github.com/projectNe10/Ne10/commit/20b1896fd6532336e6a46608778bd6e0396dc4dc:
 
-Applied to next, thanks.
+CMake Error at /nvmedata/autobuild/instance-11/output-1/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
+  The C++ compiler
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+    "/usr/bin/clang++"
+
+  is not able to compile a simple test program.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a86d09d569babe6b88cb8e5fbb47483772f42aed
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ne10/0002-fix-build-without-C.patch | 55 +++++++++++++++++++++++++++++
+ package/ne10/ne10.mk                        |  6 ++++
+ 2 files changed, 61 insertions(+)
+
+diff --git a/package/ne10/0002-fix-build-without-C.patch b/package/ne10/0002-fix-build-without-C.patch
+new file mode 100644
+index 0000000000..9dafffd5b0
+--- /dev/null
++++ b/package/ne10/0002-fix-build-without-C.patch
+@@ -0,0 +1,55 @@
++From f19b109f2a879af7b0753d94a2a312e4039adbed Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 8 May 2022 23:52:36 +0200
++Subject: [PATCH] fix build without C++
++
++Fix the following build failure without C++ raised since version 1.2.0
++and
++https://github.com/projectNe10/Ne10/commit/20b1896fd6532336e6a46608778bd6e0396dc4dc:
++
++CMake Error at /nvmedata/autobuild/instance-11/output-1/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
++  The C++ compiler
++
++    "/usr/bin/clang++"
++
++  is not able to compile a simple test program.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a86d09d569babe6b88cb8e5fbb47483772f42aed
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/projectNe10/Ne10/pull/280]
++---
++ CMakeLists.txt         | 2 +-
++ modules/CMakeLists.txt | 2 ++
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 40e1b72..10081f8 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -26,7 +26,7 @@
++ #
++ cmake_minimum_required(VERSION 2.6)
++ 
++-project(NE10 C CXX ASM)
+++project(NE10 C ASM)
++ 
++ option(NE10_BUILD_SHARED "Build NE10 shared libraries" OFF)
++ option(NE10_BUILD_STATIC "Build NE10 static libraries" ON)
++diff --git a/modules/CMakeLists.txt b/modules/CMakeLists.txt
++index 4f158e9..951527a 100644
++--- a/modules/CMakeLists.txt
+++++ b/modules/CMakeLists.txt
++@@ -173,6 +173,8 @@ endif(IOS_PLATFORM)
++ endif()
++ 
++ if(NE10_ENABLE_DSP)
+++    enable_language(CXX)
+++
++     #enable NE10_init_dsp
++     add_definitions(-DNE10_ENABLE_DSP)
++ 
++-- 
++2.35.1
++
+diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
+index e529caf2af..3946605556 100644
+--- a/package/ne10/ne10.mk
++++ b/package/ne10/ne10.mk
+@@ -16,6 +16,12 @@ NE10_CONF_OPTS = \
+ 	-DNE10_BUILD_UNIT_TEST=OFF \
+ 	-DNE10_LINUX_TARGET_ARCH=$(if $(BR2_aarch64),aarch64,armv7)
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++NE10_CONF_OPTS += -DNE10_ENABLE_DSP=ON
++else
++NE10_CONF_OPTS += -DNE10_ENABLE_DSP=OFF
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),)
+ NE10_CONF_OPTS += \
+ 	-DNE10_BUILD_SHARED=ON
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
