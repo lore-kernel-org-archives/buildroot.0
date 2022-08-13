@@ -1,87 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42847C19F2D
-	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 19:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DFE4C19F2D
+	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 20:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BFF3482948;
-	Sat, 13 Aug 2022 19:59:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFF3482948
+	by smtp3.osuosl.org (Postfix) with ESMTP id 833A160797;
+	Sat, 13 Aug 2022 20:01:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 833A160797
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cSWi3P3VDQxP; Sat, 13 Aug 2022 20:01:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 921C560759;
+	Sat, 13 Aug 2022 20:01:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 921C560759
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4827B1BF4E4
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 20:01:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 237EC82779
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 20:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 237EC82779
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3YbTZqSo1S3t; Sat, 13 Aug 2022 19:59:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC5AC82779;
-	Sat, 13 Aug 2022 19:59:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC5AC82779
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5BA6D1BF215
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 19:59:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3104C40122
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 19:59:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3104C40122
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e5E7jTlbTqtE for <buildroot@lists.busybox.net>;
- Sat, 13 Aug 2022 19:59:49 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CQ1mFotrKSpj for <buildroot@lists.busybox.net>;
+ Sat, 13 Aug 2022 20:01:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1777D400AF
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1777D400AF
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 19:59:49 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id bv3so4616066wrb.5
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 12:59:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=colAiuegEi/T0AdK1cvWSg1KR/1DOpZpKZrHMWIUdyg=;
- b=19V0eVBpVP0gYDiPkBkqtC+DL/A0vYbkppT5/egYbteMAevH2CqYsPVIcTpmvu50jU
- Yy7AuDgxwVDCGtTIXnAjTi0Xl9wz7UD6z7dPfnPvo/cJuSYIQCxNxlprwSzOlHrNJA7z
- xAZP7+ibNNWJI6XW8x31IL+kXwIsefZrBU0c5upPOW9Lq40jwLlww6xTs7oREpdZ/k4D
- pI239hupUdB1bfUKM6wazRVgx+AbA1qzcb0nCBVLZheCiSKSuRQh/PX0h+fnc211i7ZO
- czGDfnqlrE2mgrV4CLBBM4sIWcS3Lkz7g1nXNu3om9twIW2NRsFif+fmQL5Ujfj2QfC9
- z6DQ==
-X-Gm-Message-State: ACgBeo0rYwkQiKKaKOXpfMjDBsZC57AbbR1PpEckBJsoGfArR6MFt1jg
- yIpSKe2rmG+UMEVQnvXbDewng9SR1kE=
-X-Google-Smtp-Source: AA6agR56oUq2IXsHK9zVNjVanDycr55ulPypltirrdURvix3oYB0nIJ7x8JACOwEP7/j63Fz+h9P/A==
-X-Received: by 2002:a5d:59c5:0:b0:223:808d:51bb with SMTP id
- v5-20020a5d59c5000000b00223808d51bbmr4987189wry.454.1660420786791; 
- Sat, 13 Aug 2022 12:59:46 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b00f2efd4a33b7d07e8.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:f2ef:d4a3:3b7d:7e8])
- by smtp.gmail.com with ESMTPSA id
- h23-20020a05600c145700b003a529b7bc27sm3898971wmi.9.2022.08.13.12.59.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 13 Aug 2022 12:59:46 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 13 Aug 2022 21:59:43 +0200
-Message-Id: <20220813195943.2411510-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB0DE8275A
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CB0DE8275A
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 20:01:24 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.243.6])
+ by smtp4-g21.free.fr (Postfix) with ESMTP id 8BB4119F735;
+ Sat, 13 Aug 2022 22:01:21 +0200 (CEST)
+Received: from [37.166.134.74]
+	by webmail.free.fr
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=colAiuegEi/T0AdK1cvWSg1KR/1DOpZpKZrHMWIUdyg=;
- b=g08yZzWkl60SxRIpSkOwC4vTO/UXYE57oV6cPdvvI/20ShRU+TT4i2QGsLpRrIsDFw
- eGnMNfJhkNHcqE9L4IqDSRtKW6C7UgEpZPO5XyCHpURlQdA82lB/p6ZTZfGyMmGZUFgT
- cabBRZmgAYOhcQCfyRF94a9AbkBE1rqg6Bifp+msJ4W94cZyrBa8lcy++WoH9eMnXM0k
- Ecaky3wnOBhWhGuNv9v2OsG5MZPg01O61ChGUHiLA1okR15xUxK/23jfGFcST4cc56Hs
- lTl4BbxdFrRwlZh56/+zfYODfDpZENKWupFHU5rH2rIvCiFXH3xP+nKFAt+z/RruHcRN
- veMw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=g08yZzWk
-Subject: [Buildroot] [PATCH 1/1] package/udpcast: fix musl build
+Date: Sat, 13 Aug 2022 22:01:21 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220813125424.6caa746b@windsurf>
+References: <20220813093627.369221-1-ju.o@free.fr>
+ <20220813125424.6caa746b@windsurf>
+Message-ID: <e0634cb156656205a84bc7ecce8a9412@free.fr>
+X-Sender: ju.o@free.fr
+User-Agent: Webmail Free/1.3.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1660420881;
+ bh=6HrYReqv3TBFAHYFins/yXG45+jEOjED9/9ha8BnIM0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=g7XIZkjl7sWQS31Xvb2rS17Q15LVXUoc8RfbqsVXhzNxM8FiqRcur+sLFHwubuc0I
+ ZES8jRaAO+6PRKRgWmd0wrR2LMS9h+3y9edXsPZ5IvDE0iKEw1NmDsc6Jw1jb3sJPp
+ B4G64wXKNmSXgSM/VxwL8NUD6LryxYQ1ZHJru85538PPcWKEGL08sWA9QOulihFplV
+ zUAYJb+HjhGT83ZHyVox7JI57sPrbGGBJ2izDdYbWR/EX/B/o2Pf/v+GXj9ivKchhk
+ qnbqkp6b5IBoRlrhj+U61t1Vs/7SFvLvRmqkqfYqiO6voo3Zo9UW/wfSRHSYPy3ZiP
+ 7tg2iBcz5n4ow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=g7XIZkjl
+Subject: Re: [Buildroot] [PATCH next 1/1] package/linux-backports: bump
+ version to 5.15.58
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,73 +76,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following musl build failure raised since bump to version
-20211207 in commit ecf85b4ef58873e9acf749adedfbaa90baaaf3c0:
+Hi Thomas,
 
-receivedata.c: In function 'findSlice':
-receivedata.c:348:2: error: unknown type name 'ptrdiff_t'
-  348 |  ptrdiff_t pos = slice - clst->slices;
-      |  ^~~~~~~~~
-receivedata.c:17:1: note: 'ptrdiff_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
-   16 | #include "fec.h"
-  +++ |+#include <stddef.h>
-   17 |
+On 13/08/2022 12:54, Thomas Petazzoni wrote:
+> Hello Julien,
+> 
+> On Sat, 13 Aug 2022 11:36:27 +0200
+> Julien Olivain <ju.o@free.fr> wrote:
+> 
+>> This commit also change the minimal supported kernel version from 3.10
+>> to 4.4. See [1].
+> 
+> Could this be problematic for some of our users? Do we want to keep
+> support for an older linux-backports release to still support 3.10
+> kernels?
+> 
+> I can imagine that the people who end up using linux-backports are
+> probably stuck with an old kernel for some reason, so raising the
+> minimum kernel version required to use linux-backports is probably
+> something we should do with a bit of care?
 
-Fixes:
- - http://autobuild.buildroot.org/results/30208c6f175967fed6de690447a09e0c86547b24
+I agree that the purpose of linux-backports is to bring new drivers to
+old kernels. Then, how old is reasonably old?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/udpcast/0001-fix-musl-build.patch | 31 +++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/udpcast/0001-fix-musl-build.patch
+Few points:
 
-diff --git a/package/udpcast/0001-fix-musl-build.patch b/package/udpcast/0001-fix-musl-build.patch
-new file mode 100644
-index 0000000000..0e213b2793
---- /dev/null
-+++ b/package/udpcast/0001-fix-musl-build.patch
-@@ -0,0 +1,31 @@
-+fix musl build
-+
-+Fix the following musl build failure:
-+
-+receivedata.c: In function 'findSlice':
-+receivedata.c:348:2: error: unknown type name 'ptrdiff_t'
-+  348 |  ptrdiff_t pos = slice - clst->slices;
-+      |  ^~~~~~~~~
-+receivedata.c:17:1: note: 'ptrdiff_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
-+   16 | #include "fec.h"
-+  +++ |+#include <stddef.h>
-+   17 | 
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/30208c6f175967fed6de690447a09e0c86547b24
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://udpcast.linux.lu/mailman3/hyperkitty/list/udpcast@udpcast.linux.lu/thread/4MBES2CPUSUNIZTC7NXCQYS2GAE4DQSG/]
-+
-+diff '--color=auto' -Nura udpcast-20211207.orig/receivedata.c udpcast-20211207/receivedata.c
-+--- udpcast-20211207.orig/receivedata.c	2022-08-13 21:48:06.226588614 +0200
-++++ udpcast-20211207/receivedata.c	2022-08-13 21:48:40.242992238 +0200
-+@@ -1,6 +1,7 @@
-+ #include <assert.h>
-+ #include <sys/types.h>
-+ #include <unistd.h>
-++#include <stddef.h>
-+ #include <stdlib.h>
-+ #include <sys/time.h>
-+ #include <errno.h>
--- 
-2.35.1
+- v4.4 was released in January 2016. It is no longer maintained (last
+   version is v4.4.302 released in February 2022). Oldest still
+   maintained LTS is currently 4.9.
 
+- Oldest maintained CIP kernel is currently CIP 4.4. See [1].
+
+- The oldest kernel in Buildroot defconfigs is currently 4.4.7.
+   See [2].
+
+- Trying to compile kernel v3.10.108 in qemu_aarch64_virt_defconfig
+   did not worked out-of-the-box for me (on Buildroot tag
+   2022.08-rc1, in utils/docker-run). Build fails with:
+
+     dtc-lexer.lex.c: In function 'yylex':
+     dtc-lexer.l:46:18: error: 'yylloc' undeclared (first use in this 
+function); did you mean 'yyalloc'?
+
+I thought it would not be such big issue to update linux-backports and 
+raise
+its minimal kernel version requirement to 4.4 (which is somewhat the 
+oldest
+kernel which is still maintained we can get today).
+
+I let you decide what is the oldest kernel version which is supposed
+to compile in Buildroot, at a given point in time. Maybe we could add
+a test or a defconfig for that version, to make sure it's actually
+working.
+
+In the meantime, I suggest we could update linux-backports to the
+intermediate version v5.10.110-1 which is the highest version which
+does not change the minimal kernel version requirement (which
+is >= 3.10).
+
+What do you think?
+
+Best regards,
+
+Julien.
+
+[1] 
+https://wiki.linuxfoundation.org/civilinfrastructureplatform/start#kernel_maintainership
+[2] 
+https://git.busybox.net/buildroot/tree/configs/s6lx9_microboard_defconfig?h=2022.08-rc1#n10
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
