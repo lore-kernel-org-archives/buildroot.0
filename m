@@ -1,49 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 289D6ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:49:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D92FECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2B2540B9A;
-	Sun, 11 Sep 2022 08:49:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2B2540B9A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Hwg3N8YMmSV; Sun, 11 Sep 2022 08:49:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E86D940B86;
-	Sun, 11 Sep 2022 08:49:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E86D940B86
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 258AA1BF368
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DD8B606E6
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DD8B606E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FE1A60F7F;
+	Sun, 11 Sep 2022 08:49:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FE1A60F7F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LHZhTC9mha7I for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id c4pHiG1tquYR; Sun, 11 Sep 2022 08:49:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 662CE60777;
+	Sun, 11 Sep 2022 08:49:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 662CE60777
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 342211BF990
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78F8640996
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78F8640996
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wo5lU8PpsghW for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74D6E60774
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56B6E409AC
  for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74D6E60774
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56B6E409AC
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 61C2583620; Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
+ id 3BCC383621; Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 14 Aug 2022 12:06:33 +0200
+Date: Sat, 13 Aug 2022 23:28:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e992a3e7712f6f87fcbddb1844a5cbf51a1d82bb
-X-Git-Newrev: 7c8e34f4d20598a6536a6d63b6c4a97eb3b794cf
+X-Git-Oldrev: a09768a3c19347728e4f9ad079f3e5990032a9a6
+X-Git-Newrev: 7ff21f8d4b94e859ce95aa24ad361f2c5df9e284
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084823.61C2583620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgit2: bump to 1.5.0
+Message-Id: <20220911084823.3BCC383621@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/binutils: handle gprofng as an
+ optional feature
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,96 +57,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c8e34f4d20598a6536a6d63b6c4a97eb3b794cf
+commit: https://git.buildroot.net/buildroot/commit/?id=7ff21f8d4b94e859ce95aa24ad361f2c5df9e284
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It includes an option to build a command line program that can be used
-to replace git in simple cases.
+binutils 2.39 added support for gprofng, a new profiler (see
+https://www.phoronix.com/news/GNU-Profiler-gprofng).
 
-The upcoming sha256 repository support made them steal the sha256 code
-from RFC6234, hence the license change.
+This new profiler is enabled by default, but it requires bison on the
+host.
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+In order to handle this, this commit:
+
+ - Adds a new option BR2_BINUTILS_GPROFNG, which allows to
+   enable/disable gprofng in host-binutils
+
+ - Unconditionnally disables gprofng for the target binutils, based on
+   the idea that in a Buildroot context the analysis of profiling data
+   is generally done on the host system. This can of course always be
+   revisited later by adding a new option to the target binutils
+   package.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libgit2/Config.in    | 10 ++++++++++
- package/libgit2/libgit2.hash |  4 ++--
- package/libgit2/libgit2.mk   | 16 ++++++++++++++--
- 3 files changed, 26 insertions(+), 4 deletions(-)
+ package/binutils/Config.in.host | 6 ++++++
+ package/binutils/binutils.mk    | 8 ++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/libgit2/Config.in b/package/libgit2/Config.in
-index a6a9728ff0..5d28f054f2 100644
---- a/package/libgit2/Config.in
-+++ b/package/libgit2/Config.in
-@@ -12,3 +12,13 @@ config BR2_PACKAGE_LIBGIT2
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 907b63de13..51802db043 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -34,6 +34,12 @@ config BR2_BINUTILS_VERSION
+ 	default "2.38"		if BR2_BINUTILS_VERSION_2_38_X
+ 	default "2.39"		if BR2_BINUTILS_VERSION_2_39_X
  
- comment "libgit2 needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+
-+if BR2_PACKAGE_LIBGIT2
-+
-+config BR2_PACKAGE_LIBGIT2_CLI
-+	bool "enable command line interface (git2_cli)"
++config BR2_BINUTILS_GPROFNG
++	bool "gprofng support"
++	depends on BR2_BINUTILS_VERSION_2_39_X
 +	help
-+	  Enable a command-line interface for libgit2.
-+	  It aims to be git-compatible.
++	  This option enables support for gprofng, a new profiler.
 +
-+endif
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 3b5837f789..fb760fd4cc 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f48b961e463a9e4e7e7e58b21a0fb5a9b2a1d24d9ba4d15870a0c9b8ad965163  libgit2-1.4.3.tar.gz
--sha256  0092f24acc306ee3287dc05b5e85cb9e0e48cd3f11c60c4625b1a673a5912616  COPYING
-+sha256  8de872a0f201b33d9522b817c92e14edb4efad18dae95cf156cf240b2efff93e  libgit2-1.5.0.tar.gz
-+sha256  0fc09da43d666b5b0cf5695defc3100d5cf387936b260ebab37e396d7e0dbc83  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 9b5e2b897d..9409011eb4 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,9 +4,14 @@
- #
- ################################################################################
+ config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
+ 	string "Additional binutils options"
+ 	default ""
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index a3fece27dc..e4cb19896d 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -52,6 +52,7 @@ BINUTILS_CONF_OPTS = \
+ 	--enable-install-libiberty \
+ 	--enable-build-warnings=no \
+ 	--with-system-zlib \
++	--disable-gprofng \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
  
--LIBGIT2_VERSION = 1.4.3
-+LIBGIT2_VERSION = 1.5.0
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
--LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch), CC0-1.0 (xoroshiro256)
-+LIBGIT2_LICENSE = \
-+	GPL-2.0 with linking exception, \
-+	MIT (sha1), \
-+	BSD-3-Clause (sha256), \
-+	wildmatch license (wildmatch), \
-+	CC0-1.0 (xoroshiro256)
- LIBGIT2_LICENSE_FILES = COPYING
- LIBGIT2_CPE_ID_VENDOR = libgit2_project
- LIBGIT2_INSTALL_STAGING = YES
-@@ -44,8 +49,15 @@ else
- LIBGIT2_CONF_OPTS += -DUSE_HTTPS=OFF
- endif
+@@ -91,6 +92,13 @@ HOST_BINUTILS_CONF_OPTS = \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
  
-+ifeq ($(BR2_PACKAGE_LIBGIT2_CLI),y)
-+LIBGIT2_CONF_OPTS += -DBUILD_CLI=ON
++ifeq ($(BR2_BINUTILS_GPROFNG),y)
++HOST_BINUTILS_DEPENDENCIES += host-bison
++HOST_INBUTILS_CONF_OPTS += --enable-gprofng
 +else
-+LIBGIT2_CONF_OPTS += -DBUILD_CLI=OFF
++HOST_INBUTILS_CONF_OPTS += --disable-gprofng
 +endif
 +
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- LIBGIT2_CONF_OPTS += \
-+	-DCMAKE_EXE_LINKER_FLAGS=-latomic \
- 	-DCMAKE_SHARED_LINKER_FLAGS=-latomic
- endif
- 
+ # binutils run configure script of subdirs at make time, so ensure
+ # our TARGET_CONFIGURE_ARGS are taken into consideration for those
+ BINUTILS_MAKE_ENV = $(TARGET_CONFIGURE_ARGS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
