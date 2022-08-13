@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90CCCC19F2D
-	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 10:56:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A64DCC19F2D
+	for <buildroot@archiver.kernel.org>; Sat, 13 Aug 2022 10:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E80182A0E;
-	Sat, 13 Aug 2022 10:56:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E80182A0E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cIS6WYTpS70y; Sat, 13 Aug 2022 10:56:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C89E82865;
-	Sat, 13 Aug 2022 10:56:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C89E82865
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7A6171BF3DA
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 10:56:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 61EDC60BEB
- for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 10:56:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61EDC60BEB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AC1560C1D;
+	Sat, 13 Aug 2022 10:57:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AC1560C1D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5o2tfLFdxGxq for <buildroot@lists.busybox.net>;
- Sat, 13 Aug 2022 10:56:46 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 182CF60AD3
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 182CF60AD3
- for <buildroot@buildroot.org>; Sat, 13 Aug 2022 10:56:45 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id ED29660007;
- Sat, 13 Aug 2022 10:56:42 +0000 (UTC)
-Date: Sat, 13 Aug 2022 12:56:41 +0200
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20220813125641.43312d45@windsurf>
-In-Reply-To: <20220812124952.182664-1-troglobit@gmail.com>
-References: <20220812124952.182664-1-troglobit@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660388203;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=x6xi86Uu18cnbMUW2EKbim21M1oK+EyzuPhgqm0vhVg=;
- b=UQ1zyMKcL5NL4B7W/PH0/h1ABKbRPsfamp8JNZMalES6iBVpqpiXJxIIkZyXxUHi8cCbzO
- Eg472HXg8+kbY7LfXgiQFQ3swTddeA/QJwPcoRe/lb/n2wZV81mMvLnNJw0R4wuoe0kOXJ
- NIXiLQr33B5+nQZufSkODP5w2k30Xg12c1KzEyNcnBWyeYjqGg3+m3TQgY3pR/OqMwcycK
- d2rbnQN8RaNZlvAklY40bh08fFqook3uT01ddadF1WivO0vHG+av7yt28Ke+xJXEOvM/2o
- BanRjouXFP3OqR5z//KsUChraiSCXRwu2MUqvGfaOSC9usWjJiZ3kwVdFG33jQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UQ1zyMKc
-Subject: Re: [Buildroot] [PATCH 1/1] package/sysklogd: bump to version 2.4.3
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nFzMP_FL2CIJ; Sat, 13 Aug 2022 10:57:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B80760BEB;
+	Sat, 13 Aug 2022 10:57:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B80760BEB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BCBCB1BF3DA
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 10:56:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9865782A56
+ for <buildroot@lists.busybox.net>; Sat, 13 Aug 2022 10:56:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9865782A56
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8fdT444BBlwr for <buildroot@lists.busybox.net>;
+ Sat, 13 Aug 2022 10:56:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC52682865
+ for <buildroot@buildroot.org>; Sat, 13 Aug 2022 10:56:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC52682865
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 3FBE6869CF; Sat, 13 Aug 2022 10:42:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 13 Aug 2022 12:56:49 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: d08639e6b9e5b687c21c35041bb60a941fc7edb4
+X-Git-Newrev: a09768a3c19347728e4f9ad079f3e5990032a9a6
+X-Patchwork-Hint: ignore
+Message-Id: <20220813104229.3FBE6869CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/meson: bump to version
+ 0.63.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,33 +58,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 12 Aug 2022 14:49:52 +0200
-Joachim Wiberg <troglobit@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a09768a3c19347728e4f9ad079f3e5990032a9a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Fixes garbled tag name in std log file output (critical), and addresses a
-> minor issue with confusing project name from `syslogd -v` vs `logger -v`.
-> 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-> ---
->  package/sysklogd/sysklogd.hash | 2 +-
->  package/sysklogd/sysklogd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Even though we normally don't take version bumps in master at this
-point, this seems like a minor release with very few changes, all of
-them being bug fixes. So applied to master, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 1133bed046..d22b21cdea 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.63.0/meson-0.63.0.tar.gz.asc
+-sha256  3b51d451744c2bc71838524ec8d96cd4f8c4793d5b8d5d0d0a9c8a4f7c94cd6f  meson-0.63.0.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.63.1/meson-0.63.1.tar.gz.asc
++sha256  06fe13297213d6ff0121c5d5aab25a56ef938ffec57414ed6086fda272cb65e9  meson-0.63.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 880dfffcf1..1e431f426a 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.63.0
++MESON_VERSION = 0.63.1
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
