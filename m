@@ -1,69 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2292CC25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 12:30:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F47DC25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 12:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2C2F60BE1;
-	Sun, 14 Aug 2022 12:30:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2C2F60BE1
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6B9581ABA;
+	Sun, 14 Aug 2022 12:55:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6B9581ABA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wkjaA8qg9Qpf; Sun, 14 Aug 2022 12:30:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Dd7ZXIWIxQIf; Sun, 14 Aug 2022 12:55:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3F1F60BD8;
-	Sun, 14 Aug 2022 12:30:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3F1F60BD8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B7A901BF364
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 12:30:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6DB981985;
+	Sun, 14 Aug 2022 12:55:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6DB981985
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B08C1BF364
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 12:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 926D960BC6
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 12:30:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 926D960BC6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 738CB81985
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 12:55:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 738CB81985
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RNzE1XkG4w-u for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 12:30:36 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E50B86059F
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E50B86059F
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 12:30:35 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AEFC41C0003;
- Sun, 14 Aug 2022 12:30:32 +0000 (UTC)
-Date: Sun, 14 Aug 2022 14:30:31 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220814143031.0ef0497e@windsurf>
-In-Reply-To: <20220813195943.2411510-1-fontaine.fabrice@gmail.com>
-References: <20220813195943.2411510-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SiNi4UcvZAUp for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 12:55:47 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A1FB8188A
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6A1FB8188A
+ for <buildroot@busybox.net>; Sun, 14 Aug 2022 12:55:47 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id uj29so9478630ejc.0
+ for <buildroot@busybox.net>; Sun, 14 Aug 2022 05:55:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=EdqBXLC4pQKRQDBJtzW7qZScUpy+6a21VeL2zrG9YDU=;
+ b=XKDA7spKq9ekVwMvDVUHGG4IfPo1STWwuEIVMbOYBoMveXLLWB8CSZFNCjHZm1uk6U
+ G+bFnMQGVMDHMbCjcbAmGOCJXCWUSDbeWTnpCvWkWiJOf+X42eA4s9b8guKXSI9jPpmM
+ iwv2u6B+SkIxUxHeSFQh6TMGL1uIC0INt5pcN/2WWlfQmQs4UXZR7oCfIGfBCOxmPQSd
+ Rmli6kK5qtFYTd1Evt50dqe7IymV6YSBamVMgV1CNusnIdiZZBcn7qOd9HyIiJzQoMie
+ 3Y6tDFUTFhZ3mogYwcARRJwgVyN2q2v6rt96gv9dsN6JQBJojvzTcTWsH/umKzYc6Xov
+ bCdQ==
+X-Gm-Message-State: ACgBeo3jG8FSkF4Xkmlv6IimbcrVRMASBtnZmLLcdXgmKEdlVmRPmGDg
+ 5FM0Dz5Boj6v5Wvs043EBupIiMKm3OE=
+X-Google-Smtp-Source: AA6agR7hRO2hPZEyH/Y1wkJ+PDktOj/J0YMe0NJUmwRCOTX6C32Ie6/gwzf5lOtDcHhNkVfYwvGj7Q==
+X-Received: by 2002:a17:907:6e9f:b0:730:e923:a378 with SMTP id
+ sh31-20020a1709076e9f00b00730e923a378mr7856383ejc.71.1660481745523; 
+ Sun, 14 Aug 2022 05:55:45 -0700 (PDT)
+Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ kw10-20020a170907770a00b006fe0abb00f0sm1161862ejc.209.2022.08.14.05.55.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 14 Aug 2022 05:55:45 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Sun, 14 Aug 2022 14:55:34 +0200
+Message-Id: <20220814125534.1227844-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660480232;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nZbWIWcOqgaAPSGjGcdHI8YRiZxpkBvzaW4qFv3id5I=;
- b=bovu1mHhBQ+JDMPNkixRWYVK/kydX+L9v9aXhcULrNrWZcGETzdMZeegrvJqrRvl3tOHzE
- O2bG1J+yLyvHJw4IPozihDW3NLbYeIZZS5KXWWDNr/vK60o5S2ZL8qLTv0E9nP6ISOUZnT
- J6cWx6eW0Rsa4+G5XunHwZXW39mJDF1nhutqZd4nOJTXwiQ8rLaw4FaCIr3GRWvYUKUW6+
- Yfog87pLIaZ2wluf/xlyJ+ycaRkASL4Iq5Jii+J3Zz09nFFAse4VhwA2Yjt4Q6qYmntK1f
- KbRb/mIqemkJ1ooWpRlm8eJWwR7xyDFZD6/U0BW6840b+AV0nYGcek4qMSi2xQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bovu1mHh
-Subject: Re: [Buildroot] [PATCH 1/1] package/udpcast: fix musl build
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=EdqBXLC4pQKRQDBJtzW7qZScUpy+6a21VeL2zrG9YDU=;
+ b=i0W2FL1QkW9M3YqWMGbr0tgkIfX/1Mjh3G203x/qsh1Xl9b4KsnnbHk4SuvbgiRhb1
+ 6AoN/VKSvsOR41L6OEBtuG4f+mSgbRq0PUxaA2xxb6MdEU7PyUNvd3nJZBv46FwuHXR7
+ pYDc6KwXjvQNPPn5VdtIRr9qDxAf28zHzzwmNn4G57OrGhrve5+6LTeqV2Sn6TdRI83X
+ OrKTCwkS0jmB/EtP0SGxnveSJ5lNnYh54zsoZie7g88aDhKJgwUCX28CILXPlnIJMqoE
+ OeZ4zFaw4VO6r1YunURECWOcrn+SowUwa7Sjxga+9qZsi5YqsP2VulRra90Yo+EA7gbS
+ J3eg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=i0W2FL1Q
+Subject: [Buildroot] [PATCH] package/gdk-pixbuf: bump to version 2.42.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,45 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 13 Aug 2022 21:59:43 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/gdk-pixbuf/gdk-pixbuf.hash | 4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Fix the following musl build failure raised since bump to version
-> 20211207 in commit ecf85b4ef58873e9acf749adedfbaa90baaaf3c0:
-> 
-> receivedata.c: In function 'findSlice':
-> receivedata.c:348:2: error: unknown type name 'ptrdiff_t'
->   348 |  ptrdiff_t pos = slice - clst->slices;
->       |  ^~~~~~~~~
-> receivedata.c:17:1: note: 'ptrdiff_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
->    16 | #include "fec.h"
->   +++ |+#include <stddef.h>
->    17 |
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/30208c6f175967fed6de690447a09e0c86547b24
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/udpcast/0001-fix-musl-build.patch | 31 +++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/udpcast/0001-fix-musl-build.patch
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 4bb246aa5..35084a50a 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,3 +1,3 @@
+-# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.8.sha256sum
+-sha256  84acea3acb2411b29134b32015a5b1aaa62844b19c4b1ef8b8971c6b0759f4c6  gdk-pixbuf-2.42.8.tar.xz
++# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.9.sha256sum
++sha256  28f7958e7bf29a32d4e963556d241d0a41a6786582ff6a5ad11665e0347fc962  gdk-pixbuf-2.42.9.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 57e8bbd51..7a75ed23f 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GDK_PIXBUF_VERSION_MAJOR = 2.42
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).8
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).9
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPL-2.1+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
