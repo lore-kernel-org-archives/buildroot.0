@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E6AEC25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 23:40:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60377C3F6B0
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 23:40:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2240410A0;
-	Sun, 14 Aug 2022 23:40:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2240410A0
+	by smtp2.osuosl.org (Postfix) with ESMTP id E65F540490;
+	Sun, 14 Aug 2022 23:40:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E65F540490
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lScZigvStlx8; Sun, 14 Aug 2022 23:40:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2aXLDCEvpx0e; Sun, 14 Aug 2022 23:40:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88EFD408BA;
-	Sun, 14 Aug 2022 23:40:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88EFD408BA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF7D31BF2E3
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 23:39:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1005D40364;
+	Sun, 14 Aug 2022 23:40:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1005D40364
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B26B1BF2E3
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 23:39:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6110408BA
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 23:39:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6110408BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46063402F5
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 23:39:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46063402F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VVurPWwzsyvg for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 23:39:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8YLeD4_zids3 for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 23:39:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F03BF40298
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5680400E4
 Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com
  [IPv6:2607:f8b0:4864:20::e2b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F03BF40298
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 23:39:32 +0000 (UTC)
-Received: by mail-vs1-xe2b.google.com with SMTP id m67so5820534vsc.12
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 16:39:32 -0700 (PDT)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A5680400E4
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 23:39:35 +0000 (UTC)
+Received: by mail-vs1-xe2b.google.com with SMTP id b124so5829772vsc.9
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 16:39:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=H4DIz+wjmaqauWFen839SdvwoZNbJTlvtOrvRKBGX4k=;
- b=bdsmzX/ZWa1JKU3RG+eGrGYbfcjlkwshURNl/8PL6SFIpRoujhZxLWHf6qXTDzoBc4
- ZRhZp5t97at1Gh7BswCgoFlQyoWvxt5qtE4juw0+qo39BNbQrVso/uhkc2V0+Y/GNrnV
- vf9Xelbp4WBpin2j0CNUorGrEliIo7TzClVsFYURH9fIabzgFp7UJ1ZR+tZZ/F4ue0mI
- u+ZYSTHITPGC7ldRmdlI+7gW/N/VF6YCUf+Lg2AZi1gcavCKv9GAtMA4+F+QFIVa+S0P
- 6XS3UnI3vSKvvdgXjAsXrzZEYxtS02heYlu2POZbPPGl0dauLrDc6LHkj04bRrHy5Q9M
- GOUA==
-X-Gm-Message-State: ACgBeo03jVq2QhvvWbXjMTSf0chqRX0aGoo/j2zmpUCL/zZqu+q6a45Y
- HRIglvQhANA0r+/yt6NOZMV3B45ALTU=
-X-Google-Smtp-Source: AA6agR6gjxbLezjuspnbBb5hh23VHVIC6gzojxzCiWc61AM6FRS7++o47n1idHChHTUSd6ZEnPFxEg==
-X-Received: by 2002:a67:d71d:0:b0:387:d4bf:1578 with SMTP id
- p29-20020a67d71d000000b00387d4bf1578mr5270782vsj.13.1660520371778; 
- Sun, 14 Aug 2022 16:39:31 -0700 (PDT)
+ bh=ttvcNYrZGVa4WR9ACRi/Ffb1SY4w1xH9MGtiX+GXnBY=;
+ b=FC4BlZUwhr5vzsKpTKKylw5CTunHr3MC09SyyofUtLExzESWozQrcfZ9U8a8M1CviQ
+ 14VOv10X0jZffOrYKi9fwOTM+u1DYaUwDpro0/wd+BQ3SzwQ8/I+bzLd+xOtIMFcsn/i
+ yApnj0xAhjDW57k1iSAVk1SaqUCvb65fbfK1rEf701Uv3Gv0SLbowgrOB4klC2plAoNu
+ lz4yvYlzKeQR5gDLWpRGdYuAoq2yYL0bz962Kwgwmavicv+lp79CovB3XNKYHpqZAJw3
+ qloCvkEB0SYGcYBTHvo9f/LW3VuugkXzqXGeYItZVZggRhB4w3zUmzHKt52X5qINJ6nA
+ dLMg==
+X-Gm-Message-State: ACgBeo1S1onMqKNEegeL1Lh0WHGky0Td9n7azY/amVyaBBfqmGfbOrko
+ ZXEaBqjLvUIdXH4v+Njsvd1yAbi+19I=
+X-Google-Smtp-Source: AA6agR6xd03llR6DNexHPbg8pCGurDf7dnQEiU8FfMsUoUtEM9FlruT75niP/UnwQkXggo5gpz9MVA==
+X-Received: by 2002:a67:ec82:0:b0:388:fefa:2467 with SMTP id
+ h2-20020a67ec82000000b00388fefa2467mr5408060vsp.67.1660520374421; 
+ Sun, 14 Aug 2022 16:39:34 -0700 (PDT)
 Received: from localhost.localdomain ([191.187.223.18])
  by smtp.gmail.com with ESMTPSA id
- z15-20020ab020cf000000b0038342b58f6csm4037769ual.17.2022.08.14.16.39.29
+ z15-20020ab020cf000000b0038342b58f6csm4037769ual.17.2022.08.14.16.39.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 14 Aug 2022 16:39:30 -0700 (PDT)
+ Sun, 14 Aug 2022 16:39:33 -0700 (PDT)
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Aug 2022 20:38:18 -0300
-Message-Id: <20220814233845.2247022-7-ricardo.martincoski@gmail.com>
+Date: Sun, 14 Aug 2022 20:38:19 -0300
+Message-Id: <20220814233845.2247022-8-ricardo.martincoski@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220814233845.2247022-1-ricardo.martincoski@gmail.com>
 References: <20220814233845.2247022-1-ricardo.martincoski@gmail.com>
@@ -72,18 +72,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=H4DIz+wjmaqauWFen839SdvwoZNbJTlvtOrvRKBGX4k=;
- b=ZdNADm7+xiUbBR7JOgq+BZerSd7WlLG9ijWvtmVe7MM1L7Bdf17sDTDfmN93ztJ8CX
- k/2LoiCiAC3NbmWQIegePyalhnpyDCm6pLZxtqC0KsHo+lhZiflypRMdgDlRNj1GIUjW
- YT2jKZ1V0oKk6nLWdXHJeSXBZFaeKkPXw2A4KLq5NSfLUfnz07pilMg7+GMfFgU+EUyd
- C9JfPM9cGjLyxieZoCpTA5Dys4HKqfXLHeGAi0Hn00NxwnxOiNZJjvLhatMhLmlIGZDc
- t5XO4/R0HgVoZaKuOCVYJPjl2IZbY0iERjGO2V4QgCp+ctn8w6gOVWR5fIiIBtdBMrKA
- 0QlQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ttvcNYrZGVa4WR9ACRi/Ffb1SY4w1xH9MGtiX+GXnBY=;
+ b=bqz8aN5tqKIMxtFUfLtlr4Xpl82x8v6Y3dRQsZtuBpiozTspjYW9IecjVnNaPE+JGf
+ 27R+8sYyg0BCwQcdVls1hGZwQj45m2orRK+ioy0IYEpQpKojI7/aknfuyhu3DGzFw8Ef
+ 1xizqWo1UmD21RzbyMNc5ok6R/7ipQO5zKsZVqLCxPIlY5F7lUy/g9NcGlzvHZ3riNnM
+ rxhKb/YaZMCRp2dsDN7nYguGTdRXNvV/VvGWLtiHBtLY8jk3rfbVDoGq4wMBwlwpjqAE
+ dsbOTWrsTvmfO7wUvXHA4wCTf01T/8MLHZzsnU7ORayltkcRXkZnV3HjegOQjjeRFwFq
+ jL9w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZdNADm7+
-Subject: [Buildroot] [PATCH 06/33] package/kvm-unit-tests: do not use
- "select...if SYMBOL=y"
+ header.a=rsa-sha256 header.s=20210112 header.b=bqz8aN5t
+Subject: [Buildroot] [PATCH 07/33] Config.in.legacy: add missing select
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,31 +100,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All other occurrencies in the tree simply do:
-select SYMBOL1 if SYMBOL2
-instead of
-select SYMBOL1 if SYMBOL2=y
-
-So do the same here for consistency.
+BR2_LINUX_KERNEL_CUSTOM_LOCAL was moved to legacy handling during release
+2016.11 but does not select BR2_LEGACY.
+Add the select, like done by all other symbols in the file.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- package/kvm-unit-tests/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Config.in.legacy | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
-index 7658877ce9..02ea8dd58c 100644
---- a/package/kvm-unit-tests/Config.in
-+++ b/package/kvm-unit-tests/Config.in
-@@ -20,7 +20,7 @@ config BR2_PACKAGE_KVM_UNIT_TESTS
- 	# x86-64 we use the host gcc (see .mk file for details)
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || !BR2_i386
- 	depends on BR2_HOSTARCH = "x86_64" || !BR2_x86_64
--	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64=y
-+	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_x86_64
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 80c443d9fb..03814c0378 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -3953,6 +3953,7 @@ config BR2_PACKAGE_ELEMENTARY
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ 	bool "Linux kernel local directory option removed"
++	select BR2_LEGACY
  	help
- 	  kvm-unit-tests is a project as old as KVM. As its name
- 	  suggests, it's purpose is to provide unit tests for KVM. The
+ 	  The option to select a local directory as the source of the
+ 	  Linux kernel has been removed. It hurts reproducibility of
 -- 
 2.25.1
 
