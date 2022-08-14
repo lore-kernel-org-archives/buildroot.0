@@ -1,70 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9B02C25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 21:42:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5395AC25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 21:46:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4903F40977;
-	Sun, 14 Aug 2022 21:42:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4903F40977
+	by smtp2.osuosl.org (Postfix) with ESMTP id B9510403EA;
+	Sun, 14 Aug 2022 21:46:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9510403EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hCFG-zG86IYs; Sun, 14 Aug 2022 21:42:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0BAypysgXnaf; Sun, 14 Aug 2022 21:46:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2687540933;
-	Sun, 14 Aug 2022 21:42:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2687540933
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8AB2D1BF282
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 21:42:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8640400E9;
+	Sun, 14 Aug 2022 21:46:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8640400E9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AFA7E1BF282
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 21:46:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 662F9605A4
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 21:42:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 662F9605A4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8ADC0400E9
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 21:46:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8ADC0400E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jv6XwgpkHza5 for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 21:42:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C0C86059B
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5C0C86059B
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 21:42:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a-IJ2HPDep9o for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 21:46:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67883400AC
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 67883400AC
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 21:46:39 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:4cac:4fa9:6c11:832f])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 961266012C;
- Sun, 14 Aug 2022 23:42:15 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 316AD60128;
+ Sun, 14 Aug 2022 23:46:32 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 14 Aug 2022 23:42:15 +0200
-Date: Sun, 14 Aug 2022 23:42:15 +0200
+ Sun, 14 Aug 2022 23:46:32 +0200
+Date: Sun, 14 Aug 2022 23:46:32 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220814214215.GP2854108@scaer>
-References: <20220812210147.178027-1-fontaine.fabrice@gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20220814214632.GQ2854108@scaer>
+References: <2ba3394abf87c940fe036b2e18e1afc2a2d37ad0.1660320356.git.stefan@agner.ch>
+ <20220813115137.GA2741326@scaer>
+ <17a5ae06-dc0c-944b-8b86-591b3e9ca500@mind.be>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220812210147.178027-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <17a5ae06-dc0c-944b-8b86-591b3e9ca500@mind.be>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660513338;
- bh=o4ftyr+W4y6jsVj+zv4g/dd3BP/rn5WFtUPoc2OYjxs=;
+ d=free.fr; s=smtp-20201208; t=1660513596;
+ bh=mbhVnJAwWnYTplL+i7RJzVb1e/x1viq7MnZQlw8Zytg=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=e8P4kjTC43DRivYrvc4aB8Htsu9XMmbR8UnBnep/Amim4XjDj01cse49E8YrfnvSr
- ZOHAsfCq6IeOe9vn8Gmvtq4IS8yS8fXlUjYuQSssp3wz9RXStgVdYwCdPImSNFqt06
- YcovSyxgNdbjYRyqthFRvctf/sK4HNF6cGmhJXphsvyOD/+UEZ/JHzjkIxWGnbR7sF
- UPQS/q2G6eT3Ij09hSwGjJC+yyRphzG9qX1ImFCvrH2c3zW7+HrMneOlVTjoUxHrQa
- aHdkGYAo6pse3cQpwHfIk+4nKcXeeXZRk3Kk+86JN88c624i43gFYEkaPlRhbcYzpH
- ns+bbwPyEhTFA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=uTalyGHNT8BPsATyqIcaM3E/qaSDK8CrhiL5gEHMNsUZ6ZehKkorfWihLfcbXMKzi
+ R8iGZlm5blPetukGhMP55DZeOr+RoXiOxwroeQKHgUcAjSMOPCAHlMvXRdIGky5lRC
+ 8jHZJflCyThSnKeRTnOmHAr2lFmO9+AyUKJEEwpTgzyZ9ceo5sbjZ1YJd+12IlQ6ed
+ URSGIh/52RUaFmzCS24AzRfwB2tmDFcDP2kl4R/81iBinHtHj8BgtGgeFFXlUm0roZ
+ lNhZelgAg/jPClXar0dSL+/PRG9437dOZ18/ARDUzO0741M/Ofw4d6gbfz40948IhY
+ hSsVs4pgr+NkA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=e8P4kjTC
-Subject: Re: [Buildroot] [PATCH 1/1] package/ocrad: fix static build
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uTalyGHN
+Subject: Re: [Buildroot] [PATCH] package/docker-engine: use kernel modules
+ for extra network drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,62 +79,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gilles Talis <gilles.talis@gmail.com>, buildroot@buildroot.org
+Cc: Stefan Agner <stefan@agner.ch>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Arnout, Stefan, All,
 
-On 2022-08-12 23:01 +0200, Fabrice Fontaine spake thusly:
-> Fix the following static build failure raised since bump to version 0.28
-> in commit 1b677db703dc0b976a707942bbc94ecd3f7b4b4b:
+On 2022-08-14 23:27 +0200, Arnout Vandecappelle spake thusly:
+> On 13/08/2022 13:51, Yann E. MORIN wrote:
+> >On 2022-08-12 18:07 +0200, Stefan Agner spake thusly:
+> >>Docker network driver "overlay", "macvlan" and "ipvlan" are not used
+> >>by default. Make them a module.
+[--SNIP--]
+>  Actually, if they're optional, I wouldn't configure them at all. Someone
+> who doesn't need this feature may very well want to build a kernel that
+> doesn't have them at all, even as modules. Or you may even build a kernel
+> that doesn't have module support.
 > 
-> /home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpng.a(png.o): in function `png_reset_crc':
-> png.c:(.text+0x738): undefined reference to `crc32'
+>  We don't have a good way to make those options "suggested", other than
+> mentioning them in the help text. But I do think that that's enough.
 
-I've added a blurb how LIBS work, and applied to master, thanks.
+Agreed.
 
 Regards,
 Yann E. MORIN.
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/97543d8df5c40818e05622490e4aad60b48934a6
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/ocrad/ocrad.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
-> index 78638b770a..5a68427bfb 100644
-> --- a/package/ocrad/ocrad.mk
-> +++ b/package/ocrad/ocrad.mk
-> @@ -10,12 +10,14 @@ OCRAD_SITE = $(BR2_GNU_MIRROR)/ocrad
->  OCRAD_LICENSE = GPL-2.0+
->  OCRAD_LICENSE_FILES = COPYING
->  OCRAD_INSTALL_STAGING = YES
-> -OCRAD_DEPENDENCIES = libpng
-> +OCRAD_DEPENDENCIES = host-pkgconf libpng
-> +OCRAD_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs libpng`
->  
->  # This is not a true autotools package.
->  define OCRAD_CONFIGURE_CMDS
->  	cd $(@D) && \
-> -	$(TARGET_MAKE_ENV) ./configure --prefix=/usr --sysconfdir=/etc $(TARGET_CONFIGURE_OPTS)
-> +	$(TARGET_MAKE_ENV) ./configure --prefix=/usr --sysconfdir=/etc \
-> +		LIBS="$(OCRAD_LIBS)" $(TARGET_CONFIGURE_OPTS)
->  endef
->  
->  define OCRAD_BUILD_CMDS
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
