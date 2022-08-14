@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D92FECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:49:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F6EEECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FE1A60F7F;
-	Sun, 11 Sep 2022 08:49:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FE1A60F7F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c4pHiG1tquYR; Sun, 11 Sep 2022 08:49:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 662CE60777;
-	Sun, 11 Sep 2022 08:49:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 662CE60777
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 342211BF990
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78F8640996
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78F8640996
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2943415A9;
+	Sun, 11 Sep 2022 08:49:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2943415A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wo5lU8PpsghW for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qhojC6eChzKQ; Sun, 11 Sep 2022 08:49:41 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8AEF41570;
+	Sun, 11 Sep 2022 08:49:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8AEF41570
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 401E81BF9A4
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 426F083EAF
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 426F083EAF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e-j-fSFmwasT for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56B6E409AC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7867E83EB2
  for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56B6E409AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7867E83EB2
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3BCC383621; Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
+ id 7696F835E4; Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 13 Aug 2022 23:28:20 +0200
+Date: Sun, 14 Aug 2022 16:46:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a09768a3c19347728e4f9ad079f3e5990032a9a6
-X-Git-Newrev: 7ff21f8d4b94e859ce95aa24ad361f2c5df9e284
+X-Git-Oldrev: 936334d8226c2a7b339974845fa3584a90f92b3d
+X-Git-Newrev: 87f0cca545140e1dcf38853d061476e6eb0b8f9a
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084823.3BCC383621@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/binutils: handle gprofng as an
- optional feature
+Message-Id: <20220911084823.7696F835E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcap: bump to version 2.65
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,76 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ff21f8d4b94e859ce95aa24ad361f2c5df9e284
+commit: https://git.buildroot.net/buildroot/commit/?id=87f0cca545140e1dcf38853d061476e6eb0b8f9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-binutils 2.39 added support for gprofng, a new profiler (see
-https://www.phoronix.com/news/GNU-Profiler-gprofng).
-
-This new profiler is enabled by default, but it requires bison on the
-host.
-
-In order to handle this, this commit:
-
- - Adds a new option BR2_BINUTILS_GPROFNG, which allows to
-   enable/disable gprofng in host-binutils
-
- - Unconditionnally disables gprofng for the target binutils, based on
-   the idea that in a Buildroot context the analysis of profiling data
-   is generally done on the host system. This can of course always be
-   revisited later by adding a new option to the target binutils
-   package.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/binutils/Config.in.host | 6 ++++++
- package/binutils/binutils.mk    | 8 ++++++++
- 2 files changed, 14 insertions(+)
+ package/libcap/libcap.hash | 2 +-
+ package/libcap/libcap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 907b63de13..51802db043 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -34,6 +34,12 @@ config BR2_BINUTILS_VERSION
- 	default "2.38"		if BR2_BINUTILS_VERSION_2_38_X
- 	default "2.39"		if BR2_BINUTILS_VERSION_2_39_X
+diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
+index 7c48cd950b..5fc8173905 100644
+--- a/package/libcap/libcap.hash
++++ b/package/libcap/libcap.hash
+@@ -1,5 +1,5 @@
+ # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
+-sha256  c8465e1f0b068d5fc06199231135ccac7adb56d662b1de93589252e8cd071e13  libcap-2.64.tar.xz
++sha256  73e350020cc31fe15360879d19384ffa3395a825f065fcf6bda3a5cdf965bebd  libcap-2.65.tar.xz
  
-+config BR2_BINUTILS_GPROFNG
-+	bool "gprofng support"
-+	depends on BR2_BINUTILS_VERSION_2_39_X
-+	help
-+	  This option enables support for gprofng, a new profiler.
-+
- config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
- 	string "Additional binutils options"
- 	default ""
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index a3fece27dc..e4cb19896d 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -52,6 +52,7 @@ BINUTILS_CONF_OPTS = \
- 	--enable-install-libiberty \
- 	--enable-build-warnings=no \
- 	--with-system-zlib \
-+	--disable-gprofng \
- 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
- 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+ # Hash for license file:
+ sha256  f58c80bcce8c929db39a23c32e924876e3311f3ffa54f66076c38056d38fa59b  License
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 91e02638e2..728a6ba6cc 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -91,6 +92,13 @@ HOST_BINUTILS_CONF_OPTS = \
- 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
- 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
- 
-+ifeq ($(BR2_BINUTILS_GPROFNG),y)
-+HOST_BINUTILS_DEPENDENCIES += host-bison
-+HOST_INBUTILS_CONF_OPTS += --enable-gprofng
-+else
-+HOST_INBUTILS_CONF_OPTS += --disable-gprofng
-+endif
-+
- # binutils run configure script of subdirs at make time, so ensure
- # our TARGET_CONFIGURE_ARGS are taken into consideration for those
- BINUTILS_MAKE_ENV = $(TARGET_CONFIGURE_ARGS)
+-LIBCAP_VERSION = 2.64
++LIBCAP_VERSION = 2.65
+ LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
+ LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
+ LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
