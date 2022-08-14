@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAA6EC25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 19:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6267FC25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 19:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93B8260BD8;
-	Sun, 14 Aug 2022 19:21:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93B8260BD8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C9F283ED6;
+	Sun, 14 Aug 2022 19:21:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C9F283ED6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ooacWajB10yD; Sun, 14 Aug 2022 19:21:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9-kXgyv3oTtp; Sun, 14 Aug 2022 19:21:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2BC560B9A;
-	Sun, 14 Aug 2022 19:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2BC560B9A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 188BC83ECC;
+	Sun, 14 Aug 2022 19:21:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 188BC83ECC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5C5D81BF30C
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:21:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 79DD81BF30C
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:21:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3637C409FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5D04D409FD
  for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:21:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3637C409FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D04D409FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MyBLSdJTgkZu for <buildroot@lists.busybox.net>;
+ with ESMTP id LFOkJ5MuVyN0 for <buildroot@lists.busybox.net>;
  Sun, 14 Aug 2022 19:21:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BA67409FD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E5014088D
  for <buildroot@buildroot.org>; Sun, 14 Aug 2022 19:21:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BA67409FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E5014088D
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9FF0687542; Sun, 14 Aug 2022 19:06:48 +0000 (UTC)
+ id 7BBD187521; Sun, 14 Aug 2022 19:06:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 14 Aug 2022 21:20:35 +0200
+Date: Sun, 14 Aug 2022 20:57:58 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 048c6a5adf9640bd874fc380113553ca94e4cf83
-X-Git-Newrev: b562565c5d5e2881b37ed18841446bc7ae7b7df5
+X-Git-Oldrev: 9efe1989b697095ae43ff56b9b137a85354000e7
+X-Git-Newrev: acf885f9f7147ad24e398487e5e2ddf5ae7746e5
 X-Patchwork-Hint: ignore
-Message-Id: <20220814190648.9FF0687542@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] utils/readme.txt: Fix
- typo "get-developers"
+Message-Id: <20220814190648.7BBD187521@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/python-django:
+ security bump to version 4.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b562565c5d5e2881b37ed18841446bc7ae7b7df5
+commit: https://git.buildroot.net/buildroot/commit/?id=acf885f9f7147ad24e398487e5e2ddf5ae7746e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix typo on line 23 `get-developpers` to `get-developers`
+Fix CVE-2022-34265: An issue was discovered in Django 3.2 before 3.2.14
+and 4.0 before 4.0.6. The Trunc() and Extract() database functions are
+subject to SQL injection if untrusted data is used as a kind/lookup_name
+value. Applications that constrain the lookup name and kind choice to a
+known safe list are unaffected.
 
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b58e2cde5ccc955eb02f627688f49cc7af5f23a1)
+https://www.djangoproject.com/weblog/2022/jul/04/security-releases
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 3e4f6e1b205a8e3ebb3c82ac704627618a8400a3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/utils/readme.txt b/utils/readme.txt
-index 3064ecec32..3e8833c4ea 100644
---- a/utils/readme.txt
-+++ b/utils/readme.txt
-@@ -20,7 +20,7 @@ genrandconfig
-     (http://autobuild.buildroot.org). It selects a random toolchain from
-     support/config-fragments/autobuild and randomly selects packages to build.
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 8d9f0aafdb..bfc9219c7e 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  153fcb5dd7360b7ad219d65cb53e2d57  Django-4.0.4.tar.gz
+-sha256  4e8177858524417563cc0430f29ea249946d831eacb0068a1455686587df40b5  Django-4.0.4.tar.gz
++md5  ad4e850c7110a45a6c7778d5bd01b85e  Django-4.0.6.tar.gz
++sha256  a67a793ff6827fd373555537dca0da293a63a316fe34cb7f367f898ccca3c3ae  Django-4.0.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index b4d6ec21c9..d49c845d54 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
--get-developpers
-+get-developers
-     a script to return the list of people interested in a specific part
-     of Buildroot, so they can be Cc:ed on a mail. Accepts a patch as
-     input, a package name or and architecture name.
+-PYTHON_DJANGO_VERSION = 4.0.4
++PYTHON_DJANGO_VERSION = 4.0.6
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d2/95/93d1f75da95624bf89e373d079fa72debf77f9b10acc31998cc52a5ff3f9
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/a4/17/b10aa26d7a566a3c19e9d29fac39c8643cbceb6cd7649a378d676839b5db
+ 
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
