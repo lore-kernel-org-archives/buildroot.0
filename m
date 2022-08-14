@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 956F9C25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 19:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1140AC25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 19:21:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1260C83ED0;
-	Sun, 14 Aug 2022 19:20:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1260C83ED0
+	by smtp1.osuosl.org (Postfix) with ESMTP id A74BB83F06;
+	Sun, 14 Aug 2022 19:21:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A74BB83F06
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0MBXM1QE6gvR; Sun, 14 Aug 2022 19:20:52 +0000 (UTC)
+	with ESMTP id rAWW0E2LTa3L; Sun, 14 Aug 2022 19:21:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD7C783ECB;
-	Sun, 14 Aug 2022 19:20:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD7C783ECB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 27CCE1BF30C
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:20:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1F0E83EE3;
+	Sun, 14 Aug 2022 19:21:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1F0E83EE3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C7961BF30C
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 030C060B9A
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:20:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 030C060B9A
+ by smtp1.osuosl.org (Postfix) with ESMTP id E92AE83EE3
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:21:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E92AE83EE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yNgmU7j3gF0O for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 19:20:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1043460B67
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1043460B67
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 19:20:48 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2B57E240003;
- Sun, 14 Aug 2022 19:20:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oNJAE-000Q8q-6J; Sun, 14 Aug 2022 21:20:46 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U3XNrWIduXGt for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 19:21:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3125083ECC
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 19:21:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3125083ECC
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 84FDB87546; Sun, 14 Aug 2022 19:06:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Jesse Taube <mr.bossman075@gmail.com>
-References: <20220723160837.272337-1-Mr.Bossman075@gmail.com>
-Date: Sun, 14 Aug 2022 21:20:46 +0200
-In-Reply-To: <20220723160837.272337-1-Mr.Bossman075@gmail.com> (Jesse Taube's
- message of "Sat, 23 Jul 2022 12:08:37 -0400")
-Message-ID: <87edxihbsh.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1] utils/readme.txt: Fix typo
- "get-developers"
+To: buildroot@buildroot.org
+Date: Sun, 14 Aug 2022 20:59:38 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: acf885f9f7147ad24e398487e5e2ddf5ae7746e5
+X-Git-Newrev: 1123b04f0220eebdd8f73658c542ca014e69c4fd
+X-Patchwork-Hint: ignore
+Message-Id: <20220814190648.84FDB87546@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/protobuf-c:
+ security bump to version 1.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,21 +57,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Jesse" == Jesse Taube <mr.bossman075@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1123b04f0220eebdd8f73658c542ca014e69c4fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Fix typo on line 23 `get-developpers` to `get-developers`
- > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+- Fix CVE-2022-33070: Protobuf-c v1.4.0 was discovered to contain an
+  invalid arithmetic shift via the function parse_tag_and_wiretype in
+  protobuf-c/protobuf-c.c. This vulnerability allows attackers to cause
+  a Denial of Service (DoS) via unspecified vectors.
+- Use official tarball (and so drop autoreconf)
+- Update hash of COPYING (year updated with
+  https://github.com/protobuf-c/protobuf-c/commit/471aaa5f6d54406c6c17bf3179d5aea18f15073b)
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+https://github.com/protobuf-c/protobuf-c/releases/tag/v1.4.1
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit cbbd2dae9e8cbe839352730fd407269863dd3d18)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/protobuf-c/protobuf-c.hash | 4 ++--
+ package/protobuf-c/protobuf-c.mk   | 6 ++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+index 13e1b474bc..ec00442277 100644
+--- a/package/protobuf-c/protobuf-c.hash
++++ b/package/protobuf-c/protobuf-c.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1068bca1e9870e9492096f97c409cd15f10c5019c183e52ec6d53e8d18630cbf  protobuf-c-1.4.0.tar.gz
+-sha256  20e800cad4550f4b19bb37fc9577dac21de13333ae66497c4c45ae489c35c34a  LICENSE
++sha256  4cc4facd508172f3e0a4d3a8736225d472418aee35b4ad053384b137b220339f  protobuf-c-1.4.1.tar.gz
++sha256  b8999cb392cc5bbe8cd679de59584ad8d2f26033123e76f1d662fa14b9d4f287  LICENSE
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 7dd3b09a6c..0742a33db2 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PROTOBUF_C_VERSION = 1.4.0
+-PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,v$(PROTOBUF_C_VERSION))
++PROTOBUF_C_VERSION = 1.4.1
++PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+ PROTOBUF_C_MAKE = $(MAKE1)
+@@ -14,8 +14,6 @@ PROTOBUF_C_INSTALL_STAGING = YES
+ PROTOBUF_C_LICENSE = BSD-2-Clause
+ PROTOBUF_C_LICENSE_FILES = LICENSE
+ PROTOBUF_C_CPE_ID_VENDOR = protobuf-c_project
+-PROTOBUF_C_AUTORECONF = YES
+-HOST_PROTOBUF_C_AUTORECONF = YES
+ 
+ # host-protobuf needs c++11 (since 3.6.0)
+ HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
