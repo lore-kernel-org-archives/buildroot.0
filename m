@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32547C25B0F
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 14:49:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B15CC25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 14:49:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCB85830C0;
-	Sun, 14 Aug 2022 14:49:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCB85830C0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s8D4-tX-w9_X; Sun, 14 Aug 2022 14:49:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F198D82951;
-	Sun, 14 Aug 2022 14:49:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F198D82951
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0BF181BF96B
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 14:49:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DBCE04055F
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 14:49:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBCE04055F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B230400D8;
+	Sun, 14 Aug 2022 14:49:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B230400D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bjgn4rtSx_wR for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vsaisK5OUsuW; Sun, 14 Aug 2022 14:49:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E9C340566;
+	Sun, 14 Aug 2022 14:49:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E9C340566
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1C3881BF976
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 14:49:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 04DA48277E
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 14:49:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04DA48277E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5F-MEh2W7p36 for <buildroot@lists.busybox.net>;
  Sun, 14 Aug 2022 14:49:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2AD67400D8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 341D48278F
  for <buildroot@buildroot.org>; Sun, 14 Aug 2022 14:49:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AD67400D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 341D48278F
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id E5EEF874D8; Sun, 14 Aug 2022 14:34:36 +0000 (UTC)
+ id F0D2F874D9; Sun, 14 Aug 2022 14:34:36 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 14 Aug 2022 16:46:42 +0200
+Date: Sun, 14 Aug 2022 16:46:44 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 83d5cd80a6a1d9fb22dc212cb25666dffb7d0ce4
-X-Git-Newrev: 310a234596341ab333038cd9fb58567e077bb136
+X-Git-Oldrev: 310a234596341ab333038cd9fb58567e077bb136
+X-Git-Newrev: cbddb02f8ae98770b9f8c067e54effdc5dc0ddaf
 X-Patchwork-Hint: ignore
-Message-Id: <20220814143436.E5EEF874D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nettle: bump to
- version 3.8.1
+Message-Id: <20220814143436.F0D2F874D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pango: bump to version
+ 1.50.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=310a234596341ab333038cd9fb58567e077bb136
+commit: https://git.buildroot.net/buildroot/commit/?id=cbddb02f8ae98770b9f8c067e54effdc5dc0ddaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/nettle/nettle.hash | 4 ++--
- package/nettle/nettle.mk   | 2 +-
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
-index 14467977bf..d726cb94c6 100644
---- a/package/nettle/nettle.hash
-+++ b/package/nettle/nettle.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/nettle/nettle-3.8.tar.gz.sig
--sha256  7576c68481c198f644b08c160d1a4850ba9449e308069455b5213319f234e8e6  nettle-3.8.tar.gz
-+# https://ftp.gnu.org/gnu/nettle/nettle-3.8.1.tar.gz.sig
-+sha256  364f3e2b77cd7dcde83fd7c45219c834e54b0c75e428b6f894a23d12dd41cbfe  nettle-3.8.1.tar.gz
- # Locally calculated
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index 05b8b0bea5..dd4dfbbe38 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 9a73001c9f..48d7f4d5a3 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.8.sha256sum
+-sha256  cf626f59dd146c023174c4034920e9667f1d25ac2c1569516d63136c311255fa  pango-1.50.8.tar.xz
++# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.9.sha256sum
++sha256  1b636aabf905130d806372136f5e137b6a27f26d47defd9240bf444f6a4fe610  pango-1.50.9.tar.xz
+ 
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 30b1de9d23..348759092d 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--NETTLE_VERSION = 3.8
-+NETTLE_VERSION = 3.8.1
- NETTLE_SITE = https://ftp.gnu.org/gnu/nettle
- NETTLE_DEPENDENCIES = gmp
- NETTLE_INSTALL_STAGING = YES
+ PANGO_VERSION_MAJOR = 1.50
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).8
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).9
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
