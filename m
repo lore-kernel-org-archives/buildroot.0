@@ -1,97 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2BA1C25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 21:55:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 060CDC25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 22:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F4CC60BC6;
-	Sun, 14 Aug 2022 21:55:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F4CC60BC6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F52B82A72;
+	Sun, 14 Aug 2022 22:02:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F52B82A72
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 58CIWpy4z6nL; Sun, 14 Aug 2022 21:55:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sIWdD7hY_SUs; Sun, 14 Aug 2022 22:02:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4788660B67;
-	Sun, 14 Aug 2022 21:55:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4788660B67
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 66EEF1BF282
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 21:55:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD9C282A29;
+	Sun, 14 Aug 2022 22:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD9C282A29
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B9F191BF282
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 22:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F436409F3
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 21:55:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F436409F3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9ACDF82A29
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 22:02:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ACDF82A29
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BABspDhd5_ov for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 21:55:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RzuxnQMwVXnZ for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 22:02:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE27A409EC
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE27A409EC
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 21:55:41 +0000 (UTC)
-Received: by mail-ed1-x534.google.com with SMTP id t5so7523574edc.11
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 14:55:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BEF182A28
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3BEF182A28
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 22:02:48 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id bs25so7176108wrb.2
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 15:02:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:organization:from:references
- :cc:to:content-language:subject:user-agent:mime-version:date
- :message-id:x-gm-message-state:from:to:cc;
- bh=VlndL7rgSx5c7aG3IiWE2X1sAJJW/l4QjK/iU2PYoxU=;
- b=sdwU53jJkQszCsyGYCE9rcnPMC9iWABZgBxzT7db31omk15Nx+YhQHE3ucQTn6vmez
- gGlgXaeJ0c5f8fD062W1acDFuWmLsbq3ByU/81GvDOvp1F8IlcyTIqOHxg4Te593fImN
- 2NEuVl6tZyoiue/ewEattyAJY9yKCGHiEQ/UAqnhCK0kyn0DH4BIRGUe6xSe8I7A3pZZ
- FF/loffoz1pl6FWXJnh0BqG8vhhAQ1oEgg4bCLQPhUBHAbtaq2TdwyXQZKSA16m1zRTK
- 2I5hWr51l/7fdj7CRMkWuF784hWZH062+GQLMl1qCWmJhKly4UJD4eTi5iWJ2jwECws1
- 0z7A==
-X-Gm-Message-State: ACgBeo3BdKWii5LI+hEy8R6ST1FT8tGBoZkPcMMZnOQEDnUXjACX1RTv
- AFYvE8mawCgvbtFF9NXAkY6/Bw==
-X-Google-Smtp-Source: AA6agR4qA2i4HLqvzVB7Ti3vMdx/BqzPZMR238mmFiB5A8fXs7TY+b5r3hXu0m7OYi6Tmtaed+TpPw==
-X-Received: by 2002:a05:6402:440c:b0:43a:1124:e56a with SMTP id
- y12-20020a056402440c00b0043a1124e56amr12303845eda.134.1660514139936; 
- Sun, 14 Aug 2022 14:55:39 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=6g95JKoYgUgdz797HRgrqEacMeTnu3V+kORvN1BImRQ=;
+ b=mMnc37o5GRqtrbVL1lOrYnGm75S/D74cRXtBE4Sg/Ry1YO/xMogAJMwP6eeTD5G7EQ
+ cB01jrIs6/NSE1D8WigunTZESdGpBFzcEPTl3brhCE3cgcpzNyD8cK00lXs/3eMI4F8N
+ WXNYS2C03WgL1yD0WaKF09RViwxG9VmDD6gKUB8Mi/5muW1W5o5LVSno+Ha8E6Vt3zZv
+ Z9pL3cKisbAJVzDrUHiyc8Y6HWv1o1UpKl3OYUGgypqX+6nV0tNfUL6kLjyLSjPuQCtg
+ SHHDUwGVO0UzXsNX+mqjexnP0puadiGski+8gtwH6V1EFllR8CFXavCnvthEVWYMIBbh
+ r3mg==
+X-Gm-Message-State: ACgBeo0hU9sePpBc1F/iBN8QeqO6o7EXNylSGICyOQcE5YiRZnlBPSLK
+ t36d9BUYVNINWooNt5cklH4+0Y0wybo=
+X-Google-Smtp-Source: AA6agR6jbM3RsPXq0bwwb3b3Z1CgRX4ArfB2Gwzq2j4Luf4KDrKndwQo2sw8yjGZkoi+IsIueNgQ5w==
+X-Received: by 2002:adf:eb50:0:b0:21e:3d13:3a91 with SMTP id
+ u16-20020adfeb50000000b0021e3d133a91mr6825433wrn.484.1660514564886; 
+ Sun, 14 Aug 2022 15:02:44 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b00a9b2226c9e455ada.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:a9b2:226c:9e45:5ada])
  by smtp.gmail.com with ESMTPSA id
- ec8-20020a0564020d4800b0043e67f9028esm5356262edb.20.2022.08.14.14.55.39
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 14 Aug 2022 14:55:39 -0700 (PDT)
-Message-ID: <7d0fcbf1-144e-b6d3-7b38-6caa3348703d@mind.be>
-Date: Sun, 14 Aug 2022 23:55:37 +0200
+ m18-20020adfe0d2000000b0021ea1bcc300sm5404090wri.56.2022.08.14.15.02.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 14 Aug 2022 15:02:44 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 15 Aug 2022 00:02:41 +0200
+Message-Id: <20220814220241.203440-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-GB
-To: Ben Wolsieffer <ben.wolsieffer@hefring.com>,
- Vladimir Murzin <vladimir.murzin@arm.com>
-References: <20220802133009.1282520-1-Ben.Wolsieffer@hefring.com>
- <b71a7617-3e26-14ef-6fe6-45e766924270@arm.com> <YvV2kelJpRw6erhZ@hefring>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <YvV2kelJpRw6erhZ@hefring>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:organization:from:references
- :cc:to:content-language:subject:user-agent:mime-version:date
- :message-id:from:to:cc;
- bh=VlndL7rgSx5c7aG3IiWE2X1sAJJW/l4QjK/iU2PYoxU=;
- b=BCEaJZsag8RCniAI1aJKDZRl5Uo29S/xJZ692e+HhEndPWmcj1cnbGA3Usg7tNQ5/o
- ggGpgKixXaTYZh0Cumh9cq05QhbtzD7ZuPtT065YeWPRywqsW893nvXogdKTFOxPP0Ce
- FEuRSKokTKYv2XdG0RDPQOmi7YvIgGFLA5vOHqeBS4IZFtMRRcY4ILKPN6aSZ+kSfqZc
- kcvXDLoDz0hh/J4m09LUyzhy0GFaoO7g7Em1vJx12sn3QyMI45xePQnynuGLtO1YgIJ2
- szL2AYMdQlA093qThsXjmI4V8xbqTOQU3G9fFtHADMA0Gw3pAT04ziienqhHq4Ah4Zu5
- WCJQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=BCEaJZsa
-Subject: Re: [Buildroot] [PATCH 0/2] Add support for FDPIC binaries on ARM
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=6g95JKoYgUgdz797HRgrqEacMeTnu3V+kORvN1BImRQ=;
+ b=FMC/1HSoAtkMR/HWzKN9Ct/12qBowP69uwlW3+P1nOenIAtWWZDdxI6tZwnfie2MJL
+ jigYwcBxzyeFxDKJsQd3m1jpe3woop3lK09Sm+/SVfaA8+ur+ri2IP9Nu2mVEPWY5ve1
+ fL4flp5P45UnLOeKNOd+7viY/H057dPXd+Q5kkgLJ4ZuQELRKaSa0NJ04H7k4vgDejuh
+ ZasFRzXVfw7RTkM+k3YsPe5vxNr2v+EFCwv5xLneFpbHzl9YumSCyFl1EF1Vb6C29Lt/
+ CTtWFUgvZFS2id7XLpk2xYyRY+AYSH9CU84gwyPUWy7hnxO1CR+a+pPep4atJobzANAN
+ ugGw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=FMC/1HSo
+Subject: [Buildroot] [PATCH 1/1] package/freeradius-server: fix libkrb5 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,81 +93,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following libkrb5 build failure raised since the addition of the
+package in commit 736c4c1655d93652a9a7e79235bbe726b3d46176:
 
+configure: error: in `/home/giuliobenetti/autobuild/run/instance-2/output-1/build/freeradius-server-3.2.0/src/modules/rlm_krb5':
+configure: error: cannot run test program while cross compiling
 
-On 11/08/2022 23:37, Ben Wolsieffer wrote:
-> On Tue, Aug 09, 2022 at 12:26:14PM +0100, Vladimir Murzin wrote:
->>
->> You might also want to allow uClibc to use NPTL thread library instead
->> of old(-sh) LinuxThreads with something like
->>
->> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
->> index ba8b5885ec..30a154531a 100644
->> --- a/package/uclibc/Config.in
->> +++ b/package/uclibc/Config.in
->> @@ -76,7 +76,7 @@ choice
->>   
->>   config BR2_PTHREADS_NATIVE
->>          bool "Native POSIX Threading (NPTL)"
->> -       depends on BR2_USE_MMU
->> +       depends on BR2_USE_MMU || BR2_BINFMT_FDPIC
->>          select BR2_TOOLCHAIN_HAS_THREADS
->>          select BR2_TOOLCHAIN_HAS_THREADS_NPTL
->>   
-> 
-> You mean I could have just used NPTL and not wasted hours fighting
-> LinuxThreads...
-> 
-> I'm not sure how I missed this before, since I immediately found the
-> relevant patches when I searched for them now.
-> 
-> I've been playing around with NPTL and FDPIC and it doesn't quite work
-> perfectly out of the box. Static libraries (linked into a dynamic
-> executable) crash when attempting to use TLS. In addition, the reason
-> static libraries are even being used is because libtool doesn't recognize
-> the target name and therefore thinks it can't build shared libaries.
-> 
-> There was a patch [1] submitted a few years ago to add the target to
-> libtool, but it looks like it was ignored. Unfortunately, we can't just
-> apply it in Buildroot, unless we want to run autoreconf on every
-> package. I'm working around this locally with a hacky hook to patch
-> configure scripts, but I'm not sure it is appropriate to upstream.
+Fixes:
+ - http://autobuild.buildroot.org/results/3968d611458060480d341bd60f7c50209a0ace15
 
-  This problem exists for a number of architectures. For that reason, we have a 
-workaround: the LIBTOOL_PATCH_HOOK [1]. For any autotools package, we search for 
-ltmain.sh files in the source, parse out the libtool version from it, and apply 
-the appropriate patch from support/libtool/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/freeradius-server/freeradius-server.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-  In other words, the solution is to extend the patches in support/libtool/ with 
-the missing architecture.
+diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
+index 2f4c118da5..5b74a3b01a 100644
+--- a/package/freeradius-server/freeradius-server.mk
++++ b/package/freeradius-server/freeradius-server.mk
+@@ -15,6 +15,12 @@ FREERADIUS_SERVER_CPE_ID_PRODUCT = freeradius
+ FREERADIUS_SERVER_DEPENDENCIES = libtalloc
+ FREERADIUS_SERVER_AUTORECONF = YES
+ 
++# We're patching src/modules/rlm_krb5/configure.ac
++define FREERADIUS_SERVER_RUN_KRB5_AUTOCONF
++	cd $(@D)/src/modules/rlm_krb5; $(AUTOCONF) -I$(@D)
++endef
++FREERADIUS_SERVER_PRE_CONFIGURE_HOOKS += FREERADIUS_SERVER_RUN_KRB5_AUTOCONF
++
+ # some compiler checks are not supported while cross compiling.
+ # instead of removing those checks, we cache the answers
+ FREERADIUS_SERVER_CONF_OPTS += \
+-- 
+2.35.1
 
-
-  Regards,
-  Arnout
-
-[1] 
-https://gitlab.com/buildroot.org/buildroot/-/blob/master/package/pkg-autotools.mk#L60
-
-
-> 
-> Although the situation is not ideal, things basically work with
-> LinuxThreads and the libtool issue, so I'd prefer to get this patch set
-> finished without expanding the scope.
-> 
-> Thanks, Ben
-> 
-> [1] https://lists.gnu.org/archive/html/libtool-patches/2018-05/msg00000.html
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
