@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FEE6C25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 10:18:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61AF7C25B0D
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 10:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1002160BAA;
-	Sun, 14 Aug 2022 10:18:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1002160BAA
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC66840383;
+	Sun, 14 Aug 2022 10:27:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC66840383
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GWGhC3zEON3Z; Sun, 14 Aug 2022 10:27:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B9704024B;
+	Sun, 14 Aug 2022 10:27:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B9704024B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0DD3F1BF2E3
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:27:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D97BF60A8A
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:27:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D97BF60A8A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AeaEym5eltRa; Sun, 14 Aug 2022 10:18:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BC9E60AF1;
-	Sun, 14 Aug 2022 10:18:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BC9E60AF1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7DFBA1BF2E3
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:18:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 573D74192F
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:18:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 573D74192F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oDaUoOIW8NSI for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 10:18:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0161F41732
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0161F41732
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 10:17:59 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3VmBo6NxAdgu for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 10:27:33 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3204E608B7
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3204E608B7
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 10:27:32 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A270C20002;
- Sun, 14 Aug 2022 10:17:57 +0000 (UTC)
-Date: Sun, 14 Aug 2022 12:17:56 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 6C8801BF203;
+ Sun, 14 Aug 2022 10:27:31 +0000 (UTC)
+Date: Sun, 14 Aug 2022 12:27:30 +0200
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220814121756.5827d311@windsurf>
-In-Reply-To: <20220812130526.99002-1-fontaine.fabrice@gmail.com>
-References: <20220812130526.99002-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220814122730.46636be6@windsurf>
+In-Reply-To: <20220812132144.104301-1-fontaine.fabrice@gmail.com>
+References: <20220812132144.104301-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660472278;
+ d=bootlin.com; s=gm1; t=1660472851;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=KDGHFbNJL/mtFTTxAka/0VJ7fFhAKYPYIbdpC7UtDKk=;
- b=jA5crSP5eO7YHZXGUuc/RZRad2Md+RXrK+ZNDydJYO+djl3m15Z2lhQDcr+eQXwo14wgns
- 7mVzdFO5FIWkWJcUqH4RlM3TIiNQHfBg9Anwj5yCjndtSSBEJl5xOushSHjGB2EAYdAyGg
- 4UmkX1Jdhr645W9NNbQPoTuct/vm535Km6geSRW6Qpc1L92BP5uJ7yCR3X8Mky03nmq+OE
- eiCeUiciEiv86rdrPRxDmZQ5ito3OL47rgij64i340Qr9aGBcD35qcr8pscaaRH/MSG+Q/
- VXSq3pPr4fJxG4d4/DRVBzt3GewXoCwFs1g9ZIWlXDza3G5jW5ppVcYxox3VoA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=YvtlU0x3BGkcWJIwbiU6FIPXWznjn/34s3wE7nQdaG4=;
+ b=hSKkn8Ys8twRgMn0aaf/bPyPhh0BF0Xduc7VP9QXIGxiPZIOQWDsiKlA4Lptj6/aDkEOVW
+ XGGsggIU9PbLOGjUJ+/piMxLaZ9oATlR2tWC2R3op3FKt5qWOFmpYHept1w2/rAowPiXBr
+ j44yx1IbiZAC6kQjS1B+egF1imYtj1bZYTqfFTp0KXnM8dElCdCzeYUqiWgNlqkLSL4wZv
+ e3+GCZ/bKPgHzUIUjemRCdW1aTLKdI8Ksd+zrDzK5yHQSaUlEGodb2VuZ0fE3VVcl8Du6g
+ miAfqpXP9eRTbtLm7Q0jlq5kHg/jlOhEKwXrGkFs3I+zbU4hD4yfks6qJJ1cmQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jA5crSP5
-Subject: Re: [Buildroot] [PATCH 1/1] package/intel-mediadriver: fix build
- with libexecinfo
+ header.s=gm1 header.b=hSKkn8Ys
+Subject: Re: [Buildroot] [PATCH 1/1] package/alsa-utils: needs dynamic
+ library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,38 +78,72 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>,
- Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 12 Aug 2022 15:05:26 +0200
+Hello Fabrice,
+
+On Fri, 12 Aug 2022 15:21:44 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix the following build failure with libexecinfo raised since bump to
-> version 22.4.3 in commit dd1c8879c503a093b807ea8ab04c31f685e7b340:
+> alsa-utils needs dynamic library since bump to version 1.2.7 in commit
+> 4dc8563363d639255217ffc59482eaccf93a1b51 and
+> https://github.com/alsa-project/alsa-utils/commit/44d3e8aa44fc12f95bfeef0e3a1051e8f77047b5:
 > 
-> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/intel-mediadriver-22.5.1/media_softlet/linux/common/os/osservice/mos_utilities_specific.cpp:2481: undefined reference to `backtrace'
+> pre-processor.c:28:10: fatal error: dlfcn.h: No such file or directory
+>    28 | #include <dlfcn.h>
+>       |          ^~~~~~~~~
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/3316e39c5113bb7600374eda45497a87c9ac9873
->  - http://autobuild.buildroot.org/results/1074e832dd2f67e6fea8ff1fc7e226245a4d51bd
+>  - http://autobuild.buildroot.org/results/1173a1ee28a58ce565a3274f35e868c35bb2e04e
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0002-Fix-build-with-libexecinfo.patch     | 43 +++++++++++++++++++
->  .../intel-mediadriver/intel-mediadriver.mk    |  4 ++
->  2 files changed, 47 insertions(+)
->  create mode 100644 package/intel-mediadriver/0002-Fix-build-with-libexecinfo.patch
 
-Applied to master, thanks.
+I think alsa-utils could potentially be useful even in small systems
+that require static linking, so it's perhaps worth implementing a
+slightly better solution.
+
+<dlfcn.h> is only used in topology/, i.e. when configure.ac detects
+that topology.h is installed by alsa-lib. What about adding an
+AC_CHECK_HEADERS([dlfcn.h]) ?
+
+Something like this:
+
+diff --git a/configure.ac b/configure.ac
+index 20cbb68..c1592b6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -27,6 +27,8 @@ AC_CHECK_FUNC([snd_ctl_elem_add_enumerated],
+              , [AC_ERROR([No user enum control support in alsa-lib])])
+ fi
+ 
++AC_CHECK_HEADERS([dlfcn.h])
++
+ dnl Check components
+ AC_CHECK_HEADERS([alsa/pcm.h], [have_pcm="yes"], [have_pcm="no"],
+   [#include <alsa/asoundlib.h>])
+@@ -74,7 +76,7 @@ AM_CONDITIONAL(HAVE_MIXER, test "$have_mixer" = "yes")
+ AM_CONDITIONAL(HAVE_RAWMIDI, test "$have_rawmidi" = "yes")
+ AM_CONDITIONAL(HAVE_SEQ, test "$have_seq" = "yes")
+ AM_CONDITIONAL(HAVE_UCM, test "$have_ucm" = "yes")
+-AM_CONDITIONAL(HAVE_TOPOLOGY, test "$have_topology" = "yes")
++AM_CONDITIONAL(HAVE_TOPOLOGY, test "$have_topology" = "yes" -a "$ac_cv_header_dlfcn_h" = "yes")
+ AM_CONDITIONAL(HAVE_SAMPLERATE, test "$have_samplerate" = "yes")
+ AM_CONDITIONAL(HAVE_FFADO, test "$have_ffado" = "yes")
+ 
+
+Of course, we would need BR2_PACKAGE_ALSA_UTILS_ALSATPLG to have a
+dependency on !BR2_STATIC_LIBS.
+
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
