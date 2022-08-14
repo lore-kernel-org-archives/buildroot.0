@@ -1,69 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B1E6C25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 10:39:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E19EEC25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 11:56:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 192B260BA9;
-	Sun, 14 Aug 2022 10:39:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 192B260BA9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23EF240445;
+	Sun, 14 Aug 2022 11:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23EF240445
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id necJwc_w66cn; Sun, 14 Aug 2022 10:39:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t9YnGOFA52wX; Sun, 14 Aug 2022 11:56:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32F4B60A8A;
-	Sun, 14 Aug 2022 10:39:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32F4B60A8A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D9B64024B;
+	Sun, 14 Aug 2022 11:56:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D9B64024B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0BFE21BF2E3
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:39:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 427EB1BF2C3
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 11:56:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E614141696
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E614141696
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E981415C3
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 11:56:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E981415C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xkjvRwOsiRMP for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 10:39:52 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C59F4136B
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6C59F4136B
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 10:39:52 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3FD5F240008;
- Sun, 14 Aug 2022 10:39:50 +0000 (UTC)
-Date: Sun, 14 Aug 2022 12:39:49 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220814123949.6dcc4963@windsurf>
-In-Reply-To: <20220813193227.2386185-1-fontaine.fabrice@gmail.com>
-References: <20220813193227.2386185-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id TfHhF9PN6p6F for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 11:56:27 +0000 (UTC)
+X-Greylist: delayed 00:05:05 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B10A41526
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2B10A41526
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 11:56:26 +0000 (UTC)
+Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue010
+ [212.227.15.167]) with ESMTPSA (Nemesis) id 1MWitM-1nq7UT2f7o-00X5Gk; Sun, 14
+ Aug 2022 13:51:17 +0200
+From: Laurent Vivier <laurent@vivier.eu>
+To: buildroot@buildroot.org
+Date: Sun, 14 Aug 2022 13:51:13 +0200
+Message-Id: <20220814115115.2798469-1-laurent@vivier.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660473590;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nkYnwUj0JTFA7Aj2Qx3VGyXso7ZJjNJPXN8Ql/NZI7M=;
- b=Jv5HLavVROIKcXBOcq+lf7F5mKoRPf9tHl14Q3mEonB7+2ad8p7o0xxN9qtMsvIsLqUNbx
- +qm+l/DrVytNRWHqcI/awlqcSNxC/5XkYfeJeQqYf9P7+VBuheT6C/XZsV6/oDnL90+54p
- vz1bvwyJJ2RCmbAL0nGnPF1rr7T4sqp2xKY/NkPx8RCouB7FUghbtC3qavlmGXvp1llOPD
- wfdSo3+HzRgpDrMDWuSlGMoeO4bDxOhTX0q4r3tX23tB4S66zFTVTYMW05rR2ZJe+8LN/l
- 0ePL5Ri/vGzDKP480Ve8y0pr1tmKYUKfp5XtW32n8UQ6XCieNKMbmSylbh22wg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Jv5HLavV
-Subject: Re: [Buildroot] [PATCH 1/1] package/jose: disable man pages
+X-Provags-ID: V03:K1:DyTA/iclg1QL7PDMaTfwglMD2yAls5uo9rUIBcm2uHzkIeawy3M
+ gBjSV7BZwNMsOQWgb3a/6EJv6j3Cm8x73LeU8PNVH6nkeOHcdFhbFgDBEEOpQ357gZI8hWk
+ TGlCoGYOffxz6mIGUTcq3igzFzjTWT2XOfFoa19jHh2qxrqnWIQMOI3OmIJvVj1aJ7IPo6W
+ N2usqBoZgEL9kjl0PVTgA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bwYgfglUfuo=:u/PCiAhcD5FMy5iROLE9ax
+ WlEAv4URWXXeZ3oxrZyVcE+zmRDHMiX8Vv7ugNsNa56QzIb9j3plGYMsiDpWIaKGq6oPHE1mH
+ 3gkN0gvWc0b6ZtvS0YxpyFD6HPXjl9t8GJSLOpmS3DIgj7QUxzlr0kLRAkU47BAXrKGvMQc76
+ X2IOI1T0P3lR9uesYdCZ4d9GKaEBIgbYooW9EPuZaui5e/yjSunRyhdnKgKu6p5MxZNMAXWSa
+ 7OgTuL6RNVM2LKhHva3ovI8ImkN649RWBCMb+SEEzLDT7sl5GN38OIpRHpcB2XIRK71GEMLCj
+ mKdya8DIysWHpUzZLDRUrcGtMogF08rGMpfrpNb3Mi12SX+ACFHuJwsnFPedl0NcOb17GqDGA
+ EcF0mJEf2JL7iHOf/0YkOEawc2RLhTVZOWHUp3E2ORbj3n5mtYAymDmyEVVDYHhwQQVfIhUzx
+ wpEwyImMnB16CnODtLss9BynoF4vc5DuiDzMkxyc5sn1L4PFY2VTCkaVfenm+Mt3VIJPc1vdC
+ AfyGnjyafAEZ3bA2JCbasEKNOLoZN9EAyej4wwqe70N43RMgSv/kzwLLeVan4Sx34uSKysMgc
+ ftazQ/USIIVenF20Fldk3MZjwbV+ap2kzU4UtlT0ehfwq+S50ET12/k68NNy3uo43lPvxsvR7
+ xzQxbpE9XnhG/Scph7cnG2jlspa5U2GxAQ1xySERXGj/SkgSMWKdSRxS5cD8/8j8cndsL1/8C
+ PyJ/N8gSla1syE5iJK622tXqn4f4/sloDo7jkA==
+Subject: [Buildroot] [PATCH v3 0/2] package: add petitboot to use with
+ qemu-system-m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,48 +73,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>, Laurent Vivier <laurent@vivier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+qemu-system-m68k has introduced in v6.0 a new pure virtual machine
+that is now supported by linux v5.19.
 
-On Sat, 13 Aug 2022 21:32:27 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+The goal of this series is to provide petitboot as an embedded bootloader
+for it (like it is for the IBM spapr machine).
 
-> +diff --git a/meson_options.txt b/meson_options.txt
-> +new file mode 100644
-> +index 0000000..0885515
-> +--- /dev/null
-> ++++ b/meson_options.txt
-> +@@ -0,0 +1 @@
-> ++option('skip_manpages', type: 'boolean', value: false, description: 'Do not build manpages')
-> diff --git a/package/jose/jose.mk b/package/jose/jose.mk
-> index 8a60e20cc6..11c0783799 100644
-> --- a/package/jose/jose.mk
-> +++ b/package/jose/jose.mk
-> @@ -11,5 +11,6 @@ JOSE_LICENSE = Apache-2.0
->  JOSE_LICENSE_FILES = COPYING
->  JOSE_INSTALL_STAGING = YES
->  JOSE_DEPENDENCIES = host-pkgconf zlib jansson openssl
-> +JOSE_CONF_OPTS = -Dskip_manpages=false
+The first patch introduces petitboot package, the second patch the
+configuration to build buildroot with petitboot for the QEMU machine.
 
-Should this be -Dskip_manpages=true, to skip building the man pages?
+You can test it with:
 
-If you set skip_manpages = false, then "if not
-get_option('skip_manpages')" is true, and we build the manpages.
+  qemu-system-m68k -M virt -kernel images/vmlinux \
+                   -initrd images/rootfs.cpio.xz \
+                   -append "console=ttyGF0" --nographic
 
-Am I missing something?
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
-Thomas
+Laurent Vivier (2):
+  package: add petitboot
+  board/qemu/m68k-virt: Add virt-m68k linux config
+
+ board/qemu/m68k-virt/config.linux            | 89 ++++++++++++++++++++
+ board/qemu/m68k-virt/readme.txt              |  5 ++
+ configs/qemu_m68k_virt_petitboot_defconfig   | 28 ++++++
+ package/Config.in                            |  1 +
+ package/kexec/Config.in                      |  2 +-
+ package/petitboot/63-md-raid-arrays.rules    | 41 +++++++++
+ package/petitboot/65-md-incremental.rules    | 69 +++++++++++++++
+ package/petitboot/66-add-sg-module.rules     |  2 +
+ package/petitboot/Config.in                  | 33 ++++++++
+ package/petitboot/S14silence-console         |  9 ++
+ package/petitboot/S15pb-discover             | 38 +++++++++
+ package/petitboot/fs-overlay/etc/inittab     | 34 ++++++++
+ package/petitboot/fs-overlay/etc/locale      |  1 +
+ package/petitboot/fs-overlay/init            |  8 ++
+ package/petitboot/kexec-restart              |  8 ++
+ package/petitboot/petitboot-console-ui.rules |  6 ++
+ package/petitboot/petitboot.hash             |  1 +
+ package/petitboot/petitboot.mk               | 85 +++++++++++++++++++
+ package/petitboot/removable-event-poll.rules |  4 +
+ package/petitboot/shell_config               | 19 +++++
+ package/petitboot/shell_profile              |  2 +
+ 21 files changed, 484 insertions(+), 1 deletion(-)
+ create mode 100644 board/qemu/m68k-virt/config.linux
+ create mode 100644 board/qemu/m68k-virt/readme.txt
+ create mode 100644 configs/qemu_m68k_virt_petitboot_defconfig
+ create mode 100644 package/petitboot/63-md-raid-arrays.rules
+ create mode 100644 package/petitboot/65-md-incremental.rules
+ create mode 100644 package/petitboot/66-add-sg-module.rules
+ create mode 100644 package/petitboot/Config.in
+ create mode 100755 package/petitboot/S14silence-console
+ create mode 100755 package/petitboot/S15pb-discover
+ create mode 100644 package/petitboot/fs-overlay/etc/inittab
+ create mode 100644 package/petitboot/fs-overlay/etc/locale
+ create mode 100755 package/petitboot/fs-overlay/init
+ create mode 100755 package/petitboot/kexec-restart
+ create mode 100644 package/petitboot/petitboot-console-ui.rules
+ create mode 100644 package/petitboot/petitboot.hash
+ create mode 100644 package/petitboot/petitboot.mk
+ create mode 100644 package/petitboot/removable-event-poll.rules
+ create mode 100644 package/petitboot/shell_config
+ create mode 100755 package/petitboot/shell_profile
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.37.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
