@@ -1,49 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56887C25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 10:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC132C25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 10:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E66A982B3E;
-	Sun, 14 Aug 2022 10:08:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E66A982B3E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E25960B63;
+	Sun, 14 Aug 2022 10:09:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E25960B63
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t0us8-R0hd7J; Sun, 14 Aug 2022 10:08:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rL_tIgl2jY_j; Sun, 14 Aug 2022 10:09:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B8D482A5D;
-	Sun, 14 Aug 2022 10:08:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B8D482A5D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 561711BF96B
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:08:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 899DF607FE;
+	Sun, 14 Aug 2022 10:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 899DF607FE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D96C31BF2E3
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:09:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 307C6411C6
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:08:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 307C6411C6
+ by smtp3.osuosl.org (Postfix) with ESMTP id B540B607FE
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 10:09:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B540B607FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N_Zxhj5hhmH3 for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 10:08:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29D9F409EC
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 10:08:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29D9F409EC
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 5D3348745B; Sun, 14 Aug 2022 09:54:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 14 Aug 2022 12:08:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8271e8692eef780d22df65116344e684e6f76ce8
-X-Git-Newrev: 2b543a4b885d5c073f60d486cece2beaaa9849e5
-X-Patchwork-Hint: ignore
-Message-Id: <20220814095415.5D3348745B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mali-driver: bump version
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8DcuXXIYnw2y for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 10:09:18 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 206EC6076A
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 206EC6076A
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 10:09:17 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 695DD240003;
+ Sun, 14 Aug 2022 10:09:14 +0000 (UTC)
+Date: Sun, 14 Aug 2022 12:09:13 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220814120913.30de7011@windsurf>
+In-Reply-To: <20220813084815.696873-1-fontaine.fabrice@gmail.com>
+References: <20220813084815.696873-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1660471755;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=4fU/6Ihd6VjsBSb/9q/sOw3eaVs6bl43u+H04bOe0/U=;
+ b=I3CSXY5Os5e6i3jPN1vKr994LossJ0RAV4Fu4xWRx9bXWwevs5dEIVvKg8aA5yRJv6p0qI
+ rBab27B0Wh4FHXizoyDzz6v9oXs4F66eZvIetBm5RMX+Uzw3Eyuw6w0KI4eA95LTINU3Tb
+ GRHdH6HisqkmBB8hz7lEQHvu82Hr04FjxeNvxH4c0r1ZzoZI64iEbew1RrXB0wivZ2Yw+/
+ 8s8LExRBTDm1lhyw0Won/5OSB3alCV1vnh/Fk4ZeFKlLCxgBuSmeQDslhcs5xuQ6DNff7h
+ DN0kI2P7Qvq3A6v2r9qqSBPdpLrW5ucJ8cHvCDAVsP/puNxsFHXJtAarHz0mKA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=I3CSXY5O
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-autobahn: fix
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +78,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b543a4b885d5c073f60d486cece2beaaa9849e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 13 Aug 2022 10:48:15 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-This version fixes build failure with Linux version >= 5.15.
+> Commit efa5ff1489625eb862b1d7d161a169514cc9c881 forgot to add reverse
+> dependencies resulting in the following build failure:
+> 
+> Makefile:575: *** snappy is in the dependency chain of python-snappy that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/fc4fdc29ff4ab3e1585a42ed6b063e9e50583fe9
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/python-autobahn/Config.in | 9 +++++++++
+>  package/python-crossbar/Config.in | 6 ++++--
+>  2 files changed, 13 insertions(+), 2 deletions(-)
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mali-driver/mali-driver.hash | 2 +-
- package/mali-driver/mali-driver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Sorry for having missed those dependencies when reviewing/reworking
+these patches. So, thanks for fixing this mess! Applied to master!
 
-diff --git a/package/mali-driver/mali-driver.hash b/package/mali-driver/mali-driver.hash
-index 9f28090417..d18db55fe0 100644
---- a/package/mali-driver/mali-driver.hash
-+++ b/package/mali-driver/mali-driver.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  76464e5ed55e9d21062cf154733ce61217211172629ec8742af902607f14d41a  mali-driver-a742530232d1de41b57465744a1259fa6c35049e.tar.gz
-+sha256  512ca30916fd9b9abec70073fced1c2d33757cddbcb3d0f1d1c4b8c6c318f207  mali-driver-3d697de9bce8bc68bf9408d5407873ce32d0f4fc.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
-index b12bfec69d..2d5febe192 100644
---- a/package/mali-driver/mali-driver.mk
-+++ b/package/mali-driver/mali-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MALI_DRIVER_VERSION = a742530232d1de41b57465744a1259fa6c35049e
-+MALI_DRIVER_VERSION = 3d697de9bce8bc68bf9408d5407873ce32d0f4fc
- MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
- MALI_DRIVER_DEPENDENCIES = linux
- MALI_DRIVER_LICENSE = GPL-2.0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
