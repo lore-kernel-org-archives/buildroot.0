@@ -1,57 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E8CEC25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 19:25:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35E23C25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 19:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 087DF411C6;
-	Sun, 14 Aug 2022 19:25:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 087DF411C6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OC3BHH5Mzdbz; Sun, 14 Aug 2022 19:25:19 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7F9340A7A;
-	Sun, 14 Aug 2022 19:25:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7F9340A7A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D86D31BF30C
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:23:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B406D60BB2
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:23:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B406D60BB2
+	by smtp3.osuosl.org (Postfix) with ESMTP id C29CC60C05;
+	Sun, 14 Aug 2022 19:25:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C29CC60C05
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nLalYDPlbK6y for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 19:23:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81175600B9
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 81175600B9
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 19:23:34 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1D20460002;
- Sun, 14 Aug 2022 19:23:30 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oNJCs-000QK8-2r; Sun, 14 Aug 2022 21:23:30 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20220723161616.1C52F846E1@busybox.osuosl.org>
-Date: Sun, 14 Aug 2022 21:23:30 +0200
-In-Reply-To: <20220723161616.1C52F846E1@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Sat, 23 Jul 2022 18:29:25 +0200")
-Message-ID: <875yiuhbnx.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] DEVELOPERS: remove Min Xu
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qPlkmJaKaHNP; Sun, 14 Aug 2022 19:25:58 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A8D260BB2;
+	Sun, 14 Aug 2022 19:25:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A8D260BB2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 763EC1BF30C
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:25:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51359402E4
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 19:25:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51359402E4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fb16hWbo_Nsp for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 19:25:54 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F68A4029B
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 19:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F68A4029B
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id F0F0987582; Sun, 14 Aug 2022 19:11:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 14 Aug 2022 21:25:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0b5710ae3b256924fe0fb5c8c9dc06fb3ac34179
+X-Git-Newrev: 69cbdbe8877f5ee1e51d05cfe71b636635df9c3c
+X-Patchwork-Hint: ignore
+Message-Id: <20220814191126.F0F0987582@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-txdbus: drop comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +56,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=69cbdbe8877f5ee1e51d05cfe71b636635df9c3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > commit:
- > https://git.buildroot.net/buildroot/commit/?id=f704ec56f85b4aebb75a76fd7dbd9db800bf1b9e
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Commit a2ba9e7db9bd5fabff738147f73039fc8d4f1b3d forgot to drop comment
 
- > Min Xu has said at
- > https://patchwork.ozlabs.org/project/buildroot/patch/20220519074438.462-1-xuminready@gmail.com/
- > that they are no longer interested in maintaining this package, so
- > drop them from the DEVELOPERS file.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-txdbus/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-txdbus/Config.in b/package/python-txdbus/Config.in
+index f3ea4c78d6..e299596611 100644
+--- a/package/python-txdbus/Config.in
++++ b/package/python-txdbus/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_TXDBUS
+ 	bool "python-txdbus"
+ 	# python-twisted -> python-cryptography
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+-	# python-twisted -> python-cryptography
+ 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
