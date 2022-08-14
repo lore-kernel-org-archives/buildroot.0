@@ -1,68 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39C60C25B06
-	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 11:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BE4DC25B06
+	for <buildroot@archiver.kernel.org>; Sun, 14 Aug 2022 11:57:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCDFA415C0;
-	Sun, 14 Aug 2022 11:57:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCDFA415C0
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE568825E8;
+	Sun, 14 Aug 2022 11:57:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE568825E8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wAGAWvEiyTJv; Sun, 14 Aug 2022 11:56:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pXhM5ECOa_yH; Sun, 14 Aug 2022 11:57:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A19941680;
-	Sun, 14 Aug 2022 11:56:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A19941680
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7C9982438;
+	Sun, 14 Aug 2022 11:57:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7C9982438
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A04E1BF2C3
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 11:56:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 077A01BF2C3
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 11:56:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7D3D341526
- for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 11:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D3D341526
+ by smtp4.osuosl.org (Postfix) with ESMTP id DEA46415B9
+ for <buildroot@lists.busybox.net>; Sun, 14 Aug 2022 11:56:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEA46415B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BMcfKwjL_RCF for <buildroot@lists.busybox.net>;
- Sun, 14 Aug 2022 11:56:28 +0000 (UTC)
+ with ESMTP id Yp-iwab9nuT4 for <buildroot@lists.busybox.net>;
+ Sun, 14 Aug 2022 11:56:44 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF23C415C0
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BF23C415C0
- for <buildroot@buildroot.org>; Sun, 14 Aug 2022 11:56:27 +0000 (UTC)
-Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue010
- [212.227.15.167]) with ESMTPSA (Nemesis) id 1MkpOZ-1nelRZ1cPH-00mGXF; Sun, 14
- Aug 2022 13:51:18 +0200
-From: Laurent Vivier <laurent@vivier.eu>
-To: buildroot@buildroot.org
-Date: Sun, 14 Aug 2022 13:51:14 +0200
-Message-Id: <20220814115115.2798469-2-laurent@vivier.eu>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220814115115.2798469-1-laurent@vivier.eu>
-References: <20220814115115.2798469-1-laurent@vivier.eu>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34234415C0
+Received: from smtpcmd03120.aruba.it (smtpcmd03120.aruba.it [62.149.158.120])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 34234415C0
+ for <buildroot@buildroot.org>; Sun, 14 Aug 2022 11:56:43 +0000 (UTC)
+Received: from [192.168.8.175] ([86.32.63.136])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id NCESovzFD5XbvNCESoMc1J; Sun, 14 Aug 2022 13:56:41 +0200
+Message-ID: <91f0cd4b-a3dd-14db-d490-968b4b31339a@benettiengineering.com>
+Date: Sun, 14 Aug 2022 13:56:40 +0200
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:v3jIT6ahN5S/tqhYiNh+BU29w/OfQRgT9viWvXhAZGmLOboI+S7
- DZyxuPwsrIuM7Fv9HkY5sZ3000UbHUK141gB5fUL3vBBscOYShS5iDWAHCqxO27eXawShCb
- My3hpDuqT3U/QeeFblzizTojBmnfyEMACeuNMOKg/5De4e0QW807K0TlKaQidx0o5fKT/Nh
- Bn6POsBYRIc/ZBBOFvwzA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Z7O/CyrmoxY=:sLQA0m2v1PnROkWrc7jqIU
- XbO1OAi9oQjone3yAEPOFL+rppzTUfTHZ9b6FFR9xkr8lKF2YeK4MfmlPy3peIhmnnB3ruxij
- euBUuT8qj0Hth1jIk7j9gyj0PPkZcApiiBbSyBu8yZn/Gnh0bN5+5iDf0aoPBg1i7htqymDvo
- TZShl7FUQXAUohRHpjjYky2K2W7mOhzj9PBQ2frrqTpSl1Y45NAet9RvgnAatsOzBKZWHGk/v
- cBmfYAGNELV9f2FiwoWuM2stXlW6BZQb1GH1Iu1ZVDQKNIDRcvcpriuAa9YdVjxob4fToZVG/
- tFggdfYqt8h8ug/vnefrwV2uukbHL4DDgTgeeUXkIVFIN/W3EbYGLZWCCBmLEB+q1hSkYHtpI
- oA0Bzi0LH42uVgZeW7xbPN2u4wHXG1DeHJTSWkZOwfMQi3wmmPMKeNxzhzuLjHE0JI/HyiJ5o
- IiHhTw3/c4PTnmMh0gd4leJsbr3IWYRKnvGF2U3Xuo8/Igl+JLjfSFAXEhHoJ8y9UiNUYfV04
- lfOVeUxzyRFzuLJRGc1N8T9rxr4R4Jn2vz9qziEf5KxBmJ6DJacBVQNNl/c/3JLMyEPcno32t
- /nBL0j1HezTvkhzZmaF3ydQb3FwmdoYOmenQ75DAiw4N04ET7hArL3B2YhnMRjIH5OnJzH4UJ
- 9+0NW59la9uY12ayhddOO0aHu75UXqYIcbHYDeFwzxLfk4vHTRneJACokJO9fQb0wkLhcIAFt
- jbLIKXA4DgaXXAn+bXhSqENcp6czugq9izxmQg==
-Subject: [Buildroot] [PATCH v3 1/2] package: add petitboot
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Content-Language: en-US
+To: Jan Havran <havran.jan@email.cz>, buildroot@buildroot.org
+References: <YlBzP4J4FGA4Z7nL@arch-zen.localdomain>
+ <733d97a0-7ee5-d788-6cba-ccac757befdb@benettiengineering.com>
+ <Yvi+0zOx0hn0ydhB@arch-zen.localdomain>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <Yvi+0zOx0hn0ydhB@arch-zen.localdomain>
+X-CMAE-Envelope: MS4xfHS8/WjdGqqMhhBw5a3XeyS1szKHiUrd5Vgw3pJIfn3gYGvtMUbNm4G8Nj6MuBRjX4i4rG1+Wix+iIbBtWDj3fpkLQltZOCHgHS1vGhPZcRpz2go0crd
+ 8ieR0036fGObopdipJQ6fv2K4M99yw+0ArNHcNiCs1BK7veeBO88Cx0oj4697M8PbNt65BevapwxLykILHaZySnzpHBRA3vEGAlj2qhf9X42VBhQxGW4qXLx
+ GbwFfHVo28mFukHa5M740K5pSAjj+XuOyxn2Od2cDIevx/XkJy0Am4JRlLOJDf7zmS9vz65IePKoJQ5T512V+suKXKpYbKYMMSzMi5Dpljc=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1660478201; bh=Q0lygNpqh9nac/QZrfVF0heTQbGEkXEHNrvEk5OYAnA=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=I56MjIJpHqvE2+fvXbUR16rz86sOPc1RbxAk3JC+Su5Jbq51NJvsQluzsGjaWdbPN
+ twIHzh8fhnM8S2RZh14hTyNeuoRrdUUonfFhJUGOCdbBLmXrIXG6S1UuVVoK6TA/Oj
+ BjaIS1b6zB7CAd0eiyvsF19/5l7ygwGIqFGJW++IEK8iwVMXORMlGdq9wpgo9/0m2C
+ f7SLpopYyoLK7PzbwNCmDVK+w4IR3r6zIr8VpYWuFNsseuRZ0Gt8rC5Dds+UBX1vQL
+ 14YNbDcgajJx6u8tTZ86Hx30wA6bFsSqwsRsTGsZ6APc8Bqtpb6K+KUV6zvny6oS7+
+ a9navxGCQlg6Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=I56MjIJp
+Subject: Re: [Buildroot] [PATCH 1/1] board/pine64/pinecube: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,541 +78,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, Laurent Vivier <laurent@vivier.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Jagan Teki <jagan@amarulasolutions.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-from https://github.com/glevand/petitboot--buildroot
-
-Updated to work with m68k architecture rather than PlayStation3
-(focused on qemu-system-m68k virt machine)
-
-Signed-off-by: Laurent Vivier <laurent@vivier.eu>
----
- package/Config.in                            |  1 +
- package/kexec/Config.in                      |  2 +-
- package/petitboot/63-md-raid-arrays.rules    | 41 ++++++++++
- package/petitboot/65-md-incremental.rules    | 69 ++++++++++++++++
- package/petitboot/66-add-sg-module.rules     |  2 +
- package/petitboot/Config.in                  | 33 ++++++++
- package/petitboot/S14silence-console         |  9 +++
- package/petitboot/S15pb-discover             | 38 +++++++++
- package/petitboot/fs-overlay/etc/inittab     | 34 ++++++++
- package/petitboot/fs-overlay/etc/locale      |  1 +
- package/petitboot/fs-overlay/init            |  8 ++
- package/petitboot/kexec-restart              |  8 ++
- package/petitboot/petitboot-console-ui.rules |  6 ++
- package/petitboot/petitboot.hash             |  1 +
- package/petitboot/petitboot.mk               | 85 ++++++++++++++++++++
- package/petitboot/removable-event-poll.rules |  4 +
- package/petitboot/shell_config               | 19 +++++
- package/petitboot/shell_profile              |  2 +
- 18 files changed, 362 insertions(+), 1 deletion(-)
- create mode 100644 package/petitboot/63-md-raid-arrays.rules
- create mode 100644 package/petitboot/65-md-incremental.rules
- create mode 100644 package/petitboot/66-add-sg-module.rules
- create mode 100644 package/petitboot/Config.in
- create mode 100755 package/petitboot/S14silence-console
- create mode 100755 package/petitboot/S15pb-discover
- create mode 100644 package/petitboot/fs-overlay/etc/inittab
- create mode 100644 package/petitboot/fs-overlay/etc/locale
- create mode 100755 package/petitboot/fs-overlay/init
- create mode 100755 package/petitboot/kexec-restart
- create mode 100644 package/petitboot/petitboot-console-ui.rules
- create mode 100644 package/petitboot/petitboot.hash
- create mode 100644 package/petitboot/petitboot.mk
- create mode 100644 package/petitboot/removable-event-poll.rules
- create mode 100644 package/petitboot/shell_config
- create mode 100755 package/petitboot/shell_profile
-
-diff --git a/package/Config.in b/package/Config.in
-index d1c098c48f56..e3cdc6c375a4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2613,6 +2613,7 @@ menu "System tools"
- 	source "package/openrc/Config.in"
- 	source "package/openvmtools/Config.in"
- 	source "package/pamtester/Config.in"
-+	source "package/petitboot/Config.in"
- 	source "package/polkit/Config.in"
- 	source "package/powerpc-utils/Config.in"
- 	source "package/procps-ng/Config.in"
-diff --git a/package/kexec/Config.in b/package/kexec/Config.in
-index 90a7bc2672bd..092a80b171fc 100644
---- a/package/kexec/Config.in
-+++ b/package/kexec/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_KEXEC
- 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
- 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
- 		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
--		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x
-+		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x || BR2_m68k
- 	help
- 	  Kexec is a user space utility for loading another kernel
- 	  and asking the currently running kernel to do something with
-diff --git a/package/petitboot/63-md-raid-arrays.rules b/package/petitboot/63-md-raid-arrays.rules
-new file mode 100644
-index 000000000000..92aec36e69d4
---- /dev/null
-+++ b/package/petitboot/63-md-raid-arrays.rules
-@@ -0,0 +1,41 @@
-+# do not edit this file, it will be overwritten on update
-+
-+SUBSYSTEM!="block", GOTO="md_end"
-+
-+# handle md arrays
-+ACTION!="add|change", GOTO="md_end"
-+KERNEL!="md*", GOTO="md_end"
-+
-+# partitions have no md/{array_state,metadata_version}, but should not
-+# for that reason be ignored.
-+ENV{DEVTYPE}=="partition", GOTO="md_ignore_state"
-+
-+# container devices have a metadata version of e.g. 'external:ddf' and
-+# never leave state 'inactive'
-+ATTR{md/metadata_version}=="external:[A-Za-z]*", ATTR{md/array_state}=="inactive", GOTO="md_ignore_state"
-+TEST!="md/array_state", ENV{SYSTEMD_READY}="0", GOTO="md_end"
-+ATTR{md/array_state}=="|clear|inactive", ENV{SYSTEMD_READY}="0", GOTO="md_end"
-+LABEL="md_ignore_state"
-+
-+IMPORT{program}="/sbin/mdadm --detail --export $devnode"
-+ENV{DEVTYPE}=="disk", ENV{MD_NAME}=="?*", SYMLINK+="disk/by-id/md-name-$env{MD_NAME}", OPTIONS+="string_escape=replace"
-+ENV{DEVTYPE}=="disk", ENV{MD_UUID}=="?*", SYMLINK+="disk/by-id/md-uuid-$env{MD_UUID}"
-+ENV{DEVTYPE}=="disk", ENV{MD_DEVNAME}=="?*", SYMLINK+="md/$env{MD_DEVNAME}"
-+ENV{DEVTYPE}=="partition", ENV{MD_NAME}=="?*", SYMLINK+="disk/by-id/md-name-$env{MD_NAME}-part%n", OPTIONS+="string_escape=replace"
-+ENV{DEVTYPE}=="partition", ENV{MD_UUID}=="?*", SYMLINK+="disk/by-id/md-uuid-$env{MD_UUID}-part%n"
-+ENV{DEVTYPE}=="partition", ENV{MD_DEVNAME}=="*[^0-9]", SYMLINK+="md/$env{MD_DEVNAME}%n"
-+ENV{DEVTYPE}=="partition", ENV{MD_DEVNAME}=="*[0-9]", SYMLINK+="md/$env{MD_DEVNAME}p%n"
-+
-+IMPORT{builtin}="blkid"
-+OPTIONS+="link_priority=100"
-+OPTIONS+="watch"
-+ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{ID_FS_UUID_ENC}=="?*", SYMLINK+="disk/by-uuid/$env{ID_FS_UUID_ENC}"
-+ENV{ID_FS_USAGE}=="filesystem|other", ENV{ID_FS_LABEL_ENC}=="?*", SYMLINK+="disk/by-label/$env{ID_FS_LABEL_ENC}"
-+
-+ENV{MD_LEVEL}=="raid[1-9]*", ENV{SYSTEMD_WANTS}+="mdmonitor.service"
-+
-+# Tell systemd to run mdmon for our container, if we need it.
-+ENV{MD_LEVEL}=="raid[1-9]*", ENV{MD_CONTAINER}=="?*", PROGRAM="/usr/bin/readlink $env{MD_CONTAINER}", ENV{MD_MON_THIS}="%c"
-+ENV{MD_MON_THIS}=="?*", PROGRAM="/usr/bin/basename $env{MD_MON_THIS}", ENV{SYSTEMD_WANTS}+="mdmon@%c.service"
-+
-+LABEL="md_end"
-diff --git a/package/petitboot/65-md-incremental.rules b/package/petitboot/65-md-incremental.rules
-new file mode 100644
-index 000000000000..153d12fe6f7e
---- /dev/null
-+++ b/package/petitboot/65-md-incremental.rules
-@@ -0,0 +1,69 @@
-+# This file causes block devices with Linux RAID (mdadm) signatures to
-+# automatically cause mdadm to be run.
-+# See udev(8) for syntax
-+
-+# Don't process any events if anaconda is running as anaconda brings up
-+# raid devices manually
-+ENV{ANACONDA}=="?*", GOTO="md_end"
-+
-+# Also don't process disks that are slated to be a multipath device
-+ENV{DM_MULTIPATH_DEVICE_PATH}=="?*", GOTO="md_end"
-+
-+# We process add events on block devices (since they are ready as soon as
-+# they are added to the system), but we must process change events as well
-+# on any dm devices (like LUKS partitions or LVM logical volumes) and on
-+# md devices because both of these first get added, then get brought live
-+# and trigger a change event.  The reason we don't process change events
-+# on bare hard disks is because if you stop all arrays on a disk, then
-+# run fdisk on the disk to change the partitions, when fdisk exits it
-+# triggers a change event, and we want to wait until all the fdisks on
-+# all member disks are done before we do anything.  Unfortunately, we have
-+# no way of knowing that, so we just have to let those arrays be brought
-+# up manually after fdisk has been run on all of the disks.
-+
-+# First, process all add events (md and dm devices will not really do
-+# anything here, just regular disks, and this also won't get any imsm
-+# array members either)
-+SUBSYSTEM=="block", ACTION=="add|change", ENV{ID_FS_TYPE}=="linux_raid_member", \
-+	RUN+="/sbin/mdadm -I --export $env{DEVNAME}"
-+
-+# Next, check to make sure the BIOS raid stuff wasn't turned off via cmdline
-+IMPORT{cmdline}="noiswmd"
-+IMPORT{cmdline}="nodmraid"
-+ENV{noiswmd}=="?*", GOTO="md_imsm_inc_end"
-+ENV{nodmraid}=="?*", GOTO="md_imsm_inc_end"
-+SUBSYSTEM=="block", ACTION=="add", ENV{ID_FS_TYPE}=="isw_raid_member", \
-+	RUN+="/sbin/mdadm -I $env{DEVNAME}"
-+LABEL="md_imsm_inc_end"
-+
-+SUBSYSTEM=="block", ACTION=="remove", ENV{ID_PATH}=="?*", \
-+	RUN+="/sbin/mdadm -If $name --path $env{ID_PATH}"
-+SUBSYSTEM=="block", ACTION=="remove", ENV{ID_PATH}!="?*", \
-+	RUN+="/sbin/mdadm -If $name"
-+
-+# Next make sure that this isn't a dm device we should skip for some reason
-+ENV{DM_UDEV_RULES_VSN}!="?*", GOTO="dm_change_end"
-+ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", GOTO="dm_change_end"
-+ENV{DM_SUSPENDED}=="1", GOTO="dm_change_end"
-+KERNEL=="dm-*", SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="linux_raid_member", \
-+	ACTION=="change", RUN+="/sbin/mdadm -I $env{DEVNAME}"
-+LABEL="dm_change_end"
-+
-+# Finally catch any nested md raid arrays.  If we brought up an md raid
-+# array that's part of another md raid array, it won't be ready to be used
-+# until the change event that occurs when it becomes live
-+KERNEL=="md*", SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="linux_raid_member", \
-+	ACTION=="change", RUN+="/sbin/mdadm -I $env{DEVNAME}"
-+
-+# In case the initramfs only started some of the arrays in our container,
-+# run incremental assembly on the container itself.  Note: we ran mdadm
-+# on the container in 64-md-raid.rules, and that's how the MD_LEVEL
-+# environment variable is already set.  If that disappears from the other
-+# file, we will need to add this line into the middle of the next rule:
-+#	IMPORT{program}="/sbin/mdadm -D --export $tempnode", \
-+
-+SUBSYSTEM=="block", ACTION=="add|change", KERNEL=="md*", \
-+	ENV{MD_LEVEL}=="container", RUN+="/sbin/mdadm -I $env{DEVNAME}"
-+
-+
-+LABEL="md_end"
-diff --git a/package/petitboot/66-add-sg-module.rules b/package/petitboot/66-add-sg-module.rules
-new file mode 100644
-index 000000000000..ae18d28c570e
---- /dev/null
-+++ b/package/petitboot/66-add-sg-module.rules
-@@ -0,0 +1,2 @@
-+# load modules to scsi disks, if they aren't in kernel
-+SUBSYSTEM=="scsi", ENV{DEVTYPE}=="scsi_device", TEST!="[module/sg]", RUN+="/sbin/modprobe sg"
-diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
-new file mode 100644
-index 000000000000..01a6f365e28e
---- /dev/null
-+++ b/package/petitboot/Config.in
-@@ -0,0 +1,33 @@
-+config BR2_PACKAGE_PETITBOOT
-+	bool "petitboot"
-+	# petitboot needs udev /dev management
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_TARGET_PANEL
-+	select BR2_PACKAGE_NCURSES_TARGET_FORM
-+	select BR2_PACKAGE_NCURSES_TARGET_MENU
-+	# run-time dependency only
-+	select BR2_PACKAGE_KEXEC_LITE if !BR2_PACKAGE_KEXEC
-+	# run-time dependency only
-+	select BR2_PACKAGE_POWERPC_UTILS if (( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le ) && ! BR2_PACKAGE_PS3_UTILS )
-+	# run-time dependency only
-+	select BR2_PACKAGE_NVME if (( BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le ) && ! BR2_PACKAGE_PS3_UTILS )
-+	help
-+	  Petitboot is a small kexec-based bootloader
-+
-+	  http://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
-+
-+comment "petitboot requires udev to be enabled"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+
-+config BR2_PACKAGE_PETITBOOT_MTD
-+	bool "petitboot-mtd"
-+	depends on BR2_PACKAGE_PETITBOOT
-+	select BR2_PACKAGE_LIBFLASH
-+	select BR2_PACKAGE_PFLASH
-+	help
-+	  Adds Petitboot support for MTD devices
-+
-+comment "Add support for accessing MTD devices"
-diff --git a/package/petitboot/S14silence-console b/package/petitboot/S14silence-console
-new file mode 100755
-index 000000000000..2ce6b39f427b
---- /dev/null
-+++ b/package/petitboot/S14silence-console
-@@ -0,0 +1,9 @@
-+#!/bin/sh
-+
-+case "$1" in
-+    start)
-+        echo 1 1 1 1 > /proc/sys/kernel/printk
-+        ;;
-+esac
-+
-+exit 0
-diff --git a/package/petitboot/S15pb-discover b/package/petitboot/S15pb-discover
-new file mode 100755
-index 000000000000..9d9ec57de3f0
---- /dev/null
-+++ b/package/petitboot/S15pb-discover
-@@ -0,0 +1,38 @@
-+#!/bin/sh
-+
-+LOGFILE=/var/log/petitboot/pb-discover.log
-+PIDFILE=/var/run/petitboot.pid
-+
-+PATH=/usr/bin:/usr/sbin:/bin:/sbin
-+export PATH
-+
-+verbose=
-+if pb-config debug | grep -q enabled
-+then
-+	verbose=-v
-+fi
-+
-+case "$1" in
-+    start)
-+        ulimit -c unlimited
-+        mkdir -p -m 0775 $(dirname $LOGFILE)
-+        mkdir -p -m 0775 /var/petitboot
-+        # Set permissions for normal users
-+        chown -R root:petitgroup $(dirname $LOGFILE)
-+        chown -R root:petitgroup /var/petitboot
-+
-+        export $(cat /etc/locale)
-+        pb-discover -l $LOGFILE $verbose &
-+        echo $! > $PIDFILE
-+        ;;
-+    stop)
-+        pid=$(cat $PIDFILE)
-+        [ -n "$pid" ] && kill -TERM $pid
-+        ;;
-+    *)
-+        echo "Usage: $0 {start|stop}"
-+        exit 1
-+        ;;
-+esac
-+
-+exit 0
-diff --git a/package/petitboot/fs-overlay/etc/inittab b/package/petitboot/fs-overlay/etc/inittab
-new file mode 100644
-index 000000000000..1f503d5d56f7
---- /dev/null
-+++ b/package/petitboot/fs-overlay/etc/inittab
-@@ -0,0 +1,34 @@
-+# /etc/inittab
-+#
-+# Copyright (C) 2001 Erik Andersen <andersen@codepoet.org>
-+#
-+# Note: BusyBox init doesn't support runlevels.  The runlevels field is
-+# completely ignored by BusyBox init. If you want runlevels, use
-+# sysvinit.
-+#
-+# Format for each entry: <id>:<runlevels>:<action>:<process>
-+#
-+# id        == tty to run on, or empty for /dev/console
-+# runlevels == ignored
-+# action    == one of sysinit, respawn, askfirst, wait, and once
-+# process   == program to run
-+
-+# Startup the system
-+::sysinit:/bin/mount -t proc proc /proc
-+::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
-+::sysinit:/bin/mkdir -p /dev/pts
-+::sysinit:/bin/mkdir -p /dev/shm
-+::sysinit:/bin/mount -a
-+::sysinit:/bin/hostname -F /etc/hostname
-+# now run any rc scripts
-+::sysinit:/etc/init.d/rcS
-+::sysinit:/sbin/petitboot-nc
-+# Stuff to do for the 3-finger salute
-+::ctrlaltdel:/sbin/reboot
-+
-+# Stuff to do before rebooting
-+::shutdown:/etc/init.d/rcK
-+::shutdown:/bin/umount -a -r
-+::shutdown:/sbin/swapoff -a
-+
-+::restart:/usr/sbin/kexec-restart
-diff --git a/package/petitboot/fs-overlay/etc/locale b/package/petitboot/fs-overlay/etc/locale
-new file mode 100644
-index 000000000000..655683630776
---- /dev/null
-+++ b/package/petitboot/fs-overlay/etc/locale
-@@ -0,0 +1 @@
-+LANG=en_US.utf-8
-diff --git a/package/petitboot/fs-overlay/init b/package/petitboot/fs-overlay/init
-new file mode 100755
-index 000000000000..1e56178db162
---- /dev/null
-+++ b/package/petitboot/fs-overlay/init
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+# devtmpfs does not get automounted for initramfs
-+/bin/mount -t devtmpfs devtmpfs /dev
-+exec 0</dev/console
-+exec 1>/dev/console
-+exec 2>/dev/console
-+exec /sbin/init "$@"
-+
-diff --git a/package/petitboot/kexec-restart b/package/petitboot/kexec-restart
-new file mode 100755
-index 000000000000..0175e76df4cd
---- /dev/null
-+++ b/package/petitboot/kexec-restart
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+
-+/usr/sbin/kexec -f -e
-+
-+while :
-+do
-+    sleep 1
-+done
-diff --git a/package/petitboot/petitboot-console-ui.rules b/package/petitboot/petitboot-console-ui.rules
-new file mode 100644
-index 000000000000..cbf1b7e1d765
---- /dev/null
-+++ b/package/petitboot/petitboot-console-ui.rules
-@@ -0,0 +1,6 @@
-+
-+# spawn a petitboot UI on common user-visible interface devices
-+SUBSYSTEM=="tty", KERNEL=="ttyGF*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/agetty --detach -- -a petituser -n -i $name linux"
-+SUBSYSTEM=="tty", KERNEL=="hvc*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/agetty --detach -- -a petituser -n -i $name linux"
-+SUBSYSTEM=="tty", KERNEL=="tty0", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/agetty --detach -- -a petituser -n -i $name linux"
-+SUBSYSTEM=="tty", KERNEL=="ttyS*", RUN+="/usr/libexec/petitboot/pb-console --getty=/sbin/agetty --detach -- -a petituser -n -i $name linux"
-diff --git a/package/petitboot/petitboot.hash b/package/petitboot/petitboot.hash
-new file mode 100644
-index 000000000000..7046c102d8a4
---- /dev/null
-+++ b/package/petitboot/petitboot.hash
-@@ -0,0 +1 @@
-+sha256 b42ae4fb2a81e9cf68f727c3f54c6312788c654bd97628ec9ba61b19a68990e6  petitboot-v1.13.tar.gz
-diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-new file mode 100644
-index 000000000000..f4c9a3f2a1dd
---- /dev/null
-+++ b/package/petitboot/petitboot.mk
-@@ -0,0 +1,85 @@
-+################################################################################
-+#
-+# petitboot
-+#
-+################################################################################
-+
-+PETITBOOT_VERSION = v1.13
-+PETITBOOT_SOURCE = petitboot-$(PETITBOOT_VERSION).tar.gz
-+PETITBOOT_SITE ?= https://github.com/open-power/petitboot/releases/download/$(PETITBOOT_VERSION)
-+PETITBOOT_DEPENDENCIES = elfutils ncurses udev host-bison host-flex lvm2
-+PETITBOOT_LICENSE = GPLv2
-+PETITBOOT_LICENSE_FILES = COPYING
-+
-+PETITBOOT_CONF_OPTS += --with-ncurses --without-twin-x11 --without-twin-fbdev \
-+	      --localstatedir=/var \
-+	      --enable-crypt \
-+	      HOST_PROG_KEXEC=/usr/sbin/kexec \
-+	      HOST_PROG_SHUTDOWN=/usr/sbin/kexec-restart \
-+	      $(if $(BR2_PACKAGE_BUSYBOX),--with-tftp=busybox --enable-busybox)
-+
-+ifdef PETITBOOT_DEBUG
-+PETITBOOT_CONF_OPTS += --enable-debug
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PETITBOOT_MTD),y)
-+PETITBOOT_CONF_OPTS += --enable-mtd
-+PETITBOOT_DEPENDENCIES += libflash
-+PETITBOOT_CPPFLAGS += -I$(STAGING_DIR)
-+PETITBOOT_LDFLAGS += -L$(STAGING_DIR)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+PETITBOOT_CONF_OPTS += --with-ncursesw MENU_LIB=-lmenuw FORM_LIB=-lformw
-+endif
-+
-+define PETITBOOT_POST_INSTALL
-+	$(INSTALL) -D -m 0755 $(@D)/utils/bb-kexec-reboot \
-+		$(TARGET_DIR)/usr/libexec/petitboot
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/petitboot/boot.d
-+	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/01-create-default-dtb \
-+		$(TARGET_DIR)/etc/petitboot/boot.d/
-+	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/90-sort-dtb \
-+		$(TARGET_DIR)/etc/petitboot/boot.d/
-+
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/S14silence-console \
-+		$(TARGET_DIR)/etc/init.d/
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/S15pb-discover \
-+		$(TARGET_DIR)/etc/init.d/
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/kexec-restart \
-+		$(TARGET_DIR)/usr/sbin/
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/petitboot-console-ui.rules \
-+		$(TARGET_DIR)/etc/udev/rules.d/
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/removable-event-poll.rules \
-+		$(TARGET_DIR)/etc/udev/rules.d/
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/63-md-raid-arrays.rules \
-+		$(TARGET_DIR)/etc/udev/rules.d/
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/65-md-incremental.rules \
-+		$(TARGET_DIR)/etc/udev/rules.d/
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/66-add-sg-module.rules \
-+		$(TARGET_DIR)/etc/udev/rules.d/
-+
-+	ln -sf /usr/sbin/pb-udhcpc \
-+		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
-+
-+	mkdir -p $(TARGET_DIR)/home/petituser
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/shell_profile \
-+		$(TARGET_DIR)/home/petituser/.profile
-+	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/shell_config \
-+		$(TARGET_DIR)/home/petituser/.shrc
-+
-+	$(MAKE) -C $(@D)/po DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define PETITBOOT_POST_INSTALL_DTB
-+	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/30-dtb-updates \
-+		$(TARGET_DIR)/etc/petitboot/boot.d/
-+endef
-+
-+PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL
-+
-+ifeq ($(BR2_PACKAGE_DTC),y)
-+	PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL_DTB
-+endif
-+
-+$(eval $(autotools-package))
-diff --git a/package/petitboot/removable-event-poll.rules b/package/petitboot/removable-event-poll.rules
-new file mode 100644
-index 000000000000..b736aef6101f
---- /dev/null
-+++ b/package/petitboot/removable-event-poll.rules
-@@ -0,0 +1,4 @@
-+
-+# petitboot needs notification for media change events on removable devices,
-+# which we only get if we've set the poll_msecs sysfs attribute.
-+ACTION!="remove", ATTR{removable}=="1", ATTR{events_poll_msecs}="2000"
-diff --git a/package/petitboot/shell_config b/package/petitboot/shell_config
-new file mode 100644
-index 000000000000..59337ff53039
---- /dev/null
-+++ b/package/petitboot/shell_config
-@@ -0,0 +1,19 @@
-+#!bin/sh
-+
-+reset
-+
-+echo "Exiting petitboot. Type 'exit' to return."
-+echo "You may run 'pb-sos' to gather diagnostic data"
-+
-+if [[ "$(id -u)" != "0" ]]; then
-+	echo "" | sudo -S /bin/true 2&>1 >> /dev/null
-+	if [[ $? = 0 ]]; then
-+		echo "No password set, running as root. You may set a password in the System Configuration screen."
-+		sudo -i
-+		sudo -K
-+		exit
-+	fi
-+	export PS1='$ '
-+else
-+	export PS1='# '
-+fi
-diff --git a/package/petitboot/shell_profile b/package/petitboot/shell_profile
-new file mode 100755
-index 000000000000..40062b423b79
---- /dev/null
-+++ b/package/petitboot/shell_profile
-@@ -0,0 +1,2 @@
-+export ENV="/home/petituser/.shrc"
-+/usr/libexec/petitboot/pb-console
--- 
-2.37.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSmFuLCBZYW5uLAoKT24gMTQvMDgvMjIgMTE6MjIsIEphbiBIYXZyYW4gd3JvdGU6Cj4gSGVs
+bG8gR2l1bGlvLAo+IAo+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4+IGluZGV4IDAwMDAwMDAw
+MDAuLjEwNjQxNjdkOGUKPj4+IC0tLSAvZGV2L251bGwKPj4+ICsrKyBiL2NvbmZpZ3MvcGluZWN1
+YmVfZGVmY29uZmlnCj4+PiBAQCAtMCwwICsxLDQ3IEBACj4+PiArIyBUYXJnZXQgb3B0aW9ucwo+
+Pj4gK0JSMl9hcm09eQo+Pj4gK0JSMl9jb3J0ZXhfYTc9eQo+Pj4gK0JSMl9BUk1fRlBVX05FT05f
+VkZQVjQ9eQo+Pgo+PiBUaGlzIF5eXiBzaG91bGQgYmUgcmVtb3ZlZCBzaW5jZSBORU9OIGRvZXNu
+J3Qgc3VwcG9ydCBjb21wbGV0ZSBGUFUKPj4gc3RhbmRhcmQgQVBJLCBzbyBpdCdzIGJldHRlciB0
+byBrZWVwIHRoZSBkZWZhdWx0IGZvciBCUjJfY29ydGV4X2E3Cj4gCj4gSSB3aWxsIGZpeCBldmVy
+eXRoaW5nIGFuZCBwb3N0IFYyLCBidXQgb25lIHRoaW5nIEkgZG8gbm90IHVuZGVyc3RhbmQgbXVj
+aCBpcwo+IHRoaXMgb25lLgoKSGVyZSB0aGVyZSBpcyBhIHZlcnkgZ29vZCBleHBsYW5hdGlvbiBv
+biB3aHkgbm90IGFkZGluZyBieSBkZWZhdWx0CkJSMl9BUk1fRlBVX05FT05fVkZQVjQ6Cmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9waXBlcm1haWwvYnVpbGRyb290LzIwMjItSmFudWFyeS82
+MzQ3MjguaHRtbAoKPiBGb3IgZXhhbXBsZSBib3RoIGxpY2hlZXBpIHplcm8gKHYzcykgYW5kIGJh
+bmFuYXBpIG0yIHBsdXMgKGgzKQo+IHNob3VsZCBzdXBwb3J0IE5FT04gYW5kIFZGUDQgWzFdWzJd
+LCBidXQgb25lIGhhcyBzZWxlY3RlZCBvcHRpb24KPiBCUjJfQVJNX0ZQVV9WRlBWND15LCB3aGls
+ZSB0aGUgb3RoZXIgaGFzIGRlZmF1bHQuIEFsc28gcGluZWN1YmUgKHMzKQo+IHN1cHBvcnRzIGJv
+dGggTkVPTi9WRlA0IFszXS4KCkJlY2F1c2Ugb2YgdGhlIGV4cGxhbmF0aW9uIGFib3ZlIG5vLiBO
+RU9OL1ZGUFY0IGlzIG5vdCBjb21wbGlhbnQgd2l0aApJRUVFIDc1NCBhbmQgdW5sZXNzIHlvdSBz
+cGVjaWZ5IGNvbXBpbGVyJ3MgZmxhZzoKLWZ1bnNhZmUtbWF0aC1vcHRpbWl6YXRpb25zCk5FT04g
+d29uJ3QgYmUgdXNlZCwgYnV0IHRoZW4gVkZQVjQgbmVpdGhlciBmcm9tIG15IHVuZGVyc3RhbmRp
+bmcuCgpCdXQgeWVzLCBpZiBWRlBWNCBpcyBzdXBwb3J0ZWQgdGhlbiB5ZXMsIGl0IG1ha2VzIHNl
+bnNlIHRvIGVuYWJsZSBpdAppbnN0ZWFkIG9mIGtlZXBpbmcgdGhlIGRlZmF1bHQuIFNvIHNpbmNl
+IHRoaXMgYm9hcmQgaXMgUzMgYmFzZWQgYW5kCml0IHN1cHBvcnRzIFZGUFY0IHRoZW4geW91IGNh
+biBlbmFibGU6CkJSMl9BUk1fRlBVX1ZGUFY0CgphbmQgc2FtZSBjYW4gZ28gd2l0aCBIMyBiYXNl
+ZCBib2FyZHMgSSB0aGluay4KCkBZYW5uLCB3aGF0IGRvIHlvdSB0aGluayBhYm91dCBlbmFibGlu
+ZyBWRlBWNCBvbiBib2FyZHMgd2l0aCBTb0NzCnRoYXQgc3VwcG9ydCBWRlBWND8gKG5vdCBORU9O
+L1ZGUFY0IG9mIGNvdXJzZSkKCkJlc3QgcmVnYXJkcwotLSAKR2l1bGlvIEJlbmV0dGkKQmVuZXR0
+aSBFbmdpbmVlcmluZyBzYXMKCj4gCj4gQ291bGQgeW91IHBsZWFzZSBnaXZlIG1lIGEgaGludCB3
+aHkgc29tZSBib2FyZHMgaGF2ZSB0aGlzIG9yIG90aGVyIG9wdGlvbgo+IGVuYWJsZWQsIHdoaWxl
+IHNvbWUga2VlcCBkZWZhdWx0IHNldHRpbmdzPwo+IAo+IFRoYW5rIHlvdSBmb3IgeW91ciB0aW1l
+IGFuZCBwYXRjaCByZXZpZXcsCj4gSmFuCj4gCj4gWzFdIGh0dHBzOi8vbGludXgtc3VueGkub3Jn
+L1Yzcwo+IFsyXSBodHRwczovL2xpbnV4LXN1bnhpLm9yZy9IMwo+IFszXSBodHRwczovL2xpbnV4
+LXN1bnhpLm9yZy9TMwo+IAo+IFbCoEZyaSwgSnVsIDI5LCAyMDIyIGF0IDEyOjI4OjUzQU0gKzAy
+MDAswqBHaXVsaW8gQmVuZXR0aSBuYXBzYWwoYSk6Cj4+IEhpIEphbiwKPj4KPj4gT24gMDgvMDQv
+MjIgMTk6MzksIEphbiBIYXZyYW4gd3JvdGU6Cj4+PiBBZGQgc3VwcG9ydCBmb3IgUGluZUN1YmUg
+d2l0aDoKPj4+IC0gVS1Cb290IDIwMjIuMDEKPj4+IC0gTGludXggNS4xNQo+Pgo+PiBIZXJlIEkg
+d291bGQgYnJpZWZseSBkZXNjcmliZSB0aGUgYm9hcmQodmFyaW91cyBJL09zKSBhbmQgYWRkIGEg
+aHR0cHMKPj4gVVJMIHRvIHRoZSBib2FyZCBvZmZpY2lhbCB3ZWJwYWdlIGlmIGl0IGV4aXN0cy4K
+Pj4KPj4+IFNpZ25lZC1vZmYtYnk6IEphbiBIYXZyYW4gPGhhdnJhbi5qYW5AZW1haWwuY3o+Cj4+
+PiAtLS0KPj4+ICAgIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgNCArKysK
+Pj4+ICAgIGJvYXJkL3BpbmU2NC9waW5lY3ViZS9ib290LmNtZCAgICAgfCAgNiArKysrCj4+PiAg
+ICBib2FyZC9waW5lNjQvcGluZWN1YmUvZ2VuaW1hZ2UuY2ZnIHwgMzQgKysrKysrKysrKysrKysr
+KysrKysrCj4+PiAgICBib2FyZC9waW5lNjQvcGluZWN1YmUvcmVhZG1lLnR4dCAgIHwgMzEgKysr
+KysrKysrKysrKysrKysrKysKPj4+ICAgIGNvbmZpZ3MvcGluZWN1YmVfZGVmY29uZmlnICAgICAg
+ICAgfCA0NyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysKPj4+ICAgIDUgZmlsZXMgY2hh
+bmdlZCwgMTIyIGluc2VydGlvbnMoKykKPj4+ICAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9w
+aW5lNjQvcGluZWN1YmUvYm9vdC5jbWQKPj4+ICAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9w
+aW5lNjQvcGluZWN1YmUvZ2VuaW1hZ2UuY2ZnCj4+PiAgICBjcmVhdGUgbW9kZSAxMDA2NDQgYm9h
+cmQvcGluZTY0L3BpbmVjdWJlL3JlYWRtZS50eHQKPj4+ICAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBj
+b25maWdzL3BpbmVjdWJlX2RlZmNvbmZpZwo+Pj4KPj4+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJT
+IGIvREVWRUxPUEVSUwo+Pj4gaW5kZXggYTY2YjlkN2VlZS4uZDQxOGExYWY5OSAxMDA2NDQKPj4+
+IC0tLSBhL0RFVkVMT1BFUlMKPj4+ICsrKyBiL0RFVkVMT1BFUlMKPj4+IEBAIC0xMzU2LDYgKzEz
+NTYsMTAgQEAgRjoJcGFja2FnZS9wYW5nb21tLwo+Pj4gICAgRjoJcGFja2FnZS9ycG0vCj4+PiAg
+ICBGOglwYWNrYWdlL3lhZC8KPj4+ICtOOglKYW4gSGF2cmFuIDxoYXZyYW4uamFuQGVtYWlsLmN6
+Pgo+Pj4gK0Y6CWJvYXJkL3BpbmU2NC9waW5lY3ViZS8KPj4+ICtGOgljb25maWdzL3BpbmVjdWJl
+X2RlZmNvbmZpZwo+Pj4gKwo+Pj4gICAgTjoJSmFuIEhleWxlbiA8amFuLmhleWxlbkBub2tpYS5j
+b20+Cj4+PiAgICBGOglwYWNrYWdlL29wZW50cmFjaW5nLWNwcC8KPj4+IGRpZmYgLS1naXQgYS9i
+b2FyZC9waW5lNjQvcGluZWN1YmUvYm9vdC5jbWQgYi9ib2FyZC9waW5lNjQvcGluZWN1YmUvYm9v
+dC5jbWQKPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+PiBpbmRleCAwMDAwMDAwMDAwLi5kOGI2
+MmUwYjRhCj4+PiAtLS0gL2Rldi9udWxsCj4+PiArKysgYi9ib2FyZC9waW5lNjQvcGluZWN1YmUv
+Ym9vdC5jbWQKPj4+IEBAIC0wLDAgKzEsNiBAQAo+Pj4gK3NldGVudiBib290YXJncyBjb25zb2xl
+PXR0eVMwLDExNTIwMCBlYXJseXByaW50ayByb290PS9kZXYvbW1jYmxrMHAyIHJvb3R3YWl0IHJ3
+Cj4+PiArCj4+PiArZmF0bG9hZCBtbWMgMCAka2VybmVsX2FkZHJfciB6SW1hZ2UKPj4+ICtmYXRs
+b2FkIG1tYyAwICRmZHRfYWRkcl9yIHN1bjhpLXMzLXBpbmVjdWJlLmR0Ygo+Pj4gKwo+Pj4gK2Jv
+b3R6ICRrZXJuZWxfYWRkcl9yIC0gJGZkdF9hZGRyX3IKPj4KPj4gVGhlIGxhc3Rlc3QgYm9hcmRz
+IHVzZSBleHRsaW51eC5jb25mIGluc3RlYWQgb2YgYm9vdC5jbWQgc2luY2UgaXQncwo+PiBwcmV0
+dHkgZWFzaWVyIHRvIHVzZSBpdCBkdXJpbmcgZGVidWdnaW5nLiBTbyBpdCdzIGJldHRlciB0byBo
+YXZlCj4+IGV4dGxpbnV4LmNvbmYgaGVyZSBhbmQgd2hlbiBvbmUgZmluYWxpemUgdGhlIHByb2pl
+Y3QgdGhlbiBpdCBjYW4gY3JlYXRlCj4+IHRoZSBjb3JyZXNwb25kaW5nIGJvb3QuY21kCj4+Cj4+
+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvcGluZTY0L3BpbmVjdWJlL2dlbmltYWdlLmNmZyBiL2JvYXJk
+L3BpbmU2NC9waW5lY3ViZS9nZW5pbWFnZS5jZmcKPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+
+PiBpbmRleCAwMDAwMDAwMDAwLi5hZjE3NTgxMWFkCj4+PiAtLS0gL2Rldi9udWxsCj4+PiArKysg
+Yi9ib2FyZC9waW5lNjQvcGluZWN1YmUvZ2VuaW1hZ2UuY2ZnCj4+PiBAQCAtMCwwICsxLDM0IEBA
+Cj4+PiAraW1hZ2UgYm9vdC52ZmF0IHsKPj4+ICsJdmZhdCB7Cj4+PiArCQlmaWxlcyA9IHsKPj4+
+ICsJCQkiekltYWdlIiwKPj4+ICsJCQkic3VuOGktczMtcGluZWN1YmUuZHRiIiwKPj4+ICsJCQki
+Ym9vdC5zY3IiCj4+PiArCQl9Cj4+PiArCX0KPj4+ICsKPj4+ICsJc2l6ZSA9IDhNCj4+PiArfQo+
+Pj4gKwo+Pj4gK2ltYWdlIHNkY2FyZC5pbWcgewo+Pj4gKwloZGltYWdlIHsKPj4+ICsJfQo+Pj4g
+Kwo+Pj4gKwlwYXJ0aXRpb24gdS1ib290IHsKPj4+ICsJCWluLXBhcnRpdGlvbi10YWJsZSA9ICJu
+byIKPj4+ICsJCWltYWdlID0gInUtYm9vdC1zdW54aS13aXRoLXNwbC5iaW4iCj4+PiArCQlvZmZz
+ZXQgPSA4Swo+Pj4gKwkJc2l6ZSA9IDUwNEsgIyA1MTJLQiAtIDhLQgo+Pj4gKwl9Cj4+PiArCj4+
+PiArCXBhcnRpdGlvbiBib290IHsKPj4+ICsJCXBhcnRpdGlvbi10eXBlID0gMHhDCj4+PiArCQli
+b290YWJsZSA9ICJ0cnVlIgo+Pj4gKwkJaW1hZ2UgPSAiYm9vdC52ZmF0Igo+Pj4gKwl9Cj4+PiAr
+Cj4+PiArCXBhcnRpdGlvbiByb290ZnMgewo+Pj4gKwkJcGFydGl0aW9uLXR5cGUgPSAweDgzCj4+
+PiArCQlpbWFnZSA9ICJyb290ZnMuZXh0NCIKPj4+ICsJfQo+Pj4gK30KPj4+IGRpZmYgLS1naXQg
+YS9ib2FyZC9waW5lNjQvcGluZWN1YmUvcmVhZG1lLnR4dCBiL2JvYXJkL3BpbmU2NC9waW5lY3Vi
+ZS9yZWFkbWUudHh0Cj4+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+Pj4gaW5kZXggMDAwMDAwMDAw
+MC4uNzc3MGJiZmU0Mgo+Pj4gLS0tIC9kZXYvbnVsbAo+Pj4gKysrIGIvYm9hcmQvcGluZTY0L3Bp
+bmVjdWJlL3JlYWRtZS50eHQKPj4+IEBAIC0wLDAgKzEsMzEgQEAKPj4+ICtJbnRybwo+Pj4gKz09
+PT09Cj4+PiArCj4+PiArVGhpcyBkaXJlY3RvcnkgY29udGFpbnMgYSBCdWlsZHJvb3QgY29uZmln
+dXJhdGlvbiBmb3IgYnVpbGRpbmcgYQo+Pj4gK1BpbmU2NCBQaW5lQ3ViZS4KPj4+ICsKPj4+ICtC
+b2FyZCBob21lcGFnZTogaHR0cHM6Ly93d3cucGluZTY0Lm9yZy9jdWJlLwo+Pj4gK0JvYXJkIHdp
+a2k6ICAgICBodHRwczovL3dpa2kucGluZTY0Lm9yZy93aWtpL1BpbmVDdWJlCj4+Cj4+IFRoZXNl
+IF5eXiBhcmUgdGhlIFVSTHMgSSBhc2sgeW91IGZvciBpbiBjb21taXQgbG9nCj4+Cj4+PiArCj4+
+PiArSG93IHRvIGJ1aWxkIGl0Cj4+PiArPT09PT09PT09PT09PT09Cj4+PiArCj4+PiArICAkIG1h
+a2UgcGluZWN1YmVfZGVmY29uZmlnCj4+PiArICAkIG1ha2UKPj4+ICsKPj4+ICtOb3RlOiB5b3Ug
+d2lsbCBuZWVkIGFjY2VzcyB0byB0aGUgaW50ZXJuZXQgdG8gZG93bmxvYWQgdGhlIHJlcXVpcmVk
+Cj4+PiArc291cmNlcy4KPj4+ICsKPj4+ICtIb3cgdG8gd3JpdGUgdGhlIFNEIGNhcmQKPj4+ICs9
+PT09PT09PT09PT09PT09PT09PT09PT0KPj4+ICsKPj4+ICtPbmNlIHRoZSBidWlsZCBwcm9jZXNz
+IGlzIGZpbmlzaGVkIHlvdSB3aWxsIGhhdmUgYW4gaW1hZ2UgY2FsbGVkICJzZGNhcmQuaW1nIgo+
+Pj4gK2luIHRoZSBvdXRwdXQvaW1hZ2VzLyBkaXJlY3RvcnkuCj4+PiArCj4+PiArQ29weSB0aGUg
+Ym9vdGFibGUgInNkY2FyZC5pbWciIG9udG8gYW4gU0QgY2FyZCB3aXRoICJkZCI6Cj4+PiArCj4+
+PiArICAkIHN1ZG8gZGQgaWY9b3V0cHV0L2ltYWdlcy9zZGNhcmQuaW1nIG9mPS9kZXYvc2RYCj4+
+PiArICAkIHN1ZG8gc3luYwo+Pj4gKwo+Pj4gK0luc2VydCB0aGUgbWljcm8gU0RjYXJkIGluIHlv
+dXIgUGluZUN1YmUgYW5kIHBvd2VyIGl0IHVwLiBUaGUgY29uc29sZQo+Pj4gK2lzIG9uIHRoZSBz
+ZXJpYWwgcG9ydCAyLCAxMTUyMDAgOE4xIChjaGVjayBXaWtpIGZvciBib2FyZCBwaW5vdXQpLgo+
+Pj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcGluZWN1YmVfZGVmY29uZmlnIGIvY29uZmlncy9waW5l
+Y3ViZV9kZWZjb25maWcKPj4KPj4gU2luY2UgdGhpcyBpcyBhIFBpbmU2NCBib2FyZCBhbmQgeW91
+IGFsc28gdXNlIGJvYXJkL3BpbmU2NC9waW5lY3ViZSBpdCdzCj4+IGJldHRlciB0byByZW5hbWUg
+cGluZWN1YmVfZGVmY29uZmlnIHRvIHBpbmU2NF9waW5lY3ViZV9kZWZjb25maWcgbGlrZQo+PiBw
+aW5lNjRfc29waW5lX2RlZmNvbmZpZwo+Pgo+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4+IGlu
+ZGV4IDAwMDAwMDAwMDAuLjEwNjQxNjdkOGUKPj4+IC0tLSAvZGV2L251bGwKPj4+ICsrKyBiL2Nv
+bmZpZ3MvcGluZWN1YmVfZGVmY29uZmlnCj4+PiBAQCAtMCwwICsxLDQ3IEBACj4+PiArIyBUYXJn
+ZXQgb3B0aW9ucwo+Pj4gK0JSMl9hcm09eQo+Pj4gK0JSMl9jb3J0ZXhfYTc9eQo+Pj4gK0JSMl9B
+Uk1fRlBVX05FT05fVkZQVjQ9eQo+Pgo+PiBUaGlzIF5eXiBzaG91bGQgYmUgcmVtb3ZlZCBzaW5j
+ZSBORU9OIGRvZXNuJ3Qgc3VwcG9ydCBjb21wbGV0ZSBGUFUKPj4gc3RhbmRhcmQgQVBJLCBzbyBp
+dCdzIGJldHRlciB0byBrZWVwIHRoZSBkZWZhdWx0IGZvciBCUjJfY29ydGV4X2E3Cj4+Cj4+PiAr
+Cj4+PiArIyBUb29sY2hhaW4gb3B0aW9ucwo+Pj4gK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVB
+REVSU19DVVNUT01fNV8xNT15Cj4+PiArCj4+PiArIyBTeXN0ZW0gY29uZmlndXJhdGlvbgo+Pj4g
+K0JSMl9UQVJHRVRfR0VORVJJQ19IT1NUTkFNRT0icGluZWN1YmUiCj4+PiArQlIyX1RBUkdFVF9H
+RU5FUklDX0lTU1VFPSJXZWxjb21lIHRvIFBJTkVDVUJFIgo+Pgo+PiAiV2VsY29tZSB0byBQaW5l
+NjQgUGluZWN1YmUiIF5eXgo+Pgo+Pj4gK0JSMl9TWVNURU1fREhDUD0iZXRoMCIKPj4+ICtCUjJf
+Uk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCj4+
+PiArQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSItYyBib2FyZC9waW5lNjQvcGluZWN1YmUv
+Z2VuaW1hZ2UuY2ZnIgo+Pj4gKwo+Pj4gKyMgS2VybmVsCj4+PiArQlIyX0xJTlVYX0tFUk5FTD15
+Cj4+PiArQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Cj4+PiArQlIyX0xJTlVYX0tF
+Uk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4xNSIKPj4KPj4gSGVyZSBeXl4gcGxlYXNlIHVz
+ZSBsYXRlc3Qgc3RhYmxlIDUuMTUueCB2ZXJzaW9uLCBub3cgaXQncyA1LjE1LjU3Ogo+PiBodHRw
+czovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9zdGFibGUvbGludXgu
+Z2l0Lwo+Pgo+PiBhbmQgcmUtdGVzdCBpdAo+Pgo+Pj4gK0JSMl9MSU5VWF9LRVJORUxfREVGQ09O
+RklHPSJzdW54aSIKPj4+ICtCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPj4+ICtCUjJf
+TElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0ic3VuOGktczMtcGluZWN1YmUiCj4+PiArQlIy
+X0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQo+Pj4gKwo+Pj4gKyMgRmlsZXN5c3Rl
+bQo+Pj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+Pj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VY
+VDJfND15Cj4+PiArCj4+PiArIyBCb290bG9hZGVyCj4+PiArQlIyX1RBUkdFVF9VQk9PVD15Cj4+
+PiArQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNURU1fS0NPTkZJRz15Cj4+PiArQlIyX1RBUkdF
+VF9VQk9PVF9DVVNUT01fVkVSU0lPTj15Cj4+PiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVS
+U0lPTl9WQUxVRT0iMjAyMi4wMSIKPj4+ICtCUjJfVEFSR0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJ
+Rz0icGluZWN1YmUiCj4+PiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQo+Pj4gK0JSMl9U
+QVJHRVRfVUJPT1RfTkVFRFNfUFlMSUJGRFQ9eQo+Pj4gK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNf
+T1BFTlNTTD15Cj4+PiArQlIyX1RBUkdFVF9VQk9PVF9TUEw9eQo+Pj4gK0JSMl9UQVJHRVRfVUJP
+T1RfU1BMX05BTUU9InUtYm9vdC1zdW54aS13aXRoLXNwbC5iaW4iCj4+PiArQlIyX1BBQ0tBR0Vf
+SE9TVF9VQk9PVF9UT09MUz15Cj4+PiArQlIyX1BBQ0tBR0VfSE9TVF9VQk9PVF9UT09MU19CT09U
+X1NDUklQVD15Cj4+PiArQlIyX1BBQ0tBR0VfSE9TVF9VQk9PVF9UT09MU19CT09UX1NDUklQVF9T
+T1VSQ0U9ImJvYXJkL3BpbmU2NC9waW5lY3ViZS9ib290LmNtZCIKPj4+ICsKPj4+ICsjIFJlcXVp
+cmVkIGhvc3QgdXRpbGl0aWVzIGZvciBidWlsZGluZyBhbiBTRENhcmQgaW1hZ2UKPj4+ICtCUjJf
+UEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQo+Pj4gK0JSMl9QQUNLQUdFX0hPU1RfR0VOSU1BR0U9
+eQo+Pj4gK0JSMl9QQUNLQUdFX0hPU1RfTVRPT0xTPXkKPj4KPj4gSGVyZSBeXl4gcmVtZW1iZXIg
+dG8gY2hlY2sgd2hpY2ggSG9zdCB0b29sIGlzIG5lZWRlZCBhZnRlciBjaGFuZ2luZyB0bwo+PiBl
+eHRsaW51eC5jb25mCj4+Cj4+IEFueXdheSBJJ3ZlIGJ1aWx0IGl0IHN1Y2Nlc3NmdWxseSB3aXRo
+IEJ1aWxkcm9vdCdzIHV0aWxzL2RvY2tlci1ydW4uCj4+Cj4+IFdhaXRpbmcgZm9yIFYyIHBhdGNo
+IHRoZW4uCj4+Cj4+IFRoYW5rIHlvdSEKPj4KPj4gQmVzdCByZWdhcmRzCj4+IC0tIAo+PiBHaXVs
+aW8gQmVuZXR0aQo+PiBCZW5ldHRpIEVuZ2luZWVyaW5nIHNhcwo+PiBfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
+Cj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
