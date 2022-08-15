@@ -4,95 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6616C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 14:49:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E3DAC00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 14:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5166E4029D;
-	Mon, 15 Aug 2022 14:49:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5166E4029D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73B1F401BF;
+	Mon, 15 Aug 2022 14:49:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73B1F401BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zYaPo9nkOhpm; Mon, 15 Aug 2022 14:49:13 +0000 (UTC)
+	with ESMTP id ZaCQ2vqStcow; Mon, 15 Aug 2022 14:49:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63DA640195;
-	Mon, 15 Aug 2022 14:49:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63DA640195
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3616A416F4;
+	Mon, 15 Aug 2022 14:49:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3616A416F4
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EAB271BF308
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 14:49:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 75C981BF308
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 14:49:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C61A983EC7
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 14:49:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C61A983EC7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E29D83ED7
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 14:49:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E29D83ED7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v4_EtfGHVRlE for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 14:49:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 008A183F19
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 008A183F19
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 14:49:07 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id f22so9853170edc.7
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 07:49:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:organization:from:references
- :cc:to:content-language:subject:user-agent:mime-version:date
- :message-id:x-gm-message-state:from:to:cc;
- bh=a/1gxpxqIHfeycz5OYRzetBawZdStQvA2LM07NLqSAI=;
- b=LO0iHamNlAJInbqhxYsJTo4rJGXKsoXZXqFI8odRrRVWvN/W8g/0nQSuvJV/ej/U1C
- T8Swn9UjXktY3uq9OlpsoiMSGxJgHrP+I6FECmD5Hw+JnBEU9tMjVx01FNeGYopronSQ
- mcxRV84in9l5aE9l4aTh0xuG/sYdV1UBJ/8581JtPkN2mtaQRyRpAxKXKdCTp1Sfutf0
- t62dDWrkfmu6Y2bVBn10yZCaKv/mrHEUdu56xEmXZUZuNtcBWbTUBtbj6c98t1omP7Eb
- nsIxHLhY7ZIhu8qD4vztUA98HNbEW+x0gyUYNXfo+vGY2/eX4KO3oZukJD26BS/5cdWX
- /N8A==
-X-Gm-Message-State: ACgBeo1MUL0Eh3tssc8iYPB8p4PI9UXiS7M79WwNTU6Hj5vYIYb90zxa
- USRw8idwpEBm+8+K2G4J5BTIY+HpWYQB/r57
-X-Google-Smtp-Source: AA6agR6TJDdb2cASV6IWo91ti8jkMXCz0ScEdPCowwYe+RdN3Txyfj8PBVdz3VaPABcePU4TU01Eew==
-X-Received: by 2002:aa7:c30c:0:b0:440:a189:541d with SMTP id
- l12-20020aa7c30c000000b00440a189541dmr14866300edq.64.1660574945855; 
- Mon, 15 Aug 2022 07:49:05 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- kx18-20020a170907775200b007341663d7ddsm4108910ejc.96.2022.08.15.07.49.04
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 15 Aug 2022 07:49:05 -0700 (PDT)
-Message-ID: <48258ca5-db71-3af9-a357-15f6b0130652@mind.be>
-Date: Mon, 15 Aug 2022 16:49:02 +0200
+ with ESMTP id kB6EFe9f_hAC for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 14:49:15 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4A3C83EC7
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A4A3C83EC7
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 14:49:14 +0000 (UTC)
+Received: from quad ([82.142.8.70]) by mrelayeu.kundenserver.de (mreue012
+ [212.227.15.167]) with ESMTPSA (Nemesis) id 1M9qYn-1oKYbI19CH-005t5E; Mon, 15
+ Aug 2022 16:49:09 +0200
+From: Laurent Vivier <laurent@vivier.eu>
+To: buildroot@buildroot.org
+Date: Mon, 15 Aug 2022 16:49:05 +0200
+Message-Id: <20220815144907.3300089-1-laurent@vivier.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Ricardo Martincoski <ricardo.martincoski@gmail.com>
-References: <20220814233845.2247022-1-ricardo.martincoski@gmail.com>
- <20220814233845.2247022-34-ricardo.martincoski@gmail.com>
- <20220815113330.5383950c@windsurf>
-From: Arnout Vandecappelle <arnout@mind.be>
-Organization: Essensium/Mind
-In-Reply-To: <20220815113330.5383950c@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:organization:from:references
- :cc:to:content-language:subject:user-agent:mime-version:date
- :message-id:from:to:cc;
- bh=a/1gxpxqIHfeycz5OYRzetBawZdStQvA2LM07NLqSAI=;
- b=Fp81htErsQ4fwBNTSLAc0T8grsrnwjAL3RFybncrco98aqzaZ0R6aP+4bK+hcUN1kh
- xqWlwgdY+PObKPpffj09GUZgS9eGCGWFPR5Dv2GWGXgh39x9+S7o7boT9vpmNFmymmRi
- pvBYn2lYlIUNN8xy8yMVeAB42h6rzPdg4QVYVUD40Q07IGjOPrpm9YVYIOGdtsQEQomK
- M8AE1BzTZgv5ruQVCPT/3WFR7BvtbkcrgZoYwAjy6K+GBHpXpRl4FicuK5SMRLEkjUtu
- iCLJRFkM4/5v+Zd9OQKzxSosXhaXzqXXCzCDPbQPPBX37gu/7O/i37DN0C5Sy8SXUqk1
- FX0w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Fp81htEr
-Subject: Re: [Buildroot] [PATCH 33/33] utils/check-symbols: new script
+X-Provags-ID: V03:K1:GkwAQGKW4djNc5KwIgh4PY5P+FFKMOE+9d+ibiI+wQniUgTGyfD
+ ZO+ltH5vv3f5YL+o/V6nL80cBHHnVfr/zpuMX/s1HOgnd5Pmxett29ltHudPBsSp9iIF3bU
+ 21uw1j7JRRaD+mElsmontTuQ5qGwQWmJrbN1pwhLZ6OUDtLsRGhs9YKdihvqux0+u4tbsnr
+ 2lJcv2XtvwVSJasslsfig==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qE2wpwlBRFc=:Mqih/gsBKth9URxvRlujvY
+ anKXAj1hLltptt7CLVIZbB9lTEZg1w3/YdwmwjUZ21flpE4myMM8+3lrKGEI06nNQ8LusIagG
+ DUutx59Mqn0+4qY3TweK1BfrDQ/Zlii/RWtwyGBiqaSj6OBDFlc2AtIvMkcnQsO6Yu0c1zBEw
+ 1PZxzHFXzewEwDTLm6svLJwT+jf5FGTMqOpifnaVA0DQ8zph+sONup+M/t7N3EduttV6NkInh
+ QdltHoPgyPHW2f8C0Y8tKJHhaltJuUiy0RtrBKOvTuq+uyZWdAgPYVLzOzDafzjdo9X32R93e
+ sysxLHhGq0IbIF8HuldUH0Ym/nOK2WkOUWw696nCqkGStfWswFLtiEYBFghmXJOcaFaa3Zmia
+ QDhbaLESbYYnXuizWsRJ1OQZZDyU3cPCSjHMGnNikSkd+jJwnWt0rWJw9oH2DqofwgGvDLtEp
+ AyntVYn0xlmTyGU8DUTwu2bZoxOJygYzAD4l69md4YTWi62Ikhiipdgy3gVko8dFXBij1tjIP
+ NmdjCRcS4qMG+RuqHz6mGHd8j98PWbVjsr3JDpHKi8dK41QRxRiYLaSncNfBD3WD+IAgruxfN
+ i9DOzkzMCgU5OWO40fFQF9cvdbNdB0SgrJamEQPLBwvgtjrxsDeIozSr0h7n5dUkjAr1vN99r
+ 47v9Xt5Npf2w/0UOSipzhttBnu4MV4/JOZCGcEuByAX/0tvTtc7YyvZt3rWJ40skBdgi6v6p+
+ 8dBXXSSAzuhMZLkX3Sw0FcUk7234hf9PkPiPpg==
+Subject: [Buildroot] [PATCH v4 0/2] package: add petitboot to use with
+ qemu-system-m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,84 +73,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
+ Laurent Vivier <laurent@vivier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+qemu-system-m68k has introduced in v6.0 a new pure virtual machine
+that is now supported by linux v5.19.
 
+The goal of this series is to provide petitboot as an embedded bootloader
+for it (like it is for the IBM spapr machine).
 
-On 15/08/2022 11:33, Thomas Petazzoni via buildroot wrote:
-> Hello Ricardo,
-> 
-> On Sun, 14 Aug 2022 20:38:45 -0300
-> Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
-> 
->> This is just a WIP!
->> - it is ugly
->> - it was not designed for performance (speed, RAM usage, ...)
->> - it is poorly covered by unit tests
->> - it has no help/usage
->> - it has no debug options
->> - it uses a hand-made database
->> - it has a long list of false positives, ignored in the DB class
->> - it does not support yet:
->>    - rootfs
->>    - virtual packages
->>    - barebox
->>    - linux extensions
->>
->> ... but it gets some initial results
->>
->> Someone willing to adopt this patch?
-> 
-> Does this imply that you are not interested/willing to push this
-> further up to a point where it can be merged?
-> 
->> I don't know what to do with this symbol:
->> package/fwts/Config.in:config BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
->> package/fwts/fwts.mk:ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
->> maybe one of below?
->> 1) make the script to accept 'ifdef' as a valid usage for a menuconfig symbol
->> 2) rework the package to use 'ifeq' like the other ones.
-> 
-> I would say convert to ifeq. However, there is something a bit
-> "special" done here:
-> 
-> ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
-> FWTS_MODULE_SUBDIRS = efi_runtime
-> $(eval $(kernel-module))
-> endif
-> 
-> i.e the eval kernel-module is done within the condition. Is this the
-> reason for using ifdef instead of ifeq? I don't really see why, but
-> maybe I'm missing some aspect of GNU make sorcery. Which is why is in
-> Cc of this e-mail :-)
+The first patch introduces petitboot package, the second patch the
+configuration to build buildroot with petitboot for the QEMU machine.
 
-  I don't know if I'm the missing name in the "why ... is in Cc", but I'll reply 
-anyway :-)
+You can test it with:
 
-  The difference between ifeq and ifdef is that ifdef doesn't expand 
-recursively. So if we would have:
+  qemu-system-m68k -M virt -kernel images/vmlinux \
+                   -initrd images/rootfs.cpio.xz \
+                   -append "console=ttyGF0" --nographic
 
-BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE = $(if ....)
-ifdef BR2_PACKAGE_FWTS_EFI_RUNTIME_MODULE
-...
-endif
+Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
-then it would always be included, even if the $(if ...) expands to nothing.
+v4:
+  - address Thomas' comments
+  - remove petitboot-mtd config as libflash is not available
 
-However, that is not at all the case here, so the ifdef can safely be replaced 
-with ifeq.
+v3: v2: v1:
+  - first version, I messed up with list subscription and git-publish...
 
-  In fact, even most of the ifdefs in the infra can replaced with ifeq. But that 
-would require just a little bit more thinking to be sure of it...
+Laurent Vivier (2):
+  package: add petitboot
+  board/qemu/m68k-virt: Add virt-m68k linux config
 
-  Oh and there's another one in pugixml.mk.
+ DEVELOPERS                                   |  5 ++
+ board/qemu/m68k-virt/config.linux            | 89 ++++++++++++++++++++
+ board/qemu/m68k-virt/readme.txt              |  5 ++
+ configs/qemu_m68k_virt_petitboot_defconfig   | 28 ++++++
+ package/Config.in                            |  1 +
+ package/kexec/Config.in                      |  2 +-
+ package/petitboot/63-md-raid-arrays.rules    | 41 +++++++++
+ package/petitboot/65-md-incremental.rules    | 69 +++++++++++++++
+ package/petitboot/66-add-sg-module.rules     |  2 +
+ package/petitboot/Config.in                  | 23 +++++
+ package/petitboot/S14silence-console         |  9 ++
+ package/petitboot/S15pb-discover             | 38 +++++++++
+ package/petitboot/fs-overlay/etc/inittab     | 34 ++++++++
+ package/petitboot/fs-overlay/etc/locale      |  1 +
+ package/petitboot/fs-overlay/init            |  8 ++
+ package/petitboot/kexec-restart              |  8 ++
+ package/petitboot/petitboot-console-ui.rules |  6 ++
+ package/petitboot/petitboot.hash             |  2 +
+ package/petitboot/petitboot.mk               | 78 +++++++++++++++++
+ package/petitboot/removable-event-poll.rules |  4 +
+ package/petitboot/shell_config               | 19 +++++
+ package/petitboot/shell_profile              |  2 +
+ 22 files changed, 473 insertions(+), 1 deletion(-)
+ create mode 100644 board/qemu/m68k-virt/config.linux
+ create mode 100644 board/qemu/m68k-virt/readme.txt
+ create mode 100644 configs/qemu_m68k_virt_petitboot_defconfig
+ create mode 100644 package/petitboot/63-md-raid-arrays.rules
+ create mode 100644 package/petitboot/65-md-incremental.rules
+ create mode 100644 package/petitboot/66-add-sg-module.rules
+ create mode 100644 package/petitboot/Config.in
+ create mode 100755 package/petitboot/S14silence-console
+ create mode 100755 package/petitboot/S15pb-discover
+ create mode 100644 package/petitboot/fs-overlay/etc/inittab
+ create mode 100644 package/petitboot/fs-overlay/etc/locale
+ create mode 100755 package/petitboot/fs-overlay/init
+ create mode 100755 package/petitboot/kexec-restart
+ create mode 100644 package/petitboot/petitboot-console-ui.rules
+ create mode 100644 package/petitboot/petitboot.hash
+ create mode 100644 package/petitboot/petitboot.mk
+ create mode 100644 package/petitboot/removable-event-poll.rules
+ create mode 100644 package/petitboot/shell_config
+ create mode 100755 package/petitboot/shell_profile
 
-  Regards,
-  Arnout
+-- 
+2.37.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
