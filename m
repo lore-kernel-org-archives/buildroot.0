@@ -1,87 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE620C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:51:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 096E1C00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 452A541505;
-	Mon, 15 Aug 2022 09:51:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 452A541505
+	by smtp2.osuosl.org (Postfix) with ESMTP id 89FA140AAA;
+	Mon, 15 Aug 2022 09:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89FA140AAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id siFCMllK_URn; Mon, 15 Aug 2022 09:51:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lQmQp2oubSuZ; Mon, 15 Aug 2022 09:51:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24425409F7;
-	Mon, 15 Aug 2022 09:51:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24425409F7
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0708408D0;
+	Mon, 15 Aug 2022 09:51:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0708408D0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4A9AD1BF3CB
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:50:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C841A1BF3CB
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:50:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 336936068D
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:50:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 336936068D
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0E9B60AF7
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:50:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0E9B60AF7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id noxVeFiX-Z-R for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 09:50:31 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E32060AF7
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2E32060AF7
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:50:31 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id b4so5351056wrn.4
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 02:50:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=LMRNmcO+emKZp/YmmoKTxIZwJEcb5eAnoi03MJk5nbM=;
- b=Wf/l94GAlBkQ7hSgWYVIOMQkE1Hlf6jbILtaCgyavNcjfMI9saRtjvW3F/4wp1akmM
- PbYyKw0QkrvXigCuue+dXtuxkq46wX+eMteDOuIbN3g2ce3oJTqcV4pslv70dd6vrDTa
- ulIzNFk6HNVrfPuDwDYc+uVYBit3mQI6jGfoGKPpSI4VCQiv8FquVx7ZvmmtyE0yRoo2
- t7CY+HWWABWcWGulGuDJAXaZqBm4bebMIspMbcJviK5mT6cIaJFsIE47MkbOa4KoPLtD
- D8+q3pfwajTElApWFoXHuCM8/1atqRRHNOp+l7HwYKiM5dlAUwCcmZFscYW006RP3vTk
- CpAw==
-X-Gm-Message-State: ACgBeo0MawNUZK69sStbKvcom8HXQ0q0/LoBLg10MfJUk+ExNwdycEdi
- ax6pzt9TQfRpIkGKSXWsAC4VVltltNg=
-X-Google-Smtp-Source: AA6agR7NOY03mVKy1dqFsQq4dS2Ti+cMEtZ9Yinon5ttZV/Ym3L3A9SMuW6TJfg1uChthb65pNXyrQ==
-X-Received: by 2002:a5d:6b12:0:b0:21f:1568:c7e1 with SMTP id
- v18-20020a5d6b12000000b0021f1568c7e1mr8226474wrw.532.1660557029216; 
- Mon, 15 Aug 2022 02:50:29 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b00a02a978cbcfe81d2.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:a02a:978c:bcfe:81d2])
- by smtp.gmail.com with ESMTPSA id
- n6-20020a1c2706000000b003a511e92abcsm9132932wmn.34.2022.08.15.02.50.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Aug 2022 02:50:28 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 11:50:22 +0200
-Message-Id: <20220815095022.297076-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id iQ92woL0CaQU for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 09:50:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B43946068D
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B43946068D
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:50:41 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id ED3A9240003;
+ Mon, 15 Aug 2022 09:50:39 +0000 (UTC)
+Date: Mon, 15 Aug 2022 11:50:38 +0200
+To: Yair Ben-Avraham via buildroot <buildroot@buildroot.org>
+Message-ID: <20220815115038.30dbcfa2@windsurf>
+In-Reply-To: <OnXRv428u0aogON15S-eaYq1e-8O0pEK8Ul7AshrDFTo6BbyTTGBdXgiYGzOMtmsIf0eluZocPSIya_d2i2LimqdcrK5eEGaQ5SdOwIppSg=@protonmail.com>
+References: <OnXRv428u0aogON15S-eaYq1e-8O0pEK8Ul7AshrDFTo6BbyTTGBdXgiYGzOMtmsIf0eluZocPSIya_d2i2LimqdcrK5eEGaQ5SdOwIppSg=@protonmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=LMRNmcO+emKZp/YmmoKTxIZwJEcb5eAnoi03MJk5nbM=;
- b=K2rau6COWdxFj1eonDHc/3VwqWYto5HqoepqiywPD2ieK9aD0/KvUkgd0P0OwFSQzJ
- hv3hk5X39ux7+adw5/ciByFPpCnZoLxWhAxwJbtCAFcK09spB/rnt9NA6hBbbyWRLzPh
- 9xXYQ4fW7ODXPoki18Fu2w1xii8j/DKRubqiM3hfcLYQ0U32jlZ/XUhbU4P4QfZSL6FW
- +DChf9+KaZo8fbwuKUExRYezIcOIlfsX5qwmEAMeSmcn74ql1T/ODw8hpwCMvC3mPgHc
- juILRz9IPiwZlX3tg5foZAaQ7L6TAm6Y7xdbupZaEDyNZlu4uVaXf6EgUQuPyz3hx4cO
- rzjw==
+ d=bootlin.com; s=gm1; t=1660557040;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=5IBgYvyROsTxeuhpRN118VXeMC26IdlRERGr8UVXaYc=;
+ b=A1tLeeU6uE097VMnnlEgVOjr3+xwMqd126XGjTg1DwP8tCszwqFTs/vzsyF+sSt8mfOPWF
+ sOPOvhE7ZWlzWwlTwzJ/Fv3aQYH98K1tKfq3ZdzM6RVBfnhxml9eTo7vA25UUVjR6Cqzm8
+ 3Q46UT7YANt8pWcn4xkPmApPsUtpO67pueAY/wIifE1tW2iR0r3v7/GDdeONhbTCabRz3F
+ SeEjsxh3CF0FURivDNqDcvgMHq92mMSC4xfhSrvrmfHXdLlPnmKHkQPKxiVsCmWNj1vApW
+ Xd5Qs5K66MQCZ/7r+BuODkalSwPJXlUESefaWxuZ5bNYSXvRb3Cbw7WLEJvFHA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=K2rau6CO
-Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: add mips64 support
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=A1tLeeU6
+Subject: Re: [Buildroot] [PATCH 1/1] package/rsync: bump version to 3.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,37 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Egorenkov <egorenar-dev@posteo.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yair Ben-Avraham <yairba@protonmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-mips64 is supported since bump to version 1.6.9 in commit
-cb648d12fa733788cd2ea8e0fa8b00bb95983c4e and
-https://github.com/makedumpfile/makedumpfile/commit/7f185d29aa1794a82a090c748aae2f7bf240fb49
+On Mon, 15 Aug 2022 04:06:02 +0000
+Yair Ben-Avraham via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/makedumpfile/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> Fix https://nvd.nist.gov/vuln/detail/CVE-2022-29154
+> 
+> Remove 0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch, applied to master:
+> https://github.com/WayneD/rsync/commit/c3f7414c450faaf6a8281cc4a4403529aeb7d859
+> 
+> remove 0002-Handle-linking-with-a-zlib-with-external-read_buf.patch b/package/rsync/0002-Handle-linking-with-a-zlib-with-external-read_buf.patch, applied to naster:
+> https://github.com/WayneD/rsync/commit/60dd42be603a79cd57cec076fe1680e9037be774
+> 
+> Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+> ---
+>  ...n-the-certificate-when-using-openssl.patch | 29 -------------------
+>  ...g-with-a-zlib-with-external-read_buf.patch | 27 -----------------
+>  package/rsync/rsync.hash                      |  6 ++--
+>  package/rsync/rsync.mk                        |  2 +-
+>  4 files changed, 4 insertions(+), 60 deletions(-)
+>  delete mode 100644 package/rsync/0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch
+>  delete mode 100644 package/rsync/0002-Handle-linking-with-a-zlib-with-external-read_buf.patch
 
-diff --git a/package/makedumpfile/Config.in b/package/makedumpfile/Config.in
-index d5af38b598..62549f851f 100644
---- a/package/makedumpfile/Config.in
-+++ b/package/makedumpfile/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
- 	default y if BR2_aarch64 || BR2_aarch64_be
- 	default y if BR2_arm || BR2_armeb
- 	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_mips64 || BR2_mips64el
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	default y if BR2_s390x
- 	default y if BR2_sparc64
+Applied to next, thanks.
+
+Thomas
 -- 
-2.35.1
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
