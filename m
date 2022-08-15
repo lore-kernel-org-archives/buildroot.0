@@ -1,70 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F653C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:34:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9C8EC00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:35:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A262840A8B;
-	Mon, 15 Aug 2022 09:34:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A262840A8B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A89560D62;
+	Mon, 15 Aug 2022 09:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A89560D62
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RrLxcEGyTabL; Mon, 15 Aug 2022 09:34:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1_7yKnycciaI; Mon, 15 Aug 2022 09:35:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF2F440159;
-	Mon, 15 Aug 2022 09:34:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF2F440159
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6A0FA1BF3CB
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:34:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E68160AF7;
+	Mon, 15 Aug 2022 09:35:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E68160AF7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D7B211BF3CB
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:35:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 303BE40146
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:34:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 303BE40146
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1FC760AF7
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:35:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1FC760AF7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JfaWvHKVWj0P for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 09:34:42 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2121040120
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2121040120
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:34:41 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id EFFA520005;
- Mon, 15 Aug 2022 09:34:39 +0000 (UTC)
-Date: Mon, 15 Aug 2022 11:34:38 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220815113438.0fd0b556@windsurf>
-In-Reply-To: <20220810094911.2908651-1-fontaine.fabrice@gmail.com>
-References: <20220810094911.2908651-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660556080;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/Rji61CYbopFc7dYE4l7x2wgvpOQn6k1KoauV2w+yJM=;
- b=MxYarGo/VZFvpjHL39EGZ2au1Ku0EtDLdqtYA6JxAQrbsnTOm5uM7GNblV7i8HWu7Q5D30
- px0pY3fGQPOj+HSFanY8wVwnOCMc57id4IlL2LveIOmIhu6ZplOXTKsslDpi+iX1uneAVb
- ucHo5NjCMVm450ETqFZkhno6hjiampKQ23gg+iQFqjQW74AQoGW/qz07mYhiecCZ3YpYc3
- 4zjQTraj7QRIxp27xaV8QSzgpLKxAYC3hGi1++NqT+0WEFH/bGVhcjvZynLSor4DvckUBd
- t8ck63sGxPXAOuIevBtxaM3yycWbves/IdmK8klioiTA8p05w7sgUbP0fzTG2Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MxYarGo/
-Subject: Re: [Buildroot] [PATCH 1/1] package/libdill: bump to latest git
- commit
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AIXufygcK4oY for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 09:35:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 05D5860AD4
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:35:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05D5860AD4
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 07F82875C5; Mon, 15 Aug 2022 09:20:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 15 Aug 2022 11:34:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 106e2b448c5249aa905aeaa0a5a1d1f87cf8f694
+X-Git-Newrev: a53be62fadd5d7bbe54f3ada1b5e41f69705ac1e
+X-Patchwork-Hint: ignore
+Message-Id: <20220815092037.07F82875C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/q5doc: fix dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,39 +57,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 10 Aug 2022 11:49:11 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a53be62fadd5d7bbe54f3ada1b5e41f69705ac1e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This bump will fix the following openssl static build failure raised
-> since the addition of the package in commit
-> d4b13b21024a894a2fc682090f3e01d53bd699e9 thanks to
-> https://github.com/sustrik/libdill/commit/b3b81d2c7bf4daf8a57925ddd40f5b6f13484187:
-> 
-> checking for SSL_ctrl  in -lssl... no
-> configure: error: libssl not found; install OpenSSL
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0b5c1f8675d218e0abf57b4d46428fe06e28431e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libdill/libdill.hash | 2 +-
->  package/libdill/libdill.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Commit fa917d0ca96baf4ef877a80e57d438bfbb8cdf2d forgot to add
+BR2_PACKAGE_QT5_JSCORE_AVAILABLE dependency:
 
-Applied to master as it fixes a build issue, thanks.
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_QT5DECLARATIVE
+  Depends on [n]: BR2_PACKAGE_QT5 [=y] && BR2_PACKAGE_QT5_JSCORE_AVAILABLE [=n]
+  Selected by [y]:
+  - BR2_PACKAGE_QT5DOC [=y] && BR2_PACKAGE_QT5 [=y]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5doc/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qt5/qt5doc/Config.in b/package/qt5/qt5doc/Config.in
+index 1ab5f8d333..e9685a4d50 100644
+--- a/package/qt5/qt5doc/Config.in
++++ b/package/qt5/qt5doc/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_QT5DOC
+ 	bool "qt5doc (includes quick demos)"
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
+ 	select BR2_PACKAGE_QT5BASE_EXAMPLES
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+ 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
