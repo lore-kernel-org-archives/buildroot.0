@@ -1,49 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05F6FC6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:57:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76CF7ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:57:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AA05640BAD;
-	Sun, 11 Sep 2022 08:57:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA05640BAD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 239076106E;
+	Sun, 11 Sep 2022 08:57:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 239076106E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gSITaSNLAYvn; Sun, 11 Sep 2022 08:57:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LxDySXI9GZ2Q; Sun, 11 Sep 2022 08:57:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD4D940B8A;
-	Sun, 11 Sep 2022 08:57:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD4D940B8A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A44A31BF368
+	by smtp3.osuosl.org (Postfix) with ESMTP id 380ED61053;
+	Sun, 11 Sep 2022 08:57:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 380ED61053
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B43661BF990
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6F61A409AC
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F61A409AC
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0CC960FCF
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0CC960FCF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r8wxdkS0IfMt for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M5uT-l7eIUbL for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A577409BB
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A577409BB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4EF6360F7F
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EF6360F7F
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 884E883624; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
+ id 4CC5B8361F; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 29 Aug 2022 22:16:41 +0200
+Date: Mon, 15 Aug 2022 20:48:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9b5caa2ab45d7ec01e1657b10f94c2f60c7afe8e
-X-Git-Newrev: 6c24f7cb8da5651bdfbcb40da5c762e1e85a93fc
+X-Git-Oldrev: 11e11b8fda94dd12d4b8cb6565808e91c4743fed
+X-Git-Newrev: 1c3b7870cf4bbabb0b19abb2e28e8040980645f2
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084828.884E883624@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/most: bump version to 5.2.0
+Message-Id: <20220911084824.4CC5B8361F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-utils.mk: move
+ FREESCALE_IMX_EXTRACT_HELPER
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,56 +57,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c24f7cb8da5651bdfbcb40da5c762e1e85a93fc
+commit: https://git.buildroot.net/buildroot/commit/?id=1c3b7870cf4bbabb0b19abb2e28e8040980645f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The COPYRIGHT file hash has changed due to:
+This helper was introduced before Freescale was part of NXP. Nowadays,
+we have NXP packages, and they do use the same archiving format.
 
-- Copyright (c) 1991, 1999, 2002, 2005-2018,2019 John E. Davis
-+ Copyright (c) 1991, 1999, 2002, 2005-2021, 2022 John E. Davis
+Move the Freescale-specific extract helper to a common location, so
+that it can be used by other packages in the future.
 
-Signed-off-by: Sven Oliver Moll <svolli@svolli.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[yann.morin.1998@free.fr: provide the rationale in the commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/most/most.hash | 6 +++---
- package/most/most.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/freescale-imx/freescale-imx.mk | 25 -------------------------
+ package/pkg-utils.mk                   | 25 +++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 25 deletions(-)
 
-diff --git a/package/most/most.hash b/package/most/most.hash
-index db0eb6db59..ec9da9adcd 100644
---- a/package/most/most.hash
-+++ b/package/most/most.hash
-@@ -1,6 +1,6 @@
- # From https://www.jedsoft.org/releases/most/
--sha1  db811669a6b22c15478c957b439b5e4483ce1c95  most-5.1.0.tar.gz
-+sha1  322073ee6e8c45ce084f4fccd08d3f026aa1f66d  most-5.2.0.tar.gz
- # Locally computed
--sha256  db805d1ffad3e85890802061ac8c90e3c89e25afb184a794e03715a3ed190501  most-5.1.0.tar.gz
-+sha256  9455aeb8f826fa8385c850dc22bf0f22cf9069b3c3423fba4bf2c6f6226d9903  most-5.2.0.tar.gz
- sha256  1b2a567f289f66a143c56353e7b3d4fa5862514a5e3c5cfdf8b02ee5e5aaa953  COPYING
--sha256  47ad1c3f9b94d6ec42d9bee6c5df980c5c2daa5b9d22113545ae6a3f21ca2f52  COPYRIGHT
-+sha256  3d8f860532c9f202db9300375fb29a1e7b32f538c6033e7013266ad55317fc3e  COPYRIGHT
-diff --git a/package/most/most.mk b/package/most/most.mk
-index 28d82cddf1..24627c046a 100644
---- a/package/most/most.mk
-+++ b/package/most/most.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index 84a1725cc1..5f32a098a2 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -6,29 +6,4 @@
  
- MOST_SITE = http://www.jedsoft.org/releases/most
--MOST_VERSION = 5.1.0
-+MOST_VERSION = 5.2.0
- MOST_LICENSE = GPL-2.0+
- MOST_LICENSE_FILES = COPYING COPYRIGHT
- MOST_DEPENDENCIES = slang
+ FREESCALE_IMX_SITE = http://www.nxp.com/lgfiles/NMG/MAD/YOCTO
+ 
+-# Helper for self-extracting binaries distributed by Freescale.
+-#
+-# The --force option makes sure it doesn't fail if the source
+-# directory already exists. The --auto-accept skips the license check,
+-# as it is not needed in Buildroot because we have legal-info. Since
+-# there's a EULA in the binary file, we extract it in this macro, and
+-# it should therefore be added to the LICENSE_FILES variable of
+-# packages using this macro. Also, remember to set REDISTRIBUTE to
+-# "NO". Indeed, this is a legal minefield: the EULA specifies that the
+-# Board Support Package includes software and hardware (sic!) for
+-# which a separate license is needed...
+-#
+-# $(1): full path to the archive file
+-#
+-define FREESCALE_IMX_EXTRACT_HELPER
+-	awk 'BEGIN      { start = 0; } \
+-	     /^EOEULA/  { start = 0; } \
+-	                { if (start) print; } \
+-	     /<<EOEULA/ { start = 1; }' \
+-	    $(1) > $(@D)/EULA
+-	cd $(@D) && sh $(1) --force --auto-accept
+-	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
+-	rmdir $(@D)/$(basename $(notdir $(1)))
+-endef
+-
+ include $(sort $(wildcard package/freescale-imx/*/*.mk))
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 6ece27baa2..57f4af04c5 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -275,3 +275,28 @@ legal-deps = \
+         $(filter-out $(if $(1:host-%=),host-%),\
+             $(call non-virtual-deps,\
+                 $($(call UPPERCASE,$(1))_FINAL_RECURSIVE_DEPENDENCIES))),$(p) [$($(call UPPERCASE,$(p))_LICENSE)])
++
++# Helper for self-extracting binaries distributed by Freescale.
++#
++# The --force option makes sure it doesn't fail if the source
++# directory already exists. The --auto-accept skips the license check,
++# as it is not needed in Buildroot because we have legal-info. Since
++# there's a EULA in the binary file, we extract it in this macro, and
++# it should therefore be added to the LICENSE_FILES variable of
++# packages using this macro. Also, remember to set REDISTRIBUTE to
++# "NO". Indeed, this is a legal minefield: the EULA specifies that the
++# Board Support Package includes software and hardware (sic!) for
++# which a separate license is needed...
++#
++# $(1): full path to the archive file
++#
++define FREESCALE_IMX_EXTRACT_HELPER
++	awk 'BEGIN      { start = 0; } \
++	     /^EOEULA/  { start = 0; } \
++	                { if (start) print; } \
++	     /<<EOEULA/ { start = 1; }' \
++	    $(1) > $(@D)/EULA
++	cd $(@D) && sh $(1) --force --auto-accept
++	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
++	rmdir $(@D)/$(basename $(notdir $(1)))
++endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
