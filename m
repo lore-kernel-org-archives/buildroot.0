@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70049C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B625EC00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:53:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0078D408D0;
-	Mon, 15 Aug 2022 09:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0078D408D0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F93940120;
+	Mon, 15 Aug 2022 09:53:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F93940120
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OS-zlPSbnYcT; Mon, 15 Aug 2022 09:53:25 +0000 (UTC)
+	with ESMTP id FyWraLHxW6YO; Mon, 15 Aug 2022 09:53:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E6F140A8B;
-	Mon, 15 Aug 2022 09:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E6F140A8B
+	by smtp2.osuosl.org (Postfix) with ESMTP id A1A4640AF0;
+	Mon, 15 Aug 2022 09:53:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1A4640AF0
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 817571BF3CB
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:53:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 148C41BF3CB
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:53:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6AB51408D0
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:53:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AB51408D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1DA040A8B
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:53:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1DA040A8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TdAP7K8mBXvV for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 09:53:11 +0000 (UTC)
+ with ESMTP id Df3X6G_QAVrC for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 09:53:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACFC740120
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:53:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACFC740120
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4653140148
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:53:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4653140148
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id A453B875F2; Mon, 15 Aug 2022 09:38:42 +0000 (UTC)
+ id 4145087600; Mon, 15 Aug 2022 09:39:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 11:53:05 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a17c456b2ccd44566c2395efc90d403cd27a2902
-X-Git-Newrev: b8665e39f1fa3f77fc390cb2a14884f2cb7c76f4
+Date: Mon, 15 Aug 2022 11:53:20 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: b92dc8bd0f73615eaf63f9aad33bbf63b208603d
+X-Git-Newrev: 4d32bd37458d6fa2b418c1a37aba59fcba9f3fac
 X-Patchwork-Hint: ignore
-Message-Id: <20220815093842.A453B875F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/makedumpfile: set CROSS
+Message-Id: <20220815093903.4145087600@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/makedumpfile: add zstd
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +64,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8665e39f1fa3f77fc390cb2a14884f2cb7c76f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=4d32bd37458d6fa2b418c1a37aba59fcba9f3fac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Set CROSS variable otherwise makedumpfile will use it to undefine the
-host architecture through -U__$(HOST_ARCH)__ if $(TARGET) is not equal
-to $(HOST_ARCH). This will result in the following build failure since
-the addition of the package in commit
-adb64a97e79bcb4e28450dd858654003ec8706c3 if aarch64_be is cross-compiled
-on a aarch64 host for example:
-
-/home/autobuild/autobuild/instance-5/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -g -O2 -Wall -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DVERSION='"1.7.0"' -DRELEASE_DATE='"8 Nov 2021"' -D__aarch64_be__ -U__aarch64__ -DUSELZO -c -o ./print_info.o print_info.c
-
-[...]
-
-makedumpfile.c: In function 'is_kvaddr':
-makedumpfile.c:1547:46: error: 'KVBASE' undeclared (first use in this function)
- 1547 |         return (addr >= (unsigned long long)(KVBASE));
-      |                                              ^~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/e4e10364e1a24099ce31bf20eacf5adedf93e5a7
+zstd is an optional dependency since bump to version 1.7.0 in commit
+bbc52f3ff382e4c50baea2e1876a3f6ebf77a851 and
+https://github.com/makedumpfile/makedumpfile/commit/afd0a6db2a0543217f8e46955a1b44b71f7e7ef3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/makedumpfile/makedumpfile.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/makedumpfile/makedumpfile.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
-index 8399e4d063..815a159b00 100644
+index 8399e4d063..b787f0f387 100644
 --- a/package/makedumpfile/makedumpfile.mk
 +++ b/package/makedumpfile/makedumpfile.mk
-@@ -17,6 +17,7 @@ MAKEDUMPFILE_TARGET = $(BR2_ARCH)
+@@ -30,6 +30,11 @@ MAKEDUMPFILE_DEPENDENCIES += snappy
+ MAKEDUMPFILE_MAKE_OPTS += USESNAPPY=on
  endif
  
- MAKEDUMPFILE_MAKE_OPTS = \
-+	CROSS= \
- 	TARGET=$(MAKEDUMPFILE_TARGET) \
- 	LINKTYPE=dynamic
- 
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++MAKEDUMPFILE_DEPENDENCIES += zstd
++MAKEDUMPFILE_MAKE_OPTS += USEZSTD=on
++endif
++
+ define MAKEDUMPFILE_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		$(MAKEDUMPFILE_MAKE_OPTS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
