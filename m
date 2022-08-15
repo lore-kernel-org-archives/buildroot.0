@@ -1,50 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90C07C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 12:12:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEBC9C00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 12:13:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1490141697;
-	Mon, 15 Aug 2022 12:12:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1490141697
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dmn7TNRu0mdC; Mon, 15 Aug 2022 12:12:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E511F41655;
-	Mon, 15 Aug 2022 12:12:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E511F41655
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 441761BF3B9
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 12:12:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C7D181365
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 12:12:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C7D181365
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A3B68174F;
+	Mon, 15 Aug 2022 12:13:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A3B68174F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aOsRFEXCcw3A for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 12:12:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07B6381364
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 12:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07B6381364
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id BEA5D8761C; Mon, 15 Aug 2022 11:57:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 14:12:04 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 22b3b3a77720d9527b8279d033d9fbca65b2bcba
-X-Git-Newrev: 11e11b8fda94dd12d4b8cb6565808e91c4743fed
-X-Patchwork-Hint: ignore
-Message-Id: <20220815115740.BEA5D8761C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/crda: bump to version
- 4.15
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VHPAGOaCh-d3; Mon, 15 Aug 2022 12:13:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B04D680AF5;
+	Mon, 15 Aug 2022 12:13:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B04D680AF5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E65191BF3B9
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 12:13:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C46640A96
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 12:13:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C46640A96
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AcRB6qIilKcy for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 12:13:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 551FF405AC
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 551FF405AC
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 12:13:27 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 90244240005;
+ Mon, 15 Aug 2022 12:13:23 +0000 (UTC)
+Date: Mon, 15 Aug 2022 14:13:22 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220815141322.06d3c831@windsurf>
+In-Reply-To: <20220807220528.251581-1-fontaine.fabrice@gmail.com>
+References: <20220807220528.251581-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1660565604;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=yQLj7AI21yxCX4XDTj3Cm9xhsUBe3U99c6fxLmjBpmo=;
+ b=SvTgp7u7nm2ZpgdKQrT6VHm6xKUirvP2zq7pIyNCazG8lsFpRwdhVDuHvbKkEhnbHaIE67
+ nXBUc/4/uMb7h19YBX2oF0qyCPktZ8+MCG3CF6Uktd0GayYmRhqvEOSVQx2KfDYoix4Yko
+ 1airm0kedYeQ7AvLPfOZWn8k6c4XyveV6HywPfWztjgsHbsZC6MY0FDUVUG+s/SZS4tY+G
+ TxYbFMK2bPOup1bNQ2WzaMGfK9qGbl0WQY0Wdg1+sH/Grmkf+x6S/+/GsHiAXnT1RZ+FuA
+ EFIijn5V3/QhCL1wSlCs+xtsCRcwU6FZYZ6phBfFPWU5qm/1W0Tg5xm99TYZHA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SvTgp7u7
+Subject: Re: [Buildroot] [PATCH 1/1] package/crda: bump to version 4.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,67 +77,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11e11b8fda94dd12d4b8cb6565808e91c4743fed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon,  8 Aug 2022 00:05:28 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/crda/0002-drop-ldconfig-call.patch | 4 +++-
- package/crda/crda.hash                     | 2 +-
- package/crda/crda.mk                       | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/crda/0002-drop-ldconfig-call.patch | 4 +++-
+>  package/crda/crda.hash                     | 2 +-
+>  package/crda/crda.mk                       | 2 +-
+>  3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/crda/0002-drop-ldconfig-call.patch b/package/crda/0002-drop-ldconfig-call.patch
-index f09e258adb..567840c07e 100644
---- a/package/crda/0002-drop-ldconfig-call.patch
-+++ b/package/crda/0002-drop-ldconfig-call.patch
-@@ -1,6 +1,8 @@
- Drop ldconfig call, it's useless for cross-compiling.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[Fabrice: update for 4.15]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- diff -Nura crda-3.18.orig/Makefile crda-3.18/Makefile
- --- crda-3.18.orig/Makefile	2015-02-18 10:34:23.841259401 -0300
-@@ -8,7 +10,7 @@ diff -Nura crda-3.18.orig/Makefile crda-3.18/Makefile
- @@ -127,7 +127,6 @@
-  	$(NQ) '  INSTALL  libreg'
-  	$(Q)mkdir -p $(DESTDIR)/$(LIBDIR)
-- 	$(Q)cp $(LIBREG) $(DESTDIR)/$(LIBDIR)/
-+	$(Q)$(INSTALL) -m 644 $(LIBREG) $(DESTDIR)/$(LIBDIR)/
- -	$(Q)ldconfig
-  
-  %.o: %.c regdb.h $(LIBREG)
-diff --git a/package/crda/crda.hash b/package/crda/crda.hash
-index 2a263d172a..3b0610994e 100644
---- a/package/crda/crda.hash
-+++ b/package/crda/crda.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5a8f35bb8b27474f466b0e75d451ba917433d8aab1889678a64d9c4e72a8b8c2  crda-4.14.tar.gz
-+sha256  99eb58f774f6016c380def0d80fffd573d2be0ad5f117b678c1968ed5657af82  crda-4.15.tar.gz
- sha256  c16224b376128b589eea69a8fdd1f09818b8cb995e10d1e37f72dff22233d7b0  LICENSE
-diff --git a/package/crda/crda.mk b/package/crda/crda.mk
-index 31a64d004b..a73c9aa26d 100644
---- a/package/crda/crda.mk
-+++ b/package/crda/crda.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CRDA_VERSION = 4.14
-+CRDA_VERSION = 4.15
- CRDA_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/snapshot
- CRDA_DEPENDENCIES = host-pkgconf host-python-pycryptodomex libnl libgcrypt
- CRDA_LICENSE = ISC
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
