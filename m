@@ -4,66 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C808C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:50:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B99D4C00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:50:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2DEA41673;
-	Mon, 15 Aug 2022 09:50:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2DEA41673
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2829741505;
+	Mon, 15 Aug 2022 09:50:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2829741505
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id prAqCSyGpJQv; Mon, 15 Aug 2022 09:50:03 +0000 (UTC)
+	with ESMTP id 67Ku5ts3fyki; Mon, 15 Aug 2022 09:50:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D651409FD;
-	Mon, 15 Aug 2022 09:50:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D651409FD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 49FA11BF3CB
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:49:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC74E409E5;
+	Mon, 15 Aug 2022 09:50:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC74E409E5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C5461BF3CB
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:50:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 253E1824B4
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:49:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 253E1824B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id DBAFB60AF7
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:50:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBAFB60AF7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mpstFDPbbX70 for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 09:49:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3C77818A2
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C3C77818A2
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:49:48 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B539920002;
- Mon, 15 Aug 2022 09:49:46 +0000 (UTC)
-Date: Mon, 15 Aug 2022 11:49:45 +0200
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20220815114945.2c32654b@windsurf>
-In-Reply-To: <20220815090736.79798-1-troglobit@gmail.com>
-References: <20220815090736.79798-1-troglobit@gmail.com>
-Organization: Bootlin
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e99eSGsO2XM6 for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 09:50:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E08086068D
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com
+ [209.85.218.47])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E08086068D
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:50:11 +0000 (UTC)
+Received: by mail-ej1-f47.google.com with SMTP id gb36so12621917ejc.10
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 02:50:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+ bh=5SixJW2N0XphGofOoFEnAj6rKnDKqnLPTbmOf9KceJY=;
+ b=bRw8yHAzwMbic9AGLzqsS+BeyPCXUeo/uPaZ5SujrSM0Tbkf491O/jLW8uJjJQnCpu
+ KOUa10n8gpcPOiownooABcaZg8nAZN/B6SLlC5fxg/JkYFH6yODWO3LT59rc3pTc14mA
+ 6bJ90v7vLoS4y71leEec28xKnhoVjrqGCkVGxXrElkzN2z9vc4JOakb7HQKh7s6w7YNc
+ VKHzR2wWm2hGpYgAhucfqIX6c5qTKrZdGcOuHlEF6kYxVfIAeis+xPFeX2dVjwPfp8gt
+ LoyYgy59FkXa06H7PkDwqcUWywftt5zGL3JRWV9RRS8cpYm6OrG/Cqk/z7bGxS7QfPkr
+ lgEA==
+X-Gm-Message-State: ACgBeo0RjhRFLEMgx4awmIA1rPZuZlCgTM9efw36+hlBZN0VyHSfJ9kt
+ Wghu0uMglnpHi5yPUnZHjpo=
+X-Google-Smtp-Source: AA6agR5ceHLx6s9gPl+sLDgNF/ZVVgXGzdY2mu7KhqojItEcV1HQqHb+7sx0ntHBeBa3YUNZOUq1Rg==
+X-Received: by 2002:a17:907:3f11:b0:731:57ed:3aea with SMTP id
+ hq17-20020a1709073f1100b0073157ed3aeamr9800084ejc.432.1660557010080; 
+ Mon, 15 Aug 2022 02:50:10 -0700 (PDT)
+Received: from localhost (tmo-096-168.customers.d1-online.com. [80.187.96.168])
+ by smtp.gmail.com with ESMTPSA id
+ t7-20020a170906948700b0072b32de7794sm3879021ejx.70.2022.08.15.02.50.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 15 Aug 2022 02:50:09 -0700 (PDT)
+Date: Mon, 15 Aug 2022 11:50:02 +0200
+From: Thomas Huth <huth@tuxfamily.org>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220815115002.3724bdec@tuxfamily.org>
+In-Reply-To: <20220812155233.132edc8b@windsurf>
+References: <20220806224338.0159e15c@windsurf>
+ <20220808101452.566fd732@tuxfamily.org>
+ <20220808102653.5a7a0584@windsurf>
+ <20220808215900.0fc19e1b@tuxfamily.org>
+ <20220812155233.132edc8b@windsurf>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660556987;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=IoiKlpu4tKG0A1C7XDQsP/9i0+dmTp5eQq2yqik4DSE=;
- b=SeiT4O0EARYLYS3XU98naVRMyuM/+oneieiPa2bKwofc+0oa9IKacSwdJgD7UTGDXcUCdu
- XOZ6tPR5NQ0wBTmcpTGqgPwq++NBtSXFR03gBpGj1LHnW1qkGfoWM06zT76GkFTU8moSNx
- +Ejl6qKprYzdK4U+li/ayjgTRMPp9JG7AAvBcEW3P/NAzOdjtonqas4mdUcYYV0ai4QmM8
- MIDAXJMIlQiDHY4MJNXhUUK0o10qoDsQ/yQLAvuWBpOtn/QzVIXNw9lKx1fMxYLIA4UAFf
- IyZtvslIp//57MRaZ4ryplVSiNHeS491Tes1Lfvndi8IIWGahChGkF5xohYNjQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SeiT4O0E
-Subject: Re: [Buildroot] [PATCH next] package/sysklogd: bump to version 2.4.4
+Subject: Re: [Buildroot] Buildroot defconfigs about to be removed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,37 +84,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ Filip Skoneczny <fskoneczny@gmail.com>,
+ Marek Belisko <marek.belisko@open-nandra.com>,
+ Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+ "Yann E. MORIN\"  <yann.morin.1998@free.fr>"@osuosl.org,
+ Suniel Mahesh <sunil@amarulasolutions.com>, Davide Viti <zinosat@gmail.com>,
+ Mike Harmony <mike.harmony@snapav.com>, Peter Seiderer <ps.report@gmx.net>,
+ Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org,
+ Heiko Thiery <heiko.thiery@gmail.com>, Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 15 Aug 2022 11:07:36 +0200
-Joachim Wiberg <troglobit@gmail.com> wrote:
+Am Fri, 12 Aug 2022 15:52:33 +0200
+schrieb Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-> Only one change compared to v2.4.3, fix for running `syslogd -T`, which
-> should use local time for all remote messages, but time is always logged
-> with "Jan 0 00:00:00".
+> Hello Thomas,
 > 
-> https://github.com/troglobit/sysklogd/releases/tag/v2.4.4
+> On Mon, 8 Aug 2022 21:59:00 +0200
+> Thomas Huth <huth@tuxfamily.org> wrote:
 > 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-> ---
->  package/sysklogd/sysklogd.hash | 2 +-
->  package/sysklogd/sysklogd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> > Thanks for the pointers! I had a look at the source for a while, and from
+> > what I can see, I came to the same conclusion that the modifications for
+> > ARM should really not have been done for m68k / binutils 2.32.
+> > 
+> > I can get the mcf5208 board back working by applying a patch like this on
+> > top of the current state in buildroot (fixes both, the segfault and the
+> > section overlapping):  
+> 
+> FYI, a patch was posted and merged:
+> 
+>   https://git.buildroot.org/buildroot/commit/?id=95402089c314fbc03b934f5fcf9c29db043d758c
+>   https://git.buildroot.org/buildroot/commit/?id=9dd179d43ffe9be98035f921a0db2bf051b632fb
+> 
+> Don't hesitate to give a test on your side!
 
-Since this is a pure bugfix release, I've applied the version bump to
-master. Thanks!
+Thanks, I've checked it and it works fine for me, too!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Thomas H
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
