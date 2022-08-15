@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3790CC00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 16:46:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB076C282E7
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 16:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B33E460C2A;
-	Mon, 15 Aug 2022 16:46:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B33E460C2A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8754460B49;
+	Mon, 15 Aug 2022 16:46:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8754460B49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JnB8WWnjgYxw; Mon, 15 Aug 2022 16:46:40 +0000 (UTC)
+	with ESMTP id xCgv2SlLaffa; Mon, 15 Aug 2022 16:46:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25B39607FE;
-	Mon, 15 Aug 2022 16:46:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25B39607FE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CC0D60EA0;
+	Mon, 15 Aug 2022 16:46:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CC0D60EA0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 841D41BF41C
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 16:46:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 27B321BF41C
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 16:46:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F800607FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 603D460A80
  for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 16:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F800607FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 603D460A80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JtLahYbaeVtz for <buildroot@lists.busybox.net>;
+ with ESMTP id mNNDXo_08Bps for <buildroot@lists.busybox.net>;
  Mon, 15 Aug 2022 16:46:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 40DAD6068D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3AD17605E8
  for <buildroot@buildroot.org>; Mon, 15 Aug 2022 16:46:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40DAD6068D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AD17605E8
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id 8CE5387649; Mon, 15 Aug 2022 16:31:53 +0000 (UTC)
+ id 8421887658; Mon, 15 Aug 2022 16:31:53 +0000 (UTC)
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 18:45:00 +0200
+Date: Mon, 15 Aug 2022 18:42:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4040d0d8e1d3d3b77de582b8354eca641a0613d
-X-Git-Newrev: 2bf6b0630808f8d195f1b9824492a8b072f2e3e3
+X-Git-Oldrev: 085407351ddd46c6e2a51ded6df3a0e11e31c2c9
+X-Git-Newrev: e4040d0d8e1d3d3b77de582b8354eca641a0613d
 X-Patchwork-Hint: ignore
-Message-Id: <20220815163153.8CE5387649@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/genrandconfig: add xenomai custom
- handling
+Message-Id: <20220815163153.8421887658@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xenomai: rework custom handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +62,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bf6b0630808f8d195f1b9824492a8b072f2e3e3
+commit: https://git.buildroot.net/buildroot/commit/?id=e4040d0d8e1d3d3b77de582b8354eca641a0613d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add custom cases to make sure that a random configuration with an empty
-git, tarball location or version for xenomai doesn't fail. It reverts to
-BR2_PACKAGE_XENOMAI_LATEST_VERSION in these cases.
-
-Fixes:
- - http://autobuild.buildroot.org/results/19419759b4add0197b4e629d0b2216c2a07624b2
+- Drop default value of BR2_PACKAGE_XENOMAI_REPOSITORY
+- Add BR2_PACKAGE_XENOMAI_{CUSTOM_VERSION_VALUE,REPOSITORY_VERSION} to
+  mimick what is done by other packages (e.g. barebox, u-boot)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- utils/genrandconfig | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ package/xenomai/Config.in | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 4846c316bb..b8ca628724 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -542,6 +542,27 @@ def fixup_config(sysinfo, configfile):
-         configlines.append('BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION=y\n')
-         configlines.remove('BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL=""\n')
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index ec6d9e5d29..269b85b5ce 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -64,17 +64,29 @@ config BR2_PACKAGE_XENOMAI_CUSTOM_GIT
  
-+    if 'BR2_PACKAGE_XENOMAI=y\n' in configlines and \
-+       'BR2_PACKAGE_XENOMAI_CUSTOM_GIT=y\n' in configlines and \
-+       'BR2_PACKAGE_XENOMAI_REPOSITORY=""\n' in configlines:
-+        configlines.remove('BR2_PACKAGE_XENOMAI_CUSTOM_GIT=y\n')
-+        configlines.append('BR2_PACKAGE_XENOMAI_LATEST_VERSION=y\n')
-+        configlines.remove('BR2_PACKAGE_XENOMAI_REPOSITORY=""\n')
+ endchoice
+ 
++config BR2_PACKAGE_XENOMAI_CUSTOM_VERSION_VALUE
++	string "Xenomai version"
++	depends on BR2_PACKAGE_XENOMAI_CUSTOM_VERSION
 +
-+    if 'BR2_PACKAGE_XENOMAI=y\n' in configlines and \
-+       'BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL=y\n' in configlines and \
-+       'BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL_URL=""\n' in configlines:
-+        configlines.remove('BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL=y\n')
-+        configlines.append('BR2_PACKAGE_XENOMAI_LATEST_VERSION=y\n')
-+        configlines.remove('BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL_URL=""\n')
+ config BR2_PACKAGE_XENOMAI_REPOSITORY
+ 	string "URL of custom repository"
+-	default "https://gitlab.denx.de/Xenomai/xenomai.git"
+ 	depends on BR2_PACKAGE_XENOMAI_CUSTOM_GIT
+ 
++config BR2_PACKAGE_XENOMAI_REPOSITORY_VERSION
++	string "Custom repository version"
++	depends on BR2_PACKAGE_XENOMAI_CUSTOM_GIT
++	help
++	  Revision to use in the typical format used by Git, i.e a
++	  SHA1 or a tag.
 +
-+    if 'BR2_PACKAGE_XENOMAI=y\n' in configlines and \
-+       'BR2_PACKAGE_XENOMAI_CUSTOM_VERSION=y\n' in configlines and \
-+       'BR2_PACKAGE_XENOMAI_CUSTOM_VERSION_VALUE=""\n' in configlines:
-+        configlines.remove('BR2_PACKAGE_XENOMAI_CUSTOM_VERSION=y\n')
-+        configlines.append('BR2_PACKAGE_XENOMAI_LATEST_VERSION=y\n')
-+        configlines.remove('BR2_PACKAGE_XENOMAI_CUSTOM_VERSION_VALUE=""\n')
-+
-     if 'BR2_PACKAGE_XVISOR=y\n' in configlines and \
-        'BR2_PACKAGE_XVISOR_USE_CUSTOM_CONFIG=y\n' in configlines and \
-        'BR2_PACKAGE_XVISOR_CUSTOM_CONFIG_FILE=""\n' in configlines:
+ config BR2_PACKAGE_XENOMAI_VERSION
+-	string "Custom Xenomai version" if \
+-		!BR2_PACKAGE_XENOMAI_LATEST_VERSION && \
+-		!BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
++	string
+ 	default "3.0.10" if BR2_PACKAGE_XENOMAI_LATEST_VERSION
++	default BR2_PACKAGE_XENOMAI_CUSTOM_VERSION_VALUE \
++                if BR2_PACKAGE_XENOMAI_CUSTOM_VERSION
+ 	default "custom" if BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
++	default BR2_PACKAGE_XENOMAI_REPOSITORY_VERSION \
++		if BR2_PACKAGE_XENOMAI_CUSTOM_GIT
+ 
+ config BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL_URL
+ 	string "URL of custom tarball"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
