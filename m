@@ -1,89 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A08C25B0E
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 20:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3B27C25B08
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 21:48:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28ED54032A;
-	Mon, 15 Aug 2022 20:50:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28ED54032A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EB5940241;
+	Mon, 15 Aug 2022 21:48:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EB5940241
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xVRH21Ffme3Y; Mon, 15 Aug 2022 20:50:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OueuInl8Ugb1; Mon, 15 Aug 2022 21:48:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B577440332;
-	Mon, 15 Aug 2022 20:50:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B577440332
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BFA140239;
+	Mon, 15 Aug 2022 21:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BFA140239
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 49BAE1BF33F
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 20:50:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0EB9D1BF39E
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 21:48:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 24C3560BA9
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 20:50:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24C3560BA9
+ by smtp3.osuosl.org (Postfix) with ESMTP id D0BD860BD1
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 21:48:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0BD860BD1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ti-_FSLC3lxp for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 20:50:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26A6C60B34
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 26A6C60B34
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 20:50:20 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- bd26-20020a05600c1f1a00b003a5e82a6474so2793209wmb.4
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 13:50:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=gX7jZ7aZr4XfjbtbHcKix5gesRmmoc8CMvYBXYomfek=;
- b=hx9x4VZ5Lj3ZtuOz3xGdOXMBhgKddJyZdYfv2bdRgsnLL1i2fwtk6fROztGmAdmnGN
- qh47qo24JT3J5U3gpNlW6ZuwXCHOKRaYI61alej74vIe7jNMI8dXVtjrr2dvbjlmIyo4
- INMO/OPjbwDjHaVxTXhJUCrGTyWnldMk7DoCWXT9DxDDNmdL4lBDQVC+1uvoQXrk920e
- YYzXEqVfKLS3neT06quDxjCjKK+wFtOeB4y2U5jYSOnuwVGKg2/dsbdP0XxWrCJ/8hZi
- pEgAldNv/BAh+k7A7n0jgxY/vg0nvtFix9PDtVlpWUfStOKjnIK5yBcKL1f5aRDodatO
- ffMA==
-X-Gm-Message-State: ACgBeo2x7medcmipHlRAmq2JDPqh9XGEaAsRes8ND3PWnU9V+WyEu2tu
- lcRxsIIsyFE5q9XdQLf1MNQtj1km7zg=
-X-Google-Smtp-Source: AA6agR6qxz2hiLX+NdkOTxOy6IYR+XzRDCE3mQWe2Z4vXIc10JqobDJUug6ncEaGwcBKRGYkRf0LiQ==
-X-Received: by 2002:a05:600c:3ba0:b0:3a5:b73a:8773 with SMTP id
- n32-20020a05600c3ba000b003a5b73a8773mr15430501wms.64.1660596618107; 
- Mon, 15 Aug 2022 13:50:18 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b0083b0e7aadc437e2f.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:83b0:e7aa:dc43:7e2f])
- by smtp.gmail.com with ESMTPSA id
- n37-20020a05600c3ba500b003a38606385esm267205wms.3.2022.08.15.13.50.17
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Aug 2022 13:50:17 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 22:50:11 +0200
-Message-Id: <20220815205011.13423-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ with ESMTP id 6EYnIJTtSykE for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 21:48:23 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A29D560AA7
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A29D560AA7
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 21:48:22 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 24A9B240004;
+ Mon, 15 Aug 2022 21:48:19 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Romain Naour <romain.naour@gmail.com>,
+ =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Date: Mon, 15 Aug 2022 23:48:12 +0200
+Message-Id: <20220815214815.2234201-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=gX7jZ7aZr4XfjbtbHcKix5gesRmmoc8CMvYBXYomfek=;
- b=WlddmCud2SBONNAFwwnBHLIlYI6y5XQJqhw9ADGndRkXTUsf41IGQ2roC8fjBZJDmq
- veUl0XYu2eJXN7lMhokmXEWFbgNKVRpkMH281eeDMLn9mVwuIFEwNqJbOU1Wbb1rzuFj
- KgJFIuiLsyaBatqgg+MzqQUNcv5qLNRl+ElWO68Nbrk9VbKPrYkMtzKfpm/IQwhnHvyQ
- f3HarN+3VqMULh5XeCwleoNFhT6fW1kufoy5zbK34FCoFkIceRHtq7i3nwMy133tq4cG
- 566tZ5T+j4NVfIT2+I/SwE7YMxMTShAMkTtHCPFYNSZGMY4sSJW/NwQZ4cUL5k1ReGWv
- Cv8g==
+ d=bootlin.com; s=gm1; t=1660600099;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=pxmq8wllrptS0AsjLN/hB2z5sAMFqvgOzbIadUUkx2c=;
+ b=UQHPLXaT+jHbjtCpbZHruDFev0KcgfXVzeGXFOaExVn0G5tdyBG9mfXgcONHpH1iQG2zqn
+ HoEzjrfu2CesXb8YfBWLBkJlZ+Yd/ne8j3MNRphy6BLD/p6d9168oMVGuIGNMfmm0RjjsV
+ 0yfxjROSPiideshC9P7GKJghHHM3dcPDZwFT+4T67Xp08uSd5Weg6bEbRzGJY9wxDyjFJv
+ H9dB4D8Ai/FAEHPErXDS5U4AXGIaqRO6VxUU8Fa1Zc1KDATNHSP0ayMgL1wRE7iB2sEvi3
+ rxsFmNCWXtVU9s6vnp477zWgw4IyIL92ujEB2Dzr32LNFCGvVqFnSuEHdGeQZA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=WlddmCud
-Subject: [Buildroot] [PATCH 1/1] support/dependencies: check for find and
- xargs
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UQHPLXaT
+Subject: [Buildroot] [PATCH 0/3] Fix 3 Python test cases
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,46 +74,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 7652817c93a02715e0d334d70118a0d8b6917ca6 updated the
-documentation but forgot to update support/dependencies
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- support/dependencies/dependencies.sh | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+This small patch series fixes 3 Python test cases. They fail because
+we use an initramfs in all Python tests (and in many other tests). The
+issue of initramfs is that if the initramfs filesystem grows too
+large, the kernel fails to decompress it, and simply continues booting
+with a partially uncompressed initramfs: some files are simply
+missing.
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index d69d97afaa..2b678ae8c4 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -163,7 +163,7 @@ fi
- 
- # Check that a few mandatory programs are installed
- missing_progs="no"
--for prog in perl tar wget cpio unzip rsync bc cmp ${DL_TOOLS} ; do
-+for prog in perl tar wget cpio unzip rsync bc cmp find xargs ${DL_TOOLS} ; do
- 	if ! which $prog > /dev/null ; then
- 		echo "You must install '$prog' on your build machine";
- 		missing_progs="yes"
-@@ -177,6 +177,10 @@ for prog in perl tar wget cpio unzip rsync bc cmp ${DL_TOOLS} ; do
- 			echo "  bzcat is usually part of the bzip2 package in your distribution"
- 		elif test $prog = "cmp" ; then
- 			echo "  cmp is usually part of the diffutils package in your distribution"
-+		elif test $prog = "find" ; then
-+			echo "  find is usually part of the findutils package in your distribution"
-+		elif test $prog = "xargs" ; then
-+			echo "  xargs is usually part of the findutils package in your distribution"
- 		fi
- 	fi
- done
+In this patch series, we fix just the 3 failing test cases, for the
+sake of having a reasonably minimal solution to apply in master. We
+switch those test cases to use an initramfs to using an ext2 image
+that is exposed by Qemu as a regular hard-drive.
+
+Long term, we probably want to switch all tests to using this
+strategy, so that we don't face a weird limit caused by
+initramfs. That being said, there is no silver bullet: even if we
+switch to ext2, we will have to define, for each test, the size of the
+ext2 filesystem image. So there will still be some sort of arbitrary
+limit that will have to be tweaked from time to time as a given test
+grows in size (more dependencies, dependencies growing, etc.).
+
+Best regards,
+
+Thomas Petazzoni
+
+Thomas Petazzoni (3):
+  support/testing/tests/package/test_python_boto3: use ext2 instead of
+    cpio
+  support/testing/tests/package/test_python_botocore: use ext2 instead
+    of cpio
+  support/testing/tests/package/test_python_s3transfer: use ext2 instead
+    of cpio
+
+ support/testing/tests/package/test_python_boto3.py   | 12 ++++++++++++
+ .../testing/tests/package/test_python_botocore.py    | 12 ++++++++++++
+ .../testing/tests/package/test_python_s3transfer.py  | 12 ++++++++++++
+ 3 files changed, 36 insertions(+)
+
 -- 
-2.35.1
+2.37.2
 
 _______________________________________________
 buildroot mailing list
