@@ -1,87 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD996C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 20:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48D74C00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 20:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 624A3408A8;
-	Mon, 15 Aug 2022 20:43:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 624A3408A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id D0B594032A;
+	Mon, 15 Aug 2022 20:47:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0B594032A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 164sDT-sHlY7; Mon, 15 Aug 2022 20:43:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s499JEI442z5; Mon, 15 Aug 2022 20:47:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4128B4089D;
-	Mon, 15 Aug 2022 20:43:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4128B4089D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1748C1BF33F
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 20:43:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B49F5402BC;
+	Mon, 15 Aug 2022 20:47:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B49F5402BC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 97A441BF33F
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 20:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E67678130D
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 20:43:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E67678130D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AC13402BC
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 20:47:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AC13402BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id f8-Oe3h7ugoD for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 20:43:49 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4900E81310
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4900E81310
- for <buildroot@busybox.net>; Mon, 15 Aug 2022 20:43:49 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id z8so4413003ile.0
- for <buildroot@busybox.net>; Mon, 15 Aug 2022 13:43:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-disposition:mime-version:message-id:subject:to:from:date
- :x-gm-message-state:from:to:cc;
- bh=mrZBSYCFfljCWXjy1r08JoTzw+w5wC1yS2khCdrBM+E=;
- b=znZ84m+NpPRoMd12qm1zY+ak3CFGTG0jHek41qwPX37pAhShz7D2oVD4f4ZDXwI+wx
- cxdkFjoVi3LAs+QIwfiXZnZCJP/FfQFInkwqV/pCzAdOoCyTsmMuRClPuQ74HI82Bt/x
- zdA1p6QnGoMHSJGwW9VqOuOGLR4Gym6XX4k5KDfGWY2hVzNkfwlQNKq4gF0eV9rFjiSa
- vSf8B7wqzdI6Qb4ecvVtntM10nU9HbwAMLi/7wXWkcxV6zeXFOfwFelgQBSLqsnkoQ/4
- m1KsXM104NRQEllq0Xf7hF6iv7m0AlMO2xj2As1hMGIwEEHJKUoUa4WmT5QhbeW1AwAP
- idow==
-X-Gm-Message-State: ACgBeo3faDa095WS//BKbwJVyNqP9BoGo8HUi2SEsZTVxigmDA0QI4Z+
- rF048wvgn57Uh/THAfHtKyi7AWto8Eg=
-X-Google-Smtp-Source: AA6agR46VgHhqxfMeKAERHnVzum0FMC1MQYrKmpqPkeZmz1J50PjZgHbPpq6naORLZ00Hg7GUtQNmg==
-X-Received: by 2002:a05:6e02:b4d:b0:2de:d8bf:3770 with SMTP id
- f13-20020a056e020b4d00b002ded8bf3770mr7669756ilu.48.1660596228382; 
- Mon, 15 Aug 2022 13:43:48 -0700 (PDT)
-Received: from einstein.dilieto.eu (smtp.dilieto.eu. [188.68.43.228])
- by smtp.gmail.com with ESMTPSA id
- g8-20020a05660203c800b006881f702ef9sm2718894iov.14.2022.08.15.13.43.47
- for <buildroot@busybox.net>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Aug 2022 13:43:47 -0700 (PDT)
-Date: Mon, 15 Aug 2022 22:43:44 +0200
-From: Nicola Di Lieto <nicola.dilieto@gmail.com>
-To: buildroot@busybox.net
-Message-ID: <YvqwAHIBtqUM4M7/@einstein.dilieto.eu>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WpTBlHYojBBE for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 20:47:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A243640298
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A243640298
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 20:47:39 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 8326F240005;
+ Mon, 15 Aug 2022 20:47:37 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Mon, 15 Aug 2022 22:47:31 +0200
+Message-Id: <20220815204732.2220880-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Disposition: inline
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-disposition:mime-version:message-id:subject:to:from:date
- :from:to:cc;
- bh=mrZBSYCFfljCWXjy1r08JoTzw+w5wC1yS2khCdrBM+E=;
- b=hsN+/RE3Q0D/PDTe/n0TspM56/U5zZC+b9nPF9z6/DDoAMtOc0Qft7Y4P1dKaPUDsu
- dN/gHYmCmFEe8vyBgxRj7eDRtIJuT1lZyk3gORK/GRkUIYOlJTcc7nKXwjFHti7womuI
- sN9BYr/BH054fltHjZnQ2VJKItEfhqrKMTQhqomF/ys2SSztVbEWC9eKdC8JQRQZsu1O
- 6/bzcTs14uzg28jmcPMxNeHAXN3mfB5uo6EJFf5jNddh4YpoMlpvuy7+9PbZ57m7lNBz
- fagQhcgg5j8I+zWGahUQtR7p33EuoakPyQ5r+TyZ0m2yi0Rus0rA1jGeOWIhxRzZAMy4
- vOVg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=hsN+/RE3
-Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.7.2
+ d=bootlin.com; s=gm1; t=1660596457;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=2COklEkGKIWS2pfTCeQdZ+jfnzRqc6dmpDLlaZHLoro=;
+ b=n2FiufnSqP3Pyisjk71FPEoGEeZ1rrXT4qQb7XOC+8YQQfLfDlO/u1m7u7fFxoLlk5mmhS
+ MgqjveIQlewJouhmtEY9VRLdUXaStKa8FZ3+vWjecpImxNLbREI9p/KvMQl8RwLvC4TrAZ
+ TmrQyHlaP9evDLkTRFbhdeo64FrATcgTQ6tYRJQ9VXAsUwu+eM4gabhf1/4i/b9iPIs+Aw
+ meJAcPV3Zy71ELQkMIT3OZ+2osaeOs4GVZz0VmI44+cvxAVH3ib0/XUottHbrM4h/7SF57
+ ZqNGabrCCFLHo+9kNmxomu9YQxOamV1U8Qjii0r6qgsjoOv7hycsgp3JzaBbPQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=n2FiufnS
+Subject: [Buildroot] [PATCH] support/testing/tests/fs/test_f2fs: fix test
+ after f2fs-tools bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,41 +72,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
----
- package/uacme/uacme.hash | 2 +-
- package/uacme/uacme.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+In commit
+9267b0f14d3d5f4715bad444f44eae47d9d5627c ("package/f2fs-tools: bump to
+version 1.15.0"), f2fs-tools was bumped from 1.14.0 to 1.15.0.
 
-diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
-index 4ae85c1c..f6246302 100644
---- a/package/uacme/uacme.hash
-+++ b/package/uacme/uacme.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  36027a587256cbaa86650cec2a5b3eb000480e1150bd83941565661b392625ac  uacme-1.7.1.tar.gz
-+sha256  e7598e794f5ec414d993c4f2f7df39e7c72f26e41302b875ddaf040d8103ec5f  uacme-1.7.2.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-index 84e01057..24822594 100644
---- a/package/uacme/uacme.mk
-+++ b/package/uacme/uacme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+It turns out that this version bump causes the output of dump.f2fs to
+slightly change.
+
+In version 1.14.0, it looked like this:
+
+Info: Segments per section = 1
+Info: Sections per zone = 1
+Info: sector size = 512
+Info: total sectors = 262144 (128 MB)
+Info: MKFS version
+  "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022"
+Info: FSCK version
+  from "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 20
+22"
+    to "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 20
+22"
+Info: superblock features = 0 :
+Info: superblock encrypt level = 0, salt = 00000000000000000000000000000000
+Info: total FS sectors = 262144 (128 MB)
+Info: CKPT version = 70c101c3
+Info: checkpoint state = 181 :  trimmed nat_bits unmount
+
+In version 1.15.0, it looked like this:
+
+Info: MKFS version
+  "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022"
+Info: FSCK version
+  from "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 20
+22"
+    to "Linux version 5.4.0-124-generic (buildd@lcy02-amd64-089) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)) #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 20
+22"
+Info: superblock features = 0 :
+Info: superblock encrypt level = 0, salt = 00000000000000000000000000000000
+Info: Segments per section = 1
+Info: Sections per zone = 1
+Info: total FS sectors = 262144 (128 MB)
+Info: CKPT version = b89f8bb
+Info: checkpoint state = 181 :  trimmed nat_bits unmount
+
+You will notice that the message "Info: total sectors = 262144 (128
+MB)" is no longer present, and only "Info: total FS sectors =
+262144 (128 MB)" is not present.
+
+Except our test case was precisely looking for this "Info: total
+sectors" string in the output, causing the test to fail.
+
+We fix this by simply matching on "Info: total FS sectors" now.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/2884634814
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/fs/test_f2fs.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/testing/tests/fs/test_f2fs.py b/support/testing/tests/fs/test_f2fs.py
+index 2d05a86418..425fbe31ca 100644
+--- a/support/testing/tests/fs/test_f2fs.py
++++ b/support/testing/tests/fs/test_f2fs.py
+@@ -30,7 +30,7 @@ class TestF2FS(infra.basetest.BRTest):
+         img = os.path.join(self.builddir, "images", "rootfs.f2fs")
+         out = infra.run_cmd_on_host(self.builddir, ["host/sbin/dump.f2fs", img])
+         out = out.splitlines()
+-        prop = dumpf2fs_getprop(out, "Info: total sectors")
++        prop = dumpf2fs_getprop(out, "Info: total FS sectors")
+         self.assertEqual(prop, "262144 (128 MB)")
  
--UACME_VERSION = 1.7.1
-+UACME_VERSION = 1.7.2
- # Released versions are on branch upstream/latest, tagged as
- # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
- # include .tarball-version
+         kernel = os.path.join(self.builddir, "images", "zImage")
 -- 
-2.20.1
+2.37.2
 
 _______________________________________________
 buildroot mailing list
