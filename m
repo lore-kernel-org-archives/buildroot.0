@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C7DDC25B08
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 19:04:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66BDAC25B0E
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 19:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04C1140632;
-	Mon, 15 Aug 2022 19:04:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04C1140632
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9ABA40888;
+	Mon, 15 Aug 2022 19:04:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9ABA40888
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id khFzmD-GnIwW; Mon, 15 Aug 2022 19:04:36 +0000 (UTC)
+	with ESMTP id ePv9VQKyOIqt; Mon, 15 Aug 2022 19:04:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D92174067F;
-	Mon, 15 Aug 2022 19:04:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D92174067F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DA0111BF30B
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 19:04:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 053F34087A;
+	Mon, 15 Aug 2022 19:04:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 053F34087A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 07FF51BF96B
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 19:04:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5D5860AAD
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3F9340544
  for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 19:04:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5D5860AAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3F9340544
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DSXmuucWnEh2 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hC8cQVSvu4g0 for <buildroot@lists.busybox.net>;
  Mon, 15 Aug 2022 19:04:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2F0660AA7
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAABD40632
  for <buildroot@buildroot.org>; Mon, 15 Aug 2022 19:04:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2F0660AA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAABD40632
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 17F69876AF; Mon, 15 Aug 2022 18:50:03 +0000 (UTC)
+ id 0D80A876AE; Mon, 15 Aug 2022 18:50:03 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 21:03:46 +0200
+Date: Mon, 15 Aug 2022 21:03:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68d0385533698e49747a070a03bd7a06652288bd
-X-Git-Newrev: 869fe1fbab7f769007995356e7cf15a9df6b28b5
+X-Git-Oldrev: a0ad1a68692d55aef407b8862a836ad1bcbf5897
+X-Git-Newrev: 68d0385533698e49747a070a03bd7a06652288bd
 X-Patchwork-Hint: ignore
-Message-Id: <20220815185003.17F69876AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert
- "configs/olimex_a20_olinuxino_lime2: use NEON+VFPv4 as FPU strategy"
+Message-Id: <20220815185003.0D80A876AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "configs/olimex_a33_olinuxino: use
+ NEON+VFPv4 as FPU strategy"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=869fe1fbab7f769007995356e7cf15a9df6b28b5
+commit: https://git.buildroot.net/buildroot/commit/?id=68d0385533698e49747a070a03bd7a06652288bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The gcc man page states that specifying Neon as part of the fpu setting
@@ -86,26 +86,26 @@ well as setting BR2_ARM_FPU_NEON_VFPV4. This way the default
 BR2_ARM_FPU_VFPV4D16 is used as previously. So let's revert the
 offending patch.
 
-This reverts commit f8528acdfda278ea9f2f9bc8a47eb77ace0c050f.
+This reverts commit 23329364e206d5ca67a9eb9c733d3d556ccdbac4.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/olimex_a20_olinuxino_lime2_defconfig | 1 -
+ configs/olimex_a33_olinuxino_defconfig | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index a032eb922f..e325184e9e 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -2,7 +2,6 @@
+diff --git a/configs/olimex_a33_olinuxino_defconfig b/configs/olimex_a33_olinuxino_defconfig
+index 27924b9e92..cdbc63efe1 100644
+--- a/configs/olimex_a33_olinuxino_defconfig
++++ b/configs/olimex_a33_olinuxino_defconfig
+@@ -1,7 +1,6 @@
+ # Architecture
  BR2_arm=y
  BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
 -BR2_ARM_FPU_NEON_VFPV4=y
  
- # Linux headers same as kernel, a 5.15 LTS series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ # Linux headers same as kernel, a 5.14 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
