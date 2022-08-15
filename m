@@ -1,74 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A925C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70049C00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:53:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA060818C0;
-	Mon, 15 Aug 2022 09:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA060818C0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0078D408D0;
+	Mon, 15 Aug 2022 09:53:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0078D408D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xDKi6eb2DzCL; Mon, 15 Aug 2022 09:53:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OS-zlPSbnYcT; Mon, 15 Aug 2022 09:53:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1DA681749;
-	Mon, 15 Aug 2022 09:53:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1DA681749
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2DA291BF3CB
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:53:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E6F140A8B;
+	Mon, 15 Aug 2022 09:53:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E6F140A8B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 817571BF3CB
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:53:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 095B360D62
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 095B360D62
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AB51408D0
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:53:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AB51408D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oXM7E8r7-rSp for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 09:53:02 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC39460BCA
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EC39460BCA
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:53:01 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c91d:14e3:a117:34c4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 7ABC16013E;
- Mon, 15 Aug 2022 11:52:56 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 15 Aug 2022 11:52:56 +0200
-Date: Mon, 15 Aug 2022 11:52:56 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220815095256.GT2854108@scaer>
-References: <20220813093627.369221-1-ju.o@free.fr>
- <20220813125424.6caa746b@windsurf>
- <e0634cb156656205a84bc7ecce8a9412@free.fr>
- <20220814202300.GM2854108@scaer> <20220815113915.33c6816b@windsurf>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220815113915.33c6816b@windsurf>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660557179;
- bh=41gTDKtGq0dg5hhOMIuAwQKgprkQcqQ8QL6yAipJi9k=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=scNUKD6Prw4wE5bmhUnF6n2wgK5fxL92xEtrA4BlOmWEOFykzaRUimlMB+5Eeg5/Z
- EarIlFEHrnuHVhWZltqJVYDOY+XDLYqBJxI+zaDv7VEzEEMuBRSrXVkfb3Z3Odj7UB
- NoE3UUK80ISbPpC5c35yl2YHzWNncty/UEpho4k8NlL7gvIedaPRRYKa/dIzGsFrbN
- qyeT840jpI0HdNi3H6D7T4lieuDx179ylazUZxD4HCUxim2AyLqFZLq66THA3fODmj
- wiwT09HNSLB0aCRuou9Jtin7F3les0n5QFZyBXpDLKICztOvWxHlRm2citBJgNXvj2
- Lls9VCfXkIkLw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=scNUKD6P
-Subject: Re: [Buildroot] [PATCH next 1/1] package/linux-backports: bump
- version to 5.15.58
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TdAP7K8mBXvV for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 09:53:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id ACFC740120
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:53:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACFC740120
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id A453B875F2; Mon, 15 Aug 2022 09:38:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 15 Aug 2022 11:53:05 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a17c456b2ccd44566c2395efc90d403cd27a2902
+X-Git-Newrev: b8665e39f1fa3f77fc390cb2a14884f2cb7c76f4
+X-Patchwork-Hint: ignore
+Message-Id: <20220815093842.A453B875F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/makedumpfile: set CROSS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,40 +55,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b8665e39f1fa3f77fc390cb2a14884f2cb7c76f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-08-15 11:39 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 14 Aug 2022 22:23:00 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > The alternate solution is not great: we could add a version choice:
-[--SNIP--]
-> That is the sort of solution that I was thinking of, indeed.
+Set CROSS variable otherwise makedumpfile will use it to undefine the
+host architecture through -U__$(HOST_ARCH)__ if $(TARGET) is not equal
+to $(HOST_ARCH). This will result in the following build failure since
+the addition of the package in commit
+adb64a97e79bcb4e28450dd858654003ec8706c3 if aarch64_be is cross-compiled
+on a aarch64 host for example:
 
-Then OK. We can argue that linux-backports is in the same league as the
-kernel, so having a version choice makes sense.
+/home/autobuild/autobuild/instance-5/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -g -O2 -Wall -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DVERSION='"1.7.0"' -DRELEASE_DATE='"8 Nov 2021"' -D__aarch64_be__ -U__aarch64__ -DUSELZO -c -o ./print_info.o print_info.c
 
-Julien, I've marked this patch as changes-requested, while waiting for a
-respin that ads the version choice.
+[...]
 
-Thanks!
+makedumpfile.c: In function 'is_kvaddr':
+makedumpfile.c:1547:46: error: 'KVBASE' undeclared (first use in this function)
+ 1547 |         return (addr >= (unsigned long long)(KVBASE));
+      |                                              ^~~~~~
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - http://autobuild.buildroot.org/results/e4e10364e1a24099ce31bf20eacf5adedf93e5a7
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/makedumpfile/makedumpfile.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
+index 8399e4d063..815a159b00 100644
+--- a/package/makedumpfile/makedumpfile.mk
++++ b/package/makedumpfile/makedumpfile.mk
+@@ -17,6 +17,7 @@ MAKEDUMPFILE_TARGET = $(BR2_ARCH)
+ endif
+ 
+ MAKEDUMPFILE_MAKE_OPTS = \
++	CROSS= \
+ 	TARGET=$(MAKEDUMPFILE_TARGET) \
+ 	LINKTYPE=dynamic
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
