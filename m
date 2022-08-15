@@ -1,71 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ED0BC00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:57:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7067CC00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 10:01:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E1AE640A96;
-	Mon, 15 Aug 2022 09:57:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1AE640A96
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DTwdyPztSZ7P; Mon, 15 Aug 2022 09:57:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFEF6408D0;
-	Mon, 15 Aug 2022 09:57:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFEF6408D0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D03221BF3CB
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:57:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9AB0409C1
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:57:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9AB0409C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6CAA415D0;
+	Mon, 15 Aug 2022 10:01:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6CAA415D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j3OI3n-Kmjw4 for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 09:57:06 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BzJeOsQwxKA6; Mon, 15 Aug 2022 10:01:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD7F441581;
+	Mon, 15 Aug 2022 10:01:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD7F441581
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A8A51BF3CB
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:01:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45BF460625
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:01:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45BF460625
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UKGFGS9cpC3L for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 10:01:02 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 514D24098B
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 514D24098B
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:57:06 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:c91d:14e3:a117:34c4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 337E16013D;
- Mon, 15 Aug 2022 11:57:01 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 15 Aug 2022 11:57:00 +0200
-Date: Mon, 15 Aug 2022 11:57:00 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF7AA605A7
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CF7AA605A7
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 10:01:01 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EA85D240003;
+ Mon, 15 Aug 2022 10:00:58 +0000 (UTC)
+Date: Mon, 15 Aug 2022 12:00:57 +0200
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220815095700.GU2854108@scaer>
-References: <20220814182734.2878423-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220815120057.6a188a67@windsurf>
+In-Reply-To: <20220815094054.291874-1-fontaine.fabrice@gmail.com>
+References: <20220815094054.291874-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220814182734.2878423-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660557424;
- bh=dY2bo8CKrD54hOQ5uahxvuRWoez4U8X/7ZwWCvX0bFI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=C5AUbjrxU5Tmc9YWeEsCJ6VLKoaFTy8sJ5umwG5XLuxD0t0ZaDw/Q8/h3o3NhNwZZ
- ibUzaiVq3I5u43dibZk4jDxd6H4KWAjrBCQgmLt3VVeprCqWzm5tG6D8rllkzihTf8
- hEgbXmBpZ2lNzslxaOZdSQPYvTTH7g9Ro3PlF8LNtKBEv8Pn+Ah4vOXd6NInlCm64o
- dldmQa6WTdjVrrX0qqqidnU+jAYyBbUqlDoZHiBNmKhcexD5EsJFSgxQ8Wxse7l1Jz
- mGF+2xWbL9W+329KelL9f9tLIXXxBSthBREgMjz82xGA6hb99JqXVcZuJ5R4XZLWUl
- aav76LS38NTKg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=C5AUbjrx
-Subject: Re: [Buildroot] [PATCH v3,
- 1/2] Revert "package/libvirtd: fix recursive dependency in Kconfig"
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1660557659;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ohdAZn5b7eihheWol4eMPNbA4HxKyGWPtXNphkf/CcA=;
+ b=H2dCzKBe9ZHRoUsuw1i5TcNqDKwWdusXLmyma4/3YBjJIhce2h9yduXJxQiGCLmCozMalR
+ 3bg8XEynWjIodF35i+7xNTEhRxnHRmO9AKH7sh4u+i4QJVSK11hfeTwAz7Rn0mS6AfeXhv
+ 5pzLHqa9fhUQu8PlsMinnee8Ov/mzje9fnaI4zW03nWzgzV7gBRGcScFcimdpfsR53sFtO
+ AEbQhAhHJ8+kyR6tibN2Ioq/eR5IjLZuZDwioXlLEM0rrEr8PMhx3yhLOkYzNC5dWeL1Ku
+ heGLHRLXWYYnyrHe7MXHD/aVLHehYtqEzknFCeu2Yx60NzIHVJxi9SbwWjySnQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=H2dCzKBe
+Subject: Re: [Buildroot] [PATCH 1/1] package/makedumpfile: set CROSS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,76 +74,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jared Bents <jared.bents@rockwellcollins.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Alexander Egorenkov <egorenar-dev@posteo.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+On Mon, 15 Aug 2022 11:40:54 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On 2022-08-14 20:27 +0200, Fabrice Fontaine spake thusly:
-> This reverts commit f81242ae4fb64ab85af5d38e70246222276552ae to avoid
-> the following build failure:
+> Set CROSS variable otherwise makedumpfile will use it to undefine the
+> host architecture through -U__$(HOST_ARCH)__ if $(TARGET) is not equal
+> to $(HOST_ARCH). This will result in the following build failure since
+> the addition of the package in commit
+> adb64a97e79bcb4e28450dd858654003ec8706c3 if aarch64_be is cross-compiled
+> on a aarch64 host for example:
 > 
-> Makefile:575: *** libbsd is in the dependency chain of netcat-openbsd that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+> /home/autobuild/autobuild/instance-5/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -g -O2 -Wall -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DVERSION='"1.7.0"' -DRELEASE_DATE='"8 Nov 2021"' -D__aarch64_be__ -U__aarch64__ -DUSELZO -c -o ./print_info.o print_info.c
+> 
+> [...]
+> 
+> makedumpfile.c: In function 'is_kvaddr':
+> makedumpfile.c:1547:46: error: 'KVBASE' undeclared (first use in this function)
+>  1547 |         return (addr >= (unsigned long long)(KVBASE));
+>       |                                              ^~~~~~
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/aada1d92df6cab0d01e27431b7b7483e3d165e79
+>  - http://autobuild.buildroot.org/results/e4e10364e1a24099ce31bf20eacf5adedf93e5a7
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Series of two patches applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
 > ---
-> Changes v2 -> v3 (after review of Thomas Petazzoni):
->  - Always mandate C++ instead of glibc
->  
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Fix patch (rebase on top of current master)
-> 
->  package/libvirt/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-> index 5a6b067a0d..afd2372d0e 100644
-> --- a/package/libvirt/Config.in
-> +++ b/package/libvirt/Config.in
-> @@ -38,13 +38,15 @@ if BR2_PACKAGE_LIBVIRT
->  config BR2_PACKAGE_LIBVIRT_DAEMON
->  	bool "libvirtd"
->  	default y
-> +	depends on BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_NETCAT_OPENBSD # nmap
->  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	select BR2_PACKAGE_DNSMASQ
->  	select BR2_PACKAGE_EBTABLES
->  	select BR2_PACKAGE_IPTABLES
->  	select BR2_PACKAGE_IPROUTE2
->  	# These are required because there is no way to unequivocally select a modern netcat
-> -	select BR2_PACKAGE_NETCAT_OPENBSD if !BR2_PACKAGE_NMAP_NCAT
-> +	select BR2_PACKAGE_NMAP      if !BR2_PACKAGE_NETCAT_OPENBSD
-> +	select BR2_PACKAGE_NMAP_NCAT if !BR2_PACKAGE_NETCAT_OPENBSD
->  	select BR2_PACKAGE_RADVD
->  	help
->  	  Build the libvirt daemon (libvirtd) otherwise build only the
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+>  package/makedumpfile/makedumpfile.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
+Applied to master, thanks.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
