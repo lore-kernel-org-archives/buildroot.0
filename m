@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C7B8ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:52:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 157A9ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:52:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD2E0417AA;
-	Sun, 11 Sep 2022 08:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD2E0417AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7E0181947;
+	Sun, 11 Sep 2022 08:52:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7E0181947
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uBvI4XcF9x-4; Sun, 11 Sep 2022 08:52:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Vl1Cwe1SMVzo; Sun, 11 Sep 2022 08:52:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCF60415C7;
-	Sun, 11 Sep 2022 08:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCF60415C7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 12D1C1BF990
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FA97818C0;
+	Sun, 11 Sep 2022 08:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FA97818C0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 24A2D1BF9A4
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A2146106E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3813140A05
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A2146106E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3813140A05
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eIaJhKwnZber for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f7MJTYDRHoPm for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEF4160B2C
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEF4160B2C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2FABC409F3
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FABC409F3
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BAE9283620; Sun, 11 Sep 2022 08:48:23 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 2D88583621; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 14 Aug 2022 17:31:24 +0200
+Date: Mon, 15 Aug 2022 11:53:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4afac3ab11ea4b8c2d45312f70dadb63d17d628
-X-Git-Newrev: f3b3887012de06c69b73291693c1bd4a35f21250
+X-Git-Oldrev: 4d32bd37458d6fa2b418c1a37aba59fcba9f3fac
+X-Git-Newrev: 0b389385666687ecfd09cdbce6c6ecfd74ce11ab
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084823.BAE9283620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ttyd: bump to version 1.7.0
+Message-Id: <20220911084824.2D88583621@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/makedumpfile: add mips64 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,48 +55,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3b3887012de06c69b73291693c1bd4a35f21250
+commit: https://git.buildroot.net/buildroot/commit/?id=0b389385666687ecfd09cdbce6c6ecfd74ce11ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash for license file to account for an update in the (C) years.
+mips64 is supported since bump to version 1.6.9 in commit
+cb648d12fa733788cd2ea8e0fa8b00bb95983c4e and
+https://github.com/makedumpfile/makedumpfile/commit/7f185d29aa1794a82a090c748aae2f7bf240fb49
 
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-[yann.morin.1998@free.fr: update the license hash]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ttyd/ttyd.hash | 4 ++--
- package/ttyd/ttyd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/makedumpfile/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ttyd/ttyd.hash b/package/ttyd/ttyd.hash
-index c4263d6e94..283288febf 100644
---- a/package/ttyd/ttyd.hash
-+++ b/package/ttyd/ttyd.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  1116419527edfe73717b71407fb6e06f46098fc8a8e6b0bb778c4c75dc9f64b9  ttyd-1.6.3.tar.gz
--sha256  711762f081c180ade3d09d7b0b7537eaf35eca8d1671e47bc66eaa39376edb12  LICENSE
-+sha256  47bc98d43cf2060af06378a2113605b229c46895a391613bdaa5a1197bfe5d47  ttyd-1.7.0.tar.gz
-+sha256  8b7e100f8311cb428c57609164d93099bada2599f948359045d1ac876a7a625b  LICENSE
-diff --git a/package/ttyd/ttyd.mk b/package/ttyd/ttyd.mk
-index 856270a88d..7b582a696c 100644
---- a/package/ttyd/ttyd.mk
-+++ b/package/ttyd/ttyd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TTYD_VERSION = 1.6.3
-+TTYD_VERSION = 1.7.0
- TTYD_SITE = $(call github,tsl0922,ttyd,$(TTYD_VERSION))
- TTYD_LICENSE = MIT
- TTYD_LICENSE_FILES = LICENSE
+diff --git a/package/makedumpfile/Config.in b/package/makedumpfile/Config.in
+index d5af38b598..62549f851f 100644
+--- a/package/makedumpfile/Config.in
++++ b/package/makedumpfile/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
+ 	default y if BR2_aarch64 || BR2_aarch64_be
+ 	default y if BR2_arm || BR2_armeb
+ 	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_mips64 || BR2_mips64el
+ 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+ 	default y if BR2_s390x
+ 	default y if BR2_sparc64
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
