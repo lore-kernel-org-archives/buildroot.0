@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A704AC00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 10:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 847F4C00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 10:58:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F3AC415FF;
-	Mon, 15 Aug 2022 10:46:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F3AC415FF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08E2381D5F;
+	Mon, 15 Aug 2022 10:58:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08E2381D5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ov9gqaBMvH4x; Mon, 15 Aug 2022 10:46:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fSYi_Jn5WUip; Mon, 15 Aug 2022 10:58:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6965415DE;
-	Mon, 15 Aug 2022 10:46:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6965415DE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D28081DCA;
+	Mon, 15 Aug 2022 10:58:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D28081DCA
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5669B1BF3C4
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:46:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 24C701BF3C4
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D080415DE
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:46:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D080415DE
+ by smtp4.osuosl.org (Postfix) with ESMTP id B01AD408CC
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:58:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B01AD408CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T9KNU2WMyGoN for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 10:46:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE21640994
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CE21640994
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 10:46:38 +0000 (UTC)
-Received: from [81.174.171.191] (helo=donbot)
- by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
- (Exim 4.95) (envelope-from <john@metanate.com>) id 1oNXcA-0001pp-9Z;
- Mon, 15 Aug 2022 11:46:34 +0100
-Date: Mon, 15 Aug 2022 11:46:29 +0100
-From: John Keeping <john@metanate.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <YvokBS1iouu46JsD@donbot>
-References: <20220811134533.508348-1-john@metanate.com>
- <20220813221143.GA2854108@scaer>
+ with ESMTP id bDDMWWT8pWn5 for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 10:58:20 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B26F408B3
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0B26F408B3
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 10:58:19 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D80DD60003;
+ Mon, 15 Aug 2022 10:58:16 +0000 (UTC)
+Date: Mon, 15 Aug 2022 12:58:15 +0200
+To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Message-ID: <20220815125815.2a11d116@windsurf>
+In-Reply-To: <20220808080910.14164-1-gwenj@trabucayre.com>
+References: <20220808080910.14164-1-gwenj@trabucayre.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220813221143.GA2854108@scaer>
-X-Authenticated: YES
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
- Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
- Content-Description; bh=ilCZ4nti4kg0zSyg0hkdWYJDZUKoydwMxZe+4igesa8=; b=IV4lf
- 56lc2BT/YMsxZYWIiMxIr+yxfYX0lbO1yOIVBxV3PSU/1EvkTrMTQfKfCWfj0L2y4CqQGG5gawtVa
- nots2PXWNqtyyb1bxyqY67KeVR23vKp0DAsyuoxNcp8sVbrPBumBh/nKISqh2NY6dEIYi80lKJqch
- ooqYy+gYeEK4BPBS/2oFbCf6skvbc8dTrLk/USF06SIxxKg7qsxA5F2+0vxZQvKBfe+nSQ25uadhe
- ujMZugbRBnNJKu/f4Ztmz+g/HDDhQ8o4CeivwAC+y34iOBMCdA+7TKXBLflUNLbNbL+mIpDVAz7Cw
- KL/hFta+mjd24qnRq+u5FW+3sKpiQ==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1660561097;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=0wy13nYNbuAIfaSNzxM6cmeXMh9YWd7r/TPmrg4+dsE=;
+ b=bZKs+I6sfxwFMjztv6b+jot+vvoIZk9/LIHpFpdfSQEM5/UOxfj6wvDiuFvPntXd9HVH2i
+ 0N2qSHTqjoECFKiZhBQz44L5cmfqDob9kcg83+AQcc/C1pBCN5yza7bAROzqfHLITI7FpM
+ Rlghy8aNgjy10RcNz4QkyPjnxA5QxBwCGQrd/+Lkt6dEC47XzEFgDS5MoMis1+KNUPw/Ao
+ 30W2G7QEBgQZM45WstrCqiIe2vdFpd6vL2+PphtzjUrwG32Z8GFIHeq6lYS7GeSSm6C5dD
+ OyeJGA8seZOnmPKq9r87uE2KVz+0ANqdqSOJDaySJz8xmwCdJ9tzga/pK7zoLA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=metanate.com header.i=@metanate.com
- header.a=rsa-sha256 header.s=stronger header.b=IV4lf56l
-Subject: Re: [Buildroot] [PATCH] support/download/git: disable global &
- system config
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=bZKs+I6s
+Subject: Re: [Buildroot] [PATCH] package/gnuradio: bump version to 3.10.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,52 +75,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+Hello,
 
-On Sun, Aug 14, 2022 at 12:11:43AM +0200, Yann E. MORIN wrote:
-> On 2022-08-11 14:45 +0100, John Keeping spake thusly:
-> > The build environment should be isolated from the host system as much as
-> > possible to keep the build reproducible.  Git's global config (usually
-> > ~/.gitconfig) and system config (/etc/gitconfig) can affect the
-> > behaviour of all Git operations, so should be disabled.
-> > 
-> > An example of this is that `git lfs install` will add the LFS smudge
-> > filter to the global config and thus always checkout LFS files ignoring
-> > the value of $(PKG)_GIT_LFS.  This may mask a bug in the package when
-> > the initial developer's machine has LFS installed globally.
+On Mon,  8 Aug 2022 10:09:10 +0200
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> While I appreciate the reasoning and example, there are valid cases
-> where we do want to use (at least) the user's settings, like when they
-> have proxy commands (i.e. core.gitProxy or core.sshCommand) set to reach
-> the outter world (e.g. because they are behind a restrictive firewall
-> and need to tunnel ssh-over-https for example).
+> - remove all no more required patches
+> - add dependency to SPDLOG
+> - add pybind dependency where python is set
+> 
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Good point - this is more complicated than I initially realised.
+Thanks for this version bump. A few questions below.
 
-> So we need something better than just ignoring the local configuration,
-> and this is going to be... tricky.
+>  	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+> +	select BR2_PACKAGE_PYTHON_PYBIND # runtime
 
-What do you thing about adding a config option to specify the global
-gitconfig file to use?
+So here you're saying that python-numpy and python-pybind are runtime
+dependencies.
 
-Unfortunately we can't just default the value to ~/.gitconfig as there
-is no value which replicates the behaviour when the variable is unset
-(when Git uses both ~/.gitconfig and $XDG_CONFIG_HOME/git/config).
+>  ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+> -GNURADIO_DEPENDENCIES += python3
+> +GNURADIO_DEPENDENCIES += python3 python-numpy python-pybind \
 
-The system config is less likely to be problematic as I don't think it's
-used much outside managed environments where the content probably is for
-proxy settings that should be included in Buildroot.
+But you have them as build-time dependencies here. Could you check this?
 
-So we end up with something like this:
+> +	host-python-mako host-python-numpy host-python-packaging
 
-	eval ${BR2_GIT_CONFIG_GLOBAL:+GIT_CONFIG_GLOBAL=\'${BR2_GIT_CONFIG_GLOBAL}\'} \
-		GIT_DIR="${git_cache}/.git" ${GIT} "${@}"
+Are these host-python-* really needed? Why would gnuradio needs numpy
+at build time? Or are they just here to satisfy some broken build
+system that verifies NumPy is installed on the build machine, even
+though really they are needed only on the target?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
