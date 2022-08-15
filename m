@@ -1,49 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD920C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:19:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF738C00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:19:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6170440A96;
-	Mon, 15 Aug 2022 09:19:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6170440A96
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6135560F68;
+	Mon, 15 Aug 2022 09:19:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6135560F68
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id syaU_4vBk-Ci; Mon, 15 Aug 2022 09:19:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ww16OYUyCpUF; Mon, 15 Aug 2022 09:19:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9DD1540A8B;
-	Mon, 15 Aug 2022 09:19:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DD1540A8B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 196D61BF990
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76F6660F74;
+	Mon, 15 Aug 2022 09:19:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76F6660F74
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CEB5C1BF3CB
  for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:17:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE0C5415FA
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:17:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE0C5415FA
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE3FC827A8
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:17:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE3FC827A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SiKWHEtG9Oox for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 09:17:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JdsEE3XdGWk3 for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 09:17:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A021041680
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:17:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A021041680
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA0F0827CE
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:17:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA0F0827CE
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id B6D3D875A3; Mon, 15 Aug 2022 09:02:38 +0000 (UTC)
+ id E1A64875A7; Mon, 15 Aug 2022 09:02:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 11:04:06 +0200
+Date: Mon, 15 Aug 2022 11:03:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8d8a83fd1f7615f7fdd2f230dc6a360f0840733b
-X-Git-Newrev: b828d531ae1c72466e2f45cd59aea686e0ae7322
+X-Git-Oldrev: 16c1cdef65351d6f99f37000c4421c74515ae9b4
+X-Git-Newrev: 1f5afac198870a9df011f0f4cbe9b67aaf8fc8fe
 X-Patchwork-Hint: ignore
-Message-Id: <20220815090238.B6D3D875A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zeek: drop bogus PYTHON3_HASHLIB
+Message-Id: <20220815090237.E1A64875A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ti-gfx: fix typo on help
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +63,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b828d531ae1c72466e2f45cd59aea686e0ae7322
+commit: https://git.buildroot.net/buildroot/commit/?id=1f5afac198870a9df011f0f4cbe9b67aaf8fc8fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Package python3-hashlib does not exist in the tree.
-So drop the reference to it added by commit:
-'ea36681572 package/zeek: new package'
+libaries -> libraries
 
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zeek/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/ti-gfx/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/zeek/Config.in b/package/zeek/Config.in
-index 123fedb339..f2a769621f 100644
---- a/package/zeek/Config.in
-+++ b/package/zeek/Config.in
-@@ -26,7 +26,6 @@ config BR2_PACKAGE_ZEEK_ZEEKCTL
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
- 	select BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON3_CURSES
--	select BR2_PACKAGE_PYTHON3_HASHLIB
- 	select BR2_PACKAGE_PYTHON3_SQLITE
- 	select BR2_PACKAGE_PYTHON3_ZLIB
+diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
+index 76aabcb8c4..40f46335a3 100644
+--- a/package/ti-gfx/Config.in
++++ b/package/ti-gfx/Config.in
+@@ -45,7 +45,7 @@ config BR2_PACKAGE_TI_GFX_DEMOS
+ config BR2_PACKAGE_TI_GFX_EGLIMAGE
+ 	bool "install eglimage version of libraries"
  	help
+-	  Installs OpenGL libaries which support the eglimage api.
++	  Installs OpenGL libraries which support the eglimage api.
+ 
+ choice
+ 	prompt "Target"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
