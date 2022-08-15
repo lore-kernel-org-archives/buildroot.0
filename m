@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98F53C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 21:48:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77FF3C00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 21:48:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D02904040B;
-	Mon, 15 Aug 2022 21:48:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D02904040B
+	by smtp3.osuosl.org (Postfix) with ESMTP id E711E60BD9;
+	Mon, 15 Aug 2022 21:48:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E711E60BD9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zw0HmmZrcJ6x; Mon, 15 Aug 2022 21:48:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 74vTdcJNk3-4; Mon, 15 Aug 2022 21:48:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BBA140363;
-	Mon, 15 Aug 2022 21:48:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BBA140363
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 38EE91BF96B
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 21:48:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 246E960B97;
+	Mon, 15 Aug 2022 21:48:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 246E960B97
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A9C4F1BF39E
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 21:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 14521403C2
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 21:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14521403C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 774EF817AA
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 21:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 774EF817AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4NYNdrs6hgWq for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 21:48:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id er8-Ctl_Dg5i for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 21:48:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 877FA4032B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 555D781761
 Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 877FA4032B
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 21:48:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 555D781761
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 21:48:24 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 88CAA240002;
- Mon, 15 Aug 2022 21:48:20 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id E238D240005;
+ Mon, 15 Aug 2022 21:48:21 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>,
  "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Romain Naour <romain.naour@gmail.com>,
  =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Mon, 15 Aug 2022 23:48:13 +0200
-Message-Id: <20220815214815.2234201-2-thomas.petazzoni@bootlin.com>
+Date: Mon, 15 Aug 2022 23:48:14 +0200
+Message-Id: <20220815214815.2234201-3-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815214815.2234201-1-thomas.petazzoni@bootlin.com>
 References: <20220815214815.2234201-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660600101;
+ d=bootlin.com; s=gm1; t=1660600102;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=1P68XtWfX/t3kDAvPx2ovEbYhXkA5gIYLHj80tUigxA=;
- b=ONXnnYm4FbrxjpaeQQ9u3Oo8SBOwHDw38pdSIWie7biWkLexGJWP9ArxVj+GSWzBGj0e2Z
- dHDLcDUXXeQVUSQ3ISOdI0EKcMrmpRtx/KeQUPS2PAPI2GaS1z50sY/JaQmwTSRC7gU48t
- wok+aW0YTMzwMtRxP073r5e21R219Q9YTPdilWdND+9GD9oVzJKOW95mSZRgOzHek40gX8
- +7hRCCBQPwELA5gGAvxqo9bED3Lt2U8ne2bJJnZf+Fz+N3Uisf7VDAw9zvnGZY10SOimKE
- 4/Y9g1BwTV3wtFlZs7EyFEVyqQkliIOQrQ/NuXfrjOkvYlH3yRINkMbSFNAVaA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=58DAl33xWaO41oOxaSizf1AWysK8l+Sb8FhBphaWDZU=;
+ b=N6cBMvAMoJCdnKUFphWsvMf0Qm/yduK2dFkisM1Q3kEzhorgDvrkOtffHwf+7PI1+jxcQ3
+ JOvW121n/hEC05RV1sXMdgQ+AqnEer9hB0lqIkBGAy0bBRVlfMfxOeVHTbBZQcYtuDtD+O
+ l7Bo0nN/8Cb8QtdT7M/R7jRxBKPV5O1gcPb3XGbFNRLLu1OfWCdvo2SqC7TMb6ScMUlIlo
+ R9kgEDAucSrjPDP+Vc6GApoMDd1Fyg2iKj5050Da4yoqsKn1K0Psmpy/tLWx2kBDuBpVDS
+ 0yACDLO8eGEv3qlHIRgwqQ+XGeS+CJEG6TJDeeeXKsobEX3upgiZnHrqEHJiPA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ONXnnYm4
-Subject: [Buildroot] [PATCH 1/3]
- support/testing/tests/package/test_python_boto3: use ext2 instead of cpio
+ header.s=gm1 header.b=N6cBMvAM
+Subject: [Buildroot] [PATCH 2/3]
+ support/testing/tests/package/test_python_botocore: use ext2 instead of
+ cpio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,7 +86,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The CPIO filesystem generated by the test_python_boto3 test is too
+The CPIO filesystem generated by the test_python_botocore test is too
 large, and doesn't fit as an initramfs in the 256MB of RAM available
 in the versatilepb machine. This causes a "Initramfs unpacking failed:
 write error" when booting, and many files being missing from the root
@@ -97,32 +98,32 @@ problems.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/2884635041
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/2884635042
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_python_boto3.py | 12 ++++++++++++
+ .../testing/tests/package/test_python_botocore.py    | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/support/testing/tests/package/test_python_boto3.py b/support/testing/tests/package/test_python_boto3.py
-index 756495fec9..7f24399304 100644
---- a/support/testing/tests/package/test_python_boto3.py
-+++ b/support/testing/tests/package/test_python_boto3.py
+diff --git a/support/testing/tests/package/test_python_botocore.py b/support/testing/tests/package/test_python_botocore.py
+index 6336c5658f..d198c3e682 100644
+--- a/support/testing/tests/package/test_python_botocore.py
++++ b/support/testing/tests/package/test_python_botocore.py
 @@ -1,4 +1,5 @@
  from tests.package.test_python import TestPythonPackageBase
 +import os
  
  
- class TestPythonPy3Boto3(TestPythonPackageBase):
-@@ -7,6 +8,17 @@ class TestPythonPy3Boto3(TestPythonPackageBase):
+ class TestPythonPy3Botocore(TestPythonPackageBase):
+@@ -7,6 +8,17 @@ class TestPythonPy3Botocore(TestPythonPackageBase):
          """
          BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_BOTO3=y
+         BR2_PACKAGE_PYTHON_BOTOCORE=y
 +        BR2_TARGET_ROOTFS_EXT2=y
 +        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
 +        # BR2_TARGET_ROOTFS_TAR is not set
          """
-     sample_scripts = ["tests/package/sample_python_boto3.py"]
+     sample_scripts = ["tests/package/sample_python_botocore.py"]
      timeout = 10
 +
 +    def login(self):
