@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A90B1C00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 10:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9BAAC00140
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 10:02:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26E3F416A3;
-	Mon, 15 Aug 2022 10:02:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26E3F416A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63573417D8;
+	Mon, 15 Aug 2022 10:02:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63573417D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 86Ec-oApmPvo; Mon, 15 Aug 2022 10:02:01 +0000 (UTC)
+	with ESMTP id jmnaklQkHisC; Mon, 15 Aug 2022 10:02:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC8644161C;
-	Mon, 15 Aug 2022 10:01:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC8644161C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96ED61BF3CB
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:01:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA6E9416A3;
+	Mon, 15 Aug 2022 10:02:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA6E9416A3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D6331BF3CB
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:02:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E60241581
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:01:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E60241581
+ by smtp3.osuosl.org (Postfix) with ESMTP id 061DD60625
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 10:02:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 061DD60625
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BnfR4DuPEKyp for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 10:01:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 205B8415DA
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 205B8415DA
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 10:01:47 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BA4181BF20A;
- Mon, 15 Aug 2022 10:01:44 +0000 (UTC)
-Date: Mon, 15 Aug 2022 12:01:43 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220815120143.03fdf52d@windsurf>
-In-Reply-To: <20220815095022.297076-1-fontaine.fabrice@gmail.com>
-References: <20220815095022.297076-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1660557705;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CyTwaGvf8SoPvC+HSsPHj8+IyleTGEfi2VhFhVXFkaA=;
- b=TgmvW2H/NQ2jQuu9kb1t0p3vu/E0WjVwqyWMKpI3IQyE4xZ0sWV1dgMRgIG1E8ifARfHMw
- xLxdXqprGW5JPWhyKewEx9/voPUsbRswsEBWXqFrcoGgHbvHyYm/lZ2B4PiX0ZhW4K4kpe
- HktRU3BVL/FudUNISx9ZNd/TkHXDZGqmUUWF1mDZAbpCx3KIps0fei/jMQhyfQwa5UboT3
- XNOnWHhwx4W4LyMkcfByPLyNgeSM4+1wRerT5h/RoVJxNOVK15pTD60WAB1ff3YLlPGxMm
- 685H7Mx0QzUBvt6tSIQd/IU2lO8mJs3XK+nSCRKGJQMSi/15B5kQiCa+EseGtA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TgmvW2H/
-Subject: Re: [Buildroot] [PATCH 1/1] package/makedumpfile: add mips64 support
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k-eZWj-UNJPG for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 10:02:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18B96605A7
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 10:02:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18B96605A7
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 0D15087608; Mon, 15 Aug 2022 09:47:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 15 Aug 2022 12:01:51 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 0b389385666687ecfd09cdbce6c6ecfd74ce11ab
+X-Git-Newrev: 22b3b3a77720d9527b8279d033d9fbca65b2bcba
+X-Patchwork-Hint: ignore
+Message-Id: <20220815094752.0D15087608@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/go: bump to version
+ 1.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,31 +58,173 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexander Egorenkov <egorenar-dev@posteo.net>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 15 Aug 2022 11:50:22 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=22b3b3a77720d9527b8279d033d9fbca65b2bcba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> mips64 is supported since bump to version 1.6.9 in commit
-> cb648d12fa733788cd2ea8e0fa8b00bb95983c4e and
-> https://github.com/makedumpfile/makedumpfile/commit/7f185d29aa1794a82a090c748aae2f7bf240fb49
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/makedumpfile/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Go 1.19 is a major release with changes to the implementation of the toolchain,
+runtime, and libraries.
 
-Applied to next, thanks.
+Dropped patch 0002-cmd-dist-use-gohostarch... as it was merged upstream.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://go.dev/doc/go1.19
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...d.go-explicit-option-for-crosscompilation.patch |  4 +-
+ ...dist-use-gohostarch-for-ssa-rewrite-check.patch | 95 ----------------------
+ package/go/go.hash                                 |  2 +-
+ package/go/go.mk                                   |  2 +-
+ 4 files changed, 4 insertions(+), 99 deletions(-)
+
+diff --git a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+index 3a9b47474c..992a83a644 100644
+--- a/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
++++ b/package/go/0001-build.go-explicit-option-for-crosscompilation.patch
+@@ -1,4 +1,4 @@
+-From 335c6245674088de616324398137416c7a1cbe8f Mon Sep 17 00:00:00 2001
++From 6aed475557032a7ff9009e9b4b691b40b561876a Mon Sep 17 00:00:00 2001
+ From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ Date: Tue, 8 May 2018 16:08:44 +0200
+ Subject: [PATCH] build.go: explicit option for crosscompilation
+@@ -17,7 +17,7 @@ Signed-off-by: Anisse Astier <anisse@astier.eu>
+  1 file changed, 2 insertions(+), 1 deletion(-)
+ 
+ diff --git a/src/cmd/dist/build.go b/src/cmd/dist/build.go
+-index f99f1f4e43..08a9f24f59 100644
++index 7c44c4a605..03500920c4 100644
+ --- a/src/cmd/dist/build.go
+ +++ b/src/cmd/dist/build.go
+ @@ -286,12 +286,13 @@ func xinit() {
+diff --git a/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch b/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
+deleted file mode 100644
+index 2346208640..0000000000
+--- a/package/go/0002-cmd-dist-use-gohostarch-for-ssa-rewrite-check.patch
++++ /dev/null
+@@ -1,95 +0,0 @@
+-From 38d841a18ab0bcb63554fed6b38012e504599891 Mon Sep 17 00:00:00 2001
+-From: Christian Stewart <christian@paral.in>
+-Date: Wed, 1 Jun 2022 20:52:12 +0000
+-Subject: [PATCH] cmd/dist: use gohostarch for ssa rewrite check
+-
+-Fix a build failure when bootstrapping the Go compiler with go-bootstrap 1.4
+-while the environment contains GOARCH=riscv64.
+-
+-Building Go toolchain1 using go-1.4-bootstrap-20171003.
+-src/cmd/compile/internal/ssa/rewriteRISCV64.go:4814
+-invalid operation: y << x (shift count type int64, must be unsigned integer)
+-
+-This is because:
+-
+- - buildtool.go:198: calls bootstrapRewriteFile(src)
+- - bootstrapRewriteFile: buildtool.go:283 calls:
+- - isUnneededSSARewriteFile: checks os.Getenv("GOARCH")
+- - isUnneededSSARewriteFile: returns "", false
+- - bootstrapRewriteFile: calls bootstrapFixImports
+- - boostrapFixImports: generates code go1.4 cannot compile
+-
+-Instead of checking "GOARCH" in the environment, use the gohostarch variable.
+-
+-Change-Id: Ie9c190498555c4068461fead6278a62e924062c6
+-GitHub-Last-Rev: 300d7a7fea0a67c696970fd271e2ce709674a658
+-GitHub-Pull-Request: golang/go#52362
+-Reviewed-on: https://go-review.googlesource.com/c/go/+/400376
+-Reviewed-by: Bryan Mills <bcmills@google.com>
+-TryBot-Result: Gopher Robot <gobot@golang.org>
+-Reviewed-by: Dmitri Shuralyov <dmitshur@google.com>
+-Auto-Submit: Bryan Mills <bcmills@google.com>
+-Run-TryBot: Bryan Mills <bcmills@google.com>
+-Reviewed-by: Joel Sing <joel@sing.id.au>
+-Run-TryBot: Joel Sing <joel@sing.id.au>
+----
+- src/cmd/dist/buildtool.go | 16 ++++++----------
+- 1 file changed, 6 insertions(+), 10 deletions(-)
+-
+-diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
+-index 036f8c52fa..2d8ace52d8 100644
+---- a/src/cmd/dist/buildtool.go
+-+++ b/src/cmd/dist/buildtool.go
+-@@ -16,7 +16,6 @@ import (
+- 	"os"
+- 	"path/filepath"
+- 	"regexp"
+--	"runtime"
+- 	"strings"
+- )
+- 
+-@@ -239,11 +238,11 @@ var ssaRewriteFileSubstring = filepath.FromSlash("src/cmd/compile/internal/ssa/r
+- 
+- // isUnneededSSARewriteFile reports whether srcFile is a
+- // src/cmd/compile/internal/ssa/rewriteARCHNAME.go file for an
+--// architecture that isn't for the current runtime.GOARCH.
+-+// architecture that isn't for the given GOARCH.
+- //
+- // When unneeded is true archCaps is the rewrite base filename without
+- // the "rewrite" prefix or ".go" suffix: AMD64, 386, ARM, ARM64, etc.
+--func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
+-+func isUnneededSSARewriteFile(srcFile, goArch string) (archCaps string, unneeded bool) {
+- 	if !strings.Contains(srcFile, ssaRewriteFileSubstring) {
+- 		return "", false
+- 	}
+-@@ -258,13 +257,10 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
+- 	archCaps = fileArch
+- 	fileArch = strings.ToLower(fileArch)
+- 	fileArch = strings.TrimSuffix(fileArch, "splitload")
+--	if fileArch == os.Getenv("GOHOSTARCH") {
+-+	if fileArch == goArch {
+- 		return "", false
+- 	}
+--	if fileArch == strings.TrimSuffix(runtime.GOARCH, "le") {
+--		return "", false
+--	}
+--	if fileArch == strings.TrimSuffix(os.Getenv("GOARCH"), "le") {
+-+	if fileArch == strings.TrimSuffix(goArch, "le") {
+- 		return "", false
+- 	}
+- 	return archCaps, true
+-@@ -273,9 +269,9 @@ func isUnneededSSARewriteFile(srcFile string) (archCaps string, unneeded bool) {
+- func bootstrapRewriteFile(srcFile string) string {
+- 	// During bootstrap, generate dummy rewrite files for
+- 	// irrelevant architectures. We only need to build a bootstrap
+--	// binary that works for the current runtime.GOARCH.
+-+	// binary that works for the current gohostarch.
+- 	// This saves 6+ seconds of bootstrap.
+--	if archCaps, ok := isUnneededSSARewriteFile(srcFile); ok {
+-+	if archCaps, ok := isUnneededSSARewriteFile(srcFile, gohostarch); ok {
+- 		return fmt.Sprintf(`// Code generated by go tool dist; DO NOT EDIT.
+- 
+- package ssa
+--- 
+-2.35.1
+-
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 2a0f02abfd..2b877145e9 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  9920d3306a1ac536cdd2c796d6cb3c54bc559c226fc3cc39c32f1e0bd7f50d2a  go1.18.5.src.tar.gz
++sha256  9419cc70dc5a2523f29a77053cafff658ed21ef3561d9b6b020280ebceab28b9  go1.19.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 16602e590b..2220953e55 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.18.5
++GO_VERSION = 1.19
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
