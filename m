@@ -1,49 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD01CC00140
-	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:49:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24789C25B0E
+	for <buildroot@archiver.kernel.org>; Mon, 15 Aug 2022 09:49:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A11281760;
-	Mon, 15 Aug 2022 09:49:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A11281760
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jaSsNLfIulq8; Mon, 15 Aug 2022 09:49:25 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91D7F81496;
-	Mon, 15 Aug 2022 09:49:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91D7F81496
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EB86F1BF3CB
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:49:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C613C409F7
- for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:49:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C613C409F7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FE9841504;
+	Mon, 15 Aug 2022 09:49:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FE9841504
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tfWUsivz4XKF for <buildroot@lists.busybox.net>;
- Mon, 15 Aug 2022 09:49:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4579409EB
- for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:49:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4579409EB
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id CC71D875D0; Mon, 15 Aug 2022 09:34:52 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w-ez_t3JoW5v; Mon, 15 Aug 2022 09:49:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E562415FA;
+	Mon, 15 Aug 2022 09:49:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E562415FA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E36AE1BF3CB
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:49:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD38740AAB
+ for <buildroot@lists.busybox.net>; Mon, 15 Aug 2022 09:49:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD38740AAB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Dq7qpkBgT8fg for <buildroot@lists.busybox.net>;
+ Mon, 15 Aug 2022 09:49:46 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6BDF40AA2
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B6BDF40AA2
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 09:49:45 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ s11-20020a1cf20b000000b003a52a0945e8so3669087wmc.1
+ for <buildroot@buildroot.org>; Mon, 15 Aug 2022 02:49:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=l3W9PaRa0xpYQcdjaI465V5kIg23pg0beyvGyU26GpM=;
+ b=OAuVuxPAJEAjNWXQa9Au11cfMDDXPXU899LFd+CM63rXHnGFJmMuy8K0HJ88e+cfui
+ /7mvu4yQ906cGfkMoZA6KpFV8h+4IkZ6Z1lZm7FJ7vyhctrWAqBkhd9YQJ7IOVisqh2l
+ 0NbCDrqzuopl7VdMNJVYaYtTpHpgEiCgYsMzcQ/rYkkvdj4NHb1g065xiytAUlAMDvDh
+ 7UdJyzZ3lw99Ypq+aXD9JMyc1ECyifX0Uvj/CvIcEKtQbOgujT296feWKiyQz3qp0/wG
+ rWXX5zFIotaueq42XRWixRAV91JVzYNo1OtSh48vI7Cb8neEMZcBt2XNVg/fX966nmZj
+ /X6g==
+X-Gm-Message-State: ACgBeo2b54xXx9Qk8n/wPFLdAEnyRpi+uPzJPqTdHg3OuaCwB0rLbnO/
+ 8blcQEXBT+je1dTRv0xgz/zJgSJfNtE=
+X-Google-Smtp-Source: AA6agR6vZniE2gr1cTRX5kFAVaT5P1KeLl4DVm+ko+hIXYWCVppFXvtLazekT/rUQhsEg/e2/6pCIg==
+X-Received: by 2002:a7b:c04c:0:b0:3a5:e442:554 with SMTP id
+ u12-20020a7bc04c000000b003a5e4420554mr5076248wmc.130.1660556983435; 
+ Mon, 15 Aug 2022 02:49:43 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b00a02a978cbcfe81d2.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:a02a:978c:bcfe:81d2])
+ by smtp.gmail.com with ESMTPSA id
+ k4-20020a5d66c4000000b002217a25ba8dsm6691771wrw.44.2022.08.15.02.49.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 15 Aug 2022 02:49:42 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 11:49:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a53be62fadd5d7bbe54f3ada1b5e41f69705ac1e
-X-Git-Newrev: 8ac84a2e457ec607a478fe305375c05614a187f3
-X-Patchwork-Hint: ignore
-Message-Id: <20220815093452.CC71D875D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sysklogd: bump to version 2.4.4
+Date: Mon, 15 Aug 2022 11:49:34 +0200
+Message-Id: <20220815094934.296837-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=l3W9PaRa0xpYQcdjaI465V5kIg23pg0beyvGyU26GpM=;
+ b=ICX7ZEUuKT8P5NHvNHP9oriBSE1IFSgUmjR4xs24nbKxVFYTnDgbeOT547wUA2v9xP
+ EPRdjtPpp1WD4ef0q8KVjYHIaQDI7vzzPDDV6Qq+y842IKlW5W36TfFoR2AE0j/mqOo7
+ MIOE5gXtLU7PfMWvcuVHaQQhEaD6WwwPTZAE5ldF/CucFvsOcpAdrY2BK3yIzOdrVDgp
+ ICSDuu8rN63ks76lTXYWoesPTpb1rJzL/CDSnJNepXPakzd7o6az396U4R5yKmH0F3E6
+ NdOJ6BN+A9Vz2g0LxWufmQuM8CI/8ayr9cfyDiS8iCDnlUlG94bW/ojz8JgW2v6BXP5z
+ 96DA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ICX7ZEUu
+Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: add zstd optional
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,54 +95,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Alexander Egorenkov <egorenar-dev@posteo.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ac84a2e457ec607a478fe305375c05614a187f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+zstd is an optional dependency since bump to version 1.7.0 in commit
+bbc52f3ff382e4c50baea2e1876a3f6ebf77a851 and
+https://github.com/makedumpfile/makedumpfile/commit/afd0a6db2a0543217f8e46955a1b44b71f7e7ef3
 
-Only one change compared to v2.4.3, fix for running `syslogd -T`, which
-should use local time for all remote messages, but time is always logged
-with "Jan 0 00:00:00".
-
-https://github.com/troglobit/sysklogd/releases/tag/v2.4.4
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sysklogd/sysklogd.hash | 2 +-
- package/sysklogd/sysklogd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/makedumpfile/makedumpfile.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
-index 6ddfcf16cb..e370716bd9 100644
---- a/package/sysklogd/sysklogd.hash
-+++ b/package/sysklogd/sysklogd.hash
-@@ -1,5 +1,5 @@
- # Upstream .sha256 from GitHub
--sha256  58cbf7e82b3ee0f0ac2433192737dbb317656ff6eed0317490821b2a4532aa34  sysklogd-2.4.3.tar.gz
-+sha256  01f25931d1508c3e6be4e182f49356c993abc7d035d5835db35f9b61d5085549  sysklogd-2.4.4.tar.gz
+diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
+index 815a159b00..868c681344 100644
+--- a/package/makedumpfile/makedumpfile.mk
++++ b/package/makedumpfile/makedumpfile.mk
+@@ -31,6 +31,11 @@ MAKEDUMPFILE_DEPENDENCIES += snappy
+ MAKEDUMPFILE_MAKE_OPTS += USESNAPPY=on
+ endif
  
- # Locally calculated
- sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 393482305d..68023c9ae2 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSKLOGD_VERSION = 2.4.3
-+SYSKLOGD_VERSION = 2.4.4
- SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
- SYSKLOGD_LICENSE = BSD-3-Clause
- SYSKLOGD_LICENSE_FILES = LICENSE
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++MAKEDUMPFILE_DEPENDENCIES += zstd
++MAKEDUMPFILE_MAKE_OPTS += USEZSTD=on
++endif
++
+ define MAKEDUMPFILE_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		$(MAKEDUMPFILE_MAKE_OPTS)
+-- 
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
