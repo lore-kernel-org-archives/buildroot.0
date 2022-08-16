@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20265C2BB41
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 08:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65ABDC2BB41
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 08:35:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B861581D65;
-	Tue, 16 Aug 2022 08:35:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B861581D65
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1792660F48;
+	Tue, 16 Aug 2022 08:35:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1792660F48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P3_S8RuHwsHD; Tue, 16 Aug 2022 08:35:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MIPrDjS5XbzN; Tue, 16 Aug 2022 08:35:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8CDF81CFE;
-	Tue, 16 Aug 2022 08:35:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8CDF81CFE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 258FF1BF9C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C44260E72;
+	Tue, 16 Aug 2022 08:35:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C44260E72
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0CE311BF9C2
  for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:35:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DCFA81B26
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:35:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DCFA81B26
+ by smtp2.osuosl.org (Postfix) with ESMTP id E92EB40641
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:35:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E92EB40641
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 62r1carVUsq1 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VTKJg3-2EnZK for <buildroot@lists.busybox.net>;
  Tue, 16 Aug 2022 08:35:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4044881B48
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A1184063E
  for <buildroot@buildroot.org>; Tue, 16 Aug 2022 08:35:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4044881B48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A1184063E
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 12E018773C; Tue, 16 Aug 2022 08:20:39 +0000 (UTC)
+ id 1F619876B8; Tue, 16 Aug 2022 08:20:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 10:28:31 +0200
+Date: Tue, 16 Aug 2022 10:32:05 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 77c68719b7c02c7d49ce903c595baa20611a9a49
-X-Git-Newrev: 64273340d024a9c2c70a501248e5961b5cff1dd6
+X-Git-Oldrev: 64273340d024a9c2c70a501248e5961b5cff1dd6
+X-Git-Newrev: e0893d5b381e02ceeefb15f7c9e88d5fac13f54c
 X-Patchwork-Hint: ignore
-Message-Id: <20220816082039.12E018773C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/xdg-dbus-proxy:
- bump to version 0.1.4
+Message-Id: <20220816082039.1F619876B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/kvm-unit-tests:
+ Completely disable the tests on big endian ARM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64273340d024a9c2c70a501248e5961b5cff1dd6
+commit: https://git.buildroot.net/buildroot/commit/?id=e0893d5b381e02ceeefb15f7c9e88d5fac13f54c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-This version includes a few fixes, and a new Meson-based build system.
-For now this only updates to the latest version, the switch to Meson is
-left for a follow-up patch. Release notes can be found at:
+Though the code compiles with a big endian toolchain, the kvm-unit-tests
+do not work at all in big endian mode on ARM. Until someone steps up to
+fix this, disable the package completely on big endian ARM targets.
 
-  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.4
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9ad0000827dbe58d499ff8efc96158600e23edb6)
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit b4f8c41b5ecde0b5351042450cc41f9e24e316fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
- package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kvm-unit-tests/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-index b7aa9ac701..7bbea72b03 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.3
--sha256  03b5d28ca879253ddbbce31098909becca1495ea811a6377a492e28f16c09b9b  xdg-dbus-proxy-0.1.3.tar.xz
-+# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.4
-+sha256  1ec0eab53d1e49966d722352bcfd51ac402dce5190baedc749a8541e761670ab  xdg-dbus-proxy-0.1.4.tar.xz
- 
- # Hash for license files:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-index 9c4449c7bb..b07cf787ed 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDG_DBUS_PROXY_VERSION = 0.1.3
-+XDG_DBUS_PROXY_VERSION = 0.1.4
- XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
- XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
- XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
+diff --git a/package/kvm-unit-tests/Config.in b/package/kvm-unit-tests/Config.in
+index 2b797e13b4..7658877ce9 100644
+--- a/package/kvm-unit-tests/Config.in
++++ b/package/kvm-unit-tests/Config.in
+@@ -1,12 +1,13 @@
+ config BR2_PACKAGE_KVM_UNIT_TESTS_ARCH_SUPPORTS
+ 	bool
+-	# On ARM, it uses virtualization extensions
+-	default y if BR2_cortex_a7 || BR2_cortex_a12 || \
++	# On ARM, it needs virtualization extensions and little endian CPUs
++	default y if (BR2_arm || BR2_aarch64) && \
++		(BR2_cortex_a7 || BR2_cortex_a12 || \
+ 		BR2_cortex_a15 || BR2_cortex_a15_a7 || \
+ 		BR2_cortex_a17 || BR2_cortex_a17_a7 || \
+ 		BR2_cortex_a55 || BR2_cortex_a75 || \
+ 		BR2_cortex_a75_a55 || BR2_cortex_a76 || \
+-		BR2_cortex_a76_a55
++		BR2_cortex_a76_a55)
+ 	default y if BR2_i386 || BR2_x86_64
+ 	default y if BR2_powerpc64 || BR2_powerpc64le
+ 	default y if BR2_s390x
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
