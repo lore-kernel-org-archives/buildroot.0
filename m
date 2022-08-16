@@ -1,51 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9279EC2BB41
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 09:39:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BC71C2BB41
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 09:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39689410E5;
-	Tue, 16 Aug 2022 09:39:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39689410E5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B445812B6;
+	Tue, 16 Aug 2022 09:48:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B445812B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9cR-3d73x8IJ; Tue, 16 Aug 2022 09:39:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id eN6jd-Ur6QdB; Tue, 16 Aug 2022 09:48:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04531409E9;
-	Tue, 16 Aug 2022 09:39:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04531409E9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2A2DF1BF2A2
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 09:39:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BC988131B;
+	Tue, 16 Aug 2022 09:48:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BC988131B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 062951BF39C
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 09:48:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03CEB410C2
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 09:39:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03CEB410C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1D2D812DE
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 09:48:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1D2D812DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8cV7QS5Ymoex for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 09:39:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA25340358
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 09:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA25340358
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A85C2877ED; Tue, 16 Aug 2022 09:24:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 11:32:51 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 5284543cc0efd00e0281ed41d23865a7a4ea3bbf
-X-Git-Newrev: ac74ab30c16c5101fdfdfeaf7bb85564392c937b
-X-Patchwork-Hint: ignore
-Message-Id: <20220816092437.A85C2877ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x]
- package/x11r7/xserver_xorg-server: fix xephyr build with kdrive
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Kf7uzwFurHIx for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 09:48:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F629812B6
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1F629812B6
+ for <buildroot@busybox.net>; Tue, 16 Aug 2022 09:48:52 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id d5so2687669wms.5
+ for <buildroot@busybox.net>; Tue, 16 Aug 2022 02:48:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=OFwKkC+pPIkOKywlIA9+hJRLVSexjnndsREnPVBh2l4=;
+ b=fMNqDxMxfQ8wf7L4PGUIoKIVnWUoS2PgvDpFmmvgHU2D/vnujurcHPKSzIpn8FU0rf
+ bY48A7R/Zs7lK82Sva4PG8J9ex/erkk0HHKlfdKvuUNG/HAoXj8zkHwxRCsXSC6RFwAb
+ 324FBawWldFdnhGPINs/dM9W6nL6pTaq3LirTGLHTMOK3MwhZbAs9yHAcp+OPxgtrvju
+ hv6yRpgknYrWUdIm/4/+W48tQdYRDwjVEt6S5L1/WNS6gDoLaykzB1OsiFqEF/kKtmpp
+ bZBoGlOAI17AMrVfHlOPVGyP3MXaMKQmv4pPzj2NiSy1WqzMr9Pu0fOPe5rigwyAluFF
+ 1pAA==
+X-Gm-Message-State: ACgBeo3jNZ/mCX8HjgO2jNVHv72J+Xl1dBF8hvQs3yfa5EhZWPx8A+5g
+ vF5b51FWUQ1k5Kr8+tFzuw8PutMtLns=
+X-Google-Smtp-Source: AA6agR4D+nc3GFs8kC4WPFZmzDejLQzX4iSH57aqBjD86OCDI/rFEVmBT48QfZ3LCfi+4Ks8YGnwjw==
+X-Received: by 2002:a7b:c8c1:0:b0:3a5:bb57:e7a9 with SMTP id
+ f1-20020a7bc8c1000000b003a5bb57e7a9mr15606788wml.18.1660643331013; 
+ Tue, 16 Aug 2022 02:48:51 -0700 (PDT)
+Received: from pc-140.home ([2a01:cb1c:794:2300:d109:33e7:bc94:49e5])
+ by smtp.gmail.com with ESMTPSA id
+ k16-20020a05600c1c9000b003a5a5069107sm12701049wms.24.2022.08.16.02.48.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Aug 2022 02:48:50 -0700 (PDT)
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+To: buildroot@busybox.net
+Date: Tue, 16 Aug 2022 11:48:29 +0200
+Message-Id: <20220816094829.377-1-guillaume.bressaix@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=OFwKkC+pPIkOKywlIA9+hJRLVSexjnndsREnPVBh2l4=;
+ b=bRKXkqEyUo3RvEu/fFyE+FHCHFh9BKFqORHDyII+kkSfvKYcQWlq5Cy0hNL1efznca
+ ffd9pjO3dgnoVDhWpeDNNFqyZ1sAUzIdTESGjGFA9NcOfNEhP/VpXkjTz8Pk7M/jSy/1
+ lFZIRweBqK9aLCpfPg3MC3lmvlK0sAsSWYM2jiqhORQJcF5BFnJnZ2pSnJt40b3Vz22K
+ jcg731k0hNlcAMpFPRWYZd4F6iLBPSHAG/ugo//lVUiQUwFWXgqeRFl9gtGolnKf/Zcz
+ qTMQMsYWlP7NeiPTPNdpVWkjDzIXk2OxXTb94fHiTzyzWsms73mjhNycOvxVOvJ0ErM/
+ aWJA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=bRKXkqEy
+Subject: [Buildroot] [RFC 1/1] package/pkg-meson.mk: handle possibly non
+ existing compilers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,73 +93,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Yann Morin <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac74ab30c16c5101fdfdfeaf7bb85564392c937b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+To avoid populating the cross-file with non existing compilers,
+we tie them to /bin/false
 
-Fix the following xephyr build failure with kdrive raised since commit
-eedbd6f97d51a0049ec512de26541465403ab06f:
-
-checking for XEPHYR... no
-configure: error: Package requirements (xau xdmcp xcb xcb-shape xcb-render xcb-renderutil xcb-aux xcb-image xcb-icccm xcb-shm >= 1.9.3 xcb-keysyms xcb-randr xcb-xkb xcb-xv) were not met:
-
-Package 'xcb-renderutil', required by 'virtual:world', not found
-Package 'xcb-aux', required by 'virtual:world', not found
-Package 'xcb-image', required by 'virtual:world', not found
-Package 'xcb-icccm', required by 'virtual:world', not found
-Package 'xcb-keysyms', required by 'virtual:world', not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/baba218c879b67bfbadc9c25d34313abc76397bc
- - http://autobuild.buildroot.org/results/9471b77db9aefa2fd0e5be61ea84709183511623
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 90a6572e102d72ce01eaae6ab12065148f6a1a36)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
- package/x11r7/xserver_xorg-server/Config.in              | 4 ++++
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 7 +++++++
- 2 files changed, 11 insertions(+)
+I only managed the CXX and FC case,
+assuming all the other ones are always there ?
+---
+ package/pkg-meson.mk | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 4fb03051dd..daf4d81702 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -85,6 +85,10 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_XEPHYR
- 	bool "Xephyr server"
-+	select BR2_PACKAGE_XCB_UTIL_IMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
-+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
-+	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
-+	select BR2_PACKAGE_XCB_UTIL_WM if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
- 	help
- 	  Xephyr nested X server; successor to Xnest.
- 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 0f1779dcab..fa5d2a802d 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -84,6 +84,13 @@ XSERVER_XORG_SERVER_CONF_OPTS += \
- 	--disable-glx \
- 	--disable-dri
- 
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_XEPHYR),y)
-+XSERVER_XORG_SERVER_DEPENDENCIES += \
-+	xcb-util-image \
-+	xcb-util-keysyms \
-+	xcb-util-renderutil \
-+	xcb-util-wm
-+endif
- else # modular
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 0632ab21cf..f246a126d1 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -68,15 +68,29 @@ else
+ PKG_MESON_TARGET_CPU_FAMILY = $(ARCH)
  endif
+ 
++# To avoid populating the cross-file with non existing compilers,
++# we tie them to /bin/false
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_CXX),y)
++PKG_MESON_TARGET_CXX = $(TARGET_CXX)
++else
++PKG_MESON_TARGET_CXX = /bin/false
++endif
++
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_FORTRAN),y)
++PKG_MESON_TARGET_FC = $(TARGET_FC)
++else
++PKG_MESON_TARGET_FC = /bin/false
++endif
++
+ # Generates sed patterns for patching the cross-compilation.conf template,
+ # since Flags might contain commas the arguments are passed indirectly by
+ # variable name (stripped to deal with whitespaces).
+ # Arguments are variable containing cflags, cxxflags, ldflags, fcflags
+ define PKG_MESON_CROSSCONFIG_SED
+         -e "s%@TARGET_CC@%$(TARGET_CC)%g" \
+-        -e "s%@TARGET_CXX@%$(TARGET_CXX)%g" \
++        -e "s%@TARGET_CXX@%$(PKG_MESON_TARGET_CXX)%g" \
+         -e "s%@TARGET_AR@%$(TARGET_AR)%g" \
+-        -e "s%@TARGET_FC@%$(TARGET_FC)%g" \
++        -e "s%@TARGET_FC@%$(PKG_MESON_TARGET_FC)%g" \
+         -e "s%@TARGET_STRIP@%$(TARGET_STRIP)%g" \
+         -e "s%@TARGET_ARCH@%$(PKG_MESON_TARGET_CPU_FAMILY)%g" \
+         -e "s%@TARGET_CPU@%$(GCC_TARGET_CPU)%g" \
+-- 
+2.20.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
