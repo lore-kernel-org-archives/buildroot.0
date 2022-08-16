@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 306B1C25B0E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 20:16:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6906FC25B0E
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 20:16:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB48A41504;
-	Tue, 16 Aug 2022 20:16:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB48A41504
+	by smtp3.osuosl.org (Postfix) with ESMTP id E63BC600B8;
+	Tue, 16 Aug 2022 20:16:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E63BC600B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EWtMa8V6OcJc; Tue, 16 Aug 2022 20:16:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xXg8f19R9QFV; Tue, 16 Aug 2022 20:16:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5738E410E9;
-	Tue, 16 Aug 2022 20:16:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5738E410E9
+	by smtp3.osuosl.org (Postfix) with ESMTP id D414360B05;
+	Tue, 16 Aug 2022 20:16:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D414360B05
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 091491BF470
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:12:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 193291BF470
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:12:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF7AD40139
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF9734019E
  for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:12:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF7AD40139
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF9734019E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1or1RoiMwaAq for <buildroot@lists.busybox.net>;
+ with ESMTP id RiZeH-A85o3h for <buildroot@lists.busybox.net>;
  Tue, 16 Aug 2022 20:12:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EECB3402EB
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 20:12:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EECB3402EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 030CB4038E
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 20:12:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 030CB4038E
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AE66E87893; Tue, 16 Aug 2022 19:58:10 +0000 (UTC)
+ id C50318788C; Tue, 16 Aug 2022 19:58:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 22:06:49 +0200
+Date: Tue, 16 Aug 2022 22:09:20 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7e71021a606ae0da34db5c1d882dfd971a82b3b8
-X-Git-Newrev: 8c0726bd2429e708ffa1acdd5018d098a18f975e
+X-Git-Oldrev: 5cf3136f4025526dfc256f3aeffcc0037cbf149a
+X-Git-Newrev: 9cc76357b58373dd9673a0bd956165476739056b
 X-Patchwork-Hint: ignore
-Message-Id: <20220816195810.AE66E87893@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/jquery-validation: security bump to version 1.19.5
+Message-Id: <20220816195810.C50318788C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/bind: add json-c
+ optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,62 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c0726bd2429e708ffa1acdd5018d098a18f975e
+commit: https://git.buildroot.net/buildroot/commit/?id=9cc76357b58373dd9673a0bd956165476739056b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-- Fix CVE-2021-43306: An exponential ReDoS (Regular Expression Denial
-  of Service) can be triggered in the jquery-validation npm package,
-  when an attacker is able to supply arbitrary input to the url2 method
-- Fix CVE-2022-31147: The jQuery Validation Plugin (jquery-validation)
-  provides drop-in validation for forms. Versions of jquery-validation
-  prior to 1.19.5 are vulnerable to regular expression denial of service
-  (ReDoS) when an attacker is able to supply arbitrary input to the url2
-  method. This is due to an incomplete fix for CVE-2021-43306. Users
-  should upgrade to version 1.19.5 to receive a patch.
-- Use LICENSE.md instead of README.md which is available since version
-  1.14.0 and
-  https://github.com/jquery-validation/jquery-validation/commit/96b7036eb45375eb4861082d8ca442d94a9c666c
-
-https://github.com/jquery-validation/jquery-validation/releases/tag/1.19.4
-https://github.com/jquery-validation/jquery-validation/releases/tag/1.19.5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit b0f825f4488ee7d78b3ea77c4bc2343da3a84ea9)
+(cherry picked from commit fbdcd551343a9cc6469f46d0066119cc182052d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jquery-validation/jquery-validation.hash | 4 ++--
- package/jquery-validation/jquery-validation.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/bind/bind.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/jquery-validation/jquery-validation.hash b/package/jquery-validation/jquery-validation.hash
-index 4dbe07e218..31ecd62bcb 100644
---- a/package/jquery-validation/jquery-validation.hash
-+++ b/package/jquery-validation/jquery-validation.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  01ad2ef0a7f9cd413aeb51081651293916da47d20e5c0a59ec62587e58b03564  jquery-validation-1.19.3.zip
--sha256  3e5a99460077c16bf75f6821a30cdac9baa339119ebf63b2a6c49f4f50421ca4  README.md
-+sha256  52381e080f266f8bca1a17acd6a4a68be4c2606a8b16f8a12e597cc69f2c0584  jquery-validation-1.19.5.zip
-+sha256  f398878cab338b869638bdac1aeae76bf3ac11b2b89da6e0b68bc1a645733440  LICENSE.md
-diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
-index 920ed1cece..1ed37ee73b 100644
---- a/package/jquery-validation/jquery-validation.mk
-+++ b/package/jquery-validation/jquery-validation.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 86049d3648..bd12f7ad31 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -33,7 +33,6 @@ BIND_CONF_ENV = \
+ BIND_CONF_OPTS = \
+ 	--without-cmocka \
+ 	--without-lmdb \
+-	--with-json-c=no \
+ 	--enable-epoll \
+ 	--disable-backtrace \
+ 	--with-openssl=$(STAGING_DIR)/usr
+@@ -47,6 +46,13 @@ else
+ BIND_CONF_OPTS += --without-zlib
+ endif
  
--JQUERY_VALIDATION_VERSION = 1.19.3
-+JQUERY_VALIDATION_VERSION = 1.19.5
- JQUERY_VALIDATION_SITE = https://github.com/jquery-validation/jquery-validation/releases/download/$(JQUERY_VALIDATION_VERSION)
- JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
- JQUERY_VALIDATION_LICENSE = MIT
--JQUERY_VALIDATION_LICENSE_FILES = README.md
-+JQUERY_VALIDATION_LICENSE_FILES = LICENSE.md
- JQUERY_VALIDATION_CPE_ID_VENDOR = jqueryvalidation
- JQUERY_VALIDATION_CPE_ID_PRODUCT = jquery_validation
- 
++ifeq ($(BR2_PACKAGE_JSON_C),y)
++BIND_CONF_OPTS += --with-json-c
++BIND_DEPENDENCIES += json-c
++else
++BIND_CONF_OPTS += --without-json-c
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ BIND_CONF_OPTS += --enable-linux-caps
+ BIND_DEPENDENCIES += libcap
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
