@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB482C2BB41
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 21:05:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D58DC25B0E
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 21:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F1284010D;
-	Tue, 16 Aug 2022 21:05:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F1284010D
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0CDA60B6E;
+	Tue, 16 Aug 2022 21:05:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0CDA60B6E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Afqiybo2uLLC; Tue, 16 Aug 2022 21:05:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8pKSQBEd0DyO; Tue, 16 Aug 2022 21:05:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CACE4013E;
-	Tue, 16 Aug 2022 21:05:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CACE4013E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6DE3C1BF84C
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 21:05:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D471860ADD;
+	Tue, 16 Aug 2022 21:05:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D471860ADD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AACFC1BF84C
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 21:05:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 565AD4013E
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 21:05:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 565AD4013E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9363A60B4B
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 21:05:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9363A60B4B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r48UgseAZ6-9 for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 21:05:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GkTDdwUFXj3C for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 21:05:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D860B4010D
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 21:05:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D860B4010D
+ by smtp3.osuosl.org (Postfix) with ESMTP id C6A7560ADD
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 21:05:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6A7560ADD
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7F768878E4; Tue, 16 Aug 2022 20:50:58 +0000 (UTC)
+ id 71437878EC; Tue, 16 Aug 2022 20:51:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 22:59:41 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3abcae9d56ca35eb734be3b1967fbff63b5f9bc9
-X-Git-Newrev: f3fc07e421a7bb479d2b872f87985b8f37ed931c
+Date: Tue, 16 Aug 2022 22:59:10 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: de9aa59da6d940180dd7af3bc41d424eab5d96ec
+X-Git-Newrev: 56fdf0d2ca0cd60decd0f9d75262a79a21063056
 X-Patchwork-Hint: ignore
-Message-Id: <20220816205058.7F768878E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/qt5/qt5webkit:
+Message-Id: <20220816205110.71437878EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/qt5/qt5webkit:
  backport upstream fix for GStreamer 1.19.x compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,15 +58,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5762943205388545721=="
+Content-Type: multipart/mixed; boundary="===============0405534234771883654=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5762943205388545721==
+--===============0405534234771883654==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3fc07e421a7bb479d2b872f87985b8f37ed931c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=56fdf0d2ca0cd60decd0f9d75262a79a21063056
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 In GStreamer commit 0a657d6db5ba912b13092a907ea507638cd01cf9, merged
 in Gstreamer 1.19.x, the GstAppSinkCallbacks structure was extended
@@ -141,7 +141,7 @@ index 0000000000..610d99e35d
 +2.37.1
 +
 
---===============5762943205388545721==
+--===============0405534234771883654==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -152,4 +152,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5762943205388545721==--
+--===============0405534234771883654==--
