@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70DC8C32771
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 05:39:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 406CDC28B2B
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 05:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1A3A060BB9;
-	Wed, 17 Aug 2022 05:39:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A3A060BB9
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC301418CF;
+	Wed, 17 Aug 2022 05:39:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC301418CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mPgnyrL9DZva; Wed, 17 Aug 2022 05:39:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mE-4OPbQydN7; Wed, 17 Aug 2022 05:39:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1390A60AC0;
-	Wed, 17 Aug 2022 05:39:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1390A60AC0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59B114175F;
+	Wed, 17 Aug 2022 05:39:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59B114175F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0905F1C113E
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 05:39:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C8E91BF947
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 05:39:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB27041934
+ by smtp4.osuosl.org (Postfix) with ESMTP id E56384175F
  for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 05:39:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB27041934
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E56384175F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SRw-NIfF530W for <buildroot@lists.busybox.net>;
+ with ESMTP id wo60bsdpi7Xk for <buildroot@lists.busybox.net>;
  Wed, 17 Aug 2022 05:39:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC6DE418CD
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5C974177B
  for <buildroot@buildroot.org>; Wed, 17 Aug 2022 05:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC6DE418CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5C974177B
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A37E287931; Wed, 17 Aug 2022 05:24:55 +0000 (UTC)
+ id 9A0C487917; Wed, 17 Aug 2022 05:24:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 07:29:22 +0200
+Date: Tue, 16 Aug 2022 23:26:42 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 85566d89f8ddc6764d155717f80336806ac0708c
-X-Git-Newrev: 3a097226184e341639b59352c718e7990060d3e6
+X-Git-Oldrev: c59eee8118a2da55002ae16e416e3700ce4c60f4
+X-Git-Newrev: 85566d89f8ddc6764d155717f80336806ac0708c
 X-Patchwork-Hint: ignore
-Message-Id: <20220817052455.A37E287931@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/nodejs: security
- bump to version 14.20.0
+Message-Id: <20220817052455.9A0C487917@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/gtest: drop
+ host-gtest
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a097226184e341639b59352c718e7990060d3e6
+commit: https://git.buildroot.net/buildroot/commit/?id=85566d89f8ddc6764d155717f80336806ac0708c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix CVE-2022-32213, CVE-2022-32214, CVE-2022-32215, CVE-2022-32212,
-CVE-2022-32223 and CVE-2022-2097
+Drop host-gtest to avoid the following build failure raised since bump
+to version 1.12.0 in commit a336b731af5979a25213b33c5840de6d1ed88bdc and
+https://github.com/google/googletest/commit/6202251f0963187a7781f181365cf8c19bf343d5:
 
-https://nodejs.org/en/blog/vulnerability/july-2022-security-releases
-https://github.com/nodejs/node/blob/v14.x/doc/changelogs/CHANGELOG_V14.md#14.20.0
+/usr/bin/install -D -m 0755 /home/giuliobenetti/autobuild/run/instance-1/output-1/build/host-gtest-1.12.0/googlemock/scripts/generator/gmock_gen.py /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/gmock_gen
+/usr/bin/install: cannot stat '/home/giuliobenetti/autobuild/run/instance-1/output-1/build/host-gtest-1.12.0/googlemock/scripts/generator/gmock_gen.py': No such file or directory
 
-Update the LICENSE hash for the addition of corepack and ICU bump:
+Fixes:
+ - http://autobuild.buildroot.org/results/6a8fb259760f84c67a3482cc5964c6610f9b70a4
 
-https://github.com/nodejs/node/commit/737df75e1707b41c30b71d94c779abe665edef41
-https://github.com/nodejs/node/commit/2755d391a5e68e08b699e9d7c20e05cfc28bcac3
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 16a8c68b2103e36c491712e4697b945a6684874f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 6 +++---
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gtest/Config.in |  9 ---------
+ package/gtest/gtest.mk  | 15 ---------------
+ 2 files changed, 24 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 6365ef852b..ab79787e45 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v14.18.3/SHASUMS256.txt
--sha256  783ac443cd343dd6c68d2abcf7e59e7b978a6a428f6a6025f9b84918b769d608  node-v14.18.3.tar.xz
-+# From https://nodejs.org/dist/v14.20.0/SHASUMS256.txt
-+sha256  2b5098498889d1e6a9709d63f3d6f94e696a5ad8221618c5d51159cee363996a  node-v14.20.0.tar.xz
+diff --git a/package/gtest/Config.in b/package/gtest/Config.in
+index 4355e9c9c5..4591cb5e48 100644
+--- a/package/gtest/Config.in
++++ b/package/gtest/Config.in
+@@ -26,7 +26,6 @@ if BR2_PACKAGE_GTEST
  
- # Hash for license file
--sha256  b3a67885b5a6ac35e8bbe8190509e41b79b0d9a2e3fbd47186f2ac4727f63be5  LICENSE
-+sha256  d05c4319d4955d6b3c7beab2711ff61448b31889560d4b125bfbd35f16d3d3af  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 5d8eb4af63..262d60e86b 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ config BR2_PACKAGE_GTEST_GMOCK
+ 	bool "gmock"
+-	depends on BR2_HOST_GCC_AT_LEAST_5 # host-gtest
+ 	help
+ 	  Inspired by jMock, EasyMock, and Hamcrest, and designed with
+ 	  C++'s specifics in mind, Google C++ Mocking Framework (or
+@@ -43,14 +42,6 @@ config BR2_PACKAGE_GTEST_GMOCK
+ 	    * works on Linux, Mac OS X, Windows, Windows Mobile, minGW,
+ 	      and Symbian.
  
--NODEJS_VERSION = 14.18.3
-+NODEJS_VERSION = 14.20.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = \
+-	  There are both host and target packages. The target one has
+-	  include files required to compile the tests and the static
+-	  libraries required to link/run them. The host package installs
+-	  gmock_gen, a Python script used to generate code mocks.
+-
+-comment "gmock needs host gcc >= 5"
+-	depends on !BR2_HOST_GCC_AT_LEAST_5
+-
+ endif # BR2_PACKAGE_GTEST
+ 
+ comment "gtest needs a toolchain w/ C++, wchar, threads, gcc >= 5"
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index f3f3f9c296..236c8f3730 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -13,10 +13,6 @@ GTEST_LICENSE_FILES = LICENSE
+ GTEST_CPE_ID_VENDOR = google
+ GTEST_CPE_ID_PRODUCT = google_test
+ 
+-HOST_GTEST_LICENSE = Apache-2.0
+-HOST_GTEST_LICENSE_FILES = googlemock/scripts/generator/LICENSE
+-HOST_GTEST_DEPENDENCIES = host-python3
+-
+ # While it is possible to build gtest as shared library, using this gtest shared
+ # library requires to set some special configure option in the project using
+ # gtest.
+@@ -34,20 +30,9 @@ GTEST_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GTEST_GMOCK),y)
+-GTEST_DEPENDENCIES += host-gtest
+ GTEST_CONF_OPTS += -DBUILD_GMOCK=ON
+ else
+ GTEST_CONF_OPTS += -DBUILD_GMOCK=OFF
+ endif
+ 
+-define HOST_GTEST_POST_INSTALL_PYTHON
+-	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
+-		$(HOST_DIR)/bin/gmock_gen
+-	cp -rp $(@D)/googlemock/scripts/generator/cpp \
+-		$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+-endef
+-
+-HOST_GTEST_POST_INSTALL_HOOKS += HOST_GTEST_POST_INSTALL_PYTHON
+-
+ $(eval $(cmake-package))
+-$(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
