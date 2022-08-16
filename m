@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1D94C25B0E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 20:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71AC4C25B0E
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 20:14:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F7D560B2D;
-	Tue, 16 Aug 2022 20:14:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F7D560B2D
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD31760C07;
+	Tue, 16 Aug 2022 20:14:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD31760C07
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 92R0CkdjyS5H; Tue, 16 Aug 2022 20:14:33 +0000 (UTC)
+	with ESMTP id vvIWqafDtag0; Tue, 16 Aug 2022 20:14:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0C9D605A1;
-	Tue, 16 Aug 2022 20:14:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0C9D605A1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8E9E31BF470
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EE1B60B83;
+	Tue, 16 Aug 2022 20:14:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EE1B60B83
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ABE4E1BF9B9
  for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A03E814A0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 949684042B
  for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:12:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A03E814A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 949684042B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rUBeo-qus1jZ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9DV2xl9vgkL5 for <buildroot@lists.busybox.net>;
  Tue, 16 Aug 2022 20:12:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A45EC8145F
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE63F4010D
  for <buildroot@buildroot.org>; Tue, 16 Aug 2022 20:12:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A45EC8145F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE63F4010D
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 624398788B; Tue, 16 Aug 2022 19:58:10 +0000 (UTC)
+ id 8DA608788B; Tue, 16 Aug 2022 19:58:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 21:50:38 +0200
+Date: Tue, 16 Aug 2022 21:58:50 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: ef9adc2e01de30bc022d924b28a7742137f64ac8
-X-Git-Newrev: 0e2d07ee6e93b56d0202227d3655fd44dcb5d662
+X-Git-Oldrev: 85cd3874cb4da5df3f5042b92e3800df71160c98
+X-Git-Newrev: d058c514c6f844a00ad61f82773c98c0c4fb6705
 X-Patchwork-Hint: ignore
-Message-Id: <20220816195810.624398788B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/glslsandbox-player: add support for the NullSW windowing system
+Message-Id: <20220816195810.8DA608788B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/pkg-waf.mk:
+ enable definiton of env. variables in every build steps
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e2d07ee6e93b56d0202227d3655fd44dcb5d662
+commit: https://git.buildroot.net/buildroot/commit/?id=d058c514c6f844a00ad61f82773c98c0c4fb6705
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This nullws doesn't need any extra dependency other than the EGL/GLES
-ones, which will help simplify the glslsandbox-player package.
+It might be necessary for some packages to define environment variables when calling waf build and waf install.
+This is done the same way as the others package types, by defining $(PKG)_MAKE_ENV in .mk.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 81ad39d62f660a1409e96d1dbd405d6dab16c0f6)
+Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 95ea6664cdd552acbb366e8eb8393224df40e57f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glslsandbox-player/Config.in             | 5 +++++
- package/glslsandbox-player/glslsandbox-player.mk | 4 +++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ package/pkg-waf.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
-index 317eb62898..19536c8546 100644
---- a/package/glslsandbox-player/Config.in
-+++ b/package/glslsandbox-player/Config.in
-@@ -65,6 +65,11 @@ choice
- 	help
- 	  Select the native windowing system you wish to use.
- 
-+config BR2_PACKAGE_GLSLSANDBOX_PLAYER_NULL
-+	bool "NullWS"
-+	help
-+	  Enable Null Windowing System
-+
- config BR2_PACKAGE_GLSLSANDBOX_PLAYER_KMS
- 	bool "KMS/DRM/GBM"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
-diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
-index 70bd5ca370..6496cdf23d 100644
---- a/package/glslsandbox-player/glslsandbox-player.mk
-+++ b/package/glslsandbox-player/glslsandbox-player.mk
-@@ -41,7 +41,9 @@ else
- GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-install-scripts
- endif
- 
--ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_KMS),y)
-+ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_NULL),y)
-+GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=nullws
-+else ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_KMS),y)
- # gbm dependency is not needed, as it is normally packaged with
- # libegl/libgles drivers.
- GLSLSANDBOX_PLAYER_DEPENDENCIES += libdrm
+diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+index d546b4a817..e090afa9e6 100644
+--- a/package/pkg-waf.mk
++++ b/package/pkg-waf.mk
+@@ -75,7 +75,7 @@ endif
+ ifndef $(2)_BUILD_CMDS
+ define $(2)_BUILD_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+ 		build $$(WAF_OPTS) $$($(2)_BUILD_OPTS) \
+ 		$$($(2)_WAF_OPTS)
+ endef
+@@ -88,7 +88,7 @@ endif
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+ 		install --destdir=$$(STAGING_DIR) \
+ 		$$($(2)_INSTALL_STAGING_OPTS) \
+ 		$$($(2)_WAF_OPTS)
+@@ -102,7 +102,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+ 		install --destdir=$$(TARGET_DIR) \
+ 		$$($(2)_INSTALL_TARGET_OPTS) \
+ 		$$($(2)_WAF_OPTS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
