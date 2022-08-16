@@ -4,97 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F071BC25B0E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 20:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B8D7C25B0E
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 20:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58EED41299;
-	Tue, 16 Aug 2022 20:50:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58EED41299
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7587341583;
+	Tue, 16 Aug 2022 20:54:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7587341583
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LySg4p52Xdos; Tue, 16 Aug 2022 20:50:24 +0000 (UTC)
+	with ESMTP id nJI1WkztAc-d; Tue, 16 Aug 2022 20:54:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 246944099D;
-	Tue, 16 Aug 2022 20:50:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 246944099D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 10C871BF39C
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:50:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 570F441570;
+	Tue, 16 Aug 2022 20:54:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 570F441570
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 888791BF39C
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE11840423
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:50:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE11840423
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6379081413
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:54:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6379081413
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vpz4TXG-Cug1 for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 20:50:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bkXJZgQ46YDU for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 20:54:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1B694010D
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
- [IPv6:2a00:1450:4864:20::52c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E1B694010D
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 20:50:19 +0000 (UTC)
-Received: by mail-ed1-x52c.google.com with SMTP id o22so15010868edc.10
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 13:50:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CD308140F
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4CD308140F
+ for <buildroot@busybox.net>; Tue, 16 Aug 2022 20:54:08 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id c39so154024edf.0
+ for <buildroot@busybox.net>; Tue, 16 Aug 2022 13:54:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:in-reply-to:organization:from:references
  :cc:to:content-language:subject:user-agent:mime-version:date
  :message-id:x-gm-message-state:from:to:cc;
- bh=OKdff5iDjzj7oknZUQAze0DNqmM5MC9hdyCjZEShOFg=;
- b=RjgWS+aAt0StXG9c3li0rkwwEpU+pz6co+HDwcr1PuOlNJBbsVTDBxhAKoFSbcQMGQ
- aORBTanbOfujMiM0KYgtcTSq2jpKnHbhHAWPikQfF4itdrJAZjROso3Arv03ZRTTSO74
- x8FbLsP4+MFGCcgpPPcvYP45u3+S0viprwWH98ZxJaY5p39LsQ9J5VC7bA+azPNO4UWg
- Z7/rISC84BBKPcm5UqLy8/pz4BW6RcHGL3ZdSSoB1l3o/CgEcNu6lFsHAaHhcl9A83QO
- O0WBs/f9s8sBldzaVvWhdorKZiQ7RYGB4ZgScgiNxEnRcpUbJpzgorc9a9rQNbBaalMv
- wEgw==
-X-Gm-Message-State: ACgBeo1fNpeSBJdUzPO2iVFbJfy5YT2F0lNRljzQthl3B/FrEUGwPUfY
- v2OXwicR5cj2WXrq+2Xs6lOVJg==
-X-Google-Smtp-Source: AA6agR7weHTr4TVEZ4MThvJ+CNWw3gT1FnkBCTlHVYlw7/iReKVV1Hi5LbNIISX7juSJNLR5hpqzxQ==
-X-Received: by 2002:a05:6402:e86:b0:440:d1be:20c7 with SMTP id
- h6-20020a0564020e8600b00440d1be20c7mr20480718eda.349.1660683018169; 
- Tue, 16 Aug 2022 13:50:18 -0700 (PDT)
+ bh=elxtHH4W94T5AP5xe/BpsOHJj1GlzJ0OE4jcsEGTvmQ=;
+ b=gztkq+K/0QDOZgZWpsX0mighTIa50yXImtLp3zQ2TrImAg6dqHQ+QmSwHC1Qow4cl1
+ iCpHdvCPXU5qvmnCkKQpHqshWC9MwyHz86fucI3tRZo8CS8dbzERlIFDqU4FfxKCa93y
+ ZzBCMa37TV0+yopk04Z3prgy+BCxcPVMRZb2SzrnT1Pz47r8pu2ea5sisiARHngOVk0b
+ OTAqd7clR1ZyfuQF1H1pO9EREQGBWTVzm88hSA1/4WKs7azCbzRyKH4sBN9q8u0sZfOA
+ yuwVeWazYBt+BC9WIJ/D2zYpVYbydnrF4JehdMN0zw4MCKpodmOZpDJtsT7y5h6edNLR
+ i2fw==
+X-Gm-Message-State: ACgBeo2d+8gHDq8+MBdipZFkC77hURTn3sN6HNkZ05IHdLAlKE9DUucc
+ 0TY9+5mOOncq7otwfgY4R3nNoJ++61qmlQ==
+X-Google-Smtp-Source: AA6agR5KAtlkCS6iDiyT4roRiYAxtBOy6cw12fs9D4mdloqPQ+YEInOA+8LITb7BkVoLrAeFE0VOVQ==
+X-Received: by 2002:a05:6402:3697:b0:443:1c6:acc3 with SMTP id
+ ej23-20020a056402369700b0044301c6acc3mr20709333edb.421.1660683246509; 
+ Tue, 16 Aug 2022 13:54:06 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- f10-20020a056402194a00b0043ca6fb7e7dsm8894751edz.68.2022.08.16.13.50.17
+ x5-20020a1709060a4500b0070efa110afcsm5822788ejf.83.2022.08.16.13.54.05
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 16 Aug 2022 13:50:17 -0700 (PDT)
-Message-ID: <7de0d13b-cb37-2516-bc01-8188fab69e02@mind.be>
-Date: Tue, 16 Aug 2022 22:50:15 +0200
+ Tue, 16 Aug 2022 13:54:06 -0700 (PDT)
+Message-ID: <5bf3b48f-bfae-444c-3c2e-73235a0d523c@mind.be>
+Date: Tue, 16 Aug 2022 22:54:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
 Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot List <buildroot@buildroot.org>,
- Peter Korsgaard <peter@korsgaard.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Romain Naour <romain.naour@gmail.com>
-References: <20220815202955.2216503-1-thomas.petazzoni@bootlin.com>
+To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>, buildroot@busybox.net
+References: <20220816103710.1278-1-guillaume.bressaix@gmail.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220815202955.2216503-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220816103710.1278-1-guillaume.bressaix@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=content-transfer-encoding:in-reply-to:organization:from:references
  :cc:to:content-language:subject:user-agent:mime-version:date
  :message-id:from:to:cc;
- bh=OKdff5iDjzj7oknZUQAze0DNqmM5MC9hdyCjZEShOFg=;
- b=KDpUOa9oWrEU+c2j2LU7W7Ona9AXuXTIHTQK4YaPb6CYWrVRBDaMjiRylaOU03ARlo
- 0ZVPthQcbFtYCYuyi9/8o7f4I6unRPQHxD4b6W92qRqRgva059vEShsoxh9X7ANkIlW5
- 7jTkDErQ/prKA3Jpy1UZQtk2w6YI7XslcZiQ8WMnREUu0SlfUcJbKt07WpzPx3hBgX+s
- 2LshM+AO1mRfNNmhELSzaxszYBV156jnq+YWSC+cB6g2Xloghu2eryVThE9XC/zsJOgB
- mCDVf+GzC5ShvgtFMCLHTPmAJsBqz6GRjjQaDlFVDp6CaPj5c+SlTHCZArD06BxT5SzS
- btgQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=elxtHH4W94T5AP5xe/BpsOHJj1GlzJ0OE4jcsEGTvmQ=;
+ b=bZM2nTE41gnl1WZSSk6BH+Xvr9PGiT56w/zi4z1yWHaY8rmazXzWNpkhY1OTGjeM/c
+ DxsoDaLKTWi9WX+DS+3PLA4wq3dqluJgTxBdklwNBwwVyhv8NIPbwvUBLB1dMBw/icjY
+ BXxKzLqj6Oe13//rKb+7RQ9Uewb1i4AXtfCXS4Qk4BmDXzXS1Vghw/6jYCyzgf1diZrd
+ T4zdCYUmVqjIg1P0patfD8LpkX46O2iMyxlhY8Szw1q8hLL253Umbj+JgeFDtyBBXOJP
+ 1VEPDSDBI9GZtJzsKDW851X7TonK3IED/VksXwB4qWhvaG1Vlw/vOinAHum3xViZxkrz
+ 5nbA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=KDpUOa9o
-Subject: Re: [Buildroot] [PATCH next] toolchain/toolchain-buildroot: default
- to glibc as the C library
+ header.a=rsa-sha256 header.s=google header.b=bZM2nTE4
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/pkg-meson.mk: handle
+ possibly non existing compilers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,8 +102,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Yann Morin <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -115,53 +111,61 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/08/2022 22:29, Thomas Petazzoni wrote:
-> This is perhaps the most controversial change for Buildroot that can
-> be written in a two-liner.
+On 16/08/2022 12:37, Guillaume W. Bres wrote:
+> To avoid populating the cross-file with non existing compilers,
+> we tie them to /bin/false
 > 
-> Historically, we have used uClibc as our default C library, as
-> Buildroot was created initially as a test-bed for uClibc, and also
-> because uClibc made a lot of sense for embedded Linux systems, due to
-> its smaller size and fine-grained configurability.
+> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> ---
+>   package/pkg-meson.mk | 18 ++++++++++++++++--
+>   1 file changed, 16 insertions(+), 2 deletions(-)
 > 
-> Since then, the landscape of embedded Linux systems has changed. Even
-> though Buildroot happily supports really low-end devices, the vast
-> majority of Buildroot users are quite certainly running the resulting
-> system on a reasonably powerful platform, with significant amount of
-> RAM and storage. In this context, the benefits of uClibc are no longer
-> that much relevant, and glibc causes less "troubles". Therefore, this
-> patch proposes to use glibc as our default C library when using the
-> internal toolchain backend instead of uClibc.
-> 
-> Of course, we will keep the support for uClibc, which remains an
-> important C library choice, for space-constrained systems, or simply
-> for architectures that are not supported by glibc.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 0632ab21cf..d675f7f733 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -68,15 +68,29 @@ else
+>   PKG_MESON_TARGET_CPU_FAMILY = $(ARCH)
+>   endif
+>   
+> +# To avoid populating the cross-file with non existing compilers,
+> +# we tie them to /bin/false
+> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+> +PKG_MESON_TARGET_CXX = $(TARGET_CXX)
+> +else
+> +PKG_MESON_TARGET_CXX = /bin/false
+> +endif
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
+> +PKG_MESON_TARGET_FC = $(TARGET_FC)
+> +else
+> +PKG_MESON_TARGET_FC = /bin/false
+> +endif
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  Perhaps we should do this in package/Makefile.in instead? I.e. define 
+TARGET_CXX itself as false.
+
+  This does have rather heavy implications, but I *think* it should be fine... 
+And anyway, the autobuilders will tell us :-)
 
   Regards,
   Arnout
 
-> ---
->   toolchain/toolchain-buildroot/Config.in | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 836af3b22a..9956dc4383 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -22,8 +22,7 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
->   
->   choice
->   	prompt "C library"
-> -	default BR2_TOOLCHAIN_BUILDROOT_UCLIBC
-> -	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_powerpc64
-> +	default BR2_TOOLCHAIN_BUILDROOT_GLIBC
->   
->   config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->   	bool "uClibc-ng"
+> +
+>   # Generates sed patterns for patching the cross-compilation.conf template,
+>   # since Flags might contain commas the arguments are passed indirectly by
+>   # variable name (stripped to deal with whitespaces).
+>   # Arguments are variable containing cflags, cxxflags, ldflags, fcflags
+>   define PKG_MESON_CROSSCONFIG_SED
+>           -e "s%@TARGET_CC@%$(TARGET_CC)%g" \
+> -        -e "s%@TARGET_CXX@%$(TARGET_CXX)%g" \
+> +        -e "s%@TARGET_CXX@%$(PKG_MESON_TARGET_CXX)%g" \
+>           -e "s%@TARGET_AR@%$(TARGET_AR)%g" \
+> -        -e "s%@TARGET_FC@%$(TARGET_FC)%g" \
+> +        -e "s%@TARGET_FC@%$(PKG_MESON_TARGET_FC)%g" \
+>           -e "s%@TARGET_STRIP@%$(TARGET_STRIP)%g" \
+>           -e "s%@TARGET_ARCH@%$(PKG_MESON_TARGET_CPU_FAMILY)%g" \
+>           -e "s%@TARGET_CPU@%$(GCC_TARGET_CPU)%g" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
