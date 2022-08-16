@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F915C32772
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 08:33:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 368EFC2BB41
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 08:35:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2237C60E7C;
-	Tue, 16 Aug 2022 08:33:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2237C60E7C
+	by smtp3.osuosl.org (Postfix) with ESMTP id C061060E77;
+	Tue, 16 Aug 2022 08:35:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C061060E77
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ilco5QyHIH3r; Tue, 16 Aug 2022 08:33:13 +0000 (UTC)
+	with ESMTP id RV9MkNnX-Z9d; Tue, 16 Aug 2022 08:35:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 611DE60E61;
-	Tue, 16 Aug 2022 08:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 611DE60E61
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D7C0A1BF2A4
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:33:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D412460E61;
+	Tue, 16 Aug 2022 08:35:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D412460E61
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DE67D1BF9B9
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:35:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFECC60D75
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:33:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFECC60D75
+ by smtp1.osuosl.org (Postfix) with ESMTP id B6BFB81C04
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:35:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6BFB81C04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t_o5rqDYIPmT for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 08:33:10 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDDC860E58
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DDDC860E58
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 08:33:09 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 535581C0008;
- Tue, 16 Aug 2022 08:33:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oNs0Y-001Gql-Bw; Tue, 16 Aug 2022 10:33:06 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AVOMNUbdYeht for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 08:35:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB06381B26
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 08:35:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB06381B26
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id BD34E87736; Tue, 16 Aug 2022 08:20:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20220618060641.24736-1-huth@tuxfamily.org>
- <a631a0bc-bead-b99b-ca3c-e5c122877beb@mind.be>
-Date: Tue, 16 Aug 2022 10:33:06 +0200
-In-Reply-To: <a631a0bc-bead-b99b-ca3c-e5c122877beb@mind.be> (Arnout
- Vandecappelle's message of "Sat, 23 Jul 2022 21:09:25 +0200")
-Message-ID: <87y1voegfx.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/kvm-unit-tests: Completely disable
- the tests on big endian ARM
+To: buildroot@buildroot.org
+Date: Tue, 16 Aug 2022 10:17:15 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: d952378f3ea89f94fc163587b0f1fa639f60bd09
+X-Git-Newrev: abfdae4eb263e8c8ff90a6ff8b176c365759edcd
+X-Patchwork-Hint: ignore
+Message-Id: <20220816082038.BD34E87736@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/netsniff-ng:
+ libnl is optional, not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,28 +57,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Huth <huth@tuxfamily.org>, Cornelia Huck <cohuck@redhat.com>,
- Matt Weber <matthew.weber@collins.com>, Cyril Bur <cyrilbur@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=abfdae4eb263e8c8ff90a6ff8b176c365759edcd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
- > On 18/06/2022 08:06, Thomas Huth wrote:
- >> Though the code compiles with a big endian toolchain, the kvm-unit-tests
- >> do not work at all in big endian mode on ARM. Until someone steps up to
- >> fix this, disable the package completely on big endian ARM targets.
- >> Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+libnl is optional, not mandatory, since version 0.6.2 and
+https://github.com/netsniff-ng/netsniff-ng/commit/20a5e15443bfbbb7e6624a754832cdce19d462a0
+https://github.com/netsniff-ng/netsniff-ng/commit/b073c8e5fd7f8c723680b659bd81afd231ef32f5
 
- >  Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit c0065069a7d086d0a394e967ca5c1890749f8399)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/netsniff-ng/Config.in      |  1 -
+ package/netsniff-ng/netsniff-ng.mk | 11 +++++++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-Committed to 2022.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index 5d1407baac..6b043362ba 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_NETSNIFF_NG
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	select BR2_PACKAGE_LIBNL
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+ 	select BR2_PACKAGE_LIBURCU
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index 27bd707c84..3bc11b55b9 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -13,7 +13,8 @@ NETSNIFF_NG_LICENSE_FILES = README COPYING
+ NETSNIFF_NG_CONF_ENV = \
+ 	NACL_INC_DIR=/dev/null \
+ 	NACL_LIB_DIR=/dev/null
+-NETSNIFF_NG_DEPENDENCIES = host-pkgconf libnl libpcap libnetfilter_conntrack liburcu
++NETSNIFF_NG_DEPENDENCIES = host-pkgconf libpcap libnetfilter_conntrack liburcu
++NETSNIFF_NG_CONF_OPTS = --prefix=$(TARGET_DIR)/usr
+ 
+ ifeq ($(BR2_PACKAGE_NETSNIFF_NG_MAUSEZAHN),y)
+ NETSNIFF_NG_DEPENDENCIES += libcli libnet
+@@ -28,6 +29,12 @@ ifeq ($(BR2_PACKAGE_GEOIP),y)
+ NETSNIFF_NG_DEPENDENCIES += geoip
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBNL),y)
++NETSNIFF_NG_DEPENDENCIES += libnl
++else
++NETSNIFF_NG_CONF_OPTS += --disable-libnl
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ NETSNIFF_NG_DEPENDENCIES += ncurses
+ endif
+@@ -43,7 +50,7 @@ define NETSNIFF_NG_CONFIGURE_CMDS
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		./configure \
+-		--prefix=$(TARGET_DIR)/usr \
++		$(NETSNIFF_NG_CONF_OPTS) \
+ 	)
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
