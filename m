@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2372C32771
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 09:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9279EC2BB41
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 09:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AB2F60E61;
-	Tue, 16 Aug 2022 09:39:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AB2F60E61
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39689410E5;
+	Tue, 16 Aug 2022 09:39:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39689410E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gptwOMn09nDY; Tue, 16 Aug 2022 09:39:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9cR-3d73x8IJ; Tue, 16 Aug 2022 09:39:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6924860D78;
-	Tue, 16 Aug 2022 09:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6924860D78
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0C0651BF9B9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04531409E9;
+	Tue, 16 Aug 2022 09:39:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04531409E9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A2DF1BF2A2
  for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 09:39:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC30B408EA
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 09:39:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC30B408EA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 03CEB410C2
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 09:39:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03CEB410C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FZpky1HjsROB for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8cV7QS5Ymoex for <buildroot@lists.busybox.net>;
  Tue, 16 Aug 2022 09:39:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DCD5840128
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA25340358
  for <buildroot@buildroot.org>; Tue, 16 Aug 2022 09:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCD5840128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA25340358
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 9AF76877EC; Tue, 16 Aug 2022 09:24:37 +0000 (UTC)
+ id A85C2877ED; Tue, 16 Aug 2022 09:24:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 11:32:44 +0200
+Date: Tue, 16 Aug 2022 11:32:51 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 7216212387668bbd215897d50ec8e81e423fadb5
-X-Git-Newrev: 5284543cc0efd00e0281ed41d23865a7a4ea3bbf
+X-Git-Oldrev: 5284543cc0efd00e0281ed41d23865a7a4ea3bbf
+X-Git-Newrev: ac74ab30c16c5101fdfdfeaf7bb85564392c937b
 X-Patchwork-Hint: ignore
-Message-Id: <20220816092437.9AF76877EC@busybox.osuosl.org>
+Message-Id: <20220816092437.A85C2877ED@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.05.x]
- package/x11r7/xserver_xorg-server: bump version to 21.1.3
+ package/x11r7/xserver_xorg-server: fix xephyr build with kdrive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,148 +63,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5284543cc0efd00e0281ed41d23865a7a4ea3bbf
+commit: https://git.buildroot.net/buildroot/commit/?id=ac74ab30c16c5101fdfdfeaf7bb85564392c937b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2022-January/003127.html
+Fix the following xephyr build failure with kdrive raised since commit
+eedbd6f97d51a0049ec512de26541465403ab06f:
 
-Removed patch which was applied upstream:
-https://gitlab.freedesktop.org/xorg/xserver/-/commit/9c66d910cae107cbcda02a8502ac5324a6eca052
+checking for XEPHYR... no
+configure: error: Package requirements (xau xdmcp xcb xcb-shape xcb-render xcb-renderutil xcb-aux xcb-image xcb-icccm xcb-shm >= 1.9.3 xcb-keysyms xcb-randr xcb-xkb xcb-xv) were not met:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Package 'xcb-renderutil', required by 'virtual:world', not found
+Package 'xcb-aux', required by 'virtual:world', not found
+Package 'xcb-image', required by 'virtual:world', not found
+Package 'xcb-icccm', required by 'virtual:world', not found
+Package 'xcb-keysyms', required by 'virtual:world', not found
+
+Fixes:
+ - http://autobuild.buildroot.org/results/baba218c879b67bfbadc9c25d34313abc76397bc
+ - http://autobuild.buildroot.org/results/9471b77db9aefa2fd0e5be61ea84709183511623
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e3245e3eba03f9ec64597afbebdeb90dd3064b26)
+(cherry picked from commit 90a6572e102d72ce01eaae6ab12065148f6a1a36)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tion-error-when-built-without-logind-plat.patch | 90 ----------------------
- .../xserver_xorg-server/xserver_xorg-server.hash   |  6 +-
- .../xserver_xorg-server/xserver_xorg-server.mk     |  2 +-
- 3 files changed, 4 insertions(+), 94 deletions(-)
+ package/x11r7/xserver_xorg-server/Config.in              | 4 ++++
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch b/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
-deleted file mode 100644
-index 164c0039bd..0000000000
---- a/package/x11r7/xserver_xorg-server/0002-Fix-compilation-error-when-built-without-logind-plat.patch
-+++ /dev/null
-@@ -1,90 +0,0 @@
--From 17b6ab4d8cecf55a3784dbefbef9bfcf84ee3b1b Mon Sep 17 00:00:00 2001
--From: Jocelyn Falempe <jfalempe@redhat.com>
--Date: Thu, 16 Dec 2021 15:46:43 +0100
--Subject: [PATCH] Fix compilation error when built without logind/platform bus
--
--This was introduced by commit 8eb1396d
--
--Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
--[Peter: from https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/827]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- hw/xfree86/common/xf86Events.c               |  9 +--------
-- hw/xfree86/os-support/linux/systemd-logind.c | 16 +++++++++++-----
-- include/systemd-logind.h                     |  4 ++--
-- 3 files changed, 14 insertions(+), 15 deletions(-)
--
--diff --git a/hw/xfree86/common/xf86Events.c b/hw/xfree86/common/xf86Events.c
--index 6076efa80..395bbc7b3 100644
----- a/hw/xfree86/common/xf86Events.c
--+++ b/hw/xfree86/common/xf86Events.c
--@@ -383,14 +383,7 @@ xf86VTLeave(void)
--         xf86GPUScreens[i]->LeaveVT(xf86GPUScreens[i]);
-- 
--     if (systemd_logind_controls_session()) {
---        for (i = 0; i < xf86_num_platform_devices; i++) {
---            if (xf86_platform_devices[i].flags & XF86_PDEV_SERVER_FD) {
---                int major, minor;
---                major = xf86_platform_odev_attributes(i)->major;
---                minor = xf86_platform_odev_attributes(i)->minor;
---                systemd_logind_drop_master(major, minor);
---            }
---        }
--+        systemd_logind_drop_master();
--     }
-- 
--     if (!xf86VTSwitchAway())
--diff --git a/hw/xfree86/os-support/linux/systemd-logind.c b/hw/xfree86/os-support/linux/systemd-logind.c
--index 35d5cc75b..f6a223a55 100644
----- a/hw/xfree86/os-support/linux/systemd-logind.c
--+++ b/hw/xfree86/os-support/linux/systemd-logind.c
--@@ -308,13 +308,19 @@ cleanup:
--  * and ensure the drm_drop_master is done before
--  * VT_RELDISP when switching VT
--  */
---void systemd_logind_drop_master(int _major, int _minor)
--+void systemd_logind_drop_master(void)
-- {
---    struct systemd_logind_info *info = &logind_info;
---    dbus_int32_t major = _major;
---    dbus_int32_t minor = _minor;
--+    int i;
--+    for (i = 0; i < xf86_num_platform_devices; i++) {
--+        if (xf86_platform_devices[i].flags & XF86_PDEV_SERVER_FD) {
--+            dbus_int32_t major, minor;
--+            struct systemd_logind_info *info = &logind_info;
-- 
---    systemd_logind_ack_pause(info, minor, major);
--+            major = xf86_platform_odev_attributes(i)->major;
--+            minor = xf86_platform_odev_attributes(i)->minor;
--+            systemd_logind_ack_pause(info, minor, major);
--+        }
--+    }
-- }
-- 
-- static DBusHandlerResult
--diff --git a/include/systemd-logind.h b/include/systemd-logind.h
--index a8af2b96d..5c04d0130 100644
----- a/include/systemd-logind.h
--+++ b/include/systemd-logind.h
--@@ -33,7 +33,7 @@ int systemd_logind_take_fd(int major, int minor, const char *path, Bool *paus);
-- void systemd_logind_release_fd(int major, int minor, int fd);
-- int systemd_logind_controls_session(void);
-- void systemd_logind_vtenter(void);
---void systemd_logind_drop_master(int major, int minor);
--+void systemd_logind_drop_master(void);
-- #else
-- #define systemd_logind_init()
-- #define systemd_logind_fini()
--@@ -41,7 +41,7 @@ void systemd_logind_drop_master(int major, int minor);
-- #define systemd_logind_release_fd(major, minor, fd) close(fd)
-- #define systemd_logind_controls_session() 0
-- #define systemd_logind_vtenter()
---#define systemd_logind_drop_master(major, minor)
--+#define systemd_logind_drop_master()
-- #endif
-- 
-- #endif
---- 
--2.20.1
--
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 6008661db1..b5635b9afa 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2021-December/003125.html
--sha256  c20bf46a9fe8e74bf4e75430637e58d49a02d806609dc161462bceb1ef7e8db0  xorg-server-21.1.2.tar.xz
--sha512  6d7a0d29d5be09f80ed505c4d6ae964795127525a0ab73a4eab4f601788ab3627033143e5aeb4c2565c6683dd3402084d13acab5554606fbd519c4aec0a79def  xorg-server-21.1.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-January/003127.html
-+sha256  61d6aad5b6b47a116b960bd7f0cba4ee7e6da95d6bb0b127bde75d7d1acdebe5  xorg-server-21.1.3.tar.xz
-+sha512  cf5fed023eadda62ae732f8c4d427c272ebe005188341290f3d03147042c103b00cbb94d86a0256da815fb9b9a3da315c21a05ee0c926c1a2ff0c54ab0c0638b  xorg-server-21.1.3.tar.xz
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 4fb03051dd..daf4d81702 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -85,6 +85,10 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB
  
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_XEPHYR
+ 	bool "Xephyr server"
++	select BR2_PACKAGE_XCB_UTIL_IMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
++	select BR2_PACKAGE_XCB_UTIL_KEYSYMS if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
++	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
++	select BR2_PACKAGE_XCB_UTIL_WM if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+ 	help
+ 	  Xephyr nested X server; successor to Xnest.
+ 
 diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 0cadba92a3..0f1779dcab 100644
+index 0f1779dcab..fa5d2a802d 100644
 --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -84,6 +84,13 @@ XSERVER_XORG_SERVER_CONF_OPTS += \
+ 	--disable-glx \
+ 	--disable-dri
  
--XSERVER_XORG_SERVER_VERSION = 21.1.2
-+XSERVER_XORG_SERVER_VERSION = 21.1.3
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
++ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_XEPHYR),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += \
++	xcb-util-image \
++	xcb-util-keysyms \
++	xcb-util-renderutil \
++	xcb-util-wm
++endif
+ else # modular
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
