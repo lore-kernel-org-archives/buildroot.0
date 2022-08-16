@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7BF7C32772
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 09:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9DFCC2BB41
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 09:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 682E68142E;
-	Tue, 16 Aug 2022 09:38:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 682E68142E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C5444099B;
+	Tue, 16 Aug 2022 09:38:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C5444099B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1VBJ17QFNmVC; Tue, 16 Aug 2022 09:38:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MWfgEzmps9PN; Tue, 16 Aug 2022 09:38:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3AB28139E;
-	Tue, 16 Aug 2022 09:38:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3AB28139E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4FD421BF2A2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F1744038C;
+	Tue, 16 Aug 2022 09:38:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F1744038C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E6A71BF9B9
  for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 09:38:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2ADE8408EB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 460944038C
  for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 09:38:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2ADE8408EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 460944038C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rha7Y4_LdBYR for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l5zYmdHaifob for <buildroot@lists.busybox.net>;
  Tue, 16 Aug 2022 09:38:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4AABF40128
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50F3540358
  for <buildroot@buildroot.org>; Tue, 16 Aug 2022 09:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AABF40128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50F3540358
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0218187770; Tue, 16 Aug 2022 09:24:09 +0000 (UTC)
+ id 0D2A1877DB; Tue, 16 Aug 2022 09:24:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 11:34:38 +0200
+Date: Tue, 16 Aug 2022 11:34:44 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0ec971b0d92e0d7b8d66f1732b7710e3fb6922df
-X-Git-Newrev: dcd43bdf16f7c5af695b7d12897f04888b190ecc
+X-Git-Oldrev: dcd43bdf16f7c5af695b7d12897f04888b190ecc
+X-Git-Newrev: 04e37b9a4946c9c7add323145a008d26b7080c56
 X-Patchwork-Hint: ignore
-Message-Id: <20220816092409.0218187770@busybox.osuosl.org>
+Message-Id: <20220816092409.0D2A1877DB@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.02.x]
- package/x11r7/xserver_xorg-server: fix xephyr build with kdrive
+ package/x11r7/xserver_xorg-server: drop unrecognized option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcd43bdf16f7c5af695b7d12897f04888b190ecc
+commit: https://git.buildroot.net/buildroot/commit/?id=04e37b9a4946c9c7add323145a008d26b7080c56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following xephyr build failure with kdrive raised since commit
-eedbd6f97d51a0049ec512de26541465403ab06f:
-
-checking for XEPHYR... no
-configure: error: Package requirements (xau xdmcp xcb xcb-shape xcb-render xcb-renderutil xcb-aux xcb-image xcb-icccm xcb-shm >= 1.9.3 xcb-keysyms xcb-randr xcb-xkb xcb-xv) were not met:
-
-Package 'xcb-renderutil', required by 'virtual:world', not found
-Package 'xcb-aux', required by 'virtual:world', not found
-Package 'xcb-image', required by 'virtual:world', not found
-Package 'xcb-icccm', required by 'virtual:world', not found
-Package 'xcb-keysyms', required by 'virtual:world', not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/baba218c879b67bfbadc9c25d34313abc76397bc
- - http://autobuild.buildroot.org/results/9471b77db9aefa2fd0e5be61ea84709183511623
+dmx has been dropped since version 21.1.0 and
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/b3b81c8c2090cd49410960a021baf0d27fdd2ab3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 90a6572e102d72ce01eaae6ab12065148f6a1a36)
+(cherry picked from commit da7b8726692ee8f0fede8118ad06a4aa938e67e1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/Config.in              | 4 ++++
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 7 +++++++
- 2 files changed, 11 insertions(+)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 4fb03051dd..daf4d81702 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -85,6 +85,10 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_XEPHYR
- 	bool "Xephyr server"
-+	select BR2_PACKAGE_XCB_UTIL_IMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
-+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
-+	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
-+	select BR2_PACKAGE_XCB_UTIL_WM if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
- 	help
- 	  Xephyr nested X server; successor to Xnest.
- 
 diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 0f1779dcab..fa5d2a802d 100644
+index fa5d2a802d..43d2038a8d 100644
 --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -84,6 +84,13 @@ XSERVER_XORG_SERVER_CONF_OPTS += \
- 	--disable-glx \
- 	--disable-dri
- 
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_XEPHYR),y)
-+XSERVER_XORG_SERVER_DEPENDENCIES += \
-+	xcb-util-image \
-+	xcb-util-keysyms \
-+	xcb-util-renderutil \
-+	xcb-util-wm
-+endif
- else # modular
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive
+@@ -45,7 +45,6 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
+ 	--disable-config-hal \
+ 	--enable-record \
+ 	--disable-xnest \
+-	--disable-dmx \
+ 	--disable-unit-tests \
+ 	--with-builder-addr=buildroot@buildroot.org \
+ 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1 -O2" \
+@@ -165,10 +164,6 @@ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-screensaver
  endif
+ 
+-ifneq ($(BR2_PACKAGE_XLIB_LIBDMX),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-dmx
+-endif
+-
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --with-sha1=libcrypto
+ XSERVER_XORG_SERVER_DEPENDENCIES += openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
