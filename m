@@ -4,55 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76EF5C25B0E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 19:53:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 377A5C25B0E
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 19:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F29B5404A3;
-	Tue, 16 Aug 2022 19:53:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F29B5404A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CEC741527;
+	Tue, 16 Aug 2022 19:54:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CEC741527
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lboptDy5-jcq; Tue, 16 Aug 2022 19:53:46 +0000 (UTC)
+	with ESMTP id CYabpeWvrI0a; Tue, 16 Aug 2022 19:53:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB48140499;
-	Tue, 16 Aug 2022 19:53:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB48140499
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A3BAD1BF3D2
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 19:53:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7441F410B8;
+	Tue, 16 Aug 2022 19:53:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7441F410B8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 707441BF3D2
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 19:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8C95740134
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 19:53:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C95740134
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5945C60B4B
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 19:53:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5945C60B4B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EDmDtgYA9I4R for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 19:53:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TrYm5nGEe-dp for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 19:53:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D7644010D
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D7644010D
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 19:53:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBDA060AF2
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DBDA060AF2
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 19:53:49 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5746D1C0005;
- Tue, 16 Aug 2022 19:53:36 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id C3373240003;
+ Tue, 16 Aug 2022 19:53:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oO2d5-009cBc-0w; Tue, 16 Aug 2022 21:53:35 +0200
+ id 1oO2dF-009cBi-9Z; Tue, 16 Aug 2022 21:53:45 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20220723201033.3FCF78513F@busybox.osuosl.org>
-Date: Tue, 16 Aug 2022 21:53:34 +0200
-In-Reply-To: <20220723201033.3FCF78513F@busybox.osuosl.org> (Thomas Petazzoni
+References: <20220723201033.4982E851A6@busybox.osuosl.org>
+Date: Tue, 16 Aug 2022 21:53:45 +0200
+In-Reply-To: <20220723201033.4982E851A6@busybox.osuosl.org> (Thomas Petazzoni
  via buildroot's message of "Sat, 23 Jul 2022 22:23:48 +0200")
-Message-ID: <87ilmsc6dd.fsf@dell.be.48ers.dk>
+Message-ID: <87edxgc6d2.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] package/glslsandbox-player: drop
- BR2_TOOLCHAIN_HAS_THREADS workaround
+Subject: Re: [Buildroot] [git commit] package/glslsandbox: kms needs gbm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,18 +71,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=624f2e658d09d13cb9e61a8a52f2227d2a60d7f7
+ > commit: https://git.buildroot.net/buildroot/commit/?id=e88cb1038d3a3691621d0fe14bc9f13d6c9b7389
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > We used to have a BR2_TOOLCHAIN_HAS_THREADS dependency at the
- > top-level BR2_PACKAGE_GLSLSANDBOX_PLAYER option to make sure that at
- > least one of them windowing system was selectable.
+ > Obviously, KMS/DRM/GBM needs gbm so add a dependency on libgbm which was
+ > added by commit 4a541ee93242e67f7fab625607f5501c6925d451:
 
- > However, thanks to the recent introduction of the support for the null
- > windowing system, we now have a windowing system that doesn't require
- > any special feature, so we can drop this dependency from the top-level
- > option.
+ > checking for gbm... no
+ > configure: error: Package requirements (gbm) were not met:
 
+ > Package 'gbm', required by 'virtual:world', not found
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/31b3fff9748300e293b4efb5615176ccce48dd15
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2022.05.x and 2022.02.x, thanks.
