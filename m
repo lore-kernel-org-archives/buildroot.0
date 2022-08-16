@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59D0CC32771
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 05:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 324D0C25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 05:39:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D68B641924;
-	Wed, 17 Aug 2022 05:38:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D68B641924
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2FC082D96;
+	Wed, 17 Aug 2022 05:39:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2FC082D96
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3Ez08zJJXkeq; Wed, 17 Aug 2022 05:38:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id S6DhWq4hyebX; Wed, 17 Aug 2022 05:39:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 901BE418CD;
-	Wed, 17 Aug 2022 05:38:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 901BE418CD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 465E71BF947
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D8A182C3E;
+	Wed, 17 Aug 2022 05:39:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D8A182C3E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 533FA1C113E
  for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 05:38:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FA2640C9E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E45460B27
  for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 05:38:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FA2640C9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E45460B27
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id chxLlZrLui9Q for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8zhQXxeDAE54 for <buildroot@lists.busybox.net>;
  Wed, 17 Aug 2022 05:38:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C5444013F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CF1D60A9C
  for <buildroot@buildroot.org>; Wed, 17 Aug 2022 05:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C5444013F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CF1D60A9C
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 06427876FD; Wed, 17 Aug 2022 05:24:17 +0000 (UTC)
+ id 14AB8876FB; Wed, 17 Aug 2022 05:24:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 23:06:50 +0200
+Date: Tue, 16 Aug 2022 23:26:06 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 56fdf0d2ca0cd60decd0f9d75262a79a21063056
-X-Git-Newrev: 186e736baa7488730044a02fdc3f8663bc8ac483
+X-Git-Oldrev: 186e736baa7488730044a02fdc3f8663bc8ac483
+X-Git-Newrev: 71c6ba101d72d233b187be36ca134eb5bbd750ba
 X-Patchwork-Hint: ignore
-Message-Id: <20220817052417.06427876FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/nodejs: security
- bump to version 16.16.0
+Message-Id: <20220817052417.14AB8876FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/gtest: bump to
+ version 1.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=186e736baa7488730044a02fdc3f8663bc8ac483
+commit: https://git.buildroot.net/buildroot/commit/?id=71c6ba101d72d233b187be36ca134eb5bbd750ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Fix CVE-2022-32213, CVE-2022-32214, CVE-2022-32215, CVE-2022-32212,
-CVE-2022-32223, CVE-2022-32222 and CVE-2022-2097
-
-https://nodejs.org/en/blog/vulnerability/july-2022-security-releases
-https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V16.md#16.16.0
+https://github.com/google/googletest/releases/tag/release-1.12.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit d7d6fda52f1443c50b1ded39fbeec7a6ecf93199)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a336b731af5979a25213b33c5840de6d1ed88bdc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gtest/gtest.hash | 2 +-
+ package/gtest/gtest.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 716becccc9..12ae449ab4 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v16.15.0/SHASUMS256.txt
--sha256  a0f812efc43f78321eca08957960a48f5e6bf97004d5058c8dd3b03c646ea4f7  node-v16.15.0.tar.xz
-+# From https://nodejs.org/dist/v16.16.0/SHASUMS256.txt
-+sha256  145151eff3b2aa5ebe73384009c52271a83740ae687a93c98c628cd7d52736eb  node-v16.16.0.tar.xz
- 
- # Hash for license file
- sha256  6211cc77f9ceaf365db12faf050775b3a1e6da7a1eff3577ba006c4918103c33  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index cfd9295d4e..3154dcd7ec 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
+diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
+index d21fea7142..1a93684aeb 100644
+--- a/package/gtest/gtest.hash
++++ b/package/gtest/gtest.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  b4870bf121ff7795ba20d20bcdd8627b8e088f2d1dab299a031c1034eddc93d5  gtest-1.11.0.tar.gz
++sha256  2a4f11dce6188b256f3650061525d0fe352069e5c162452818efbbf8d0b5fe1c  gtest-1.12.0.tar.gz
+ sha256  9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  LICENSE
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index 8ec5e9c535..f3f3f9c296 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 16.15.0
-+NODEJS_VERSION = 16.16.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = \
+-GTEST_VERSION = 1.11.0
++GTEST_VERSION = 1.12.0
+ GTEST_SITE = $(call github,google,googletest,release-$(GTEST_VERSION))
+ GTEST_INSTALL_STAGING = YES
+ GTEST_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
