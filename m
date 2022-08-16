@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E18CFC25B0E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 21:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB482C2BB41
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 21:05:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 62A8681401;
-	Tue, 16 Aug 2022 21:03:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62A8681401
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F1284010D;
+	Tue, 16 Aug 2022 21:05:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F1284010D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5tWBERBN_euZ; Tue, 16 Aug 2022 21:03:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Afqiybo2uLLC; Tue, 16 Aug 2022 21:05:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C9AEF81411;
-	Tue, 16 Aug 2022 21:03:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9AEF81411
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6CACE4013E;
+	Tue, 16 Aug 2022 21:05:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CACE4013E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7619D1BF39C
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 21:03:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6DE3C1BF84C
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 21:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59F89408E5
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 21:03:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59F89408E5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 565AD4013E
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 21:05:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 565AD4013E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vzRbTgr180Jl for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 21:03:44 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 545224059B
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 545224059B
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 21:03:44 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e933:8a8a:6743:9483])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 22FC9780505;
- Tue, 16 Aug 2022 23:03:35 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 16 Aug 2022 23:03:34 +0200
-Date: Tue, 16 Aug 2022 23:03:34 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220816210334.GP2854108@scaer>
-References: <20220815202955.2216503-1-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220815202955.2216503-1-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660683822;
- bh=fGOicHbQtRjWyleWz3KipWwk6O+BaIfVPbbdb7iAIYQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=TDNn0Qdm2gIvjzoTKoL6eeYf0dU8m/PCwIDP9v5nTCJ6WS/uHZzMP+d/xlcHbmYmR
- cjsqa1aWl3KnllbbdFvLRT9JMq/eHiFNIun0mlSCLNjnBqXvyCdbb9qtrjIbKq0VUL
- km732HhFrskUrP6KERFO5BuSWf+5faM8ZPHNRF+jZgx5wIGhX3YIVOEzZ4kyJEArGb
- I2Nxt1cCPMP0Oeo0kmgXavnrdw0yUgVisZE5npcmHpgAqdieY87rvrTVMu6JZXEsPJ
- FgC+ECptk4Jbqwjtt7hsk1md0vedwTDWhcR8Oe92JY0KozUrXTHwt+7xcvjJwSLzb0
- Yscr1lAnvMp6g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=TDNn0Qdm
-Subject: Re: [Buildroot] [PATCH next] toolchain/toolchain-buildroot: default
- to glibc as the C library
+ with ESMTP id r48UgseAZ6-9 for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 21:05:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D860B4010D
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 21:05:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D860B4010D
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 7F768878E4; Tue, 16 Aug 2022 20:50:58 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Tue, 16 Aug 2022 22:59:41 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 3abcae9d56ca35eb734be3b1967fbff63b5f9bc9
+X-Git-Newrev: f3fc07e421a7bb479d2b872f87985b8f37ed931c
+X-Patchwork-Hint: ignore
+Message-Id: <20220816205058.7F768878E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/qt5/qt5webkit:
+ backport upstream fix for GStreamer 1.19.x compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,83 +57,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot List <buildroot@buildroot.org>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5762943205388545721=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+--===============5762943205388545721==
+Content-Type: text/plain
 
-On 2022-08-15 22:29 +0200, Thomas Petazzoni via buildroot spake thusly:
-> This is perhaps the most controversial change for Buildroot that can
-> be written in a two-liner.
-> 
-> Historically, we have used uClibc as our default C library, as
-> Buildroot was created initially as a test-bed for uClibc, and also
-> because uClibc made a lot of sense for embedded Linux systems, due to
-> its smaller size and fine-grained configurability.
-> 
-> Since then, the landscape of embedded Linux systems has changed. Even
-> though Buildroot happily supports really low-end devices, the vast
-> majority of Buildroot users are quite certainly running the resulting
-> system on a reasonably powerful platform, with significant amount of
-> RAM and storage. In this context, the benefits of uClibc are no longer
-> that much relevant, and glibc causes less "troubles". Therefore, this
-> patch proposes to use glibc as our default C library when using the
-> internal toolchain backend instead of uClibc.
-> 
-> Of course, we will keep the support for uClibc, which remains an
-> important C library choice, for space-constrained systems, or simply
-> for architectures that are not supported by glibc.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=f3fc07e421a7bb479d2b872f87985b8f37ed931c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+In GStreamer commit 0a657d6db5ba912b13092a907ea507638cd01cf9, merged
+in Gstreamer 1.19.x, the GstAppSinkCallbacks structure was extended
+with another field calle new_event. This requires an update in the
+WebKit code, without which we have a build failure:
 
-Yes, I will be a bit sad that we demote uClibc-ng, but let's face it:
-the word moves on, let's move along.
+    platform/audio/gstreamer/AudioFileReaderGStreamer.cpp:234:5: error: braces around scalar initializer for type ‘gboolean (*)(GstAppSink*, gpointer) {aka int (*)(_GstAppSink*, void*)}’
 
-Regards,
-Yann E. MORIN.
+There are no autobuilder failures, but the issue could be reproduced
+using the following defconfig:
 
-> ---
->  toolchain/toolchain-buildroot/Config.in | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 836af3b22a..9956dc4383 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -22,8 +22,7 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
->  
->  choice
->  	prompt "C library"
-> -	default BR2_TOOLCHAIN_BUILDROOT_UCLIBC
-> -	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_powerpc64
-> +	default BR2_TOOLCHAIN_BUILDROOT_GLIBC
->  
->  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  	bool "uClibc-ng"
-> -- 
-> 2.37.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5WEBKIT=y
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+[Thomas: find the actual upstream fix and use that, improve the
+explanation about the issue in the commit message]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bb50b821702841fdc75bf8151555cd401f764f07)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...e-to-AppSinkCallbacks-struct-growth-https.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+
+diff --git a/package/qt5/qt5webkit/0006-Warnings-due-to-AppSinkCallbacks-struct-growth-https.patch b/package/qt5/qt5webkit/0006-Warnings-due-to-AppSinkCallbacks-struct-growth-https.patch
+new file mode 100644
+index 0000000000..610d99e35d
+--- /dev/null
++++ b/package/qt5/qt5webkit/0006-Warnings-due-to-AppSinkCallbacks-struct-growth-https.patch
+@@ -0,0 +1,39 @@
++From 53d5bbf4d597a2fcb26149fab3185a3db09529af Mon Sep 17 00:00:00 2001
++From: Philippe Normand <pnormand@igalia.com>
++Date: Fri, 23 Jul 2021 15:38:29 +0000
++Subject: [PATCH] Warnings due to AppSinkCallbacks struct growth
++ https://bugs.webkit.org/show_bug.cgi?id=228229
++
++Patch by Philippe Normand <pnormand@igalia.com> on 2021-07-23
++Reviewed by Xabier Rodriguez-Calvar.
++
++A new callback was added, for event notifications.
++
++Canonical link: https://commits.webkit.org/239911@main
++git-svn-id: https://svn.webkit.org/repository/webkit/trunk@280243268f45cc-cd09-0410-ab3c-d52691b4dbfc
++[Thomas: backported from upstream, only the part touching
++Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp
++as other parts are not relevant]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ .../platform/audio/gstreamer/AudioFileReaderGStreamer.cpp     | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp b/Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp
++index 2f24c0cf5..dd9d91cf3 100644
++--- a/Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp
+++++ b/Source/WebCore/platform/audio/gstreamer/AudioFileReaderGStreamer.cpp
++@@ -230,6 +230,10 @@ void AudioFileReader::handleNewDeinterleavePad(GstPad* pad)
++         [](GstAppSink* sink, gpointer userData) -> GstFlowReturn {
++             return static_cast<AudioFileReader*>(userData)->handleSample(sink);
++         },
+++#if GST_CHECK_VERSION(1, 19, 1)
+++        // new_event
+++        nullptr,
+++#endif
++         { nullptr }
++     };
++     gst_app_sink_set_callbacks(GST_APP_SINK(sink), &callbacks, this, 0);
++-- 
++2.37.1
++
+
+--===============5762943205388545721==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5762943205388545721==--
