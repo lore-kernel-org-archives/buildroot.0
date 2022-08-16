@@ -1,89 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EC28C25B0E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 12:07:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCA6FC25B0E
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 12:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9543060FD7;
-	Tue, 16 Aug 2022 12:07:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9543060FD7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2132940B1D;
+	Tue, 16 Aug 2022 12:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2132940B1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BojJLlBz1CLb; Tue, 16 Aug 2022 12:07:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kz2IVhAr-tYe; Tue, 16 Aug 2022 12:53:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74D4260FAE;
-	Tue, 16 Aug 2022 12:07:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74D4260FAE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BE2471BF82D
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 12:07:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E371A40B8C;
+	Tue, 16 Aug 2022 12:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E371A40B8C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F03C1BF82D
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 12:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A44464160D
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 12:07:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A44464160D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09C30812BD
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 12:53:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09C30812BD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bnOHBpn82AAA for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 12:07:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JSh6i8aE1PRU for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 12:53:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BE9F404F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76C8E81356
 Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
  [IPv6:2a00:1450:4864:20::52b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9BE9F404F1
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 12:07:22 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id z2so13204414edc.1
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 05:07:22 -0700 (PDT)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 76C8E81356
+ for <buildroot@busybox.net>; Tue, 16 Aug 2022 12:53:42 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id z20so13310176edb.9
+ for <buildroot@busybox.net>; Tue, 16 Aug 2022 05:53:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-message-state:from:to:cc;
- bh=yxPCcwgn5a/pOeEL2hayfcLmkpgkoafC7JyDU8THllg=;
- b=cEUgVbPoASjG+GS/keiSxJo220tLydXydJV/RVMOKMUjMMieP/vb8E1+pvKrCsgHPU
- ST+GAEriQTRxzvcDaeg+S0NhKao4XMIElRt+ngFHHvfFrx2e9MrtdD30OxgQaSENX7O6
- avnI0ZsLZXyLFUbqoC5p3vnLCGiDlhpqwaOeazqvA6fIjIhMB9TAppkNvKY31HPcIhjL
- cNPl1UBpyHxxc4azb+lTFpn9MTIR5FyNdYsNkfkWre2OCz8dgqN+d7UNa/cmj7MVCFFy
- PJncyM2+oifna7xipkBBLv9RO4sxEIKoI+GEm+q8YJrx/LW6DCD/nPF0zxa46SbkBjwi
- R3BA==
-X-Gm-Message-State: ACgBeo0HjMNSaV95KlGDS/XkbDymTqtKF5BKqnE61n/96GsWK9+wlyHW
- 3HeCZwkLaRH5Sy13JNwthBG9GvuRxXNHeQ==
-X-Google-Smtp-Source: AA6agR7o26F5WGXivtR13P8F2eRxG8tYHbsvLTyID9NIRkYG09L9ppjzdGcAR0rh4GQDwAAXz1fbhg==
-X-Received: by 2002:a50:fb10:0:b0:43d:561a:c990 with SMTP id
- d16-20020a50fb10000000b0043d561ac990mr18565279edq.115.1660651640210; 
- Tue, 16 Aug 2022 05:07:20 -0700 (PDT)
-Received: from nitrogen.local (253.124-78-194.adsl-static.isp.belgacom.be.
- [194.78.124.253]) by smtp.gmail.com with ESMTPSA id
- d6-20020a50fe86000000b0043c0fbdcd8esm8408421edt.70.2022.08.16.05.07.18
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Aug 2022 05:07:19 -0700 (PDT)
-From: Bram Vlerick <bram.vlerick@openpixelsystems.org>
-To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 14:07:17 +0200
-Message-Id: <20220816120718.3021545-1-bram.vlerick@openpixelsystems.org>
-X-Mailer: git-send-email 2.31.1
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc;
+ bh=GjlEm7uXIoV4z4Cw9W2AvWTEhtzxCnPvZA/nCAUQVEI=;
+ b=qQcf1kBdivMQHd5LGXpbatgNc5D6KMm3oBkCOfYI4GqiHUI4hEUfNkvzdr9C04QKN8
+ 6NG7n4WR96msj5Pwf+bQ9v3mGlxCYf4AHRuKsdq+LTvVQtfzBXkr3S8Zo/EuCPdw/lqo
+ iMNjOedbJbVzlUtjYv3FgIJMk5HJDEW2ZqyLacLHomHU7BKEnpfDUCIOI1vzVpkc2JoJ
+ f4vRcef4rKZ2HJtnyW40xakd0YaEUNkSEirD3Id8cgfcvmJq6qqnN/mSLf7y90wca3GF
+ Lpoql1pn1xD2eH1uE1n77/oSIlkhGva5nEiafi+S98xw1mL5c0RzZUGWQjziwxdwyslu
+ 6njA==
+X-Gm-Message-State: ACgBeo3ZlAPVHBRJgKZLOoBC6rCO3akqNFCZtz4sqfwxaZpavmzjIpQb
+ 6v2E4XbGlc0OcSooj3IJ4ZHlB/ApzuWrP1a/cyFl47s6AjA=
+X-Google-Smtp-Source: AA6agR5BiIhSMvbSsR/g20VFs6ar6u78FdBa3syaBljD6nYoX2fAxGUJrFhh9o7uL19dNvJyxM+zYgjW2hOcGIZ6tBg=
+X-Received: by 2002:aa7:c946:0:b0:43d:3038:1381 with SMTP id
+ h6-20020aa7c946000000b0043d30381381mr19072107edt.354.1660654420715; Tue, 16
+ Aug 2022 05:53:40 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220816094829.377-1-guillaume.bressaix@gmail.com>
+ <20220816120109.1a348d39@windsurf>
+ <14985_1660644771_62FB6DA3_14985_149_1_20220816101249.GA2027648@tl-lnx-nyma7486>
+ <20220816135325.169146bf@windsurf>
+ <30735_1660651483_62FB87DB_30735_129_1_20220816120440.GA2939@tl-lnx-nyma7486>
+In-Reply-To: <30735_1660651483_62FB87DB_30735_129_1_20220816120440.GA2939@tl-lnx-nyma7486>
+From: Guillaume Bres <guillaume.bressaix@gmail.com>
+Date: Tue, 16 Aug 2022 14:53:14 +0200
+Message-ID: <CAJe0E3cLyPiuh3v6Z6FOAegGJp=4N1MNC9iKG0pEKkxMpJf4gg@mail.gmail.com>
+To: yann.morin@orange.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=openpixelsystems-org.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc;
- bh=yxPCcwgn5a/pOeEL2hayfcLmkpgkoafC7JyDU8THllg=;
- b=7eE1h/0mxJBN8irS0vjyOXWk4mjacwhO2VNRK1Lj0KuAv9ApsIS0r1FeLhGQ+9rqxA
- E/GBVr3jQBcZUh+UHMBPKHh9d62SGr9ggHP4Mt0ULPssMZVvLLIBubwUzaI1VEyBv/B8
- 4z0lzg6D07iBqZGqTS1oYzg8HlQyFFc8N6JAY557ez1VR4ninVzIU6YQwoo2PKIRUE0N
- 6kwZhd8P3UfoPP+lNHpqwHmnlPTR60uI42ER6yuTRgNM3bJgrk58p200c1QVT7CN9XXs
- egN9pXTKZXqyIyBEAHx3/dm2GJWmwKAdLxPgSigMn6RZ2Z3LZful61UKBUQqIIAoi1Np
- +pIA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=openpixelsystems-org.20210112.gappssmtp.com
- header.i=@openpixelsystems-org.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=7eE1h/0m
-Subject: [Buildroot] [PATCH 1/2] board/freescale/common/imx: align
- u-boot-spl to 4 bytes
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc;
+ bh=GjlEm7uXIoV4z4Cw9W2AvWTEhtzxCnPvZA/nCAUQVEI=;
+ b=cTdK+a7UPVkR4w5ouoNAizEZEu4ylP0drhVLQkDzsLYhPSa9IBhx2Qw+HpuCaw4t2Y
+ R+5MBpVWZ5Vf+/qdh8xVZ7WCX6OvKJ1cZ0AraewFx5QqCEMgEwv4xjCze2AhZa5OzuBm
+ Op01RWiQ+TpHn1zRG/+vvnrf8OLVbRpO7pdNvSPUgDR2haUm/bNHUHGO50Pjsp2NTPH9
+ QAEK8/xVfJFDADnNJNLh12Tw31vW+svpgoUvIcjMjBVf/x0Db/J8gzMHFQ+AczbdYne1
+ el0rQ5HIfD9eEOvlAKc2mX8vNYXRjZRW/uwo3sq8YIWwkfe1dwpciaEAxKeSH2mDV9le
+ O4RA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=cTdK+a7U
+Subject: Re: [Buildroot] [RFC 1/1] package/pkg-meson.mk: handle possibly non
+ existing compilers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,72 +93,195 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net, Yann Morin <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: multipart/mixed; boundary="===============0536265845893017378=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When enable DM for SPL binary, the DTB part of SPL may not 4 bytes aligned.
-If u-boot-spl is not aligned, the offset of the DDR firmware is not 4
-byte aligned when u-boot-spl-ddr.bin is created. This causes the ddr
-firmware to not be loaded correctly at boot.
+--===============0536265845893017378==
+Content-Type: multipart/alternative; boundary="000000000000d76ac205e65b3cb7"
 
-See imx-mkimage commit bba038d893046b44683182dba540f104dab80fe7 for
-implementation in imx-mkimage.
+--000000000000d76ac205e65b3cb7
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
----
- .../freescale/common/imx/imx8-bootloader-prepare.sh  | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index 9025fb132d..ace0f6d610 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -9,7 +9,8 @@ main ()
- 	fi
- 
- 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
--		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		dd if=${BINARIES_DIR}/u-boot-spl.bin of=${BINARIES_DIR}/u-boot-spl-padded.bin bs=4 conv=sync
-+		cat ${BINARIES_DIR}/u-boot-spl-padded.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
- 		if grep -Eq "^BR2_TARGET_OPTEE_OS=y$" ${BR2_CONFIG}; then
- 			BL31=${BINARIES_DIR}/bl31.bin BL32=${BINARIES_DIR}/tee.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin TEE_LOAD_ADDR=0xfe000000 ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		else
-@@ -20,7 +21,8 @@ main ()
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
--		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		dd if=${BINARIES_DIR}/u-boot-spl.bin of=${BINARIES_DIR}/u-boot-spl-padded.bin bs=4 conv=sync
-+		cat ${BINARIES_DIR}/u-boot-spl-padded.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
- 		if grep -Eq "^BR2_TARGET_OPTEE_OS=y$" ${BR2_CONFIG}; then
- 			BL31=${BINARIES_DIR}/bl31.bin BL32=${BINARIES_DIR}/tee.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin TEE_LOAD_ADDR=0xbe000000 ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		else
-@@ -31,7 +33,8 @@ main ()
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=y$" ${BR2_CONFIG}; then
--		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		dd if=${BINARIES_DIR}/u-boot-spl.bin of=${BINARIES_DIR}/u-boot-spl-padded.bin bs=4 conv=sync
-+		cat ${BINARIES_DIR}/u-boot-spl-padded.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
- 		if grep -Eq "^BR2_TARGET_OPTEE_OS=y$" ${BR2_CONFIG}; then
- 			BL31=${BINARIES_DIR}/bl31.bin BL32=${BINARIES_DIR}/tee.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin TEE_LOAD_ADDR=0x56000000 ATF_LOAD_ADDR=0x00960000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		else
-@@ -42,7 +45,8 @@ main ()
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -v v2 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x912000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP=y$" ${BR2_CONFIG}; then
--		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		dd if=${BINARIES_DIR}/u-boot-spl.bin of=${BINARIES_DIR}/u-boot-spl-padded.bin bs=4 conv=sync
-+		cat ${BINARIES_DIR}/u-boot-spl-padded.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
- 		if grep -Eq "^BR2_TARGET_OPTEE_OS=y$" ${BR2_CONFIG}; then
- 			BL31=${BINARIES_DIR}/bl31.bin BL32=${BINARIES_DIR}/tee.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin TEE_LOAD_ADDR=0x56000000 ATF_LOAD_ADDR=0x00970000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		else
--- 
-2.31.1
+>> So, yes, we tried for CXX, and no, we do not want to do it again. For
+>> consistency, we should not try for other languages either, I believe.
+>So, the Meson-specific solution proposed by Guillaume is relevant
+
+that was my understanding from Yann's clarifications this morning. I
+submitted a V1 (non RFC) with your corrections, please disregard the RFC
+from now on
+
+Guillaume W. Bres
+Software engineer
+<guillaume.bressaix@gmail.com>
+
+
+Le mar. 16 ao=C3=BBt 2022 =C3=A0 14:04, <yann.morin@orange.com> a =C3=A9cri=
+t :
+
+> Thomas, All,
+>
+> On 2022-08-16 13:53 +0200, Thomas Petazzoni spake thusly:
+> > On Tue, 16 Aug 2022 12:12:49 +0200
+> > <yann.morin@orange.com> wrote:
+> [--SNIP--]
+> > > So, yes, we tried for CXX, and no, we do not want to do it again. For
+> > > consistency, we should not try for other languages either, I believe.
+> > So, the Meson-specific solution proposed by Guillaume is relevant?
+>
+> Yes, I believe so. Disabling use/detection of tools should be a
+> per-infra solution: the meson solution (use /bin/false) is incompatible
+> with the autotools (which break with /bin/false).
+>
+> As for why using /bin/false in meson, see:
+>     https://lore.kernel.org/buildroot/20220809162534.GE3168@scaer/
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+>                                         ____________
+> .-----------------.--------------------:       _    :------------------.
+> |  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+> | +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+> | +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+> |      yann.morin (at) orange.com      |_=3D"    ,--' | / \ HTML MAIL    =
+|
+> '--------------------------------------:______/_____:------------------'
+>
+>
+>
+> _________________________________________________________________________=
+________________________________________________
+>
+> Ce message et ses pieces jointes peuvent contenir des informations
+> confidentielles ou privilegiees et ne doivent donc
+> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez
+> recu ce message par erreur, veuillez le signaler
+> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages
+> electroniques etant susceptibles d'alteration,
+> Orange decline toute responsabilite si ce message a ete altere, deforme o=
+u
+> falsifie. Merci.
+>
+> This message and its attachments may contain confidential or privileged
+> information that may be protected by law;
+> they should not be distributed, used or copied without authorisation.
+> If you have received this email in error, please notify the sender and
+> delete this message and its attachments.
+> As emails may be altered, Orange is not liable for messages that have bee=
+n
+> modified, changed or falsified.
+> Thank you.
+>
+>
+
+--000000000000d76ac205e65b3cb7
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<br><br>&gt;&gt;<span class=3D"gmail-im" style=3D"co=
+lor:rgb(80,0,80)">=C2=A0So, yes, we tried for CXX, and no, we do not want t=
+o do it again. For<br>&gt;&gt; consistency, we should not try for other lan=
+guages either, I believe.<br></span>&gt;So, the Meson-specific solution pro=
+posed by Guillaume is relevant<div><br></div><div>that was my understanding=
+ from Yann&#39;s clarifications this morning. I submitted a V1 (non RFC) wi=
+th your corrections, please disregard the RFC from now on<br><br clear=3D"a=
+ll"><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmail=
+_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"=
+ltr"><div><div><div><font face=3D"arial,helvetica,sans-serif">Guillaume W. =
+Bres<br></font></div><font face=3D"arial,helvetica,sans-serif">Software eng=
+ineer</font><br></div><font face=3D"arial,helvetica,sans-serif"></font></di=
+v><font face=3D"arial,helvetica,sans-serif">&lt;<a href=3D"mailto:guillaume=
+.bressaix@gmail.com" target=3D"_blank">guillaume.bressaix@gmail.com</a>&gt;=
+<br></font></div></div></div></div></div></div><br></div></div><br><div cla=
+ss=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mar. 16 ao=
+=C3=BBt 2022 =C3=A0=C2=A014:04, &lt;<a href=3D"mailto:yann.morin@orange.com=
+">yann.morin@orange.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote cl=
+ass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid=
+ rgb(204,204,204);padding-left:1ex">Thomas, All,<br>
+<br>
+On 2022-08-16 13:53 +0200, Thomas Petazzoni spake thusly:<br>
+&gt; On Tue, 16 Aug 2022 12:12:49 +0200<br>
+&gt; &lt;<a href=3D"mailto:yann.morin@orange.com" target=3D"_blank">yann.mo=
+rin@orange.com</a>&gt; wrote:<br>
+[--SNIP--]<br>
+&gt; &gt; So, yes, we tried for CXX, and no, we do not want to do it again.=
+ For<br>
+&gt; &gt; consistency, we should not try for other languages either, I beli=
+eve.<br>
+&gt; So, the Meson-specific solution proposed by Guillaume is relevant?<br>
+<br>
+Yes, I believe so. Disabling use/detection of tools should be a<br>
+per-infra solution: the meson solution (use /bin/false) is incompatible<br>
+with the autotools (which break with /bin/false).<br>
+<br>
+As for why using /bin/false in meson, see:<br>
+=C2=A0 =C2=A0 <a href=3D"https://lore.kernel.org/buildroot/20220809162534.G=
+E3168@scaer/" rel=3D"noreferrer" target=3D"_blank">https://lore.kernel.org/=
+buildroot/20220809162534.GE3168@scaer/</a><br>
+<br>
+Regards,<br>
+Yann E. MORIN.<br>
+<br>
+-- <br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ________=
+____<br>
+.-----------------.--------------------:=C2=A0 =C2=A0 =C2=A0 =C2=A0_=C2=A0 =
+=C2=A0 :------------------.<br>
+|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded |=C2=A0 =C2=A0 __/ )=C2=A0=
+ =C2=A0| /&quot;\ ASCII RIBBON |<br>
+| +33 534.541.179 | Software=C2=A0 Designer |=C2=A0 _/ - /&#39;=C2=A0 =C2=
+=A0| \ / CAMPAIGN=C2=A0 =C2=A0 =C2=A0|<br>
+| +33 638.411.245 &#39;--------------------: (_=C2=A0 =C2=A0 `--, |=C2=A0 X=
+=C2=A0 AGAINST=C2=A0 =C2=A0 =C2=A0 |<br>
+|=C2=A0 =C2=A0 =C2=A0 yann.morin (at) <a href=3D"http://orange.com" rel=3D"=
+noreferrer" target=3D"_blank">orange.com</a>=C2=A0 =C2=A0 =C2=A0 |_=3D&quot=
+;=C2=A0 =C2=A0 ,--&#39; | / \ HTML MAIL=C2=A0 =C2=A0 |<br>
+&#39;--------------------------------------:______/_____:------------------=
+&#39;<br>
+<br>
+<br>
+___________________________________________________________________________=
+______________________________________________<br>
+<br>
+Ce message et ses pieces jointes peuvent contenir des informations confiden=
+tielles ou privilegiees et ne doivent donc<br>
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu=
+ ce message par erreur, veuillez le signaler<br>
+a l&#39;expediteur et le detruire ainsi que les pieces jointes. Les message=
+s electroniques etant susceptibles d&#39;alteration,<br>
+Orange decline toute responsabilite si ce message a ete altere, deforme ou =
+falsifie. Merci.<br>
+<br>
+This message and its attachments may contain confidential or privileged inf=
+ormation that may be protected by law;<br>
+they should not be distributed, used or copied without authorisation.<br>
+If you have received this email in error, please notify the sender and dele=
+te this message and its attachments.<br>
+As emails may be altered, Orange is not liable for messages that have been =
+modified, changed or falsified.<br>
+Thank you.<br>
+<br>
+</blockquote></div>
+
+--000000000000d76ac205e65b3cb7--
+
+--===============0536265845893017378==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0536265845893017378==--
