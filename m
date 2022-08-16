@@ -4,84 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCA6FC25B0E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 12:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78235C25B0E
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 14:40:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2132940B1D;
-	Tue, 16 Aug 2022 12:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2132940B1D
+	by smtp2.osuosl.org (Postfix) with ESMTP id C38DD4051A;
+	Tue, 16 Aug 2022 14:40:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C38DD4051A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kz2IVhAr-tYe; Tue, 16 Aug 2022 12:53:48 +0000 (UTC)
+	with ESMTP id OonNuPTGTnAj; Tue, 16 Aug 2022 14:40:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E371A40B8C;
-	Tue, 16 Aug 2022 12:53:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E371A40B8C
+	by smtp2.osuosl.org (Postfix) with ESMTP id C35AB40374;
+	Tue, 16 Aug 2022 14:40:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C35AB40374
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2F03C1BF82D
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 12:53:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D5AF1BF4D6
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 14:40:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 09C30812BD
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 12:53:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09C30812BD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5509182983
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 14:40:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5509182983
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JSh6i8aE1PRU for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 12:53:42 +0000 (UTC)
+ with ESMTP id w5Yx4UUp-Yaw for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 14:40:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76C8E81356
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 76C8E81356
- for <buildroot@busybox.net>; Tue, 16 Aug 2022 12:53:42 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id z20so13310176edb.9
- for <buildroot@busybox.net>; Tue, 16 Aug 2022 05:53:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8103181D4F
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8103181D4F
+ for <buildroot@busybox.net>; Tue, 16 Aug 2022 14:40:01 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id z16so12851374wrh.12
+ for <buildroot@busybox.net>; Tue, 16 Aug 2022 07:40:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc;
- bh=GjlEm7uXIoV4z4Cw9W2AvWTEhtzxCnPvZA/nCAUQVEI=;
- b=qQcf1kBdivMQHd5LGXpbatgNc5D6KMm3oBkCOfYI4GqiHUI4hEUfNkvzdr9C04QKN8
- 6NG7n4WR96msj5Pwf+bQ9v3mGlxCYf4AHRuKsdq+LTvVQtfzBXkr3S8Zo/EuCPdw/lqo
- iMNjOedbJbVzlUtjYv3FgIJMk5HJDEW2ZqyLacLHomHU7BKEnpfDUCIOI1vzVpkc2JoJ
- f4vRcef4rKZ2HJtnyW40xakd0YaEUNkSEirD3Id8cgfcvmJq6qqnN/mSLf7y90wca3GF
- Lpoql1pn1xD2eH1uE1n77/oSIlkhGva5nEiafi+S98xw1mL5c0RzZUGWQjziwxdwyslu
- 6njA==
-X-Gm-Message-State: ACgBeo3ZlAPVHBRJgKZLOoBC6rCO3akqNFCZtz4sqfwxaZpavmzjIpQb
- 6v2E4XbGlc0OcSooj3IJ4ZHlB/ApzuWrP1a/cyFl47s6AjA=
-X-Google-Smtp-Source: AA6agR5BiIhSMvbSsR/g20VFs6ar6u78FdBa3syaBljD6nYoX2fAxGUJrFhh9o7uL19dNvJyxM+zYgjW2hOcGIZ6tBg=
-X-Received: by 2002:aa7:c946:0:b0:43d:3038:1381 with SMTP id
- h6-20020aa7c946000000b0043d30381381mr19072107edt.354.1660654420715; Tue, 16
- Aug 2022 05:53:40 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=oD14uQmpnxJ2Y2QtxdOoAc2LIaNB1/+IEiSR1IfUE3s=;
+ b=Xzr1mg1lMSffO6Q4eGCwMO8evlqVSqznEGzA9o55NCAhIn1+zM3T6AHvgH8Pccd2lc
+ TEzBNomDX6G+2T/nnogRql0Icg+WmW9JkPEPRaANfXvx81k7M7a85MHKu4wMLBWfgTGR
+ Sn0Umsml9tfZjXj3tmwvJwA2hjbJNjYnOja49rONOaXb0vW74qwlndkab2PuK5nRsD6D
+ f8LHrlhlwJBgMm3bQqpKWgDqpsZoH7KppIxck2cnC3PkUDpSKgqAUll8//lNbZvk6l2S
+ 8fMoQY1S8M1+/34KAjOF6gBkGqiyrvyfdD2Qpzn8jbidc9xJvZ68fZdTakGDXdtw/TIx
+ STfg==
+X-Gm-Message-State: ACgBeo1r25gA5vmeikwm2S4RwJ3Y33GP1rzvMUDZVsOO74qGEDJycKqG
+ UBzpiZvTsr41BWNzKN8D5M2RIHJGUPA=
+X-Google-Smtp-Source: AA6agR4aBF9I9rxS5X+iLqlGxmEOJApDVvLHpJb3jW2JyUMPUXTxYkgLxnuEY1FBqEBaG1RaazpOBw==
+X-Received: by 2002:a05:6000:1883:b0:205:c0cb:33c6 with SMTP id
+ a3-20020a056000188300b00205c0cb33c6mr12576084wri.39.1660660799398; 
+ Tue, 16 Aug 2022 07:39:59 -0700 (PDT)
+Received: from pc-140.home ([2a01:cb1c:794:2300:d109:33e7:bc94:49e5])
+ by smtp.gmail.com with ESMTPSA id
+ j36-20020a05600c1c2400b003a4c6e67f01sm13844300wms.6.2022.08.16.07.39.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Aug 2022 07:39:58 -0700 (PDT)
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+To: buildroot@busybox.net
+Date: Tue, 16 Aug 2022 16:39:37 +0200
+Message-Id: <20220816143943.16142-1-guillaume.bressaix@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220816094829.377-1-guillaume.bressaix@gmail.com>
- <20220816120109.1a348d39@windsurf>
- <14985_1660644771_62FB6DA3_14985_149_1_20220816101249.GA2027648@tl-lnx-nyma7486>
- <20220816135325.169146bf@windsurf>
- <30735_1660651483_62FB87DB_30735_129_1_20220816120440.GA2939@tl-lnx-nyma7486>
-In-Reply-To: <30735_1660651483_62FB87DB_30735_129_1_20220816120440.GA2939@tl-lnx-nyma7486>
-From: Guillaume Bres <guillaume.bressaix@gmail.com>
-Date: Tue, 16 Aug 2022 14:53:14 +0200
-Message-ID: <CAJe0E3cLyPiuh3v6Z6FOAegGJp=4N1MNC9iKG0pEKkxMpJf4gg@mail.gmail.com>
-To: yann.morin@orange.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc;
- bh=GjlEm7uXIoV4z4Cw9W2AvWTEhtzxCnPvZA/nCAUQVEI=;
- b=cTdK+a7UPVkR4w5ouoNAizEZEu4ylP0drhVLQkDzsLYhPSa9IBhx2Qw+HpuCaw4t2Y
- R+5MBpVWZ5Vf+/qdh8xVZ7WCX6OvKJ1cZ0AraewFx5QqCEMgEwv4xjCze2AhZa5OzuBm
- Op01RWiQ+TpHn1zRG/+vvnrf8OLVbRpO7pdNvSPUgDR2haUm/bNHUHGO50Pjsp2NTPH9
- QAEK8/xVfJFDADnNJNLh12Tw31vW+svpgoUvIcjMjBVf/x0Db/J8gzMHFQ+AczbdYne1
- el0rQ5HIfD9eEOvlAKc2mX8vNYXRjZRW/uwo3sq8YIWwkfe1dwpciaEAxKeSH2mDV9le
- O4RA==
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=oD14uQmpnxJ2Y2QtxdOoAc2LIaNB1/+IEiSR1IfUE3s=;
+ b=gaybNCD2ZVajIrPo0APBZaqGjz32CB/o6v/QekFJawhLIbUxmFb4LvxCWTFDXsmJ3Y
+ chC2uyUKUp0i8Rp9cp/mMbeBwEBa96OXuHRRSyjzXhGnjt9WYVr/gpbU47/gHyAQMPwv
+ ptWjWljG5gJP9KTlQBENcnaWDyGo+4yyK6RFyuJCcHUjhuxmclj7HNsLW/iWYcN6HRwH
+ FMGTA0oltQ9EuppRCQL3hxvhT8m8ODC0RHc1qORUcPLcKrxEWST/BXfTOSMBBK+tVm2K
+ ttdcypU5cLHUjXDifdE4fmxrmBMUS8Ud8vZ4vPOc/ps0p4Z3GYwv8feOlz9JzG7eFQ8V
+ bVtA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=cTdK+a7U
-Subject: Re: [Buildroot] [RFC 1/1] package/pkg-meson.mk: handle possibly non
- existing compilers
+ header.a=rsa-sha256 header.s=20210112 header.b=gaybNCD2
+Subject: [Buildroot] [PATCH v1 1/7] package/python-joblib: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,195 +92,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net, Yann Morin <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: multipart/mixed; boundary="===============0536265845893017378=="
+Cc: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0536265845893017378==
-Content-Type: multipart/alternative; boundary="000000000000d76ac205e65b3cb7"
+package/python-scikitlearn requires python-joblib
+as runtime dependency
 
---000000000000d76ac205e65b3cb7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-joblib/Config.in          |  8 ++++++++
+ package/python-joblib/python-joblib.hash |  3 +++
+ package/python-joblib/python-joblib.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/python-joblib/Config.in
+ create mode 100644 package/python-joblib/python-joblib.hash
+ create mode 100644 package/python-joblib/python-joblib.mk
 
-Hello,
-
->> So, yes, we tried for CXX, and no, we do not want to do it again. For
->> consistency, we should not try for other languages either, I believe.
->So, the Meson-specific solution proposed by Guillaume is relevant
-
-that was my understanding from Yann's clarifications this morning. I
-submitted a V1 (non RFC) with your corrections, please disregard the RFC
-from now on
-
-Guillaume W. Bres
-Software engineer
-<guillaume.bressaix@gmail.com>
-
-
-Le mar. 16 ao=C3=BBt 2022 =C3=A0 14:04, <yann.morin@orange.com> a =C3=A9cri=
-t :
-
-> Thomas, All,
->
-> On 2022-08-16 13:53 +0200, Thomas Petazzoni spake thusly:
-> > On Tue, 16 Aug 2022 12:12:49 +0200
-> > <yann.morin@orange.com> wrote:
-> [--SNIP--]
-> > > So, yes, we tried for CXX, and no, we do not want to do it again. For
-> > > consistency, we should not try for other languages either, I believe.
-> > So, the Meson-specific solution proposed by Guillaume is relevant?
->
-> Yes, I believe so. Disabling use/detection of tools should be a
-> per-infra solution: the meson solution (use /bin/false) is incompatible
-> with the autotools (which break with /bin/false).
->
-> As for why using /bin/false in meson, see:
->     https://lore.kernel.org/buildroot/20220809162534.GE3168@scaer/
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->                                         ____________
-> .-----------------.--------------------:       _    :------------------.
-> |  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-> | +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-> | +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-> |      yann.morin (at) orange.com      |_=3D"    ,--' | / \ HTML MAIL    =
-|
-> '--------------------------------------:______/_____:------------------'
->
->
->
-> _________________________________________________________________________=
-________________________________________________
->
-> Ce message et ses pieces jointes peuvent contenir des informations
-> confidentielles ou privilegiees et ne doivent donc
-> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez
-> recu ce message par erreur, veuillez le signaler
-> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages
-> electroniques etant susceptibles d'alteration,
-> Orange decline toute responsabilite si ce message a ete altere, deforme o=
-u
-> falsifie. Merci.
->
-> This message and its attachments may contain confidential or privileged
-> information that may be protected by law;
-> they should not be distributed, used or copied without authorisation.
-> If you have received this email in error, please notify the sender and
-> delete this message and its attachments.
-> As emails may be altered, Orange is not liable for messages that have bee=
-n
-> modified, changed or falsified.
-> Thank you.
->
->
-
---000000000000d76ac205e65b3cb7
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello,<br><br>&gt;&gt;<span class=3D"gmail-im" style=3D"co=
-lor:rgb(80,0,80)">=C2=A0So, yes, we tried for CXX, and no, we do not want t=
-o do it again. For<br>&gt;&gt; consistency, we should not try for other lan=
-guages either, I believe.<br></span>&gt;So, the Meson-specific solution pro=
-posed by Guillaume is relevant<div><br></div><div>that was my understanding=
- from Yann&#39;s clarifications this morning. I submitted a V1 (non RFC) wi=
-th your corrections, please disregard the RFC from now on<br><br clear=3D"a=
-ll"><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmail=
-_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"=
-ltr"><div><div><div><font face=3D"arial,helvetica,sans-serif">Guillaume W. =
-Bres<br></font></div><font face=3D"arial,helvetica,sans-serif">Software eng=
-ineer</font><br></div><font face=3D"arial,helvetica,sans-serif"></font></di=
-v><font face=3D"arial,helvetica,sans-serif">&lt;<a href=3D"mailto:guillaume=
-.bressaix@gmail.com" target=3D"_blank">guillaume.bressaix@gmail.com</a>&gt;=
-<br></font></div></div></div></div></div></div><br></div></div><br><div cla=
-ss=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mar. 16 ao=
-=C3=BBt 2022 =C3=A0=C2=A014:04, &lt;<a href=3D"mailto:yann.morin@orange.com=
-">yann.morin@orange.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote cl=
-ass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid=
- rgb(204,204,204);padding-left:1ex">Thomas, All,<br>
-<br>
-On 2022-08-16 13:53 +0200, Thomas Petazzoni spake thusly:<br>
-&gt; On Tue, 16 Aug 2022 12:12:49 +0200<br>
-&gt; &lt;<a href=3D"mailto:yann.morin@orange.com" target=3D"_blank">yann.mo=
-rin@orange.com</a>&gt; wrote:<br>
-[--SNIP--]<br>
-&gt; &gt; So, yes, we tried for CXX, and no, we do not want to do it again.=
- For<br>
-&gt; &gt; consistency, we should not try for other languages either, I beli=
-eve.<br>
-&gt; So, the Meson-specific solution proposed by Guillaume is relevant?<br>
-<br>
-Yes, I believe so. Disabling use/detection of tools should be a<br>
-per-infra solution: the meson solution (use /bin/false) is incompatible<br>
-with the autotools (which break with /bin/false).<br>
-<br>
-As for why using /bin/false in meson, see:<br>
-=C2=A0 =C2=A0 <a href=3D"https://lore.kernel.org/buildroot/20220809162534.G=
-E3168@scaer/" rel=3D"noreferrer" target=3D"_blank">https://lore.kernel.org/=
-buildroot/20220809162534.GE3168@scaer/</a><br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
--- <br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ________=
-____<br>
-.-----------------.--------------------:=C2=A0 =C2=A0 =C2=A0 =C2=A0_=C2=A0 =
-=C2=A0 :------------------.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded |=C2=A0 =C2=A0 __/ )=C2=A0=
- =C2=A0| /&quot;\ ASCII RIBBON |<br>
-| +33 534.541.179 | Software=C2=A0 Designer |=C2=A0 _/ - /&#39;=C2=A0 =C2=
-=A0| \ / CAMPAIGN=C2=A0 =C2=A0 =C2=A0|<br>
-| +33 638.411.245 &#39;--------------------: (_=C2=A0 =C2=A0 `--, |=C2=A0 X=
-=C2=A0 AGAINST=C2=A0 =C2=A0 =C2=A0 |<br>
-|=C2=A0 =C2=A0 =C2=A0 yann.morin (at) <a href=3D"http://orange.com" rel=3D"=
-noreferrer" target=3D"_blank">orange.com</a>=C2=A0 =C2=A0 =C2=A0 |_=3D&quot=
-;=C2=A0 =C2=A0 ,--&#39; | / \ HTML MAIL=C2=A0 =C2=A0 |<br>
-&#39;--------------------------------------:______/_____:------------------=
-&#39;<br>
-<br>
-<br>
-___________________________________________________________________________=
-______________________________________________<br>
-<br>
-Ce message et ses pieces jointes peuvent contenir des informations confiden=
-tielles ou privilegiees et ne doivent donc<br>
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu=
- ce message par erreur, veuillez le signaler<br>
-a l&#39;expediteur et le detruire ainsi que les pieces jointes. Les message=
-s electroniques etant susceptibles d&#39;alteration,<br>
-Orange decline toute responsabilite si ce message a ete altere, deforme ou =
-falsifie. Merci.<br>
-<br>
-This message and its attachments may contain confidential or privileged inf=
-ormation that may be protected by law;<br>
-they should not be distributed, used or copied without authorisation.<br>
-If you have received this email in error, please notify the sender and dele=
-te this message and its attachments.<br>
-As emails may be altered, Orange is not liable for messages that have been =
-modified, changed or falsified.<br>
-Thank you.<br>
-<br>
-</blockquote></div>
-
---000000000000d76ac205e65b3cb7--
-
---===============0536265845893017378==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d2bd0d809a..2c4f9ed76e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1191,6 +1191,7 @@ F:	package/mbw/
+ F:	package/pixiewps/
+ F:	package/python-beniget/
+ F:	package/python-gast/
++F:	package/python-joblib/
+ F:	package/python-pybind/
+ F:	package/python-pythran/
+ F:	package/python-scipy/
+diff --git a/package/Config.in b/package/Config.in
+index d1c098c48f..7f017c92e9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1086,6 +1086,7 @@ menu "External python modules"
+ 	source "package/python-jedi/Config.in"
+ 	source "package/python-jinja2/Config.in"
+ 	source "package/python-jmespath/Config.in"
++	source "package/python-joblib/Config.in"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-jsonmodels/Config.in"
+ 	source "package/python-jsonschema/Config.in"
+diff --git a/package/python-joblib/Config.in b/package/python-joblib/Config.in
+new file mode 100644
+index 0000000000..c6c5122c49
+--- /dev/null
++++ b/package/python-joblib/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_JOBLIB
++	bool "python-joblib"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  Joblib is a set of tools to provide lightweight
++	  pipelining in Python.
++
++	  https://joblib.readthedocs.io/en/latest/
+diff --git a/package/python-joblib/python-joblib.hash b/package/python-joblib/python-joblib.hash
+new file mode 100644
+index 0000000000..5023ba872c
+--- /dev/null
++++ b/package/python-joblib/python-joblib.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  4cda464ca712a4814849c9477d7551b696ce215dc05d79fc516460814ef48f4f  python-joblib-1.1.0.tar.gz
++sha256  42612911c1872c5e4b43f6ae0e8ee59467cd350332241cf72ce90640264fae6a  LICENSE.txt
+diff --git a/package/python-joblib/python-joblib.mk b/package/python-joblib/python-joblib.mk
+new file mode 100644
+index 0000000000..97bf9172f2
+--- /dev/null
++++ b/package/python-joblib/python-joblib.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# python-joblib
++#
++################################################################################
++
++PYTHON_JOBLIB_VERSION = 1.1.0
++PYTHON_JOBLIB_SITE = $(call github,joblib,joblib,$(PYTHON_JOBLIB_VERSION))
++PYTHON_JOBLIB_LICENSE = BSD-3-Clause
++PYTHON_JOBLIB_LICENSE_FILES = LICENSE.txt
++PYTHON_JOBLIB_SETUP_TYPE = setuptools
++
++# avoid running this test which requires
++# chinese caracters to be supported
++define PYTHON_JOBLIB_REMOVE_SPECIAL_ENCODING_TEST
++	rm -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/joblib/test/test_func_inspect_special_encoding.py
++endef
++PYTHON_JOBLIB_POST_INSTALL_TARGET_HOOKS += PYTHON_JOBLIB_REMOVE_SPECIAL_ENCODING_TEST
++
++$(eval $(python-package))
+-- 
+2.20.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0536265845893017378==--
