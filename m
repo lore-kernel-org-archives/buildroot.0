@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5287C2BB41
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 08:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE533C2BB41
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 08:37:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6216A60F23;
-	Tue, 16 Aug 2022 08:37:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6216A60F23
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FCFB414CC;
+	Tue, 16 Aug 2022 08:37:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FCFB414CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OGXCyx207ELm; Tue, 16 Aug 2022 08:37:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qsBSep52y86X; Tue, 16 Aug 2022 08:37:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8187E60E61;
-	Tue, 16 Aug 2022 08:37:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8187E60E61
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 978451BF2A4
+	by smtp4.osuosl.org (Postfix) with ESMTP id E48944086A;
+	Tue, 16 Aug 2022 08:37:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E48944086A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C9501BF9C2
  for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:37:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 738354063E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8569B81CFE
  for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:37:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 738354063E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8569B81CFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IXp19YqG5Qdj for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7908nEDjDx6q for <buildroot@lists.busybox.net>;
  Tue, 16 Aug 2022 08:37:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B294F40635
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F6C281C11
  for <buildroot@buildroot.org>; Tue, 16 Aug 2022 08:37:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B294F40635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F6C281C11
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8866087765; Tue, 16 Aug 2022 08:22:34 +0000 (UTC)
+ id 652A28774E; Tue, 16 Aug 2022 08:22:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 16 Aug 2022 10:28:26 +0200
+Date: Tue, 16 Aug 2022 10:20:53 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: cfc2d87eb56b77a56b67a4dc746557aa48f0ecd9
-X-Git-Newrev: b3835eb692b82d5bbd3770bff5fc6cf6aed13f50
+X-Git-Oldrev: 4d38bc3168e278d844054e498c160292c469ce7d
+X-Git-Newrev: 2f2eb49376ac1f89982a60ebae430d8f9da75357
 X-Patchwork-Hint: ignore
-Message-Id: <20220816082234.8866087765@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/xdg-dbus-proxy:
- bump to version 0.1.4
+Message-Id: <20220816082234.652A28774E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] docs/manual: fix
+ patchwork URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3835eb692b82d5bbd3770bff5fc6cf6aed13f50
+commit: https://git.buildroot.net/buildroot/commit/?id=2f2eb49376ac1f89982a60ebae430d8f9da75357
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This version includes a few fixes, and a new Meson-based build system.
-For now this only updates to the latest version, the switch to Meson is
-left for a follow-up patch. Release notes can be found at:
+http://patchwork.buildroot.org is redirecting to
+https://bugs.busybox.net so replace it by
+https://patchwork.ozlabs.org/project/buildroot/list/ as already done in
+docs/website/contribute.html
 
-  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.4
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9ad0000827dbe58d499ff8efc96158600e23edb6)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 002f0e927d857e51595cedf3d2a44613b4f7e5f1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
- package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/manual/contribute.txt | 18 +++++++++++-------
+ docs/manual/resources.txt  |  2 +-
+ 2 files changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-index b7aa9ac701..7bbea72b03 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.3
--sha256  03b5d28ca879253ddbbce31098909becca1495ea811a6377a492e28f16c09b9b  xdg-dbus-proxy-0.1.3.tar.xz
-+# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.4
-+sha256  1ec0eab53d1e49966d722352bcfd51ac402dce5190baedc749a8541e761670ab  xdg-dbus-proxy-0.1.4.tar.xz
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index bf2aed6b51..e588c69be6 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -418,7 +418,8 @@ editing the commit message. Below the +Signed-off-by+ section, add
+ +---+ and your changelog.
  
- # Hash for license files:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-index 9c4449c7bb..b07cf787ed 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ Although the changelog will be visible for the reviewers in the mail
+-thread, as well as in http://patchwork.buildroot.org[patchwork], +git+
++thread, as well as in
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork], +git+
+ will automatically ignores lines below +---+ when the patch will be
+ merged. This is the intended behavior: the changelog is not meant to
+ be preserved forever in the +git+ history of the project.
+@@ -470,19 +471,22 @@ $ git format-patch -v4 -M -s -o outgoing origin/master
+ ---------------------
  
--XDG_DBUS_PROXY_VERSION = 0.1.3
-+XDG_DBUS_PROXY_VERSION = 0.1.4
- XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
- XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
- XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
+ When you provide a new version of a patch, please mark the old one as
+-superseded in http://patchwork.buildroot.org[patchwork]. You need to
+-create an account on http://patchwork.buildroot.org[patchwork] to be
++superseded in
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. You
++need to create an account on
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] to be
+ able to modify the status of your patches. Note that you can only change
+ the status of patches you submitted yourself, which means the email
+-address you register in http://patchwork.buildroot.org[patchwork] should
++address you register in
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] should
+ match the one you use for sending patches to the mailing list.
+ 
+ You can also add the +--in-reply-to <message-id>+ option when
+ submitting a patch to the mailing list. The id of the mail to reply to
+ can be found under the "Message Id" tag on
+-http://patchwork.buildroot.org[patchwork].  The advantage of
+-*in-reply-to* is that patchwork will automatically mark the previous
+-version of the patch as superseded.
++https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. The
++advantage of *in-reply-to* is that patchwork will automatically mark
++the previous version of the patch as superseded.
+ 
+ [[reporting-bugs]]
+ === Reporting issues/bugs or getting help
+diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
+index e90a49b2ab..68b7eb9062 100644
+--- a/docs/manual/resources.txt
++++ b/docs/manual/resources.txt
+@@ -68,4 +68,4 @@ review comments in a clean and concise web interface, it can be useful
+ for all Buildroot developers.
+ +
+ The Buildroot patch management interface is available at
+-http://patchwork.buildroot.org[].
++https://patchwork.ozlabs.org/project/buildroot/list/[].
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
