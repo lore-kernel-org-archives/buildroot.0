@@ -1,72 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38B26C25B0E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 16:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED8C3C25B0E
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 17:40:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ABAA282ED1;
-	Tue, 16 Aug 2022 16:26:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABAA282ED1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A32760B95;
+	Tue, 16 Aug 2022 17:40:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A32760B95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ix8Y5W5BOn9l; Tue, 16 Aug 2022 16:26:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zu3qNoveL3Pw; Tue, 16 Aug 2022 17:40:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE91D82F14;
-	Tue, 16 Aug 2022 16:26:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE91D82F14
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F00A31BF392
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 16:26:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8661260B35;
+	Tue, 16 Aug 2022 17:40:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8661260B35
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 234081BF391
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 17:40:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C993E41550
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 16:26:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C993E41550
+ by smtp3.osuosl.org (Postfix) with ESMTP id F257D60B35
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 17:40:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F257D60B35
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C8DDfx5ByDoS for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 16:26:33 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D3C74031B
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1D3C74031B
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 16:26:33 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e933:8a8a:6743:9483])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 1D1FE780504;
- Tue, 16 Aug 2022 18:26:27 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 16 Aug 2022 18:26:26 +0200
-Date: Tue, 16 Aug 2022 18:26:26 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220816162626.GQ2775145@scaer>
-References: <20220815214815.2234201-1-thomas.petazzoni@bootlin.com>
- <20220815214815.2234201-2-thomas.petazzoni@bootlin.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eQd-2ygss9wf for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 17:40:21 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92BD560AE3
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com
+ [IPv6:2607:f8b0:4864:20::f2f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 92BD560AE3
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 17:40:20 +0000 (UTC)
+Received: by mail-qv1-xf2f.google.com with SMTP id u10so8362604qvp.12
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 10:40:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc;
+ bh=kk5utAbTGKyKdLnqWrJnm0Jdfj1mElQCQ+W3nspeS+M=;
+ b=Egt3hI9V9/Tyjsc6xGIniLINyCBnXObN0/q/fvPPIJLdiSf8BPidOPbP6RTyKZcmX1
+ zhe3HW3E6zSgDvJ55URWB5YSsYsWalDDXb6LiZ8SK9X5M0j4rVrHAFC402K8ZmruVmSh
+ Z0P/7WpFzeh/SvW9qRDL5oj8yhbRZ5Fy98iyxc+RUdLsKnTq8kkdJSZ6rZW3qoJ7tsud
+ aP6rXcnyXX8YZ66o3JiTVSEKXrzqP3KP3GKa5VfX1zGzBxVieFfMrRmN7pa+dxEwTUqK
+ gDWTS8a53OBaOJoj+W5pbv7ndtTLnxpYrchqEyKvRnSXyA3xWsl2Q6GxgKKnVHXMqfmG
+ P73Q==
+X-Gm-Message-State: ACgBeo0xYrtdVDGETtJRtE/NcjTPPQcSslJllioi5YetWsK7ukmUSa14
+ W9lpn4UdIMj2MofU1J8GWs7RFL06FstsV3a9xr/5EPw+bjrXB/eI
+X-Google-Smtp-Source: AA6agR5UbmoPcqRD9wyh2wQhVYF9PESFjWNkMBvT96TO3if20Id5yQ0bdFHhdcFjhNI433DO/+8G5kwoE51eJFmwYnA=
+X-Received: by 2002:a05:6214:c6f:b0:479:5993:5e8d with SMTP id
+ t15-20020a0562140c6f00b0047959935e8dmr18739747qvj.15.1660671618926; Tue, 16
+ Aug 2022 10:40:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220815214815.2234201-2-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660667191;
- bh=Vkub+dIc81t8xqYDGtoHmABoMynPoDXFFb1Qw1Vsh2E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=aopknb9Xen/vCrVvcMHGzXhNmUTfDsEkxLw5r5awt36ToG/vTERG34y91Y+aSmJwV
- XTK/zNfqb3i0Omu/aejvxNC6IfavS2dfH/eokH/+cx2L+8ZkzxWutuM/BhUE+H/aOb
- HMVzBzSRtehFqA+INDtdTQWd065mSLFZU10B8CKjBhRZ0cDox2t0S/UHv6FfhamSPm
- y/S+mUHkIlDGX6LNmsXs484CfvqrQWuBUyiUy+Nj/AJx/wwRmzUaVtVZeAU5u57ltb
- lravJQW2efHD8kHLgH74eV1I38UNPtR7tIAfhq+gqwNz73AmmtPJMke501R46c+NB6
- V6+7dyH0Zthkg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=aopknb9X
-Subject: Re: [Buildroot] [PATCH 1/3]
- support/testing/tests/package/test_python_boto3: use ext2 instead of cpio
+References: <20220809203505.3620840-1-mmayer@broadcom.com>
+ <20220815195618.GM2854108@scaer>
+In-Reply-To: <20220815195618.GM2854108@scaer>
+Date: Tue, 16 Aug 2022 10:40:08 -0700
+Message-ID: <CAGt4E5sMFKOmGX_syrwP85ZqFebb_r6x-E_rd=kB+8dk5RJjxA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=broadcom.com; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc;
+ bh=kk5utAbTGKyKdLnqWrJnm0Jdfj1mElQCQ+W3nspeS+M=;
+ b=TlRUyIH+H5KVquO5ZMDZHWg2znzOnUTTLO3r18SgxDwmyvR+rwVw89Um1YwDNNd8Xk
+ Ta3TmIUi78Qd6W6Fz7QWUT6iUha8hr2XNmGetaf8iaPyjdSuw5pnrlnC/ISWPLFaeN7O
+ lhjCLJEYHCqbsIzgtnEHQaRJTQGLE3eZrzuKs=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com
+ header.a=rsa-sha256 header.s=google header.b=TlRUyIH+
+Subject: Re: [Buildroot] [PATCH] package/linux-tools/linux-tool-perf.mk.in:
+ Fix disabling of documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,101 +86,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- =?utf-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
- Buildroot List <buildroot@buildroot.org>
+From: Markus Mayer via buildroot <buildroot@buildroot.org>
+Reply-To: Markus Mayer <mmayer@broadcom.com>
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Hi Yann,
 
-On 2022-08-15 23:48 +0200, Thomas Petazzoni via buildroot spake thusly:
-> The CPIO filesystem generated by the test_python_boto3 test is too
-> large, and doesn't fit as an initramfs in the 256MB of RAM available
-> in the versatilepb machine. This causes a "Initramfs unpacking failed:
-> write error" when booting, and many files being missing from the root
-> filesystem, ultimately causing the test to fail.
-> 
-> It would make sense to switch all test cases to use ext2 + a
-> hard-drive, but for now, let's fix the few test cases that are causing
-> problems.
-> 
-> Fixes:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/2884635041
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/testing/tests/package/test_python_boto3.py | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/support/testing/tests/package/test_python_boto3.py b/support/testing/tests/package/test_python_boto3.py
-> index 756495fec9..7f24399304 100644
-> --- a/support/testing/tests/package/test_python_boto3.py
-> +++ b/support/testing/tests/package/test_python_boto3.py
-> @@ -1,4 +1,5 @@
->  from tests.package.test_python import TestPythonPackageBase
-> +import os
->  
->  
->  class TestPythonPy3Boto3(TestPythonPackageBase):
-> @@ -7,6 +8,17 @@ class TestPythonPy3Boto3(TestPythonPackageBase):
->          """
->          BR2_PACKAGE_PYTHON3=y
->          BR2_PACKAGE_PYTHON_BOTO3=y
-> +        BR2_TARGET_ROOTFS_EXT2=y
-> +        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-> +        # BR2_TARGET_ROOTFS_TAR is not set
+> Woo.. almost six years before my crap gets noticed! ;-)
+>
+> > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+>
+> Applied to master, thanks.
 
-BR2_TARGET_ROOTFS_TAR is already unset in TestPythonPackageBase.config,
-so disabling it here is superfluous.
+Thanks for applying this. We have to thank Ubuntu 22.04 for flushing
+out this error.
 
-But this will however still build the cpio archive, because it is
-enabled in TestPythonPackageBase.config.
+In the past, /usr/bin/asciidoc used to be a regular Python script that
+would import "regular" Python packages (i.e. nothing special). The
+actual parser was contained in the script. With Ubuntu 22.04,
+/usr/bin/asciidoc became a shell script like so:
 
-We can disable it with:
+$ cat /usr/bin/asciidoc
+#!/bin/sh
+python3 -m asciidoc "$@"
 
-    class TestPythonPy3Boto3(TestPythonPackageBase):
-        config = TestPythonPackageBase.config.replace('BR2_TARGET_ROOTFS_CPIO=y\n', '') + \
-            """
-            blablabla
-            """
+This means that the actual parser now lives as a Python module in
+/usr/lib/python3/dist-packages/asciidoc. And therein lies the issue.
+We are using BR2_FORCE_HOST_BUILD=y, so it builds its own Python
+interpreter. And while .../output/arm64/host/bin/python3 is perfectly
+capable of running /usr/bin/asciidoc when it is a standalone script,
+it can't run asciidoc as a module, because
+/usr/lib/python3/dist-packages is not in the custom Python
+interpreter's search path.
 
-If you believe that it is acceptable, I can fix when applying. Or we can
-continue to uselessly build the cpio archive, which does not take very
-long to assemble...
+And, thus, our build started failing when conducted on Ubuntu 22.04
+(while being perfectly fine on Ubuntu 20.04 and older). Subsequently,
+a slightly confusing search for the root cause commenced, since none
+of these findings were expected.
+
+I am mentioning here what happened, in case somebody else comes across
+a similar issue.
 
 Regards,
-Yann E. MORIN.
-
->          """
->      sample_scripts = ["tests/package/sample_python_boto3.py"]
->      timeout = 10
-> +
-> +    def login(self):
-> +        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
-> +        self.emulator.boot(arch="armv5",
-> +                           kernel="builtin",
-> +                           options=["-drive", "file=%s,if=scsi,format=raw" % ext2_file],
-> +                           kernel_cmdline=["rootwait", "root=/dev/sda"])
-> +        self.emulator.login()
-> -- 
-> 2.37.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+-Markus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
