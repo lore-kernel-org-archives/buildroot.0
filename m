@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 594C8C2BB41
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 08:53:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18127C2BB41
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 08:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E39A840113;
-	Tue, 16 Aug 2022 08:53:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E39A840113
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3EF760E83;
+	Tue, 16 Aug 2022 08:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3EF760E83
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X6J2cWgoNJ83; Tue, 16 Aug 2022 08:53:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k_MmhtYulqHI; Tue, 16 Aug 2022 08:53:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7E2940111;
-	Tue, 16 Aug 2022 08:53:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7E2940111
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED66460D75;
+	Tue, 16 Aug 2022 08:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED66460D75
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98DC31BF2A4
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:53:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8E3A01BF2A4
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72E964004B
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:53:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72E964004B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 652B2400EE
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 08:53:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 652B2400EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nRNMcT5qvvC6 for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 08:53:12 +0000 (UTC)
+ with ESMTP id nuEtP0R8RG_b for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 08:53:15 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6494740065
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6494740065
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 08:53:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F48E40065
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4F48E40065
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 08:53:15 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 56A6060007;
- Tue, 16 Aug 2022 08:53:09 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0BADB240004;
+ Tue, 16 Aug 2022 08:53:12 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oNsJw-001HMj-IX; Tue, 16 Aug 2022 10:53:08 +0200
+ id 1oNsK0-001HMq-6f; Tue, 16 Aug 2022 10:53:12 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 References: <20220619164610.649145-1-fontaine.fabrice@gmail.com>
- <20220619164610.649145-3-fontaine.fabrice@gmail.com>
-Date: Tue, 16 Aug 2022 10:53:08 +0200
-In-Reply-To: <20220619164610.649145-3-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 19 Jun 2022 18:46:09 +0200")
-Message-ID: <87leroefij.fsf@dell.be.48ers.dk>
+ <20220619164610.649145-4-fontaine.fabrice@gmail.com>
+Date: Tue, 16 Aug 2022 10:53:12 +0200
+In-Reply-To: <20220619164610.649145-4-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 19 Jun 2022 18:46:10 +0200")
+Message-ID: <87h72cefif.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 3/4] package/rsyslog: add qpid-proton
+Subject: Re: [Buildroot] [PATCH 4/4] package/rsyslog: add libmaxminddb
  optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
