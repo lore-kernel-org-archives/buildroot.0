@@ -4,95 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72042C25B0E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 20:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F071BC25B0E
+	for <buildroot@archiver.kernel.org>; Tue, 16 Aug 2022 20:50:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCD5C400C6;
-	Tue, 16 Aug 2022 20:46:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCD5C400C6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58EED41299;
+	Tue, 16 Aug 2022 20:50:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58EED41299
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vOXOHCgEzWPw; Tue, 16 Aug 2022 20:46:50 +0000 (UTC)
+	with ESMTP id LySg4p52Xdos; Tue, 16 Aug 2022 20:50:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B9DF408F8;
-	Tue, 16 Aug 2022 20:46:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B9DF408F8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 26F091BF2A2
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:46:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 246944099D;
+	Tue, 16 Aug 2022 20:50:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 246944099D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 10C871BF39C
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:50:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01AD660B3D
- for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:46:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01AD660B3D
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE11840423
+ for <buildroot@lists.busybox.net>; Tue, 16 Aug 2022 20:50:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE11840423
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aR2yM-g7Eohf for <buildroot@lists.busybox.net>;
- Tue, 16 Aug 2022 20:46:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vpz4TXG-Cug1 for <buildroot@lists.busybox.net>;
+ Tue, 16 Aug 2022 20:50:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA0CD60B28
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CA0CD60B28
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 20:46:44 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id kb8so21122334ejc.4
- for <buildroot@buildroot.org>; Tue, 16 Aug 2022 13:46:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1B694010D
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E1B694010D
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 20:50:19 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id o22so15010868edc.10
+ for <buildroot@buildroot.org>; Tue, 16 Aug 2022 13:50:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:in-reply-to:organization:from:references
  :cc:to:content-language:subject:user-agent:mime-version:date
  :message-id:x-gm-message-state:from:to:cc;
- bh=aoOy/JWeo5bXYmv4mjVlJTLwWDREpXQ0uimx/WFc/+I=;
- b=QexXiA8cjsPPhXQCxdWIsAbd0IOUtgDhtsq1pXhJ7Jf9whmrtlytBNMhubhJqixo+B
- Tdt4y2fO/8hBF8HfF3kdNL0V969U60pEQ23KEoQacoLsq3fSIHI9BBfOORHaBI5IdCu7
- PkMIL8iygwYbPhul4G8mEOise9YUITCogRDAf4rORXXXscCv6+b03MkKNih/tXFQXoFo
- NCKrPZO8lYHOtyDQJkLpL9k2owfh8tepYvpu/omxZb7LP1QyoOzdGdVYmxm6X+186U8c
- Ow1XZSRqqHN5RYgNKARboScGNl6uZ1kEZTZdUOUtxueCSqaa44g9amMCSXiterTKSItf
- AJjg==
-X-Gm-Message-State: ACgBeo2B/q6UpZRo+s5IY5sW0k6hPzj/G+CjP+A+TDg5tKobCLFXo1KU
- ObSuGhO2gICB7oCWolDIVOiXtA==
-X-Google-Smtp-Source: AA6agR5VjQvMVKPxJZ+HvP7B8D/ghZUsBYprufZ2h9Fo3v0l5LU6+sSaxSIBXej8ulQ9Zj2ndGM1pA==
-X-Received: by 2002:a17:906:c154:b0:733:197:a8c with SMTP id
- dp20-20020a170906c15400b0073301970a8cmr14869911ejc.483.1660682803045; 
- Tue, 16 Aug 2022 13:46:43 -0700 (PDT)
+ bh=OKdff5iDjzj7oknZUQAze0DNqmM5MC9hdyCjZEShOFg=;
+ b=RjgWS+aAt0StXG9c3li0rkwwEpU+pz6co+HDwcr1PuOlNJBbsVTDBxhAKoFSbcQMGQ
+ aORBTanbOfujMiM0KYgtcTSq2jpKnHbhHAWPikQfF4itdrJAZjROso3Arv03ZRTTSO74
+ x8FbLsP4+MFGCcgpPPcvYP45u3+S0viprwWH98ZxJaY5p39LsQ9J5VC7bA+azPNO4UWg
+ Z7/rISC84BBKPcm5UqLy8/pz4BW6RcHGL3ZdSSoB1l3o/CgEcNu6lFsHAaHhcl9A83QO
+ O0WBs/f9s8sBldzaVvWhdorKZiQ7RYGB4ZgScgiNxEnRcpUbJpzgorc9a9rQNbBaalMv
+ wEgw==
+X-Gm-Message-State: ACgBeo1fNpeSBJdUzPO2iVFbJfy5YT2F0lNRljzQthl3B/FrEUGwPUfY
+ v2OXwicR5cj2WXrq+2Xs6lOVJg==
+X-Google-Smtp-Source: AA6agR7weHTr4TVEZ4MThvJ+CNWw3gT1FnkBCTlHVYlw7/iReKVV1Hi5LbNIISX7juSJNLR5hpqzxQ==
+X-Received: by 2002:a05:6402:e86:b0:440:d1be:20c7 with SMTP id
+ h6-20020a0564020e8600b00440d1be20c7mr20480718eda.349.1660683018169; 
+ Tue, 16 Aug 2022 13:50:18 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 10-20020a170906310a00b0073145afd156sm5742921ejx.80.2022.08.16.13.46.42
+ f10-20020a056402194a00b0043ca6fb7e7dsm8894751edz.68.2022.08.16.13.50.17
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 16 Aug 2022 13:46:42 -0700 (PDT)
-Message-ID: <00072104-98ca-a1ee-5963-c1a7e151722a@mind.be>
-Date: Tue, 16 Aug 2022 22:46:40 +0200
+ Tue, 16 Aug 2022 13:50:17 -0700 (PDT)
+Message-ID: <7de0d13b-cb37-2516-bc01-8188fab69e02@mind.be>
+Date: Tue, 16 Aug 2022 22:50:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
 Content-Language: en-GB
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-References: <20220815154854.17628-1-giulio.benetti@benettiengineering.com>
- <20220815154854.17628-2-giulio.benetti@benettiengineering.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot List <buildroot@buildroot.org>,
+ Peter Korsgaard <peter@korsgaard.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Romain Naour <romain.naour@gmail.com>
+References: <20220815202955.2216503-1-thomas.petazzoni@bootlin.com>
 From: Arnout Vandecappelle <arnout@mind.be>
 Organization: Essensium/Mind
-In-Reply-To: <20220815154854.17628-2-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220815202955.2216503-1-thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=content-transfer-encoding:in-reply-to:organization:from:references
  :cc:to:content-language:subject:user-agent:mime-version:date
  :message-id:from:to:cc;
- bh=aoOy/JWeo5bXYmv4mjVlJTLwWDREpXQ0uimx/WFc/+I=;
- b=Z387DIrC/xW/RMxg+9GN0agi0n5lcKkYzBmzpe2BaH5tnCwvGJJ4OUGXiQyZBv/Iln
- zm44ruM75jbXIiCq4FHl8CQXYEIWIY9qjC9Voom0u+HLptQQANHir7077nfw/yHKNkRK
- v89TUDG14F23JSoLRm483wuPjgtNRq/AcHgRCkqXpJibfnCOnLKBe1ICgcL+jW/73SFl
- g539wuG/rlVH3mTkGWOveGAU8eTs0GAG+xR43dgt/M+I8rt1ea1vFQO40Z3C9Goy/7Ip
- BGwDZ1gwj3IGKTKzlc/ZC1KvGh/MNVAQeDJZeHolvRxZaxkn0vkD4IoVO0KV1xOj3svn
- s9DA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=OKdff5iDjzj7oknZUQAze0DNqmM5MC9hdyCjZEShOFg=;
+ b=KDpUOa9oWrEU+c2j2LU7W7Ona9AXuXTIHTQK4YaPb6CYWrVRBDaMjiRylaOU03ARlo
+ 0ZVPthQcbFtYCYuyi9/8o7f4I6unRPQHxD4b6W92qRqRgva059vEShsoxh9X7ANkIlW5
+ 7jTkDErQ/prKA3Jpy1UZQtk2w6YI7XslcZiQ8WMnREUu0SlfUcJbKt07WpzPx3hBgX+s
+ 2LshM+AO1mRfNNmhELSzaxszYBV156jnq+YWSC+cB6g2Xloghu2eryVThE9XC/zsJOgB
+ mCDVf+GzC5ShvgtFMCLHTPmAJsBqz6GRjjQaDlFVDp6CaPj5c+SlTHCZArD06BxT5SzS
+ btgQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Z387DIrC
-Subject: Re: [Buildroot] [PATCH 1/4] Revert "configs/olimex_a33_olinuxino:
- use NEON+VFPv4 as FPU strategy"
+ header.a=rsa-sha256 header.s=google header.b=KDpUOa9o
+Subject: Re: [Buildroot] [PATCH next] toolchain/toolchain-buildroot: default
+ to glibc as the C library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,10 +106,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Jagan Teki <jagan@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -115,65 +115,53 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/08/2022 17:48, Giulio Benetti wrote:
-> The gcc man page states that specifying Neon as part of the fpu setting
-> has no effect, unless the -funsafe-math-optimizations is also specified,
-> because Neon is not compliant with IEEE 754:
-> ```
->      If the selected floating-point hardware includes the NEON extension
->      (e.g. -mfpu=neon), note that floating-point operations are not
->      generated by GCC's auto-vectorization pass unless
->      -funsafe-math-optimizations is also specified. This is because NEON
->      hardware does not fully implement the IEEE 754 standard for
->      floating-point arithmetic (in particular denormal values are treated
->      as zero), so the use of NEON instructions may lead to a loss of
->      precision.
-> ```
+On 15/08/2022 22:29, Thomas Petazzoni wrote:
+> This is perhaps the most controversial change for Buildroot that can
+> be written in a two-liner.
 > 
-> -funsafe-math-optimizations must be explictly specified per package to
-> really use NEON as FPU,
+> Historically, we have used uClibc as our default C library, as
+> Buildroot was created initially as a test-bed for uClibc, and also
+> because uClibc made a lot of sense for embedded Linux systems, due to
+> its smaller size and fine-grained configurability.
+> 
+> Since then, the landscape of embedded Linux systems has changed. Even
+> though Buildroot happily supports really low-end devices, the vast
+> majority of Buildroot users are quite certainly running the resulting
+> system on a reasonably powerful platform, with significant amount of
+> RAM and storage. In this context, the benefits of uClibc are no longer
+> that much relevant, and glibc causes less "troubles". Therefore, this
+> patch proposes to use glibc as our default C library when using the
+> internal toolchain backend instead of uClibc.
+> 
+> Of course, we will keep the support for uClibc, which remains an
+> important C library choice, for space-constrained systems, or simply
+> for architectures that are not supported by glibc.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-  That's not true. The statement above is just about auto-vectorization, but 
-it's still possible to use intrinsics or inline assembly to use NEON in your 
-code. I don't know what exactly happens with those if we specify 
--mfpu=vfpv4-d16, but I expect that it will not compile those. So packages will 
-discover that neon is not supported on the target CPU, while actually it is.
-
-  Note that that unsafe-math-optimizations thing was exactly the reason why we 
-thought it was OK to allow -mfpu=neon-vfpv4 to begin with - GCC is not going to 
-generate invalid code out of the box.
-
-> but it's something that is left to the user as
-> well as setting BR2_ARM_FPU_NEON_VFPV4. This way the default
-> BR2_ARM_FPU_VFPV4D16 is used as previously. So let's revert the
-> offending patch.
-
-  I could be wrong, but doesn't the availability of SIMD imply that there are 32 
-DP registers?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
 
-> 
-> This reverts commit 23329364e206d5ca67a9eb9c733d3d556ccdbac4.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
->   configs/olimex_a33_olinuxino_defconfig | 1 -
->   1 file changed, 1 deletion(-)
+>   toolchain/toolchain-buildroot/Config.in | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/configs/olimex_a33_olinuxino_defconfig b/configs/olimex_a33_olinuxino_defconfig
-> index 27924b9e92..cdbc63efe1 100644
-> --- a/configs/olimex_a33_olinuxino_defconfig
-> +++ b/configs/olimex_a33_olinuxino_defconfig
-> @@ -1,7 +1,6 @@
->   # Architecture
->   BR2_arm=y
->   BR2_cortex_a7=y
-> -BR2_ARM_FPU_NEON_VFPV4=y
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 836af3b22a..9956dc4383 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -22,8 +22,7 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
 >   
->   # Linux headers same as kernel, a 5.14 series
->   BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
+>   choice
+>   	prompt "C library"
+> -	default BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+> -	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_powerpc64
+> +	default BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>   
+>   config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+>   	bool "uClibc-ng"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
