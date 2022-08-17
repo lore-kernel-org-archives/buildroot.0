@@ -1,67 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52691C25B08
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 21:38:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B78AFC25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 22:36:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E80CE60C2B;
-	Wed, 17 Aug 2022 21:38:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E80CE60C2B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12E6B83EF0;
+	Wed, 17 Aug 2022 22:36:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12E6B83EF0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AK25KEBSnqzk; Wed, 17 Aug 2022 22:36:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 159BD83EE8;
+	Wed, 17 Aug 2022 22:36:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 159BD83EE8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 373181BF573
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 22:36:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 17FCD60F4B
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 22:36:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17FCD60F4B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8rXYo9LHh8xG; Wed, 17 Aug 2022 21:38:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB27B60B71;
-	Wed, 17 Aug 2022 21:37:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB27B60B71
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 366F01BF35A
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 21:37:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1AE39402C3
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 21:37:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AE39402C3
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bdmb95jQHwd1 for <buildroot@lists.busybox.net>;
- Wed, 17 Aug 2022 21:37:48 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DmISVcIwfJ47 for <buildroot@lists.busybox.net>;
+ Wed, 17 Aug 2022 22:36:22 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7EF040575
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E7EF040575
- for <buildroot@buildroot.org>; Wed, 17 Aug 2022 21:37:47 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.166.112.68])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 7DC586012C;
- Wed, 17 Aug 2022 23:37:42 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D67F60F42
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4D67F60F42
+ for <buildroot@buildroot.org>; Wed, 17 Aug 2022 22:36:22 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id r16so8513212wrm.6
+ for <buildroot@buildroot.org>; Wed, 17 Aug 2022 15:36:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=oI7tB+K3XMp2NXkn6bgWcYQbkA55/03BYVUe+IXHpSE=;
+ b=q9GyX+S1qo8BcUBU2N65guoy7gtrtgHV5Ud1BaxbvxiBDouNo2tCFPAfypys+G/Wic
+ EIvEvU8sgBj7+qrTNYdxNxTkp27iHC0GyVaVXJikqZprmGsxz6eVpSCCTpLW1aocQts/
+ 51U5HqqIT4R8cPndSWC9IZ1LPLbNOb5RG+5lkHXjV+eeUU4MW0vvlgf9uFAwFu4Rl6Gl
+ hPJcQjesxzKfBmTIUwItie8aiMhnRx8JvZFKv2lT1hxz6DzyHd+taFEfeFcVHLNfmSnS
+ zlgB85Gu5ua/dvzlIMyIFTkIt41RvJDM9A+KpLOFq6dwfoPuouBSQYf2P+zKgXrVmnhS
+ C0KQ==
+X-Gm-Message-State: ACgBeo3KaISNFV6t/wUOTpEbiVl0+59aCwHDDxGJ0tCGehUD5YBe5LtQ
+ X2cjruwV1hSzVNgorOvN9C1eq/sN0Ok=
+X-Google-Smtp-Source: AA6agR4DEY2dY7Ae2VpL4c3e17mBSZoxF4L5ZXFV9XyJ6ADT+GUR+Gz7CSGf0Iuo9j9DvFO41ogevQ==
+X-Received: by 2002:a5d:6646:0:b0:225:259e:dec5 with SMTP id
+ f6-20020a5d6646000000b00225259edec5mr76286wrw.566.1660775780071; 
+ Wed, 17 Aug 2022 15:36:20 -0700 (PDT)
+Received: from kali.home (2a01cb088e0b5b00d8e5b341f3f5f170.ipv6.abo.wanadoo.fr.
+ [2a01:cb08:8e0b:5b00:d8e5:b341:f3f5:f170])
+ by smtp.gmail.com with ESMTPSA id
+ l41-20020a05600c1d2900b003a62052053csm1251960wms.18.2022.08.17.15.36.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 17 Aug 2022 15:36:19 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 23:37:24 +0200
-Message-Id: <20220817213724.10547-2-ju.o@free.fr>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220817213724.10547-1-ju.o@free.fr>
-References: <20220817213724.10547-1-ju.o@free.fr>
+Date: Thu, 18 Aug 2022 00:36:12 +0200
+Message-Id: <20220817223612.218840-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660772266;
- bh=Rl+V8LOUczVwEeBqkpjP7/hqzqSmkyrikNOQnzCO6BQ=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=Lp652c70OUCLJLBulErw4Kf8WtfITJ1UesQiEp8CKdqdKVz+8iWyb4Lbkx6DSIny2
- W9ELZN8OYLGUYGubC3xW6zuepfVIWBRv8Dx2ImFmYoqGVVfpv7AmdS+2G6uPzJOCJq
- POJX6THXlc30XgbeX1BU0s7yHeY7VpUfYQbI3JR2la9nyTbBCjSFcuO2ZBulAQK8eL
- MQgkGHGlUjdezJ7GRubfH11CqBWs5XZTq9E4e5bw61STH0lUzIWy3Dq8K0zK2Hcw5c
- D7gfWYAQq1UYHmLCkjOfzAUpcBK17S2Tnl3g7snVDdKqFtGKFkf6ylHNi6A0ujnSg1
- 1U1rMUnkkgE+w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Lp652c70
-Subject: [Buildroot] [PATCH next 2/2] package/linux-backports: add version
- 5.15.58
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=oI7tB+K3XMp2NXkn6bgWcYQbkA55/03BYVUe+IXHpSE=;
+ b=h88pGmwuo4LaEKYLJI65mYJFeOEOmH0PUykporE9xeV44el4XRl41cG+7duw4M/kF0
+ fWM1Qlst70m1aOMgIDHlc6EMMBbWpgRuqGdIQ/Vr47WVPKhlri0Yl/sMnqgZcnF3MAUS
+ SiEiusE8gAPhacvNhEjEZB/ID31DICFRWbWp/reXZzSGXNVNtHcKoWsv9JZ2+cuzLHkl
+ 3eL0DSIrLRTzPSzyf6FLwH5SymXWliG+QrWk+1Bmcb+e9lypJ+vq+v7lBwgUr2se+pVy
+ LzSh0aSrW8wyD0ATpkfY9hbjwyupF5/Ck7ru5LqzlXJYKng75mkm7AXVqgEX440e4Zht
+ OXqA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=h88pGmwu
+Subject: [Buildroot] [PATCH 1/1] package/syslog-ng: fix libressl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,133 +93,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Chris Packham <judge.packham@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit add a new package version, while keeping the previous one.
+Fix the following build failure with libressl raised since bump to
+version 3.37.1 in commit 2546a31ccef6fed6c3bd40d6a1f13f4d0898cea9 and
+https://github.com/syslog-ng/syslog-ng/commit/c7ba645918480da06b9e065c62ebd630312b0c7f:
 
-This was suggested in:
-https://lists.buildroot.org/pipermail/buildroot/2022-August/649398.html
+/nvmedata/autobuild/instance-5/output-1/host/lib/gcc/nios2-buildroot-linux-gnu/10.3.0/../../../../nios2-buildroot-linux-gnu/bin/ld: ./lib/.libs/libsyslog-ng.so: undefined reference to `SSL_CTX_set1_client_sigalgs_list'
+/nvmedata/autobuild/instance-5/output-1/host/lib/gcc/nios2-buildroot-linux-gnu/10.3.0/../../../../nios2-buildroot-linux-gnu/bin/ld: ./lib/.libs/libsyslog-ng.so: undefined reference to `SSL_CTX_set1_sigalgs_list'
 
-This is because linux-backports increased its minimal requirements on
-kernel version. Since Buildroot want to support a wide range of kernel
-versions, this package now supports several backport versions, one for
-each kernel version era (backports v5.10.110 for kernels down to version
-3.10, backports v5.15.58 for kernels down to version 4.4).
+Fixes:
+ - http://autobuild.buildroot.org/results/84cf9f6a0f6de831a685b73c42eab868952c8b15
 
-For detailed release commit log, see:
-https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/log/?h=v5.15.58-1
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linux-backports/Config.in            | 20 ++++++++++++++---
- package/linux-backports/linux-backports.hash |  2 ++
- package/linux-backports/linux-backports.mk   | 23 +++++++++++++++-----
- 3 files changed, 37 insertions(+), 8 deletions(-)
+ ...-lib-tlscontext.c-fix-libressl-build.patch | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 package/syslog-ng/0002-lib-tlscontext.c-fix-libressl-build.patch
 
-diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
-index 251d202fd2..bdc1074ebd 100644
---- a/package/linux-backports/Config.in
-+++ b/package/linux-backports/Config.in
-@@ -8,13 +8,27 @@ config BR2_PACKAGE_LINUX_BACKPORTS
- 	  The linux-backports package includes many Linux drivers from
- 	  recent kernels, backported to older ones.
- 
--	  This version of linux-backports supports kernels starting
--	  from 3.10.
--
- 	  https://backports.wiki.kernel.org
- 
- if BR2_PACKAGE_LINUX_BACKPORTS
- 
-+choice
-+	prompt "Linux Backports version"
-+	default BR2_PACKAGE_LINUX_BACKPORTS_5_15_X
-+	help
-+	  Newer Linux Backports version increased the minimal kernel
-+	  version requirement. This package has several versions, to
-+	  keep support for older kernels. Select the higher version
-+	  that will support the kernel version.
+diff --git a/package/syslog-ng/0002-lib-tlscontext.c-fix-libressl-build.patch b/package/syslog-ng/0002-lib-tlscontext.c-fix-libressl-build.patch
+new file mode 100644
+index 0000000000..2c438627a4
+--- /dev/null
++++ b/package/syslog-ng/0002-lib-tlscontext.c-fix-libressl-build.patch
+@@ -0,0 +1,85 @@
++From 6f93484cea81ff8d45df213d5d2b4cffc4eadcad Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 16 Jul 2022 18:09:25 +0200
++Subject: [PATCH] lib/tlscontext.c: fix libressl build
 +
-+config BR2_PACKAGE_LINUX_BACKPORTS_5_15_X
-+	bool "5.15.x (for kernels back to 4.4)"
++Fix the following build failure with libressl raised since version
++3.37.1 and
++https://github.com/syslog-ng/syslog-ng/commit/c7ba645918480da06b9e065c62ebd630312b0c7f:
 +
-+config BR2_PACKAGE_LINUX_BACKPORTS_5_10_X
-+	bool "5.10.x (for kernels back to 3.10)"
++/nvmedata/autobuild/instance-5/output-1/host/lib/gcc/nios2-buildroot-linux-gnu/10.3.0/../../../../nios2-buildroot-linux-gnu/bin/ld: ./lib/.libs/libsyslog-ng.so: undefined reference to `SSL_CTX_set1_client_sigalgs_list'
++/nvmedata/autobuild/instance-5/output-1/host/lib/gcc/nios2-buildroot-linux-gnu/10.3.0/../../../../nios2-buildroot-linux-gnu/bin/ld: ./lib/.libs/libsyslog-ng.so: undefined reference to `SSL_CTX_set1_sigalgs_list'
 +
-+endchoice
++Fixes:
++ - http://autobuild.buildroot.org/results/84cf9f6a0f6de831a685b73c42eab868952c8b15
 +
- choice
- 	prompt "Linux kernel driver backports configuration"
- 	default BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-index 83a3e54cd7..ce4278dffa 100644
---- a/package/linux-backports/linux-backports.hash
-+++ b/package/linux-backports/linux-backports.hash
-@@ -1,5 +1,7 @@
- # From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.10.110/sha256sums.asc
- sha256  3d958154080c059adaf26512430fd1a8888d65a2228e5e70e48d028201e148b1  backports-5.10.110-1.tar.xz
-+# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.15.58/sha256sums.asc
-+sha256  a3c2a2b7bbaf8943c65fd72f4e7d7ad5e205aeae28b26c835f9d8afa0f9810bf  backports-5.15.58-1.tar.xz
- # Locally computed
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
- sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-index a39891336d..dd3ff8271e 100644
---- a/package/linux-backports/linux-backports.mk
-+++ b/package/linux-backports/linux-backports.mk
-@@ -4,7 +4,17 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_5_10_X),y)
- LINUX_BACKPORTS_VERSION_MAJOR = 5.10.110
-+LINUX_BACKPORTS_MINIMAL_KVER_MAJOR = 3
-+LINUX_BACKPORTS_MINIMAL_KVER_MINOR = 10
-+else
-+# use default the latest version as default
-+LINUX_BACKPORTS_VERSION_MAJOR = 5.15.58
-+LINUX_BACKPORTS_MINIMAL_KVER_MAJOR = 4
-+LINUX_BACKPORTS_MINIMAL_KVER_MINOR = 4
-+endif
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/syslog-ng/syslog-ng/pull/4081]
++---
++ cmake/openssl_functions.cmake | 4 +++-
++ configure.ac                  | 2 ++
++ lib/tlscontext.c              | 4 ++++
++ syslog-ng-config.h.in         | 2 ++
++ 4 files changed, 11 insertions(+), 1 deletion(-)
 +
- LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
- LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
- LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
-@@ -93,8 +103,8 @@ $(eval $(kconfig-package))
- # can't use it as a stamp file. We use the LINUX_KCONFIG_STAMP_DOTCONFIG
- # instead.
- #
--# Furthermore, we want to check the kernel version, since linux-backports
--# only supports kernels >= 3.10. To avoid overriding linux-backports'
-+# Furthermore, we want to check the kernel version is compatible with
-+# linux-backports. To avoid overriding linux-backports'
- # KCONFIG_STAMP_DOTCONFIG rule defined in the kconfig-package infra, we
- # use an intermediate stamp-file.
- #
-@@ -107,11 +117,14 @@ $(LINUX_BACKPORTS_DIR)/$(LINUX_BACKPORTS_KCONFIG_STAMP_DOTCONFIG): $(LINUX_BACKP
- .SECONDEXPANSION:
- $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/$$(LINUX_KCONFIG_STAMP_DOTCONFIG)
- 	$(Q)KVER=$(LINUX_VERSION_PROBED); \
-+	MIN_KVER_MAJOR=$(LINUX_BACKPORTS_MINIMAL_KVER_MAJOR); \
-+	MIN_KVER_MINOR=$(LINUX_BACKPORTS_MINIMAL_KVER_MINOR); \
- 	KVER_MAJOR=`echo $${KVER} | sed 's/^\([0-9]*\)\..*/\1/'`; \
- 	KVER_MINOR=`echo $${KVER} | sed 's/^[0-9]*\.\([0-9]*\).*/\1/'`; \
--	if [ $${KVER_MAJOR} -lt 3 -o \( $${KVER_MAJOR} -eq 3 -a $${KVER_MINOR} -lt 10 \) ]; then \
--		printf "Linux version '%s' is too old for linux-backports (needs 3.10 or later)\n" \
--			"$${KVER}"; \
-+	if [ $${KVER_MAJOR} -lt $${MIN_KVER_MAJOR} -o \
-+		\( $${KVER_MAJOR} -eq $${MIN_KVER_MAJOR} -a $${KVER_MINOR} -lt $${MIN_KVER_MINOR} \) ]; then \
-+		printf "Linux version '%s' is too old for linux-backports (needs %s.%s or later)\n" \
-+			"$${KVER}" "$${MIN_KVER_MAJOR}" "$${MIN_KVER_MINOR}"; \
- 		exit 1; \
- 	fi
- 	$(Q)touch $(@)
++diff --git a/cmake/openssl_functions.cmake b/cmake/openssl_functions.cmake
++index afd7b96bfe..319dcc2e23 100644
++--- a/cmake/openssl_functions.cmake
+++++ b/cmake/openssl_functions.cmake
++@@ -42,7 +42,9 @@ function (openssl_set_defines)
++     DH_set0_pqg
++     BN_get_rfc3526_prime_2048
++     SSL_CTX_set_num_tickets
++-    SSL_CTX_set_ciphersuites)
+++    SSL_CTX_set_ciphersuites
+++    SSL_CTX_set1_sigalgs_list
+++    SSL_CTX_set1_client_sigalgs_list)
++ 
++   foreach (symbol ${symbol_list})
++     string(TOUPPER ${symbol} SYMBOL_UPPERCASE)
++diff --git a/configure.ac b/configure.ac
++index 8cfab2251e..ecffb84f06 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1055,6 +1055,8 @@ AC_CHECK_DECLS([ASN1_STRING_get0_data], [], [], [[#include <openssl/asn1.h>]])
++ AC_CHECK_DECLS([DH_set0_pqg], [], [], [[#include <openssl/dh.h>]])
++ AC_CHECK_DECLS([BN_get_rfc3526_prime_2048], [], [], [[#include <openssl/bn.h>]])
++ AC_CHECK_DECLS([SSL_CTX_set_num_tickets],[], [], [[#include <openssl/ssl.h>]])
+++AC_CHECK_DECLS([SSL_CTX_set1_sigalgs_list],[], [], [[#include <openssl/ssl.h>]])
+++AC_CHECK_DECLS([SSL_CTX_set1_client_sigalgs_list],[], [], [[#include <openssl/ssl.h>]])
++ 
++ CPPFLAGS="$CPPFLAGS_SAVE"
++ 
++diff --git a/lib/tlscontext.c b/lib/tlscontext.c
++index ddde21dcaf..dedcf1ce5a 100644
++--- a/lib/tlscontext.c
+++++ b/lib/tlscontext.c
++@@ -598,11 +598,15 @@ tls_context_setup_cipher_suite(TLSContext *self)
++ static gboolean
++ tls_context_setup_sigalgs(TLSContext *self)
++ {
+++#if SYSLOG_NG_HAVE_DECL_SSL_CTX_SET1_SIGALGS_LIST
++   if (self->sigalgs && !SSL_CTX_set1_sigalgs_list(self->ssl_ctx, self->sigalgs))
++     return FALSE;
+++#endif
++ 
+++#if SYSLOG_NG_HAVE_DECL_SSL_CTX_SET1_CLIENT_SIGALGS_LIST
++   if (self->client_sigalgs && !SSL_CTX_set1_client_sigalgs_list(self->ssl_ctx, self->client_sigalgs))
++     return FALSE;
+++#endif
++ 
++   return TRUE;
++ }
++diff --git a/syslog-ng-config.h.in b/syslog-ng-config.h.in
++index 1817deea50..004b0a7be6 100644
++--- a/syslog-ng-config.h.in
+++++ b/syslog-ng-config.h.in
++@@ -57,6 +57,8 @@
++ #cmakedefine01 SYSLOG_NG_HAVE_DECL_ASN1_STRING_GET0_DATA
++ #cmakedefine01 SYSLOG_NG_HAVE_DECL_SSL_CTX_GET0_PARAM
++ #cmakedefine01 SYSLOG_NG_HAVE_DECL_SSL_CTX_SET_CIPHERSUITES
+++#cmakedefine01 SYSLOG_NG_HAVE_DECL_SSL_CTX_SET1_SIGALGS_LIST
+++#cmakedefine01 SYSLOG_NG_HAVE_DECL_SSL_CTX_SET1_CLIENT_SIGALGS_LIST
++ #cmakedefine01 SYSLOG_NG_HAVE_DECL_X509_STORE_CTX_GET0_CERT
++ #cmakedefine01 SYSLOG_NG_HAVE_DECL_X509_GET_EXTENSION_FLAGS
++ #cmakedefine01 SYSLOG_NG_HAVE_DECL_DH_SET0_PQG
 -- 
-2.37.2
+2.35.1
 
 _______________________________________________
 buildroot mailing list
