@@ -1,71 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 896ACC32772
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 19:24:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07482C25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 19:35:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 14E8C4027F;
-	Wed, 17 Aug 2022 19:24:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14E8C4027F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92E0C82F13;
+	Wed, 17 Aug 2022 19:35:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92E0C82F13
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2shi0aKJ8n2N; Wed, 17 Aug 2022 19:24:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ox9OZ1kvl4oz; Wed, 17 Aug 2022 19:35:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EF25C4013E;
-	Wed, 17 Aug 2022 19:24:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF25C4013E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 73DDF1BF47E
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 19:24:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAABB828EF;
+	Wed, 17 Aug 2022 19:35:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAABB828EF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 088051BF47E
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 19:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4CC8D60B7D
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 19:24:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CC8D60B7D
+ by smtp1.osuosl.org (Postfix) with ESMTP id D7484828EF
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 19:35:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7484828EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cCOYkdSTycAx for <buildroot@lists.busybox.net>;
- Wed, 17 Aug 2022 19:24:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A3C060BAC
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4A3C060BAC
- for <buildroot@buildroot.org>; Wed, 17 Aug 2022 19:24:45 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:1014:5f7:51e1:dc98])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id E44F52003AE;
- Wed, 17 Aug 2022 21:24:39 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 17 Aug 2022 21:24:39 +0200
-Date: Wed, 17 Aug 2022 21:24:39 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220817192439.GS2854108@scaer>
-References: <20220817061157.4120650-1-james.hilliard1@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cFIeJzP3yQ1o for <buildroot@lists.busybox.net>;
+ Wed, 17 Aug 2022 19:35:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB1ED828C5
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EB1ED828C5
+ for <buildroot@buildroot.org>; Wed, 17 Aug 2022 19:35:15 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ ay39-20020a05600c1e2700b003a5503a80cfso1412675wmb.2
+ for <buildroot@buildroot.org>; Wed, 17 Aug 2022 12:35:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc;
+ bh=kABDJ6OUBmRcrSxtPOnywWz8LrpBHp8vFyuthmzd1yI=;
+ b=2O3arHWCigl72IWonuUUyWyTHepgTl7ZM9sTZNzKyJ6VcCnAoAay+ctRbNakaQre0x
+ 9HATLG+dReyVu2L37haneDAvGxrmpgwDWng+h/9yTMOokvCuPotvS+GAI432wpgIxX6u
+ 59q5z1mJ6VlRxuF7gdFALmLNGZIRkc/CGlQwmMtOxUcTykSrLpGtP9YykuCODBMUXQ+S
+ KT1MBkqw83iA/a2nasi2SRW/bTIb41mWWakvqapuOOqoAa1E6WzwRlGggxgGzIwtgn0E
+ 4oNlZHSVZmxLP8XWScCRgznlUpxqQ32l8HdeV2CooX4Ep/H3vroNEzw1TpeUPrBcMWdV
+ dLOg==
+X-Gm-Message-State: ACgBeo0qk+g/y6OcE34sbadmjWRoyf4vARNERF+4VaF9HbtB740RxDDN
+ HpqpwpMr7RbWW7IfDr8i3lA=
+X-Google-Smtp-Source: AA6agR7WgalkYOvU1SXzH+bhfAGZH+NR69AYxduEJUFt5Y8oJ5573A4LnMqURAvFPQ0Nfmiqtrs9EA==
+X-Received: by 2002:a7b:cbd0:0:b0:3a6:9f6:a3e8 with SMTP id
+ n16-20020a7bcbd0000000b003a609f6a3e8mr3001656wmi.13.1660764914044; 
+ Wed, 17 Aug 2022 12:35:14 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id
+ az36-20020a05600c602400b003a5fa79007fsm3297216wmb.7.2022.08.17.12.35.11
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 17 Aug 2022 12:35:13 -0700 (PDT)
+Message-ID: <fb8ee027-b516-39e6-7029-3286f3961332@gmail.com>
+Date: Wed, 17 Aug 2022 21:35:08 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220817061157.4120650-1-james.hilliard1@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660764282;
- bh=fQjN7DJ1AcwFueV/9VRbOIs2nok+Bypmz28Te3S7Ddc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=VfQ+Rc068Z+rG98y1e8a9sxleGB5FnrCfB42mvlFBhFR3HCjzXIfjcuUxC7G7Usjq
- AiNEArgJP7LnEiejAtgqlEOOP1OZUPWibiGhjeUewmfZkeJ+ao7RUbXZyBIvEBT2Cp
- V42m6xmesY9iy4j/kfgXvFg/RJ0DNTrNxgy1YAjyUahsEza0dHjF+Ib+7U17QssMOy
- iER2KFEBhrBELhAcOJANXkg7ETozbN4JDI49lDBXw0RWk7vRlsDpl2pyXJbqaj/fNR
- EFd+B9zv0mzzPMeeINOEWvt+UgPVLCwCrfuDy5W3QY6tBtSo8jdALlYEhvkyTqF5dx
- O8QV8ubLx1WFA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VfQ+Rc06
-Subject: Re: [Buildroot] [PATCH v3 1/1] utils/scanpypi: restore modules
- search path in case of error
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To: Peter Korsgaard <peter@korsgaard.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220815202955.2216503-1-thomas.petazzoni@bootlin.com>
+ <20220816210334.GP2854108@scaer> <87bksjc1ji.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <87bksjc1ji.fsf@dell.be.48ers.dk>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc;
+ bh=kABDJ6OUBmRcrSxtPOnywWz8LrpBHp8vFyuthmzd1yI=;
+ b=KX5gmj9/z/1A7c39WsjHH5pmOEp+6GeTP4Rg4/AQu2h0PjKkRMFUXp5avwjrMkeY1T
+ lPQ/aFnU966uXTbYC5ulTQ2Qyxppo8exmO+QwE86qAndKIIElo2VnlGfcMiqx2mtY7Gd
+ kOE4yh6C9Ywo7F4dDuhFrdNukA6HhJf/RRcxPHUmKPDp2v43/y0fo0DuO60kP7DBH/oG
+ c4IcnRe023zbB0nWGSd+d5ybhrRmNfleqMXMQHSsHYjDI7mnJfJN9kaQ/h0dX5GyJl3b
+ KHbUHqELgtSzT1xPIgMti/QABiwHn5jlySDrtADitayjN7GTaf8RfBbbPGIYnIj+YgUH
+ 22wQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=KX5gmj9/
+Subject: Re: [Buildroot] [PATCH next] toolchain/toolchain-buildroot: default
+ to glibc as the C library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,99 +104,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot List <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
-
-On 2022-08-17 00:11 -0600, James Hilliard spake thusly:
-> We extend the modules search path to be able to load the package
-> metadata. In case that fails, we need to restore it to its previous
-> state to avoid leaking the path further.
-
-Thanks for adding those explanations, it makes really more sense to
-explain the patch. Given your further feedback on IRC, I've extended
-that to explain that the restoration code was already present for the
-case verything worked, and was missing only when it failed.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v2 -> v3:
->   - add more detailed commit log
-> ---
->  utils/scanpypi | 34 ++++++++++++++++++----------------
->  1 file changed, 18 insertions(+), 16 deletions(-)
-> 
-> diff --git a/utils/scanpypi b/utils/scanpypi
-> index cc13701c0e..452b4a3fc3 100755
-> --- a/utils/scanpypi
-> +++ b/utils/scanpypi
-> @@ -296,23 +296,25 @@ class BuildrootPackage():
->          current_dir = os.getcwd()
->          os.chdir(self.tmp_extract)
->          sys.path.insert(0, self.tmp_extract)
-> -        s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
-> -        imp.load_module('__main__', s_file, s_path, s_desc)
-> -        if self.metadata_name in self.setup_args:
-> -            pass
-> -        elif self.metadata_name.replace('_', '-') in self.setup_args:
-> -            self.metadata_name = self.metadata_name.replace('_', '-')
-> -        elif self.metadata_name.replace('-', '_') in self.setup_args:
-> -            self.metadata_name = self.metadata_name.replace('-', '_')
->          try:
-> -            self.setup_metadata = self.setup_args[self.metadata_name]
-> -        except KeyError:
-> -            # This means setup was not called
-> -            print('ERROR: Could not determine package metadata for {pkg}.\n'
-> -                  .format(pkg=self.real_name))
-> -            raise
-> -        os.chdir(current_dir)
-> -        sys.path.remove(self.tmp_extract)
-> +            s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
-> +            imp.load_module('__main__', s_file, s_path, s_desc)
-> +            if self.metadata_name in self.setup_args:
-> +                pass
-> +            elif self.metadata_name.replace('_', '-') in self.setup_args:
-> +                self.metadata_name = self.metadata_name.replace('_', '-')
-> +            elif self.metadata_name.replace('-', '_') in self.setup_args:
-> +                self.metadata_name = self.metadata_name.replace('-', '_')
-> +            try:
-> +                self.setup_metadata = self.setup_args[self.metadata_name]
-> +            except KeyError:
-> +                # This means setup was not called
-> +                print('ERROR: Could not determine package metadata for {pkg}.\n'
-> +                      .format(pkg=self.real_name))
-> +                raise
-> +        finally:
-> +            os.chdir(current_dir)
-> +            sys.path.remove(self.tmp_extract)
->  
->      def get_requirements(self, pkg_folder):
->          """
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8sCgpMZSAxNi8wOC8yMDIyIMOgIDIzOjM3LCBQZXRlciBLb3JzZ2FhcmQgYSDDqWNyaXTC
+oDoKPj4+Pj4+ICJZYW5uIiA9PSBZYW5uIEUgTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZy
+PiB3cml0ZXM6Cj4gCj4gID4gVGhvbWFzLCBBbGwsCj4gID4gT24gMjAyMi0wOC0xNSAyMjoyOSAr
+MDIwMCwgVGhvbWFzIFBldGF6em9uaSB2aWEgYnVpbGRyb290IHNwYWtlIHRodXNseToKPiAgPj4g
+VGhpcyBpcyBwZXJoYXBzIHRoZSBtb3N0IGNvbnRyb3ZlcnNpYWwgY2hhbmdlIGZvciBCdWlsZHJv
+b3QgdGhhdCBjYW4KPiAgPj4gYmUgd3JpdHRlbiBpbiBhIHR3by1saW5lci4KPiAgPj4gCj4gID4+
+IEhpc3RvcmljYWxseSwgd2UgaGF2ZSB1c2VkIHVDbGliYyBhcyBvdXIgZGVmYXVsdCBDIGxpYnJh
+cnksIGFzCj4gID4+IEJ1aWxkcm9vdCB3YXMgY3JlYXRlZCBpbml0aWFsbHkgYXMgYSB0ZXN0LWJl
+ZCBmb3IgdUNsaWJjLCBhbmQgYWxzbwo+ICA+PiBiZWNhdXNlIHVDbGliYyBtYWRlIGEgbG90IG9m
+IHNlbnNlIGZvciBlbWJlZGRlZCBMaW51eCBzeXN0ZW1zLCBkdWUgdG8KPiAgPj4gaXRzIHNtYWxs
+ZXIgc2l6ZSBhbmQgZmluZS1ncmFpbmVkIGNvbmZpZ3VyYWJpbGl0eS4KPiAgPj4gCj4gID4+IFNp
+bmNlIHRoZW4sIHRoZSBsYW5kc2NhcGUgb2YgZW1iZWRkZWQgTGludXggc3lzdGVtcyBoYXMgY2hh
+bmdlZC4gRXZlbgo+ICA+PiB0aG91Z2ggQnVpbGRyb290IGhhcHBpbHkgc3VwcG9ydHMgcmVhbGx5
+IGxvdy1lbmQgZGV2aWNlcywgdGhlIHZhc3QKPiAgPj4gbWFqb3JpdHkgb2YgQnVpbGRyb290IHVz
+ZXJzIGFyZSBxdWl0ZSBjZXJ0YWlubHkgcnVubmluZyB0aGUgcmVzdWx0aW5nCj4gID4+IHN5c3Rl
+bSBvbiBhIHJlYXNvbmFibHkgcG93ZXJmdWwgcGxhdGZvcm0sIHdpdGggc2lnbmlmaWNhbnQgYW1v
+dW50IG9mCj4gID4+IFJBTSBhbmQgc3RvcmFnZS4gSW4gdGhpcyBjb250ZXh0LCB0aGUgYmVuZWZp
+dHMgb2YgdUNsaWJjIGFyZSBubyBsb25nZXIKPiAgPj4gdGhhdCBtdWNoIHJlbGV2YW50LCBhbmQg
+Z2xpYmMgY2F1c2VzIGxlc3MgInRyb3VibGVzIi4gVGhlcmVmb3JlLCB0aGlzCj4gID4+IHBhdGNo
+IHByb3Bvc2VzIHRvIHVzZSBnbGliYyBhcyBvdXIgZGVmYXVsdCBDIGxpYnJhcnkgd2hlbiB1c2lu
+ZyB0aGUKPiAgPj4gaW50ZXJuYWwgdG9vbGNoYWluIGJhY2tlbmQgaW5zdGVhZCBvZiB1Q2xpYmMu
+Cj4gID4+IAo+ICA+PiBPZiBjb3Vyc2UsIHdlIHdpbGwga2VlcCB0aGUgc3VwcG9ydCBmb3IgdUNs
+aWJjLCB3aGljaCByZW1haW5zIGFuCj4gID4+IGltcG9ydGFudCBDIGxpYnJhcnkgY2hvaWNlLCBm
+b3Igc3BhY2UtY29uc3RyYWluZWQgc3lzdGVtcywgb3Igc2ltcGx5Cj4gID4+IGZvciBhcmNoaXRl
+Y3R1cmVzIHRoYXQgYXJlIG5vdCBzdXBwb3J0ZWQgYnkgZ2xpYmMuCj4gID4+IAo+ICA+PiBTaWdu
+ZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29t
+Pgo+IAo+ICA+IEFja2VkLWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5m
+cj4KPiAKPiAgPiBZZXMsIEkgd2lsbCBiZSBhIGJpdCBzYWQgdGhhdCB3ZSBkZW1vdGUgdUNsaWJj
+LW5nLCBidXQgbGV0J3MgZmFjZSBpdDoKPiAgPiB0aGUgd29yZCBtb3ZlcyBvbiwgbGV0J3MgbW92
+ZSBhbG9uZy4KPiAKPiBBZ3JlZWQuCj4gCj4gQWNrZWQtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0
+ZXJAa29yc2dhYXJkLmNvbT4KPiAKVGhlIG5leHQgbW92ZSBpcyBwcm9iYWJseSBpbmNyZWFzZSB0
+ZXN0aW5nIHdpdGggZ2xpYmMgaW4gdGhlIEJ1aWxkcm9vdCB0ZXN0c3VpdGU/CgpBY2tlZC1ieTog
+Um9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPgoKQmVzdCByZWdhcmRzLApSb21h
+aW4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
