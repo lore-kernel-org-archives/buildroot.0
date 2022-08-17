@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9CEAC25B08
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 06:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9A9CC25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 08:28:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 863B0830C1;
-	Wed, 17 Aug 2022 06:58:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 863B0830C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3C3D40D77;
+	Wed, 17 Aug 2022 08:28:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3C3D40D77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eh6oKP9X2n34; Wed, 17 Aug 2022 06:58:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AETvVUvbqbyg; Wed, 17 Aug 2022 08:28:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7FD48830C5;
-	Wed, 17 Aug 2022 06:58:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FD48830C5
+	by smtp2.osuosl.org (Postfix) with ESMTP id EECEE40E08;
+	Wed, 17 Aug 2022 08:28:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EECEE40E08
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 42B1B1BF9C6
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:58:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8E38D1C113E
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 08:28:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C6CC4197D
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:58:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C6CC4197D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7538841981
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 08:28:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7538841981
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ErfRrgz7lJDT for <buildroot@lists.busybox.net>;
- Wed, 17 Aug 2022 06:57:58 +0000 (UTC)
+ with ESMTP id 0_3O1uD371cZ for <buildroot@lists.busybox.net>;
+ Wed, 17 Aug 2022 08:28:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C83B54193A
- for <buildroot@buildroot.org>; Wed, 17 Aug 2022 06:57:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C83B54193A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5ED0E416B9
+ for <buildroot@buildroot.org>; Wed, 17 Aug 2022 08:28:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ED0E416B9
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7A7B687970; Wed, 17 Aug 2022 06:43:25 +0000 (UTC)
+ id E610287943; Wed, 17 Aug 2022 08:14:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 08:47:04 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: fe209bd472d50d8e9c4e1346ce041b89d8490d6f
-X-Git-Newrev: 686d5ba78193f0a96f395dbcde58ccfc9b22c936
+Date: Wed, 17 Aug 2022 08:54:41 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: f17eee169ba533a2e7b8cb4b85ec490957b09bc7
+X-Git-Newrev: 0fa5de37f1b2b864e04a22314f43a6aaf13db6ec
 X-Patchwork-Hint: ignore
-Message-Id: <20220817064325.7A7B687970@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/gcc: disable
- split-stack for non-thread builds
+Message-Id: <20220817081402.E610287943@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/nvidia-driver:
+ define IGNORE_CC_MISMATCH
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,109 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=686d5ba78193f0a96f395dbcde58ccfc9b22c936
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0fa5de37f1b2b864e04a22314f43a6aaf13db6ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Since commit [1], the autobuilder script generates fully random
-configurations that can trigger configurations that were not tested
-before.
+Leverage IGNORE_CC_MISMATCH for kernel module builds to avoid an issue
+where NVIDIA's `cc_version_check` in kernel/conftest.sh may fail due
+to matching on the pkgversion substring of the GCC version string in
+the kernel's include/generated/compile.h.
 
-Here, the toolchain build with uClibc-ng without threads support
-(BR2_PTHREADS_NONE=y) fails to build due to a missing pthread.h
-header:
-
-../../../libgcc/generic-morestack-thread.c:42:10: fatal error: pthread.h: No such file or directory
-   42 | #include <pthread.h>
-
-This issue was actually fixed by this commit [2] adding a patch for
-gcc 4.8, 4.9, 5.3. But it get lost when gcc 6 was added to Buildroot [3].
-
-Since then the issue was present in Buildroot but has not been noticed.
-
-[1] https://git.buildroot.net/buildroot-test/commit/?id=27b18dcb1686a98ce718b6a816e98f8505957a6c
-[2] 2631219f648f4aa13fa36d06a483e4507cb6f3d7
-[3] 519d83bfa0442439026db4e71e605a5c1347e566
-
-Fixes:
-http://autobuild.buildroot.org/results/5ec/5ec9eefacd27ef4fa73066013188796b43a30428
-https://bugs.busybox.net/show_bug.cgi?id=8766
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fff68f75b3519cadb2639fde2296b26db919d79d)
-[Peter: drop gcc-12.1 patch]
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 30a79ffdb0d1197fb4304c46ec60f71040d68eb8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...disable-split-stack-for-non-thread-builds.patch | 26 ++++++++++++++++++++++
- ...disable-split-stack-for-non-thread-builds.patch | 26 ++++++++++++++++++++++
- 2 files changed, 52 insertions(+)
+ package/nvidia-driver/nvidia-driver.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch b/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
-new file mode 100644
-index 0000000000..668b1cd9d7
---- /dev/null
-+++ b/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
-@@ -0,0 +1,26 @@
-+From cdb76d638e91cc53949585d98fa653d3671b92ac Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Mon, 25 Jul 2022 00:29:55 +0200
-+Subject: [PATCH] disable split-stack for non-thread builds
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+[Romain: convert to git format]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ libgcc/config/t-stack | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
-+index cc0366b4cd8..f3f97e86d60 100644
-+--- a/libgcc/config/t-stack
-++++ b/libgcc/config/t-stack
-+@@ -1,4 +1,6 @@
-+ # Makefile fragment to provide generic support for -fsplit-stack.
-+ # This should be used in config.host for any host which supports
-+ # -fsplit-stack.
-++ifeq ($(enable_threads),yes)
-+ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
-++endif
-+-- 
-+2.34.3
-+
-diff --git a/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch b/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
-new file mode 100644
-index 0000000000..dba2d02d7f
---- /dev/null
-+++ b/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
-@@ -0,0 +1,26 @@
-+From 3b9d7d397fa6dc290eb05bffca80968efb6ec2e5 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Mon, 25 Jul 2022 00:29:55 +0200
-+Subject: [PATCH] disable split-stack for non-thread builds
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+[Romain: convert to git format]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ libgcc/config/t-stack | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
-+index cc0366b4cd8..f3f97e86d60 100644
-+--- a/libgcc/config/t-stack
-++++ b/libgcc/config/t-stack
-+@@ -1,4 +1,6 @@
-+ # Makefile fragment to provide generic support for -fsplit-stack.
-+ # This should be used in config.host for any host which supports
-+ # -fsplit-stack.
-++ifeq ($(enable_threads),yes)
-+ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
-++endif
-+-- 
-+2.34.3
-+
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index 54c2aa46d8..ec070e3ca6 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -137,6 +137,7 @@ endif
+ # because they don't recognise the usual variables set by the kernel
+ # build system. We also need to tell them what modules to build.
+ NVIDIA_DRIVER_MODULE_MAKE_OPTS = \
++	IGNORE_CC_MISMATCH=1 \
+ 	NV_KERNEL_SOURCES="$(LINUX_DIR)" \
+ 	NV_KERNEL_OUTPUT="$(LINUX_DIR)" \
+ 	NV_KERNEL_MODULES="$(NVIDIA_DRIVER_MODULES)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
