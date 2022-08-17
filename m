@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E99CFC25B08
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 06:39:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43E78C25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 06:39:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8AAD56105B;
-	Wed, 17 Aug 2022 06:39:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AAD56105B
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF49F61060;
+	Wed, 17 Aug 2022 06:39:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF49F61060
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4SWDre0dRApA; Wed, 17 Aug 2022 06:39:37 +0000 (UTC)
+	with ESMTP id fQiPlbxLL8RV; Wed, 17 Aug 2022 06:39:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A552C60F8E;
-	Wed, 17 Aug 2022 06:39:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A552C60F8E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2C5B41BF9C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FDEF61059;
+	Wed, 17 Aug 2022 06:39:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FDEF61059
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A37361BF9C6
  for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 09E2B61059
+ by smtp1.osuosl.org (Postfix) with ESMTP id 033A182437
  for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09E2B61059
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 033A182437
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T6K1TD-tbCmH for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3OyA1T_EQYDJ for <buildroot@lists.busybox.net>;
  Wed, 17 Aug 2022 06:38:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2433060AB0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D80081B7B
  for <buildroot@buildroot.org>; Wed, 17 Aug 2022 06:38:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2433060AB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D80081B7B
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D662587940; Wed, 17 Aug 2022 06:24:21 +0000 (UTC)
+ id DFA7487942; Wed, 17 Aug 2022 06:24:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 07:49:40 +0200
+Date: Wed, 17 Aug 2022 07:58:00 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 2df1ff86cce1785697149521f8682c0d69866915
-X-Git-Newrev: 3ca6058a44076c1b658c4b7603fcef2ef64a53a8
+X-Git-Oldrev: 3ca6058a44076c1b658c4b7603fcef2ef64a53a8
+X-Git-Newrev: f7904e30e03bf109f0f9a89e0a231523b22246c8
 X-Patchwork-Hint: ignore
-Message-Id: <20220817062421.D662587940@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/x11r7/xserver_xorg-server: security bump version to 21.1.4
+Message-Id: <20220817062421.DFA7487942@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/runc: fix typo:
+ OCP to OCI specification
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ca6058a44076c1b658c4b7603fcef2ef64a53a8
+commit: https://git.buildroot.net/buildroot/commit/?id=f7904e30e03bf109f0f9a89e0a231523b22246c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fixes CVE-2022-2319 & CVE-2022-2320:
-https://lists.x.org/archives/xorg-announce/2022-July/003192.html
+The Config.in has a typo: "OCP specification"
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2022-July/003193.html
+It should be OCI for Open Container Initiative.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://opencontainers.org/
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 948c7b2f2c7fa1a4c466b3331cc182dd90a67d11)
+(cherry picked from commit 8382574d589ecab2a6c3877a9eadf486eb20fd10)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/runc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index b5635b9afa..4b2090fa99 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2022-January/003127.html
--sha256  61d6aad5b6b47a116b960bd7f0cba4ee7e6da95d6bb0b127bde75d7d1acdebe5  xorg-server-21.1.3.tar.xz
--sha512  cf5fed023eadda62ae732f8c4d427c272ebe005188341290f3d03147042c103b00cbb94d86a0256da815fb9b9a3da315c21a05ee0c926c1a2ff0c54ab0c0638b  xorg-server-21.1.3.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-July/003193.html
-+sha256  5cc4be8ee47edb58d4a90e603a59d56b40291ad38371b0bd2471fc3cbee1c587  xorg-server-21.1.4.tar.xz
-+sha512  eb5b8520d02908f72719e6ecfbf7a9bf139acb65ccae04d1db4223a8a2384cd3a94bd5afef10cce327b751b800cc2b79bfaa5ae35c95c3a217f775168082e68f  xorg-server-21.1.4.tar.xz
+diff --git a/package/runc/Config.in b/package/runc/Config.in
+index 66203896a8..fe527b1954 100644
+--- a/package/runc/Config.in
++++ b/package/runc/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_RUNC
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+ 	help
+ 	  runC is a CLI tool for spawning and running containers
+-	  according to the OCP specification.
++	  according to the OCI specification.
  
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 43d2038a8d..18ddd1cb07 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	  https://github.com/opencontainers/runc
  
--XSERVER_XORG_SERVER_VERSION = 21.1.3
-+XSERVER_XORG_SERVER_VERSION = 21.1.4
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
