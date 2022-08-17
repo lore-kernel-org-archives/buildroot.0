@@ -1,51 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D898DC25B08
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 10:45:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B1AC25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 10:54:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76DF583298;
-	Wed, 17 Aug 2022 10:45:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76DF583298
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6699610A6;
+	Wed, 17 Aug 2022 10:54:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6699610A6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Qz9_WgXL1Rkj; Wed, 17 Aug 2022 10:54:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 101E561063;
+	Wed, 17 Aug 2022 10:54:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 101E561063
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B16421BF377
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:54:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 59526831C1
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:54:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59526831C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RhPzd8Eli9ps; Wed, 17 Aug 2022 10:45:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E288832AA;
-	Wed, 17 Aug 2022 10:45:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E288832AA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 69ED91BF377
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:45:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42D7E41A0D
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:45:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42D7E41A0D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 16uxsYiPdQ0F for <buildroot@lists.busybox.net>;
- Wed, 17 Aug 2022 10:45:43 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0AD4141A02
- for <buildroot@buildroot.org>; Wed, 17 Aug 2022 10:45:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AD4141A02
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5EFE387985; Wed, 17 Aug 2022 10:31:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 12:43:48 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0fa5de37f1b2b864e04a22314f43a6aaf13db6ec
-X-Git-Newrev: 69af5ab34fc6c092f90fd3103f5f98818b1de71c
-X-Patchwork-Hint: ignore
-Message-Id: <20220817103109.5EFE387985@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rpi-userland: add
- GLint64, GLuint64 and GLsync typedefs to GLES2/gl2ext.h
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HqoUwhMUdk2T for <buildroot@lists.busybox.net>;
+ Wed, 17 Aug 2022 10:54:12 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E218B82F6C
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E218B82F6C
+ for <buildroot@busybox.net>; Wed, 17 Aug 2022 10:54:11 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7885A240005;
+ Wed, 17 Aug 2022 10:54:08 +0000 (UTC)
+Date: Wed, 17 Aug 2022 12:54:07 +0200
+To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Message-ID: <20220817125407.024ae30f@windsurf>
+In-Reply-To: <20220816143943.16142-6-guillaume.bressaix@gmail.com>
+References: <20220816143943.16142-1-guillaume.bressaix@gmail.com>
+ <20220816143943.16142-6-guillaume.bressaix@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1660733649;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=EftG1VtdbqXxMSKz7+Yc+zJSlMvd+R/etCYjS0sziOk=;
+ b=ofICG4WNzQIVM7C6qVIQnYqOnyFDm6Tk2ER3LJ6/Jx4ZCsycOKQ6kqQvvdmpIg1E0dkjYx
+ 5GK+UtmciyoMqA1ahj5j0kXgoMk7wT+je1MSOZgoUqGC/VxSLIfQFzQCQVpmF0p9f0WWib
+ NUEzq7CtN8dYSb0kucgW0eqObDqOdIUhtxGsLr24wq7YpQNiKO9JZraVe+NxkxmukTqJn2
+ 8sSHpXkdwoByEO4OyiJMs1mRqf6TN0KliG/01joRp0oTgOTAr8wIdyzqaAkXgRMRU3ANwB
+ LJredTPa6ZMyl/WvWwSQsZ5LNnBv4aXpwoU2pi8czzBuFaTpCDUs6m6qTNfWiQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ofICG4WN
+Subject: Re: [Buildroot] [PATCH v1 6/7] package/python-scikitlearn: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,201 +76,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1498948390327099689=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1498948390327099689==
-Content-Type: text/plain
+Hello Guillaume,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69af5ab34fc6c092f90fd3103f5f98818b1de71c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+On Tue, 16 Aug 2022 16:39:42 +0200
+"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
 
-Fixes:
+> +PYTHON_SCIKITLEARN_VERSION = 1.1.1
+> +PYTHON_SCIKITLEARN_SITE = $(call github,scikit-learn,scikit-learn,$(PYTHON_SCIKITLEARN_VERSION))
+> +PYTHON_SCIKITLEARN_LICENSE = BSD-3-Clause
+> +PYTHON_SCIKITLEARN_LICENSE_FILES = COPYING
+> +PYTHON_SCIKITLEARN_SETUP_TYPE = setuptools
+> +PYTHON_SCIKITLEARN_DEPENDENCIES = \
+> +	host-python-cython \
+> +	host-python-scipy \
 
-  - https://bugs.busybox.net/show_bug.cgi?id=13796
+Are you sure it needs host-python-scipy? What error do you get if you
+don't have host-python-scipy?
 
-.../host/arm-linucleus-linux-gnueabihf/sysroot/usr/include/gstreamer-1.0/gst/gl/glprototypes/gstgl_compat.h:40:18: error: conflicting declaration ‘typedef void* GLsync’
-   40 | typedef gpointer GLsync;
-      |                  ^~~~~~
+From a quick glance at scikitlearn's setup.py script (at
+https://github.com/scikit-learn/scikit-learn/blob/main/setup.py#L303),
+I have the impression it only tries to import numpy and scipy at
+build-time to verify that their version is correct.
 
-.../host/arm-linucleus-linux-gnueabihf/sysroot/usr/include/qt5/QtGui/qopengles2ext.h:24:26: note: previous declaration as ‘typedef struct __GLsync* GLsync’
-   24 | typedef struct __GLsync *GLsync;
-      |                          ^~~~~~
+Though it's true than then it does import numpy/scipy stuff:
 
-File gstgl_compat.h:
+        # These commands require the setup from numpy.distutils because they
+        # may use numpy.distutils compiler classes.
+        from numpy.distutils.core import setup
 
- 39 #if !GST_GL_HAVE_GLSYNC
- 40 typedef gpointer GLsync;
- 41 #endif
+        # Monkeypatches CCompiler.spawn to prevent random wheel build errors on Windows
+        # The build errors on Windows was because msvccompiler spawn was not threadsafe
+        # This fixed can be removed when we build with numpy >= 1.22.2 on Windows.
+        # https://github.com/pypa/distutils/issues/5
+        # https://github.com/scikit-learn/scikit-learn/issues/22310
+        # https://github.com/numpy/numpy/pull/20640
+        from numpy.distutils.ccompiler import replace_method
+        from distutils.ccompiler import CCompiler
+        from sklearn.externals._numpy_compiler_patch import CCompiler_spawn
 
-File qopengles2ext.h:
+But the below part is to avoid build errors on Windows. Can you try to
+patch this out?
 
-   1 #ifndef __gles2_gl2ext_h_
-   2 #define __gles2_gl2ext_h_ 1
-   3
-   4 #if 0
-   5 #pragma qt_no_master_include
-   6 #pragma qt_sync_skip_header_check
-   7 #pragma qt_sync_stop_processing
-   8 #endif
-   9
-  10 #ifdef __cplusplus
-  11 extern "C" {
-  12 #endif
-  13
-  14 #ifndef __gl3_h_
-  15 /* These types are defined with reference to <inttypes.h>
-  16  * in the Apple extension spec, but here we use the Khronos
-  17  * portable types in khrplatform.h, and assume those types
-  18  * are always defined.
-  19  * If any other extensions using these types are defined,
-  20  * the typedefs must move out of this block and be shared.
-  21  */
-  22 typedef khronos_int64_t GLint64;
-  23 typedef khronos_uint64_t GLuint64;
-  24 typedef struct __GLsync *GLsync;
-  25 #endif
+> +	python-joblib \
+> +	python-threadpoolctl
 
-The problem is that rpi-userland doesn't define GLsync, and both
-GStreamer and Qt have their own definition of GLsync in this case, but
-they are not the same.
+Are you sure these are needed at build-time? You marked them as
+run-time dependencies in your Config.in file.
 
-We reported this issue to:
-
- * rpi-userland, to get the headers updated:
-   https://github.com/raspberrypi/userland/issues/469#issuecomment-1193864294
-
- * gstreamer, to get their bogus definition of GLsync fixed:
-   https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/issues/973
-
-In the mean time, fix this by adding the missing definitions to
-rpi-userland, so that GStreamer and Qt don't try to provide their own.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e008c0bb104eb952cab27b3887912529f9e8e10e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...t.h-add-GLint64-GLuint64-and-GLsync-typed.patch | 99 ++++++++++++++++++++++
- 1 file changed, 99 insertions(+)
-
-diff --git a/package/rpi-userland/0007-GLES2-gl2ext.h-add-GLint64-GLuint64-and-GLsync-typed.patch b/package/rpi-userland/0007-GLES2-gl2ext.h-add-GLint64-GLuint64-and-GLsync-typed.patch
-new file mode 100644
-index 0000000000..6dca2e7b8a
---- /dev/null
-+++ b/package/rpi-userland/0007-GLES2-gl2ext.h-add-GLint64-GLuint64-and-GLsync-typed.patch
-@@ -0,0 +1,99 @@
-+From ffb8eafe2d745ddf2f44101ffc4e6599ed096e69 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 10 May 2021 19:15:48 +0200
-+Subject: [PATCH] GLES2/gl2ext.h: add GLint64, GLuint64 and GLsync typedefs
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+.../host/arm-linucleus-linux-gnueabihf/sysroot/usr/include/gstreamer-1.0/gst/gl/glprototypes/gstgl_compat.h:40:18: error: conflicting declaration ‘typedef void* GLsync’
-+   40 | typedef gpointer GLsync;
-+      |                  ^~~~~~
-+
-+.../host/arm-linucleus-linux-gnueabihf/sysroot/usr/include/qt5/QtGui/qopengles2ext.h:24:26: note: previous declaration as ‘typedef struct __GLsync* GLsync’
-+   24 | typedef struct __GLsync *GLsync;
-+      |                          ^~~~~~
-+
-+File gstgl_compat.h:
-+
-+ 39 #if !GST_GL_HAVE_GLSYNC
-+ 40 typedef gpointer GLsync;
-+ 41 #endif
-+
-+File qopengles2ext.h:
-+
-+   1 #ifndef __gles2_gl2ext_h_
-+   2 #define __gles2_gl2ext_h_ 1
-+   3
-+   4 #if 0
-+   5 #pragma qt_no_master_include
-+   6 #pragma qt_sync_skip_header_check
-+   7 #pragma qt_sync_stop_processing
-+   8 #endif
-+   9
-+  10 #ifdef __cplusplus
-+  11 extern "C" {
-+  12 #endif
-+  13
-+  14 #ifndef __gl3_h_
-+  15 /* These types are defined with reference to <inttypes.h>
-+  16  * in the Apple extension spec, but here we use the Khronos
-+  17  * portable types in khrplatform.h, and assume those types
-+  18  * are always defined.
-+  19  * If any other extensions using these types are defined,
-+  20  * the typedefs must move out of this block and be shared.
-+  21  */
-+  22 typedef khronos_int64_t GLint64;
-+  23 typedef khronos_uint64_t GLuint64;
-+  24 typedef struct __GLsync *GLsync;
-+  25 #endif
-+
-+The problem is that rpi-userland doesn't define GLsync, and both
-+GStreamer and Qt have their own definition of GLsync in this case, but
-+they are not the same.
-+
-+We reported this issue to:
-+
-+ * rpi-userland, to get the headers updated:
-+   https://github.com/raspberrypi/userland/issues/469#issuecomment-1193864294
-+
-+ * gstreamer, to get their bogus definition of GLsync fixed:
-+   https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/issues/973
-+
-+In the mean time, fix this by adding the missing definitions to
-+rpi-userland, so that GStreamer and Qt don't try to provide their own.
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ interface/khronos/include/GLES2/gl2ext.h | 13 +++++++++++++
-+ 1 file changed, 13 insertions(+)
-+
-+diff --git a/interface/khronos/include/GLES2/gl2ext.h b/interface/khronos/include/GLES2/gl2ext.h
-+index 4eacf7f..96e87ec 100644
-+--- a/interface/khronos/include/GLES2/gl2ext.h
-++++ b/interface/khronos/include/GLES2/gl2ext.h
-+@@ -33,6 +33,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+ extern "C" {
-+ #endif
-+ 
-++#ifndef __gl3_h_
-++/* These types are defined with reference to <inttypes.h>
-++ * in the Apple extension spec, but here we use the Khronos
-++ * portable types in khrplatform.h, and assume those types
-++ * are always defined.
-++ * If any other extensions using these types are defined,
-++ * the typedefs must move out of this block and be shared.
-++ */
-++typedef khronos_int64_t GLint64;
-++typedef khronos_uint64_t GLuint64;
-++typedef struct __GLsync *GLsync;
-++#endif
-++
-+ /* We want this */
-+ #ifndef GL_GLEXT_PROTOTYPES
-+ #define GL_GLEXT_PROTOTYPES
-+-- 
-+2.31.1
-+
-
---===============1498948390327099689==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1498948390327099689==--
