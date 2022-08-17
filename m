@@ -1,51 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C688C25B08
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 08:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E346C25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 10:45:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA3746107E;
-	Wed, 17 Aug 2022 08:28:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA3746107E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ErHrHvlLL6yT; Wed, 17 Aug 2022 08:28:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F22B861078;
-	Wed, 17 Aug 2022 08:28:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F22B861078
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8CD8F1BF873
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 08:28:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6EED3812F3
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 08:28:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EED3812F3
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7C1783295;
+	Wed, 17 Aug 2022 10:45:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7C1783295
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BX1JyAZBOyfF for <buildroot@lists.busybox.net>;
- Wed, 17 Aug 2022 08:28:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58BF2812C7
- for <buildroot@buildroot.org>; Wed, 17 Aug 2022 08:28:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58BF2812C7
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DC09287979; Wed, 17 Aug 2022 08:14:02 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YRDLBL-Ou5TV; Wed, 17 Aug 2022 10:45:08 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20DC883267;
+	Wed, 17 Aug 2022 10:45:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20DC883267
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BD0F1BF377
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:45:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C20B41A02
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:45:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C20B41A02
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VmcxlVqLR0o5 for <buildroot@lists.busybox.net>;
+ Wed, 17 Aug 2022 10:45:04 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D39E3419FE
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D39E3419FE
+ for <buildroot@buildroot.org>; Wed, 17 Aug 2022 10:45:02 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 70EFF1BF206;
+ Wed, 17 Aug 2022 10:45:00 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oOGXj-00C3Ri-HJ; Wed, 17 Aug 2022 12:44:59 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 08:47:58 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3d01735b5ae5444dc5c0f21c6c6ff6cf081c4991
-X-Git-Newrev: f17eee169ba533a2e7b8cb4b85ec490957b09bc7
-X-Patchwork-Hint: ignore
-Message-Id: <20220817081402.DC09287979@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gcc: disable
- split-stack for non-thread builds
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20210510195352.13205-1-ps.report@gmx.net>
+ <20220725150025.12ee53e7@windsurf>
+Date: Wed, 17 Aug 2022 12:44:59 +0200
+In-Reply-To: <20220725150025.12ee53e7@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Mon, 25 Jul 2022 15:00:25 +0200")
+Message-ID: <87czcz9mj8.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [RFC v1] package/rpi-userland: add GLint64,
+ GLuint64 and GLsync typedefs to GLES2/gl2ext.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,115 +65,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f17eee169ba533a2e7b8cb4b85ec490957b09bc7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Since commit [1], the autobuilder script generates fully random
-configurations that can trigger configurations that were not tested
-before.
+ > Hello Peter,
+ > On Mon, 10 May 2021 21:53:52 +0200
+ > Peter Seiderer <ps.report@gmx.net> wrote:
 
-Here, the toolchain build with uClibc-ng without threads support
-(BR2_PTHREADS_NONE=y) fails to build due to a missing pthread.h
-header:
+ >> The problem is that gstreamer sees the original gl2ext.h file from
+ >> rpi-userland (rpi-userland-093b30bbc2fd083d68cc3ee07e6e555c6e592d11/interface/khronos/include/GLES2/gl2ext.h)
+ >> without the additional GLint64, GLuint64 and GLsync typedef definitions but
+ >> checks for existance and if not found enables its own versions in gstgl_compat.h,
+ >> incompatible with the later ones used from Qt (qopengles2ext.h).
+ >> 
+ >> Fix this by adding the same typedef definitions already to the
+ >> rpi-userland header version.
 
-../../../libgcc/generic-morestack-thread.c:42:10: fatal error: pthread.h: No such file or directory
-   42 | #include <pthread.h>
+ > Romain and I finally had a look at this. I was a bit confused by your
+ > explanation, so after doing our investigation, I rewrote it this way:
 
-This issue was actually fixed by this commit [2] adding a patch for
-gcc 4.8, 4.9, 5.3. But it get lost when gcc 6 was added to Buildroot [3].
+ >     The problem is that rpi-userland doesn't define GLsync, and both
+ >     GStreamer and Qt have their own definition of GLsync in this case, but
+ >     they are not the same.
+    
+ >     We reported this issue to:
+    
+ >      * rpi-userland, to get the headers updated:
+ >        https://github.com/raspberrypi/userland/issues/469#issuecomment-1193864294
+    
+ >      * gstreamer, to get their bogus definition of GLsync fixed:
+ >        https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/issues/973
+    
+ >     In the mean time, fix this by adding the missing definitions to
+ >     rpi-userland, so that GStreamer and Qt don't try to provide their own.
+    
+ > As you can see, I also reported the issue back to rpi-userland (more
+ > precisely pinged in an existing issue) and to GStreamer.
 
-Since then the issue was present in Buildroot but has not been noticed.
+ > But for now, what you proposed is the most immediate fix, so I've
+ > applied your patch to master with an updated commit log and patch
+ > description.
 
-[1] https://git.buildroot.net/buildroot-test/commit/?id=27b18dcb1686a98ce718b6a816e98f8505957a6c
-[2] 2631219f648f4aa13fa36d06a483e4507cb6f3d7
-[3] 519d83bfa0442439026db4e71e605a5c1347e566
+Committed to 2022.05.x and 2022.02.x, thanks.
 
-Fixes:
-http://autobuild.buildroot.org/results/5ec/5ec9eefacd27ef4fa73066013188796b43a30428
-https://bugs.busybox.net/show_bug.cgi?id=8766
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fff68f75b3519cadb2639fde2296b26db919d79d)
-[Peter: drop gcc-12.1 patch]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...disable-split-stack-for-non-thread-builds.patch | 26 ++++++++++++++++++++++
- ...disable-split-stack-for-non-thread-builds.patch | 26 ++++++++++++++++++++++
- 2 files changed, 52 insertions(+)
-
-diff --git a/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch b/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
-new file mode 100644
-index 0000000000..668b1cd9d7
---- /dev/null
-+++ b/package/gcc/10.3.0/0006-disable-split-stack-for-non-thread-builds.patch
-@@ -0,0 +1,26 @@
-+From cdb76d638e91cc53949585d98fa653d3671b92ac Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Mon, 25 Jul 2022 00:29:55 +0200
-+Subject: [PATCH] disable split-stack for non-thread builds
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+[Romain: convert to git format]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ libgcc/config/t-stack | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
-+index cc0366b4cd8..f3f97e86d60 100644
-+--- a/libgcc/config/t-stack
-++++ b/libgcc/config/t-stack
-+@@ -1,4 +1,6 @@
-+ # Makefile fragment to provide generic support for -fsplit-stack.
-+ # This should be used in config.host for any host which supports
-+ # -fsplit-stack.
-++ifeq ($(enable_threads),yes)
-+ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
-++endif
-+-- 
-+2.34.3
-+
-diff --git a/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch b/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
-new file mode 100644
-index 0000000000..dba2d02d7f
---- /dev/null
-+++ b/package/gcc/11.3.0/0004-disable-split-stack-for-non-thread-builds.patch
-@@ -0,0 +1,26 @@
-+From 3b9d7d397fa6dc290eb05bffca80968efb6ec2e5 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Mon, 25 Jul 2022 00:29:55 +0200
-+Subject: [PATCH] disable split-stack for non-thread builds
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+[Romain: convert to git format]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ libgcc/config/t-stack | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
-+index cc0366b4cd8..f3f97e86d60 100644
-+--- a/libgcc/config/t-stack
-++++ b/libgcc/config/t-stack
-+@@ -1,4 +1,6 @@
-+ # Makefile fragment to provide generic support for -fsplit-stack.
-+ # This should be used in config.host for any host which supports
-+ # -fsplit-stack.
-++ifeq ($(enable_threads),yes)
-+ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
-++endif
-+-- 
-+2.34.3
-+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
