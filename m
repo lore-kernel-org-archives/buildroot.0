@@ -1,86 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2619DC32772
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 20:58:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13D7CC25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 21:37:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80BED4040B;
-	Wed, 17 Aug 2022 20:58:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80BED4040B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64DE040608;
+	Wed, 17 Aug 2022 21:37:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64DE040608
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p2IveHu19MyE; Wed, 17 Aug 2022 20:58:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KVyUONA7sPlD; Wed, 17 Aug 2022 21:37:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FC1940354;
-	Wed, 17 Aug 2022 20:58:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FC1940354
+	by smtp2.osuosl.org (Postfix) with ESMTP id 79CEB402C3;
+	Wed, 17 Aug 2022 21:37:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79CEB402C3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0541A1BF3AE
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 20:58:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6204F1BF35A
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 21:37:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1AFD83E00
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 20:58:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1AFD83E00
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43A3783E9F
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 21:37:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43A3783E9F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XSmYx5JmroWB for <buildroot@lists.busybox.net>;
- Wed, 17 Aug 2022 20:58:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 246488146F
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 246488146F
- for <buildroot@buildroot.org>; Wed, 17 Aug 2022 20:58:29 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id h24so3451444wrb.8
- for <buildroot@buildroot.org>; Wed, 17 Aug 2022 13:58:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=q96QoRefe+NsRuKJ0Yc0IC+eGyMconcuMlbf6c8m0/s=;
- b=1UvvpyOWCS77xf6mQWtXW7dqbG39vEgNqGBN1ApZY4hbwU7UTjARQiD9gevZahka66
- RZYBtWBXWP7rh9SyNl+9q5lZHQsqCu0EYDeRCRC5/d30jQ8dT9PvghSJkmdtp8cThGc8
- dAphVlNkOmrvhtXAG1wq/XxTNay2ZOWYdKbuitHRMdCkSR5Uv28uEjz09qbNOqLPhs7N
- F2WARkGzRTjnBczFXuEVgcOaSuEBtUXrrhMhJxX3eMN0dJGV1nlTc0PfOq9yL+H5TmzL
- Esh0SQXK2c33us84eIIXfIgMFFrirPGAvr8bRCqxGoaFn4hfHZ17FW7gJyOuD59Mswe7
- DR7w==
-X-Gm-Message-State: ACgBeo1bRcVvlOrB0mnx5Ge5uPLnwi/MsyKCQuZoAxIZ0wNUX3sEUbgJ
- Wlz5PZ2IowBR/8g9ua70OoGtxSrcbMRwrQ==
-X-Google-Smtp-Source: AA6agR56FhfAyLnlez+7qZlgxtHk8chAJ3F9KqxAjEQ5teuKCXnPmpgLphhXbIyu20ZhLZemUONFaw==
-X-Received: by 2002:a05:6000:1d8e:b0:225:142d:285d with SMTP id
- bk14-20020a0560001d8e00b00225142d285dmr6040783wrb.199.1660769906842; 
- Wed, 17 Aug 2022 13:58:26 -0700 (PDT)
-Received: from menoah.home ([2a01:cb19:190:c500:b06c:cdd7:97f2:6c5])
- by smtp.gmail.com with ESMTPSA id
- j3-20020a5d5643000000b0021f138e07acsm13717894wrw.35.2022.08.17.13.58.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 17 Aug 2022 13:58:26 -0700 (PDT)
-From: Pierre-Jean Texier <texier.pj2@gmail.com>
+ with ESMTP id 46D020r4Yp27 for <buildroot@lists.busybox.net>;
+ Wed, 17 Aug 2022 21:37:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E837083E81
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E837083E81
+ for <buildroot@buildroot.org>; Wed, 17 Aug 2022 21:37:41 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.166.112.68])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id CCDDD6012F;
+ Wed, 17 Aug 2022 23:37:35 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 22:58:23 +0200
-Message-Id: <20220817205823.47256-1-texier.pj2@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Wed, 17 Aug 2022 23:37:23 +0200
+Message-Id: <20220817213724.10547-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=q96QoRefe+NsRuKJ0Yc0IC+eGyMconcuMlbf6c8m0/s=;
- b=k4jq5P8TgWwgyOOXiZT3pV0F+oLpCdVwnSvZubLrP8mUM2oIRNb1nr8MXs44U1B9Kb
- PTB8BiOyDBSJkqH0PbiHcfTcV/3ArXJu6vcg2vL3Iwd8qYlcPXsKXsrxGH3xK4RBMazk
- fJ9xTCO7jaOaizoJQ4yptU9iLgVLazev0T1oN0bBiRG7gnm11JRc6BbLqEahs7lvlyt8
- wZBtQpqP+0sYgQOnlguiAmi/85qOH2lvVznnYAHBV7VtuJfbQEwyvo4EKvYRwcRrsUSl
- PAyP3DWmSqFSzgFwDHW23ZNiBskva3nP+uO4vYxjESfA2f3V3/eeMTz27EUZEXCweFVj
- cCBQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1660772258;
+ bh=XOEzWTvyDv3JCDV4GusYHn2+SdwPQ4WBHvi40pr0D6U=;
+ h=From:To:Cc:Subject:Date:From;
+ b=t5lTyEaRgO6/jHd/B3ljOhlQj27iq8pPJ9foNbQLbTgmiOm5sSqTNzVIF2iuOvu/M
+ t7WkRD3de7GEauI7nLZ04RiCiI+adVPbnNNgfJsG4JiMxWtiadQUEp0u64cM+ON8sn
+ CGjJDiB8fgvRyx4UDsCB71a7A+br1Y3030kFMS7WPdz6caGZ3INrAcopBdao+flhOW
+ F6LJ4r8HYD/TOL7QM8yMfhYT0BZN6ra0qh52SNWyDV/j/HJwmH6FNcXpiz/na3k8Dg
+ hL4NeOkAuaWbEvQDlZj4TX325sFAorrpsOX7229CwvGgug0D1FTc2SILM9/NjMR94L
+ VFWtdHflwfMxQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=k4jq5P8T
-Subject: [Buildroot] [PATCH] package/stunnel: bump to version 5.65
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=t5lTyEaR
+Subject: [Buildroot] [PATCH next 1/2] package/linux-backports: bump version
+ to 5.10.110
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,53 +71,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update COPYING hash; copyright year update:
+Note:
+This is not the latest package version to date. This is the latest
+linux-backports version which is not changing the minimal kernel version
+requirement, which is kept to kernels version >= 3.10.
 
--_Copyright (C) 1998-2021 Michal Trojnara_
-+_Copyright (C) 1998-2022 Michal Trojnara_
+For commit log details, see:
+https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/log/?h=v5.10.110-1
 
-See full changelog https://www.stunnel.org/NEWS.html
-
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/stunnel/stunnel.hash | 6 +++---
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/linux-backports/linux-backports.hash | 4 ++--
+ package/linux-backports/linux-backports.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index b8cc62be13..19633b3c18 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
+diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
+index 3e103424f5..83a3e54cd7 100644
+--- a/package/linux-backports/linux-backports.hash
++++ b/package/linux-backports/linux-backports.hash
 @@ -1,5 +1,5 @@
--# From https://www.stunnel.org/downloads/stunnel-5.60.tar.gz.sha256
--sha256  c45d765b1521861fea9b03b425b9dd7d48b3055128c0aec673bba5ef9b8f787d  stunnel-5.60.tar.gz
-+# From https://www.stunnel.org/downloads/stunnel-5.65.tar.gz.sha256
-+sha256  60c500063bd1feff2877f5726e38278c086f96c178f03f09d264a2012d6bf7fc  stunnel-5.65.tar.gz
- # Locally calculated
--sha256  28b55d0157efd5ceb63640faeebb50fda13b1f49aec0b9c1240b9a3ea9f0eb4c  COPYING.md
-+sha256  f10bcd7ee7b722dce40c9c674761ddb37e7e29a76a6e413e961cd52e361c5d7a  COPYING.md
- sha256  62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d  COPYRIGHT.md
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index cc56eb39a8..95a1530eb8 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
+-# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.8/sha256sums.asc
+-sha256  19b4174d89bf11ee221458e11f1e8dace26558498774b823051156f522d2036b  backports-5.8-1.tar.xz
++# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.10.110/sha256sums.asc
++sha256  3d958154080c059adaf26512430fd1a8888d65a2228e5e70e48d028201e148b1  backports-5.10.110-1.tar.xz
+ # Locally computed
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+ sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+index 068dcffcc8..a39891336d 100644
+--- a/package/linux-backports/linux-backports.mk
++++ b/package/linux-backports/linux-backports.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).60
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).65
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-LINUX_BACKPORTS_VERSION_MAJOR = 5.8
++LINUX_BACKPORTS_VERSION_MAJOR = 5.10.110
+ LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
+ LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
+ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
 -- 
-2.25.1
+2.37.2
 
 _______________________________________________
 buildroot mailing list
