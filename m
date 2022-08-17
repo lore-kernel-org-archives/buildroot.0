@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F07D5ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:59:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C193C6FA83
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2B006FB41;
-	Sun, 11 Sep 2022 08:59:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2B006FB41
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF90841C56;
+	Sun, 11 Sep 2022 08:59:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF90841C56
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id soIy-cww7VeK; Sun, 11 Sep 2022 08:59:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ybv_3OxIImil; Sun, 11 Sep 2022 08:59:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4DC76FB3C;
-	Sun, 11 Sep 2022 08:59:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4DC76FB3C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A48471BF368
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D63E41B5C;
+	Sun, 11 Sep 2022 08:59:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D63E41B5C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E3C311BF368
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C2AD83EBA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3252A61091
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C2AD83EBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3252A61091
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZlRW1gD7WGhA for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jil9imk3f1SZ for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41D9583ECF
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41D9583ECF
+ by smtp3.osuosl.org (Postfix) with ESMTP id A074260812
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A074260812
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4002F8361F; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+ id 8AEC983621; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 22 Aug 2022 10:19:00 +0200
+Date: Wed, 17 Aug 2022 20:45:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0b7e7bc70b3b7f3125aa0ef780f4fbf61cd6cd4b
-X-Git-Newrev: e3b2bc21d52fc949ac62964bc4c628c5143e4954
+X-Git-Oldrev: 54e033785cfead216db256d2dc3389b2486806f4
+X-Git-Newrev: 4057e36ca9665edd5248512e4edba2c243b8f4be
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084825.4002F8361F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/signal-estimator: add new package
+Message-Id: <20220911084824.8AEC983621@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/toolchain-buildroot: default to
+ glibc as the C library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,113 +58,59 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5617033441987180436=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5617033441987180436==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e3b2bc21d52fc949ac62964bc4c628c5143e4954
+commit: https://git.buildroot.net/buildroot/commit/?id=4057e36ca9665edd5248512e4edba2c243b8f4be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We need to use the git download mechanism, as the package depends on a
-submodule (an old version of cxxopt), and this is not included in the
-archive autogenerated by Github.
+This is perhaps the most controversial change for Buildroot that can
+be written in a two-liner.
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-[yann.morin.1998@free.fr:
-  - bump to 0.0.4
-  - reword commit log ad help text
-  - other eye-candy reformatting
-]
+Historically, we have used uClibc as our default C library, as
+Buildroot was created initially as a test-bed for uClibc, and also
+because uClibc made a lot of sense for embedded Linux systems, due to
+its smaller size and fine-grained configurability.
+
+Since then, the landscape of embedded Linux systems has changed. Even
+though Buildroot happily supports really low-end devices, the vast
+majority of Buildroot users are quite certainly running the resulting
+system on a reasonably powerful platform, with significant amount of
+RAM and storage. In this context, the benefits of uClibc are no longer
+that much relevant, and glibc causes less "troubles". Therefore, this
+patch proposes to use glibc as our default C library when using the
+internal toolchain backend instead of uClibc.
+
+Of course, we will keep the support for uClibc, which remains an
+important C library choice, for space-constrained systems, or simply
+for architectures that are not supported by glibc.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Config.in                              |  1 +
- package/signal-estimator/Config.in             | 17 +++++++++++++++++
- package/signal-estimator/signal-estimator.hash |  3 +++
- package/signal-estimator/signal-estimator.mk   | 19 +++++++++++++++++++
- 4 files changed, 40 insertions(+)
+ toolchain/toolchain-buildroot/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d1c098c48f..2c2752b412 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -142,6 +142,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/rt-tests/Config.in"
- 	source "package/rwmem/Config.in"
- 	source "package/sentry-native/Config.in"
-+	source "package/signal-estimator/Config.in"
- 	source "package/spidev_test/Config.in"
- 	source "package/strace/Config.in"
- 	source "package/stress/Config.in"
-diff --git a/package/signal-estimator/Config.in b/package/signal-estimator/Config.in
-new file mode 100644
-index 0000000000..30c6e966ab
---- /dev/null
-+++ b/package/signal-estimator/Config.in
-@@ -0,0 +1,17 @@
-+comment "signal-estimator needs a toochain w/ C++, threads, gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_SIGNAL_ESTIMATOR
-+	bool "signal-estimator"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-+	select BR2_PACKAGE_ALSA_LIB
-+	help
-+	  signal-estimator is a small command-line and GUI tool allowing
-+	  to measure different characteristics of the signal looped back
-+	  from audio output to audio input.
-+
-+	  https://github.com/gavv/signal-estimator
-diff --git a/package/signal-estimator/signal-estimator.hash b/package/signal-estimator/signal-estimator.hash
-new file mode 100644
-index 0000000000..c10aa16d50
---- /dev/null
-+++ b/package/signal-estimator/signal-estimator.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  6256b881bd9285fdcf133628cf6dd6b0e2758c08bada231e44b2684a3cf7898f  signal-estimator-v0.0.4-br1.tar.gz
-+sha256  e836fc784cb6ed2d160f1c1ecdf1303ed57436a86f66f97e5406a1b79e6db55e  LICENSE
-diff --git a/package/signal-estimator/signal-estimator.mk b/package/signal-estimator/signal-estimator.mk
-new file mode 100644
-index 0000000000..cb1594b58d
---- /dev/null
-+++ b/package/signal-estimator/signal-estimator.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# signal-estimator
-+#
-+################################################################################
-+
-+SIGNAL_ESTIMATOR_VERSION = v0.0.4
-+SIGNAL_ESTIMATOR_SITE = https://github.com/gavv/signal-estimator
-+SIGNAL_ESTIMATOR_SITE_METHOD = git
-+SIGNAL_ESTIMATOR_GIT_SUBMODULES = YES
-+
-+SIGNAL_ESTIMATOR_LICENSE = MIT
-+SIGNAL_ESTIMATOR_LICENSE_FILES = LICENSE
-+
-+SIGNAL_ESTIMATOR_DEPENDENCIES = alsa-lib
-+
-+SIGNAL_ESTIMATOR_CONF_OPTS += -DBUILD_GUI=OFF
-+
-+$(eval $(cmake-package))
-
---===============5617033441987180436==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 836af3b22a..9956dc4383 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -22,8 +22,7 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+ 
+ choice
+ 	prompt "C library"
+-	default BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+-	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_powerpc64
++	default BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	bool "uClibc-ng"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5617033441987180436==--
