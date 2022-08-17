@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45C20C32772
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 06:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D074C25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 06:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D91A040CE8;
-	Wed, 17 Aug 2022 06:42:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D91A040CE8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06D4982FCB;
+	Wed, 17 Aug 2022 06:50:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06D4982FCB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ajza2d5n-GOS; Wed, 17 Aug 2022 06:42:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XUEK8dkdWKTA; Wed, 17 Aug 2022 06:50:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E1091408E5;
-	Wed, 17 Aug 2022 06:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1091408E5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 616801BF9C6
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:41:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D36882F77;
+	Wed, 17 Aug 2022 06:50:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D36882F77
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C6AD61BF9C6
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:50:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 552C44197D
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:41:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 552C44197D
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1CAE82F77
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:50:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1CAE82F77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J_2A2gufnWgo for <buildroot@lists.busybox.net>;
- Wed, 17 Aug 2022 06:41:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 392504198F
- for <buildroot@buildroot.org>; Wed, 17 Aug 2022 06:41:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 392504198F
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EBD4D87956; Wed, 17 Aug 2022 06:26:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ibc9fL1f93ZQ for <buildroot@lists.busybox.net>;
+ Wed, 17 Aug 2022 06:50:18 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 753B382F19
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 753B382F19
+ for <buildroot@buildroot.org>; Wed, 17 Aug 2022 06:50:18 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 15E9A240005;
+ Wed, 17 Aug 2022 06:50:14 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oOCsY-00Bx8L-4D; Wed, 17 Aug 2022 08:50:14 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 08:06:56 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: ac74775612de564c047ba9777b891ade389f0c4e
-X-Git-Newrev: fe209bd472d50d8e9c4e1346ce041b89d8490d6f
-X-Patchwork-Hint: ignore
-Message-Id: <20220817062655.EBD4D87956@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/glibc: fix struct
- stat for microblaze with largefile
+To: Romain Naour <romain.naour@smile.fr>
+References: <20220725094456.15051-1-romain.naour@smile.fr>
+Date: Wed, 17 Aug 2022 08:50:14 +0200
+In-Reply-To: <20220725094456.15051-1-romain.naour@smile.fr> (Romain Naour's
+ message of "Mon, 25 Jul 2022 11:44:56 +0200")
+Message-ID: <87lern9xeh.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/gcc: disable split-stack for
+ non-thread builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,82 +64,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe209bd472d50d8e9c4e1346ce041b89d8490d6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
-On microblaze, there is a separate version of struct stat for largefile
-and for non-largefile. When the struct was updated to include the
-st_mtim, st_atim and st_ctim members for POSIX, the largefile version
-was forgotten. Since we only use largefile in Buildroot, that means that
-microblaze didn't have these members in struct stat. This breaks the
-build of some packages.
+ > Since commit [1], the autobuilder script generate fully random
+ > configurations that can triggers configuration that was not tested
+ > before.
 
-Change the define around st_mtim etc. to __USE_XOPEN2K8 to enable it in
-posix context (i.e. by default).
+ > Here, the toolchain build with uClibc-ng without threads support
+ > (BR2_PTHREADS_NONE=y) fail to build due to missing pthread.h header.
 
-Fixes:
- - http://autobuild.buildroot.org/results/dd944a3bd4ac0c94b2bec8ac209100daaf43903d (zstd)
- - http://autobuild.buildroot.org/results/4609c8e2af24d9536eb33397a4659ad740aca742 (dieharder)
+ > ../../../libgcc/generic-morestack-thread.c:42:10: fatal error: pthread.h: No such file or directory
+ >    42 | #include <pthread.h>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit 5399a7a55bbc596bf4d41b106beda5eea369328b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-is-not-posix-conformant-on-microblaze-wi.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ > This issue was actually fixed by this commit [2] adding a patch for
+ > gcc 4.8, 4.9, 5.3. But it get lost when gcc 6 was added to Buildroot [3].
 
-diff --git a/package/glibc/0002-struct-stat-is-not-posix-conformant-on-microblaze-wi.patch b/package/glibc/0002-struct-stat-is-not-posix-conformant-on-microblaze-wi.patch
-new file mode 100644
-index 0000000000..9797f3a935
---- /dev/null
-+++ b/package/glibc/0002-struct-stat-is-not-posix-conformant-on-microblaze-wi.patch
-@@ -0,0 +1,37 @@
-+From 87d415cc133ff493ccd02464c061cb171d11ef2f Mon Sep 17 00:00:00 2001
-+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-+Date: Mon, 25 Jul 2022 11:25:15 +0200
-+Subject: [PATCH] struct stat is not posix conformant on microblaze with
-+ __USE_FILE_OFFSET64
-+
-+Commit a06b40cdf5ba0d2ab4f9b4c77d21e45ff284fac7 updated stat.h to use
-+__USE_XOPEN2K8 instead of __USE_MISC to add the st_atim, st_mtim and
-+st_ctim members to struct stat. However, for microblaze, there are two
-+definitions of struct stat, depending on the __USE_FILE_OFFSET64 macro.
-+The second one was not updated.
-+
-+Change __USE_MISC to __USE_XOPEN2K8 in the __USE_FILE_OFFSET64 version
-+of struct stat for microblaze.
-+
-+Upstream: https://sourceware.org/bugzilla/show_bug.cgi?id=29403
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h b/sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h
-+index a2787e88343..850697f4fa6 100644
-+--- a/sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h
-++++ b/sysdeps/unix/sysv/linux/microblaze/bits/struct_stat.h
-+@@ -89,7 +89,7 @@ struct stat
-+         __blksize_t             st_blksize; /* Optimal block size for I/O.  */
-+         int                     __pad3;
-+         __blkcnt64_t            st_blocks;  /* Number 512-byte blocks allocated.  */
-+-# ifdef __USE_MISC
-++# ifdef __USE_XOPEN2K8
-+         /* Nanosecond resolution timestamps are stored in a format
-+          * equivalent to 'struct timespec'. This is the type used
-+          * whenever possible but the Unix namespace rules do not allow the
-+-- 
-+2.35.3
-+
+ > Since then the issue was present in Buildroot but has not been noticed.
+
+ > [1] https://git.buildroot.net/buildroot-test/commit/?id=27b18dcb1686a98ce718b6a816e98f8505957a6c
+ > [2] 2631219f648f4aa13fa36d06a483e4507cb6f3d7
+ > [3] 519d83bfa0442439026db4e71e605a5c1347e566
+
+ > Fixes:
+ > http://autobuild.buildroot.org/results/5ec/5ec9eefacd27ef4fa73066013188796b43a30428
+ > https://bugs.busybox.net/show_bug.cgi?id=8766
+
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Cc: Waldemar Brodkorb <wbx@openadk.org>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2022.05.x and 2022.02.x (without the gcc 12.1.0 patch), thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
