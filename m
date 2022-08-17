@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78C87C25B08
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 06:42:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C35FFC25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 06:42:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03C5A6105D;
-	Wed, 17 Aug 2022 06:42:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03C5A6105D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7056061075;
+	Wed, 17 Aug 2022 06:42:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7056061075
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ko8p5aAvxFpe; Wed, 17 Aug 2022 06:42:05 +0000 (UTC)
+	with ESMTP id ffz9fZOgeWWs; Wed, 17 Aug 2022 06:42:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FC9260F8E;
-	Wed, 17 Aug 2022 06:42:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FC9260F8E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 19C6A1BF9C6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 78C776106D;
+	Wed, 17 Aug 2022 06:42:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78C776106D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 68C0F1BF9C6
  for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:41:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7DB261059
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:41:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7DB261059
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23C4B41992
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 06:41:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23C4B41992
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YbyQmR50bWK6 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EpuwbPJMy7b1 for <buildroot@lists.busybox.net>;
  Wed, 17 Aug 2022 06:41:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 272BD60F8E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1DDE74197D
  for <buildroot@buildroot.org>; Wed, 17 Aug 2022 06:41:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 272BD60F8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DDE74197D
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D8E1A87958; Wed, 17 Aug 2022 06:26:55 +0000 (UTC)
+ id CEF5C87957; Wed, 17 Aug 2022 06:26:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 07:49:34 +0200
+Date: Wed, 17 Aug 2022 07:48:35 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: ae505761d0529c6b2f6734802db973084da00846
-X-Git-Newrev: 864b246bd6e0eb250970029c56b284887d077291
+X-Git-Oldrev: a8c67ea5d18f30cc6e14a10fa83a66312af9664b
+X-Git-Newrev: ae505761d0529c6b2f6734802db973084da00846
 X-Patchwork-Hint: ignore
-Message-Id: <20220817062655.D8E1A87958@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x]
- package/x11r7/xserver_xorg-server: security bump version to 21.1.4
+Message-Id: <20220817062655.CEF5C87957@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libest:
+ auto-select safeclib to avoid use of bundled copy of library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=864b246bd6e0eb250970029c56b284887d077291
+commit: https://git.buildroot.net/buildroot/commit/?id=ae505761d0529c6b2f6734802db973084da00846
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Fixes CVE-2022-2319 & CVE-2022-2320:
-https://lists.x.org/archives/xorg-announce/2022-July/003192.html
+Support for libsafec can not be completely disabled - currently,
+--disable-safec does not exactly allow for compiling libest on
+systems without libsafec, but instead just uses bundled copy of
+library from safe_c_stub/
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2022-July/003193.html
+To avoid that, do automatically select the full-featured safeclib
+package and always use --with-system-libsafec
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 948c7b2f2c7fa1a4c466b3331cc182dd90a67d11)
+(cherry picked from commit a36b947d52d289ec6aad50a12b99232fcab3368e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libest/Config.in |  1 +
+ package/libest/libest.mk | 14 +++++---------
+ 2 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index b5635b9afa..4b2090fa99 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2022-January/003127.html
--sha256  61d6aad5b6b47a116b960bd7f0cba4ee7e6da95d6bb0b127bde75d7d1acdebe5  xorg-server-21.1.3.tar.xz
--sha512  cf5fed023eadda62ae732f8c4d427c272ebe005188341290f3d03147042c103b00cbb94d86a0256da815fb9b9a3da315c21a05ee0c926c1a2ff0c54ab0c0638b  xorg-server-21.1.3.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2022-July/003193.html
-+sha256  5cc4be8ee47edb58d4a90e603a59d56b40291ad38371b0bd2471fc3cbee1c587  xorg-server-21.1.4.tar.xz
-+sha512  eb5b8520d02908f72719e6ecfbf7a9bf139acb65ccae04d1db4223a8a2384cd3a94bd5afef10cce327b751b800cc2b79bfaa5ae35c95c3a217f775168082e68f  xorg-server-21.1.4.tar.xz
+diff --git a/package/libest/Config.in b/package/libest/Config.in
+index 6abe9d2848..bd5f40afae 100644
+--- a/package/libest/Config.in
++++ b/package/libest/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBEST
+ 	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
++	select BR2_PACKAGE_SAFECLIB
+ 	help
+ 	  libest is a C implementation of RFC 7030 (Enrollment over
+ 	  Secure Transport).
+diff --git a/package/libest/libest.mk b/package/libest/libest.mk
+index d9f3cf87bc..0dd3e7d0e4 100644
+--- a/package/libest/libest.mk
++++ b/package/libest/libest.mk
+@@ -12,14 +12,17 @@ LIBEST_LICENSE = BSD-3-Clause, MIT, W3C
+ LIBEST_LICENSE_FILES = LICENSE
+ LIBEST_INSTALL_STAGING = YES
+ LIBEST_AUTORECONF = YES
+-LIBEST_DEPENDENCIES = openssl host-pkgconf
++LIBEST_DEPENDENCIES = openssl host-pkgconf safeclib
+ # libcoap support is explicitly disabled because it breaks the build
++# libsafec support is explicitly enabled because we want to avoid
++# possible hidden use of bundled copy of library.
+ LIBEST_CONF_OPTS = \
+ 	--with-ssl-dir=$(STAGING_DIR)/usr \
+ 	$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-pthreads,--disable-pthreads) \
+ 	$(if $(BR2_PACKAGE_LIBEST_BRSKI),--enable-brski,--disable-brski) \
+ 	--disable-examples \
+-	--without-libcoap-dir
++	--without-libcoap-dir \
++	--with-system-libsafec
  
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 43d2038a8d..18ddd1cb07 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+ LIBEST_DEPENDENCIES += libexecinfo
+@@ -55,13 +58,6 @@ else
+ LIBEST_CONF_OPTS += --without-uriparser-dir
+ endif
  
--XSERVER_XORG_SERVER_VERSION = 21.1.3
-+XSERVER_XORG_SERVER_VERSION = 21.1.4
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.xz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+-ifeq ($(BR2_PACKAGE_SAFECLIB),y)
+-LIBEST_CONF_OPTS += --with-system-libsafec
+-LIBEST_DEPENDENCIES += safeclib
+-else
+-LIBEST_CONF_OPTS += --without-system-libsafec
+-endif
+-
+ define LIBEST_INSTALL_PC
+ 	$(INSTALL) -c -m 0644 $(LIBEST_PKGDIR)/libest.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/libest.pc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
