@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BD9BC25B08
-	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 10:45:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D898DC25B08
+	for <buildroot@archiver.kernel.org>; Wed, 17 Aug 2022 10:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 012D941A04;
-	Wed, 17 Aug 2022 10:45:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 012D941A04
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76DF583298;
+	Wed, 17 Aug 2022 10:45:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76DF583298
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RhPzd8Eli9ps; Wed, 17 Aug 2022 10:45:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E288832AA;
+	Wed, 17 Aug 2022 10:45:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E288832AA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 69ED91BF377
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:45:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 42D7E41A0D
+ for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:45:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42D7E41A0D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CM5wrSAroptt; Wed, 17 Aug 2022 10:45:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A6B641A02;
-	Wed, 17 Aug 2022 10:45:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A6B641A02
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BF80D1BF377
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:45:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9AA1761059
- for <buildroot@lists.busybox.net>; Wed, 17 Aug 2022 10:45:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AA1761059
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EGgy7bO3VEuR for <buildroot@lists.busybox.net>;
- Wed, 17 Aug 2022 10:45:15 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 16uxsYiPdQ0F for <buildroot@lists.busybox.net>;
+ Wed, 17 Aug 2022 10:45:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A867060AA5
- for <buildroot@buildroot.org>; Wed, 17 Aug 2022 10:45:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A867060AA5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0AD4141A02
+ for <buildroot@buildroot.org>; Wed, 17 Aug 2022 10:45:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AD4141A02
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0615A87981; Wed, 17 Aug 2022 10:30:42 +0000 (UTC)
+ id 5EFE387985; Wed, 17 Aug 2022 10:31:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 17 Aug 2022 12:44:01 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: a224b41b8da5f20f20eaf3988c124faff74f67d3
-X-Git-Newrev: 68101bd0c931ab6377b0b3824c88f34d54ab413a
+Date: Wed, 17 Aug 2022 12:43:48 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 0fa5de37f1b2b864e04a22314f43a6aaf13db6ec
+X-Git-Newrev: 69af5ab34fc6c092f90fd3103f5f98818b1de71c
 X-Patchwork-Hint: ignore
-Message-Id: <20220817103042.0615A87981@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/rpi-userland: add
+Message-Id: <20220817103109.5EFE387985@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rpi-userland: add
  GLint64, GLuint64 and GLsync typedefs to GLES2/gl2ext.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,15 +58,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5061302237527495556=="
+Content-Type: multipart/mixed; boundary="===============1498948390327099689=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5061302237527495556==
+--===============1498948390327099689==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68101bd0c931ab6377b0b3824c88f34d54ab413a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=69af5ab34fc6c092f90fd3103f5f98818b1de71c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Fixes:
 
@@ -243,7 +243,7 @@ index 0000000000..6dca2e7b8a
 +2.31.1
 +
 
---===============5061302237527495556==
+--===============1498948390327099689==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -254,4 +254,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5061302237527495556==--
+--===============1498948390327099689==--
