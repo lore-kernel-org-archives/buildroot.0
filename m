@@ -1,59 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9288C00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 07:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79B11C00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 07:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C87E410CC;
-	Thu, 18 Aug 2022 07:00:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C87E410CC
+	by smtp4.osuosl.org (Postfix) with ESMTP id D936C41B91;
+	Thu, 18 Aug 2022 07:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D936C41B91
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VX69uZSa3Jxb; Thu, 18 Aug 2022 07:00:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HsqIGNc2n6hG; Thu, 18 Aug 2022 07:01:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 717FB408C0;
-	Thu, 18 Aug 2022 06:59:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 717FB408C0
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7CD541B8B;
+	Thu, 18 Aug 2022 07:01:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7CD541B8B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 839451BF2BB
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 06:59:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A8EC91BF3FC
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 07:01:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C2B641B8B
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 06:59:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C2B641B8B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8308A41B8B
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 07:01:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8308A41B8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vr2ieUnfyVgH for <buildroot@lists.busybox.net>;
- Thu, 18 Aug 2022 06:59:56 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09AD741947
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 09AD741947
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 06:59:55 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 781782000E;
- Thu, 18 Aug 2022 06:59:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oOZVP-00CgtU-JG; Thu, 18 Aug 2022 08:59:51 +0200
+ with ESMTP id 12rKfko2v4qT for <buildroot@lists.busybox.net>;
+ Thu, 18 Aug 2022 07:01:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B1BC41947
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 07:01:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B1BC41947
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id DBBC9879A3; Thu, 18 Aug 2022 06:46:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20220726131249.2009383-1-thomas.petazzoni@bootlin.com>
- <20220726131249.2009383-2-thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Aug 2022 08:59:51 +0200
-In-Reply-To: <20220726131249.2009383-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Tue, 26 Jul 2022 15:12:47
- +0200")
-Message-ID: <87sflu6nq0.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/uclibc: define
+To: buildroot@buildroot.org
+Date: Thu, 18 Aug 2022 08:57:40 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 1f49d55e845f5f1303b1efb619613b352d1ce097
+X-Git-Newrev: 1f4a9dbebcb4d0125715c39fb23ec4fa1f2a1cd5
+X-Patchwork-Hint: ignore
+Message-Id: <20220818064628.DBBC9879A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/uclibc: define
  BR2_UCLIBC_TARGET_ARCH for ARM64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,45 +57,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>, "Yann E.
- MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1f4a9dbebcb4d0125715c39fb23ec4fa1f2a1cd5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
- > So far, BR2_UCLIBC_TARGET_ARCH had a value for all
- > architectures... except for ARM64. Its value is passed as ARCH= when
- > building uClibc... which is currently empty:
+So far, BR2_UCLIBC_TARGET_ARCH had a value for all
+architectures... except for ARM64. Its value is passed as ARCH= when
+building uClibc... which is currently empty:
 
- > /usr/bin/make -j33 -C .../build/uclibc-1.0.41 ARCH="" CROSS_COMPILE=".../host/bin/aarch64-buildroot-linux-uclibc-"
+/usr/bin/make -j33 -C .../build/uclibc-1.0.41 ARCH="" CROSS_COMPILE=".../host/bin/aarch64-buildroot-linux-uclibc-"
 
- > And also in uclibc.mk, when we inject the architecture in uClibc's
- > .config:
+And also in uclibc.mk, when we inject the architecture in uClibc's
+.config:
 
- >         $(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH))
- >         $(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)")
+        $(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH))
+        $(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)")
 
- > We enable TARGET_ (which doesn't exist) and set TARGET_ARCH to the
- > empty string.
+We enable TARGET_ (which doesn't exist) and set TARGET_ARCH to the
+empty string.
 
- > Nobody noticed so far, and it happens to work because aarch64 is the
- > first architecture in the choice of architectures in
- > extra/Configs/Config.in in the uClibc code. So, when the architecture
- > is not specified, aarch64 is used.
+Nobody noticed so far, and it happens to work because aarch64 is the
+first architecture in the choice of architectures in
+extra/Configs/Config.in in the uClibc code. So, when the architecture
+is not specified, aarch64 is used.
 
- > As we are about to add some logic in uclibc.mk that will use
- > BR2_UCLIBC_TARGET_ARCH, we noticed this missing definition.
+As we are about to add some logic in uclibc.mk that will use
+BR2_UCLIBC_TARGET_ARCH, we noticed this missing definition.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 8195e85e10c30b2284613200b4cb1dcba31c9386)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/uclibc/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 2eea4d30f3..ba8b5885ec 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -124,6 +124,7 @@ config BR2_UCLIBC_INSTALL_UTILS
+ # uClibc architecture names.
+ config BR2_UCLIBC_TARGET_ARCH
+ 	string
++	default "aarch64"  if BR2_aarch64 || BR2_aarch64_be
+ 	default "arc"	   if BR2_arcle || BR2_arceb
+ 	default "arm"	   if BR2_arm	|| BR2_armeb
+ 	default "m68k"	   if BR2_m68k
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
