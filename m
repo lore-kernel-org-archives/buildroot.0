@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A85EC00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 06:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92319C00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 06:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8514F419FF;
-	Thu, 18 Aug 2022 06:31:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8514F419FF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A80341BA9;
+	Thu, 18 Aug 2022 06:31:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A80341BA9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n8ueo8vkBS_2; Thu, 18 Aug 2022 06:31:08 +0000 (UTC)
+	with ESMTP id 1EsK_WH7yn1F; Thu, 18 Aug 2022 06:31:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EC1B41BA7;
-	Thu, 18 Aug 2022 06:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EC1B41BA7
+	by smtp4.osuosl.org (Postfix) with ESMTP id E27B841BB3;
+	Thu, 18 Aug 2022 06:31:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E27B841BB3
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0B6081BF3FC
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 06:30:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1BF5A1BF3FC
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 06:30:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8F71410E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id D8F0B408C3
  for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 06:30:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8F71410E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8F0B408C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q1dfFjbUpc4u for <buildroot@lists.busybox.net>;
+ with ESMTP id oMslsYFoRQ_T for <buildroot@lists.busybox.net>;
  Thu, 18 Aug 2022 06:30:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11DE7408F0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1F14740C37
  for <buildroot@buildroot.org>; Thu, 18 Aug 2022 06:30:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11DE7408F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F14740C37
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7F63387978; Thu, 18 Aug 2022 06:16:03 +0000 (UTC)
+ id 889B18797B; Thu, 18 Aug 2022 06:16:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 18 Aug 2022 08:26:06 +0200
+Date: Thu, 18 Aug 2022 08:28:31 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b0565337d6d31cb64e2db8cf665381ff7fb8b263
-X-Git-Newrev: 9a1d1aa69775cbf826720ca8700cb2a46b0eb45f
+X-Git-Oldrev: 9a1d1aa69775cbf826720ca8700cb2a46b0eb45f
+X-Git-Newrev: 07b8a6db19659fe8880c716307c886a9f86df9b7
 X-Patchwork-Hint: ignore
-Message-Id: <20220818061603.7F63387978@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/pppd: fix build
- with libressl
+Message-Id: <20220818061603.889B18797B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/gcc: disable
+ split-stack for non-thread builds for gcc powerpc spe
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,70 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a1d1aa69775cbf826720ca8700cb2a46b0eb45f
+commit: https://git.buildroot.net/buildroot/commit/?id=07b8a6db19659fe8880c716307c886a9f86df9b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure with libressl:
+The toolchain for powerpc spe can use uClibc-ng without thread support.
+So we need the same fix as commit [1].
 
-eap-tls.c: In function 'ssl_msg_callback':
-eap-tls.c:1284:10: error: 'SSL3_RT_HEADER' undeclared (first use in this function); did you mean 'SSL3_RT_ALERT'?
- 1284 |     case SSL3_RT_HEADER:
-      |          ^~~~~~~~~~~~~~
-      |          SSL3_RT_ALERT
+[1] fff68f75b3519cadb2639fde2296b26db919d79d
 
-Fixes:
- - http://autobuild.buildroot.org/results/7d721833bddf73531fa03b0a626511af6826d0df
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b78ecb7ef80a558f508bd9ca6b2b6439040b442b)
+(cherry picked from commit 3915a3f589d95b6793125f03d295671606d86e84)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...02-pppd-eap-tls.c-fix-build-with-libressl.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ ...disable-split-stack-for-non-thread-builds.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/pppd/0002-pppd-eap-tls.c-fix-build-with-libressl.patch b/package/pppd/0002-pppd-eap-tls.c-fix-build-with-libressl.patch
+diff --git a/package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch b/package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch
 new file mode 100644
-index 0000000000..aefdc5b7a4
+index 0000000000..8d99e89293
 --- /dev/null
-+++ b/package/pppd/0002-pppd-eap-tls.c-fix-build-with-libressl.patch
-@@ -0,0 +1,36 @@
-+From b0a011bc4abac8cb3de8dfff42b754ed236ecf0f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 4 Jul 2022 10:07:03 +0200
-+Subject: [PATCH] pppd/eap-tls.c: fix build with libressl (#338)
++++ b/package/gcc/8.4.0/0004-disable-split-stack-for-non-thread-builds.patch
+@@ -0,0 +1,26 @@
++From 1ddcb4870533af1b71b6afb75b8f2b271fd88eb4 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 25 Jul 2022 00:29:55 +0200
++Subject: [PATCH] disable split-stack for non-thread builds
 +
-+Fix the following build failure with libressl:
-+
-+eap-tls.c: In function 'ssl_msg_callback':
-+eap-tls.c:1284:10: error: 'SSL3_RT_HEADER' undeclared (first use in this function); did you mean 'SSL3_RT_ALERT'?
-+ 1284 |     case SSL3_RT_HEADER:
-+      |          ^~~~~~~~~~~~~~
-+      |          SSL3_RT_ALERT
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7d721833bddf73531fa03b0a626511af6826d0df
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved (and backported) from:
-+https://github.com/ppp-project/ppp/commit/b0a011bc4abac8cb3de8dfff42b754ed236ecf0f]
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++[Romain: convert to git format]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
 +---
-+ pppd/eap-tls.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ libgcc/config/t-stack | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/pppd/eap-tls.c b/pppd/eap-tls.c
-+index b9bab842..40796d58 100644
-+--- a/pppd/eap-tls.c
-++++ b/pppd/eap-tls.c
-+@@ -61,7 +61,7 @@
-+ #include "mppe.h"
-+ #include "pathnames.h"
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ 
-+ #define TLS_method SSLv23_method
-+ 
++diff --git a/libgcc/config/t-stack b/libgcc/config/t-stack
++index cc0366b4cd8..f3f97e86d60 100644
++--- a/libgcc/config/t-stack
+++++ b/libgcc/config/t-stack
++@@ -1,4 +1,6 @@
++ # Makefile fragment to provide generic support for -fsplit-stack.
++ # This should be used in config.host for any host which supports
++ # -fsplit-stack.
+++ifeq ($(enable_threads),yes)
++ LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+++endif
++-- 
++2.34.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
