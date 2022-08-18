@@ -1,64 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AC2BC00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 13:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2D6FC32772
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 16:13:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8AB9440591;
-	Thu, 18 Aug 2022 13:18:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AB9440591
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YJSAne_rTo1p; Thu, 18 Aug 2022 13:18:50 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 89BC340620;
-	Thu, 18 Aug 2022 13:18:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89BC340620
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 13AA91BF303
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 13:18:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E1C58418E6
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 13:18:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1C58418E6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EA22403B4;
+	Thu, 18 Aug 2022 16:13:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EA22403B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ft-S6hbcFhVy for <buildroot@lists.busybox.net>;
- Thu, 18 Aug 2022 13:18:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D87D6418EA
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D87D6418EA
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 13:18:45 +0000 (UTC)
-Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id E4FD25C1384;
- Thu, 18 Aug 2022 15:18:40 +0200 (CEST)
-From: Stefan Agner <stefan@agner.ch>
-To: buildroot@buildroot.org, yann.morin.1998@free.fr,
- thomas.petazzoni@bootlin.com
-Date: Thu, 18 Aug 2022 15:18:34 +0200
-Message-Id: <0e18605c9938776a707a4aab032be74a1a9afe8e.1660828116.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.37.2
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iwCT8hCHjBpW; Thu, 18 Aug 2022 16:13:15 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5C4C40491;
+	Thu, 18 Aug 2022 16:13:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5C4C40491
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E76D91BF868
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 16:13:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C22EA611A4
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 16:13:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C22EA611A4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id myKEy91SNfHf for <buildroot@lists.busybox.net>;
+ Thu, 18 Aug 2022 16:13:11 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB94660C28
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EB94660C28
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 16:13:10 +0000 (UTC)
+Received: from booty (unknown [77.244.183.192])
+ (Authenticated sender: luca.ceresoli@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 418EC100006;
+ Thu, 18 Aug 2022 16:13:08 +0000 (UTC)
+Date: Thu, 18 Aug 2022 18:13:06 +0200
+To: "Frager, Neal" <neal.frager@amd.com>
+Message-ID: <20220818181306.64b0039e@booty>
+In-Reply-To: <CH2PR12MB50047F205184CA0DFD7C688DF06A9@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20220503152425.1069617-1-neal.frager@amd.com>
+ <20220503152425.1069617-2-neal.frager@amd.com>
+ <87h7653i8q.fsf@dell.be.48ers.dk>
+ <edddb58b-dee7-21aa-05b8-3a94c3e2c4d1@xilinx.com>
+ <87ilqccu3k.fsf@dell.be.48ers.dk>
+ <SJ0PR02MB7758738449EEBFE4991D7973D7C89@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <SJ0PR02MB7758FE7F237530275606A745D7C89@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <875ymcawvb.fsf@dell.be.48ers.dk>
+ <56c3feaa-cbd2-eaa9-7800-cd2102fa8545@lucaceresoli.net>
+ <D9EEAC86-D8CB-46E0-A019-B0F792B0511C@xilinx.com>
+ <874k1ua6mw.fsf@dell.be.48ers.dk>
+ <B695963F-1D4C-4D05-B152-54F424FE025B@xilinx.com>
+ <200341c2-809e-8d14-686c-8bf838a15df6@lucaceresoli.net>
+ <SJ0PR02MB77589186692C36CA8975DE4ED7CA9@SJ0PR02MB7758.namprd02.prod.outlook.com>
+ <CH2PR12MB5004860BC0816E61B757266AF09A9@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20220802170112.00ff0966@booty>
+ <CH2PR12MB50047F205184CA0DFD7C688DF06A9@CH2PR12MB5004.namprd12.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1660828721;
+ d=bootlin.com; s=gm1; t=1660839188;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=UEJa/ycAHCj1ghZBonZOk3QLH9GoUSQ8dft11LSPLrU=;
- b=KI92xvfZnfUvovXJvpggunRrIYEDNBlpbBnd3fw06o3MZ7PgEo2u2klQOIMAwKfv/beSAn
- CNXcONtPcOFUccrH6BP/FmtJBLswz2Sqkm5Rx7ljTJqH+eM41L3AhG1HioiVJqwQjVrUfF
- PH11Ni6Qx8pHD0w219pzcE7CNX4T3qs=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=KI92xvfZ
-Subject: [Buildroot] [RFC PATCH] package/linux-firmware: Add more Intel WiFi
- 22000 series
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=M6xkHowVT211iC81HqETZjzekxEjZY+MLlmh85yohAk=;
+ b=lLKL+ZBa/4HnKP1sgp4JO57v/ZXQAaObmFLO8zQO0+bJeefm5IxgQTRI4ANpBc55sCkmQ4
+ 3M1s9YuWBDz9G2Aea06qvXyhXLbwNYci5tTr1cB6Xg7/pJOFfshwkkSeiYffGxplaVNMO9
+ BihfecwWI/cCKxF4zK79KLd8jTFoNXKCX057A6Gjk5QBJdKTBNeJj2Lvd1V/Q3TrzfSFGs
+ UqMugLbvfMSvcw/aodWBLSfrqKfyr2ZcL+Dk/A0vMZ2HHNEA5DT7s1WgTQEnzogWpV30yu
+ xMdHQBMfFx9IdhYw8gz14IplSC5lm4/8Csubf9dw4tZAvX59Q7kfxSr82Ba6pA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=lLKL+ZBa
+Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig:
+ transition to tarballs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,101 +92,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: stefan@agner.ch
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: "Simek, Michal" <michal.simek@amd.com>,
+ "'giulio.benetti@benettiengineering.com'"
+ <giulio.benetti@benettiengineering.com>,
+ "'buildroot@buildroot.org'" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add more Intel WiFi 22000 series firmware files. Allow to select the
-firmware version using shell globs.
-
-Signed-off-by: Stefan Agner <stefan@agner.ch>
----
-With the Intel WiFi 22000 series the amount of firmwares is just stagering. So
-much so that it causes size issues in our case.
-
-Intel firmwares seem to have an API version, which is the last digit before the
-file ending .ucode. The Linux kernel sources have defines which API each
-individual driver supports (e.g. Linux 5.15 22000 series kernel driver
-supports ucode API 39 up to 66).
-
-This crude method uses just file glob matching to allow to select firmwares
-which match the kernel in use. However, this approach has a problem: Some
-API versions are missing. E.g. simply using "66" doesn't work since some
-firmware are not available with the latest API supported (e.g.
-iwlwifi-so-a0-gf-a0-64.ucode).
-
-Also if an older kernel is in use, some firmware files with an older maximum
-API might just be missing, which leads to tar complaining about missing files.
-
-In this case, we can use 6[46], which happens to select the newest version of
-all firmwares (it seems that firmwares which are available with API version 66
-have only been released with version 63 before).
-
-However, this of course might be just a coincidence. Ideally Buildroot would
-select the newest version available for a particular API version. Not sure if
-this is easily doable.
-
-Thoughts?
-
---
-Stefan
-
- package/linux-firmware/Config.in         |  9 +++++++++
- package/linux-firmware/linux-firmware.mk | 15 ++++++++++++++-
- 2 files changed, 23 insertions(+), 1 deletion(-)
-
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 8ce71140da..49a40283c8 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -181,6 +181,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22000
- 	  Firmware files for the Intel Wifi 22000 devices supported by
- 	  the iwlwifi kernel driver.
- 
-+if BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22000
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB
-+        string "*"
-+        help
-+	  API level for firmware files of the Intel Wifi 22000 devices.
-+
-+endif
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22260
- 	bool "Intel iwlwifi 22260"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 64d096df14..2283cd7d5e 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -436,7 +436,20 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22000),y)
--LINUX_FIRMWARE_FILES += iwlwifi-QuZ-*.ucode iwlwifi-Qu-*.ucode
-+LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB = $(call qstrip,$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB))
-+LINUX_FIRMWARE_FILES += \
-+	iwlwifi-Qu-b0-hr-b0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-Qu-c0-hr-b0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-Qu-b0-jf-b0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-Qu-c0-jf-b0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-QuZ-a0-hr-b0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-QuZ-a0-jf-b0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-cc-a0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-so-a0-jf-b0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-so-a0-hr-b0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-so-a0-gf-a0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-ty-a0-gf-a0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode \
-+	iwlwifi-so-a0-gf4-a0-$(LINUX_FIRMWARE_IWLWIFI_22000_UCODE_API_GLOB).ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
--- 
-2.37.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgTmVhbCwKCk9uIFdlZCwgMTcgQXVnIDIwMjIgMTc6MjM6NDEgKzAwMDAKIkZyYWdlciwgTmVh
+bCIgPG5lYWwuZnJhZ2VyQGFtZC5jb20+IHdyb3RlOgoKPiBIaSBMdWNhLAo+IAo+ID4gSGkgTHVj
+YSwKPiA+ICAgCj4gPiA+IEhpIE5lYWwsICAKPiA+IAo+ID4gT24gMTMvMDUvMjIgMDY6MjEsIE5l
+YWwgRnJhZ2VyIHdyb3RlOiAgCj4gPiA+IEhpIFBldGVyLCBMdWNhLAo+ID4gPgo+ID4gPgo+ID4g
+PiAgICAKPiA+ID4+IExlIDEyIG1haSAyMDIyIMOgIDIxOjMzLCBQZXRlciBLb3JzZ2FhcmQgPHBl
+dGVyQGtvcnNnYWFyZC5jb20+IGEgw6ljcml0IDoKPiA+ID4+Cj4gPiA+PiDvu79DQVVUSU9OOiBU
+aGlzIG1lc3NhZ2UgaGFzIG9yaWdpbmF0ZWQgZnJvbSBhbiBFeHRlcm5hbCBTb3VyY2UuIFBsZWFz
+ZSB1c2UgcHJvcGVyIGp1ZGdtZW50IGFuZCBjYXV0aW9uIHdoZW4gb3BlbmluZyBhdHRhY2htZW50
+cywgY2xpY2tpbmcgbGlua3MsIG9yIHJlc3BvbmRpbmcgdG8gdGhpcyBlbWFpbC4KPiA+ID4+Cj4g
+PiA+PiAgICAKPiA+ID4+Pj4+Pj4gIk5lYWwiID09IE5lYWwgRnJhZ2VyIDxuZWFsZkB4aWxpbngu
+Y29tPiB3cml0ZXM6ICAgIAo+ID4gPj4KPiA+ID4+IEhpLAo+ID4gPj4gICAgCj4gPiA+Pj4+PiBJ
+IGhhZCB0byBhbHNvIHBhc3MgdGhlIC1tKiBmbGFncyBpbiBFWFRSQV9DT01QSUxFUl9GTEFHUyB0
+byBnZXQgCj4gPiA+Pj4+PiBpdCB0byBsaW5rLCBwcmVzdW1hYmx5IHRoZSBwZXRhbGludXggdG9v
+bGNoYWluIGhhcyBpbmNvbXBhdGlibGUgCj4gPiA+Pj4+PiBkZWZhdWx0cy4gTHVjYSwgYW55IHNw
+ZWNpZmljIHJlYXNvbnMgdG8gbm90IHBhc3MgQ0ZMQUdTIHRoZXJlPyAgCj4gPiA+Pj4+Cj4gPiA+
+Pj4+IEknbSBhZnJhaWQgSSBoYXZlIG5vIHJlYWwgYW5zd2VyLiA6KCBXaGVuIEkgaW5pdGlhbGx5
+IHdyb3RlIHRoZSAKPiA+ID4+Pj4gc2NyaXB0IEkgZGlkIGl0IHRvIGhhdmUgdGhlIHNhbWUgbG9n
+aWMgYXMgcGV0YWxpbnV4LiBMYXRlciBJIAo+ID4gPj4+PiBkaWRuJ3Qgd2F0Y2ggZm9yIGl0cyBj
+aGFuZ2VzLiBJIHdvdWxkIGxvdmUgdG8gYmUgaGVscGZ1bCBidXQgSSAKPiA+ID4+Pj4gaGF2ZSBu
+byBhY2Nlc3MgdG8gYSB6eW5xbXAgYm9hcmQgbm93LiAgCj4gPiA+PiAgICAKPiA+ID4+PiBXb3Vs
+ZCBpdCBiZSBwb3NzaWJsZSBmb3IgeW91IHRvIGp1c3QgaW1wbGVtZW50IHRoZSBjaGFuZ2VzIHRo
+YXQgCj4gPiA+Pj4gUGV0ZXIgaGFzIHByb3Bvc2VkPyAgUGV0ZXIgYXBwZWFycyB0byBoYXZlIGFs
+cmVhZHkgaWRlbnRpZmllZCBhIHNvbHV0aW9uLiAgCj4gPiA+PiAgICAKPiA+ID4+PiBCb3RoIFBl
+dGVyIGFuZCBJIGhhdmUgemN1MTA2IGJvYXJkcywgc28gd2UgY2FuIGJvdGggdGVzdCBhbmQgCj4g
+PiA+Pj4gdmVyaWZ5IHRoZSB1cGRhdGUgd29ya3MuICAKPiA+ID4+Cj4gPiA+PiBTb3JyeSwgdGhh
+dCBpcyBub3QgdHJ1ZS4gSSBoYXZlbid0IGZvdW5kIHRoZSBtYWdpYyBpbmNhcm5hdGlvbiB0byAK
+PiA+ID4+IGdldCBhIHdvcmtpbmcgcG11ZncgYnVpbGQgd2l0aCB0aGUgdG9vbGNoYWluIGJ1aWx0
+IGJ5IGNyb3NzdG9vbC1uZy4gCj4gPiA+PiBNeSBkaWZmIHdhcyBqdXN0IHRvIHNob3cgd2hhdCBJ
+IGhhZCB0byBjaGFuZ2UgdG8gYWRqdXN0IAo+ID4gPj4genlucW1wLXBtdWZ3LWJ1aWxkZXIgdG8g
+dXNlIGEgcGV0YWxpbnV4IHRvb2xjaGFpbi4KPiA+ID4+ICAgIAo+ID4gPgo+ID4gPiBJcyB0aGVy
+ZSBhIHJlYXNvbiB3aHkgd2UgY2Fubm90IGNoYW5nZSB0aGUgenlucW1wLXBtdWZ3LWJ1aWxkZXIg
+dG8gZG93bmxvYWQgdGhlIHNhbWUgdG9vbGNoYWluIHRoYXQgcGV0YWxpbnV4IHVzZXMgYXMgdGhl
+IGNyb3NzdG9vbC1uZyB0b29sY2hhaW4/ICAgIAo+ID4gICAKPiA+ID4gQ2FuIHlvdSBwb2ludCB0
+byB3aGVyZSB0aGUgcGV0YWxpbnV4IHRvb2xjaGFpbiBjb21lcyBmcm9tPyAgICAKPiA+ICAgCj4g
+PiA+IElmIHBldGFsaW51eCB1c2VzIGEgcHVibGljbHkgYXZhaWxhYmxlIHByZWJ1aWx0IHRvb2xj
+aGFpbiwgcG9zc2libHkgd2l0aCBzb3VyY2VzIGF2YWlsYWJsZSwgdGhlbiB0aGlzIGNvdWxkIGJl
+IGNvbnNpZGVyZWQuICAgIAo+ID4gICAKPiA+ID4gSG93ZXZlciBJIHN1c3BlY3QgaXQgZG9lcyB1
+c2UgYSB0b29sY2hhaW4gdGhhdCBpcyBzaGlwcGVkIGJ5IFZpdGlzLiBJZiBpdCBpcyB0aGUgY2Fz
+ZSwgdGhlbiBpdCdzIG5vdCBhbiBvcHRpb24gaGVyZS4gICAgCj4gPiAgIAo+ID4gPiBUaGUgZXN0
+IG9wdGlvbiB3b3VsZCBiZSB0byBmaXggdGhlIGN0LW5nIHRvb2xjaGFpbiBvZiBjb3Vyc2UsIGJ1
+dCAKPiA+ID4gSSdtIGFmcmFpZCBJIGNhbm5vdCBiZSB2ZXJ5IGhlbHBmdWwgb24gdGhpcywgZXNw
+ZWNpYWxseSB3aXRob3V0IGFuIAo+ID4gPiBoYXJkd2FyZSB0byB0ZXN0LiA6KCAgCj4gPiAgIAo+
+ID4gPiBWaXRpcyBhbmQgUGV0YUxpbnV4IDIwMjIuMSB1c2UgR0NDIGNvbXBpbGVyIDExLjIuMCB3
+aXRoIHRoZSBmb2xsb3dpbmcgcGF0Y2ggc2V0Ogo+ID4gPiBodHRwczovL2dpdGh1Yi5jb20vWGls
+aW54L21ldGEteGlsaW54L3RyZWUveGxueC1yZWwtdjIwMjIuMS9tZXRhLW1pYwo+ID4gPiByb2Js
+YXplL3JlY2lwZXMtZGV2dG9vbHMvZ2NjL2djYy0xMSAgCj4gPiAKPiA+IEkgd2FudGVkIHRvIGZv
+bGxvdyB1cCBvbiB0aGlzLiAgSGF2ZSB5b3UgaGFkIGEgY2hhbmNlIHRvIGFwcGx5IHRoZXNlIHBh
+dGNoZXMgdG8gdGhlIGNvbXBpbGVyIHVzZWQgYnkgdGhlIHp5bnFtcC1wbXVmdy1idWlsZGVyPwo+
+ID4gCj4gPiBJdCB3b3VsZCBiZSBncmVhdCBpZiB3ZSBjb3VsZCB1cGRhdGUgdGhlIHp5bnFtcC1w
+bXVmdy1idWlsZGVyIHRvIGdlbmVyYXRlIGdvb2QgcG11ZncgaW1hZ2VzIGZvciB6eW5xbXAgYW5k
+IGtyaWEgc29tcyBpbiB0aW1lIGZvciB0aGUgMjAyMi4yIHVwZGF0ZS4gIAo+IAo+ID4gQXBvbG9n
+aWVzLCBJIGhhZCB6ZXJvIHNwYXJlIHRpbWUgdG8gdHJ5IHRoaXMuIDooICAKPiAKPiBJIGhvcGUg
+aXQgaXMgb2ssIGJ1dCB3aGlsZSB0aGUgenlucW1wLXBtdWZ3LWJ1aWxkZXIgY29tcGlsZXIgaXMg
+c3RpbGwgY3JlYXRpbmcgcG11ZncgaW1hZ2VzIHRoYXQgY2Fubm90IGNvcnJlY3RseSBzb2Z0IHJl
+Ym9vdCwKPiBJIGhhdmUgY3JlYXRlZCBhIHRlbXBvcmFyeSBzb2x1dGlvbiB1c2luZyBwbXVmdyBp
+bWFnZXMgYnVpbHQgd2l0aCBwZXRhbGludXguCj4gCj4gaHR0cHM6Ly9naXRodWIuY29tL25lYWxm
+cmFnZXIvenlucW1wX3BtdWZ3Cj4gCj4gSSBqdXN0IHN1Ym1pdHRlZCBhIHBhdGNoIHRvZGF5IHRo
+YXQgbWlncmF0ZXMgdGhlIHp5bnFtcCBkZWZjb25maWdzIHRvIHVzZSB0aGVzZSBwbXVmdyBpbWFn
+ZXMgaW5zdGVhZCBvZiB0aGUgb25lcwo+IGdlbmVyYXRlZCBieSB0aGUgenlucW1wLXBtdWZ3LWJ1
+aWxkZXIgdG9vbC4KPiAKPiBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVp
+bGRyb290L3BhdGNoLzIwMjIwODE3MTE1MjQ5Ljk4OTQtMS1uZWFsLmZyYWdlckB4aWxpbnguY29t
+Lwo+IAo+IE9uY2Ugd2UgZ2V0IHRoZSB6eW5xbXAtcG11ZnctYnVpbGRlciB0b29sIHdvcmtpbmcg
+cHJvcGVybHkgYWdhaW4sIEkgd291bGQgYmUgaGFwcHkgdG8gc3dpdGNoIGJ1aWxkcm9vdCBiYWNr
+IHRvIHVzaW5nIGl0Lgo+IAo+IEFyZSB5b3Ugb2sgd2l0aCB0aGlzIHNvbHV0aW9uPwoKR2l2ZW4g
+SSdtIHRoZSBvbmUgd2hvIGlzIGtlZXBpbmcgdGhpcyBpZGxlLCBJIHN1cmVseSBjYW5ub3QgYmxh
+bWUgeW91IQoKRllJOiBJIGRlZmluaXRlbHkgd291bGQgbGlrZSB0byBhZGRyZXNzIHRoaXMgaXNz
+dWUgYW5kIGhvcGUgdG8gZmluZApzb21lIHRpbWUgdG8gZG8gdGhhdC4gVGhhdCBzYWlkLCBhbnkg
+cGF0Y2hlcyB3b3VsZCBiZSB3ZWxjb21lIHRvby4KClRoYW5rcyBmb3IgeW91ciBlZmZvcnQuCgot
+LSAKTHVjYSBDZXJlc29saSwgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2lu
+ZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
