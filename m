@@ -4,55 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BCC1C00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 05:53:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7787C00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 05:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF7D783E3C;
-	Thu, 18 Aug 2022 05:53:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF7D783E3C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 508E983E45;
+	Thu, 18 Aug 2022 05:55:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 508E983E45
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TRDsMuKOZQBZ; Thu, 18 Aug 2022 05:53:28 +0000 (UTC)
+	with ESMTP id mENgtflWMdi1; Thu, 18 Aug 2022 05:55:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA65483E26;
-	Thu, 18 Aug 2022 05:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA65483E26
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 710681BF869
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 05:53:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4AB8183E3A;
+	Thu, 18 Aug 2022 05:55:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AB8183E3A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5678D1BF869
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 05:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CCAB40377
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 05:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CCAB40377
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2FC8C419C3
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 05:55:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FC8C419C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BAVPD21piXs6 for <buildroot@lists.busybox.net>;
- Thu, 18 Aug 2022 05:53:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IHhPeOI9hN64 for <buildroot@lists.busybox.net>;
+ Thu, 18 Aug 2022 05:55:34 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E479F400E4
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E479F400E4
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 05:53:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E296419C2
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4E296419C2
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 05:55:34 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E66E5240006;
- Thu, 18 Aug 2022 05:53:20 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8372E20003;
+ Thu, 18 Aug 2022 05:55:30 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oOYT1-00CeiQ-Pn; Thu, 18 Aug 2022 07:53:19 +0200
+ id 1oOYV7-00Cepf-DX; Thu, 18 Aug 2022 07:55:29 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20220725165741.7C41E85D89@busybox.osuosl.org>
-Date: Thu, 18 Aug 2022 07:53:19 +0200
-In-Reply-To: <20220725165741.7C41E85D89@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Mon, 25 Jul 2022 19:08:52 +0200")
-Message-ID: <87v8qq85dc.fsf@dell.be.48ers.dk>
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20211105201257.2589008-1-fontaine.fabrice@gmail.com>
+ <0484d5a9-a281-8cdf-d060-f566843dfbd0@mind.be>
+Date: Thu, 18 Aug 2022 07:55:29 +0200
+In-Reply-To: <0484d5a9-a281-8cdf-d060-f566843dfbd0@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 25 Jul 2022 21:28:46 +0200")
+Message-ID: <87r11e859q.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit] support/scripts/pkg-stats: tweak
- infras field when running with -c
+Subject: Re: [Buildroot] [PATCH 1/1] package/bird: fix build with autoconf
+ >= 2.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,46 +65,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Adrien =?utf-8?Q?Gallou=C3=ABt?= <adrien@gallouet.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=28973f28acfcee81f2912e7a65dd3704b1d68f6f
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
- > When we use the statistics output to generate a CVE/CPE customer
- > report showing whether a product is affected by CVEs, we are primarily
- > interested in whether they are relevant to the target
- > system. Currently we cannot see if the package is configured for the
- > build (infra==host) and/or the target system (infra==target).
+ > On 05/11/2021 21:12, Fabrice Fontaine wrote:
+ >> Fix the following build failure raised since bump of autoconf to version
+ >> 2.71 in commit ecd54b65c1f998a7ccd91f7c523e4ff38c4781da:
+ >> checking for glob.h... no
+ >> configure: error: glob.h not found.
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/d7aab7df196e0f6d6389b87ff29da7c2971e6b6d
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> ---
+ >> ...gure.ac-fix-build-with-autoconf-2.70.patch | 43 +++++++++++++++++++
+ >> 1 file changed, 43 insertions(+)
+ >> create mode 100644 package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch
+ >> diff --git
+ >> a/package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch
+ >> b/package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch
+ >> new file mode 100644
+ >> index 0000000000..b412a55ead
+ >> --- /dev/null
+ >> +++ b/package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch
+ >> @@ -0,0 +1,43 @@
+ >> +From aa5bc6d2e59c5257d777a45ee4a0e0a784c44244 Mon Sep 17 00:00:00 2001
+ >> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> +Date: Fri, 5 Nov 2021 20:58:41 +0100
+ >> +Subject: [PATCH] configure.ac: fix build with autoconf >= 2.70
+ >> +
+ >> +On some embedded toolchains, glob.h detection fails because -g is
+ >> +wrongly added (even when CFLAGS is overwritten):
+ >> +
+ >> +configure:5881: checking for glob.h
+ >> +configure:5904:
+ >> /home/giuliobenetti/autobuild/run/instance-2/output-1/host/bin/mips64el-linux-gcc
+ >> -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+ >> -D_FILE_OFFSET_BITS=64 -Os -g0 -pthread -fno-strict-aliasing
+ >> -fno-strict-overflow -flto -Wall -Wextra -Wstrict-prototypes
+ >> -Wno-parentheses -Wno-pointer-sign -Wno-missing-field-initializers
+ >> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ >> -pthread -flto=4 -g conftest.c >&5
+ >> +/home/giuliobenetti/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/8.4.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld:
+ >> /tmp/ccldlED9.ltrans0.ltrans.o:(.debug_info+0x2a): undefined
+ >> reference to `conftest.c.fb729d13'
+ >> +/home/giuliobenetti/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/8.4.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld:
+ >> /tmp/ccldlED9.ltrans0.ltrans.o:(.debug_info+0x2f): undefined
+ >> reference to `conftest.c.fb729d13'
 
- > Therefore this commit extends the pkg-stats script to leverage the
- > information available in "make show-info" output to tweak the list of
- > package infrastructures for each package. Thanks to this commit, the
- > script now has a more consistent behavior:
+ >  Since this is involving functions that are generated by LTO, I think
+ >  it's more likely that the issue is triggered by the -flto=4 rather
+ > than the -g.
 
- >  * When pkg-stats is run without -c, i.e without a defined Buildroot
- >    configuration, it continues to operate as it did, i.e it lists all
- >    package infrastructures supported by the package (such as autotools
- >    host+target, or kconfig target, etc.)
+ >  Also, I saw that it only occurs on GCC8, not on any of the other
+ >  myriad GCC versions that we run in the autobuilders. So it's clearly
+ > a compiler bug.
 
- >  * When pkg-stats is run with -c, i.e with a defined Buildroot
- >    configuration which defines the list of packages that should be
- >    considered, then for each package it now lists only the package
- >    infrastructures used by the package in that current
- >    configuration. For example if you have a package with a host and
- >    target variant, but only the host variant is used in your
- >    configuration, now the pkg-stats output will only say that the host
- >    variant of this package is used;
+ >  Regardless, this patch does fix it, so I applied to master, thanks. I
+ >  largely rewrote the commit message (both of the patch and the
+ > buildroot commit) and I added the quotes that I suggested
+ > earlier. I've also added a comment in the .mk file to explain the
+ > AUTORECONF (just pointing to the patch since the earlier reason is no
+ > longer valid).
 
- > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
- > [Thomas: pretty much rework the entire implementation and how the
- > result is presented.]
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ >  Perhaps you could do another attempt to send the patch upstream?
 
 Committed to 2022.05.x and 2022.02.x, thanks.
 
