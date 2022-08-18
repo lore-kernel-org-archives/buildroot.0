@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D5C8ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 799BFC6FA83
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:58:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C09D0812C8;
-	Sun, 11 Sep 2022 08:58:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C09D0812C8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29E0661083;
+	Sun, 11 Sep 2022 08:58:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29E0661083
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zPAGVD0gtEuT; Sun, 11 Sep 2022 08:58:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2yxHnr44zTjl; Sun, 11 Sep 2022 08:58:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89BEA812AF;
-	Sun, 11 Sep 2022 08:58:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89BEA812AF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C51F21BF990
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3852361053;
+	Sun, 11 Sep 2022 08:58:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3852361053
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D413C1BF368
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D5AD0410A4
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5AD0410A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3BABD61053
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BABD61053
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xu_JXm6e-Umr for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R_fJjBNSWoBM for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0745841496
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0745841496
+ by smtp3.osuosl.org (Postfix) with ESMTP id B48B860ACA
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B48B860ACA
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E647D83622; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
+ id B171183620; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 6 Sep 2022 12:26:16 +0200
+Date: Thu, 18 Aug 2022 22:49:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 20285161549eb695c678e02b5c173fccdce59896
-X-Git-Newrev: 4ebc9d0b85deb742a9df727a32ab2fc8b0989d30
+X-Git-Oldrev: 87f4900826bd4387a098fdb9a003e66a0ca057c8
+X-Git-Newrev: d8f0ec7a468c30d401b2e51e4bbfe985997f8e0c
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084828.E647D83622@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs: remove uClibc config options
+Message-Id: <20220911084824.B171183620@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fs/cpio: new option to use dracut tool
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,420 +62,223 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ebc9d0b85deb742a9df727a32ab2fc8b0989d30
+commit: https://git.buildroot.net/buildroot/commit/?id=d8f0ec7a468c30d401b2e51e4bbfe985997f8e0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Following the switch to Glibc as the default libc in Buildroot [1],
-all defconfigs expecting uClibc with wchar (or any other uClibc
-specific option) should now select BR2_TOOLCHAIN_BUILDROOT_UCLIBC too.
+Adds an option to invoke the dracut host tool, providing
+a configuration file, instead of having a full cpio archive
+of the whole target directory.
 
-Even if all defconfigs has been tested with uClibc, maintainers
-prefer to not enforce a C library and use the default of Buildroot,
-which is now glibc.
+A default configuration file is provided. It assumes busybox init.
+ideally, a different default should be used in case of systemd init, but
+that's left for future work.
 
-This commit remove uClibc specific options BR2_TOOLCHAIN_BUILDROOT_WCHAR,
-BR2_PTHREAD_DEBUG (required by gdb) and BR2_TOOLCHAIN_BUILDROOT_USE_SSP.
-
-Since glibc always has argp built-in, also remove the standalone one
-from affected toolchains...
-
-Fixes:
-https://gitlab.com/kubu93/buildroot/-/jobs/2911738579
-
-[1] 4057e36ca9665edd5248512e4edba2c243b8f4be
-[2] http://lists.busybox.net/pipermail/buildroot/2022-August/649998.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[yann.morin.1998@free.fr: also drop argp-standalone]
+Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
+[arnout@mind.be: many changes]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[yann.morin.1998@free.fr: some additional fixups]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/aarch64_efi_defconfig                          | 3 ---
- configs/at91sam9x5ek_dev_defconfig                     | 4 ----
- configs/at91sam9x5ek_mmc_dev_defconfig                 | 4 ----
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig       | 2 --
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig       | 4 ----
- configs/atmel_sama5d3_xplained_dev_defconfig           | 4 ----
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig       | 4 ----
- configs/atmel_sama5d4_xplained_dev_defconfig           | 4 ----
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig       | 4 ----
- configs/bananapro_defconfig                            | 3 ---
- configs/engicam_imx6qdl_icore_qt5_defconfig            | 1 -
- configs/galileo_defconfig                              | 2 --
- configs/imx6-sabresd_qt5_defconfig                     | 1 -
- configs/kontron_smarc_sal28_defconfig                  | 1 -
- configs/lego_ev3_defconfig                             | 3 ---
- configs/mender_x86_64_efi_defconfig                    | 4 ----
- configs/microchip_sam9x60ek_mmc_dev_defconfig          | 3 ---
- configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig | 3 ---
- configs/microchip_sama5d2_icp_mmc_dev_defconfig        | 3 ---
- configs/microchip_sama7g5ek_mmc_dev_defconfig          | 3 ---
- configs/minnowboard_max_defconfig                      | 2 --
- configs/pc_x86_64_bios_defconfig                       | 3 ---
- configs/pc_x86_64_efi_defconfig                        | 3 ---
- configs/qemu_aarch64_sbsa_defconfig                    | 3 ---
- 24 files changed, 71 deletions(-)
+ fs/cpio/Config.in   | 35 ++++++++++++++++++++
+ fs/cpio/cpio.mk     | 33 +++++++++++++++++++
+ fs/cpio/dracut.conf | 92 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 160 insertions(+)
 
-diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
-index 1bd06c51f3..443113e47b 100644
---- a/configs/aarch64_efi_defconfig
-+++ b/configs/aarch64_efi_defconfig
-@@ -1,9 +1,6 @@
- # Architecture
- BR2_aarch64=y
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index c1151a2881..861e9a929e 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -7,6 +7,41 @@ config BR2_TARGET_ROOTFS_CPIO
  
--# Toolchain, required for eudev and grub
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--
- # System
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ if BR2_TARGET_ROOTFS_CPIO
  
-diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
-index 8714463d89..824aa8b1f7 100644
---- a/configs/at91sam9x5ek_dev_defconfig
-+++ b/configs/at91sam9x5ek_dev_defconfig
-@@ -5,10 +5,6 @@ BR2_arm926t=y
- # Toolchain
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- # Needed for some packages
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--# Needed for gdb
--BR2_PTHREAD_DEBUG=y
--# Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
++choice
++	prompt "cpio type"
++	default BR2_TARGET_ROOTFS_CPIO_FULL
++
++config BR2_TARGET_ROOTFS_CPIO_FULL
++	bool "cpio the whole root filesystem"
++	help
++	  Build a cpio archive containing the whole the root filesystem.
++
++config BR2_TARGET_ROOTFS_CPIO_DRACUT
++	bool "Invoke dracut to make a partial initramfs"
++	select BR2_PACKAGE_HOST_DRACUT
++	help
++	  Build an additional initramfs using dracut. This only contains
++	  a subset of the rootfs, as determined by the configuration
++	  file.
++	  This can be useful to create a recovery system, for instance.
++
++endchoice
++
++if BR2_TARGET_ROOTFS_CPIO_DRACUT
++
++config BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE
++	string "dracut configuration file"
++	default "fs/cpio/dracut.conf"
++	help
++	  Dracut configuration file. It determines which parts of the
++	  rootfs get included in the cpio image. See dracut.conf(5) or
++	  https://github.com/dracutdevs/dracut/blob/master/man/dracut.conf.5.asc
++
++	  The default configuration file is suitable for busybox init.
++	  It doesn't, however, pivot_root into a full rootfs.
++
++endif
++
+ choice
+ 	prompt "Compression method"
+ 	default BR2_TARGET_ROOTFS_CPIO_NONE
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index 81f8c393d1..fa66b1c710 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -36,6 +36,8 @@ ROOTFS_CPIO_DEPENDENCIES += host-cpio
+ ROOTFS_CPIO_OPTS += --reproducible
+ endif
  
- # System Configuration
-diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
-index 9481594716..3b2016b970 100644
---- a/configs/at91sam9x5ek_mmc_dev_defconfig
-+++ b/configs/at91sam9x5ek_mmc_dev_defconfig
-@@ -5,10 +5,6 @@ BR2_arm926t=y
- # Toolchain
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- # Needed for some packages
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--# Needed for gdb
--BR2_PTHREAD_DEBUG=y
--# Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
++ifeq ($(BR2_TARGET_ROOTFS_CPIO_FULL),y)
++
+ define ROOTFS_CPIO_CMD
+ 	cd $(TARGET_DIR) && \
+ 	find . \
+@@ -44,6 +46,37 @@ define ROOTFS_CPIO_CMD
+ 	> $@
+ endef
  
- # System Configuration
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index 38618a5732..85ff29771a 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -4,8 +4,6 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--BR2_PTHREAD_DEBUG=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index 1654408aa5..4ee7fca35f 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -8,10 +8,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
- # Toolchain
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- # Needed for some packages
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--# Needed for gdb
--BR2_PTHREAD_DEBUG=y
--# Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- # System Configuration
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index 64455cb2e0..ef09df3fce 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -7,10 +7,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
- # Toolchain
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- # Needed for some packages
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--# Needed for gdb
--BR2_PTHREAD_DEBUG=y
--# Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- # System Configuration
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index 8f5724d631..f5aa3e382f 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -7,10 +7,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
- # Toolchain
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- # Needed for some packages
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--# Needed for gdb
--BR2_PTHREAD_DEBUG=y
--# Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- # System Configuration
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index fab91cf0b3..ca51ef5b5f 100644
---- a/configs/atmel_sama5d4_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -8,10 +8,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
- # Toolchain
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- # Needed for some packages
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--# Needed for gdb
--BR2_PTHREAD_DEBUG=y
--# Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- # System Configuration
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index f9074e9862..e8d126c7b0 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -8,10 +8,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
- # Toolchain
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- # Needed for some packages
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--# Needed for gdb
--BR2_PTHREAD_DEBUG=y
--# Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- # System Configuration
-diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
-index e18c83d593..dbebdf3e37 100644
---- a/configs/bananapro_defconfig
-+++ b/configs/bananapro_defconfig
-@@ -8,9 +8,6 @@ BR2_ARM_FPU_NEON_VFPV4=y
- # Linux headers same as kernel, a 5.4 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
--# Toolchain
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="bananapro"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pro!"
-diff --git a/configs/engicam_imx6qdl_icore_qt5_defconfig b/configs/engicam_imx6qdl_icore_qt5_defconfig
-index 2d213e4ab9..6d3a344bdd 100644
---- a/configs/engicam_imx6qdl_icore_qt5_defconfig
-+++ b/configs/engicam_imx6qdl_icore_qt5_defconfig
-@@ -47,7 +47,6 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
- BR2_ROOTFS_OVERLAY="board/engicam/icorem6/rootfs_overlay"
- 
- # qt5 dependencies
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- # qt5
-diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
-index 312162b7a8..29110677bb 100644
---- a/configs/galileo_defconfig
-+++ b/configs/galileo_defconfig
-@@ -1,7 +1,5 @@
- BR2_x86_x1000=y
- BR2_GLOBAL_PATCH_DIR="board/intel/galileo/patches"
--# Needed for TARGET_GRUB2
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Linux headers same as kernel, a 3.14 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index d962ac6897..e385e86b81 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -8,7 +8,6 @@ BR2_ARM_FPU_VFPV3=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # Additional features needed for packages
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- # System
-diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-index 37e415cf32..877903a1fe 100644
---- a/configs/kontron_smarc_sal28_defconfig
-+++ b/configs/kontron_smarc_sal28_defconfig
-@@ -1,7 +1,6 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/smarc-sal28/post-build.sh"
-diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
-index 555a63e36c..1ce2817d42 100644
---- a/configs/lego_ev3_defconfig
-+++ b/configs/lego_ev3_defconfig
-@@ -2,9 +2,6 @@
- BR2_arm=y
- BR2_arm926t=y
- 
--# Toolchain
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--
- # system
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
-diff --git a/configs/mender_x86_64_efi_defconfig b/configs/mender_x86_64_efi_defconfig
-index 4ab4c7b03d..6919a60c90 100644
---- a/configs/mender_x86_64_efi_defconfig
-+++ b/configs/mender_x86_64_efi_defconfig
-@@ -3,10 +3,6 @@ BR2_x86_64=y
- 
- # Toolchain
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
--# Required for eudev (to autoload drivers)
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--# Required for sysvinit
--BR2_TOOLCHAIN_BUILDROOT_USE_SSP=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-diff --git a/configs/microchip_sam9x60ek_mmc_dev_defconfig b/configs/microchip_sam9x60ek_mmc_dev_defconfig
-index 2b4e234297..4c842f2bb0 100644
---- a/configs/microchip_sam9x60ek_mmc_dev_defconfig
-+++ b/configs/microchip_sam9x60ek_mmc_dev_defconfig
-@@ -1,7 +1,5 @@
- BR2_arm=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--BR2_PTHREAD_DEBUG=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_TARGET_GENERIC_HOSTNAME="sam9x60ek"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-@@ -47,7 +45,6 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_ARGP_STANDALONE=y
- BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
-diff --git a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-index f9aa6cdc05..5f6eba482c 100644
---- a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-+++ b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
-@@ -4,8 +4,6 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--BR2_PTHREAD_DEBUG=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-@@ -50,7 +48,6 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_ARGP_STANDALONE=y
- BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
-diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-index b1b22c1312..64df7b4d13 100644
---- a/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-+++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
-@@ -4,8 +4,6 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--BR2_PTHREAD_DEBUG=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-@@ -42,7 +40,6 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_ARGP_STANDALONE=y
- BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
-diff --git a/configs/microchip_sama7g5ek_mmc_dev_defconfig b/configs/microchip_sama7g5ek_mmc_dev_defconfig
-index d68846e553..2fca9873a6 100644
---- a/configs/microchip_sama7g5ek_mmc_dev_defconfig
-+++ b/configs/microchip_sama7g5ek_mmc_dev_defconfig
-@@ -2,8 +2,6 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--BR2_PTHREAD_DEBUG=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-@@ -42,7 +40,6 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_ARGP_STANDALONE=y
- BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
-diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
-index 1270f23953..83a970f601 100644
---- a/configs/minnowboard_max_defconfig
-+++ b/configs/minnowboard_max_defconfig
-@@ -10,8 +10,6 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/minnowboard/genimage.cfg"
- 
- # Linux headers same as kernel, a 5.10 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
--# Needed for grub2
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- 
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index df5988d75e..ec34a41667 100644
---- a/configs/pc_x86_64_bios_defconfig
-+++ b/configs/pc_x86_64_bios_defconfig
-@@ -1,9 +1,6 @@
- # Architecture
- BR2_x86_64=y
- 
--# Toolchain, required for eudev (to autoload drivers)
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
-index 18d2c477d5..da05471e28 100644
---- a/configs/pc_x86_64_efi_defconfig
-+++ b/configs/pc_x86_64_efi_defconfig
-@@ -1,9 +1,6 @@
- # Architecture
- BR2_x86_64=y
- 
--# Toolchain, required for eudev (to autoload drivers)
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
-index 0d4e8b2c29..609444e787 100644
---- a/configs/qemu_aarch64_sbsa_defconfig
-+++ b/configs/qemu_aarch64_sbsa_defconfig
-@@ -2,9 +2,6 @@
- BR2_aarch64=y
- BR2_cortex_a57=y
- 
--# Toolchain
--BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
--
- # System
- BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++else ifeq ($(BR2_TARGET_ROOTFS_CPIO_DRACUT),y)
++
++ROOTFS_CPIO_DEPENDENCIES += host-dracut
++
++ROOTFS_CPIO_DRACUT_CONF_FILE = $(call qstrip,$(BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE))
++ifeq ($(BR_BUILDING):$(ROOTFS_CPIO_DRACUT_CONF_FILE),y:)
++$(error No dracut config file name specified, check your BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE setting)
++endif
++
++ifeq ($(BR2_LINUX_KERNEL),y)
++ROOTFS_CPIO_DEPENDENCIES += linux
++ROOTFS_CPIO_OPTS += --kver $(LINUX_VERSION_PROBED)
++else
++ROOTFS_CPIO_OPTS += --no-kernel
++endif
++
++define ROOTFS_CPIO_CMD
++	mkdir -p $(ROOTFS_CPIO_DIR)/tmp
++	$(HOST_DIR)/bin/dracut \
++		$(ROOTFS_CPIO_OPTS) \
++		-c $(ROOTFS_CPIO_DRACUT_CONF_FILE) \
++		--sysroot $(TARGET_DIR) \
++		--tmpdir $(ROOTFS_CPIO_DIR)/tmp \
++		-M \
++		--force \
++		--no-compress \
++		$@
++endef
++
++endif #BR2_TARGET_ROOTFS_CPIO_DRACUT
++
+ ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
+ ROOTFS_CPIO_DEPENDENCIES += host-uboot-tools
+ define ROOTFS_CPIO_UBOOT_MKIMAGE
+diff --git a/fs/cpio/dracut.conf b/fs/cpio/dracut.conf
+new file mode 100644
+index 0000000000..2337736c4e
+--- /dev/null
++++ b/fs/cpio/dracut.conf
+@@ -0,0 +1,92 @@
++#Simple dracut config for a system without systemd
++
++#Dracut configuration
++
++show_modules=yes
++i18n_install_all=no
++lvmconf=no
++mdadmconf=no
++early_microcode=no
++hostonly=no
++hostonly_cmdline=no
++use_fstab=no
++kernel_cmdline="rd.break=initqueue"
++do_strip=no
++
++# Dracut modules needed
++add_dracutmodules+=" \
++busybox-init
++"
++
++# Modules to ignore
++omit_dracutmodules+=" \
++bash \
++biosdevname \
++btrfs \
++bluetooth \
++busybox \
++caps \
++cifs \
++crypt \
++crypt-gpg \
++dash \
++dbus-broker \
++dbus-daemon \
++dm \
++dmraid \
++dmsquash-live-ntfs \
++dracut-systemd \
++fcoe \
++fcoe-uefi \
++fs-lib \
++iscsi \
++i18n \
++lvmmerge \
++lvm \
++lunmask \
++mdraid \
++memstrack \
++mksh \
++modsign \
++mount-root \
++multipath \
++nbd \
++network-legacy \
++network-wicked \
++nfs \
++nvdimm \
++nvmf \
++parse-lunmask \
++qemu \
++qemu-net \
++resume \
++rootfs-block \
++rngd \
++systemd \
++systemd-udevd \
++systemd-coredump \
++systemd-ask-password \
++systemd-timedated \
++systemd-rfkill \
++systemd-resolved \
++systemd-hostnamed \
++systemd-initrd \
++systemd-journald \
++systemd-ldconfig \
++systemd-networkd \
++systemd-timesyncd \
++systemd-veritysetup \
++systemd-modules-load \
++systemd-sysctl \
++systemd-repart \
++systemd-sysext \
++systemd-sysusers \
++systemd-tmpfiles \
++squash \
++ssh-client \
++stratis \
++tpm2-tss \
++udev-rules \
++url-lib \
++usrmount \
++"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
