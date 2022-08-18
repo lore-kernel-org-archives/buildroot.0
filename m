@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D15DC00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 22:36:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3CA9C00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 22:37:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1519B4021C;
-	Thu, 18 Aug 2022 22:36:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1519B4021C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46FF960DCB;
+	Thu, 18 Aug 2022 22:37:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46FF960DCB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9xBF6kU3n77p; Thu, 18 Aug 2022 22:37:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9A5C60C16;
+	Thu, 18 Aug 2022 22:37:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9A5C60C16
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EE6631BF33D
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 22:37:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C950B4015E
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 22:37:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C950B4015E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eul53HI7DX_v; Thu, 18 Aug 2022 22:36:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C22304015E;
-	Thu, 18 Aug 2022 22:36:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C22304015E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C80251BF33D
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 22:36:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 98DCC418DB
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 22:36:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98DCC418DB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T8T4vrqS99xu for <buildroot@lists.busybox.net>;
- Thu, 18 Aug 2022 22:36:38 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EcLw2lg9pB-9 for <buildroot@lists.busybox.net>;
+ Thu, 18 Aug 2022 22:37:14 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49E3641773
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-sn1anam02on2117.outbound.protection.outlook.com [40.107.96.117])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 49E3641773
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 22:36:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BF2B40129
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10on2130.outbound.protection.outlook.com [40.107.94.130])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6BF2B40129
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 22:37:14 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F1FwDrF/MH582knAXZc7DtlUhclgPZvT7lbtWqHZKad/gLFl5+12gktp2ZL/MUAC/T3dxvvCYc6xTzMJ5aEeWors/jF0U/AGIlsk8cW+P0dz9pOIN80jx2JEKeA7vdyRlFF9Qr4/lHZAJc6NkxeTMj+A5xWVAgorAwNH300tWF7UpL7kMJhKuMsS6aJ9ICcJWAvrWK76PKZUrfxGT4kjw7khoO8J05WOPinN7ocCo0ZkYipY8mcy1Zo/tpZjVG79i/+AKE0zayB8emAkZflIv/M63OrZa1nifqAXl2xd3FQb+l5GeC7a1mMxdOGUnH0qNKrt3xmNXNU/CALnGl+uMw==
+ b=D4gbjUx4Y8OzPUq/nm6mSYlWk7CwyqBNTY9CRxSU3pQZb4nlb2t31kHjypj/GNBP7FBUZvIAMuu07AVX97hl2nTYIZsnK5zkbhi8Wc+0iuPIErD0e4hUnExSatedHwvZXX2qqBuoISUi2tcdF20oFfWHJs+Aeas6Qkry19Fn5PF9AtnSG9NsMdk5+9iByoaIng5/yrV4YKYuUg1H4mKXI+Ak0QFOPBp98jjRw3a3PD1VeGv7aHjRSTUNPqGKqcy6m3UXRw3X9+BpAyfruMEr4vLAzgUWCFP0BPRLA6HQIQRraiqGVQ/paa6r2RaJ/0Be7pWDLzNlA9E2qhSkVC7vmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zBp1x2pPAyX260lpGE3q5/u3sBKdk5WhAtQZabE361Q=;
- b=e9q7sgQCSlJUqB74Z7ffUzyv0iAM9w4Z73IvJ3/v01dKE+pAmu1TAxJJddTbm7JW3nEwLIZoDXrfQvoIdgkceuciJeNxXJs7iGpV2yjmDTtZKkiIhg09GuY2Mo6cEBri8pSbW1hYgBRGiZVVr1/0MUozKdL0RqcEXYAnN8E3eMOc47Uw5G6htzUZRMmITy09A3ZB8UgFLMAb0HEOdScqkjkbuLOh9FZBF7M/VgjzxXpUDnY+L8yTQThYgUt1TbQ3z6Kpk6AuAfMAWZFGuys3YoKQTibfhiwRpcK8Ut1wOAsWfqqcCKWyFS4FvN+FOacc4sTdEvRDILO+WXsuEuvq6Q==
+ bh=IsJ6txxWTj3kNtKQJsM8aCedrLQWH7OYNNpaOoobiww=;
+ b=LXxdg6LkXJmqnIMK7Gcnhh7YUNvgxS3VAx9R9O4UgzaACIxKO50Y2H0EYs1E79ckHZsFgEp0mmVVf8uI0OD17/y3xARye94ZNiQ8DyBkN71nuNqIGO1MzZWiT7M1eonqAujOkupv6JurhE1/CBHm6aXclkULIMbAiF16w6H79qjSP0kBranLrtOe01pSYBhtTVgtdowvlITZBfCwQ2aDRVupjNABqQhrh0F1KJUKWGkgmErf5lKXoxbdHdGez+Z9SVhtoZv+WDrgZz/gr6w1NgOIA5tYFVX2E5aEezP39GQqo/IRopUQupFynSzvFvEiTbX4I9nE8lRT9twUj1F8fQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=phobosdpl.com; dmarc=pass action=none
  header.from=phobosdpl.com; dkim=pass header.d=phobosdpl.com; arc=none
@@ -50,83 +50,85 @@ Received: from DM6PR17MB3515.namprd17.prod.outlook.com (2603:10b6:5:1de::16)
  by DM6PR17MB3514.namprd17.prod.outlook.com (2603:10b6:5:204::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Thu, 18 Aug
- 2022 22:36:32 +0000
+ 2022 22:37:11 +0000
 Received: from DM6PR17MB3515.namprd17.prod.outlook.com
  ([fe80::4941:8376:dc1a:c03f]) by DM6PR17MB3515.namprd17.prod.outlook.com
  ([fe80::4941:8376:dc1a:c03f%3]) with mapi id 15.20.5525.019; Thu, 18 Aug 2022
- 22:36:32 +0000
+ 22:37:11 +0000
 From: Sen Hastings <sen@phobosdpl.com>
 To: buildroot@buildroot.org
-Date: Thu, 18 Aug 2022 17:36:02 -0500
-Message-Id: <20220818223603.45459-1-sen@phobosdpl.com>
+Date: Thu, 18 Aug 2022 17:36:03 -0500
+Message-Id: <20220818223603.45459-2-sen@phobosdpl.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220818223603.45459-1-sen@phobosdpl.com>
+References: <20220818223603.45459-1-sen@phobosdpl.com>
 X-ClientProxiedBy: SN4PR0501CA0041.namprd05.prod.outlook.com
  (2603:10b6:803:41::18) To DM6PR17MB3515.namprd17.prod.outlook.com
  (2603:10b6:5:1de::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 65dd3657-bb6d-4005-c0af-08da816a199c
+X-MS-Office365-Filtering-Correlation-Id: 2c9604e0-564b-4174-2747-08da816a30c8
 X-MS-TrafficTypeDiagnostic: DM6PR17MB3514:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N1MlzzVcNmF88cS/mtqmV9CTbYh3LJp2FgEzz6EXLCFrbjnQkCYuxJYMiGHrBHK6Ij5G2eoEDK3Ckl0OR1MjuqN3V44XgQE6LOtJxezDZMW5m30ThqNpduAEv5by6dGxKpnTIhGyOHUhrIqiJcFHZggs4yLQ7DYGitFNgWzErqQnWIVH1tEzcb62bQLvMCIV7b/wlA2bTDJz75r1BkkBq03qC9173OgQS46dPt8wMR0nMtYJoCgXCjOsPapTQPEfUjW5R/t4oabwCdmOuo8D33hiaHBgF71qu3w4VuF3DQfzJv7sn0CoHgqmzGlJTp1Wjq5fcwR9gSRoETeFIM8dHMHjZgdr9q/HozOG05q4QQbXA8ukZIzcPn/GrjdK6Ftg0nsZ7kP4acqytUY/8dh3COKI59B4q5Ygj5vYwJXu/ZFZrI7SZUzqvgsyYG20YfLNtGfgY/9yQnjwG2Ll/C/mJXKpKq498DHL5wSq0NSfk4pugWB0wHS4atnjQlft0cPzNAPgMUt1sO78J108bQCfc4vQnyKbzfj39KnlqSDdUA7SV90esr7tDboBNU6u5P/5gvu71Q3xR9L17UhRVxkwv1s/Gj7MvNGr+LWq1VkrH+SezAD97AaORkptrt/0AGwieyd6c24RS6bMORI6z6czqFjAvXugUXVJB7as39cHUvDqYRCDi6y7w03rm3PMTarYM639CkiP+An6/BwGOAAs2c8vVeU1qRA9zPJRtONm4rArxNqTP2yrNbniOfYy/xesmWQOwqUDl2hOacT0HvEBDJaePg1kWsV4zOGRNy3SQ7w=
+X-Microsoft-Antispam-Message-Info: 9bMd8y8YfXzyNwl9uuPExCk9114lFidD6PyiTQFFPYvW3eHEJ/0eMXjWZUfP7YuSB5aJ0/BWZ2azsFBv6rszqyaqR+i6eLwdMuyiRTv6Wy4hnfjnfVG8iwmOdqo+4B+YwoLK9FmA59TwQTNvBPnzdr7rer3BjM3P4WLVpgWQ8uc85myaBjMxpcLiVHEzIHzZqsrLAe4E2v7V3UJyiAJu75QmGykYAYTe9VXiUgI6pMZDp/CpYOkj5Uje5vqTZZu9gsufUf9PYFFUKtWjOIEdJ8+mmeempDdFn4AIsmERSwZXqeMzyZrQwEfzdWOrQclpKmSicqVSJ8OwmacuSODQO8tFNBQAovwiBEocGMTwfFzGa9+WMAze6y/qyZSVT6rBmaXs9TvyNLp1cSISo2qd31stkcq+WYNxjbqVMU6hHinZEogHluHMFYW1KPZUwQBpPPHhYVFVwLz0+35qs5kBIhmK4SSmJLIrdQhRZZp7pkx3+ysx9/5OFI9qjcbkBSxc6tz1/JBuEu3r2ACOMjCe7fSyU0uoF0+/E5+J/Idkojg54fB8+SIdUs7mKao0kVb1ZxoOs0+v2v0BV7q+QspkZDEfwahFKBIlHqGSwaJXcF5/xoKR2xN2n5lsub0g1QXnbQFCEBVxet8ID71YZHXpQNG+Hl/UOPMJ1UUvGk6c38AThPh9NLUHECUYPUsyoYGad4sA9Q33kBUOlojLfkD/AuznQJhJLlPQPGyZMAwMoFUy3kOGZ7h15tYRyicEUBII483XKoadF0YOA8JahLZtHRT8Ecw0xTOGoNRxKHxbc9k=
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DM6PR17MB3515.namprd17.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(366004)(39830400003)(136003)(346002)(396003)(376002)(2616005)(6916009)(166002)(316002)(1076003)(186003)(54906003)(83380400001)(36756003)(38350700002)(38100700002)(6486002)(6506007)(298455003)(66946007)(4326008)(66476007)(66556008)(2906002)(8676002)(53546011)(6512007)(41300700001)(478600001)(86362001)(26005)(107886003)(30864003)(8936002)(6666004)(5660300002)(52116002);
+ SFS:(13230016)(366004)(39830400003)(136003)(346002)(396003)(376002)(2616005)(6916009)(166002)(316002)(1076003)(186003)(54906003)(83380400001)(36756003)(38350700002)(38100700002)(6486002)(6506007)(66946007)(4326008)(66476007)(66556008)(2906002)(8676002)(53546011)(6512007)(41300700001)(478600001)(86362001)(26005)(107886003)(8936002)(6666004)(5660300002)(52116002);
  DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rfkaWq4AC76L93IfZKXh8pZorPWJmthWuHXaS6DdndDZ+oCP3iM8GkBCLMS/?=
- =?us-ascii?Q?/m9PLPZHLoYxntr+8FVbT4EkWMY/lD+crhKfD7PeIIgyzRqL86a7hmFGkAdV?=
- =?us-ascii?Q?VZQCKZSB5+SlDpjCWEkuZ8acZ62h4pADQ2D0i+OhYPvAKuZDfabG874NAxel?=
- =?us-ascii?Q?71ePOkaZbIBBrEDAq3HJJ8Zl12e7IM2y9yohUV0l59uTewJOTddQCUrj1AGH?=
- =?us-ascii?Q?jI2Ph6gn8psApEdroTAdmTIhPmiISpTOMhGLAAZP3H53W0zHQNS0oCn9GLAj?=
- =?us-ascii?Q?8rggpS4O08TEShkFdj/YK8dvaVmC1xC5o26X43gsiQALocnnLU35MfAVfwQG?=
- =?us-ascii?Q?fKpR2URFu7qGZt0aVgcPD5X8wzE9u5BGFQ865xTGxkrLCYe5KxCP4UCNekx6?=
- =?us-ascii?Q?rqaP/CB527+aKhTdkadywqN0ByULhZIgC+WXW00R2NbmPhu4JJCeGxH2CFte?=
- =?us-ascii?Q?e5D1gUtumcsBmHoNT2BceXQK0BawJiLiRIG3pyDcqOoBAVVg4FI3LnEK+6Xi?=
- =?us-ascii?Q?Av3US/eL4n+ItHAqTdYfOQbwbilopNNFJrNR9Z1Zm1XUXti7BDTFIGA1U/L0?=
- =?us-ascii?Q?zqu59UGtzULlnalMK6OgtHfHWePt5XVW/oeZZzkrXU3wU7vsZYoDNejPCzUJ?=
- =?us-ascii?Q?OZKQ95uXRUt5DtBz10+WBdzjVH6shwoVONCoNdFqPEEK/0xdkh/SFCWLcQGH?=
- =?us-ascii?Q?CaA0GQN4jknzeOLaqZnw6jm5XRx4a2+RdZvEtpzp5kaamd3RTBmB6e9zzohv?=
- =?us-ascii?Q?6bhwACtdb3DQ52uSSQY6Dx5pqAFy9/AOPFrJhzp1BpKMvujI8p2vLovKc/at?=
- =?us-ascii?Q?zzLldnan4CseTEgq8PVVzDK6JjrkWldGUIvmQ97eVrX6dfyeeUI9g117TSVQ?=
- =?us-ascii?Q?j/lJQsYLdlwc5rTwNGp3j+1zU8e8dA2fMqZb4aXszFWhRnAls4H1CL/XLf3a?=
- =?us-ascii?Q?goC8+S1KU2XOPoJDvkyxkGZ8QzbWZmrlpj3LUW+EV6tlpVLF/7pjJKamlfrh?=
- =?us-ascii?Q?dwBezqD5LpQLOoWOhWA4UlXuqQb8pbRi4jRr7n3qXpI+pBgRlsTpruLGJA75?=
- =?us-ascii?Q?oTkf2rmYXOZrtMKnXAcA8yZRy55bRP8+msbYOykzW/GJuuYQ5Hkdq0hxOFL+?=
- =?us-ascii?Q?u3kYctZdtp8maaMivxZcuQFvSTO+Jr3dq5tPOsuGFdoB5qYJtsM3rR1NXRpw?=
- =?us-ascii?Q?ZlvqhdBCd/RPWZnvmvdGRrfOwRxTWzo30Es4D6h14iGa9QpdUZuZcyakW+dh?=
- =?us-ascii?Q?JvAip6oOq/Hq21XBO+xuJ1gfyOdmM3vC4NvUANWLQF2C+1ZzmitjFAQREvLG?=
- =?us-ascii?Q?ls11T1WxF/IPGN4/ua/Zzs9ttcCw335XuvBkCSxwlesmV10+7Vk59Xs0CpFl?=
- =?us-ascii?Q?eECBvUA9we+MQSekoSC5JVZGUlTR1SbkCGBkEi2/YUTr0FA7Abp3KbkIrcUR?=
- =?us-ascii?Q?yaCJrbh7QluaIH1FgtAy1sixxXo3OMpy1kXEPZQSM0Os7lnXGTwEtzUrkY11?=
- =?us-ascii?Q?cPnkW0TSMdhtt/mUWyNTYNYO8GJ8WJDAXVU0h6WJUjSvKfV1UBMJ2ZFF3E83?=
- =?us-ascii?Q?0N0YIQKk9xJ0XfbbzpwEtXlSvqolFFYgd3iIA1zc?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qO0f3g+rFbsp7+6NC7eXfljyp1nCeCtQgfEjE8hv4pfyqrlIhwk17v1BdGJq?=
+ =?us-ascii?Q?rar0s2VkNCUxPyX72rPzFFavOxcTBgf0iC7I6Oshe52GTmuGtzlj+mzEI6We?=
+ =?us-ascii?Q?52isw3L2mvaCXv0qgwy6Ku6nbxEJPrVfBPufd4EyO8nRo6d7JzV+RSCehhDN?=
+ =?us-ascii?Q?xPL9S7Mk8EO8LUBOSS6gK3eCzp3VZtLsHvk5lyEyfNuR5diIqIKKkBLSouyn?=
+ =?us-ascii?Q?wRYMVRVwuQ6Fq0FeqOYbgrQr6Tif2tMYDZ3NxZInwjwppAseb4CETmZNVhwI?=
+ =?us-ascii?Q?vucBh3+tFqeLKUC7QSCB1U/G79uB6BRRqTUIhOpaVKM8UhA0t+Y3ssIQ5bRC?=
+ =?us-ascii?Q?04hJzWwrXWwBUdzsGcCO72sYYxiJgY7LugOrnhCPiupUZ25q+2KIrrY5mbkH?=
+ =?us-ascii?Q?XBcZKFZKiFs2Xc6coWYBFW9Fob65bqSygVS0oJuPQe5BCZ0eiHkVo/kLvK9v?=
+ =?us-ascii?Q?EGknuIp3vsxXBSpE3JSzgmBx/gghtCB2bAXljQgcTahHeiYwmucRP7WFJAy3?=
+ =?us-ascii?Q?B1LAqi4y0CMh3+q0njqjEgw3AgClLB96YVRl//VPrYqUB+0xUV11Ks72LW6p?=
+ =?us-ascii?Q?TmJUXqJYmsM2IPSsd5obPbUnc8tVAkqTnUTI+3Njhv8lDMB3Okawjw1A/D0t?=
+ =?us-ascii?Q?3AnTJuOoKfQCQVG+pmBgMSHzr9EU0udOxrXSFIBhVINrLDnAObut+0xaNc2S?=
+ =?us-ascii?Q?IGmIlEZQWlstqpHS/Ew/MxiouuM9ZeTPUubydQW45Mr7WM0ZgkAgF5PyWN9C?=
+ =?us-ascii?Q?m42/t78+PQoE9/rGKhSTB/Hnurff48bBNElxPtZtuoSB9zx/0yArkAMnLUgS?=
+ =?us-ascii?Q?GtD4IFBVffFDkfpkz3lq3mRLdtvGpHlwHOyvngqaRU8BeyDHQmmftRInO/5P?=
+ =?us-ascii?Q?5A/07HGhKr+gM8lgYZYoQu+87EX7ERLYccHAAzjs+FhFU5uZrMnvmrNn1Udk?=
+ =?us-ascii?Q?GLmvSHSE8LwUxna5mnFxv8LfPIYQIj6IIN8S7W6EkwBNXxEXGkraofjqV1Fs?=
+ =?us-ascii?Q?tWWZXzw6jFKagi30dNGO5PurtIa1f6XZ4Xx8ixk1k55+Dl2MSNDAjqS56RCF?=
+ =?us-ascii?Q?57A55BXHNLudgI0FDIKmeV35fzf3OqiU64w/2DruXh9pMRYEhkBga0JALZv7?=
+ =?us-ascii?Q?eTLw5m7kIpDeJ38KYquqAsGKopn7FT0esZrrIve1/dhHvivAlWzWVPj7WkJn?=
+ =?us-ascii?Q?xGNwNmlH++hCQIkOxFYWVV78ev7/WMthuPFoN1QqUH3KJS34WrprOH/FuNhf?=
+ =?us-ascii?Q?l3iTuE6TqLCdks/tMZoYtYCOMCGy/pJVjxmL00OOEr6qnNoK5JrQLaHvUMkM?=
+ =?us-ascii?Q?kNAjiileTC9zHIs4InBcmnZr/wYq0RxnSKBluv00qukiDoLIkrat0fCCcxye?=
+ =?us-ascii?Q?5nrAvxb1ndOSSUtdAGUax90rb8k5HgqLTVOnyIARU5vk+5niyqyvuigskDXs?=
+ =?us-ascii?Q?njomT6izqjtn4e1dUUieTYmIYStJg09Ztsnjhyp6A3boV5TxU01VrrUKqpc5?=
+ =?us-ascii?Q?88rRwpKgAOxbZK6q5febmNDSTHl9Uyz0x45pUJDWdNn7HTP7kO+EaRNOXWF/?=
+ =?us-ascii?Q?GYWGaJq10FP2MlE1psnDb1sZX4uFXnnu1P0ubiHi?=
 X-OriginatorOrg: phobosdpl.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65dd3657-bb6d-4005-c0af-08da816a199c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c9604e0-564b-4174-2747-08da816a30c8
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR17MB3515.namprd17.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 22:36:32.4284 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 22:37:11.2536 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 07b76dd5-c518-427b-a15a-2e07dfd0130a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4eBxvmyG7YxDZJageGauYHntNfcx5Key7sPTu6y7cOvQMRH0rR+1i44a32TMQUZD44R5uVuSZg1hATvOWnRtmg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: koHhAhWdaHxVx+G87pwc5BreIBnucFZ11BCIGXshaAShoNhhNzWSfueDD/nu46tw7rM1VnGyGn7C8/7WK+Ox8w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR17MB3514
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=centc.onmicrosoft.com; 
  s=selector2-centc-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zBp1x2pPAyX260lpGE3q5/u3sBKdk5WhAtQZabE361Q=;
- b=lEC4JJuxCV2OnrnTlZAKj+JkqlaMPfiHW0lS7wMTYYHDmoWSli7m/0/ucLNCCbx32tV2nw0jxSD1R1kZ1OLeb31zYiH9MV5nKm3ed0B8LVYeRvuFIXa0KOX1/pOqxzClo+lJ79n5o7dnovsUdof7d2rh1bkMR/5Nf1HxbvHTAlg=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=IsJ6txxWTj3kNtKQJsM8aCedrLQWH7OYNNpaOoobiww=;
+ b=DFK5nV4+W6nE87vXs40ajctVCTz/r1tBA7uFf67CLbVxYbaANDou+/o+gvgCm89zdQyuqfm/6jotWlXfzpGdaHu2Wp6e0GxVfcyZ/GUijHDX9eQBtd2dd4XVAYEQCQyPxD5mbwhZaG7AaqVOYT6WFeSIq1CnDCBog9zy4uwhX8w=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=centc.onmicrosoft.com
  header.i=@centc.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-centc-onmicrosoft-com header.b=lEC4JJux
+ header.s=selector2-centc-onmicrosoft-com header.b=DFK5nV4+
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=phobosdpl.com;
-Subject: Re: [Buildroot] [PATCH 1/2] support/scripts/pkg-stats: remove
- useless escaping of double quotes
+Subject: Re: [Buildroot] [PATCH 2/2] support/scripts/pkg-stats: remove
+ remaining double quote escaping
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -146,234 +148,163 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 On 8/6/22 16:56, Thomas Petazzoni wrote:
-> Within single-quoted f-strings, and within triple double quoted
-> strings, escaping all the double quotes is completely useless and
-> makes the code more difficult to read. Get rid of all this useless
-> escaping.
+> This is done either by switching to single quoted f-strings, triple
+> double quoted f-strings when needed, or simply single-quoted strings.
 > 
 > The renderer HTML is exactly identical before/after this commit.
-
-Sorry for getting to this so late, I didn't realize for some reason
-this was a patch. Looks all good.
 > 
+yeah looks good.
+
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Tested-By: Sen Hastings <sen@phobosdpl.com>
 Acked-By: Sen Hastings <sen@phobosdpl.com>
 > ---
->  support/scripts/pkg-stats | 100 +++++++++++++++++++-------------------
->  1 file changed, 50 insertions(+), 50 deletions(-)
+>  support/scripts/pkg-stats | 67 +++++++++++++++++++--------------------
+>  1 file changed, 32 insertions(+), 35 deletions(-)
 > 
 > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index d32abd7225..572757b7ea 100755
+> index 572757b7ea..aa3b49c809 100755
 > --- a/support/scripts/pkg-stats
 > +++ b/support/scripts/pkg-stats
-> @@ -886,7 +886,7 @@ function expandField(fieldId){
+> @@ -1010,13 +1010,12 @@ def dump_html_pkg(f, pkg):
+>          if pkg.latest_version['version'] is None:
+>              latest_version_text = "<b>Found, but no version</b>"
+>          else:
+> -            latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % \
+> -                (pkg.latest_version['id'], str(pkg.latest_version['version']))
+> +            latest_version_text = f"""<a href="https://release-monitoring.org/project/{pkg.latest_version['id']}"><b>{str(pkg.latest_version['version'])}</b></a>"""
 >  
->  <body>
+>          latest_version_text += "<br/>"
 >  
-> -<a href=\"#results\">Results</a><br/>
-> +<a href="#results">Results</a><br/>
->  
->  """  # noqa - tabs and spaces
->  
-> @@ -920,8 +920,8 @@ def boolean_str(b):
->  
->  def dump_html_pkg(f, pkg):
->      pkg_css_class = pkg.path.replace("/", "_")[:-3]
-> -    f.write(f'<div id=\"package__{pkg_css_class}\" \
-> -        class=\"package data _{pkg_css_class}\">{pkg.path}</div>\n')
-> +    f.write(f'<div id="package__{pkg_css_class}" \
-> +        class="package data _{pkg_css_class}">{pkg.path}</div>\n')
->      # Patch count
->      data_field_id = f'patch_count__{pkg_css_class}'
->      div_class = ["centered patch_count data"]
-> @@ -932,8 +932,8 @@ def dump_html_pkg(f, pkg):
->          div_class.append("somepatches")
->      else:
->          div_class.append("lotsofpatches")
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -        \">{str(pkg.patch_count)}</div>\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)} \
-> +        ">{str(pkg.patch_count)}</div>\n')
->  
->      # Infrastructure
->      data_field_id = f'infrastructure__{pkg_css_class}'
-> @@ -944,8 +944,8 @@ def dump_html_pkg(f, pkg):
->          div_class.append("wrong")
->      else:
->          div_class.append("correct")
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -        \">{infra_str(pkg.infras)}</div>\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)} \
-> +        ">{infra_str(pkg.infras)}</div>\n')
->  
->      # License
->      data_field_id = f'license__{pkg_css_class}'
-> @@ -955,8 +955,8 @@ def dump_html_pkg(f, pkg):
->          div_class.append("correct")
->      else:
->          div_class.append("wrong")
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -        \">{boolean_str(pkg.is_status_ok("license"))}</div>\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)} \
-> +        ">{boolean_str(pkg.is_status_ok("license"))}</div>\n')
->  
->      # License files
->      data_field_id = f'license_files__{pkg_css_class}'
-> @@ -966,8 +966,8 @@ def dump_html_pkg(f, pkg):
->          div_class.append("correct")
->      else:
->          div_class.append("wrong")
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -        \">{boolean_str(pkg.is_status_ok("license-files"))}</div>\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)} \
-> +        ">{boolean_str(pkg.is_status_ok("license-files"))}</div>\n')
->  
->      # Hash
->      data_field_id = f'hash_file__{pkg_css_class}'
-> @@ -977,8 +977,8 @@ def dump_html_pkg(f, pkg):
->          div_class.append("correct")
->      else:
->          div_class.append("wrong")
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)} \
-> -        \">{boolean_str(pkg.is_status_ok("hash"))}</div>\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)} \
-> +        ">{boolean_str(pkg.is_status_ok("hash"))}</div>\n')
->  
->      # Current version
->      data_field_id = f'current_version__{pkg_css_class}'
-> @@ -986,8 +986,8 @@ def dump_html_pkg(f, pkg):
->          current_version = pkg.current_version[:20] + "..."
->      else:
->          current_version = pkg.current_version
-> -    f.write(f'  <div id=\"{data_field_id}\" \
-> -        class=\"centered current_version data _{pkg_css_class}\">{current_version}</div>\n')
-> +    f.write(f'  <div id="{data_field_id}" \
-> +        class="centered current_version data _{pkg_css_class}">{current_version}</div>\n')
->  
->      # Latest version
->      data_field_id = f'latest_version__{pkg_css_class}'
-> @@ -1020,7 +1020,7 @@ def dump_html_pkg(f, pkg):
+>          if pkg.latest_version['status'] == RM_API_STATUS_FOUND_BY_DISTRO:
+> -            latest_version_text += "found by <a href=\"https://release-monitoring.org/distro/Buildroot/\">distro</a>"
+> +            latest_version_text += f'found by <a href="https://release-monitoring.org/distro/Buildroot/">distro</a>'
 >          else:
 >              latest_version_text += "found by guess"
 >  
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">{latest_version_text}</div>\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">{latest_version_text}</div>\n')
->  
->      # Warnings
->      data_field_id = f'warnings__{pkg_css_class}'
-> @@ -1030,7 +1030,7 @@ def dump_html_pkg(f, pkg):
->          div_class.append("correct")
->      else:
->          div_class.append("wrong")
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">{pkg.warnings}</div>\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">{pkg.warnings}</div>\n')
->  
->      # URL status
->      data_field_id = f'upstream_url__{pkg_css_class}'
-> @@ -1045,7 +1045,7 @@ def dump_html_pkg(f, pkg):
+> @@ -1041,10 +1040,10 @@ def dump_html_pkg(f, pkg):
+>          div_class.append("missing_url")
+>      if pkg.status['url'][0] == "error":
+>          div_class.append("invalid_url")
+> -        url_str = "<a href=\"%s\">%s</a>" % (pkg.url, pkg.status['url'][1])
+> +        url_str = f"""<a href="{pkg.url}">{pkg.status['url'][1]}</a>"""
 >      else:
 >          div_class.append("good_url")
->          url_str = "<a href=\"%s\">Link</a>" % pkg.url
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">{url_str}</div>\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">{url_str}</div>\n')
+> -        url_str = "<a href=\"%s\">Link</a>" % pkg.url
+> +        url_str = f'<a href="{pkg.url}">Link</a>'
+>      f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">{url_str}</div>\n')
 >  
 >      # CVEs
->      data_field_id = f'cves__{pkg_css_class}'
-> @@ -1061,11 +1061,11 @@ def dump_html_pkg(f, pkg):
->          div_class.append("cve-ok")
->      else:
->          div_class.append("cve-unknown")
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">\n')
->      if len(pkg.cves) > 10:
->          cve_total = len(pkg.cves) + 1
-> -        f.write(f' <div onclick=\"expandField(\'{data_field_id}\')\" \
-> -        class=\"see-more centered cve_ignored\">see all ({cve_total}) &#9662;</div>\n')
-> +        f.write(f' <div onclick="expandField(\'{data_field_id}\')" \
-> +        class="see-more centered cve_ignored">see all ({cve_total}) &#9662;</div>\n')
+> @@ -1068,11 +1067,11 @@ def dump_html_pkg(f, pkg):
+>          class="see-more centered cve_ignored">see all ({cve_total}) &#9662;</div>\n')
 >      if pkg.is_status_error("cve"):
 >          for cve in pkg.cves:
->              f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s</a><br/>\n" % (cve, cve))
-> @@ -1083,7 +1083,7 @@ def dump_html_pkg(f, pkg):
->      div_class.append(f'_{pkg_css_class}')
->      if pkg.ignored_cves:
->          div_class.append("cve_ignored")
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">\n')
->      for ignored_cve in pkg.ignored_cves:
->          f.write("    <a href=\"https://security-tracker.debian.org/tracker/%s\">%s</a><br/>\n" % (ignored_cve, ignored_cve))
->      f.write("  </div>\n")
-> @@ -1100,7 +1100,7 @@ def dump_html_pkg(f, pkg):
->          div_class.append("cpe-ok")
+> -            f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s</a><br/>\n" % (cve, cve))
+> +            f.write(f'   <a href="https://security-tracker.debian.org/tracker/{cve}">{cve}</a><br/>\n')
+>          for cve in pkg.unsure_cves:
+> -            f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s <i>(unsure)</i></a><br/>\n" % (cve, cve))
+> +            f.write(f'   <a href="https://security-tracker.debian.org/tracker/{cve}">{cve} <i>(unsure)</i></a><br/>\n')
+>      elif pkg.is_status_na("cve"):
+> -        f.write("    %s" % pkg.status['cve'][1])
+> +        f.write(f"""    {pkg.status['cve'][1]}""")
 >      else:
->          div_class.append("cpe-unknown")
-> -    f.write(f'  <div id=\"{data_field_id}\" class=\"{" ".join(div_class)}\">\n')
-> +    f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">\n')
->      if pkg.cpeid:
->          cpeid_begin = ":".join(pkg.cpeid.split(":")[0:4]) + ":"
->          cpeid_formatted = pkg.cpeid.replace(cpeid_begin, cpeid_begin + "<wbr>")
-> @@ -1121,33 +1121,33 @@ def dump_html_pkg(f, pkg):
+>          f.write("    N/A\n")
+>      f.write("  </div>\n")
+> @@ -1085,7 +1084,7 @@ def dump_html_pkg(f, pkg):
+>          div_class.append("cve_ignored")
+>      f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">\n')
+>      for ignored_cve in pkg.ignored_cves:
+> -        f.write("    <a href=\"https://security-tracker.debian.org/tracker/%s\">%s</a><br/>\n" % (ignored_cve, ignored_cve))
+> +        f.write(f'    <a href="https://security-tracker.debian.org/tracker/{ignored_cve}">{ignored_cve}</a><br/>\n')
+>      f.write("  </div>\n")
 >  
->  def dump_html_all_pkgs(f, packages):
->      f.write("""
-> -<div id=\"package-grid\">
-> -<div style="grid-column: 1;" onclick="sortGrid(this.id)" id=\"package\"
-> -     class=\"package data label\"><span>Package</span><span></span></div>
-> -<div style="grid-column: 2;" onclick="sortGrid(this.id)" id=\"patch_count\"
-> -     class=\"centered patch_count data label\"><span>Patch count</span><span></span></div>
-> -<div style="grid-column: 3;" onclick="sortGrid(this.id)" id=\"infrastructure\"
-> -     class=\"centered infrastructure data label\">Infrastructure<span></span></div>
-> -<div style="grid-column: 4;" onclick="sortGrid(this.id)" id=\"license\"
-> -     class=\"centered license data label\"><span>License</span><span></span></div>
-> -<div style="grid-column: 5;" onclick="sortGrid(this.id)" id=\"license_files\"
-> -     class=\"centered license_files data label\"><span>License files</span><span></span></div>
-> -<div style="grid-column: 6;" onclick="sortGrid(this.id)" id=\"hash_file\"
-> -     class=\"centered hash_file data label\"><span>Hash file</span><span></span></div>
-> -<div style="grid-column: 7;" onclick="sortGrid(this.id)" id=\"current_version\"
-> -     class=\"centered current_version data label\"><span>Current version</span><span></span></div>
-> -<div style="grid-column: 8;" onclick="sortGrid(this.id)" id=\"latest_version\"
-> -     class=\"centered latest_version data label\"><span>Latest version</span><span></span></div>
-> -<div style="grid-column: 9;" onclick="sortGrid(this.id)" id=\"warnings\"
-> -     class=\"centered warnings data label\"><span>Warnings</span><span></span></div>
-> -<div style="grid-column: 10;" onclick="sortGrid(this.id)" id=\"upstream_url\"
-> -     class=\"centered upstream_url data label\"><span>Upstream URL</span><span></span></div>
-> -<div style="grid-column: 11;" onclick="sortGrid(this.id)" id=\"cves\"
-> -     class=\"centered cves data label\"><span>CVEs</span><span></span></div>
-> -<div style="grid-column: 12;" onclick="sortGrid(this.id)" id=\"ignored_cves\"
-> -     class=\"centered ignored_cves data label\"><span>CVEs Ignored</span><span></span></div>
-> -<div style="grid-column: 13;" onclick="sortGrid(this.id)" id=\"cpe_id\"
-> -     class=\"centered cpe_id data label\"><span>CPE ID</span><span></span></div>
-> +<div id="package-grid">
-> +<div style="grid-column: 1;" onclick="sortGrid(this.id)" id="package"
-> +     class="package data label"><span>Package</span><span></span></div>
-> +<div style="grid-column: 2;" onclick="sortGrid(this.id)" id="patch_count"
-> +     class="centered patch_count data label"><span>Patch count</span><span></span></div>
-> +<div style="grid-column: 3;" onclick="sortGrid(this.id)" id="infrastructure"
-> +     class="centered infrastructure data label">Infrastructure<span></span></div>
-> +<div style="grid-column: 4;" onclick="sortGrid(this.id)" id="license"
-> +     class="centered license data label"><span>License</span><span></span></div>
-> +<div style="grid-column: 5;" onclick="sortGrid(this.id)" id="license_files"
-> +     class="centered license_files data label"><span>License files</span><span></span></div>
-> +<div style="grid-column: 6;" onclick="sortGrid(this.id)" id="hash_file"
-> +     class="centered hash_file data label"><span>Hash file</span><span></span></div>
-> +<div style="grid-column: 7;" onclick="sortGrid(this.id)" id="current_version"
-> +     class="centered current_version data label"><span>Current version</span><span></span></div>
-> +<div style="grid-column: 8;" onclick="sortGrid(this.id)" id="latest_version"
-> +     class="centered latest_version data label"><span>Latest version</span><span></span></div>
-> +<div style="grid-column: 9;" onclick="sortGrid(this.id)" id="warnings"
-> +     class="centered warnings data label"><span>Warnings</span><span></span></div>
-> +<div style="grid-column: 10;" onclick="sortGrid(this.id)" id="upstream_url"
-> +     class="centered upstream_url data label"><span>Upstream URL</span><span></span></div>
-> +<div style="grid-column: 11;" onclick="sortGrid(this.id)" id="cves"
-> +     class="centered cves data label"><span>CVEs</span><span></span></div>
-> +<div style="grid-column: 12;" onclick="sortGrid(this.id)" id="ignored_cves"
-> +     class="centered ignored_cves data label"><span>CVEs Ignored</span><span></span></div>
-> +<div style="grid-column: 13;" onclick="sortGrid(this.id)" id="cpe_id"
-> +     class="centered cpe_id data label"><span>CPE ID</span><span></span></div>
->  """)
->      for pkg in sorted(packages):
->          dump_html_pkg(f, pkg)
+>      # CPE ID
+> @@ -1108,11 +1107,9 @@ def dump_html_pkg(f, pkg):
+>      if not pkg.is_status_ok("cpe"):
+>          if pkg.is_actual_package and pkg.current_version:
+>              if pkg.cpeid:
+> -                f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
+> -                        (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
+> +                f.write(f"""  <br/>{pkg.status['cpe'][1]} <a href="https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword={":".join(pkg.cpeid.split(":")[0:5])}">(Search)</a>\n""") # noqa: E501
+>              else:
+> -                f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
+> -                        (pkg.status['cpe'][1], pkg.name))
+> +                f.write(f"""  {pkg.status['cpe'][1]} <a href="https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword={pkg.name}">(Search)</a>\n""")  # noqa: E501
+>          else:
+>              f.write("  %s\n" % pkg.status['cpe'][1])
+>  
+> @@ -1155,49 +1152,49 @@ def dump_html_all_pkgs(f, packages):
+>  
+>  
+>  def dump_html_stats(f, stats):
+> -    f.write("<a id=\"results\"></a>\n")
+> -    f.write("<div class=\"data\" id=\"results-grid\">\n")
+> +    f.write('<a id="results"></a>\n')
+> +    f.write('<div class="data" id="results-grid">\n')
+>      infras = [infra[6:] for infra in stats.keys() if infra.startswith("infra-")]
+>      for infra in infras:
+> -        f.write(" <div class=\"data\">Packages using the <i>%s</i> infrastructure</div><div class=\"data\">%s</div>\n" %
+> +        f.write(' <div class="data">Packages using the <i>%s</i> infrastructure</div><div class="data">%s</div>\n' %
+>                  (infra, stats["infra-%s" % infra]))
+> -    f.write(" <div class=\"data\">Packages having license information</div><div class=\"data\">%s</div>\n" %
+> +    f.write(' <div class="data">Packages having license information</div><div class="data">%s</div>\n' %
+>              stats["license"])
+> -    f.write(" <div class=\"data\">Packages not having license information</div><div class=\"data\">%s</div>\n" %
+> +    f.write(' <div class="data">Packages not having license information</div><div class="data">%s</div>\n' %
+>              stats["no-license"])
+> -    f.write(" <div class=\"data\">Packages having license files information</div><div class=\"data\">%s</div>\n" %
+> +    f.write(' <div class="data">Packages having license files information</div><div class="data">%s</div>\n' %
+>              stats["license-files"])
+> -    f.write(" <div class=\"data\">Packages not having license files information</div><div class=\"data\">%s</div>\n" %
+> +    f.write(' <div class="data">Packages not having license files information</div><div class="data">%s</div>\n' %
+>              stats["no-license-files"])
+> -    f.write(" <div class=\"data\">Packages having a hash file</div><div class=\"data\">%s</div>\n" %
+> +    f.write(' <div class="data">Packages having a hash file</div><div class="data">%s</div>\n' %
+>              stats["hash"])
+> -    f.write(" <div class=\"data\">Packages not having a hash file</div><div class=\"data\">%s</div>\n" %
+> +    f.write(' <div class="data">Packages not having a hash file</div><div class="data">%s</div>\n' %
+>              stats["no-hash"])
+> -    f.write(" <div class=\"data\">Total number of patches</div><div class=\"data\">%s</div>\n" %
+> +    f.write(' <div class="data">Total number of patches</div><div class="data">%s</div>\n' %
+>              stats["patches"])
+> -    f.write("<div class=\"data\">Packages having a mapping on <i>release-monitoring.org</i></div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Packages having a mapping on <i>release-monitoring.org</i></div><div class="data">%s</div>\n' %
+>              stats["rmo-mapping"])
+> -    f.write("<div class=\"data\">Packages lacking a mapping on <i>release-monitoring.org</i></div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Packages lacking a mapping on <i>release-monitoring.org</i></div><div class="data">%s</div>\n' %
+>              stats["rmo-no-mapping"])
+> -    f.write("<div class=\"data\">Packages that are up-to-date</div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Packages that are up-to-date</div><div class="data">%s</div>\n' %
+>              stats["version-uptodate"])
+> -    f.write("<div class=\"data\">Packages that are not up-to-date</div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Packages that are not up-to-date</div><div class="data">%s</div>\n' %
+>              stats["version-not-uptodate"])
+> -    f.write("<div class=\"data\">Packages with no known upstream version</div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Packages with no known upstream version</div><div class="data">%s</div>\n' %
+>              stats["version-unknown"])
+> -    f.write("<div class=\"data\">Packages affected by CVEs</div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Packages affected by CVEs</div><div class="data">%s</div>\n' %
+>              stats["pkg-cves"])
+> -    f.write("<div class=\"data\">Total number of CVEs affecting all packages</div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Total number of CVEs affecting all packages</div><div class="data">%s</div>\n' %
+>              stats["total-cves"])
+> -    f.write("<div class=\"data\">Packages affected by unsure CVEs</div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Packages affected by unsure CVEs</div><div class="data">%s</div>\n' %
+>              stats["pkg-unsure-cves"])
+> -    f.write("<div class=\"data\">Total number of unsure CVEs affecting all packages</div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Total number of unsure CVEs affecting all packages</div><div class="data">%s</div>\n' %
+>              stats["total-unsure-cves"])
+> -    f.write("<div class=\"data\">Packages with CPE ID</div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Packages with CPE ID</div><div class="data">%s</div>\n' %
+>              stats["cpe-id"])
+> -    f.write("<div class=\"data\">Packages without CPE ID</div><div class=\"data\">%s</div>\n" %
+> +    f.write('<div class="data">Packages without CPE ID</div><div class="data">%s</div>\n' %
+>              stats["no-cpe-id"])
+> -    f.write("</div>\n")
+> +    f.write('</div>\n')
+>  
+>  
+>  def dump_html_gen_info(f, date, commit):
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
