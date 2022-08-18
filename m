@@ -4,71 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4164AC00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 23:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F09CEC00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 23:23:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96DE641BD4;
-	Thu, 18 Aug 2022 23:20:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96DE641BD4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D394408DC;
+	Thu, 18 Aug 2022 23:23:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D394408DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id krMddzcf8QMR; Thu, 18 Aug 2022 23:20:12 +0000 (UTC)
+	with ESMTP id OUptdOZ-XBv1; Thu, 18 Aug 2022 23:23:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A2CB41BBB;
-	Thu, 18 Aug 2022 23:20:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A2CB41BBB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CD821C116E
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 23:20:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12DBC400A8;
+	Thu, 18 Aug 2022 23:23:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12DBC400A8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 53E5F1C116E
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 23:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 27F9A60A75
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 23:20:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27F9A60A75
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B3F5401DF
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 23:23:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B3F5401DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kn9Jv9LBXQ13 for <buildroot@lists.busybox.net>;
- Thu, 18 Aug 2022 23:20:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA6C060A46
-Received: from smtpcmd15186.aruba.it (smtpcmd15186.aruba.it [62.149.156.186])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA6C060A46
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 23:20:05 +0000 (UTC)
-Received: from [192.168.8.175] ([86.32.63.136])
- by Aruba Outgoing Smtp  with ESMTPSA
- id OonyoZTv6zxgcOonzozgF3; Fri, 19 Aug 2022 01:20:03 +0200
-Message-ID: <102b7a5e-b188-435c-be00-40f278026bdc@benettiengineering.com>
-Date: Fri, 19 Aug 2022 01:20:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Content-Language: en-US
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6aX3itOdq6vc for <buildroot@lists.busybox.net>;
+ Thu, 18 Aug 2022 23:23:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17D6C40129
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 17D6C40129
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 23:23:03 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id r141so2216877iod.4
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 16:23:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=mime-version:user-agent:content-transfer-encoding:organization
+ :references:in-reply-to:date:to:from:subject:message-id
+ :x-gm-message-state:from:to:cc;
+ bh=DhpA/lb4hvN114w6scQz3tZxxIoQCO6Yu761DcTkjFY=;
+ b=MIAziSFyNWkaAOEBoCnJxyeKP07npLq4R9VSlZEtHKVgSV+TKc+Z4GFcK106gNP5zE
+ 3R5zRuwWViVX7XB+IC1xqIcTS5urWN+MMfzKTtg0QVQJwWYEB/O/5p2bJWBJRT9MEAwP
+ QhUUjERVjTJ+y/GpRO9fD7E3MAkO3oc52NuGquaxVzx1B4EYbiU7W2tCjhgyxNZ4X/X2
+ bxJoRnt7vIIWH0NOjoLMSjzmrL+2pOndoGnFe/mL2sf5+ngDoY6Gdfolp6KM8SiFITF6
+ PdlI3LaTpGavkQ1aSt52srqxbIEAJ2nDphYWVVwHRPWigldeIJm9E52o6G/EO/64V6xH
+ Qm+Q==
+X-Gm-Message-State: ACgBeo2AR5XOd9w/8MEqbPKmP8Z1C4IUxfc4IPZ2ssi4v/96I2p5MfmB
+ ypGHOwg0w40zlF5u0yo4m6iQwV6+iVTQMps=
+X-Google-Smtp-Source: AA6agR48y8z3cs+/yAji/SBRbf1sE+Q4SDHSC5ApOG00kGrSiUnMvtK+RmzKuX75PYLJbt01A5yuTA==
+X-Received: by 2002:a05:6638:430d:b0:343:69f4:2016 with SMTP id
+ bt13-20020a056638430d00b0034369f42016mr2377483jab.90.1660864982990; 
+ Thu, 18 Aug 2022 16:23:02 -0700 (PDT)
+Received: from bixby.lan ([76.130.90.80]) by smtp.gmail.com with ESMTPSA id
+ f1-20020a02a101000000b0034377bca601sm1094487jag.119.2022.08.18.16.23.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 18 Aug 2022 16:23:02 -0700 (PDT)
+Message-ID: <4e7927d6257e67f66cff14a7b2a86fd395931518.camel@egauge.net>
 To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20220815154854.17628-1-giulio.benetti@benettiengineering.com>
- <20220815154854.17628-2-giulio.benetti@benettiengineering.com>
- <00072104-98ca-a1ee-5963-c1a7e151722a@mind.be>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <00072104-98ca-a1ee-5963-c1a7e151722a@mind.be>
-X-CMAE-Envelope: MS4xfKLCs9Rh68r1uOHIZ/17geY80XFrwB/WLtvnU60Ls1NPcbuJFcxNN9o3gYkhWXW0tKCknzhoN2pdD6svWMUxocNdfeI3Ll6cYgu20hLY3NqSjIuYb4PP
- pi85k8nKzqGnIy5WEBu1wf2bi/Q1OmvL1OTfmRFS11ZCDl+k42h0mnswed4klI/rEzYnh6Gi020b5rP8c5HZAVc0pptT0Af27jL32vQr9f45tzCtf8ghKr4W
- ejHj46vvxIQY64q1XScOKSV658nsNBcWbOo9MJoiGHCZLOJcZ4zILVHibuvw0Mk4fph8arGj2S/uhdd+u5eJL/TMlPDt4cOtSE5tUsuUih8ZXuL3aQPw+TI/
- iSsMBkTY
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1660864804; bh=PyyjZOC9peAJcXYOr4IdRfCV8NlMnDYYcSpPDcrtc+A=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=Yep7aZICyyCHVGqmvxunFdiWo+xy11aE7xOENoCp74cQto3NlW08XtccWP9wCGVPB
- qcROB+ZVXWnZ/KI+5YB7xRvvlwmPYNZ5StWnF8SabkT6mcUppe7o8BQLcuS9MtLgYV
- JP7cUnaw8l76S+rNEb44SkMIivOwOdVwowvWHMs8lc/nAxZgH9+kN6jEEYJsZTjLD+
- CW8AGrtRI3Khcj7mL5qPIsp/YaSjC92X9sGQWCA6ltu9PakXEAb/6Jm8OJqC0Ogf2/
- UcU8d3bGiuU5GPzJAVfURrLLfS6Ih4LWgQmYnduqVQr9zWX3vdl2FakktNHnMDAFU/
- gRN7opVY6cVsA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Yep7aZIC
-Subject: Re: [Buildroot] [PATCH 1/4] Revert "configs/olimex_a33_olinuxino:
- use NEON+VFPv4 as FPU strategy"
+Date: Thu, 18 Aug 2022 17:23:02 -0600
+In-Reply-To: <4b4140d7-6242-765c-8bf7-c27740764413@mind.be>
+References: <a616e2b3d0edf64b98a2114dad8086fcdd1088f4.camel@egauge.net>
+ <4b4140d7-6242-765c-8bf7-c27740764413@mind.be>
+Organization: eGauge Systems LLC
+User-Agent: Evolution 3.44.1-0ubuntu1 
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=egauge.net; s=google;
+ h=mime-version:user-agent:content-transfer-encoding:organization
+ :references:in-reply-to:date:to:from:subject:message-id:from:to:cc;
+ bh=DhpA/lb4hvN114w6scQz3tZxxIoQCO6Yu761DcTkjFY=;
+ b=CvmoJ5I8b6E9bA8317zthJaP2/Wk41YNyp18YnObZ+FrC6eNwPkdcVh48Eqj5UIJ9e
+ GsGBicvyOIsKjr7rU1dcKndprzOi6K5I8ASWwT5IuO68OyJYEJNM4FpvNLkaR+604tYL
+ xNo0kNjdAmOQvV2g4iQaLw6EaIAtWjRRv7s22J8dFquLVqRnBxup9C52GlnL7Ko0tpOx
+ dZ42w99NjQKFrucGUHk6pu6OsCgGyYHUxLUwcca28S24FcNNxldL795nxXfs+t9fbDGt
+ HHQl9FnjhvpYdXqJmBVJMolsTD6UcQs+5FleDPLg2HtPAGy5uNBsWH8EJ7J+uKIQCqUD
+ XfhA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=egauge.net header.i=@egauge.net
+ header.a=rsa-sha256 header.s=google header.b=CvmoJ5I8
+Subject: Re: [Buildroot] add support for generating multiple UBI images
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,124 +95,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Jagan Teki <jagan@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: David Mosberger-Tang via buildroot <buildroot@buildroot.org>
+Reply-To: David Mosberger-Tang <davidm@egauge.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LCBZYW5uLCBUaG9tYXMsIEFsbCwKCk9uIDE2LzA4LzIyIDIyOjQ2LCBBcm5vdXQg
-VmFuZGVjYXBwZWxsZSB3cm90ZToKPiAKPiAKPiBPbiAxNS8wOC8yMDIyIDE3OjQ4LCBHaXVsaW8g
-QmVuZXR0aSB3cm90ZToKPj4gVGhlIGdjYyBtYW4gcGFnZSBzdGF0ZXMgdGhhdCBzcGVjaWZ5aW5n
-IE5lb24gYXMgcGFydCBvZiB0aGUgZnB1IHNldHRpbmcKPj4gaGFzIG5vIGVmZmVjdCwgdW5sZXNz
-IHRoZSAtZnVuc2FmZS1tYXRoLW9wdGltaXphdGlvbnMgaXMgYWxzbyBzcGVjaWZpZWQsCj4+IGJl
-Y2F1c2UgTmVvbiBpcyBub3QgY29tcGxpYW50IHdpdGggSUVFRSA3NTQ6Cj4+IGBgYAo+PiDCoMKg
-wqDCoCBJZiB0aGUgc2VsZWN0ZWQgZmxvYXRpbmctcG9pbnQgaGFyZHdhcmUgaW5jbHVkZXMgdGhl
-IE5FT04gZXh0ZW5zaW9uCj4+IMKgwqDCoMKgIChlLmcuIC1tZnB1PW5lb24pLCBub3RlIHRoYXQg
-ZmxvYXRpbmctcG9pbnQgb3BlcmF0aW9ucyBhcmUgbm90Cj4+IMKgwqDCoMKgIGdlbmVyYXRlZCBi
-eSBHQ0MncyBhdXRvLXZlY3Rvcml6YXRpb24gcGFzcyB1bmxlc3MKPj4gwqDCoMKgwqAgLWZ1bnNh
-ZmUtbWF0aC1vcHRpbWl6YXRpb25zIGlzIGFsc28gc3BlY2lmaWVkLiBUaGlzIGlzIGJlY2F1c2Ug
-TkVPTgo+PiDCoMKgwqDCoCBoYXJkd2FyZSBkb2VzIG5vdCBmdWxseSBpbXBsZW1lbnQgdGhlIElF
-RUUgNzU0IHN0YW5kYXJkIGZvcgo+PiDCoMKgwqDCoCBmbG9hdGluZy1wb2ludCBhcml0aG1ldGlj
-IChpbiBwYXJ0aWN1bGFyIGRlbm9ybWFsIHZhbHVlcyBhcmUgdHJlYXRlZAo+PiDCoMKgwqDCoCBh
-cyB6ZXJvKSwgc28gdGhlIHVzZSBvZiBORU9OIGluc3RydWN0aW9ucyBtYXkgbGVhZCB0byBhIGxv
-c3Mgb2YKPj4gwqDCoMKgwqAgcHJlY2lzaW9uLgo+PiBgYGAKPj4KPj4gLWZ1bnNhZmUtbWF0aC1v
-cHRpbWl6YXRpb25zIG11c3QgYmUgZXhwbGljdGx5IHNwZWNpZmllZCBwZXIgcGFja2FnZSB0bwo+
-PiByZWFsbHkgdXNlIE5FT04gYXMgRlBVLAo+IAo+ICDCoFRoYXQncyBub3QgdHJ1ZS4gVGhlIHN0
-YXRlbWVudCBhYm92ZSBpcyBqdXN0IGFib3V0IGF1dG8tdmVjdG9yaXphdGlvbiwgCj4gYnV0IGl0
-J3Mgc3RpbGwgcG9zc2libGUgdG8gdXNlIGludHJpbnNpY3Mgb3IgaW5saW5lIGFzc2VtYmx5IHRv
-IHVzZSBORU9OIAo+IGluIHlvdXIgY29kZS4gSSBkb24ndCBrbm93IHdoYXQgZXhhY3RseSBoYXBw
-ZW5zIHdpdGggdGhvc2UgaWYgd2Ugc3BlY2lmeSAKPiAtbWZwdT12ZnB2NC1kMTYsIGJ1dCBJIGV4
-cGVjdCB0aGF0IGl0IHdpbGwgbm90IGNvbXBpbGUgdGhvc2UuIFNvIAo+IHBhY2thZ2VzIHdpbGwg
-ZGlzY292ZXIgdGhhdCBuZW9uIGlzIG5vdCBzdXBwb3J0ZWQgb24gdGhlIHRhcmdldCBDUFUsIAo+
-IHdoaWxlIGFjdHVhbGx5IGl0IGlzLgo+IAo+ICDCoE5vdGUgdGhhdCB0aGF0IHVuc2FmZS1tYXRo
-LW9wdGltaXphdGlvbnMgdGhpbmcgd2FzIGV4YWN0bHkgdGhlIHJlYXNvbiAKPiB3aHkgd2UgdGhv
-dWdodCBpdCB3YXMgT0sgdG8gYWxsb3cgLW1mcHU9bmVvbi12ZnB2NCB0byBiZWdpbiB3aXRoIC0g
-R0NDIAo+IGlzIG5vdCBnb2luZyB0byBnZW5lcmF0ZSBpbnZhbGlkIGNvZGUgb3V0IG9mIHRoZSBi
-b3guCgoKTXkgYmFkIGhlcmUuIEkndmUgd3JpdHRlbiBhIGJhZCBjb21taXQgbG9nIGFuZCB0aGF0
-IHBocmFzZSBpcyBub3QKY29ycmVjdCwgeW91J3JlIHJpZ2h0LiBJZiBCUjJfQVJNX0ZQVV9ORU9O
-X1ZGUFY0IGlzIGVuYWJsZWQgdGhlbgpwcm9jZXNzb3Igd2lsbCB1c2UgTkVPTiBhcyBGUFUgYnV0
-IHdpdGggYSBsb3NzIG9mIHByZWNpc2lvbiBhbmQKd2l0aG91dCBhdXRvLXZlY3Rvcml6YXRpb24g
-QlVUIG9ubHkgaWYgLWZ1bnNhZmUtbWF0aC1vcHRpbWl6YXRpb25zIGlzCnBhc3NlZCh2ZXJ5IGhh
-cmQgdG8gZmluZCBhIHBhY2thZ2Ugd2l0aCB0aGF0IGZsYWdzIHBhc3NlZCkuClNvIHRoZSBpZGVh
-ICp3YXMqIHRvICpub3QqIHVzZSBWRlBWNCtORU9OIGJ5IGRlZmF1bHQgb24gZGVmY29uZmlncyBh
-bmQKdGhlbiBlbmFibGUgcGVyIGRlZmNvbmZpZywgZGVwZW5kaW5nIG9uIFNvQyBGUFUgaW1wbGVt
-ZW50YXRpb24sCnRoZSByaWdodCBWRlBWNDogRDE2IG9yIEQzMi4KTGVhdmluZyBhcyBpdCBpcyh3
-aXRoIE5FT04gZW5hYmxlZCkgZmxvYXRpbmcgcG9pbnQgY29kZSBnZW5lcmF0ZWQKd2lsbCBtaXNz
-IHNvbWUgRlBVIGFjY2VsZXJhdGlvbiBzaW5jZSBJRUVFIDc1NCBpcyBub3QgbWV0KCpJIHRob3Vn
-aHQqKS4KCkJVVCB0aGVuIEkndmUgZm91bmQgd2hhdCBBUk0gcmVjb21tZW5kczogWzFdCgpJIHRo
-aW5rIHdlIHNob3VsZCBmb2xsb3cgd2hhdCB0aGV5IHJlY29tbWVuZC4gQW5kIHRoZXJlIGlzIGEg
-Z29vZAp0YWJsZSB0byBmb2xsb3csIG9mIGNvdXJzZSBkZXBlbmRpbmcgb24gcGVyIFNvQyBGUFUg
-aW1wbGVtZW50YXRpb24gaWYKc29tZXRoaW5nIGlzIG9wdGlvbmFsIGFjY29yZGluZyB0byB0aGUg
-Y29ydGV4LUF4IG1vZGVsLgpGb3IgZXhhbXBsZSB0aGV5IHN1Z2dlc3QgQlIyX0FSTV9GUFVfTkVP
-Tl9WRlBWNCgtbWZwdT1uZW9uLXZmcHY0KSBmb3IKQ29ydGV4LUE3IGlmIE5FT04oU0lNRCkgaXMg
-c3VwcG9ydGVkLiBTbyB5ZXMsIHRoZXNlIHJldmVydHMgdGhlbgpkb24ndCBtYWtlIHNlbnNlLgoK
-V2hhdCBJIHVuZGVyc3RhbmQgKm5vdyogdGhlbiBpcyB0aGF0IHRoZSBsb3NzIG9mIHByZWNpc2lv
-biBkdWUgdG8gdGhlCmZhY3QgdGhhdCAqTkVPTiogaXMgbm90IGZ1bGx5IElFRUUgNzU0IGlzIHRy
-dWUgb25seSBpZiAKLWZ1bnNhZmUtbWF0aC1vcHRpbWl6YXRpb25zIGZsYWcgaXMgcGFzc2VkLgoK
-T3RoZXJ3aXNlIEkgZG9uJ3QgdGhpbmsgb2ZmaWNpYWwgQVJNIHdlYnNpdGUgd291bGQgc3VnZ2Vz
-dCBzdWNoIHRhYmxlLApyaWdodD8KCkhlcmVbM10gdGhleSBjbGFyaWZ5IGl0IGFuZCB0aGUgdGFi
-bGVbMV0gaGFzIG1vcmUgc2Vuc2UuClRoZXkgc3RhdGU6CmBgYApIb3dldmVyLCB0aGUgY29tcGls
-ZXIgbWlnaHQgKm5vdCB2ZWN0b3JpemUqIHRoZSBjb2RlIHdoZW4geW91IGV4cGVjdCBpdCAKdG8u
-IFRoZXJlIGFyZSB2YXJpb3VzIHJlYXNvbnMgZm9yIHRoaXM6CgogICAgIE9wdGltaXphdGlvbiBs
-ZXZlbCBmb3IgdGhlIHZlY3Rvcml6ZXIKCiAgICAgKklFRUUgY29tcGxpYW5jZS4qCmBgYAoKQW5k
-IGhlcmVbNF0gYSBzZXQgb2YgY29tbWFuZCBsaW5lIGV4YW1wbGVzLgoKVGhlIHBvaW50IHRoZSB5
-ZXMsIGl0IHNlZW1zIHRvIGJlIG9ubHkgYWJvdXQgYXV0by12ZWN0b3JpemF0aW9uLgoKU28gaGVy
-ZSBJIGFzayBteXNlbGYoYW5kIHlvdSk6IGRvIHdlIGhhdmUgYmV0dGVyIHBlcmZvcm1hbmNlcyB3
-aXRoCk5FT04gb3Igd2l0aG91dCBORU9OIGlmIHByZXNlbnQgZXZlbiBpZiB3ZSBsb29zZSBhdXRv
-LXZlY3Rvcml6YXRpb24/CgpOT1RFOiAtT2Zhc3QgaGFzIHRoZSBzYW1lIGVmZmVjdCBvZiAtZmZh
-c3QtbWF0aCB0aGF0IHJlbGF4ZXMgdGhlIHJ1bGVzCmFuZCBlbmFibGUgdmVjdG9yaXphdGlvbi4g
-U28gdGhhdCB3aWxsIGJyZWFrIElFRUUgNzU0IHN0YW5kYXJkIGFueXdheSwKbm90IG9ubHkgLWZ1
-bnNhZmUtbWF0aC1vcHRpbWl6YXRpb25zLgpTbyB0aGlzIGFscmVhZHkgaGFwcGVucy4KClNvLCBk
-byB3ZSByZWFsbHkgbmVlZCB0byBiZSBzbyBzdHJpY3RseSBjb21wbGlhbnQgdG8gSUVFRSA3NTQ/
-Ck5FT04gdW5pdCBzZWVtcyB0byAic2F2ZSBwb3dlciBhbmQgbWF4aW1pemUgdGhlIHBlcmZvcm1h
-bmNlIiBjb21wYXJlZAp0byBWRlBWNCBhcyBwb2ludGVkIGhlcmVbM10uCgo+PiBidXQgaXQncyBz
-b21ldGhpbmcgdGhhdCBpcyBsZWZ0IHRvIHRoZSB1c2VyIGFzCj4+IHdlbGwgYXMgc2V0dGluZyBC
-UjJfQVJNX0ZQVV9ORU9OX1ZGUFY0LiBUaGlzIHdheSB0aGUgZGVmYXVsdAo+PiBCUjJfQVJNX0ZQ
-VV9WRlBWNEQxNiBpcyB1c2VkIGFzIHByZXZpb3VzbHkuIFNvIGxldCdzIHJldmVydCB0aGUKPj4g
-b2ZmZW5kaW5nIHBhdGNoLgo+IAo+ICDCoEkgY291bGQgYmUgd3JvbmcsIGJ1dCBkb2Vzbid0IHRo
-ZSBhdmFpbGFiaWxpdHkgb2YgU0lNRCBpbXBseSB0aGF0IAo+IHRoZXJlIGFyZSAzMiBEUCByZWdp
-c3RlcnM/CgpKdWRnaW5nIGZyb20gdGhlIGxpbmsgYWJvdmU6CmBgYApWRlB2MyBhbmQgVkZQdjQg
-aW1wbGVtZW50YXRpb25zIHByb3ZpZGUgMzIgZG91YmxlLXByZWNpc2lvbiByZWdpc3RlcnMuIApI
-b3dldmVyLCB3aGVuIE5FT04gdW5pdCBpcyBub3QgcHJlc2VudCwgdGhlIHRvcCBzaXh0ZWVuIHJl
-Z2lzdGVycyAKKEQxNi1EMzEpIGJlY29tZSBvcHRpb25hbC4gVGhpcyBpcyBzaG93biBieSB0aGUg
-LWQxNiBpbiB0aGUgb3B0aW9uIG5hbWUsIAp3aGljaCBtZWFucyB0aGF0IHRoZSB0b3Agc2l4dGVl
-biBEIHJlZ2lzdGVycyBhcmUgbm90IGF2YWlsYWJsZQpgYGAKWWVzLCBGUCtTSU1EIGltcGxpZXMg
-MzIgZG91YmxlIHByZWNpc2lvbiByZWdpc3RlcnMuIEluZGVlZCBpbiB0aGUgdGFibGUsCm9uIHRo
-ZSBjb2x1bW4gIkZQICsgU0lNRCIgdGhlcmUgaXMgbm8gIi1kMTYiIHBhc3NlZC4gVGhhdCBvbmx5
-IGhhcHBlbnMKaW4gdGhlIGNvbHVtbiAiRlAgb25seSIuCgpUaGVuIEkgd291bGQgbGlrZSB0byBh
-ZGp1c3QgYW55IGRlZmNvbmZpZyBhY2NvcmRpbmcgdG8gU29DJ3MgRlBVCmltcGxlbWVudGF0aW9u
-IGFjY29yZGluZyB0byB0aGF0IHRhYmxlLiBXaGF0IGFib3V0IHRoaXM/CgpUaGUgb3RoZXIgY2hh
-bmNlIHdvdWxkIGJlIGRpcmVjdGx5IHRlc3Rpbmcgb24gZGlmZmVyZW50IFNvQ3MKd2hhdCBoYXBw
-ZW5zIHdpdGggYSBwcm9ncmFtL3BhY2thZ2UgdGhhdCB1c2VzIGZsb2F0aW5nIHBvaW50IGRhdGFz
-LgpCdXQgdGhhdCB0YWJsZSB0YWxrcyBwcmV0dHkgY2xlYXIgSU1ITy4gQW5kIGFueXdheSBJIGhh
-dmUgcGxhbm5lZAp0byBidW1wIGFsbCBPbGltZXggQWxsd2lubmVyIGJvYXJkcyBhcyB3ZWxsIGFz
-IEFzdXMgVGlua2VyIGFuZApBbWFydWxhIFZ5YXNhLiBTbyBJJ2xsIGhhdmUgdGhlIGNoYW5jZSB0
-byB0ZXN0IGl0LgpTbzoKY29ydGV4LUE3CmNvcnRleC1BOApjb3J0ZXgtQTE3KHRoZSB0YWJsZSBk
-b2Vzbid0IHRhbGsgYWJvdXQgdGhhdCBidXQgaGVyZVsyXSB3ZSBjYW4Kc2VlIHRoYXQgQTEyL0Ex
-NS9BMTcgaGF2ZSBib3RoIFZGUFY0K05FT04gc28gSSBjYW4gZm9sbG93IHRoZSBjb2x1bW4KZm9y
-IEExNSkKCkFjdHVhbGx5IEkgZG9uJ3QgaGF2ZSBib2FyZHMgd2l0aCBBNSBhbmQgQTkuIFNvIG1h
-eWJlIHdlIGNhbiBhc2sgdG8KTWljcm9jaGlwIFNBTUE1IG1haW50YWluZXJzIGFuZCBOWFAgaS5N
-WDYgbWFpbnRhaW5lcnMgdG8gZ2l2ZSBhIHRyeQp0aGUgbmV4dCB0aW1lIHRoZXkgYnVtcCB1LWJv
-b3QvbGludXguCgpXaGljaCBwYWNrYWdlIGNvdWxkIGJlIHRoZSByaWdodCBvbmUgdG8gc2VlIGlm
-IGV2ZXJ5dGhpbmcgd29ya3MKc21vb3RoIGluc3RlYWQgb2YgaGFuZ2luZyBiZWNhdXNlIG9mIEZQ
-VSBpbGxlZ2FsIGluc3RydWN0aW9uPwoKSG9wZSBJJ20gb24gdGhlIHJpZ2h0IGRpcmVjdGlvbiBh
-bmQgYXQgbGVhc3QgcHJvdmlkaW5nIHNvbWUgbmV3CmluZm9ybWF0aW9ucy4gSXQncyBwcmV0dHkg
-aW50cmljYXRlIHRoaXMgcGFydC4KCkkgd2FpdCBmb3IgeW91ciB0aG91Z2h0cyBvbiB0aGlzLiBT
-b3JyeSBpZiBzb21ldGhpbmcgaXMgbm90IHRoYXQgY2xlYXIsCkknbSB0cnlpbmcgdG8gY2xhcmlm
-eSBteXNlbGYhCgpUaGFuayB5b3UhCgpbMV06IApodHRwczovL2RldmVsb3Blci5hcm0uY29tL2Rv
-Y3VtZW50YXRpb24vZGVuMDAxOC9hL0NvbXBpbGluZy1ORU9OLUluc3RydWN0aW9ucy9HQ0MtY29t
-bWFuZC1saW5lLW9wdGlvbnMvT3B0aW9uLXRvLXNwZWNpZnktdGhlLUZQVQpbMl06IGh0dHBzOi8v
-ZW4ud2lraXBlZGlhLm9yZy93aWtpL0NvbXBhcmlzb25fb2ZfQVJNdjctQV9wcm9jZXNzb3JzClsz
-XTogCmh0dHBzOi8vZGV2ZWxvcGVyLmFybS5jb20vZG9jdW1lbnRhdGlvbi9kZW4wMDE4L2EvQ29t
-cGlsaW5nLU5FT04tSW5zdHJ1Y3Rpb25zL0dDQy1jb21tYW5kLWxpbmUtb3B0aW9ucy9WZWN0b3Jp
-emluZy1mbG9hdGluZy1wb2ludC1vcGVyYXRpb25zCls0XTogCmh0dHBzOi8vZGV2ZWxvcGVyLmFy
-bS5jb20vZG9jdW1lbnRhdGlvbi9kZW4wMDE4L2EvQ29tcGlsaW5nLU5FT04tSW5zdHJ1Y3Rpb25z
-L0dDQy1jb21tYW5kLWxpbmUtb3B0aW9ucy9FeGFtcGxlLUdDQy1jb21tYW5kLWxpbmUtdXNhZ2Ut
-Zm9yLU5FT04tY29kZS1vcHRpbWl6YXRpb24KCkJlc3QgcmVnYXJkcwotLSAKR2l1bGlvIEJlbmV0
-dGkKQmVuZXR0aSBFbmdpbmVlcmluZyBzYXMKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+Arnout,
+
+Thanks for the quick response.
+
+On Thu, 2022-08-18 at 23:10 +0200, Arnout Vandecappelle wrote:
+> 
+> On 18/08/2022 21:02, David Mosberger-Tang via buildroot wrote:
+> > We have a need to be able to support multiple NAND devices with distinct flash
+> > parameters.  For example, one device uses an erase block size of 128KiB while
+> > another uses 256KiB.  Depending on supply-chain availability, we may get boards
+> > with one device or the other.  Because of this, we'd like the ability to create
+> > multiple UBI images with a single "make" command so that we can be sure all
+> > images are always up-to-date.
+> 
+>   That situation sucks pretty hard... It makes upgrades a bit tricky because you 
+> have to choose a different upgrade image too depending on the hardware...
+
+That part we can handle fine, fortunately.
+
+>   My advise would be not to use ubifs. Use squashfs, which doesn't care about 
+> the LEB size.
+
+Ah, that would solve the problem.  I don't think it's a viable option for us at
+this point though.
+
+>  Writeable rootfs is generally not a good idea anyway. With 
+> squashfs, you still have the problem for ubinize, but ubinize is anyway just an 
+> add-on for the simplest case; you can easily add a post-build script that runs 
+> ubinize twice.
+> 
+>   Also, as an aside: if you don't want to patch buildroot itself, you can also 
+> add fs options to BR2_EXTERNAL.
+
+Got it, thanks for the suggestion!
+
+> > To accomplish this, I modified the build environment as per attached patch.  The
+> > patch is relative to version 2017.02.5 and I see that, in the meantime, ubifs.mk
+> > and ubi.mk have been split into separate directories.  Thus, the attached patch
+> > won't apply directly.  However, I thought I'd share it as a basis for discussion
+> > in case anyone else has similar needs.  I'm sure there are better ways of
+> > accomplishing the same, but the patch works for our purposes and, if this is of
+> > interest to others, I'd be happy on rework it for the latest buildroot version
+> > and incorporate other feedback.
+> 
+>   I think for upstream Buildroot, the patch is a bit too complicated and the use 
+> case too rare and specific. In addition, in its current form, it makes the usual 
+> case less user-friendly.
+
+Makes sense.  And if someone does have the need for it, hopefully they'll find
+the patch in the mailing list archive.
+
+Thanks and best regards,
+
+  --david
+
+> 
+> 
+>   Regards,
+>   Arnout
+> 
+> > With the patch applied, the NAND flash parameters can be specified with a single
+> > config option BR2_TARGET_ROOTFS_UBIFS_PARAMS.  It expects a blank-separated list
+> > of triplets which specify the Logical Erase Block size, the minimum I/O size,
+> > and the Physical Erase Block size in bytes (as hex strings).  For example, with:
+> > 
+> >   BR2_TARGET_ROOTFS_UBIFS_PARAMS="0x1f000-0x800-0x20000 0x3e000-0x1000-0x40000"
+> > 
+> > You'd get two images:
+> > 
+> >   rootfs.ubi-eb128k-pg2k and rootfs.ubi-eb256k-pg4
+> > 
+> > with:
+> > 
+> >   Logical Erase Block size: 0x1f000 and 0x3e000, respectively
+> >   Minimum I/O size: 0x800 and 0x1000, respectively
+> >   Physical Erase Block size: 0x20000 and 0x40000, respectively
+> > 
+> > (The patch assumes the subpage size is constant across the images.)
+> > 
+> > Best regards,
+> > 
+> >    --david
+> > 
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
