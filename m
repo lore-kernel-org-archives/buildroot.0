@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79B11C00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 07:01:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EC4CC00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 07:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D936C41B91;
-	Thu, 18 Aug 2022 07:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D936C41B91
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0556840C7F;
+	Thu, 18 Aug 2022 07:01:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0556840C7F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HsqIGNc2n6hG; Thu, 18 Aug 2022 07:01:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5PQwYvFCHZ2T; Thu, 18 Aug 2022 07:01:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7CD541B8B;
-	Thu, 18 Aug 2022 07:01:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7CD541B8B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A33D408C0;
+	Thu, 18 Aug 2022 07:01:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A33D408C0
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A8EC91BF3FC
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 07:01:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B64CE1BF3FC
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 07:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8308A41B8B
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 07:01:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8308A41B8B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 904BB41B93
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 07:01:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 904BB41B93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 12rKfko2v4qT for <buildroot@lists.busybox.net>;
- Thu, 18 Aug 2022 07:01:04 +0000 (UTC)
+ with ESMTP id bq3EG1exrhGU for <buildroot@lists.busybox.net>;
+ Thu, 18 Aug 2022 07:01:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B1BC41947
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 07:01:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B1BC41947
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9555041B8D
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 07:01:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9555041B8D
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DBBC9879A3; Thu, 18 Aug 2022 06:46:28 +0000 (UTC)
+ id 04B20879A7; Thu, 18 Aug 2022 06:47:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 18 Aug 2022 08:57:40 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 1f49d55e845f5f1303b1efb619613b352d1ce097
-X-Git-Newrev: 1f4a9dbebcb4d0125715c39fb23ec4fa1f2a1cd5
+Date: Thu, 18 Aug 2022 08:57:32 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 07b8a6db19659fe8880c716307c886a9f86df9b7
+X-Git-Newrev: c56da683c8edd1c7555d394d4501a8423c5fcda6
 X-Patchwork-Hint: ignore
-Message-Id: <20220818064628.DBBC9879A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/uclibc: define
+Message-Id: <20220818064700.04B20879A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/uclibc: define
  BR2_UCLIBC_TARGET_ARCH for ARM64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f4a9dbebcb4d0125715c39fb23ec4fa1f2a1cd5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c56da683c8edd1c7555d394d4501a8423c5fcda6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 So far, BR2_UCLIBC_TARGET_ARCH had a value for all
 architectures... except for ARM64. Its value is passed as ARCH= when
