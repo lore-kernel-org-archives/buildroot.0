@@ -1,87 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43B16C00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 21:39:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD22CC00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 21:51:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CAAA8404F1;
-	Thu, 18 Aug 2022 21:39:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAAA8404F1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QKySV707z9KM; Thu, 18 Aug 2022 21:39:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D9E64013A;
-	Thu, 18 Aug 2022 21:39:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D9E64013A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BD1E21BF9B4
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 21:39:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 916044007F
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 21:39:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 916044007F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2CCB141A5A;
+	Thu, 18 Aug 2022 21:51:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CCB141A5A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SWPXJ6nSOJ5Q for <buildroot@lists.busybox.net>;
- Thu, 18 Aug 2022 21:39:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABCB3418D2
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ABCB3418D2
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 21:39:42 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id h5so2336405wru.7
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 14:39:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=Sft7rv4/U4hjKhjrVe3DjDUY7kELFcko7pvROIi4WKM=;
- b=22UKucBFsKJXzTzww+VBgC8Ejre5lYFJYxkqvbiPTdbr4u6QrZBJLPtANfHraZ8NV4
- yXnPYD0mNJUBnbtmdBgyh0IypgWGCyn7XnNXu/UDvbFyzPIauIXgNUZa9OE6yrP87zsj
- sBicApDvT+9tQ4CS4EOOeHLKsF24raFUxADB22+fG/eNbDKPE8OHoiaH13wwi0OBeqYx
- fqz8BguAUeVpwayUNy9hSIxeCbO0zZZ6OzR/TR7tXj2lyQjMw0aTEPEHOSWLkllLKBgW
- /X0Vd8JQWWUHXN7utEUdXCqY/3OlJSlYBiR9WsQij0OyouBD7yNw2/IJ0rcQh6ojKfjx
- pOJA==
-X-Gm-Message-State: ACgBeo00LXsmNZoD5Ry3LK9IkbdnrFTqnfEO/ay7aHbuTQaq0MGcK2vs
- PfCeO3+f54kFjpX8Vzf+MzHctTlzLog=
-X-Google-Smtp-Source: AA6agR5rJAt669RiXJQz/1I0yd7ffJ5/0Fhls83YfP4XkIB1NgNJ+fAFHLUFB1e/MGMCsyjbOB2woQ==
-X-Received: by 2002:a5d:60c1:0:b0:225:3890:290b with SMTP id
- x1-20020a5d60c1000000b002253890290bmr152457wrt.66.1660858780617; 
- Thu, 18 Aug 2022 14:39:40 -0700 (PDT)
-Received: from kali.home (2a01cb088e0b5b00db1a14b4af656231.ipv6.abo.wanadoo.fr.
- [2a01:cb08:8e0b:5b00:db1a:14b4:af65:6231])
- by smtp.gmail.com with ESMTPSA id
- m128-20020a1c2686000000b003a5dbdea6a8sm7792925wmm.27.2022.08.18.14.39.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 18 Aug 2022 14:39:40 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 18 Aug 2022 23:39:36 +0200
-Message-Id: <20220818213936.442912-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T7kBHZ7NvsxO; Thu, 18 Aug 2022 21:50:59 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C6A2419C5;
+	Thu, 18 Aug 2022 21:50:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C6A2419C5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C78FC1BF9B4
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 21:50:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1A5183E7B
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 21:50:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1A5183E7B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PChpbB21xh5u for <buildroot@lists.busybox.net>;
+ Thu, 18 Aug 2022 21:50:55 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08EC783E63
+Received: from smtpcmd15186.aruba.it (smtpcmd15186.aruba.it [62.149.156.186])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08EC783E63
+ for <buildroot@busybox.net>; Thu, 18 Aug 2022 21:50:53 +0000 (UTC)
+Received: from [192.168.8.175] ([86.32.63.136])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id OnPeoXShazxgcOnPfoyfxr; Thu, 18 Aug 2022 23:50:51 +0200
+Message-ID: <1da82f84-42e7-37af-d87d-3dfb27382060@benettiengineering.com>
+Date: Thu, 18 Aug 2022 23:50:50 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=Sft7rv4/U4hjKhjrVe3DjDUY7kELFcko7pvROIi4WKM=;
- b=onbMnFFKpQyBNnGg1w0raiyB7AK1I+ZH6UExOaP3Z0FPnTbeV8Ds5jbSfd2I5W3xZA
- ybHEsWcHsbjtDEDHcCAIsP4E+Oadk59cXvZYNzqlAFqw77Vw1F5nKzLN+Ys+SoNkesaK
- kJjJstyUUce5FiopgkE8iubJOk+XV/5aG15MWToSkAEl/y37VaKc0it6m2Dpf5QxsGN0
- hYA2cG3bndQdBGgzGIMX5lBdpQiQZUN74BkhkyDNO4p+e2xhhsuMbwRFpDUWfH5l1Uvi
- i8McpH7uo89bZxXIt+LoUN7ki+vVl4OXY7CQRxfSpEQMYdhwf3GRRjUOzJS2iQO46FyT
- p8ZQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=onbMnFFK
-Subject: [Buildroot] [PATCH 1/1] package/strongswan: fix wolfssl build
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Content-Language: en-US
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20220816175503.1280276-1-francois.perrad@gadz.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220816175503.1280276-1-francois.perrad@gadz.org>
+X-CMAE-Envelope: MS4xfN1znaesdN7Hg131rTBELxwgbnKSDixLSIL11FoYfNHp+KeE2866EWH6Zm8F3R2VL6dU91U2ZI63enjA0J2EgiBkEfVpnaRT/sts6IIoIyIO9F7pSHVY
+ RyXmM/93ttbksjeSVSbFrOI7bJkHozIaYgFaoZwhQJqYod4V4ro9GyACNIVvO5droCl9Bl8Fj0lMakF1zDi6VND/0owgaOzBCqqNF9euWg2Zx+X70vrMaXII
+ 3GIdu62IPIad3gCqH5dh9g==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1660859451; bh=8RJfAOwQcNEVYUHUk5fz3YephWZBw8CHvMpBsvHCPAE=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=XnZvbdCKT+Sl615mAS32lhnmLhskP+XzMrg79wdV1Q4OeC+zH9OluL+Yn4FmIb+T1
+ sO8HyB28tRRPsZBvFkdtmBPlbvv460sWdka/8j2gtA9if8KfGs+b1q2yOwaOtAzxQ/
+ iAR9O/wKRucCW8qWsHBhLyAwanQZESatedS96WfbkHDdYRuETwqMYc+d75P7pUloET
+ lqUWkPG21Pu9iPMG29iqWmSsnx18dmIcqP1hz4Zve6FHFunc/8HP6A5DqcUBqap/rm
+ 2P08aRbBR5JBINerKGumVRelGS7XyaRmjIjZBdgmJwWDGsYSHCojBDtz+lYHKzwRXm
+ SQ3cMZN62gdSw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=XnZvbdCK
+Subject: Re: [Buildroot] [PATCH v4 0/2] new board LS1028ARDB
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,204 +76,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with BR2_PACKAGE_WOLFSSL_ALL raised
-since bump to version 5.9.0 in commit
-da912a3d2abe2eb2b338c03ec56c7e39a4d640f9:
+Hi Francois,
 
-In file included from ../../../../src/libstrongswan/utils/utils.h:59,
-                 from ../../../../src/libstrongswan/library.h:101,
-                 from wolfssl_common.h:29,
-                 from wolfssl_aead.c:23:
-wolfssl_aead.c:90:16: error: conflicting types for 'encrypt'; have '_Bool(union <anonymous>,  chunk_t,  chunk_t,  chunk_t,  chunk_t *)'
-   90 | METHOD(aead_t, encrypt, bool,
-      |                ^~~~~~~
-../../../../src/libstrongswan/utils/utils/object.h:99:20: note: in definition of macro 'METHOD'
-   99 |         static ret name(union {iface *_public; this;} \
-      |                    ^~~~
-In file included from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/wc_port.h:573,
-                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/types.h:35,
-                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/logging.h:33,
-                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/ssl.h:35,
-                 from wolfssl_common.h:64,
-                 from wolfssl_aead.c:23:
-/home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/unistd.h:149:6: note: previous declaration of 'encrypt' with type 'void(char *, int)'
-  149 | void encrypt(char *, int);
-      |      ^~~~~~~
+remember to set as "Superseded" the v3 patchset in Patchwork:
+https://patchwork.ozlabs.org/project/buildroot/list/
 
-Fixes:
- - http://autobuild.buildroot.org/results/02f080c2f6d8272cb8cc1de66e058d66fb7499bc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...gswan-plugins-wolfssl-rename-encrypt.patch | 150 ++++++++++++++++++
- 1 file changed, 150 insertions(+)
- create mode 100644 package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch
-
-diff --git a/package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch b/package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch
-new file mode 100644
-index 0000000000..7b47b3278b
---- /dev/null
-+++ b/package/strongswan/0001-src-libstrongswan-plugins-wolfssl-rename-encrypt.patch
-@@ -0,0 +1,150 @@
-+From 5900426a710eaa65a27784687775e331bcb0489b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 8 Aug 2022 09:52:19 +0200
-+Subject: [PATCH] wolfssl: Rename `encrypt` methods to avoid conflicts with
-+ system headers
-+
-+Rename `encrypt` methods to avoid the following build failure when wolfSSL
-+is built with --enable-opensslextra:
-+
-+In file included from ../../../../src/libstrongswan/utils/utils.h:59,
-+                 from ../../../../src/libstrongswan/library.h:101,
-+                 from wolfssl_common.h:29,
-+                 from wolfssl_aead.c:23:
-+wolfssl_aead.c:90:16: error: conflicting types for 'encrypt'; have '_Bool(union <anonymous>,  chunk_t,  chunk_t,  chunk_t,  chunk_t *)'
-+   90 | METHOD(aead_t, encrypt, bool,
-+      |                ^~~~~~~
-+../../../../src/libstrongswan/utils/utils/object.h:99:20: note: in definition of macro 'METHOD'
-+   99 |         static ret name(union {iface *_public; this;} \
-+      |                    ^~~~
-+In file included from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/wc_port.h:573,
-+                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/types.h:35,
-+                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/wolfcrypt/logging.h:33,
-+                 from /home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/wolfssl/ssl.h:35,
-+                 from wolfssl_common.h:64,
-+                 from wolfssl_aead.c:23:
-+/home/autobuild/autobuild/instance-5/output-1/host/powerpc64le-buildroot-linux-musl/sysroot/usr/include/unistd.h:149:6: note: previous declaration of 'encrypt' with type 'void(char *, int)'
-+  149 | void encrypt(char *, int);
-+      |      ^~~~~~~
-+
-+Closes strongswan/strongswan#1201
-+[Retrieved from:
-+https://github.com/strongswan/strongswan/commit/5900426a710eaa65a27784687775e331bcb0489b]
-+---
-+ src/libstrongswan/plugins/wolfssl/wolfssl_aead.c           | 4 ++--
-+ src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c        | 4 ++--
-+ src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c  | 4 ++--
-+ src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c  | 4 ++--
-+ src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c | 4 ++--
-+ 5 files changed, 10 insertions(+), 10 deletions(-)
-+
-+diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c b/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c
-+index 2ea7c94cd65..44f054916cf 100644
-+--- a/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c
-++++ b/src/libstrongswan/plugins/wolfssl/wolfssl_aead.c
-+@@ -87,7 +87,7 @@ struct private_aead_t {
-+ 	encryption_algorithm_t alg;
-+ };
-+ 
-+-METHOD(aead_t, encrypt, bool,
-++METHOD(aead_t, encrypt_, bool,
-+ 	private_aead_t *this, chunk_t plain, chunk_t assoc, chunk_t iv,
-+ 	chunk_t *encrypted)
-+ {
-+@@ -323,7 +323,7 @@ aead_t *wolfssl_aead_create(encryption_algorithm_t algo,
-+ 
-+ 	INIT(this,
-+ 		.public = {
-+-			.encrypt = _encrypt,
-++			.encrypt = _encrypt_,
-+ 			.decrypt = _decrypt,
-+ 			.get_block_size = _get_block_size,
-+ 			.get_icv_size = _get_icv_size,
-+diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c b/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c
-+index cffe7ba2375..085a912404c 100644
-+--- a/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c
-++++ b/src/libstrongswan/plugins/wolfssl/wolfssl_crypter.c
-+@@ -230,7 +230,7 @@ METHOD(crypter_t, decrypt, bool,
-+ 	return success;
-+ }
-+ 
-+-METHOD(crypter_t, encrypt, bool,
-++METHOD(crypter_t, encrypt_, bool,
-+ 	private_wolfssl_crypter_t *this, chunk_t data, chunk_t iv, chunk_t *dst)
-+ {
-+ 	u_char *out;
-+@@ -578,7 +578,7 @@ wolfssl_crypter_t *wolfssl_crypter_create(encryption_algorithm_t algo,
-+ 	INIT(this,
-+ 		.public = {
-+ 			.crypter = {
-+-				.encrypt = _encrypt,
-++				.encrypt = _encrypt_,
-+ 				.decrypt = _decrypt,
-+ 				.get_block_size = _get_block_size,
-+ 				.get_iv_size = _get_iv_size,
-+diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c b/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c
-+index d8a1ededb06..110543762f2 100644
-+--- a/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c
-++++ b/src/libstrongswan/plugins/wolfssl/wolfssl_ec_public_key.c
-+@@ -193,7 +193,7 @@ METHOD(public_key_t, verify, bool,
-+ 	}
-+ }
-+ 
-+-METHOD(public_key_t, encrypt, bool,
-++METHOD(public_key_t, encrypt_, bool,
-+ 	private_wolfssl_ec_public_key_t *this, encryption_scheme_t scheme,
-+ 	void *params, chunk_t crypto, chunk_t *plain)
-+ {
-+@@ -324,7 +324,7 @@ static private_wolfssl_ec_public_key_t *create_empty()
-+ 			.key = {
-+ 				.get_type = _get_type,
-+ 				.verify = _verify,
-+-				.encrypt = _encrypt,
-++				.encrypt = _encrypt_,
-+ 				.get_keysize = _get_keysize,
-+ 				.equals = public_key_equals,
-+ 				.get_fingerprint = _get_fingerprint,
-+diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c b/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c
-+index f423d8d5691..ea0fb3dfc77 100644
-+--- a/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c
-++++ b/src/libstrongswan/plugins/wolfssl/wolfssl_ed_public_key.c
-+@@ -111,7 +111,7 @@ METHOD(public_key_t, verify, bool,
-+ 	return ret == 0 && res == 1;
-+ }
-+ 
-+-METHOD(public_key_t, encrypt, bool,
-++METHOD(public_key_t, encrypt_, bool,
-+ 	private_public_key_t *this, encryption_scheme_t scheme,
-+ 	void *params, chunk_t crypto, chunk_t *plain)
-+ {
-+@@ -368,7 +368,7 @@ static private_public_key_t *create_empty(key_type_t type)
-+ 		.public = {
-+ 			.get_type = _get_type,
-+ 			.verify = _verify,
-+-			.encrypt = _encrypt,
-++			.encrypt = _encrypt_,
-+ 			.get_keysize = _get_keysize,
-+ 			.equals = public_key_equals,
-+ 			.get_fingerprint = _get_fingerprint,
-+diff --git a/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c b/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c
-+index 72df115fe90..da8899c2d8c 100644
-+--- a/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c
-++++ b/src/libstrongswan/plugins/wolfssl/wolfssl_rsa_public_key.c
-+@@ -216,7 +216,7 @@ METHOD(public_key_t, verify, bool,
-+ 	}
-+ }
-+ 
-+-METHOD(public_key_t, encrypt, bool,
-++METHOD(public_key_t, encrypt_, bool,
-+ 	private_wolfssl_rsa_public_key_t *this, encryption_scheme_t scheme,
-+ 	void *params, chunk_t plain, chunk_t *crypto)
-+ {
-+@@ -440,7 +440,7 @@ static private_wolfssl_rsa_public_key_t *create_empty()
-+ 			.key = {
-+ 				.get_type = _get_type,
-+ 				.verify = _verify,
-+-				.encrypt = _encrypt,
-++				.encrypt = _encrypt_,
-+ 				.equals = public_key_equals,
-+ 				.get_keysize = _get_keysize,
-+ 				.get_fingerprint = _get_fingerprint,
+Thank you
+Best regards
 -- 
-2.35.1
+Giulio Benetti
+Benetti Engineering sas
+
+On 16/08/22 19:55, Francois Perrad wrote:
+> This serie introduces a new board.
+> 
+> The first commit tweak an existing module,
+> and the second commit introduces the new board.
+> 
+> v3 --> v4
+> - remove qoriq-cadence-dp-firmware part
+> - use imx_v8_defconfig from LSDK instead of arm64 default
+> 
+> v2 --> v3
+> - restore my SoB
+> - add Reviewed-by Giulio Benetti
+> 
+> v1 --> v2
+> - add missing udev rules
+> - improved commit messages
+> - tweak readme.txt
+>    - of=/dev/sdX
+> - minor cleanup in defconfig
+>    - BR2_TOOLCHAIN_BUILDROOT_GLIBC becomes BR2_TOOLCHAIN_BUILDROOT_WCHAR
+>    - BR2_PACKAGE_BUSYBOX_SHOW_OTHERS removed
+> 
+> Francois Perrad (2):
+>    boot/arm-trusted-firmware: allow to generate BL2 from RCW
+>    board/freescale/ls1028ardb: new board
+> 
+>   DEVELOPERS                                    |  2 +
+>   board/freescale/ls1028ardb/genimage.cfg       | 23 +++++++
+>   board/freescale/ls1028ardb/readme.txt         | 60 +++++++++++++++++++
+>   .../boot/extlinux/extlinux.conf               |  4 ++
+>   .../rules.d/73-fsl-enetc-networking.rules     | 16 +++++
+>   boot/arm-trusted-firmware/Config.in           |  6 ++
+>   .../arm-trusted-firmware.mk                   |  6 ++
+>   configs/ls1028ardb_defconfig                  | 57 ++++++++++++++++++
+>   8 files changed, 174 insertions(+)
+>   create mode 100644 board/freescale/ls1028ardb/genimage.cfg
+>   create mode 100644 board/freescale/ls1028ardb/readme.txt
+>   create mode 100644 board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
+>   create mode 100644 board/freescale/ls1028ardb/rootfs_overlay/etc/udev/rules.d/73-fsl-enetc-networking.rules
+>   create mode 100644 configs/ls1028ardb_defconfig
+> 
 
 _______________________________________________
 buildroot mailing list
