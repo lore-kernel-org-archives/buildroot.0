@@ -1,89 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15AE3C32773
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 19:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77126C00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 20:15:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8549F419D3;
-	Thu, 18 Aug 2022 19:12:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8549F419D3
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m6qR1V7kuMhP; Thu, 18 Aug 2022 19:12:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1126641987;
-	Thu, 18 Aug 2022 19:12:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1126641987
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 012D11BF2A9
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 19:12:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD7D14016C
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 19:12:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD7D14016C
+	by smtp2.osuosl.org (Postfix) with ESMTP id D06D6405E9;
+	Thu, 18 Aug 2022 20:15:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D06D6405E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fh5TyQmzpV8r for <buildroot@lists.busybox.net>;
- Thu, 18 Aug 2022 19:12:51 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zOb0K1vw5wnc; Thu, 18 Aug 2022 20:15:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC5D0403C8;
+	Thu, 18 Aug 2022 20:15:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC5D0403C8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A9EBF1BF343
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 20:15:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F24B84013
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 20:15:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F24B84013
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mTFXWWKFhsN0 for <buildroot@lists.busybox.net>;
+ Thu, 18 Aug 2022 20:15:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4D5840154
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D4D5840154
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 19:12:50 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id y187so1829542iof.0
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 12:12:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27D3C83F67
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 27D3C83F67
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 20:15:33 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id gb36so5214795ejc.10
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 13:15:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=mime-version:user-agent:content-transfer-encoding:organization
- :references:in-reply-to:date:to:from:subject:message-id
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc;
- bh=4vKEUUWFmEThKdZ7jDJ9NlBUMbnhK0bpCwQRvZ5wnSE=;
- b=4Th8jTFpoOPHMQVE4GrHsNk+dz8W55kOJogsPMVB1oAJy3elMon60KODmxLWyWO1TU
- /KmC9z1EhQjtPMnrlCN0rgXPIY8jDrQlepEa4A7K+w5VZMNC38Y2JMwYKSlr25bBTKJX
- Qcibb0TQCWrpTViGkNzCjaU6RFmbrT8VPpSncdwecN7vMBTGiSrxjuHsS5Lf0Tbckauc
- Gmh53yYg+31Iy+whNZ6WK5s6CcN3OrdWYoUbWifIyotAYlipYEbcBWiqPQQEaCi/24mj
- RUsyWL+fIGqyXJtCskliylJXtMztGmDStxV01poOSx8s0butRGA5CtWzCsARsSGPsnvV
- jBWA==
-X-Gm-Message-State: ACgBeo3LsCFvytaKETCOLmXwr97TRsEUVrvWp+LGMXSRW/I2cW9m46NS
- 9klrwW4Ls/rggs+dD9fxDHDP6rAETySDGYQ=
-X-Google-Smtp-Source: AA6agR4B0+4SfZkADR2MikuDd9oRG+9gnMzW0FmAU11PCKTkvMoAeRstBknspBlNkvScbtGHC1JBeQ==
-X-Received: by 2002:a05:6602:15c6:b0:67a:33d1:6c73 with SMTP id
- f6-20020a05660215c600b0067a33d16c73mr2028659iow.156.1660849969431; 
- Thu, 18 Aug 2022 12:12:49 -0700 (PDT)
-Received: from bixby.lan ([76.130.90.80]) by smtp.gmail.com with ESMTPSA id
- x13-20020a92d64d000000b002e8e1a7d90esm927587ilp.65.2022.08.18.12.12.48
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 18 Aug 2022 12:12:48 -0700 (PDT)
-Message-ID: <6c71c767d7904097e3e27f7cd3f483d66eadb44d.camel@egauge.net>
-To: buildroot@buildroot.org
-Date: Thu, 18 Aug 2022 13:12:48 -0600
-In-Reply-To: <a616e2b3d0edf64b98a2114dad8086fcdd1088f4.camel@egauge.net>
-References: <a616e2b3d0edf64b98a2114dad8086fcdd1088f4.camel@egauge.net>
-Organization: eGauge Systems LLC
-User-Agent: Evolution 3.44.1-0ubuntu1 
+ bh=8bqc5OmL2MnKhb+iPWv2BwcrovVNX6i4fSZpqE4nxRA=;
+ b=fmAzBD+TVILVrX/CCTcyvdAeQ91yP8zGJ3P0B2Sn58NXmJ/LDBDeWB+FYDYvjW4Grz
+ InyK0ijJrHhCc5p1fotyksbDWLn4VZu0ctSfRoGUgPayOLccUeo7OANl9gni5b4loZiV
+ H6ud54hQPd08Qh+NAdt+4Ijd7EorBEP9EjYh+028z6MsN5N3VqMNkPfNfsaDf3EL6eVb
+ 09rqm6rz6nc+/ypSzV3Jf3chPOWlJHaVFmUcIHfv9V1DDhOyRAIwngD6k6Sh6KorrMlx
+ ODV94Fx3Cgp+5PcpfaQR0O3m7cO3TnAOdWSpNap/oGEPp5C+Ar1KEFCL8fzISVHcTNBx
+ sZ8w==
+X-Gm-Message-State: ACgBeo1XepcK80GHzVZRf8Qwp98xC+jZIGc7HoFgzU4alriAU8oDpleV
+ MnFQ3WjDPGeTNtNakWdD/GCh4A==
+X-Google-Smtp-Source: AA6agR6QkspxS+/b0PUf4VnqsKVdp8KcG7hOGoYkk2VJIjMkXtXGPgQ4nXtqv9heDg+l2WiLMUwZ1w==
+X-Received: by 2002:a17:907:724f:b0:731:9ec:10fc with SMTP id
+ ds15-20020a170907724f00b0073109ec10fcmr2841840ejc.427.1660853731430; 
+ Thu, 18 Aug 2022 13:15:31 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ q3-20020a056402040300b00445e1489313sm1667056edv.94.2022.08.18.13.15.30
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 18 Aug 2022 13:15:31 -0700 (PDT)
+Message-ID: <7f8e557f-d01d-3fe6-765e-253435fbeff0@mind.be>
+Date: Thu, 18 Aug 2022 22:15:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-GB
+To: Romain Naour <romain.naour@gmail.com>,
+ Peter Korsgaard <peter@korsgaard.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220815202955.2216503-1-thomas.petazzoni@bootlin.com>
+ <20220816210334.GP2854108@scaer> <87bksjc1ji.fsf@dell.be.48ers.dk>
+ <fb8ee027-b516-39e6-7029-3286f3961332@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <fb8ee027-b516-39e6-7029-3286f3961332@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=egauge.net; s=google;
- h=mime-version:user-agent:content-transfer-encoding:organization
- :references:in-reply-to:date:to:from:subject:message-id:from:to:cc;
- bh=4vKEUUWFmEThKdZ7jDJ9NlBUMbnhK0bpCwQRvZ5wnSE=;
- b=Ku9/oG7nCvSHZFwYKvMm+A0IPW2l/8/a+HntLM11Yn+FbIr2Qns7nBaFUluVmNX94O
- Xq9Ay8RomK8m1ExyPljZJz3BklOXHzAiRxzM+u5iICYz7wfihjBKsbHkDI2PPwgTJW5E
- Ah4aRwPqqlu9ojZf4OL+MmiTLyMtmDNDGNPM1ZiLPtnN5Ov6lhXmq5ZCu2PoxNgthbAl
- zC4PbW151qt27bW+Nn53n4BYPw7Rl03qeeVey37ZGE7pKzFKAHzibFqwixl5jxBgQIB1
- Ow5T2q+2oK33P/0n7BmwpI2tFGlOOa7MhCj23CqYt5e1iirhTNVrya2HTZE4zDdww7Cv
- RHdQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=egauge.net header.i=@egauge.net
- header.a=rsa-sha256 header.s=google header.b=Ku9/oG7n
-Subject: Re: [Buildroot] add support for generating multiple UBI images
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc;
+ bh=8bqc5OmL2MnKhb+iPWv2BwcrovVNX6i4fSZpqE4nxRA=;
+ b=KUFTiNJjYcAcBz0At7LhyIN1e6+D/Lrt1/bNufgdN9RSMnJDcGYVtpKx5iIRzpxQ42
+ AMTvdsWaIw4ZUSksFuq51174JUPGbxSqoJQcGC7Sje7xQeFQhmiLmkRAOhCAcDEEdlG8
+ IPY6nbcGMbUVLk0qoDNdGsYvonM9uBInkxHhC90yWo2+XESao4rQHfJOeSI5vmTM5SbU
+ xqpcgQeTiMwaLxLUffCsPQrpSE3rl3Y1L8D6urBJLKsVT3MMvlG2+EPBSPvo4Jq1mZrP
+ 8MstmxzSdHgKgR3vdL0etCcg0AEhSrGcpD72aHmHBGA9a1N9Y4nY2V7VW2Ha+VjPsujl
+ /raw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=KUFTiNJj
+Subject: Re: [Buildroot] [PATCH next] toolchain/toolchain-buildroot: default
+ to glibc as the C library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,177 +105,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: David Mosberger-Tang via buildroot <buildroot@buildroot.org>
-Reply-To: David Mosberger-Tang <davidm@egauge.net>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot List <buildroot@buildroot.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sorry, the attachement got scrubbed.  Here is the patch.
-
-  --david
-
-commit 03d07d07e9e686fe388da362d8e14db369474ac4
-Author: David Mosberger-Tang <davidm@egauge.net>
-Date:   Thu Aug 18 10:51:50 2022 -0600
-
-    fs: ubifs: support generating multiple UBI images
-    
-    This is needed in order to be able to handle NAND flash chips with
-    different parameters.
-
-diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-index ff604c5c38..23a3f61977 100644
---- a/fs/ubifs/Config.in
-+++ b/fs/ubifs/Config.in
-@@ -5,19 +5,16 @@ config BR2_TARGET_ROOTFS_UBIFS
- 
- if BR2_TARGET_ROOTFS_UBIFS
- 
--config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
--	hex "logical eraseblock size"
--	default 0x1f800
--	help
--	  Logical eraseblock (LEB) size. The value provided here is
--	  passed to the -e/--leb-size option of mkfs.ubifs.
--
--config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
--	hex "minimum I/O unit size"
--	default 0x800
--	help
--	  Minimum I/O unit size. The value provided here is passed
--	  to the -m/--min-io-size option of mkfs.ubifs/ubinize.
-+config BR2_TARGET_ROOTFS_UBIFS_PARAMS
-+       string "List of UBIFS parameters for which images should be generated."
-+       default "0x1f000-0x800-0x20000"
-+       help
-+	  This list contains one or more UBIFS parameter sets for which to
-+	  generate images for.  Each parameter set consists of three
-+	  hex strings separated by dashes.  The first hex string specifies
-+	  the logical eraseblock (LEB) size in bytes.  The second the
-+	  minimum I/O size in bytes (also known as page size or write size).
-+	  The third the physical eraseblock (PEB) size in bytes.
- 
- config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
- 	int "maximum logical eraseblock count"
-@@ -102,14 +99,6 @@ config BR2_TARGET_ROOTFS_UBI
- 
- if BR2_TARGET_ROOTFS_UBI
- 
--config BR2_TARGET_ROOTFS_UBI_PEBSIZE
--	hex "physical eraseblock size"
--	default 0x20000
--	help
--	  Tells ubinize the physical eraseblock (PEB) size of the
--	  flash chip the ubi image is created for. The value provided
--	  here is passed to the -p/--peb-size option of ubinize.
--
- config BR2_TARGET_ROOTFS_UBI_SUBSIZE
- 	int "sub-page size"
- 	default 512
-diff --git a/fs/ubifs/ubi-common.mk b/fs/ubifs/ubi-common.mk
-new file mode 100644
-index 0000000000..824232b040
---- /dev/null
-+++ b/fs/ubifs/ubi-common.mk
-@@ -0,0 +1,21 @@
-+#
-+# Invoke this macro with $(call ROOTFS_DO_UBI_PARAMS CMD PARAMS) to
-+# split the UBIFS parameters PARAMS and pass them to macro CMD.
-+# PARAMS must be of the form "LEB-MINIO-PEB" where LEB is the logical
-+# erase-block size in bytes, MINIO is the page size in bytes, and PEB
-+# is the physical erase-block size in bytes (all three must be
-+# specified as hex strings).
-+#
-+# CMD is called with parameters LEB, MINIO, PEB, and TAG.  The first
-+# three are identical to the respective parameters passed in PARAMS.
-+# TAG is a filename tag of the form "eb${leb}k-pg${minio}k" where
-+# ${leb} is LEB and ${minio} is MINIO expressed in KiB (as a decimal
-+# number).
-+#
-+export ROOTFS_DO_UBI_PARAMS =						  \
-+	params="$(subst -, ,$2)";					  \
-+	leb=$$(echo $$params | cut -f1 -d' ');				  \
-+	minio=$$(echo $$params | cut -f2 -d' ');			  \
-+	peb=$$(echo $$params | cut -f3 -d' ');				  \
-+	tag=$$(printf "eb%dk-pg%dk" $$(($$peb/1024)) $$(($$minio/1024))); \
-+	$(call $1,$$leb,$$minio,$$peb,$$tag)
-diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-index e488cb5f8a..be2107c2a6 100644
---- a/fs/ubifs/ubi.mk
-+++ b/fs/ubifs/ubi.mk
-@@ -4,8 +4,7 @@
- #
-################################################################################
- 
--UBI_UBINIZE_OPTS := -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE)
--UBI_UBINIZE_OPTS += -p $(BR2_TARGET_ROOTFS_UBI_PEBSIZE)
-+UBI_UBINIZE_OPTS :=
- ifneq ($(BR2_TARGET_ROOTFS_UBI_SUBSIZE),0)
- UBI_UBINIZE_OPTS += -s $(BR2_TARGET_ROOTFS_UBI_SUBSIZE)
- endif
-@@ -20,13 +19,20 @@ else
- UBINIZE_CONFIG_FILE_PATH = fs/ubifs/ubinize.cfg
- endif
- 
-+include $(dir $(lastword $(MAKEFILE_LIST)))/ubi-common.mk
-+
- # don't use sed -i as it misbehaves on systems with SELinux enabled when this
-is
- # executed through fakeroot (see #9386)
-+mkubi
-=									\
-+	sed "s;BR2_ROOTFS_UBIFS_PATH;$@fs-$4;"				\
-+		$(UBINIZE_CONFIG_FILE_PATH) >
-$(BUILD_DIR)/ubinize.cfg;	\
-+	$(HOST_DIR)/usr/sbin/ubinize -o $@-$4 $(UBI_UBINIZE_OPTS)	\
-+		-m $2 -p $3 $(BUILD_DIR)/ubinize.cfg;			\
-+	rm $(BUILD_DIR)/ubinize.cfg;
-+
- define ROOTFS_UBI_CMD
--	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
--		$(UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
--	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS)
-$(BUILD_DIR)/ubinize.cfg
--	rm $(BUILD_DIR)/ubinize.cfg
-+	$(foreach p,$(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_PARAMS)),\
-+		$(call ROOTFS_DO_UBI_PARAMS,mkubi,$p))
- endef
- 
- $(eval $(call ROOTFS_TARGET,ubi))
-diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
-index f1e4126e86..a6779f49e8 100644
---- a/fs/ubifs/ubifs.mk
-+++ b/fs/ubifs/ubifs.mk
-@@ -4,7 +4,7 @@
- #
-################################################################################
- 
--UBIFS_OPTS := -e $(BR2_TARGET_ROOTFS_UBIFS_LEBSIZE) -c
-$(BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT) -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE)
-+UBIFS_OPTS := -c $(BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT)
- 
- ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_ZLIB),y)
- UBIFS_OPTS += -x zlib
-@@ -20,8 +20,14 @@ UBIFS_OPTS += $(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_OPTS))
- 
- ROOTFS_UBIFS_DEPENDENCIES = host-mtd
- 
-+include $(dir $(lastword $(MAKEFILE_LIST)))/ubi-common.mk
-+
-+mkubifs = $(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR)	\
-+		-e $1 -m $2 $(UBIFS_OPTS) -o $@-$4;
-+
- define ROOTFS_UBIFS_CMD
--	$(HOST_DIR)/usr/sbin/mkfs.ubifs -d $(TARGET_DIR) $(UBIFS_OPTS) -o $@
-+	$(foreach p,$(call qstrip,$(BR2_TARGET_ROOTFS_UBIFS_PARAMS)),\
-+		$(call ROOTFS_DO_UBI_PARAMS,mkubifs,$p))
- endef
- 
- $(eval $(call ROOTFS_TARGET,ubifs))
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxNy8wOC8yMDIyIDIxOjM1LCBSb21haW4gTmFvdXIgd3JvdGU6Cj4gSGVsbG8sCj4gCj4g
+TGUgMTYvMDgvMjAyMiDDoCAyMzozNywgUGV0ZXIgS29yc2dhYXJkIGEgw6ljcml0wqA6Cj4+Pj4+
+Pj4gIllhbm4iID09IFlhbm4gRSBNT1JJTiA8eWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI+IHdyaXRl
+czoKPj4KPj4gICA+IFRob21hcywgQWxsLAo+PiAgID4gT24gMjAyMi0wOC0xNSAyMjoyOSArMDIw
+MCwgVGhvbWFzIFBldGF6em9uaSB2aWEgYnVpbGRyb290IHNwYWtlIHRodXNseToKPj4gICA+PiBU
+aGlzIGlzIHBlcmhhcHMgdGhlIG1vc3QgY29udHJvdmVyc2lhbCBjaGFuZ2UgZm9yIEJ1aWxkcm9v
+dCB0aGF0IGNhbgo+PiAgID4+IGJlIHdyaXR0ZW4gaW4gYSB0d28tbGluZXIuCj4+ICAgPj4KPj4g
+ICA+PiBIaXN0b3JpY2FsbHksIHdlIGhhdmUgdXNlZCB1Q2xpYmMgYXMgb3VyIGRlZmF1bHQgQyBs
+aWJyYXJ5LCBhcwo+PiAgID4+IEJ1aWxkcm9vdCB3YXMgY3JlYXRlZCBpbml0aWFsbHkgYXMgYSB0
+ZXN0LWJlZCBmb3IgdUNsaWJjLCBhbmQgYWxzbwo+PiAgID4+IGJlY2F1c2UgdUNsaWJjIG1hZGUg
+YSBsb3Qgb2Ygc2Vuc2UgZm9yIGVtYmVkZGVkIExpbnV4IHN5c3RlbXMsIGR1ZSB0bwo+PiAgID4+
+IGl0cyBzbWFsbGVyIHNpemUgYW5kIGZpbmUtZ3JhaW5lZCBjb25maWd1cmFiaWxpdHkuCj4+ICAg
+Pj4KPj4gICA+PiBTaW5jZSB0aGVuLCB0aGUgbGFuZHNjYXBlIG9mIGVtYmVkZGVkIExpbnV4IHN5
+c3RlbXMgaGFzIGNoYW5nZWQuIEV2ZW4KPj4gICA+PiB0aG91Z2ggQnVpbGRyb290IGhhcHBpbHkg
+c3VwcG9ydHMgcmVhbGx5IGxvdy1lbmQgZGV2aWNlcywgdGhlIHZhc3QKPj4gICA+PiBtYWpvcml0
+eSBvZiBCdWlsZHJvb3QgdXNlcnMgYXJlIHF1aXRlIGNlcnRhaW5seSBydW5uaW5nIHRoZSByZXN1
+bHRpbmcKPj4gICA+PiBzeXN0ZW0gb24gYSByZWFzb25hYmx5IHBvd2VyZnVsIHBsYXRmb3JtLCB3
+aXRoIHNpZ25pZmljYW50IGFtb3VudCBvZgo+PiAgID4+IFJBTSBhbmQgc3RvcmFnZS4gSW4gdGhp
+cyBjb250ZXh0LCB0aGUgYmVuZWZpdHMgb2YgdUNsaWJjIGFyZSBubyBsb25nZXIKPj4gICA+PiB0
+aGF0IG11Y2ggcmVsZXZhbnQsIGFuZCBnbGliYyBjYXVzZXMgbGVzcyAidHJvdWJsZXMiLiBUaGVy
+ZWZvcmUsIHRoaXMKPj4gICA+PiBwYXRjaCBwcm9wb3NlcyB0byB1c2UgZ2xpYmMgYXMgb3VyIGRl
+ZmF1bHQgQyBsaWJyYXJ5IHdoZW4gdXNpbmcgdGhlCj4+ICAgPj4gaW50ZXJuYWwgdG9vbGNoYWlu
+IGJhY2tlbmQgaW5zdGVhZCBvZiB1Q2xpYmMuCj4+ICAgPj4KPj4gICA+PiBPZiBjb3Vyc2UsIHdl
+IHdpbGwga2VlcCB0aGUgc3VwcG9ydCBmb3IgdUNsaWJjLCB3aGljaCByZW1haW5zIGFuCj4+ICAg
+Pj4gaW1wb3J0YW50IEMgbGlicmFyeSBjaG9pY2UsIGZvciBzcGFjZS1jb25zdHJhaW5lZCBzeXN0
+ZW1zLCBvciBzaW1wbHkKPj4gICA+PiBmb3IgYXJjaGl0ZWN0dXJlcyB0aGF0IGFyZSBub3Qgc3Vw
+cG9ydGVkIGJ5IGdsaWJjLgo+PiAgID4+Cj4+ICAgPj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBl
+dGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KPj4KPj4gICA+IEFja2VkLWJ5
+OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KPj4KPj4gICA+IFllcywg
+SSB3aWxsIGJlIGEgYml0IHNhZCB0aGF0IHdlIGRlbW90ZSB1Q2xpYmMtbmcsIGJ1dCBsZXQncyBm
+YWNlIGl0Ogo+PiAgID4gdGhlIHdvcmQgbW92ZXMgb24sIGxldCdzIG1vdmUgYWxvbmcuCj4+Cj4+
+IEFncmVlZC4KPj4KPj4gQWNrZWQtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJk
+LmNvbT4KPj4KPiBUaGUgbmV4dCBtb3ZlIGlzIHByb2JhYmx5IGluY3JlYXNlIHRlc3Rpbmcgd2l0
+aCBnbGliYyBpbiB0aGUgQnVpbGRyb290IHRlc3RzdWl0ZT8KCiAgSWYgeW91IG1lYW4gdGhlIGF1
+dG9idWlsZGVyOiBubywgbm90IGF0IGFsbC4gUXVvdGluZyBKYW1lczogd2UgYWN0dWFsbHkgd2Fu
+dCAKdGhlIGF1dG9idWlsZGVyIHRlc3RzIHRvIGZhaWwgLSBwYXNzaW5nIHRlc3RzIGFyZSBub3Qg
+ImludGVyZXN0aW5nIi4gQW5kIHVDbGliYyAKYW5kIG11c2wgYXJlIG11Y2ggbW9yZSBsaWtlbHkg
+dG8gbGVhZCB0byBmYWlsdXJlcy4KCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gCj4gQWNrZWQtYnk6
+IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4KPiAKPiBCZXN0IHJlZ2FyZHMs
+Cj4gUm9tYWluCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
