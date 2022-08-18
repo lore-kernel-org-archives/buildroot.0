@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1B48C00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 21:07:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D066C00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 21:07:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13CC74008A;
-	Thu, 18 Aug 2022 21:07:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13CC74008A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92F3160DCB;
+	Thu, 18 Aug 2022 21:07:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92F3160DCB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UZg9L2mdgSbn; Thu, 18 Aug 2022 21:07:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 42C6A60B58;
+	Thu, 18 Aug 2022 21:07:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42C6A60B58
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 149DF1BF315
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 21:07:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E20C440321
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 21:07:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E20C440321
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dDMDKGaF99nQ; Thu, 18 Aug 2022 21:07:38 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7A7740321;
-	Thu, 18 Aug 2022 21:07:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7A7740321
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 846E01C116E
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 21:07:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F97640135
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 21:07:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F97640135
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uWR9otz77URe for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BzLy7hsmT3D7 for <buildroot@lists.busybox.net>;
  Thu, 18 Aug 2022 21:07:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 53A2E400C6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4968F4008A
  for <buildroot@buildroot.org>; Thu, 18 Aug 2022 21:07:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53A2E400C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4968F4008A
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 60C8083637; Thu, 18 Aug 2022 20:52:45 +0000 (UTC)
+ id 4FB5F879CD; Thu, 18 Aug 2022 20:52:45 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 18 Aug 2022 22:49:39 +0200
+Date: Thu, 18 Aug 2022 22:49:33 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 87f4900826bd4387a098fdb9a003e66a0ca057c8
-X-Git-Newrev: d8f0ec7a468c30d401b2e51e4bbfe985997f8e0c
+X-Git-Oldrev: de34ba06c568e06f95f5d4c4ee1b673669c95b68
+X-Git-Newrev: 87f4900826bd4387a098fdb9a003e66a0ca057c8
 X-Patchwork-Hint: ignore
-Message-Id: <20220818205245.60C8083637@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] fs/cpio: new option to use
- dracut tool
+Message-Id: <20220818205245.4FB5F879CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dracut: new host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,223 +63,357 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8f0ec7a468c30d401b2e51e4bbfe985997f8e0c
+commit: https://git.buildroot.net/buildroot/commit/?id=87f4900826bd4387a098fdb9a003e66a0ca057c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Adds an option to invoke the dracut host tool, providing
-a configuration file, instead of having a full cpio archive
-of the whole target directory.
+Dracut is the tool used by desktop distributions to build initrds.
 
-A default configuration file is provided. It assumes busybox init.
-ideally, a different default should be used in case of systemd init, but
-that's left for future work.
+In the embedded world, it can be very useful, too, for instance when
+wanting to create an initramfs for a system recovery mode.
+Whereas it is definitively possible to achieve this with buildroot, the
+process is to have a dedicated buildroot configuration for that, and
+perform a full build. Instead of doing that, dracut can pick the needed
+binaries/shared libraries, configuration files, or kernel modules from
+the 'target' directory.
+The advantage is to save build time, and also to have a consistency
+between the packages versions taken for the recovery and the production
+filesystem.
+
+The principle of dracut is based on the so-called 'dracut modules'. The
+modules determine what will be included in the initramfs. For example,
+one of dracut's modules checks the kernel modules that are included and
+also includes the corresponding firmware blobs.
+On the host, they are on host/lib/dracut/modules.d
+Each directory as a prefix number for the order of execution, and
+at least a "module-setup.sh" script.
+
+Dracut sources all of them, and typically calls the "check()" function,
+which is the placeholder for required binaries (that are aimed to be
+polulated in the initrd), then the "depends()" function, that lists
+other modules to depend on, and the "install()" function, that makes
+the actual work.
+
+Dracut was initially thought to work with systems using systemd,
+but it can also work without it. Do to so, every "systemd-xxx"
+module must be disabled in the dracut configuration file. For
+convenience, the 05busybox-init module is provided, to support
+busybox init system. Note that this module should *not* be enabled when
+using systemd init. It is therefore only installed if busybox init is
+selected.
+
+Musl and uClibc make assumptions about the existence of some symlinks
+that are not discoverable with readelf. Therefore, another module
+05libc-links is provided that creates those links. The module is
+installed regardless of which libc is used - the script itself discovers
+if the links need to be installed based on which libc is found.
 
 Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
 [arnout@mind.be: many changes]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Adam Duskett <aduskett@gmail.com>
 [yann.morin.1998@free.fr: some additional fixups]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- fs/cpio/Config.in   | 35 ++++++++++++++++++++
- fs/cpio/cpio.mk     | 33 +++++++++++++++++++
- fs/cpio/dracut.conf | 92 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 160 insertions(+)
+ DEVELOPERS                                         |  2 +
+ package/Config.in.host                             |  1 +
+ .../0001-dracut.sh-don-t-unset-LD_PRELOAD.patch    | 31 ++++++++++++
+ package/dracut/Config.in.host                      |  9 ++++
+ package/dracut/busybox-init-module-setup.sh        | 59 ++++++++++++++++++++++
+ package/dracut/dracut.hash                         |  3 ++
+ package/dracut/dracut.mk                           | 48 ++++++++++++++++++
+ package/dracut/dracut_wrapper                      | 38 ++++++++++++++
+ package/dracut/libc-links-module-setup.sh          | 27 ++++++++++
+ 9 files changed, 218 insertions(+)
 
-diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
-index c1151a2881..861e9a929e 100644
---- a/fs/cpio/Config.in
-+++ b/fs/cpio/Config.in
-@@ -7,6 +7,41 @@ config BR2_TARGET_ROOTFS_CPIO
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d2bd0d809a..4287fd9cf7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -225,6 +225,7 @@ F:	package/espeak/
+ N:	Arnout Vandecappelle <arnout@mind.be>
+ F:	package/arp-scan/
+ F:	package/dehydrated/
++F:	package/dracut/
+ F:	package/freescale-imx/firmware-imx/
+ F:	package/freescale-imx/imx-lib/
+ F:	package/libpagekite/
+@@ -2796,6 +2797,7 @@ F:	configs/beagleboardx15_defconfig
+ F:	package/pugixml/
  
- if BR2_TARGET_ROOTFS_CPIO
+ N:	Thierry Bultel <tbultel@free.fr>
++F:	package/dracut/
+ F:	package/mpd-mpc/
  
-+choice
-+	prompt "cpio type"
-+	default BR2_TARGET_ROOTFS_CPIO_FULL
-+
-+config BR2_TARGET_ROOTFS_CPIO_FULL
-+	bool "cpio the whole root filesystem"
-+	help
-+	  Build a cpio archive containing the whole the root filesystem.
-+
-+config BR2_TARGET_ROOTFS_CPIO_DRACUT
-+	bool "Invoke dracut to make a partial initramfs"
-+	select BR2_PACKAGE_HOST_DRACUT
-+	help
-+	  Build an additional initramfs using dracut. This only contains
-+	  a subset of the rootfs, as determined by the configuration
-+	  file.
-+	  This can be useful to create a recovery system, for instance.
-+
-+endchoice
-+
-+if BR2_TARGET_ROOTFS_CPIO_DRACUT
-+
-+config BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE
-+	string "dracut configuration file"
-+	default "fs/cpio/dracut.conf"
-+	help
-+	  Dracut configuration file. It determines which parts of the
-+	  rootfs get included in the cpio image. See dracut.conf(5) or
-+	  https://github.com/dracutdevs/dracut/blob/master/man/dracut.conf.5.asc
-+
-+	  The default configuration file is suitable for busybox init.
-+	  It doesn't, however, pivot_root into a full rootfs.
-+
-+endif
-+
- choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_CPIO_NONE
-diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-index 81f8c393d1..fa66b1c710 100644
---- a/fs/cpio/cpio.mk
-+++ b/fs/cpio/cpio.mk
-@@ -36,6 +36,8 @@ ROOTFS_CPIO_DEPENDENCIES += host-cpio
- ROOTFS_CPIO_OPTS += --reproducible
- endif
- 
-+ifeq ($(BR2_TARGET_ROOTFS_CPIO_FULL),y)
-+
- define ROOTFS_CPIO_CMD
- 	cd $(TARGET_DIR) && \
- 	find . \
-@@ -44,6 +46,37 @@ define ROOTFS_CPIO_CMD
- 	> $@
- endef
- 
-+else ifeq ($(BR2_TARGET_ROOTFS_CPIO_DRACUT),y)
-+
-+ROOTFS_CPIO_DEPENDENCIES += host-dracut
-+
-+ROOTFS_CPIO_DRACUT_CONF_FILE = $(call qstrip,$(BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE))
-+ifeq ($(BR_BUILDING):$(ROOTFS_CPIO_DRACUT_CONF_FILE),y:)
-+$(error No dracut config file name specified, check your BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE setting)
-+endif
-+
-+ifeq ($(BR2_LINUX_KERNEL),y)
-+ROOTFS_CPIO_DEPENDENCIES += linux
-+ROOTFS_CPIO_OPTS += --kver $(LINUX_VERSION_PROBED)
-+else
-+ROOTFS_CPIO_OPTS += --no-kernel
-+endif
-+
-+define ROOTFS_CPIO_CMD
-+	mkdir -p $(ROOTFS_CPIO_DIR)/tmp
-+	$(HOST_DIR)/bin/dracut \
-+		$(ROOTFS_CPIO_OPTS) \
-+		-c $(ROOTFS_CPIO_DRACUT_CONF_FILE) \
-+		--sysroot $(TARGET_DIR) \
-+		--tmpdir $(ROOTFS_CPIO_DIR)/tmp \
-+		-M \
-+		--force \
-+		--no-compress \
-+		$@
-+endef
-+
-+endif #BR2_TARGET_ROOTFS_CPIO_DRACUT
-+
- ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
- ROOTFS_CPIO_DEPENDENCIES += host-uboot-tools
- define ROOTFS_CPIO_UBOOT_MKIMAGE
-diff --git a/fs/cpio/dracut.conf b/fs/cpio/dracut.conf
+ N:	Thijs Vermeir <thijsvermeir@gmail.com>
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 99edeafece..f437ef680c 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -19,6 +19,7 @@ menu "Host utilities"
+ 	source "package/dos2unix/Config.in.host"
+ 	source "package/dosfstools/Config.in.host"
+ 	source "package/doxygen/Config.in.host"
++	source "package/dracut/Config.in.host"
+ 	source "package/dtc/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
+diff --git a/package/dracut/0001-dracut.sh-don-t-unset-LD_PRELOAD.patch b/package/dracut/0001-dracut.sh-don-t-unset-LD_PRELOAD.patch
 new file mode 100644
-index 0000000000..2337736c4e
+index 0000000000..394917eeb0
 --- /dev/null
-+++ b/fs/cpio/dracut.conf
-@@ -0,0 +1,92 @@
-+#Simple dracut config for a system without systemd
++++ b/package/dracut/0001-dracut.sh-don-t-unset-LD_PRELOAD.patch
+@@ -0,0 +1,31 @@
++From bb12f15856911d8532b569116da7dab4cbf107be Mon Sep 17 00:00:00 2001
++From: Thierry Bultel <thierry.bultel@linatsea.fr>
++Date: Mon, 10 Jan 2022 09:09:43 +0100
++Subject: [PATCH] dracut.sh: don't unset LD_PRELOAD
 +
-+#Dracut configuration
++LD_PRELOAD and LD_LIBRARY_PATH are needed to run under fakeroot.
 +
-+show_modules=yes
-+i18n_install_all=no
-+lvmconf=no
-+mdadmconf=no
-+early_microcode=no
-+hostonly=no
-+hostonly_cmdline=no
-+use_fstab=no
-+kernel_cmdline="rd.break=initqueue"
-+do_strip=no
++Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++[yann.morin.1998@free.fr: commit log also mentions LD_LIBRARY_PATH]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ dracut.sh | 2 --
++ 1 file changed, 2 deletions(-)
 +
-+# Dracut modules needed
-+add_dracutmodules+=" \
-+busybox-init
-+"
++diff --git a/dracut.sh b/dracut.sh
++index 60ac46f4..37f25b38 100755
++--- a/dracut.sh
+++++ b/dracut.sh
++@@ -868,8 +868,6 @@ export LC_ALL=C
++ export LANG=C
++ unset LC_MESSAGES
++ unset LC_CTYPE
++-unset LD_LIBRARY_PATH
++-unset LD_PRELOAD
++ unset GREP_OPTIONS
++ 
++ export DRACUT_LOG_LEVEL=warning
++-- 
++2.37.1
 +
-+# Modules to ignore
-+omit_dracutmodules+=" \
-+bash \
-+biosdevname \
-+btrfs \
-+bluetooth \
-+busybox \
-+caps \
-+cifs \
-+crypt \
-+crypt-gpg \
-+dash \
-+dbus-broker \
-+dbus-daemon \
-+dm \
-+dmraid \
-+dmsquash-live-ntfs \
-+dracut-systemd \
-+fcoe \
-+fcoe-uefi \
-+fs-lib \
-+iscsi \
-+i18n \
-+lvmmerge \
-+lvm \
-+lunmask \
-+mdraid \
-+memstrack \
-+mksh \
-+modsign \
-+mount-root \
-+multipath \
-+nbd \
-+network-legacy \
-+network-wicked \
-+nfs \
-+nvdimm \
-+nvmf \
-+parse-lunmask \
-+qemu \
-+qemu-net \
-+resume \
-+rootfs-block \
-+rngd \
-+systemd \
-+systemd-udevd \
-+systemd-coredump \
-+systemd-ask-password \
-+systemd-timedated \
-+systemd-rfkill \
-+systemd-resolved \
-+systemd-hostnamed \
-+systemd-initrd \
-+systemd-journald \
-+systemd-ldconfig \
-+systemd-networkd \
-+systemd-timesyncd \
-+systemd-veritysetup \
-+systemd-modules-load \
-+systemd-sysctl \
-+systemd-repart \
-+systemd-sysext \
-+systemd-sysusers \
-+systemd-tmpfiles \
-+squash \
-+ssh-client \
-+stratis \
-+tpm2-tss \
-+udev-rules \
-+url-lib \
-+usrmount \
-+"
+diff --git a/package/dracut/Config.in.host b/package/dracut/Config.in.host
+new file mode 100644
+index 0000000000..18f562b310
+--- /dev/null
++++ b/package/dracut/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_DRACUT
++	bool
++	select BR2_PACKAGE_HOST_KMOD
++	help
++	  dracut is used to create an initramfs image by
++	  copying tools and files from an installed system
++	  and combining it with the dracut framework.
++
++	  https://dracut.wiki.kernel.org
+diff --git a/package/dracut/busybox-init-module-setup.sh b/package/dracut/busybox-init-module-setup.sh
+new file mode 100644
+index 0000000000..d6ea94350f
+--- /dev/null
++++ b/package/dracut/busybox-init-module-setup.sh
+@@ -0,0 +1,59 @@
++#!/bin/bash
++
++check() {
++	require_binaries busybox || return 1
++	return 0
++}
++
++depends() {
++	return 0
++}
++
++install_busybox_links() {
++	dir="${1}"
++	linkname="${2}"
++
++	(cd "${dracutsysrootdir?}${dir}" &&
++	for x in *; do
++		if [ "$(readlink "${x}")" = "${linkname}" ]; then
++			ln -sf "${linkname}" "${initdir?}/${dir}/${x}"
++		fi
++	done
++	)
++}
++
++install() {
++	inst_multiple /bin/busybox
++
++	# wrapper script for early console; will launch /sbin/init
++	# after having mounted devtmpfs
++	inst_multiple /init
++
++	if [ -e "${dracutsysrootdir?}/lib64" ]; then
++		ln -sf lib "${initdir?}/lib64"
++		ln -sf lib "${initdir?}/usr/lib64"
++	fi
++
++	if [ -e "${dracutsysrootdir?}/lib32" ]; then
++		ln -sf lib "${initdir?}/lib32"
++		ln -sf lib "${initdir?}/usr/lib32"
++	fi
++
++	install_busybox_links "/bin" "busybox"
++	install_busybox_links "/sbin" "../bin/busybox"
++	if [ ! -L "${dracutsysrootdir?}/bin" ]; then
++		install_busybox_links "/usr/bin" "../../bin/busybox"
++		install_busybox_links "/usr/sbin" "../../bin/busybox"
++	fi
++
++	inst_multiple \
++		/etc/inittab	\
++		/etc/init.d/rcS \
++		/etc/init.d/rcK \
++		/etc/issue	\
++		/etc/fstab	\
++		/etc/group	\
++		/etc/passwd	\
++		/etc/shadow	\
++		/etc/hostname
++}
+diff --git a/package/dracut/dracut.hash b/package/dracut/dracut.hash
+new file mode 100644
+index 0000000000..3cda736856
+--- /dev/null
++++ b/package/dracut/dracut.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  4baa08206cceeb124dbf1075a0daf774b5a8f144ce2e01d82a144af3020fd65b  dracut-055.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+new file mode 100644
+index 0000000000..2b6a144aac
+--- /dev/null
++++ b/package/dracut/dracut.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# dracut
++#
++################################################################################
++
++DRACUT_VERSION = 055
++DRACUT_SOURCE = dracut-$(DRACUT_VERSION).tar.xz
++DRACUT_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/boot/dracut
++DRACUT_LICENSE = GPL-2.0
++DRACUT_LICENSE_FILES = COPYING
++
++HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-prelink-cross
++
++define HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
++	mv $(HOST_DIR)/bin/dracut $(HOST_DIR)/bin/dracut.real
++	install -D -m 0755 $(HOST_DRACUT_PKGDIR)/dracut_wrapper \
++		$(HOST_DIR)/bin/dracut
++endef
++HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
++
++# When using uClibc or musl, there must be "ld-uClibc.so.1" or
++# "ld-musl-x.so" symlinks, respectively - else the init process cannot
++# start
++define HOST_DRACUT_POST_INSTALL_LIBC_LINKS_MODULE
++	$(INSTALL) -D -m 0755 package/dracut/libc-links-module-setup.sh \
++		$(HOST_DIR)/lib/dracut/modules.d/05libc-links/module-setup.sh
++endef
++HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_LIBC_LINKS_MODULE
++
++ifeq ($(BR2_INIT_BUSYBOX),y)
++# Dracut does not support busybox init (systemd init is assumed to work
++# out of the box, though). It provides a busybox module, that does not
++# use the same paths as buildroot, and is not meant to be used as an init
++# system.
++# So it is simpler for users to disable the standard 'busybox' module in
++# the configuration file, and enable the "busybox-init' module instead.
++# Note that setting the script as executable (0755) is not mandatory,
++# but this is what dracut does on all its modules, so lets just conform
++# to it.
++define HOST_DRACUT_POST_INSTALL_BUSYBOX_INIT_MODULE
++	$(INSTALL) -D -m 0755 package/dracut/busybox-init-module-setup.sh \
++		$(HOST_DIR)/lib/dracut/modules.d/05busybox-init/module-setup.sh
++endef
++HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_BUSYBOX_INIT_MODULE
++endif
++
++$(eval $(host-autotools-package))
+diff --git a/package/dracut/dracut_wrapper b/package/dracut/dracut_wrapper
+new file mode 100644
+index 0000000000..0464db17fe
+--- /dev/null
++++ b/package/dracut/dracut_wrapper
+@@ -0,0 +1,38 @@
++#!/bin/bash
++set -e
++
++# Find the --sysroot argument
++sysroot=
++next_arg=false
++for arg; do
++	if ${next_arg}; then
++		next_arg=false
++		sysroot="${arg}"
++		continue  # not break, in case there are more than one
++	fi
++	case "${arg}" in
++	(--sysroot|-r)
++		next_arg=true
++		continue
++		;;
++	(--sysroot=*)
++		sysroot="${arg#*=}"
++		continue  # not break, in case there are more than one
++		;;
++	(-r?*)
++		sysroot="${arg#-r}"
++		continue  # not break, in case there are more than one
++		;;
++	esac
++done
++if [ -z "${sysroot}" ]; then
++	echo "${0}: --sysroot argument must be given." 1>&2
++	exit 1
++fi
++
++topdir="$(dirname "$(realpath "$(dirname "${0}")")")"
++export DRACUT_LDD="${topdir}/sbin/prelink-rtld --root='${sysroot}'"
++export DRACUT_INSTALL="${topdir}/lib/dracut/dracut-install"
++export DRACUT_LDCONFIG=/bin/true
++export dracutbasedir="${topdir}/lib/dracut"
++exec "${topdir}/bin/dracut.real" "${@}"
+diff --git a/package/dracut/libc-links-module-setup.sh b/package/dracut/libc-links-module-setup.sh
+new file mode 100755
+index 0000000000..26ebc5bc84
+--- /dev/null
++++ b/package/dracut/libc-links-module-setup.sh
+@@ -0,0 +1,27 @@
++#!/bin/bash
++
++# Adds the missing links for uClibc or musl, if needed
++
++check() {
++	return 0
++}
++
++depends() {
++	return 0
++}
++
++install() {
++	# Despite of the fact that the listed dependency (reported by readelf -d)
++	# is purely /lib/libc.so, the musl symlink is needed anyway.
++	musl_link="$(find "${dracutsysrootdir?}/lib/" -name "ld-musl-*.so*")"
++	if [ -n "${musl_link}" ] ; then
++		ln -s libc.so "${initdir?}/lib/${musl_link##*/}"
++	fi
++
++	# Same for uClibc, the listed dependency
++	# is ld-uClibc.so.1, the loader needs the ld-uClibc.so.0, too
++	uclibc_link="$(find "${dracutsysrootdir?}/lib/" -name "ld-uClibc-*.so*")"
++	if [ -n "$uclibc_link" ] ; then
++		ln -s ld-uClibc.so.1 "${initdir?}/lib/ld-uClibc.so.0"
++	fi
++}
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
