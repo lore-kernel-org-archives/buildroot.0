@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BFC8C00140
-	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 06:28:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1AD4C00140
+	for <buildroot@archiver.kernel.org>; Thu, 18 Aug 2022 06:30:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFB31410EC;
-	Thu, 18 Aug 2022 06:28:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFB31410EC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KUOx6CJA93o8; Thu, 18 Aug 2022 06:28:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2BFAE40C37;
-	Thu, 18 Aug 2022 06:28:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BFAE40C37
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 661571BF3FC
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 06:28:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4EFD981A6A
- for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 06:28:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EFD981A6A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88828833C9;
+	Thu, 18 Aug 2022 06:30:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88828833C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QrgA_StQU6ar for <buildroot@lists.busybox.net>;
- Thu, 18 Aug 2022 06:28:52 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9547F81882
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9547F81882
- for <buildroot@buildroot.org>; Thu, 18 Aug 2022 06:28:52 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B6E9020007;
- Thu, 18 Aug 2022 06:28:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oOZ1N-00Cg5m-Vc; Thu, 18 Aug 2022 08:28:49 +0200
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m3ylfxPpL_bJ; Thu, 18 Aug 2022 06:30:42 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A056182884;
+	Thu, 18 Aug 2022 06:30:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A056182884
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D81B31BF3FC
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 06:30:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFB85410CD
+ for <buildroot@lists.busybox.net>; Thu, 18 Aug 2022 06:30:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFB85410CD
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VbcA8JDiWAw7 for <buildroot@lists.busybox.net>;
+ Thu, 18 Aug 2022 06:30:39 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 068A3408C3
+ for <buildroot@buildroot.org>; Thu, 18 Aug 2022 06:30:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 068A3408C3
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 758AC87970; Thu, 18 Aug 2022 06:16:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@smile.fr>
-References: <20220725125147.19057-1-romain.naour@smile.fr>
-Date: Thu, 18 Aug 2022 08:28:49 +0200
-In-Reply-To: <20220725125147.19057-1-romain.naour@smile.fr> (Romain Naour's
- message of "Mon, 25 Jul 2022 14:51:47 +0200")
-Message-ID: <87wnb66p5q.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/gcc: disable split-stack for
- non-thread builds for gcc powerpc spe
+To: buildroot@buildroot.org
+Date: Thu, 18 Aug 2022 08:24:40 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 865f317e6f9ff1754539d8947fb5d4df3d2caf7e
+X-Git-Newrev: b0565337d6d31cb64e2db8cf665381ff7fb8b263
+X-Patchwork-Hint: ignore
+Message-Id: <20220818061603.758AC87970@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/sg3_utils: fix
+ build failure due to gcc bug 104028
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,25 +57,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b0565337d6d31cb64e2db8cf665381ff7fb8b263
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > The toolchain for powerpc spe can use uClibc-ng without thread support.
- > So we need the same fix as commit [1].
+The sg3_utils package exhibits gcc bug 104028 when built for the M68K
+architecture with optimization enabled, which causes a build failure.
 
- > [1] fff68f75b3519cadb2639fde2296b26db919d79d
+As done for other packages in Buildroot work around this gcc bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_104028=y like we
+already do for BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y.
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Fixes:
+http://autobuild.buildroot.net/results/c49300d12a209b18f41d389f092324592b881277/
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 283573f9b33e4450859c0ebcf8bfc456b80b5895)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sg3_utils/sg3_utils.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+index e357fc1dde..b291bd69d9 100644
+--- a/package/sg3_utils/sg3_utils.mk
++++ b/package/sg3_utils/sg3_utils.mk
+@@ -24,6 +24,14 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ SG3_UTILS_CONF_ENV += LIBS="-latomic"
+ endif
+ 
++SG3_UTILS_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_104028),y)
++SG3_UTILS_CFLAGS += -O0
++endif
++
++SG3_UTILS_CONF_ENV += CFLAGS="$(SG3_UTILS_CFLAGS)"
++
+ ifeq ($(BR2_PACKAGE_SG3_UTILS_PROGS),)
+ define SG3_UTILS_REMOVE_PROGS
+ 	for prog in \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
