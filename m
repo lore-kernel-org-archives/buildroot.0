@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0EB6C28B2B
-	for <buildroot@archiver.kernel.org>; Fri, 19 Aug 2022 17:51:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAEAEC28B2B
+	for <buildroot@archiver.kernel.org>; Fri, 19 Aug 2022 17:51:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B6784159B;
-	Fri, 19 Aug 2022 17:51:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B6784159B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9064B41603;
+	Fri, 19 Aug 2022 17:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9064B41603
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K8JlSBtADUeB; Fri, 19 Aug 2022 17:51:19 +0000 (UTC)
+	with ESMTP id blaae_QOHu0e; Fri, 19 Aug 2022 17:51:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D991405D0;
-	Fri, 19 Aug 2022 17:51:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D991405D0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F04021BF366
- for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 17:51:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9B7CC41053;
+	Fri, 19 Aug 2022 17:51:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B7CC41053
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EC4151BF366
+ for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 17:51:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2F7941D35
- for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 17:51:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2F7941D35
+ by smtp3.osuosl.org (Postfix) with ESMTP id C75CB60B32
+ for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 17:51:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C75CB60B32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3ommWUetxY4y for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iYwSI30CEk-i for <buildroot@lists.busybox.net>;
  Fri, 19 Aug 2022 17:51:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B214741D22
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B214741D22
- for <buildroot@buildroot.org>; Fri, 19 Aug 2022 17:51:04 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- k18-20020a05600c0b5200b003a5dab49d0bso2820355wmr.3
- for <buildroot@buildroot.org>; Fri, 19 Aug 2022 10:51:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61B6D60C17
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 61B6D60C17
+ for <buildroot@buildroot.org>; Fri, 19 Aug 2022 17:51:05 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id b5so1714727wrr.5
+ for <buildroot@buildroot.org>; Fri, 19 Aug 2022 10:51:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc;
- bh=0b1QzhPzhESvoers5qBwhH0OVDZiudCgLseUr1C0RKo=;
- b=kSjhvUFSFjiYqPPqn+tEcrJOqAKc6K+05TyS/v7o8pgYwX7q0lRRa9NzmLTJWDzR80
- uI8pj+XY7lvTEdWZiVgjZZDBi42scsBzZ1DQGFQ01/nZU5fHeJQppEkJQ4VbAUQEUdSA
- nAReA7+JgQRXpzbiofaZ6eW4JXP4IO000bi+DWxfhd2tQ5D823tyrB6fsomu23qwlc24
- hBP1JVZ/sRgrmPLgzJNQ5lXKIuSPACOSV36MUcdkB5bubnYUNxuCCIrnHS0p4hJLRnvr
- 9YYEbqqPuvqWDUMIAp+/ieQ9tgusxDP/jHq+3q1hTW0OxErF9SGfXyxrbOddy2Fdg7Hi
- fTjg==
-X-Gm-Message-State: ACgBeo39se1ULFaO8kVrJ967g7SDPsTItkcrgtS6Q/IORqXHsa3EWXyc
- DKxumICqqTqW4HR8RWOWrKS3tnqwRCc=
-X-Google-Smtp-Source: AA6agR4GtjZeUwrXoWyhLwwhPv/taKhV/YAW8peRjTwWPjiNxs7eh/bszKGtp0XstE0QDG+C94E1kw==
-X-Received: by 2002:a05:600c:ace:b0:3a5:b495:854d with SMTP id
- c14-20020a05600c0ace00b003a5b495854dmr5373762wmr.86.1660931462740; 
- Fri, 19 Aug 2022 10:51:02 -0700 (PDT)
+ bh=NGV7Qj2+FtddG2MPkPxoZvAKz3YppwAbDSr20ym7r5w=;
+ b=13rrtAdJFkwU1WrKUwB4c2XbeIWBAgq3yTm7PMzO0ZKmecXh4Oh20DVbsFLjxgOqG7
+ swAKfaf0r/8kv789aAZmTDgvJDY6ZwP94ricrT3zknvxyrngvoOvgFqBprgQTl1BJmRP
+ jUXIjyphysAS/KTPnKEg9KH3PhTxVHeK2Kfa+Oo+b/41rvgEwhe5vZJq8UjJAQonor7W
+ rfdmQ/C/onC0OjPomSveitergMk54SNKsfc8zdAuNJaBy0p/3qCO29jflTklvxHfeXXB
+ +cd5O+Sw+EBmYiyPFa97dLFDrlJTt/yMYJ7J2+wqwjj/cMETf3A65AK+NOl8xFImw5bi
+ Ahfw==
+X-Gm-Message-State: ACgBeo2/CVe0Ffha/nyWXgr7cavZnbmomsYot+VuKANhPFoz6KdpDyWW
+ A3XEKmqUc/v/xFoqp6JknDSsC92fZOQ=
+X-Google-Smtp-Source: AA6agR75G/dJDl6ms3KNujnWXLTzZqvr6mgtN23DM/1VDPBUdJ9fgteWytliRf6R6HQYaay+pVgZKg==
+X-Received: by 2002:a5d:6481:0:b0:220:7f92:3c0f with SMTP id
+ o1-20020a5d6481000000b002207f923c0fmr4948668wri.464.1660931463416; 
+ Fri, 19 Aug 2022 10:51:03 -0700 (PDT)
 Received: from scaer.home ([2a01:cb19:8b51:cb00:54a5:9a99:1f8c:15e1])
  by smtp.gmail.com with ESMTPSA id
  l24-20020a1c7918000000b003a5ca627333sm8937295wme.8.2022.08.19.10.51.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 19 Aug 2022 10:51:02 -0700 (PDT)
+ Fri, 19 Aug 2022 10:51:03 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 19 Aug 2022 19:50:58 +0200
-Message-Id: <446f8241f76f0bb59b032b5368e3028e769830f9.1660931225.git.yann.morin.1998@free.fr>
+Date: Fri, 19 Aug 2022 19:50:59 +0200
+Message-Id: <212daefb880a3c5e49ff4aa8278cc4c3bc67360e.1660931225.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1660931225.git.yann.morin.1998@free.fr>
 References: <cover.1660931225.git.yann.morin.1998@free.fr>
@@ -74,18 +73,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc;
- bh=0b1QzhPzhESvoers5qBwhH0OVDZiudCgLseUr1C0RKo=;
- b=M0XNLQF+SnuEqXDCj1O5l+OhI/GtsPF4mfafdAlSF9ZR9RcdxZcN846DwnAdTm/9gT
- 9bAldItm3n/hPdDMOqNmuwzPjS0xKQ699J+TvNii8Z/3j7EFffLpOLH6GpXB5sxHQJSP
- Bujee2TGUQ5jLdT1pER+YNS4LivjpfmfO58RtlTVBLfWc9pQnNE5Z8o6RoF1424ny65W
- jYlgpMratrdYeyOxKFVRrvuSKln9DHK9pLyawr4TAxB3UZzzR6tew/nquw25GBiMVSbh
- UT8RKQ39sBb2Ln/YPPSfqRpASXK4YoJvuyXnF5+94JjLRDiYzNZOy/0whhrW16+cv99t
- JUjA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=NGV7Qj2+FtddG2MPkPxoZvAKz3YppwAbDSr20ym7r5w=;
+ b=CTnLoPBqonCoKd6M5cFRjIcbt0BtwTIqwys5QR+CL4RdGvlToiGj0fCEJ7UbG+Ck9L
+ JJrYU7f0jWp/6R3X23BZWftPR2VuimQBS9QhQ69bmKYd+2cXVhx0ExG/wv+091Q0Gmt4
+ EK2ZCAwEinnKQHyECQrZDMo7SE1kQ6hBkZcACM1ZttXgXHU1BDeEEMFeTujfZiAfetKP
+ PCtl6s+aWm4BEw6bikCSBhmohsAlBhFL6Wb+saHgRGG9KeuA0m7rSmieE73iRYp1RENf
+ 5tAsMOpgXUif3QAR6ov7SQ7OrHaq4SgankndJh7MfVz9qRC6zwi4OK2/4oLTknfcFh+U
+ Rpzw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=M0XNLQF+
-Subject: [Buildroot] [PATCH 1/4] support/test/cpio: test for pv already done
- by listing the cpio archive
+ header.a=rsa-sha256 header.s=20210112 header.b=CTnLoPBq
+Subject: [Buildroot] [PATCH 2/4] package/dracut: allow users to provide
+ their own modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,34 +104,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since we do not pivot_root/switch_root from the cpio, whatever we get
-in the rootfs was exactly what we got by listing the cpio archive.
+Dracut modules can only be looked for in HOST_DIR/lib/dracut/modules.d/
+and dracut does not offer the possibility to look elsewhere.
 
-Drop the test for the presence of pv, it's redundant.
+Installing files in HOST_DIR/ can do done either from a host-package, or
+via a post-built script; there is no overlay like there is for target/.
+This is a bit cumbersome.
+
+Add an option to the host-dracut package, so users can point to a list
+of modules to install.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Cc: Thierry Bultel <thierry.bultel@linatsea.fr>
 Cc: Adam Duskett <aduskett@gmail.com>
 ---
- support/testing/tests/fs/test_cpio.py | 4 ----
- 1 file changed, 4 deletions(-)
+ package/dracut/Config.in.host | 11 +++++++++++
+ package/dracut/dracut.mk      |  9 +++++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/support/testing/tests/fs/test_cpio.py b/support/testing/tests/fs/test_cpio.py
-index 3f661e370c..9a529f1edd 100644
---- a/support/testing/tests/fs/test_cpio.py
-+++ b/support/testing/tests/fs/test_cpio.py
-@@ -57,10 +57,6 @@ class TestCpioDracutBase(infra.basetest.BRTest):
-                              self.builddir)
-         self.assertEqual(exit_code, 0)
+diff --git a/package/dracut/Config.in.host b/package/dracut/Config.in.host
+index 18f562b310..5756dbd43f 100644
+--- a/package/dracut/Config.in.host
++++ b/package/dracut/Config.in.host
+@@ -7,3 +7,14 @@ config BR2_PACKAGE_HOST_DRACUT
+ 	  and combining it with the dracut framework.
  
--        # No pivot_root is done, so pv shouldn't be there
--        _, exit_code = self.emulator.run("ls -l /usr/bin/pv")
--        self.assertNotEqual(exit_code, 0)
--
+ 	  https://dracut.wiki.kernel.org
++
++if BR2_PACKAGE_HOST_DRACUT
++
++config BR2_PACKAGE_HOST_DRACUT_EXTRA_MODULES
++	string "extra dracut modules"
++	help
++	  Space-separated list of directories containing dracut modules
++	  to install. The modules will be installed alongside the ones
++	  bundled with dracut.
++
++endif
+diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+index 2b6a144aac..96fa7db6ba 100644
+--- a/package/dracut/dracut.mk
++++ b/package/dracut/dracut.mk
+@@ -19,6 +19,15 @@ define HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+ endef
+ HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
  
- class TestCpioDracutUclibc(TestCpioDracutBase):
-     config = TestCpioDracutBase.config + \
++HOST_DRACUT_EXTRA_MODULES = $(call qstrip,$(BR2_PACKAGE_HOST_DRACUT_EXTRA_MODULES))
++define HOST_DRACUT_INSTALL_EXTRA_MODULES
++	$(Q)mkdir -p $(HOST_DIR)/lib/dracut/modules.d/
++	$(foreach m,$(HOST_DRACUT_EXTRA_MODULES), \
++		cp -a $(m)/* $(HOST_DIR)/lib/dracut/modules.d/
++	)
++endef
++HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_INSTALL_EXTRA_MODULES
++
+ # When using uClibc or musl, there must be "ld-uClibc.so.1" or
+ # "ld-musl-x.so" symlinks, respectively - else the init process cannot
+ # start
 -- 
 2.25.1
 
