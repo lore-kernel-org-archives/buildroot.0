@@ -1,90 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A38CC32771
-	for <buildroot@archiver.kernel.org>; Fri, 19 Aug 2022 15:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 563D6C28B2B
+	for <buildroot@archiver.kernel.org>; Fri, 19 Aug 2022 17:51:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CED7041CF1;
-	Fri, 19 Aug 2022 15:20:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CED7041CF1
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB9FE405CE;
+	Fri, 19 Aug 2022 17:51:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB9FE405CE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7CnEzvQvA0go; Fri, 19 Aug 2022 15:20:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bu6g_kbJyU4W; Fri, 19 Aug 2022 17:51:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F2EB418EA;
-	Fri, 19 Aug 2022 15:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F2EB418EA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 087BE1BF5DB
- for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 15:18:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D590C405CD;
+	Fri, 19 Aug 2022 17:51:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D590C405CD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EAB4D1BF366
+ for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 17:51:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D68094034D
- for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 15:18:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D68094034D
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5A8D60C17
+ for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 17:51:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5A8D60C17
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ar7VYG-vyVKy for <buildroot@lists.busybox.net>;
- Fri, 19 Aug 2022 15:18:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n5xNAZYl4qlH for <buildroot@lists.busybox.net>;
+ Fri, 19 Aug 2022 17:51:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF81F4035F
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
- [IPv6:2607:f8b0:4864:20::832])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CF81F4035F
- for <buildroot@buildroot.org>; Fri, 19 Aug 2022 15:18:30 +0000 (UTC)
-Received: by mail-qt1-x832.google.com with SMTP id x5so3543121qtv.9
- for <buildroot@buildroot.org>; Fri, 19 Aug 2022 08:18:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 967AA60B32
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 967AA60B32
+ for <buildroot@buildroot.org>; Fri, 19 Aug 2022 17:51:02 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id a4so5999800wrq.1
+ for <buildroot@buildroot.org>; Fri, 19 Aug 2022 10:51:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=BexaqVSyozuDVPgWGQjlECJhTHc+JCnjMCGRfl6icKU=;
- b=gkntYL2B0kWmir/dg3nnDB9iWnHG7OXS/Xsw2NqCzZNuxyVvW0vMTPiTqYoOadtSRc
- Fipq9zWrTYt1BzGpz18auwX+DWye6cCWybNUVh9OsxgB9vds2mmUX8k3Qkn0xfXDQdNB
- 1JZ7ZfphYFWD1x5O9Mz6I85rFBlVahJDJJRKvzpJZ5rbgpB5uzQx5vcvQNovgk4YfucQ
- yWRCckB3zC3GsfZlTUMgcEKPb/VlExSAs6nXkxvogVOaLo2IcpC7OpH+BIbxoLkfDMyl
- wqy8CA7PLqLE3XjaBqZGNdlEFfnPj0r279rxBFjx6DAdarWhllbpdBYu55S30XlBOJ7M
- F9EQ==
-X-Gm-Message-State: ACgBeo2XchmEr++peoegrvWhcsEy0BgWcKjtYUtSZwyN1lqUhv/cU8qs
- zeeTtV0IkmES2Nib5en89UZ6xkheCSrcLQ==
-X-Google-Smtp-Source: AA6agR74uQ3eADcMgDXR8CM3gva2FXgFzpMXaSqZVO8eNHvqP7/iDCzNyTC/fDWgqcaCnJ8coQByKQ==
-X-Received: by 2002:a05:622a:54c:b0:343:5a1a:9ace with SMTP id
- m12-20020a05622a054c00b003435a1a9acemr6903128qtx.546.1660922309490; 
- Fri, 19 Aug 2022 08:18:29 -0700 (PDT)
-Received: from hefring.. ([50.212.55.89]) by smtp.gmail.com with ESMTPSA id
- br38-20020a05620a462600b006bbc09af9f5sm3368907qkb.101.2022.08.19.08.18.28
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc;
+ bh=1Rc/eFpylo0c5bIj/yzypb29+hDXuh84yucXpe3d3NI=;
+ b=wd3QyqsqgpKbJKhlLJ25YbqwoJ9iZ/C+eb59da+K5g7bLy/UX05raFZ4btlybOzdYn
+ N4c813lnYM3HswSVhXZ1HVukkFAXHzCV4mSBRpnUxTedKEIbCR0zOJJHjfVPYs/yIH00
+ cbPHNZa7gFHuvH+FiflmcNP/H7buvvlFYpfxNoRwLgnzDX+1rNwz5ZgzFcjybUVG70KK
+ y4dJKCZz1uQ6qvBnjZUGhmajM+MwzvMfhQET2mWyGeYwFUKUzx739j4zM+oRCU+Yclyx
+ DNeGyAA3z++WNmb7+EpDhcg2+rikQSNdCsFCiUYouzK/bWC+OhPW06qpY/hYx6qBcfDs
+ 2bMA==
+X-Gm-Message-State: ACgBeo3Sraf5mEIxBa3qABT6wEKb+bj3D9cC+1e6QRcPqa51+YQWhh2/
+ 9M4zUKLMEvNrYtDZbVpJj2bc59DTic8=
+X-Google-Smtp-Source: AA6agR4Gd9BNAL7ZIsiQuGHGCrp3JykPrVWXo52MAsr+v/p21FPI3f+gjkMhuuUBOiiTIS22LAoIgw==
+X-Received: by 2002:a5d:5a0c:0:b0:220:6cd2:33fb with SMTP id
+ bq12-20020a5d5a0c000000b002206cd233fbmr4596811wrb.560.1660931460490; 
+ Fri, 19 Aug 2022 10:51:00 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:54a5:9a99:1f8c:15e1])
+ by smtp.gmail.com with ESMTPSA id
+ u1-20020a7bcb01000000b003a502c23f2asm9533012wmj.16.2022.08.19.10.50.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 19 Aug 2022 08:18:29 -0700 (PDT)
-From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
-X-Google-Original-From: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
+ Fri, 19 Aug 2022 10:51:00 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 19 Aug 2022 11:17:33 -0400
-Message-Id: <20220819151734.926106-9-Ben.Wolsieffer@hefring.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220819151734.926106-1-Ben.Wolsieffer@hefring.com>
-References: <20220819151734.926106-1-Ben.Wolsieffer@hefring.com>
+Date: Fri, 19 Aug 2022 19:50:59 +0200
+Message-Id: <cover.1660931225.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=hefring-com.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc;
- bh=BexaqVSyozuDVPgWGQjlECJhTHc+JCnjMCGRfl6icKU=;
- b=cDLvXyW0KLljDbw0z3L0V27OdtVnTReM82YhDU1XaP9bNIYuuAuibl7WmeIJRb3kwH
- azd92gzweO2ockA5CyvjSscw7KmP1Ty+XdwbP0CYSFvTbDDeKQVoBgOW8ncEU+AQP55j
- 7fcpMIY2VTOC30nIAXJ5mdMYNgCG1TtBJLb4sz/ME7i2Yo70q009SjntOu579Qgq8Ohf
- 7zF+sDS42DlaEkFdZfKe9SAdQARseGigVuAG8Az3PPT9ow7f4mBSFfpRePpF+SYXMy55
- qmjXZEF86en2XN429xMq2lm6RcqBZnU6elBdLMXa763oYduSTkz9OVmPv00SrDDoJejp
- jeYQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=hefring-com.20210112.gappssmtp.com
- header.i=@hefring-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=cDLvXyW0
-Subject: [Buildroot] [PATCH v3 8/8] package/pkg-autotools: patch libtool to
- support ARM FDPIC
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc;
+ bh=1Rc/eFpylo0c5bIj/yzypb29+hDXuh84yucXpe3d3NI=;
+ b=lqntXxuNdaYdzUEYh1aknPIO3UDRZpM0QZWQYVqGOa4udSNl54d9cJfCnQwYrGKOUB
+ OlXUD86aU6FZtFXPv5w9H+P4U5H9VCXGAHqJznJrwKK1V2k6h8JotWGhXKy1aRIfZ3T4
+ wVf1TrEQD0pBlb8uPDYit57LotmKm4nZIUSVc7LbJ2+ILl4tX3hzP7xLomSNf7IlD+sC
+ xgd3IeCLqPZ/Um7xdYyx7rJX0T2ThQvZ0xRuQw/7R32XLDbzfE2pqsnOISWPReSBJRQR
+ tvJNRfG//GPAMytGLrYjE/4xsac8wg1fgD4jMIBPWvsOtXACXCg909qZf0n5IDJ86pEy
+ 5hXA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=lqntXxuN
+Subject: [Buildroot] [PATCH 0/4] dracut: extend support and tests (branch
+ yem/dracut)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,69 +93,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vladimir Murzin <vladimir.murzin@arm.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Ben Wolsieffer <Ben.Wolsieffer@hefring.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Thierry Bultel <thierry.bultel@linatsea.fr>,
+ Adam Duskett <aduskett@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Patch the target matching code in libtool to understand
-arm-*-uclinuxfdpiceabi targets. To avoid the need to run autoreconf,
-this patching must be performed in the configure script.
+Hello All!
 
-Without this patch, libtool refuses to build ARM FDPIC shared libraries.
-This is especially important because NPTL thread-local storage is broken
-in static libraries that are linked into dynamic FDPIC executables.
+Starting with a discussion with Arnout about adding the last item in
+the list, this small series extends or dracut support in three ways:
+  - allow user to easily provide custom dracut modules
+  - allow user to use more than one dracut config file
+  - extend run-time tests to check DT_NEEDED are included, by
+    exercising the above
 
-Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
----
- package/pkg-autotools.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Additionally, the existing run-time test about the presence of pv is
+redundant, so the series starts by cleaning it up.
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index b6224b349d..60e70a6e2f 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -87,6 +87,16 @@ define CONFIGURE_FIX_POWERPC64_HOOK
- 	support/scripts/fix-configure-powerpc64.sh $($(PKG)_DIR)
- endef
- 
-+#
-+# Hook to add support for arm-*-uclinuxfdpiceabi to the configure script
-+#
-+define CONFIGURE_FIX_UCLINUXFDPICEABI_HOOK
-+	@$(call MESSAGE,"Adding uclinuxfdpiceabi to configure")
-+	find $($(PKG)_DIR) -name configure \
-+		-exec grep -qF 'Generated by GNU Autoconf' {} \; \
-+		-exec sed -Ei 's#((\s|^)linux\*\B)#\1 | uclinuxfdpiceabi#' '{}' \;
-+endef
-+
- #
- # Hook to gettextize the package if needed
- #
-@@ -269,6 +279,13 @@ ifneq ($$(filter powerpc64%,$$(if $$(filter target,$(4)),$$(ARCH),$$(HOSTARCH)))
- $(2)_PRE_CONFIGURE_HOOKS += CONFIGURE_FIX_POWERPC64_HOOK
- endif
- 
-+# Append a configure hook if building for ARM with FDPIC enabled.
-+# Must be added after other pre-configure hooks that might regenerate the
-+# configure script and overwrite the changes made here.
-+ifeq ($(BR2_arm)$(BR2_armeb):$(BR2_BINFMT_FDPIC),y:y)
-+$(2)_PRE_CONFIGURE_HOOKS += CONFIGURE_FIX_UCLINUXFDPICEABI_HOOK
-+endif
-+
- #
- # Build step. Only define it if not already defined by the package .mk
- # file.
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      support/test/cpio: test for pv already done by listing the cpio archive
+      package/dracut: allow users to provide their own modules
+      fs/cpio: accept a list of dracut.conf files
+      support/tests/cpio: extend runtime tests
+
+ fs/cpio/Config.in                                     | 12 +++++++-----
+ fs/cpio/cpio.mk                                       | 19 ++++++++++++++-----
+ package/dracut/Config.in.host                         | 11 +++++++++++
+ package/dracut/dracut.mk                              |  9 +++++++++
+ support/testing/tests/fs/test_cpio.py                 | 15 ++++++++++-----
+ support/testing/tests/fs/test_cpio/dracut-cramfs.conf |  7 +++++++
+ .../fs/test_cpio/modules/99cramfs/module-setup.sh     | 11 +++++++++++
+ 7 files changed, 69 insertions(+), 15 deletions(-)
+ create mode 100644 support/testing/tests/fs/test_cpio/dracut-cramfs.conf
+ create mode 100755 support/testing/tests/fs/test_cpio/modules/99cramfs/module-setup.sh
+
 -- 
-2.37.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
