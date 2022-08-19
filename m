@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5FE1C32771
-	for <buildroot@archiver.kernel.org>; Fri, 19 Aug 2022 21:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86227C32771
+	for <buildroot@archiver.kernel.org>; Fri, 19 Aug 2022 21:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1421441D1A;
-	Fri, 19 Aug 2022 21:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1421441D1A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A755842B5;
+	Fri, 19 Aug 2022 21:27:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A755842B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id upG8k6t2cJbC; Fri, 19 Aug 2022 21:26:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id scVScv4LY65q; Fri, 19 Aug 2022 21:27:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C542D41CD5;
-	Fri, 19 Aug 2022 21:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C542D41CD5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6B1DF1BF390
- for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 21:26:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E14A81B84;
+	Fri, 19 Aug 2022 21:27:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E14A81B84
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 721C01BF390
+ for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 21:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4FE5A60B78
- for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 21:26:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FE5A60B78
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4D21C81B84
+ for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 21:27:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D21C81B84
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id upMMevxY0lda for <buildroot@lists.busybox.net>;
- Fri, 19 Aug 2022 21:26:29 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4145060B45
- for <buildroot@buildroot.org>; Fri, 19 Aug 2022 21:26:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4145060B45
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 00FDA879D6; Fri, 19 Aug 2022 21:11:49 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 19 Aug 2022 23:26:14 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bd0b2db23154f700fbb94aa3a0a0752a52b5ea7b
-X-Git-Newrev: 35b3a646e0ae44b9a4428dcedce22a61967a2384
-X-Patchwork-Hint: ignore
-Message-Id: <20220819211150.00FDA879D6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/docker-engine: use
- kernel modules for extra network drivers
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X8Kelv2S4H8q for <buildroot@lists.busybox.net>;
+ Fri, 19 Aug 2022 21:27:27 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9B1C81750
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D9B1C81750
+ for <buildroot@buildroot.org>; Fri, 19 Aug 2022 21:27:26 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:54a5:9a99:1f8c:15e1])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 64CA2780502;
+ Fri, 19 Aug 2022 23:27:18 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 19 Aug 2022 23:27:18 +0200
+Date: Fri, 19 Aug 2022 23:27:17 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Stefan Agner <stefan@agner.ch>
+Message-ID: <20220819212717.GA2167049@scaer>
+References: <c54a625f2a5556cc558e12445d4de4cf98643b29.1660858361.git.stefan@agner.ch>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <c54a625f2a5556cc558e12445d4de4cf98643b29.1660858361.git.stefan@agner.ch>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1660944443;
+ bh=AF7QXANyGH7qm1VjRg70ZAb1kgXCknur8LQPYWnagSU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=TOgFhZOxnPNXLLTPeqjYI6ezO/hAQhy7Z6OSLv6Y9ci+/3OqSwvmG/8tNgVQ6Wb9G
+ GKMiEl0MvUm6BkZwsKWxxz6VXr3DthCthzDgkXy+1wWr6UTmuGGdERJKO/Nl78YrfH
+ 8csmkTxAemCf0TJxLf28+RZq52C+njypB5kKcK+6Z+cA5ENBCp0Kci8Gk0w33KtD3d
+ bGKxeCNylTmYiD3MscHsUlOvm7qYpYlx22I8B3El1NK29hbOBRPhhGYtZWn1L0fXIM
+ ziCQrS9Lj/K+dJeGg19eYu+2Kt981Djtwhg/GIMT8Qj+pq+YOYY4F7/JfbNEBJm7cC
+ D7eU72fUgbc6g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=TOgFhZOx
+Subject: Re: [Buildroot] [PATCH v2] package/docker-engine: use kernel
+ modules for extra network drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,42 +77,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35b3a646e0ae44b9a4428dcedce22a61967a2384
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Stefan, All,
 
-Docker network driver "overlay", "macvlan" and "ipvlan" are not used
-by default. Don't force enable them in the kernel.
+On 2022-08-18 23:33 +0200, Stefan Agner spake thusly:
+> Docker network driver "overlay", "macvlan" and "ipvlan" are not used
+> by default. Don't force enable them in the kernel.
+> 
+> The main aim here is to get rid of the dummy0 network interface which
+> is generated by the dummy driver by default.
+> 
+> Signed-off-by: Stefan Agner <stefan@agner.ch>
 
-The main aim here is to get rid of the dummy0 network interface which
-is generated by the dummy driver by default.
+Applied to next, thanks.
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/docker-engine/docker-engine.mk | 4 ----
- 1 file changed, 4 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 293af1858c..fb489c0f8d 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -124,10 +124,6 @@ define DOCKER_ENGINE_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_MACVLAN)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_IPVLAN)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
+> ---
+>  package/docker-engine/docker-engine.mk | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+> index 293af1858c..fb489c0f8d 100644
+> --- a/package/docker-engine/docker-engine.mk
+> +++ b/package/docker-engine/docker-engine.mk
+> @@ -124,10 +124,6 @@ define DOCKER_ENGINE_LINUX_CONFIG_FIXUPS
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
+> -	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
+> -	$(call KCONFIG_ENABLE_OPT,CONFIG_MACVLAN)
+> -	$(call KCONFIG_ENABLE_OPT,CONFIG_IPVLAN)
+> -	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
+>  	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
+> -- 
+> 2.37.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
