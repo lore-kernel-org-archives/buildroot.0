@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56B32C25B08
-	for <buildroot@archiver.kernel.org>; Sat, 20 Aug 2022 09:32:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE225C25B08
+	for <buildroot@archiver.kernel.org>; Sat, 20 Aug 2022 09:32:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D27A560E56;
-	Sat, 20 Aug 2022 09:32:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D27A560E56
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7688060D77;
+	Sat, 20 Aug 2022 09:32:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7688060D77
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OENVtzykL5Oz; Sat, 20 Aug 2022 09:32:30 +0000 (UTC)
+	with ESMTP id q9ZTc_4sLxdc; Sat, 20 Aug 2022 09:32:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AA4160E3A;
-	Sat, 20 Aug 2022 09:32:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AA4160E3A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 826241BF2C5
- for <buildroot@lists.busybox.net>; Sat, 20 Aug 2022 09:32:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D92AA60E78;
+	Sat, 20 Aug 2022 09:32:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D92AA60E78
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 525A71BF2C5
+ for <buildroot@lists.busybox.net>; Sat, 20 Aug 2022 09:32:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DE6B60E51
- for <buildroot@lists.busybox.net>; Sat, 20 Aug 2022 09:32:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DE6B60E51
+ by smtp4.osuosl.org (Postfix) with ESMTP id 388B341969
+ for <buildroot@lists.busybox.net>; Sat, 20 Aug 2022 09:32:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 388B341969
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HTvkx-VnjP72 for <buildroot@lists.busybox.net>;
- Sat, 20 Aug 2022 09:32:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F106660D88
- for <buildroot@buildroot.org>; Sat, 20 Aug 2022 09:32:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F106660D88
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8E94387038; Sat, 20 Aug 2022 09:17:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 20 Aug 2022 11:31:56 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b826fba77c71ecf1d61062857e080aa15ef239d6
-X-Git-Newrev: 2d3d130bc129cc36b88ff82c4a87e53a77874a50
-X-Patchwork-Hint: ignore
-Message-Id: <20220820091742.8E94387038@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/genrandconfig: add opensbi custom
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MUiaFLfh1XIE for <buildroot@lists.busybox.net>;
+ Sat, 20 Aug 2022 09:32:31 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20EE741973
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 20EE741973
+ for <buildroot@buildroot.org>; Sat, 20 Aug 2022 09:32:30 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B94A91BF207;
+ Sat, 20 Aug 2022 09:32:27 +0000 (UTC)
+Date: Sat, 20 Aug 2022 11:32:26 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220820113226.77796524@windsurf>
+In-Reply-To: <20220815170129.98422-1-fontaine.fabrice@gmail.com>
+References: <20220815170129.98422-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1660987948;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=zEgePtSpinIC/Hu8n1tpVxqOfKJaIlgqmIoObcjqLzI=;
+ b=NC/uoDn8ja3tZAZ+X7wNBQaEFQ2AdOBqqFn7LrSzG8zOSGkR2fRrgaq3BNjpARRHtgACmx
+ 1YXR9JpuffepIZ8btaq9YLXFm6pLuc05NxOhAyJqPSgchNPVYegnohQVp6iFlNGTrxTPLJ
+ 45o+VusoHov+yj2ms85J0CW3dQrN0zruqOml45etb+35CcyFA3FYJyX0L1LbdIg59WjAtx
+ zwKZjc2dyj6rB/gRzqLRI4TdIxWGuzR+IzQsaFihq/kXzIIH7aLoqN95dOZ9Wa4U11oUIr
+ torrOGOLhexOOKfAwQZGmFlaUb2qGjzcDbqXPzxXQ/fvrnT73ewSFUVzkfft2g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=NC/uoDn8
+Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: add opensbi custom
  handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,61 +78,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d3d130bc129cc36b88ff82c4a87e53a77874a50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 15 Aug 2022 19:01:29 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Add custom cases to make sure that a random configuration with an empty
-git, tarball location or version for opensbi doesn't fail. It reverts to
-BR2_TARGET_OPENSBI_LATEST_VERSION in that case.
+> Add custom cases to make sure that a random configuration with an empty
+> git, tarball location or version for opensbi doesn't fail. It reverts to
+> BR2_TARGET_OPENSBI_LATEST_VERSION in that case.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/b31882b1a7119b2b590cc6dfed44fe515a63a6b8
+>  - http://autobuild.buildroot.org/results/61866e8941741c9746dcb2c60b6db3b0e5b9a47b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  utils/genrandconfig | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 
-Fixes:
- - http://autobuild.buildroot.org/results/b31882b1a7119b2b590cc6dfed44fe515a63a6b8
- - http://autobuild.buildroot.org/results/61866e8941741c9746dcb2c60b6db3b0e5b9a47b
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/genrandconfig | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index b8ca628724..c6b3123feb 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -535,6 +535,27 @@ def fixup_config(sysinfo, configfile):
-         if 'BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT=y\n' in configlines:
-             return False
- 
-+    if 'BR2_TARGET_OPENSBI=y\n' in configlines and \
-+       'BR2_TARGET_OPENSBI_CUSTOM_GIT=y\n' in configlines and \
-+       'BR2_TARGET_OPENSBI_CUSTOM_REPO_URL=""\n' in configlines:
-+        configlines.remove('BR2_TARGET_OPENSBI_CUSTOM_GIT=y\n')
-+        configlines.append('BR2_TARGET_OPENSBI_LATEST_VERSION=y\n')
-+        configlines.remove('BR2_TARGET_OPENSBI_CUSTOM_REPO_URL=""\n')
-+
-+    if 'BR2_TARGET_OPENSBI=y\n' in configlines and \
-+       'BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y\n' in configlines and \
-+       'BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION=""\n' in configlines:
-+        configlines.remove('BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y\n')
-+        configlines.append('BR2_TARGET_OPENSBI_LATEST_VERSION=y\n')
-+        configlines.remove('BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION=""\n')
-+
-+    if 'BR2_TARGET_OPENSBI=y\n' in configlines and \
-+       'BR2_TARGET_OPENSBI_CUSTOM_VERSION=y\n' in configlines and \
-+       'BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE=""\n' in configlines:
-+        configlines.remove('BR2_TARGET_OPENSBI_CUSTOM_VERSION=y\n')
-+        configlines.append('BR2_TARGET_OPENSBI_LATEST_VERSION=y\n')
-+        configlines.remove('BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE=""\n')
-+
-     if 'BR2_PACKAGE_REFPOLICY=y\n' in configlines and \
-        'BR2_PACKAGE_REFPOLICY_CUSTOM_GIT=y\n' in configlines and \
-        'BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL=""\n' in configlines:
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
