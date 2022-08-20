@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86227C32771
-	for <buildroot@archiver.kernel.org>; Fri, 19 Aug 2022 21:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C98FAC25B08
+	for <buildroot@archiver.kernel.org>; Sat, 20 Aug 2022 08:10:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A755842B5;
-	Fri, 19 Aug 2022 21:27:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A755842B5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 427C84060B;
+	Sat, 20 Aug 2022 08:10:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 427C84060B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id scVScv4LY65q; Fri, 19 Aug 2022 21:27:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jmL9OL835yuM; Sat, 20 Aug 2022 08:10:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E14A81B84;
-	Fri, 19 Aug 2022 21:27:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E14A81B84
+	by smtp2.osuosl.org (Postfix) with ESMTP id 69C9A404D8;
+	Sat, 20 Aug 2022 08:10:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69C9A404D8
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 721C01BF390
- for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 21:27:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 136921BF36A
+ for <buildroot@lists.busybox.net>; Sat, 20 Aug 2022 08:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D21C81B84
- for <buildroot@lists.busybox.net>; Fri, 19 Aug 2022 21:27:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D21C81B84
+ by smtp1.osuosl.org (Postfix) with ESMTP id D539683E83
+ for <buildroot@lists.busybox.net>; Sat, 20 Aug 2022 08:10:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D539683E83
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X8Kelv2S4H8q for <buildroot@lists.busybox.net>;
- Fri, 19 Aug 2022 21:27:27 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9B1C81750
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D9B1C81750
- for <buildroot@buildroot.org>; Fri, 19 Aug 2022 21:27:26 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:54a5:9a99:1f8c:15e1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 64CA2780502;
- Fri, 19 Aug 2022 23:27:18 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 19 Aug 2022 23:27:18 +0200
-Date: Fri, 19 Aug 2022 23:27:17 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Stefan Agner <stefan@agner.ch>
-Message-ID: <20220819212717.GA2167049@scaer>
-References: <c54a625f2a5556cc558e12445d4de4cf98643b29.1660858361.git.stefan@agner.ch>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <c54a625f2a5556cc558e12445d4de4cf98643b29.1660858361.git.stefan@agner.ch>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1660944443;
- bh=AF7QXANyGH7qm1VjRg70ZAb1kgXCknur8LQPYWnagSU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=TOgFhZOxnPNXLLTPeqjYI6ezO/hAQhy7Z6OSLv6Y9ci+/3OqSwvmG/8tNgVQ6Wb9G
- GKMiEl0MvUm6BkZwsKWxxz6VXr3DthCthzDgkXy+1wWr6UTmuGGdERJKO/Nl78YrfH
- 8csmkTxAemCf0TJxLf28+RZq52C+njypB5kKcK+6Z+cA5ENBCp0Kci8Gk0w33KtD3d
- bGKxeCNylTmYiD3MscHsUlOvm7qYpYlx22I8B3El1NK29hbOBRPhhGYtZWn1L0fXIM
- ziCQrS9Lj/K+dJeGg19eYu+2Kt981Djtwhg/GIMT8Qj+pq+YOYY4F7/JfbNEBJm7cC
- D7eU72fUgbc6g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=TOgFhZOx
-Subject: Re: [Buildroot] [PATCH v2] package/docker-engine: use kernel
- modules for extra network drivers
+ with ESMTP id hMeabJ0E0lhH for <buildroot@lists.busybox.net>;
+ Sat, 20 Aug 2022 08:10:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FF4183E65
+ for <buildroot@buildroot.org>; Sat, 20 Aug 2022 08:10:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FF4183E65
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 4351583DFD; Sat, 20 Aug 2022 07:55:31 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 20 Aug 2022 10:06:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 167cbd76eea17d5995f6e4f88e34d8b3f795cc33
+X-Git-Newrev: 713de9f90eba91581ba8d264e237205bfee1ac11
+X-Patchwork-Hint: ignore
+Message-Id: <20220820075531.4351583DFD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sdl2: be more explicit in
+ disabling optional features
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,62 +57,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Stefan, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=713de9f90eba91581ba8d264e237205bfee1ac11
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-08-18 23:33 +0200, Stefan Agner spake thusly:
-> Docker network driver "overlay", "macvlan" and "ipvlan" are not used
-> by default. Don't force enable them in the kernel.
-> 
-> The main aim here is to get rid of the dummy0 network interface which
-> is generated by the dummy driver by default.
-> 
-> Signed-off-by: Stefan Agner <stefan@agner.ch>
+Add many more explicit --disable-<foo>, as we have for example seen
+video-vivante being autodetected when not needed.
 
-Applied to next, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/sdl2/sdl2.mk | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/docker-engine/docker-engine.mk | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-> index 293af1858c..fb489c0f8d 100644
-> --- a/package/docker-engine/docker-engine.mk
-> +++ b/package/docker-engine/docker-engine.mk
-> @@ -124,10 +124,6 @@ define DOCKER_ENGINE_LINUX_CONFIG_FIXUPS
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-> -	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
-> -	$(call KCONFIG_ENABLE_OPT,CONFIG_MACVLAN)
-> -	$(call KCONFIG_ENABLE_OPT,CONFIG_IPVLAN)
-> -	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
-> -- 
-> 2.37.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 94533fa9b4..d255112ce9 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -20,7 +20,24 @@ SDL2_CONF_OPTS += \
+ 	--disable-esd \
+ 	--disable-dbus \
+ 	--disable-pulseaudio \
+-	--disable-video-wayland
++	--disable-video-vivante \
++	--disable-video-cocoa \
++	--disable-video-metal \
++	--disable-video-wayland \
++	--disable-video-dummy \
++	--disable-video-offscreen \
++	--disable-video-vulkan \
++	--disable-ime \
++	--disable-ibus \
++	--disable-fcitx \
++	--disable-joystick-mfi \
++	--disable-directx \
++	--disable-xinput \
++	--disable-wasapi \
++	--disable-hidapi-joystick \
++	--disable-hidapi-libusb \
++	--disable-joystick-virtual \
++	--disable-render-d3d
+ 
+ # We are using autotools build system for sdl2, so the sdl2-config.cmake
+ # include path are not resolved like for sdl2-config script.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
