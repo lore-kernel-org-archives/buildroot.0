@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 541B1C28D13
-	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 05:01:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8F32C00140
+	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 05:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AC64410E7;
-	Sun, 21 Aug 2022 05:01:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AC64410E7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 294CC827FA;
+	Sun, 21 Aug 2022 05:02:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 294CC827FA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J7UeuftSeQBO; Sun, 21 Aug 2022 05:02:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 266938246F;
+	Sun, 21 Aug 2022 05:02:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 266938246F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 93E7E1BF83E
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 05:02:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D60041477
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 05:02:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D60041477
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2H4WiBT-UXQl; Sun, 21 Aug 2022 05:01:28 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A6E2410C0;
-	Sun, 21 Aug 2022 05:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A6E2410C0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 840261BF83E
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 05:01:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5FE2260B34
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 05:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FE2260B34
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eRhR-US9WL3j for <buildroot@lists.busybox.net>;
- Sun, 21 Aug 2022 05:01:24 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R-btnvWv6MvN for <buildroot@lists.busybox.net>;
+ Sun, 21 Aug 2022 05:02:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 516E260B18
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com
- [209.85.210.170])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 516E260B18
- for <buildroot@buildroot.org>; Sun, 21 Aug 2022 05:01:24 +0000 (UTC)
-Received: by mail-pf1-f170.google.com with SMTP id w29so2014157pfj.3
- for <buildroot@buildroot.org>; Sat, 20 Aug 2022 22:01:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35227410E8
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com
+ [209.85.214.177])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 35227410E8
+ for <buildroot@buildroot.org>; Sun, 21 Aug 2022 05:02:26 +0000 (UTC)
+Received: by mail-pl1-f177.google.com with SMTP id g8so3385009plq.11
+ for <buildroot@buildroot.org>; Sat, 20 Aug 2022 22:02:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=bD03U7VH0yHr1hSalOrkbywZg4abOFCoOdQLI6bXQ8M=;
- b=ZaYzV++6iQb6x/D2fbrjdZrLa8rvt/VDFLRI5/1xcgFUhbHktqY6ERg+BIK+ioG6ZD
- GXxOw2FKn7mIUvsrODAPp/nw9bkqxXHMXWjAkDhKGdBL4LQqkIMzeT6qWTCcBU7f5iJC
- LeQoSikQXH5Czxk4nKfP12DZ+AabDNx0fX0w5dPNRLN3x43cUnaFJgvoRSY5xH46m3fJ
- PscpqjK6CDB9YR3QeJk1yVdZtfCxpmcP4ifsHBH7rShyyEyYzpmxlXlCb/EgXc3YCPqJ
- Uw5b4wz5Y8XIAt6mTjPW/9IxD9ZOGIY+WxnW/Yypwfx31PvQzGBOJjDg0iAKK0FWhxXA
- WrBg==
-X-Gm-Message-State: ACgBeo3GkKrmbRgRKTr7l3VBwWQGlXaxK3RxBaxay4MBRTNOBfCmpDTU
- rMarxHNESv76XMuiFFvfqPjabqaE2Kc11A==
-X-Google-Smtp-Source: AA6agR5jtbFO6GzqtLM7Yj1kA+MXjfNVidAYVYcPgJ6lrLBlivAkzJjJ6xOvEW2WIIQ28gLeKa7jtQ==
-X-Received: by 2002:a05:6a00:1a49:b0:528:6ea0:14e2 with SMTP id
- h9-20020a056a001a4900b005286ea014e2mr15014298pfv.22.1661058083207; 
- Sat, 20 Aug 2022 22:01:23 -0700 (PDT)
+ bh=b3aWVSKizf5qBMsnqqVxtf78a9hokXCx40kETiX9MSg=;
+ b=zM8DBvzBRXw0sDbnaa+YJTBSCwIBCp060Zia3CWDb5PbOggKs522EoCU8BhEziXAPZ
+ ierIbuzToncGCbNkK7o0yp6XzJBF3O7J20YDYV9eMaeXpEmS3K2fZhXECsKG+bHCRijU
+ EmQBJdEajcBqxqoNx8rpveDwYie3AnUUzzGK7Erxj/kaXkg6ehwgRUTdLaoayO/wjPPf
+ ldazaDCxSEKSIMfwaWqrULPF1fu6V43Es4GcjMMfnqtnLxFVYZQTqX7qBBn1xhYztKgf
+ VUiJLrH3fi8MCNFVWkPYuxMVRXMjnIBKJlKnT1frcZfdAHu4ydRqshPxLy9poYYeG3Qw
+ gLSg==
+X-Gm-Message-State: ACgBeo3ggBNC2yZDuc4zBDDJyS5g/txfErfS9X9ldBBchFjgDr65yWYh
+ K/xet9DLGgfgV5UM1UnUzzibipAJrqu0bg==
+X-Google-Smtp-Source: AA6agR5is0/2sUJm7UfchggK6lCM08L0qK4bmEcCDJcO0NdbjDAlHO1QtAXBIG/aLlqIczNBJtPejw==
+X-Received: by 2002:a17:903:248b:b0:172:a790:3206 with SMTP id
+ p11-20020a170903248b00b00172a7903206mr14342647plw.139.1661058145966; 
+ Sat, 20 Aug 2022 22:02:25 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- t196-20020a6378cd000000b0042aa381e2easm206294pgc.51.2022.08.20.22.01.21
+ c11-20020a17090ab28b00b001f4f76033f9sm5593925pjr.49.2022.08.20.22.02.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 Aug 2022 22:01:22 -0700 (PDT)
+ Sat, 20 Aug 2022 22:02:25 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat, 20 Aug 2022 22:01:19 -0700
-Message-Id: <20220821050119.578342-1-christian@paral.in>
+Date: Sat, 20 Aug 2022 22:02:22 -0700
+Message-Id: <20220821050222.578600-1-christian@paral.in>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/1] package/conmon: new package
+Subject: [Buildroot] [PATCH v1 1/1] package/crun: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,114 +87,142 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Conmon is an OCI container runtime monitor.
+crun is a fast and low-memory OCI Container Runtime in C.
 
-https://github.com/containers/conmon
-
-Dependency of podman.
+https://github.com/containers/crun
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/conmon/Config.in   | 11 +++++++++++
- package/conmon/conmon.hash |  3 +++
- package/conmon/conmon.mk   | 34 ++++++++++++++++++++++++++++++++++
- 5 files changed, 50 insertions(+)
- create mode 100644 package/conmon/Config.in
- create mode 100644 package/conmon/conmon.hash
- create mode 100644 package/conmon/conmon.mk
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...am-use-.version-file-for-git-version.patch | 28 +++++++++++++++++
+ package/crun/Config.in                        |  7 +++++
+ package/crun/crun.hash                        |  4 +++
+ package/crun/crun.mk                          | 31 +++++++++++++++++++
+ 6 files changed, 72 insertions(+)
+ create mode 100644 package/crun/0001-Makefile.am-use-.version-file-for-git-version.patch
+ create mode 100644 package/crun/Config.in
+ create mode 100644 package/crun/crun.hash
+ create mode 100644 package/crun/crun.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d2bd0d809a..1914da041d 100644
+index d2bd0d809a..b92821f9c7 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -529,6 +529,7 @@ F:	package/python-pylibftdi/
- 
+@@ -530,6 +530,7 @@ F:	package/python-pylibftdi/
  N:	Christian Stewart <christian@paral.in>
  F:	package/batman-adv/
-+F:	package/conmon/
  F:	package/containerd/
++F:	package/crun/
  F:	package/delve/
  F:	package/docker-cli/
+ F:	package/docker-engine/
 diff --git a/package/Config.in b/package/Config.in
-index d1c098c48f..5c71fc1d57 100644
+index d1c098c48f..fd591d9e52 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2564,6 +2564,7 @@ menu "System tools"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/circus/Config.in"
- 	source "package/containerd/Config.in"
-+	source "package/conmon/Config.in"
+@@ -2567,6 +2567,7 @@ menu "System tools"
  	source "package/coreutils/Config.in"
  	source "package/cpulimit/Config.in"
  	source "package/cpuload/Config.in"
-diff --git a/package/conmon/Config.in b/package/conmon/Config.in
++	source "package/crun/Config.in"
+ 	source "package/daemon/Config.in"
+ 	source "package/dc3dd/Config.in"
+ 	source "package/dcron/Config.in"
+diff --git a/package/crun/0001-Makefile.am-use-.version-file-for-git-version.patch b/package/crun/0001-Makefile.am-use-.version-file-for-git-version.patch
 new file mode 100644
-index 0000000000..80caf46a59
+index 0000000000..05c284b385
 --- /dev/null
-+++ b/package/conmon/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_CONMON
-+	bool "conmon"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
++++ b/package/crun/0001-Makefile.am-use-.version-file-for-git-version.patch
+@@ -0,0 +1,28 @@
++From 818012b2070ba6bcd096016fd7f3fa4076f9a5cf Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@paral.in>
++Date: Sat, 20 Aug 2022 20:21:31 -0700
++Subject: [PATCH] Makefile.am: use .version file for git version
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ Makefile.am | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 5800406..97aad82 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -151,9 +151,7 @@ TESTS = tests/test_capabilities.py \
++ 	$(AM_V_GEN)echo $(VERSION) > $@-t && mv $@-t $@
++ 
++ git-version.h:
++-	@if test -e $(abs_top_srcdir)/.git; then \
++-		$(AM__GEN)printf "/* autogenerated.  */\n#ifndef GIT_VERSION\n# define GIT_VERSION \"%s\"\n#endif\n" $(shell git --git-dir=$(abs_top_srcdir)/.git rev-parse HEAD) > $@-t && mv $@-t $@; \
++-	fi
+++	$(AM__GEN)printf "/* autogenerated.  */\n#ifndef GIT_VERSION\n# define GIT_VERSION \"%s\"\n#endif\n" $(shell cat $(abs_top_srcdir)/.version) > $@-t && mv $@-t $@
++ 
++ nixpkgs:
++ 	@nix run -f channel:nixpkgs-unstable nix-prefetch-git -c nix-prefetch-git \
++-- 
++2.37.2
++
+diff --git a/package/crun/Config.in b/package/crun/Config.in
+new file mode 100644
+index 0000000000..5aca10dcdb
+--- /dev/null
++++ b/package/crun/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_CRUN
++	bool "crun"
++	select BR2_PACKAGE_YAJL # libocispec
 +	help
-+	  Conmon is an OCI container runtime monitor.
++	  crun is a fast and low-memory OCI Container Runtime in C.
 +
-+	  https://github.com/containers/conmon
-+
-+comment "conmon needs a glibc or musl toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/conmon/conmon.hash b/package/conmon/conmon.hash
++	  https://github.com/containers/crun
+diff --git a/package/crun/crun.hash b/package/crun/crun.hash
 new file mode 100644
-index 0000000000..70ddb2a495
+index 0000000000..a0de4b6748
 --- /dev/null
-+++ b/package/conmon/conmon.hash
-@@ -0,0 +1,3 @@
++++ b/package/crun/crun.hash
+@@ -0,0 +1,4 @@
 +# Locally computed
-+sha256  145b5aa1c5d1d9977ad0d15a53c11aad1e65e8233f7e0fd176ac85f67d6d6fbe  conmon-2.1.3.tar.gz
-+sha256  9c9d771d4004725237a31ada889fe06c85a24fd0a29e41825181ab4cde54f016  LICENSE
-diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
++sha256  f7fb1f3f7ad14739389399d90e749baf732021e5c81c2886f75c860d7a8610ea  crun-1.5-br1.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.libcrun
+diff --git a/package/crun/crun.mk b/package/crun/crun.mk
 new file mode 100644
-index 0000000000..b629b0089e
+index 0000000000..622042cc44
 --- /dev/null
-+++ b/package/conmon/conmon.mk
-@@ -0,0 +1,34 @@
++++ b/package/crun/crun.mk
+@@ -0,0 +1,31 @@
 +################################################################################
 +#
-+# conmon
++# crun
 +#
 +################################################################################
 +
-+CONMON_VERSION = 2.1.3
-+CONMON_SITE = $(call github,containers,conmon,v$(CONMON_VERSION))
-+CONMON_LICENSE = Apache-2.0
-+CONMON_LICENSE_FILES = LICENSE
++CRUN_VERSION = 1.5
++CRUN_SITE = https://github.com/containers/crun
++CRUN_SITE_METHOD = git
++CRUN_GIT_SUBMODULES = YES
++CRUN_DEPENDENCIES = host-pkgconf yajl
++CRUN_LICENSE = GPL-2.0+ (crun binary), LGPL-2.1+ (libcrun)
++CRUN_LICENSE_FILES = COPYING COPYING.libcrun
++
++CRUN_AUTORECONF = YES
 +
 +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+CONMON_ENABLE_SECCOMP = 1
-+CONMON_DEPENDENCIES += libseccomp
++CRUN_DEPENDENCIES += libseccomp
 +else
-+CONMON_ENABLE_SECCOMP = 0
++CRUN_CONF_OPTS += --disable-seccomp
 +endif
 +
-+define CONMON_CONFIGURE_CMDS
-+	printf '#!/bin/bash\necho "$(CONMON_ENABLE_SECCOMP)"\n' > \
-+		$(@D)/hack/seccomp-notify.sh
-+	chmod +x $(@D)/hack/seccomp-notify.sh
-+endef
++CRUN_CONF_OPTS += --enable-embedded-yajl=no
 +
-+define CONMON_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D) bin/conmon
++define CRUN_GEN_VERSION
++	echo "$(CRUN_VERSION)" > $(@D)/.version
++	$(MAKE) -C $(@D) git-version.h
 +endef
++CRUN_PRE_BUILD_HOOKS += CRUN_GEN_VERSION
 +
-+define CONMON_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/bin/conmon $(TARGET_DIR)/usr/bin/conmon
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 2.37.2
 
