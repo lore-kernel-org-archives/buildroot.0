@@ -1,71 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E94AC00140
-	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 09:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1679AC00140
+	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 11:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E67A1404C4;
-	Sun, 21 Aug 2022 09:49:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E67A1404C4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eIuxuGvv0pmV; Sun, 21 Aug 2022 09:49:22 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E664740488;
-	Sun, 21 Aug 2022 09:49:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E664740488
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8A1DC1BF25B
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 09:49:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 657A260B96
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 09:49:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 657A260B96
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BEB5600B8;
+	Sun, 21 Aug 2022 11:16:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BEB5600B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Eh8lwpqTElCe for <buildroot@lists.busybox.net>;
- Sun, 21 Aug 2022 09:49:17 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 880BD60B86
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 880BD60B86
- for <buildroot@buildroot.org>; Sun, 21 Aug 2022 09:49:17 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:b8e6:fe51:1cfa:c9c2])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 22B9713F8AE;
- Sun, 21 Aug 2022 11:49:12 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 21 Aug 2022 11:49:11 +0200
-Date: Sun, 21 Aug 2022 11:49:11 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220821094911.GR2775145@scaer>
-References: <20220820113352.4976-1-fontaine.fabrice@gmail.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qK2_o9HxhX_i; Sun, 21 Aug 2022 11:16:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E9006068D;
+	Sun, 21 Aug 2022 11:16:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E9006068D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 991CD1BF3A7
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 11:16:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7474E40236
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 11:16:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7474E40236
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id relfCbYA4msM for <buildroot@lists.busybox.net>;
+ Sun, 21 Aug 2022 11:16:35 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B21A4400E5
+Received: from mxd1.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B21A4400E5
+ for <buildroot@buildroot.org>; Sun, 21 Aug 2022 11:16:34 +0000 (UTC)
+Received: from email.seznam.cz
+ by email-smtpc12a.ng.seznam.cz (email-smtpc12a.ng.seznam.cz [10.23.11.105])
+ id 2ed0c915ae37a3882ca4f77b; Sun, 21 Aug 2022 13:16:32 +0200 (CEST)
+Received: from arch-zen.localdomain (havhav.seb.rev-fortech.cz [213.250.223.2])
+ by email-relay22.ng.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+ Sun, 21 Aug 2022 13:04:25 +0200 (CEST)  
+Date: Sun, 21 Aug 2022 13:04:18 +0200
+From: Jan Havran <havran.jan@email.cz>
+To: buildroot@buildroot.org
+Message-ID: <YwIRMgNSkvP/T9a+@arch-zen.localdomain>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220820113352.4976-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661075354;
- bh=bCYCWfmUGi7aULQPpE+H3Y/bLV7idrCmd4OLjUWth0Q=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=BgrMyqbBTCRp2Apdyr/CheElwGikE/wiLjQkfEuFBaE/iMwww7oNaQStnx3udhdp3
- If5BmxWFQ1n7wdoncqkpB34wpqAdy6lfLid60e2vffx/ipiUNcCFloGJOSpvoREzSm
- 7qLaEP62jv8k34a0nbd1Dsr9uS5M6KhtpTzCgDmBcOTOhs/PbtJ7FaiKECy5tV/0qR
- 3sJXVoS/yLTLbS5CVCi17t4xeGxc3mT0aIFbkbzExt+fpVsXwYnNvBdzFeYwJaxWlG
- 1Lmj4FWBaQb7BG+ILxqhgmNmIWzo0XqoQG6n94pEBVT4SBOjUDPhSVTxkr5jZ/e33v
- RY1SyLyxjP9Hg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BgrMyqbB
-Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: add
- jquery-ui-themes handling
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=email.cz; s=beta; 
+ t=1661080592; bh=nVHqm4HpYv0lj9JR+G+6qdbvzv4sSQW/sy/xeWQky5c=;
+ h=Received:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+ Content-Type:Content-Disposition;
+ b=kFHKw0nI5euu+/rllGgrD2tuFw4DyvAshjBtnluEE9uJAdpTdmTRHpzY0lsaudLIc
+ vVrSEAeP/rlPUIIB63ZTZHDH+jw8OxDY47H4oBUtTJV9i3Zx0OJN89CsoHvEuM10vL
+ rXfrj3bCGGCb4IdDgi6BtrEnnvEgy/SDRBlH3NnE=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=email.cz header.i=@email.cz
+ header.a=rsa-sha256 header.s=beta header.b=kFHKw0nI
+Subject: [Buildroot] [PATCH v2] board/pine64/pinecube: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,81 +70,226 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Jan Havran <havran.jan@email.cz>, Jagan Teki <jagan@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2022-08-20 13:33 +0200, Fabrice Fontaine spake thusly:
-> Add a custom case to make sure that a random configuration with an empty
-> theme for jquery-ui-themes doesn't fail. It reverts to
-> BR2_PACKAGE_JQUERY_UI_THEMES_BLACK_TIE in that case.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b38f605795b1c60d8253313ce9478c4b1991d390
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  utils/genrandconfig | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/utils/genrandconfig b/utils/genrandconfig
-> index 85db7ed1e9..9d2ed3f244 100755
-> --- a/utils/genrandconfig
-> +++ b/utils/genrandconfig
-> @@ -547,6 +547,11 @@ def fixup_config(sysinfo, configfile):
->          if 'BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT=y\n' in configlines:
->              return False
->  
-> +    if 'BR2_PACKAGE_JQUERY_UI_THEMES=y\n' in configlines and \
-> +       'BR2_PACKAGE_JQUERY_UI_THEMES_THEME=""\n' in configlines:
+Add support for PineCube with:
+- U-Boot 2022.04
+- Linux 5.15.61
 
-I am not sure how we can end up with an empty BR2_PACKAGE_JQUERY_UI_THEMES_THEME.
-Indeed, it is filled from a choice, and unless there is a typo in one of
-the config options, there are as many defaults for it as there are
-entries in the choice...
+PineCube is a low-powered, open source IP camera
+with the following specs:
+ - Allwinner S3 Cortex-A7
+ - 128 MiB DDR3
+ - 16 MiB SPI flash
+ - 5 MPx OV5640 camera
+ - MicroSD slot
+ - 10/100M Ethernet with passive PoE
+ - 802.11 b/g/n WiFi
+ - Bluetooth 4.1
+ - USB 2.0
+ - 26 pins GPIO header
+ - Microphone
+ - IR LEDs for night vision
 
-And if you look at the .config file, there is actually something
-selected in that choice, BR2_PACKAGE_JQUERY_UI_THEMES_VADER=y, but
-indeed BR2_PACKAGE_JQUERY_UI_THEMES_THEME is not even set. It's not that
-it is empty, it is not set at all!
+Board homepage: https://www.pine64.org/cube/
+Board wiki:     https://wiki.pine64.org/wiki/PineCube
 
-So, the .config file is not correct.
+Signed-off-by: Jan Havran <havran.jan@email.cz>
+---
+Changes v1 -> v2 (review by Giulio Benetti):
+  - Updated commit message
+  - Replaced boot.cmd by extlinux.conf
+  - Renamed pinecube_defconfig to pine64_pinecube_defconfig
+  - Changed welcome message (generic issue)
+  - Updated U-Boot 2022.01 to 2022.04
+  - Updated Linux kernel from 5.15 to 5.15.61
+  - Removed NEON from FPU (but kept VFPV4)
+---
+ DEVELOPERS                          |  4 +++
+ board/pine64/pinecube/extlinux.conf |  4 +++
+ board/pine64/pinecube/genimage.cfg  | 34 ++++++++++++++++++++++
+ board/pine64/pinecube/post-build.sh |  5 ++++
+ board/pine64/pinecube/readme.txt    | 31 ++++++++++++++++++++
+ configs/pine64_pinecube_defconfig   | 45 +++++++++++++++++++++++++++++
+ 6 files changed, 123 insertions(+)
+ create mode 100644 board/pine64/pinecube/extlinux.conf
+ create mode 100644 board/pine64/pinecube/genimage.cfg
+ create mode 100755 board/pine64/pinecube/post-build.sh
+ create mode 100644 board/pine64/pinecube/readme.txt
+ create mode 100644 configs/pine64_pinecube_defconfig
 
-So, I think the issue is about fixing genrandconfig to generate .config
-files that are correct to begin with. Priobably, running "make
-olddefconfig" before checking the configuration is required? At least,
-when I do that localy, the .config now properly contains
-BR2_PACKAGE_JQUERY_UI_THEMES_THEME="vader".
-
-But wait, wait... We already run 'make olddefconfig'! What's going on
-here?
-
-Regards,
-Yann E. MORIN.
-
-> +        configlines.append('BR2_PACKAGE_JQUERY_UI_THEMES_BLACK_TIE=y\n')
-> +        configlines.remove('BR2_PACKAGE_JQUERY_UI_THEMES_THEME=""\n')
-> +
->      if 'BR2_TARGET_OPENSBI=y\n' in configlines and \
->         'BR2_TARGET_OPENSBI_CUSTOM_GIT=y\n' in configlines and \
->         'BR2_TARGET_OPENSBI_CUSTOM_REPO_URL=""\n' in configlines:
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4287fd9cf7..74f57af6fa 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1410,6 +1410,10 @@ F:	package/pangomm/
+ F:	package/rpm/
+ F:	package/yad/
+ 
++N:	Jan Havran <havran.jan@email.cz>
++F:	board/pine64/pinecube/
++F:	configs/pine64_pinecube_defconfig
++
+ N:	Jan Heylen <jan.heylen@nokia.com>
+ F:	package/opentracing-cpp/
+ 
+diff --git a/board/pine64/pinecube/extlinux.conf b/board/pine64/pinecube/extlinux.conf
+new file mode 100644
+index 0000000000..6a18d9a2cb
+--- /dev/null
++++ b/board/pine64/pinecube/extlinux.conf
+@@ -0,0 +1,4 @@
++label buildroot
++  kernel /zImage
++  devicetree /sun8i-s3-pinecube.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait rw
+diff --git a/board/pine64/pinecube/genimage.cfg b/board/pine64/pinecube/genimage.cfg
+new file mode 100644
+index 0000000000..398d45e2f7
+--- /dev/null
++++ b/board/pine64/pinecube/genimage.cfg
+@@ -0,0 +1,34 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-s3-pinecube.dtb",
++			"extlinux"
++		}
++	}
++
++	size = 8M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8K
++		size = 504K # 512KB - 8KB
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/pine64/pinecube/post-build.sh b/board/pine64/pinecube/post-build.sh
+new file mode 100755
+index 0000000000..ba29375c05
+--- /dev/null
++++ b/board/pine64/pinecube/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+diff --git a/board/pine64/pinecube/readme.txt b/board/pine64/pinecube/readme.txt
+new file mode 100644
+index 0000000000..4cf6df2110
+--- /dev/null
++++ b/board/pine64/pinecube/readme.txt
+@@ -0,0 +1,31 @@
++Intro
++=====
++
++This directory contains a Buildroot configuration for building a
++Pine64 PineCube.
++
++Board homepage: https://www.pine64.org/cube/
++Board wiki:     https://wiki.pine64.org/wiki/PineCube
++
++How to build it
++===============
++
++  $ make pine64_pinecube_defconfig
++  $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SDcard in your PineCube and power it up. The console
++is on the serial port 2, 115200 8N1 (check Wiki for board pinout).
+diff --git a/configs/pine64_pinecube_defconfig b/configs/pine64_pinecube_defconfig
+new file mode 100644
+index 0000000000..8f60115f8f
+--- /dev/null
++++ b/configs/pine64_pinecube_defconfig
+@@ -0,0 +1,45 @@
++# Target options
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++
++# Toolchain options
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="pinecube"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Pine64 Pinecube"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/pinecube/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pinecube/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.61"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-s3-pinecube"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pinecube"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++
++# Required host utilities for building an SDCard image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.37.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
