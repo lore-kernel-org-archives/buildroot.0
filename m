@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 639BDC00140
-	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 17:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D67B8C00140
+	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 18:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B424C408F1;
-	Sun, 21 Aug 2022 17:58:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B424C408F1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MigiekA10-UN; Sun, 21 Aug 2022 17:58:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB31E408AA;
-	Sun, 21 Aug 2022 17:58:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB31E408AA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AE5E01BF30E
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 17:58:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9669981292
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 17:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9669981292
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6168181BA8;
+	Sun, 21 Aug 2022 18:01:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6168181BA8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LGOsNFmu7xxO for <buildroot@lists.busybox.net>;
- Sun, 21 Aug 2022 17:58:40 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m3x5onn8FpRH; Sun, 21 Aug 2022 18:01:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D0DC818EC;
+	Sun, 21 Aug 2022 18:01:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D0DC818EC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A1541BF30E
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:01:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE0B3408B0
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:01:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE0B3408B0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5dyGFGGQ776M for <buildroot@lists.busybox.net>;
+ Sun, 21 Aug 2022 18:01:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1901281272
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3BE9408AA
 Received: from smtpcmd09100.aruba.it (smtpcmd09100.aruba.it [62.149.156.100])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1901281272
- for <buildroot@busybox.net>; Sun, 21 Aug 2022 17:58:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3BE9408AA
+ for <buildroot@buildroot.org>; Sun, 21 Aug 2022 18:01:49 +0000 (UTC)
 Received: from [192.168.8.175] ([86.32.48.35])
  by Aruba Outgoing Smtp  with ESMTPSA
- id PpDZojiiIcFgjPpDZoO5cj; Sun, 21 Aug 2022 19:58:38 +0200
-Message-ID: <471c3ee0-b47e-9ead-55b5-cfc5c2181f64@benettiengineering.com>
-Date: Sun, 21 Aug 2022 19:58:37 +0200
+ id PpGeojlzicFgjPpGeoO70z; Sun, 21 Aug 2022 20:01:48 +0200
+Message-ID: <b32d133e-14a6-8e4f-c7e4-2e2e647f4601@benettiengineering.com>
+Date: Sun, 21 Aug 2022 20:01:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.0
 Content-Language: en-US
-To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
-References: <20220816175503.1280276-1-francois.perrad@gadz.org>
- <20220816175503.1280276-3-francois.perrad@gadz.org>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220816175503.1280276-3-francois.perrad@gadz.org>
-X-CMAE-Envelope: MS4xfNk9P1tS5avd7QVIFbs+CiugUGuHN9WdGlQpBpEyuU8AXSvWgd4cEl3XF8Ez3ZXkze9XZxTaVlDL8z6kO7p57MOBzSEmNV+8cWBz9v1R9N5BsfrE0xMQ
- jKlAKlz/se0UdRjIbXAZaKeRRYCsXbtIEhC5fd3f62e1dKtJCOLO4MkLTJNTg62ivl1Fkzf6tM0KXYAP0K64wYyIaXfQErXPkGa5ZJQagwE2QyCjerbU9EgX
- 54JPb3rbM5YBqdRDL7+7pfwYd8XaV9KbWrVcdN+aSsA=
+To: Jan Havran <havran.jan@email.cz>, buildroot@buildroot.org
+References: <YwIRMgNSkvP/T9a+@arch-zen.localdomain>
+ <2515e8ef-16ef-2d1b-8395-8d63eae8724f@benettiengineering.com>
+In-Reply-To: <2515e8ef-16ef-2d1b-8395-8d63eae8724f@benettiengineering.com>
+X-CMAE-Envelope: MS4xfJX4k/R6RyD08kuassz5hzmk82lIViQOdEQIucZF3DHsG0FESJqq4lZyAA/0UJLDLPMhYB/Qtiufo78DTUw9F/EI2Kd331rzMUnhCnRfLlw3A6F0zmP3
+ wDTk9H+Ukdg7p5I0mUuBLOUhkvglC7nmYG8LK9XQgcx1ldRTvjtpi1U8NG27ImP07Bui3s1Gd+OtRISn7tYkwaz39HL2fOwRfCxqdYEQDITSh2y7eY3btF6P
+ pTZ2BTU9SOmnWCP90I1w68fVZNNEAl+xjbVrQuDDbSXsV7iFOOYoIl9feG0+qHw6
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1661104718; bh=k1CNiHYCJCKwwFgRuJtvnqQ4mCNN4gHRae6c0uAJfeo=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=cMW4SUdRkdrntJPisVZW8hmBWEyyMBegy9wu5RJqYtXKNVC4HTpl6O8beOjvsACew
- OGFA5S64XaDCmDI7VuaAZVvuHJjWEhZw6hCTTnA7MZz0K5JxOe1ioFtZW72e7iY2nH
- Aoz+OZiySS9F0KXCnDD4vlERhPkRRjNv/CyV9/awn9V8+nEiOEJFq2F7hC6iLaEsUs
- 5dPXgPDMDrxZDW8PHv+9UWS7DuNnn5P+tYdAfpgmp6l0/vulGpoCq3chKOS12zPk71
- eQCeg5CSbU6fHISktZkyer9agOjYrR1oQL1T7jVeGpxZ5BtEbtJPsR55SxAU5CdLgL
- hDyPMeHOqA3hA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1661104908; bh=1VjVuzRS1YIMZrq/Es393IlAZCm3zpiF5gMoV805lyI=;
+ h=Date:MIME-Version:Subject:From:To:Content-Type;
+ b=OAbXG5KOZfCLzwGMj92wfXw4WSw3U8rbzm2rsrANp4ZwGrO7M2qB6TEv1wZ0CHIEz
+ 0Q1YieemDXkkM1C4xKt5UB9Ep1sL+3B1Gx5SY6GaCI2RhLTBUrhC7Azi0TuLMojGMZ
+ 8/2CGE7W/y/Im0hUmEOt9oPrFQW7XW+/ETaN9KnjDOLApgHUIB4+Zy5mRM/37GyYrH
+ zv+qlbBFbwlSuxHOT0hFL4B6H351pliRtQ60PcOKjnrFjcx6pom+LDQXmbiE4+YttJ
+ zC3l9se2h+x8/w1Qi6h4Xf4HwamvmtGEjnvmgSliIF765dnNq25fgTQrDTuz2tH1r1
+ suaf+WQ0djMvg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=cMW4SUdR
-Subject: Re: [Buildroot] [PATCH v4 2/2] board/freescale/ls1028ardb: new board
+ header.a=rsa-sha256 header.s=a1 header.b=OAbXG5KO
+Subject: Re: [Buildroot] [PATCH v2] board/pine64/pinecube: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,251 +77,153 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Francois, All,
-
-On 16/08/22 19:55, Francois Perrad wrote:
-> This is the reference design board for the NXP LS1028a SoC.
-> 
-> see https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Here ^^^ there is a double Reviewed-by:
-I think that the Maintainer that will commit this patch could reword it.
-
-Best regards
--- 
-Giulio Benetti
-Benetti Engineering sas
-
-> ---
->   DEVELOPERS                                    |  2 +
->   board/freescale/ls1028ardb/genimage.cfg       | 23 +++++++
->   board/freescale/ls1028ardb/readme.txt         | 60 +++++++++++++++++++
->   .../boot/extlinux/extlinux.conf               |  4 ++
->   .../rules.d/73-fsl-enetc-networking.rules     | 16 +++++
->   configs/ls1028ardb_defconfig                  | 57 ++++++++++++++++++
->   6 files changed, 162 insertions(+)
->   create mode 100644 board/freescale/ls1028ardb/genimage.cfg
->   create mode 100644 board/freescale/ls1028ardb/readme.txt
->   create mode 100644 board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
->   create mode 100644 board/freescale/ls1028ardb/rootfs_overlay/etc/udev/rules.d/73-fsl-enetc-networking.rules
->   create mode 100644 configs/ls1028ardb_defconfig
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d2bd0d809..a034471fa 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1018,9 +1018,11 @@ N:	Francisco Gonzalez <gzmorell@gmail.com>
->   F:	package/ser2net/
->   
->   N:	Francois Perrad <francois.perrad@gadz.org>
-> +F:	board/freescale/ls1028ardb/
->   F:	board/olimex/a20_olinuxino
->   F:	board/olimex/imx233_olinuxino/
->   F:	board/olimex/stmp1_olinuxino/
-> +F:	configs/ls1028ardb_defconfig
->   F:	configs/olimex_a20_olinuxino_*
->   F:	configs/olimex_imx233_olinuxino_defconfig
->   F:	configs/olimex_stmp157_olinuxino_lime_defconfig
-> diff --git a/board/freescale/ls1028ardb/genimage.cfg b/board/freescale/ls1028ardb/genimage.cfg
-> new file mode 100644
-> index 000000000..3efef0bff
-> --- /dev/null
-> +++ b/board/freescale/ls1028ardb/genimage.cfg
-> @@ -0,0 +1,23 @@
-> +image sdcard.img {
-> +	hdimage {
-> +	}
-> +
-> +	partition fsbl {
-> +		offset = 4K
-> +		in-partition-table = "no"
-> +		image = "bl2_sd.pbl"
-> +	}
-> +
-> +	partition ssbl {
-> +		offset = 1M
-> +		in-partition-table = "no"
-> +		image = "fip.bin"
-> +	}
-> +
-> +	partition rootfs {
-> +		offset = 8M
-> +		partition-type = 0x83
-> +		bootable = "true"
-> +		image = "rootfs.ext4"
-> +	}
-> +}
-> diff --git a/board/freescale/ls1028ardb/readme.txt b/board/freescale/ls1028ardb/readme.txt
-> new file mode 100644
-> index 000000000..93396a419
-> --- /dev/null
-> +++ b/board/freescale/ls1028ardb/readme.txt
-> @@ -0,0 +1,60 @@
-> +**************
-> +NXP LS1028ARDB
-> +**************
-> +
-> +This file documents the Buildroot support for the LS1028A Reference Design Board.
-> +
-> +for more details about the board and the QorIQ Layerscape SoC, see the following pages:
-> +  - https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
-> +  - https://www.nxp.com/LS1028A
-> +
-> +Build
-> +=====
-> +
-> +First, configure Buildroot for the LS1028ARDB board:
-> +
-> +  make ls1028ardb_defconfig
-> +
-> +Build all components:
-> +
-> +  make
-> +
-> +You will find in output/images/ the following files:
-> +  - bl2_sd.pbl
-> +  - fip.bin
-> +  - fsl-ls1028a-rdb.dtb
-> +  - Image
-> +  - PBL.bin
-> +  - rootfs.ext2
-> +  - rootfs.ext4 -> rootfs.ext2
-> +  - sdcard.img
-> +  - u-boot.bin
-> +
-> +Create a bootable SD card
-> +=========================
-> +
-> +To determine the device associated to the SD card have a look in the
-> +/proc/partitions file:
-> +
-> +  cat /proc/partitions
-> +
-> +Buildroot prepares a bootable "sdcard.img" image in the output/images/
-> +directory, ready to be dumped on a SD card. Launch the following
-> +command as root:
-> +
-> +  dd if=output/images/sdcard.img of=/dev/sdX
-> +
-> +*** WARNING! This will destroy all the card content. Use with care! ***
-> +
-> +For details about the medium image layout, see the definition in
-> +board/freescale/ls1028ardb/genimage.cfg.
-> +
-> +Boot the LS1028ARDB board
-> +=========================
-> +
-> +To boot your newly created system:
-> +- insert the SD card in the SD slot of the board;
-> +- Configure the switches SW2[1:4] = 1000 (select SD Card boot option)
-> +- put a DB9F cable into the UART1 Port and connect using a terminal
-> +  emulator at 115200 bps, 8n1;
-> +- power on the board.
-> diff --git a/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
-> new file mode 100644
-> index 000000000..c08ddde10
-> --- /dev/null
-> +++ b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
-> @@ -0,0 +1,4 @@
-> +label ls1028ardb-buildroot
-> +  kernel /boot/Image
-> +  devicetree /boot/fsl-ls1028a-rdb.dtb
-> +  append root=/dev/mmcblk0p1 rootwait
-> diff --git a/board/freescale/ls1028ardb/rootfs_overlay/etc/udev/rules.d/73-fsl-enetc-networking.rules b/board/freescale/ls1028ardb/rootfs_overlay/etc/udev/rules.d/73-fsl-enetc-networking.rules
-> new file mode 100644
-> index 000000000..19f41634b
-> --- /dev/null
-> +++ b/board/freescale/ls1028ardb/rootfs_overlay/etc/udev/rules.d/73-fsl-enetc-networking.rules
-> @@ -0,0 +1,16 @@
-> +# ENETC rules
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.0", DRIVERS=="fsl_enetc", NAME:="eno0"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.1", DRIVERS=="fsl_enetc", NAME:="eno1"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.2", DRIVERS=="fsl_enetc", NAME:="eno2"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.6", DRIVERS=="fsl_enetc", NAME:="eno3"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.0", DRIVERS=="fsl_enetc_vf", NAME:="eno0vf0"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.1", DRIVERS=="fsl_enetc_vf", NAME:="eno0vf1"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.2", DRIVERS=="fsl_enetc_vf", NAME:="eno1vf0"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.3", DRIVERS=="fsl_enetc_vf", NAME:="eno1vf1"
-> +# LS1028 switch rules
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p0", NAME="swp0"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p1", NAME="swp1"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p2", NAME="swp2"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p3", NAME="swp3"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p4", NAME="swp4"
-> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p5", NAME="swp5"
-> diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
-> new file mode 100644
-> index 000000000..605e41d70
-> --- /dev/null
-> +++ b/configs/ls1028ardb_defconfig
-> @@ -0,0 +1,57 @@
-> +# Architecture
-> +BR2_aarch64=y
-> +BR2_cortex_a72=y
-> +
-> +# Toolchain
-> +# Linux headers same as kernel, a 5.10 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-> +# wchar required by eudev
-> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> +
-> +# System configuration
-> +BR2_TARGET_GENERIC_HOSTNAME="ls1028a"
-> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> +BR2_ROOTFS_OVERLAY="board/freescale/ls1028ardb/rootfs_overlay"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1028ardb/genimage.cfg"
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/linux"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="LSDK-21.08"
-> +BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-rdb"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +
-> +# Bootloaders
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/atf"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="LSDK-21.08"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BOOT_MODE=sd"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/u-boot"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="LSDK-21.08"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1028ardb_tfa"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +
-> +# Host utilities
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_QORIQ_RCW_INTREE="ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.bin"
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T25lIGxhc3QgdGhpbmcsIHBsZWFzZSBzZXQgdGhlIHYxIHBhdGNoIHRvIHN1cGVyc2VkZWQgaW4g
+UGF0Y2h3b3JrOgpodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290
+L2xpc3QvP3N1Ym1pdHRlcj03NDg0MQoKVGhhbmsgeW91IQoKQmVzdCByZWdhcmRzCi0tIApHaXVs
+aW8gQmVuZXR0aQpCZW5ldHRpIEVuZ2luZWVyaW5nIHNhcwoKT24gMjEvMDgvMjIgMTk6NTMsIEdp
+dWxpbyBCZW5ldHRpIHdyb3RlOgo+IEhpIEphbiwKPiAKPiBPbiAyMS8wOC8yMiAxMzowNCwgSmFu
+IEhhdnJhbiB3cm90ZToKPj4gQWRkIHN1cHBvcnQgZm9yIFBpbmVDdWJlIHdpdGg6Cj4+IC0gVS1C
+b290IDIwMjIuMDQKPj4gLSBMaW51eCA1LjE1LjYxCj4+Cj4+IFBpbmVDdWJlIGlzIGEgbG93LXBv
+d2VyZWQsIG9wZW4gc291cmNlIElQIGNhbWVyYQo+PiB3aXRoIHRoZSBmb2xsb3dpbmcgc3BlY3M6
+Cj4+IMKgIC0gQWxsd2lubmVyIFMzIENvcnRleC1BNwo+PiDCoCAtIDEyOCBNaUIgRERSMwo+PiDC
+oCAtIDE2IE1pQiBTUEkgZmxhc2gKPj4gwqAgLSA1IE1QeCBPVjU2NDAgY2FtZXJhCj4+IMKgIC0g
+TWljcm9TRCBzbG90Cj4+IMKgIC0gMTAvMTAwTSBFdGhlcm5ldCB3aXRoIHBhc3NpdmUgUG9FCj4+
+IMKgIC0gODAyLjExIGIvZy9uIFdpRmkKPj4gwqAgLSBCbHVldG9vdGggNC4xCj4+IMKgIC0gVVNC
+IDIuMAo+PiDCoCAtIDI2IHBpbnMgR1BJTyBoZWFkZXIKPj4gwqAgLSBNaWNyb3Bob25lCj4+IMKg
+IC0gSVIgTEVEcyBmb3IgbmlnaHQgdmlzaW9uCj4+Cj4+IEJvYXJkIGhvbWVwYWdlOiBodHRwczov
+L3d3dy5waW5lNjQub3JnL2N1YmUvCj4+IEJvYXJkIHdpa2k6wqDCoMKgwqAgaHR0cHM6Ly93aWtp
+LnBpbmU2NC5vcmcvd2lraS9QaW5lQ3ViZQo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBKYW4gSGF2cmFu
+IDxoYXZyYW4uamFuQGVtYWlsLmN6Pgo+PiAtLS0KPj4gQ2hhbmdlcyB2MSAtPiB2MiAocmV2aWV3
+IGJ5IEdpdWxpbyBCZW5ldHRpKToKPj4gwqDCoCAtIFVwZGF0ZWQgY29tbWl0IG1lc3NhZ2UKPj4g
+wqDCoCAtIFJlcGxhY2VkIGJvb3QuY21kIGJ5IGV4dGxpbnV4LmNvbmYKPj4gwqDCoCAtIFJlbmFt
+ZWQgcGluZWN1YmVfZGVmY29uZmlnIHRvIHBpbmU2NF9waW5lY3ViZV9kZWZjb25maWcKPj4gwqDC
+oCAtIENoYW5nZWQgd2VsY29tZSBtZXNzYWdlIChnZW5lcmljIGlzc3VlKQo+PiDCoMKgIC0gVXBk
+YXRlZCBVLUJvb3QgMjAyMi4wMSB0byAyMDIyLjA0Cj4+IMKgwqAgLSBVcGRhdGVkIExpbnV4IGtl
+cm5lbCBmcm9tIDUuMTUgdG8gNS4xNS42MQo+PiDCoMKgIC0gUmVtb3ZlZCBORU9OIGZyb20gRlBV
+IChidXQga2VwdCBWRlBWNCkKPj4gLS0tCj4+IMKgIERFVkVMT1BFUlPCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNCArKysKPj4gwqAgYm9hcmQv
+cGluZTY0L3BpbmVjdWJlL2V4dGxpbnV4LmNvbmYgfMKgIDQgKysrCj4+IMKgIGJvYXJkL3BpbmU2
+NC9waW5lY3ViZS9nZW5pbWFnZS5jZmfCoCB8IDM0ICsrKysrKysrKysrKysrKysrKysrKysKPj4g
+wqAgYm9hcmQvcGluZTY0L3BpbmVjdWJlL3Bvc3QtYnVpbGQuc2ggfMKgIDUgKysrKwo+PiDCoCBi
+b2FyZC9waW5lNjQvcGluZWN1YmUvcmVhZG1lLnR4dMKgwqDCoCB8IDMxICsrKysrKysrKysrKysr
+KysrKysrCj4+IMKgIGNvbmZpZ3MvcGluZTY0X3BpbmVjdWJlX2RlZmNvbmZpZ8KgwqAgfCA0NSAr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+PiDCoCA2IGZpbGVzIGNoYW5nZWQsIDEyMyBp
+bnNlcnRpb25zKCspCj4+IMKgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9waW5lNjQvcGluZWN1
+YmUvZXh0bGludXguY29uZgo+PiDCoCBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvcGluZTY0L3Bp
+bmVjdWJlL2dlbmltYWdlLmNmZwo+PiDCoCBjcmVhdGUgbW9kZSAxMDA3NTUgYm9hcmQvcGluZTY0
+L3BpbmVjdWJlL3Bvc3QtYnVpbGQuc2gKPj4gwqAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3Bp
+bmU2NC9waW5lY3ViZS9yZWFkbWUudHh0Cj4+IMKgIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdz
+L3BpbmU2NF9waW5lY3ViZV9kZWZjb25maWcKPj4KPj4gZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMg
+Yi9ERVZFTE9QRVJTCj4+IGluZGV4IDQyODdmZDljZjcuLjc0ZjU3YWY2ZmEgMTAwNjQ0Cj4+IC0t
+LSBhL0RFVkVMT1BFUlMKPj4gKysrIGIvREVWRUxPUEVSUwo+PiBAQCAtMTQxMCw2ICsxNDEwLDEw
+IEBAIEY6wqDCoMKgIHBhY2thZ2UvcGFuZ29tbS8KPj4gwqAgRjrCoMKgwqAgcGFja2FnZS9ycG0v
+Cj4+IMKgIEY6wqDCoMKgIHBhY2thZ2UveWFkLwo+PiArTjrCoMKgwqAgSmFuIEhhdnJhbiA8aGF2
+cmFuLmphbkBlbWFpbC5jej4KPj4gK0Y6wqDCoMKgIGJvYXJkL3BpbmU2NC9waW5lY3ViZS8KPj4g
+K0Y6wqDCoMKgIGNvbmZpZ3MvcGluZTY0X3BpbmVjdWJlX2RlZmNvbmZpZwo+PiArCj4+IMKgIE46
+wqDCoMKgIEphbiBIZXlsZW4gPGphbi5oZXlsZW5Abm9raWEuY29tPgo+PiDCoCBGOsKgwqDCoCBw
+YWNrYWdlL29wZW50cmFjaW5nLWNwcC8KPj4gZGlmZiAtLWdpdCBhL2JvYXJkL3BpbmU2NC9waW5l
+Y3ViZS9leHRsaW51eC5jb25mIAo+PiBiL2JvYXJkL3BpbmU2NC9waW5lY3ViZS9leHRsaW51eC5j
+b25mCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+IGluZGV4IDAwMDAwMDAwMDAuLjZhMThkOWEy
+Y2IKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9ib2FyZC9waW5lNjQvcGluZWN1YmUvZXh0bGlu
+dXguY29uZgo+PiBAQCAtMCwwICsxLDQgQEAKPj4gK2xhYmVsIGJ1aWxkcm9vdAo+PiArwqAga2Vy
+bmVsIC96SW1hZ2UKPj4gK8KgIGRldmljZXRyZWUgL3N1bjhpLXMzLXBpbmVjdWJlLmR0Ygo+PiAr
+wqAgYXBwZW5kIGNvbnNvbGU9dHR5UzAsMTE1MjAwIGVhcmx5cHJpbnRrIHJvb3Q9L2Rldi9tbWNi
+bGswcDIgCj4+IHJvb3R3YWl0IHJ3Cj4+IGRpZmYgLS1naXQgYS9ib2FyZC9waW5lNjQvcGluZWN1
+YmUvZ2VuaW1hZ2UuY2ZnIAo+PiBiL2JvYXJkL3BpbmU2NC9waW5lY3ViZS9nZW5pbWFnZS5jZmcK
+Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4gaW5kZXggMDAwMDAwMDAwMC4uMzk4ZDQ1ZTJmNwo+
+PiAtLS0gL2Rldi9udWxsCj4+ICsrKyBiL2JvYXJkL3BpbmU2NC9waW5lY3ViZS9nZW5pbWFnZS5j
+ZmcKPj4gQEAgLTAsMCArMSwzNCBAQAo+PiAraW1hZ2UgYm9vdC52ZmF0IHsKPj4gK8KgwqDCoCB2
+ZmF0IHsKPj4gK8KgwqDCoMKgwqDCoMKgIGZpbGVzID0gewo+PiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCAiekltYWdlIiwKPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgInN1bjhpLXMzLXBpbmVj
+dWJlLmR0YiIsCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICJleHRsaW51eCIKPj4gK8KgwqDC
+oMKgwqDCoMKgIH0KPj4gK8KgwqDCoCB9Cj4+ICsKPj4gK8KgwqDCoCBzaXplID0gOE0KPj4gK30K
+Pj4gKwo+PiAraW1hZ2Ugc2RjYXJkLmltZyB7Cj4+ICvCoMKgwqAgaGRpbWFnZSB7Cj4+ICvCoMKg
+wqAgfQo+PiArCj4+ICvCoMKgwqAgcGFydGl0aW9uIHUtYm9vdCB7Cj4+ICvCoMKgwqDCoMKgwqDC
+oCBpbi1wYXJ0aXRpb24tdGFibGUgPSAibm8iCj4+ICvCoMKgwqDCoMKgwqDCoCBpbWFnZSA9ICJ1
+LWJvb3Qtc3VueGktd2l0aC1zcGwuYmluIgo+PiArwqDCoMKgwqDCoMKgwqAgb2Zmc2V0ID0gOEsK
+Pj4gK8KgwqDCoMKgwqDCoMKgIHNpemUgPSA1MDRLICMgNTEyS0IgLSA4S0IKPj4gK8KgwqDCoCB9
+Cj4+ICsKPj4gK8KgwqDCoCBwYXJ0aXRpb24gYm9vdCB7Cj4+ICvCoMKgwqDCoMKgwqDCoCBwYXJ0
+aXRpb24tdHlwZSA9IDB4Qwo+PiArwqDCoMKgwqDCoMKgwqAgYm9vdGFibGUgPSAidHJ1ZSIKPj4g
+K8KgwqDCoMKgwqDCoMKgIGltYWdlID0gImJvb3QudmZhdCIKPj4gK8KgwqDCoCB9Cj4+ICsKPj4g
+K8KgwqDCoCBwYXJ0aXRpb24gcm9vdGZzIHsKPj4gK8KgwqDCoMKgwqDCoMKgIHBhcnRpdGlvbi10
+eXBlID0gMHg4Mwo+PiArwqDCoMKgwqDCoMKgwqAgaW1hZ2UgPSAicm9vdGZzLmV4dDQiCj4+ICvC
+oMKgwqAgfQo+PiArfQo+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvcGluZTY0L3BpbmVjdWJlL3Bvc3Qt
+YnVpbGQuc2ggCj4+IGIvYm9hcmQvcGluZTY0L3BpbmVjdWJlL3Bvc3QtYnVpbGQuc2gKPj4gbmV3
+IGZpbGUgbW9kZSAxMDA3NTUKPj4gaW5kZXggMDAwMDAwMDAwMC4uYmEyOTM3NWMwNQo+PiAtLS0g
+L2Rldi9udWxsCj4+ICsrKyBiL2JvYXJkL3BpbmU2NC9waW5lY3ViZS9wb3N0LWJ1aWxkLnNoCj4+
+IEBAIC0wLDAgKzEsNSBAQAo+PiArIyEvYmluL3NoCj4+ICsKPj4gK0JPQVJEX0RJUj0iJChkaXJu
+YW1lICQwKSIKPj4gKwo+PiAraW5zdGFsbCAtbSAwNjQ0IC1EICRCT0FSRF9ESVIvZXh0bGludXgu
+Y29uZiAKPj4gJEJJTkFSSUVTX0RJUi9leHRsaW51eC9leHRsaW51eC5jb25mCj4+IGRpZmYgLS1n
+aXQgYS9ib2FyZC9waW5lNjQvcGluZWN1YmUvcmVhZG1lLnR4dCAKPj4gYi9ib2FyZC9waW5lNjQv
+cGluZWN1YmUvcmVhZG1lLnR4dAo+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+PiBpbmRleCAwMDAw
+MDAwMDAwLi40Y2Y2ZGYyMTEwCj4+IC0tLSAvZGV2L251bGwKPj4gKysrIGIvYm9hcmQvcGluZTY0
+L3BpbmVjdWJlL3JlYWRtZS50eHQKPj4gQEAgLTAsMCArMSwzMSBAQAo+PiArSW50cm8KPj4gKz09
+PT09Cj4+ICsKPj4gK1RoaXMgZGlyZWN0b3J5IGNvbnRhaW5zIGEgQnVpbGRyb290IGNvbmZpZ3Vy
+YXRpb24gZm9yIGJ1aWxkaW5nIGEKPj4gK1BpbmU2NCBQaW5lQ3ViZS4KPj4gKwo+PiArQm9hcmQg
+aG9tZXBhZ2U6IGh0dHBzOi8vd3d3LnBpbmU2NC5vcmcvY3ViZS8KPj4gK0JvYXJkIHdpa2k6wqDC
+oMKgwqAgaHR0cHM6Ly93aWtpLnBpbmU2NC5vcmcvd2lraS9QaW5lQ3ViZQo+PiArCj4+ICtIb3cg
+dG8gYnVpbGQgaXQKPj4gKz09PT09PT09PT09PT09PQo+PiArCj4+ICvCoCAkIG1ha2UgcGluZTY0
+X3BpbmVjdWJlX2RlZmNvbmZpZwo+PiArwqAgJCBtYWtlCj4+ICsKPj4gK05vdGU6IHlvdSB3aWxs
+IG5lZWQgYWNjZXNzIHRvIHRoZSBpbnRlcm5ldCB0byBkb3dubG9hZCB0aGUgcmVxdWlyZWQKPj4g
+K3NvdXJjZXMuCj4+ICsKPj4gK0hvdyB0byB3cml0ZSB0aGUgU0QgY2FyZAo+PiArPT09PT09PT09
+PT09PT09PT09PT09PT09Cj4+ICsKPj4gK09uY2UgdGhlIGJ1aWxkIHByb2Nlc3MgaXMgZmluaXNo
+ZWQgeW91IHdpbGwgaGF2ZSBhbiBpbWFnZSBjYWxsZWQgCj4+ICJzZGNhcmQuaW1nIgo+PiAraW4g
+dGhlIG91dHB1dC9pbWFnZXMvIGRpcmVjdG9yeS4KPj4gKwo+PiArQ29weSB0aGUgYm9vdGFibGUg
+InNkY2FyZC5pbWciIG9udG8gYW4gU0QgY2FyZCB3aXRoICJkZCI6Cj4+ICsKPj4gK8KgICQgc3Vk
+byBkZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9L2Rldi9zZFgKPj4gK8KgICQgc3Vk
+byBzeW5jCj4+ICsKPj4gK0luc2VydCB0aGUgbWljcm8gU0RjYXJkIGluIHlvdXIgUGluZUN1YmUg
+YW5kIHBvd2VyIGl0IHVwLiBUaGUgY29uc29sZQo+PiAraXMgb24gdGhlIHNlcmlhbCBwb3J0IDIs
+IDExNTIwMCA4TjEgKGNoZWNrIFdpa2kgZm9yIGJvYXJkIHBpbm91dCkuCj4+IGRpZmYgLS1naXQg
+YS9jb25maWdzL3BpbmU2NF9waW5lY3ViZV9kZWZjb25maWcgCj4+IGIvY29uZmlncy9waW5lNjRf
+cGluZWN1YmVfZGVmY29uZmlnCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+IGluZGV4IDAwMDAw
+MDAwMDAuLjhmNjAxMTVmOGYKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9jb25maWdzL3BpbmU2
+NF9waW5lY3ViZV9kZWZjb25maWcKPj4gQEAgLTAsMCArMSw0NSBAQAo+PiArIyBUYXJnZXQgb3B0
+aW9ucwo+PiArQlIyX2FybT15Cj4+ICtCUjJfY29ydGV4X2E3PXkKPj4gK0JSMl9BUk1fRlBVX1ZG
+UFY0PXkKPiAKPiBBYm91dCB0aGlzIF5eXiB0aGVyZSBpcyBhbiBvbmdvaW5nIGRpc2N1c3Npb24g
+aWYgdXNlIG1peGVkIFZGVlA0K05FT04gb3IKPiBub3Q6Cj4gaHR0cHM6Ly9saXN0cy5idWlsZHJv
+b3Qub3JnL3BpcGVybWFpbC9idWlsZHJvb3QvMjAyMi1BdWd1c3QvNjQ5NzcwLmh0bWwKPiAKPiBG
+b3IgdGhlIG1vbWVudCBpdCdzIG9rIHRvIG1lIGtlZXBpbmcgdGhpcyB3YXkgYW5kIHdoZW4gd2Un
+dmUgYWxsCj4gY2xhcmlmaWVkIEZQVSBzdHJhdGVneSBvbiAzMi1iaXQgQVJNIGNvcnRleCB0aGVu
+IHdlIGNhbiBtb2RpZnkgYW5kCj4geW91IGNvdWxkIHRlc3QgaXQgb3IgZXZlbiBwcm92aWRlIHRo
+ZSBwYXRjaCBmb3IgdGhpcy4KPiAKPiBIYXZlIHlvdSByZS10ZXN0ZWQgdGhlIGJvYXJkIHdpdGgg
+c3VjaCBtb2RpZmljYXRpb24/Cj4gCj4+ICsKPj4gKyMgVG9vbGNoYWluIG9wdGlvbnMKPj4gK0JS
+Ml9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xNT15Cj4+ICsKPj4gKyMgU3lz
+dGVtIGNvbmZpZ3VyYXRpb24KPj4gK0JSMl9UQVJHRVRfR0VORVJJQ19IT1NUTkFNRT0icGluZWN1
+YmUiCj4+ICtCUjJfVEFSR0VUX0dFTkVSSUNfSVNTVUU9IldlbGNvbWUgdG8gUGluZTY0IFBpbmVj
+dWJlIgo+PiArQlIyX1NZU1RFTV9ESENQPSJldGgwIgo+PiArQlIyX1JPT1RGU19QT1NUX0JVSUxE
+X1NDUklQVD0iYm9hcmQvcGluZTY0L3BpbmVjdWJlL3Bvc3QtYnVpbGQuc2giCj4+ICtCUjJfUk9P
+VEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCj4+ICtC
+UjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9Ii1jIGJvYXJkL3BpbmU2NC9waW5lY3ViZS9nZW5p
+bWFnZS5jZmciCj4+ICsKPj4gKyMgS2VybmVsCj4+ICtCUjJfTElOVVhfS0VSTkVMPXkKPj4gK0JS
+Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+PiArQlIyX0xJTlVYX0tFUk5FTF9DVVNU
+T01fVkVSU0lPTl9WQUxVRT0iNS4xNS42MSIKPj4gK0JSMl9MSU5VWF9LRVJORUxfREVGQ09ORklH
+PSJzdW54aSIKPj4gK0JSMl9MSU5VWF9LRVJORUxfRFRTX1NVUFBPUlQ9eQo+PiArQlIyX0xJTlVY
+X0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9InN1bjhpLXMzLXBpbmVjdWJlIgo+PiArQlIyX0xJTlVY
+X0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQo+PiArCj4+ICsjIEZpbGVzeXN0ZW0KPj4gK0JS
+Ml9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+PiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl80PXkKPj4g
+Kwo+PiArIyBCb290bG9hZGVyCj4+ICtCUjJfVEFSR0VUX1VCT09UPXkKPj4gK0JSMl9UQVJHRVRf
+VUJPT1RfQlVJTERfU1lTVEVNX0tDT05GSUc9eQo+PiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01f
+VkVSU0lPTj15Cj4+ICtCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDIy
+LjA0Igo+PiArQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9InBpbmVjdWJlIgo+PiAr
+QlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQo+PiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19Q
+WUxJQkZEVD15Cj4+ICtCUjJfVEFSR0VUX1VCT09UX05FRURTX09QRU5TU0w9eQo+PiArQlIyX1RB
+UkdFVF9VQk9PVF9TUEw9eQo+PiArQlIyX1RBUkdFVF9VQk9PVF9TUExfTkFNRT0idS1ib290LXN1
+bnhpLXdpdGgtc3BsLmJpbiIKPj4gKwo+PiArIyBSZXF1aXJlZCBob3N0IHV0aWxpdGllcyBmb3Ig
+YnVpbGRpbmcgYW4gU0RDYXJkIGltYWdlCj4+ICtCUjJfUEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9
+eQo+PiArQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15Cj4+ICtCUjJfUEFDS0FHRV9IT1NUX01U
+T09MUz15Cj4gCj4gT3ZlcmFsbCBsb29rcyBnb29kIHRvIG1lLCBpdCBidWlsZHMgY29ycmVjdGx5
+IHdpdGggYnVpbGRyb290L2RvY2tlci1ydW4KPiBzbzoKPiBSZXZpZXdlZC1ieTogR2l1bGlvIEJl
+bmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Cj4gCj4gRXhwZWN0
+IHRoaXMgcGF0Y2ggdG8gYmUgcGFydCBvZiAyMDIyLjExIHNpbmNlIDIwMjIuMDgtcmMxIGhhcyBi
+ZWVuCj4gcmVsZWFzZWQgb24gMTJ0aCBBdWd1c3QgYW5kIGZyb20gLXJjMSB0byAyMDIyLjA4IG9u
+bHkgYnVnIGZpeGVzIGFuZAo+IHNlY3VyaXR5IHBhdGNoZXMgYXJlIGFsbG93ZWQuCj4gCj4gVGhh
+bmtzIGZvciB0aGUgY29udHJpYnV0aW9uIQo+IAo+IEJlc3QgcmVnYXJkcwoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
