@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01262C6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:55:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEAC6ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DAA26104C;
-	Sun, 11 Sep 2022 08:55:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DAA26104C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EF0241B3C;
+	Sun, 11 Sep 2022 08:55:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EF0241B3C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mBadsHjwFek8; Sun, 11 Sep 2022 08:55:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3XpQSYJ13oum; Sun, 11 Sep 2022 08:55:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C06406103B;
-	Sun, 11 Sep 2022 08:55:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C06406103B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9DA201BF9A4
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16118419CE;
+	Sun, 11 Sep 2022 08:55:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16118419CE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 135521BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 829966107E
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 829966107E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 074CA83EE0
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 074CA83EE0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4VdvupB1N_s6 for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gndyDiYfPLXC for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4484461034
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4484461034
+ by smtp1.osuosl.org (Postfix) with ESMTP id 20E7F83ECA
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20E7F83ECA
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 42A5883518; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+ id 1DBE68361F; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 14:12:04 +0200
+Date: Sun, 21 Aug 2022 13:29:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 22b3b3a77720d9527b8279d033d9fbca65b2bcba
-X-Git-Newrev: 11e11b8fda94dd12d4b8cb6565808e91c4743fed
+X-Git-Oldrev: 13faa449e16d955182d5bac132142b7ba07c65e3
+X-Git-Newrev: 3b4d8daa6d30cb09ba9d57b15299a722d2f57a38
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084824.42A5883518@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/crda: bump to version 4.15
+Message-Id: <20220911084825.1DBE68361F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zic: bump to 2022c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,69 +56,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11e11b8fda94dd12d4b8cb6565808e91c4743fed
+commit: https://git.buildroot.net/buildroot/commit/?id=3b4d8daa6d30cb09ba9d57b15299a722d2f57a38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/crda/0002-drop-ldconfig-call.patch | 4 +++-
- package/crda/crda.hash                     | 2 +-
- package/crda/crda.mk                       | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ package/zic/0001-remove-dependency-check-on-version-file.patch | 2 +-
+ package/zic/zic.hash                                           | 4 ++--
+ package/zic/zic.mk                                             | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/crda/0002-drop-ldconfig-call.patch b/package/crda/0002-drop-ldconfig-call.patch
-index f09e258adb..567840c07e 100644
---- a/package/crda/0002-drop-ldconfig-call.patch
-+++ b/package/crda/0002-drop-ldconfig-call.patch
-@@ -1,6 +1,8 @@
- Drop ldconfig call, it's useless for cross-compiling.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[Fabrice: update for 4.15]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- diff -Nura crda-3.18.orig/Makefile crda-3.18/Makefile
- --- crda-3.18.orig/Makefile	2015-02-18 10:34:23.841259401 -0300
-@@ -8,7 +10,7 @@ diff -Nura crda-3.18.orig/Makefile crda-3.18/Makefile
- @@ -127,7 +127,6 @@
-  	$(NQ) '  INSTALL  libreg'
-  	$(Q)mkdir -p $(DESTDIR)/$(LIBDIR)
-- 	$(Q)cp $(LIBREG) $(DESTDIR)/$(LIBDIR)/
-+	$(Q)$(INSTALL) -m 644 $(LIBREG) $(DESTDIR)/$(LIBDIR)/
- -	$(Q)ldconfig
-  
-  %.o: %.c regdb.h $(LIBREG)
-diff --git a/package/crda/crda.hash b/package/crda/crda.hash
-index 2a263d172a..3b0610994e 100644
---- a/package/crda/crda.hash
-+++ b/package/crda/crda.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5a8f35bb8b27474f466b0e75d451ba917433d8aab1889678a64d9c4e72a8b8c2  crda-4.14.tar.gz
-+sha256  99eb58f774f6016c380def0d80fffd573d2be0ad5f117b678c1968ed5657af82  crda-4.15.tar.gz
- sha256  c16224b376128b589eea69a8fdd1f09818b8cb995e10d1e37f72dff22233d7b0  LICENSE
-diff --git a/package/crda/crda.mk b/package/crda/crda.mk
-index 31a64d004b..a73c9aa26d 100644
---- a/package/crda/crda.mk
-+++ b/package/crda/crda.mk
+diff --git a/package/zic/0001-remove-dependency-check-on-version-file.patch b/package/zic/0001-remove-dependency-check-on-version-file.patch
+index 62adc59c83..64587bc0df 100644
+--- a/package/zic/0001-remove-dependency-check-on-version-file.patch
++++ b/package/zic/0001-remove-dependency-check-on-version-file.patch
+@@ -18,7 +18,7 @@ diff --git a/Makefile b/Makefile
+ index 1b714a8..00d2c09 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -593,7 +593,7 @@ INSTALL:	ALL install date.1
++@@ -609,7 +609,7 @@ INSTALL:	ALL install date.1
+  # Otherwise, use $(VERSION) unless it is "unknown" and there is already
+  # a 'version' file, in which case reuse the existing 'version' contents
+  # and append "-dirty" if the contents do not already end in "-dirty".
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 9e17621de8..c9c7491948 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2021-October/000069.html
+-sha512  87b0335129ea41c5f42f687f548712e5da892baa8494cecf5d34851beceecf6ae52f22104696ed187713cf9e502570eb2041e277dfd3c043c11d0253bfde685a  tzcode2021e.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2022-August/000072.html
++sha512  3373fa16a12007415c3dc3a75c4a0d61d6ae54968eeecedcdf4bcfd7f554020a15c4687dde107b90462b75d848eebe1e200c33322ebe0d3f1ad11bc769cade06  tzcode2022c.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 13f3a83bce..bb5cd3c916 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CRDA_VERSION = 4.14
-+CRDA_VERSION = 4.15
- CRDA_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/snapshot
- CRDA_DEPENDENCIES = host-pkgconf host-python-pycryptodomex libnl libgcrypt
- CRDA_LICENSE = ISC
+-ZIC_VERSION = 2021e
++ZIC_VERSION = 2022c
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = https://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
