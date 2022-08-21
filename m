@@ -1,72 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D9A3C00140
-	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 18:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AD15C00140
+	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 18:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC29C409A0;
-	Sun, 21 Aug 2022 18:46:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC29C409A0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vcTraVg6f3ya; Sun, 21 Aug 2022 18:46:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16793408CC;
-	Sun, 21 Aug 2022 18:45:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16793408CC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C5D981BF421
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:45:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0BDA81C2F
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:45:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0BDA81C2F
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB12D8175A;
+	Sun, 21 Aug 2022 18:55:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB12D8175A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2b-QnA1bGk0K for <buildroot@lists.busybox.net>;
- Sun, 21 Aug 2022 18:45:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B22881C21
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1B22881C21
- for <buildroot@buildroot.org>; Sun, 21 Aug 2022 18:45:56 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:b8e6:fe51:1cfa:c9c2])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C65FC13F92C;
- Sun, 21 Aug 2022 20:45:48 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 21 Aug 2022 20:45:48 +0200
-Date: Sun, 21 Aug 2022 20:45:48 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-Message-ID: <20220821184548.GZ2775145@scaer>
-References: <20220129214235.5133-1-thomas.devoogdt@gmail.com>
- <20220129214235.5133-2-thomas.devoogdt@gmail.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iVL7ITK3nZwc; Sun, 21 Aug 2022 18:55:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F2D1814C9;
+	Sun, 21 Aug 2022 18:55:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F2D1814C9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8277C1BF421
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:55:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D0AB60AE5
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:55:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D0AB60AE5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VL0gtWOjKzRj for <buildroot@lists.busybox.net>;
+ Sun, 21 Aug 2022 18:55:18 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A4A060AE3
+Received: from mxd1.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1A4A060AE3
+ for <buildroot@buildroot.org>; Sun, 21 Aug 2022 18:55:17 +0000 (UTC)
+Received: from email.seznam.cz
+ by email-smtpc24a.ng.seznam.cz (email-smtpc24a.ng.seznam.cz [10.23.18.32])
+ id 541625b8d4f14f2556621bd6; Sun, 21 Aug 2022 20:55:14 +0200 (CEST)
+Received: from arch-zen.localdomain (havhav.seb.rev-fortech.cz [213.250.223.2])
+ by email-relay13.ko.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+ Sun, 21 Aug 2022 20:55:10 +0200 (CEST)  
+Date: Sun, 21 Aug 2022 20:55:05 +0200
+From: Jan Havran <havran.jan@email.cz>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+Message-ID: <YwJ/ifNz9LP9JpW+@arch-zen.localdomain>
+References: <YwIRMgNSkvP/T9a+@arch-zen.localdomain>
+ <2515e8ef-16ef-2d1b-8395-8d63eae8724f@benettiengineering.com>
+ <b32d133e-14a6-8e4f-c7e4-2e2e647f4601@benettiengineering.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220129214235.5133-2-thomas.devoogdt@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661107553;
- bh=nxaT82zeO0oWbGm9MPtO4maue/CWz6LUJRSbyGKEEmc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qFA5rL6z1xy7bFgRQnZ/WgmHcMAHTmWXbl7ZFRuSG5T/X+iY6LjUf6IoLetLTMpUk
- mUDEqUyF2Ovh1smk/QlEmT+2lVaCSLQZyP0ujWo3FMX/srM7DDL18r4ENldqezFrFH
- wzQ59gTa23vO2nW6VK2zRZLeepINy4+vkD9B66XFBwsCpsKuD25ZzOlc6m4Kjm9Jcb
- aZe2ainMqKBZqJl0K8g/34nij+oknBDaO4gvpV4/mHUu9jYjju650GQhcAZ/XYpe8Q
- qMG2W3HP3q42SAOJtaPozhoma2YkAVu9UUudwtPWO+t2W/Fg4lXtDltM29dRqZ4jHt
- NRN3/yIx2noIw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=qFA5rL6z
-Subject: Re: [Buildroot] [PATCH 2/2] package/libsoup: add choice between
- libsoup2 and libsoup3
+In-Reply-To: <b32d133e-14a6-8e4f-c7e4-2e2e647f4601@benettiengineering.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=email.cz; s=beta; 
+ t=1661108114; bh=ju8DkHQBOE26cNHwH1SS3DwzZpjHTE4yFWPeVqw6NLU=;
+ h=Received:Date:From:To:Cc:Subject:Message-ID:References:
+ MIME-Version:Content-Type:Content-Disposition:
+ Content-Transfer-Encoding:In-Reply-To;
+ b=bIx1Rj5E9aSgclLxTZ3locaYIx6vxe1jPLeM/as+hpDarmxnCXCGcIETZd11Ft9lk
+ D8+Jbwa8g40aZH48RjDS2lKQKuxbK4FnZd2CfUpUxu1lkxXskk2b6h9wM1nIbOlVeb
+ /e80Dx55IJ971fGyahA68wo1k7vaOpPmxZemmGdI=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=email.cz header.i=@email.cz
+ header.a=rsa-sha256 header.s=beta header.b=bIx1Rj5E
+Subject: Re: [Buildroot] [PATCH v2] board/pine64/pinecube: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,200 +76,313 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Hi Giulio,
 
-On 2022-01-29 22:42 +0100, Thomas Devoogdt spake thusly:
-> Libsoup3 has a new API [1], packages using libsoup2 may not
-> compile with libsoup3 or may crash at runtime in unexpected
-> ways. So the default will (for now) stay on libsoup2.
-> A tracking table for the migration can be found here [2].
+V=A0Sun, Aug 21, 2022 at 08:01:47PM +0200,=A0Giulio Benetti napsal(a):
+> One last thing, please set the v1 patch to superseded in Patchwork:
+> https://patchwork.ozlabs.org/project/buildroot/list/?submitter=3D74841
+> =
 
-Seeing the comment by Peter on a previous iteration [0]...
 
-I investigated a bit, and found that both libsoup2 and libsoup3 will
-detect one another and explicitly fail; these are commits:
-  - 9596a869414b Detect if libsoup2 is loaded in the same process at init
-  - e7f842c35e97 Error when libsoup3 is detected as already loaded in
-    the same process
+Patch set (did not know that I have to do it manually).
 
-Also, I've checked, and the includes are instaleld in different
-directories and shared libraries have different filenames and SONAMES.
+> Thank you!
+> =
 
-So, in case both are enabeld at the same time, what would fail is only
-trhe case of a package loading one or the other via a third-party shared
-library, e.g.:
+> Best regards
+> -- =
 
-    my-exec -> libA -> libsoup2
-           `-> libsoup3
+> Giulio Benetti
+> Benetti Engineering sas
+> =
 
-(or the other way around, or both through a library).
+> On 21/08/22 19:53, Giulio Benetti wrote:
+> > Hi Jan,
+> > =
 
-I don't think that is going to be a very common situation.
+> > On 21/08/22 13:04, Jan Havran wrote:
+> > > Add support for PineCube with:
+> > > - U-Boot 2022.04
+> > > - Linux 5.15.61
+> > > =
 
-So, I think we should introduce libsoup3 as a different package. We have
-only 10 packages in Buildroot that use libsoup, with the following
-status (also looking at [2])
+> > > PineCube is a low-powered, open source IP camera
+> > > with the following specs:
+> > > =A0 - Allwinner S3 Cortex-A7
+> > > =A0 - 128 MiB DDR3
+> > > =A0 - 16 MiB SPI flash
+> > > =A0 - 5 MPx OV5640 camera
+> > > =A0 - MicroSD slot
+> > > =A0 - 10/100M Ethernet with passive PoE
+> > > =A0 - 802.11 b/g/n WiFi
+> > > =A0 - Bluetooth 4.1
+> > > =A0 - USB 2.0
+> > > =A0 - 26 pins GPIO header
+> > > =A0 - Microphone
+> > > =A0 - IR LEDs for night vision
+> > > =
 
-  - gmpc: 2.4 only
+> > > Board homepage: https://www.pine64.org/cube/
+> > > Board wiki:=A0=A0=A0=A0 https://wiki.pine64.org/wiki/PineCube
+> > > =
 
-  - gssdp: should be 3.0 compatible since e3598a582783 (ci: Track
-    libsoup master again) which is a few days old, so not in a relase
-    yet (but at least, we could backport something...)
+> > > Signed-off-by: Jan Havran <havran.jan@email.cz>
+> > > ---
+> > > Changes v1 -> v2 (review by Giulio Benetti):
+> > > =A0=A0 - Updated commit message
+> > > =A0=A0 - Replaced boot.cmd by extlinux.conf
+> > > =A0=A0 - Renamed pinecube_defconfig to pine64_pinecube_defconfig
+> > > =A0=A0 - Changed welcome message (generic issue)
+> > > =A0=A0 - Updated U-Boot 2022.01 to 2022.04
+> > > =A0=A0 - Updated Linux kernel from 5.15 to 5.15.61
+> > > =A0=A0 - Removed NEON from FPU (but kept VFPV4)
+> > > ---
+> > > =A0 DEVELOPERS=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0 |=A0 4 +++
+> > > =A0 board/pine64/pinecube/extlinux.conf |=A0 4 +++
+> > > =A0 board/pine64/pinecube/genimage.cfg=A0 | 34 ++++++++++++++++++++++
+> > > =A0 board/pine64/pinecube/post-build.sh |=A0 5 ++++
+> > > =A0 board/pine64/pinecube/readme.txt=A0=A0=A0 | 31 ++++++++++++++++++=
+++
+> > > =A0 configs/pine64_pinecube_defconfig=A0=A0 | 45 ++++++++++++++++++++=
++++++++++
+> > > =A0 6 files changed, 123 insertions(+)
+> > > =A0 create mode 100644 board/pine64/pinecube/extlinux.conf
+> > > =A0 create mode 100644 board/pine64/pinecube/genimage.cfg
+> > > =A0 create mode 100755 board/pine64/pinecube/post-build.sh
+> > > =A0 create mode 100644 board/pine64/pinecube/readme.txt
+> > > =A0 create mode 100644 configs/pine64_pinecube_defconfig
+> > > =
 
-  - gst1-plugins-good: it should be in-tree with c3455def2e7b (soup:
-    Runtime compatibility support for libsoup2 and libsoup3)
+> > > diff --git a/DEVELOPERS b/DEVELOPERS
+> > > index 4287fd9cf7..74f57af6fa 100644
+> > > --- a/DEVELOPERS
+> > > +++ b/DEVELOPERS
+> > > @@ -1410,6 +1410,10 @@ F:=A0=A0=A0 package/pangomm/
+> > > =A0 F:=A0=A0=A0 package/rpm/
+> > > =A0 F:=A0=A0=A0 package/yad/
+> > > +N:=A0=A0=A0 Jan Havran <havran.jan@email.cz>
+> > > +F:=A0=A0=A0 board/pine64/pinecube/
+> > > +F:=A0=A0=A0 configs/pine64_pinecube_defconfig
+> > > +
+> > > =A0 N:=A0=A0=A0 Jan Heylen <jan.heylen@nokia.com>
+> > > =A0 F:=A0=A0=A0 package/opentracing-cpp/
+> > > diff --git a/board/pine64/pinecube/extlinux.conf
+> > > b/board/pine64/pinecube/extlinux.conf
+> > > new file mode 100644
+> > > index 0000000000..6a18d9a2cb
+> > > --- /dev/null
+> > > +++ b/board/pine64/pinecube/extlinux.conf
+> > > @@ -0,0 +1,4 @@
+> > > +label buildroot
+> > > +=A0 kernel /zImage
+> > > +=A0 devicetree /sun8i-s3-pinecube.dtb
+> > > +=A0 append console=3DttyS0,115200 earlyprintk root=3D/dev/mmcblk0p2
+> > > rootwait rw
+> > > diff --git a/board/pine64/pinecube/genimage.cfg
+> > > b/board/pine64/pinecube/genimage.cfg
+> > > new file mode 100644
+> > > index 0000000000..398d45e2f7
+> > > --- /dev/null
+> > > +++ b/board/pine64/pinecube/genimage.cfg
+> > > @@ -0,0 +1,34 @@
+> > > +image boot.vfat {
+> > > +=A0=A0=A0 vfat {
+> > > +=A0=A0=A0=A0=A0=A0=A0 files =3D {
+> > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 "zImage",
+> > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 "sun8i-s3-pinecube.dtb",
+> > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 "extlinux"
+> > > +=A0=A0=A0=A0=A0=A0=A0 }
+> > > +=A0=A0=A0 }
+> > > +
+> > > +=A0=A0=A0 size =3D 8M
+> > > +}
+> > > +
+> > > +image sdcard.img {
+> > > +=A0=A0=A0 hdimage {
+> > > +=A0=A0=A0 }
+> > > +
+> > > +=A0=A0=A0 partition u-boot {
+> > > +=A0=A0=A0=A0=A0=A0=A0 in-partition-table =3D "no"
+> > > +=A0=A0=A0=A0=A0=A0=A0 image =3D "u-boot-sunxi-with-spl.bin"
+> > > +=A0=A0=A0=A0=A0=A0=A0 offset =3D 8K
+> > > +=A0=A0=A0=A0=A0=A0=A0 size =3D 504K # 512KB - 8KB
+> > > +=A0=A0=A0 }
+> > > +
+> > > +=A0=A0=A0 partition boot {
+> > > +=A0=A0=A0=A0=A0=A0=A0 partition-type =3D 0xC
+> > > +=A0=A0=A0=A0=A0=A0=A0 bootable =3D "true"
+> > > +=A0=A0=A0=A0=A0=A0=A0 image =3D "boot.vfat"
+> > > +=A0=A0=A0 }
+> > > +
+> > > +=A0=A0=A0 partition rootfs {
+> > > +=A0=A0=A0=A0=A0=A0=A0 partition-type =3D 0x83
+> > > +=A0=A0=A0=A0=A0=A0=A0 image =3D "rootfs.ext4"
+> > > +=A0=A0=A0 }
+> > > +}
+> > > diff --git a/board/pine64/pinecube/post-build.sh
+> > > b/board/pine64/pinecube/post-build.sh
+> > > new file mode 100755
+> > > index 0000000000..ba29375c05
+> > > --- /dev/null
+> > > +++ b/board/pine64/pinecube/post-build.sh
+> > > @@ -0,0 +1,5 @@
+> > > +#!/bin/sh
+> > > +
+> > > +BOARD_DIR=3D"$(dirname $0)"
+> > > +
+> > > +install -m 0644 -D $BOARD_DIR/extlinux.conf
+> > > $BINARIES_DIR/extlinux/extlinux.conf
+> > > diff --git a/board/pine64/pinecube/readme.txt
+> > > b/board/pine64/pinecube/readme.txt
+> > > new file mode 100644
+> > > index 0000000000..4cf6df2110
+> > > --- /dev/null
+> > > +++ b/board/pine64/pinecube/readme.txt
+> > > @@ -0,0 +1,31 @@
+> > > +Intro
+> > > +=3D=3D=3D=3D=3D
+> > > +
+> > > +This directory contains a Buildroot configuration for building a
+> > > +Pine64 PineCube.
+> > > +
+> > > +Board homepage: https://www.pine64.org/cube/
+> > > +Board wiki:=A0=A0=A0=A0 https://wiki.pine64.org/wiki/PineCube
+> > > +
+> > > +How to build it
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +
+> > > +=A0 $ make pine64_pinecube_defconfig
+> > > +=A0 $ make
+> > > +
+> > > +Note: you will need access to the internet to download the required
+> > > +sources.
+> > > +
+> > > +How to write the SD card
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> > > +
+> > > +Once the build process is finished you will have an image called
+> > > "sdcard.img"
+> > > +in the output/images/ directory.
+> > > +
+> > > +Copy the bootable "sdcard.img" onto an SD card with "dd":
+> > > +
+> > > +=A0 $ sudo dd if=3Doutput/images/sdcard.img of=3D/dev/sdX
+> > > +=A0 $ sudo sync
+> > > +
+> > > +Insert the micro SDcard in your PineCube and power it up. The console
+> > > +is on the serial port 2, 115200 8N1 (check Wiki for board pinout).
+> > > diff --git a/configs/pine64_pinecube_defconfig
+> > > b/configs/pine64_pinecube_defconfig
+> > > new file mode 100644
+> > > index 0000000000..8f60115f8f
+> > > --- /dev/null
+> > > +++ b/configs/pine64_pinecube_defconfig
+> > > @@ -0,0 +1,45 @@
+> > > +# Target options
+> > > +BR2_arm=3Dy
+> > > +BR2_cortex_a7=3Dy
+> > > +BR2_ARM_FPU_VFPV4=3Dy
+> > =
 
-  - gstd-1.x: 2.4 only
+> > About this ^^^ there is an ongoing discussion if use mixed VFVP4+NEON or
+> > not:
+> > https://lists.buildroot.org/pipermail/buildroot/2022-August/649770.html
+> > =
 
-  - gupnp-tools: 3.0 only since 09dfcdc65568 (Merge branch
-    'wip/gupnp-1.6' into 'master') and 7ee5fd9beb04 (Port to GUPnP 1.6
-    and libsoup 3), but no release yet.
+> > For the moment it's ok to me keeping this way and when we've all
+> > clarified FPU strategy on 32-bit ARM cortex then we can modify and
+> > you could test it or even provide the patch for this.
+> > =
 
-  - gvfs: 2.4 only for now
+> > Have you re-tested the board with such modification?
+> > =
 
-  - libostree: 2.4 only
 
-  - midori: uses webkitgtk, so I expect like webkitgtk?
+Yes, I re-tested the board for general use. But if you ask about the FPU, I=
+ am not
+sure what kind of tests should I run and how to check if it gives me valid =
+result.
+Should I do some heavy FPU testing? This one setting is more based on chip =
+description
+and previous discussion rather than some my tests/experiments.
 
-  - webkitgtk: you seemed to imply that was OK [1]?
+> > > +
+> > > +# Toolchain options
+> > > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=3Dy
+> > > +
+> > > +# System configuration
+> > > +BR2_TARGET_GENERIC_HOSTNAME=3D"pinecube"
+> > > +BR2_TARGET_GENERIC_ISSUE=3D"Welcome to Pine64 Pinecube"
+> > > +BR2_SYSTEM_DHCP=3D"eth0"
+> > > +BR2_ROOTFS_POST_BUILD_SCRIPT=3D"board/pine64/pinecube/post-build.sh"
+> > > +BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"support/scripts/genimage.sh"
+> > > +BR2_ROOTFS_POST_SCRIPT_ARGS=3D"-c board/pine64/pinecube/genimage.cfg"
+> > > +
+> > > +# Kernel
+> > > +BR2_LINUX_KERNEL=3Dy
+> > > +BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
+> > > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"5.15.61"
+> > > +BR2_LINUX_KERNEL_DEFCONFIG=3D"sunxi"
+> > > +BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy
+> > > +BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"sun8i-s3-pinecube"
+> > > +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy
+> > > +
+> > > +# Filesystem
+> > > +BR2_TARGET_ROOTFS_EXT2=3Dy
+> > > +BR2_TARGET_ROOTFS_EXT2_4=3Dy
+> > > +
+> > > +# Bootloader
+> > > +BR2_TARGET_UBOOT=3Dy
+> > > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy
+> > > +BR2_TARGET_UBOOT_CUSTOM_VERSION=3Dy
+> > > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE=3D"2022.04"
+> > > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D"pinecube"
+> > > +BR2_TARGET_UBOOT_NEEDS_DTC=3Dy
+> > > +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=3Dy
+> > > +BR2_TARGET_UBOOT_NEEDS_OPENSSL=3Dy
+> > > +BR2_TARGET_UBOOT_SPL=3Dy
+> > > +BR2_TARGET_UBOOT_SPL_NAME=3D"u-boot-sunxi-with-spl.bin"
+> > > +
+> > > +# Required host utilities for building an SDCard image
+> > > +BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy
+> > > +BR2_PACKAGE_HOST_GENIMAGE=3Dy
+> > > +BR2_PACKAGE_HOST_MTOOLS=3Dy
+> > =
 
-  - wpewebkit: this being webkit stuff, I would guess OK like webkitgtk?
+> > Overall looks good to me, it builds correctly with buildroot/docker-run
+> > so:
+> > Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> > =
 
-So, the only one I can see conflicting is gstd: it links with libsoup3,
-but I expect it also links or loads gstreamer libs or plugins, so there
-will be a conflict.
+> > Expect this patch to be part of 2022.11 since 2022.08-rc1 has been
+> > released on 12th August and from -rc1 to 2022.08 only bug fixes and
+> > security patches are allowed.
+> > =
 
-So, if we need libsoup3 for a package that has no libsoup2 support, then
-I think we should introduce a separate package. If we do not yet have a
-need for libsoup3, let's postpone the introdution of it.
+> > Thanks for the contribution!
 
-[0] https://lore.kernel.org/buildroot/87o83v7m5c.fsf@dell.be.48ers.dk/
-[1] https://lore.kernel.org/buildroot/CACXRmJjSOrww35YVVmkg_DEHDaG3ngQts4obTeDUsfsigM4cBQ@mail.gmail.com/
-[2] https://gitlab.gnome.org/GNOME/libsoup/-/issues/218
+Thank you very much for your review and your time.
 
 Regards,
-Yann E. MORIN.
+Jan
 
-> Changes for libsoup3:
-> - "0001-meson.build-set-c_std-to-gnu99.patch" is upstream now [3].
-> - The "gnome" option was dropped in [4].
-> - A new "libnghttp2" dependency is added since libsoup 2.99.6 (HTTP2 backend) [5].
-> 
-> [1] https://libsoup.org/libsoup-3.0/ch02.html
-> [2] https://gitlab.gnome.org/GNOME/libsoup/-/issues/218
-> [3] https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c3d431bdb094c59997f2a23e31e83f815ab667c
-> [4] https://gitlab.gnome.org/GNOME/libsoup/-/commit/3fcaa882c4eb29fd754cdb6dd06195632cb4b52a
-> [5] https://gitlab.gnome.org/GNOME/libsoup/-/commit/1a1d29c3114ca86c673d0c0b02a492d0962dcfe8
-> 
-> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
-> ---
->  .../0001-meson.build-set-c_std-to-gnu99.patch    |  0
->  package/libsoup/Config.in                        | 16 ++++++++++++++++
->  package/libsoup/libsoup.hash                     |  2 ++
->  package/libsoup/libsoup.mk                       | 11 +++++++++++
->  4 files changed, 29 insertions(+)
->  rename package/libsoup/{ => 2.74.0}/0001-meson.build-set-c_std-to-gnu99.patch (100%)
-> 
-> diff --git a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch b/package/libsoup/2.74.0/0001-meson.build-set-c_std-to-gnu99.patch
-> similarity index 100%
-> rename from package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
-> rename to package/libsoup/2.74.0/0001-meson.build-set-c_std-to-gnu99.patch
-> diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-> index 02e8e8b578..959ddedef5 100644
-> --- a/package/libsoup/Config.in
-> +++ b/package/libsoup/Config.in
-> @@ -16,8 +16,24 @@ config BR2_PACKAGE_LIBSOUP
->  
->  if BR2_PACKAGE_LIBSOUP
->  
-> +choice
-> +	prompt "libsoup version"
-> +	default BR2_PACKAGE_LIBSOUP_VERSION_2
-> +	help
-> +	  Select the version of libsoup you wish to use.
-> +
-> +config BR2_PACKAGE_LIBSOUP_VERSION_3
-> +	select BR2_PACKAGE_NGHTTP2
-> +	bool "libsoup3"
-> +
-> +config BR2_PACKAGE_LIBSOUP_VERSION_2
-> +	bool "libsoup2"
-> +
-> +endchoice
-> +
->  config BR2_PACKAGE_LIBSOUP_GNOME
->  	bool "libsoup-gnome"
-> +	depends on BR2_PACKAGE_LIBSOUP_VERSION_2
->  	help
->  	  Build libsoup-gnome library.
->  
-> diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
-> index 95c1c26eb4..6d87cc67e8 100644
-> --- a/package/libsoup/libsoup.hash
-> +++ b/package/libsoup/libsoup.hash
-> @@ -1,3 +1,5 @@
-> +# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/3.0/libsoup-3.0.0.sha256sum
-> +sha256  cde05f3e20114ce985cbd03d575ff74e5e41e70a218e5eb3068c4bf4710dbf2b  libsoup-3.0.0.tar.xz
->  # From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.74/libsoup-2.74.0.sha256sum
->  sha256  33b1d4e0d639456c675c227877e94a8078d731233e2d57689c11abcef7d3c48e  libsoup-2.74.0.tar.xz
->  # Locally calculated
-> diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-> index 1a26714992..bd8ce40643 100644
-> --- a/package/libsoup/libsoup.mk
-> +++ b/package/libsoup/libsoup.mk
-> @@ -4,8 +4,13 @@
->  #
->  ################################################################################
->  
-> +ifeq ($(BR2_PACKAGE_LIBSOUP_VERSION_3),y)
-> +LIBSOUP_VERSION_MAJOR = 3.0
-> +LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
-> +else
->  LIBSOUP_VERSION_MAJOR = 2.74
->  LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
-> +endif
->  LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
->  LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
->  LIBSOUP_LICENSE = LGPL-2.0+
-> @@ -55,10 +60,16 @@ else
->  LIBSOUP_CONF_OPTS += -Dgssapi=disabled
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBSOUP_VERSION_2),y)
->  ifeq ($(BR2_PACKAGE_LIBSOUP_GNOME),y)
->  LIBSOUP_CONF_OPTS += -Dgnome=true
->  else
->  LIBSOUP_CONF_OPTS += -Dgnome=false
->  endif
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBSOUP_VERSION_3),y)
-> +LIBSOUP_DEPENDENCIES += nghttp2
-> +endif
->  
->  $(eval $(meson-package))
-> -- 
-> 2.17.1
-> 
+> > =
+
+> > Best regards
+> =
+
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
