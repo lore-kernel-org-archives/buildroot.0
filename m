@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEA73C00140
-	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 17:53:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 639BDC00140
+	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 17:58:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2DDFC81BA8;
-	Sun, 21 Aug 2022 17:53:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DDFC81BA8
+	by smtp4.osuosl.org (Postfix) with ESMTP id B424C408F1;
+	Sun, 21 Aug 2022 17:58:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B424C408F1
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MigiekA10-UN; Sun, 21 Aug 2022 17:58:44 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB31E408AA;
+	Sun, 21 Aug 2022 17:58:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB31E408AA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AE5E01BF30E
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 17:58:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9669981292
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 17:58:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9669981292
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WiLgv4AnmksW; Sun, 21 Aug 2022 17:53:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A79981B52;
-	Sun, 21 Aug 2022 17:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A79981B52
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 65B9E1BF30E
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 17:53:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4725E605AC
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 17:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4725E605AC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Een5bS7befyY for <buildroot@lists.busybox.net>;
- Sun, 21 Aug 2022 17:53:22 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LGOsNFmu7xxO for <buildroot@lists.busybox.net>;
+ Sun, 21 Aug 2022 17:58:40 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25CE96058F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1901281272
 Received: from smtpcmd09100.aruba.it (smtpcmd09100.aruba.it [62.149.156.100])
- by smtp3.osuosl.org (Postfix) with ESMTP id 25CE96058F
- for <buildroot@buildroot.org>; Sun, 21 Aug 2022 17:53:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1901281272
+ for <buildroot@busybox.net>; Sun, 21 Aug 2022 17:58:39 +0000 (UTC)
 Received: from [192.168.8.175] ([86.32.48.35])
  by Aruba Outgoing Smtp  with ESMTPSA
- id Pp8QojdSScFgjPp8QoO3GM; Sun, 21 Aug 2022 19:53:18 +0200
-Message-ID: <2515e8ef-16ef-2d1b-8395-8d63eae8724f@benettiengineering.com>
-Date: Sun, 21 Aug 2022 19:53:17 +0200
+ id PpDZojiiIcFgjPpDZoO5cj; Sun, 21 Aug 2022 19:58:38 +0200
+Message-ID: <471c3ee0-b47e-9ead-55b5-cfc5c2181f64@benettiengineering.com>
+Date: Sun, 21 Aug 2022 19:58:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.0
-To: Jan Havran <havran.jan@email.cz>, buildroot@buildroot.org
-References: <YwIRMgNSkvP/T9a+@arch-zen.localdomain>
 Content-Language: en-US
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20220816175503.1280276-1-francois.perrad@gadz.org>
+ <20220816175503.1280276-3-francois.perrad@gadz.org>
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <YwIRMgNSkvP/T9a+@arch-zen.localdomain>
-X-CMAE-Envelope: MS4xfPW86ZQS2mQ+dQAEJWLtUHpp6MXCwnPvJ0N0TvSm8b2Txxfhgp4f4kPrOKxBADIRYxHIzu+/h3WsWVg8ymVCQGM8isAm/fxAYLv8OwrcHdohWVpnXlY6
- 2i2g1P708irmsqRwJ0ybj3lqO5vdSVprppc1VjCXxxQcz2wNSiS0o8KWf8B3wkK6Jh59DDqb9WvTYnU8E7uGGzBQnHKEbjPQCNgC/Dj78WeSefcz3s4uLvJF
- OjbbNqrIAt4Cun4EYm0AulGI/UnFt95Mz8+bG6TGesSoBkq7oKEroZN32fhnFjeQ
+In-Reply-To: <20220816175503.1280276-3-francois.perrad@gadz.org>
+X-CMAE-Envelope: MS4xfNk9P1tS5avd7QVIFbs+CiugUGuHN9WdGlQpBpEyuU8AXSvWgd4cEl3XF8Ez3ZXkze9XZxTaVlDL8z6kO7p57MOBzSEmNV+8cWBz9v1R9N5BsfrE0xMQ
+ jKlAKlz/se0UdRjIbXAZaKeRRYCsXbtIEhC5fd3f62e1dKtJCOLO4MkLTJNTg62ivl1Fkzf6tM0KXYAP0K64wYyIaXfQErXPkGa5ZJQagwE2QyCjerbU9EgX
+ 54JPb3rbM5YBqdRDL7+7pfwYd8XaV9KbWrVcdN+aSsA=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1661104398; bh=nGIZXAyNQThq81kwlwXPFSvf3gyVyU5MU9tbPtGVmN4=;
+ t=1661104718; bh=k1CNiHYCJCKwwFgRuJtvnqQ4mCNN4gHRae6c0uAJfeo=;
  h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=h1pKRPFpbcBZa3im7pFoMDVW/uE2YKqqr5ImJrYsjG1ITchsuckhpcsbmxCOCICMj
- myGlOSISdRthR2QcZwmJbrscs6OrJWSkTJoVUiaPOVXxLF4KtgzjVYoTlHzj3cuHiO
- WDYRT8Uc8w5AYMGmrBmotoytaBgBuRnDPWS2WCPvt8hf9dWlxFV3TfHMyL4SWpt3Cs
- VrAKetLBZVbVXsAHln3ynDP3UVVv9obFhLDt4ifVuRU1TovXF9V641MblPQvh2WyXO
- 5+CWkwXBUGg4rwaM+7mGWjoWYWQeAagTJx4A3IEkmFXOEvAdBFHeR6zhNy5bnpIcz+
- v0ELRySjj3Tog==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=cMW4SUdRkdrntJPisVZW8hmBWEyyMBegy9wu5RJqYtXKNVC4HTpl6O8beOjvsACew
+ OGFA5S64XaDCmDI7VuaAZVvuHJjWEhZw6hCTTnA7MZz0K5JxOe1ioFtZW72e7iY2nH
+ Aoz+OZiySS9F0KXCnDD4vlERhPkRRjNv/CyV9/awn9V8+nEiOEJFq2F7hC6iLaEsUs
+ 5dPXgPDMDrxZDW8PHv+9UWS7DuNnn5P+tYdAfpgmp6l0/vulGpoCq3chKOS12zPk71
+ eQCeg5CSbU6fHISktZkyer9agOjYrR1oQL1T7jVeGpxZ5BtEbtJPsR55SxAU5CdLgL
+ hDyPMeHOqA3hA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=h1pKRPFp
-Subject: Re: [Buildroot] [PATCH v2] board/pine64/pinecube: new board
+ header.a=rsa-sha256 header.s=a1 header.b=cMW4SUdR
+Subject: Re: [Buildroot] [PATCH v4 2/2] board/freescale/ls1028ardb: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,251 +77,250 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jan,
+Hi Francois, All,
 
-On 21/08/22 13:04, Jan Havran wrote:
-> Add support for PineCube with:
-> - U-Boot 2022.04
-> - Linux 5.15.61
+On 16/08/22 19:55, Francois Perrad wrote:
+> This is the reference design board for the NXP LS1028a SoC.
 > 
-> PineCube is a low-powered, open source IP camera
-> with the following specs:
->   - Allwinner S3 Cortex-A7
->   - 128 MiB DDR3
->   - 16 MiB SPI flash
->   - 5 MPx OV5640 camera
->   - MicroSD slot
->   - 10/100M Ethernet with passive PoE
->   - 802.11 b/g/n WiFi
->   - Bluetooth 4.1
->   - USB 2.0
->   - 26 pins GPIO header
->   - Microphone
->   - IR LEDs for night vision
+> see https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
 > 
-> Board homepage: https://www.pine64.org/cube/
-> Board wiki:     https://wiki.pine64.org/wiki/PineCube
-> 
-> Signed-off-by: Jan Havran <havran.jan@email.cz>
-> ---
-> Changes v1 -> v2 (review by Giulio Benetti):
->    - Updated commit message
->    - Replaced boot.cmd by extlinux.conf
->    - Renamed pinecube_defconfig to pine64_pinecube_defconfig
->    - Changed welcome message (generic issue)
->    - Updated U-Boot 2022.01 to 2022.04
->    - Updated Linux kernel from 5.15 to 5.15.61
->    - Removed NEON from FPU (but kept VFPV4)
-> ---
->   DEVELOPERS                          |  4 +++
->   board/pine64/pinecube/extlinux.conf |  4 +++
->   board/pine64/pinecube/genimage.cfg  | 34 ++++++++++++++++++++++
->   board/pine64/pinecube/post-build.sh |  5 ++++
->   board/pine64/pinecube/readme.txt    | 31 ++++++++++++++++++++
->   configs/pine64_pinecube_defconfig   | 45 +++++++++++++++++++++++++++++
->   6 files changed, 123 insertions(+)
->   create mode 100644 board/pine64/pinecube/extlinux.conf
->   create mode 100644 board/pine64/pinecube/genimage.cfg
->   create mode 100755 board/pine64/pinecube/post-build.sh
->   create mode 100644 board/pine64/pinecube/readme.txt
->   create mode 100644 configs/pine64_pinecube_defconfig
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 4287fd9cf7..74f57af6fa 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1410,6 +1410,10 @@ F:	package/pangomm/
->   F:	package/rpm/
->   F:	package/yad/
->   
-> +N:	Jan Havran <havran.jan@email.cz>
-> +F:	board/pine64/pinecube/
-> +F:	configs/pine64_pinecube_defconfig
-> +
->   N:	Jan Heylen <jan.heylen@nokia.com>
->   F:	package/opentracing-cpp/
->   
-> diff --git a/board/pine64/pinecube/extlinux.conf b/board/pine64/pinecube/extlinux.conf
-> new file mode 100644
-> index 0000000000..6a18d9a2cb
-> --- /dev/null
-> +++ b/board/pine64/pinecube/extlinux.conf
-> @@ -0,0 +1,4 @@
-> +label buildroot
-> +  kernel /zImage
-> +  devicetree /sun8i-s3-pinecube.dtb
-> +  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait rw
-> diff --git a/board/pine64/pinecube/genimage.cfg b/board/pine64/pinecube/genimage.cfg
-> new file mode 100644
-> index 0000000000..398d45e2f7
-> --- /dev/null
-> +++ b/board/pine64/pinecube/genimage.cfg
-> @@ -0,0 +1,34 @@
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"zImage",
-> +			"sun8i-s3-pinecube.dtb",
-> +			"extlinux"
-> +		}
-> +	}
-> +
-> +	size = 8M
-> +}
-> +
-> +image sdcard.img {
-> +	hdimage {
-> +	}
-> +
-> +	partition u-boot {
-> +		in-partition-table = "no"
-> +		image = "u-boot-sunxi-with-spl.bin"
-> +		offset = 8K
-> +		size = 504K # 512KB - 8KB
-> +	}
-> +
-> +	partition boot {
-> +		partition-type = 0xC
-> +		bootable = "true"
-> +		image = "boot.vfat"
-> +	}
-> +
-> +	partition rootfs {
-> +		partition-type = 0x83
-> +		image = "rootfs.ext4"
-> +	}
-> +}
-> diff --git a/board/pine64/pinecube/post-build.sh b/board/pine64/pinecube/post-build.sh
-> new file mode 100755
-> index 0000000000..ba29375c05
-> --- /dev/null
-> +++ b/board/pine64/pinecube/post-build.sh
-> @@ -0,0 +1,5 @@
-> +#!/bin/sh
-> +
-> +BOARD_DIR="$(dirname $0)"
-> +
-> +install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-> diff --git a/board/pine64/pinecube/readme.txt b/board/pine64/pinecube/readme.txt
-> new file mode 100644
-> index 0000000000..4cf6df2110
-> --- /dev/null
-> +++ b/board/pine64/pinecube/readme.txt
-> @@ -0,0 +1,31 @@
-> +Intro
-> +=====
-> +
-> +This directory contains a Buildroot configuration for building a
-> +Pine64 PineCube.
-> +
-> +Board homepage: https://www.pine64.org/cube/
-> +Board wiki:     https://wiki.pine64.org/wiki/PineCube
-> +
-> +How to build it
-> +===============
-> +
-> +  $ make pine64_pinecube_defconfig
-> +  $ make
-> +
-> +Note: you will need access to the internet to download the required
-> +sources.
-> +
-> +How to write the SD card
-> +========================
-> +
-> +Once the build process is finished you will have an image called "sdcard.img"
-> +in the output/images/ directory.
-> +
-> +Copy the bootable "sdcard.img" onto an SD card with "dd":
-> +
-> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-> +  $ sudo sync
-> +
-> +Insert the micro SDcard in your PineCube and power it up. The console
-> +is on the serial port 2, 115200 8N1 (check Wiki for board pinout).
-> diff --git a/configs/pine64_pinecube_defconfig b/configs/pine64_pinecube_defconfig
-> new file mode 100644
-> index 0000000000..8f60115f8f
-> --- /dev/null
-> +++ b/configs/pine64_pinecube_defconfig
-> @@ -0,0 +1,45 @@
-> +# Target options
-> +BR2_arm=y
-> +BR2_cortex_a7=y
-> +BR2_ARM_FPU_VFPV4=y
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-About this ^^^ there is an ongoing discussion if use mixed VFVP4+NEON or
-not:
-https://lists.buildroot.org/pipermail/buildroot/2022-August/649770.html
-
-For the moment it's ok to me keeping this way and when we've all
-clarified FPU strategy on 32-bit ARM cortex then we can modify and
-you could test it or even provide the patch for this.
-
-Have you re-tested the board with such modification?
-
-> +
-> +# Toolchain options
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-> +
-> +# System configuration
-> +BR2_TARGET_GENERIC_HOSTNAME="pinecube"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Pine64 Pinecube"
-> +BR2_SYSTEM_DHCP="eth0"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/pinecube/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pinecube/genimage.cfg"
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.61"
-> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-s3-pinecube"
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +
-> +# Bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pinecube"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-> +
-> +# Required host utilities for building an SDCard image
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-
-Overall looks good to me, it builds correctly with buildroot/docker-run
-so:
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Expect this patch to be part of 2022.11 since 2022.08-rc1 has been
-released on 12th August and from -rc1 to 2022.08 only bug fixes and
-security patches are allowed.
-
-Thanks for the contribution!
+Here ^^^ there is a double Reviewed-by:
+I think that the Maintainer that will commit this patch could reword it.
 
 Best regards
 -- 
 Giulio Benetti
 Benetti Engineering sas
+
+> ---
+>   DEVELOPERS                                    |  2 +
+>   board/freescale/ls1028ardb/genimage.cfg       | 23 +++++++
+>   board/freescale/ls1028ardb/readme.txt         | 60 +++++++++++++++++++
+>   .../boot/extlinux/extlinux.conf               |  4 ++
+>   .../rules.d/73-fsl-enetc-networking.rules     | 16 +++++
+>   configs/ls1028ardb_defconfig                  | 57 ++++++++++++++++++
+>   6 files changed, 162 insertions(+)
+>   create mode 100644 board/freescale/ls1028ardb/genimage.cfg
+>   create mode 100644 board/freescale/ls1028ardb/readme.txt
+>   create mode 100644 board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
+>   create mode 100644 board/freescale/ls1028ardb/rootfs_overlay/etc/udev/rules.d/73-fsl-enetc-networking.rules
+>   create mode 100644 configs/ls1028ardb_defconfig
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index d2bd0d809..a034471fa 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1018,9 +1018,11 @@ N:	Francisco Gonzalez <gzmorell@gmail.com>
+>   F:	package/ser2net/
+>   
+>   N:	Francois Perrad <francois.perrad@gadz.org>
+> +F:	board/freescale/ls1028ardb/
+>   F:	board/olimex/a20_olinuxino
+>   F:	board/olimex/imx233_olinuxino/
+>   F:	board/olimex/stmp1_olinuxino/
+> +F:	configs/ls1028ardb_defconfig
+>   F:	configs/olimex_a20_olinuxino_*
+>   F:	configs/olimex_imx233_olinuxino_defconfig
+>   F:	configs/olimex_stmp157_olinuxino_lime_defconfig
+> diff --git a/board/freescale/ls1028ardb/genimage.cfg b/board/freescale/ls1028ardb/genimage.cfg
+> new file mode 100644
+> index 000000000..3efef0bff
+> --- /dev/null
+> +++ b/board/freescale/ls1028ardb/genimage.cfg
+> @@ -0,0 +1,23 @@
+> +image sdcard.img {
+> +	hdimage {
+> +	}
+> +
+> +	partition fsbl {
+> +		offset = 4K
+> +		in-partition-table = "no"
+> +		image = "bl2_sd.pbl"
+> +	}
+> +
+> +	partition ssbl {
+> +		offset = 1M
+> +		in-partition-table = "no"
+> +		image = "fip.bin"
+> +	}
+> +
+> +	partition rootfs {
+> +		offset = 8M
+> +		partition-type = 0x83
+> +		bootable = "true"
+> +		image = "rootfs.ext4"
+> +	}
+> +}
+> diff --git a/board/freescale/ls1028ardb/readme.txt b/board/freescale/ls1028ardb/readme.txt
+> new file mode 100644
+> index 000000000..93396a419
+> --- /dev/null
+> +++ b/board/freescale/ls1028ardb/readme.txt
+> @@ -0,0 +1,60 @@
+> +**************
+> +NXP LS1028ARDB
+> +**************
+> +
+> +This file documents the Buildroot support for the LS1028A Reference Design Board.
+> +
+> +for more details about the board and the QorIQ Layerscape SoC, see the following pages:
+> +  - https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
+> +  - https://www.nxp.com/LS1028A
+> +
+> +Build
+> +=====
+> +
+> +First, configure Buildroot for the LS1028ARDB board:
+> +
+> +  make ls1028ardb_defconfig
+> +
+> +Build all components:
+> +
+> +  make
+> +
+> +You will find in output/images/ the following files:
+> +  - bl2_sd.pbl
+> +  - fip.bin
+> +  - fsl-ls1028a-rdb.dtb
+> +  - Image
+> +  - PBL.bin
+> +  - rootfs.ext2
+> +  - rootfs.ext4 -> rootfs.ext2
+> +  - sdcard.img
+> +  - u-boot.bin
+> +
+> +Create a bootable SD card
+> +=========================
+> +
+> +To determine the device associated to the SD card have a look in the
+> +/proc/partitions file:
+> +
+> +  cat /proc/partitions
+> +
+> +Buildroot prepares a bootable "sdcard.img" image in the output/images/
+> +directory, ready to be dumped on a SD card. Launch the following
+> +command as root:
+> +
+> +  dd if=output/images/sdcard.img of=/dev/sdX
+> +
+> +*** WARNING! This will destroy all the card content. Use with care! ***
+> +
+> +For details about the medium image layout, see the definition in
+> +board/freescale/ls1028ardb/genimage.cfg.
+> +
+> +Boot the LS1028ARDB board
+> +=========================
+> +
+> +To boot your newly created system:
+> +- insert the SD card in the SD slot of the board;
+> +- Configure the switches SW2[1:4] = 1000 (select SD Card boot option)
+> +- put a DB9F cable into the UART1 Port and connect using a terminal
+> +  emulator at 115200 bps, 8n1;
+> +- power on the board.
+> diff --git a/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
+> new file mode 100644
+> index 000000000..c08ddde10
+> --- /dev/null
+> +++ b/board/freescale/ls1028ardb/rootfs_overlay/boot/extlinux/extlinux.conf
+> @@ -0,0 +1,4 @@
+> +label ls1028ardb-buildroot
+> +  kernel /boot/Image
+> +  devicetree /boot/fsl-ls1028a-rdb.dtb
+> +  append root=/dev/mmcblk0p1 rootwait
+> diff --git a/board/freescale/ls1028ardb/rootfs_overlay/etc/udev/rules.d/73-fsl-enetc-networking.rules b/board/freescale/ls1028ardb/rootfs_overlay/etc/udev/rules.d/73-fsl-enetc-networking.rules
+> new file mode 100644
+> index 000000000..19f41634b
+> --- /dev/null
+> +++ b/board/freescale/ls1028ardb/rootfs_overlay/etc/udev/rules.d/73-fsl-enetc-networking.rules
+> @@ -0,0 +1,16 @@
+> +# ENETC rules
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.0", DRIVERS=="fsl_enetc", NAME:="eno0"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.1", DRIVERS=="fsl_enetc", NAME:="eno1"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.2", DRIVERS=="fsl_enetc", NAME:="eno2"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.6", DRIVERS=="fsl_enetc", NAME:="eno3"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.0", DRIVERS=="fsl_enetc_vf", NAME:="eno0vf0"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.1", DRIVERS=="fsl_enetc_vf", NAME:="eno0vf1"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.2", DRIVERS=="fsl_enetc_vf", NAME:="eno1vf0"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.3", DRIVERS=="fsl_enetc_vf", NAME:="eno1vf1"
+> +# LS1028 switch rules
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p0", NAME="swp0"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p1", NAME="swp1"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p2", NAME="swp2"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p3", NAME="swp3"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p4", NAME="swp4"
+> +ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p5", NAME="swp5"
+> diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
+> new file mode 100644
+> index 000000000..605e41d70
+> --- /dev/null
+> +++ b/configs/ls1028ardb_defconfig
+> @@ -0,0 +1,57 @@
+> +# Architecture
+> +BR2_aarch64=y
+> +BR2_cortex_a72=y
+> +
+> +# Toolchain
+> +# Linux headers same as kernel, a 5.10 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+> +# wchar required by eudev
+> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> +
+> +# System configuration
+> +BR2_TARGET_GENERIC_HOSTNAME="ls1028a"
+> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> +BR2_ROOTFS_OVERLAY="board/freescale/ls1028ardb/rootfs_overlay"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1028ardb/genimage.cfg"
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/linux"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="LSDK-21.08"
+> +BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-rdb"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +
+> +# Bootloaders
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/atf"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="LSDK-21.08"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BOOT_MODE=sd"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/qoriq/qoriq-components/u-boot"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="LSDK-21.08"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1028ardb_tfa"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +
+> +# Host utilities
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_QORIQ_RCW_INTREE="ls1028ardb/R_SQPP_0x85bb/rcw_1300_sdboot.bin"
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
