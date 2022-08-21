@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 619CDC6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99872ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03C6240B88;
-	Sun, 11 Sep 2022 08:56:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03C6240B88
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4888084012;
+	Sun, 11 Sep 2022 08:57:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4888084012
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NwSWMiZUjitl; Sun, 11 Sep 2022 08:56:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9sp6znq8W0D2; Sun, 11 Sep 2022 08:57:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 23AFE40B8A;
-	Sun, 11 Sep 2022 08:56:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23AFE40B8A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B0FE01BF990
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8009B83EEB;
+	Sun, 11 Sep 2022 08:57:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8009B83EEB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 342191BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9FBEE61085
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FBEE61085
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4AB6383EDC
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AB6383EDC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D9wWhqFSmpg4 for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bucDz6XIkvM8 for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65B7C60774
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65B7C60774
+ by smtp1.osuosl.org (Postfix) with ESMTP id 427F583ED0
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 427F583ED0
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 63A6D835E4; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+ id 33B6583620; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 15 Aug 2022 20:58:42 +0200
+Date: Sun, 21 Aug 2022 17:27:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 721d3c6e802b8f97e133b2974cbf615dd00a1e80
-X-Git-Newrev: 3b5e02c4958e11b28ee359f908cbf464b6964fff
+X-Git-Oldrev: 638b1422c6bb99f99ee043b79edfd01cdfdf6c2b
+X-Git-Newrev: 0b7e7bc70b3b7f3125aa0ef780f4fbf61cd6cd4b
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084824.63A6D835E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-cadence-dp-firmware:
- refactor with NXP_EXTRACT_HELPER
+Message-Id: <20220911084825.33B6583620@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: add optional
+ nmcli support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b5e02c4958e11b28ee359f908cbf464b6964fff
+commit: https://git.buildroot.net/buildroot/commit/?id=0b7e7bc70b3b7f3125aa0ef780f4fbf61cd6cd4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+The network-manager package builds the nmcli utility when the readline
+package is enabled. However, this is not necessarily obvious to the
+user. Therefore, this commit adds an explicit option to enable the nmcli
+tool, which automatically selects readline.
+
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+[yann.morin.1998@free.fr: rewrap commit log and help text]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../qoriq-cadence-dp-firmware.mk                   | 27 +---------------------
- 1 file changed, 1 insertion(+), 26 deletions(-)
+ package/network-manager/Config.in          | 8 +++++++-
+ package/network-manager/network-manager.mk | 2 +-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-index 23643d24e0..6bfb921628 100644
---- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-@@ -13,33 +13,8 @@ QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
- QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
- QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 39114daf18..1a11fc4270 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -33,6 +33,13 @@ config BR2_PACKAGE_NETWORK_MANAGER_TUI
+ 	help
+ 	  This option enables terminal based UI
  
--# Helper for self-extracting binaries distributed by NXP.
--#
--# The --force option makes sure it doesn't fail if the source
--# directory already exists. The --auto-accept skips the license check,
--# as it is not needed in Buildroot because we have legal-info. Since
--# there's a EULA in the binary file, we extract it in this macro, and
--# it should therefore be added to the LICENSE_FILES variable of
--# packages using this macro. Also, remember to set REDISTRIBUTE to
--# "NO". Indeed, this is a legal minefield: the EULA specifies that the
--# Board Support Package includes software and hardware (sic!) for
--# which a separate license is needed...
--#
--# $(1): full path to the archive file
--#
--define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_HELPER
--	awk 'BEGIN      { start = 0; } \
--	     /^EOEULA/  { start = 0; } \
--	                { if (start) print; } \
--	     /<<EOEULA/ { start = 1; }' \
--	    $(1) > $(@D)/EULA
--	cd $(@D) && sh $(1) --force --auto-accept
--	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
--	rmdir $(@D)/$(basename $(notdir $(1)))
--endef
++config BR2_PACKAGE_NETWORK_MANAGER_CLI
++	bool "nmcli support"
++	select BR2_PACKAGE_READLINE
++	help
++	  This option enables support for the NetworkManager Command
++	  Line Interface
++
+ config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
+ 	bool "modem-manager support"
+ 	select BR2_PACKAGE_MODEM_MANAGER
+@@ -50,7 +57,6 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
+ 	select BR2_PACKAGE_JANSSON
+ 	help
+ 	  This option enables support for OpenVSwitch
 -
- define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
--	$(call QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
-+	$(call NXP_EXTRACT_HELPER,$(QORIQ_CADENCE_DP_FIRMWARE_DL_DIR)/$(QORIQ_CADENCE_DP_FIRMWARE_SOURCE))
- endef
+ endif
  
- define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
+ comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 4.6, dynamic library, wchar, threads, gcc >= 4.9"
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 3c39ce7d6d..92997d1cb6 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -142,7 +142,7 @@ else
+ NETWORK_MANAGER_CONF_OPTS += --disable-polkit
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_READLINE),y)
++ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_CLI),y)
+ NETWORK_MANAGER_DEPENDENCIES += readline
+ NETWORK_MANAGER_CONF_OPTS += --with-nmcli
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
