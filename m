@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D67B8C00140
-	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 18:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D9A3C00140
+	for <buildroot@archiver.kernel.org>; Sun, 21 Aug 2022 18:46:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6168181BA8;
-	Sun, 21 Aug 2022 18:01:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6168181BA8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m3x5onn8FpRH; Sun, 21 Aug 2022 18:01:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D0DC818EC;
-	Sun, 21 Aug 2022 18:01:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D0DC818EC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A1541BF30E
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:01:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE0B3408B0
- for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:01:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE0B3408B0
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC29C409A0;
+	Sun, 21 Aug 2022 18:46:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC29C409A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5dyGFGGQ776M for <buildroot@lists.busybox.net>;
- Sun, 21 Aug 2022 18:01:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3BE9408AA
-Received: from smtpcmd09100.aruba.it (smtpcmd09100.aruba.it [62.149.156.100])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3BE9408AA
- for <buildroot@buildroot.org>; Sun, 21 Aug 2022 18:01:49 +0000 (UTC)
-Received: from [192.168.8.175] ([86.32.48.35])
- by Aruba Outgoing Smtp  with ESMTPSA
- id PpGeojlzicFgjPpGeoO70z; Sun, 21 Aug 2022 20:01:48 +0200
-Message-ID: <b32d133e-14a6-8e4f-c7e4-2e2e647f4601@benettiengineering.com>
-Date: Sun, 21 Aug 2022 20:01:47 +0200
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vcTraVg6f3ya; Sun, 21 Aug 2022 18:46:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16793408CC;
+	Sun, 21 Aug 2022 18:45:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16793408CC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C5D981BF421
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:45:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0BDA81C2F
+ for <buildroot@lists.busybox.net>; Sun, 21 Aug 2022 18:45:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0BDA81C2F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2b-QnA1bGk0K for <buildroot@lists.busybox.net>;
+ Sun, 21 Aug 2022 18:45:56 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B22881C21
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1B22881C21
+ for <buildroot@buildroot.org>; Sun, 21 Aug 2022 18:45:56 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:b8e6:fe51:1cfa:c9c2])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id C65FC13F92C;
+ Sun, 21 Aug 2022 20:45:48 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 21 Aug 2022 20:45:48 +0200
+Date: Sun, 21 Aug 2022 20:45:48 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+Message-ID: <20220821184548.GZ2775145@scaer>
+References: <20220129214235.5133-1-thomas.devoogdt@gmail.com>
+ <20220129214235.5133-2-thomas.devoogdt@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: Jan Havran <havran.jan@email.cz>, buildroot@buildroot.org
-References: <YwIRMgNSkvP/T9a+@arch-zen.localdomain>
- <2515e8ef-16ef-2d1b-8395-8d63eae8724f@benettiengineering.com>
-In-Reply-To: <2515e8ef-16ef-2d1b-8395-8d63eae8724f@benettiengineering.com>
-X-CMAE-Envelope: MS4xfJX4k/R6RyD08kuassz5hzmk82lIViQOdEQIucZF3DHsG0FESJqq4lZyAA/0UJLDLPMhYB/Qtiufo78DTUw9F/EI2Kd331rzMUnhCnRfLlw3A6F0zmP3
- wDTk9H+Ukdg7p5I0mUuBLOUhkvglC7nmYG8LK9XQgcx1ldRTvjtpi1U8NG27ImP07Bui3s1Gd+OtRISn7tYkwaz39HL2fOwRfCxqdYEQDITSh2y7eY3btF6P
- pTZ2BTU9SOmnWCP90I1w68fVZNNEAl+xjbVrQuDDbSXsV7iFOOYoIl9feG0+qHw6
+Content-Disposition: inline
+In-Reply-To: <20220129214235.5133-2-thomas.devoogdt@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1661104908; bh=1VjVuzRS1YIMZrq/Es393IlAZCm3zpiF5gMoV805lyI=;
- h=Date:MIME-Version:Subject:From:To:Content-Type;
- b=OAbXG5KOZfCLzwGMj92wfXw4WSw3U8rbzm2rsrANp4ZwGrO7M2qB6TEv1wZ0CHIEz
- 0Q1YieemDXkkM1C4xKt5UB9Ep1sL+3B1Gx5SY6GaCI2RhLTBUrhC7Azi0TuLMojGMZ
- 8/2CGE7W/y/Im0hUmEOt9oPrFQW7XW+/ETaN9KnjDOLApgHUIB4+Zy5mRM/37GyYrH
- zv+qlbBFbwlSuxHOT0hFL4B6H351pliRtQ60PcOKjnrFjcx6pom+LDQXmbiE4+YttJ
- zC3l9se2h+x8/w1Qi6h4Xf4HwamvmtGEjnvmgSliIF765dnNq25fgTQrDTuz2tH1r1
- suaf+WQ0djMvg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=OAbXG5KO
-Subject: Re: [Buildroot] [PATCH v2] board/pine64/pinecube: new board
+ d=free.fr; s=smtp-20201208; t=1661107553;
+ bh=nxaT82zeO0oWbGm9MPtO4maue/CWz6LUJRSbyGKEEmc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=qFA5rL6z1xy7bFgRQnZ/WgmHcMAHTmWXbl7ZFRuSG5T/X+iY6LjUf6IoLetLTMpUk
+ mUDEqUyF2Ovh1smk/QlEmT+2lVaCSLQZyP0ujWo3FMX/srM7DDL18r4ENldqezFrFH
+ wzQ59gTa23vO2nW6VK2zRZLeepINy4+vkD9B66XFBwsCpsKuD25ZzOlc6m4Kjm9Jcb
+ aZe2ainMqKBZqJl0K8g/34nij+oknBDaO4gvpV4/mHUu9jYjju650GQhcAZ/XYpe8Q
+ qMG2W3HP3q42SAOJtaPozhoma2YkAVu9UUudwtPWO+t2W/Fg4lXtDltM29dRqZ4jHt
+ NRN3/yIx2noIw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qFA5rL6z
+Subject: Re: [Buildroot] [PATCH 2/2] package/libsoup: add choice between
+ libsoup2 and libsoup3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,153 +78,201 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T25lIGxhc3QgdGhpbmcsIHBsZWFzZSBzZXQgdGhlIHYxIHBhdGNoIHRvIHN1cGVyc2VkZWQgaW4g
-UGF0Y2h3b3JrOgpodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290
-L2xpc3QvP3N1Ym1pdHRlcj03NDg0MQoKVGhhbmsgeW91IQoKQmVzdCByZWdhcmRzCi0tIApHaXVs
-aW8gQmVuZXR0aQpCZW5ldHRpIEVuZ2luZWVyaW5nIHNhcwoKT24gMjEvMDgvMjIgMTk6NTMsIEdp
-dWxpbyBCZW5ldHRpIHdyb3RlOgo+IEhpIEphbiwKPiAKPiBPbiAyMS8wOC8yMiAxMzowNCwgSmFu
-IEhhdnJhbiB3cm90ZToKPj4gQWRkIHN1cHBvcnQgZm9yIFBpbmVDdWJlIHdpdGg6Cj4+IC0gVS1C
-b290IDIwMjIuMDQKPj4gLSBMaW51eCA1LjE1LjYxCj4+Cj4+IFBpbmVDdWJlIGlzIGEgbG93LXBv
-d2VyZWQsIG9wZW4gc291cmNlIElQIGNhbWVyYQo+PiB3aXRoIHRoZSBmb2xsb3dpbmcgc3BlY3M6
-Cj4+IMKgIC0gQWxsd2lubmVyIFMzIENvcnRleC1BNwo+PiDCoCAtIDEyOCBNaUIgRERSMwo+PiDC
-oCAtIDE2IE1pQiBTUEkgZmxhc2gKPj4gwqAgLSA1IE1QeCBPVjU2NDAgY2FtZXJhCj4+IMKgIC0g
-TWljcm9TRCBzbG90Cj4+IMKgIC0gMTAvMTAwTSBFdGhlcm5ldCB3aXRoIHBhc3NpdmUgUG9FCj4+
-IMKgIC0gODAyLjExIGIvZy9uIFdpRmkKPj4gwqAgLSBCbHVldG9vdGggNC4xCj4+IMKgIC0gVVNC
-IDIuMAo+PiDCoCAtIDI2IHBpbnMgR1BJTyBoZWFkZXIKPj4gwqAgLSBNaWNyb3Bob25lCj4+IMKg
-IC0gSVIgTEVEcyBmb3IgbmlnaHQgdmlzaW9uCj4+Cj4+IEJvYXJkIGhvbWVwYWdlOiBodHRwczov
-L3d3dy5waW5lNjQub3JnL2N1YmUvCj4+IEJvYXJkIHdpa2k6wqDCoMKgwqAgaHR0cHM6Ly93aWtp
-LnBpbmU2NC5vcmcvd2lraS9QaW5lQ3ViZQo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBKYW4gSGF2cmFu
-IDxoYXZyYW4uamFuQGVtYWlsLmN6Pgo+PiAtLS0KPj4gQ2hhbmdlcyB2MSAtPiB2MiAocmV2aWV3
-IGJ5IEdpdWxpbyBCZW5ldHRpKToKPj4gwqDCoCAtIFVwZGF0ZWQgY29tbWl0IG1lc3NhZ2UKPj4g
-wqDCoCAtIFJlcGxhY2VkIGJvb3QuY21kIGJ5IGV4dGxpbnV4LmNvbmYKPj4gwqDCoCAtIFJlbmFt
-ZWQgcGluZWN1YmVfZGVmY29uZmlnIHRvIHBpbmU2NF9waW5lY3ViZV9kZWZjb25maWcKPj4gwqDC
-oCAtIENoYW5nZWQgd2VsY29tZSBtZXNzYWdlIChnZW5lcmljIGlzc3VlKQo+PiDCoMKgIC0gVXBk
-YXRlZCBVLUJvb3QgMjAyMi4wMSB0byAyMDIyLjA0Cj4+IMKgwqAgLSBVcGRhdGVkIExpbnV4IGtl
-cm5lbCBmcm9tIDUuMTUgdG8gNS4xNS42MQo+PiDCoMKgIC0gUmVtb3ZlZCBORU9OIGZyb20gRlBV
-IChidXQga2VwdCBWRlBWNCkKPj4gLS0tCj4+IMKgIERFVkVMT1BFUlPCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNCArKysKPj4gwqAgYm9hcmQv
-cGluZTY0L3BpbmVjdWJlL2V4dGxpbnV4LmNvbmYgfMKgIDQgKysrCj4+IMKgIGJvYXJkL3BpbmU2
-NC9waW5lY3ViZS9nZW5pbWFnZS5jZmfCoCB8IDM0ICsrKysrKysrKysrKysrKysrKysrKysKPj4g
-wqAgYm9hcmQvcGluZTY0L3BpbmVjdWJlL3Bvc3QtYnVpbGQuc2ggfMKgIDUgKysrKwo+PiDCoCBi
-b2FyZC9waW5lNjQvcGluZWN1YmUvcmVhZG1lLnR4dMKgwqDCoCB8IDMxICsrKysrKysrKysrKysr
-KysrKysrCj4+IMKgIGNvbmZpZ3MvcGluZTY0X3BpbmVjdWJlX2RlZmNvbmZpZ8KgwqAgfCA0NSAr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+PiDCoCA2IGZpbGVzIGNoYW5nZWQsIDEyMyBp
-bnNlcnRpb25zKCspCj4+IMKgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9waW5lNjQvcGluZWN1
-YmUvZXh0bGludXguY29uZgo+PiDCoCBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvcGluZTY0L3Bp
-bmVjdWJlL2dlbmltYWdlLmNmZwo+PiDCoCBjcmVhdGUgbW9kZSAxMDA3NTUgYm9hcmQvcGluZTY0
-L3BpbmVjdWJlL3Bvc3QtYnVpbGQuc2gKPj4gwqAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3Bp
-bmU2NC9waW5lY3ViZS9yZWFkbWUudHh0Cj4+IMKgIGNyZWF0ZSBtb2RlIDEwMDY0NCBjb25maWdz
-L3BpbmU2NF9waW5lY3ViZV9kZWZjb25maWcKPj4KPj4gZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMg
-Yi9ERVZFTE9QRVJTCj4+IGluZGV4IDQyODdmZDljZjcuLjc0ZjU3YWY2ZmEgMTAwNjQ0Cj4+IC0t
-LSBhL0RFVkVMT1BFUlMKPj4gKysrIGIvREVWRUxPUEVSUwo+PiBAQCAtMTQxMCw2ICsxNDEwLDEw
-IEBAIEY6wqDCoMKgIHBhY2thZ2UvcGFuZ29tbS8KPj4gwqAgRjrCoMKgwqAgcGFja2FnZS9ycG0v
-Cj4+IMKgIEY6wqDCoMKgIHBhY2thZ2UveWFkLwo+PiArTjrCoMKgwqAgSmFuIEhhdnJhbiA8aGF2
-cmFuLmphbkBlbWFpbC5jej4KPj4gK0Y6wqDCoMKgIGJvYXJkL3BpbmU2NC9waW5lY3ViZS8KPj4g
-K0Y6wqDCoMKgIGNvbmZpZ3MvcGluZTY0X3BpbmVjdWJlX2RlZmNvbmZpZwo+PiArCj4+IMKgIE46
-wqDCoMKgIEphbiBIZXlsZW4gPGphbi5oZXlsZW5Abm9raWEuY29tPgo+PiDCoCBGOsKgwqDCoCBw
-YWNrYWdlL29wZW50cmFjaW5nLWNwcC8KPj4gZGlmZiAtLWdpdCBhL2JvYXJkL3BpbmU2NC9waW5l
-Y3ViZS9leHRsaW51eC5jb25mIAo+PiBiL2JvYXJkL3BpbmU2NC9waW5lY3ViZS9leHRsaW51eC5j
-b25mCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+IGluZGV4IDAwMDAwMDAwMDAuLjZhMThkOWEy
-Y2IKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9ib2FyZC9waW5lNjQvcGluZWN1YmUvZXh0bGlu
-dXguY29uZgo+PiBAQCAtMCwwICsxLDQgQEAKPj4gK2xhYmVsIGJ1aWxkcm9vdAo+PiArwqAga2Vy
-bmVsIC96SW1hZ2UKPj4gK8KgIGRldmljZXRyZWUgL3N1bjhpLXMzLXBpbmVjdWJlLmR0Ygo+PiAr
-wqAgYXBwZW5kIGNvbnNvbGU9dHR5UzAsMTE1MjAwIGVhcmx5cHJpbnRrIHJvb3Q9L2Rldi9tbWNi
-bGswcDIgCj4+IHJvb3R3YWl0IHJ3Cj4+IGRpZmYgLS1naXQgYS9ib2FyZC9waW5lNjQvcGluZWN1
-YmUvZ2VuaW1hZ2UuY2ZnIAo+PiBiL2JvYXJkL3BpbmU2NC9waW5lY3ViZS9nZW5pbWFnZS5jZmcK
-Pj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPj4gaW5kZXggMDAwMDAwMDAwMC4uMzk4ZDQ1ZTJmNwo+
-PiAtLS0gL2Rldi9udWxsCj4+ICsrKyBiL2JvYXJkL3BpbmU2NC9waW5lY3ViZS9nZW5pbWFnZS5j
-ZmcKPj4gQEAgLTAsMCArMSwzNCBAQAo+PiAraW1hZ2UgYm9vdC52ZmF0IHsKPj4gK8KgwqDCoCB2
-ZmF0IHsKPj4gK8KgwqDCoMKgwqDCoMKgIGZpbGVzID0gewo+PiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCAiekltYWdlIiwKPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgInN1bjhpLXMzLXBpbmVj
-dWJlLmR0YiIsCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICJleHRsaW51eCIKPj4gK8KgwqDC
-oMKgwqDCoMKgIH0KPj4gK8KgwqDCoCB9Cj4+ICsKPj4gK8KgwqDCoCBzaXplID0gOE0KPj4gK30K
-Pj4gKwo+PiAraW1hZ2Ugc2RjYXJkLmltZyB7Cj4+ICvCoMKgwqAgaGRpbWFnZSB7Cj4+ICvCoMKg
-wqAgfQo+PiArCj4+ICvCoMKgwqAgcGFydGl0aW9uIHUtYm9vdCB7Cj4+ICvCoMKgwqDCoMKgwqDC
-oCBpbi1wYXJ0aXRpb24tdGFibGUgPSAibm8iCj4+ICvCoMKgwqDCoMKgwqDCoCBpbWFnZSA9ICJ1
-LWJvb3Qtc3VueGktd2l0aC1zcGwuYmluIgo+PiArwqDCoMKgwqDCoMKgwqAgb2Zmc2V0ID0gOEsK
-Pj4gK8KgwqDCoMKgwqDCoMKgIHNpemUgPSA1MDRLICMgNTEyS0IgLSA4S0IKPj4gK8KgwqDCoCB9
-Cj4+ICsKPj4gK8KgwqDCoCBwYXJ0aXRpb24gYm9vdCB7Cj4+ICvCoMKgwqDCoMKgwqDCoCBwYXJ0
-aXRpb24tdHlwZSA9IDB4Qwo+PiArwqDCoMKgwqDCoMKgwqAgYm9vdGFibGUgPSAidHJ1ZSIKPj4g
-K8KgwqDCoMKgwqDCoMKgIGltYWdlID0gImJvb3QudmZhdCIKPj4gK8KgwqDCoCB9Cj4+ICsKPj4g
-K8KgwqDCoCBwYXJ0aXRpb24gcm9vdGZzIHsKPj4gK8KgwqDCoMKgwqDCoMKgIHBhcnRpdGlvbi10
-eXBlID0gMHg4Mwo+PiArwqDCoMKgwqDCoMKgwqAgaW1hZ2UgPSAicm9vdGZzLmV4dDQiCj4+ICvC
-oMKgwqAgfQo+PiArfQo+PiBkaWZmIC0tZ2l0IGEvYm9hcmQvcGluZTY0L3BpbmVjdWJlL3Bvc3Qt
-YnVpbGQuc2ggCj4+IGIvYm9hcmQvcGluZTY0L3BpbmVjdWJlL3Bvc3QtYnVpbGQuc2gKPj4gbmV3
-IGZpbGUgbW9kZSAxMDA3NTUKPj4gaW5kZXggMDAwMDAwMDAwMC4uYmEyOTM3NWMwNQo+PiAtLS0g
-L2Rldi9udWxsCj4+ICsrKyBiL2JvYXJkL3BpbmU2NC9waW5lY3ViZS9wb3N0LWJ1aWxkLnNoCj4+
-IEBAIC0wLDAgKzEsNSBAQAo+PiArIyEvYmluL3NoCj4+ICsKPj4gK0JPQVJEX0RJUj0iJChkaXJu
-YW1lICQwKSIKPj4gKwo+PiAraW5zdGFsbCAtbSAwNjQ0IC1EICRCT0FSRF9ESVIvZXh0bGludXgu
-Y29uZiAKPj4gJEJJTkFSSUVTX0RJUi9leHRsaW51eC9leHRsaW51eC5jb25mCj4+IGRpZmYgLS1n
-aXQgYS9ib2FyZC9waW5lNjQvcGluZWN1YmUvcmVhZG1lLnR4dCAKPj4gYi9ib2FyZC9waW5lNjQv
-cGluZWN1YmUvcmVhZG1lLnR4dAo+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+PiBpbmRleCAwMDAw
-MDAwMDAwLi40Y2Y2ZGYyMTEwCj4+IC0tLSAvZGV2L251bGwKPj4gKysrIGIvYm9hcmQvcGluZTY0
-L3BpbmVjdWJlL3JlYWRtZS50eHQKPj4gQEAgLTAsMCArMSwzMSBAQAo+PiArSW50cm8KPj4gKz09
-PT09Cj4+ICsKPj4gK1RoaXMgZGlyZWN0b3J5IGNvbnRhaW5zIGEgQnVpbGRyb290IGNvbmZpZ3Vy
-YXRpb24gZm9yIGJ1aWxkaW5nIGEKPj4gK1BpbmU2NCBQaW5lQ3ViZS4KPj4gKwo+PiArQm9hcmQg
-aG9tZXBhZ2U6IGh0dHBzOi8vd3d3LnBpbmU2NC5vcmcvY3ViZS8KPj4gK0JvYXJkIHdpa2k6wqDC
-oMKgwqAgaHR0cHM6Ly93aWtpLnBpbmU2NC5vcmcvd2lraS9QaW5lQ3ViZQo+PiArCj4+ICtIb3cg
-dG8gYnVpbGQgaXQKPj4gKz09PT09PT09PT09PT09PQo+PiArCj4+ICvCoCAkIG1ha2UgcGluZTY0
-X3BpbmVjdWJlX2RlZmNvbmZpZwo+PiArwqAgJCBtYWtlCj4+ICsKPj4gK05vdGU6IHlvdSB3aWxs
-IG5lZWQgYWNjZXNzIHRvIHRoZSBpbnRlcm5ldCB0byBkb3dubG9hZCB0aGUgcmVxdWlyZWQKPj4g
-K3NvdXJjZXMuCj4+ICsKPj4gK0hvdyB0byB3cml0ZSB0aGUgU0QgY2FyZAo+PiArPT09PT09PT09
-PT09PT09PT09PT09PT09Cj4+ICsKPj4gK09uY2UgdGhlIGJ1aWxkIHByb2Nlc3MgaXMgZmluaXNo
-ZWQgeW91IHdpbGwgaGF2ZSBhbiBpbWFnZSBjYWxsZWQgCj4+ICJzZGNhcmQuaW1nIgo+PiAraW4g
-dGhlIG91dHB1dC9pbWFnZXMvIGRpcmVjdG9yeS4KPj4gKwo+PiArQ29weSB0aGUgYm9vdGFibGUg
-InNkY2FyZC5pbWciIG9udG8gYW4gU0QgY2FyZCB3aXRoICJkZCI6Cj4+ICsKPj4gK8KgICQgc3Vk
-byBkZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9L2Rldi9zZFgKPj4gK8KgICQgc3Vk
-byBzeW5jCj4+ICsKPj4gK0luc2VydCB0aGUgbWljcm8gU0RjYXJkIGluIHlvdXIgUGluZUN1YmUg
-YW5kIHBvd2VyIGl0IHVwLiBUaGUgY29uc29sZQo+PiAraXMgb24gdGhlIHNlcmlhbCBwb3J0IDIs
-IDExNTIwMCA4TjEgKGNoZWNrIFdpa2kgZm9yIGJvYXJkIHBpbm91dCkuCj4+IGRpZmYgLS1naXQg
-YS9jb25maWdzL3BpbmU2NF9waW5lY3ViZV9kZWZjb25maWcgCj4+IGIvY29uZmlncy9waW5lNjRf
-cGluZWN1YmVfZGVmY29uZmlnCj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4+IGluZGV4IDAwMDAw
-MDAwMDAuLjhmNjAxMTVmOGYKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysgYi9jb25maWdzL3BpbmU2
-NF9waW5lY3ViZV9kZWZjb25maWcKPj4gQEAgLTAsMCArMSw0NSBAQAo+PiArIyBUYXJnZXQgb3B0
-aW9ucwo+PiArQlIyX2FybT15Cj4+ICtCUjJfY29ydGV4X2E3PXkKPj4gK0JSMl9BUk1fRlBVX1ZG
-UFY0PXkKPiAKPiBBYm91dCB0aGlzIF5eXiB0aGVyZSBpcyBhbiBvbmdvaW5nIGRpc2N1c3Npb24g
-aWYgdXNlIG1peGVkIFZGVlA0K05FT04gb3IKPiBub3Q6Cj4gaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL3BpcGVybWFpbC9idWlsZHJvb3QvMjAyMi1BdWd1c3QvNjQ5NzcwLmh0bWwKPiAKPiBG
-b3IgdGhlIG1vbWVudCBpdCdzIG9rIHRvIG1lIGtlZXBpbmcgdGhpcyB3YXkgYW5kIHdoZW4gd2Un
-dmUgYWxsCj4gY2xhcmlmaWVkIEZQVSBzdHJhdGVneSBvbiAzMi1iaXQgQVJNIGNvcnRleCB0aGVu
-IHdlIGNhbiBtb2RpZnkgYW5kCj4geW91IGNvdWxkIHRlc3QgaXQgb3IgZXZlbiBwcm92aWRlIHRo
-ZSBwYXRjaCBmb3IgdGhpcy4KPiAKPiBIYXZlIHlvdSByZS10ZXN0ZWQgdGhlIGJvYXJkIHdpdGgg
-c3VjaCBtb2RpZmljYXRpb24/Cj4gCj4+ICsKPj4gKyMgVG9vbGNoYWluIG9wdGlvbnMKPj4gK0JS
-Ml9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19DVVNUT01fNV8xNT15Cj4+ICsKPj4gKyMgU3lz
-dGVtIGNvbmZpZ3VyYXRpb24KPj4gK0JSMl9UQVJHRVRfR0VORVJJQ19IT1NUTkFNRT0icGluZWN1
-YmUiCj4+ICtCUjJfVEFSR0VUX0dFTkVSSUNfSVNTVUU9IldlbGNvbWUgdG8gUGluZTY0IFBpbmVj
-dWJlIgo+PiArQlIyX1NZU1RFTV9ESENQPSJldGgwIgo+PiArQlIyX1JPT1RGU19QT1NUX0JVSUxE
-X1NDUklQVD0iYm9hcmQvcGluZTY0L3BpbmVjdWJlL3Bvc3QtYnVpbGQuc2giCj4+ICtCUjJfUk9P
-VEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCj4+ICtC
-UjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9Ii1jIGJvYXJkL3BpbmU2NC9waW5lY3ViZS9nZW5p
-bWFnZS5jZmciCj4+ICsKPj4gKyMgS2VybmVsCj4+ICtCUjJfTElOVVhfS0VSTkVMPXkKPj4gK0JS
-Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049eQo+PiArQlIyX0xJTlVYX0tFUk5FTF9DVVNU
-T01fVkVSU0lPTl9WQUxVRT0iNS4xNS42MSIKPj4gK0JSMl9MSU5VWF9LRVJORUxfREVGQ09ORklH
-PSJzdW54aSIKPj4gK0JSMl9MSU5VWF9LRVJORUxfRFRTX1NVUFBPUlQ9eQo+PiArQlIyX0xJTlVY
-X0tFUk5FTF9JTlRSRUVfRFRTX05BTUU9InN1bjhpLXMzLXBpbmVjdWJlIgo+PiArQlIyX0xJTlVY
-X0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQo+PiArCj4+ICsjIEZpbGVzeXN0ZW0KPj4gK0JS
-Ml9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+PiArQlIyX1RBUkdFVF9ST09URlNfRVhUMl80PXkKPj4g
-Kwo+PiArIyBCb290bG9hZGVyCj4+ICtCUjJfVEFSR0VUX1VCT09UPXkKPj4gK0JSMl9UQVJHRVRf
-VUJPT1RfQlVJTERfU1lTVEVNX0tDT05GSUc9eQo+PiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01f
-VkVSU0lPTj15Cj4+ICtCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDIy
-LjA0Igo+PiArQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9InBpbmVjdWJlIgo+PiAr
-QlIyX1RBUkdFVF9VQk9PVF9ORUVEU19EVEM9eQo+PiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19Q
-WUxJQkZEVD15Cj4+ICtCUjJfVEFSR0VUX1VCT09UX05FRURTX09QRU5TU0w9eQo+PiArQlIyX1RB
-UkdFVF9VQk9PVF9TUEw9eQo+PiArQlIyX1RBUkdFVF9VQk9PVF9TUExfTkFNRT0idS1ib290LXN1
-bnhpLXdpdGgtc3BsLmJpbiIKPj4gKwo+PiArIyBSZXF1aXJlZCBob3N0IHV0aWxpdGllcyBmb3Ig
-YnVpbGRpbmcgYW4gU0RDYXJkIGltYWdlCj4+ICtCUjJfUEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9
-eQo+PiArQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15Cj4+ICtCUjJfUEFDS0FHRV9IT1NUX01U
-T09MUz15Cj4gCj4gT3ZlcmFsbCBsb29rcyBnb29kIHRvIG1lLCBpdCBidWlsZHMgY29ycmVjdGx5
-IHdpdGggYnVpbGRyb290L2RvY2tlci1ydW4KPiBzbzoKPiBSZXZpZXdlZC1ieTogR2l1bGlvIEJl
-bmV0dGkgPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVlcmluZy5jb20+Cj4gCj4gRXhwZWN0
-IHRoaXMgcGF0Y2ggdG8gYmUgcGFydCBvZiAyMDIyLjExIHNpbmNlIDIwMjIuMDgtcmMxIGhhcyBi
-ZWVuCj4gcmVsZWFzZWQgb24gMTJ0aCBBdWd1c3QgYW5kIGZyb20gLXJjMSB0byAyMDIyLjA4IG9u
-bHkgYnVnIGZpeGVzIGFuZAo+IHNlY3VyaXR5IHBhdGNoZXMgYXJlIGFsbG93ZWQuCj4gCj4gVGhh
-bmtzIGZvciB0aGUgY29udHJpYnV0aW9uIQo+IAo+IEJlc3QgcmVnYXJkcwoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Thomas, All,
+
+On 2022-01-29 22:42 +0100, Thomas Devoogdt spake thusly:
+> Libsoup3 has a new API [1], packages using libsoup2 may not
+> compile with libsoup3 or may crash at runtime in unexpected
+> ways. So the default will (for now) stay on libsoup2.
+> A tracking table for the migration can be found here [2].
+
+Seeing the comment by Peter on a previous iteration [0]...
+
+I investigated a bit, and found that both libsoup2 and libsoup3 will
+detect one another and explicitly fail; these are commits:
+  - 9596a869414b Detect if libsoup2 is loaded in the same process at init
+  - e7f842c35e97 Error when libsoup3 is detected as already loaded in
+    the same process
+
+Also, I've checked, and the includes are instaleld in different
+directories and shared libraries have different filenames and SONAMES.
+
+So, in case both are enabeld at the same time, what would fail is only
+trhe case of a package loading one or the other via a third-party shared
+library, e.g.:
+
+    my-exec -> libA -> libsoup2
+           `-> libsoup3
+
+(or the other way around, or both through a library).
+
+I don't think that is going to be a very common situation.
+
+So, I think we should introduce libsoup3 as a different package. We have
+only 10 packages in Buildroot that use libsoup, with the following
+status (also looking at [2])
+
+  - gmpc: 2.4 only
+
+  - gssdp: should be 3.0 compatible since e3598a582783 (ci: Track
+    libsoup master again) which is a few days old, so not in a relase
+    yet (but at least, we could backport something...)
+
+  - gst1-plugins-good: it should be in-tree with c3455def2e7b (soup:
+    Runtime compatibility support for libsoup2 and libsoup3)
+
+  - gstd-1.x: 2.4 only
+
+  - gupnp-tools: 3.0 only since 09dfcdc65568 (Merge branch
+    'wip/gupnp-1.6' into 'master') and 7ee5fd9beb04 (Port to GUPnP 1.6
+    and libsoup 3), but no release yet.
+
+  - gvfs: 2.4 only for now
+
+  - libostree: 2.4 only
+
+  - midori: uses webkitgtk, so I expect like webkitgtk?
+
+  - webkitgtk: you seemed to imply that was OK [1]?
+
+  - wpewebkit: this being webkit stuff, I would guess OK like webkitgtk?
+
+So, the only one I can see conflicting is gstd: it links with libsoup3,
+but I expect it also links or loads gstreamer libs or plugins, so there
+will be a conflict.
+
+So, if we need libsoup3 for a package that has no libsoup2 support, then
+I think we should introduce a separate package. If we do not yet have a
+need for libsoup3, let's postpone the introdution of it.
+
+[0] https://lore.kernel.org/buildroot/87o83v7m5c.fsf@dell.be.48ers.dk/
+[1] https://lore.kernel.org/buildroot/CACXRmJjSOrww35YVVmkg_DEHDaG3ngQts4obTeDUsfsigM4cBQ@mail.gmail.com/
+[2] https://gitlab.gnome.org/GNOME/libsoup/-/issues/218
+
+Regards,
+Yann E. MORIN.
+
+> Changes for libsoup3:
+> - "0001-meson.build-set-c_std-to-gnu99.patch" is upstream now [3].
+> - The "gnome" option was dropped in [4].
+> - A new "libnghttp2" dependency is added since libsoup 2.99.6 (HTTP2 backend) [5].
+> 
+> [1] https://libsoup.org/libsoup-3.0/ch02.html
+> [2] https://gitlab.gnome.org/GNOME/libsoup/-/issues/218
+> [3] https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c3d431bdb094c59997f2a23e31e83f815ab667c
+> [4] https://gitlab.gnome.org/GNOME/libsoup/-/commit/3fcaa882c4eb29fd754cdb6dd06195632cb4b52a
+> [5] https://gitlab.gnome.org/GNOME/libsoup/-/commit/1a1d29c3114ca86c673d0c0b02a492d0962dcfe8
+> 
+> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@gmail.com>
+> ---
+>  .../0001-meson.build-set-c_std-to-gnu99.patch    |  0
+>  package/libsoup/Config.in                        | 16 ++++++++++++++++
+>  package/libsoup/libsoup.hash                     |  2 ++
+>  package/libsoup/libsoup.mk                       | 11 +++++++++++
+>  4 files changed, 29 insertions(+)
+>  rename package/libsoup/{ => 2.74.0}/0001-meson.build-set-c_std-to-gnu99.patch (100%)
+> 
+> diff --git a/package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch b/package/libsoup/2.74.0/0001-meson.build-set-c_std-to-gnu99.patch
+> similarity index 100%
+> rename from package/libsoup/0001-meson.build-set-c_std-to-gnu99.patch
+> rename to package/libsoup/2.74.0/0001-meson.build-set-c_std-to-gnu99.patch
+> diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+> index 02e8e8b578..959ddedef5 100644
+> --- a/package/libsoup/Config.in
+> +++ b/package/libsoup/Config.in
+> @@ -16,8 +16,24 @@ config BR2_PACKAGE_LIBSOUP
+>  
+>  if BR2_PACKAGE_LIBSOUP
+>  
+> +choice
+> +	prompt "libsoup version"
+> +	default BR2_PACKAGE_LIBSOUP_VERSION_2
+> +	help
+> +	  Select the version of libsoup you wish to use.
+> +
+> +config BR2_PACKAGE_LIBSOUP_VERSION_3
+> +	select BR2_PACKAGE_NGHTTP2
+> +	bool "libsoup3"
+> +
+> +config BR2_PACKAGE_LIBSOUP_VERSION_2
+> +	bool "libsoup2"
+> +
+> +endchoice
+> +
+>  config BR2_PACKAGE_LIBSOUP_GNOME
+>  	bool "libsoup-gnome"
+> +	depends on BR2_PACKAGE_LIBSOUP_VERSION_2
+>  	help
+>  	  Build libsoup-gnome library.
+>  
+> diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+> index 95c1c26eb4..6d87cc67e8 100644
+> --- a/package/libsoup/libsoup.hash
+> +++ b/package/libsoup/libsoup.hash
+> @@ -1,3 +1,5 @@
+> +# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/3.0/libsoup-3.0.0.sha256sum
+> +sha256  cde05f3e20114ce985cbd03d575ff74e5e41e70a218e5eb3068c4bf4710dbf2b  libsoup-3.0.0.tar.xz
+>  # From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.74/libsoup-2.74.0.sha256sum
+>  sha256  33b1d4e0d639456c675c227877e94a8078d731233e2d57689c11abcef7d3c48e  libsoup-2.74.0.tar.xz
+>  # Locally calculated
+> diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+> index 1a26714992..bd8ce40643 100644
+> --- a/package/libsoup/libsoup.mk
+> +++ b/package/libsoup/libsoup.mk
+> @@ -4,8 +4,13 @@
+>  #
+>  ################################################################################
+>  
+> +ifeq ($(BR2_PACKAGE_LIBSOUP_VERSION_3),y)
+> +LIBSOUP_VERSION_MAJOR = 3.0
+> +LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
+> +else
+>  LIBSOUP_VERSION_MAJOR = 2.74
+>  LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
+> +endif
+>  LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+>  LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+>  LIBSOUP_LICENSE = LGPL-2.0+
+> @@ -55,10 +60,16 @@ else
+>  LIBSOUP_CONF_OPTS += -Dgssapi=disabled
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBSOUP_VERSION_2),y)
+>  ifeq ($(BR2_PACKAGE_LIBSOUP_GNOME),y)
+>  LIBSOUP_CONF_OPTS += -Dgnome=true
+>  else
+>  LIBSOUP_CONF_OPTS += -Dgnome=false
+>  endif
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBSOUP_VERSION_3),y)
+> +LIBSOUP_DEPENDENCIES += nghttp2
+> +endif
+>  
+>  $(eval $(meson-package))
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
