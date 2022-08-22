@@ -1,65 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B834C28D13
-	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 22:14:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BAD7C28D13
+	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 22:15:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB390605D8;
-	Mon, 22 Aug 2022 22:14:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB390605D8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aLbUuJhP9rkj; Mon, 22 Aug 2022 22:14:46 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 136FD60585;
-	Mon, 22 Aug 2022 22:14:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 136FD60585
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 79EE91BF3EC
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:14:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55841400A8
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:14:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55841400A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id E06D840112;
+	Mon, 22 Aug 2022 22:14:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E06D840112
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H70ntOkaH35H for <buildroot@lists.busybox.net>;
- Mon, 22 Aug 2022 22:14:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4807400C6
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E4807400C6
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 22:14:42 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R096UXgdgog2; Mon, 22 Aug 2022 22:14:58 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 69D66400C6;
+	Mon, 22 Aug 2022 22:14:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69D66400C6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A52C41BF3EC
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:14:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F1B2405AE
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:14:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F1B2405AE
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FBNDNIZ9KPOv for <buildroot@lists.busybox.net>;
+ Mon, 22 Aug 2022 22:14:48 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32CDC4054E
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 32CDC4054E
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 22:14:48 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.166.117.143])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 8F08360129;
- Tue, 23 Aug 2022 00:14:38 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id C7EC96012E;
+ Tue, 23 Aug 2022 00:14:43 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 00:14:29 +0200
-Message-Id: <20220822221430.355066-1-ju.o@free.fr>
+Date: Tue, 23 Aug 2022 00:14:30 +0200
+Message-Id: <20220822221430.355066-2-ju.o@free.fr>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220822221430.355066-1-ju.o@free.fr>
+References: <20220822221430.355066-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661206480;
- bh=Wjwt34j/x4MLwg8LALYzSDH8LOanKyYqw+O5dkUDCG4=;
- h=From:To:Cc:Subject:Date:From;
- b=mYuELmyBzACjlpfSkZ5Oxvh6nO/YdRQMSVA4Qnrm/K/crdvaXyx8CCcHNj8abpzXT
- czke6MPaM+lA2fXgUsO+T9grnjNZh5YM0962uzLKhCX8zm2AVOj8aDOKBj/Dut/btx
- e7eQED6PYmomp63dAiZIbO3oxxvXbeSd3CYcn1W2BQPjJmXbielwfO8UXhkG/Rx257
- NxcK/4jazwZlHPdYyXhhVEpBRBvNYkUmjZXHtOUlYlwwIs/0qLagSzRxRI8DWLkEBS
- 9dHjZY71fqKy/jLxvd05UqagbXZDkMzaJUnTJE+w9LmoDnqtu9cKsNeHvY7SclQUeW
- vdA3rc7UDwHXQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1661206486;
+ bh=VxEIMg5T1lNc4bWrPMIHH9Vh9RO3GW/tUSRf4krVio4=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=PC5F8SUomcidAYJ+ANNZCTf9adlS3KgDtlljv7R5O28faMqGFk1B0CZRCat1Nm4Ob
+ oep3R7IGrEyn4/AKSOxnzBosWg0vM0XGuL7ku8+U/iLzpE/DQQf+nOpCZX6mgbM++4
+ bznBFNXwLLWEtyDmZ0F0VaZypO26psVC8qydlUHPM/yCVusMvyE9Aay5X102y3Zf6b
+ joyCRA0bGJgxM3hD1R8JUKMWLh5YQ2xbRJvsOv+Lh8HJPm6PjLU1tShAgsHLQOj0bl
+ gxKzJ5frXYkPYqtI6YrLO8NgEdgovUb9sUYz/Ki+s6536slXp+woIkh1EAK+z0vlCT
+ zo5KGV0nZxeEQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mYuELmyB
-Subject: [Buildroot] [RFC next 1/2] linux: fix builds for kernels < 5.6 and
- host-gcc >= 10
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PC5F8SUo
+Subject: [Buildroot] [RFC next 2/2]
+ support/testing/tests/core/test_kernel3_10: new test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,76 +79,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-During a linux-backports update, it was found that kernel v3.10.108 was
-failing to compile. See:
-https://lists.buildroot.org/pipermail/buildroot/2022-August/649507.html
-
-This issue was introduced by commit 9b41b54be07711c10ad13ce157be272ed1cf402e
-"linux: fix build with host-gcc 10+", which removes all declarations of
-"yylloc" symbols in the dtc parser. This symbol is generated by bison, if the
-"%locations" directive is provided in the parser. See:
-https://git.savannah.gnu.org/cgit/bison.git/tree/doc/bison.texi?h=v3.8.2#n5984
-
-Kernel versions < 5.6 did not include this directive, so removing all
-yylloc declararions in the parser also was failing for those version.
-
-In the kernel, dtc was updated to v1.5.1-22-gc40aeb60b47a in:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0cec114e36606412908a35695a5db944cec2e3db
-This commit is included in kernel v5.6.
-
-This dtc update include the dtc commit:
-https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=7150286225476345bd6e7312331e3baf4d621c32
-which adds the '%locations' directive.
-
-This commit fixes the issue by programmatically adding the '%locations'
-Bison directive, if it's not found in the parser file.
-
-Fixes:
+This commit add a test to check that a relatively old 3.10 kernel are
+building successfully in Buildroot. This test was written for
+investigating the bug described in:
 - https://bugs.busybox.net/show_bug.cgi?id=14971
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Tested by:
-- Building a recent kernel:
-  qemu_aarch64_virt_defconfig (Kernel v5.15.18)
-- Building an old kernel:
-  qemu_arm_vexpress_defconfig with kernel 3.10.108
----
- linux/linux.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Tested with:
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 3d9ac37959..f3eb9c32cb 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -155,6 +155,7 @@ LINUX_MAKE_FLAGS = \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	WERROR=0 \
-+	REGENERATE_PARSERS=1 \
- 	DEPMOD=$(HOST_DIR)/sbin/depmod
- 
- ifeq ($(BR2_REPRODUCIBLE),y)
-@@ -286,6 +287,19 @@ define LINUX_DROP_YYLLOC
- endef
- LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
- 
-+# Kernel version < 5.6 breaks if host-gcc version is >= 10 and
-+# 'yylloc' symbol is removed in previous hook, due to missing
-+# '%locations' bison directive in dtc-parser.y.  See:
-+# https://bugs.busybox.net/show_bug.cgi?id=14971
-+define LINUX_ADD_DTC_LOCATIONS
-+	$(Q)DTC_PARSER=$(@D)/scripts/dtc/dtc-parser.y; \
-+	if test -e "$${DTC_PARSER}" \
-+		&& ! grep -Eq '^%locations$$' "$${DTC_PARSER}" ; then \
-+		$(SED) '/^%{$$/i %locations' "$${DTC_PARSER}"; \
-+	fi
-+endef
-+LINUX_POST_PATCH_HOOKS += LINUX_ADD_DTC_LOCATIONS
+    python3 -m flake8 \
+        support/testing/tests/core/test_kernel3_10.py
+    [no-output]
+
+    support/testing/run-tests \
+        -d dl \
+        -o output_folder tests.core.test_kernel3_10.TestOldKernel3_10
+    ...
+    OK
+---
+ DEVELOPERS                                    |  1 +
+ support/testing/tests/core/test_kernel3_10.py | 43 +++++++++++++++++++
+ 2 files changed, 44 insertions(+)
+ create mode 100644 support/testing/tests/core/test_kernel3_10.py
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4287fd9cf7..5cf63e919e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1680,6 +1680,7 @@ F:	package/python-gnupg/
+ F:	package/python-pyalsa/
+ F:	package/riscv-isa-sim/
+ F:	package/zynaddsubfx/
++F:	support/testing/tests/core/test_kernel3_10.py
+ F:	support/testing/tests/package/sample_python_distro.py
+ F:	support/testing/tests/package/sample_python_gnupg.py
+ F:	support/testing/tests/package/sample_python_pyalsa.py
+diff --git a/support/testing/tests/core/test_kernel3_10.py b/support/testing/tests/core/test_kernel3_10.py
+new file mode 100644
+index 0000000000..5ff5ed1cad
+--- /dev/null
++++ b/support/testing/tests/core/test_kernel3_10.py
+@@ -0,0 +1,43 @@
++import os
 +
- # Older linux kernels use deprecated perl constructs in timeconst.pl
- # that were removed for perl 5.22+ so it breaks on newer distributions
- # Try a dry-run patch to see if this applies, if it does go ahead
++import infra.basetest
++
++
++# For testing the compilation of an old 3.10 kernel, we use a armv7
++# gcc5 bootlin toolchain, which also includes 3.10 kernel headers.
++class TestOldKernel3_10(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_EABIHF=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.108"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++        BR2_TOOLCHAIN_EXTERNAL_CXX=y
++        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++        BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
++        BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
++        BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--stable-2017.05-toolchains-1-1.tar.bz2"
++        """
++
++    def test_run(self):
++        initrd = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "zImage")
++        dtb = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
++        self.emulator.boot(arch="armv7", kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "vexpress-a9", "-dtb", dtb, "-initrd", initrd])
++        self.emulator.login()
++        self.assertRunOk("true")
 -- 
 2.37.2
 
