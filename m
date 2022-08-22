@@ -1,67 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BAD7C28D13
-	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 22:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C3BBC28D13
+	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 22:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E06D840112;
-	Mon, 22 Aug 2022 22:14:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E06D840112
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD9F5814B8;
+	Mon, 22 Aug 2022 22:15:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD9F5814B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R096UXgdgog2; Mon, 22 Aug 2022 22:14:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EVQScf4sp4e2; Mon, 22 Aug 2022 22:15:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69D66400C6;
-	Mon, 22 Aug 2022 22:14:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69D66400C6
+	by smtp1.osuosl.org (Postfix) with ESMTP id E170F8141B;
+	Mon, 22 Aug 2022 22:15:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E170F8141B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A52C41BF3EC
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:14:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 984151BF3EC
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:15:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F1B2405AE
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:14:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F1B2405AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71AF54071E
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:15:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71AF54071E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FBNDNIZ9KPOv for <buildroot@lists.busybox.net>;
- Mon, 22 Aug 2022 22:14:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32CDC4054E
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 32CDC4054E
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 22:14:48 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.166.117.143])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C7EC96012E;
- Tue, 23 Aug 2022 00:14:43 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+ with ESMTP id D1b04D64xJIK for <buildroot@lists.busybox.net>;
+ Mon, 22 Aug 2022 22:15:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE977405E7
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
+ [IPv6:2a00:1450:4864:20::135])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EE977405E7
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 22:15:27 +0000 (UTC)
+Received: by mail-lf1-x135.google.com with SMTP id be9so9253699lfb.12
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 15:15:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=hbFN+NMgMsIjdcyZZRZA+rqFx03SLwhR28FKe0PD6fE=;
+ b=LZbFyREz3IyWUYBuAhNa1m8AgsstJosS9UdO0C82IhcX03Y28JUYNpE0zsp4zTgbnL
+ HjotIoSesq5agERk7eupJlRCysDIvLqp5I4PG8amrrx/DxbaCEKQ46nJpXgYd8X5Sh1l
+ iCfQdlaWARZcacMFYdiivbvwpwUZQS/fUxQk1f+KmUYww8SYH8EieqkEuCDJg3op2iHT
+ aMmLP+6pmNJTdCr3ZjrhoVPJ7u61yVhtsk7fRXJjg+yewaEd6mlW0WMwbfm4ktik+Xms
+ cWlGTVkH4P+L7C/xS8VgCKPzxeQuULGyRt93m9y+39nD2h1Btj7s31JK1NIU++XNTz6J
+ mDOA==
+X-Gm-Message-State: ACgBeo2LcLrWtQIAvQgeMJ7v4AqT0+QNFS/YLDj8jvLsomT3GdRS2ASX
+ ZLN7J20lSpSQL0KnArAsSws7g5DjqUU=
+X-Google-Smtp-Source: AA6agR7LFi9lqUZmxqZX9l2ciPwrkI2Ya3E7Lqh22EvjERve36GmPq+wYFP3XZG8a5gyEtFSRF8wqg==
+X-Received: by 2002:a05:6512:3151:b0:492:f0b1:b840 with SMTP id
+ s17-20020a056512315100b00492f0b1b840mr792413lfi.120.1661206525484; 
+ Mon, 22 Aug 2022 15:15:25 -0700 (PDT)
+Received: from nibiru.. ([2a00:1370:8172:1de6:b11c:c9f6:aeed:f134])
+ by smtp.gmail.com with ESMTPSA id
+ r5-20020ac25a45000000b00492f049258asm300771lfn.65.2022.08.22.15.15.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 22 Aug 2022 15:15:25 -0700 (PDT)
+From: Sergey Bobrenok <bobrofon@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 00:14:30 +0200
-Message-Id: <20220822221430.355066-2-ju.o@free.fr>
+Date: Tue, 23 Aug 2022 01:14:52 +0300
+Message-Id: <20220822221452.388659-1-bobrofon@gmail.com>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220822221430.355066-1-ju.o@free.fr>
-References: <20220822221430.355066-1-ju.o@free.fr>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661206486;
- bh=VxEIMg5T1lNc4bWrPMIHH9Vh9RO3GW/tUSRf4krVio4=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=PC5F8SUomcidAYJ+ANNZCTf9adlS3KgDtlljv7R5O28faMqGFk1B0CZRCat1Nm4Ob
- oep3R7IGrEyn4/AKSOxnzBosWg0vM0XGuL7ku8+U/iLzpE/DQQf+nOpCZX6mgbM++4
- bznBFNXwLLWEtyDmZ0F0VaZypO26psVC8qydlUHPM/yCVusMvyE9Aay5X102y3Zf6b
- joyCRA0bGJgxM3hD1R8JUKMWLh5YQ2xbRJvsOv+Lh8HJPm6PjLU1tShAgsHLQOj0bl
- gxKzJ5frXYkPYqtI6YrLO8NgEdgovUb9sUYz/Ki+s6536slXp+woIkh1EAK+z0vlCT
- zo5KGV0nZxeEQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=hbFN+NMgMsIjdcyZZRZA+rqFx03SLwhR28FKe0PD6fE=;
+ b=RIM/IfnCvdYm+q7ZWKflEfit0dWbCCqUOIhzYBzx2kr/qSITLCa9RMH27HAXbcuX3+
+ AG4KNynrMdqFpVfX6jlwGsGAahwtYreg+qkjrrCj9xo7zv6aGcMlgN8y6V0+lmZGdumn
+ weFtFd0a2sLZKlCpjcWZVs5PvhQlc4jseL8JKrf/HcQtlb9JhclDqDY3BhYFajkv2x66
+ gFaB0T0J/RQXBCCmGOv97NI/HjOzkR+QhBUzxLNMF4xK0cJIhUqNqPofZxSszOAxyN1Y
+ 6HiepcDbddyf+Tzaz+TyWzwLZGdTczVzerrZsrrtCe5j3SbVFV8MoVCIQDRvO620KxmW
+ C/JQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=PC5F8SUo
-Subject: [Buildroot] [RFC next 2/2]
- support/testing/tests/core/test_kernel3_10: new test
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=RIM/IfnC
+Subject: [Buildroot] [PATCH] package/sdbus-cpp: bump to version 1.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,97 +92,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Sergey Bobrenok <bobrofon@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit add a test to check that a relatively old 3.10 kernel are
-building successfully in Buildroot. This test was written for
-investigating the bug described in:
-- https://bugs.busybox.net/show_bug.cgi?id=14971
+Changelog:
+https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v1.2.0
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
 ---
-Tested with:
+ package/sdbus-cpp/sdbus-cpp.hash | 2 +-
+ package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    python3 -m flake8 \
-        support/testing/tests/core/test_kernel3_10.py
-    [no-output]
-
-    support/testing/run-tests \
-        -d dl \
-        -o output_folder tests.core.test_kernel3_10.TestOldKernel3_10
-    ...
-    OK
----
- DEVELOPERS                                    |  1 +
- support/testing/tests/core/test_kernel3_10.py | 43 +++++++++++++++++++
- 2 files changed, 44 insertions(+)
- create mode 100644 support/testing/tests/core/test_kernel3_10.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4287fd9cf7..5cf63e919e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1680,6 +1680,7 @@ F:	package/python-gnupg/
- F:	package/python-pyalsa/
- F:	package/riscv-isa-sim/
- F:	package/zynaddsubfx/
-+F:	support/testing/tests/core/test_kernel3_10.py
- F:	support/testing/tests/package/sample_python_distro.py
- F:	support/testing/tests/package/sample_python_gnupg.py
- F:	support/testing/tests/package/sample_python_pyalsa.py
-diff --git a/support/testing/tests/core/test_kernel3_10.py b/support/testing/tests/core/test_kernel3_10.py
-new file mode 100644
-index 0000000000..5ff5ed1cad
---- /dev/null
-+++ b/support/testing/tests/core/test_kernel3_10.py
-@@ -0,0 +1,43 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+# For testing the compilation of an old 3.10 kernel, we use a armv7
-+# gcc5 bootlin toolchain, which also includes 3.10 kernel headers.
-+class TestOldKernel3_10(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_EABIHF=y
-+        BR2_ARM_ENABLE_NEON=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.108"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-+        BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--glibc--stable-2017.05-toolchains-1-1.tar.bz2"
-+        """
-+
-+    def test_run(self):
-+        initrd = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "zImage")
-+        dtb = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
-+        self.emulator.boot(arch="armv7", kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "vexpress-a9", "-dtb", dtb, "-initrd", initrd])
-+        self.emulator.login()
-+        self.assertRunOk("true")
+diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
+index 3a0e863a86..169fad2807 100644
+--- a/package/sdbus-cpp/sdbus-cpp.hash
++++ b/package/sdbus-cpp/sdbus-cpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  35e939fdd9c796522702c9c8762dd59b5c47f3440c01ba9feb9921c042780b55  v1.1.0.tar.gz
++sha256  7f7231904abb6a996b8c18ddc5fb50078ef5dff5191649abf9f127aff41d24e9  v1.2.0.tar.gz
+ sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
+ sha256  be43debbf06a38325616054a39e44ed5afde4ed21b99de197488a4a306d47e39  COPYING-LGPL-Exception
+diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
+index e0fbc5c856..0e8d74cfcd 100644
+--- a/package/sdbus-cpp/sdbus-cpp.mk
++++ b/package/sdbus-cpp/sdbus-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDBUS_CPP_VERSION = 1.1.0
++SDBUS_CPP_VERSION = 1.2.0
+ SDBUS_CPP_SOURCE = v$(SDBUS_CPP_VERSION).tar.gz
+ SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
+ SDBUS_CPP_INSTALL_STAGING = YES
 -- 
 2.37.2
 
