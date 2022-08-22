@@ -4,81 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5943C28D13
-	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 07:57:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82A95C28D13
+	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 08:08:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10B74409F5;
-	Mon, 22 Aug 2022 07:57:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10B74409F5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 025F6410D3;
+	Mon, 22 Aug 2022 08:08:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 025F6410D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Qz46DOdE-KAa; Mon, 22 Aug 2022 07:57:24 +0000 (UTC)
+	with ESMTP id Co5NLtT5d0dI; Mon, 22 Aug 2022 08:08:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0344F409E9;
-	Mon, 22 Aug 2022 07:57:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0344F409E9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E880C1BF577
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 07:57:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B92C9410A6;
+	Mon, 22 Aug 2022 08:08:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B92C9410A6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C0651BF321
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 08:08:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D063B40169
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 07:57:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D063B40169
+ by smtp1.osuosl.org (Postfix) with ESMTP id 256FA81456
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 08:08:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 256FA81456
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y997FFUplbZ6 for <buildroot@lists.busybox.net>;
- Mon, 22 Aug 2022 07:57:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5AC5400D2
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com
- [IPv6:2607:f8b0:4864:20::1034])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E5AC5400D2
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 07:57:19 +0000 (UTC)
-Received: by mail-pj1-x1034.google.com with SMTP id pm13so1236348pjb.5
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 00:57:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc;
- bh=IvwLtPL6bkhPUE7MCihsYmU96psUEYndzmwaXopMsyU=;
- b=UEUVcfUZQ79Ckl0c2zwxHlzG4iygWPC9zdGL66j+UfF3uxom59Ik50y7UfIK++xT8W
- rN0ljsM8BnM62KUwV1ew6Hf/A5ze+YaGl/W9+WMJg890dgpw+WXFo/LoVgZLf3NjnMbM
- H/PRqyfQNwsy2PmPWBtUtACHs++YWinWF+F7eCQLl0n2nqJpP8nnI2JRhPHSSRBET5F7
- TICDbujegbopfOxeJUTdrqBtwLgNTwE5wEkmZX7ofHOUmW0J2XLSFxykVNLcKL7yFNUF
- sES7CHj+fuDAHaa6LoMgM04migcGQlHLHZPVFWcCgST5uwPg6fQsW0ZbKJX71Ihz6c54
- Th3Q==
-X-Gm-Message-State: ACgBeo2f59AXd3Vy7oDfpmnXupuxftkAdbWdT4YM6F1e/gmSGZJWS4Wq
- JIlVzH/NOD5w7BxXWaidzi0DHnv8xaiFS3Y2eeYWlsItD8s=
-X-Google-Smtp-Source: AA6agR7LCkAPKirSLq3PB91ILOip3Sq2HGGNlOSl7n72YUDg2YontuMTwZHS52fKNhG+keUh9jfd/+sv0d4EUwjS0Vc=
-X-Received: by 2002:a17:90b:4acc:b0:1f5:7f05:12e8 with SMTP id
- mh12-20020a17090b4acc00b001f57f0512e8mr21194840pjb.92.1661155039312; Mon, 22
- Aug 2022 00:57:19 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XOwAgZHgGv3w for <buildroot@lists.busybox.net>;
+ Mon, 22 Aug 2022 08:08:35 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A55E081428
+Received: from smtprelay02.ispgateway.de (smtprelay02.ispgateway.de
+ [80.67.18.14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A55E081428
+ for <buildroot@busybox.net>; Mon, 22 Aug 2022 08:08:35 +0000 (UTC)
+Received: from [91.21.124.120] (helo=exchange.go-sys.de)
+ by smtprelay02.ispgateway.de with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
+ (envelope-from <mf@go-sys.de>) id 1oQ2UQ-0004i8-HB
+ for buildroot@busybox.net; Mon, 22 Aug 2022 10:08:54 +0200
+Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
+ (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2507.12; Mon, 22
+ Aug 2022 10:08:31 +0200
+Received: from go-sys.de (192.168.1.100) by exchange.go-sys.de (192.168.1.17)
+ with Microsoft SMTP Server id 15.1.2507.12 via Frontend Transport;
+ Mon, 22 Aug 2022 10:08:31 +0200
+From: Michael Fischer <mf@go-sys.de>
+To: <buildroot@busybox.net>
+Date: Mon, 22 Aug 2022 10:08:29 +0200
+Message-ID: <20220822080829.30980-1-mf@go-sys.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220822060201.3333515-1-james.hilliard1@gmail.com>
- <20220822071611.GW2167049@scaer>
-In-Reply-To: <20220822071611.GW2167049@scaer>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 22 Aug 2022 01:57:07 -0600
-Message-ID: <CADvTj4oewb-iE9OMkHKak=VyFiMejG810FwWGikjcLWpTqWUqA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc;
- bh=IvwLtPL6bkhPUE7MCihsYmU96psUEYndzmwaXopMsyU=;
- b=P0LQFz+h9K6IPeiV6jdZWS+4Gd7rovC3Ktv1M7nnWANbN+/3VkJc1y/xkWf2QisviP
- 1ziMZDra/E5fh0o/vKwfVfdqfbUpAo7Ei1bgotN2HobtNQpE4CvksQlGbA3H7iVrRzYk
- bAukZnzSI2ilE2pXBWMEuzQjXEPnlv6vidnuQsoZwuj2H67JPmCRPzCyZx9aMpnK7FsJ
- jsPNI2HMhAVoe/BSoZBcYRxiGtINmmRiwswm0FIu1ly8Qs23Zb6aQuh81Kj1xNTmH6jG
- gs0Rub4yTiRPta/khb/3pe2VgjsSWQHFWJPe9CgYD7k216KWwwPsYte6n6AFt1C9FPMz
- Y4tw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=P0LQFz+h
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/pkg-python: clean
- conflicting pep517 packages before install
+X-C2ProcessedOrg: 77b28032-c882-4527-ad15-de6c89cb71cd
+X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
+X-OrganizationHeadersPreserved: exchange.go-sys.local
+X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: bump version to 2.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,75 +70,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Hoffmann <marcus.hoffmann@othermo.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Michael Fischer <mf@go-sys.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Aug 22, 2022 at 1:16 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2022-08-22 00:02 -0600, James Hilliard spake thusly:
-> > The python installer package isn't able to overwrite packages that
->
-> s/packages/files of packges/
+New version numbering scheme, similar to GLib and Flatpak
+version 2.0.24 is now 2.24.0
 
-Changed in v3
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+---
+ package/sdl2/sdl2.hash | 4 ++--
+ package/sdl2/sdl2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->
-> > already exist, this causes problems when doing a rebuild or update
-> > without a full clean.
-> >
-> > To fix this we can use functionality from importlib to identify and
-> > remove any conflicting python package files before installation.
-> >
-> > Since we are adding this functionality to our pyinstaller.py script
-> > we must also use pyinstaller.py for host python packages to avoid
-> > hitting this issue there as well.
->
-> Please split in two:
->   - first pach to use ur pyinstaller for host packages
->   - second patch to cleanup
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index a5dad638bb..981c98531e 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.22.tar.gz.sig
+-sha256  fe7cbf3127882e3fc7259a75a0cb585620272c51745d3852ab9dd87960697f2e  SDL2-2.0.22.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.0.tar.gz.sig
++sha256  91e4c34b1768f92d399b078e171448c6af18cafda743987ed2064a28954d6d97  SDL2-2.24.0.tar.gz
+ # Locally calculated
+ sha256  fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426  LICENSE.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 94533fa9b4..c380d9910e 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_VERSION = 2.0.22
++SDL2_VERSION = 2.24.0
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
+-- 
+2.20.1
 
-Split in v3:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220822075418.903230-1-james.hilliard1@gmail.com/
-https://patchwork.ozlabs.org/project/buildroot/patch/20220822075418.903230-2-james.hilliard1@gmail.com/
-
->
-> [--SNIP--]
-> > diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-> > index 5794e3a195..b147827821 100644
-> > --- a/package/pkg-python.mk
-> > +++ b/package/pkg-python.mk
-> > @@ -139,6 +139,14 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
-> >  HOST_PKG_PYTHON_PEP517_ENV = \
-> >       $(HOST_PKG_PYTHON_ENV)
-> >
-> > +HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
-> > +     --interpreter=/bin/python \
->
-> Why is this not $(HOST_DIR)/bin/python ?
-
-Fixed in v3:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220822075418.903230-1-james.hilliard1@gmail.com/
-
->
-> There is no guarantee that there is a python interpreter on the build
-> machine, and we anyway want to use our python, not the system one.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
