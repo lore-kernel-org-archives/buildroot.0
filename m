@@ -1,72 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB1FAC28D13
-	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 15:01:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4800BC28D13
+	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 15:24:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 710BC60E9D;
-	Mon, 22 Aug 2022 15:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 710BC60E9D
+	by smtp4.osuosl.org (Postfix) with ESMTP id C321341606;
+	Mon, 22 Aug 2022 15:23:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C321341606
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9_lpWrE9wrok; Mon, 22 Aug 2022 15:01:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CwD0mf6zmZQF; Mon, 22 Aug 2022 15:23:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E8FA60B52;
-	Mon, 22 Aug 2022 15:01:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E8FA60B52
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 45E0A1BF402
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 15:01:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6674408DB;
+	Mon, 22 Aug 2022 15:23:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6674408DB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A0F841BF387
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 15:23:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E4BD60B52
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 15:01:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E4BD60B52
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A116408DB
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 15:23:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A116408DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gYJYNPjbL9PJ for <buildroot@lists.busybox.net>;
- Mon, 22 Aug 2022 15:01:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE7C260AA7
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BE7C260AA7
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 15:01:19 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:961:575d:b2ff:71eb])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C30D16013A;
- Mon, 22 Aug 2022 17:01:12 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 22 Aug 2022 17:01:12 +0200
-Date: Mon, 22 Aug 2022 17:01:12 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220822150112.GD2167049@scaer>
-References: <20220804221559.46394-1-thomas.petazzoni@bootlin.com>
- <20220804221559.46394-3-thomas.petazzoni@bootlin.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mhfkYKd3E0Cm for <buildroot@lists.busybox.net>;
+ Mon, 22 Aug 2022 15:23:54 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F2C8408D3
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1F2C8408D3
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 15:23:54 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id b16so14407432edd.4
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 08:23:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc;
+ bh=XvWh41XNSCMDuYMBSOg6yeJPC0//SvvGPhexltXINDQ=;
+ b=KWidLqbqNQuF3tsYlbre+CBM6b++DP4sw59iaLPsreRBbCKs47uVQ42m3fByAVE3e6
+ uyYyWn8hU4HbD2YfH1RVRB+GcHSBu8fLuXWEG0/Fe8bWVyewnsgI9sE1LI881dRYnp1/
+ UeE4po5SgiNBJ7l6tUkn/Fj5UaXyQyXDRt79JyaKRY4xMtAp6TmbtJ/pLxKT3O1V6V1W
+ JFKQ8fp4DiBaeOG9svH7+LoiiEJkjCcpwD7wP21h3DsAmOuSfyk2hNDIlG12ATwNV8oJ
+ QB8hth2IQ59lrSYGkRnW9wvvy2ugcSShnbQ+di6zoxFV2DRvz4daLGfcRDyQd+Z5+MPf
+ cbog==
+X-Gm-Message-State: ACgBeo2aUEN1hrGbOqwYYQwA7sUPePVNXyxuxQSWtNKVVlnmIY4YbP0S
+ 4/KkOQqvg8nlXUubs1zhHXRvmRoTfvY=
+X-Google-Smtp-Source: AA6agR5L/YR20pi38B7YQLZWg83HZFimzHVE4TVlazUSbYPwDBNiIKSQa6CyGCPAb3kn45rDtmVMog==
+X-Received: by 2002:a05:6402:3583:b0:43d:6943:44a with SMTP id
+ y3-20020a056402358300b0043d6943044amr16412696edc.409.1661181832050; 
+ Mon, 22 Aug 2022 08:23:52 -0700 (PDT)
+Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
+ [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
+ k5-20020aa7d8c5000000b0044657ecfbb5sm5707086eds.13.2022.08.22.08.23.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 22 Aug 2022 08:23:51 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+To: buildroot@buildroot.org
+Date: Mon, 22 Aug 2022 17:23:39 +0200
+Message-Id: <20220822152339.2188387-1-thomas.devoogdt@barco.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220804221559.46394-3-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661180476;
- bh=WfRaj2vn3pO7AFl4yjJwFdXhW9A9y9YEd3zSrpgBYMM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=oyMnT6pur9HR7s6DZYRpBNnDc9OknAgj+HyXb6NsjUyFkx1m63kHsksmzaFUVDuju
- NMyWa3Mj/X3kmHB5KIb7A8uSVfbyAkTYzzHnf/0YfvXrbUVQ+uEXRhZE4jxv4bmmkh
- FMhbsXU3qD5vhW1gTPiFiYK8mVBi5RcHf3qCKK8Uihbqg9chvq5Sli7dxLMGSr9O4z
- eXIWu0CTCRnSJzffA61vgggBLLhyNgrL/sdQsLyxLcv2CyhBAWwCsjjORpqp1c1IdF
- PchaCnjGi6sYBl815oAC5kwBCpS+UBG7LEs26ZausNn+Gr99iGpV/srGGNlTDhX0PG
- i5BAClQihrRsA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=oyMnT6pu
-Subject: Re: [Buildroot] [PATCH 3/3] package/sdl2: rework KMS/DRM video
- driver dependencies
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc;
+ bh=XvWh41XNSCMDuYMBSOg6yeJPC0//SvvGPhexltXINDQ=;
+ b=BqiUuy05lEM2IV2fzSEH9X4p+n0QFKOR4XrmJ/LR7QYAq7bkUcUOduCGRI8/lgBzdS
+ lTvyzANd4gB9jGjVX6R7sAIBQbIpRTxyJggPOo9Ul4Z6eyAanJ0v5jiaYNHdTq6oM3bh
+ Jp/eig+vusOfJiBRI2lVRD7CUuHxNAJKhFi+Ug9VNXfdsUrqHipo6OWs5ZLj4FwtTfMy
+ uG9mWXieaTkOhxEJ+ym6/aIG86ttY3df/kH16MDYFTrPxk4W+6xlYYK4ptglmidu+f5W
+ 0VugAbCtJK4EGmh66lVS0bTuotlkrxe7Du3y/gAcKNnfhdxvHc4j5D5jUPzOIEPOPYOt
+ 2x/g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=BqiUuy05
+Subject: [Buildroot] [PATCH] package/webkitgtk: drop unused flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,107 +93,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>, buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Upstream dropped in:
+https://github.com/WebKit/WebKit/commit/aa6631a6189aaa4541a2d2e89993a4989103d161
 
-On 2022-08-05 00:15 +0200, Thomas Petazzoni via buildroot spake thusly:
-> The KMS/DRM video driver of SDL2 can currently only be enabled when
-> mesa3d is the OpenGL provider, as the option has a dependency on
-> BR2_PACKAGE_MESA3D_GBM. Now that we have a libgbm virtual package and
-> BR2_PACKAGE_HAS_LIBGBM, we can do better.
-> 
-> However, this has uncovered a number of additional related issues that
-> are resolved at the same time. Here are some details:
-> 
->  * the 'depends on BR2_PACKAGE_LIBDRM' is changed to a select, as we
->    normally do for library dependencies. Due to this, we inherit a
->    BR2_TOOLCHAIN_HAS_THREADS dependency.
-> 
->  * the 'depends on BR2_PACKAGE_MESA3D_GBM' is changed to 'depends on
->    BR2_PACKAGE_HAS_LIBGBM', and the 'mesa3d' dependency is changed to
->    'libgbm'.
-> 
->  * the KMS/DRM video driver in SDL2 needs EGL (hence the additional
->    'depends on BR2_PACKAGE_HAS_LIBEGL' and the libegbl dependency is
->    added in the .mk file). But in turn, EGL support is only checked
->    when either OpenGL or OpenGLES support is enabled in SDL2, which is
->    why we add logic to select the appropriate options.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+---
+ package/webkitgtk/webkitgtk.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-I've forward-ported the tzo other patches to thhe next bracnh, fixed the
-dependencies of the comment, and applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/sdl2/Config.in | 17 ++++++++++-------
->  package/sdl2/sdl2.mk   |  2 +-
->  2 files changed, 11 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
-> index 2ad45e4d00..bce7d4e272 100644
-> --- a/package/sdl2/Config.in
-> +++ b/package/sdl2/Config.in
-> @@ -31,14 +31,17 @@ comment "X11 video driver needs X.org"
->  
->  config BR2_PACKAGE_SDL2_KMSDRM
->  	bool "KMS/DRM video driver"
-> -	depends on BR2_PACKAGE_LIBDRM
-> -	depends on BR2_PACKAGE_MESA3D_GBM
-> +	depends on BR2_PACKAGE_HAS_LIBGBM
-> +	depends on BR2_PACKAGE_SDL2_OPENGL || BR2_PACKAGE_SDL2_OPENGLES
-> +	depends on BR2_PACKAGE_HAS_LIBEGL
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_LIBDRM
->  
-> -comment "KMS/DRM video driver needs libdrm"
-> -	depends on !BR2_PACKAGE_LIBDRM
-> -
-> -comment "KMS/DRM video driver needs mesa3d w/ GBM"
-> -	depends on !BR2_PACKAGE_MESA3D_GBM
-> +comment "KMS/DRM video driver needs a GBM provider, OpenGL or OpenGLES support, toolchain w/threads"
-> +	depends on !BR2_PACKAGE_HAS_LIBGBM || \
-> +		!(BR2_PACKAGE_SDL2_OPENGL || BR2_PACKAGE_SDL2_OPENGLES) || \
-> +		BR2_PACKAGE_HAS_LIBEGL || \
-> +		BR2_TOOLCHAIN_HAS_THREADS
->  
->  config BR2_PACKAGE_SDL2_OPENGL
->  	bool "OpenGL (GLX)"
-> diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-> index c5e7968cec..b5e09b6078 100644
-> --- a/package/sdl2/sdl2.mk
-> +++ b/package/sdl2/sdl2.mk
-> @@ -169,7 +169,7 @@ SDL2_CONF_OPTS += --disable-alsa
->  endif
->  
->  ifeq ($(BR2_PACKAGE_SDL2_KMSDRM),y)
-> -SDL2_DEPENDENCIES += libdrm mesa3d
-> +SDL2_DEPENDENCIES += libdrm libgbm libegl
->  SDL2_CONF_OPTS += --enable-video-kmsdrm
->  else
->  SDL2_CONF_OPTS += --disable-video-kmsdrm
-> -- 
-> 2.37.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 7b81e76695..0e8f794abc 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -99,7 +99,6 @@ endif
+ # 2D CANVAS acceleration requires OpenGL proper with cairo-gl
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ WEBKITGTK_CONF_OPTS += \
+-	-DENABLE_ACCELERATED_2D_CANVAS=ON \
+ 	-DENABLE_GLES2=OFF \
+ 	-DENABLE_X11_TARGET=ON
+ WEBKITGTK_DEPENDENCIES += libgl \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
