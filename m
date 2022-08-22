@@ -4,64 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4824CC28D13
-	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 22:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B834C28D13
+	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 22:14:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7966560670;
-	Mon, 22 Aug 2022 22:07:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7966560670
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB390605D8;
+	Mon, 22 Aug 2022 22:14:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB390605D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cViOREem4WVu; Mon, 22 Aug 2022 22:07:11 +0000 (UTC)
+	with ESMTP id aLbUuJhP9rkj; Mon, 22 Aug 2022 22:14:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33FA2605DB;
-	Mon, 22 Aug 2022 22:07:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33FA2605DB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 136FD60585;
+	Mon, 22 Aug 2022 22:14:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 136FD60585
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 530101BF3EC
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:07:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 79EE91BF3EC
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:14:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3534D400EA
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:07:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3534D400EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55841400A8
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 22:14:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55841400A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VvsOWZyXrbeF for <buildroot@lists.busybox.net>;
- Mon, 22 Aug 2022 22:07:07 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F51F400A8
-Received: from smtpcmd13158.aruba.it (smtpcmd13158.aruba.it [62.149.156.158])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F51F400A8
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 22:07:05 +0000 (UTC)
-Received: from localhost.localdomain ([86.32.48.35])
- by Aruba Outgoing Smtp  with ESMTPSA
- id QFZWoDP1QeEtAQFZWoILdx; Tue, 23 Aug 2022 00:07:03 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ with ESMTP id H70ntOkaH35H for <buildroot@lists.busybox.net>;
+ Mon, 22 Aug 2022 22:14:43 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4807400C6
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E4807400C6
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 22:14:42 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.166.117.143])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 8F08360129;
+ Tue, 23 Aug 2022 00:14:38 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 00:06:54 +0200
-Message-Id: <20220822220654.171970-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue, 23 Aug 2022 00:14:29 +0200
+Message-Id: <20220822221430.355066-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfJg6QNATM8fIi/4LxOeC3X59/wG3LQm6SlWHhAmztVtuPm/8g9Gd7V/3GhQu+2xHlp89Z1mzjnO5SzKsUGa921Tmgvoz4PONwoQzlX6rMcL65yjC0alT
- Yp2GBow5YivFQaep9HtSglKr3+bRLhBq4n5kyAW68vikdTHCsChsp31QTCUotU16vNGxYDlViVeBhYwC8Xr9VPacBQr27iubXEUxds8yPWAHBFFrsTYnR+VU
- ORtQ/VUVXH4xS2OiPOh8AVQRTsKkXAkGL7LrlLfpkSw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1661206023; bh=yMVpzffZctDxwbQZHJhh7kou3zracB6XX5jIWThBjB4=;
- h=From:To:Subject:Date:MIME-Version;
- b=dEoQsEavoZmzarDWjxHVjWxV8Db4yvkGWOvPPGkTctUco2OdfMMf2FIfaqfub6hQX
- sxHIGr2KCHYK/8z9Lu+rQmGg86S+VMtXyvBSIHUTgFTJT+7y4xbqxUbBjzpnAl71wh
- igApFTaRDwHB/5ObpshOyPgrAq2qxoU2Q2qFBM79J75FwwflJLEBC6KtbQfScMDcGI
- dcXBJZ7JtPFstoh2+/OPjXJ6WZ/BI9la8+aKIFFbzTAnzFuROW4U92NrdedhoNwTzL
- 7UmY5z7LK8LMI8yM82Higoji126m9cfPBBaZR5Mg1jCMN0FwwHDAcNUxb/R4+zTg9u
- avo/quCpBfv7Q==
+ d=free.fr; s=smtp-20201208; t=1661206480;
+ bh=Wjwt34j/x4MLwg8LALYzSDH8LOanKyYqw+O5dkUDCG4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=mYuELmyBzACjlpfSkZ5Oxvh6nO/YdRQMSVA4Qnrm/K/crdvaXyx8CCcHNj8abpzXT
+ czke6MPaM+lA2fXgUsO+T9grnjNZh5YM0962uzLKhCX8zm2AVOj8aDOKBj/Dut/btx
+ e7eQED6PYmomp63dAiZIbO3oxxvXbeSd3CYcn1W2BQPjJmXbielwfO8UXhkG/Rx257
+ NxcK/4jazwZlHPdYyXhhVEpBRBvNYkUmjZXHtOUlYlwwIs/0qLagSzRxRI8DWLkEBS
+ 9dHjZY71fqKy/jLxvd05UqagbXZDkMzaJUnTJE+w9LmoDnqtu9cKsNeHvY7SclQUeW
+ vdA3rc7UDwHXQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=dEoQsEav
-Subject: [Buildroot] [PATCH] package/sunxi-mali-utgard-driver: update
- Config.in link to the new project URL
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mYuELmyB
+Subject: [Buildroot] [RFC next 1/2] linux: fix builds for kernels < 5.6 and
+ host-gcc >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,29 +71,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/sunxi-mali-utgard-driver/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+During a linux-backports update, it was found that kernel v3.10.108 was
+failing to compile. See:
+https://lists.buildroot.org/pipermail/buildroot/2022-August/649507.html
 
-diff --git a/package/sunxi-mali-utgard-driver/Config.in b/package/sunxi-mali-utgard-driver/Config.in
-index 244283f44d..ba4d1919ce 100644
---- a/package/sunxi-mali-utgard-driver/Config.in
-+++ b/package/sunxi-mali-utgard-driver/Config.in
-@@ -36,4 +36,4 @@ config BR2_PACKAGE_SUNXI_MALI_UTGARD_DRIVER
- 	    since the driver requires at least double buffering and
- 	    fails to work with the default value(100).
+This issue was introduced by commit 9b41b54be07711c10ad13ce157be272ed1cf402e
+"linux: fix build with host-gcc 10+", which removes all declarations of
+"yylloc" symbols in the dtc parser. This symbol is generated by bison, if the
+"%locations" directive is provided in the parser. See:
+https://git.savannah.gnu.org/cgit/bison.git/tree/doc/bison.texi?h=v3.8.2#n5984
+
+Kernel versions < 5.6 did not include this directive, so removing all
+yylloc declararions in the parser also was failing for those version.
+
+In the kernel, dtc was updated to v1.5.1-22-gc40aeb60b47a in:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0cec114e36606412908a35695a5db944cec2e3db
+This commit is included in kernel v5.6.
+
+This dtc update include the dtc commit:
+https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=7150286225476345bd6e7312331e3baf4d621c32
+which adds the '%locations' directive.
+
+This commit fixes the issue by programmatically adding the '%locations'
+Bison directive, if it's not found in the parser file.
+
+Fixes:
+- https://bugs.busybox.net/show_bug.cgi?id=14971
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Tested by:
+- Building a recent kernel:
+  qemu_aarch64_virt_defconfig (Kernel v5.15.18)
+- Building an old kernel:
+  qemu_arm_vexpress_defconfig with kernel 3.10.108
+---
+ linux/linux.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 3d9ac37959..f3eb9c32cb 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -155,6 +155,7 @@ LINUX_MAKE_FLAGS = \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	WERROR=0 \
++	REGENERATE_PARSERS=1 \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
  
--	  https://github.com/mripard/sunxi-mali/blob/master/README.md
-+	  https://github.com/giuliobenetti/sunxi-mali/blob/master/README.md
+ ifeq ($(BR2_REPRODUCIBLE),y)
+@@ -286,6 +287,19 @@ define LINUX_DROP_YYLLOC
+ endef
+ LINUX_POST_PATCH_HOOKS += LINUX_DROP_YYLLOC
+ 
++# Kernel version < 5.6 breaks if host-gcc version is >= 10 and
++# 'yylloc' symbol is removed in previous hook, due to missing
++# '%locations' bison directive in dtc-parser.y.  See:
++# https://bugs.busybox.net/show_bug.cgi?id=14971
++define LINUX_ADD_DTC_LOCATIONS
++	$(Q)DTC_PARSER=$(@D)/scripts/dtc/dtc-parser.y; \
++	if test -e "$${DTC_PARSER}" \
++		&& ! grep -Eq '^%locations$$' "$${DTC_PARSER}" ; then \
++		$(SED) '/^%{$$/i %locations' "$${DTC_PARSER}"; \
++	fi
++endef
++LINUX_POST_PATCH_HOOKS += LINUX_ADD_DTC_LOCATIONS
++
+ # Older linux kernels use deprecated perl constructs in timeconst.pl
+ # that were removed for perl 5.22+ so it breaks on newer distributions
+ # Try a dry-run patch to see if this applies, if it does go ahead
 -- 
-2.34.1
+2.37.2
 
 _______________________________________________
 buildroot mailing list
