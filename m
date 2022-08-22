@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3894C32772
-	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 08:40:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E072C32789
+	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 08:43:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D98E81C18;
-	Mon, 22 Aug 2022 08:40:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D98E81C18
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11764402C1;
+	Mon, 22 Aug 2022 08:43:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11764402C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EG2I8isxGept; Mon, 22 Aug 2022 08:40:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pkyd2zh843Hp; Mon, 22 Aug 2022 08:43:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C20381AC4;
-	Mon, 22 Aug 2022 08:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C20381AC4
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC0AA40993;
+	Mon, 22 Aug 2022 08:43:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC0AA40993
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 838B71BF321
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 08:40:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 32D011BF321
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 08:43:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57D9F81ABA
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 08:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57D9F81ABA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08E5C81063
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 08:43:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08E5C81063
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7kuxrUu3WG-o for <buildroot@lists.busybox.net>;
- Mon, 22 Aug 2022 08:40:52 +0000 (UTC)
+ with ESMTP id k3wWp7GXk4XZ for <buildroot@lists.busybox.net>;
+ Mon, 22 Aug 2022 08:43:36 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E68F81AC4
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com
- [IPv6:2607:f8b0:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E68F81AC4
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 08:40:51 +0000 (UTC)
-Received: by mail-ot1-x334.google.com with SMTP id
- z22-20020a056830129600b0063711f456ceso7232310otp.7
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 01:40:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F5D381026
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
+ [IPv6:2607:f8b0:4864:20::22c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1F5D381026
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 08:43:36 +0000 (UTC)
+Received: by mail-oi1-x22c.google.com with SMTP id o204so3926415oia.12
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 01:43:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=irG6EZ08yfO5CrMadvLfsiIZN8CMCvozMdDbQgxFC0k=;
- b=ybJkZuTVTl0d6zizzL+FdSdt5WY05fV+pw82vmwJCW9lTMSv8nlXwTC11mMdT0zLsA
- HGYshDjE/wUp+iKFV/b8oU4q4yZGpVE/Ye6xZIp03u7eGV/PZVAOs+G5EJWbJCbSkcxr
- f5QrYBjzgaK8TTygg7p4JyJvreSWwloxmFSVFqqGLc71jvdDrC6B0AgfSG114QYmNiWr
- b1msgR1NCbzZA3rqIqioVany4IxN0mOgoZG/Go+2j8IPClULpLTJgt6qR8Z6/S/FTchN
- mQzXqPaFdJcewGaID/XktOIPsXmDjyxY80wvRynBIE9A5RDkyj7LDTzQeXcTZI8qtqko
- 2O3A==
-X-Gm-Message-State: ACgBeo2085JlLgiwTDu26bpr5XxtPalFJQgnCe5mqyDlSdQzuOGUQmA0
- 9AZJ8LP/RgPZeGb6ySXSgR4It6oot/s=
-X-Google-Smtp-Source: AA6agR6w2y2mDEuZ1jxJ9PXA77BFVe2dd1I3gcupYAV7HleTrnXlcJpgs8IYMBWl89NhYiOc4LzJow==
-X-Received: by 2002:a05:6830:4194:b0:638:be5e:55e8 with SMTP id
- r20-20020a056830419400b00638be5e55e8mr7556678otu.361.1661157650317; 
- Mon, 22 Aug 2022 01:40:50 -0700 (PDT)
+ bh=ljVCN5nlKrZo9y9tIStKV8r7J0e6MKGuSkyudaonONE=;
+ b=kommMh7zYl+hFOD9NKCDVHS87ASzG48zd9aOd/VVyHiLETSk73f7teqw+hWhQQwsIs
+ ThaunKEJw+CWIYMEI0ZWPIRpSGpB/7SsZS74KHaA7eniVtjdMHdr0A06Hasy1ADmKpnx
+ TLF49mMH0T1TPnQ63f8vkqnCBsLwV+XG3xF+WmQIboP3lpWAWosUfct0DWWIQCXHz10e
+ dlcEjlud1UdWMIXU6WZU4Ql6ieQnXEOo70sGo29UsmqeFH1sIlIdI3czph4UvUia2TUR
+ g7OoSF+l3QI6GtszR4IiN94/Y0wpxfjOe9G4Qvugh/h99ilGKOLcyQTgbDX4AnyjQqlb
+ 1/sg==
+X-Gm-Message-State: ACgBeo38Je6H9O0NbKGApfFZI+366QAlPcXpPpYUmEA5p2C7lzOOxG+P
+ pZjdAtU87sPxY1qqBDhzkeCOyTiozak=
+X-Google-Smtp-Source: AA6agR6gPJfprL9AQaCSWZ0V3po1BvdEQiEiIQLCv5UBdW61rSeekqbQjIw3l9CSrCceFTmrZqJzhg==
+X-Received: by 2002:a05:6808:1489:b0:344:7ff8:54e8 with SMTP id
+ e9-20020a056808148900b003447ff854e8mr10799694oiw.195.1661157814641; 
+ Mon, 22 Aug 2022 01:43:34 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net.
  [71.33.138.207]) by smtp.gmail.com with ESMTPSA id
- r26-20020a056830135a00b006391bdbb361sm1194412otq.31.2022.08.22.01.40.49
+ g22-20020a056830161600b0063715f7eef8sm2807488otr.38.2022.08.22.01.43.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Aug 2022 01:40:49 -0700 (PDT)
+ Mon, 22 Aug 2022 01:43:33 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 22 Aug 2022 02:40:47 -0600
-Message-Id: <20220822084047.2846789-1-james.hilliard1@gmail.com>
+Date: Mon, 22 Aug 2022 02:43:31 -0600
+Message-Id: <20220822084331.3261657-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=irG6EZ08yfO5CrMadvLfsiIZN8CMCvozMdDbQgxFC0k=;
- b=ayCxVXsSx8yijiClWbBX3fXUg5bq9SAEvm2lk9wqvpq2CnWuIngkOZXKwVEoVQtOO7
- Ek0zbwWRjpnpRKHzMoZLwRYozSWwrECucgAS3vB0yRHwDFKesIb/O/Y8B1yCQvGTSJJ6
- gJ3EJLI1G9F4gq5KCOEbIDF/4Himp8iwNZhDP/gRp/xfNjwBF754BtztUSgOlPPDFXMY
- CyviM5TSg6s253nObRb/G9kC+Yu0GNpbWpTTBG6Y2/hd9UHFdqw3N4VTg6qs+yh3GSn8
- RuOVRnnx7j5JFNO/w4NA4eH920TbpVDOT3H+g2bB1PBhgVpiJqAi08wEeLMHuw0YDxb3
- 79QQ==
+ bh=ljVCN5nlKrZo9y9tIStKV8r7J0e6MKGuSkyudaonONE=;
+ b=YdoFZq/y5FehSalSGnJi3kNjZRLfvw9KLwwMV8PTZ4V6pCdk3VJP2GsbxAIF7jv9h9
+ yGJqXX+PVRR6dHVTy4PI+YP2p9A7AmXikGDJsZY7Ap691VM5kecYNJvwCHdre0V8renS
+ LgdAqGDMhne+X+2eOka3Bu2ztzny4oeet+7tVLWhWYVzjP4E4SJVEuswO6cW30+Lj/wh
+ sr/AQvfh2QsaSRhiiJ7Cz7UI8KiswZ5TWTSvnjKk60WCY2dnrPrTbjosr2zS45KIaY73
+ egoteKsKQE26HXq3suWydykemz3N55RGfGmi4XwR6t+QaHeRGx6pJpixllydwVKV5EzI
+ qrfQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ayCxVXsS
-Subject: [Buildroot] [PATCH 1/1] package/python-pycares: bump to version
- 4.2.2
+ header.a=rsa-sha256 header.s=20210112 header.b=YdoFZq/y
+Subject: [Buildroot] [PATCH 1/1] package/python-typing-inspect: bump to
+ version 0.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,38 +101,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pycares/python-pycares.hash | 4 ++--
- package/python-pycares/python-pycares.mk   | 4 ++--
+ package/python-typing-inspect/python-typing-inspect.hash | 4 ++--
+ package/python-typing-inspect/python-typing-inspect.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
-index 2037c17172..13f640b1c1 100644
---- a/package/python-pycares/python-pycares.hash
-+++ b/package/python-pycares/python-pycares.hash
+diff --git a/package/python-typing-inspect/python-typing-inspect.hash b/package/python-typing-inspect/python-typing-inspect.hash
+index f3ff6b642b..737373d609 100644
+--- a/package/python-typing-inspect/python-typing-inspect.hash
++++ b/package/python-typing-inspect/python-typing-inspect.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycares/json
--md5  92fa9622ba42cb895d598910722e80b5  pycares-4.2.1.tar.gz
--sha256  735b4f75fd0f595c4e9184da18cd87737f46bc81a64ea41f4edce2b6b68d46d2  pycares-4.2.1.tar.gz
-+md5  7706a01fdbfc593564b63ac0d71031d9  pycares-4.2.2.tar.gz
-+sha256  e1f57a8004370080694bd6fb969a1ffc9171a59c6824d54f791c1b2e4d298385  pycares-4.2.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/typing-inspect/json
+-md5  1444feceb8213bd94cfece3c6d4ffc5c  typing_inspect-0.7.1.tar.gz
+-sha256  047d4097d9b17f46531bf6f014356111a1b6fb821a24fe7ac909853ca2a782aa  typing_inspect-0.7.1.tar.gz
++md5  d56c8277a55d0bf061275df1ea3785d5  typing_inspect-0.8.0.tar.gz
++sha256  8b1ff0c400943b6145df8119c41c244ca8207f1f10c9c057aeed1560e4806e3d  typing_inspect-0.8.0.tar.gz
  # Locally computed sha256 checksums
- sha256  427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
-index e2b813b278..858adbf33b 100644
---- a/package/python-pycares/python-pycares.mk
-+++ b/package/python-pycares/python-pycares.mk
+ sha256  f9d3567d00ca2337f769fb28c553cc590213ecefed4ed599110c10ded2ea0117  LICENSE
+diff --git a/package/python-typing-inspect/python-typing-inspect.mk b/package/python-typing-inspect/python-typing-inspect.mk
+index eef1f0b586..8573bb1c27 100644
+--- a/package/python-typing-inspect/python-typing-inspect.mk
++++ b/package/python-typing-inspect/python-typing-inspect.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCARES_VERSION = 4.2.1
-+PYTHON_PYCARES_VERSION = 4.2.2
- PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
--PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/99/da/d3d20bc7bd5baadeea04ee84db16f1f07557138c313bd6200e1cffab5bee
-+PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/ac/a3/21594384c2398420dd7f6e8656aeb5a2c15128ddf2b85ef5f4403342e18d
- PYTHON_PYCARES_SETUP_TYPE = setuptools
- PYTHON_PYCARES_LICENSE = MIT
- PYTHON_PYCARES_LICENSE_FILES = LICENSE
+-PYTHON_TYPING_INSPECT_VERSION = 0.7.1
++PYTHON_TYPING_INSPECT_VERSION = 0.8.0
+ PYTHON_TYPING_INSPECT_SOURCE = typing_inspect-$(PYTHON_TYPING_INSPECT_VERSION).tar.gz
+-PYTHON_TYPING_INSPECT_SITE = https://files.pythonhosted.org/packages/c3/da/864ce66818e308b38209d4b1ef0585921d28eb07621ba7d905a0e96bcc80
++PYTHON_TYPING_INSPECT_SITE = https://files.pythonhosted.org/packages/72/23/bed3ea644bcd77ffe9a7f591eb058c00739747e33ab94d80cc4319ddee8e
+ PYTHON_TYPING_INSPECT_SETUP_TYPE = setuptools
+ PYTHON_TYPING_INSPECT_LICENSE = MIT
+ PYTHON_TYPING_INSPECT_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
