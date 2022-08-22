@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 625E6C32789
-	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 09:55:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA537C28D13
+	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 09:55:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7FBB60D62;
-	Mon, 22 Aug 2022 09:55:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7FBB60D62
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61D1C8175C;
+	Mon, 22 Aug 2022 09:55:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61D1C8175C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ICtgLkq-kGhm; Mon, 22 Aug 2022 09:55:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dbo7dqtI2EIE; Mon, 22 Aug 2022 09:55:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FBF7606F2;
-	Mon, 22 Aug 2022 09:55:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FBF7606F2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0CEBF1BF306
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E6A88143E;
+	Mon, 22 Aug 2022 09:55:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E6A88143E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 10D371BF995
  for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 09:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E96094048D
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC1AD4098C
  for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 09:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E96094048D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC1AD4098C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pzg6644Jw014 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lt9gK9CE1mb2 for <buildroot@lists.busybox.net>;
  Mon, 22 Aug 2022 09:55:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 16006400D2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B91A40941
  for <buildroot@buildroot.org>; Mon, 22 Aug 2022 09:55:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16006400D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B91A40941
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 180D287A82; Mon, 22 Aug 2022 09:40:38 +0000 (UTC)
+ id 2152287A4B; Mon, 22 Aug 2022 09:40:38 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 22 Aug 2022 11:39:27 +0200
+Date: Mon, 22 Aug 2022 11:54:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d349d50dac5a264c174cb6e0fd9f197ea780f2ed
-X-Git-Newrev: d752f73b0c0e4ba50738cd1e7f4472f61fce9089
+X-Git-Oldrev: d752f73b0c0e4ba50738cd1e7f4472f61fce9089
+X-Git-Newrev: fc429c4dc6d8f42596c0c6b40ebcce8c2a71877c
 X-Patchwork-Hint: ignore
-Message-Id: <20220822094038.180D287A82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-python: use pyinstaller.py for
- host python packages
+Message-Id: <20220822094038.2152287A4B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-python: clean conflicting
+ pep517 packages before install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,64 +63,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d752f73b0c0e4ba50738cd1e7f4472f61fce9089
+commit: https://git.buildroot.net/buildroot/commit/?id=fc429c4dc6d8f42596c0c6b40ebcce8c2a71877c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The python installer cli isn't able to overwrite files of packages
+The python installer package isn't able to overwrite files of packges
 that already exist, this causes problems when doing a rebuild or
 update without a full clean.
 
-Since we need to add functionality to our pyinstaller.py script to fix
-this issue we must also use pyinstaller.py for host python packages.
+To fix this we can use functionality from importlib to identify and
+remove any conflicting python package files before installation.
+
+We also need to use internals from python-installer, as we want to use
+the same logic as pyinstaller uses internally for getting the scheme so
+that we ensure we clean the correct package scheme (we want it to be the
+same as the one we're installing)
+
+Fixes:
+Traceback (most recent call last):
+  File "/home/buildroot/buildroot/support/scripts/pyinstaller.py", line 69, in <module>
+    main()
+  File "/home/buildroot/buildroot/support/scripts/pyinstaller.py", line 61, in main
+    install(
+  File "/home/buildroot/buildroot/output/host/lib/python3.10/site-packages/installer/_core.py", line 109, in install
+    record = destination.write_file(
+  File "/home/buildroot/buildroot/output/host/lib/python3.10/site-packages/installer/destinations.py", line 207, in write_file
+    return self.write_to_fs(scheme, path_, stream, is_executable)
+  File "/home/buildroot/buildroot/output/host/lib/python3.10/site-packages/installer/destinations.py", line 167, in write_to_fs
+    raise FileExistsError(message)
+FileExistsError: File already exists: /home/buildroot/buildroot/output/target/usr/lib/python3.10/site-packages/tinycss2/__init__.py
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Tested-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+[yann.morin.1998@free.fr:
+  - extend commit log about the use of the installer internals (the
+    symbols prefixed with '_')
+  - check path.files against explicitly None
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-python.mk          | 12 ++++++++++--
- support/scripts/pyinstaller.py |  0
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ support/scripts/pyinstaller.py | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index 5794e3a195..c15a168f60 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -139,6 +139,14 @@ PKG_PYTHON_PEP517_INSTALL_STAGING_OPTS = \
- HOST_PKG_PYTHON_PEP517_ENV = \
- 	$(HOST_PKG_PYTHON_ENV)
- 
-+HOST_PKG_PYTHON_PEP517_INSTALL_OPTS = \
-+	--interpreter=$(HOST_DIR)/bin/python \
-+	--script-kind=posix \
-+	--purelib=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
-+	--headers=$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR) \
-+	--scripts=$(HOST_DIR)/bin \
-+	--data=$(HOST_DIR)
-+
- HOST_PKG_PYTHON_PEP517_BOOTSTRAP_INSTALL_OPTS = \
- 	--installdir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
- 
-@@ -200,7 +208,7 @@ $(2)_BASE_INSTALL_STAGING_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/*
- else
- $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
- $(2)_BASE_BUILD_CMD = -m build -n -w
--$(2)_BASE_INSTALL_CMD = -m installer dist/*
-+$(2)_BASE_INSTALL_CMD = $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
- endif
- else ifeq ($$($(2)_SETUP_TYPE),flit-bootstrap)
- ifeq ($(4),target)
-@@ -208,7 +216,7 @@ $$(error flit-bootstrap setup type only supported for host packages)
- else
- $(2)_BASE_ENV = $$(HOST_PKG_PYTHON_PEP517_ENV)
- $(2)_BASE_BUILD_CMD = -m flit_core.wheel
--$(2)_BASE_INSTALL_CMD ?= -m installer dist/*
-+$(2)_BASE_INSTALL_CMD ?= $(TOPDIR)/support/scripts/pyinstaller.py dist/* $$(HOST_PKG_PYTHON_PEP517_INSTALL_OPTS)
- endif
- else
- $$(error "Invalid $(2)_SETUP_TYPE. Valid options are 'distutils', 'setuptools', 'pep517' or 'flit'.")
 diff --git a/support/scripts/pyinstaller.py b/support/scripts/pyinstaller.py
-old mode 100755
-new mode 100644
+index 6dd9242327..9e689eea2d 100644
+--- a/support/scripts/pyinstaller.py
++++ b/support/scripts/pyinstaller.py
+@@ -2,12 +2,34 @@
+ 
+ import argparse
+ import glob
++import pathlib
++
++from importlib.machinery import PathFinder
++from importlib.metadata import DistributionFinder
+ 
+ from installer import install
++from installer._core import _process_WHEEL_file
+ from installer.destinations import SchemeDictionaryDestination
+ from installer.sources import WheelFile
+ 
+ 
++def clean(source, destination):
++    scheme = _process_WHEEL_file(source)
++    scheme_path = destination.scheme_dict[scheme]
++    context = DistributionFinder.Context(
++        name=source.distribution,
++        path=[scheme_path],
++    )
++    for path in PathFinder.find_distributions(context=context):
++        # path.files is either an iterable, or None
++        if path.files is None:
++            continue
++        for file in path.files:
++            file_path = pathlib.Path(file.locate())
++            if file_path.exists():
++                file_path.unlink()
++
++
+ def main():
+     """Entry point for CLI."""
+     ap = argparse.ArgumentParser("python pyinstaller.py")
+@@ -58,6 +80,7 @@ def main():
+     )
+ 
+     with WheelFile.open(glob.glob(args.wheel_file)[0]) as source:
++        clean(source, destination)
+         install(
+             source=source,
+             destination=destination,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
