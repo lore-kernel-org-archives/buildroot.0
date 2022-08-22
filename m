@@ -1,104 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9515AC28D13
-	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 06:56:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3119DC28D13
+	for <buildroot@archiver.kernel.org>; Mon, 22 Aug 2022 07:08:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDBE560BF5;
-	Mon, 22 Aug 2022 06:56:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDBE560BF5
+	by smtp4.osuosl.org (Postfix) with ESMTP id A506540276;
+	Mon, 22 Aug 2022 07:08:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A506540276
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ldGukvCivAN1; Mon, 22 Aug 2022 06:56:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2SiL_VvixOlb; Mon, 22 Aug 2022 07:08:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A184860B54;
-	Mon, 22 Aug 2022 06:56:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A184860B54
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A336C1BF32E
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 06:56:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5091840923;
+	Mon, 22 Aug 2022 07:08:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5091840923
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 851791BF577
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 07:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7DBBD60B54
- for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 06:56:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DBBD60B54
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65E8140923
+ for <buildroot@lists.busybox.net>; Mon, 22 Aug 2022 07:08:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65E8140923
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iVYdhj9Ywd35 for <buildroot@lists.busybox.net>;
- Mon, 22 Aug 2022 06:56:27 +0000 (UTC)
-X-Greylist: delayed 00:37:23 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 459D96059D
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
- [148.163.158.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 459D96059D
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 06:56:27 +0000 (UTC)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
- by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27M3TB9M017723
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 06:19:03 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com
- [159.122.73.71])
- by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j41xe3ru3-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 06:19:02 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
- by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27M66SMV032422
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 06:19:01 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com
- (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
- by ppma02fra.de.ibm.com with ESMTP id 3j2q88segv-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 06:19:00 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com
- [9.149.105.58])
- by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 27M6IwTZ27787552
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 06:18:58 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 88A834C04A
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 06:18:58 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 62A224C044
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 06:18:58 +0000 (GMT)
-Received: from oc8242746057.ibm.com.com (unknown [9.171.2.208])
- by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 06:18:58 +0000 (GMT)
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uMCwW9cHA4pX for <buildroot@lists.busybox.net>;
+ Mon, 22 Aug 2022 07:08:04 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DCE8408D5
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
+ [IPv6:2607:f8b0:4864:20::235])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2DCE8408D5
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 07:08:04 +0000 (UTC)
+Received: by mail-oi1-x235.google.com with SMTP id bb16so11207879oib.11
+ for <buildroot@buildroot.org>; Mon, 22 Aug 2022 00:08:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=d9pnmIhJFmipmsZqlS0kbveW0cwOTqm9Q5TnDHlNves=;
+ b=gLMZ+wogPsze4JqsMY3Cfx+wphjzL2kzkd2HFeNeJYnoakTQaPtSvXR9G/Y539MeyO
+ +eM5r2MDSfa1hByIbE6uXtUs5QctAGXgvPgxezay4LaAVKb8TZ7zqyDAVDtiHMOHsiOl
+ P6/cRFCqPe07SpYsYNlb5RJW2cq52KY7AaTy8PoGOda/gzG6PWXeGEVq8yETWJNWCDTX
+ YDr6r2t6QQ3Ueu9D8zJkVK7X7wq+zVIAuSj32BvIZxNWT8EaYP0B/lqLDMH3GTcB9Z/n
+ oWR5SYwYZkeqtMYL9d6mOBAJpVgH29Uy45gTk7S3gc+6b+7Bf0767J5VnIfXTmBDhV/D
+ VNpQ==
+X-Gm-Message-State: ACgBeo1oA7ju8//03LUDneJN+GjZZR3rEnvXue8zOniZAzg4Qj16O3uk
+ VYsOXSBV56EyCjT92jgr4FhAwHGu/jQ=
+X-Google-Smtp-Source: AA6agR4ut5eJ8irc3Dpn+iqsg+3eAoMhMH2X8KDuT3ACBQAYC78L8Fx8rD7YJj+iGh0g9C4LXlqP2A==
+X-Received: by 2002:a05:6808:ec3:b0:2ec:8fcb:1d4a with SMTP id
+ q3-20020a0568080ec300b002ec8fcb1d4amr11083987oiv.162.1661152081805; 
+ Mon, 22 Aug 2022 00:08:01 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net.
+ [71.33.138.207]) by smtp.gmail.com with ESMTPSA id
+ r26-20020a056830135a00b006391bdbb361sm1162132otq.31.2022.08.22.00.07.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 22 Aug 2022 00:07:58 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 22 Aug 2022 08:18:46 +0200
-Message-Id: <20220822061846.81613-1-egorenar@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: y_u1icT6bLqfVw2jFdUYRtIpK1SWPb9T
-X-Proofpoint-GUID: y_u1icT6bLqfVw2jFdUYRtIpK1SWPb9T
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Date: Mon, 22 Aug 2022 01:07:56 -0600
+Message-Id: <20220822070756.2928475-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-22_02,2022-08-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1011 adultscore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 priorityscore=1501 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208220027
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ibm.com; h=from : to : subject :
- date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=U6krX4j+PyFts+AYcxbiL1hbG9+1oi2ah/5kbWYy0GA=;
- b=lT30K+QPwvz7Bcvsde6QWwrSRzy/vLeFZqNknxT5WkPa7mUOvxEKxSHt58yko759mUj/
- ZiBPQA4mxTzE+d6u3WViQ2koOmDK5SwuZvMLsnWGJHWtws12mT4YjXH6ZyNV1MIqwR03
- lUuOE+rsVxe27CoHWzGzKSToF84aFmHw9bhSRGgueFMPtjnEPxWIfazS37Pd00aj/Xkn
- OSMrkdciolFLf+yNVlwFoHiJ0jX2VDuQIwuFxPT8l6NGYKJHUNXTWFgWVKeDKb1FH9E/
- breM6UILyAA9mvPKG7vofTgxvG2lh8boFv++rRfd0SMYlzZgLbZ+v8NwlAXkVxKUCnvX 4w== 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
- header.a=rsa-sha256 header.s=pp1 header.b=lT30K+QP
-Subject: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version 2.23.0
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=d9pnmIhJFmipmsZqlS0kbveW0cwOTqm9Q5TnDHlNves=;
+ b=QUPL9THubQrRR7UW2S82iQPH+40opiQFDpEoyGaJBr0Kis4nJE9fcMsunKlTjWo8AB
+ VzSNJoK8xANPOysQqz0n4mo8rxKsaNPk7n1OQVdnZfJ2I2EQvQSeZRbb4hcE0yCjmV0M
+ adbC1jz24PwqJCS6RStqKNOeYtAkM9T9QbTDQ5yCucJTyoJ40nAVN8XJuTOv1iep3+Iz
+ A/ksryVlcWLzjbbz0t0oqAD3CKexq5nHYPDKTE/tO/KsSOKs5iwDYr+JoWJWkS1XKXEs
+ +N3ezocfvIqpPb6T2gsGmLInsji1yrSR7qfrxcTE7gVVYx6sCJH6Uo4D+Dv6tm9UuNRp
+ z27A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=QUPL9THu
+Subject: [Buildroot] [PATCH 1/1] package/python-frozenlist: bump to version
+ 1.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,65 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-- https://release-monitoring.org/project/10714/
-
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/s390-tools/s390-tools.hash |  2 +-
- package/s390-tools/s390-tools.mk   | 16 +++++++++++++++-
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ package/python-frozenlist/python-frozenlist.hash | 4 ++--
+ package/python-frozenlist/python-frozenlist.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
-index dc9209856b00..f74695b81df8 100644
---- a/package/s390-tools/s390-tools.hash
-+++ b/package/s390-tools/s390-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  d0f56fe4f6a62dda45ccd87191e42ebfaec82671ff4b96cc2229a7fe240ce072  s390-tools-2.21.0.tar.gz
-+sha256  c04d1f7d7f4c941f19a293188eb6302194cc298171f88a4dc17a08a8001c6c01  s390-tools-2.23.0.tar.gz
- sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
-diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
-index f38110079282..99fc669ce72e 100644
---- a/package/s390-tools/s390-tools.mk
-+++ b/package/s390-tools/s390-tools.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-frozenlist/python-frozenlist.hash b/package/python-frozenlist/python-frozenlist.hash
+index 034150397b..4d1ac3b411 100644
+--- a/package/python-frozenlist/python-frozenlist.hash
++++ b/package/python-frozenlist/python-frozenlist.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/frozenlist/json
+-md5  e65d870bd189ba3c21ab7eb10eab22b7  frozenlist-1.3.0.tar.gz
+-sha256  ce6f2ba0edb7b0c1d8976565298ad2deba6f8064d2bebb6ffce2ca896eb35b0b  frozenlist-1.3.0.tar.gz
++md5  6ac017ba79ac7a1491e47e89012efeab  frozenlist-1.3.1.tar.gz
++sha256  3a735e4211a04ccfa3f4833547acdf5d2f863bfeb01cfd3edaffbc251f15cec8  frozenlist-1.3.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE
+diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
+index ad618971f7..51b5d42832 100644
+--- a/package/python-frozenlist/python-frozenlist.mk
++++ b/package/python-frozenlist/python-frozenlist.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--S390_TOOLS_VERSION = 2.21.0
-+S390_TOOLS_VERSION = 2.23.0
- S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
- S390_TOOLS_LICENSE = MIT
- S390_TOOLS_LICENSE_FILES = LICENSE
-@@ -93,6 +93,20 @@ else
- S390_TOOLS_MAKE_OPTS += HAVE_SNMP=0
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBLOCKFILE),y)
-+S390_TOOLS_DEPENDENCIES += liblockfile
-+S390_TOOLS_MAKE_OPTS += HAVE_LOCKFILE=1
-+else
-+S390_TOOLS_MAKE_OPTS += HAVE_LOCKFILE=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+S390_TOOLS_DEPENDENCIES += udev
-+S390_TOOLS_MAKE_OPTS += HAVE_LIBUDEV=1
-+else
-+S390_TOOLS_MAKE_OPTS += HAVE_LIBUDEV=0
-+endif
-+
- define S390_TOOLS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		$(S390_TOOLS_MAKE_OPTS)
+-PYTHON_FROZENLIST_VERSION = 1.3.0
++PYTHON_FROZENLIST_VERSION = 1.3.1
+ PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
+-PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/f4/f7/8dfeb76d2a52bcea2b0718427af954ffec98be1d34cd8f282034b3e36829
++PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/8a/95/229aacfe85daa28e2792481a98c336bc30d3729533e6a44db537880aca21
+ PYTHON_FROZENLIST_SETUP_TYPE = setuptools
+ PYTHON_FROZENLIST_LICENSE = Apache-2.0
+ PYTHON_FROZENLIST_LICENSE_FILES = LICENSE
 -- 
-2.37.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
