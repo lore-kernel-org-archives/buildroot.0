@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 799BFC6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F07D5ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29E0661083;
-	Sun, 11 Sep 2022 08:58:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29E0661083
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2B006FB41;
+	Sun, 11 Sep 2022 08:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2B006FB41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2yxHnr44zTjl; Sun, 11 Sep 2022 08:58:49 +0000 (UTC)
+	with ESMTP id soIy-cww7VeK; Sun, 11 Sep 2022 08:59:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3852361053;
-	Sun, 11 Sep 2022 08:58:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3852361053
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D413C1BF368
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4DC76FB3C;
+	Sun, 11 Sep 2022 08:59:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4DC76FB3C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A48471BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BABD61053
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C2AD83EBA
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BABD61053
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C2AD83EBA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R_fJjBNSWoBM for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZlRW1gD7WGhA for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B48B860ACA
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B48B860ACA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41D9583ECF
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41D9583ECF
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B171183620; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
+ id 4002F8361F; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 18 Aug 2022 22:49:39 +0200
+Date: Mon, 22 Aug 2022 10:19:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 87f4900826bd4387a098fdb9a003e66a0ca057c8
-X-Git-Newrev: d8f0ec7a468c30d401b2e51e4bbfe985997f8e0c
+X-Git-Oldrev: 0b7e7bc70b3b7f3125aa0ef780f4fbf61cd6cd4b
+X-Git-Newrev: e3b2bc21d52fc949ac62964bc4c628c5143e4954
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084824.B171183620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] fs/cpio: new option to use dracut tool
+Message-Id: <20220911084825.4002F8361F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/signal-estimator: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,229 +57,113 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5617033441987180436=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8f0ec7a468c30d401b2e51e4bbfe985997f8e0c
+--===============5617033441987180436==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e3b2bc21d52fc949ac62964bc4c628c5143e4954
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adds an option to invoke the dracut host tool, providing
-a configuration file, instead of having a full cpio archive
-of the whole target directory.
+We need to use the git download mechanism, as the package depends on a
+submodule (an old version of cxxopt), and this is not included in the
+archive autogenerated by Github.
 
-A default configuration file is provided. It assumes busybox init.
-ideally, a different default should be used in case of systemd init, but
-that's left for future work.
-
-Signed-off-by: Thierry Bultel <thierry.bultel@linatsea.fr>
-[arnout@mind.be: many changes]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[yann.morin.1998@free.fr: some additional fixups]
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+[yann.morin.1998@free.fr:
+  - bump to 0.0.4
+  - reword commit log ad help text
+  - other eye-candy reformatting
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- fs/cpio/Config.in   | 35 ++++++++++++++++++++
- fs/cpio/cpio.mk     | 33 +++++++++++++++++++
- fs/cpio/dracut.conf | 92 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 160 insertions(+)
+ package/Config.in                              |  1 +
+ package/signal-estimator/Config.in             | 17 +++++++++++++++++
+ package/signal-estimator/signal-estimator.hash |  3 +++
+ package/signal-estimator/signal-estimator.mk   | 19 +++++++++++++++++++
+ 4 files changed, 40 insertions(+)
 
-diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
-index c1151a2881..861e9a929e 100644
---- a/fs/cpio/Config.in
-+++ b/fs/cpio/Config.in
-@@ -7,6 +7,41 @@ config BR2_TARGET_ROOTFS_CPIO
- 
- if BR2_TARGET_ROOTFS_CPIO
- 
-+choice
-+	prompt "cpio type"
-+	default BR2_TARGET_ROOTFS_CPIO_FULL
-+
-+config BR2_TARGET_ROOTFS_CPIO_FULL
-+	bool "cpio the whole root filesystem"
-+	help
-+	  Build a cpio archive containing the whole the root filesystem.
-+
-+config BR2_TARGET_ROOTFS_CPIO_DRACUT
-+	bool "Invoke dracut to make a partial initramfs"
-+	select BR2_PACKAGE_HOST_DRACUT
-+	help
-+	  Build an additional initramfs using dracut. This only contains
-+	  a subset of the rootfs, as determined by the configuration
-+	  file.
-+	  This can be useful to create a recovery system, for instance.
-+
-+endchoice
-+
-+if BR2_TARGET_ROOTFS_CPIO_DRACUT
-+
-+config BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE
-+	string "dracut configuration file"
-+	default "fs/cpio/dracut.conf"
-+	help
-+	  Dracut configuration file. It determines which parts of the
-+	  rootfs get included in the cpio image. See dracut.conf(5) or
-+	  https://github.com/dracutdevs/dracut/blob/master/man/dracut.conf.5.asc
-+
-+	  The default configuration file is suitable for busybox init.
-+	  It doesn't, however, pivot_root into a full rootfs.
-+
-+endif
-+
- choice
- 	prompt "Compression method"
- 	default BR2_TARGET_ROOTFS_CPIO_NONE
-diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-index 81f8c393d1..fa66b1c710 100644
---- a/fs/cpio/cpio.mk
-+++ b/fs/cpio/cpio.mk
-@@ -36,6 +36,8 @@ ROOTFS_CPIO_DEPENDENCIES += host-cpio
- ROOTFS_CPIO_OPTS += --reproducible
- endif
- 
-+ifeq ($(BR2_TARGET_ROOTFS_CPIO_FULL),y)
-+
- define ROOTFS_CPIO_CMD
- 	cd $(TARGET_DIR) && \
- 	find . \
-@@ -44,6 +46,37 @@ define ROOTFS_CPIO_CMD
- 	> $@
- endef
- 
-+else ifeq ($(BR2_TARGET_ROOTFS_CPIO_DRACUT),y)
-+
-+ROOTFS_CPIO_DEPENDENCIES += host-dracut
-+
-+ROOTFS_CPIO_DRACUT_CONF_FILE = $(call qstrip,$(BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE))
-+ifeq ($(BR_BUILDING):$(ROOTFS_CPIO_DRACUT_CONF_FILE),y:)
-+$(error No dracut config file name specified, check your BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE setting)
-+endif
-+
-+ifeq ($(BR2_LINUX_KERNEL),y)
-+ROOTFS_CPIO_DEPENDENCIES += linux
-+ROOTFS_CPIO_OPTS += --kver $(LINUX_VERSION_PROBED)
-+else
-+ROOTFS_CPIO_OPTS += --no-kernel
-+endif
-+
-+define ROOTFS_CPIO_CMD
-+	mkdir -p $(ROOTFS_CPIO_DIR)/tmp
-+	$(HOST_DIR)/bin/dracut \
-+		$(ROOTFS_CPIO_OPTS) \
-+		-c $(ROOTFS_CPIO_DRACUT_CONF_FILE) \
-+		--sysroot $(TARGET_DIR) \
-+		--tmpdir $(ROOTFS_CPIO_DIR)/tmp \
-+		-M \
-+		--force \
-+		--no-compress \
-+		$@
-+endef
-+
-+endif #BR2_TARGET_ROOTFS_CPIO_DRACUT
-+
- ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
- ROOTFS_CPIO_DEPENDENCIES += host-uboot-tools
- define ROOTFS_CPIO_UBOOT_MKIMAGE
-diff --git a/fs/cpio/dracut.conf b/fs/cpio/dracut.conf
+diff --git a/package/Config.in b/package/Config.in
+index d1c098c48f..2c2752b412 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -142,6 +142,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/rt-tests/Config.in"
+ 	source "package/rwmem/Config.in"
+ 	source "package/sentry-native/Config.in"
++	source "package/signal-estimator/Config.in"
+ 	source "package/spidev_test/Config.in"
+ 	source "package/strace/Config.in"
+ 	source "package/stress/Config.in"
+diff --git a/package/signal-estimator/Config.in b/package/signal-estimator/Config.in
 new file mode 100644
-index 0000000000..2337736c4e
+index 0000000000..30c6e966ab
 --- /dev/null
-+++ b/fs/cpio/dracut.conf
-@@ -0,0 +1,92 @@
-+#Simple dracut config for a system without systemd
++++ b/package/signal-estimator/Config.in
+@@ -0,0 +1,17 @@
++comment "signal-estimator needs a toochain w/ C++, threads, gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 \
++		|| !BR2_TOOLCHAIN_HAS_THREADS
 +
-+#Dracut configuration
++config BR2_PACKAGE_SIGNAL_ESTIMATOR
++	bool "signal-estimator"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  signal-estimator is a small command-line and GUI tool allowing
++	  to measure different characteristics of the signal looped back
++	  from audio output to audio input.
 +
-+show_modules=yes
-+i18n_install_all=no
-+lvmconf=no
-+mdadmconf=no
-+early_microcode=no
-+hostonly=no
-+hostonly_cmdline=no
-+use_fstab=no
-+kernel_cmdline="rd.break=initqueue"
-+do_strip=no
++	  https://github.com/gavv/signal-estimator
+diff --git a/package/signal-estimator/signal-estimator.hash b/package/signal-estimator/signal-estimator.hash
+new file mode 100644
+index 0000000000..c10aa16d50
+--- /dev/null
++++ b/package/signal-estimator/signal-estimator.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  6256b881bd9285fdcf133628cf6dd6b0e2758c08bada231e44b2684a3cf7898f  signal-estimator-v0.0.4-br1.tar.gz
++sha256  e836fc784cb6ed2d160f1c1ecdf1303ed57436a86f66f97e5406a1b79e6db55e  LICENSE
+diff --git a/package/signal-estimator/signal-estimator.mk b/package/signal-estimator/signal-estimator.mk
+new file mode 100644
+index 0000000000..cb1594b58d
+--- /dev/null
++++ b/package/signal-estimator/signal-estimator.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# signal-estimator
++#
++################################################################################
 +
-+# Dracut modules needed
-+add_dracutmodules+=" \
-+busybox-init
-+"
++SIGNAL_ESTIMATOR_VERSION = v0.0.4
++SIGNAL_ESTIMATOR_SITE = https://github.com/gavv/signal-estimator
++SIGNAL_ESTIMATOR_SITE_METHOD = git
++SIGNAL_ESTIMATOR_GIT_SUBMODULES = YES
 +
-+# Modules to ignore
-+omit_dracutmodules+=" \
-+bash \
-+biosdevname \
-+btrfs \
-+bluetooth \
-+busybox \
-+caps \
-+cifs \
-+crypt \
-+crypt-gpg \
-+dash \
-+dbus-broker \
-+dbus-daemon \
-+dm \
-+dmraid \
-+dmsquash-live-ntfs \
-+dracut-systemd \
-+fcoe \
-+fcoe-uefi \
-+fs-lib \
-+iscsi \
-+i18n \
-+lvmmerge \
-+lvm \
-+lunmask \
-+mdraid \
-+memstrack \
-+mksh \
-+modsign \
-+mount-root \
-+multipath \
-+nbd \
-+network-legacy \
-+network-wicked \
-+nfs \
-+nvdimm \
-+nvmf \
-+parse-lunmask \
-+qemu \
-+qemu-net \
-+resume \
-+rootfs-block \
-+rngd \
-+systemd \
-+systemd-udevd \
-+systemd-coredump \
-+systemd-ask-password \
-+systemd-timedated \
-+systemd-rfkill \
-+systemd-resolved \
-+systemd-hostnamed \
-+systemd-initrd \
-+systemd-journald \
-+systemd-ldconfig \
-+systemd-networkd \
-+systemd-timesyncd \
-+systemd-veritysetup \
-+systemd-modules-load \
-+systemd-sysctl \
-+systemd-repart \
-+systemd-sysext \
-+systemd-sysusers \
-+systemd-tmpfiles \
-+squash \
-+ssh-client \
-+stratis \
-+tpm2-tss \
-+udev-rules \
-+url-lib \
-+usrmount \
-+"
++SIGNAL_ESTIMATOR_LICENSE = MIT
++SIGNAL_ESTIMATOR_LICENSE_FILES = LICENSE
++
++SIGNAL_ESTIMATOR_DEPENDENCIES = alsa-lib
++
++SIGNAL_ESTIMATOR_CONF_OPTS += -DBUILD_GUI=OFF
++
++$(eval $(cmake-package))
+
+--===============5617033441987180436==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5617033441987180436==--
