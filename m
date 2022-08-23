@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06AB0C32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39FC7C32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 89A264059E;
-	Tue, 23 Aug 2022 19:49:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89A264059E
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEBF440980;
+	Tue, 23 Aug 2022 19:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEBF440980
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aNRURm18T4LJ; Tue, 23 Aug 2022 19:49:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id si6lRFg2EVTT; Tue, 23 Aug 2022 19:49:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9488E40447;
-	Tue, 23 Aug 2022 19:49:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9488E40447
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7F7071BF39D
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC9B640922;
+	Tue, 23 Aug 2022 19:49:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC9B640922
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A8B971BF9A4
  for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A39F81343
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84CA260B15
  for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:49:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A39F81343
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84CA260B15
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8drRpDSgWqbx for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b-rC2-dx9ChI for <buildroot@lists.busybox.net>;
  Tue, 23 Aug 2022 19:49:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A36281370
+ by smtp3.osuosl.org (Postfix) with ESMTP id 90F4F605E0
  for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:49:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A36281370
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90F4F605E0
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6DC4087B7B; Tue, 23 Aug 2022 19:34:38 +0000 (UTC)
+ id 64F2B87B79; Tue, 23 Aug 2022 19:34:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 21:48:53 +0200
+Date: Tue, 23 Aug 2022 21:48:34 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: eb710c3a346de48ae6da5b1afcc820ad89297319
-X-Git-Newrev: b23e33f89cfbd8be6849f115df4cd12bd3bdbf8e
+X-Git-Oldrev: e8ecf4238707b93df190e0eb0de1c0ca9b6fbd29
+X-Git-Newrev: eb710c3a346de48ae6da5b1afcc820ad89297319
 X-Patchwork-Hint: ignore
-Message-Id: <20220823193438.6DC4087B7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/open62541: bump to
- version 1.3.3
+Message-Id: <20220823193438.64F2B87B79@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lighttpd: bump to
+ version 1.4.66
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b23e33f89cfbd8be6849f115df4cd12bd3bdbf8e
+commit: https://git.buildroot.net/buildroot/commit/?id=eb710c3a346de48ae6da5b1afcc820ad89297319
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/open62541/open62541.hash | 2 +-
- package/open62541/open62541.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lighttpd/lighttpd.hash | 4 ++--
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
-index f5402ffdbb..22c13851bf 100644
---- a/package/open62541/open62541.hash
-+++ b/package/open62541/open62541.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 0b4310aa72..b45fecc609 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.65.sha512sum
+-sha512  e9ecb3e99dd5cd0efbf98cfc937f0cfcfafe712ab0e6c11f9cdee936c508820cd8de06ef03d2f888dab19a842eebae342a83818e601dd21094f154832acb69ec  lighttpd-1.4.65.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.66.sha512sum
++sha512  6d4ae1faa0ebc3115b7ad4fc84ccdd476ca71ee701d115c1a320f525c6c3ce884b48af38f65e4f1c012b4d0936755925b16f8d37aad810a286b2349c27f47567  lighttpd-1.4.66.tar.xz
  # Locally calculated
--sha256  7e2a47ee6c6e5e7b9a9c803ff717670707d040710bb65d2615c0df33a614e629  open62541-v1.3.2-br1.tar.gz
-+sha256  283545991c3eb36b18c75a64638c7c2ad8f193654c2403b76aee848abf454e14  open62541-v1.3.3-br1.tar.gz
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 0551c3bca6..edc95dcf15 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -4,7 +4,7 @@
- #
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index bedb9c8f33..0905b0ae14 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OPEN62541_VERSION = v1.3.2
-+OPEN62541_VERSION = v1.3.3
- OPEN62541_SITE_METHOD = git
- OPEN62541_SITE = https://github.com/open62541/open62541.git
- OPEN62541_GIT_SUBMODULES = YES
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).65
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).66
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
