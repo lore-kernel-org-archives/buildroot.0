@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EA6DC32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0258C32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:58:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30EC460B5E;
-	Tue, 23 Aug 2022 19:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30EC460B5E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0359860B5E;
+	Tue, 23 Aug 2022 19:58:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0359860B5E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JL9Ydvurljqb; Tue, 23 Aug 2022 19:55:25 +0000 (UTC)
+	with ESMTP id OjdgIsJIt84S; Tue, 23 Aug 2022 19:58:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59E1D60B35;
-	Tue, 23 Aug 2022 19:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59E1D60B35
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 67A721BF39D
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:55:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 203C560B38;
+	Tue, 23 Aug 2022 19:58:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 203C560B38
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C42771BF39D
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:58:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4318781771
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4318781771
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7B6940531
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:58:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7B6940531
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mjghAJNgpATS for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 19:55:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iaZ7Fba-aO44 for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 19:58:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8281B80B41
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:55:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8281B80B41
+ by smtp2.osuosl.org (Postfix) with ESMTP id E613D4011C
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:58:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E613D4011C
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4A20587B88; Tue, 23 Aug 2022 19:40:33 +0000 (UTC)
+ id B48A087B8E; Tue, 23 Aug 2022 19:43:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 21:52:50 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a1b26020d133499d90a547d73d6388286c95b658
-X-Git-Newrev: 7b31593d8299babf94c7851218dec9c7041cfa35
+Date: Tue, 23 Aug 2022 21:57:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fc429c4dc6d8f42596c0c6b40ebcce8c2a71877c
+X-Git-Newrev: a0690a8e2474f5ae676ec9602eec56ddc870efad
 X-Patchwork-Hint: ignore
-Message-Id: <20220823194033.4A20587B88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/strace: bump to
- version 5.19
+Message-Id: <20220823194319.B48A087B8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: drop unused flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b31593d8299babf94c7851218dec9c7041cfa35
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=a0690a8e2474f5ae676ec9602eec56ddc870efad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Upstream dropped in:
+https://github.com/WebKit/WebKit/commit/aa6631a6189aaa4541a2d2e89993a4989103d161,
+which is present since webkitgtk 2.36.4.
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/webkitgtk/webkitgtk.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index c044563b33..cadcb20f47 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.18/strace-5.18.tar.xz.asc
--sha256  60293ea79ac9253d600cdc9be077ad2988ca22284a439c9e66be5150db3d1187  strace-5.18.tar.xz
-+# https://strace.io/files/5.19/strace-5.19.tar.xz.asc
-+sha256  aa3dc1c8e60e4f6ff3d396514aa247f3c7bf719d8a8dc4dd4fa793be786beca3  strace-5.19.tar.xz
- sha256  d92f973d08c8466993efff1e500453add0c038c20b4d2cbce3297938a296aea9  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 0e1cb04c44..7bdf36a47e 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 5.18
-+STRACE_VERSION = 5.19
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 8949cb2b1c..b5b9be3778 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -78,7 +78,6 @@ endif
+ # 2D CANVAS acceleration requires OpenGL proper with cairo-gl
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ WEBKITGTK_CONF_OPTS += \
+-	-DENABLE_ACCELERATED_2D_CANVAS=ON \
+ 	-DENABLE_GLES2=OFF \
+ 	-DENABLE_X11_TARGET=ON
+ WEBKITGTK_DEPENDENCIES += libgl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
