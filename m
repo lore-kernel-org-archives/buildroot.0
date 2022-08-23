@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3B16C32774
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 05:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EF63C32792
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 09:31:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E49140339;
-	Tue, 23 Aug 2022 05:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E49140339
+	by smtp1.osuosl.org (Postfix) with ESMTP id A03D181763;
+	Tue, 23 Aug 2022 09:31:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A03D181763
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id P0i5LVZsdSmn; Tue, 23 Aug 2022 09:31:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA1AA81375;
+	Tue, 23 Aug 2022 09:31:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA1AA81375
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4D51F1BF294
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 09:30:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21A5C404CF
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 09:30:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21A5C404CF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CJWHzYbM5YJd; Tue, 23 Aug 2022 05:48:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98F7D40323;
-	Tue, 23 Aug 2022 05:48:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98F7D40323
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 035381BF2F8
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 05:48:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB29240873
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 05:48:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB29240873
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H8FMgYdHJ7Po for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 05:48:16 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C81774086F
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com
- [209.85.210.176])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C81774086F
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 05:48:16 +0000 (UTC)
-Received: by mail-pf1-f176.google.com with SMTP id z187so12451321pfb.12
- for <buildroot@buildroot.org>; Mon, 22 Aug 2022 22:48:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=VUUD3ObcZzMUEZ8hnGPIjhKtf48p8VvruFvyuBCcZAQ=;
- b=wRqD+V6235/9sCuch9Hy0EMv4Cy/rz0MuaBJQFeZTma1ZQpo8Iu/TeAFwdbiLTuYa5
- zVb9WtP9OWxambz+qf4sh1ThnSLCz5JPRa1xzmFn7uS+ZA5xlcvBtKWBT1GsgkKeAdIi
- a+yhERBKhE94YfX/iz0Gkdr1r9NXTnbIE6gB85/H8W2ygcaMOod1uuEhgqWTqXn+d02A
- knFsTL7M+89m1LIZu9wFwhWfA+ubib6NanBJv6Nsxa6w7VKULEuMltSSLnapJerp9jMl
- dhK7g87sRMWP/stedOoED+JX0wnfX+WxeMCQYXLzLVlDQmtXo0q8rmnHs18qiyi+6Mhb
- +Edw==
-X-Gm-Message-State: ACgBeo3Domsy3jAfJjPNWQ4BBn8elTcFXE2yg4GGtEtD4rNn6PdHyyWa
- 1FEhJAuYcCre1jbm10AYSARc4KDtQikStg==
-X-Google-Smtp-Source: AA6agR7HSEh3V3uN2gtZ3Icn/lwkSRHD3lD0KepoBV1rEyOE+M6YZhtU3eFD9OpIq5Z8UX0rcpmhSQ==
-X-Received: by 2002:a05:6a00:1a:b0:536:d522:dbf1 with SMTP id
- h26-20020a056a00001a00b00536d522dbf1mr4752709pfk.42.1661233695601; 
- Mon, 22 Aug 2022 22:48:15 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- c9-20020a170902d48900b0016db43e5212sm9528379plg.175.2022.08.22.22.48.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Aug 2022 22:48:14 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Mon, 22 Aug 2022 22:48:11 -0700
-Message-Id: <20220823054811.360322-1-christian@paral.in>
-X-Mailer: git-send-email 2.37.2
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hmxg_nrrE3ob for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 09:30:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD23E40168
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DD23E40168
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 09:30:57 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:a5cb:81c2:970c:cd58])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 21F962003DD;
+ Tue, 23 Aug 2022 11:30:52 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 23 Aug 2022 11:30:51 +0200
+Date: Tue, 23 Aug 2022 11:30:51 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220823093051.GA2775145@scaer>
+References: <20220820113352.4976-1-fontaine.fabrice@gmail.com>
+ <20220821094911.GR2775145@scaer> <20220821120304.GU2775145@scaer>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] package/crun: new package
+Content-Disposition: inline
+In-Reply-To: <20220821120304.GU2775145@scaer>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1661247054;
+ bh=fdkzEWqoo05BdiyMND5KUJAxu7IlABTRrdTD/foVJMY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=JFRTs1t1D9HfreRmT2gOwk4BOVcK6MLgeas27VMisEbUeLw6frobZq7nlU+szDX98
+ U3eFt1w/U4LrSY50jDuwvS+I/z5yROAX1vcsoF4k1VzZgJ/+obFb1Jpep/orOqQnCy
+ 4QFv5mrs8thiqQ3iYquKs0KDnpM59lzkaFfwKVvT7kmOkiAIUKvtz+1gkHrTJEnfvu
+ 2bMQSAilfhdz/t1zw2h95R32/1x2Fz3klgq+RTv8fIYilAY1GuvRxt+Yg897tQ47Uu
+ Fo7ZTUC27QujwdL8Ltk37X7o7Z2sGEuoRfJzqjFHO0h/U8CE5XcDmTSLtgiHUbkHvz
+ 6Qx5Qks1nW7zQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JFRTs1t1
+Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: add
+ jquery-ui-themes handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,134 +78,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: Christian Stewart <christian@paral.in>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-crun is a fast and low-memory OCI Container Runtime in C.
+Fabrice, All,
 
-https://github.com/containers/crun
+On 2022-08-21 14:03 +0200, Yann E. MORIN spake thusly:
+> On 2022-08-21 11:49 +0200, Yann E. MORIN spake thusly:
+> > On 2022-08-20 13:33 +0200, Fabrice Fontaine spake thusly:
+> > > Add a custom case to make sure that a random configuration with an empty
+> > > theme for jquery-ui-themes doesn't fail. It reverts to
+> > > BR2_PACKAGE_JQUERY_UI_THEMES_BLACK_TIE in that case.
+> [--SNIP--]
+> > I am not sure how we can end up with an empty BR2_PACKAGE_JQUERY_UI_THEMES_THEME.
+> > Indeed, it is filled from a choice, and unless there is a typo in one of
+> > the config options, there are as many defaults for it as there are
+> > entries in the choice...
+> > 
+> > And if you look at the .config file, there is actually something
+> > selected in that choice, BR2_PACKAGE_JQUERY_UI_THEMES_VADER=y, but
+> > indeed BR2_PACKAGE_JQUERY_UI_THEMES_THEME is not even set. It's not that
+> > it is empty, it is not set at all!
+> > 
+> > So, the .config file is not correct.
+[--SNIP--]
+> So, for fun, I had the following snippet run:
+>     while true; do
+>         ./utils/genrandconfig 2>&1 |grep KCONFIG_SEED=
+>         if grep -q BR2_PACKAGE_JQUERY_UI_THEMES=y .config; then
+>             echo 'Got JQuery UI themes...'
+>             grep BR2_PACKAGE_JQUERY_UI_THEMES_ .config
+>             grep -q BR2_PACKAGE_JQUERY_UI_THEMES_THEME= .config \
+>             || { echo 'Missing theme...'; break; }
+>         fi
+>     done
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+This has now been running for almost 48 hours straight, and there has
+been 10005 configs generated, 55 with BR2_PACKAGE_JQUERY_UI_THEMES
+enabled, of which none with BR2_PACKAGE_JQUERY_UI_THEMES_THEME unset.
 
----
+Regards,
+Yann E. MORIN.
 
-v1 -> v2:
-
- - add libcap and systemd flags
- - use upstream download tar.gz with submodules and git version
- - no need to use the submodule download method nor the patch.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/crun/Config.in |  7 +++++++
- package/crun/crun.hash |  4 ++++
- package/crun/crun.mk   | 36 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 49 insertions(+)
- create mode 100644 package/crun/Config.in
- create mode 100644 package/crun/crun.hash
- create mode 100644 package/crun/crun.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d2bd0d809a..b92821f9c7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -530,6 +530,7 @@ F:	package/python-pylibftdi/
- N:	Christian Stewart <christian@paral.in>
- F:	package/batman-adv/
- F:	package/containerd/
-+F:	package/crun/
- F:	package/delve/
- F:	package/docker-cli/
- F:	package/docker-engine/
-diff --git a/package/Config.in b/package/Config.in
-index d1c098c48f..fd591d9e52 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2567,6 +2567,7 @@ menu "System tools"
- 	source "package/coreutils/Config.in"
- 	source "package/cpulimit/Config.in"
- 	source "package/cpuload/Config.in"
-+	source "package/crun/Config.in"
- 	source "package/daemon/Config.in"
- 	source "package/dc3dd/Config.in"
- 	source "package/dcron/Config.in"
-diff --git a/package/crun/Config.in b/package/crun/Config.in
-new file mode 100644
-index 0000000000..5aca10dcdb
---- /dev/null
-+++ b/package/crun/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_CRUN
-+	bool "crun"
-+	select BR2_PACKAGE_YAJL # libocispec
-+	help
-+	  crun is a fast and low-memory OCI Container Runtime in C.
-+
-+	  https://github.com/containers/crun
-diff --git a/package/crun/crun.hash b/package/crun/crun.hash
-new file mode 100644
-index 0000000000..de61310e08
---- /dev/null
-+++ b/package/crun/crun.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+sha256  acd24012daa951cf1674b20b2d5f87975d5d6c8e8c80bfe12e4cffa3495cae67  crun-1.5.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.libcrun
-diff --git a/package/crun/crun.mk b/package/crun/crun.mk
-new file mode 100644
-index 0000000000..210d3c5860
---- /dev/null
-+++ b/package/crun/crun.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# crun
-+#
-+################################################################################
-+
-+CRUN_VERSION = 1.5
-+CRUN_SITE = https://github.com/containers/crun/releases/download/$(CRUN_VERSION)
-+CRUN_DEPENDENCIES = host-pkgconf yajl
-+
-+CRUN_LICENSE = GPL-2.0+ (crun binary), LGPL-2.1+ (libcrun)
-+CRUN_LICENSE_FILES = COPYING COPYING.libcrun
-+
-+CRUN_AUTORECONF = YES
-+CRUN_CONF_OPTS += --enable-embedded-yajl=no
-+
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+CRUN_DEPENDENCIES += libcap
-+else
-+CRUN_CONF_OPTS += --disable-caps
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+CRUN_DEPENDENCIES += libseccomp
-+else
-+CRUN_CONF_OPTS += --disable-seccomp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+CRUN_CONF_OPTS += --enable-systemd
-+CRUN_DEPENDENCIES += systemd host-pkgconf
-+else
-+CRUN_CONF_OPTS += --disable-systemd
-+endif
-+
-+$(eval $(autotools-package))
 -- 
-2.37.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
