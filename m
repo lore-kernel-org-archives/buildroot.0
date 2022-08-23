@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59368C6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:01:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BD3BECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:01:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0315F842A2;
-	Sun, 11 Sep 2022 09:01:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0315F842A2
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lBxukxLhb_8c; Sun, 11 Sep 2022 09:01:36 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FBE0842E0;
-	Sun, 11 Sep 2022 09:01:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FBE0842E0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 34E801BF368
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C43296106F
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C43296106F
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDB2461091;
+	Sun, 11 Sep 2022 09:01:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDB2461091
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GcB37Qz3Y0uL for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 67zu3Hah_B_M; Sun, 11 Sep 2022 09:01:48 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C5976107F;
+	Sun, 11 Sep 2022 09:01:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C5976107F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ECFC71BF990
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFD7D83EC6
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFD7D83EC6
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pq_WaudPG-pB for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE8AB60F64
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE8AB60F64
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B50483EC4
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B50483EC4
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B727483620; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+ id 139E0835E4; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 21:35:56 +0200
+Date: Tue, 23 Aug 2022 21:48:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ed92ca13d9de57a21e242098fea8a7d37955e232
-X-Git-Newrev: ff0bbbb76fe5addbc970449c9627ab864a3c6d43
+X-Git-Oldrev: 2e3ef50648f3356a0e8e06182be1e482a3ec2a53
+X-Git-Newrev: e8ecf4238707b93df190e0eb0de1c0ca9b6fbd29
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084825.B727483620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pycares: bump to version
- 4.2.2
+Message-Id: <20220911084826.139E0835E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ethtool: bump to version 5.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff0bbbb76fe5addbc970449c9627ab864a3c6d43
+commit: https://git.buildroot.net/buildroot/commit/?id=e8ecf4238707b93df190e0eb0de1c0ca9b6fbd29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pycares/python-pycares.hash | 4 ++--
- package/python-pycares/python-pycares.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pycares/python-pycares.hash b/package/python-pycares/python-pycares.hash
-index 2037c17172..13f640b1c1 100644
---- a/package/python-pycares/python-pycares.hash
-+++ b/package/python-pycares/python-pycares.hash
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 052a87d978..8a649876d9 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycares/json
--md5  92fa9622ba42cb895d598910722e80b5  pycares-4.2.1.tar.gz
--sha256  735b4f75fd0f595c4e9184da18cd87737f46bc81a64ea41f4edce2b6b68d46d2  pycares-4.2.1.tar.gz
-+md5  7706a01fdbfc593564b63ac0d71031d9  pycares-4.2.2.tar.gz
-+sha256  e1f57a8004370080694bd6fb969a1ffc9171a59c6824d54f791c1b2e4d298385  pycares-4.2.2.tar.gz
- # Locally computed sha256 checksums
- sha256  427bb3a5372024a26e2c290b24382512bcc7ca123431c4dd178dd613beea7eee  LICENSE
-diff --git a/package/python-pycares/python-pycares.mk b/package/python-pycares/python-pycares.mk
-index e2b813b278..858adbf33b 100644
---- a/package/python-pycares/python-pycares.mk
-+++ b/package/python-pycares/python-pycares.mk
-@@ -4,9 +4,9 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  9577b2ffbce710b659fb239598ec92bced1ca400ca0f1286762bfa44e4784270  ethtool-5.18.tar.xz
++sha256  3b752a3329827907ac3812f2831dfecf51c8c41c55d2d69cfb9c53ca06449fc6  ethtool-5.19.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 9fd4c31c7b..32bd5e7db1 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYCARES_VERSION = 4.2.1
-+PYTHON_PYCARES_VERSION = 4.2.2
- PYTHON_PYCARES_SOURCE = pycares-$(PYTHON_PYCARES_VERSION).tar.gz
--PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/99/da/d3d20bc7bd5baadeea04ee84db16f1f07557138c313bd6200e1cffab5bee
-+PYTHON_PYCARES_SITE = https://files.pythonhosted.org/packages/ac/a3/21594384c2398420dd7f6e8656aeb5a2c15128ddf2b85ef5f4403342e18d
- PYTHON_PYCARES_SETUP_TYPE = setuptools
- PYTHON_PYCARES_LICENSE = MIT
- PYTHON_PYCARES_LICENSE_FILES = LICENSE
+-ETHTOOL_VERSION = 5.18
++ETHTOOL_VERSION = 5.19
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
