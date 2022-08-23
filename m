@@ -1,86 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 099B5C32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 17:30:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E1FFC32789
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 18:03:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 961D960F69;
-	Tue, 23 Aug 2022 17:30:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 961D960F69
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0BB1414C0;
+	Tue, 23 Aug 2022 18:03:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0BB1414C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E6Dm4ep6sajY; Tue, 23 Aug 2022 17:30:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DYWO64CEvkL4; Tue, 23 Aug 2022 18:03:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3EF260F5E;
-	Tue, 23 Aug 2022 17:30:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3EF260F5E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8A5D21BF417
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 17:30:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37BD3410E8;
+	Tue, 23 Aug 2022 18:03:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37BD3410E8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8592A1BF417
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 18:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 72FB24091E
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 17:30:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72FB24091E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5EF438193E
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 18:02:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EF438193E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m7eCQ7QV_CEQ for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 17:30:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LLEcyHxkgE8M for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 18:02:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DA87400C5
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com
- [IPv6:2607:f8b0:4864:20::535])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7DA87400C5
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 17:30:18 +0000 (UTC)
-Received: by mail-pg1-x535.google.com with SMTP id r69so12871490pgr.2
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 10:30:18 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4908581451
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com
+ [209.85.216.41])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4908581451
+ for <buildroot@busybox.net>; Tue, 23 Aug 2022 18:02:58 +0000 (UTC)
+Received: by mail-pj1-f41.google.com with SMTP id bf22so14682255pjb.4
+ for <buildroot@busybox.net>; Tue, 23 Aug 2022 11:02:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc;
- bh=lhGT+K3HmqXvmbiKvPX9P5PZDbRWorLZI4blozzM/l0=;
- b=z13P2hmpaoxq5QEXD3s41Ff5mX8g9IYklO/2PxPR/i2MpnWj/qqaHdKE/i/sSYqBwb
- 39TymPhsagmw64jf2icxJhs1lHnIq49P/MBFcXUw+69ZQQyve3atNLEfCqkDfiTqbL9C
- AQLduVHQoXBJMbeT6cH8n9xOmpnSA6w6NvFc3IWCY7azo/DwNLwmwRXX5n7Caj24jslG
- ROghLEJSjnqVMBp7i/7EzKDnMK+gKtVqLt9GExpa99buxa/UI8xf+gdhD8xhUxepdSeK
- seugfG8X6w5VfitlHkdlB8g5gSAgROIVK2LFrW4hzRy7uhVrCF7c29c5Qog2iVh3RyY3
- Zcvg==
-X-Gm-Message-State: ACgBeo07JC/+ZkkIalJaF+ShuLFQeUWXy+YDbIRuIazVJ7Bcc5fOFv1X
- CTpuTLQrUA08x8A1ql3tNbt+DCGMVevzYfRF3Sg=
-X-Google-Smtp-Source: AA6agR6Nh/LHYHMUEKrf0/V3Xe6WOMdV3h0q1air/twVGugRjp/7Vlp4OOoA+LDalZA6kTp7mHEiqQGWc8HhxOSSeJg=
-X-Received: by 2002:a63:224d:0:b0:42a:81ff:68ca with SMTP id
- t13-20020a63224d000000b0042a81ff68camr12295014pgm.290.1661275817747; Tue, 23
- Aug 2022 10:30:17 -0700 (PDT)
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :x-gm-message-state:from:to:cc;
+ bh=aftmwp0vIx7SajYddyTVGpsBzuYTMEGn0LS6qtia+7A=;
+ b=ciLBDcZlC5oybuhpI+PssvPV1Kie+BQxxPxRJWDsBecLUAuZMrmBWwc2JgQX2F2OVq
+ St6Abl14ceH6MxdZwXlSMLwcrGq9Movrg/kuO4rIkou/oqkBE6h6lLEKqxlM5eug9n4g
+ Mj4G01nI/Agp4iaCbYZAsKNEkqfKrWHGSYqNULBwhqRJXemvZVB+wv7EPP5fFTDUgNfu
+ St9Q5yZcKXy3D5DwYtHrmhOLLUKR0wRzUsirOd0A1ObQKMjPhgfySB7/AaPMCnMKkPsf
+ x20BG/1uApS/MCGBRQlie+bSAXp6iKq8ETAfyFwZppkrVmAp/GJ5B7BIfHgeNn6lNGRw
+ ONWw==
+X-Gm-Message-State: ACgBeo2mvY14XR/uSo/G9RgCsp4iWDhWNGx+PvC7euruuJVEWe1fleL3
+ 9YI0L7H6W7VlACbmOE/VX4cTEjkS0MoktDunuXN1/Ig8vVRa9g==
+X-Google-Smtp-Source: AA6agR5lI8ntrINQP5bSj0DHMy9BG4BdwYWbC2atgmui3cfja2H2B/1OF9FnSZE1MAn1asijv1Zt6vzZs0QQdd3DUXc=
+X-Received: by 2002:a17:90a:8911:b0:1fa:c8f7:1450 with SMTP id
+ u17-20020a17090a891100b001fac8f71450mr4228121pjn.123.1661277777361; Tue, 23
+ Aug 2022 11:02:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220807210317.9415-1-heiko.thiery@gmail.com>
- <20220808104133.6479c0a5@windsurf>
- <CAEyMn7Y+2=+2ruq-4+kvHqX2YXVNoGYLskYrYpjKfAxPfY2XOw@mail.gmail.com>
- <20220809100602.2fb39e1c@windsurf> <20220815121412.3be64939@windsurf>
-In-Reply-To: <20220815121412.3be64939@windsurf>
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 23 Aug 2022 19:30:04 +0200
-Message-ID: <CAEyMn7ZyX6L2V3zTBdbzZ7ECokUS5pWoqUVKKAq4no5Ay4Fa-w@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc;
- bh=lhGT+K3HmqXvmbiKvPX9P5PZDbRWorLZI4blozzM/l0=;
- b=M0cNl5MRxRtFtjmETyTzPcGPBSbznXR2hozznjL7c9WKrz9EVQZZr8/OlabSOciNCp
- 2SUuUdWqnE9IEMQ5qmU4CgwAjCRRNrAgJ/irE4C44IhRYYETuag9qBglrACd3+znaG55
- IFvKD/wRADENTI/NmERuuFtZBdFWXNk0hhMHHpUyiuqvMypZOeO7qPglpb9EVNryf2Ca
- Dj3KQC6MtcH7KFHH/bXj0g9UMagG5qXSJqIArbdigo4G949TBjzbA8g/17XIqMc6MLTm
- ikbXNymm2e5OFzmy37EbgILH3JgxVCswm5D+qXb9AeT0oYTW/CP/AONwx+sx0C2uRrol
- 9yAg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=M0cNl5MR
-Subject: Re: [Buildroot] [PATCH] configs/kontron_bl_imx8mm_defconfig: fix
- build failure with u-boot 2022.04
+References: <20220221043034.2736010-1-francois.perrad@gadz.org>
+ <20220823164611.GI2167049@scaer>
+In-Reply-To: <20220823164611.GI2167049@scaer>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 23 Aug 2022 20:02:45 +0200
+Message-ID: <CAB0FRssgdgs9E9aS2y7R407m_b2KNZ_RydMO6epGsVw-wof_yA@mail.gmail.com>
+To: buildroot <buildroot@busybox.net>
+Subject: Re: [Buildroot] [PATCH 0/3] portable services: another use case of
+ BR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,115 +76,222 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5269775432684429220=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+--===============5269775432684429220==
+Content-Type: multipart/alternative; boundary="000000000000cb1a2f05e6ec5f7e"
 
-Am Mo., 15. Aug. 2022 um 12:14 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
+--000000000000cb1a2f05e6ec5f7e
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Le mar. 23 ao=C3=BBt 2022 =C3=A0 18:46, Yann E. MORIN <yann.morin.1998@free=
+.fr> a
+=C3=A9crit :
+
+> Fran=C3=A7ois, All,
 >
-> Hello Heiko,
->
-> On Tue, 9 Aug 2022 10:06:02 +0200
-> Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
->
-> > But this is not normal, because:
+> On 2022-02-21 05:30 +0100, Francois Perrad spake thusly:
+> > This series allows to build a rootfs suitable for portable services wit=
+h
+> systemd.
 > >
-> > UBOOT_MAKE_OPTS += \
-> >         CROSS_COMPILE="$(TARGET_CROSS)" \
-> >         ARCH=$(UBOOT_ARCH) \
-> >         HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS)))" \
-> >         HOSTLDFLAGS="$(HOST_LDFLAGS)" \
-> >         $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS))
+> > A new value of "Init system" is introduced : BR2_INIT_PORTABLE.
+> > BR2_INIT_PORTABLE is like BR2_INIT_NONE, but with all
+> FOO_INSTALL_INIT_SYSTEMD executed.
 > >
-> > see we're passing HOSTLDFLAGS here? It contains -L$(HOST_DIR)/lib. So
-> > it means there is also something wrong in U-Boot in that it doesn't use
-> > $(HOSTLDFLAGS).
+> > A new type of skeleton is required : BR2_PACKAGE_SKELETON_INIT_PORTABLE=
+.
+> >
+> > see https://systemd.io/PORTABLE_SERVICES/
 >
-> Could you try this change in U-Boot:
+> Given the feedback on this series, and after discussing with the other
+> maintainers, I've now marked this series as rejected. Sorry for that.
 >
-> diff --git a/scripts/Makefile.host b/scripts/Makefile.host
-> index 69983a19a44..7624304e3e9 100644
-> --- a/scripts/Makefile.host
-> +++ b/scripts/Makefile.host
-> @@ -89,7 +89,7 @@ hostcxx_flags  = -Wp,-MD,$(depfile) $(__hostcxx_flags)
->  # Create executable from a single .c file
->  # host-csingle -> Executable
->  quiet_cmd_host-csingle         = HOSTCC  $@
-> -      cmd_host-csingle = $(HOSTCC) $(hostc_flags) -o $@ $< \
-> +      cmd_host-csingle = $(HOSTCC) $(hostc_flags) $(KBUILD_HOSTLDFLAGS) -o $@ $< \
->                 $(KBUILD_HOSTLDLIBS) $(HOSTLDLIBS_$(@F))
->  $(host-csingle): $(obj)/%: $(src)/%.c FORCE
->         $(call if_changed_dep,host-csingle)
 >
-> (without your pkg-config patch, of course).
+Thanks for these feedbacks.
+
+Fran=C3=A7ois
+
+
+> If you believe the use-case is really important, we can reconsider it in
+> the light of a newer and more complete series that addresses the issues
+> that were raised in this review.
 >
-> Indeed, scripts/Makefile.host is a copy of the kernel's
-> scripts/Makefile.host, and the kernel copy does use KBUILD_HOSTLDFLAGS
-> when building host tools that are based on a single source file, but
-> for some reason the U-Boot copy does not have it, which doesn't make
-> much sense.
-
-Indeed ... I just added this change to my local copy of u-boot rebuild
-it without the previous patch and it works.
-
+> Thank you!
 >
-> I think it doesn't mean your pkg-config patch is bogus: it still makes
-> sense to use pkg-config when possible, but I also think not passing
-> KBUILD_HOSTLDFLAGS is incorrect.
+> Regards,
+> Yann E. MORIN.
 >
-> Of course, if it works, I think both patches should be submitted to
-> U-Boot upstream.
-
-I will prepare an U-Boot patch and send it to the mailing list. I saw
-that you cahnged the patch in patchwork to "changes requested". Would
-you accept it with the "new" patch?
-
-> Could you have a look?
-
-without the change:
---- 8< ---
-  /usr/bin/gcc -O2 -isystem
-/home/hthiery/sources/mainline/buildroot/output/host/include
--Wp,-MD,tools/.mkeficapsule.d -Wall -Wstrict-prototypes -O2
--fomit-frame-pointer   -std=gnu11    -DCONFIG_FIT_SIGNATURE
--DCONFIG_FIT_SIGNATURE_MAX_SIZE=0xffffffff -DCONFIG_FIT_CIPHER
--include ./include/compiler.h -idirafterinclude
--idirafter./arch/arm/include -I./scripts/dtc/libfdt -I./tools
--DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE  -o
-tools/mkeficapsule tools/mkeficapsule.c   -lgnutls -luuid
---- 8< ---
-
-with the change you suggested:
---- 8< ---
-  /usr/bin/gcc -O2 -isystem
-/home/hthiery/sources/mainline/buildroot/output/host/include
--Wp,-MD,tools/.mkeficapsule.d -Wall -Wstrict-prototypes -O2
--fomit-frame-pointer   -std=gnu11    -DCONFIG_FIT_SIGNATURE
--DCONFIG_FIT_SIGNATURE_MAX_SIZE=0xffffffff -DCONFIG_FIT_CIPHER
--include ./include/compiler.h -idirafterinclude
--idirafter./arch/arm/include -I./scripts/dtc/libfdt -I./tools
--DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -D_GNU_SOURCE
--L/home/hthiery/sources/mainline/buildroot/output/host/lib
--Wl,-rpath,/home/hthiery/sources/mainline/buildroot/output/host/lib -o
-tools/mkeficapsule tools/mkeficapsule.c   -lgnutls -luuid
---- 8< ---
-
-> Thanks a lot!
+> > Francois Perrad (3):
+> >   package/skeleton-init-portable: new skeleton
+> >   portable: new init system
+> >   portable: tweak some default values
+> >
+> >  DEVELOPERS                                    |  1 +
+> >  fs/squashfs/Config.in                         |  1 +
+> >  package/Config.in                             |  1 +
+> >  package/ifupdown-scripts/Config.in            |  2 +-
+> >  package/pkg-generic.mk                        |  2 ++
+> >  package/skeleton-init-portable/Config.in      |  7 ++++++
+> >  .../skeleton-init-portable.mk                 | 23 +++++++++++++++++++
+> >  system/Config.in                              | 18 +++++++++++----
+> >  8 files changed, 50 insertions(+), 5 deletions(-)
+> >  create mode 100644 package/skeleton-init-portable/Config.in
+> >  create mode 100644 package/skeleton-init-portable/
+> skeleton-init-portable.mk
+> >
+> > --
+> > 2.32.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
 >
-> Thomas
 > --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+>
+> .-----------------.--------------------.------------------.--------------=
+------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There i=
+s
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------=
+------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
 
--- 
-Heiko
+--000000000000cb1a2f05e6ec5f7e
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0mar. 23 ao=C3=BBt 2022 =C3=A0=
+=C2=A018:46, Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr">y=
+ann.morin.1998@free.fr</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
+rgb(204,204,204);padding-left:1ex">Fran=C3=A7ois, All,<br>
+<br>
+On 2022-02-21 05:30 +0100, Francois Perrad spake thusly:<br>
+&gt; This series allows to build a rootfs suitable for portable services wi=
+th systemd.<br>
+&gt; <br>
+&gt; A new value of &quot;Init system&quot; is introduced : BR2_INIT_PORTAB=
+LE.<br>
+&gt; BR2_INIT_PORTABLE is like BR2_INIT_NONE, but with all FOO_INSTALL_INIT=
+_SYSTEMD executed.<br>
+&gt; <br>
+&gt; A new type of skeleton is required : BR2_PACKAGE_SKELETON_INIT_PORTABL=
+E.<br>
+&gt; <br>
+&gt; see <a href=3D"https://systemd.io/PORTABLE_SERVICES/" rel=3D"noreferre=
+r" target=3D"_blank">https://systemd.io/PORTABLE_SERVICES/</a><br>
+<br>
+Given the feedback on this series, and after discussing with the other<br>
+maintainers, I&#39;ve now marked this series as rejected. Sorry for that.<b=
+r>
+<br></blockquote><div><br></div><div>Thanks for these feedbacks.</div><div>=
+<br></div><div>Fran=C3=A7ois<br></div><div>=C2=A0</div><blockquote class=3D=
+"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(2=
+04,204,204);padding-left:1ex">
+If you believe the use-case is really important, we can reconsider it in<br=
+>
+the light of a newer and more complete series that addresses the issues<br>
+that were raised in this review.<br>
+<br>
+Thank you!<br>
+<br>
+Regards,<br>
+Yann E. MORIN.<br>
+<br>
+&gt; Francois Perrad (3):<br>
+&gt;=C2=A0 =C2=A0package/skeleton-init-portable: new skeleton<br>
+&gt;=C2=A0 =C2=A0portable: new init system<br>
+&gt;=C2=A0 =C2=A0portable: tweak some default values<br>
+&gt; <br>
+&gt;=C2=A0 DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=
+=C2=A0 1 +<br>
+&gt;=C2=A0 fs/squashfs/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
+&gt;=C2=A0 package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
+&gt;=C2=A0 package/ifupdown-scripts/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 |=C2=A0 2 +-<br>
+&gt;=C2=A0 package/<a href=3D"http://pkg-generic.mk" rel=3D"noreferrer" tar=
+get=3D"_blank">pkg-generic.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 2 ++<br>
+&gt;=C2=A0 package/skeleton-init-portable/Config.in=C2=A0 =C2=A0 =C2=A0 |=
+=C2=A0 7 ++++++<br>
+&gt;=C2=A0 .../<a href=3D"http://skeleton-init-portable.mk" rel=3D"noreferr=
+er" target=3D"_blank">skeleton-init-portable.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 23 +++++++++++++++++++<br>
+&gt;=C2=A0 system/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 18 +++++++++++--=
+--<br>
+&gt;=C2=A0 8 files changed, 50 insertions(+), 5 deletions(-)<br>
+&gt;=C2=A0 create mode 100644 package/skeleton-init-portable/Config.in<br>
+&gt;=C2=A0 create mode 100644 package/skeleton-init-portable/<a href=3D"htt=
+p://skeleton-init-portable.mk" rel=3D"noreferrer" target=3D"_blank">skeleto=
+n-init-portable.mk</a><br>
+&gt; <br>
+&gt; -- <br>
+&gt; 2.32.0<br>
+&gt; <br>
+&gt; _______________________________________________<br>
+&gt; buildroot mailing list<br>
+&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
+@buildroot.org</a><br>
+&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
+nfo/buildroot</a><br>
+<br>
+-- <br>
+.-----------------.--------------------.------------------.----------------=
+----.<br>
+|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
+Erics&#39; conspiracy: |<br>
+| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
+=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
+| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
+ =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
+| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer" target=3D"_bl=
+ank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=A0 =C2=A0 =
+|=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
+&#39;------------------------------^-------^------------------^------------=
+--------&#39;<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div></div>
+
+--000000000000cb1a2f05e6ec5f7e--
+
+--===============5269775432684429220==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5269775432684429220==--
