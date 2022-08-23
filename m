@@ -1,50 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FA74ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8706C6FA83
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C294D84276;
-	Sun, 11 Sep 2022 09:02:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C294D84276
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5FC5540BAD;
+	Sun, 11 Sep 2022 09:02:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FC5540BAD
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id afOII2uSMLK3; Sun, 11 Sep 2022 09:02:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 647B540B9F;
+	Sun, 11 Sep 2022 09:02:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 647B540B9F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 017481BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1B6D83EDE
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1B6D83EDE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bYx6G7Y8X9mC; Sun, 11 Sep 2022 09:02:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9D2F8429F;
-	Sun, 11 Sep 2022 09:01:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9D2F8429F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 377931BF368
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0AB46FB1C
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0AB46FB1C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s7jUNE-sbdZO for <buildroot@lists.busybox.net>;
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h8O2Bzt9TIRL for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC3E16103F
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC3E16103F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C85183EE3
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C85183EE3
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 966BD83621; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+ id 03F6D8361F; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 21:29:24 +0200
+Date: Tue, 23 Aug 2022 21:44:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 590bc8efb6c54539471826974b4e457dd1e99034
-X-Git-Newrev: 9bbcc554dd12acdbdd1484f17e72423658982025
+X-Git-Oldrev: 85a3bfc4ca93252517337ed82ae7370372ec5e34
+X-Git-Newrev: 2e3ef50648f3356a0e8e06182be1e482a3ec2a53
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084825.966BD83621@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-fonttools: bump to version
- 4.36.0
+Message-Id: <20220911084826.03F6D8361F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uuu: bump to version 1.4.240
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,44 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bbcc554dd12acdbdd1484f17e72423658982025
+commit: https://git.buildroot.net/buildroot/commit/?id=2e3ef50648f3356a0e8e06182be1e482a3ec2a53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-fonttools/python-fonttools.hash | 4 ++--
- package/python-fonttools/python-fonttools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/uuu/uuu.hash | 2 +-
+ package/uuu/uuu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
-index 469fea9c19..4f6536dbfb 100644
---- a/package/python-fonttools/python-fonttools.hash
-+++ b/package/python-fonttools/python-fonttools.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fonttools/json
--md5  197ad603c91d4c2909acf9e54c26e85f  fonttools-4.34.4.zip
--sha256  9a1c52488045cd6c6491fd07711a380f932466e317cb8e016fc4e99dc7eac2f0  fonttools-4.34.4.zip
-+md5  5eb0df388216de4bfd058153d16c75bf  fonttools-4.36.0.zip
-+sha256  e637d2fe06bddabbfc488e02ef32d04d561e3c71e9ba11abc7782ea753ceb218  fonttools-4.36.0.zip
- # Locally computed sha256 checksums
- sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
-diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
-index c35c538cb6..6281359e86 100644
---- a/package/python-fonttools/python-fonttools.mk
-+++ b/package/python-fonttools/python-fonttools.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
+index 7291f93c52..9396926781 100644
+--- a/package/uuu/uuu.hash
++++ b/package/uuu/uuu.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+-sha256  b8b7fcd0e8eca64a255bf2b964bfb39a97599670e5258858421b27ff86aac80f  uuu_source-1.4.224.tar.gz
++sha256  2a1971438f70f77fae0578fb59b831d1e6de38f8c63f0f26e516248d9451a057  uuu_source-1.4.240.tar.gz
+ sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
+ sha256  52b1828ddb508a180cf9ad159b61e655c72dfb25ffce67eb0aef761d38a4398f  README.md
+diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+index 647254446f..0cd4427697 100644
+--- a/package/uuu/uuu.mk
++++ b/package/uuu/uuu.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FONTTOOLS_VERSION = 4.34.4
-+PYTHON_FONTTOOLS_VERSION = 4.36.0
- PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).zip
--PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/5a/a4/a97cff4c4af6764a04cc202299e5205b2e101cb1543bcaf9737be29f78ab
-+PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/df/4b/ca51dbaf267decfcc7ca9300cdc703206c1c05f3e2beb5140a71817c2d7e
- PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
- PYTHON_FONTTOOLS_LICENSE = MIT
- PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
+-UUU_VERSION = 1.4.224
++UUU_VERSION = 1.4.240
+ UUU_SOURCE = uuu_source-$(UUU_VERSION).tar.gz
+ UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
+ UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
