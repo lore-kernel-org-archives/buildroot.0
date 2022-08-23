@@ -1,50 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B627AC32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 21:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E694C32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 21:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41FD140873;
-	Tue, 23 Aug 2022 21:34:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41FD140873
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97109409E2;
+	Tue, 23 Aug 2022 21:39:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97109409E2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8IBey-Ei5LtI; Tue, 23 Aug 2022 21:34:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kz_PrnihH4wD; Tue, 23 Aug 2022 21:39:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFA10403D8;
-	Tue, 23 Aug 2022 21:34:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFA10403D8
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9FA1403C8;
+	Tue, 23 Aug 2022 21:39:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9FA1403C8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D8C5E1BF3D7
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:33:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2B55F1BF3D7
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C042F40A04
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:33:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C042F40A04
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9FDE403C8
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:39:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9FDE403C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nsD2KdPh06uZ for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 21:33:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96FA4409E2
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 21:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96FA4409E2
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4053987C1B; Tue, 23 Aug 2022 21:19:10 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 23:31:33 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 75cb88ae667002454aa3a3ec2b927cd171f3bfff
-X-Git-Newrev: 4c2f0b918c65b1de934800bcc82e571ca4f96b86
-X-Patchwork-Hint: ignore
-Message-Id: <20220823211910.4053987C1B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/freescale-imx/firmware-imx: allow ddr firmware version override
+ with ESMTP id dQnwLBq3cq0v for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 21:39:40 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8EAB403C2
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C8EAB403C2
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 21:39:39 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 91820240006;
+ Tue, 23 Aug 2022 21:39:36 +0000 (UTC)
+Date: Tue, 23 Aug 2022 23:39:35 +0200
+To: Bram Vlerick <bram.vlerick@openpixelsystems.org>
+Message-ID: <20220823233935.047ae825@windsurf>
+In-Reply-To: <20220816070517.2770099-1-bram.vlerick@openpixelsystems.org>
+References: <20220816070517.2770099-1-bram.vlerick@openpixelsystems.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1661290777;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=aS1Y/Vlb04Trsl+amLcn5WbUGINBMftbF+Fyggy2XqM=;
+ b=GPl+GT3osmaVh9PXMQRF7ezbgaUHi3eZ9B3ee+BUey7abJoLqTSYktOIVCg/CwpVLfyLGL
+ F+u9xuxx7d7VJcEA6+D0Yu3qN71xtMMk4yDUhqLCNkdKTQKyE94Y8Ei273gJm+3ERiQpx4
+ v0jA2BcrFILxzd4OjRmFALj4mjEp24tTBW0iTIGRvlKUolWADr2FAJGKfIe9KMJ2Drs+eF
+ Yv9PsIifqj9k4ryqBfJv+wSSM2dw3e6lmH+xGbueD+NbqoWo2Ji/MB1Hr31HIQtyaawkgy
+ kZGDAgwSOCDEHsqJa1/FWr8pAqEsF8L0bWKflUBOkNaFKM6j2+/daN9u05yqAw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=GPl+GT3o
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/freescale-imx/firmware-imx:
+ allow ddr firmware version override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,120 +77,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Gary Bisson <bisson.gary@gmail.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c2f0b918c65b1de934800bcc82e571ca4f96b86
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Bram,
 
-Add support for selecting a specific version of the DDR firmware
-version. For example Variscite's imx8mp-var-dart SOM requires the
-"_202006" version of the lpddr4_pmu_train_* binaries.
+On Tue, 16 Aug 2022 09:05:17 +0200
+Bram Vlerick <bram.vlerick@openpixelsystems.org> wrote:
 
-Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/freescale-imx/firmware-imx/Config.in       | 10 ++++++
- package/freescale-imx/firmware-imx/firmware-imx.mk | 39 +++++++++++++++-------
- 2 files changed, 37 insertions(+), 12 deletions(-)
+> Add support for selecting a specific version of the DDR firmware
+> version. For example Variscite's imx8mp-var-dart SOM requires the
+> "_202006" version of the lpddr4_pmu_train_* binaries.
+> 
+> Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
+> ---
+>  package/freescale-imx/firmware-imx/Config.in  | 10 +++++
+>  .../firmware-imx/firmware-imx.mk              | 39 +++++++++++++------
+>  2 files changed, 37 insertions(+), 12 deletions(-)
 
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index 06c4d8036c..0c1913e227 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -82,6 +82,16 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR3
- 
- endchoice # DDR training FW
- 
-+config BR2_PACKAGE_FIRMWARE_IMX_DDR_VERSION
-+	string "DDR3/DDR4/LPDDR4 firmware version"
-+	# Needed for backward compatibility, the package used to
-+	# unconditionally use HW version 201810 when DDR3/DDR4 was
-+	# selected
-+	default "201810" if BR2_PACKAGE_FIRMWARE_IMX_DDR3 || BR2_PACKAGE_FIRMWARE_IMX_DDR4
-+	help
-+	  Use a specific version of the imx ddr binaries. Leaving this
-+	  field empty will select the default version.
-+
- config BR2_PACKAGE_FIRMWARE_IMX_IMEM_LEN
- 	hex "(LP)DDR IMEM padding length"
- 	default 0x8000
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 4884079d5c..99fe71a91c 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -36,6 +36,11 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
- 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
- endef
- 
-+FIRMWARE_IMX_DDR_VERSION = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_DDR_VERSION))
-+ifneq ($(FIRMWARE_IMX_DDR_VERSION),)
-+FIRMWARE_IMX_DDR_VERSION_SUFFIX = _$(FIRMWARE_IMX_DDR_VERSION)
-+endif
-+
- ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
- FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
- 
-@@ -44,9 +49,13 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
- 	# lpddr4_pmu_train_fw.bin is needed when generating imx8-boot-sd.bin
- 	# which is done in post-image script.
- 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
--		lpddr4_pmu_train_1d_imem,lpddr4_pmu_train_1d_dmem,lpddr4_pmu_train_1d_fw)
-+		lpddr4_pmu_train_1d_imem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		lpddr4_pmu_train_1d_dmem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		lpddr4_pmu_train_1d_fw)
- 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
--		lpddr4_pmu_train_2d_imem,lpddr4_pmu_train_2d_dmem,lpddr4_pmu_train_2d_fw)
-+		lpddr4_pmu_train_2d_imem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		lpddr4_pmu_train_2d_dmem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		lpddr4_pmu_train_2d_fw)
- 	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
- 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
- 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
-@@ -67,13 +76,17 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
- 	# ddr4_fw.bin is needed when generating imx8-boot-sd.bin
- 	# which is done in post-image script.
- 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
--		ddr4_imem_1d_201810,ddr4_dmem_1d_201810,ddr4_1d_201810_fw)
-+		ddr4_imem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		ddr4_dmem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		ddr4_1d_fw)
- 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
--		ddr4_imem_2d_201810,ddr4_dmem_2d_201810,ddr4_2d_201810_fw)
--	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_201810_fw.bin \
--		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
--		$(BINARIES_DIR)/ddr4_201810_fw.bin
--	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
-+		ddr4_imem_2d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		ddr4_dmem_2d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		ddr4_2d_fw)
-+	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_fw.bin \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_fw.bin > \
-+		$(BINARIES_DIR)/ddr4_fw.bin
-+	ln -sf $(BINARIES_DIR)/ddr4_fw.bin $(BINARIES_DIR)/ddr_fw.bin
- 
- 	# U-Boot supports creation of the combined flash.bin image. To make
- 	# sure that U-Boot can access all available files copy them to
-@@ -90,10 +103,12 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
- 	# ddr3_fw.bin is needed when generating imx8-boot-sd.bin
- 	# which is done in post-image script.
- 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
--		ddr3_imem_1d_201810,ddr3_dmem_1d_201810,ddr3_1d_201810_fw)
--	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr3_1d_201810_fw.bin > \
--		$(BINARIES_DIR)/ddr3_201810_fw.bin
--	ln -sf $(BINARIES_DIR)/ddr3_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
-+		ddr3_imem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		ddr3_dmem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
-+		ddr3_1d_fw)
-+	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr3_1d_fw.bin > \
-+		$(BINARIES_DIR)/ddr3_fw.bin
-+	ln -sf $(BINARIES_DIR)/ddr3_fw.bin $(BINARIES_DIR)/ddr_fw.bin
- 
- 	# U-Boot supports creation of the combined flash.bin image. To make
- 	# sure that U-Boot can access all available files copy them to
+Thanks for this new iteration, which I have applied to our next branch.
+This means this change will not be in Buildroot 2022.08, but in
+Buildroot 2022.11.
+
+Thanks again for your contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
