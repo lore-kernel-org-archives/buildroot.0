@@ -1,51 +1,49 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D35FDC6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:58:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F767ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 08:58:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81FDE84077;
-	Sun, 11 Sep 2022 08:58:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81FDE84077
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0E5640BB8;
+	Sun, 11 Sep 2022 08:58:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0E5640BB8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5GgEAHnMIylz; Sun, 11 Sep 2022 08:58:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D86640BAC;
+	Sun, 11 Sep 2022 08:58:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D86640BAC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9464A1BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68A3A83EC3
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68A3A83EC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FMtGQ1tPXe8d; Sun, 11 Sep 2022 08:58:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A549083F3C;
-	Sun, 11 Sep 2022 08:58:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A549083F3C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C41041BF9A4
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A62661033
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A62661033
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wNdQ3Vw2cw_A for <buildroot@lists.busybox.net>;
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vbW-RN8-nnVN for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D726F61053
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D726F61053
+ by smtp1.osuosl.org (Postfix) with ESMTP id 849BC83ED9
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 849BC83ED9
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D141E83620; Sun, 11 Sep 2022 08:48:24 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 6B35D8361F; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 20 Aug 2022 11:01:31 +0200
+Date: Tue, 23 Aug 2022 21:24:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 35b3a646e0ae44b9a4428dcedce22a61967a2384
-X-Git-Newrev: 8bba793456fe887c81a6198fedc9ea8fceb59a74
+X-Git-Oldrev: 8ab036d26f5811d604433013b9fbefbf0227a5c1
+X-Git-Newrev: 7e185002018c9c43664632b13b030c4693eb110b
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084824.D141E83620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-backports: bump version to
- 5.10.110
+Message-Id: <20220911084825.6B35D8361F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kexec: bump to version 2.0.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +55,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bba793456fe887c81a6198fedc9ea8fceb59a74
+commit: https://git.buildroot.net/buildroot/commit/?id=7e185002018c9c43664632b13b030c4693eb110b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Note:
-This is not the latest package version to date. This is the latest
-linux-backports version which is not changing the minimal kernel version
-requirement, which is kept to kernels version >= 3.10.
+https://www.spinics.net/lists/kexec/msg29887.html
 
-For commit log details, see:
-https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/log/?h=v5.10.110-1
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Federico Pellegrin <fede@evolware.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-backports/linux-backports.hash | 4 ++--
- package/linux-backports/linux-backports.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kexec/kexec.hash | 2 +-
+ package/kexec/kexec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-index 3e103424f5..83a3e54cd7 100644
---- a/package/linux-backports/linux-backports.hash
-+++ b/package/linux-backports/linux-backports.hash
-@@ -1,5 +1,5 @@
--# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.8/sha256sums.asc
--sha256  19b4174d89bf11ee221458e11f1e8dace26558498774b823051156f522d2036b  backports-5.8-1.tar.xz
-+# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.10.110/sha256sums.asc
-+sha256  3d958154080c059adaf26512430fd1a8888d65a2228e5e70e48d028201e148b1  backports-5.10.110-1.tar.xz
- # Locally computed
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
- sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-index 068dcffcc8..a39891336d 100644
---- a/package/linux-backports/linux-backports.mk
-+++ b/package/linux-backports/linux-backports.mk
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index dcf661cce4..34e17339b9 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256  af230ce6430deb6c2ab35762f8028888ac9d6ebefc2c4c83224a9c109143c0e8  kexec-tools-2.0.24.tar.xz
++sha256  7ce2e5def38ec04f79feb107d02243dd586fbc68569eccf02f44bad3a13ec07d  kexec-tools-2.0.25.tar.xz
+ # locally calculated
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index c08a9155f2..ced7009ed3 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUX_BACKPORTS_VERSION_MAJOR = 5.8
-+LINUX_BACKPORTS_VERSION_MAJOR = 5.10.110
- LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
- LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
- LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
+-KEXEC_VERSION = 2.0.24
++KEXEC_VERSION = 2.0.25
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
