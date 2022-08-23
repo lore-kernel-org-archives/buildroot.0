@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9BE0C32789
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 20:30:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB19C32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 20:31:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CEA5409C1;
-	Tue, 23 Aug 2022 20:30:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CEA5409C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id BBD934012B;
+	Tue, 23 Aug 2022 20:31:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBD934012B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JaMClSGu2nF6; Tue, 23 Aug 2022 20:30:45 +0000 (UTC)
+	with ESMTP id 1PC1EbP9On46; Tue, 23 Aug 2022 20:31:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 87CBE40461;
-	Tue, 23 Aug 2022 20:30:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87CBE40461
+	by smtp2.osuosl.org (Postfix) with ESMTP id DCF73409F8;
+	Tue, 23 Aug 2022 20:30:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCF73409F8
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 340BD1BF5A8
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 20:30:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A9831BF5A8
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 20:30:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E94C4040B
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 20:30:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E94C4040B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C34C40880
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 20:30:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C34C40880
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0E2MdX4vKhwK for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 20:30:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAEC34067C
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 20:30:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAEC34067C
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id AB0A687BCD; Tue, 23 Aug 2022 20:15:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 22:22:25 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3ad17d88f4fcd1e76e2835331e5dfc6cc976a2e0
-X-Git-Newrev: ab91f93953458389adab8dd482b6fbdc7c1e3a1f
-X-Patchwork-Hint: ignore
-Message-Id: <20220823201539.AB0A687BCD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-mediadriver:
- bump version to 22.5.2
+ with ESMTP id i3WLiPXeWOCg for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 20:30:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC6B24069B
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CC6B24069B
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 20:30:55 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7F7CD240008;
+ Tue, 23 Aug 2022 20:30:52 +0000 (UTC)
+Date: Tue, 23 Aug 2022 22:30:51 +0200
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20220823223051.205e6d8f@windsurf>
+In-Reply-To: <20220817154633.127418-1-bernd.kuhls@t-online.de>
+References: <20220817154633.127418-1-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1661286653;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=YoHp6vQ/fI2VcRBAZe0jag1xvYf+wAHERue4Sj6F35w=;
+ b=UR4CBwtIRDSLo5XQot7AyO7+n0JQm14KBzV7btSF/CiuS/mehwEvVEBHWlNRFN+s0cnQsE
+ 9BtPyzAz6wGkQs3E8ZgRUYTa2sI9P7tZ31etk4UpgrtglauohCWuCbqz0Sncyg7cbjdV0K
+ DtSPk32ZeWyBP/hLWumwpXCAGdoMJPa2jq9d2AfgSPhXe1sFWItIUQT05uaIH/LoAfZ4yd
+ Dl2x4DeS8niw1wsL9yrPmDOPDdGrTg5CwS+XR0KNCN+Fqd7xTMaz+YxoMcez+nt6WKqml3
+ 0EtHuAsMvmXtpcw7gvA0KZgo4bJG82oyT8/c3cfPbEapbeU2QVA22pCvhg2Bgw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UR4CBwtI
+Subject: Re: [Buildroot] [PATCH/next 1/2] package/intel-mediadriver: bump
+ version to 22.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +78,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab91f93953458389adab8dd482b6fbdc7c1e3a1f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed, 17 Aug 2022 17:46:32 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+>  package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 890f48029e..74870f54de 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  17905258374dafe2051073fee5722527c6b756c111b2962af051b37d1fc0df56  intel-media-22.5.1.tar.gz
-+sha256  3b53bb6fb7793ef6c498ff086327ceefeef0a72d1f41b1fcaeae552a694fbcd8  intel-media-22.5.2.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index f43e6d1b42..11a04e8e33 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 22.5.1
-+INTEL_MEDIADRIVER_VERSION = 22.5.2
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+Both applied to next. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
