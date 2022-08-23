@@ -1,70 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1898C32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 21:22:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BF16C32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 21:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5134460BEE;
-	Tue, 23 Aug 2022 21:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5134460BEE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C32E40A04;
+	Tue, 23 Aug 2022 21:23:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C32E40A04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PsWbNfesc1NT; Tue, 23 Aug 2022 21:22:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 42W6FgB173Dq; Tue, 23 Aug 2022 21:23:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AAFC60B4C;
-	Tue, 23 Aug 2022 21:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AAFC60B4C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E23B409DD;
+	Tue, 23 Aug 2022 21:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E23B409DD
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 803651BF3D7
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:22:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 48DF61BF3D7
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:23:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5BADA81289
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:22:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BADA81289
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3127280E48
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:23:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3127280E48
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k09fW3NtNo-1 for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 21:22:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A6E381281
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A6E381281
- for <buildroot@busybox.net>; Tue, 23 Aug 2022 21:22:34 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9647860005;
- Tue, 23 Aug 2022 21:22:32 +0000 (UTC)
-Date: Tue, 23 Aug 2022 23:22:31 +0200
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20220823232231.6fc5fd7f@windsurf>
-In-Reply-To: <20220816175503.1280276-3-francois.perrad@gadz.org>
-References: <20220816175503.1280276-1-francois.perrad@gadz.org>
- <20220816175503.1280276-3-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id OI8P1hBKYkdF for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 21:23:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C48BC80E3B
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C48BC80E3B
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 21:23:52 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id b5so14186500wrr.5
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 14:23:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=Cna7GxHlFp2QTtAIcL48OvACD0o7dxphFpiaagtG1ag=;
+ b=vl8ocEmpAvCWV2eEaO0mPh0HZE1zL2Z2VXLQiraIA/C3AkGoNf4+GsxALB62H1hGUp
+ DiYu1T+B4WWg8YI95BbjU9Ywo8NoJrrEXhNb11kujRhtIMgO+2I0yADlvNPN8urIzSiw
+ L5tMYNUWqX6gsVkjxMdfK7UI7PJ1MKcTwHbXQrnKH8BOsygRPdkzoziaGhtIhGXXeXTR
+ St/cygav9a9hhv1Tx3ysy0h44i63a6Y8Lokco1jqmsYFXT8JxKlAPFTPPYX5+zmK68TX
+ RU/GrQAWQ8y/msaI8trhiorfHOiKC+UL4HPlrXt7gJlxmdzY1WpO4PqdPsBeEDFXXfRv
+ +w5w==
+X-Gm-Message-State: ACgBeo060caGoojgtJW8vdNGQygGESub1g0uhJWCeQPd22UaDRFKvgy9
+ hW0I8MCRzvUjENc1+6gmBiiSkdyJzug=
+X-Google-Smtp-Source: AA6agR7adwxkt8eFkEn/S8smcIg+VU5hFX6rJ/trEfQrWRd+9IVYnRYEDbayTbEhArnmdWWilP8nwg==
+X-Received: by 2002:a05:6000:381:b0:221:7542:61bb with SMTP id
+ u1-20020a056000038100b00221754261bbmr14353567wrf.305.1661289830637; 
+ Tue, 23 Aug 2022 14:23:50 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ o14-20020adfcf0e000000b0021f1ec8776fsm15446352wrj.61.2022.08.23.14.23.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Aug 2022 14:23:50 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 23 Aug 2022 23:23:46 +0200
+Message-Id: <20220823212346.7415-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1661289753;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=H/3xnbRMbL8VSa32RBKi+nAQeNZnbPDQ9OWG025Ql50=;
- b=FUnsZdkHT1zsAnX+X+be0S5xkD72+eflc8SOGtgV5pb4VD7YWp0CcJH/JUN37rp7j/aFi+
- B/Z2QjT4Y1LsW2Uss68GS5O0kJbqrFM7Q7RH5A9bySkJlJfOjc08ajlRiKkU5XDltQLYSS
- iW1xM0MwtVnzpE+UVlQmKSVJfedfdS28ZeRI3J4eI8TvNttLtz3A39FZxU4yrIwj//i5gJ
- iHormlrRPtZxsk/9/pwaW7sW6g2OhACUF8xjhb8iq/zvORlZW9uQ6G50gqgnyPeRX41kHZ
- g+9nnavvhApjIA0Y3bmsThdJchLuXZNbzes3fP1t2NgwAwnIhAf7nfnjhNIgCg==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=Cna7GxHlFp2QTtAIcL48OvACD0o7dxphFpiaagtG1ag=;
+ b=LqchAkkQo3VmUXWh/0LLbUswWRs3fJb/BxM9gCsWRP3TBzp7KEiCb4GPhc24TwzDB4
+ e+ZC/f2nZxS6ya042JKLxkbeNwaJZA4VejZK5hkDCslqRsU7ybsvH4Rx0K4ohpmPZGgE
+ 20HNyGTTUnE6JG9GYXslPPRlde2QRCV12wzfVovlNBreZVB1AhrwJc5ho1qBbOQMJsIb
+ /Zqy8A1iYFQ9LJCZjY3hRXiQsAMYlpmoEu93M+NC+Fk4com2RINol1y3kyx6fG2KU7x9
+ e5HmjCtMKmlXXrufFqDemR9+zXFalPr5Ho30j6zqGIM/2izhZdSOYeS4gMomBGGXXvKi
+ DgVw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FUnsZdkH
-Subject: Re: [Buildroot] [PATCH v4 2/2] board/freescale/ls1028ardb: new board
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=LqchAkkQ
+Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: add aufs-util handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,55 +92,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 16 Aug 2022 19:55:03 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+Add a custom case to make sure that a random configuration with an empty
+version for aufs-util doesn't fail.
 
-> diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
-> new file mode 100644
-> index 000000000..605e41d70
-> --- /dev/null
-> +++ b/configs/ls1028ardb_defconfig
-> @@ -0,0 +1,57 @@
-> +# Architecture
-> +BR2_aarch64=y
-> +BR2_cortex_a72=y
-> +
-> +# Toolchain
-> +# Linux headers same as kernel, a 5.10 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-> +# wchar required by eudev
-> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+Fixes:
+ - http://autobuild.buildroot.org/results/e242cf66a02983bcf6e95b37f8e458bd18aee683
 
-I dropped this since we're now using glibc by default.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ utils/genrandconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> +# Host utilities
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-
-I added:
-
-BR2_PACKAGE_HOST_QORIQ_RCW=y
-
-because the arm-trusted-firmware now depends on qoriq-rcw instead of
-selecting it.
-
-Applied to next with those two changes!
-
-Thanks!
-
-Thomas
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 4c00d67691..6e144a792a 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -296,6 +296,9 @@ def fixup_config(sysinfo, configfile):
+     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
+        'BR2_PACKAGE_FLANN=y\n' in configlines:
+         return False
++    if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
++       'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
++        return False
+ 
+     if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines and \
+        'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE=""\n' in configlines and \
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
