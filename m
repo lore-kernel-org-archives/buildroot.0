@@ -1,50 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 728F5C32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:45:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD816C32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04F6060B5C;
-	Tue, 23 Aug 2022 19:45:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04F6060B5C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47A50819ED;
+	Tue, 23 Aug 2022 19:45:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47A50819ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J7EaQpt6w1zI; Tue, 23 Aug 2022 19:45:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B6xHu63tDpFN; Tue, 23 Aug 2022 19:45:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BF1360B30;
-	Tue, 23 Aug 2022 19:45:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BF1360B30
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3834E1BF9A4
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:44:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71D65817E4;
+	Tue, 23 Aug 2022 19:45:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71D65817E4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9208B1BF39D
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:44:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F01760B30
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:44:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F01760B30
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D3BD403B7
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:44:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D3BD403B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Px5UtZxqQQJH for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 19:44:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DC0660B15
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:44:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DC0660B15
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 13A3487B5C; Tue, 23 Aug 2022 19:29:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 21:43:20 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5bb747f0b783a0d3f1712350ca3277263045b299
-X-Git-Newrev: 85a3bfc4ca93252517337ed82ae7370372ec5e34
-X-Patchwork-Hint: ignore
-Message-Id: <20220823192956.13A3487B5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ser2net: bump to
- version 4.3.7
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JKgkKD6_ntSK for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 19:44:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CF194011C
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3CF194011C
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:44:49 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 013721BF20A;
+ Tue, 23 Aug 2022 19:44:46 +0000 (UTC)
+Date: Tue, 23 Aug 2022 21:44:45 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220823214445.5d197367@windsurf>
+In-Reply-To: <20220822091135.4114651-1-james.hilliard1@gmail.com>
+References: <20220822091135.4114651-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1661283887;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=dIx+NVPzAc0Zcf1hPJhCNTTNpHQr37XFNquzclbiPMg=;
+ b=LibzagSW6avgLZQYKvcDZY52VOGOiAsMAmRDDhSP9tKyqsyK4UXBjTaTPsNiXYGHpZBl1R
+ ibVZ/HsYlpT9goACpBXVCUm0llUrpRdr8OQlRkpxHTbEGfAR21tM/Ck+NoIjfl4Ln3XsFq
+ mHKPFG4UdG7FYpdfj7x7DXcsJ+3IqJpGrTVzfkKuYvCdGAzjV3ndu2M8R/gxQJ9WHEPAHx
+ WWfzi4zglME5G8TckAOzdD6UCI5DKcnk+16lfmW8BB0ZwTk8/DFb/5c8g4fKp9OkTLezN6
+ p09UhiFSY91x7t0+6x3hX8XfmZUiWSBlpTcx0wpHjtXe4XIhzE+olsosrkp9Yw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LibzagSW
+Subject: Re: [Buildroot] [PATCH 1/1] package/ser2net: bump to version 4.3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Francisco Gonzalez <gzmorell@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85a3bfc4ca93252517337ed82ae7370372ec5e34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon, 22 Aug 2022 03:11:35 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ser2net/ser2net.hash | 6 +++---
- package/ser2net/ser2net.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/ser2net/ser2net.hash | 6 +++---
+>  package/ser2net/ser2net.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index 31a7518428..db493b28cb 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  e6d88a440852e28b8e2978003b00e154  ser2net-4.3.4.tar.gz
--sha1  74d02c19c2eef219b59a47fbc61b4fb09cf608d3  ser2net-4.3.4.tar.gz
-+md5  3323783668b20016d79458e82327cff8  ser2net-4.3.7.tar.gz
-+sha1  88c0542b3b5e8ce03bc99ace00b2e163382e726e  ser2net-4.3.7.tar.gz
- # Locally computed:
--sha256  c714d6777849100b2ca3f216d1cfc36d4573639ececc91d5c7809dfe27c8428e  ser2net-4.3.4.tar.gz
-+sha256  542915e240ae8b5c7dcec8d1589e6067818532900d45cfef226cea9f0e671d13  ser2net-4.3.7.tar.gz
- sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index bec2a9c202..393d358033 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SER2NET_VERSION = 4.3.4
-+SER2NET_VERSION = 4.3.7
- SER2NET_SITE = https://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
