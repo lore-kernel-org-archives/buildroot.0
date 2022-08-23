@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41A86ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:03:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CC14C6FA83
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAC8084305;
-	Sun, 11 Sep 2022 09:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAC8084305
+	by smtp1.osuosl.org (Postfix) with ESMTP id B01D2813DE;
+	Sun, 11 Sep 2022 09:03:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B01D2813DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DGxo8lMCfHhn; Sun, 11 Sep 2022 09:03:16 +0000 (UTC)
+	with ESMTP id QL7ZxJKlPOvp; Sun, 11 Sep 2022 09:03:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C80FE84324;
-	Sun, 11 Sep 2022 09:03:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C80FE84324
+	by smtp1.osuosl.org (Postfix) with ESMTP id A52628131E;
+	Sun, 11 Sep 2022 09:03:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A52628131E
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4D1821BF990
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 12B4D1BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23AF66103F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 205FD60774
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23AF66103F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 205FD60774
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C2qoPf5h6V3S for <buildroot@lists.busybox.net>;
+ with ESMTP id s7Bsd2Njf1MB for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18F6F61034
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30E1E61037
  for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18F6F61034
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30E1E61037
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id D545383624; Sun, 11 Sep 2022 08:48:25 +0000 (UTC)
+ id 2C6FB83620; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 21:42:03 +0200
+Date: Tue, 23 Aug 2022 21:48:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8c1702594eb25b26b15cec22a117174edee0624d
-X-Git-Newrev: 2f954aacb9ee401ed4bdbf924cbf55b5816b5477
+X-Git-Oldrev: eb710c3a346de48ae6da5b1afcc820ad89297319
+X-Git-Newrev: b23e33f89cfbd8be6849f115df4cd12bd3bdbf8e
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084825.D545383624@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-yarl: bump to version 1.8.1
+Message-Id: <20220911084826.2C6FB83620@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/open62541: bump to version 1.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f954aacb9ee401ed4bdbf924cbf55b5816b5477
+commit: https://git.buildroot.net/buildroot/commit/?id=b23e33f89cfbd8be6849f115df4cd12bd3bdbf8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-yarl/python-yarl.hash | 4 ++--
- package/python-yarl/python-yarl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/open62541/open62541.hash | 2 +-
+ package/open62541/open62541.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-index bf971e9a9a..b4e411cbdf 100644
---- a/package/python-yarl/python-yarl.hash
-+++ b/package/python-yarl/python-yarl.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/yarl/json
--md5  acd3eb25a9c46b10a699a3bee5fb9777  yarl-1.7.2.tar.gz
--sha256  45399b46d60c253327a460e99856752009fcee5f5d3c80b2f7c0cae1c38d56dd  yarl-1.7.2.tar.gz
-+md5  ff8f2843481cd11c3c674ce4f6fa167b  yarl-1.8.1.tar.gz
-+sha256  af887845b8c2e060eb5605ff72b6f2dd2aab7a761379373fd89d314f4752abbf  yarl-1.8.1.tar.gz
- # Locally computed sha256 checksums
- sha256  56d6ac6c8105c0a51304c21db060e361af9a8ea0af9a75c239c28b5d13693838  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-index 175aaa7a35..55bfbab53e 100644
---- a/package/python-yarl/python-yarl.mk
-+++ b/package/python-yarl/python-yarl.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
+index f5402ffdbb..22c13851bf 100644
+--- a/package/open62541/open62541.hash
++++ b/package/open62541/open62541.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7e2a47ee6c6e5e7b9a9c803ff717670707d040710bb65d2615c0df33a614e629  open62541-v1.3.2-br1.tar.gz
++sha256  283545991c3eb36b18c75a64638c7c2ad8f193654c2403b76aee848abf454e14  open62541-v1.3.3-br1.tar.gz
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+index 0551c3bca6..edc95dcf15 100644
+--- a/package/open62541/open62541.mk
++++ b/package/open62541/open62541.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_YARL_VERSION = 1.7.2
-+PYTHON_YARL_VERSION = 1.8.1
- PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
--PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/f6/da/46d1b3d69a9a0835dabf9d59c7eb0f1600599edd421a4c5a15ab09f527e0
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/d6/04/255c68974ec47fa754564c4abba8f61f9ed68b869bbbb854198d6259c4f7
- PYTHON_YARL_LICENSE = Apache-2.0
- PYTHON_YARL_LICENSE_FILES = LICENSE
- PYTHON_YARL_SETUP_TYPE = setuptools
+-OPEN62541_VERSION = v1.3.2
++OPEN62541_VERSION = v1.3.3
+ OPEN62541_SITE_METHOD = git
+ OPEN62541_SITE = https://github.com/open62541/open62541.git
+ OPEN62541_GIT_SUBMODULES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
