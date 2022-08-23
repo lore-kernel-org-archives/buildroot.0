@@ -1,86 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CBE7C32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 21:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B627AC32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 21:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD39A409DD;
-	Tue, 23 Aug 2022 21:32:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD39A409DD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41FD140873;
+	Tue, 23 Aug 2022 21:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41FD140873
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8IBey-Ei5LtI; Tue, 23 Aug 2022 21:34:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BFA10403D8;
+	Tue, 23 Aug 2022 21:34:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFA10403D8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D8C5E1BF3D7
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:33:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C042F40A04
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:33:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C042F40A04
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6LlPCaS8tJno; Tue, 23 Aug 2022 21:32:13 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0AA1D404D3;
-	Tue, 23 Aug 2022 21:32:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AA1D404D3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 07E571BF3D7
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:32:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D70F781498
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:32:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D70F781498
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zz0wreUTMMl0 for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 21:32:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF5BA8138B
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BF5BA8138B
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 21:32:09 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id n4so18458956wrp.10
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 14:32:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=lYNJe7evWHUiG/RKzb26UpvnbuJtzIRg0jNbcTM50ak=;
- b=wVZiilBOpy73UgoirBtIXyGcYp52a1oCBykZ0YW5cZJVry6jD3YllTYm/1P5OD2ay8
- fORiSArBBMdTrNPSaVt0iokLF2I/YAeJG5BbWZ6n4tBhaxeEkiiP2lSsdPBxEhzi/+u5
- cXy9WucyXVcxa9ULAOlW0rgf2cqudZogiBfTvH74SGCGftT4TRTWUsVJBFGxPyPc/ru2
- zC5UWMLZSnRG/10knCoJa4pM/GW71rLqNr+CGS6YtbDs7ZwxneN9Ug7ZwHvHfTtnzgAt
- A4jAZFV1R4u8ff7aWESzfAsN6Ua3YfBBehQGrnHXTaz4M4z4Uy0q5WVo4U1VP9RQPqvB
- LUyA==
-X-Gm-Message-State: ACgBeo0Qv81fB3lt+HJtuFJLXzywZRQHx1/gZBzN82J43RJTghneaOBo
- sR1CtiGj4wADMYkxQd7+ehhnbxci8zI=
-X-Google-Smtp-Source: AA6agR44lJldxt0MOONXHCkwfCVWux5vD5LZ3eb2SQ4Rby0g6RbIZU9GLWauXcLoOPAClkV0u/Dc4Q==
-X-Received: by 2002:a05:6000:12c3:b0:225:3063:82a6 with SMTP id
- l3-20020a05600012c300b00225306382a6mr13389415wrx.541.1661290327662; 
- Tue, 23 Aug 2022 14:32:07 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- x2-20020adfffc2000000b0021e5bec14basm14917769wrs.5.2022.08.23.14.32.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Aug 2022 14:32:07 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nsD2KdPh06uZ for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 21:33:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96FA4409E2
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 21:33:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96FA4409E2
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 4053987C1B; Tue, 23 Aug 2022 21:19:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 23:32:06 +0200
-Message-Id: <20220823213206.10149-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=lYNJe7evWHUiG/RKzb26UpvnbuJtzIRg0jNbcTM50ak=;
- b=fbwUDDv9u9Prtk8VThm2C0OUt5OViBtHPKO9A+JUiCbIfSIBf5QiMW2mTuvqcXxWca
- mXbTJsQPn4oJlJW5TnL4BrybQbjSY5AHxfXa3FtznTwyOHptvpfRrhfoo9EZ8jvFPQjT
- HnUf3qY6+A+AZooc4QfmjvAd0EuNrMAfoeCS7Y5ng0I8/PMyth6zNeaODsocjmmV4FsU
- 01ziiYEGTiHLL+T+pZEIZjNs8N3XH1HUIFE0SIZVpkuwJ2w9nvINLrFaEUnM83MnZZF9
- 0c5gDADEtikknkalKQf3kdPBAY0TPUiyjZcQshbRZut5WyM6qVcb4fUvShw3XdvdvTfS
- suiQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=fbwUDDv9
-Subject: [Buildroot] [PATCH 1/1] package/freeradius-server: set krb5-config
+Date: Tue, 23 Aug 2022 23:31:33 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 75cb88ae667002454aa3a3ec2b927cd171f3bfff
+X-Git-Newrev: 4c2f0b918c65b1de934800bcc82e571ca4f96b86
+X-Patchwork-Hint: ignore
+Message-Id: <20220823211910.4053987C1B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/freescale-imx/firmware-imx: allow ddr firmware version override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,60 +56,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following libkrb5 build failure raised since the addition of the
-package in commit 736c4c1655d93652a9a7e79235bbe726b3d46176:
+commit: https://git.buildroot.net/buildroot/commit/?id=4c2f0b918c65b1de934800bcc82e571ca4f96b86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-checking for krb5-config... /bin/krb5-config
-checking krb5-config CFLAGS... Failed to find installation architecture
-""
-checking krb5-config LDFLAGS... Failed to find installation architecture
+Add support for selecting a specific version of the DDR firmware
+version. For example Variscite's imx8mp-var-dart SOM requires the
+"_202006" version of the lpddr4_pmu_train_* binaries.
 
-checking krb5-config reported version... Failed to find installation architecture
- ()
-checking krb5-config reported vendor... Failed to find installation architecture
-
-checking canonical API type... HEIMDAL
-
-[...]
-
-In file included from src/modules/rlm_krb5/rlm_krb5.c:32:
-src/modules/rlm_krb5/krb5.h:41:9: error: unknown type name 'krb5_verify_opt'
-   41 |         krb5_verify_opt options;
-      |         ^~~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/f173d1600c278d910f4cbeae86dcad1ee0f911f9
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freeradius-server/freeradius-server.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/freescale-imx/firmware-imx/Config.in       | 10 ++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 39 +++++++++++++++-------
+ 2 files changed, 37 insertions(+), 12 deletions(-)
 
-diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
-index 5b74a3b01a..f77413a170 100644
---- a/package/freeradius-server/freeradius-server.mk
-+++ b/package/freeradius-server/freeradius-server.mk
-@@ -86,7 +86,9 @@ FREERADIUS_SERVER_CONF_OPTS += --without-libcap
- endif
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 06c4d8036c..0c1913e227 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -82,6 +82,16 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR3
  
- ifeq ($(BR2_PACKAGE_LIBKRB5),y)
--FREERADIUS_SERVER_CONF_OPTS += --with-rlm_krb5
-+FREERADIUS_SERVER_CONF_OPTS += \
-+	ac_cv_path_krb5-config=$(STAGING_DIR)/usr/bin/krb5-config \
-+	--with-rlm_krb5
- FREERADIUS_SERVER_DEPENDENCIES += libkrb5
- else
- FREERADIUS_SERVER_CONF_OPTS += --without-rlm_krb5
--- 
-2.35.1
-
+ endchoice # DDR training FW
+ 
++config BR2_PACKAGE_FIRMWARE_IMX_DDR_VERSION
++	string "DDR3/DDR4/LPDDR4 firmware version"
++	# Needed for backward compatibility, the package used to
++	# unconditionally use HW version 201810 when DDR3/DDR4 was
++	# selected
++	default "201810" if BR2_PACKAGE_FIRMWARE_IMX_DDR3 || BR2_PACKAGE_FIRMWARE_IMX_DDR4
++	help
++	  Use a specific version of the imx ddr binaries. Leaving this
++	  field empty will select the default version.
++
+ config BR2_PACKAGE_FIRMWARE_IMX_IMEM_LEN
+ 	hex "(LP)DDR IMEM padding length"
+ 	default 0x8000
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 4884079d5c..99fe71a91c 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -36,6 +36,11 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
+ endef
+ 
++FIRMWARE_IMX_DDR_VERSION = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_DDR_VERSION))
++ifneq ($(FIRMWARE_IMX_DDR_VERSION),)
++FIRMWARE_IMX_DDR_VERSION_SUFFIX = _$(FIRMWARE_IMX_DDR_VERSION)
++endif
++
+ ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
+ FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+ 
+@@ -44,9 +49,13 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 	# lpddr4_pmu_train_fw.bin is needed when generating imx8-boot-sd.bin
+ 	# which is done in post-image script.
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		lpddr4_pmu_train_1d_imem,lpddr4_pmu_train_1d_dmem,lpddr4_pmu_train_1d_fw)
++		lpddr4_pmu_train_1d_imem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		lpddr4_pmu_train_1d_dmem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		lpddr4_pmu_train_1d_fw)
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		lpddr4_pmu_train_2d_imem,lpddr4_pmu_train_2d_dmem,lpddr4_pmu_train_2d_fw)
++		lpddr4_pmu_train_2d_imem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		lpddr4_pmu_train_2d_dmem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		lpddr4_pmu_train_2d_fw)
+ 	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
+ 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
+@@ -67,13 +76,17 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 	# ddr4_fw.bin is needed when generating imx8-boot-sd.bin
+ 	# which is done in post-image script.
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		ddr4_imem_1d_201810,ddr4_dmem_1d_201810,ddr4_1d_201810_fw)
++		ddr4_imem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr4_dmem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr4_1d_fw)
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		ddr4_imem_2d_201810,ddr4_dmem_2d_201810,ddr4_2d_201810_fw)
+-	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_201810_fw.bin \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
+-		$(BINARIES_DIR)/ddr4_201810_fw.bin
+-	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++		ddr4_imem_2d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr4_dmem_2d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr4_2d_fw)
++	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_fw.bin \
++		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_fw.bin > \
++		$(BINARIES_DIR)/ddr4_fw.bin
++	ln -sf $(BINARIES_DIR)/ddr4_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+ 
+ 	# U-Boot supports creation of the combined flash.bin image. To make
+ 	# sure that U-Boot can access all available files copy them to
+@@ -90,10 +103,12 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 	# ddr3_fw.bin is needed when generating imx8-boot-sd.bin
+ 	# which is done in post-image script.
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		ddr3_imem_1d_201810,ddr3_dmem_1d_201810,ddr3_1d_201810_fw)
+-	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr3_1d_201810_fw.bin > \
+-		$(BINARIES_DIR)/ddr3_201810_fw.bin
+-	ln -sf $(BINARIES_DIR)/ddr3_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++		ddr3_imem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr3_dmem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr3_1d_fw)
++	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr3_1d_fw.bin > \
++		$(BINARIES_DIR)/ddr3_fw.bin
++	ln -sf $(BINARIES_DIR)/ddr3_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+ 
+ 	# U-Boot supports creation of the combined flash.bin image. To make
+ 	# sure that U-Boot can access all available files copy them to
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
