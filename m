@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF9E4C32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58A83C32789
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D35440517;
-	Tue, 23 Aug 2022 19:47:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D35440517
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b1PjgO4SyeBB; Tue, 23 Aug 2022 19:47:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4846A40323;
-	Tue, 23 Aug 2022 19:47:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4846A40323
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B135D1BF39D
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:47:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C7E881A50
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:47:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C7E881A50
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0DD281AF4;
+	Tue, 23 Aug 2022 19:48:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0DD281AF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F-6EUy88zs27 for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 19:47:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB9BF81951
-Received: from mout-b-206.mailbox.org (mout-b-206.mailbox.org [195.10.208.51])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CB9BF81951
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:47:39 +0000 (UTC)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by mout-b-206.mailbox.org (Postfix) with ESMTPS id 4MC0BF5bZ8z9sqG;
- Tue, 23 Aug 2022 21:47:33 +0200 (CEST)
-From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l8-ay1HOhP1q; Tue, 23 Aug 2022 19:48:24 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0A5F81A50;
+	Tue, 23 Aug 2022 19:48:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0A5F81A50
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 003701BF39D
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:48:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 73CA860034
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:48:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73CA860034
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XrSaSk0w2yzq for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 19:48:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6F0660B15
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:48:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6F0660B15
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 793FB87B65; Tue, 23 Aug 2022 19:33:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 21:47:32 +0200
-Message-Id: <20220823194732.701895-2-marcus.hoffmann@othermo.de>
-In-Reply-To: <20220823194732.701895-1-marcus.hoffmann@othermo.de>
-References: <20220823194732.701895-1-marcus.hoffmann@othermo.de>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=othermo.de; s=MBO0001; t=1661284053;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UjJpMxzNpFImL4s7fK4+YEIVuZ0LJqC3rtv+lmYVjWY=;
- b=j+PfdXquba9iNwhD89RAN21y9fOStSlJ14CVXBzLLbpZcjspBeb3gWuU3t3CNHlZSxYNMw
- 4x4mx8yAQwNmY7wXzZ7Qm/3d84jUyKQLs5ebaMSyb/EteC3YsCzWkR9/+wNQVMCltJ+GUC
- 1WNfN/pKpUGY8ngd9QHyW3P6rBaj8dKGHghcY5YdoJM25Lcyj9HuYESBop7k2iCzJKdp5t
- PCANPCXNpEYhpFw9f/oipUaFGmRF+L2RYChHfR5wTDzmnLIuNdN2pZ9VnZu8VLBgQNxsRk
- R6XbBoDuIguNMSYR70wBJwknvPeEQunG0mtuLlsNfGUYY+EhII+4KwKUZJp2Dw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=othermo.de header.i=@othermo.de
- header.a=rsa-sha256 header.s=MBO0001 header.b=j+PfdXqu
-Subject: [Buildroot] [PATCH 2/2]
- support/testing/tests/package/test_python_paho_mqtt: new runtime test
+Date: Tue, 23 Aug 2022 21:48:00 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 2e3ef50648f3356a0e8e06182be1e482a3ec2a53
+X-Git-Newrev: e8ecf4238707b93df190e0eb0de1c0ca9b6fbd29
+X-Patchwork-Hint: ignore
+Message-Id: <20220823193331.793FB87B65@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ethtool: bump to
+ version 5.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,76 +56,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Davide Viti <zinosat@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=e8ecf4238707b93df190e0eb0de1c0ca9b6fbd29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../tests/package/sample_python_paho_mqtt.py  | 12 ++++++++
- .../tests/package/test_python_paho_mqtt.py    | 29 +++++++++++++++++++
- 2 files changed, 41 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_paho_mqtt.py
- create mode 100644 support/testing/tests/package/test_python_paho_mqtt.py
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/sample_python_paho_mqtt.py b/support/testing/tests/package/sample_python_paho_mqtt.py
-new file mode 100644
-index 00000000000..769ad6250fa
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_paho_mqtt.py
-@@ -0,0 +1,12 @@
-+from paho.mqtt import publish, subscribe
-+
-+publish.single(
-+        'buildroot/test',
-+        payload="Hello, World!",
-+        qos=2,
-+        retain=True,
-+        hostname="localhost",
-+        port=1883)
-+
-+message = subscribe.simple('buildroot/test')
-+print(message.payload.decode())
-diff --git a/support/testing/tests/package/test_python_paho_mqtt.py b/support/testing/tests/package/test_python_paho_mqtt.py
-new file mode 100644
-index 00000000000..b1e2b8fb422
---- /dev/null
-+++ b/support/testing/tests/package/test_python_paho_mqtt.py
-@@ -0,0 +1,29 @@
-+from tests.package.test_python import TestPythonPackageBase
-+import os
-+import time
-+
-+
-+class TestPythonPahoMQTT(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_MOSQUITTO=y
-+        BR2_PACKAGE_MOSQUITTO_BROKER=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PAHO_MQTT=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_paho_mqtt.py"]
-+
-+    def test_run(self):
-+        self.login()
-+        self.check_sample_scripts_exist()
-+        cmd = "mosquitto > /dev/null 2>&1 &"
-+        _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-+
-+        # Give some time for mosquitto broker to start up
-+        time.sleep(1)
-+
-+        cmd = "%s %s" % (self.interpreter, os.path.basename(self.sample_scripts[0]))
-+        output, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "Hello, World!")
--- 
-2.25.1
-
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 052a87d978..8a649876d9 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  9577b2ffbce710b659fb239598ec92bced1ca400ca0f1286762bfa44e4784270  ethtool-5.18.tar.xz
++sha256  3b752a3329827907ac3812f2831dfecf51c8c41c55d2d69cfb9c53ca06449fc6  ethtool-5.19.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 9fd4c31c7b..32bd5e7db1 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 5.18
++ETHTOOL_VERSION = 5.19
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
