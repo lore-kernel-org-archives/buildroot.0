@@ -1,71 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 323DCC32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 21:21:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 972BCC32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 21:22:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9964C60BDA;
-	Tue, 23 Aug 2022 21:21:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9964C60BDA
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6yjsE81UAdqH; Tue, 23 Aug 2022 21:21:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12EF060B4C;
-	Tue, 23 Aug 2022 21:21:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12EF060B4C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 483901BF3D7
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:21:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0F7E381289
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F7E381289
+	by smtp1.osuosl.org (Postfix) with ESMTP id 216A8812B5;
+	Tue, 23 Aug 2022 21:22:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 216A8812B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bh3TQIWAuIWY for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 21:21:12 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67F5B81281
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 67F5B81281
- for <buildroot@busybox.net>; Tue, 23 Aug 2022 21:21:12 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CAD7760002;
- Tue, 23 Aug 2022 21:21:09 +0000 (UTC)
-Date: Tue, 23 Aug 2022 23:21:08 +0200
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20220823232108.3a8a5ce5@windsurf>
-In-Reply-To: <20220816175503.1280276-2-francois.perrad@gadz.org>
-References: <20220816175503.1280276-1-francois.perrad@gadz.org>
- <20220816175503.1280276-2-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PgugaR-MVBsA; Tue, 23 Aug 2022 21:22:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3969581281;
+	Tue, 23 Aug 2022 21:22:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3969581281
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B92671BF3D7
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:22:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9238E410B5
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9238E410B5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E_UzPNqAt_ig for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 21:22:25 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0936A410B4
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0936A410B4
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 21:22:24 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ n23-20020a7bc5d7000000b003a62f19b453so7227904wmk.3
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 14:22:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=YcjpHcwK0YVqbswZzN261LhQttxbCf36QhKh0w78TXI=;
+ b=tAGqZgsotlg028KVhToBT0YUTlbSQ5fTNqrbPJVnzztPSVzyocwlJAsv04ocTl48Qg
+ WPeWxKMNeU+AvMHbJay/zoa168q2P1WeKCHcL2SAKIBS06SxCDTUDIvIX6uWAJdVp9o/
+ pUPWsqPwnOHBGdT6CZ6Sta9t94wAHdPjgg8xJkK+8hOSgpiOfXtblTH1sAGW2ByuYemv
+ Fg/PuV3rFJz3K1Hw/nlhoy15eujqC4wngQVTADBl1fRUXyvmwZxSURiL7s7Te2Hq4/Ty
+ DnTrsqVsbnNk67Qo1ymSAEAbth96KMDhDWQPGJ3wMH3A1A3h3CCnk8FtPnGVljfHk3Jp
+ sn8Q==
+X-Gm-Message-State: ACgBeo2j8aAm1IbpkvXrYAPH2QXl8qZNFvsGNxFndyBezaeRgsttShei
+ 8pUb9bnhyiXBxth/5VF+6JJkfQu0M00=
+X-Google-Smtp-Source: AA6agR4V1ztqF/IjPg/tdrcaM0SBv5Ham4n1K7M125z66mhcwBUZ0apyyk8ZKCfE6Ti7csSjkb0rFw==
+X-Received: by 2002:a05:600c:4c06:b0:3a5:4eec:eb4b with SMTP id
+ d6-20020a05600c4c0600b003a54eeceb4bmr3442749wmp.151.1661289742892; 
+ Tue, 23 Aug 2022 14:22:22 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ d12-20020adff2cc000000b002238ea5750csm18672944wrp.72.2022.08.23.14.22.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Aug 2022 14:22:22 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 23 Aug 2022 23:22:19 +0200
+Message-Id: <20220823212219.5066-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1661289670;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=VQPRSBmnhiPIArqTrlS80Edp3qsQ+r2P5LhL500MKL4=;
- b=mSQnwJ8AvPAPz2phEdzuytT8Ssf8EIIYdGfEeTaKOhOx9mUevVwWZJ72ilkPMuCUARRIHA
- ihWkEdsIGF1xyd43IWUaNatGT3rN3QWJIYLBuJBWq2xd6zS0yJUeGZTdyNMKCyQcmDaloR
- Mydjo+ZIT+F/2c6A9NIek7NFGu1aCkccsAGhfs2JnDVIKk18jvzeaFoadTnHbEzmXp+Tqx
- 3NVWyoeuK3vsgtMCISesvhG5cjr/mjFwHgW7vxj4GK7jfCpvEg8HhtVNu2pm0oOjc5qOA+
- Di5UU8FzibVbikGzWFVGyUjgMnm9MzDigOvfcaliDTyipmhAXTOI6DiV95wpsw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mSQnwJ8A
-Subject: Re: [Buildroot] [PATCH v4 1/2] boot/arm-trusted-firmware: allow to
- generate BL2 from RCW
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=YcjpHcwK0YVqbswZzN261LhQttxbCf36QhKh0w78TXI=;
+ b=O8etwUVZwfFYq3dPY98DRrhXCvKzGByzWC7P3rrtv/kd9YSD4nLbWP+v7VOqZyHN4m
+ n+0Lh40CjJs+SjY7JOBRMDCUSq6LwlAMBi82tc/EG0IWlMlM2h3+dxG8k3p+YBOSZid/
+ 2XhPD9c9unKqssD1mr1pTzk8a3qfxSlA+5DFfCq7cSNdUyCeuJ8XdHOCRsViLwNjecS7
+ eSLZ/UkaGUlAoEKHo8S2+CvvQmxjPqFl61C7X/jsyZZQDW634mbPkilR5zYYbiNo99eN
+ 0RTnnUXANnhUnrdUA2Y7r9F7FLX3scWPxp+7LGBQsMVNQYCwF9KOJPSh0qmS7guxalwD
+ 8F0A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=O8etwUVZ
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: altivec needs VSX with
+ little endian
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,65 +94,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 16 Aug 2022 19:55:02 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+Fix the following build failure:
 
-> This patch adds option BR2_TARGETARM_TRUSTED_FIRMWARE_RCW that allows
-> TF-A to encapsulate a pre-loader RCW (Reset Configuration Word) file
-> into BL2.
-> 
-> Upcoming NXP QorIQ family board needs this option.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In file included from libavcodec/ppc/audiodsp.c:31:
+libavcodec/ppc/audiodsp.c: In function 'scalarproduct_int16_altivec':
+./libavutil/ppc/util_altivec.h:123:5: error: implicit declaration of function 'vec_vsx_ld'; did you mean 'vec_vslh'? [-Werror=implicit-function-declaration]
+  123 |     vec_vsx_ld(offset, b)
+      |     ^~~~~~~~~~
 
-Thanks, I have applied with some changes.
+Fixes:
+ - http://autobuild.buildroot.org/results/b772d285f978ff9bc3b07872d009633c943f20b1
 
-> ---
->  boot/arm-trusted-firmware/Config.in               | 6 ++++++
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-> index 100ac8348..2a59a325d 100644
-> --- a/boot/arm-trusted-firmware/Config.in
-> +++ b/boot/arm-trusted-firmware/Config.in
-> @@ -90,6 +90,12 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP
->  	  platforms were ATF encapsulates the second stage bootloader
->  	  (such as U-Boot).
->  
-> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ffmpeg/ffmpeg.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I have moved this option further down, next to the options where we can
-say what BL32 to use, what BL33 to use. It made more sense to me than
-to have the option in the middle of the list of images to build.
-
-> +	bool "Include RCW"
-
-Changed to "Include NXP RCW" to hint it's some NXP-specific stufff.
-
-> +	select BR2_PACKAGE_HOST_QORIQ_RCW
-
-Changed to "depends on". Indeed, sub-options of
-BR2_PACKAGE_HOST_QORIQ_RCW must be set for this to work correctly, so
-the user needs to be aware that qoriq-rcw is used.
-
-Thanks!
-
-Thomas
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 82d229903f..7038f4f5f7 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -511,7 +511,9 @@ endif
+ FFMPEG_CONF_OPTS += --disable-asm
+ endif # MIPS
+ 
+-ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
++ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC):$(BR2_powerpc64le),y:)
++FFMPEG_CONF_OPTS += --enable-altivec
++else ifeq ($(BR2_POWERPC_CPU_HAS_VSX):$(BR2_powerpc64le),y:y)
+ FFMPEG_CONF_OPTS += --enable-altivec
+ else
+ FFMPEG_CONF_OPTS += --disable-altivec
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
