@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 547A3C6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:18:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85363C6FA83
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0C9B84302;
-	Sun, 11 Sep 2022 09:18:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0C9B84302
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A69E40BFC;
+	Sun, 11 Sep 2022 09:18:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A69E40BFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h1P2klNGpboH; Sun, 11 Sep 2022 09:18:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YfvzKzinqNlJ; Sun, 11 Sep 2022 09:18:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EF8F842FD;
-	Sun, 11 Sep 2022 09:18:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EF8F842FD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5759740BB8;
+	Sun, 11 Sep 2022 09:18:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5759740BB8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2A5181BF368
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:49:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 53BC01BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54C256FB40
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57A346FB4F
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54C256FB40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57A346FB4F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PVrVg-JGhqNf for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
+ with ESMTP id gowVIrh3XVMA for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CFFA6107D
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CFFA6107D
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDD1660B2C
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDD1660B2C
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0012A83622; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
+ id ABB238361F; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Sat, 27 Aug 2022 23:02:38 +0200
+Date: Tue, 23 Aug 2022 22:47:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4f903c9ba8f4f68df530b3de43247865f59d1b77
-X-Git-Newrev: 6c7061f3a855d789a225a78ec0c96882463c8c17
+X-Git-Oldrev: d73bc1eb3a559c96310359cbb2cc7fb1792037df
+X-Git-Newrev: 028611be7195b4e616ea1910126aae36e62d33bf
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084828.0012A83622@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: fix flake8
- errors
+Message-Id: <20220911084826.ABB238361F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: support game
+ controllers via libmanette
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c7061f3a855d789a225a78ec0c96882463c8c17
+commit: https://git.buildroot.net/buildroot/commit/?id=028611be7195b4e616ea1910126aae36e62d33bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes flake8 errors:
-support/scripts/pkg-stats:1013:133: E501 line too long (164 > 132 characters)
-support/scripts/pkg-stats:1018:36: F541 f-string is missing placeholders
-support/scripts/pkg-stats:1110:199: E261 at least two spaces before inline comment
+Add support for the Gamepad API in webkitgtk, depending on
+libmanette, which is used for implementing access to game
+controllers.
 
-For the first and the last one, we chose to split the long lines rather
-than adding noqa: 501. Indeed, the long lines make it very unreadable,
-and there are relatively natural places where the line can be broken.
-Also split a line just below the second one in a similar way.
-
-The f-string on 1018 doesn't need to be an f-string.
-
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- support/scripts/pkg-stats | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ package/webkitgtk/webkitgtk.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index aa3b49c809..3248e3678d 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -1010,12 +1010,13 @@ def dump_html_pkg(f, pkg):
-         if pkg.latest_version['version'] is None:
-             latest_version_text = "<b>Found, but no version</b>"
-         else:
--            latest_version_text = f"""<a href="https://release-monitoring.org/project/{pkg.latest_version['id']}"><b>{str(pkg.latest_version['version'])}</b></a>"""
-+            latest_version_text = f"""<a href="https://release-monitoring.org/project/{pkg.latest_version['id']}">""" \
-+                                  f"""<b>{str(pkg.latest_version['version'])}</b></a>"""
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 8949cb2b1c..0dbb72f970 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -18,7 +18,6 @@ WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf \
+ 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
+-	-DENABLE_GAMEPAD=OFF \
+ 	-DENABLE_GEOLOCATION=OFF \
+ 	-DENABLE_GTKDOC=OFF \
+ 	-DENABLE_MINIBROWSER=ON \
+@@ -71,6 +70,13 @@ else
+ WEBKITGTK_CONF_OPTS += -DENABLE_INTROSPECTION=OFF
+ endif
  
-         latest_version_text += "<br/>"
++ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_GAMEPAD=ON
++WEBKITGTK_DEPENDENCIES += libmanette
++else
++WEBKITGTK_CONF_OPTS += -DENABLE_GAMEPAD=OFF
++endif
++
+ # Only one target platform can be built, assume X11 > Wayland
  
-         if pkg.latest_version['status'] == RM_API_STATUS_FOUND_BY_DISTRO:
--            latest_version_text += f'found by <a href="https://release-monitoring.org/distro/Buildroot/">distro</a>'
-+            latest_version_text += 'found by <a href="https://release-monitoring.org/distro/Buildroot/">distro</a>'
-         else:
-             latest_version_text += "found by guess"
- 
-@@ -1107,9 +1108,11 @@ def dump_html_pkg(f, pkg):
-     if not pkg.is_status_ok("cpe"):
-         if pkg.is_actual_package and pkg.current_version:
-             if pkg.cpeid:
--                f.write(f"""  <br/>{pkg.status['cpe'][1]} <a href="https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword={":".join(pkg.cpeid.split(":")[0:5])}">(Search)</a>\n""") # noqa: E501
-+                f.write(f"""  <br/>{pkg.status['cpe'][1]} <a href="https://nvd.nist.gov/products/cpe/search/results?"""
-+                        f"""namingFormat=2.3&keyword={":".join(pkg.cpeid.split(":")[0:5])}">(Search)</a>\n""")
-             else:
--                f.write(f"""  {pkg.status['cpe'][1]} <a href="https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword={pkg.name}">(Search)</a>\n""")  # noqa: E501
-+                f.write(f"""  {pkg.status['cpe'][1]} <a href="https://nvd.nist.gov/products/cpe/search/results?"""
-+                        f"""namingFormat=2.3&keyword={pkg.name}">(Search)</a>\n""")
-         else:
-             f.write("  %s\n" % pkg.status['cpe'][1])
- 
+ # GTK3-X11 target gives OpenGL from newer libgtk3 versions
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
