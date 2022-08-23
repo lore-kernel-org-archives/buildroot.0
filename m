@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CCBFC32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 20:48:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B644C32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 20:48:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D50CC40A03;
-	Tue, 23 Aug 2022 20:48:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D50CC40A03
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4HNhEMRwlwP4; Tue, 23 Aug 2022 20:48:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D77DA409D8;
-	Tue, 23 Aug 2022 20:48:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D77DA409D8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 359521BF9A4
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 20:48:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1006840249
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 20:48:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1006840249
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52ADA403C1;
+	Tue, 23 Aug 2022 20:48:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52ADA403C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0IAZK6zA9179 for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MXLOKi-k3lLX; Tue, 23 Aug 2022 20:48:52 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC74A4088C;
+	Tue, 23 Aug 2022 20:48:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC74A4088C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D02C1BF5A8
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 20:48:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5D53405E5
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 20:48:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5D53405E5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BIarVZU1R6h0 for <buildroot@lists.busybox.net>;
  Tue, 23 Aug 2022 20:48:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E705A40266
+ by smtp2.osuosl.org (Postfix) with ESMTP id F28A0405D6
  for <buildroot@buildroot.org>; Tue, 23 Aug 2022 20:48:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E705A40266
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F28A0405D6
 Received: by busybox.osuosl.org (Postfix, from userid 4052)
- id A108987BED; Tue, 23 Aug 2022 20:33:46 +0000 (UTC)
+ id AAB3287BEE; Tue, 23 Aug 2022 20:33:46 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 22:44:02 +0200
+Date: Tue, 23 Aug 2022 22:47:24 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 58c58466319a7864441dc6c70e880165db79ead0
-X-Git-Newrev: d73bc1eb3a559c96310359cbb2cc7fb1792037df
+X-Git-Oldrev: d73bc1eb3a559c96310359cbb2cc7fb1792037df
+X-Git-Newrev: 028611be7195b4e616ea1910126aae36e62d33bf
 X-Patchwork-Hint: ignore
-Message-Id: <20220823203346.A108987BED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package: Add libmanette
+Message-Id: <20220823203346.AAB3287BEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/webkitgtk: support
+ game controllers via libmanette
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,134 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d73bc1eb3a559c96310359cbb2cc7fb1792037df
+commit: https://git.buildroot.net/buildroot/commit/?id=028611be7195b4e616ea1910126aae36e62d33bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libmanette is a library which provides a higher level interface to
-enumerate and make use of game controllers (gamepads, joysticks).
-WebKitGTK can use libmanette to expose controllers to web content,
-which will be enabled on a follow-up patch.
-
-Minimal kernel headers 4.16 for input_event_sec and input_event_usec
-in struct input_event.
+Add support for the Gamepad API in webkitgtk, depending on
+libmanette, which is used for implementing access to game
+controllers.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-[Arnout: add kernel headers dependency suggested by Romain]
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/libmanette/Config.in       | 17 +++++++++++++++
- package/libmanette/libmanette.hash |  5 +++++
- package/libmanette/libmanette.mk   | 42 ++++++++++++++++++++++++++++++++++++++
- 5 files changed, 66 insertions(+)
+ package/webkitgtk/webkitgtk.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4287fd9cf7..34cce542bd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -35,6 +35,7 @@ F:	package/bubblewrap/
- F:	package/cage/
- F:	package/cog/
- F:	package/libepoxy/
-+F:	package/libmanette/
- F:	package/libpsl/
- F:	package/libwpe/
- F:	package/webkitgtk/
-diff --git a/package/Config.in b/package/Config.in
-index 2c2752b412..802fb5da30 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -518,6 +518,7 @@ endmenu
- 	source "package/kbd/Config.in"
- 	source "package/lcdproc/Config.in"
- 	source "package/libiec61850/Config.in"
-+	source "package/libmanette/Config.in"
- 	source "package/libubootenv/Config.in"
- 	source "package/libuio/Config.in"
- 	source "package/linux-backports/Config.in"
-diff --git a/package/libmanette/Config.in b/package/libmanette/Config.in
-new file mode 100644
-index 0000000000..31fff15286
---- /dev/null
-+++ b/package/libmanette/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBMANETTE
-+	bool "libmanette"
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_WCHAR # libglib2 -> gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
-+	select BR2_PACKAGE_LIBEVDEV
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  GObject library which provides access to game controllers.
-+
-+	  https://gitlab.gnome.org/GNOME/libmanette
-+
-+comment "libmanette needs a toolchain w/ wchar, threads, headers >= 4.16"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
-diff --git a/package/libmanette/libmanette.hash b/package/libmanette/libmanette.hash
-new file mode 100644
-index 0000000000..96089f971a
---- /dev/null
-+++ b/package/libmanette/libmanette.hash
-@@ -0,0 +1,5 @@
-+# From https://download.gnome.org/sources/libmanette/0.2/libmanette-0.2.6.sha256sum
-+sha256  63653259a821ec7d90d681e52e757e2219d462828c9d74b056a5f53267636bac  libmanette-0.2.6.tar.xz
-+
-+# Locally calculated
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libmanette/libmanette.mk b/package/libmanette/libmanette.mk
-new file mode 100644
-index 0000000000..10f2b8a466
---- /dev/null
-+++ b/package/libmanette/libmanette.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# libmanette
-+#
-+################################################################################
-+
-+LIBMANETTE_VERSION_MAJOR = 0.2
-+LIBMANETTE_VERSION = $(LIBMANETTE_VERSION_MAJOR).6
-+LIBMANETTE_SOURCE = libmanette-$(LIBMANETTE_VERSION).tar.xz
-+LIBMANETTE_SITE = https://download.gnome.org/sources/libmanette/$(LIBMANETTE_VERSION_MAJOR)
-+LIBMANETTE_LICENSE = LGPL-2.1+
-+LIBMANETTE_LICENSE_FILES = COPYING
-+LIBMANETTE_INSTALL_STAGING = YES
-+LIBMANETTE_DEPENDENCIES = \
-+	libevdev \
-+	libglib2 \
-+	$(TARGET_NLS_DEPENDENCIES)
-+
-+LIBMANETTE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
-+
-+LIBMANETTE_CONF_OPTS = \
-+	-Ddemos=false \
-+	-Dbuild-tests=false \
-+	-Dinstall-tests=false \
-+	-Ddoc=false \
-+	-Dvapi=false
-+
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBMANETTE_CONF_OPTS += -Dintrospection=true
-+LIBMANETTE_DEPENDENCIES += gobject-introspection
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 8949cb2b1c..0dbb72f970 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -18,7 +18,6 @@ WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf \
+ 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
+-	-DENABLE_GAMEPAD=OFF \
+ 	-DENABLE_GEOLOCATION=OFF \
+ 	-DENABLE_GTKDOC=OFF \
+ 	-DENABLE_MINIBROWSER=ON \
+@@ -71,6 +70,13 @@ else
+ WEBKITGTK_CONF_OPTS += -DENABLE_INTROSPECTION=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_GAMEPAD=ON
++WEBKITGTK_DEPENDENCIES += libmanette
 +else
-+LIBMANETTE_CONF_OPTS += -Dintrospection=false
++WEBKITGTK_CONF_OPTS += -DENABLE_GAMEPAD=OFF
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-+LIBMANETTE_CONF_OPTS += -Dgudev=enabled
-+LIBMANETTE_DEPENDENCIES += libgudev
-+else
-+LIBMANETTE_CONF_OPTS += -Dgudev=disabled
-+endif
-+
-+$(eval $(meson-package))
+ # Only one target platform can be built, assume X11 > Wayland
+ 
+ # GTK3-X11 target gives OpenGL from newer libgtk3 versions
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
