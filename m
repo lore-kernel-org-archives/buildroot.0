@@ -1,49 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BE88C6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB7FBECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1704540B8A;
-	Sun, 11 Sep 2022 09:04:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1704540B8A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g79GFG0Du677; Sun, 11 Sep 2022 09:04:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2F20640629;
-	Sun, 11 Sep 2022 09:04:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F20640629
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E88E11BF368
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D95261037
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D95261037
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9387C61075;
+	Sun, 11 Sep 2022 09:04:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9387C61075
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uGeIp6BkqOSC for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T8W5VeKC3-ZO; Sun, 11 Sep 2022 09:04:43 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A97F861037;
+	Sun, 11 Sep 2022 09:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A97F861037
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 407771BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E27D08135B
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E27D08135B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ynWeYuBvr48s for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FB4660ACA
+ by smtp1.osuosl.org (Postfix) with ESMTP id E396183EB2
  for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FB4660ACA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E396183EB2
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 6040483620; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+ id CD9BC835E4; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 22:18:01 +0200
+Date: Tue, 23 Aug 2022 23:31:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4a82916c88aa73fa7486f6febd1672716a50036
-X-Git-Newrev: 3ad17d88f4fcd1e76e2835331e5dfc6cc976a2e0
+X-Git-Oldrev: 75cb88ae667002454aa3a3ec2b927cd171f3bfff
+X-Git-Newrev: 4c2f0b918c65b1de934800bcc82e571ca4f96b86
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084826.6040483620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: bump to version 12.2.0
+Message-Id: <20220911084826.CD9BC835E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: allow
+ ddr firmware version override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +64,114 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ad17d88f4fcd1e76e2835331e5dfc6cc976a2e0
+commit: https://git.buildroot.net/buildroot/commit/?id=4c2f0b918c65b1de934800bcc82e571ca4f96b86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See announce:
-https://gcc.gnu.org/pipermail/gcc-announce/2022/000174.html
+Add support for selecting a specific version of the DDR firmware
+version. For example Variscite's imx8mp-var-dart SOM requires the
+"_202006" version of the lpddr4_pmu_train_* binaries.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-disable-split-stack-for-non-thread-builds.patch              | 0
- package/gcc/Config.in.host                                            | 2 +-
- package/gcc/gcc.hash                                                  | 4 ++--
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/freescale-imx/firmware-imx/Config.in       | 10 ++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 39 +++++++++++++++-------
+ 2 files changed, 37 insertions(+), 12 deletions(-)
 
-diff --git a/package/gcc/12.1.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/12.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-similarity index 100%
-rename from package/gcc/12.1.0/0001-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/12.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index ba2a2ee072..87805efcfd 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -83,7 +83,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "10.4.0"    if BR2_GCC_VERSION_10_X
- 	default "11.3.0"    if BR2_GCC_VERSION_11_X
--	default "12.1.0"    if BR2_GCC_VERSION_12_X
-+	default "12.2.0"    if BR2_GCC_VERSION_12_X
- 	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 06c4d8036c..0c1913e227 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -82,6 +82,16 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR3
  
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index b9536ddffe..666124fa6d 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
- sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-11.3.0/sha512.sum
- sha512  f0be5ad705c73b84477128a69c047f57dd47002f375eb60e1e842e08cf2009a509e92152bca345823926d550b7395ae6d4de7db51d1ee371c2dc37313881fca7  gcc-11.3.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.1.0/sha512.sum
--sha512  2121d295292814a6761edf1fba08c5f633ebe16f52b80e7b73a91050e71e1d2ed98bf17eebad263e191879561c02b48906c53faa4c4670c486a26fc75df23900  gcc-12.1.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-12.2.0/sha512.sum
-+sha512  e9e857bd81bf7a370307d6848c81b2f5403db8c7b5207f54bce3f3faac3bde63445684092c2bc1a2427cddb6f7746496d9fbbef05fbbd77f2810b2998f1f9173  gcc-12.2.0.tar.xz
+ endchoice # DDR training FW
  
- # Locally calculated (fetched from Github)
- sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
++config BR2_PACKAGE_FIRMWARE_IMX_DDR_VERSION
++	string "DDR3/DDR4/LPDDR4 firmware version"
++	# Needed for backward compatibility, the package used to
++	# unconditionally use HW version 201810 when DDR3/DDR4 was
++	# selected
++	default "201810" if BR2_PACKAGE_FIRMWARE_IMX_DDR3 || BR2_PACKAGE_FIRMWARE_IMX_DDR4
++	help
++	  Use a specific version of the imx ddr binaries. Leaving this
++	  field empty will select the default version.
++
+ config BR2_PACKAGE_FIRMWARE_IMX_IMEM_LEN
+ 	hex "(LP)DDR IMEM padding length"
+ 	default 0x8000
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 4884079d5c..99fe71a91c 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -36,6 +36,11 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
+ endef
+ 
++FIRMWARE_IMX_DDR_VERSION = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_DDR_VERSION))
++ifneq ($(FIRMWARE_IMX_DDR_VERSION),)
++FIRMWARE_IMX_DDR_VERSION_SUFFIX = _$(FIRMWARE_IMX_DDR_VERSION)
++endif
++
+ ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
+ FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+ 
+@@ -44,9 +49,13 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 	# lpddr4_pmu_train_fw.bin is needed when generating imx8-boot-sd.bin
+ 	# which is done in post-image script.
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		lpddr4_pmu_train_1d_imem,lpddr4_pmu_train_1d_dmem,lpddr4_pmu_train_1d_fw)
++		lpddr4_pmu_train_1d_imem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		lpddr4_pmu_train_1d_dmem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		lpddr4_pmu_train_1d_fw)
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		lpddr4_pmu_train_2d_imem,lpddr4_pmu_train_2d_dmem,lpddr4_pmu_train_2d_fw)
++		lpddr4_pmu_train_2d_imem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		lpddr4_pmu_train_2d_dmem$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		lpddr4_pmu_train_2d_fw)
+ 	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
+ 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
+@@ -67,13 +76,17 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 	# ddr4_fw.bin is needed when generating imx8-boot-sd.bin
+ 	# which is done in post-image script.
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		ddr4_imem_1d_201810,ddr4_dmem_1d_201810,ddr4_1d_201810_fw)
++		ddr4_imem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr4_dmem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr4_1d_fw)
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		ddr4_imem_2d_201810,ddr4_dmem_2d_201810,ddr4_2d_201810_fw)
+-	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_201810_fw.bin \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
+-		$(BINARIES_DIR)/ddr4_201810_fw.bin
+-	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++		ddr4_imem_2d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr4_dmem_2d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr4_2d_fw)
++	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_fw.bin \
++		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_fw.bin > \
++		$(BINARIES_DIR)/ddr4_fw.bin
++	ln -sf $(BINARIES_DIR)/ddr4_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+ 
+ 	# U-Boot supports creation of the combined flash.bin image. To make
+ 	# sure that U-Boot can access all available files copy them to
+@@ -90,10 +103,12 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 	# ddr3_fw.bin is needed when generating imx8-boot-sd.bin
+ 	# which is done in post-image script.
+ 	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+-		ddr3_imem_1d_201810,ddr3_dmem_1d_201810,ddr3_1d_201810_fw)
+-	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr3_1d_201810_fw.bin > \
+-		$(BINARIES_DIR)/ddr3_201810_fw.bin
+-	ln -sf $(BINARIES_DIR)/ddr3_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++		ddr3_imem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr3_dmem_1d$(FIRMWARE_IMX_DDR_VERSION_SUFFIX),
++		ddr3_1d_fw)
++	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr3_1d_fw.bin > \
++		$(BINARIES_DIR)/ddr3_fw.bin
++	ln -sf $(BINARIES_DIR)/ddr3_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+ 
+ 	# U-Boot supports creation of the combined flash.bin image. To make
+ 	# sure that U-Boot can access all available files copy them to
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
