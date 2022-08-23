@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B4FBC32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:42:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19E55C32772
+	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 19:42:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA36840980;
-	Tue, 23 Aug 2022 19:42:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA36840980
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E05760B5E;
+	Tue, 23 Aug 2022 19:42:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E05760B5E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HsReDns8s0yv; Tue, 23 Aug 2022 19:42:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wUQgFR6eEqWg; Tue, 23 Aug 2022 19:42:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84B814093A;
-	Tue, 23 Aug 2022 19:42:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84B814093A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 91D8A1BF39D
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:42:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD3B860B30;
+	Tue, 23 Aug 2022 19:42:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD3B860B30
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 607FD1BF39D
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E1B84093A
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:42:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E1B84093A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BE0181951
+ for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 19:42:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BE0181951
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qLCoArCAQAwx for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 19:42:00 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC02E4092D
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EC02E4092D
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:41:59 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DAAEC1C0002;
- Tue, 23 Aug 2022 19:41:57 +0000 (UTC)
-Date: Tue, 23 Aug 2022 21:41:56 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220823214156.032ae2bc@windsurf>
-In-Reply-To: <20220822084858.18574-1-james.hilliard1@gmail.com>
-References: <20220822084858.18574-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1661283718;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=8HnCGsz9oZoud2AZP70z3lZzUWuPaIF8efQCGJinYT0=;
- b=eNxGl5i2lGZ97JbEzuDOzkKw9kM2W+cNGYPeJ06bxTOSVuiFhtULN2zNwJiPfw9/oTt2/v
- L545F9kFcUAZ52bcvuPHRCVtyZpMocuxO/cGhRZEkiWjXsXBrMeTbF/qNGwrrTEc5knAoW
- veXtTOe6fqQsnBa7qwsT6on8IQww+cZRgEVyz87F6O1D92Ra8Z1EsM0WZfyMsvTXSZYJNP
- ihZY/m8wiizgXIZJvoBkHYzhEjXHWmvNG1KMCe7wghNfa12Cm1IpCA3IeuXiq7KmQVqJff
- 1Hp08bpj3UFVuvIIfPkx8Re4d8BS/ZN3L5qrSrCQ+KZ6NDT8fjySDYta6omEJQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=eNxGl5i2
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-weasyprint: bump to
- version 56.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PxSR618Is3dE for <buildroot@lists.busybox.net>;
+ Tue, 23 Aug 2022 19:42:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 828C6817E4
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:42:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 828C6817E4
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 59E2987B49; Tue, 23 Aug 2022 19:27:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 23 Aug 2022 21:41:36 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: dba15762cf9f5fd93b8bf2c37e5b68cfb71872b3
+X-Git-Newrev: 8c1702594eb25b26b15cec22a117174edee0624d
+X-Patchwork-Hint: ignore
+Message-Id: <20220823192738.59E2987B49@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-weasyprint:
+ bump to version 56.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,28 +58,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 22 Aug 2022 02:48:58 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8c1702594eb25b26b15cec22a117174edee0624d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-weasyprint/python-weasyprint.hash | 4 ++--
->  package/python-weasyprint/python-weasyprint.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-weasyprint/python-weasyprint.hash | 4 ++--
+ package/python-weasyprint/python-weasyprint.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
+index 70c4e19832..68b895361b 100644
+--- a/package/python-weasyprint/python-weasyprint.hash
++++ b/package/python-weasyprint/python-weasyprint.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/weasyprint/json
+-md5  8891a483640daf4f9f234f96437fc056  weasyprint-55.0.tar.gz
+-sha256  ea5d5f2f159262e38b6e85939d8510e9735a47751a9647c9eaa93c22ced86230  weasyprint-55.0.tar.gz
++md5  0a339942d1d238aa0b974c1ec1580c03  weasyprint-56.1.tar.gz
++sha256  27f796abce8edebc9e5b3cff2d095a9fa2b0af5766801431659db51203c70b38  weasyprint-56.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
+diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
+index d6e6895f00..aff9a31a43 100644
+--- a/package/python-weasyprint/python-weasyprint.mk
++++ b/package/python-weasyprint/python-weasyprint.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEASYPRINT_VERSION = 55.0
++PYTHON_WEASYPRINT_VERSION = 56.1
+ PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
+-PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/8c/a5/1a0f1f60a0dabd475d3c36739eeb43bec2da2d9d57f4a6cd95964f8b34b7
++PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/30/2c/9c29989bf03bb573bd963c2cf167839099bdaff05aff1f0eff2ccbd1b509
+ PYTHON_WEASYPRINT_SETUP_TYPE = flit
+ PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
+ PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
