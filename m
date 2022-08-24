@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EDF3ECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:06:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE390C6FA89
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:06:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F35BF6106F;
-	Sun, 11 Sep 2022 09:06:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F35BF6106F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54A7861091;
+	Sun, 11 Sep 2022 09:06:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54A7861091
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XvaszzmKZIXR; Sun, 11 Sep 2022 09:06:39 +0000 (UTC)
+	with ESMTP id KkRuNDh62R1l; Sun, 11 Sep 2022 09:06:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0E976FB41;
-	Sun, 11 Sep 2022 09:06:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0E976FB41
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3CE0B1BF990
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D85A6FB39;
+	Sun, 11 Sep 2022 09:06:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D85A6FB39
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 384E61BF368
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F2A581699
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F2A581699
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF0986FB2A
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF0986FB2A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 32Dbz3gXQQ2z for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id g_oe8ILcfu-r for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 74EF280C24
+ by smtp3.osuosl.org (Postfix) with ESMTP id 062CF6FB23
  for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74EF280C24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 062CF6FB23
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 65B5E835E4; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
+ id 0294883620; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 24 Aug 2022 13:04:28 +0200
+Date: Wed, 24 Aug 2022 12:08:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f4a78565db49b90d96b5e28cd06e6b07cb0a7e61
-X-Git-Newrev: 22d10e294cc9cd30fa8adc3672a337167e6241a3
+X-Git-Oldrev: f0520470951528eb07710338e7427a1fd0159b48
+X-Git-Newrev: 8bf3d6a1b7f1584344d39e14f6e275cf14b1b4fa
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084827.65B5E835E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain/toolchain-external: update Arm
- ARM32 toolchain 11.2-2022.02
+Message-Id: <20220911084827.0294883620@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libinput: enable installation of
+ python tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,83 +64,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22d10e294cc9cd30fa8adc3672a337167e6241a3
+commit: https://git.buildroot.net/buildroot/commit/?id=8bf3d6a1b7f1584344d39e14f6e275cf14b1b4fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated to gcc 11.2, gdb 11, binutils 2.37, glibc 2.34.
+Now that we have a python-libevdev package, let's allow the
+installation of the libinput Python tools, using a new
+BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS option.
 
-See https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
-
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../toolchain-external/toolchain-external-arm-arm/Config.in  |  8 ++++----
- .../toolchain-external-arm-arm.hash                          | 12 +++++-------
- .../toolchain-external-arm-arm/toolchain-external-arm-arm.mk |  6 +++---
- 3 files changed, 12 insertions(+), 14 deletions(-)
+ package/libinput/Config.in   | 22 ++++++++++++++++++++++
+ package/libinput/libinput.mk |  2 ++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-index 28c6541406..c595b1c133 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-@@ -3,7 +3,7 @@ comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
- 	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
+diff --git a/package/libinput/Config.in b/package/libinput/Config.in
+index 14e4e70f96..1a8fcc7ed4 100644
+--- a/package/libinput/Config.in
++++ b/package/libinput/Config.in
+@@ -13,5 +13,27 @@ config BR2_PACKAGE_LIBINPUT
  
- config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
--	bool "Arm ARM 2021.07"
-+	bool "Arm ARM 2022.02"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
- 	depends on BR2_ARM_CPU_HAS_NEON
-@@ -13,12 +13,12 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
- 	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
--	  Arm toolchain for the ARM architecture. It uses GCC 10.3,
--	  GDB 10.2, glibc 2.33, Binutils 2.36.1. It generates code
-+	  Arm toolchain for the ARM architecture. It uses GCC 11.2,
-+	  GDB 11, glibc 2.34, Binutils 2.37. It generates code
- 	  that runs on all Cortex-A profile devices. The code
- 	  generated uses the hard floating point calling convention,
- 	  and uses the NEON FPU instructions.
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
-index 1fc2c5de57..3c07237e1d 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
-@@ -1,7 +1,5 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz.asc
--md5  87ec580b290df2febc7c476f59484635  gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
--# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz.asc
--md5  0f1c5c90f5c62e1d1066f75fb3e51e21  gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz
--# locally calculated
--sha256  aa074fa8371a4f73fecbd16bd62c8b1945f23289e26414794f130d6ccdf8e39c  gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
--sha256  fccd7af76988da2b077f939eb2a78baa9935810918d2bf3f837bc74f52efa825  gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf.tar.xz.sha256asc
-+sha256  c254f7199261fe76c32ef42187502839bda7efad0a66646cf739d074eff45fad  gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf.tar.xz
+ 	  http://freedesktop.org/wiki/Software/libinput/
+ 
++if BR2_PACKAGE_LIBINPUT
 +
-+# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-aarch64-arm-none-linux-gnueabihf.tar.xz.sha256asc
-+sha256  c5603772af016008ddacb7e475dc226d0cccdf069925dfded43e452a59774fc3  gcc-arm-11.2-2022.02-aarch64-arm-none-linux-gnueabihf.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
-index 8731a4f0e5..1bab088830 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
++config BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS
++	bool "install python tools "
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_LIBEVDEV # runtime
++	select BR2_PACKAGE_PYTHON_PYUDEV # runtime
++	select BR2_PACKAGE_PYTHON_PYYAML # runtime
++	help
++	  Install python tools:
++	  libinput-analyze-per-slot-delta,
++	  libinput-analyze-recording,
++	  libinput-analyze-touch-down-state,
++	  libinput-measure-fuzz,
++	  libinput-measure-touchpad-pressure,
++	  libinput-measure-touchpad-size,
++	  libinput-measure-touchpad-tap,
++	  libinput-measure-touch-size,
++	  libinput-replay
++
++endif
++
+ comment "libinput needs udev /dev management"
+ 	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 1529411355..3454907bab 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -30,6 +30,7 @@ else
+ LIBINPUT_CONF_OPTS += -Ddebug-gui=false
+ endif
  
--TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2021.07
--TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
-+TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2022.02
-+TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/11.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
++ifeq ($(BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS),)
+ LIBINPUT_PYTHON_TOOLS = libinput-analyze-per-slot-delta \
+ 	libinput-analyze-recording \
+ 	libinput-analyze-touch-down-state \
+@@ -46,5 +47,6 @@ define LIBINPUT_REMOVE_UNNEEDED_FILES
+ 	)
+ endef
+ LIBINPUT_POST_INSTALL_TARGET_HOOKS += LIBINPUT_REMOVE_UNNEEDED_FILES
++endif
  
--TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-$(HOSTARCH)-arm-none-linux-gnueabihf.tar.xz
-+TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-11.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-$(HOSTARCH)-arm-none-linux-gnueabihf.tar.xz
- 
- $(eval $(toolchain-external-package))
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
