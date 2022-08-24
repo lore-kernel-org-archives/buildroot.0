@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EA5EC32774
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 03:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E17D3C32792
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 03:02:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA3E660E4A;
-	Wed, 24 Aug 2022 03:02:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA3E660E4A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D83F4055A;
+	Wed, 24 Aug 2022 03:02:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D83F4055A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S7uF1-qE6Ggn; Wed, 24 Aug 2022 03:02:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L_-fxB8yE_Mb; Wed, 24 Aug 2022 03:02:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE1BE60B92;
-	Wed, 24 Aug 2022 03:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE1BE60B92
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 568231BF3FF
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 03:02:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6939740480;
+	Wed, 24 Aug 2022 03:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6939740480
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E84E1BF3FF
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 03:02:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F5E68175C
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 03:02:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F5E68175C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4761340480
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 03:02:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4761340480
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SuExepoNrxEa for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 03:02:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CdsyrvbjBieV for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 03:02:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 392A981756
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com
- [IPv6:2607:f8b0:4864:20::441])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 392A981756
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 03:02:40 +0000 (UTC)
-Received: by mail-pf1-x441.google.com with SMTP id w29so9676015pfj.3
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 20:02:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45F9240423
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com
+ [IPv6:2607:f8b0:4864:20::1042])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 45F9240423
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 03:02:41 +0000 (UTC)
+Received: by mail-pj1-x1042.google.com with SMTP id
+ x63-20020a17090a6c4500b001fabbf8debfso207773pjj.4
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 20:02:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=hFdZNmXWT3t/BwVPBrair17nfBGFCynRvnRLlB844hA=;
- b=yx4AyQIJ8l++rgvfX/ojaBX3qNj2gLuT3dW30MlJJkjggPokDlrB6ElDgatvKHoNf7
- zHNswb7ds5Uc4NpHFreRaoSO/L/YbxORouoZEyvDjnskAbmd6h87q6RAvMz+CBHv5Moq
- 7b77uMhzoU7LF8FeYeSQCV3X6+mj/eNQ8IWJW3l/vygesADPRo6m7ArJvrrBiHnPfK/K
- EeUn6aJ8cAMN/rvRT+dZz84+TwMTtCW0wGiftKr6DbnMarthhajQH+MThRJJPHiwGMGU
- miU1PAVaAtXR1b0D+w50ELBKQEboito8AAk1xt5JKUqrCVGSZGYOxcB2dFwtP0XEA9tH
- 0TIA==
-X-Gm-Message-State: ACgBeo3dHJkBdgrLSueZyUli4gsEhdbb0LE8p7EMfvpwBmmzH+X975Ia
- qmARunSIE3J7RF0XiHmvvx6p/WcHG55+20O09e4=
-X-Google-Smtp-Source: AA6agR6dK3o0Ya58QZc7WH5SpwCjGhsszt+MgyoZ79/5WaKkhG8q5ZXtKMBjqDEHzDY7XckX8LF3KA==
-X-Received: by 2002:a63:9149:0:b0:41d:10ae:4203 with SMTP id
- l70-20020a639149000000b0041d10ae4203mr23258442pge.450.1661310159482; 
- Tue, 23 Aug 2022 20:02:39 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+ bh=eRJVFc+V8kf4u53sW+RuTKs6ItAUE0ow4M6Sl3hnAQw=;
+ b=7xeIBGU11AaVzdWYkmQoCMrPfgF0C49w/C+7QL4bQI04TVCZ9feoBtmOCfVrnGFAY+
+ 8w2tO3qjua/0UYEa+xa8wri4rKDdC859OG1yLk3aRZX9P/5RSsonDwjf4TSFqs8FjsVC
+ 5rTvMBXj4Y0PpB43aV0rSGYqPhYq2P5/cGo8wUTkLXcBAh+b119dywZrEci6noEuFoy1
+ fK624X/h/c/cxw2xbE/BSGWYhslxBJyt38J+MFUIsRhhm2GbZbAZjTBIgt0iLFgFGkKx
+ 8KOmARwpp38J4QbM7njL5DAx7ItOkcoFX5AD/Zsna9I730G2aAhuULcm0kMWEL3Vs8fP
+ Myxw==
+X-Gm-Message-State: ACgBeo0uXawyxqjshMcHeUSpdmjR6cufDGiviXqZX4UjB6q92SsK8Xjx
+ 8noLXEMiSUo7QOJbiVzytCBh6t1ggYigmflqMsc=
+X-Google-Smtp-Source: AA6agR74jUZt1H90iXPcn6bhGSifz6oSgE8PKmKVy34tR1jq0dUy0eIFaoCwaK7MTmp5DdlZZVaWqw==
+X-Received: by 2002:a17:902:f34b:b0:173:da9:d401 with SMTP id
+ q11-20020a170902f34b00b001730da9d401mr3185317ple.80.1661310160569; 
+ Tue, 23 Aug 2022 20:02:40 -0700 (PDT)
 Received: from chris-jammy.hollywoodparkca.com
  (2603-8000-3f01-0100-893e-b127-a8ca-bcb9.res6.spectrum.com.
  [2603:8000:3f01:100:893e:b127:a8ca:bcb9])
  by smtp.googlemail.com with ESMTPSA id
- d5-20020a170903230500b00172ccb3f4ebsm8101263plh.160.2022.08.23.20.02.38
+ d5-20020a170903230500b00172ccb3f4ebsm8101263plh.160.2022.08.23.20.02.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Aug 2022 20:02:39 -0700 (PDT)
+ Tue, 23 Aug 2022 20:02:40 -0700 (PDT)
 From: Chris Dimich <chris.dimich@boundarydevices.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 20:02:26 -0700
-Message-Id: <20220824030229.2531548-1-chris.dimich@boundarydevices.com>
+Date: Tue, 23 Aug 2022 20:02:27 -0700
+Message-Id: <20220824030229.2531548-2-chris.dimich@boundarydevices.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220824030229.2531548-1-chris.dimich@boundarydevices.com>
+References: <20220824030229.2531548-1-chris.dimich@boundarydevices.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=boundarydevices.com; s=google;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=hFdZNmXWT3t/BwVPBrair17nfBGFCynRvnRLlB844hA=;
- b=fIifVx73V1R0nl1bAzKhUD98B7CpagnPKs4wlMlP+qkUH6SPacAjBRgfkUUyPU1HJk
- 3PixXzR7XoWBSYyQXS60g24isXnp3ckDlbnCxGZSZ6SNztXQQsSG9o8R1FYKFFlIvBH/
- gxLCEod0vaiGhNDX2FEf0sJqVyX8W2EP0O+30=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc;
+ bh=eRJVFc+V8kf4u53sW+RuTKs6ItAUE0ow4M6Sl3hnAQw=;
+ b=SrLWxJgWIvsWxxdr57l05NmSuVIGK4nXVEV+iLpm+QDTj9TUwWzdLMRsYiUvUpZ/AJ
+ NrDxcHdANY4pudQ7lnnaVZDhwlw1RX47qmulIaChhyclE89A7TOs/96gFUKb5wmB8p5S
+ 4i0QaoVNl+4VUH+0TIW5B58p3d94zsxwCEQ1U=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=boundarydevices.com
  header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
- header.b=fIifVx73
-Subject: [Buildroot] [PATCH 1/2] configs/nitrogen*: update kernel to
- boundary-imx_5.15.y
+ header.b=SrLWxJgW
+Subject: [Buildroot] [PATCH 2/2] configs/nitrogen*: bump u-boot revision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,202 +108,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Also bump linux headers version to 5.15.
-Based on NXP 5.15.32-2.0.0 release.
+To latest v2020.10 rev (1d21a3d5)
 
 Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 ---
- configs/nitrogen6sx_defconfig | 8 ++++----
- configs/nitrogen6x_defconfig  | 8 ++++----
- configs/nitrogen7_defconfig   | 8 ++++----
- configs/nitrogen8m_defconfig  | 8 ++++----
- configs/nitrogen8mm_defconfig | 8 ++++----
- configs/nitrogen8mn_defconfig | 8 ++++----
- configs/nitrogen8mp_defconfig | 8 ++++----
- 7 files changed, 28 insertions(+), 28 deletions(-)
+ configs/nitrogen6sx_defconfig | 2 +-
+ configs/nitrogen6x_defconfig  | 2 +-
+ configs/nitrogen7_defconfig   | 2 +-
+ configs/nitrogen8m_defconfig  | 2 +-
+ configs/nitrogen8mm_defconfig | 2 +-
+ configs/nitrogen8mn_defconfig | 2 +-
+ configs/nitrogen8mp_defconfig | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index 3c2fe0cc7b..0519e9f12e 100644
+index 0519e9f12e..e302fcbba5 100644
 --- a/configs/nitrogen6sx_defconfig
 +++ b/configs/nitrogen6sx_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -35,8 +35,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/bo
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_5.10.x_2.0.0
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
-+# Latest revision  of branch boundary-imx_5.15.y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 9e1d3ae1bc..31cf97b13e 100644
+index 31cf97b13e..6f7c3bbe99 100644
 --- a/configs/nitrogen6x_defconfig
 +++ b/configs/nitrogen6x_defconfig
-@@ -16,8 +16,8 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -34,8 +34,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/bo
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_5.10.x_2.0.0
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
-+# Latest revision  of branch boundary-imx_5.15.y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index 0dbced86e9..79156d4482 100644
+index 79156d4482..1efcdf6071 100644
 --- a/configs/nitrogen7_defconfig
 +++ b/configs/nitrogen7_defconfig
-@@ -16,8 +16,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -34,8 +34,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/bo
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_5.10.x_2.0.0
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
-+# Latest revision  of branch boundary-imx_5.15.y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index a41e5f04d8..c3f3093b2e 100644
+index c3f3093b2e..a6a9526dee 100644
 --- a/configs/nitrogen8m_defconfig
 +++ b/configs/nitrogen8m_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # DDR training binaries
- BR2_PACKAGE_FREESCALE_IMX=y
-@@ -49,8 +49,8 @@ BR2_TARGET_UBOOT_SPL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_5.10.x_2.0.0
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
-+# Latest revision  of branch boundary-imx_5.15.y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index a635f8012b..56ec60dda9 100644
+index 56ec60dda9..0130a6a62a 100644
 --- a/configs/nitrogen8mm_defconfig
 +++ b/configs/nitrogen8mm_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # DDR training binaries
- BR2_PACKAGE_FREESCALE_IMX=y
-@@ -49,8 +49,8 @@ BR2_TARGET_UBOOT_SPL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_5.10.x_2.0.0
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
-+# Latest revision  of branch boundary-imx_5.15.y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index 5c2101441d..9e38629883 100644
+index 9e38629883..50976959c5 100644
 --- a/configs/nitrogen8mn_defconfig
 +++ b/configs/nitrogen8mn_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # DDR training binaries
- BR2_PACKAGE_FREESCALE_IMX=y
-@@ -49,8 +49,8 @@ BR2_TARGET_UBOOT_SPL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_5.10.x_2.0.0
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
-+# Latest revision  of branch boundary-imx_5.15.y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
-index dc7427c856..5dc47c45e8 100644
+index 5dc47c45e8..a14a024353 100644
 --- a/configs/nitrogen8mp_defconfig
 +++ b/configs/nitrogen8mp_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
- 
- # DDR training binaries
- BR2_PACKAGE_FREESCALE_IMX=y
-@@ -49,8 +49,8 @@ BR2_TARGET_UBOOT_SPL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_5.10.x_2.0.0
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/950d5f1b.tar.gz"
-+# Latest revision  of branch boundary-imx_5.15.y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/5dcbb9a6.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mp_2gr0"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 -- 
 2.34.1
 
