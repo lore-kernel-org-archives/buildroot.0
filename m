@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 840A4C32796
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 19:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22236C00140
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 19:27:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 08C2E40BA1;
-	Wed, 24 Aug 2022 19:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08C2E40BA1
+	by smtp4.osuosl.org (Postfix) with ESMTP id B45C6417BE;
+	Wed, 24 Aug 2022 19:27:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B45C6417BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JHlTqHOApK3E; Wed, 24 Aug 2022 19:27:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XWLUjScYbwgL; Wed, 24 Aug 2022 19:27:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2119140BA4;
-	Wed, 24 Aug 2022 19:27:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2119140BA4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 239DB1BF307
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:26:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73137417B1;
+	Wed, 24 Aug 2022 19:27:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73137417B1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 92C181BF307
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:26:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F343982BD6
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:26:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F343982BD6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E46E60FDC
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:26:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E46E60FDC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qGFONa1WSJP7 for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 19:26:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YqYolhzUdgzQ for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 19:26:20 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3104781B52
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com
- [IPv6:2607:f8b0:4864:20::444])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3104781B52
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 19:26:19 +0000 (UTC)
-Received: by mail-pf1-x444.google.com with SMTP id w138so14829060pfc.10
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 12:26:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA64E60FDA
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com
+ [IPv6:2607:f8b0:4864:20::541])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BA64E60FDA
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 19:26:20 +0000 (UTC)
+Received: by mail-pg1-x541.google.com with SMTP id r69so15873928pgr.2
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 12:26:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=qKM0WifSNhmvFNxa+8ggvSJ3dnNPVuvkyxbYElKtP7Q=;
- b=1vKbFEmik+vjgWz70Cs5DGQtw768Fdydd1anOUeiJHMmQpgzlkOBQXs/LOqeY7b3EA
- xIJMKQSF7isqlNZEfBnZDykC5imKVifcYZSsXY/bp1VUEzPJftgdZvzRUkZh0onYpXUn
- AYz/AppGoWdfkM5xBhmZcVK1akRRv2ZtD7VWliNvdIyTQvAC6YvXoms7wgwy2d5vzY1g
- katJq5p/9ebh4jsse0fDh+im48+I7zYSk+bDoEl9cV7DxR9lvdEBYgP0pJtVJ2EHqgZM
- O4qXFGvp8VUZQ1Dv6Y3+GWjDvTmmZpVRH6QbOkUDO7RzHLo6t/pGNSeHWnJz5VGnooxy
- Pb0A==
-X-Gm-Message-State: ACgBeo048MWtwspew14KjpqmtbHp2upbbY2hlj8FfRZ3oS/EMMb7a6PA
- sGzJTw6KD+QW7YKm1kyqITvp4bJxANWyegR9I0c=
-X-Google-Smtp-Source: AA6agR71gN1N1jmvv9u7VrR+hJO2V4WnJXiamnwkBXvW3OnWpapTxZvq+3NiNlm2+DVv4ESz0IbZJg==
-X-Received: by 2002:a63:e448:0:b0:429:f52a:3ad2 with SMTP id
- i8-20020a63e448000000b00429f52a3ad2mr368878pgk.138.1661369178463; 
- Wed, 24 Aug 2022 12:26:18 -0700 (PDT)
+ bh=OeFjHsIMyA5ZlqaEXc8VD4136Tgyg3lEa4v0idG2WQA=;
+ b=SDLzXo7IwjnG63b0fLCNqLlcXDR7hfBDjjMZQl9neSpgdqnbNC1D93jx/AqaLXzjir
+ C3ly4JW3vmB3zEY4FuIFrueJ5z/TJUsQiJwMeJc9rzElykGdUSIf2ZjCe2iPfDvK3/3i
+ vEW0hvOlHxQZUkW+Ogtp79NMEd43DW+QJn1AihNAJYKdxNUiZRTIFVTCOi4dQutGw+GD
+ qVs0ir9LFspJz6/ECPefItzXyWd6zR9dIAA60PetWS372TROtphWx6wR3dWTszjzag7L
+ 60nxE/+rAVkbfh/BkJfD3WnYBHJLqaQugCf8IF0NVAzm7DeVwTq00MstRCtm9X4fEga4
+ da/A==
+X-Gm-Message-State: ACgBeo0GrNcsgSq+pd2bR/jOqHynJyLHCKNUOCZtowl9OtFedEr/MNdZ
+ Z4JdCDkpaomGs3J2SfUazIo9Bksb3QZEFSTP+yA=
+X-Google-Smtp-Source: AA6agR4XmaKVMRjGGUTIfg/ud7dXwII6sHOabWuNFdm4rs7oDJ9cX/5vKLZkapd1HAFB6NDLVYcBbw==
+X-Received: by 2002:a63:9149:0:b0:41d:10ae:4203 with SMTP id
+ l70-20020a639149000000b0041d10ae4203mr358520pge.450.1661369180074; 
+ Wed, 24 Aug 2022 12:26:20 -0700 (PDT)
 Received: from chris-jammy.hollywoodparkca.com
  (2603-8000-3f01-0100-893e-b127-a8ca-bcb9.res6.spectrum.com.
  [2603:8000:3f01:100:893e:b127:a8ca:bcb9])
  by smtp.googlemail.com with ESMTPSA id
- q1-20020a17090a1b0100b001fb4a8d82a7sm1741338pjq.56.2022.08.24.12.26.17
+ q1-20020a17090a1b0100b001fb4a8d82a7sm1741338pjq.56.2022.08.24.12.26.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Aug 2022 12:26:18 -0700 (PDT)
+ Wed, 24 Aug 2022 12:26:19 -0700 (PDT)
 From: Chris Dimich <chris.dimich@boundarydevices.com>
 To: buildroot@buildroot.org
-Date: Wed, 24 Aug 2022 12:25:55 -0700
-Message-Id: <20220824192604.2549356-5-chris.dimich@boundarydevices.com>
+Date: Wed, 24 Aug 2022 12:25:56 -0700
+Message-Id: <20220824192604.2549356-6-chris.dimich@boundarydevices.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220824192604.2549356-1-chris.dimich@boundarydevices.com>
 References: <20220824192604.2549356-1-chris.dimich@boundarydevices.com>
@@ -74,16 +74,16 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=boundarydevices.com; s=google;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=qKM0WifSNhmvFNxa+8ggvSJ3dnNPVuvkyxbYElKtP7Q=;
- b=Cz3guKswNl+m7DFdFVrOqcYbGxigLBBxusekXIsAs4lPAzbndL+Yfsbuxvjeoyr19O
- aqB43do21WUsXI7miywFF3SO9/kniobPlyMOJL4xGZkXk0zDb84ZuNS+SnH6WTrdKuuN
- bcZ3ESAI3MazWbXIIkmSAdYHMLX/tdpM0Ugkk=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=OeFjHsIMyA5ZlqaEXc8VD4136Tgyg3lEa4v0idG2WQA=;
+ b=cMS2muWK+P98SivtGpKl5fJniV/eA4KYEHSCQAATXL89v8ohICIiuZv73lA7J9mJfi
+ tWuDAHYw/iihMsQPmEqLwUI0hEdIn/ZqpkgEq8euhha9o2il4uDUyqzBTUW9Rzs75NGQ
+ 8ES8wkOADsxOv70v/hWMYJkMcQBoijhZc15OU=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=boundarydevices.com
  header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
- header.b=Cz3guKsw
-Subject: [Buildroot] [PATCH 5/7] package/freescale-imx/imx-gpu-g2d: bump
- version to 6.4.3.p4.2
+ header.b=cMS2muWK
+Subject: [Buildroot] [PATCH 6/7] package/freescale-imx/imx-vpu-hantro-vc:
+ bump version to 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,45 +108,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-To match NXP 5.15.32-2.0.0 release.
-EULA/COPYING: update to LA_OPT_NXP_Software_License v35.
+-To match NXP 5.15.32-2.0.0 release.
+-EULA/COPYING: update to LA_OPT_NXP_Software_License v35.
+-Add an INSTALL_STAGING_CMDS define as libraries needed by imx-vpu-hantro-daemon.
 
 Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 ---
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 8 ++++----
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash             | 6 +++---
+ .../freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk | 9 ++++++++-
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index 4d28b037d0..181d85a575 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  39fe307916e19a0892a514621121086e276a43858af90230372a1344852116a2  imx-gpu-g2d-6.4.3.p2.0-arm.bin
--sha256  2642a49e088daae4cf568a150d01e7c095995e8a6ff1883c02c3fa6d26d254b3  imx-gpu-g2d-6.4.3.p2.0-aarch64.bin
+diff --git a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash
+index aadf5b121f..df2cae6ca8 100644
+--- a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash
++++ b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  d5efae484c4271c098286d007590d6bf40c272d4f35702ff65625f2362715ab3  imx-vpu-hantro-vc-1.4.0.bin
 -sha256  ea58636bf34f589048fcd46e38497c47229fde8498df086ff5fb52f9ef8e15ee  COPYING
 -sha256  50099e283cfd307f84f159aeb1a6f462351320273dbcdb80d7f2c9db0494b71c  EULA
-+sha256  0ba9806c4efa0154fc9f7be406e42bc2c50b975abd32cbe322cf7bcf6ae0d350  imx-gpu-g2d-6.4.3.p4.2-arm.bin
-+sha256  ff50ddfee2d989798a2aba84ef9114e01f8d867293891dc0aacfab1640cbf8a3  imx-gpu-g2d-6.4.3.p4.2-aarch64.bin
-+sha256  4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517  COPYING
-+sha256  4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517  EULA
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index 0e4078a962..cb40e5940b 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -5,9 +5,9 @@
++sha256  8af665f8e06e0e467f563e372f43583d94128f0d37f75321965bc26bd4404b2b  imx-vpu-hantro-vc-1.7.0.bin
++sha256  35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  COPYING
++sha256  35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  EULA
+diff --git a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk
+index b07e116674..91f1db656e 100644
+--- a/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk
++++ b/package/freescale-imx/imx-vpu-hantro-vc/imx-vpu-hantro-vc.mk
+@@ -4,10 +4,11 @@
+ #
  ################################################################################
  
- ifeq ($(BR2_aarch64),y)
--IMX_GPU_G2D_VERSION = 6.4.3.p2.0-aarch64
-+IMX_GPU_G2D_VERSION = 6.4.3.p4.2-aarch64
- else
--IMX_GPU_G2D_VERSION = 6.4.3.p2.0-arm
-+IMX_GPU_G2D_VERSION = 6.4.3.p4.2-arm
- endif
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
+-IMX_VPU_HANTRO_VC_VERSION = 1.4.0
++IMX_VPU_HANTRO_VC_VERSION = 1.7.0
+ IMX_VPU_HANTRO_VC_SITE = $(FREESCALE_IMX_SITE)
+ IMX_VPU_HANTRO_VC_SOURCE = imx-vpu-hantro-vc-$(IMX_VPU_HANTRO_VC_VERSION).bin
+ IMX_VPU_HANTRO_VC_DEPENDENCIES = linux
++IMX_VPU_HANTRO_VC_INSTALL_STAGING = YES
+ 
+ IMX_VPU_HANTRO_VC_LICENSE = NXP Semiconductor Software License Agreement
+ IMX_VPU_HANTRO_VC_LICENSE_FILES = EULA COPYING
+@@ -17,6 +18,12 @@ define IMX_VPU_HANTRO_VC_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_VPU_HANTRO_VC_DL_DIR)/$(IMX_VPU_HANTRO_VC_SOURCE))
+ endef
+ 
++define IMX_VPU_HANTRO_VC_INSTALL_STAGING_CMDS
++	cp -r $(@D)/usr/include/hantro_VC8000E_enc $(STAGING_DIR)/usr/include/
++	cp $(@D)/usr/lib/libhantro_vc8000e.so $(STAGING_DIR)/usr/lib/
++	cp $(@D)/usr/lib/libhantro_vc8000e.so.1 $(STAGING_DIR)/usr/lib/
++endef
++
+ define IMX_VPU_HANTRO_VC_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/usr/lib/libhantro_vc8000e.so $(TARGET_DIR)/usr/lib/libhantro_vc8000e.so
+ 	$(INSTALL) -D -m 0755 $(@D)/usr/lib/libhantro_vc8000e.so.1 $(TARGET_DIR)/usr/lib/libhantro_vc8000e.so.1
 -- 
 2.34.1
 
