@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 343FCECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAF25ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:09:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D4396411AB;
-	Sun, 11 Sep 2022 09:09:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4396411AB
+	by smtp2.osuosl.org (Postfix) with ESMTP id A073840B88;
+	Sun, 11 Sep 2022 09:09:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A073840B88
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CBezEfSEJgr0; Sun, 11 Sep 2022 09:09:22 +0000 (UTC)
+	with ESMTP id 7pIOSOpMQVVs; Sun, 11 Sep 2022 09:09:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B02B140FB9;
-	Sun, 11 Sep 2022 09:09:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B02B140FB9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80D441BF368
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:49:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E6BE4103A;
+	Sun, 11 Sep 2022 09:09:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E6BE4103A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 105711BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:49:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58BD26106A
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58BD26106A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 560DE81D0C
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 560DE81D0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tluQHQ5SNtkl for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FhC1lWmlimA9 for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6AE4160777
+ by smtp1.osuosl.org (Postfix) with ESMTP id ABF0C8131D
  for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AE4160777
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABF0C8131D
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5AE6A8361F; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
+ id 9FE21835E4; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 24 Aug 2022 13:04:28 +0200
+Date: Wed, 24 Aug 2022 13:36:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 34cf3a15c9da81afb6cab6c56babd5a2096e44ca
-X-Git-Newrev: f4a78565db49b90d96b5e28cd06e6b07cb0a7e61
+X-Git-Oldrev: 98a3fba9402a84d00762eeeeb7086f855d8a0d0f
+X-Git-Newrev: d68628a5382844a40856be486cd41dbfb0c7cabb
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084827.5AE6A8361F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain/toolchain-external: update Arm
- AArch64 BE toolchain 11.2-2022.02
+Message-Id: <20220911084827.9FE21835E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: remove
+ remaining double quote escaping
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,67 +64,164 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4a78565db49b90d96b5e28cd06e6b07cb0a7e61
+commit: https://git.buildroot.net/buildroot/commit/?id=d68628a5382844a40856be486cd41dbfb0c7cabb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated to gcc 11.2, gdb 11, binutils 2.37, glibc 2.34.
+This is done either by switching to single quoted f-strings, triple
+double quoted f-strings when needed, or simply single-quoted strings.
 
-See https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
+The renderer HTML is exactly identical before/after this commit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-By: Sen Hastings <sen@phobosdpl.com>
+Acked-By: Sen Hastings <sen@phobosdpl.com>
 ---
- .../toolchain-external/toolchain-external-arm-aarch64-be/Config.in  | 4 ++--
- .../toolchain-external-arm-aarch64-be.hash                          | 6 ++----
- .../toolchain-external-arm-aarch64-be.mk                            | 6 +++---
- 3 files changed, 7 insertions(+), 9 deletions(-)
+ support/scripts/pkg-stats | 67 ++++++++++++++++++++++-------------------------
+ 1 file changed, 32 insertions(+), 35 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-index eeb88579fe..dba50595f5 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-@@ -1,12 +1,12 @@
- config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
--	bool "Arm AArch64 BE 2021.07"
-+	bool "Arm AArch64 BE 2022.02"
- 	depends on BR2_aarch64_be
- 	depends on BR2_HOSTARCH = "x86_64"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_HAS_FORTRAN
- 	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-index 1079917c98..99a2f1ff22 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
-@@ -1,4 +1,2 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64_be-none-linux-gnu.tar.xz.asc
--md5  54cbaef7db7eb3de27732500f9da9c6f  gcc-arm-10.3-2021.07-x86_64-aarch64_be-none-linux-gnu.tar.xz
--# locally calculated
--sha256  63c34cac07ceadd74620ea87f27af1aa6a6f55c20a5bc116af21a59ddb6b6a6a  gcc-arm-10.3-2021.07-x86_64-aarch64_be-none-linux-gnu.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
-+sha256  cc834d22fd8eff98d18cf3f464e30f5e4aee0966e51f9e09514e948f1eb9884b  gcc-arm-11.2-2022.02-x86_64-aarch64_be-none-linux-gnu.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-index 5a6dbc60d5..f98f090327 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 572757b7ea..aa3b49c809 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -1010,13 +1010,12 @@ def dump_html_pkg(f, pkg):
+         if pkg.latest_version['version'] is None:
+             latest_version_text = "<b>Found, but no version</b>"
+         else:
+-            latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % \
+-                (pkg.latest_version['id'], str(pkg.latest_version['version']))
++            latest_version_text = f"""<a href="https://release-monitoring.org/project/{pkg.latest_version['id']}"><b>{str(pkg.latest_version['version'])}</b></a>"""
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 2021.07
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 2022.02
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/11.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
+         latest_version_text += "<br/>"
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = gcc-arm-11.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
+         if pkg.latest_version['status'] == RM_API_STATUS_FOUND_BY_DISTRO:
+-            latest_version_text += "found by <a href=\"https://release-monitoring.org/distro/Buildroot/\">distro</a>"
++            latest_version_text += f'found by <a href="https://release-monitoring.org/distro/Buildroot/">distro</a>'
+         else:
+             latest_version_text += "found by guess"
  
- $(eval $(toolchain-external-package))
+@@ -1041,10 +1040,10 @@ def dump_html_pkg(f, pkg):
+         div_class.append("missing_url")
+     if pkg.status['url'][0] == "error":
+         div_class.append("invalid_url")
+-        url_str = "<a href=\"%s\">%s</a>" % (pkg.url, pkg.status['url'][1])
++        url_str = f"""<a href="{pkg.url}">{pkg.status['url'][1]}</a>"""
+     else:
+         div_class.append("good_url")
+-        url_str = "<a href=\"%s\">Link</a>" % pkg.url
++        url_str = f'<a href="{pkg.url}">Link</a>'
+     f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">{url_str}</div>\n')
+ 
+     # CVEs
+@@ -1068,11 +1067,11 @@ def dump_html_pkg(f, pkg):
+         class="see-more centered cve_ignored">see all ({cve_total}) &#9662;</div>\n')
+     if pkg.is_status_error("cve"):
+         for cve in pkg.cves:
+-            f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s</a><br/>\n" % (cve, cve))
++            f.write(f'   <a href="https://security-tracker.debian.org/tracker/{cve}">{cve}</a><br/>\n')
+         for cve in pkg.unsure_cves:
+-            f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s <i>(unsure)</i></a><br/>\n" % (cve, cve))
++            f.write(f'   <a href="https://security-tracker.debian.org/tracker/{cve}">{cve} <i>(unsure)</i></a><br/>\n')
+     elif pkg.is_status_na("cve"):
+-        f.write("    %s" % pkg.status['cve'][1])
++        f.write(f"""    {pkg.status['cve'][1]}""")
+     else:
+         f.write("    N/A\n")
+     f.write("  </div>\n")
+@@ -1085,7 +1084,7 @@ def dump_html_pkg(f, pkg):
+         div_class.append("cve_ignored")
+     f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">\n')
+     for ignored_cve in pkg.ignored_cves:
+-        f.write("    <a href=\"https://security-tracker.debian.org/tracker/%s\">%s</a><br/>\n" % (ignored_cve, ignored_cve))
++        f.write(f'    <a href="https://security-tracker.debian.org/tracker/{ignored_cve}">{ignored_cve}</a><br/>\n')
+     f.write("  </div>\n")
+ 
+     # CPE ID
+@@ -1108,11 +1107,9 @@ def dump_html_pkg(f, pkg):
+     if not pkg.is_status_ok("cpe"):
+         if pkg.is_actual_package and pkg.current_version:
+             if pkg.cpeid:
+-                f.write("  <br/>%s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
+-                        (pkg.status['cpe'][1], ":".join(pkg.cpeid.split(":")[0:5])))
++                f.write(f"""  <br/>{pkg.status['cpe'][1]} <a href="https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword={":".join(pkg.cpeid.split(":")[0:5])}">(Search)</a>\n""") # noqa: E501
+             else:
+-                f.write("  %s <a href=\"https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=%s\">(Search)</a>\n" %  # noqa: E501
+-                        (pkg.status['cpe'][1], pkg.name))
++                f.write(f"""  {pkg.status['cpe'][1]} <a href="https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword={pkg.name}">(Search)</a>\n""")  # noqa: E501
+         else:
+             f.write("  %s\n" % pkg.status['cpe'][1])
+ 
+@@ -1155,49 +1152,49 @@ def dump_html_all_pkgs(f, packages):
+ 
+ 
+ def dump_html_stats(f, stats):
+-    f.write("<a id=\"results\"></a>\n")
+-    f.write("<div class=\"data\" id=\"results-grid\">\n")
++    f.write('<a id="results"></a>\n')
++    f.write('<div class="data" id="results-grid">\n')
+     infras = [infra[6:] for infra in stats.keys() if infra.startswith("infra-")]
+     for infra in infras:
+-        f.write(" <div class=\"data\">Packages using the <i>%s</i> infrastructure</div><div class=\"data\">%s</div>\n" %
++        f.write(' <div class="data">Packages using the <i>%s</i> infrastructure</div><div class="data">%s</div>\n' %
+                 (infra, stats["infra-%s" % infra]))
+-    f.write(" <div class=\"data\">Packages having license information</div><div class=\"data\">%s</div>\n" %
++    f.write(' <div class="data">Packages having license information</div><div class="data">%s</div>\n' %
+             stats["license"])
+-    f.write(" <div class=\"data\">Packages not having license information</div><div class=\"data\">%s</div>\n" %
++    f.write(' <div class="data">Packages not having license information</div><div class="data">%s</div>\n' %
+             stats["no-license"])
+-    f.write(" <div class=\"data\">Packages having license files information</div><div class=\"data\">%s</div>\n" %
++    f.write(' <div class="data">Packages having license files information</div><div class="data">%s</div>\n' %
+             stats["license-files"])
+-    f.write(" <div class=\"data\">Packages not having license files information</div><div class=\"data\">%s</div>\n" %
++    f.write(' <div class="data">Packages not having license files information</div><div class="data">%s</div>\n' %
+             stats["no-license-files"])
+-    f.write(" <div class=\"data\">Packages having a hash file</div><div class=\"data\">%s</div>\n" %
++    f.write(' <div class="data">Packages having a hash file</div><div class="data">%s</div>\n' %
+             stats["hash"])
+-    f.write(" <div class=\"data\">Packages not having a hash file</div><div class=\"data\">%s</div>\n" %
++    f.write(' <div class="data">Packages not having a hash file</div><div class="data">%s</div>\n' %
+             stats["no-hash"])
+-    f.write(" <div class=\"data\">Total number of patches</div><div class=\"data\">%s</div>\n" %
++    f.write(' <div class="data">Total number of patches</div><div class="data">%s</div>\n' %
+             stats["patches"])
+-    f.write("<div class=\"data\">Packages having a mapping on <i>release-monitoring.org</i></div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Packages having a mapping on <i>release-monitoring.org</i></div><div class="data">%s</div>\n' %
+             stats["rmo-mapping"])
+-    f.write("<div class=\"data\">Packages lacking a mapping on <i>release-monitoring.org</i></div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Packages lacking a mapping on <i>release-monitoring.org</i></div><div class="data">%s</div>\n' %
+             stats["rmo-no-mapping"])
+-    f.write("<div class=\"data\">Packages that are up-to-date</div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Packages that are up-to-date</div><div class="data">%s</div>\n' %
+             stats["version-uptodate"])
+-    f.write("<div class=\"data\">Packages that are not up-to-date</div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Packages that are not up-to-date</div><div class="data">%s</div>\n' %
+             stats["version-not-uptodate"])
+-    f.write("<div class=\"data\">Packages with no known upstream version</div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Packages with no known upstream version</div><div class="data">%s</div>\n' %
+             stats["version-unknown"])
+-    f.write("<div class=\"data\">Packages affected by CVEs</div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Packages affected by CVEs</div><div class="data">%s</div>\n' %
+             stats["pkg-cves"])
+-    f.write("<div class=\"data\">Total number of CVEs affecting all packages</div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Total number of CVEs affecting all packages</div><div class="data">%s</div>\n' %
+             stats["total-cves"])
+-    f.write("<div class=\"data\">Packages affected by unsure CVEs</div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Packages affected by unsure CVEs</div><div class="data">%s</div>\n' %
+             stats["pkg-unsure-cves"])
+-    f.write("<div class=\"data\">Total number of unsure CVEs affecting all packages</div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Total number of unsure CVEs affecting all packages</div><div class="data">%s</div>\n' %
+             stats["total-unsure-cves"])
+-    f.write("<div class=\"data\">Packages with CPE ID</div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Packages with CPE ID</div><div class="data">%s</div>\n' %
+             stats["cpe-id"])
+-    f.write("<div class=\"data\">Packages without CPE ID</div><div class=\"data\">%s</div>\n" %
++    f.write('<div class="data">Packages without CPE ID</div><div class="data">%s</div>\n' %
+             stats["no-cpe-id"])
+-    f.write("</div>\n")
++    f.write('</div>\n')
+ 
+ 
+ def dump_html_gen_info(f, date, commit):
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
