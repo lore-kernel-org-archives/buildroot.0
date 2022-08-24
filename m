@@ -1,70 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28FE7C32772
-	for <buildroot@archiver.kernel.org>; Tue, 23 Aug 2022 21:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B76C9C32793
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 02:49:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96BE2410DB;
-	Tue, 23 Aug 2022 21:57:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96BE2410DB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 166A040547;
+	Wed, 24 Aug 2022 02:49:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 166A040547
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gIEoYzoQHTSy; Wed, 24 Aug 2022 02:49:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1757640423;
+	Wed, 24 Aug 2022 02:49:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1757640423
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 596BE1BF3FF
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 02:49:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3297B409DE
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 02:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3297B409DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lhlNKM-7w_XT; Tue, 23 Aug 2022 21:57:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51994410C2;
-	Tue, 23 Aug 2022 21:57:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51994410C2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 417B61BF3D7
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:57:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C401813DA
- for <buildroot@lists.busybox.net>; Tue, 23 Aug 2022 21:57:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C401813DA
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NfsfkX95JV86 for <buildroot@lists.busybox.net>;
- Tue, 23 Aug 2022 21:57:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C223B813D9
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C223B813D9
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 21:57:39 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id AB1D5240005;
- Tue, 23 Aug 2022 21:57:37 +0000 (UTC)
-Date: Tue, 23 Aug 2022 23:57:36 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220823235736.7545824b@windsurf>
-In-Reply-To: <20220810074547.2833007-1-fontaine.fabrice@gmail.com>
-References: <20220810074547.2833007-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OSf35JhMAgvM for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 02:49:28 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBE8140921
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com
+ [IPv6:2607:f8b0:4864:20::541])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BBE8140921
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 02:49:28 +0000 (UTC)
+Received: by mail-pg1-x541.google.com with SMTP id d71so13824108pgc.13
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:49:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=9zfhUpOTjC7ezU0KQTdZK+TqBGuiASeN0mplPDPIDNU=;
+ b=J8GOIXeueu5Vq3hPXHtMDxxBNmyKLCiWIRx1wxFuYA22EjQBo3iQKCKKgf52MRVN5a
+ k4o0KjaSW6wcIBV3xUEmQdfSPAfELhyMW5JpdWFrrjZpbbXgEjJvZX8ddsqkLntwNpKW
+ 6A9xBVUjr54IIYwYIl1l2oa6ggr3hEz1PXlYuWbNoDuWydB77LXhkKfOT0DmcA0UoJ1/
+ JHY8CI7nAA8mVeSvVXSaH7TSLDGiUAiqwKwb2ErYI56ikSJ5pFa/XILJ0XDJC3OJDIf+
+ 8MtEuBbi2QyUHMoIvLLeYeTvT3T2o9mNQCrS7aDOdrnFAsywmte5CsptRuEnk5mMN+90
+ T5Cg==
+X-Gm-Message-State: ACgBeo3Q895UpvO1Q1cTCB8+R1QmqeYgZQOQt/iVuyu5l66m5RkY7Kns
+ i4L1joNlPzI2cCdqqbqw6lY/VpOzmvJSkQ5ZK9Y=
+X-Google-Smtp-Source: AA6agR45uxC51HYcChYlVnPR0xsumbynT5QzT7Os2741fbx8TEovc+++kcKZq8ymLB60ApKpGKPbVw==
+X-Received: by 2002:a05:6a00:4147:b0:52e:2d56:17c8 with SMTP id
+ bv7-20020a056a00414700b0052e2d5617c8mr27683930pfb.51.1661309367845; 
+ Tue, 23 Aug 2022 19:49:27 -0700 (PDT)
+Received: from chris-jammy.hollywoodparkca.com
+ (2603-8000-3f01-0100-893e-b127-a8ca-bcb9.res6.spectrum.com.
+ [2603:8000:3f01:100:893e:b127:a8ca:bcb9])
+ by smtp.googlemail.com with ESMTPSA id
+ p13-20020a635b0d000000b004296719538esm9845273pgb.40.2022.08.23.19.49.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Aug 2022 19:49:27 -0700 (PDT)
+From: Chris Dimich <chris.dimich@boundarydevices.com>
+To: buildroot@buildroot.org
+Date: Tue, 23 Aug 2022 19:48:51 -0700
+Message-Id: <20220824024904.2529728-1-chris.dimich@boundarydevices.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1661291858;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=X2C5dwUu3bz1LzcXyRy9GKakMNOpu3P0LXSrqrCLogo=;
- b=MAQJNujcaXYGZnfdNUNTVGKxBKj02oUIUyt1aWtqciLvQTxO9ZnqVG0MfcKArUx6ID5H12
- mrPpz63fHr/WdJbvodkQirDa07yCe0DrV2oY+OuYlw7SERK4dAHX0eNawOFOXYWj8ZdH1N
- 47V2btPkjoQu0EUhpkKJqdFN5SWs21+ngm1CiV3ycIU7nqq/2IRaqXkxGudaCOR/Oa+5uH
- kF5uW7FJrp4TTFBi3e30FOe+vTjwEgEoU+CRpiylJFcTlgHuf9ut/2auE1OklMwffEZl4/
- zGOi+ViSfGOAAqDtzKj6JY5oWJXiIuMn05Dn8PbVhfMBuTqL+HtS0SysVCmWag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MAQJNujc
-Subject: Re: [Buildroot] [PATCH 1/1] utils/genrandconfig: improve ARM
- trusted firmware fixup
+ d=boundarydevices.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=9zfhUpOTjC7ezU0KQTdZK+TqBGuiASeN0mplPDPIDNU=;
+ b=NHqgdGI0XKWUited4fvpB7Nb/LYye+/HQz7q2HbqKefiIRwmDpp2UszdHAmzs6RjgN
+ Hu1SaNajBvnBsy1sxSjfrHZOLYMblYhE+s+G7V8wLH+4Secs10S0/UFcmzjONd6Syqxe
+ FwpaYi2Dp157awLGPmB86MYySBU7TqIYv+5Hs=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=boundarydevices.com
+ header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
+ header.b=NHqgdGI0
+Subject: [Buildroot] [PATCH 1/7] toolchain/toolchain-external: update Arm
+ AArch64 toolchain 11.2-2022.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,49 +93,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Cc: Gary Bisson <bisson.gary@gmail.com>,
+ Chris Dimich <chris.dimich@boundarydevices.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+Updated to gcc 11.2, gdb 11, binutils 2.37, glibc 2.34.
 
-+James in Cc as he did the initial genrandconfig fixups for
-arm-trusted-firmware.
+See "Release Note":
+https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/downloads-1
 
-On Wed, 10 Aug 2022 09:45:47 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
+---
+ .../toolchain-external-arm-aarch64/Config.in                | 2 +-
+ .../toolchain-external-arm-aarch64.hash                     | 6 +++---
+ .../toolchain-external-arm-aarch64.mk                       | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-> Improve commit 541e794a959914d1189570c3674908eb5db08ce8 by adding a
-> custom case to make sure that a random configuration with an empty
-> platform for arm-trusted-firmware doesn't fail:
-> 
-> make_helpers/plat_helpers.mk:15: *** "Error: Unknown platform. Please use PLAT=<platform name> to specify the platform".  Stop.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1b67220008223d1bcbe70b76d643f9d04362ba6b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  utils/genrandconfig | 4 ++++
->  1 file changed, 4 insertions(+)
-
-I've applied to master. But if I'm not mistaken, this change means that
-arm-trusted-firmware will never be built by the autobuilders, as
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM will always be empty in the
-random configurations that are generated. This means that the rest of
-the arm-trusted-firmware fixups in genrandconfig are useless, no?
-
-Thanks!
-
-Thomas
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+index 9eb5d64a9d..b5b4d137b8 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+@@ -6,7 +6,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	help
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+index ca1ea48bcb..6d81f58594 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+@@ -1,4 +1,4 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz.asc
+-md5  07bbe2b5277b75ba36a924e9136366a4  gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-aarch64-none-elf.tar.xz
++md5  712ee3fa6247ac3f619dd193f714fbc1  gcc-arm-11.2-2022.02-x86_64-aarch64-none-linux-gnu.tar.xz
+ # locally calculated
+-sha256  1e33d53dea59c8de823bbdfe0798280bdcd138636c7060da9d77a97ded095a84  gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
++sha256  52dbac3eb71dbe0916f60a8c5ab9b7dc9b66b3ce513047baa09fae56234e53f3  gcc-arm-11.2-2022.02-x86_64-aarch64-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+index 356e0810b3..3d340ea0d7 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2021.07
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2022.02
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/11.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
+ 
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-none-linux-gnu.tar.xz
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-11.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-none-linux-gnu.tar.xz
+ 
+ $(eval $(toolchain-external-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
