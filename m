@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7062C6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:06:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EDF3ECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:06:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 406306FB3C;
-	Sun, 11 Sep 2022 09:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 406306FB3C
+	by smtp3.osuosl.org (Postfix) with ESMTP id F35BF6106F;
+	Sun, 11 Sep 2022 09:06:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F35BF6106F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U_GyDJWBlBxL; Sun, 11 Sep 2022 09:06:26 +0000 (UTC)
+	with ESMTP id XvaszzmKZIXR; Sun, 11 Sep 2022 09:06:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39A566FB36;
-	Sun, 11 Sep 2022 09:06:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39A566FB36
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 259881BF990
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0E976FB41;
+	Sun, 11 Sep 2022 09:06:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0E976FB41
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CE0B1BF990
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92DB06FB28
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92DB06FB28
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9F2A581699
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F2A581699
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yTJa5xAbSUZX for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 32Dbz3gXQQ2z for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9BC7606E6
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9BC7606E6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 74EF280C24
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74EF280C24
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B53C283620; Sun, 11 Sep 2022 08:48:26 +0000 (UTC)
+ id 65B5E835E4; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 23:18:20 +0200
+Date: Wed, 24 Aug 2022 13:04:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 028611be7195b4e616ea1910126aae36e62d33bf
-X-Git-Newrev: 4a340349bccf74ff402ae5487fcd1d7d4af5db1b
+X-Git-Oldrev: f4a78565db49b90d96b5e28cd06e6b07cb0a7e61
+X-Git-Newrev: 22d10e294cc9cd30fa8adc3672a337167e6241a3
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084826.B53C283620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: allow to
- generate BL2 from RCW
+Message-Id: <20220911084827.65B5E835E4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/toolchain-external: update Arm
+ ARM32 toolchain 11.2-2022.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,59 +64,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a340349bccf74ff402ae5487fcd1d7d4af5db1b
+commit: https://git.buildroot.net/buildroot/commit/?id=22d10e294cc9cd30fa8adc3672a337167e6241a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds the option BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW that
-allows TF-A to encapsulate a pre-loaded RCW (Reset Configuration Word)
-file into BL2.
+Updated to gcc 11.2, gdb 11, binutils 2.37, glibc 2.34.
 
-Upcoming NXP QorIQ family board needs this option.
+See https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/arm-trusted-firmware/Config.in               | 8 ++++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++++
- 2 files changed, 14 insertions(+)
+ .../toolchain-external/toolchain-external-arm-arm/Config.in  |  8 ++++----
+ .../toolchain-external-arm-arm.hash                          | 12 +++++-------
+ .../toolchain-external-arm-arm/toolchain-external-arm-arm.mk |  6 +++---
+ 3 files changed, 12 insertions(+), 14 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 100ac83482..aa571502b3 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -162,6 +162,14 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
- 	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
- 	  build system, the dependency between ATF and EDK is reversed.
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index 28c6541406..c595b1c133 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -3,7 +3,7 @@ comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
+ 	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
  
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW
-+	bool "Include NXP RCW in BL2"
-+	depends on BR2_PACKAGE_HOST_QORIQ_RCW
-+	help
-+	  Include the NXP RCW (Reset Control Word) in BL2. See
-+	  package/qoriq-rcw/ for more details. This is mostly useful
-+	  on NXP LayerScape platforms.
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS
- 	string "Additional ATF make targets"
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+-	bool "Arm ARM 2021.07"
++	bool "Arm ARM 2022.02"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_ARM_CPU_HAS_NEON
+@@ -13,12 +13,12 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
  	help
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 7c4e7edb00..246c0699bb 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -144,6 +144,12 @@ define ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL
- endef
- endif
- 
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW),y)
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-qoriq-rcw
-+ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += pbl
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RCW=$(BINARIES_DIR)/PBL.bin
-+endif
+-	  Arm toolchain for the ARM architecture. It uses GCC 10.3,
+-	  GDB 10.2, glibc 2.33, Binutils 2.36.1. It generates code
++	  Arm toolchain for the ARM architecture. It uses GCC 11.2,
++	  GDB 11, glibc 2.34, Binutils 2.37. It generates code
+ 	  that runs on all Cortex-A profile devices. The code
+ 	  generated uses the hard floating point calling convention,
+ 	  and uses the NEON FPU instructions.
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+index 1fc2c5de57..3c07237e1d 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+@@ -1,7 +1,5 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz.asc
+-md5  87ec580b290df2febc7c476f59484635  gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz.asc
+-md5  0f1c5c90f5c62e1d1066f75fb3e51e21  gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz
+-# locally calculated
+-sha256  aa074fa8371a4f73fecbd16bd62c8b1945f23289e26414794f130d6ccdf8e39c  gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
+-sha256  fccd7af76988da2b077f939eb2a78baa9935810918d2bf3f837bc74f52efa825  gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf.tar.xz.sha256asc
++sha256  c254f7199261fe76c32ef42187502839bda7efad0a66646cf739d074eff45fad  gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf.tar.xz
 +
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31),y)
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += bl31
- endif
++# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-aarch64-arm-none-linux-gnueabihf.tar.xz.sha256asc
++sha256  c5603772af016008ddacb7e475dc226d0cccdf069925dfded43e452a59774fc3  gcc-arm-11.2-2022.02-aarch64-arm-none-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+index 8731a4f0e5..1bab088830 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2021.07
+-TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
++TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2022.02
++TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/11.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
+ 
+-TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-$(HOSTARCH)-arm-none-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-11.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-$(HOSTARCH)-arm-none-linux-gnueabihf.tar.xz
+ 
+ $(eval $(toolchain-external-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
