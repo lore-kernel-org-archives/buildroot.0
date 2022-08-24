@@ -4,88 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 651E8C00140
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 07:38:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B0F8C00140
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 07:47:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE5058193E;
-	Wed, 24 Aug 2022 07:38:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE5058193E
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1F6C81A12;
+	Wed, 24 Aug 2022 07:47:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1F6C81A12
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 26pxpZlK-rMr; Wed, 24 Aug 2022 07:38:17 +0000 (UTC)
+	with ESMTP id NVxe-xyH07cI; Wed, 24 Aug 2022 07:47:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA62D8176B;
-	Wed, 24 Aug 2022 07:38:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA62D8176B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8B8471BF844
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 07:38:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC3968195D;
+	Wed, 24 Aug 2022 07:47:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC3968195D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3836C1BF844
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 07:47:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6610160B75
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 07:38:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6610160B75
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1353D8195D
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 07:47:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1353D8195D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G6X6EhM4ku5b for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 07:38:12 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D2B460B64
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D2B460B64
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 07:38:11 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id 2so12907402edx.2
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 00:38:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
- bh=3A9dgDPDonmQxcl+veG+evf2bnrJUGpUKTzhd0BizHM=;
- b=YVYn/U2SvBPKDmXBlpGDfXJ0KjcQs9ZBz2W9wYAdAPcoPDvzzeoVlRVcLs7powPSAp
- WZ8g9DUGAlynt5xE+U2jRQMd+SUoyxetUL0tRlhoQqQ4Xq6vrCY7tGgNqgTfeYXvlh0A
- 67oWoXChZya2bwg8gSjpH7uwdLBM9i2euUoaLYItXNZBY4Dq+g5HFdairn0U5WMmNv0n
- wS/sHcjj5LBmocWmEKZGrvQrDvbMr1DSIrCwePO/grs7o4WOz1LeTKVxqr30ig3ML19c
- HX1WvKIxzloMMJuMt0Oei9qqOY6k9HMIunBfDaN59pU3SddoplxmH6a1GcoOUck+CqF2
- Ovbw==
-X-Gm-Message-State: ACgBeo1qCQpc47bqHqMai506DzkCKeNPJ3xl4Y9zgIKWj3V/Retrvzyi
- pnBp4W9S8TxFygMY2Y4sqHvsObqUWLoK+g==
-X-Google-Smtp-Source: AA6agR79NemdbEcGqz7XAfH+KnGYNhYlGI9LuNZ3y67HNK/lOTZLiB8ddGKVFKMZZ1gRs/B9iALSFA==
-X-Received: by 2002:a05:6402:378e:b0:43e:73f7:5c53 with SMTP id
- et14-20020a056402378e00b0043e73f75c53mr6581242edb.124.1661326690117; 
- Wed, 24 Aug 2022 00:38:10 -0700 (PDT)
-Received: from nitrogen.local (253.124-78-194.adsl-static.isp.belgacom.be.
- [194.78.124.253]) by smtp.gmail.com with ESMTPSA id
- w11-20020a170906d20b00b0073cd7cc2c81sm770180ejz.181.2022.08.24.00.38.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Aug 2022 00:38:09 -0700 (PDT)
-Date: Wed, 24 Aug 2022 09:38:07 +0200
-From: Bram Vlerick <bram.vlerick@openpixelsystems.org>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VeU1wmMwiTem for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 07:47:53 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95CD08194C
+Received: from smtprelay03.ispgateway.de (smtprelay03.ispgateway.de
+ [80.67.18.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 95CD08194C
+ for <buildroot@busybox.net>; Wed, 24 Aug 2022 07:47:53 +0000 (UTC)
+Received: from [91.21.124.120] (helo=exchange.go-sys.de)
+ by smtprelay03.ispgateway.de with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
+ (envelope-from <mf@go-sys.de>)
+ id 1oQl7D-00005y-7i; Wed, 24 Aug 2022 09:47:55 +0200
+Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
+ (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2507.12; Wed, 24
+ Aug 2022 09:46:48 +0200
+Received: from exchange.go-sys.local ([::1]) by exchange.go-sys.local ([::1])
+ with mapi id 15.01.2507.012; Wed, 24 Aug 2022 09:46:48 +0200
+From: Michael Fischer <mf@go-sys.de>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <YwXVXxWR1B2hN9Hm@nitrogen.local>
-References: <20220816120718.3021545-1-bram.vlerick@openpixelsystems.org>
- <20220823233012.513e0bf8@windsurf>
+Thread-Topic: [Buildroot] [PATCH 1/1] package/sdl2_image: bump version to 2.6.2
+Thread-Index: AQHYtf5+Jbv4rQ+NLEKuxtaU5Mb+ca28wWoAgADs8KA=
+Date: Wed, 24 Aug 2022 07:46:48 +0000
+Message-ID: <a9197d7c1c214548ae4712f607a7d241@go-sys.de>
+References: <20220822080923.31060-1-mf@go-sys.de>
+ <20220823213514.7edef928@windsurf>
+In-Reply-To: <20220823213514.7edef928@windsurf>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.1.122]
+x-c2processedorg: 77b28032-c882-4527-ad15-de6c89cb71cd
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220823233012.513e0bf8@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=openpixelsystems-org.20210112.gappssmtp.com; s=20210112;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:from:to:cc;
- bh=3A9dgDPDonmQxcl+veG+evf2bnrJUGpUKTzhd0BizHM=;
- b=tnmCR8kQfsA0/0YU1eCIUjbiDVwoKYjEATL0lypNPMSmbaVBff2aT9Z+aZQu86hLAu
- ZhYz7kwildrNW0XThA5+M3MPpmO+CsTJb5JHEmr2NDQe2qNQyDYuNwetzJSiYRqvvRw2
- RvEtnF0agPo96N6lr8uJdOy9v67K49at0DcdHanfFNJ/RbvR16fisBO+p35WTCyaWb3D
- MQnON0PU5cM3oJWI5h69neLf+TE1fXKeVUawJyCIFoBy4QicjlsoMQPTg0h21TP7Udbe
- CoxUzj+KhVEQGDSRZlJXcgTSOMI3rQQBUjLJfw6Cx0NeojfQ+GeGkD6EQr5Smuwjrr64
- dJnA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=openpixelsystems-org.20210112.gappssmtp.com
- header.i=@openpixelsystems-org.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=tnmCR8kQ
-Subject: Re: [Buildroot] [PATCH 1/2] board/freescale/common/imx: align
- u-boot-spl to 4 bytes
+X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
+X-OrganizationHeadersPreserved: exchange.go-sys.local
+X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
+Subject: Re: [Buildroot] [PATCH 1/1] package/sdl2_image: bump version to
+ 2.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,49 +79,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "buildroot@busybox.net" <buildroot@busybox.net>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Hello Thomas,
+sorry I mean the fixes from version 2.05. =
 
-Seems like I made a mistake in my git send-email. Indeed there is no
-PATCH 2/2. Sorry for that.
 
-Thanks,
-Bram
+I compared it to the wrong version.
 
-On Tue, Aug 23, 2022 at 11:30:12PM +0200, Thomas Petazzoni wrote:
-> Hello Bram,
-> 
-> On Tue, 16 Aug 2022 14:07:17 +0200
-> Bram Vlerick <bram.vlerick@openpixelsystems.org> wrote:
-> 
-> > When enable DM for SPL binary, the DTB part of SPL may not 4 bytes aligned.
-> > If u-boot-spl is not aligned, the offset of the DDR firmware is not 4
-> > byte aligned when u-boot-spl-ddr.bin is created. This causes the ddr
-> > firmware to not be loaded correctly at boot.
-> > 
-> > See imx-mkimage commit bba038d893046b44683182dba540f104dab80fe7 for
-> > implementation in imx-mkimage.
-> > 
-> > Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
-> > ---
-> >  .../freescale/common/imx/imx8-bootloader-prepare.sh  | 12 ++++++++----
-> >  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> Applied to master, thanks. Even though your patch was marked PATCH 1/2,
-> there was no PATCH 2/2 posted on the list. Was this a mistake?
-> 
+ Michael.
+
+> -----Urspr=FCngliche Nachricht-----
+> Von: Thomas Petazzoni [mailto:thomas.petazzoni@bootlin.com]
+> Gesendet: Dienstag, 23. August 2022 21:35
+> An: Michael Fischer <mf@go-sys.de>
+> Cc: buildroot@busybox.net
+> Betreff: Re: [Buildroot] [PATCH 1/1] package/sdl2_image: bump version to
+> 2.6.2
+> =
+
+> Hello Michael,
+> =
+
+> On Mon, 22 Aug 2022 10:09:23 +0200
+> Michael Fischer <mf@go-sys.de> wrote:
+> =
+
+> > Fixed a number of security issues
+> =
+
+> Could you clarify which security issues?
+> =
+
+> When I look at https://github.com/libsdl-org/SDL_image/releases, 2.0.5 did
+> fix some security issues, but we're already using 2.0.5. For the next rel=
+eases,
+> I only see new features, or fixes for regressions.
+> =
+
+> Am I missing something?
+> =
+
 > Thanks!
-> 
+> =
+
 > Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin Embedded Linux and Kernel
+> engineering and training https://bootlin.com
+> =
+
+> =
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
