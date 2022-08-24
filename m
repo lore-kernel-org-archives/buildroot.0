@@ -1,89 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AEC6C00140
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 19:29:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E0B6C004D4
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 19:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9861060FE8;
-	Wed, 24 Aug 2022 19:29:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9861060FE8
+	by smtp1.osuosl.org (Postfix) with ESMTP id EAB448139E;
+	Wed, 24 Aug 2022 19:47:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAB448139E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5MgIP3a7Bkdv; Wed, 24 Aug 2022 19:29:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9F-UQNuuKyn0; Wed, 24 Aug 2022 19:47:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0CA860FDC;
-	Wed, 24 Aug 2022 19:29:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0CA860FDC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 14AAD1BF307
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:26:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61C6180D04;
+	Wed, 24 Aug 2022 19:46:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61C6180D04
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 85A3D1BF307
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:46:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0850417C5
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0850417C5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6018F80D04
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:46:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6018F80D04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zGKO3IYyKesr for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 19:26:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G29Yi0hZSBXp for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 19:46:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF2D6417C4
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com
- [IPv6:2607:f8b0:4864:20::1043])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BF2D6417C4
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 19:26:34 +0000 (UTC)
-Received: by mail-pj1-x1043.google.com with SMTP id bf22so18054206pjb.4
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 12:26:34 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A34F2809F5
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A34F2809F5
+ for <buildroot@busybox.net>; Wed, 24 Aug 2022 19:46:49 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id gb36so35482198ejc.10
+ for <buildroot@busybox.net>; Wed, 24 Aug 2022 12:46:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=Q9YRGn/aKOX9hGIBNWPe84dVdKYEYpA5rorSnbxJZC4=;
- b=OILelG1O1UqGQU5JtjWC593aCqVNV2/gSSvoAIO+c/y2WKbxHR74yU0tlmGO3FfZMq
- /HqD9W3EZvrJ/B9sMvaAf45YSIS7D6fz8150DFnTp42hMMZR0sLgNvIo4Yj4iini8lF4
- XFJoLcSsesUiij6SSUTzesyzGKt4vUDKKQ2Nl9tlCP6zsHUc5BQ+N2ETXVFXC75a/DZ/
- ZCH5FkIyUdc6bOW6KoqQYzZmLkItCqDqAzo8sHgjoeiSxKUMLnwdLKGlupuxabxL+MbY
- DTW257OF6HW59n01lxOT/wckjvIk8BPx4JkWPGHyuMGEhcMw8/tVorD+SPhQb231Ytur
- NxBQ==
-X-Gm-Message-State: ACgBeo1AIVZwb2ij9RiMxJapav1Q6e5RYLOjXezWGWXcF23xynqj/T+5
- 7fUSxhE/2YJlBqGkqmzpU0uxwrUZ4AmUMYAR0z0=
-X-Google-Smtp-Source: AA6agR61DkWbmMAb6FGTBIRMDo3o08HUbz/9ubdAmQckZdG+WBu80jJzMmCg2FKhGqHcqbbXWaqZSQ==
-X-Received: by 2002:a17:90a:b302:b0:1fa:ee2f:23a1 with SMTP id
- d2-20020a17090ab30200b001faee2f23a1mr9886223pjr.81.1661369194059; 
- Wed, 24 Aug 2022 12:26:34 -0700 (PDT)
-Received: from chris-jammy.hollywoodparkca.com
- (2603-8000-3f01-0100-893e-b127-a8ca-bcb9.res6.spectrum.com.
- [2603:8000:3f01:100:893e:b127:a8ca:bcb9])
- by smtp.googlemail.com with ESMTPSA id
- q1-20020a17090a1b0100b001fb4a8d82a7sm1741338pjq.56.2022.08.24.12.26.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Aug 2022 12:26:33 -0700 (PDT)
-From: Chris Dimich <chris.dimich@boundarydevices.com>
-To: buildroot@buildroot.org
-Date: Wed, 24 Aug 2022 12:26:04 -0700
-Message-Id: <20220824192604.2549356-14-chris.dimich@boundarydevices.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220824192604.2549356-1-chris.dimich@boundarydevices.com>
-References: <20220824192604.2549356-1-chris.dimich@boundarydevices.com>
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc;
+ bh=xQwv/Q0Op52bxOLKCbpMIJlolatjYzbeJrXafRvOh7Y=;
+ b=XgGoDzhL5hUMTv+TAq0j3NCLY80zim8Vyfll9tkUqOMfLD+8/XFmXYN9gI3rKZ7n6m
+ 8zbZMKiQG0FB9u7OfoxcNs+lYXOe5Y3jmDARtR+d+1QfqQ73hIfZZTnBckOxc1GCveet
+ fanysImpyJrxWx9md+ohnRfSm/rkS6tx9xRhRhhQLLiq9dZi5ZzZZihZfhEAtylT+3v3
+ PAmDg97xfhq6Z+E7qT2Q8ZgOQ74ofpk6c5Lcr1A9nRKuvDG896YwOZ5HjSrYF5HJsnsR
+ PrcDyNSjd0jxgazclS18yIO5XH9NYmWlILeUqRGiaTcdAqQSGLWllrK45mv0FuD0inWf
+ KbmQ==
+X-Gm-Message-State: ACgBeo0csgryuvBihyvMeUhLLgrBgi2rc5ndQq65xmmCVPUV1/ra9vNz
+ gWLRP7WgTTvneuVkzlSM6+ZcnQ==
+X-Google-Smtp-Source: AA6agR53uVqdmBoLkRT76bHfJsPpqWGwL3wGaFSmQd+RgwVLNpjmDEOfPNMXrtK7xTGdvejmc5K/+g==
+X-Received: by 2002:a17:907:72cc:b0:73d:5f90:d960 with SMTP id
+ du12-20020a17090772cc00b0073d5f90d960mr321393ejc.720.1661370407759; 
+ Wed, 24 Aug 2022 12:46:47 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ n14-20020aa7c78e000000b004479ef996b8sm430701eds.11.2022.08.24.12.46.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 24 Aug 2022 12:46:47 -0700 (PDT)
+Message-ID: <e98a921b-aafd-d78c-7e4b-84226b090725@mind.be>
+Date: Wed, 24 Aug 2022 21:46:45 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-GB
+To: Francois Perrad <fperrad@gmail.com>, buildroot@busybox.net
+References: <20220824124816.1697526-1-francois.perrad@gadz.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20220824124816.1697526-1-francois.perrad@gadz.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=boundarydevices.com; s=google;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc;
- bh=Q9YRGn/aKOX9hGIBNWPe84dVdKYEYpA5rorSnbxJZC4=;
- b=fVPmrKeLCcXGaTogvEK4pwzQsk+V01eFE5IxGBiZgIvdHc2xt20vcsXKX9QmTmVgJ9
- CmAV+g359xbMDGQZIDAOuOCUoHowXCPTIpiw7viWPvmgqj2OdYgjgyvJpGfByQVDDK5X
- VoRBBITQwpJpced1IY07SLn5LShBAjQKNSjfM=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=boundarydevices.com
- header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
- header.b=fVPmrKeL
-Subject: [Buildroot] [PATCH 7/7]
- package/freescale-imx/imx-vpu-hantro-daemon: add package
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc;
+ bh=xQwv/Q0Op52bxOLKCbpMIJlolatjYzbeJrXafRvOh7Y=;
+ b=JnlGoX0b48TVtu0VLG1tK1uE1RXRkU4FSMcPe0ouM/qOpyAIm+YKsxPHD8TT5EO67k
+ vzwOxjSje1Mmn9vhm/Zw9y/s9EXNyIbpSSDi/uqMK59a1x4gP6fbcWsAjLLyaiOzFyZo
+ eF3IMVOQrN5uEgfvxqFu+6h91PhznPqdvL2/SvKa4MukOF4gOZU0Ds/wEbURQk/Fp03x
+ IzTN8UQ5kFzG+rPgsa4wejuHGR/Yz8lpFXE1coTkBi3MjHmu3CCiFcltvOVMzf+tmOje
+ ZrltXsm8FvbcrdQkzjnSrYwMeCZNyQuM6wY2/vv+4ka729EE2ChcXyvZc+wxH/6ZoqFD
+ yGgA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=JnlGoX0b
+Subject: Re: [Buildroot] [PATCH] package/freescale-imx: add layerscape
+ platform
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,126 +101,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- Chris Dimich <chris.dimich@boundarydevices.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Refik Tuzakli <tuzakli.refik@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-i.MX Hantro V4L2 Daemon. Provides the vsidaemon, which is needed for
-V4L2 nodes to work.
 
-Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
----
- package/freescale-imx/Config.in               |  1 +
- .../imx-vpu-hantro-daemon/Config.in           | 20 +++++++++++
- .../imx-vpu-hantro-daemon.hash                |  4 +++
- .../imx-vpu-hantro-daemon.mk                  | 36 +++++++++++++++++++
- 4 files changed, 61 insertions(+)
- create mode 100644 package/freescale-imx/imx-vpu-hantro-daemon/Config.in
- create mode 100644 package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
- create mode 100644 package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 4a4237fb42..13d611b696 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -115,6 +115,7 @@ source "package/freescale-imx/imx-vpuwrap/Config.in"
- source "package/freescale-imx/firmware-imx/Config.in"
- source "package/freescale-imx/imx-sc-firmware/Config.in"
- source "package/freescale-imx/imx-seco/Config.in"
-+source "package/freescale-imx/imx-vpu-hantro-daemon/Config.in"
- source "package/freescale-imx/imx-vpu-hantro-vc/Config.in"
- if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
- source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/Config.in b/package/freescale-imx/imx-vpu-hantro-daemon/Config.in
-new file mode 100644
-index 0000000000..2ab9f97081
---- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/Config.in
-@@ -0,0 +1,20 @@
-+comment "imx-vpu-hantro-daemon needs an i.MX-specific Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "imx-vpu-hantro needs an i.MX platform with Hantro VPU"
-+	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
-+
-+config BR2_PACKAGE_IMX_VPU_HANTRO_DAEMON
-+	bool "imx-vpu-hantro"
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
-+	select BR2_PACKAGE_IMX_VPU_HANTRO
-+	select BR2_PACKAGE_IMX_VPU_HANTRO_VC if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
-+	help
-+	  i.MX Hantro V4L2 Daemon specific for the NXP i.MX SoC
-+	  integrating a Hantro Video Processing Unit (VPU) such as the
-+	  i.MX8MQ/i.MX8MM/i.MX8MP.
-+
-+	  This library is provided by NXP as-is and doesn't have an
-+	  upstream.
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-new file mode 100644
-index 0000000000..811f8b21a3
---- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-@@ -0,0 +1,4 @@
-+# Locally computed:
-+sha256  77e25ad1e1860f0a3983f07d6beb9a04ff32763bacf26db9aefd16559e6eea9b  imx-vpu-hantro-daemon-1.1.2.tar.gz
-+sha256  35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  COPYING
-+sha256  35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  EULA
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-new file mode 100644
-index 0000000000..e9d628bef4
---- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# imx-vpu-hantro-daemon
-+#
-+################################################################################
-+
-+IMX_VPU_HANTRO_DAEMON_VERSION = 1.1.2
-+IMX_VPU_HANTRO_DAEMON_SITE = $(FREESCALE_IMX_SITE)
-+IMX_VPU_HANTRO_DAEMON_SOURCE = imx-vpu-hantro-daemon-$(IMX_VPU_HANTRO_DAEMON_VERSION).tar.gz
-+IMX_VPU_HANTRO_DAEMON_DEPENDENCIES = linux
-+IMX_VPU_HANTRO_DAEMON_DEPENDENCIES += imx-vpu-hantro
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP),y)
-+IMX_VPU_HANTRO_DAEMON_DEPENDENCIES += imx-vpu-hantro-vc
-+endif
-+
-+IMX_VPU_HANTRO_DAEMON_MAKE_ENV = \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	SDKTARGETSYSROOT=$(STAGING_DIR) \
-+	LINUX_KERNEL_ROOT=$(LINUX_DIR) \
-+	CTRLSW_HDRPATH="$(STAGING_DIR)/usr/include" \
-+	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM)
-+
-+IMX_VPU_HANTRO_DAEMON_LICENSE = NXP Semiconductor Software License Agreement
-+IMX_VPU_HANTRO_DAEMON_LICENSE_FILES = EULA COPYING
-+IMX_VPU_HANTRO_DAEMON_REDISTRIBUTE = NO
-+
-+define IMX_VPU_HANTRO_DAEMON_BUILD_CMDS
-+	$(MAKE1) -C $(@D) $(IMX_VPU_HANTRO_DAEMON_MAKE_ENV)
-+endef
-+
-+define IMX_VPU_HANTRO_DAEMON_INSTALL_TARGET_CMDS
-+	$(IMX_VPU_HANTRO_DAEMON_MAKE_ENV) $(MAKE1) -C $(@D) \
-+		DEST_DIR=$(TARGET_DIR) libdir=/usr/lib install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.34.1
+On 24/08/2022 14:48, Francois Perrad wrote:
+> layerscape is not strictly a member of the IMX family,
+> but the NXP layerscape family uses some of components of the IMX family,
+> especially the IMX GPU Vivante.
+> 
+> this change allows to use imx-gpu_viv firmware with a layerscape SoC.
 
+  I'm not entirely familiar with the NXP product line, but I do know for sure 
+that "layerscape" does not designate a SoC, it's a _line_ of SoCs. Some of them 
+are actually PowerPC!
+
+  So you definitely can't have "layerscape at the same level as "IMX8MP". I'd 
+rather expect something like LS21XX or something like that.
+
+  It unfortunately pretty much depends on what NXP is going to add later, i.e. 
+if they're going to add layerscapes that have a different GPU or VPU.
+
+
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>   package/freescale-imx/Config.in | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index 4a4237fb4..18c65d743 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -57,6 +57,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
+>   
+>   config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+>   	bool "imx8x"
+> +
+> +config BR2_PACKAGE_FREESCALE_LAYERSCAPE_PLATFORM
+> +	bool "layerscape"
+>   endchoice
+>   
+>   config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+> @@ -76,6 +79,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+>   	default "IMX8MM" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+>   	default "IMX8MN" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+>   	default "IMX8MP" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
+> +	default "LAYERSCAPE" if BR2_PACKAGE_FREESCALE_LAYERSCAPE_PLATFORM
+
+  This is normally how you know the correct designation, because the platform is 
+used in some libraries. But none of them for the Vivante, so in this case 
+there's no telling.
+
+
+  Regards,
+  Arnout
+
+>   
+>   config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+>   	bool
+> @@ -100,7 +104,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+>   		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
+>   		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
+>   		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP || \
+> -		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
+> +		BR2_PACKAGE_FREESCALE_LAYERSCAPE_PLATFORM
+>   
+>   source "package/freescale-imx/imx-alsa-plugins/Config.in"
+>   source "package/freescale-imx/imx-codec/Config.in"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
