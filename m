@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76334C32793
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 02:51:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34A75C32793
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 02:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F07E460E0B;
-	Wed, 24 Aug 2022 02:51:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F07E460E0B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88DC1409F3;
+	Wed, 24 Aug 2022 02:51:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88DC1409F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a3qLEtUCViJh; Wed, 24 Aug 2022 02:51:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w1a9NP2fxWb8; Wed, 24 Aug 2022 02:51:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28CAF60BB9;
-	Wed, 24 Aug 2022 02:51:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28CAF60BB9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54EBF409AA;
+	Wed, 24 Aug 2022 02:51:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54EBF409AA
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5347C1BF3FF
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 02:49:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 778831BF3FF
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 02:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E8938144C
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 02:49:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E8938144C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 607D88144C
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 02:49:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 607D88144C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wmv87MvtXi_w for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 02:49:40 +0000 (UTC)
+ with ESMTP id 1XgmZg0LIuyF for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 02:49:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D2B881400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com
- [IPv6:2607:f8b0:4864:20::444])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8D2B881400
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 02:49:40 +0000 (UTC)
-Received: by mail-pf1-x444.google.com with SMTP id y127so12246846pfy.5
- for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:49:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B672481400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com
+ [IPv6:2607:f8b0:4864:20::643])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B672481400
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 02:49:42 +0000 (UTC)
+Received: by mail-pl1-x643.google.com with SMTP id 20so14471973plo.10
+ for <buildroot@buildroot.org>; Tue, 23 Aug 2022 19:49:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=cuZxOiTJMP5+zuK3MzjaF79nTdIc+AnV3IYD937FLN0=;
- b=2NsRinmKWHJeYsk1+VE47jvjynNget1+IQgdZ5zxBJZN+xyxFmndV1ssmLksE5aNKL
- u7IIJ3eOoAmXQaYHG57xoP2y8d6b7kAICNLfh9ELC09svi7XKZ0TAnKTFzA8SOuqaRdq
- 1CO6o1ZJc/wmGNrtO/DZP0+C4ZPzDeYnQ2L3K3Efi1xzYi6qTutcYjSWpCqCKj/ltxUe
- D+71y/d/QEf1YUMRGBM+lhNiUoxhBniI0w9S9YTTW20zA6GU4EgbQjTbNArJQghq9VDG
- F6q+KXwCtgPBX7BILF/I2nkBJtpEpB2rRajuYjOUyageeI4rIi+OK2qdUcwOWXaovelg
- WIxQ==
-X-Gm-Message-State: ACgBeo0eKKxkVMrwdVbIIZtCB8EHbQm97Zk3TBqyNQgLzmZhb0A6oHTC
- i8IGUZN6vWV4BVFX4EMp9nYxLqSED2eZVCAXRPk=
-X-Google-Smtp-Source: AA6agR5M/XQGYYbHJSWJDEljyyrDG7K9AyHKA7rEZnmdQivM5A5g7Ywf3w3FBnmzSbi7uF3SGGJa8g==
-X-Received: by 2002:a63:81c8:0:b0:429:ea8c:3afa with SMTP id
- t191-20020a6381c8000000b00429ea8c3afamr22432700pgd.22.1661309379910; 
- Tue, 23 Aug 2022 19:49:39 -0700 (PDT)
+ bh=2uQz6DPys3YfBsy54syAfOezZ1mKfATgosDt86rsqBo=;
+ b=UrnOPEUotkkTwPVH5wh1yaB97zRKE3CMGnCzG5A9aJSEk8QAxIIqeTNi7AifWg3O7P
+ NbBQ529xD7VkzwMtpT44+7JQPmF45N/F3ujd2X8JNkfN/rFhApk10wuhA/nhf6/G83mn
+ PZcGmaZQAtbha0EOzWdyUpNpn64P55xFxy8m2UKdnHAlOys29+CrJ72R4OssJZXeqPQb
+ J+xTKTDMARQJgsJ19wIAepQE2Iu8+DlmUlGMv0yYeALvmDTERYCpYpa4gAI1hLeG2E3n
+ iF206cBvq4mT+WBojQrtnjnYgkmuQJJdz00z8hvv0hRSw5+/L5fpAVLHt4ecaucbTtB2
+ k04Q==
+X-Gm-Message-State: ACgBeo1wuSo0Oh+RRm8igmk8KRKAH0cqAJurY6ttunSe3LA4ohKc4K9s
+ 689dQ8EuNuTajoSSVaIshe3xOi2NsW/DbWY0K8o=
+X-Google-Smtp-Source: AA6agR4KxD0Ec2mUZ3fQe+LlBFHv4afRjDhsvTth486OXcOMAYZ9ndo1fCqOjnhvxVll/JF7/Lue0A==
+X-Received: by 2002:a17:90b:3a92:b0:1fb:23f3:f218 with SMTP id
+ om18-20020a17090b3a9200b001fb23f3f218mr6005144pjb.102.1661309381982; 
+ Tue, 23 Aug 2022 19:49:41 -0700 (PDT)
 Received: from chris-jammy.hollywoodparkca.com
  (2603-8000-3f01-0100-893e-b127-a8ca-bcb9.res6.spectrum.com.
  [2603:8000:3f01:100:893e:b127:a8ca:bcb9])
  by smtp.googlemail.com with ESMTPSA id
- p13-20020a635b0d000000b004296719538esm9845273pgb.40.2022.08.23.19.49.38
+ p13-20020a635b0d000000b004296719538esm9845273pgb.40.2022.08.23.19.49.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Aug 2022 19:49:39 -0700 (PDT)
+ Tue, 23 Aug 2022 19:49:41 -0700 (PDT)
 From: Chris Dimich <chris.dimich@boundarydevices.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Aug 2022 19:48:59 -0700
-Message-Id: <20220824024904.2529728-9-chris.dimich@boundarydevices.com>
+Date: Tue, 23 Aug 2022 19:49:00 -0700
+Message-Id: <20220824024904.2529728-10-chris.dimich@boundarydevices.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220824024904.2529728-1-chris.dimich@boundarydevices.com>
 References: <20220824024904.2529728-1-chris.dimich@boundarydevices.com>
@@ -74,16 +74,16 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=boundarydevices.com; s=google;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=cuZxOiTJMP5+zuK3MzjaF79nTdIc+AnV3IYD937FLN0=;
- b=dnWHGYLwRfyP7cnqpwr2nrf0FXYBmbXwTEurRPFtPuIcTdOnzSsEJEdAdBsiiKfyIj
- wF/SDP0x4b7egn79c3rF7fm6KOKpxAE9B8rARB0BjQO1cL2rOBB2vR0g6Jw8Bmnp0H7F
- 9hFur0TGPc7hOOVbl8jO8kPQlv+hCJLqOKjf4=
+ bh=2uQz6DPys3YfBsy54syAfOezZ1mKfATgosDt86rsqBo=;
+ b=Bs1oBKDVCsNxg6rUHVwsY0RtU7TTHVTMtmOiiGTCuxjr7UJDr8OpEv48DMmyE7purf
+ UNeO2H4gLI1kQedZyXn/dxSV1NfuPWUczBLriME74FXWr2EoG4TaYAwdqve6gdAA/rPv
+ kJsdKGMjjSgGq+QJu5PTSv8qyo7vjsgPNRFfk=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=boundarydevices.com
  header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
- header.b=dnWHGYLw
-Subject: [Buildroot] [PATCH 2/7] package/weston: add
- BR2_PACKAGE_WESTON_DEPRECATED_WL_SHELL config
+ header.b=Bs1oBKDV
+Subject: [Buildroot] [PATCH 3/7]
+ package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,41 +108,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In the case of the vivante sdk, the deprecated-wl-shell option needs to
-be enabled. Otherwise, apps using the sdk cannot run on weston/wayland.
+To match NXP 5.15.32-2.0.0 release.
 
 Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 ---
- package/weston/Config.in | 4 ++++
- package/weston/weston.mk | 4 ++++
- 2 files changed, 8 insertions(+)
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash    | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 3b4e932b7d..8f7b1824c7 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -164,4 +164,8 @@ comment "demo clients needs an OpenGL ES provider, an OpenEGL-capable Wayland ba
- 		!BR2_USE_WCHAR || !BR2_PACKAGE_HAS_LIBGLES || \
- 		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index ee105ef82c..ccb28bc4f6 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  257c6cd8b01cfb6543827cbeb78409e6a2ad4ae321891751dcea1abc47d89379  kernel-module-imx-gpu-viv-ae0f3be0b7240f11cca191a3e2bdd4a445ee46e5.tar.gz
++sha256  b816ab94b1d248cfc5fe5f6381422346c273d01760bb324303e0298e10bd46e2  kernel-module-imx-gpu-viv-82c6cb6c607424403b8d76805bb17e7be74292f6.tar.gz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 10505fdf17..f94890a438 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_WESTON_DEPRECATED_WL_SHELL
-+	bool "deprecated wl shell"
-+	default n
-+
- endif
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index e6c54ee7aa..ad4d81425e 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -186,4 +186,8 @@ else
- WESTON_CONF_OPTS += -Ddemo-clients=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_WESTON_DEPRECATED_WL_SHELL),y)
-+WESTON_CONF_OPTS += -Ddeprecated-wl-shell=true
-+endif
-+
- $(eval $(meson-package))
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = ae0f3be0b7240f11cca191a3e2bdd4a445ee46e5
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 82c6cb6c607424403b8d76805bb17e7be74292f6 #6.4.3.p4.2
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
 -- 
 2.34.1
 
