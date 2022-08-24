@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3402C00140
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 11:19:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B12EEC00140
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 11:19:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24D6141638;
-	Wed, 24 Aug 2022 11:19:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24D6141638
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17A708161D;
+	Wed, 24 Aug 2022 11:19:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17A708161D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id td-csY-4S7Oh; Wed, 24 Aug 2022 11:19:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YjTmmA8TkB3Y; Wed, 24 Aug 2022 11:19:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC25640298;
-	Wed, 24 Aug 2022 11:19:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC25640298
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75840813E7;
+	Wed, 24 Aug 2022 11:19:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75840813E7
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E0DF1BF37A
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 11:19:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 378401BF37A
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 11:19:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F3C140FC4
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 11:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F3C140FC4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2644740FBF
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 11:10:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2644740FBF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id atafXUI8pKZX for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 11:10:50 +0000 (UTC)
+ with ESMTP id oTk_30zpSohi for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 11:10:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1DDD40FB9
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 11:10:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1DDD40FB9
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB56140DC2
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 11:10:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB56140DC2
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 09BCA87CF3; Wed, 24 Aug 2022 10:55:12 +0000 (UTC)
+ id 14D6C87CF5; Wed, 24 Aug 2022 10:55:12 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 24 Aug 2022 13:04:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 132278e85171fc0691410b09178b81533aaabd96
-X-Git-Newrev: 34cf3a15c9da81afb6cab6c56babd5a2096e44ca
+X-Git-Oldrev: 34cf3a15c9da81afb6cab6c56babd5a2096e44ca
+X-Git-Newrev: f4a78565db49b90d96b5e28cd06e6b07cb0a7e61
 X-Patchwork-Hint: ignore
-Message-Id: <20220824105512.09BCA87CF3@busybox.osuosl.org>
+Message-Id: <20220824105512.14D6C87CF5@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next] toolchain/toolchain-external:
- update Arm AArch64 toolchain 11.2-2022.02
+ update Arm AArch64 BE toolchain 11.2-2022.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,30 +64,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34cf3a15c9da81afb6cab6c56babd5a2096e44ca
+commit: https://git.buildroot.net/buildroot/commit/?id=f4a78565db49b90d96b5e28cd06e6b07cb0a7e61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Updated to gcc 11.2, gdb 11, binutils 2.37, glibc 2.34.
 
-See https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads.
+See https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
 
-Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../toolchain-external/toolchain-external-arm-aarch64/Config.in     | 4 ++--
- .../toolchain-external-arm-aarch64.hash                             | 6 ++----
- .../toolchain-external-arm-aarch64.mk                               | 6 +++---
+ .../toolchain-external/toolchain-external-arm-aarch64-be/Config.in  | 4 ++--
+ .../toolchain-external-arm-aarch64-be.hash                          | 6 ++----
+ .../toolchain-external-arm-aarch64-be.mk                            | 6 +++---
  3 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-index 9eb5d64a9d..a2dd252a9c 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+index eeb88579fe..dba50595f5 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
 @@ -1,12 +1,12 @@
- config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
--	bool "Arm AArch64 2021.07"
-+	bool "Arm AArch64 2022.02"
- 	depends on BR2_aarch64
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
+-	bool "Arm AArch64 BE 2021.07"
++	bool "Arm AArch64 BE 2022.02"
+ 	depends on BR2_aarch64_be
  	depends on BR2_HOSTARCH = "x86_64"
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_TOOLCHAIN_HAS_SSP
@@ -98,32 +97,32 @@ index 9eb5d64a9d..a2dd252a9c 100644
  	select BR2_TOOLCHAIN_HAS_FORTRAN
  	select BR2_TOOLCHAIN_HAS_OPENMP
  	help
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-index ca1ea48bcb..c7173324b8 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
+index 1079917c98..99a2f1ff22 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
 @@ -1,4 +1,2 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz.asc
--md5  07bbe2b5277b75ba36a924e9136366a4  gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64_be-none-linux-gnu.tar.xz.asc
+-md5  54cbaef7db7eb3de27732500f9da9c6f  gcc-arm-10.3-2021.07-x86_64-aarch64_be-none-linux-gnu.tar.xz
 -# locally calculated
--sha256  1e33d53dea59c8de823bbdfe0798280bdcd138636c7060da9d77a97ded095a84  gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-aarch64-none-linux-gnu.tar.xz.sha256asc
-+sha256  52dbac3eb71dbe0916f60a8c5ab9b7dc9b66b3ce513047baa09fae56234e53f3  gcc-arm-11.2-2022.02-x86_64-aarch64-none-linux-gnu.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-index 356e0810b3..3d340ea0d7 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+-sha256  63c34cac07ceadd74620ea87f27af1aa6a6f55c20a5bc116af21a59ddb6b6a6a  gcc-arm-10.3-2021.07-x86_64-aarch64_be-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
++sha256  cc834d22fd8eff98d18cf3f464e30f5e4aee0966e51f9e09514e948f1eb9884b  gcc-arm-11.2-2022.02-x86_64-aarch64_be-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+index 5a6dbc60d5..f98f090327 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2021.07
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2022.02
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/11.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 2021.07
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 2022.02
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/11.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
  
--TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-none-linux-gnu.tar.xz
-+TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-11.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-none-linux-gnu.tar.xz
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = gcc-arm-11.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
  
  $(eval $(toolchain-external-package))
 _______________________________________________
