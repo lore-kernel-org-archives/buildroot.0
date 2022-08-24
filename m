@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 247F6C00140
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 10:18:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B459C32796
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 10:35:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B37A7404F4;
-	Wed, 24 Aug 2022 10:18:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B37A7404F4
+	by smtp1.osuosl.org (Postfix) with ESMTP id A474281374;
+	Wed, 24 Aug 2022 10:35:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A474281374
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6W0r4a3s9QtD; Wed, 24 Aug 2022 10:18:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wDfck4cLp4zg; Wed, 24 Aug 2022 10:35:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D11A340105;
-	Wed, 24 Aug 2022 10:18:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D11A340105
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A4DB61BF592
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:18:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7C1181341;
+	Wed, 24 Aug 2022 10:35:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7C1181341
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 279071BF592
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:35:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7FDDB40105
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:18:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FDDB40105
+ by smtp3.osuosl.org (Postfix) with ESMTP id F41C260E40
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:35:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F41C260E40
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bFoPnLMrKUjv for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 10:18:41 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64920400FB
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 64920400FB
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 10:18:41 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B7A7D240005;
- Wed, 24 Aug 2022 10:18:38 +0000 (UTC)
-Date: Wed, 24 Aug 2022 12:18:37 +0200
-To: Jesse Van Gavere <jesseevg@gmail.com>
-Message-ID: <20220824121837.42e2af73@windsurf>
-In-Reply-To: <20220824075542.3637678-1-jesseevg@gmail.com>
-References: <20220824075542.3637678-1-jesseevg@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1661336319;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=aQ8xKiKLLteovZBY1Pxt8vJHEh34cvQE7aMuvq8CSwk=;
- b=WThVxDP+zsPyFpCbcwrHJcYwFBm8pakgzzafFpmHPZVQmLcAiJDSDgibhzrSv33eT7n5Ti
- 79Z/I9exhQfYhw9BjNo8l3x4IAJ5aMiFYRmMwBF2vguCeHaoOo4rhO069SdhnA0cF5FIMU
- uypKL63xHQzSu6m5yrbBu5NSg2qFVGxV1uLy3rkvX0QU5241PrNeFMY1MNMxRgQ3J/CGWS
- 4igXNqwjfF16hTuAMVMxuh5glqgkmkyhMMoONzdR4xn4hLzBJHW+a/WzqwAA1pe+2T+QGb
- PkApJjs1A4cV5BlhGG1iGhTJRSBeeiWxOPGEpKGQd+I6uXjGnmGJGONkRcUTtQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WThVxDP+
-Subject: Re: [Buildroot] [PATCH 1/1] package/jquery-ui: bump to version
- 1.13.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JZ5iYm8Iy_x0 for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 10:35:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16C7160B66
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 10:35:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16C7160B66
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 78BBD87C88; Wed, 24 Aug 2022 10:20:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 24 Aug 2022 12:23:06 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 86ec2b57f48f90b0d7625c4b2cb25ef7c0047a05
+X-Git-Newrev: 7f67bd1ca68f0449435c8d31c4ee99e85d156c22
+X-Patchwork-Hint: ignore
+Message-Id: <20220824102041.78BBD87C88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt6/qt6serialport: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,37 +58,126 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Simon Dawson <spdawson@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Jesse,
+commit: https://git.buildroot.net/buildroot/commit/?id=7f67bd1ca68f0449435c8d31c4ee99e85d156c22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 24 Aug 2022 09:55:42 +0200
-Jesse Van Gavere <jesseevg@gmail.com> wrote:
+Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                   |  3 +++
+ package/qt6/Config.in                        |  1 +
+ package/qt6/qt6serialport/Config.in          | 11 ++++++++
+ package/qt6/qt6serialport/qt6serialport.hash |  9 +++++++
+ package/qt6/qt6serialport/qt6serialport.mk   | 38 ++++++++++++++++++++++++++++
+ 5 files changed, 62 insertions(+)
 
-> Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
-> ---
->  package/jquery-ui/jquery-ui.hash |  4 ++--
->  package/jquery-ui/jquery-ui.mk   | 17 ++++++-----------
->  2 files changed, 8 insertions(+), 13 deletions(-)
-
-Thanks, I've applied to next. What was missing in the commit log are
-some explanations about the changes in the license file. We have a hash
-of license files precisely to make sure we notice when the licensing
-terms are changed, so such changes should not be silently made. See my
-updated commit log:
-https://git.buildroot.org/buildroot/commit/?h=next&id=86ec2b57f48f90b0d7625c4b2cb25ef7c0047a05
-
-Thanks for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 07d719984a..08d24fba5c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1468,6 +1468,9 @@ F:	package/wmctrl/
+ F:	package/x11r7/xdriver_xf86-video-imx/
+ F:	package/x11r7/xdriver_xf86-video-imx-viv/
+ 
++N:	Jesse Van Gavere <jesseevg@gmail.com>
++F:	package/qt6/qt6serialport/
++
+ N:	Jianhui Zhao <zhaojh329@gmail.com>
+ F:	package/libuhttpd/
+ F:	package/libuwsc/
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 86394f49ba..4b2b9a1174 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -39,5 +39,6 @@ menuconfig BR2_PACKAGE_QT6
+ if BR2_PACKAGE_QT6
+ 
+ source "package/qt6/qt6base/Config.in"
++source "package/qt6/qt6serialport/Config.in"
+ 
+ endif
+diff --git a/package/qt6/qt6serialport/Config.in b/package/qt6/qt6serialport/Config.in
+new file mode 100644
+index 0000000000..f1fd844f56
+--- /dev/null
++++ b/package/qt6/qt6serialport/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QT6SERIALPORT
++	bool "qt6serialport"
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  Qt Serial Port provides the basic functionality, which
++	  includes configuring, I/O operations, getting and setting
++	  the control signals of the RS-232 pinouts.
++
++	  https://doc.qt.io/qt-6/qserialport.html
+diff --git a/package/qt6/qt6serialport/qt6serialport.hash b/package/qt6/qt6serialport/qt6serialport.hash
+new file mode 100644
+index 0000000000..9780eb86fe
+--- /dev/null
++++ b/package/qt6/qt6serialport/qt6serialport.hash
+@@ -0,0 +1,9 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.3/6.3.1/submodules/qtserialport-everywhere-src-6.3.1.tar.xz.sha256
++sha256  4eb6d80e65799dd2e0318df4dfba14173c1929e861718cda9bedca24253b616e  qtserialport-everywhere-src-6.3.1.tar.xz
++
++# Hashes for license files:
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+diff --git a/package/qt6/qt6serialport/qt6serialport.mk b/package/qt6/qt6serialport/qt6serialport.mk
+new file mode 100644
+index 0000000000..01763657b8
+--- /dev/null
++++ b/package/qt6/qt6serialport/qt6serialport.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# qt6serialport
++#
++################################################################################
++
++QT6SERIALPORT_VERSION = $(QT6_VERSION)
++QT6SERIALPORT_SITE = $(QT6_SITE)
++QT6SERIALPORT_SOURCE = qtserialport-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALPORT_VERSION).tar.xz
++QT6SERIALPORT_INSTALL_STAGING = YES
++QT6SERIALPORT_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6SERIALPORT_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception (tools), GFDL-1.3 (docs)
++QT6SERIALPORT_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
++QT6SERIALPORT_CONF_OPTS = \
++	-GNinja \
++	-DQT_HOST_PATH=$(HOST_DIR) \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF
++
++QT6SERIALPORT_DEPENDENCIES = \
++	host-pkgconf \
++	host-ninja \
++	qt6base
++
++define QT6SERIALPORT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERIALPORT_BUILDDIR)
++endef
++
++define QT6SERIALPORT_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR) --prefix $(STAGING_DIR)/usr
++endef
++
++define QT6SERIALPORT_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR) --prefix $(TARGET_DIR)/usr
++endef
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
