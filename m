@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D975C00140
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 10:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33D64C00140
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 10:39:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8F0A40544;
-	Wed, 24 Aug 2022 10:39:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8F0A40544
+	by smtp1.osuosl.org (Postfix) with ESMTP id D76438135A;
+	Wed, 24 Aug 2022 10:39:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D76438135A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CJXrTxgOuOHF; Wed, 24 Aug 2022 10:39:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zFCMjs4ZeeKp; Wed, 24 Aug 2022 10:39:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9A00340576;
-	Wed, 24 Aug 2022 10:39:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A00340576
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C9EA71BF592
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:38:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1BE881363;
+	Wed, 24 Aug 2022 10:39:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1BE881363
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FCD01BF592
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 971BD40B0E
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:38:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 971BD40B0E
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFA6860E40
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:39:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFA6860E40
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HCsSsCdGNEu8 for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 10:38:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9E0540105
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D9E0540105
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 10:38:56 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 89AA160003;
- Wed, 24 Aug 2022 10:38:53 +0000 (UTC)
-Date: Wed, 24 Aug 2022 12:38:52 +0200
-To: Jesse Van Gavere <jesseevg@gmail.com>
-Message-ID: <20220824123852.489214fa@windsurf>
-In-Reply-To: <20220824094900.3639681-1-jesseevg@gmail.com>
-References: <20220824094900.3639681-1-jesseevg@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1661337533;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=9zwzNE/BTNSWoX+W+zVAVAfWWzjuH8UYUDynFkdqgSY=;
- b=WzyaKtH328tRxCBa5BpUIhIHW78d2+7kNOkOftnFFl4PlmJ3R/X80gulLmqgeryD47Uv1c
- 7fI5G+CDDYyBco+AEzcGTB3ry/59Ft0bs0Hd1WCs68/HopVn8zZSS73pjup7ps9yWc2kCX
- 4IlNRnPdgqgm0GETGW21cNTekkKVFNzpuWU/4y/Tmv4tX+YdVaUf1y/I0GYzAxiZgDOPT4
- alIuNn0TN7fLHOhP/DVfuGJMaXkXTR1v0hu+r+bRINHlNY3xhnBigsw4agBiko/9WqFdIA
- Das9kIxa53J0srMMpwkCZ9SsWBvMLj+9lQg8TFLbjVPTPlSF8RT6XPvf3wF8OA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WzyaKtH3
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt6/qt6serialport: add package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vRp1NInTDJcR for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 10:39:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F4C960B66
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 10:39:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F4C960B66
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 818F987CB6; Wed, 24 Aug 2022 10:24:20 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 24 Aug 2022 12:39:03 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c9f1ae121e27910ec1f4fae018ca35e916d79ced
+X-Git-Newrev: 132278e85171fc0691410b09178b81533aaabd96
+X-Patchwork-Hint: ignore
+Message-Id: <20220824102420.818F987CB6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/nitrogen*: bump u-boot
+ revision
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,94 +58,120 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=132278e85171fc0691410b09178b81533aaabd96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 24 Aug 2022 11:49:00 +0200
-Jesse Van Gavere <jesseevg@gmail.com> wrote:
+To latest v2020.10 rev (1d21a3d5)
 
-> Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/nitrogen6sx_defconfig | 2 +-
+ configs/nitrogen6x_defconfig  | 2 +-
+ configs/nitrogen7_defconfig   | 2 +-
+ configs/nitrogen8m_defconfig  | 2 +-
+ configs/nitrogen8mm_defconfig | 2 +-
+ configs/nitrogen8mn_defconfig | 2 +-
+ configs/nitrogen8mp_defconfig | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
-Wow, great, someone interested in Qt6! I've applied your patch to our
-next branch, with some changes. See below.
-
-> ---
->  package/qt6/Config.in                        |  1 +
->  package/qt6/qt6serialport/Config.in          | 11 ++++++
->  package/qt6/qt6serialport/qt6serialport.hash |  9 +++++
->  package/qt6/qt6serialport/qt6serialport.mk   | 41 ++++++++++++++++++++
->  4 files changed, 62 insertions(+)
-
-You forgot to add an entry to the DEVELOPERS file for this new package,
-so I've added that. This way you will receive e-mail notifications if
-we have build failures on qt6serialport, or if new versions become
-available upstream.
-
-> diff --git a/package/qt6/qt6serialport/qt6serialport.mk b/package/qt6/qt6serialport/qt6serialport.mk
-> new file mode 100644
-> index 0000000000..5bfae1ca0c
-> --- /dev/null
-> +++ b/package/qt6/qt6serialport/qt6serialport.mk
-> @@ -0,0 +1,41 @@
-> +################################################################################
-> +#
-> +# qt6serialport
-> +#
-> +################################################################################
-> +
-> +QT6SERIALPORT_VERSION = $(QT6_VERSION)
-> +QT6SERIALPORT_SITE = $(QT6_SITE)
-> +QT6SERIALPORT_SOURCE = qtserialport-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALPORT_VERSION).tar.xz
-> +QT6SERIALPORT_INSTALL_STAGING = YES
-> +QT6SERIALPORT_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
-
-                                                                      ^^^ missing space her
-
-> +QT6SERIALPORT_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-> +QT6SERIALPORT_CONF_OPTS += \
-
-+= was not needed here, a simple = was enough.
-
-> +        -GNinja \
-
-This option was intended with spaces instead of one tab.
-
-> +	-DQT_HOST_PATH=$(HOST_DIR) \
-> +	-DBUILD_SHARED_LIBS=ON \
-
-This option is not needed, it's passed by the cmake-package infrastructure already.
-
-> +	-DBUILD_WITH_PCH=OFF \
-> +	-DQT_BUILD_EXAMPLES=OFF \
-> +	-DQT_BUILD_TESTS=OFF
-
-> +
-> +QT6SERIALPORT_DEPENDENCIES = \
-> +        host-pkgconf \
-> +        host-ninja \
-
-These options were intended with spaces instead of one tab.
-
-> +	qt6base
-> +
-> +QT6SERIALPORT_INSTALL_STAGING = YES
-
-This was already present earlier in your .mk file.
-
-Again, thanks for this contribution!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 0519e9f12e..e302fcbba5 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 31cf97b13e..6f7c3bbe99 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index 79156d4482..1efcdf6071 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
+index c3f3093b2e..a6a9526dee 100644
+--- a/configs/nitrogen8m_defconfig
++++ b/configs/nitrogen8m_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
+index 56ec60dda9..0130a6a62a 100644
+--- a/configs/nitrogen8mm_defconfig
++++ b/configs/nitrogen8mm_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
+index 9e38629883..50976959c5 100644
+--- a/configs/nitrogen8mn_defconfig
++++ b/configs/nitrogen8mn_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
+index 5dc47c45e8..a14a024353 100644
+--- a/configs/nitrogen8mp_defconfig
++++ b/configs/nitrogen8mp_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mp_2gr0"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2020.10
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f2c92d83.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/1d21a3d5.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
