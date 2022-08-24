@@ -1,96 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63ED5C48BE4
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 20:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8ECC04AA5
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 20:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA8BE605A5;
-	Wed, 24 Aug 2022 20:45:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA8BE605A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21920416B5;
+	Wed, 24 Aug 2022 20:50:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21920416B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fTju3lbD6k6t; Wed, 24 Aug 2022 20:45:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 83g_a2oJ759X; Wed, 24 Aug 2022 20:50:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E58D060FF3;
-	Wed, 24 Aug 2022 20:45:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E58D060FF3
+	by smtp4.osuosl.org (Postfix) with ESMTP id B47E7416C0;
+	Wed, 24 Aug 2022 20:50:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B47E7416C0
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A86491BF831
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 20:45:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 556351BF831
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 20:50:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C9DE416C0
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 20:45:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C9DE416C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2CFC0416C0
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 20:50:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CFC0416C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R3P9vKcoo-X3 for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 20:45:34 +0000 (UTC)
+ with ESMTP id v_P7WkWtgFHu for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 20:49:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8EBD416B5
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E8EBD416B5
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 20:45:28 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id ca13so24513211ejb.9
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 13:45:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC681416B5
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DC681416B5
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 20:49:58 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id b16so23608090edd.4
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 13:49:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc;
- bh=0zGauvwpSh1Gy6R58Qxw69p8sRjbtfpy+NMCiJuF/xc=;
- b=u8AFL45pGAwI/cFCs+F9SeJt08HZmBmiZNzQA7Ab41H4IwsGmGyTRrFypMpkU3TA0e
- iQOjyaP4cYSj+XBJHQC5nGbl94gpW2kWb16gNWgYJE69SvGSTLdENmfja9vs/n0ZKQaK
- GkQHCk2MWLpT3tW5cGEwugeFx/t3sPwH6q7vSZOFOy6G5KRVwvrLtErYGu+BMzwaiOpF
- SNe8p7u1BAApsEfVaKvXQXrSALGUiq04HiauReL3VejGnzTDofSW1Ca+nclOkD8uHs+3
- oEKcm09KzD9UA7va6hkhyr6P188HFvNpIgByi0/2RLrIXDyMjPXl4fG68svsGD7LexnI
- LX/g==
-X-Gm-Message-State: ACgBeo1YtBP2+UyN6OE6NRjeQGLx2V5isImsDgD05IDRE5ltti0RuIK5
- h1T3HtEqzCXI8oTVtLjxmV1izg==
-X-Google-Smtp-Source: AA6agR5+j+IJqnYaYdrVSoF0c+WWaFJRel4ufEE8jo10LYcareuu3X7c7jeRXGYU9y1+PV3bRrUQFA==
-X-Received: by 2002:a17:907:3d94:b0:731:744f:63ab with SMTP id
- he20-20020a1709073d9400b00731744f63abmr400635ejc.541.1661373927178; 
- Wed, 24 Aug 2022 13:45:27 -0700 (PDT)
+ bh=7IfEfSrOZE2ILKFWFI3FYPZyeBmGbp78sQWpwQ5YyZw=;
+ b=WBD4I7xsSjCWg8m6LjHlQ9kbWh9KyrCUh1lY2woox9wz0hUzxZ9BvmZBt+9mBpeoiZ
+ 0Cvpe9b+VJ59fUy4fLQanNqMMj6//aPpm5p2+ZM0zItxlQF/gLR6XM4kdHijd2dhz+43
+ 2uSMS2PNF0UbKfhhzVwXMgSvD0Fc/njs2fhBZkuLUXF4IwGgSMCOqJyLdnQRWZu/r9pw
+ kXS/U1GMHEF06D1fwTPHZ8uQMGcNlQd8TTaH6ZRPf/uF/VHsw5J+iUrph+3rCqdulQrw
+ IEFy0FArXlqLbWm2tCmVzUCbIg+Wj3Ek8LFB/nvS4i/BzAukyrEaIBk5ZVNcsN++zzhH
+ Bvvg==
+X-Gm-Message-State: ACgBeo2s6BJFeqHn4AYWVhMmb0cj7G+c4TseziDBNIBJIX+eBtedkWRq
+ cswyLp17zkEu4veMWKy0nukWlw==
+X-Google-Smtp-Source: AA6agR6VPNuRyeXh2ItRyxFsmV8kKiaIMaqW/1U4TJ+4QB+NgoLhUOp1U4krNDfrKTyyu+fmeM+dwA==
+X-Received: by 2002:a05:6402:353:b0:446:2d2c:3854 with SMTP id
+ r19-20020a056402035300b004462d2c3854mr605383edw.193.1661374196997; 
+ Wed, 24 Aug 2022 13:49:56 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- da12-20020a056402176c00b004478fdbe190sm1070176edb.10.2022.08.24.13.45.25
+ q7-20020a17090622c700b0073da32b7db0sm1495980eja.199.2022.08.24.13.49.55
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 24 Aug 2022 13:45:26 -0700 (PDT)
-Message-ID: <735a04b6-f278-c032-3a37-e0cba04c2f07@mind.be>
-Date: Wed, 24 Aug 2022 22:45:23 +0200
+ Wed, 24 Aug 2022 13:49:56 -0700 (PDT)
+Message-ID: <705af3ef-1388-85bf-6ac9-f24bca8d8a1c@mind.be>
+Date: Wed, 24 Aug 2022 22:48:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
 Content-Language: en-GB
 To: Marcus Hoffmann <marcus.hoffmann@othermo.de>, buildroot@buildroot.org
 References: <20220823194732.701895-1-marcus.hoffmann@othermo.de>
- <20220823194732.701895-2-marcus.hoffmann@othermo.de>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20220823194732.701895-2-marcus.hoffmann@othermo.de>
+In-Reply-To: <20220823194732.701895-1-marcus.hoffmann@othermo.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc;
- bh=0zGauvwpSh1Gy6R58Qxw69p8sRjbtfpy+NMCiJuF/xc=;
- b=a4mMgDnuOuxFsJr+ufP6qv/tB45zCBQpwaDDmEzeiXADgNdHiqxXa28PC4uia6Kb2+
- gbU9S5lD1Z9CMWT2Se5VT/FrpZ0BNug2LTNtCIDxIAVU2zvYXM/zIxP85WCD7tLhtj6y
- 7DXJuDkxlleypuIhXS3TXwBsgdgq0tOWlOJ5+guRenzCpPTLNpIVCmg5HdK+0ORsdUFt
- TcfHGGZoCszgxq1aoY9E77ThqcPLCf0r+hJNUa1NDT0z2UIyIuH0Cd8BiJlIf74n9tHr
- unJve0r+Wh/Z86fIaGaAac58rc4HumtxlFbX32kJWdQX1W7oCurbY6wGzi38DG5K/JcM
- NZ9A==
+ bh=7IfEfSrOZE2ILKFWFI3FYPZyeBmGbp78sQWpwQ5YyZw=;
+ b=deoLTHVM7SKYp7JmvVRtATxp9CWSyDqBzGTIi6uYISnXJCVMuqf5mOhqaK77/QI6Vt
+ 7yEXtev94/QUC/US4O+KP78C7JT12yyk2ix/+74+KAoZpfufLvS5TXnx7YmgsqCrdUdg
+ Ysuj8R8w8OGIzedqOROIpukXxDGQSS/INMvlT+wcMYiUBSPZEaJxKlJEJBnHjRmQr9xn
+ Y/TKk0/2vcN5riUqvwH+dUMu/zSsOXsRkGwoGmCqpXdH42ik4tqkHcaZhbavg0Wd3Sr4
+ N+V1fRlV3H2ohQLE5WVmSILx6+DhrGiRHqip43ojlycox2xFjkikIZl4A11spIf7kNDf
+ 2E0Q==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=a4mMgDnu
-Subject: Re: [Buildroot] [PATCH 2/2]
- support/testing/tests/package/test_python_paho_mqtt: new runtime test
+ header.a=rsa-sha256 header.s=google header.b=deoLTHVM
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-paho-mqtt: bump to 1.6.1
+ to fix running on python 3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,84 +110,75 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 23/08/2022 21:47, Marcus Hoffmann wrote:
+> Fixes the following error on calling mqtt.publish():
+> 
+>    File "/usr/lib/python3.10/site-packages/paho/mqtt/publish.py", line 222, in single
+>      multiple([msg], hostname, port, client_id, keepalive, will, auth, tls,
+>    File "/usr/lib/python3.10/site-packages/paho/mqtt/publish.py", line 126, in multiple
+>      if not isinstance(msgs, collections.Iterable):
+> AttributeError: module 'collections' has no attribute 'Iterable'
+> 
+> This was actually changed in release 1.5.0 but 1.6.1 is alaready out for
+> almost a year, so we just update to that version.
+> 
+> Changelog:
+> https://github.com/eclipse/paho.mqtt.python/blob/master/ChangeLog.txt
+
+  Jumping from 1.4.0 to 1.6.1 at this point in the stabilisation month is not 
+ideal...
+
 > Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>   package/python-paho-mqtt/python-paho-mqtt.hash | 6 +++---
+>   package/python-paho-mqtt/python-paho-mqtt.mk   | 4 ++--
+>   2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
+> index bf3993e9195..56783e3fc08 100644
+> --- a/package/python-paho-mqtt/python-paho-mqtt.hash
+> +++ b/package/python-paho-mqtt/python-paho-mqtt.hash
+> @@ -1,6 +1,6 @@
+> -# md5 from https://pypi.python.org/pypi/paho-mqtt/json, sha256 locally computed
+> -md5  e3ac29cd5dc247a01083a2a8f3fddd08  paho-mqtt-1.4.0.tar.gz
+> -sha256  e440a052b46d222e184be3be38676378722072fcd4dfd2c8f509fb861a7b0b79  paho-mqtt-1.4.0.tar.gz
+> +# package hashes from from https://pypi.org/project/paho-mqtt/#copy-hash-modal-e8e8e0de-1aec-462d-8ae0-d858d4f5a0d7
+> +md5  bdb20f88db291fdb4a0fe804c0f29316  paho-mqtt-1.6.1.tar.gz
+> +sha256  2a8291c81623aec00372b5a85558a372c747cbca8e9934dfe218638b8eefc26f  paho-mqtt-1.6.1.tar.gz
+>   sha256  76f13729e84e9222e543303df00f87d1b2c0995b6a505cd859a285667e44babb  LICENSE.txt
 
-Tested that without the first patch, the test indeed fails with
+  Unfortunately, the LICENSE hash changed, because in fact the license changed:
+@@ -1,3 +1,3 @@
+-This project is dual licensed under the Eclipse Public License 1.0 and the
+-Eclipse Distribution License 1.0 as described in the epl-v10 and edl-v10 files.
++This project is dual licensed under the Eclipse Public License 2.0 and the
++Eclipse Distribution License 1.0 as described in the epl-v20 and edl-v10 files.
 
-# python sample_python_paho_mqtt.py
-Traceback (most recent call last):
-   File "/root/sample_python_paho_mqtt.py", line 3, in <module>
-     publish.single(
-   File "usr/lib/python3.10/site-packages/paho/mqtt/publish.py", line 222, in single
-   File "usr/lib/python3.10/site-packages/paho/mqtt/publish.py", line 126, in 
-multiple
-AttributeError: module 'collections' has no attribute 'Iterable'
+  And to top things up, epl-v20 is missing in the tarball...
 
+  Could you check if there is a version that does have the epl-v20 file? Perhaps 
+even from an upstream git repo?
 
   Regards,
   Arnout
 
-> ---
->   .../tests/package/sample_python_paho_mqtt.py  | 12 ++++++++
->   .../tests/package/test_python_paho_mqtt.py    | 29 +++++++++++++++++++
->   2 files changed, 41 insertions(+)
->   create mode 100644 support/testing/tests/package/sample_python_paho_mqtt.py
->   create mode 100644 support/testing/tests/package/test_python_paho_mqtt.py
-> 
-> diff --git a/support/testing/tests/package/sample_python_paho_mqtt.py b/support/testing/tests/package/sample_python_paho_mqtt.py
-> new file mode 100644
-> index 00000000000..769ad6250fa
-> --- /dev/null
-> +++ b/support/testing/tests/package/sample_python_paho_mqtt.py
-> @@ -0,0 +1,12 @@
-> +from paho.mqtt import publish, subscribe
-> +
-> +publish.single(
-> +        'buildroot/test',
-> +        payload="Hello, World!",
-> +        qos=2,
-> +        retain=True,
-> +        hostname="localhost",
-> +        port=1883)
-> +
-> +message = subscribe.simple('buildroot/test')
-> +print(message.payload.decode())
-> diff --git a/support/testing/tests/package/test_python_paho_mqtt.py b/support/testing/tests/package/test_python_paho_mqtt.py
-> new file mode 100644
-> index 00000000000..b1e2b8fb422
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_python_paho_mqtt.py
-> @@ -0,0 +1,29 @@
-> +from tests.package.test_python import TestPythonPackageBase
-> +import os
-> +import time
-> +
-> +
-> +class TestPythonPahoMQTT(TestPythonPackageBase):
-> +    __test__ = True
-> +    config = TestPythonPackageBase.config + \
-> +        """
-> +        BR2_PACKAGE_MOSQUITTO=y
-> +        BR2_PACKAGE_MOSQUITTO_BROKER=y
-> +        BR2_PACKAGE_PYTHON3=y
-> +        BR2_PACKAGE_PYTHON_PAHO_MQTT=y
-> +        """
-> +    sample_scripts = ["tests/package/sample_python_paho_mqtt.py"]
-> +
-> +    def test_run(self):
-> +        self.login()
-> +        self.check_sample_scripts_exist()
-> +        cmd = "mosquitto > /dev/null 2>&1 &"
-> +        _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-> +
-> +        # Give some time for mosquitto broker to start up
-> +        time.sleep(1)
-> +
-> +        cmd = "%s %s" % (self.interpreter, os.path.basename(self.sample_scripts[0]))
-> +        output, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-> +        self.assertEqual(exit_code, 0)
-> +        self.assertEqual(output[0], "Hello, World!")
+>   sha256  e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
+>   sha256  3b9be6b894d0769de796e653571ff6cef494913c0ce78c35a97db939e7d9087c  epl-v10
+> diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
+> index d192749e1e1..892f5f33c74 100644
+> --- a/package/python-paho-mqtt/python-paho-mqtt.mk
+> +++ b/package/python-paho-mqtt/python-paho-mqtt.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_PAHO_MQTT_VERSION = 1.4.0
+> +PYTHON_PAHO_MQTT_VERSION = 1.6.1
+>   PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
+> -PYTHON_PAHO_MQTT_SITE = https://files.pythonhosted.org/packages/25/63/db25e62979c2a716a74950c9ed658dce431b5cb01fde29eb6cba9489a904
+> +PYTHON_PAHO_MQTT_SITE = https://files.pythonhosted.org/packages/f8/dd/4b75dcba025f8647bc9862ac17299e0d7d12d3beadbf026d8c8d74215c12
+>   PYTHON_PAHO_MQTT_LICENSE = EPL-1.0 or EDLv1.0
+>   PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
+>   PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
