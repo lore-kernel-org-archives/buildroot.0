@@ -1,147 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75E6BC00140
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 16:20:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2729FC00140
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 19:08:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6A6040519;
-	Wed, 24 Aug 2022 16:20:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6A6040519
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k0onbEx-PxW2; Wed, 24 Aug 2022 16:20:40 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5F124053E;
-	Wed, 24 Aug 2022 16:20:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5F124053E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B2CE11BF5A6
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 16:20:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A94660FB9
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 16:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A94660FB9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7581560FDA;
+	Wed, 24 Aug 2022 19:08:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7581560FDA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6JuTYHDqWhKJ for <buildroot@lists.busybox.net>;
- Wed, 24 Aug 2022 16:20:34 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id njmn0OdqIFni; Wed, 24 Aug 2022 19:08:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33D7360BFA;
+	Wed, 24 Aug 2022 19:08:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33D7360BFA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5804F1BF307
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:08:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3119341626
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 19:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3119341626
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U3gP3aTOjH6R for <buildroot@lists.busybox.net>;
+ Wed, 24 Aug 2022 19:08:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 628DB60BE9
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
- (mail-eopbgr70043.outbound.protection.outlook.com [40.107.7.43])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 628DB60BE9
- for <buildroot@buildroot.org>; Wed, 24 Aug 2022 16:20:34 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zm6kdSihwe81sfD/uJ71DAch/Ydj95v+vYHAhVwIWY987qM9UanR+xFcfCD2RkiRSf7+NeXMxtU2ITwm7NIehCnDk7VGZGNd1WmlmpHpiNCJ5B+KJdlInPXiFboGy1QTgmBUeWt++TkRLJvqQyNPs5HNrn9NG9Y/W6K6vkPdOqhdLDE+doJAWPYEXPENiBxolzsii8Fc3E6QRVz07vGtzoQLbsGjz8pui8Rb8Z3PFy3h36Lkxr+0q/NvAEg0sZpq4pqUdB4EyZguX8SugotztZ3md3qj0qoFNK2+pJV3XSByIvNpAwY/O26pzTJmJONf7E0A8oIvXBLVQbHDLwX4UA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bjT9st6gcRljHtmUEYw1aruzDc6NMpv6KMqVBTovKv0=;
- b=l/X7H7wh9EVJyh4F9wkGnKrkfYGa/Y0aP/WqBhJBSIhWXA5cZepr8dShFIbk7Y8TT7HBTwUpDTndsLBlCdU6G3McWUjxW5Kg8G3os2P0c2kY8ucML1L2cCI+E2ZZiBz4FIPSA/fbXGQy9Mm7Qw4XLsIBvbRGq8KARHGgrnfNBOsDSfMEAKd4RAa64iu8pBYgO2+29IPBtWhK5Oi1bEXx2SAe0ci0ntDmJX0NqE1Y8Udq2qqK9bDlO7IVJFWEpoHUbMAX0/2NfauHmZ8+ljg94hY53VQaaxCwx/r9r6lUj/RwpmYC/Kalq+dr4qbcMzyq+bBDyYoVkCiS4l6BSSslrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
- header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
- arc=none
-Received: from PA4PR04MB9367.eurprd04.prod.outlook.com (2603:10a6:102:2aa::7)
- by DB6PR04MB3269.eurprd04.prod.outlook.com (2603:10a6:6:7::24) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5546.21; Wed, 24 Aug 2022 16:20:29 +0000
-Received: from PA4PR04MB9367.eurprd04.prod.outlook.com
- ([fe80::81a8:1bbf:5e16:9b4e]) by PA4PR04MB9367.eurprd04.prod.outlook.com
- ([fe80::81a8:1bbf:5e16:9b4e%4]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
- 16:20:28 +0000
-Message-ID: <f882f86c-31f2-55b4-e3f4-9a64e93bd0e9@theobroma-systems.com>
-Date: Wed, 24 Aug 2022 18:20:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thierry GUIBERT <thierry.guibert@free.fr>
-References: <38884503-637d-7c23-5a02-be8f8c3a522a@free.fr>
- <20220823164040.GH2167049@scaer>
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-In-Reply-To: <20220823164040.GH2167049@scaer>
-X-ClientProxiedBy: AS9PR06CA0657.eurprd06.prod.outlook.com
- (2603:10a6:20b:46f::29) To PA4PR04MB9367.eurprd04.prod.outlook.com
- (2603:10a6:102:2aa::7)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF78541620
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
+ [IPv6:2607:f8b0:4864:20::230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DF78541620
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 19:08:49 +0000 (UTC)
+Received: by mail-oi1-x230.google.com with SMTP id w197so20502955oie.5
+ for <buildroot@buildroot.org>; Wed, 24 Aug 2022 12:08:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc;
+ bh=aumm1GjtqGFMUxFSKaB7wJa+FZJW0xV1gRcQEpIu1wo=;
+ b=RY5xMz5zSQ7lmx/616axJPzjCzMC44P7U0AEosGEyCVj+X0Clm+tIdYZ/vT7QstCph
+ wJ1RqfWZYmf4P00UNZtNXDx8yaZDLvMn77/6jo8xXTsoCBmM265M/3sd7b0NWd5muO+L
+ 7LI20+jGXii7yr1H8IfFnQAOyExw4XslTg9Px07pHjxDT2Htnip9wpj+4z5hZ3JNkF3m
+ +f9Fc9t8WGLeeyirXEQ91iYdYLVvrZkvqMDA/bnhnQ2fqR5gq9CvBPzx9lxaEG1Gt+Sz
+ mQw0SY14su4XyB8Hn6zA04r2PhzrEtkTaXCvpDsnDlfqW878NHHI3VISewX/CsXg1w7k
+ A7dw==
+X-Gm-Message-State: ACgBeo38fzn9Ykqy+t+8UK/Oa14GofBVSLE+WMbh7T0BFmeTNVuespp9
+ AGCsbNNmJgJLFpZNp9iWSIDmsdl2/AvdcYPLVDsjzw==
+X-Google-Smtp-Source: AA6agR70zC6JRu2InuYm9zKsJoWXbE6NZLZuntj3kfa7unrb6+8MziuYp/lrKHqA1A0vvFmxqUwGTr+CuwO+q3fttsI=
+X-Received: by 2002:aca:eb8a:0:b0:342:fe2e:7509 with SMTP id
+ j132-20020acaeb8a000000b00342fe2e7509mr274028oih.118.1661368128725; Wed, 24
+ Aug 2022 12:08:48 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9e78ea08-610a-4b63-8986-08da85ec8f3a
-X-MS-TrafficTypeDiagnostic: DB6PR04MB3269:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ie/O43HnXZNNIilCoJtEBXhZiayApNxWhMFxVkefOiFHHlESBJxAeTiuo2Pp4u13dTOWGvuwh3drSa/deT9gw84A7SAOGYSuCYrrYXyfzYYoOvnaC+o7blOouG3iS/lmZGMLkHt+IiE30lX0KqXWKtZfsxFIB+FR97lsS6lqgzFvfzR/Fh7WXczPJyPnwdTakzERCVz3xkA29OxOkJ5RdFbCM9iii1N9Pff9D97Z4cqGOpbI+fAjPVLQQ0EujHMBNtDNiiEI4me/zt7Dsn+kdN+V3Z/c44uJ/xwMT9kCicxxBeBbh+8f+YfRLhWxlDDpwA+GEIQyn4uspt+GJF6Nh0j3PdPTLNSSQIynqFnfk20btrS8su+8D7UCZfN+kL+aAWbt7/mqlg7y+TBr04kkziRCwxdjztF9bohgYjRJgtjTIu3YR7n4drPzGy0ZNsLv9TfAbB/bcur0I+7Hwxq8pQqFo8HeXdI9kVuJn4grIsn75eo6HuTTAC4o/ueNaGM9kEspKzZA2Wr14ZhIFIQ0DodgncUlEFYTKCEJ8SYB9/hjKwW5AO+9csgA1nNcJsR82gwb79hQbPhAO2niqm6dyLOczXqqCD6DhTTmF8WwDlE22NJcneEUKKn7Eq7pwuhuJY6b29/p9RaHxiZoW0Yndkx10iIsDTKLkdY5zOr2LVNBomXM81WB27n9U9gZyArJDVyAzkz6xy8ErUFUyVEm+BXpyGOTqctlBO2WSTaV+iL5LgHOM0Hj4yFtwzMnxUyRNONziHI3dQX/wAIEQShcxocYxmd5omqJ6uFsxLucdVFOyD/iVwAvQRzHJ2HZa7Oy8CBdLwYT+4wnF2jBfSBor4gPsW2iWkzKPVXsjCPYeGc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PA4PR04MB9367.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230016)(366004)(396003)(376002)(346002)(39840400004)(136003)(41300700001)(8676002)(6486002)(316002)(966005)(38100700002)(110136005)(4326008)(478600001)(4744005)(8936002)(66946007)(66476007)(186003)(66556008)(83380400001)(44832011)(6512007)(6506007)(86362001)(31686004)(26005)(31696002)(2906002)(36756003)(5660300002)(53546011)(2616005)(43740500002)(45980500001)(41080700001);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UGhQV29ubm1oaGREVm4xVmN2QmlDcmJlSzNNdm5ENmw4SkI3OUdLcmp1ZTQ3?=
- =?utf-8?B?Vk12RWE5RE1JRnZQQTBNbjFZY3RYRncweFhUbE1NelhVYlRxaTVFTTA2YzVJ?=
- =?utf-8?B?ckN5ZWIwUEh3blN0dHNYOUJnTmZseGgxSUJibndid0lXTERka1FPY0QzS2VV?=
- =?utf-8?B?VnpheFVUcjZmeTJjV0dsd0Fpd1JZaW1jbElFTjluMGcxK3lOV3dEYm5uZm1m?=
- =?utf-8?B?dC90NUxLczFYUWNTRmZ2U2xScGlQVUs0bjVqS2w0b21kNVBZbkVOaDVPUlNV?=
- =?utf-8?B?NjJDdzF3NEZ6K0l1OEErZGlITWU3YzlFdmFHaTRBNkdOTXZ6REptSENraGw0?=
- =?utf-8?B?Sjg1dDhyanY0Zm1tSXE1OCsxam0yTmdaaUs0dS80L2wrT1ltVWRFUE1KUkdJ?=
- =?utf-8?B?cXoyeXNLV1krT3RNRnAxUWtpK2NjbjNGUXE2cVhCbmUvdE9CUEVYTnd2emta?=
- =?utf-8?B?QjBVZzc4cDRtUUdkM0QwOUJ2Yzk5aGl2WFpWUUFXS0tuSXBvZUJUTC9hWXh4?=
- =?utf-8?B?aEVRT0lnWkdtODFGc0ZWYmJWbE5nZ2Z4bW4rMzM5MEN3Y0hxVm05cElrMWlj?=
- =?utf-8?B?TTdrSXExOG5DL3pxbDZxdmhTVzdYWGVUVkJQNnJFR1pWOWVoZmhMb2lkYVI0?=
- =?utf-8?B?TE0rYmkxV2E1VFZEdGNWWHU0ZExpYzIvb0ZGWkJaR2h1L2dWdVpzUzZ6ajRt?=
- =?utf-8?B?dklaNE55MFBra1d1WWtTZmw5WjRFVlVLTWZtOGVhM0JWcHlQOGR4OVN4dVRT?=
- =?utf-8?B?ckFTQzhFTDhsRWd0WGx2WGpuTm1kVFppczQ3aiszY3FnWVRYbHh0Z2NlYk1k?=
- =?utf-8?B?K2dlc2FXSEtSRWlZYzBkdFVocmY2YWt2dDNTTFV2UzUvSkpRWUNoMWlCTHBt?=
- =?utf-8?B?cCs0R1k4UGJUbmx0TThUM1JtZjRMWmNMMG9VbEN4WUtjTVBhMXpqcUMrSmlP?=
- =?utf-8?B?K21XQWY5TFFHRFYrTS9jL0RsTnFUazc3Wlp3Nm5YQXY5cW8rM05ZcGczS0tV?=
- =?utf-8?B?SklMMVVPZnBRQ1NFeEM1MkM2emVaa1Q5bXJsK3V5V3JmaHQ0QTdWWmo5cmEw?=
- =?utf-8?B?VnNxSWFwV0h0cGI4OUxld0Z6M0dTRjMvV2RKaC92Q0RiazJQemFxNUN2MUFD?=
- =?utf-8?B?NTJWZitKQ1Y4Q2FMTTJMcTB2M2g1SlMyMU1QbjNNTGovanMxN3RJaTNhdUxo?=
- =?utf-8?B?U0ZUYWtGU3A5bFlhVURrWTVjRTJMK2tkQklmdjFVN2d2Z3dPbm54RUdnNU9q?=
- =?utf-8?B?QmozcHRCZStOYjZPRHNIUEoxY2YvdHNucGZiUEtVMENhVWpNOWl0cUhZa3Ra?=
- =?utf-8?B?SURzb0QxNXVlN3B1a00ySXlYY2JVbVBmbUlMdGtIVU1sU2ZJdUxlc24vcDRZ?=
- =?utf-8?B?UmpMckJSdFRHaiszQTFuc29DeTFxTTFlSVdEaVhpdGI0blc0Q2c3Zy9pcFQx?=
- =?utf-8?B?N1poM1B5RTlzbmVmU0NhUnVmWnlKenI5Qjh0REV5dWJEM1ZvZWREMk5wNmVa?=
- =?utf-8?B?ZjM2cnhna1RHSEVrN2pRN24yZmxQd3RmZDVVU3pidCttWm43c085L01WMjE5?=
- =?utf-8?B?OWVseVNMWEljUVdhcVk1amxOR2pjNjhzNis3YnFXUnJvKzVzOGxRbjZyOWhJ?=
- =?utf-8?B?Rk1kRFR1ekw5SXh3NjFEZHRaMVAxQ3kzQlphKytuWHZmbmpJSzhJUmh3TC9P?=
- =?utf-8?B?VlY2Yzd1Rk9naEpuSlNoTmxQWGtseWduMWsxc3NFYmcyU002aVk5KzF2K2Vl?=
- =?utf-8?B?cis4SW9qUkV5NSswRHp6K3J1QkI1a0R6d0R5R0NPSGx4bWFscW1UenF0ZHQ1?=
- =?utf-8?B?QUJFRVVxWXQyaGtBN0ZVU0RtRyt2cUZuY3NVeXBRcnFZalluOWVvTEp2dC82?=
- =?utf-8?B?QjFnZHEzWTdXSVFwNCsvcTJHSlQyUWdrSHUwUXRHMHRuSFNERG15M3dLMlFO?=
- =?utf-8?B?QlpQM0o1VDVxdkwydDJPTmtrZFNiMENGa0dydE4vcG5yT0FFZk5DWmV6WnND?=
- =?utf-8?B?YUIwb0NSVlVjVzhQamIwWUJZWlJ3R0xVVythMkd4SU40Qmk1T2g5K2twdnR2?=
- =?utf-8?B?Zmc0YzZTNWxTL2ZjSTcwc2JJWkFxUTNNK3pDL0M3WW9CeTNoSEo2V0pveDBJ?=
- =?utf-8?B?ZWFJcUptbkJuV0lxbStESUZNay9MUDZKUmdLa1IxUHpOK3ByTWZSdTR1M1px?=
- =?utf-8?Q?M4ocSukglMAZ35xlcugM6ww=3D?=
-X-OriginatorOrg: theobroma-systems.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e78ea08-610a-4b63-8986-08da85ec8f3a
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9367.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 16:20:28.9194 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R+7jlPvvoOeheMkiA56BdMsUzyPBsf9SUy3CKar1mybSA5jgWgcwdpM4T5zCR7ccTSQXRCaJ8K846DG+eSMvzWB8bx64gLyyD72hfKWuznS01hKdWSY3Rp3+P320hKbG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR04MB3269
+References: <20220824024904.2529728-1-chris.dimich@boundarydevices.com>
+ <20220824024904.2529728-7-chris.dimich@boundarydevices.com>
+ <59c122bb-dff1-79d1-fb06-c5ca253b86f7@mind.be>
+In-Reply-To: <59c122bb-dff1-79d1-fb06-c5ca253b86f7@mind.be>
+From: Chris Dimich <chris.dimich@boundarydevices.com>
+Date: Wed, 24 Aug 2022 12:08:37 -0700
+Message-ID: <CALsU4Cc1co=RtMC2DPmcuXCBODktO_york4-MLD1ZB95Q=0t7g@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cherrycloud.onmicrosoft.com; s=selector2-cherrycloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bjT9st6gcRljHtmUEYw1aruzDc6NMpv6KMqVBTovKv0=;
- b=X2M4pY7dve1PzgFBZ2Qima9fXF791ZdeQv8b1cPhpseeDrqHZ0s8NeHOL2rdHFCVVNuoKwaATVE1M68zaf94oL/2/Uln05/xF10vbupSr7GcL6uE1v1oY+dlTmjOkODZ1oVoBKO/Ei5ANv8CnFv4PD+3+l4EsijfH/4vtm07xi4=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=cherrycloud.onmicrosoft.com
- header.i=@cherrycloud.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-cherrycloud-onmicrosoft-com header.b=X2M4pY7d
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
-Subject: Re: [Buildroot] Docker container for 2022.02.x release
+ d=boundarydevices.com; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc;
+ bh=aumm1GjtqGFMUxFSKaB7wJa+FZJW0xV1gRcQEpIu1wo=;
+ b=TYd5uGhbQq6Gt63XOd1b3vQQaRFZ3HmjRlqtd5NkVIz3pu20W7KCmlD6uXcqMDkc6k
+ llMqbcmp5VLFDSRGEm1kmKRDVhmb215MO8bzpOU42qlms88YYYA91ZIDqtXxWoOI54cC
+ z1Im4nvMafL1xMqAOGol5JIydR+2IAngq4DEk=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=boundarydevices.com
+ header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
+ header.b=TYd5uGhb
+Subject: Re: [Buildroot] [PATCH 7/7]
+ package/freescale-imx/imx-vpu-hantro-daemon: add package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -153,42 +89,389 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Gary Bisson <bisson.gary@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: multipart/mixed; boundary="===============6163963394163739775=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+--===============6163963394163739775==
+Content-Type: multipart/alternative; boundary="000000000000277b5205e7016935"
 
-On 8/23/22 18:40, Yann E. MORIN wrote:
-> Thierry, All,
-> 
-> On 2022-08-23 15:13 +0200, Thierry GUIBERT spake thusly:
->> I'm using buildroot to build raspberry pi rootfs for the french red cross.
-> 
-> A noble endeavour, thank you!
-> 
->> Is there any reason for buildroot/base:20220206.1756 not to be published in
->> the docker hub ?
-> 
-> The rationale behind our docker image, is to be able to run our own CI
-> jobs, that runs in gitlab-CI. Since Docker hub now limits the number of
-> downloads permonth per image (on fre etier), the CI was very often
+--000000000000277b5205e7016935
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Could Buildroot fit the Docker Open Source Program criteria by any 
-chance? https://www.docker.com/community/open-source/application/
+Hi Arnout,
 
-That would remove those limitations.
+It is not required, as it's not a library. So is it okay?
 
-If that is not possible or not wanted by the project, I guess that 
-pushing to hub.docker.com but have the Overview page state that this is 
-pull-limited and recommend using the gitlab registry instead? 
-https://hub.docker.com/r/buildroot/base
+Thanks,
 
-Cheers,
-Quentin
+Chris Dimich
+Boundary Devices, LLC
+www.boundarydevices.com
+7 Orchard Road, Suite 102*=EF=BD=9C*Lake Forest, CA 92630
+
+
+
+On Wed, Aug 24, 2022 at 12:51 AM Arnout Vandecappelle <arnout@mind.be>
+wrote:
+
+>
+>
+> On 24/08/2022 04:48, Chris Dimich wrote:
+> > i.MX Hantro V4L2 Daemon. Provides the vsidaemon, which is needed for
+> > V4L2 nodes to work.
+> >
+> > Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
+> > ---
+> >   package/freescale-imx/Config.in               |  1 +
+> >   .../imx-vpu-hantro-daemon/Config.in           | 20 ++++++++++
+> >   .../imx-vpu-hantro-daemon.hash                |  4 ++
+> >   .../imx-vpu-hantro-daemon.mk                  | 37 ++++++++++++++++++=
++
+> >   4 files changed, 62 insertions(+)
+> >   create mode 100644
+> package/freescale-imx/imx-vpu-hantro-daemon/Config.in
+> >   create mode 100644
+> package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
+> >   create mode 100644 package/freescale-imx/imx-vpu-hantro-daemon/
+> imx-vpu-hantro-daemon.mk
+> >
+> > diff --git a/package/freescale-imx/Config.in
+> b/package/freescale-imx/Config.in
+> > index 4a4237fb42..13d611b696 100644
+> > --- a/package/freescale-imx/Config.in
+> > +++ b/package/freescale-imx/Config.in
+> > @@ -115,6 +115,7 @@ source "package/freescale-imx/imx-vpuwrap/Config.in=
+"
+> >   source "package/freescale-imx/firmware-imx/Config.in"
+> >   source "package/freescale-imx/imx-sc-firmware/Config.in"
+> >   source "package/freescale-imx/imx-seco/Config.in"
+> > +source "package/freescale-imx/imx-vpu-hantro-daemon/Config.in"
+> >   source "package/freescale-imx/imx-vpu-hantro-vc/Config.in"
+> >   if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 ||
+> BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
+> >   source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
+> > diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/Config.in
+> b/package/freescale-imx/imx-vpu-hantro-daemon/Config.in
+> > new file mode 100644
+> > index 0000000000..2ab9f97081
+> > --- /dev/null
+> > +++ b/package/freescale-imx/imx-vpu-hantro-daemon/Config.in
+> > @@ -0,0 +1,20 @@
+> > +comment "imx-vpu-hantro-daemon needs an i.MX-specific Linux kernel to
+> be built"
+> > +     depends on !BR2_LINUX_KERNEL
+> > +
+> > +comment "imx-vpu-hantro needs an i.MX platform with Hantro VPU"
+>                            -daemon
+>
+> > +     depends on BR2_LINUX_KERNEL
+> > +     depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
+> > +
+> > +config BR2_PACKAGE_IMX_VPU_HANTRO_DAEMON
+> > +     bool "imx-vpu-hantro"
+> > +     depends on BR2_LINUX_KERNEL
+> > +     depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
+> > +     select BR2_PACKAGE_IMX_VPU_HANTRO
+> > +     select BR2_PACKAGE_IMX_VPU_HANTRO_VC if
+> BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
+> > +     help
+> > +       i.MX Hantro V4L2 Daemon specific for the NXP i.MX SoC
+> > +       integrating a Hantro Video Processing Unit (VPU) such as the
+> > +       i.MX8MQ/i.MX8MM/i.MX8MP.
+> > +
+> > +       This library is provided by NXP as-is and doesn't have an
+> > +       upstream.
+> > diff --git
+> a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
+> b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
+> > new file mode 100644
+> > index 0000000000..811f8b21a3
+> > --- /dev/null
+> > +++
+> b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
+> > @@ -0,0 +1,4 @@
+> > +# Locally computed:
+> > +sha256
+> 77e25ad1e1860f0a3983f07d6beb9a04ff32763bacf26db9aefd16559e6eea9b
+> imx-vpu-hantro-daemon-1.1.2.tar.gz
+> > +sha256
+> 35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  COPYING
+> > +sha256
+> 35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  EULA
+> > diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/
+> imx-vpu-hantro-daemon.mk b/package/freescale-imx/imx-vpu-hantro-daemon/
+> imx-vpu-hantro-daemon.mk
+> > new file mode 100644
+> > index 0000000000..8e039a9d94
+> > --- /dev/null
+> > +++ b/package/freescale-imx/imx-vpu-hantro-daemon/
+> imx-vpu-hantro-daemon.mk
+> > @@ -0,0 +1,37 @@
+> >
+> +########################################################################=
+########
+> > +#
+> > +# imx-vpu-hantro-daemon
+> > +#
+> >
+> +########################################################################=
+########
+> > +
+> > +IMX_VPU_HANTRO_DAEMON_VERSION =3D 1.1.2
+> > +IMX_VPU_HANTRO_DAEMON_SITE =3D $(FREESCALE_IMX_SITE)
+> > +IMX_VPU_HANTRO_DAEMON_SOURCE =3D
+> imx-vpu-hantro-daemon-$(IMX_VPU_HANTRO_DAEMON_VERSION).tar.gz
+> > +IMX_VPU_HANTRO_DAEMON_DEPENDENCIES =3D linux
+> > +IMX_VPU_HANTRO_DAEMON_DEPENDENCIES +=3D imx-vpu-hantro
+> > +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP),y)
+> > +IMX_VPU_HANTRO_DAEMON_DEPENDENCIES +=3D imx-vpu-hantro-vc
+> > +endif
+> > +IMX_VPU_HANTRO_DAEMON_INSTALL_STAGING =3D YES
+>
+>   You don't have any commands to install to staging, so is this really
+> correct?
+>
+>   Regards,
+>   Arnout
+>
+> > +
+> > +IMX_VPU_HANTRO_DAEMON_MAKE_ENV =3D \
+> > +     CROSS_COMPILE=3D"$(TARGET_CROSS)" \
+> > +     SDKTARGETSYSROOT=3D$(STAGING_DIR) \
+> > +     LINUX_KERNEL_ROOT=3D$(LINUX_DIR) \
+> > +     CTRLSW_HDRPATH=3D"$(STAGING_DIR)/usr/include" \
+> > +     PLATFORM=3D$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM)
+> > +
+> > +IMX_VPU_HANTRO_DAEMON_LICENSE =3D NXP Semiconductor Software License
+> Agreement
+> > +IMX_VPU_HANTRO_DAEMON_LICENSE_FILES =3D EULA COPYING
+> > +IMX_VPU_HANTRO_DAEMON_REDISTRIBUTE =3D NO
+> > +
+> > +define IMX_VPU_HANTRO_DAEMON_BUILD_CMDS
+> > +     $(MAKE1) -C $(@D) $(IMX_VPU_HANTRO_DAEMON_MAKE_ENV)
+> > +endef
+> > +
+> > +define IMX_VPU_HANTRO_DAEMON_INSTALL_TARGET_CMDS
+> > +     $(IMX_VPU_HANTRO_DAEMON_MAKE_ENV) $(MAKE1) -C $(@D) \
+> > +             DEST_DIR=3D$(TARGET_DIR) libdir=3D/usr/lib install
+> > +endef
+> > +
+> > +$(eval $(generic-package))
+>
+
+--000000000000277b5205e7016935
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi=C2=A0Arnout,<div><br></div><div>It is not required, as =
+it&#39;s not a library. So is it okay?</div><div><br clear=3D"all"><div><di=
+v dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmail_signature">=
+<div dir=3D"ltr"><div><div dir=3D"ltr">Thanks,<div><br></div><div>Chris Dim=
+ich</div><div>Boundary Devices, LLC</div><div><a href=3D"http://www.boundar=
+ydevices.com" target=3D"_blank">www.boundarydevices.com</a>=C2=A0</div><div=
+><span style=3D"font-size:10pt;font-family:Arial,sans-serif;color:rgb(22,41=
+,82)">7 Orchard Road, Suite 102</span><b style=3D"font-size:12.8px"><span s=
+tyle=3D"font-size:10pt;font-family:&quot;MS Gothic&quot;;color:rgb(22,41,82=
+);background-image:initial;background-position:initial;background-repeat:in=
+itial">=EF=BD=9C</span></b><font color=3D"#939598" face=3D"Arial, sans-seri=
+f" style=3D"font-size:12.8px"><span style=3D"font-size:10pt">Lake Forest, C=
+A 92630<br></span></font><img src=3D"https://boundarydevices.com/wp-content=
+/uploads/2014/05/BoundaryDevices_Logo-01.png" width=3D"96" height=3D"24"><b=
+r></div></div></div></div></div></div><br></div></div><br><div class=3D"gma=
+il_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Wed, Aug 24, 2022 at 12:=
+51 AM Arnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@min=
+d.be</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"mar=
+gin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1=
+ex"><br>
+<br>
+On 24/08/2022 04:48, Chris Dimich wrote:<br>
+&gt; i.MX Hantro V4L2 Daemon. Provides the vsidaemon, which is needed for<b=
+r>
+&gt; V4L2 nodes to work.<br>
+&gt; <br>
+&gt; Signed-off-by: Chris Dimich &lt;<a href=3D"mailto:chris.dimich@boundar=
+ydevices.com" target=3D"_blank">chris.dimich@boundarydevices.com</a>&gt;<br=
+>
+&gt; ---<br>
+&gt;=C2=A0 =C2=A0package/freescale-imx/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
+&gt;=C2=A0 =C2=A0.../imx-vpu-hantro-daemon/Config.in=C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0| 20 ++++++++++<br>
+&gt;=C2=A0 =C2=A0.../imx-vpu-hantro-daemon.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 4 ++<br>
+&gt;=C2=A0 =C2=A0.../<a href=3D"http://imx-vpu-hantro-daemon.mk" rel=3D"nor=
+eferrer" target=3D"_blank">imx-vpu-hantro-daemon.mk</a>=C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 37 +++++++++++++++++++<br>
+&gt;=C2=A0 =C2=A04 files changed, 62 insertions(+)<br>
+&gt;=C2=A0 =C2=A0create mode 100644 package/freescale-imx/imx-vpu-hantro-da=
+emon/Config.in<br>
+&gt;=C2=A0 =C2=A0create mode 100644 package/freescale-imx/imx-vpu-hantro-da=
+emon/imx-vpu-hantro-daemon.hash<br>
+&gt;=C2=A0 =C2=A0create mode 100644 package/freescale-imx/imx-vpu-hantro-da=
+emon/<a href=3D"http://imx-vpu-hantro-daemon.mk" rel=3D"noreferrer" target=
+=3D"_blank">imx-vpu-hantro-daemon.mk</a><br>
+&gt; <br>
+&gt; diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/C=
+onfig.in<br>
+&gt; index 4a4237fb42..13d611b696 100644<br>
+&gt; --- a/package/freescale-imx/Config.in<br>
+&gt; +++ b/package/freescale-imx/Config.in<br>
+&gt; @@ -115,6 +115,7 @@ source &quot;package/freescale-imx/imx-vpuwrap/Con=
+fig.in&quot;<br>
+&gt;=C2=A0 =C2=A0source &quot;package/freescale-imx/firmware-imx/Config.in&=
+quot;<br>
+&gt;=C2=A0 =C2=A0source &quot;package/freescale-imx/imx-sc-firmware/Config.=
+in&quot;<br>
+&gt;=C2=A0 =C2=A0source &quot;package/freescale-imx/imx-seco/Config.in&quot=
+;<br>
+&gt; +source &quot;package/freescale-imx/imx-vpu-hantro-daemon/Config.in&qu=
+ot;<br>
+&gt;=C2=A0 =C2=A0source &quot;package/freescale-imx/imx-vpu-hantro-vc/Confi=
+g.in&quot;<br>
+&gt;=C2=A0 =C2=A0if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAG=
+E_FREESCALE_IMX_PLATFORM_IMX53)<br>
+&gt;=C2=A0 =C2=A0source &quot;package/freescale-imx/gpu-amd-bin-mx51/Config=
+.in&quot;<br>
+&gt; diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/Config.in b/p=
+ackage/freescale-imx/imx-vpu-hantro-daemon/Config.in<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..2ab9f97081<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/freescale-imx/imx-vpu-hantro-daemon/Config.in<br>
+&gt; @@ -0,0 +1,20 @@<br>
+&gt; +comment &quot;imx-vpu-hantro-daemon needs an i.MX-specific Linux kern=
+el to be built&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_LINUX_KERNEL<br>
+&gt; +<br>
+&gt; +comment &quot;imx-vpu-hantro needs an i.MX platform with Hantro VPU&q=
+uot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0-daemon<br>
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_LINUX_KERNEL<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HAN=
+TRO<br>
+&gt; +<br>
+&gt; +config BR2_PACKAGE_IMX_VPU_HANTRO_DAEMON<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;imx-vpu-hantro&quot;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_LINUX_KERNEL<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANT=
+RO<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_IMX_VPU_HANTRO<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_IMX_VPU_HANTRO_VC if BR2_PACKA=
+GE_FREESCALE_IMX_PLATFORM_IMX8MP<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0i.MX Hantro V4L2 Daemon specific for the N=
+XP i.MX SoC<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0integrating a Hantro Video Processing Unit=
+ (VPU) such as the<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0i.MX8MQ/i.MX8MM/i.MX8MP.<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0This library is provided by NXP as-is and =
+doesn&#39;t have an<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0upstream.<br>
+&gt; diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantr=
+o-daemon.hash b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-=
+daemon.hash<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..811f8b21a3<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemo=
+n.hash<br>
+&gt; @@ -0,0 +1,4 @@<br>
+&gt; +# Locally computed:<br>
+&gt; +sha256=C2=A0 77e25ad1e1860f0a3983f07d6beb9a04ff32763bacf26db9aefd1655=
+9e6eea9b=C2=A0 imx-vpu-hantro-daemon-1.1.2.tar.gz<br>
+&gt; +sha256=C2=A0 35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea514=
+29ca9a31=C2=A0 COPYING<br>
+&gt; +sha256=C2=A0 35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea514=
+29ca9a31=C2=A0 EULA<br>
+&gt; diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/<a href=3D"ht=
+tp://imx-vpu-hantro-daemon.mk" rel=3D"noreferrer" target=3D"_blank">imx-vpu=
+-hantro-daemon.mk</a> b/package/freescale-imx/imx-vpu-hantro-daemon/<a href=
+=3D"http://imx-vpu-hantro-daemon.mk" rel=3D"noreferrer" target=3D"_blank">i=
+mx-vpu-hantro-daemon.mk</a><br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..8e039a9d94<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/freescale-imx/imx-vpu-hantro-daemon/<a href=3D"http://im=
+x-vpu-hantro-daemon.mk" rel=3D"noreferrer" target=3D"_blank">imx-vpu-hantro=
+-daemon.mk</a><br>
+&gt; @@ -0,0 +1,37 @@<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +#<br>
+&gt; +# imx-vpu-hantro-daemon<br>
+&gt; +#<br>
+&gt; +#####################################################################=
+###########<br>
+&gt; +<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_VERSION =3D 1.1.2<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_SITE =3D $(FREESCALE_IMX_SITE)<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_SOURCE =3D imx-vpu-hantro-daemon-$(IMX_VPU_HANT=
+RO_DAEMON_VERSION).tar.gz<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_DEPENDENCIES =3D linux<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_DEPENDENCIES +=3D imx-vpu-hantro<br>
+&gt; +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP),y)<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_DEPENDENCIES +=3D imx-vpu-hantro-vc<br>
+&gt; +endif<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_INSTALL_STAGING =3D YES<br>
+<br>
+=C2=A0 You don&#39;t have any commands to install to staging, so is this re=
+ally correct?<br>
+<br>
+=C2=A0 Regards,<br>
+=C2=A0 Arnout<br>
+<br>
+&gt; +<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_MAKE_ENV =3D \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0CROSS_COMPILE=3D&quot;$(TARGET_CROSS)&quot; \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0SDKTARGETSYSROOT=3D$(STAGING_DIR) \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0LINUX_KERNEL_ROOT=3D$(LINUX_DIR) \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0CTRLSW_HDRPATH=3D&quot;$(STAGING_DIR)/usr/include=
+&quot; \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0PLATFORM=3D$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM)<=
+br>
+&gt; +<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_LICENSE =3D NXP Semiconductor Software License =
+Agreement<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_LICENSE_FILES =3D EULA COPYING<br>
+&gt; +IMX_VPU_HANTRO_DAEMON_REDISTRIBUTE =3D NO<br>
+&gt; +<br>
+&gt; +define IMX_VPU_HANTRO_DAEMON_BUILD_CMDS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(MAKE1) -C $(@D) $(IMX_VPU_HANTRO_DAEMON_MAKE_EN=
+V)<br>
+&gt; +endef<br>
+&gt; +<br>
+&gt; +define IMX_VPU_HANTRO_DAEMON_INSTALL_TARGET_CMDS<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0$(IMX_VPU_HANTRO_DAEMON_MAKE_ENV) $(MAKE1) -C $(@=
+D) \<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0DEST_DIR=3D$(TARGET_D=
+IR) libdir=3D/usr/lib install<br>
+&gt; +endef<br>
+&gt; +<br>
+&gt; +$(eval $(generic-package))<br>
+</blockquote></div>
+
+--000000000000277b5205e7016935--
+
+--===============6163963394163739775==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6163963394163739775==--
