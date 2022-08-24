@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4A2AC00140
-	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 10:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D8FBC32796
+	for <buildroot@archiver.kernel.org>; Wed, 24 Aug 2022 10:10:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 54C4940B00;
-	Wed, 24 Aug 2022 10:10:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54C4940B00
+	by smtp2.osuosl.org (Postfix) with ESMTP id B993740B54;
+	Wed, 24 Aug 2022 10:10:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B993740B54
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JRC8MfOhwdRR; Wed, 24 Aug 2022 10:10:08 +0000 (UTC)
+	with ESMTP id mYdwPMeSCmBo; Wed, 24 Aug 2022 10:10:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6315240160;
-	Wed, 24 Aug 2022 10:10:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6315240160
+	by smtp2.osuosl.org (Postfix) with ESMTP id 94E7A40242;
+	Wed, 24 Aug 2022 10:10:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94E7A40242
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C3241BF592
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:09:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E21E61BF592
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7CF360E2C
- for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:09:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7CF360E2C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3503B605E8
+ for <buildroot@lists.busybox.net>; Wed, 24 Aug 2022 10:09:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3503B605E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K0emtRnOnKyl for <buildroot@lists.busybox.net>;
+ with ESMTP id xqrOa1X7rjiy for <buildroot@lists.busybox.net>;
  Wed, 24 Aug 2022 10:09:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1CC5260E0B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E6B460601
  for <buildroot@buildroot.org>; Wed, 24 Aug 2022 10:09:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CC5260E0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E6B460601
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8670187C6F; Wed, 24 Aug 2022 09:55:03 +0000 (UTC)
+ id 7B7DC87C6E; Wed, 24 Aug 2022 09:55:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 24 Aug 2022 12:08:51 +0200
+Date: Wed, 24 Aug 2022 12:07:44 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f0520470951528eb07710338e7427a1fd0159b48
-X-Git-Newrev: 8bf3d6a1b7f1584344d39e14f6e275cf14b1b4fa
+X-Git-Oldrev: bf85b8e267b5fbbf817408d93435504ab458c01e
+X-Git-Newrev: f0520470951528eb07710338e7427a1fd0159b48
 X-Patchwork-Hint: ignore
-Message-Id: <20220824095503.8670187C6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libinput: enable
- installation of python tools
+Message-Id: <20220824095503.7B7DC87C6E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-libevdev: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,72 +64,106 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bf3d6a1b7f1584344d39e14f6e275cf14b1b4fa
+commit: https://git.buildroot.net/buildroot/commit/?id=f0520470951528eb07710338e7427a1fd0159b48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now that we have a python-libevdev package, let's allow the
-installation of the libinput Python tools, using a new
-BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS option.
+python-libevdev is needed for libinput replay command:
+
+$ libinput replay recording.yml
+Error: No module named 'libevdev'
+One or more python modules are missing. Please install those modules and re-run this tool.
+
+Indeed only libinput-replay tool is a python script
+(like libinput-analyze-recording, libinput-measure-fuzz...)
+
+python-libevdev itself requires a kernel built with
+CONFIG_INPUT_UINPUT option enabled, enable this option if a kernel is
+built by Buildroot.
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libinput/Config.in   | 22 ++++++++++++++++++++++
- package/libinput/libinput.mk |  2 ++
- 2 files changed, 24 insertions(+)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-libevdev/Config.in            |  7 +++++++
+ package/python-libevdev/python-libevdev.hash |  5 +++++
+ package/python-libevdev/python-libevdev.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
 
-diff --git a/package/libinput/Config.in b/package/libinput/Config.in
-index 14e4e70f96..1a8fcc7ed4 100644
---- a/package/libinput/Config.in
-+++ b/package/libinput/Config.in
-@@ -13,5 +13,27 @@ config BR2_PACKAGE_LIBINPUT
- 
- 	  http://freedesktop.org/wiki/Software/libinput/
- 
-+if BR2_PACKAGE_LIBINPUT
-+
-+config BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS
-+	bool "install python tools "
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_LIBEVDEV # runtime
-+	select BR2_PACKAGE_PYTHON_PYUDEV # runtime
-+	select BR2_PACKAGE_PYTHON_PYYAML # runtime
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 55b23ebef2..07d719984a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2584,6 +2584,7 @@ F:	package/ogre/
+ F:	package/openpowerlink/
+ F:	package/physfs/
+ F:	package/piglit/
++F:	package/python-libevdev/
+ F:	package/qemu/
+ F:	package/solarus/
+ F:	package/stress-ng/
+diff --git a/package/Config.in b/package/Config.in
+index 802fb5da30..4bfc12d1d1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1095,6 +1095,7 @@ menu "External python modules"
+ 	source "package/python-kiwisolver/Config.in"
+ 	source "package/python-lark/Config.in"
+ 	source "package/python-libconfig/Config.in"
++	source "package/python-libevdev/Config.in"
+ 	source "package/python-libusb1/Config.in"
+ 	source "package/python-lmdb/Config.in"
+ 	source "package/python-lockfile/Config.in"
+diff --git a/package/python-libevdev/Config.in b/package/python-libevdev/Config.in
+new file mode 100644
+index 0000000000..2d6aa49ce0
+--- /dev/null
++++ b/package/python-libevdev/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_LIBEVDEV
++	bool "python-libevdev"
++	select BR2_PACKAGE_LIBEVDEV # runtime
 +	help
-+	  Install python tools:
-+	  libinput-analyze-per-slot-delta,
-+	  libinput-analyze-recording,
-+	  libinput-analyze-touch-down-state,
-+	  libinput-measure-fuzz,
-+	  libinput-measure-touchpad-pressure,
-+	  libinput-measure-touchpad-size,
-+	  libinput-measure-touchpad-tap,
-+	  libinput-measure-touch-size,
-+	  libinput-replay
++	  Python wrapper for libevdev.
 +
-+endif
++	  https://gitlab.freedesktop.org/libevdev/python-libevdev
+diff --git a/package/python-libevdev/python-libevdev.hash b/package/python-libevdev/python-libevdev.hash
+new file mode 100644
+index 0000000000..2799078cc8
+--- /dev/null
++++ b/package/python-libevdev/python-libevdev.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/libevdev/json
++md5  34b48098c1fba26de79a0d67a17a588a  libevdev-0.11.tar.gz
++sha256  e9ca006a4df2488a60bd9a740011ee948d81904be2364f017e560169508f560f  libevdev-0.11.tar.gz
++# Locally computed sha256 checksums
++sha256  a547b196da4e5bb9588a6e24f1f36ae9e2349ca5375e2cf9c315186e237d9f6d  COPYING
+diff --git a/package/python-libevdev/python-libevdev.mk b/package/python-libevdev/python-libevdev.mk
+new file mode 100644
+index 0000000000..e5256064c9
+--- /dev/null
++++ b/package/python-libevdev/python-libevdev.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# python-libevdev
++#
++################################################################################
 +
- comment "libinput needs udev /dev management"
- 	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 1529411355..3454907bab 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -30,6 +30,7 @@ else
- LIBINPUT_CONF_OPTS += -Ddebug-gui=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS),)
- LIBINPUT_PYTHON_TOOLS = libinput-analyze-per-slot-delta \
- 	libinput-analyze-recording \
- 	libinput-analyze-touch-down-state \
-@@ -46,5 +47,6 @@ define LIBINPUT_REMOVE_UNNEEDED_FILES
- 	)
- endef
- LIBINPUT_POST_INSTALL_TARGET_HOOKS += LIBINPUT_REMOVE_UNNEEDED_FILES
-+endif
- 
- $(eval $(meson-package))
++PYTHON_LIBEVDEV_VERSION = 0.11
++PYTHON_LIBEVDEV_SOURCE = libevdev-$(PYTHON_LIBEVDEV_VERSION).tar.gz
++PYTHON_LIBEVDEV_SITE = https://files.pythonhosted.org/packages/b0/49/2fe589ce1fa6ca0f05ae0b1717923650f2cc6eec6307c71fbc7789738902
++PYTHON_LIBEVDEV_SETUP_TYPE = setuptools
++PYTHON_LIBEVDEV_LICENSE = MIT
++PYTHON_LIBEVDEV_LICENSE_FILES = COPYING
++
++# Requires a kernel built with user level driver support (uinput).
++define PYTHON_LIBEVDEV_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INPUT_MISC)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INPUT_UINPUT)
++endef
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
