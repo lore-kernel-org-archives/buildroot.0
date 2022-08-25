@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71FC8C28D13
-	for <buildroot@archiver.kernel.org>; Thu, 25 Aug 2022 15:23:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B0A9C28D13
+	for <buildroot@archiver.kernel.org>; Thu, 25 Aug 2022 15:26:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB3A383E35;
-	Thu, 25 Aug 2022 15:23:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB3A383E35
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A6A783E18;
+	Thu, 25 Aug 2022 15:26:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A6A783E18
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hNLc2E_J3OJC; Thu, 25 Aug 2022 15:23:28 +0000 (UTC)
+	with ESMTP id FQ7EZaSk05Bw; Thu, 25 Aug 2022 15:26:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 046DA83E2E;
-	Thu, 25 Aug 2022 15:23:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 046DA83E2E
+	by smtp1.osuosl.org (Postfix) with ESMTP id A876983005;
+	Thu, 25 Aug 2022 15:26:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A876983005
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F9421BF36D
- for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 15:23:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8EBC91BF36D
+ for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 15:26:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36010408BE
- for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 15:23:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36010408BE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6822E418DE
+ for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 15:26:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6822E418DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TRx5BtNg5NBG for <buildroot@lists.busybox.net>;
- Thu, 25 Aug 2022 15:23:24 +0000 (UTC)
+ with ESMTP id 5xUdxK9rImbD for <buildroot@lists.busybox.net>;
+ Thu, 25 Aug 2022 15:26:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F217340425
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com
- [IPv6:2607:f8b0:4864:20::443])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F217340425
- for <buildroot@buildroot.org>; Thu, 25 Aug 2022 15:23:23 +0000 (UTC)
-Received: by mail-pf1-x443.google.com with SMTP id y127so17138008pfy.5
- for <buildroot@buildroot.org>; Thu, 25 Aug 2022 08:23:23 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F295418D7
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com
+ [IPv6:2607:f8b0:4864:20::644])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3F295418D7
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 15:26:31 +0000 (UTC)
+Received: by mail-pl1-x644.google.com with SMTP id x23so18821075pll.7
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 08:26:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=v1UCEaXpy2ZpMx0sP7tPkZtoeDiKesBggTG6xtoZVQk=;
- b=NTGZPDxHTdDfBAatJLW8/cgHeJVysDiMZ0p9b++t594NeNP19wD2oUYWL4OALBqtuG
- b4mqlOm6pEO/PgZQadvmBVajK8BnvUTMNCO9qUegc+2PJLpE4hnKqBJLuYz+iJI5Y5fO
- nNYx5CAJYhCDRC7I0vv/rkN0QCvr3AbL02w/eypQpbCwZDYpSW+bVbzhiGU9E6YbteCb
- GccVAuR3KMpPh9tmyBZd6Bd5AmYEB08a3VZY1VTTX46DXXvNI4B3LwWQ6YKYaICaZ7g3
- r2jNQRfPtovsiO9IynRNyWeL+tjGgsu2J+Ar+6fsgdLPEIO5CGOzL2uu5XfNcXLReue3
- iAxw==
-X-Gm-Message-State: ACgBeo0HToEQFWlxeubsKYTmbIp2iC8OCzTFtsIk6udJd8bwFY23woNv
- ZOn5kcvKP9oDTmg1yNv7uzbbGieQ9Qa25Q==
-X-Google-Smtp-Source: AA6agR7lZctdZryH5HWaU/g7XqK+2X3DSk8SDuTIomMfF1Zrk6HHmHeIay1OM0iJd65ZMfedXXyHzQ==
-X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id
- h5-20020a056a00218500b0052072766570mr4718707pfi.84.1661441002870; 
- Thu, 25 Aug 2022 08:23:22 -0700 (PDT)
-Received: from smartcross-dev.lan ([2605:52c0:2:6e3::])
+ bh=GrW8kpEJhV1W+DOsyGGN7iAi/bzkL/7Ejkh2H/n3ulY=;
+ b=KbWRhPTsWYmCucihl6qlzi2hmGG5TIUuFNt8gSB3WcN/PAPtl6gAjts8ro6JIF1BgR
+ YFFK4/elRhgk9VlilW0H2Jd2hzTR9N8CrsLKGlUXzEv/bksg5ZBDqgRpxRqLWnras74M
+ e9Zi9d3A7Isk8YMUyO8oPYJZHPPYFz5Jc56+3WYSUq/oLKCEGN2Qh7Gt7/RCOd95CpoQ
+ S75KK/r5Zo3LZ101MYOXWCWTkzb9bZr7SRAhrBtppcCa8lyR+SyVI25RHBm4EriCsm9U
+ zWuE278z3h85uuJu1PwI8s8lwwF5+k6cMPvid1dy5EYzRVE3Lb1MiFEGBtu65CNpLauk
+ adtA==
+X-Gm-Message-State: ACgBeo0aQamS7XaHK8y1I1a4K74iceeqa5+DqKpwXZByflCnbd2SlueI
+ RS7t8bfhIRoh6MX2QYeXz2mH+dZzmisD6g==
+X-Google-Smtp-Source: AA6agR7DuWDsxXVJS2NnayfwXF0dr4ZIvDpWCbr25UiKZDoSS2zX84fiXmw7YwxMBaCRRswofzZthg==
+X-Received: by 2002:a17:90b:3e8d:b0:1fa:facf:672f with SMTP id
+ rj13-20020a17090b3e8d00b001fafacf672fmr5377662pjb.0.1661441190229; 
+ Thu, 25 Aug 2022 08:26:30 -0700 (PDT)
+Received: from smartcross-dev.lan ([2605:52c0:2:32c::])
  by smtp.gmail.com with ESMTPSA id
- s10-20020a170902ea0a00b00172a6cf0a84sm15023523plg.124.2022.08.25.08.23.19
+ j6-20020a170902758600b00172a2a41064sm14598427pll.298.2022.08.25.08.26.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Aug 2022 08:23:21 -0700 (PDT)
+ Thu, 25 Aug 2022 08:26:29 -0700 (PDT)
 From: Andrea Daoud <andreadaoud6@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 25 Aug 2022 23:23:15 +0800
-Message-Id: <20220825152315.146271-1-andreadaoud6@gmail.com>
+Date: Thu, 25 Aug 2022 23:26:09 +0800
+Message-Id: <20220825152609.158953-1-andreadaoud6@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=v1UCEaXpy2ZpMx0sP7tPkZtoeDiKesBggTG6xtoZVQk=;
- b=Uya8K2029wGf8jWOQ0NMqtMxid/Lcr+mvsplGeymrd0mt4LpCd0ddlSs8WzM6q1C16
- ZuAHSyBRDINhH6mtj0hb2eFAUsjWrC8jpqpHjBfIZ6tGZ4tEf5Fvaent8t2Tk/v0CZWk
- CFN8G53fv4CuiTwm2sNybAHgp1NP241R5NSqUdlJcApf/IkXHpL9BEZFTUlMfCmWeXQV
- gPYafgJCAPjXFAvgk9Ej+NjsxYLX5tS6OAkh+sl3eixeLVVQ1Loy/CnufKn5YaophV4y
- yKO3RlmF5HKN/P3CT6elIIoAXtpRo1ggG85DpC3cRfFew/vigBKxzavyyA1HLdhNjZbb
- CJxA==
+ bh=GrW8kpEJhV1W+DOsyGGN7iAi/bzkL/7Ejkh2H/n3ulY=;
+ b=U47ixYFKetwTGoPcKXz77B9E1UPJCEFeK8lP3/R+lR3g/i7Ih6nLuPsiEP+nLUTl2W
+ +31gCpNuhguKRTUrSCjN/XyweRGK0oT7/NhbuXGJhdv8KXtM3CoZwUdjgzqfm3nvn22o
+ VnwWy15znOmHbyCOc+83qxM7JIWf+M3+/tqsl4eQdogzJChPBcqjHqEfo06ihdxAMide
+ IvOjQO0l75Kgi/et1eNqDifKAewRfg/a5HMAkebuFlH0kHOoOMksIipzfrvCd5GwDsaZ
+ 2PYeZOzU/vx1O6rkpHtsS4uSelx2vsbwRqkiLADBXznUTPsvHmicdmZB1xhSipuQaG0s
+ tXfw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Uya8K202
+ header.a=rsa-sha256 header.s=20210112 header.b=U47ixYFK
 Subject: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
  bluez5_utils-headers}: bump to version 5.65
 X-BeenThere: buildroot@buildroot.org
@@ -125,13 +125,13 @@ index 2f3a290ea8..565511120f 100644
  BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
  BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
 diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 0324dd2d77..9b2c51f467 100644
+index 0324dd2d77..e0c9f3cdb9 100644
 --- a/package/bluez5_utils/bluez5_utils.hash
 +++ b/package/bluez5_utils/bluez5_utils.hash
 @@ -1,5 +1,5 @@
  # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
 -sha256  ae437e65b6b3070c198bc5b0109fe9cdeb9eaa387380e2072f9de65fe8a1de34  bluez-5.64.tar.xz
-+sha256  2565a4d48354b576e6ad92e25b54ed66808296581c8abb80587051f9993d96d4  bluez-5.64.tar.xz
++sha256  2565a4d48354b576e6ad92e25b54ed66808296581c8abb80587051f9993d96d4  bluez-5.65.tar.xz
  # Locally computed
  sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
