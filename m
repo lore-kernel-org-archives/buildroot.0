@@ -1,87 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FFDEC04AA5
-	for <buildroot@archiver.kernel.org>; Thu, 25 Aug 2022 07:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70384C32774
+	for <buildroot@archiver.kernel.org>; Thu, 25 Aug 2022 07:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 777774187C;
-	Thu, 25 Aug 2022 07:40:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 777774187C
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBBC781C67;
+	Thu, 25 Aug 2022 07:53:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBBC781C67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NEOzV-AMgpaD; Thu, 25 Aug 2022 07:40:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id J77KPaDardw7; Thu, 25 Aug 2022 07:53:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93A9241858;
-	Thu, 25 Aug 2022 07:40:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93A9241858
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DFE981397;
+	Thu, 25 Aug 2022 07:53:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DFE981397
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B11911BF83B
- for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 07:40:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6B8171BF83B
+ for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 07:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BA3583147
- for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 07:40:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BA3583147
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4CD7B812F3
+ for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 07:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CD7B812F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HoXZ1nLpqszA for <buildroot@lists.busybox.net>;
- Thu, 25 Aug 2022 07:40:02 +0000 (UTC)
+ with ESMTP id lGsmSZyLTRCE for <buildroot@lists.busybox.net>;
+ Thu, 25 Aug 2022 07:53:40 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82F0483126
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 82F0483126
- for <buildroot@buildroot.org>; Thu, 25 Aug 2022 07:40:01 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id gb36so37832284ejc.10
- for <buildroot@buildroot.org>; Thu, 25 Aug 2022 00:40:01 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB826812F1
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DB826812F1
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 07:53:39 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id r4so25003249edi.8
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 00:53:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=BvxjcYf7SW8oSvfeUaBwAEXubmtJalUR4kiMBl/f3uw=;
- b=dSYjUuVQM5pKnk80rKt44ToHuxeBXia8QK7iGfuPVPVyK6cByJZlIlWaesqBH7xUIr
- YE8EgbPFYeKLuly/+bMOH1TceC7TQRx3XXXiIDF/Vk22Ek0gwTMG7tx8b5yxOWzYtMWa
- B+x5UNDhNDqDEFS3nxxn1wSneXVyPBgTV33jFIKylQsZc9DTX8T+r24R6QEIEjem8yc8
- ZgIMH3lGrff6wi6n6H2Why5zFeB+pTTxnMPVIj+pX6MbsZK/cOLqAPU78HjRi4PS/Lqd
- bTJpWsZwl46u5bklu+rAkz78OaoKIEs2wgFvZacc5fxJmmDrwhJag30OwN1O8M0WW3p7
- I49w==
-X-Gm-Message-State: ACgBeo1GaRMCrbTC3lM/WUTVpc1hwZVIr3PmGyoptVseLG/MiGLeTUrV
- TfjTyuD+lzxsb95UnJD0wobVhcrFx2/IZg==
-X-Google-Smtp-Source: AA6agR5ivCgjG518VIcN/ND49ELt6o4L7QNyunucTn6mvI+SeGSZwVzHfi32L98A/AgM2Q5k2Lb3Ig==
-X-Received: by 2002:a17:907:6818:b0:730:9b90:84b7 with SMTP id
- qz24-20020a170907681800b007309b9084b7mr1596206ejc.643.1661413198792; 
- Thu, 25 Aug 2022 00:39:58 -0700 (PDT)
+ bh=903Vc4yFYTb9AybPEO1uAJOzcs2JD2r8mwR1T3J4pxY=;
+ b=2fEjV2iirk+KbetvPOpoPSR+cTkevymba82ySMf3iMQ4ybQT3h5cZlOXWSLiJ5tLel
+ 1dF77xziTNQ3L4IKKle2Z/rO5hqQB5YJsMog4yL//TB7aggqGQHuopT+7kKxSjPLIBwy
+ TPz41GPQ6RC2jVVeg1HW1t3xY2EN1gUqM4cqmiAewpWlVEdsQLYGK82aoP1I0RUdAHpg
+ hupNvP3xehfJeYCNIqUMLciDtEc9S8bbsRyerFrDC5irbGYdpoT/1Y//K3n4HRmlRc/c
+ yOFhxWBPQqya8P0pDqZ+fdU7ja6f3eytrYaF91z07UOfoiAcaa1+lZe70sk2EuGuIUPH
+ VJsg==
+X-Gm-Message-State: ACgBeo24gxuw7hWMgLKpXYBZJ/plRUGmPfCzNaXwEOdkP9Qdu1MFm8u/
+ k0aTifrRCAfECNWmpG+W2+tSu8cRqjVqZw==
+X-Google-Smtp-Source: AA6agR7fVJn6BPuAM1Cf0vZieDr0aly2aOPWUVnDDGQPiCha4VBceY0LHb96erNg4BNfWkYyJ8VVbw==
+X-Received: by 2002:a05:6402:530c:b0:43b:c6bf:a496 with SMTP id
+ eo12-20020a056402530c00b0043bc6bfa496mr2124053edb.282.1661414017507; 
+ Thu, 25 Aug 2022 00:53:37 -0700 (PDT)
 Received: from jesse-ubuntu22.display.esterline.net ([91.183.156.252])
  by smtp.gmail.com with ESMTPSA id
- 3-20020a170906310300b0073d65a95161sm2040746ejx.222.2022.08.25.00.39.57
+ u16-20020aa7d0d0000000b004477c582ffdsm2385130edo.80.2022.08.25.00.53.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Aug 2022 00:39:58 -0700 (PDT)
+ Thu, 25 Aug 2022 00:53:36 -0700 (PDT)
 From: Jesse Van Gavere <jesseevg@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 25 Aug 2022 09:39:51 +0200
-Message-Id: <20220825073951.3920874-1-jesseevg@gmail.com>
+Date: Thu, 25 Aug 2022 09:53:34 +0200
+Message-Id: <20220825075334.3921399-1-jesseevg@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=BvxjcYf7SW8oSvfeUaBwAEXubmtJalUR4kiMBl/f3uw=;
- b=mPTWrD9cUWur1cSroXb0ocFqqHU0w4G1YQfA1Z7hBoNXF2lRIhcE5jSnXGxQnFq6k7
- coqsbU+AU0+92qnA+/cjxZ8PesgBsAq6z/IseIlG+rnbnoXa4g4dKx+OG2L5euFjtelP
- quYtE5UVTsR0pvFkOyE6YyhVan0OxwlKX1MSO8g2q0yB8yPPL/TDOEHze8ZAQYcQaSGk
- PoRbbgu22rdmcN8NLJ2hk6iQ6ma6SHaIvpiC0k6J+AwnaTzgV2Rip4f5ueI6R3pRQ/t+
- Ds9OpROoi4U/dD620RMf7XuAtexGFaxQ6F4N+9WiCc1UINcNutl2ibmOwNdtNo1oLfg8
- H3AQ==
+ bh=903Vc4yFYTb9AybPEO1uAJOzcs2JD2r8mwR1T3J4pxY=;
+ b=T/e8LPyi/CCqVnTwkvr1SaN+d3hRamNOkAUTELwCw3KOhAm8haIB6BKkP0qFFFFBU4
+ styCVp+jxqUax1XbOe2PC1nYYJZS3OTyFFsg+E0M7jF8Eve8NDcGlbpjMZpbeaemPfIj
+ E71oT2p/IUYg60D8HeGqiMxwfdhwLCD2I8AOUjN7IOvHb0GLuzyJ9LhCThXfodXr9/m9
+ 3Gdky/kDZ9yEWF4M5klhH+GqMnLKcT0Ya8n00NIKfAF/cSE6ff01e0bxbj1pS+uiHtrb
+ nfV+ElXRALWx9ri42BmQUW8dd9SdXYQY9T/m+xNPAFXFJ8wRc7tgNSXU5EFLWhCbqiDs
+ RnSg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mPTWrD9c
-Subject: [Buildroot] [PATCH 1/1] package/qt6/qt6base: extend qt6
- configuration
+ header.a=rsa-sha256 header.s=20210112 header.b=T/e8LPyi
+Subject: [Buildroot] [PATCH 2/2] package/qt6: add QT6_GL_AVAILABLE variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,681 +99,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This will bring the qt6base functionality mostly on par with the qt5base
-package, building the package has been tested to the best of my ability
-and went without error as far as I can test.
-One bug to be noted is that for the GUI with fontconfig without harfbuzz
-support, this will produce incorrectly rendered text for version 6.3.1,
-see https://bugreports.qt.io/browse/QTBUG-101430
-I have however already verified that 6.3.2 and 6.4.0 will fix this issue
-so I've decided not to add harfbuzz as a fontconfig dependency as a
-version bump (which should be soon) will fix it.
-Also add the version hashes for qt6base.
+My apologies, I forgot to add this variable in the previous patch, it
+is part of the qt6 extending as needed for GUI/OpenGL functionality
 
 Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
 ---
- package/qt6/qt6base/Config.in    | 280 ++++++++++++++++++++++++++
- package/qt6/qt6base/qt6base.hash |   9 +
- package/qt6/qt6base/qt6base.mk   | 329 ++++++++++++++++++++++++++++++-
- 3 files changed, 616 insertions(+), 2 deletions(-)
- create mode 100644 package/qt6/qt6base/qt6base.hash
+ package/qt6/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index a489ce39fc..244e7d6760 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -14,3 +14,283 @@ config BR2_PACKAGE_QT6BASE
- 	  QtWidgets, etc.
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 4b2b9a1174..32f32eb162 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -12,6 +12,11 @@ config BR2_PACKAGE_QT6_ARCH_SUPPORTS
+ 	default y if BR2_sparc64
+ 	depends on BR2_USE_MMU
  
- 	  http://qt.io
-+
-+if BR2_PACKAGE_QT6BASE
-+
-+config BR2_PACKAGE_QT6BASE_CUSTOM_CONF_OPTS
-+	string "Custom configuration options"
-+	help
-+	  Define custom qt6 configuration options which can be used to
-+	  enable or disable options not managed by buildroot. These
-+	  options are appended to the ones generated by buildroot and
-+	  passed to qt6base during configuration.
-+
-+	  Use cmake style '-Doption_name=ON' or -Doption_name=OFF'.
-+
-+config BR2_PACKAGE_QT6BASE_EXAMPLES
-+	bool "Compile and install examples (with code)"
-+	select BR2_PACKAGE_QT6BASE_NETWORK
-+	select BR2_PACKAGE_QT6BASE_XML
-+	help
-+	  If unsure, say N.
-+
-+config BR2_PACKAGE_QT6BASE_NETWORK
-+	bool "network module"
-+	help
-+	  This options enables the Qt6Network library.
-+
-+config BR2_PACKAGE_QT6BASE_CONCURRENT
-+	bool "concurrent module"
-+	help
-+	  This options enables the Qt6Concurrent library.
-+
-+config BR2_PACKAGE_QT6BASE_SQL
-+	bool "sql module"
-+	help
-+	  This options enables the Qt6Sql library.
-+
-+if BR2_PACKAGE_QT6BASE_SQL
-+config BR2_PACKAGE_QT6BASE_MYSQL
-+	bool "MySQL Plugin"
-+	depends on BR2_USE_MMU # mysql
-+	select BR2_PACKAGE_MYSQL
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  Build MySQL plugin
-+	  If unsure, say n.
-+
-+config BR2_PACKAGE_QT6BASE_PSQL
-+	bool "PostgreSQL Plugin"
-+	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR # postgresql
-+	select BR2_PACKAGE_POSTGRESQL
-+	help
-+	  Build PostgreSQL plugin
-+	  If unsure, say n.
-+
-+comment "PostgreSQL plugin needs a toolchain w/ wchar, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+
-+choice
-+	prompt "SQLite 3 support"
-+	default BR2_PACKAGE_QT6BASE_SQLITE_NONE
-+	help
-+	  Select SQLite support.
-+
-+config BR2_PACKAGE_QT6BASE_SQLITE_NONE
-+	bool "No sqlite support"
-+	help
-+	  Do not compile any kind of SQLite support.
-+
-+config BR2_PACKAGE_QT6BASE_SQLITE_QT
-+	bool "Qt SQLite"
-+	help
-+	  Use Qt bundled SQLite support.
-+
-+config BR2_PACKAGE_QT6BASE_SQLITE_SYSTEM
-+	bool "System SQLite"
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA
-+	help
-+	  Use system SQLite.
-+
-+endchoice
-+
-+endif
-+
-+config BR2_PACKAGE_QT6BASE_TEST
-+	bool "test module"
-+	help
-+	  This options enables the Qt6Test library.
-+
-+config BR2_PACKAGE_QT6BASE_XML
-+	bool "XML module"
-+	help
-+	  This options enables the Qt6Xml library.
-+
-+config BR2_PACKAGE_QT6BASE_GUI
-+	bool "gui module"
-+	select BR2_PACKAGE_FREETYPE
-+	# At least one graphic backend must be enabled, so enable
-+	# linuxfb if nothing is enabled.
-+	select BR2_PACKAGE_QT6BASE_LINUXFB if \
-+	       !BR2_PACKAGE_QT6BASE_DIRECTFB && \
-+	       !BR2_PACKAGE_QT6BASE_XCB && \
-+	       !BR2_PACKAGE_QT6BASE_EGLFS
-+	help
-+	  This option enables the Qt6Gui library.
-+
-+if BR2_PACKAGE_QT6BASE_GUI
-+
-+config BR2_PACKAGE_QT6BASE_WIDGETS
-+	bool "widgets module"
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_QT6BASE_XCB
-+	help
-+	  This option enables the Qt6Widgets library.
-+
-+comment "OpenGL support needs an OpenGL-capable backend"
-+	depends on !BR2_PACKAGE_QT6_GL_AVAILABLE
-+
-+config BR2_PACKAGE_QT6BASE_OPENGL
-+	bool "OpenGL support"
-+	depends on BR2_PACKAGE_QT6_GL_AVAILABLE
-+	help
-+	  This option enables OpenGL support.
-+
-+if BR2_PACKAGE_QT6BASE_OPENGL
-+
-+choice
-+	prompt "OpenGL API"
-+	help
-+	  Select OpenGL API.
-+
-+config BR2_PACKAGE_QT6BASE_OPENGL_DESKTOP
-+	bool "Desktop OpenGL"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	help
-+	  Use desktop OpenGL.
-+
-+config BR2_PACKAGE_QT6BASE_OPENGL_ES2
-+	bool "OpenGL ES 2.0+"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	help
-+	  Use OpenGL ES 2.0 and later versions.
-+
-+endchoice
-+
-+config BR2_PACKAGE_QT6BASE_OPENGL_LIB
-+	bool "opengl module"
-+	select BR2_PACKAGE_QT6BASE_WIDGETS
-+	help
-+	  This option enables the Qt6OpenGL library. This library
-+	  includes OpenGL support classes provided to ease porting
-+	  from Qt 4.x.
-+
-+endif
-+
-+config BR2_PACKAGE_QT6BASE_LINUXFB
-+	bool "linuxfb support"
-+
-+config BR2_PACKAGE_QT6BASE_DIRECTFB
-+	bool "directfb support"
-+	depends on BR2_PACKAGE_DIRECTFB
-+
-+comment "directfb backend available if directfb is enabled"
-+	depends on !BR2_PACKAGE_DIRECTFB
-+
-+config BR2_PACKAGE_QT6BASE_XCB
-+	bool "X.org XCB support"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XCB_UTIL_IMAGE
-+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
-+	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
-+	select BR2_PACKAGE_XCB_UTIL_WM
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
-+comment "X.org XCB backend available if X.org is enabled"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+config BR2_PACKAGE_QT6BASE_EGLFS
-+	bool "eglfs support"
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_QT6_GL_AVAILABLE
-+	select BR2_PACKAGE_QT6BASE_OPENGL
-+
-+comment "eglfs backend available if OpenGL and EGL are enabled"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_QT6_GL_AVAILABLE
-+
-+config BR2_PACKAGE_QT6BASE_DEFAULT_QPA
-+	string "Default graphical platform"
-+	help
-+	  Choose the default platform abstraction to use for graphical
-+	  applications (e.g xcb, linuxfb, eglfs, ...). If this is
-+	  empty, the default for your architecture will be used
-+	  (usually this is eglfs).
-+
-+	  You can get a list of supported platforms by running a Qt
-+	  application with the option "-platform help" on your
-+	  target. You can choose a different platform at runtime with
-+	  the -platform option.
-+
-+config BR2_PACKAGE_QT6BASE_PRINTSUPPORT
-+	depends on BR2_PACKAGE_QT6BASE_WIDGETS
-+	def_bool y
-+
-+config BR2_PACKAGE_QT6BASE_FONTCONFIG
-+	bool "fontconfig support"
-+	select BR2_PACKAGE_FONTCONFIG
-+	help
-+	  This option enables Fontconfig and Freetype support using
-+	  the system fontconfig and freetype2 libraries.
-+
-+config BR2_PACKAGE_QT6BASE_HARFBUZZ
-+	bool "harfbuzz support"
-+	select BR2_PACKAGE_HARFBUZZ if \
-+		BR2_TOOLCHAIN_HAS_SYNC_4 && \
-+		BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	help
-+	  This option enables HarfBuzz support (either system harfbuzz
-+	  if the toolchain supports __sync for 4 bytes, or the qt
-+	  provided one which avoids this dependency by using QAtomic).
-+
-+config BR2_PACKAGE_QT6BASE_GIF
-+	bool "GIF support"
-+	help
-+	  This compiles and installs the plugin for GIF reading support.
-+
-+config BR2_PACKAGE_QT6BASE_JPEG
-+	bool "JPEG support"
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  This option enables JPEG support using the system libjpeg
-+	  library.
-+
-+config BR2_PACKAGE_QT6BASE_PNG
-+	bool "PNG support"
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  This option enables PNG support using the system libpng
-+	  library.
-+
-+endif
-+
-+config BR2_PACKAGE_QT6BASE_SYSLOG
-+	bool "syslog support"
-+	help
-+	  Logs to the standard UNIX logging mechanism.
-+
-+config BR2_PACKAGE_QT6BASE_DBUS
-+	bool "DBus module"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_DBUS
-+	help
-+	  This option enables the D-Bus module.
-+
-+config BR2_PACKAGE_QT6BASE_ICU
-+	bool "Enable ICU support"
-+	depends on !BR2_BINFMT_FLAT # icu
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # icu
-+	select BR2_PACKAGE_ICU
-+	help
-+	  This option enables ICU support in Qt6. This is for example
-+	  needed for Qt6Webkit.
-+
-+comment "icu support needs a toolchain w/ gcc >= 4.9, host gcc >= 4.9"
-+	depends on !BR2_BINFMT_FLAT
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_HOST_GCC_AT_LEAST_4_9
-+
-+config BR2_PACKAGE_QT6BASE_TSLIB
-+	bool "Enable Tslib support"
-+	select BR2_PACKAGE_TSLIB
-+	help
-+	  This options enables the Tslib plugin
-+
-+endif
-diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
-new file mode 100644
-index 0000000000..0f845ce38b
---- /dev/null
-+++ b/package/qt6/qt6base/qt6base.hash
-@@ -0,0 +1,9 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.3/6.3.1/submodules/qtbase-everywhere-src-6.3.1.tar.xz.sha256
-+sha256  0a64421d9c2469c2c48490a032ab91d547017c9cc171f3f8070bc31888f24e03  qtbase-everywhere-src-6.3.1.tar.xz
-+# Hashes for license files:
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-+sha256  88ec689407cf2df9b2eb5c45952564d51ce73c129a3bdffb15c0d2d161ad7558  LICENSE.LGPLv3
-+sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
-+sha256  2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216  src/3rdparty/harfbuzz-ng/COPYING
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index c67d94e193..439c644c30 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -31,7 +31,27 @@ QT6BASE_CONF_OPTS = \
- 	-DFEATURE_system_doubleconversion=ON \
- 	-DFEATURE_system_pcre2=ON \
- 	-DFEATURE_system_zlib=ON \
--	-DFEATURE_system_libb2=ON
-+	-DFEATURE_system_libb2=ON \
-+	-DQT_BUILD_TESTS=OFF
-+
-+QT6BASE_CONF_OPTS += -DFEATURE_sse2=$(if $(BR2_X86_CPU_HAS_SSE2),ON,OFF)
-+QT6BASE_CONF_OPTS += -DFEATURE_sse3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF)
-+QT6BASE_CONF_OPTS += -DFEATURE_sse4_1=$(if $(BR2_X86_CPU_HAS_SSE4),ON,OFF)
-+QT6BASE_CONF_OPTS += -DFEATURE_sse4_2=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF)
-+QT6BASE_CONF_OPTS += -DFEATURE_ssse3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
-+QT6BASE_CONF_OPTS += -DFEATURE_avx=$(if $(BR2_X86_CPU_HAS_AVX),ON,OFF)
-+QT6BASE_CONF_OPTS += -DFEATURE_avx2=$(if $(BR2_X86_CPU_HAS_AVX2),ON,OFF)
-+# no buildroot BR2_X86_CPU_HAS_AVX512 option yet
-+QT6BASE_CONF_OPTS += \
-+	-DFEATURE_avx512bw=OFF \
-+	-DFEATURE_avx512cd=OFF \
-+	-DFEATURE_avx512dq=OFF \
-+	-DFEATURE_avx512er=OFF \
-+	-DFEATURE_avx512f=OFF \
-+	-DFEATURE_avx512ifma=OFF \
-+	-DFEATURE_avx512pf=OFF \
-+	-DFEATURE_avx512vbmi=OFF \
-+	-DFEATURE_avx512vl=OFF
- 
- define QT6BASE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6BASE_BUILDDIR)
-@@ -65,7 +85,8 @@ HOST_QT6BASE_CONF_OPTS = \
- 	-DFEATURE_system_doubleconversion=ON \
- 	-DFEATURE_system_libb2=ON \
- 	-DFEATURE_system_pcre2=ON \
--	-DFEATURE_system_zlib=ON
-+	-DFEATURE_system_zlib=ON \
-+	-DQT_BUILD_TESTS=OFF
- 
- define HOST_QT6BASE_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(BR2_CMAKE) --build $(HOST_QT6BASE_BUILDDIR)
-@@ -75,5 +96,309 @@ define HOST_QT6BASE_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(BR2_CMAKE) --install $(HOST_QT6BASE_BUILDDIR)
- endef
- 
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+QT6BASE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Debug
-+else
-+QT6BASE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_libudev=ON
-+QT6BASE_DEPENDENCIES += udev
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_libudev=OFF
-+endif
-+
-+# Qt6 SQL Plugins
-+ifeq ($(BR2_PACKAGE_QT6BASE_SQL),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_sql=ON
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_db2=OFF -DFEATURE_sql_ibase=OFF -DFEATURE_sql_oci=OFF -DFEATURE_sql_odbc=OFF
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_MYSQL),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_mysql=ON
-+QT6BASE_DEPENDENCIES += mysql
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_mysql=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_PSQL),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_psql=ON
-+QT6BASE_DEPENDENCIES += postgresql
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_psql=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_SQLITE_SYSTEM),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_sqlite=ON -DFEATURE_system_sqlite=ON
-+QT6BASE_DEPENDENCIES += sqlite
-+else ifeq ($(BR2_PACKAGE_QT6BASE_SQLITE_QT),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_sqlite=ON -DFEATURE_system_sqlite=OFF
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_sqlite=OFF
-+endif
-+
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_sql=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_GUI),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_gui=ON -DFEATURE_freetype=ON
-+#QT6BASE_CONF_OPTS += -DFEATURE_opengles2=OFF -DFEATURE_opengles3=OFF -DFEATURE_opengles31=OFF -DFEATURE_opengles32=OFF -DFEATURE_gbm=OFF -DFEATURE_vnc=OFF -DFEATURE_sessionmanager=OFF
-+QT6BASE_DEPENDENCIES += freetype
-+QT6BASE_CONF_OPTS += -DFEATURE_vulkan=OFF
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_HARFBUZZ),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_harfbuzz=ON
-+ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),y)
-+# system harfbuzz in case __sync for 4 bytes is supported
-+QT6BASE_CONF_OPTS += -DQT_USE_BUNDLED_BundledHarfbuzz=OFF
-+QT6BASE_DEPENDENCIES += harfbuzz
-+else #BR2_TOOLCHAIN_HAS_SYNC_4
-+# qt harfbuzz otherwise (using QAtomic instead)
-+QT6BASE_CONF_OPTS += -DQT_USE_BUNDLED_BundledHarfbuzz=ON
-+QT6BASE_LICENSE += , MIT (harfbuzz)
-+QT6BASE_LICENSE_FILES += src/3rdparty/harfbuzz-ng/COPYING
-+endif
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_harfbuzz=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_PNG),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_png=ON -DFEATURE_system_png=ON
-+QT6BASE_DEPENDENCIES += libpng
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_png=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_GIF),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_gif=ON
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_gif=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_JPEG),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_jpeg=ON
-+QT6BASE_DEPENDENCIES += jpeg
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_jpeg=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CUPS), y)
-+QT6BASE_CONF_OPTS += -DFEATURE_cups=ON
-+QT6BASE_DEPENDENCIES += cups
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_cups=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_kms=ON
-+QT6BASE_DEPENDENCIES += libdrm
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_kms=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_FONTCONFIG),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=ON
-+QT6BASE_DEPENDENCIES += fontconfig
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=OFF
-+endif
-+
-+# Uses libgbm from mesa3d
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_gbm=ON
-+QT6BASE_DEPENDENCIES += mesa3d
-+else ifeq ($(BR2_PACKAGE_GCNANO_BINARIES),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_gbm=ON
-+QT6BASE_DEPENDENCIES += gcnano-binaries
-+else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_gbm=ON
-+QT6BASE_DEPENDENCIES += ti-sgx-libgbm
-+else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_gbm=ON
-+QT6BASE_DEPENDENCIES += imx-gpu-viv
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_gbm=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_EGLFS),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_eglfs=ON
-+QT6BASE_DEPENDENCIES += libegl
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_eglfs=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBINPUT),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_libinput=ON
-+QT6BASE_DEPENDENCIES += libinput
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_libinput=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_TSLIB),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_tslib=ON
-+QT6BASE_DEPENDENCIES += tslib
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_tslib=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_DESKTOP),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengl_desktop=ON
-+QT6BASE_DEPENDENCIES += libgl
-+else ifeq ($(BR2_PACKAGE_QT6BASE_OPENGL_ES2),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_opengl=ON -DFEATURE_opengles2=ON
-+QT6BASE_DEPENDENCIES += libgles
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_opengl=OFF -DINPUT_opengl=no
-+endif
-+
-+# only enable gtk support if libgtk3 X11 backend is enabled
-+ifeq ($(BR2_PACKAGE_LIBGTK3)$(BR2_PACKAGE_LIBGTK3_X11),yy)
-+QT6BASE_CONF_OPTS += -DFEATURE_gtk3=ON
-+QT6BASE_DEPENDENCIES += libgtk3
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_gtk3=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_WIDGETS),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_widgets=ON
-+ifeq ($(BR2_PACKAGE_QT6BASE_LINUXFB),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_linuxfb=ON
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_linuxfb=OFF
-+endif
-+ifeq ($(BR2_PACKAGE_QT6BASE_DIRECTFB),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_directfb=ON
-+QT6BASE_DEPENDENCIES += directfb
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_directfb=OFF
-+endif
-+ifeq ($(BR2_PACKAGE_QT6BASE_XCB),y)
-+QT6BASE_CONF_OPTS += \
-+	-DFEATURE_xcb=ON \
-+	-DFEATURE_xcb_xlib=ON \
-+	-DFEATURE_xkbcommon=ON \
-+	-DFEATURE_xkbcommon_x11=ON
-+QT6BASE_DEPENDENCIES += \
-+	libxcb \
-+	xcb-util-wm \
-+	xcb-util-image \
-+	xcb-util-keysyms \
-+	xcb-util-renderutil \
-+	xlib_libX11 \
-+	libxkbcommon
-+QT6BASE_DEPENDENCIES += xlib_libXext
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_xcb=OFF
-+endif
-+else #BR2_PACKAGE_QT6BASE_WIDGETS
-+QT6BASE_CONF_OPTS += -DFEATURE_widgets=OFF
-+endif
-+
-+else #BR2_PACKAGE_QT6BASE_GUI
-+QT6BASE_CONF_OPTS += -DFEATURE_gui=OFF
-+endif
-+
-+QT6BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT6BASE_DEFAULT_QPA))
-+QT6BASE_CONF_OPTS += $(if $(QT6BASE_DEFAULT_QPA),-DQT_QPA_DEFAULT_PLATFORM=$(QT6BASE_DEFAULT_QPA))
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+QT6BASE_CONF_OPTS += -DINPUT_openssl=yes
-+QT6BASE_DEPENDENCIES += openssl
-+else
-+QT6BASE_CONF_OPTS += -DINPUT_openssl=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_DBUS),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_dbus=ON
-+QT6BASE_CONF_OPTS += -DINPUT_dbus=linked
-+QT6BASE_DEPENDENCIES += dbus
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_dbus=ON
-+HOST_QT6BASE_DEPENDENCIES += host-dbus
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_dbus=OFF
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_dbus=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_glib=ON
-+QT6BASE_DEPENDENCIES += libglib2
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_glib=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_ICU),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_icu=ON
-+QT6BASE_DEPENDENCIES += icu
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_icu=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_EXAMPLES),y)
-+QT6BASE_CONF_OPTS += -DQT_BUILD_EXAMPLES=ON
-+else
-+QT6BASE_CONF_OPTS += -DQT_BUILD_EXAMPLES=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_NETWORK),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_network=ON
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_CONCURRENT),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_concurrent=ON
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_concurrent=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_TEST),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_testlib=ON
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_testlib=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_XML),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_xml=ON
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_xml=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_journald=ON
-+QT6BASE_DEPENDENCIES += systemd
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_journald=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_zstd=ON
-+QT6BASE_DEPENDENCIES += zstd
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_zstd=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_SYSLOG),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_syslog=ON
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_syslog=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
-+# use vivante backend
-+QT6BASE_EGLFS_DEVICE = EGLFS_DEVICE_INTEGRATION = eglfs_viv
-+else ifeq ($(BR2_PACKAGE_SUNXI_MALI_MAINLINE),y)
-+# use mali backend
-+QT6BASE_EGLFS_DEVICE = EGLFS_DEVICE_INTEGRATION = eglfs_mali
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+# Qt 5.8 needs atomics, which on various architectures are in -latomic
-+QT6BASE_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="-latomic"
-+endif
-+
-+# Must be last so can override all options set by Buildroot
-+QT6BASE_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_QT6BASE_CUSTOM_CONF_OPTS))
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
++config BR2_PACKAGE_QT6_GL_AVAILABLE
++	bool
++	default y
++	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
++
+ comment "qt6 needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8, host gcc >= 8"
+ 	depends on !BR2_PACKAGE_QT5
+ 	depends on BR2_PACKAGE_QT6_ARCH_SUPPORTS
 -- 
 2.34.1
 
