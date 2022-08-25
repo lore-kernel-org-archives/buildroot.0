@@ -4,64 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF084C32774
-	for <buildroot@archiver.kernel.org>; Thu, 25 Aug 2022 15:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71FC8C28D13
+	for <buildroot@archiver.kernel.org>; Thu, 25 Aug 2022 15:23:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 486E58329E;
-	Thu, 25 Aug 2022 15:12:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 486E58329E
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB3A383E35;
+	Thu, 25 Aug 2022 15:23:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB3A383E35
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CnXGk2eyknPO; Thu, 25 Aug 2022 15:12:53 +0000 (UTC)
+	with ESMTP id hNLc2E_J3OJC; Thu, 25 Aug 2022 15:23:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41A2B813A4;
-	Thu, 25 Aug 2022 15:12:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41A2B813A4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 046DA83E2E;
+	Thu, 25 Aug 2022 15:23:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 046DA83E2E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 73A741BF36D
- for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 15:12:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4F9421BF36D
+ for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 15:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4938B4169E
- for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 15:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4938B4169E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 36010408BE
+ for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 15:23:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36010408BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3aMqKe8UOk0H for <buildroot@lists.busybox.net>;
- Thu, 25 Aug 2022 15:12:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48FD0401C3
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 48FD0401C3
- for <buildroot@buildroot.org>; Thu, 25 Aug 2022 15:12:48 +0000 (UTC)
-Received: from harderbit.localdomain ([92.154.77.116]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.168]) with ESMTPSA (Nemesis)
- id 1MZkd5-1ouCJG0nqR-00WlsA; Thu, 25 Aug 2022 17:12:45 +0200
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ with ESMTP id TRx5BtNg5NBG for <buildroot@lists.busybox.net>;
+ Thu, 25 Aug 2022 15:23:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F217340425
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com
+ [IPv6:2607:f8b0:4864:20::443])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F217340425
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 15:23:23 +0000 (UTC)
+Received: by mail-pf1-x443.google.com with SMTP id y127so17138008pfy.5
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 08:23:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=v1UCEaXpy2ZpMx0sP7tPkZtoeDiKesBggTG6xtoZVQk=;
+ b=NTGZPDxHTdDfBAatJLW8/cgHeJVysDiMZ0p9b++t594NeNP19wD2oUYWL4OALBqtuG
+ b4mqlOm6pEO/PgZQadvmBVajK8BnvUTMNCO9qUegc+2PJLpE4hnKqBJLuYz+iJI5Y5fO
+ nNYx5CAJYhCDRC7I0vv/rkN0QCvr3AbL02w/eypQpbCwZDYpSW+bVbzhiGU9E6YbteCb
+ GccVAuR3KMpPh9tmyBZd6Bd5AmYEB08a3VZY1VTTX46DXXvNI4B3LwWQ6YKYaICaZ7g3
+ r2jNQRfPtovsiO9IynRNyWeL+tjGgsu2J+Ar+6fsgdLPEIO5CGOzL2uu5XfNcXLReue3
+ iAxw==
+X-Gm-Message-State: ACgBeo0HToEQFWlxeubsKYTmbIp2iC8OCzTFtsIk6udJd8bwFY23woNv
+ ZOn5kcvKP9oDTmg1yNv7uzbbGieQ9Qa25Q==
+X-Google-Smtp-Source: AA6agR7lZctdZryH5HWaU/g7XqK+2X3DSk8SDuTIomMfF1Zrk6HHmHeIay1OM0iJd65ZMfedXXyHzQ==
+X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id
+ h5-20020a056a00218500b0052072766570mr4718707pfi.84.1661441002870; 
+ Thu, 25 Aug 2022 08:23:22 -0700 (PDT)
+Received: from smartcross-dev.lan ([2605:52c0:2:6e3::])
+ by smtp.gmail.com with ESMTPSA id
+ s10-20020a170902ea0a00b00172a6cf0a84sm15023523plg.124.2022.08.25.08.23.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 25 Aug 2022 08:23:21 -0700 (PDT)
+From: Andrea Daoud <andreadaoud6@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 25 Aug 2022 17:12:04 +0200
-Message-Id: <20220825151204.390615-1-thomas.claveirole@green-communications.fr>
-X-Mailer: git-send-email 2.35.1
+Date: Thu, 25 Aug 2022 23:23:15 +0800
+Message-Id: <20220825152315.146271-1-andreadaoud6@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Akqu9rVZeH9ZRa93vql+7CEliRwS7iYObR68UVJ88ZA5ipzwmBc
- C9tLWSWlFLOznamZmjawLg2eIXmCwS8ckhPXawm16pJrRltVg7KwBNiR/RrVCjG+1gDZjLm
- dOxNei9NNkrbsuXmd6tvp4NMiJ1f6SYNzuiTljpd5JBeDFFvUWFVV+t1j/NxaVfq6tabmgC
- Dh4mK2izVAUQo+1tCy0VQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:N+gZaN7tbWM=:sc9BEVAuB8Q3TFvnI7e1EK
- V867vkVBHHweVLHgvYNSqMaRUt2X4RoHueruMbtTCS/eI+oUpuYT0/fybWyvrHLM07+pOnX9N
- SOcb5MaRn3R61/1Dj5YbkmhMUC0E9/yJYyKQopMVzx39ZJXBEKqEx8tdVmdk7SwGtRcIj1Ire
- IpAAWKO686yJcFFUNrFM69CeQXHpiAdqZiGyPsAMEFd1Z+qRpCHfXXnf3xjrJDuwRXfTmIO4a
- gyC13i7ywL5p/h7HVQngeU9nMGsSPtC47aaWvhlYPasEMBB1GBvClbR+c+/zI662waWLRRXC2
- kzjzYKUKlXLUMW8zjhMFBq4nvVAQRvfrTEi4W+kSOQG9oKkeluJKDuhcxmMl+4NyMe+VzGHrf
- OGNZWLCnzCw2StwgfX2vlK02GBLUVXZYWnNKynyJgJSi2gJmdTBw/Fh/DpbfGFtet3STFaWx7
- ouKevxjt+9d+M3MkN1Z4etxiqrzOFNh2TlkQFeW55+TFGDLFF46Fhoo8se4/IkxT8Q7Uekibr
- sdpID/53NQNqh+bm+72o3XzJjfYJF+8DNQSDj3NGNpAfjZkOr6I/gsxZQPPP9hEZbipZxrpH2
- d/nmjDD9x4ZhCJnn7cUkIcGc0sWmTGslme7cFiY4hNhGWxXMqITHZTnHIRxKPqHcdg0FuQVJN
- vqqzhWXm3YUb/wMfEWxEenbTitjvTIxQzoA1an/lqM+H95GxS4eSH5K+j2OCwLeRyBFv+Mmbk
- GmuFvAuCHwmCeoCLxEACa5wx5/cX7UQxKdV03PXcq7BegPuCIxuwSm0yobGBjEay+jbribl1z
- e8zfGRa
-Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump to version 7.0.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=v1UCEaXpy2ZpMx0sP7tPkZtoeDiKesBggTG6xtoZVQk=;
+ b=Uya8K2029wGf8jWOQ0NMqtMxid/Lcr+mvsplGeymrd0mt4LpCd0ddlSs8WzM6q1C16
+ ZuAHSyBRDINhH6mtj0hb2eFAUsjWrC8jpqpHjBfIZ6tGZ4tEf5Fvaent8t2Tk/v0CZWk
+ CFN8G53fv4CuiTwm2sNybAHgp1NP241R5NSqUdlJcApf/IkXHpL9BEZFTUlMfCmWeXQV
+ gPYafgJCAPjXFAvgk9Ej+NjsxYLX5tS6OAkh+sl3eixeLVVQ1Loy/CnufKn5YaophV4y
+ yKO3RlmF5HKN/P3CT6elIIoAXtpRo1ggG85DpC3cRfFew/vigBKxzavyyA1HLdhNjZbb
+ CJxA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Uya8K202
+Subject: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.65
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,95 +93,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Andrea Daoud <andreadaoud6@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Do not rely on the "dist" archive anymore (or the "legacy" archive as
-OpenLayers calls it now).  Build the JavaScript directly from the
-source archive instead, using host-nodejs.
+bluez 5.65 contains various fixes.
 
-Note that the v6.14.1-dist.zip archive for the previous version did
-change, hence the hash for previous version is broken.  See
-https://github.com/openlayers/openlayers/issues/14053 for details.
-
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Andrea Daoud <andreadaoud6@gmail.com>
 ---
- package/openlayers/Config.in       |  5 +++++
- package/openlayers/openlayers.hash |  3 ++-
- package/openlayers/openlayers.mk   | 27 ++++++++++++++++-----------
- 3 files changed, 23 insertions(+), 12 deletions(-)
+ package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
+ package/bluez5_utils/bluez5_utils.hash               | 2 +-
+ package/bluez5_utils/bluez5_utils.mk                 | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openlayers/Config.in b/package/openlayers/Config.in
-index a7b7f334cf..55ce17ecb7 100644
---- a/package/openlayers/Config.in
-+++ b/package/openlayers/Config.in
-@@ -1,5 +1,10 @@
- config BR2_PACKAGE_OPENLAYERS
- 	bool "openlayers"
-+
-+	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS # host-nodejs
-+	depends on BR2_HOST_GCC_AT_LEAST_8 # host-nodejs
-+	select BR2_PACKAGE_HOST_NODEJS
-+
- 	help
- 	  OpenLayers makes it easy to put a dynamic map in any web
- 	  page. It can display map tiles, vector data and markers
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index 1c93b9a729..e1fa859e14 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256  8a9fda6e392688c049ebb88fb2c73b5788b4965b625443de4cca7d4688b1fb82  v6.14.1-dist.zip
-+sha256  290568a9f1243fbbf21a1140f1763399a4126cd3e6c308892507c2d5fc9601e7  openlayers-7.0.0.tar.gz
-+sha256  6c4347b83a8c9feef18d57b18e3b6c44cf901b3c344a4a1fbd837e421555ab8e  LICENSE.md
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index 4626e7545a..08a58cd796 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
-@@ -4,21 +4,26 @@
- #
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 2f3a290ea8..565511120f 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OPENLAYERS_VERSION = 6.14.1
--OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
--OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
--OPENLAYERS_LICENSE = BSD-2-Clause
--# There's no separate license file in the archive, only minified files.
-+OPENLAYERS_VERSION = 7.0.0
-+OPENLAYERS_SITE = $(call github,openlayers,openlayers,v$(OPENLAYERS_VERSION))
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.64
++BLUEZ5_UTILS_HEADERS_VERSION = 5.65
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 0324dd2d77..9b2c51f467 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  ae437e65b6b3070c198bc5b0109fe9cdeb9eaa387380e2072f9de65fe8a1de34  bluez-5.64.tar.xz
++sha256  2565a4d48354b576e6ad92e25b54ed66808296581c8abb80587051f9993d96d4  bluez-5.64.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 8e2c657899..76070dc3a9 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--define OPENLAYERS_EXTRACT_CMDS
--	unzip $(OPENLAYERS_DL_DIR)/$(OPENLAYERS_SOURCE) -d $(@D)
--	mv $(@D)/v$(OPENLAYERS_VERSION)-dist/* $(@D)
--	rmdir $(@D)/v$(OPENLAYERS_VERSION)-dist/
-+# OpenLayers itself is BSD-2-Clause, but not all of the dependencies
-+# it brings in are.  See $(@D)/build/legacy/*.LICENSE.txt after build
-+# for details.
-+OPENLAYERS_LICENSE = BSD-2-Clause, BSD-3-Clause (ieee754), Apache-2.0
-+OPENLAYERS_LICENSE_FILES = LICENSE.md
-+
-+OPENLAYERS_DEPENDENCIES = host-nodejs
-+
-+define OPENLAYERS_BUILD_CMDS
-+	cd $(@D) && $(NPM) install && $(NPM) run build-legacy
- endef
- 
- define OPENLAYERS_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/ol.css $(TARGET_DIR)/var/www/ol.css
--	$(INSTALL) -D -m 0644 $(@D)/ol.js $(TARGET_DIR)/var/www/ol.js
-+	$(INSTALL) -D -m 0644 \
-+		$(@D)/build/legacy/ol.js $(TARGET_DIR)/var/www/ol.js
-+	$(INSTALL) -D -m 0644 \
-+		$(@D)/build/legacy/ol.css $(TARGET_DIR)/var/www/ol.css
- endef
- 
- $(eval $(generic-package))
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.64
++BLUEZ5_UTILS_VERSION = 5.65
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
 -- 
-2.35.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
