@@ -1,73 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83BC0C28D13
-	for <buildroot@archiver.kernel.org>; Thu, 25 Aug 2022 10:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1776C28D13
+	for <buildroot@archiver.kernel.org>; Thu, 25 Aug 2022 12:15:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0112F83DF1;
-	Thu, 25 Aug 2022 10:40:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0112F83DF1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 179B540C5A;
+	Thu, 25 Aug 2022 12:15:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 179B540C5A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XDnSppo9Q_h2; Thu, 25 Aug 2022 10:40:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lELbO_PaelRs; Thu, 25 Aug 2022 12:15:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8CE383455;
-	Thu, 25 Aug 2022 10:40:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8CE383455
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A8D8E1BF28C
- for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 10:40:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED7B340201;
+	Thu, 25 Aug 2022 12:15:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED7B340201
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 057361BF3EB
+ for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 12:15:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 841FD83455
- for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 10:40:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 841FD83455
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4F0E40201
+ for <buildroot@lists.busybox.net>; Thu, 25 Aug 2022 12:15:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4F0E40201
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LspgKfGxItQy for <buildroot@lists.busybox.net>;
- Thu, 25 Aug 2022 10:40:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bdG4wxkoxbYJ for <buildroot@lists.busybox.net>;
+ Thu, 25 Aug 2022 12:15:44 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EE5D833D3
-Received: from mout-b-110.mailbox.org (mout-b-110.mailbox.org
- [IPv6:2001:67c:2050:102:465::110])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0EE5D833D3
- for <buildroot@buildroot.org>; Thu, 25 Aug 2022 10:40:20 +0000 (UTC)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by mout-b-110.mailbox.org (Postfix) with ESMTPS id 4MCzxr51MXz9sq9;
- Thu, 25 Aug 2022 12:40:16 +0200 (CEST)
-Message-ID: <3b3f344d-f06d-dc4a-e055-72e7b335044a@othermo.de>
-Date: Thu, 25 Aug 2022 12:40:14 +0200
-MIME-Version: 1.0
-Content-Language: en-US
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20220823194732.701895-1-marcus.hoffmann@othermo.de>
- <705af3ef-1388-85bf-6ac9-f24bca8d8a1c@mind.be>
-From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-In-Reply-To: <705af3ef-1388-85bf-6ac9-f24bca8d8a1c@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=othermo.de; s=MBO0001; t=1661424016;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vsBMV31zofcQikQfrnr+cc421JibzxBVVVZJtw7/Ex0=;
- b=S8zPeNOLPcCadLz18lU6hr2/iol0CZhdRSV528ozKigYge2SPJ5hqCG8cw1uyaozhMyygI
- x/KnWz6EOuuVxi0veFzeGWI1Zv9iVqsahAb5FAon+xPnemm/kq9TuBBfVmAeJZ0fVc+8Gi
- eG5QO5IPwmUINQRe6fMzzIMjBGct6VB9nNuE4/wufiqhmFmm4f5sLpKgpgH7aeUcsYo2cn
- UQWu2uerIavHdJrD5BuIq83nYUKjERwSGFFCsaxzizdjXWCIYStviU1JHxrFVWN+G6WPEf
- 6oAVq23uhvHLoVLvwDDofZQhsTU5cDNuxuNo61Z1YQ7p3sdqwuKTfWmRAoIkbQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=othermo.de header.i=@othermo.de
- header.a=rsa-sha256 header.s=MBO0001 header.b=S8zPeNOL
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-paho-mqtt: bump to 1.6.1
- to fix running on python 3.10
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3A4040146
+Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B3A4040146
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 12:15:43 +0000 (UTC)
+Received: from smtpclient.apple ([151.68.103.48])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id RBlso97mssT4eRBlsotgx8; Thu, 25 Aug 2022 14:15:41 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Thu, 25 Aug 2022 14:15:39 +0200
+Message-Id: <CAF64DF9-F5C0-4A37-9318-B50DB1CE8A0C@benettiengineering.com>
+References: <CAMdwsN8p3nfWzyodhD_k6HWJRA_V4MopKUJ1_uJD4+hYqiYfxw@mail.gmail.com>
+In-Reply-To: <CAMdwsN8p3nfWzyodhD_k6HWJRA_V4MopKUJ1_uJD4+hYqiYfxw@mail.gmail.com>
+To: Jesse Van Gavere <jesseevg@gmail.com>
+X-Mailer: iPhone Mail (19G82)
+X-CMAE-Envelope: MS4xfPV9JtVF9oJbahS8N8SVTwmRus0L1z7+Hxv0UVVAQ3Wva5tdL4PIZTqRnx+7cxTaa+2GKj8Me75l+kLv/ZGBUUtBZ7hkFtVQRTkG4B9mNK/n93vUfD9h
+ svQ8ezkGgwbyyhEu42u3/JhdtBUlfamxLmQwl6nCTqVhVZSWQ8WO05mvkRplxTt6QopSsKIosIyFboHYCCaf3SXk2PskIzV0BhSSaAoVMDjFRE2yqxuHs+yq
+ DAt5NNeNO3Gq8pVRA1ZxifXuDOU3KWl8YlEAX+hi1kytzx1qvPSofRpe68gLMd/3wJ+fH8NFH9qMZGLQd6xVgxmqAw54Ujckfq0xaTFQFKM=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1661429741; bh=8saYwvk6jnUrwrKQTawSq1xhvoavO1/kw21muL03eN8=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=bB1WnPm104sUcL/IAMs6sxrm8mjlR+kaXsuEA4TX6hnVyCqkZs+xMcZXahKBiV+m1
+ /Me8QjHfhpSQBSk7YUlAx1tBGX78Ndpamdq8q86uxxlchEu6yEqTk604iHtC57coyX
+ 2zxe0cD/y0K7/LReFSOEjkbdlxI9+HCsFrEjRnMVwWqS0ejzD5HHYOt8CY447SJ6kU
+ oDOVXYZHYZb7G76QfckAPj+IUH1aGnf1OHcjrVPvX3qQtRe/qka/RYC03LR8ijAyFH
+ wVO8mx1uzEKt4O2hfGcz+4Jv2ROYFT6LWKqYcxkiL6Z7yF2fEJ63jyJdYCQSDsxs7Q
+ mv3j4u5OQ9pfw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=bB1WnPm1
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt6/qt6base: extend qt6
+ configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,79 +75,241 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Davide Viti <zinosat@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: yann.morin.1998@free.fr, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============6383218468697456024=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQXJub3V0LAp0aGFua3MgZm9yIHRoZSByZXZpZXcuCgpPbiAyNC4wOC4yMiAyMjo0OCwgQXJu
-b3V0IFZhbmRlY2FwcGVsbGUgd3JvdGU6Cj4gCj4gCj4gT24gMjMvMDgvMjAyMiAyMTo0NywgTWFy
-Y3VzIEhvZmZtYW5uIHdyb3RlOgo+PiBGaXhlcyB0aGUgZm9sbG93aW5nIGVycm9yIG9uIGNhbGxp
-bmcgbXF0dC5wdWJsaXNoKCk6Cj4+Cj4+IMKgwqAgRmlsZSAiL3Vzci9saWIvcHl0aG9uMy4xMC9z
-aXRlLXBhY2thZ2VzL3BhaG8vbXF0dC9wdWJsaXNoLnB5IiwgbGluZSAKPj4gMjIyLCBpbiBzaW5n
-bGUKPj4gwqDCoMKgwqAgbXVsdGlwbGUoW21zZ10sIGhvc3RuYW1lLCBwb3J0LCBjbGllbnRfaWQs
-IGtlZXBhbGl2ZSwgd2lsbCwgYXV0aCwgCj4+IHRscywKPj4gwqDCoCBGaWxlICIvdXNyL2xpYi9w
-eXRob24zLjEwL3NpdGUtcGFja2FnZXMvcGFoby9tcXR0L3B1Ymxpc2gucHkiLCBsaW5lIAo+PiAx
-MjYsIGluIG11bHRpcGxlCj4+IMKgwqDCoMKgIGlmIG5vdCBpc2luc3RhbmNlKG1zZ3MsIGNvbGxl
-Y3Rpb25zLkl0ZXJhYmxlKToKPj4gQXR0cmlidXRlRXJyb3I6IG1vZHVsZSAnY29sbGVjdGlvbnMn
-IGhhcyBubyBhdHRyaWJ1dGUgJ0l0ZXJhYmxlJwo+Pgo+PiBUaGlzIHdhcyBhY3R1YWxseSBjaGFu
-Z2VkIGluIHJlbGVhc2UgMS41LjAgYnV0IDEuNi4xIGlzIGFsYXJlYWR5IG91dCBmb3IKPj4gYWxt
-b3N0IGEgeWVhciwgc28gd2UganVzdCB1cGRhdGUgdG8gdGhhdCB2ZXJzaW9uLgo+Pgo+PiBDaGFu
-Z2Vsb2c6Cj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9lY2xpcHNlL3BhaG8ubXF0dC5weXRob24vYmxv
-Yi9tYXN0ZXIvQ2hhbmdlTG9nLnR4dAo+IAo+ICDCoEp1bXBpbmcgZnJvbSAxLjQuMCB0byAxLjYu
-MSBhdCB0aGlzIHBvaW50IGluIHRoZSBzdGFiaWxpc2F0aW9uIG1vbnRoIAo+IGlzIG5vdCBpZGVh
-bC4uLgoKVGhlcmUncyB0d28gb3RoZXIgb3B0aW9ucyBJIGNhbiB0aGluayBvZiwgSSB3YXNuJ3Qg
-c3VyZSB3aGF0J3MgYmVzdCBoZXJlOgoKKiBiYWNrcG9ydCBodHRwczovL2dpdGh1Yi5jb20vZWNs
-aXBzZS9wYWhvLm1xdHQucHl0aG9uL3B1bGwvNDk3L2ZpbGVzLCAKdGhhdCBzaG91bGQgYmUgZWFz
-eSBlbm91Z2gKKiBVcGRhdGUgdG8gMS41LjEgKG5vdCAxLjUuMCBhcyBJIGNsYWltZWQgYWJvdmUp
-IHdoaWNoIGlzIHRoZSBmaXJzdCAKcmVsZWFzZSB0aGF0IGluY2x1ZGVzIHRoZSBmaXggZm9yIHRo
-ZSBwcm9ibGVtCgpEbyB5b3UgaGF2ZSBhIHByZWZlcmVuY2UgZm9yIG9uZSBvZiB0aGUgdHdvIG92
-ZXIgdXBkYXRpbmcgdG8gdGhlIGxhdGVzdCAKcmVsZWFzZT8gKEkuZS4gZGVmZXIgdGhlIDEuNi4x
-IHVwZGF0ZSB0byBuZXh0KQoKPiAKPj4gU2lnbmVkLW9mZi1ieTogTWFyY3VzIEhvZmZtYW5uIDxt
-YXJjdXMuaG9mZm1hbm5Ab3RoZXJtby5kZT4KPj4gLS0tCj4+IMKgIHBhY2thZ2UvcHl0aG9uLXBh
-aG8tbXF0dC9weXRob24tcGFoby1tcXR0Lmhhc2ggfCA2ICsrKy0tLQo+PiDCoCBwYWNrYWdlL3B5
-dGhvbi1wYWhvLW1xdHQvcHl0aG9uLXBhaG8tbXF0dC5ta8KgwqAgfCA0ICsrLS0KPj4gwqAgMiBm
-aWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCj4+Cj4+IGRpZmYg
-LS1naXQgYS9wYWNrYWdlL3B5dGhvbi1wYWhvLW1xdHQvcHl0aG9uLXBhaG8tbXF0dC5oYXNoIAo+
-PiBiL3BhY2thZ2UvcHl0aG9uLXBhaG8tbXF0dC9weXRob24tcGFoby1tcXR0Lmhhc2gKPj4gaW5k
-ZXggYmYzOTkzZTkxOTUuLjU2NzgzZTNmYzA4IDEwMDY0NAo+PiAtLS0gYS9wYWNrYWdlL3B5dGhv
-bi1wYWhvLW1xdHQvcHl0aG9uLXBhaG8tbXF0dC5oYXNoCj4+ICsrKyBiL3BhY2thZ2UvcHl0aG9u
-LXBhaG8tbXF0dC9weXRob24tcGFoby1tcXR0Lmhhc2gKPj4gQEAgLTEsNiArMSw2IEBACj4+IC0j
-IG1kNSBmcm9tIGh0dHBzOi8vcHlwaS5weXRob24ub3JnL3B5cGkvcGFoby1tcXR0L2pzb24sIHNo
-YTI1NiAKPj4gbG9jYWxseSBjb21wdXRlZAo+PiAtbWQ1wqAgZTNhYzI5Y2Q1ZGMyNDdhMDEwODNh
-MmE4ZjNmZGRkMDjCoCBwYWhvLW1xdHQtMS40LjAudGFyLmd6Cj4+IC1zaGEyNTYgIAo+PiBlNDQw
-YTA1MmI0NmQyMjJlMTg0YmUzYmUzODY3NjM3ODcyMjA3MmZjZDRkZmQyYzhmNTA5ZmI4NjFhN2Iw
-Yjc5ICAKPj4gcGFoby1tcXR0LTEuNC4wLnRhci5nego+PiArIyBwYWNrYWdlIGhhc2hlcyBmcm9t
-IGZyb20gCj4+IGh0dHBzOi8vcHlwaS5vcmcvcHJvamVjdC9wYWhvLW1xdHQvI2NvcHktaGFzaC1t
-b2RhbC1lOGU4ZTBkZS0xYWVjLTQ2MmQtOGFlMC1kODU4ZDRmNWEwZDcKPj4gK21kNcKgIGJkYjIw
-Zjg4ZGIyOTFmZGI0YTBmZTgwNGMwZjI5MzE2wqAgcGFoby1tcXR0LTEuNi4xLnRhci5nego+PiAr
-c2hhMjU2ICAKPj4gMmE4MjkxYzgxNjIzYWVjMDAzNzJiNWE4NTU1OGEzNzJjNzQ3Y2JjYThlOTkz
-NGRmZTIxODYzOGI4ZWVmYzI2ZiAgCj4+IHBhaG8tbXF0dC0xLjYuMS50YXIuZ3oKPj4gwqAgc2hh
-MjU2ICAKPj4gNzZmMTM3MjllODRlOTIyMmU1NDMzMDNkZjAwZjg3ZDFiMmMwOTk1YjZhNTA1Y2Q4
-NTlhMjg1NjY3ZTQ0YmFiYiAgCj4+IExJQ0VOU0UudHh0Cj4gCj4gIMKgVW5mb3J0dW5hdGVseSwg
-dGhlIExJQ0VOU0UgaGFzaCBjaGFuZ2VkLCBiZWNhdXNlIGluIGZhY3QgdGhlIGxpY2Vuc2UgCj4g
-Y2hhbmdlZDoKPiBAQCAtMSwzICsxLDMgQEAKPiAtVGhpcyBwcm9qZWN0IGlzIGR1YWwgbGljZW5z
-ZWQgdW5kZXIgdGhlIEVjbGlwc2UgUHVibGljIExpY2Vuc2UgMS4wIGFuZCB0aGUKPiAtRWNsaXBz
-ZSBEaXN0cmlidXRpb24gTGljZW5zZSAxLjAgYXMgZGVzY3JpYmVkIGluIHRoZSBlcGwtdjEwIGFu
-ZCAKPiBlZGwtdjEwIGZpbGVzLgo+ICtUaGlzIHByb2plY3QgaXMgZHVhbCBsaWNlbnNlZCB1bmRl
-ciB0aGUgRWNsaXBzZSBQdWJsaWMgTGljZW5zZSAyLjAgYW5kIHRoZQo+ICtFY2xpcHNlIERpc3Ry
-aWJ1dGlvbiBMaWNlbnNlIDEuMCBhcyBkZXNjcmliZWQgaW4gdGhlIGVwbC12MjAgYW5kIAo+IGVk
-bC12MTAgZmlsZXMuCj4gCj4gIMKgQW5kIHRvIHRvcCB0aGluZ3MgdXAsIGVwbC12MjAgaXMgbWlz
-c2luZyBpbiB0aGUgdGFyYmFsbC4uLgo+IAo+ICDCoENvdWxkIHlvdSBjaGVjayBpZiB0aGVyZSBp
-cyBhIHZlcnNpb24gdGhhdCBkb2VzIGhhdmUgdGhlIGVwbC12MjAgZmlsZT8gCj4gUGVyaGFwcyBl
-dmVuIGZyb20gYW4gdXBzdHJlYW0gZ2l0IHJlcG8/CgpBaCwgSSBzdXBwb3NlIHRob3NlIGhhc2hl
-cyBhcmUgb25seSBjaGVja2VkIG9uIGBsZWdhbC1pbmZvYCBhbmQgbm90IGEgCm5vcm1hbCBidWls
-ZCBvZiB0aGUgcGFja2FnZT8KCmh0dHBzOi8vd3d3LmVjbGlwc2Uub3JnL3BhaG8vaW5kZXgucGhw
-P3BhZ2U9Y2xpZW50cy9weXRob24vaW5kZXgucGhwIApzdWdnZXN0cyBpbnN0YWxsYXRpb24gdmlh
-IHB5cGkvcGlwIGlzIHRoZSBjYW5vbmljYWwgd2F5IGJ1dCBvZmZlcnMgZnJvbSAKc291cmNlIGlu
-c3RhbGxhdGlvbiBhcyBhbiBhbHRlcm5hdGl2ZS4KCmh0dHBzOi8vZ2l0aHViLmNvbS9lY2xpcHNl
-L3BhaG8ubXF0dC5weXRob24gYW5kIHRoZSBnaXRodWIgCmF1dG8tZ2VuZXJhdGVkIHRhcmJhbGwg
-Y29udGFpbiB0aGUgZXBsLTIwIGxpY2Vuc2UgZmlsZSwgc2hvdWxkIEkgY2hhbmdlIAp0aGUgc291
-cmNlIGRvd25sb2FkIHRvIHRoYXQ/IChJIHJlbWVtYmVyIGdpdGh1YiBhdXRvLWdlbmVyYXRlZCB0
-YXJiYWxscyAKYmVpbmcgcHJvYmxlbWF0aWMgaW4gdGhlIHBhc3QgYmVjYXVzZSB0aGV5IG1pZ2h0
-IHNpbGVudGx5IGNoYW5nZS4gRG9lcyAKdGhlIGJ1aWxkcm9vdCBwcm9qZWN0IGhhdmUgYSBwb2xp
-Y3kgaGVyZT8pCgo+IAo+ICDCoFJlZ2FyZHMsCj4gIMKgQXJub3V0Cj4gCgpbLi4uXQoKQmVzdCwK
-TWFyY3VzCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
-aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+--===============6383218468697456024==
+Content-Type: multipart/alternative; boundary=Apple-Mail-C460BE54-569B-4354-8675-70D60519F37C
+Content-Transfer-Encoding: 7bit
+
+
+--Apple-Mail-C460BE54-569B-4354-8675-70D60519F37C
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi Jesse,
+
+> Il giorno 25 ago 2022, alle ore 10:52, Jesse Van Gavere <jesseevg@gmail.co=
+m> ha scritto:
+>=20
+> =EF=BB=BF
+> Hello Thomas,
+>=20
+> Yann e. made a similar remark, I'll take both your comments into account t=
+o try do a full patch series that splits it up nicely, along with the change=
+s you suggested, as for the dependencies, a review/test of such a patch seri=
+es would be greatly appreciated because I'm sure like you say there might be=
+ redundancies/improvements to be made that I didn't catch with my own testin=
+g.
+> This might take some time as I'm everything but a git expert so please bea=
+r with me as I try to get this into a nice patch series :)
+> Thank you both for the feedback.
+
+Please don=E2=80=99t top post and answer inline.
+
+Thank you!
+Best regards
+=E2=80=94
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
+
+>=20
+> Best regards,
+> Jesse
+>=20
+>=20
+> Op do 25 aug. 2022 om 10:43 schreef Thomas Petazzoni <thomas.petazzoni@boo=
+tlin.com>:
+>> Hello Jesse,
+>>=20
+>> On Thu, 25 Aug 2022 09:39:51 +0200
+>> Jesse Van Gavere <jesseevg@gmail.com> wrote:
+>>=20
+>> > This will bring the qt6base functionality mostly on par with the qt5bas=
+e
+>> > package, building the package has been tested to the best of my ability=
+
+>> > and went without error as far as I can test.
+>> > One bug to be noted is that for the GUI with fontconfig without harfbuz=
+z
+>> > support, this will produce incorrectly rendered text for version 6.3.1,=
+
+>> > see https://bugreports.qt.io/browse/QTBUG-101430
+>> > I have however already verified that 6.3.2 and 6.4.0 will fix this issu=
+e
+>> > so I've decided not to add harfbuzz as a fontconfig dependency as a
+>> > version bump (which should be soon) will fix it.
+>>=20
+>> Yes, let's bump to 6.4.0 then.
+>>=20
+>> > Also add the version hashes for qt6base.
+>> >=20
+>> > Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+>>=20
+>> Overall, this needs to be split into a number of patches:
+>>=20
+>>  - One adding the hash file, with just the hash of the tarball
+>>=20
+>>  - One adding the license information (which is totally missing today,
+>>    and I noticed due to your addition of the hash file) together with
+>>    the hashes of the license files
+>>=20
+>>  - Several patches adding the different options. I'm not too keen on
+>>    copy/pasting directly the qt5 logic, as I'm not sure all the
+>>    dependencies are exactly the same, so let's do this one feature at a
+>>    time.
+>>=20
+>>=20
+>> > +ifeq ($(BR2_ENABLE_DEBUG),y)
+>> > +QT6BASE_CONF_OPTS +=3D -DCMAKE_BUILD_TYPE=3DDebug
+>> > +else
+>> > +QT6BASE_CONF_OPTS +=3D -DCMAKE_BUILD_TYPE=3DRelease
+>> > +endif
+>>=20
+>> This is already handled by the cmake-package infrastructure, do no need
+>> to handle CMAKE_BUILD_TYPE.
+>>=20
+>> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+>> > +# Qt 5.8 needs atomics, which on various architectures are in -latomic=
+
+>> > +QT6BASE_CONF_OPTS +=3D -DCMAKE_SHARED_LINKER_FLAGS=3D"-latomic"
+>>=20
+>> Is this also needed with Qt6 ? (Most likely yes, but the comment is
+>> weird, another reason why I don't like the copy/pasting from Qt5).
+>>=20
+>> Thomas
+>> --=20
+>> Thomas Petazzoni, co-owner and CEO, Bootlin
+>> Embedded Linux and Kernel engineering and training
+>> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--Apple-Mail-C460BE54-569B-4354-8675-70D60519F37C
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto">Hi Jesse,<br><div dir=3D"ltr"><br></div><di=
+v dir=3D"ltr"><blockquote type=3D"cite">Il giorno 25 ago 2022, alle ore 10:5=
+2, Jesse Van Gavere &lt;jesseevg@gmail.com&gt; ha scritto:<br><br></blockquo=
+te></div><blockquote type=3D"cite"><div dir=3D"ltr">=EF=BB=BF<div dir=3D"ltr=
+"><div>Hello Thomas,</div><div><br></div><div>Yann e. made a similar remark,=
+ I'll take both your comments into account to try do a full patch series tha=
+t splits it up nicely, along with the changes you suggested, as for the depe=
+ndencies,  a review/test of such a patch series would be greatly appreciated=
+ because I'm sure like you say there might be redundancies/improvements to b=
+e made that I didn't catch with my own testing.<br></div><div>This might tak=
+e some time as I'm everything but a git expert so please bear with me as I t=
+ry to get this into a nice patch series :)<br></div><div>Thank you both for t=
+he feedback.<br></div></div></div></blockquote><div><br></div><div>Please do=
+n=E2=80=99t top post and answer inline.</div><div><br></div><div>Thank you!<=
+/div><div>Best regards</div><div>=E2=80=94</div><div>Giulio Benetti</div><di=
+v>CEO/CTO@Benetti Engineering sas</div><br><blockquote type=3D"cite"><div di=
+r=3D"ltr"><div dir=3D"ltr"><div><br></div><div>Best regards,</div><div>Jesse=
+<br></div><div><br></div></div><br><div class=3D"gmail_quote"><div dir=3D"lt=
+r" class=3D"gmail_attr">Op do 25 aug. 2022 om 10:43 schreef Thomas Petazzoni=
+ &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzoni@bootli=
+n.com</a>&gt;:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0p=
+x 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hel=
+lo Jesse,<br>
+<br>
+On Thu, 25 Aug 2022 09:39:51 +0200<br>
+Jesse Van Gavere &lt;<a href=3D"mailto:jesseevg@gmail.com" target=3D"_blank"=
+>jesseevg@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; This will bring the qt6base functionality mostly on par with the qt5bas=
+e<br>
+&gt; package, building the package has been tested to the best of my ability=
+<br>
+&gt; and went without error as far as I can test.<br>
+&gt; One bug to be noted is that for the GUI with fontconfig without harfbuz=
+z<br>
+&gt; support, this will produce incorrectly rendered text for version 6.3.1,=
+<br>
+&gt; see <a href=3D"https://bugreports.qt.io/browse/QTBUG-101430" rel=3D"nor=
+eferrer" target=3D"_blank">https://bugreports.qt.io/browse/QTBUG-101430</a><=
+br>
+&gt; I have however already verified that 6.3.2 and 6.4.0 will fix this issu=
+e<br>
+&gt; so I've decided not to add harfbuzz as a fontconfig dependency as a<br>=
+
+&gt; version bump (which should be soon) will fix it.<br>
+<br>
+Yes, let's bump to 6.4.0 then.<br>
+<br>
+&gt; Also add the version hashes for qt6base.<br>
+&gt; <br>
+&gt; Signed-off-by: Jesse Van Gavere &lt;<a href=3D"mailto:jesseevg@gmail.co=
+m" target=3D"_blank">jesseevg@gmail.com</a>&gt;<br>
+<br>
+Overall, this needs to be split into a number of patches:<br>
+<br>
+&nbsp;- One adding the hash file, with just the hash of the tarball<br>
+<br>
+&nbsp;- One adding the license information (which is totally missing today,<=
+br>
+&nbsp; &nbsp;and I noticed due to your addition of the hash file) together w=
+ith<br>
+&nbsp; &nbsp;the hashes of the license files<br>
+<br>
+&nbsp;- Several patches adding the different options. I'm not too keen on<br=
+>
+&nbsp; &nbsp;copy/pasting directly the qt5 logic, as I'm not sure all the<br=
+>
+&nbsp; &nbsp;dependencies are exactly the same, so let's do this one feature=
+ at a<br>
+&nbsp; &nbsp;time.<br>
+<br>
+<br>
+&gt; +ifeq ($(BR2_ENABLE_DEBUG),y)<br>
+&gt; +QT6BASE_CONF_OPTS +=3D -DCMAKE_BUILD_TYPE=3DDebug<br>
+&gt; +else<br>
+&gt; +QT6BASE_CONF_OPTS +=3D -DCMAKE_BUILD_TYPE=3DRelease<br>
+&gt; +endif<br>
+<br>
+This is already handled by the cmake-package infrastructure, do no need<br>
+to handle CMAKE_BUILD_TYPE.<br>
+<br>
+&gt; +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)<br>
+&gt; +# Qt 5.8 needs atomics, which on various architectures are in -latomic=
+<br>
+&gt; +QT6BASE_CONF_OPTS +=3D -DCMAKE_SHARED_LINKER_FLAGS=3D"-latomic"<br>
+<br>
+Is this also needed with Qt6 ? (Most likely yes, but the comment is<br>
+weird, another reason why I don't like the copy/pasting from Qt5).<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:/=
+/bootlin.com</a><br>
+</blockquote></div>
+<span>_______________________________________________</span><br><span>buildr=
+oot mailing list</span><br><span>buildroot@buildroot.org</span><br><span>htt=
+ps://lists.buildroot.org/mailman/listinfo/buildroot</span><br></div></blockq=
+uote></body></html>=
+
+--Apple-Mail-C460BE54-569B-4354-8675-70D60519F37C--
+
+--===============6383218468697456024==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6383218468697456024==--
