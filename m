@@ -1,86 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D81ECAAD2
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 16:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB75DECAAA3
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 17:31:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8E2EF41A5F;
-	Fri, 26 Aug 2022 16:31:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E2EF41A5F
+	by smtp1.osuosl.org (Postfix) with ESMTP id F33C983FA8;
+	Fri, 26 Aug 2022 17:31:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F33C983FA8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZqsLl0ZKhNv1; Fri, 26 Aug 2022 16:31:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PT7O4vp1HsI2; Fri, 26 Aug 2022 17:31:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF8DA41A5D;
-	Fri, 26 Aug 2022 16:31:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF8DA41A5D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 40C611BF2C7
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 16:31:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 632C383F9F;
+	Fri, 26 Aug 2022 17:31:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 632C383F9F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 638FE1BF38A
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 17:31:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 189AF404F8
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 16:31:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 189AF404F8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 378726113D
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 17:31:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 378726113D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G5UKT_UhNMOk for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 16:31:14 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE839403F9
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DE839403F9
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 16:31:13 +0000 (UTC)
-Received: by mail-pj1-x1036.google.com with SMTP id
- s31-20020a17090a2f2200b001faaf9d92easo8557169pjd.3
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 09:31:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc;
- bh=z55badnvcGf+60rADiHESaz2+kPSvlxfxbe9muAvKao=;
- b=ATXmYPSDeVyzTSFrPuhwmZpaEXO8X1HkQjgXNxSztyk9Zo2C2VgEgZRHGcQw2vynC/
- kaBM+xZDzExYL3htBL6LHGuZDb67tqn5wWTBw9wMZhKJZKKhNhrb/tV8gMPiNNgAnnnh
- Eu4orJ98ZRfSNh4ic+emPNeggUHXQMH9e2pS9nD9P0gqz3XJ14Xaa0FD9pV8n/32jmGB
- vGhScvhHw8YfVAmCqyzB5FVbOPddYD63vrB8khfIgRMHmLqKMWn7cGrvehDgbATdOUPa
- X81WW3QyYvZ+X/iSL7RHNsq5um6pwMRQu0Zz74p4+buNf4YGzhIwY2+S1bX3dh4IOkwQ
- WzkA==
-X-Gm-Message-State: ACgBeo3Pmyw8Gjepl6qZywaw9G+/IkCbn21/TeI2k2QciTyGpmbK0+KX
- 9o1s2BEvI/Extoy4I6RjqjEmRgtu7GcdO2v6RGHA/1cKC1VsGA==
-X-Google-Smtp-Source: AA6agR6Go8WJ8rW3X632FLkkZA6RC4LXcAZWUqjuWzVhoCiNfNvd02mKY05qgBDTpYUsdLwiM9PBzDMWIco/LvGIYow=
-X-Received: by 2002:a17:902:6b82:b0:16d:d268:3842 with SMTP id
- p2-20020a1709026b8200b0016dd2683842mr4403851plk.16.1661531473103; Fri, 26 Aug
- 2022 09:31:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAM6O0Zgc_jfn+m1ZhRByLQ4QDDAYpAOQv-9aDRgruSYKWV5wUA@mail.gmail.com>
- <20220808122020.0c1ec66a@windsurf>
- <CAM6O0ZjLizEsUWZr106T6+WowWdkqE7k_a1bCaPeAVbPScZ6Ag@mail.gmail.com>
- <ea0d3b02-e5e1-9f4d-0d3a-a498f5d184f0@mind.be>
-In-Reply-To: <ea0d3b02-e5e1-9f4d-0d3a-a498f5d184f0@mind.be>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 26 Aug 2022 10:31:00 -0600
-Message-ID: <CADvTj4rFJZ=GrYoR=16WN58gr2EJEwH+YL5-TRCMHB1cdhxYgg@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc;
- bh=z55badnvcGf+60rADiHESaz2+kPSvlxfxbe9muAvKao=;
- b=PiF+05QYFTkB0MoXXsrrPVhE8zRMU0U2IG1Zyv91e1+uqMSk08BdFXgeI4qstoxiKO
- dzp6qPSUDukCAfKw7u+EysodVZ5EHF/1kjoN7n3mdgdSbM9iKAQfYwtVNG/H5H2vs8B3
- gERZHwYAOjOVPCQKO6kEO00sx/j+HG0VyxxSDqlkX6caOrZJjluCHoXvn29rdE7cuK5n
- NKz4GxSxhRs2FWQArDRelTRH8kiS6w6CzLiLEEyfSPyIQLKHPBraeFZHeKAAB0aOGD8u
- i6RzrC/rhXjFpbrbSsxy+RIkqTcOe/FeiXIX1wcboS10KWiZiiEB5U7wIg3CoPgeGdh0
- ezdg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=PiF+05QY
-Subject: Re: [Buildroot] Python pyc only and problem with scripts
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tyAe6o00aoyJ for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 17:31:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EAD9E61114
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 17:31:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAD9E61114
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 273A187DAE; Fri, 26 Aug 2022 17:16:40 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 26 Aug 2022 19:30:23 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: d68628a5382844a40856be486cd41dbfb0c7cabb
+X-Git-Newrev: 3c09118dc42f48156376527665a38d1cbb871a38
+X-Patchwork-Hint: ignore
+Message-Id: <20220826171640.273A187DAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gobject-introspection:
+ bump version to 1.72.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,173 +57,306 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Federico Pellegrin <fede@evolware.org>,
- Marcus Hoffmann <marcus.hoffmann@othermo.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7587049682306838921=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Aug 8, 2022 at 2:48 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->   Hi Federico, all,
->
->   [Please don't top-post, but reply inline like I do below. Note that this
-> requires configuring your mailer to quote replies properly.]
->
->
-> On 08/08/2022 15:19, Federico Pellegrin wrote:
-> >
-> > Hi Thomas, Marcus,
-> > Many thanks for your feedback and ideas!
-> >
-> > I've looked a bit more now after your feedback online and indeed found that
-> > likely it's mostly rt-tests (or other packages with a similar behaviour, as
-> > mentioned by Marcus) that may be wrong-doing.
->
->   Well, rt-tests is certainly not the only package that does that - I've used
-> other (proprietary) software that does similar things.
->
->
-> > Indeed according to:
-> > https://docs.python.org/3/install/#alternate-installation-unix-the-prefix-scheme
-> > <https://docs.python.org/3/install/#alternate-installation-unix-the-prefix-scheme>
-> > my understanding would be that they should indeed go to |/prefix//bin and not
-> > with the modules.|
-> > |This link
-> > https://python-packaging.readthedocs.io/en/latest/command-line-scripts.html#the-scripts-keyword-argument
-> > <https://python-packaging.readthedocs.io/en/latest/command-line-scripts.html#the-scripts-keyword-argument>
-> > also somehow confirms it I believe as also setuptools assume the possibility to
-> > deliver them.
->
->   I believe the proper way to install is to have a small script in /usr/bin/
-> that simply imports the full script (relying on PYTHONPATH) and calls its main
-> function.
+--===============7587049682306838921==
+Content-Type: text/plain
 
-That's basically how python package entry points work:
-https://packaging.python.org/en/latest/specifications/entry-points/
+commit: https://git.buildroot.net/buildroot/commit/?id=3c09118dc42f48156376527665a38d1cbb871a38
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
->
-> > So after all if rt-tests (or similar) would follow that, Buildroot py->pyc
-> > should be safe, assuming that those script will not be converted.
->
->   Given that rt-tests is not alone, I think it would be good if we could fix the
-> issue on Buildroot side.
+- Remove upstreamed patch 0004-build-Avoid-the-doctemplates-hack.patch.
+- Update license hashes due to address changes.
 
-The bug is in rt-tests, it's installing a script to site-packages when it should
-just be installing it like we would for a shell script(as the script
-isn't a python
-package but rather just a standalone python script).
+Signed-off-by: Adam Duskett <aduskett@rivian.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../gobject-introspection/0001-disable-tests.patch |   2 +-
+ .../0004-build-Avoid-the-doctemplates-hack.patch   | 221 ---------------------
+ .../gobject-introspection.hash                     |   8 +-
+ .../gobject-introspection/gobject-introspection.mk |   2 +-
+ 4 files changed, 6 insertions(+), 227 deletions(-)
 
->
->   I think the problem can be diagnosed when we encounter a .py file that is
-> executable - normally they shouldn't be. We could simply leave those alone
-> instead of removing them. Alternatively, perhaps it's possible to replace them
-> with a symlink to the pyc file - although that may break things in horrible ways
-> as well.
+diff --git a/package/gobject-introspection/0001-disable-tests.patch b/package/gobject-introspection/0001-disable-tests.patch
+index ed2d9d6fc0..390707c10a 100644
+--- a/package/gobject-introspection/0001-disable-tests.patch
++++ b/package/gobject-introspection/0001-disable-tests.patch
+@@ -16,7 +16,7 @@ diff --git a/meson.build b/meson.build
+ index c2cb577f..65ce7adf 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -225,12 +225,6 @@ else
++@@ -232,12 +232,6 @@ else
+  endif
+  subdir('docs')
+  
+diff --git a/package/gobject-introspection/0004-build-Avoid-the-doctemplates-hack.patch b/package/gobject-introspection/0004-build-Avoid-the-doctemplates-hack.patch
+deleted file mode 100644
+index 0b70b5c4c0..0000000000
+--- a/package/gobject-introspection/0004-build-Avoid-the-doctemplates-hack.patch
++++ /dev/null
+@@ -1,221 +0,0 @@
+-From 0504b26ec2adb13dfdff51679d84ad2f69af5918 Mon Sep 17 00:00:00 2001
+-From: Emmanuele Bassi <ebassi@gnome.org>
+-Date: Tue, 11 Jan 2022 15:51:10 +0000
+-Subject: [PATCH] build: Avoid the doctemplates hack
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The hack that copies the doctemplates directory into the build
+-directory has stopped working with newer versions of Meson; while it's
+-possible to copy files, custom_target() cannot depend on a directory.
+-Additionally, the dependency has always been broken.
+-
+-Instead, we enumerate the template files—after all, it's not like they
+-change a lot—and then we list them as dependencies for the test targets.
+-
+-Fixes: #414
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-[james.hilliard1@gmail.com: backport from upstream commit
+-effb1e09dee263cdac4ec593e8caf316e6f01fe2]
+----
+- giscanner/doctemplates/devdocs/meson.build | 19 +++++++
+- giscanner/doctemplates/mallard/meson.build | 63 ++++++++++++++++++++++
+- giscanner/meson.build                      | 14 ++---
+- tests/scanner/meson.build                  | 24 +++++----
+- 4 files changed, 98 insertions(+), 22 deletions(-)
+- create mode 100644 giscanner/doctemplates/devdocs/meson.build
+- create mode 100644 giscanner/doctemplates/mallard/meson.build
+-
+-diff --git a/giscanner/doctemplates/devdocs/meson.build b/giscanner/doctemplates/devdocs/meson.build
+-new file mode 100644
+-index 00000000..2037182a
+---- /dev/null
+-+++ b/giscanner/doctemplates/devdocs/meson.build
+-@@ -0,0 +1,19 @@
+-+doc_templates += files([
+-+  'Gjs/_doc.tmpl',
+-+  'Gjs/_index.tmpl',
+-+  'Gjs/_method.tmpl',
+-+  'Gjs/_methods.tmpl',
+-+  'Gjs/_properties.tmpl',
+-+  'Gjs/_signals.tmpl',
+-+  'Gjs/_staticmethods.tmpl',
+-+  'Gjs/_vfuncs.tmpl',
+-+  'Gjs/base.tmpl',
+-+  'Gjs/callback.tmpl',
+-+  'Gjs/class.tmpl',
+-+  'Gjs/default.tmpl',
+-+  'Gjs/enum.tmpl',
+-+  'Gjs/function.tmpl',
+-+  'Gjs/interface.tmpl',
+-+  'Gjs/method.tmpl',
+-+  'Gjs/namespace.tmpl',
+-+])
+-diff --git a/giscanner/doctemplates/mallard/meson.build b/giscanner/doctemplates/mallard/meson.build
+-new file mode 100644
+-index 00000000..5fe4e2af
+---- /dev/null
+-+++ b/giscanner/doctemplates/mallard/meson.build
+-@@ -0,0 +1,63 @@
+-+base_templates = files([
+-+  'base.tmpl',
+-+  'class.tmpl',
+-+  'namespace.tmpl',
+-+])
+-+
+-+c_templates = files([
+-+  'C/callback.tmpl',
+-+  'C/class.tmpl',
+-+  'C/constructor.tmpl',
+-+  'C/default.tmpl',
+-+  'C/enum.tmpl',
+-+  'C/field.tmpl',
+-+  'C/function.tmpl',
+-+  'C/interface.tmpl',
+-+  'C/method.tmpl',
+-+  'C/namespace.tmpl',
+-+  'C/property.tmpl',
+-+  'C/record.tmpl',
+-+  'C/signal.tmpl',
+-+  'C/vfunc.tmpl',
+-+])
+-+
+-+gjs_templates = files([
+-+  'Gjs/callback.tmpl',
+-+  'Gjs/class.tmpl',
+-+  'Gjs/constructor.tmpl',
+-+  'Gjs/default.tmpl',
+-+  'Gjs/enum.tmpl',
+-+  'Gjs/field.tmpl',
+-+  'Gjs/function.tmpl',
+-+  'Gjs/interface.tmpl',
+-+  'Gjs/method.tmpl',
+-+  'Gjs/namespace.tmpl',
+-+  'Gjs/property.tmpl',
+-+  'Gjs/record.tmpl',
+-+  'Gjs/signal.tmpl',
+-+  'Gjs/vfunc.tmpl',
+-+])
+-+
+-+py_templates = files([
+-+  'Python/callback.tmpl',
+-+  'Python/class.tmpl',
+-+  'Python/constructor.tmpl',
+-+  'Python/default.tmpl',
+-+  'Python/enum.tmpl',
+-+  'Python/field.tmpl',
+-+  'Python/function.tmpl',
+-+  'Python/interface.tmpl',
+-+  'Python/method.tmpl',
+-+  'Python/namespace.tmpl',
+-+  'Python/property.tmpl',
+-+  'Python/record.tmpl',
+-+  'Python/signal.tmpl',
+-+  'Python/vfunc.tmpl',
+-+])
+-+
+-+doc_templates += [
+-+  base_templates,
+-+  c_templates,
+-+  gjs_templates,
+-+  py_templates,
+-+]
+-diff --git a/giscanner/meson.build b/giscanner/meson.build
+-index 41edcd44..3d7dc678 100644
+---- a/giscanner/meson.build
+-+++ b/giscanner/meson.build
+-@@ -53,17 +53,9 @@ configure_file(input : '../girepository/gdump.c',
+- 
+- install_subdir('doctemplates', install_dir: giscannerdir)
+- 
+--# XXX: this doesn't track the input, but there is nothing to copy many files
+--# in meson.
+--doc_templates = custom_target('copy-templates',
+--  input : 'doctemplates',
+--  output : 'doctemplates',
+--  command : [
+--    python, '-c',
+--      'import sys, shutil;' +
+--      'shutil.rmtree(sys.argv[2], ignore_errors=True);' +
+--      'shutil.copytree(sys.argv[1], sys.argv[2])',
+--    '@INPUT@', '@OUTPUT@'])
+-+doc_templates = []
+-+subdir('doctemplates/devdocs')
+-+subdir('doctemplates/mallard')
+- 
+- flex = find_program('flex', 'win_flex')
+- bison = find_program('bison', 'win_bison')
+-diff --git a/tests/scanner/meson.build b/tests/scanner/meson.build
+-index 5176b957..b81b3fd5 100644
+---- a/tests/scanner/meson.build
+-+++ b/tests/scanner/meson.build
+-@@ -525,19 +525,26 @@ foreach gir : test_girs
+- endforeach
+- 
+- if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
+-+  doctool_env = environment()
+-+  doctool_env.set('srcdir', meson.current_source_dir())
+-+  doctool_env.set('builddir', meson.current_build_dir())
+-+
+-   foreach language : ['C', 'Python', 'Gjs']
+-     regress_docs = custom_target(
+-       'generate-docs-' + language,
+-       input: regress_gir,
+--      depends: [doc_templates],
+-+      depend_files: doc_templates,
+-       build_by_default: not cairo_deps_found,
+-+      env: doctool_env,
+-       output: 'Regress-1.0-' + language,
+-       command: [
+-         python, girdoctool,
+-         '--add-include-path=' + join_paths(build_root, 'gir'),
+-         '--add-include-path=' + meson.current_build_dir(),
+-         '--language', language,
+--        '@INPUT@', '-o', '@OUTPUT@'],
+-+        '--templates-dir=' + join_paths(meson.current_source_dir(), '../../giscanner/doctemplates'),
+-+        '@INPUT@', '-o', '@OUTPUT@',
+-+      ],
+-     )
+- 
+-     if cairo_deps_found
+-@@ -546,10 +553,7 @@ if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
+-         python,
+-         args: [gi_tester, 'Regress-1.0-' + language],
+-         depends: [regress_docs],
+--        env: [
+--          'srcdir=' + meson.current_source_dir(),
+--          'builddir=' + meson.current_build_dir(),
+--        ],
+-+        env: doctool_env,
+-       )
+-     endif
+-   endforeach
+-@@ -557,9 +561,10 @@ if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
+-   regress_sections = custom_target(
+-     'generate-docs-sections',
+-     input: regress_gir,
+--    depends: [doc_templates],
+-+    depend_files: [doc_templates],
+-     build_by_default: not cairo_deps_found,
+-     output: 'Regress-1.0-sections.txt',
+-+    env: doctool_env,
+-     command: [
+-       python, girdoctool,
+-       '--add-include-path=' + join_paths(build_root, 'gir'),
+-@@ -574,10 +579,7 @@ if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
+-       python,
+-       args: [gi_tester, 'Regress-1.0-sections.txt'],
+-       depends: [regress_sections],
+--      env: [
+--        'srcdir=' + meson.current_source_dir(),
+--        'builddir=' + meson.current_build_dir(),
+--      ],
+-+      env: doctool_env,
+-     )
+-   endif
+- endif
+--- 
+-2.25.1
+-
+diff --git a/package/gobject-introspection/gobject-introspection.hash b/package/gobject-introspection/gobject-introspection.hash
+index 5b76df6b40..8f9d323d9a 100644
+--- a/package/gobject-introspection/gobject-introspection.hash
++++ b/package/gobject-introspection/gobject-introspection.hash
+@@ -1,5 +1,5 @@
+-#From http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/1.70/gobject-introspection-1.70.0.sha256sum
+-sha256  902b4906e3102d17aa2fcb6dad1c19971c70f2a82a159ddc4a94df73a3cafc4a  gobject-introspection-1.70.0.tar.xz
+-sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING.LGPL
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING.GPL
++#From http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/1.70/gobject-introspection-1.72.0.sha256sum
++sha256  02fe8e590861d88f83060dd39cda5ccaa60b2da1d21d0f95499301b186beaabc  gobject-introspection-1.72.0.tar.xz
++sha256  faa2e414bd5f91d2d2c39e85c7cc3f2ccde05c3306f96b404f8ed8cf0266c279  COPYING.LGPL
++sha256  4c1cedcbb4a12ea964f1160dbbf36099e5a59b96129a99a1a1a61f2cb09271fb  COPYING.GPL
+ sha256  23f82cbc9808cdd8e902df38271434040ce0562ca382ac2a96f5e3bf807b6d31  giscanner/scannerlexer.l
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index 41d64171a7..c8ad9b3c72 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.70
++GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.72
+ GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).0
+ GOBJECT_INTROSPECTION_SITE = http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
+ GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
 
-I don't think it's normal to execute .py files directly from
-site-packages, packages
-can provide entry points if needed which will handle both .py and .pyc
-files without
-issues.
+--===============7587049682306838921==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
->
->   In either case, it's nice we have this rt-tests failure, because it means we
-> can have a runtime test for it!
->
->   Regards,
->   Arnout
->
->
-> > |
-> > |
-> > |
-> > |I'll try to contact the rt-tests team and see what they think of this and come
-> > back with a patch for Buildroot!
-> > |
-> > |
-> > |
-> > |Cheers,|
-> > |Federico
-> > |
-> > |
-> > |
-> >
-> > Il giorno lun 8 ago 2022 alle ore 12:20 Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com <mailto:thomas.petazzoni@bootlin.com>> ha scritto:
-> >
-> >     Hello Federico,
-> >
-> >     On Mon, 8 Aug 2022 09:40:02 +0200
-> >     Federico Pellegrin <fede@evolware.org <mailto:fede@evolware.org>> wrote:
-> >
-> >      > I've found a minor problem related to the rt-tests package, but that maybe
-> >      > is slightly more generic and wanted to report and in case understand which
-> >      > approach would be best to fix it (and contribute a patch then if possible).
-> >      >
-> >      > The specific problem: rt-tests, besides a few compiled executables,
-> >      > installs also two tools which are written in Python, namely hwlatdetect and
-> >      > get_cyclictest_snapshot. These are Python scripts which get installed in
-> >      > the PYLIB and then a symbolic link is done from /usr/bin to them, so ie we
-> >      > have: /usr/bin/hwlatdetect ->
-> >      > /usr/lib/python3.10/site-packages//hwlatdetect.py
-> >      >
-> >      > Needless to say that once the pycompile.py script is run and original .py
-> >      > files are removed, of course in the "PYC only" setup (which is the
-> >      > default), then the link is broken and it will not work.
-> >      > Additionally that pyc files will not work for scripts like that, so just
-> >      > somehow fixing the link mentioned above would anyhow not work, as you need
-> >      > to execute them eventually by explicitly naming the interpreter.
-> >      >
-> >      > I could imagine that we could have some similar other cases when we are
-> >      > installing Python scripts directly executed in PYLIB and not modules. But
-> >      > I'm not sure that installing the scripts there is a good idea as well,
-> >      > comparing with other distros that doesn't seem to be the case.
-> >      > So maybe the problem is really in rt-tests after all and the location those
-> >      > scripts get installed and I may just fix it that way (and contact upstream)?
-> >      > Otherwise should it be more generic maybe could make sense to have a
-> >      > facility to list some files that should not be converted to PYC?
-> >
-> >     Thanks for your bug report.
-> >
-> >     My initial gut feeling would indeed be that it is strange to install
-> >     scripts in /usr/lib/python, and they should be installed in /usr/bin
-> >     instead, so that /usr/lib/python is only for Python modules that can be
-> >     byte-compiled. However, I am not an expert at all in terms of Python
-> >     best practices and latest standards.
-> >
-> >     But from a Buildroot perspective, it really makes a lot of sense to be
-> >     able to do the byte-compilation at build-time (to save on startup time)
-> >     and drop the .py files (to save on filesystem footprint).
-> >
-> >     For the rt-tests case, I would therefore suggest to move those scripts
-> >     to /usr/bin.
-> >
-> >     Of course, if that problem shows up in more packages, then yes we could
-> >     think of a mechanism for packages to declare a number of py files that
-> >     should not be byte-compiled, and that should be preserved on the target.
-> >
-> >     Best regards,
-> >
-> >     Thomas
-> >     --
-> >     Thomas Petazzoni, co-owner and CEO, Bootlin
-> >     Embedded Linux and Kernel engineering and training
-> >     https://bootlin.com <https://bootlin.com>
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7587049682306838921==--
