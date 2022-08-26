@@ -1,76 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBDEBECAAD2
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 09:16:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD88ECAAA3
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 11:11:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BF57419B2;
-	Fri, 26 Aug 2022 09:16:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BF57419B2
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE9A3610E0;
+	Fri, 26 Aug 2022 11:11:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE9A3610E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Le73yCwZKwbD; Fri, 26 Aug 2022 09:16:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YrPavSWgNn2M; Fri, 26 Aug 2022 11:11:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEF01419A9;
-	Fri, 26 Aug 2022 09:16:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEF01419A9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0ADED610DC;
+	Fri, 26 Aug 2022 11:11:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ADED610DC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C6FF11BF2C4
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 09:16:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 89D1D1BF289
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A2415610AF
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 09:16:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2415610AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63DA9610DC
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63DA9610DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fl6vvGIseALI for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 09:16:13 +0000 (UTC)
-X-Greylist: delayed 00:06:10 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 970D160B19
-Received: from mout-b-206.mailbox.org (mout-b-206.mailbox.org
- [IPv6:2001:67c:2050:102:465::206])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 970D160B19
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 09:16:12 +0000 (UTC)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org
- [IPv6:2001:67c:2050:b231:465::102])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by mout-b-206.mailbox.org (Postfix) with ESMTPS id 4MDYv870Q4z9slv;
- Fri, 26 Aug 2022 11:09:56 +0200 (CEST)
-Message-ID: <4dcde8fb-9370-e990-8069-cbfac74a62f8@othermo.de>
-Date: Fri, 26 Aug 2022 11:09:56 +0200
+ with ESMTP id gWAZ82iOfMxC for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 11:11:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE0C560B8D
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DE0C560B8D
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 11:11:09 +0000 (UTC)
+Received: from 91-153-34-64.elisa-laajakaista.fi ([91.153.34.64] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1oRXEv-000yv0-1X; Fri, 26 Aug 2022 13:11:04 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 100b4c16;
+ Fri, 26 Aug 2022 11:10:54 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>,
+ Francois Perrad <francois.perrad@gadz.org>
+Date: Fri, 26 Aug 2022 13:50:55 +0300
+Message-Id: <20220826105055.490087-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Language: en-US
-To: buildroot@buildroot.org
-References: <CAM6O0Zgc_jfn+m1ZhRByLQ4QDDAYpAOQv-9aDRgruSYKWV5wUA@mail.gmail.com>
- <35ea7a5d-e0b4-d98e-ca1d-716de2d25698@othermo.de>
- <20220808121723.7d0d2bcb@windsurf>
- <2e49d072-ab0a-4e7e-1d39-9844e98bf560@othermo.de>
-From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-In-Reply-To: <2e49d072-ab0a-4e7e-1d39-9844e98bf560@othermo.de>
-X-Rspamd-Queue-Id: 4MDYv870Q4z9slv
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=othermo.de; s=MBO0001; t=1661504996;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=aAbfM7uyQhaNlwzTutt+6CqHaJzDdlCyqaGCqg7JpRI=;
- b=msJFHxJ9nUKRUrZeUwSfwqY/hYeeZP/+UE7o5+gKUO51fzhkjpZWBxJWkR3FgZD1djhOFE
- b3MY/0lT3ZLxmd+MCuklocZs3+4a9r1/98AYSOzaNEg6XZJPjXEeY5Xn/rsqJul5uFbH0n
- Y4O/gC4duxeT+ag7afdTA4AyVsivt6HuQpWBD01VoB7BIDUzhJYw9Gfk/Upw3LnsiQWORM
- Kn+FNtlAPNq2Qd5tP/vvg8Q3P1D5f1UhAzzfQHWZ1ZBsWlNMp9K27lPpZSBpOFemwkgJdh
- rEdqtoXPecnYKNJzaO8QFxMaFoeXp5iQGxlYhiM2ME8yHqjVRfEib+ZEbvDFpQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+ To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=uOG5f7UMbUKjVU4pOvSTIyOPxC5fRvAC0rEltLMV9GA=; b=h8mBL4NkCEfqhrgU5EBn+nLiNx
+ xu8SA+PTMGzMlhkRPRef6EcXWAH1MZ+vnt2qpyvMihjmzdFDcgloX+UjTyDeOHQnuLSAMlmv31rQS
+ BkqwnQeya+8JYb6s3sQlPq69XoVwdoinBq71I2oAS25wzz1qM2hPhZ1inKoxx8u66cGGg7pi2ySrC
+ JZz3DNVtWPJ4f6gn8rT7jrnSj1MWOPFcCg/0VeP6rkaPvq7mufn5sZXYCDGooQw4gJ72Fuy7491KZ
+ 5VA667IQVorIE5HRR9le4mGot3skGJNwqTpEtadhdOZA705dIHEFSnP83SLTrBuwD6AGW909bNa0w
+ MRoDt38w==;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=othermo.de header.i=@othermo.de
- header.a=rsa-sha256 header.s=MBO0001 header.b=msJFHxJ9
-Subject: Re: [Buildroot] Python pyc only and problem with scripts
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=h8mBL4Nk
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
+ 2.36.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,44 +78,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vincent Fazio <vfazio@xes-inc.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 08.08.22 12:30, Marcus Hoffmann wrote:
-> Hi Thomas,
-> 
-> On 08.08.22 12:17, Thomas Petazzoni via buildroot wrote:
->> Hello Marcus,
->>
->> On Mon, 8 Aug 2022 12:05:54 +0200
->> Marcus Hoffmann <marcus.hoffmann@othermo.de> wrote:
->>
->>> I've noticed a similar problem for pip's PEP517 backend as well, which
->>> normally calls some internal helper script via python subprocess (and
->>> uses the .py name for that). This is fixable by using the .pyc suffix
->>> instead in that case though.
->>
->> Do you have some details on this?
-> 
+Bugfix release, with a security patch for CVE-2022-32893.
+Release notes:
 
-I filed https://github.com/pypa/pep517/issues/148 now. It seems that 
-openwrt has run into this problem as well but the patch the submitted 
-didn't get any feedback for quite a while now.
+  https://wpewebkit.org/release/wpewebkit-2.36.6.html
+  https://wpewebkit.org/release/wpewebkit-2.36.7.html
 
+Accompanying security advisory:
 
-> 
->>
->> Thomas
-> 
-> Marcus
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+  https://wpewebkit.org/security/WSA-2022-0008.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/wpewebkit/wpewebkit.hash | 9 ++++-----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 827df1e89a..6881deb8fc 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,8 +1,7 @@
+-
+-# From https://wpewebkit.org/releases/wpewebkit-2.36.5.tar.xz.sums
+-md5  99b9b0c3c8757edf03ddf550bea448e2  wpewebkit-2.36.5.tar.xz
+-sha1  d7deb766d1ff48b7f9d685fcd67ccc23e2962288  wpewebkit-2.36.5.tar.xz
+-sha256  f2461d533cd3820ea1855e2c8b0b0624b39add1389dc3ac09c2f27891a7a8caa  wpewebkit-2.36.5.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.36.7.tar.xz.sums
++md5  a9f8d521d8171292aab842d3e8ba227e  wpewebkit-2.36.7.tar.xz
++sha1  e9255b3592bbaac8b20af03cafa31cedfb0b4898  wpewebkit-2.36.7.tar.xz
++sha256  f3747d72ffc562ad0cfb6218fdf6d897c78c4bdbf5618e0fa26906fba52b95c9  wpewebkit-2.36.7.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index a28c8321e1..62a7be11f2 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEWEBKIT_VERSION = 2.36.5
++WPEWEBKIT_VERSION = 2.36.7
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
+-- 
+2.37.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
