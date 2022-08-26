@@ -1,87 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2E6DECAAA3
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 21:15:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D00C0502A
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 21:23:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AAF6415FC;
-	Fri, 26 Aug 2022 21:15:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AAF6415FC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7457060A77;
+	Fri, 26 Aug 2022 21:23:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7457060A77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cBGqQtwnymsk; Fri, 26 Aug 2022 21:15:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3qEBMFwUfUg7; Fri, 26 Aug 2022 21:23:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 085F3415F8;
-	Fri, 26 Aug 2022 21:15:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 085F3415F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF64560888;
+	Fri, 26 Aug 2022 21:23:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF64560888
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 672281BF860
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:14:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10E001BF860
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:23:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 419C36079E
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:14:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 419C36079E
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF6BD60888
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:23:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF6BD60888
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mip_MTqGRlbm for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 21:14:57 +0000 (UTC)
+ with ESMTP id A-GU8HHelUf3 for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 21:22:59 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20FB66079D
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 20FB66079D
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 21:14:57 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id v16so442721wrm.8
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 14:14:56 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 150276079E
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 150276079E
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 21:22:59 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id az27so3183187wrb.6
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 14:22:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=Gki2hWMmRrzpKH9tFbOzmiXiDqTArfQBrz0l+ualujA=;
- b=fMfrPO0AYjhr0bleMo9Z1r+joDd+AusN99PwY1Y4ZkYtICbtUlPGF7ZsA8BVmr2AJ9
- 29IhW2NkpkFZo9E+UxxtvhHFmQ/7S0u3Dm22zvNvekD04GJkwIUZG2LwARx5UxQl5p1v
- YlkRSV7XU/wCK2RiKzxtTb/neP9et7m90gSwj0pbWcWDEw16Qw8cgA2HiabQs/OTX59C
- epdMu7zF+cAPADyU9cSe/rhmn8+Q5aOojvfOzs8q5f5C31+FhcgI+KL1RYThW8zhnOHt
- oGjRiX5kovMx6iLqMEIK183eru2sbnDiIxOHKQTW47chNvjJbssWtAc0rJuCza7zbRvA
- gPXQ==
-X-Gm-Message-State: ACgBeo2qXrftxrZkAUZ+uGqYB7ppvm3ZFVMwsA6zPZIMmVw/qBy9QO7m
- EHqeMv8hA+cRdcthyyrJHoKrSkXYfzM=
-X-Google-Smtp-Source: AA6agR7nefPTiMC+qj3sGa4RzKnveOhYRFxSVl/p0QvnO2rbukaovQuBxWHfgLV1Y+ChhJfwCcRbVQ==
-X-Received: by 2002:a05:6000:1882:b0:225:7556:f3da with SMTP id
- a2-20020a056000188200b002257556f3damr746004wri.459.1661548495145; 
- Fri, 26 Aug 2022 14:14:55 -0700 (PDT)
+ bh=iYqGYc8qrNYAzs+hwVWjjZmm2xwYRP7bIeMYUhs9GNU=;
+ b=NgEt7hzWYhz51VTaWSuh5OJsy2sSWhpJGCbNeAD0ZdqyE3y9I8uplBnz5ZY6yCgbpM
+ hNNUOm/tBL5+NV0Zo6FcvSUpdREvpd40Div3bKBMZhuKEUifXRFrMeLgCjuLuSZjNnRt
+ dLuiHVjMs5bZTuBSxWLohyvb40vM9sU+KASCgFDhm3kPKkZF+7gnTSufpOxl14q1vKPV
+ +N8wxFhHF3Hd/9BRGxPD0L9yq7lxsaP4GO77PW738lCI9klFbO2JL9FSIQSD2ZvkyLe8
+ DXePDXUJmHBrxi/phkDZo2QJgP1gps1xwDPy0BjosUhs/WCEBLg5UJ0Id1cE4VuTh1jE
+ RbHg==
+X-Gm-Message-State: ACgBeo1z2xOTxFBAJAnVnajMRwja0+fPD+j/yCSQi7xMbga51WwQzPsP
+ NX484RghMvcy/Cz91ab2Ku4R0sfQo8A=
+X-Google-Smtp-Source: AA6agR6obLiqCigRPIehh4LKRv5V/t9yKwpTIiX6axQ4Plzgq5NvwAya7KTOtR7o5+mr058/YL2ieA==
+X-Received: by 2002:a5d:6da9:0:b0:225:59e4:1497 with SMTP id
+ u9-20020a5d6da9000000b0022559e41497mr756890wrs.262.1661548977077; 
+ Fri, 26 Aug 2022 14:22:57 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- l7-20020a05600c1d0700b003a317ee3036sm837255wms.2.2022.08.26.14.14.54
+ j2-20020a056000124200b0022537d826f3sm729510wrx.23.2022.08.26.14.22.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Aug 2022 14:14:54 -0700 (PDT)
+ Fri, 26 Aug 2022 14:22:56 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Aug 2022 23:14:51 +0200
-Message-Id: <20220826211451.33719-1-fontaine.fabrice@gmail.com>
+Date: Fri, 26 Aug 2022 23:22:54 +0200
+Message-Id: <20220826212254.37425-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=Gki2hWMmRrzpKH9tFbOzmiXiDqTArfQBrz0l+ualujA=;
- b=MxiP8VgSNHRK47k1Q/luuwQz/Fsv7xQl/wA9RT0dMUQS6bDnEJCozf45lIO9GyHvxY
- W7XdXjUcvYnJ2UYKbYJTafimLY3OZvWSREp3HM1DlGrsHyvvHrdIFOne5x7FzlIiBeuw
- SNF6pYc5bu3SXGFKEw3D5W02Y+4Z9nQLN2cYUJENtWYv6ZgzWXvmjkgybOWbiGNH6tqY
- Tv3e8ht+yC7TMxSUhViVXsCsMApzqhWk5c8TXhAWRcc/lu93vBvL+IaC57DtHHmLTSjO
- M03b5+LhIYfevZ8opJsYO2TICzVUuLmWMeT9EF6Z4Irrhr79igdcEID3+mt8MBveMoQs
- xgjQ==
+ bh=iYqGYc8qrNYAzs+hwVWjjZmm2xwYRP7bIeMYUhs9GNU=;
+ b=JFfqEiyNEIxSiUqeoGPZr+JG18bZmh1fW/5ENb5mWq40jjIuKMOY8oScoKEjrV4ubX
+ KLdlNZCqacIX1uLaMl0655vkO6+cInaR2w8SoK4WT8KRLVj4czlc5CaJd5oYppR0GnNJ
+ ANx8mBtMss5eX3N9zG1Yt4y3yU8rIhyX7eIDPRqXCAyEXrWC6DKMtr6HZWD9ujMnrcLz
+ t7f+5PvfLGwnRyMThBFGgVZnWcIZVmY6QkTu2i4nYxMlcF2atDuX7M1MIPfex+WbucLu
+ zShq+1rBLPe0YwVqp+vnmLM3z8AqtnpqbdPAp6QLElCUI5EnkGvGA8ZrlZ9rQY9IgMYg
+ 42MA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=MxiP8VgS
-Subject: [Buildroot] [PATCH 1/1] package/libtirpc: security bump to version
- 1.3.3
+ header.a=rsa-sha256 header.s=20210112 header.b=JFfqEiyN
+Subject: [Buildroot] [PATCH 1/1] package/squid: security bump to version 5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,51 +92,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2021-46828: In libtirpc before 1.3.3rc1, remote attackers could
-exhaust the file descriptors of a process that uses libtirpc because
-idle TCP connections are mishandled. This can, in turn, lead to an
-svc_run infinite loop without accepting new connections.
+Fix CVE-2021-46784: In Squid 3.x through 3.5.28, 4.x through 4.17, and
+5.x before 5.6, due to improper buffer management, a Denial of Service
+can occur when processing long Gopher server responses.
 
-https://sourceforge.net/projects/libtirpc/files/libtirpc/1.3.3/Release-1.3.3.txt/download
+https://github.com/squid-cache/squid/security/advisories/GHSA-f5cp-6rh3-284w
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libtirpc/libtirpc.hash | 4 ++--
- package/libtirpc/libtirpc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 56c1d9de3f..1efc3e47e2 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
-@@ -1,5 +1,5 @@
- # From sourceforge's info on download page:
--sha1  51d75be0e5acc094a888f40042b23e128d163cb5  libtirpc-1.3.2.tar.bz2
-+sha1  6e52c39148494e4836e2d5d4f28b11ddfa65394b  libtirpc-1.3.3.tar.bz2
- # Locally computed
--sha256  e24eb88b8ce7db3b7ca6eb80115dd1284abc5ec32a8deccfed2224fc2532b9fd  libtirpc-1.3.2.tar.bz2
-+sha256  6474e98851d9f6f33871957ddee9714fdcd9d8a5ee9abb5a98d63ea2e60e12f3  libtirpc-1.3.3.tar.bz2
- sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 9d3c4b5a94..179adc97d0 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index e18ed8961e..22c6db8c70 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v5/squid-5.3.tar.xz.asc
+-md5  9249f30169ab6600e53b4f9b8129b3b0  squid-5.3.tar.xz
+-sha1  d3a8310c725616fa7565d60f3bf8fdf5fa20b15a  squid-5.3.tar.xz
++# From http://www.squid-cache.org/Versions/v5/squid-5.6.tar.xz.asc
++md5  2f2201a18a0a727ab589d951ebe4f815  squid-5.6.tar.xz
++sha1  a01f47b3e9ff06245c894773de30bfd88ab14f65  squid-5.6.tar.xz
+ # Locally calculated
+-sha256  45178588df1311ded41ebadd632840c4d93a8d7f5f60e38e74acf2f1ae2f1715  squid-5.3.tar.xz
++sha256  38d27338a347597ce0e93d0c3be6e5f66b6750417c474ca87ee0d61bb6d148db  squid-5.6.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 3847fb49dc..86a0c714c6 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTIRPC_VERSION = 1.3.2
-+LIBTIRPC_VERSION = 1.3.3
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3-Clause
+-SQUID_VERSION = 5.3
++SQUID_VERSION = 5.6
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v5
+ SQUID_LICENSE = GPL-2.0+
 -- 
 2.35.1
 
