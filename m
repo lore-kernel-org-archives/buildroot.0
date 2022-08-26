@@ -1,72 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEB65ECAAA3
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 21:07:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2E6DECAAA3
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 21:15:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47D88829AF;
-	Fri, 26 Aug 2022 21:07:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47D88829AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AAF6415FC;
+	Fri, 26 Aug 2022 21:15:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AAF6415FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kywTOC4Xhk4l; Fri, 26 Aug 2022 21:07:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cBGqQtwnymsk; Fri, 26 Aug 2022 21:15:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D605982948;
-	Fri, 26 Aug 2022 21:07:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D605982948
+	by smtp4.osuosl.org (Postfix) with ESMTP id 085F3415F8;
+	Fri, 26 Aug 2022 21:15:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 085F3415F8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5244B1BF860
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:07:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 672281BF860
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:14:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 355146079D
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:07:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 355146079D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 419C36079E
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:14:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 419C36079E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CuAP9v8ZGUf1 for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 21:07:17 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC47960769
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DC47960769
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 21:07:16 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:1c2f:c99e:ae80:bcc0])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 0751319F736;
- Fri, 26 Aug 2022 23:07:12 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 26 Aug 2022 23:07:12 +0200
-Date: Fri, 26 Aug 2022 23:07:12 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Johan Oudinet <johan.oudinet@gmail.com>
-Message-ID: <20220826210712.GE37358@scaer>
-References: <20220322160725.636205-1-johan.oudinet@gmail.com>
- <20220822141205.GC2167049@scaer>
- <CAJtjsKZtjXnqki4+yPdkdLNcVa+4kOfmybk-_5yxA8497r31-Q@mail.gmail.com>
+ with ESMTP id Mip_MTqGRlbm for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 21:14:57 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20FB66079D
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 20FB66079D
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 21:14:57 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id v16so442721wrm.8
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 14:14:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=Gki2hWMmRrzpKH9tFbOzmiXiDqTArfQBrz0l+ualujA=;
+ b=fMfrPO0AYjhr0bleMo9Z1r+joDd+AusN99PwY1Y4ZkYtICbtUlPGF7ZsA8BVmr2AJ9
+ 29IhW2NkpkFZo9E+UxxtvhHFmQ/7S0u3Dm22zvNvekD04GJkwIUZG2LwARx5UxQl5p1v
+ YlkRSV7XU/wCK2RiKzxtTb/neP9et7m90gSwj0pbWcWDEw16Qw8cgA2HiabQs/OTX59C
+ epdMu7zF+cAPADyU9cSe/rhmn8+Q5aOojvfOzs8q5f5C31+FhcgI+KL1RYThW8zhnOHt
+ oGjRiX5kovMx6iLqMEIK183eru2sbnDiIxOHKQTW47chNvjJbssWtAc0rJuCza7zbRvA
+ gPXQ==
+X-Gm-Message-State: ACgBeo2qXrftxrZkAUZ+uGqYB7ppvm3ZFVMwsA6zPZIMmVw/qBy9QO7m
+ EHqeMv8hA+cRdcthyyrJHoKrSkXYfzM=
+X-Google-Smtp-Source: AA6agR7nefPTiMC+qj3sGa4RzKnveOhYRFxSVl/p0QvnO2rbukaovQuBxWHfgLV1Y+ChhJfwCcRbVQ==
+X-Received: by 2002:a05:6000:1882:b0:225:7556:f3da with SMTP id
+ a2-20020a056000188200b002257556f3damr746004wri.459.1661548495145; 
+ Fri, 26 Aug 2022 14:14:55 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ l7-20020a05600c1d0700b003a317ee3036sm837255wms.2.2022.08.26.14.14.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 26 Aug 2022 14:14:54 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 26 Aug 2022 23:14:51 +0200
+Message-Id: <20220826211451.33719-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAJtjsKZtjXnqki4+yPdkdLNcVa+4kOfmybk-_5yxA8497r31-Q@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661548035;
- bh=nNOzwgNK9HtbXDxHYSS5XOZmWjl3nWtsLVQzHLpymBM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=EYoEND0cungjHgxDeI84SVyU7mHemROG/hNVWKaCZu5XbcRh5fO4b6wA8lk7ITnuU
- 3hy57o5rxyYyw4GGP6/wGcpPy6dAWAI73KkcDZ+1oPKmqn+Z7Jd7ynhXAbgNEeRenK
- UPT8GEbraB63x2w7Tyme/ej0EgENXkX8GcoNCinXysUvpb5Wvjb9WxDLQTdwPNlLcz
- 1l3XMztEcyxxpUErd0IfZNkFI1IPDyAJsOC/J2F9T3zcC06PeU0iMxAz4YQGetEbiW
- 6MljHqHNzt5VrszLM6bXTLBiRq5+Gtyi61qyck4x3UyCYVrV1otLVUGX8lQ0V8kC7C
- 1VwlsloqBZQYQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=Gki2hWMmRrzpKH9tFbOzmiXiDqTArfQBrz0l+ualujA=;
+ b=MxiP8VgSNHRK47k1Q/luuwQz/Fsv7xQl/wA9RT0dMUQS6bDnEJCozf45lIO9GyHvxY
+ W7XdXjUcvYnJ2UYKbYJTafimLY3OZvWSREp3HM1DlGrsHyvvHrdIFOne5x7FzlIiBeuw
+ SNF6pYc5bu3SXGFKEw3D5W02Y+4Z9nQLN2cYUJENtWYv6ZgzWXvmjkgybOWbiGNH6tqY
+ Tv3e8ht+yC7TMxSUhViVXsCsMApzqhWk5c8TXhAWRcc/lu93vBvL+IaC57DtHHmLTSjO
+ M03b5+LhIYfevZ8opJsYO2TICzVUuLmWMeT9EF6Z4Irrhr79igdcEID3+mt8MBveMoQs
+ xgjQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EYoEND0c
-Subject: Re: [Buildroot] [PATCH] package/forge: new package
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=MxiP8VgS
+Subject: [Buildroot] [PATCH 1/1] package/libtirpc: security bump to version
+ 1.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,53 +93,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Johan, All,
+Fix CVE-2021-46828: In libtirpc before 1.3.3rc1, remote attackers could
+exhaust the file descriptors of a process that uses libtirpc because
+idle TCP connections are mishandled. This can, in turn, lead to an
+svc_run infinite loop without accepting new connections.
 
-On 2022-08-26 16:11 +0200, Johan Oudinet spake thusly:
-> On Mon, Aug 22, 2022 at 4:12 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Instead, you should grab the sources from th github repo, have the
-> > package depend on host-nodejes, and build the pacakge with $(NPM) build.
-> 
-> Thanks for the suggestion. I didn't know we could do that in recent
-> versions of buildroot.
-> It is indeed a much cleaner way  to handle npm packages, even though I
-> don't like the BUILD commands to download the dependencies.
+https://sourceforge.net/projects/libtirpc/files/libtirpc/1.3.3/Release-1.3.3.txt/download
 
-Yeah, this is indeed not nice, but there is nt much we can do for now.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libtirpc/libtirpc.hash | 4 ++--
+ package/libtirpc/libtirpc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-If we get a good nderstanding of how npm-based pacages work, then we can
-look into introducing a download post-processing script, like we have
-for go and cargo, where the vendoring is done as part of the download
-step.
-
-But I don't think I could spot a similar (mis)feature in npm...
-
-Regards,
-Yann E. MORIN.
-
-> I've uploaded a new version with your suggestions.
-> 
-> Best regards,
-> -- 
-> Johan
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
+index 56c1d9de3f..1efc3e47e2 100644
+--- a/package/libtirpc/libtirpc.hash
++++ b/package/libtirpc/libtirpc.hash
+@@ -1,5 +1,5 @@
+ # From sourceforge's info on download page:
+-sha1  51d75be0e5acc094a888f40042b23e128d163cb5  libtirpc-1.3.2.tar.bz2
++sha1  6e52c39148494e4836e2d5d4f28b11ddfa65394b  libtirpc-1.3.3.tar.bz2
+ # Locally computed
+-sha256  e24eb88b8ce7db3b7ca6eb80115dd1284abc5ec32a8deccfed2224fc2532b9fd  libtirpc-1.3.2.tar.bz2
++sha256  6474e98851d9f6f33871957ddee9714fdcd9d8a5ee9abb5a98d63ea2e60e12f3  libtirpc-1.3.3.tar.bz2
+ sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 9d3c4b5a94..179adc97d0 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTIRPC_VERSION = 1.3.2
++LIBTIRPC_VERSION = 1.3.3
+ LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
+ LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+ LIBTIRPC_LICENSE = BSD-3-Clause
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
