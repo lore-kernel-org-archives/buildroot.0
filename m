@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDFFDECAAA3
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 11:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47F0EECAAD4
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 11:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D704610E7;
-	Fri, 26 Aug 2022 11:11:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D704610E7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 78C2661101;
+	Fri, 26 Aug 2022 11:12:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78C2661101
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zEKI8aqiDtv5; Fri, 26 Aug 2022 11:11:52 +0000 (UTC)
+	with ESMTP id P6GDM5B3ldV9; Fri, 26 Aug 2022 11:12:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 848BC610DE;
-	Fri, 26 Aug 2022 11:11:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 848BC610DE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D7E61C2742
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D354F610F7;
+	Fri, 26 Aug 2022 11:12:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D354F610F7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 959D21BF289
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58E7E83EEC
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58E7E83EEC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FC05404B9
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FC05404B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O412uqL2ONNK for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 11:11:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qtc2MFBgI4d7 for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 11:11:17 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D5A483EEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EDE240192
 Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5D5A483EEA
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 11:11:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8EDE240192
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 11:11:16 +0000 (UTC)
 Received: from 91-153-34-64.elisa-laajakaista.fi ([91.153.34.64] helo=kodama)
  by fanzine2.igalia.com with esmtpsa 
  (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1oRXF1-000yvB-Fs; Fri, 26 Aug 2022 13:11:11 +0200
+ id 1oRXF4-000yvB-SD; Fri, 26 Aug 2022 13:11:14 +0200
 Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 77381f4c;
+ by kodama (OpenSMTPD) with ESMTPA id 217b60a8;
  Fri, 26 Aug 2022 11:10:54 +0000 (UTC)
 From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Aug 2022 13:50:07 +0300
-Message-Id: <20220826105007.489862-1-aperez@igalia.com>
+Date: Fri, 26 Aug 2022 13:53:05 +0300
+Message-Id: <20220826105305.494881-1-aperez@igalia.com>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
@@ -55,15 +55,15 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
  In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
  List-Post:List-Owner:List-Archive;
- bh=uOG5f7UMbUKjVU4pOvSTIyOPxC5fRvAC0rEltLMV9GA=; b=hrRX6JvqzIlJ67BCONu9YwvSIm
- XPNHjT2lKYPcGRoBCjbfCBvDRJBPq2KpX0bA/H4wUFCpGPsD4d7FNwnDsh/w0IGNGBnkAb7FwpgX6
- 82IH6bX399UFxLY+MfTY9AqBDssW9P79tXfPZajZuuMzgG4lge0fyH1iIlUwkw93ZJVTJtfg+4DBL
- 1bMXgw2ZdMrw0N5WVd00HTCm15a5nxkp9MnEmeFi/wuznwKDW/XThimWNP+e3qxpR1offYwRUBVFs
- K8rCPVkQfyg/xwicuXB1Cuwge+AM5wOqPBg601fHEB3HoPaStRITvUpLmHJSd/yWKjhJxzKfMjYtq
- vCLYLHlA==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=uOG5f7UMbUKjVU4pOvSTIyOPxC5fRvAC0rEltLMV9GA=; b=RsDxiUG/NV6nknw3BSnA+wfydJ
+ 55TXUY4/JamFr7XxOGn21YwyG4aTeedzB2wxPuy1uQlVDjQaigNiRf+noBGmKJdK/VRgl0lGFyR9w
+ d23J5iwC7PSrdQm+3+bkPL+q+Rk9RMZf8fKE/dbBBU/uHswwZY+BS+VMTKc1u2cepjoTfe6xU1eM+
+ UJzJ5jFl0V0t6kln4x1ONSSNFUJp2puTK/NhRYiYNNFCXM4jiB3f11adSAHH/d4vdT6C7gY6pM++q
+ WNZRCjrZaJn2XX2f+ZJmBZ/S79jncplsyEMCdWUoWlKUfKRbiTpqUR38XKO6Ybzcd+zPoWke2D83w
+ NrhtfMSQ==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=hrRX6Jvq
+ header.a=rsa-sha256 header.s=20170329 header.b=RsDxiUG/
 Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
  2.36.7
 X-BeenThere: buildroot@buildroot.org
