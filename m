@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 475DAECAAD2
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 06:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FA3AECAAA3
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 06:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B29CC40C2E;
-	Fri, 26 Aug 2022 06:48:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B29CC40C2E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B5994014C;
+	Fri, 26 Aug 2022 06:48:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B5994014C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gD5js7O3g4tS; Fri, 26 Aug 2022 06:48:45 +0000 (UTC)
+	with ESMTP id 0UHeZ_IGCgNs; Fri, 26 Aug 2022 06:48:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92A7D400F1;
-	Fri, 26 Aug 2022 06:48:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92A7D400F1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4FD501BF8A8
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 17CDE40C39;
+	Fri, 26 Aug 2022 06:48:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17CDE40C39
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E25F1BF8A8
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 298A24197D
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 298A24197D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16906610AD
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16906610AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PIFsS4AWU_9l for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 06:48:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uHRF2_PCnIfd for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 06:48:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB72841981
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EB72841981
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 06:48:05 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id bj12so1337135ejb.13
- for <buildroot@buildroot.org>; Thu, 25 Aug 2022 23:48:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56C2160B1A
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 56C2160B1A
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 06:48:08 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id d21so1407028eje.3
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 23:48:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=NtXuREkyenAJ638DKiigj8HQg4z5rLwtbuhD2XMu3AY=;
- b=Rs/cIeIhHcKoZ2tc7W8tVgE9HKutIE2t2rMr6QbuWmEmD3eKi/00zoTSHVAXh4+5y+
- 3k8SxX32miha5BF+qwE5Q9jSkX4oy5WurQa1KAq4+rwdk7j5ogfWMlggpP7HpIYP9w+H
- +bgvr99k+kTso56rZZfKPJzn1J0Ho6AiYDJc0Ep6STgIPHBZTKG0rxVv38lSL+HT1aaS
- lbhqJX7tLGbjsAWufjeDoUWwp3qLhwOz++t49tqxoCozGAJUOEfjZGyDEqoQJCLXp3H1
- k6jzhXslO+YWUxpD5JrQrKPuzSTvPAgCrwF9xgyrq1GksmWYLt6VjWcwZbgaK+kNACLe
- ExNQ==
-X-Gm-Message-State: ACgBeo2xsDJggGTkiwnk9XIMhdd2U69k3xZMXDgJChVc5WPFWaF7TGka
- umqA6QeK57a8ST4e7LSyDYSXIdnD+MxIx30i
-X-Google-Smtp-Source: AA6agR7fvbZIlD9wsF1+dTRwlgSaQxfYLJWnACb/GzarqpXeqi8ZsP4rbErGukVOG6GarWFksI5nmw==
-X-Received: by 2002:a17:906:cc0e:b0:73d:d898:3900 with SMTP id
- ml14-20020a170906cc0e00b0073dd8983900mr3127025ejb.82.1661496483826; 
- Thu, 25 Aug 2022 23:48:03 -0700 (PDT)
+ bh=I2i7PF7Aj/GWIQZ3YoJveO4vShAeopLolA5luP/vFKw=;
+ b=2wEnYvdYAVOdEWnAWNoHgMhsb8ha4kmjFZVlGKE57WxTD9douxq9zDS8bUP0HcQDby
+ S6CzSGMzzbojxrNxHVc5EnGWYXZBFaf4SooX4qLQ/5XRVXlSp/vV5nRasYXSJw8y5ehP
+ O3ivaOHNriujAo3v9W7XvjbT+329UiXkSkbPKrIjmdtsteiLKCoNepp9x3La+3J/zGbc
+ qhgp6jZegaLvUshdND4fa/hIFQGwmwCeDlLomanHvfBM91aJ4AJLHcGEUcwa2ex7w9J8
+ ndh9yj1c3mqziZAPuBp1/gn5dDH4QdB730KRz3Ne1v9lpt/fcKVK/soucTd/rN5juUCw
+ /K5A==
+X-Gm-Message-State: ACgBeo1eT9axvXVL/nKZvRcYgFZoWqX9HOHRyfzOL3/2pSnuMqJgIL3B
+ HmI1uCcuP2E4bBsI3LijPX73sC3+FK5Xgakf
+X-Google-Smtp-Source: AA6agR7VLgTESxT8FPJEriR9jZxMINM6QA8iGdB9PFMM3wSs11aBSbmgmah68YwUTMzrSCSCsvGKyQ==
+X-Received: by 2002:a17:907:6890:b0:73d:a58c:4f0b with SMTP id
+ qy16-20020a170907689000b0073da58c4f0bmr4521911ejc.247.1661496485957; 
+ Thu, 25 Aug 2022 23:48:05 -0700 (PDT)
 Received: from jesse-ubuntu22.display.esterline.net ([91.183.156.252])
  by smtp.gmail.com with ESMTPSA id
- e1-20020a50fb81000000b00447c0dcbb99sm787613edq.83.2022.08.25.23.48.02
+ e1-20020a50fb81000000b00447c0dcbb99sm787613edq.83.2022.08.25.23.48.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Aug 2022 23:48:03 -0700 (PDT)
+ Thu, 25 Aug 2022 23:48:05 -0700 (PDT)
 From: Jesse Van Gavere <jesseevg@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Aug 2022 08:47:31 +0200
-Message-Id: <20220826064758.3968647-3-jesseevg@gmail.com>
+Date: Fri, 26 Aug 2022 08:47:33 +0200
+Message-Id: <20220826064758.3968647-5-jesseevg@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220826064758.3968647-1-jesseevg@gmail.com>
 References: <20220826064758.3968647-1-jesseevg@gmail.com>
@@ -72,18 +72,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=NtXuREkyenAJ638DKiigj8HQg4z5rLwtbuhD2XMu3AY=;
- b=OPzObIVoZYi2mbs//ZO5Bs1y1ajgLTRaELCdP36T+QNY4p2CzdjGPn0UrF5HBiqpSu
- oF83tHBGBTpEuaPzVGJ407eP5nBMnMb/kqHxDxIYk7zz+UHfY99vCuCxrfYpq/tiZKrr
- iC0Kqz6cjhVaIl8CYIU4S30bLN2zSUM092wwrUr5lGfM6OVnJOoIfERO4Qh2utTOcb35
- /9BnmralMZAOr+jOucrXu/0pDB1ph5PnuwCULylEHTOAbn3nIOymlTUN7Dq8MH9i6DFp
- 9ZPjQsmP3yWePeLpy4Al3ShGTfbL07I7BbLkGLt62MOFIHfB35STmenWH0/F27PgRXor
- yTtw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=I2i7PF7Aj/GWIQZ3YoJveO4vShAeopLolA5luP/vFKw=;
+ b=ZgRhlVfV3Hkfm/ae8VgFihkohDTlje+P7/hTjPbXV+j8ou7WU3kGMLNfUDKPZD3142
+ Q+6aavODtear6+sD7W6kdtyRXEijDupBLtwtKliIMZXXpuNA28wFBSNRIZu/UGNPdLUr
+ ISOrf8u7yHmSMgMDTBwgpT7lcxCt8GIIlyAWKYZI/hy2LCFB/aUWr5slv4uJDfWcJ6vZ
+ oJcktb11JwCkB6Fln1uE/EdOavtebtf6OvvHFE9K//CnCL8EKFpPknbnkCWag4LA2ZGm
+ 4UF2oHuiTf9UP9WnovmLcPRGT8B/s3ThVb9kdYisLK1WWqhEBntRFpmxdqs4W+X/6py3
+ xgzw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=OPzObIVo
-Subject: [Buildroot] [PATCH v2 02/29] package/qt6/qt6base: Add license
- information
+ header.a=rsa-sha256 header.s=20210112 header.b=ZgRhlVfV
+Subject: [Buildroot] [PATCH v2 04/29] package/qt6/qt6base: add support for
+ concurrent module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,38 +103,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add license hashes to the hash file and add the information into the makefile
 ---
- package/qt6/qt6base/qt6base.hash | 6 ++++++
- package/qt6/qt6base/qt6base.mk   | 2 ++
- 2 files changed, 8 insertions(+)
+ package/qt6/qt6base/Config.in  | 5 +++++
+ package/qt6/qt6base/qt6base.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
-index 31ed2494af..5efc5c2815 100644
---- a/package/qt6/qt6base/qt6base.hash
-+++ b/package/qt6/qt6base/qt6base.hash
-@@ -1,2 +1,8 @@
- # Hash from: https://download.qt.io/official_releases/qt/6.3/6.3.1/submodules/qtbase-everywhere-src-6.3.1.tar.xz.sha256
- sha256  0a64421d9c2469c2c48490a032ab91d547017c9cc171f3f8070bc31888f24e03  qtbase-everywhere-src-6.3.1.tar.xz
-+# Hashes for license files:
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-+sha256  88ec689407cf2df9b2eb5c45952564d51ce73c129a3bdffb15c0d2d161ad7558  LICENSE.LGPLv3
-+sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
+index 68bca728e2..50cdb52761 100644
+--- a/package/qt6/qt6base/Config.in
++++ b/package/qt6/qt6base/Config.in
+@@ -22,4 +22,9 @@ config BR2_PACKAGE_QT6BASE_NETWORK
+ 	help
+ 	  This options enables the Qt6Network library.
+ 
++config BR2_PACKAGE_QT6BASE_CONCURRENT
++	bool "concurrent module"
++	help
++	  This options enables the Qt6Concurrent library.
++
+ endif
 diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index c67d94e193..7a0838b2bc 100644
+index b4b6450bf1..302aecab31 100644
 --- a/package/qt6/qt6base/qt6base.mk
 +++ b/package/qt6/qt6base/qt6base.mk
-@@ -7,6 +7,8 @@
- QT6BASE_VERSION = $(QT6_VERSION)
- QT6BASE_SITE = $(QT6_SITE)
- QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
-+QT6BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
-+QT6BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
- QT6BASE_DEPENDENCIES = \
- 	host-ninja \
- 	host-qt6base \
+@@ -83,5 +83,11 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT6BASE_CONCURRENT),y)
++QT6BASE_CONF_OPTS += -DFEATURE_concurrent=ON
++else
++QT6BASE_CONF_OPTS += -DFEATURE_concurrent=OFF
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.34.1
 
