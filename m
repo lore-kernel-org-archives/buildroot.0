@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCCC2ECAAA3
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 06:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62C5CECAAD2
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 06:53:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 593FB40C39;
-	Fri, 26 Aug 2022 06:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 593FB40C39
+	by smtp2.osuosl.org (Postfix) with ESMTP id E7FFF40DC6;
+	Fri, 26 Aug 2022 06:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7FFF40DC6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MerGIDq9E1t7; Fri, 26 Aug 2022 06:52:50 +0000 (UTC)
+	with ESMTP id ih9IQH4lFKx8; Fri, 26 Aug 2022 06:53:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A68E400F1;
-	Fri, 26 Aug 2022 06:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A68E400F1
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB8D140D77;
+	Fri, 26 Aug 2022 06:53:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB8D140D77
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 31BF61BF8A8
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4FDFF1BF8A8
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DB23400F1
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DB23400F1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B967400F1
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B967400F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LydIv9811_nd for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 06:48:26 +0000 (UTC)
+ with ESMTP id SacR7ZrbPmpa for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 06:48:27 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E2FC40012
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4E2FC40012
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 06:48:26 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id z8so1014963edb.0
- for <buildroot@buildroot.org>; Thu, 25 Aug 2022 23:48:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B28E40012
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5B28E40012
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 06:48:27 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id m1so955786edb.7
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 23:48:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=SZAHl+xG1pj2jI5sKLYLKCZ0kbHNnkpx78stKuY+vPU=;
- b=1yO+Sbipe8/+lsyyfnaHqryZa9udu0es6//eRWJ6GJWqb00WiXHQ87tt4o622Y3fbT
- oj8G8MRG/HQuyYIUlMzH9JCf9Eya0CaS69soIhqbIPn3xWj29nrBzSsdJBBdo2qG3EGE
- u7Jm+4JSLeslM67wBJz5la690TrmHbdB4QExGivruzUflcIISzaMI5+qpH7q7ocHjKSd
- EtjaPK32kkSSunQHIXnZIWz+8MZS+KXpMAszzOp6HbmQcn02YUszr4yhIrKY9NUKNlGS
- 9Fjr8KfbFtAbuIx/GI0ECynWeiOw0vHicpBkMLo0GV1CdcEHvL/N1oYtMsw2vQHWVM7O
- mGTw==
-X-Gm-Message-State: ACgBeo1pp3xbvlHTWFVccQ5iWMHLYaDVO5nIsowo+yUTH+z2q0OoV1Rt
- zcoBTcNrLLLGfe4PFYrtgq6Z9EF7kvuaJgUo
-X-Google-Smtp-Source: AA6agR5EFFUNR9oOZjeFBkMdj8eUQ+gtgoprDewAocJgQDH7bIFBrEVGBalT+OgAz4TUyLsCedYYUw==
-X-Received: by 2002:a05:6402:5cd:b0:446:5965:f4af with SMTP id
- n13-20020a05640205cd00b004465965f4afmr5696036edx.12.1661496504150; 
- Thu, 25 Aug 2022 23:48:24 -0700 (PDT)
+ bh=1F94TV2kmmt135y68sjJkqSzhlQRYgHDY4ndskKk4J8=;
+ b=YEx0X/qCLvyGGDLWEwNQBgln0bHGxaIKEeqqS1Il9/sxN+nXDm905qCJTiZHeVq5Qp
+ qY+Qa6tHFC5ipG3t2LAzZp2VBDnk8xV6jTAahFPwWjonsZCq+wUgMk46O4BrgPAW2Oa8
+ gerfgweT6x3p+LFUsgS2l1LB3BQaRBD8Aqia0RHTu6ELVwb62YsclBs6//TbggkBVRD/
+ xHpEJAJMcM1HwwLHsBzBnW3uyAYWHFI+8UZK44VaSvAaq2UZidPK6/uQWozn4h0iwNoz
+ brZJYOppPoYhTP2pyz9B8xomNAegyrz/DCZBi6WwCISyTtalGrO9wjOySrWXpVwjcXAG
+ dtLQ==
+X-Gm-Message-State: ACgBeo1K7u0rreHucZSbV2tiBFtBg9h2XLK6T6ejRAE8S6bvEAkV0z6C
+ BjQv7KH81+Yn/qh1WC/K81omrphhUqk9XiTv
+X-Google-Smtp-Source: AA6agR6idv2+CmtsZqsyIbHhInuGZS5z/93EfknE1KzGt8LYHrlwb4hFawFwIkA49+VgZayVsb34pA==
+X-Received: by 2002:a05:6402:e96:b0:443:a086:e3e8 with SMTP id
+ h22-20020a0564020e9600b00443a086e3e8mr5901381eda.330.1661496505134; 
+ Thu, 25 Aug 2022 23:48:25 -0700 (PDT)
 Received: from jesse-ubuntu22.display.esterline.net ([91.183.156.252])
  by smtp.gmail.com with ESMTPSA id
- e1-20020a50fb81000000b00447c0dcbb99sm787613edq.83.2022.08.25.23.48.23
+ e1-20020a50fb81000000b00447c0dcbb99sm787613edq.83.2022.08.25.23.48.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Aug 2022 23:48:23 -0700 (PDT)
+ Thu, 25 Aug 2022 23:48:24 -0700 (PDT)
 From: Jesse Van Gavere <jesseevg@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Aug 2022 08:47:51 +0200
-Message-Id: <20220826064758.3968647-23-jesseevg@gmail.com>
+Date: Fri, 26 Aug 2022 08:47:52 +0200
+Message-Id: <20220826064758.3968647-24-jesseevg@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220826064758.3968647-1-jesseevg@gmail.com>
 References: <20220826064758.3968647-1-jesseevg@gmail.com>
@@ -72,18 +72,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=SZAHl+xG1pj2jI5sKLYLKCZ0kbHNnkpx78stKuY+vPU=;
- b=hyvk6AYB22d8OUjqA9GYo0UOlgvJZ764NITWFrNXepbFQlwzvltS/424+bfWk1TtpU
- 7LS1LFmKYcB9pQb3qhEgsSrZK99bZtE7sxoG2R+oAeQ3dSZvZR30p7quCE8PqBeNGiWJ
- QQ/1ki7tpd4fLcit2KOpsPCTsOfTEhIWFjZkNO+znBgTzY8lxFKlMFLAFcwjrxizHajC
- f7IWevALHWVkVrDSXviWCpdEcS8Cm0O8xGLIHrNpiWkSr5gaekkE4QTo8ziqt337UkL7
- DRK6NVaXIEBaFgeT1y4StSQVOl5GZO4vXaVO+qxZJosjTyRS63exQLsKzaK8sSq+A8Of
- 4P/A==
+ bh=1F94TV2kmmt135y68sjJkqSzhlQRYgHDY4ndskKk4J8=;
+ b=Op6R81ugX8WNK8UppdlnVk+QOfdwaZgOkZ6bd/HK7+ltrceqdgQxtRr8WmnjVLL6cI
+ Yi9rcsiHZMb8VQiWkMLq+ipMhZ5/3yn2mnR5zCGbUr+CcxR0xE0QzBIM7ggP8njBn3ix
+ cUxlqu2I0AHXuPl6C/I7eBpsfEk7CmgmG2bWTSxcVOuJKwV8UTzosNHtzfra1H32PYuU
+ PeuA3GjpVlFegXEVJJuMWyrdpYt1faCh5MdO+9rlJbmsjuwyn5gsZI3K01rqKVFebNWP
+ JO1C4n/DJX1qxT8Zfds1HDli0vj7fBmfOiYTk+TrkoKJX8NfYAQR7pPKlkBuz4TqI7Wa
+ MElw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=hyvk6AYB
-Subject: [Buildroot] [PATCH v2 22/29] package/qt6/qt6base: add support for
- gui module
+ header.a=rsa-sha256 header.s=20210112 header.b=Op6R81ug
+Subject: [Buildroot] [PATCH v2 23/29] package/qt6/qt6base: add support for
+ gui module fontconfig/harfbuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,46 +104,76 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 ---
- package/qt6/qt6base/Config.in  | 6 ++++++
- package/qt6/qt6base/qt6base.mk | 8 ++++++++
- 2 files changed, 14 insertions(+)
+ package/qt6/qt6base/Config.in  | 21 +++++++++++++++++++++
+ package/qt6/qt6base/qt6base.mk | 23 +++++++++++++++++++++++
+ 2 files changed, 44 insertions(+)
 
 diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 469e6b642c..8959a59431 100644
+index 8959a59431..e78fd45421 100644
 --- a/package/qt6/qt6base/Config.in
 +++ b/package/qt6/qt6base/Config.in
-@@ -111,6 +111,12 @@ config BR2_PACKAGE_QT6BASE_XML
+@@ -117,6 +117,27 @@ config BR2_PACKAGE_QT6BASE_GUI
  	help
- 	  This options enables the Qt6Xml library.
+ 	  This option enables the Qt6Gui library.
  
-+config BR2_PACKAGE_QT6BASE_GUI
-+	bool "gui module"
-+	select BR2_PACKAGE_FREETYPE
++if BR2_PACKAGE_QT6BASE_GUI
++
++config BR2_PACKAGE_QT6BASE_FONTCONFIG
++	bool "fontconfig support"
++	select BR2_PACKAGE_FONTCONFIG
 +	help
-+	  This option enables the Qt6Gui library.
++	  This option enables Fontconfig and Freetype support using
++	  the system fontconfig and freetype2 libraries.
++
++config BR2_PACKAGE_QT6BASE_HARFBUZZ
++	bool "harfbuzz support"
++	select BR2_PACKAGE_HARFBUZZ if \
++		BR2_TOOLCHAIN_HAS_SYNC_4 && \
++		BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	help
++	  This option enables HarfBuzz support (either system harfbuzz
++	  if the toolchain supports __sync for 4 bytes, or the qt
++	  provided one which avoids this dependency by using QAtomic).
++
++endif
 +
  config BR2_PACKAGE_QT6BASE_SYSLOG
  	bool "syslog support"
  	help
 diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index de65711cde..6378614526 100644
+index 6378614526..c92239f2fd 100644
 --- a/package/qt6/qt6base/qt6base.mk
 +++ b/package/qt6/qt6base/qt6base.mk
-@@ -135,6 +135,14 @@ else
- QT6BASE_CONF_OPTS += -DFEATURE_sql=OFF
- endif
+@@ -139,6 +139,29 @@ ifeq ($(BR2_PACKAGE_QT6BASE_GUI),y)
+ QT6BASE_CONF_OPTS += -DFEATURE_gui=ON -DFEATURE_freetype=ON -DINPUT_opengl=no -DFEATURE_vulkan=OFF
+ QT6BASE_DEPENDENCIES += freetype
  
-+ifeq ($(BR2_PACKAGE_QT6BASE_GUI),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_gui=ON -DFEATURE_freetype=ON -DINPUT_opengl=no -DFEATURE_vulkan=OFF
-+QT6BASE_DEPENDENCIES += freetype
-+
++ifeq ($(BR2_PACKAGE_QT6BASE_HARFBUZZ),y)
++QT6BASE_CONF_OPTS += -DFEATURE_harfbuzz=ON
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),y)
++# system harfbuzz in case __sync for 4 bytes is supported
++QT6BASE_CONF_OPTS += -DQT_USE_BUNDLED_BundledHarfbuzz=OFF
++QT6BASE_DEPENDENCIES += harfbuzz
++else #BR2_TOOLCHAIN_HAS_SYNC_4
++# qt harfbuzz otherwise (using QAtomic instead)
++QT6BASE_CONF_OPTS += -DQT_USE_BUNDLED_BundledHarfbuzz=ON
++QT6BASE_LICENSE += , MIT (harfbuzz)
++QT6BASE_LICENSE_FILES += src/3rdparty/harfbuzz-ng/COPYING
++endif
 +else
-+QT6BASE_CONF_OPTS += -DFEATURE_gui=OFF
++QT6BASE_CONF_OPTS += -DFEATURE_harfbuzz=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- QT6BASE_CONF_OPTS += -DINPUT_openssl=yes
- QT6BASE_DEPENDENCIES += openssl
++ifeq ($(BR2_PACKAGE_QT6BASE_FONTCONFIG),y)
++QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=ON
++QT6BASE_DEPENDENCIES += fontconfig
++else
++QT6BASE_CONF_OPTS += -DFEATURE_fontconfig=OFF
++endif
++
+ else
+ QT6BASE_CONF_OPTS += -DFEATURE_gui=OFF
+ endif
 -- 
 2.34.1
 
