@@ -4,85 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 796D6ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 21:35:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2CFEC0502E
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 21:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17DD882733;
-	Fri, 26 Aug 2022 21:35:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17DD882733
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A11982A2E;
+	Fri, 26 Aug 2022 21:35:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A11982A2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yQdb-KgQ11Nl; Fri, 26 Aug 2022 21:34:59 +0000 (UTC)
+	with ESMTP id qq3F4PmLdUJ4; Fri, 26 Aug 2022 21:35:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47667826DF;
-	Fri, 26 Aug 2022 21:34:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47667826DF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 915CA1BF860
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:34:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A09E826DF;
+	Fri, 26 Aug 2022 21:35:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A09E826DF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F5B21BF860
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:34:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AC5E41675
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:34:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AC5E41675
+ by smtp1.osuosl.org (Postfix) with ESMTP id 771E3826D5
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 21:34:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 771E3826D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y3tHqLhd0Wxf for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 21:34:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zq7a6-a6Fwn8 for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 21:34:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2503341620
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2503341620
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 21:34:55 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- v7-20020a1cac07000000b003a6062a4f81so5035865wme.1
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 14:34:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFA508266D
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EFA508266D
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 21:34:56 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id k17so1465630wmr.2
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 14:34:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=ciuS1TAi6DAFFnKtGgc+Fvb5N377cquLA70IeVwSn/U=;
- b=c9pIgDTbV37v/XlqQ4b2mtqKDVEjdvC1h6qs4EFhqi51tm1E/iyEudLx2ck51Mk/oG
- a17dxwpd9MFn2pKRgHwStOLcgcWSFyQL7E8LPm/xXfcMzKsaZVYpNa/yOL1PMinAHEZm
- jMX6iWlHITxuju4gkocaOw/MaZxp75B4vc7ELDrjZMmtIiJzHwbjRkm+Ecal6oxC9zXC
- gwTCqm6d7wdZaBq5L1I+PXoPeWOlXRJj7vUWRyB197i9Y91toqXBDLm722BRgUHySvmq
- RB8bW19pFpnXzmyj9D2UoZ9IWkgEOfwkUp9pRzKRSnVc1UpA5Qi73N71JKnalXgEZZM6
- JZDw==
-X-Gm-Message-State: ACgBeo05KvQHYAOuRabkasYmnjAt4/J4EKrvS/8LVzBdWWS7MErvO0si
- lmw6i4EBc8KuW97T2lpBBsWGgWNvMSM=
-X-Google-Smtp-Source: AA6agR5GcYHa9rSDx/v9ptqdUVbr7lIU6gumvFjMAMVk+0WueAcqj96yyo3uZogqof45OATF1ZmCHg==
-X-Received: by 2002:a05:600c:35cc:b0:3a6:1785:ca4 with SMTP id
- r12-20020a05600c35cc00b003a617850ca4mr774486wmq.192.1661549693092; 
- Fri, 26 Aug 2022 14:34:53 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+ bh=xh2d31hNpXfcMfTgrERYOsT4isLPhxZ170zPgXYOTEE=;
+ b=0dt64Izo1k/0R8/YW4ISLoUQMwp9Ee7UUO+L38q9pOmqyGYMUJHB6/dNjxFXZo613m
+ EXWH6id5lcqbB4BQhNVe3kqmsbAy7ORnq7If6vH900jx0BV82hU1v3UBopv2+FDEtzkS
+ hlJjS0n/eGLB3IdWBPVDourmJyxZPOz0F+cAmZ4f9agXbCYXVcpKCNsDxvOSQRPLj9wG
+ siu07GeEVUHK81lQa6Y0qu/Ng4qs8NT9ENlTQI5Zt+anhdcXw8RInoru4rzGIDzkrDCo
+ zop40JWgTHo6xHdUUGH9m2ipQSy68Z+Uis8g+/du2XOhj7XPVNgYFZ6MpCvqhMzkPgrf
+ Dowg==
+X-Gm-Message-State: ACgBeo2dWE0qWb929bDscj0i2SANuzdKSTFKMrynd1BJIGo9jkUdkF2+
+ cee3W8QkVuiH7ssWo4Wa04oAo4Y04pE=
+X-Google-Smtp-Source: AA6agR6sLWMxtUZ4//HFuQIeHaR5hZ69i6gS/EW8uHF9sWTIFR3QcsH4Q9Kllin/GuGBXYeJtLYAJw==
+X-Received: by 2002:a05:600c:3846:b0:3a6:5294:d0a9 with SMTP id
+ s6-20020a05600c384600b003a65294d0a9mr771284wmr.28.1661549694893; 
+ Fri, 26 Aug 2022 14:34:54 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- o26-20020a05600c511a00b003a5de95b105sm813986wms.41.2022.08.26.14.34.52
+ o26-20020a05600c511a00b003a5de95b105sm813986wms.41.2022.08.26.14.34.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Aug 2022 14:34:52 -0700 (PDT)
+ Fri, 26 Aug 2022 14:34:54 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Aug 2022 23:34:46 +0200
-Message-Id: <20220826213447.47029-1-fontaine.fabrice@gmail.com>
+Date: Fri, 26 Aug 2022 23:34:47 +0200
+Message-Id: <20220826213447.47029-2-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220826213447.47029-1-fontaine.fabrice@gmail.com>
+References: <20220826213447.47029-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=ciuS1TAi6DAFFnKtGgc+Fvb5N377cquLA70IeVwSn/U=;
- b=nvqEupFbvDqcA0VdxI0e0zWKNvHlgdBQhek3HQD7P9lexJU+0IBmOz0spuJVaGQ12D
- 3S6wjUpa1KdpSRZY/XJpL2SPPzdlj+0CLAaO3i5jG5OYw+tc9w53WwFv+NibkCHGoD/N
- 9LZQkIW8ga9dKKIyUvR5y6wHcygKTN+JZOS9RkJGUgdhpX/0PNrRpWr8leO+nu8E4PQM
- mB17SwTXc8YJmFLIMeJyARZf7dJZ0AFdh6suxXyi29wX75/0foi7v5RLnomyQlzjRTSN
- TFmc/6aqiDjz6LywAe+73Tmilk+0lXTsTc8cMwKwwA5tXjvchzrUpWtJD5JrYTv7gIHm
- RkTA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc;
+ bh=xh2d31hNpXfcMfTgrERYOsT4isLPhxZ170zPgXYOTEE=;
+ b=D5hwIOGAHexcMld598F97azSqWC88Gnqse7wLuHxznmfSljZA2JBICEP3jzsZzw+4k
+ yCyC1rvdQK6LGUxv+puS7C15NNBGlB9YxMDSCOnB9dz8FAn7RM5XtX88RK+Tn/ktuX59
+ J+F3PISDwHY0VZ0J7NSoaUqXY8eWAQsMfB3JTC8o/Fgr0dPxtYdglCwfA+g4zsvqfHAY
+ D+I8yRq4frm9q6XGilAXP2rRSWti36ojyC2iigcUL76XuffpfQZjRhaZ7HQcdBAeLiWK
+ cV/1SEQxb/0rY5TvZcYBlbelsagVgzSPinBmgW8J+Aviw1SFfN1yonvDrFOnNenHYYb5
+ +c9Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=nvqEupFb
-Subject: [Buildroot] [PATCH 1/2] package/v4l2loopback: add
- V4L2LOOPBACK_CPE_ID_VENDOR
+ header.a=rsa-sha256 header.s=20210112 header.b=D5hwIOGA
+Subject: [Buildroot] [PATCH 2/2] package/v4l2loopback: security bump to
+ version 0.12.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,29 +102,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:o:v4l2loopback_project:v4l2loopback is a valid CPE identifier
-for this package:
+Fix CVE-2022-2652: Depending on the way the format strings in the card
+label are crafted it's possible to leak kernel stack memory. There is
+also the possibility for DoS due to the v4l2loopback kernel module
+crashing when providing the card label on request (reproduce e.g. with
+many %s modifiers in a row).
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Ao%3Av4l2loopback_project%3Av4l2loopback
+https://github.com/umlaeute/v4l2loopback/blob/v0.12.7/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/v4l2loopback/v4l2loopback.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/v4l2loopback/v4l2loopback.hash | 2 +-
+ package/v4l2loopback/v4l2loopback.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
+index f4491e02d0..d897fd48ff 100644
+--- a/package/v4l2loopback/v4l2loopback.hash
++++ b/package/v4l2loopback/v4l2loopback.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e152cd6df6a8add172fb74aca3a9188264823efa5a2317fe960d45880b9406ae  v4l2loopback-0.12.5.tar.gz
++sha256  e0782b8abe8f2235e2734f725dc1533a0729e674c4b7834921ade43b9f04939b  v4l2loopback-0.12.7.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
 diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
-index d9f065a49d..6ee4b69ef9 100644
+index 6ee4b69ef9..84e1927ce3 100644
 --- a/package/v4l2loopback/v4l2loopback.mk
 +++ b/package/v4l2loopback/v4l2loopback.mk
-@@ -8,6 +8,8 @@ V4L2LOOPBACK_VERSION = 0.12.5
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-V4L2LOOPBACK_VERSION = 0.12.5
++V4L2LOOPBACK_VERSION = 0.12.7
  V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,v$(V4L2LOOPBACK_VERSION))
  V4L2LOOPBACK_LICENSE = GPL-2.0+
  V4L2LOOPBACK_LICENSE_FILES = COPYING
-+V4L2LOOPBACK_CPE_ID_VENDOR = v4l2loopback_project
-+V4L2LOOPBACK_CPE_ID_PREFIX = cpe:2.3:o
- 
- ifeq ($(BR2_PACKAGE_V4L2LOOPBACK_UTILS),y)
- define V4L2LOOPBACK_INSTALL_TARGET_CMDS
 -- 
 2.35.1
 
