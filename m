@@ -1,89 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16DE8ECAAD4
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 14:01:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 004DCECAAD4
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 14:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B763183F27;
-	Fri, 26 Aug 2022 14:01:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B763183F27
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90C8141A42;
+	Fri, 26 Aug 2022 14:12:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90C8141A42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QyPCQ3TYlwpe; Fri, 26 Aug 2022 14:01:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xucmpty1TgxH; Fri, 26 Aug 2022 14:12:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E905E83336;
-	Fri, 26 Aug 2022 14:01:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E905E83336
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7333C419AE;
+	Fri, 26 Aug 2022 14:12:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7333C419AE
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 377FB1BF5F5
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 13:55:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 280D41BF284
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 14:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 12AF36110C
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 13:55:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12AF36110C
+ by smtp3.osuosl.org (Postfix) with ESMTP id E9AE261113
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 14:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9AE261113
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FowtQchNIIEf for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 13:55:36 +0000 (UTC)
+ with ESMTP id nGO8KlekUS-y for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 14:11:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2311F6110D
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2311F6110D
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 13:55:36 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id m1so2201764edb.7
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 06:55:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B37CA610F5
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com
+ [IPv6:2607:f8b0:4864:20::52a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B37CA610F5
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 14:11:58 +0000 (UTC)
+Received: by mail-pg1-x52a.google.com with SMTP id w13so1508528pgq.7
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 07:11:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=rYv+JiV7uKQLsSlljJrQkH3Kgz25sqxUJ5p1FEhH4kk=;
- b=XbHQEebrLQ21MJpclpNNq4DPCdw10OwvvLvxDUFktsv5aacNJad8RR9tmBZR3iY76a
- axNo0rvOW9q+iOIoHy1wiqdRIsFZRLNDemuVo6k3Ti8n4Np01VrA+r8PnEa1o2tH02nH
- WAZc4IVJ9Ehy9lo1ztz4Aqglbzv86hpkogvKMxE/mCh9It4e4ARs19chSaD3Ky35HcqE
- zIDetafE5dLP31PwLTGd9l8M6LOrDeLaZe+Wsyyu0hJg6Qktkcg7WbWTZgyYqCS40WI7
- nynAscYTVYA3nq61q4oXI8oqVL97W36jgS3zKJFjYO8EgSlZmywrXQ03CQfI61nJlOom
- 0ZrA==
-X-Gm-Message-State: ACgBeo2raf0fDb5cGdUaQUlN4BpCHgMCUfhnlLXONcxmM26/tDwYS284
- c+JaJFhWGaFJ5alQwKi0kwTU7LooKcoLyhNt
-X-Google-Smtp-Source: AA6agR4vY9ZGpkPosObzwNQnqguDN1p+i80f4xQEOYN/tCXzwPpFWRtsZxZ/VEKEjvhLf0WzqtvobA==
-X-Received: by 2002:aa7:d846:0:b0:447:d664:8409 with SMTP id
- f6-20020aa7d846000000b00447d6648409mr3390813eds.159.1661522135312; 
- Fri, 26 Aug 2022 06:55:35 -0700 (PDT)
-Received: from jesse-ubuntu22.display.esterline.net ([91.183.156.252])
- by smtp.gmail.com with ESMTPSA id
- r6-20020a508d86000000b00446bf462203sm1347928edh.1.2022.08.26.06.55.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 26 Aug 2022 06:55:34 -0700 (PDT)
-From: Jesse Van Gavere <jesseevg@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 26 Aug 2022 15:55:03 +0200
-Message-Id: <20220826135503.20612-30-jesseevg@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220826135503.20612-1-jesseevg@gmail.com>
-References: <20220826135503.20612-1-jesseevg@gmail.com>
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc;
+ bh=EYmJ/jj2I5jzI4PzuBsnD4etjZ0BaUVtpew4gn/PUTw=;
+ b=uJYGt6P83r0WHoPfwMFWsfd1F3+Ylf4ANo+bWzE3bayOwT6+lcuRuxP4x+FwVZJnPB
+ BFgD+68KnAMs5ozjAGay0BBT7+D4rtPgHGhQ89RTVutfsV5AODNTqHuas9/ucaQzq+hn
+ ssBFT0ZUMgkJn01HYRjl2xamiK9BfaalsqzvheuKwGlU06xkyzmnx0p6IL5ARgPxkI1w
+ C1Ae22xbpnH3L9lL9mxz4Zvx7KPh4jQJz4TTJM4driJPdIrY6DP4mqROuFA8ZkAlFzkM
+ tLNtD7qsGjIf6CRVKs2BzWmdDr/xKlxKoeBX3cf7K28kY4Qf2jHqdl4geFXuK2fy5bff
+ FvdQ==
+X-Gm-Message-State: ACgBeo3JFEkQok667agRqMGVmQXCFMt4G7fEFLjE3MGdZ/X2GWh6r6Vy
+ 4xFiYP59/o+TvvZiFGYm76tHAAjHPeU838hvpvU=
+X-Google-Smtp-Source: AA6agR4szqnhEOoydkNRmOwUh4QnfqBAd/xqw3eMaKYCzGCc6r2FCP/9x2u6TQ1nUlN38/A/BqE70IwyKLhLupGOZn8=
+X-Received: by 2002:a63:1e64:0:b0:429:7f02:79b4 with SMTP id
+ p36-20020a631e64000000b004297f0279b4mr3472143pgm.435.1661523117996; Fri, 26
+ Aug 2022 07:11:57 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220322160725.636205-1-johan.oudinet@gmail.com>
+ <20220822141205.GC2167049@scaer>
+In-Reply-To: <20220822141205.GC2167049@scaer>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Fri, 26 Aug 2022 16:11:46 +0200
+Message-ID: <CAJtjsKZtjXnqki4+yPdkdLNcVa+4kOfmybk-_5yxA8497r31-Q@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc;
- bh=rYv+JiV7uKQLsSlljJrQkH3Kgz25sqxUJ5p1FEhH4kk=;
- b=Ur1knnanO4HNMe7KNZHzSJUJEtNgMB6zPdtsjFo4bP93Cz7A0y/AagVwHvlMdD7S55
- D9tNjtwSWqeBcioLGMnWH4G94Yw8EteOXkgyT4dxAcekoGl1jo7S0EKC3jERKwkqIqp6
- RZiAeFBUiITeLO1N0IierTlYHSofATIzduVeIr+b7iJga5cZwaNbH2qUWhd77sVunpTH
- qOLQH2oyRGS3Cx8eUnVVm2avKl8mMu3+mlBwpxTCxVAEXD3lqx0UHKXy51Cchf1ILEin
- kmpFQHDikqom+vSkfZZJZYUXQgG82yFsvDPrDTHhfEh0NuSRGh7iPvmou7vwMkzwWydr
- yBnw==
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc;
+ bh=EYmJ/jj2I5jzI4PzuBsnD4etjZ0BaUVtpew4gn/PUTw=;
+ b=KhowPTvlHCOINVKqSu4C5N3Qjpaxa2rI4hW0zmqE8KT8uJx3WuJPjup/+ikatW3Jve
+ Mnw1o4SS3rw2eknqz5NSbiA/mQH+e0psmzv3TCNTkRE4ln4sFH3g5QSA1B2obvV1zf3z
+ EvQIn2+tNED6uYjQYjRniXWJQJuI80mvQpDMVlsVpyzZYVbjbCprYP+gwE5koVEQZWvd
+ VvIhCMZ/ZXsYd+QngQPrtbRtdDUnpoLMUQU+howfGHIp75e+1DgXzoV1uFtEu9Fz0v3e
+ oJdh6O2HZIoUW4SOjN5QMeWFGLoOnQW3GyUOFELwBQ2nd03L49zmB5zPIUR0Y/O7OKym
+ G1og==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Ur1knnan
-Subject: [Buildroot] [PATCH v4 29/29] package/qt6/qt6base: add support for
- building examples
+ header.a=rsa-sha256 header.s=20210112 header.b=KhowPTvl
+Subject: Re: [Buildroot] [PATCH] package/forge: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,71 +89,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Now with dependency on DBus/OpenGL
-A minimal set of Qt options was selected for which building the examples
-started working.
+Hi Yann, All,
 
-Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
----
- package/qt6/qt6base/Config.in  | 17 +++++++++++++++++
- package/qt6/qt6base/qt6base.mk |  6 ++++++
- 2 files changed, 23 insertions(+)
+On Mon, Aug 22, 2022 at 4:12 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> I see that you used the npm registry as the source for this package. So,
+> I'd expect it to be an nodejs package, right? If so, then it should
+> probably depend on nodejs being enabled.
+>
+> Here, I would have expected:
+>
+>     depends on BR2_PACKAGE_NODEJS
 
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index ffa5a56b40..5c751dc109 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -40,6 +40,23 @@ config BR2_PACKAGE_QT6BASE_DBUS
- 	help
- 	  This option enables the D-Bus module.
- 
-+config BR2_PACKAGE_QT6BASE_EXAMPLES
-+	bool "Compile and install examples "
-+	depends on BR2_PACKAGE_QT6_GL_AVAILABLE
-+	select BR2_PACKAGE_QT6BASE_DBUS
-+	select BR2_PACKAGE_QT6BASE_NETWORK
-+	select BR2_PACKAGE_QT6BASE_XML
-+	select BR2_PACKAGE_QT6BASE_DBUS
-+	select BR2_PACKAGE_QT6BASE_GUI
-+	select BR2_PACKAGE_QT6BASE_WIDGETS
-+	select BR2_PACKAGE_QT6BASE_OPENGL
-+	select BR2_PACKAGE_QT6BASE_OPENGL_LIB
-+	help
-+	  If unsure, say N.
-+
-+comment "Building examples needs OpenGL/DBus support"
-+	depends on !BR2_PACKAGE_QT6_GL_AVAILABLE || !BR2_PACKAGE_DBUS
-+
- config BR2_PACKAGE_QT6BASE_GUI
- 	bool "gui module"
- 	select BR2_PACKAGE_FREETYPE
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 9b5328e5f2..2324d3825c 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -335,6 +335,12 @@ else
- QT6BASE_CONF_OPTS += -DFEATURE_icu=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT6BASE_EXAMPLES),y)
-+QT6BASE_CONF_OPTS += -DQT_BUILD_EXAMPLES=ON
-+else
-+QT6BASE_CONF_OPTS += -DQT_BUILD_EXAMPLES=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT6BASE_NETWORK),y)
- QT6BASE_CONF_OPTS += -DFEATURE_network=ON
- else
+No, it is not a nodejs package. It also works on the browser, so it
+does not depend on having nodejs in the target.
+
+>
+> So, I think I now see why you grabbed the package from the npm registry:
+> the package has been built and the minified files generated.
+>
+> I'm afraid that I do not like that very much.
+>
+> Instead, you should grab the sources from th github repo, have the
+> package depend on host-nodejes, and build the pacakge with $(NPM) build.
+
+Thanks for the suggestion. I didn't know we could do that in recent
+versions of buildroot.
+It is indeed a much cleaner way  to handle npm packages, even though I
+don't like the BUILD commands to download the dependencies.
+I've uploaded a new version with your suggestions.
+
+Best regards,
 -- 
-2.34.1
-
+Johan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
