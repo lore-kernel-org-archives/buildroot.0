@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23CAFECAAA3
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 06:49:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50D33ECAAD2
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 06:50:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A533583E8D;
-	Fri, 26 Aug 2022 06:49:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A533583E8D
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0DC5610B1;
+	Fri, 26 Aug 2022 06:50:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0DC5610B1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VzTWVEeR7NH4; Fri, 26 Aug 2022 06:49:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RtUJeH3CLcU7; Fri, 26 Aug 2022 06:50:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C45F583E82;
-	Fri, 26 Aug 2022 06:49:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C45F583E82
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C7A61C11A9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20C7F60B63;
+	Fri, 26 Aug 2022 06:50:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20C7F60B63
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C888F1BF8A8
  for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E681E400F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC2FC40292
  for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E681E400F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC2FC40292
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 54u-WZX3W7kr for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gHzdmxV6OkHi for <buildroot@lists.busybox.net>;
  Fri, 26 Aug 2022 06:48:12 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FB3A40012
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1FB3A40012
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 06:48:12 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id u9so1394515ejy.5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B086140336
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B086140336
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 06:48:11 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id u6so933778eda.12
  for <buildroot@buildroot.org>; Thu, 25 Aug 2022 23:48:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=f80USLSyQMWOwgSoizGn0tNfksEKJqFruH+UqV2T8sw=;
- b=ZMtDRPk48al68RbWqSjcuW+Yv/L+zilKX8+ozypySqHWdmo2ca6l7JASdGIxmqqd4K
- Z+WUqqNaPZQ3Fv9mJR/1AcqByo9emN0lv9NDuE0JN2f38jpXb1AEC6eAjjRBiFN7agTb
- wQ8wJRPTHNLD8O+8EygoibewtBpE3y1IZry5fB2N7DtKdwtdZCeCNrDeDZt35XqezZv0
- rhwWICMlqNDmFWyUeYUIY58n1x4kY5SeP6lwqyJL4U2v+lOXGroQe06V34oCzeoRu033
- QUeTlpyd+DsXTWjNOak9whCj7Py0sUzeApp4j4E/idbCvCsMsKt49dyJQ5HAWg7aHLyI
- oBsw==
-X-Gm-Message-State: ACgBeo1NLrjEroUJSIuitFieZgT16Ay54M3jy5CGn55auHJp/OnuDKKo
- ThHJqpN5dqDn6mVdQw83YjGWawU/nAu4sztD
-X-Google-Smtp-Source: AA6agR7J6rFRvxiUAhqHqKItfX+UEAOUe3ia3Sn7b7wChESpbPBSN3WE/GH8QHr/dAYNsIl9GS7Vfg==
-X-Received: by 2002:a17:907:6293:b0:73d:b27b:e594 with SMTP id
- nd19-20020a170907629300b0073db27be594mr4700095ejc.526.1661496489941; 
- Thu, 25 Aug 2022 23:48:09 -0700 (PDT)
+ bh=lwgwjQjZ5r+fBFGgWaHJ/4glwKiNHQX3ubcenkd8z60=;
+ b=frFpmzY4lW6ImyVWtqjWNewxJHlEGfdul9mS9NYSVx8hlOK9FALV6tZsevMHRjCgFJ
+ OYtGi3AgiXqWwpaj3jM7KodCnKj3lO2mdXPWVOQUqsdipKK9gENp6Tj+U5bn2iOhXrfr
+ I1DN9fTZZR4SqLXBJNW+mB+1Nxipo6SFFt4hUG730vcU4sPFGz/xlBdERPMFCQ1iHeaz
+ PSHfC+8MErmguQONEuBzher+6bD5YUf63NAjabJ6JqXS9hrMO/vYK+J6ljqwMEzR92xi
+ wfT/G0JMooh1EANzZ3xK7gBmysnjQc9k7idDWeFfDAsbEhhrVfbWWYyep5X7NH+EsbFH
+ pJtA==
+X-Gm-Message-State: ACgBeo1IgnOZCbNOyMgx5R0v/yZP54wuMmKBbXG/BACoqJWoj37BXWbQ
+ BQ9SkFfodYnh0shL7EmG7K1mGOmJcVh5/woV
+X-Google-Smtp-Source: AA6agR5/WVwdvUSxBAnVYcz3FTlpdJBAh4MFq3LYvF0DAshmXY8gRXgynBOKmzNqEfU1NnhjfTrPYA==
+X-Received: by 2002:a05:6402:5ca:b0:445:c80a:3c2 with SMTP id
+ n10-20020a05640205ca00b00445c80a03c2mr5698670edx.247.1661496490879; 
+ Thu, 25 Aug 2022 23:48:10 -0700 (PDT)
 Received: from jesse-ubuntu22.display.esterline.net ([91.183.156.252])
  by smtp.gmail.com with ESMTPSA id
- e1-20020a50fb81000000b00447c0dcbb99sm787613edq.83.2022.08.25.23.48.09
+ e1-20020a50fb81000000b00447c0dcbb99sm787613edq.83.2022.08.25.23.48.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Aug 2022 23:48:09 -0700 (PDT)
+ Thu, 25 Aug 2022 23:48:10 -0700 (PDT)
 From: Jesse Van Gavere <jesseevg@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Aug 2022 08:47:37 +0200
-Message-Id: <20220826064758.3968647-9-jesseevg@gmail.com>
+Date: Fri, 26 Aug 2022 08:47:38 +0200
+Message-Id: <20220826064758.3968647-10-jesseevg@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220826064758.3968647-1-jesseevg@gmail.com>
 References: <20220826064758.3968647-1-jesseevg@gmail.com>
@@ -72,18 +72,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc;
- bh=f80USLSyQMWOwgSoizGn0tNfksEKJqFruH+UqV2T8sw=;
- b=la7cRBmzG0qtdBAVxHlAqFZGAL2pjZWpBDZuSu99AM6A3I2kpQrttuY7b0Eq8Ky6pu
- ctq7Gk2h8+GOJAZbnjkcTlHrxmxf38M8dKo+vViesTYNASZpGKY1cun3uqDHomUBkPPa
- hJOxql7pEnSQmePioaijEnDBOLrZltiPKZNnS05IB0Q6oxIcZZuvQifEHfaIBgt+iIEu
- o5Zmg89qtyyMnP6RrP5HMCEJ4Yz44E3HaR8qXtJ/3AgvtpKAgPjP52CGMm3V6PRKhI18
- 27soSL/vFecIEX9vgGRVjYfqSXERQMN37SmmK0kDiiz+VRAwblWjLD4+Sa4NjvD6g9Tv
- 9Meg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=lwgwjQjZ5r+fBFGgWaHJ/4glwKiNHQX3ubcenkd8z60=;
+ b=XHy4mAsKHYz/z/a1QBZs/fB21BVzPse0CuFdBfRGNErkjq+GyMuA34tGpLX08fEXmp
+ 9SAFNFvwLR79uhEWdLBos0efUmRUjC8U4dD17HZtJLuz2g4hI5LnaPjKpbL1+pO97BKe
+ gdwfkS644FBjnNSaJxnxhsuU7YUHjCH4oOjbrn8cNnOAoHC5G6i+zOdejL+vQgQQiEnJ
+ OqWHACIu+kajySyHlK1+Q8sCBkdxCd2nQekveCCSw/p0z7iFAu57IVFAfAWMnjawH+1W
+ u6y7DcoY+Y9JVxYVzOvGBwh4O7NLUBRsXMTsVegSEQJODhniS2Q5LH9j+jCvKAEa1avC
+ vO6w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=la7cRBmz
-Subject: [Buildroot] [PATCH v2 08/29] package/qt6/qt6base: add support for
- dbus module
+ header.a=rsa-sha256 header.s=20210112 header.b=XHy4mAsK
+Subject: [Buildroot] [PATCH v2 09/29] package/qt6/qt6base: add support for
+ syslog backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,49 +104,42 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 ---
- package/qt6/qt6base/Config.in  |  8 ++++++++
- package/qt6/qt6base/qt6base.mk | 11 +++++++++++
- 2 files changed, 19 insertions(+)
+ package/qt6/qt6base/Config.in  | 5 +++++
+ package/qt6/qt6base/qt6base.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 061861880c..fb573303d5 100644
+index fb573303d5..4d75fcb111 100644
 --- a/package/qt6/qt6base/Config.in
 +++ b/package/qt6/qt6base/Config.in
-@@ -44,4 +44,12 @@ config BR2_PACKAGE_QT6BASE_XML
+@@ -44,6 +44,11 @@ config BR2_PACKAGE_QT6BASE_XML
  	help
  	  This options enables the Qt6Xml library.
  
-+config BR2_PACKAGE_QT6BASE_DBUS
-+	bool "DBus module"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_DBUS
++config BR2_PACKAGE_QT6BASE_SYSLOG
++	bool "syslog support"
 +	help
-+	  This option enables the D-Bus module.
++	  Logs to the standard UNIX logging mechanism.
 +
- endif
+ config BR2_PACKAGE_QT6BASE_DBUS
+ 	bool "DBus module"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index f66610ea0c..bdb7f00e65 100644
+index bdb7f00e65..7d6a79d00a 100644
 --- a/package/qt6/qt6base/qt6base.mk
 +++ b/package/qt6/qt6base/qt6base.mk
-@@ -77,6 +77,17 @@ define HOST_QT6BASE_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(BR2_CMAKE) --install $(HOST_QT6BASE_BUILDDIR)
- endef
+@@ -118,5 +118,11 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_xml=OFF
+ endif
  
-+ifeq ($(BR2_PACKAGE_QT6BASE_DBUS),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_dbus=ON
-+QT6BASE_CONF_OPTS += -DINPUT_dbus=linked
-+QT6BASE_DEPENDENCIES += dbus
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_dbus=ON
-+HOST_QT6BASE_DEPENDENCIES += host-dbus
++ifeq ($(BR2_PACKAGE_QT6BASE_SYSLOG),y)
++QT6BASE_CONF_OPTS += -DFEATURE_syslog=ON
 +else
-+QT6BASE_CONF_OPTS += -DFEATURE_dbus=OFF
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_dbus=OFF
++QT6BASE_CONF_OPTS += -DFEATURE_syslog=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_QT6BASE_EXAMPLES),y)
- QT6BASE_CONF_OPTS += -DQT_BUILD_EXAMPLES=ON
- else
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.34.1
 
