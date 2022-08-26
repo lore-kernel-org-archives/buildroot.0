@@ -1,86 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B724CECAAD2
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 06:48:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBA6BECAAD2
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 06:48:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E760E83E8A;
-	Fri, 26 Aug 2022 06:48:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E760E83E8A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C74A610B0;
+	Fri, 26 Aug 2022 06:48:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C74A610B0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HgMGFRcRuMWp; Fri, 26 Aug 2022 06:48:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NjKoolo9TzLv; Fri, 26 Aug 2022 06:48:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1106383E85;
-	Fri, 26 Aug 2022 06:48:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1106383E85
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 612081BF8A8
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8047C610AD;
+	Fri, 26 Aug 2022 06:48:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8047C610AD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FD501BF8A8
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C3C240012
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C3C240012
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6935D41983
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 06:48:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6935D41983
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p2emPgG-bxf3 for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 06:48:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vaiNMGdLN57o for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 06:48:05 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33552400F1
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 33552400F1
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 06:48:04 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id sd33so1370984ejc.8
- for <buildroot@buildroot.org>; Thu, 25 Aug 2022 23:48:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32E154197D
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 32E154197D
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 06:48:05 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id u6so933464eda.12
+ for <buildroot@buildroot.org>; Thu, 25 Aug 2022 23:48:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=gtd68GqfUKM4Yfx10KAeWmT+WjtZyZ6Q4B9EoKMmhmU=;
- b=htsrq32wvTENdgM58S8wz+Hzsv/rfgH2BQLxuJ1iUqFBeThklnCtFsQ104D+O83tYy
- 82f9uIhOJw95h/kZw2e/7ZDmb6nx3POYGpAuP6bLFuXPyW4VvulRxXN7LusIR0Lhiujk
- rXZurS8VpEoKbFZk6w0/vxKSNw4HEn1FdKRNUldnJ59aKwTA5/EPaek3GYp8KHz702U8
- ZhY3lIL+L4PRDcJG2AVSuA6hkYiX8y+NkkQ7ZqZl1rkXzFFVewDSK19z4TefF0mM8ecz
- qIe7T3+4w4cVhrfYQz83J/2aJsmynWZOZq12IofhftM3RhX9XsmLgKIGTrVFFEh/haYl
- AHIA==
-X-Gm-Message-State: ACgBeo3Bf6DiNpK85iOIhmAnMTH2HG/ZJmCdSBhrJWzq3D63f43G/0qB
- BWWKYflhI506tVUrXRLLTPf+jF0EJ8W1NRww
-X-Google-Smtp-Source: AA6agR4CHO6w6J1kGdWFVLt6zQo/BbQYpZFZZA/+srJTvnsE1lz6YapNO+vHVe3dK8wz9biEns2ylg==
-X-Received: by 2002:a17:907:9727:b0:73d:981d:de2c with SMTP id
- jg39-20020a170907972700b0073d981dde2cmr4586173ejc.484.1661496481870; 
- Thu, 25 Aug 2022 23:48:01 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+ bh=KXtJjVJahjtMbXmXWxhAsDJuAtpcg2vmhl3jEYnQSpg=;
+ b=4CrYf0RxkCGbUhC/GikA7BhOnjbjOl5A82rZRxGUw68wLgskP+S7WJVsG4+ukIv077
+ ovqPbaY2NS45yGPynPaZigqFb9XFV5YTXX1iXqI2YXaBsGDaEs4NPOE1gEwoeKUH5gV5
+ H3tf17ldNNNnvs8P/aasASvwOtUQ7gNLBuTMBV6XU3K955o/AYbklcSfNiHxv8Pkhd0g
+ BLe2ViqtiZ5TzGVGI4353GEQOGbs0CTnk3s2y0JAlmd+fsuPfM2icye7ZJn5LqLLsy8q
+ ekbhTHDSxQIy61wzFzG99vYZG0BiHirfjhE9hQ5hHThhLbR06+Hk/Vpi/AJvzLQSsBs4
+ X6ew==
+X-Gm-Message-State: ACgBeo04x0ckVMKAtFuLrm7RnHSLYywMWdBBYYc/UlI+OhZNBgP3EaZa
+ K7/TehLkzGuPem0ttjS6T/+Av5uwqHMjPEMn
+X-Google-Smtp-Source: AA6agR5ooX7frGtDcEe+ACk2bARHsf38E0R6XIp2835ev62gV1FjaGe9OiM/E9wdKsEm0tORXZ2gLw==
+X-Received: by 2002:a05:6402:d0b:b0:443:df38:9df with SMTP id
+ eb11-20020a0564020d0b00b00443df3809dfmr5591291edb.9.1661496482869; 
+ Thu, 25 Aug 2022 23:48:02 -0700 (PDT)
 Received: from jesse-ubuntu22.display.esterline.net ([91.183.156.252])
  by smtp.gmail.com with ESMTPSA id
  e1-20020a50fb81000000b00447c0dcbb99sm787613edq.83.2022.08.25.23.48.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Aug 2022 23:48:01 -0700 (PDT)
+ Thu, 25 Aug 2022 23:48:02 -0700 (PDT)
 From: Jesse Van Gavere <jesseevg@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 26 Aug 2022 08:47:29 +0200
-Message-Id: <20220826064758.3968647-1-jesseevg@gmail.com>
+Date: Fri, 26 Aug 2022 08:47:30 +0200
+Message-Id: <20220826064758.3968647-2-jesseevg@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220826064758.3968647-1-jesseevg@gmail.com>
+References: <20220826064758.3968647-1-jesseevg@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=gtd68GqfUKM4Yfx10KAeWmT+WjtZyZ6Q4B9EoKMmhmU=;
- b=HCcotNQc08jZ4zwcwY0cXEUVfQ0Y4bq/Za1NOrq2+wC37k1yt/rfIqOfvawpajGG7U
- 2CDBDvbtOJ+dxXnY5VG6RveO3ISQbIHSDWDVJQcspV9F5HcDHmxVgdwMBw+yLq7nVJxW
- rmZQP69Vz1DwoEtoHcA83GjBvJ/QhEP5wMbTArIkdqP4PElXmWMGiu4HV+DeAUmmdieQ
- rT+3BAdtz4gz5/txqR/Wy84LNBEC1IpWatEWBnMHvkd8ZnEpGO9LxbfC9dEUcnkOI3hL
- 3UKqg9uwrmpA4ikav0+oCReHkTEdLrv2X9c5XYZfkMToNxb/L8M+p5TsorEfH0+ibWu/
- paSg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc;
+ bh=KXtJjVJahjtMbXmXWxhAsDJuAtpcg2vmhl3jEYnQSpg=;
+ b=EiA4YIy+ngy+4fnuJ0GCxur3+lIYOAQaeZB8E5ms+go0/NeHxcBJSyRwnhDS3z2cEV
+ xjxqtg6VcpH6zpRsT4wYvQ9glOYkOmkKy3Tu8meIj+c4uiPTrtxbBTmrpH8isOlee+up
+ 5AdFKY1tdn+9v/bjzvbX+7bIX1ZK0XSbMn8ofln5ZJQvjwJYhiyngnU+PzEiB/wpi2XJ
+ TvmBq82QMLoRIfbW+01QRwMrkCK+hTrvBuzE2bUVoHZcObDfdkLHr5orHbSEAJVU+If/
+ wKJUEADbTuWkmji3igsl0hTFUIUjnxhDuiFP6ePdDNcvxOxnZoA3ePZjB0QtyRwv1nS5
+ 70OQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=HCcotNQc
-Subject: [Buildroot] [PATCH v2] Extend Qt6 configuration
+ header.a=rsa-sha256 header.s=20210112 header.b=EiA4YIy+
+Subject: [Buildroot] [PATCH v2 01/29] package/qt6/qt6base: Add qt6base hash
+ file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,56 +103,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Extend qt6base package configuration options and add license/hash
-information.
-This is mostly a port of the existing qt5 options to qt6 and checked that the
-correct CMake options are used.
-see https://github.com/qt/qtbase/blob/dev/cmake/configure-cmake-mapping.md
-This should be a good starting point to get more fully featured qt6 support
-
-Changes in v2:
-	* Rework as series with a patch per feature added
-
-Jesse Van Gavere (29):
-  package/qt6/qt6base: Add qt6base hash file
-  package/qt6/qt6base: Add license information
-  package/qt6/qt6base: add support for network module
-  package/qt6/qt6base: add support for concurrent module
-  package/qt6/qt6base: add support for xml module
-  package/qt6/qt6base: add support for test module
-  package/qt6/qt6base: add support for building examples
-  package/qt6/qt6base: add support for dbus module
-  package/qt6/qt6base: add support for syslog backend
-  package/qt6/qt6base: add qt support for journald when using systemd
-  package/qt6/qt6base: add qt support for zstd when using the package
-  package/qt6/qt6base: add qt support for SSE/AVX SIMD extensions
-  package/qt6/qt6base: add linking to libatomic
-  package/qt6/qt6base: add support to link qt to openssl
-  package/qt6/qt6base: add qt icu support
-  package/qt6/qt6base: add qt libudev support
-  package/qt6/qt6base: add qt libglib2 support
-  package/qt6/qt6base: add support for passing custom options
-  package/qt6/qt6base: add support for sql module w/ mysql
-  package/qt6/qt6base: add support for sql module with postgresql
-  package/qt6/qt6base: add support for sql module with sqlite
-  package/qt6/qt6base: add support for gui module
-  package/qt6/qt6base: add support for gui module fontconfig/harfbuzz
-  package/qt6/qt6base: Add support for gui module jpeg/png/gif image
-    format
-  package/qt6/qt6base: add support for gui module
-    widgets/opengl/graphics backends
-  package/qt6/qt6base: add support for gui module tslib
-  package/qt6/qt6base: add support for gui module libinput
-  package/qt6/qt6base: add support for gui module kms
-  package/qt6/qt6base: add support for gui module printsupport/cups
-
- package/qt6/Config.in            |   5 +
- package/qt6/qt6base/Config.in    | 280 +++++++++++++++++++++++++++
- package/qt6/qt6base/qt6base.hash |   8 +
- package/qt6/qt6base/qt6base.mk   | 318 +++++++++++++++++++++++++++++++
- 4 files changed, 611 insertions(+)
+Hash file with only the qt6base tarball hash
+---
+ package/qt6/qt6base/qt6base.hash | 2 ++
+ 1 file changed, 2 insertions(+)
  create mode 100644 package/qt6/qt6base/qt6base.hash
 
+diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
+new file mode 100644
+index 0000000000..31ed2494af
+--- /dev/null
++++ b/package/qt6/qt6base/qt6base.hash
+@@ -0,0 +1,2 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.3/6.3.1/submodules/qtbase-everywhere-src-6.3.1.tar.xz.sha256
++sha256  0a64421d9c2469c2c48490a032ab91d547017c9cc171f3f8070bc31888f24e03  qtbase-everywhere-src-6.3.1.tar.xz
 -- 
 2.34.1
 
