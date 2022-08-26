@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD88ECAAA3
-	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 11:11:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 106A3ECAAD4
+	for <buildroot@archiver.kernel.org>; Fri, 26 Aug 2022 11:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE9A3610E0;
-	Fri, 26 Aug 2022 11:11:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE9A3610E0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66536610F3;
+	Fri, 26 Aug 2022 11:11:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66536610F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YrPavSWgNn2M; Fri, 26 Aug 2022 11:11:15 +0000 (UTC)
+	with ESMTP id de7zWJ7pkzc6; Fri, 26 Aug 2022 11:11:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0ADED610DC;
-	Fri, 26 Aug 2022 11:11:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ADED610DC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 89D1D1BF289
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 669B4610EE;
+	Fri, 26 Aug 2022 11:11:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 669B4610EE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A6EC01BF289
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63DA9610DC
- for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63DA9610DC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 810F1419F0
+ for <buildroot@lists.busybox.net>; Fri, 26 Aug 2022 11:11:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 810F1419F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gWAZ82iOfMxC for <buildroot@lists.busybox.net>;
- Fri, 26 Aug 2022 11:11:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y-hTsqEvPoE9 for <buildroot@lists.busybox.net>;
+ Fri, 26 Aug 2022 11:11:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE0C560B8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B51D419E3
 Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DE0C560B8D
- for <buildroot@buildroot.org>; Fri, 26 Aug 2022 11:11:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3B51D419E3
+ for <buildroot@buildroot.org>; Fri, 26 Aug 2022 11:11:11 +0000 (UTC)
 Received: from 91-153-34-64.elisa-laajakaista.fi ([91.153.34.64] helo=kodama)
  by fanzine2.igalia.com with esmtpsa 
  (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1oRXEv-000yv0-1X; Fri, 26 Aug 2022 13:11:04 +0200
+ id 1oRXEy-000yv0-Dn; Fri, 26 Aug 2022 13:11:08 +0200
 Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 100b4c16;
+ by kodama (OpenSMTPD) with ESMTPA id ece1f19d;
  Fri, 26 Aug 2022 11:10:54 +0000 (UTC)
 From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>,
- Francois Perrad <francois.perrad@gadz.org>
-Date: Fri, 26 Aug 2022 13:50:55 +0300
-Message-Id: <20220826105055.490087-1-aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Fri, 26 Aug 2022 13:49:18 +0300
+Message-Id: <20220826104918.489523-1-aperez@igalia.com>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  c=relaxed/relaxed; d=igalia.com; 
  s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
- To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:Content-Description:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
  Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
  In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
  List-Post:List-Owner:List-Archive;
- bh=uOG5f7UMbUKjVU4pOvSTIyOPxC5fRvAC0rEltLMV9GA=; b=h8mBL4NkCEfqhrgU5EBn+nLiNx
- xu8SA+PTMGzMlhkRPRef6EcXWAH1MZ+vnt2qpyvMihjmzdFDcgloX+UjTyDeOHQnuLSAMlmv31rQS
- BkqwnQeya+8JYb6s3sQlPq69XoVwdoinBq71I2oAS25wzz1qM2hPhZ1inKoxx8u66cGGg7pi2ySrC
- JZz3DNVtWPJ4f6gn8rT7jrnSj1MWOPFcCg/0VeP6rkaPvq7mufn5sZXYCDGooQw4gJ72Fuy7491KZ
- 5VA667IQVorIE5HRR9le4mGot3skGJNwqTpEtadhdOZA705dIHEFSnP83SLTrBuwD6AGW909bNa0w
- MRoDt38w==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=uOG5f7UMbUKjVU4pOvSTIyOPxC5fRvAC0rEltLMV9GA=; b=U5RuVKFH2Vw/8FoRG3bf8TXk0w
+ G+NCticJEmju138cS3t/27uZvxxm7xRY/NMdc4Kddz/8ZaLP/6wja8G8Vr5G3QuWJnfYvkOYk4/Wf
+ tlDPpTZkGe3ABNbI+PREUdY8ER8wwZqv/LIyNtp4Vu8T2Ac3W86NWpiutoQcwoK9wij6HC7qQomWq
+ IyhV5SaGH7tasteDSsRZnl5r8WmIWw2YwQfG522GFuXgZeRub0uniJnDFqEGM8d+t/NBTN7j+C6f5
+ uETt7u0lXAM0PSiXiLbVv3qA61HmgnOn8di1PCuB8qw0hyPI91p/kHxancsZ9zybWAyLGTi8VZMlB
+ X1FiefGQ==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=h8mBL4Nk
+ header.a=rsa-sha256 header.s=20170329 header.b=U5RuVKFH
 Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
  2.36.7
 X-BeenThere: buildroot@buildroot.org
@@ -78,6 +77,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
