@@ -1,86 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A220ECAAD1
-	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 20:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7109ECAAD5
+	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 20:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF22F40A03;
-	Sat, 27 Aug 2022 20:36:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF22F40A03
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5350F60D89;
+	Sat, 27 Aug 2022 20:42:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5350F60D89
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KLg05C0vB6_H; Sat, 27 Aug 2022 20:36:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w8tZ9_5s6dLd; Sat, 27 Aug 2022 20:42:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 625DA409F5;
-	Sat, 27 Aug 2022 20:36:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 625DA409F5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4F4B71BF95D
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:36:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9012B60BF9;
+	Sat, 27 Aug 2022 20:42:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9012B60BF9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DCD61BF95D
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 236858248F
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:36:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 236858248F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54DDA40475
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:42:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54DDA40475
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fz5lAx0ERMEw for <buildroot@lists.busybox.net>;
- Sat, 27 Aug 2022 20:36:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hSr3ZBzUO8aF for <buildroot@lists.busybox.net>;
+ Sat, 27 Aug 2022 20:42:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 027C582438
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 027C582438
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 20:36:01 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id b5so5621536wrr.5
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 13:36:01 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BDE640140
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BDE640140
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 20:42:38 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id k9so5666190wri.0
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 13:42:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=BswoyJR3RYknKswy95fPtuepIrEAgKZmZgqEnmnFY4w=;
- b=HA2srAiNyBjBfxbrQZ2P3is8PQiM60k7Ry1fyzq50fO4ajjUZJ337y5Ys+9SPb0jhU
- Cd2m4LdMiK+FwXbiowLvkPpjHhNRuS4NHxDNg+3vFu49FMbQtC1OUB6xeXU+/2roxCZ8
- fch0MFuWSmGVyUy2ObfVGD4Zga+/DBzLqB8bqiV3Ck5FVkBZZXQWlOGyjQqtFsVteVT4
- LwAYgGUWzaVobcfqeeRCBvXeKJ7n+61UcP01YScFBhhP8d7L73BETHDgELRI3LJjDkzN
- cSKk2hD08cfKkTzk4mvpu4CXKJSqGZPUXmT8xLVIfrpvii4H2/bCW9afj2FhZpOcRlwB
- U0vQ==
-X-Gm-Message-State: ACgBeo1Ll3hZzYlqFf8ogSMORZckLz+5szgjXg0O4wsc6OSAU0AlDkv5
- 0qBXZG2QqmuGkNM1kcccdQ8EV2ZCr10=
-X-Google-Smtp-Source: AA6agR5hDTg5J1yNwDMPnde8sTgyKZgjXZg55rZS7xZVuYnou79Yc0iaWnyqUjujEAHlBZO/N9TMEw==
-X-Received: by 2002:a05:6000:1563:b0:222:c70e:b2a5 with SMTP id
- 3-20020a056000156300b00222c70eb2a5mr2837455wrz.492.1661632559889; 
- Sat, 27 Aug 2022 13:35:59 -0700 (PDT)
+ bh=Kzb3Ui5AQ+a75ID/9ggM50YYY7jXk58vmbQCvLx0Smw=;
+ b=0WOAFWgWg1aiKWkHEo3f7QedYWv27Eirhn2S3HS2/M/oYPYeBr1fffXjF+ZGkrf1JQ
+ Zvs8M4a5YynR+VDRpVAmC5J6cCR3rqJiyYIl3nSGZIiHOnDclb9WnErFdhUtR2RfXruC
+ q8OYnL8GdLFqygEdGwxEXNNPRje5m/YnQGATwHFzbcPbwn5fsADzjfxnznArIv9RG4ts
+ U13OEvNmOCVNgGTioW0jNd8Cn6lVYuqoqcArLj64nuReUNG1gOloKj3hK27Y/E6HwWyh
+ +3rgOSP89TS7gJOwz2Lpe0rYyohE6PAX8ZzKIRPTQ4QK58Yo5wuqGqQjUOkZ6Aeodyh1
+ Y8lA==
+X-Gm-Message-State: ACgBeo0jnRG1MxtZx0ZQGiEHkziNpuYx1v01i7pabW/uW20L/rr4JDeQ
+ qks6b7xe5B0A6THVxSZ99gmFdnSgLGE=
+X-Google-Smtp-Source: AA6agR7HpntwGpL0j31HLK5d+9elKPMJlmrh9Dl8diLbNZCSA29eXWL8tAjSB4tL+jaYARuGErtJIw==
+X-Received: by 2002:a5d:6d0b:0:b0:222:955a:8774 with SMTP id
+ e11-20020a5d6d0b000000b00222955a8774mr2621103wrq.129.1661632956104; 
+ Sat, 27 Aug 2022 13:42:36 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- x14-20020adfffce000000b00224f7c1328dsm3020128wrs.67.2022.08.27.13.35.59
+ h4-20020a05600c350400b003a54f49c1c8sm4573830wmq.12.2022.08.27.13.42.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Aug 2022 13:35:59 -0700 (PDT)
+ Sat, 27 Aug 2022 13:42:35 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 27 Aug 2022 22:35:57 +0200
-Message-Id: <20220827203557.272100-1-fontaine.fabrice@gmail.com>
+Date: Sat, 27 Aug 2022 22:42:33 +0200
+Message-Id: <20220827204233.274008-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=BswoyJR3RYknKswy95fPtuepIrEAgKZmZgqEnmnFY4w=;
- b=doIdJEWB+7y7vHW6eZQy3BtEj0hQr6om+CnGiCcmErumjaWYcrHF6WXCXqYp67289w
- E4PAQd4Qg4NJTsWMxSyUVjFEriFrJdDqebOjwwEoFHN+S1zGOH4fp7WTSoZLkmxWjAEk
- /f9SfEk+qIoNW4oS2E0E0HP5w9r3av10N6XcnTfZDNCDhDijIlnVF7buztgmEejBw8n+
- ZfuKwLcaFtPnDKQWvFDVMQ3/JNsLexOkzJHqIZsTxV0T7o8QMdarXI4j9rBwv2g2UwCF
- +949TaWeDRmDj2bcBo+5LbczYumln2wEQSM4fzJrpQ/3pcTMt7sgJRqGCrmHQl70LFPg
- oQ2g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=Kzb3Ui5AQ+a75ID/9ggM50YYY7jXk58vmbQCvLx0Smw=;
+ b=bCXyotZehX0xi249I7zsJmbGWIM/WVAMjioH/ggTDgrDWOnexNW6x2cWEKX61HxGSu
+ KoAaFrbNTujVFAich9xXDYtowbGDpFfgcrARVtpI5LwjCeOX0cMtr8GzAXipGEAMa6AF
+ Gj3SlepV5kbzrBRM12qvEU+x8A6isIEDRgmNQYpieB9QZPJvtO1XnDGdVYcbPMuE0aPp
+ nCg7acK15R5NQ18nd8FQuvOgE9cXZ5vn+QzpwDgXAH8tcf7aiwSTOUnCKeZKS6/NUIkj
+ kY+00LNMf00oJ/nuz3mij1lm4WlpCPo+68zg7/l3gZA3Re65u/ZEoJip56SCSIgSUw96
+ T2Tg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=doIdJEWB
-Subject: [Buildroot] [PATCH 1/1] package/libcamera: needs gcc >= 8
+ header.a=rsa-sha256 header.s=20210112 header.b=bCXyotZe
+Subject: [Buildroot] [PATCH 1/1] arch/Config.in.powerpc: VSX implies altivec
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,76 +92,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- Kieran Bingham <kieran.bingham@ideasonboard.com>,
+Cc: Cyril Bur <cyrilbur@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libcamera needs gcc >= 8 since bump to
-8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98 in commit
-64f67ede01699c47ca3c8801ae5dd440295f1874 and
-https://git.libcamera.org/libcamera/libcamera.git/commit/?id=a7ab5ef1d2f9b05056db450e631a99a73382d589:
-
-../output-1/build/libcamera-ba6435930f08e802cffc688d90f156a8959a0f86/meson.build:82:8: ERROR: Problem encountered: gcc version is too old, libcamera requires 8.0 or newer
-
-Fixes:
- - http://autobuild.buildroot.org/results/f8eba0e564d03b83fcda4085baec16a4857c7d25
+As spotted by Yann E. Morin in
+https://patchwork.ozlabs.org/project/buildroot/patch/20220823212219.5066-1-fontaine.fabrice@gmail.com,
+VSX is an extension to AltiVec:
+https://en.wikipedia.org/wiki/AltiVec#VSX_(Vector_Scalar_Extension)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libcamera-apps/Config.in | 6 +++---
- package/libcamera/Config.in      | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ arch/Config.in.powerpc | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
-index 492a99cf55..711fd6de05 100644
---- a/package/libcamera-apps/Config.in
-+++ b/package/libcamera-apps/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS # libcamera
- 	depends on BR2_INSTALL_LIBSTDCPP # libcamera/boost
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17/libcamera
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libcamera
- 	depends on !BR2_STATIC_LIBS # gnutls/libcamera
- 	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
- 	select BR2_PACKAGE_BOOST
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index c48edd3bb4..9fa0be0d73 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -3,6 +3,7 @@ config BR2_POWERPC_CPU_HAS_ALTIVEC
  
- 	  https://github.com/raspberrypi/libcamera-apps
+ config BR2_POWERPC_CPU_HAS_VSX
+ 	bool
++	select BR2_POWERPC_CPU_HAS_ALTIVEC
  
--comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
-+comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 0febfef4bc..63c06173db 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -10,7 +10,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
- 	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_GNUTLS
-@@ -92,7 +92,7 @@ comment "lc-compliance test application needs a toolchain w/ C++, wchar, threads
+ config BR2_POWERPC_CPU_HAS_SPE
+ 	bool
+@@ -135,11 +136,9 @@ config BR2_powerpc_power6
+ 	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ config BR2_powerpc_power7
+ 	bool "power7"
+-	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	select BR2_POWERPC_CPU_HAS_VSX
+ config BR2_powerpc_power8
+ 	bool "power8"
+-	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	select BR2_POWERPC_CPU_HAS_VSX
+ endchoice
  
- endif # BR2_PACKAGE_LIBCAMERA
- 
--comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
-+comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
 -- 
 2.35.1
 
