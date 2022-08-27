@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D16CECAAD1
-	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 20:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90BCAECAAD5
+	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 20:45:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70F6060E25;
-	Sat, 27 Aug 2022 20:45:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70F6060E25
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2ED8A60E2E;
+	Sat, 27 Aug 2022 20:45:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ED8A60E2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3zVZI3a9XU_R; Sat, 27 Aug 2022 20:45:23 +0000 (UTC)
+	with ESMTP id YmykMZ1AlGc2; Sat, 27 Aug 2022 20:45:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 836D660E15;
-	Sat, 27 Aug 2022 20:45:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 836D660E15
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54D0460E09;
+	Sat, 27 Aug 2022 20:45:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54D0460E09
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F04381BF95D
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:45:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9D2EF1BF95D
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9D8C60C0F
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:45:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9D8C60C0F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8492360E15
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:45:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8492360E15
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jeRgFiW2MuCj for <buildroot@lists.busybox.net>;
- Sat, 27 Aug 2022 20:45:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE42360D89
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 20:45:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE42360D89
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 950C087E3F; Sat, 27 Aug 2022 20:30:10 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 27 Aug 2022 22:44:36 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 96f50e65f3d51d40759b1ebf4259789b14951dc3
-X-Git-Newrev: 204002f672a7acb9af326b3ad4e378246cdc65ca
-X-Patchwork-Hint: ignore
-Message-Id: <20220827203010.950C087E3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcamera: needs gcc >= 8
+ with ESMTP id pyHg8egUZP4U for <buildroot@lists.busybox.net>;
+ Sat, 27 Aug 2022 20:45:37 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8948D60D89
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8948D60D89
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 20:45:37 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:e2dc:5f1b:7f23:232])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 8C888780509;
+ Sat, 27 Aug 2022 22:45:31 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 27 Aug 2022 22:45:31 +0200
+Date: Sat, 27 Aug 2022 22:45:31 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220827204531.GC37358@scaer>
+References: <20220827202514.265143-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220827202514.265143-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1661633135;
+ bh=LUd08zfKPOaq6Dr6Ghm2tYvkavsN2Ny5rwcEwAbqFzI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=IEDLMHS/tkSSIIu5SZZyjxzt/CIfXOGRo09EqH2bVdtjewzJDhRUD6fZ1H0xR7S+/
+ swosU3Egmn2ZybHJyseH+/4B3mWBrzqUHF/Bpgt5btKOM8AMsI1D/Bwd+JsMuDRTAC
+ SaVvYHP/9+b5mX3/Jq31/6n8b9ImOLWYT2zpw22lCbYfBqvpeen3UKktiCul/8EQcq
+ /vFD11oS0pVklu8Y0uqsqzFo1oJhKP0OZbgF1AMBTB/kh5AENLonnksXtn6zb3G/vg
+ deF0TwMzqUy4BNZPHoD8ykl4BuOV89c5Rweb5a5lWRR1PCclzWgcw5Lewf1nJIwCaC
+ GKN9Yiq5acJTg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=IEDLMHS/
+Subject: Re: [Buildroot] [PATCH 1/1] package/freeradius-server: correctly
+ set krb5-config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,78 +77,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=204002f672a7acb9af326b3ad4e378246cdc65ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-libcamera needs gcc >= 8 since bump to
-8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98 in commit
-64f67ede01699c47ca3c8801ae5dd440295f1874 and
-https://git.libcamera.org/libcamera/libcamera.git/commit/?id=a7ab5ef1d2f9b05056db450e631a99a73382d589:
+On 2022-08-27 22:25 +0200, Fabrice Fontaine spake thusly:
+> Fix typo added by commit 84d32e53657db32784608c1130ec5290667a652f:
+> 
+> configure: error: invalid variable name: `ac_cv_path_krb5-config'
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5a0e5023c274223b5eb7623165395549e7f446bf
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-../output-1/build/libcamera-ba6435930f08e802cffc688d90f156a8959a0f86/meson.build:82:8: ERROR: Problem encountered: gcc version is too old, libcamera requires 8.0 or newer
+Applied to master, thanks.
 
-Fixes:
- - http://autobuild.buildroot.org/results/f8eba0e564d03b83fcda4085baec16a4857c7d25
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libcamera-apps/Config.in | 6 +++---
- package/libcamera/Config.in      | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+> ---
+>  package/freeradius-server/freeradius-server.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
+> index f77413a170..ebd459341d 100644
+> --- a/package/freeradius-server/freeradius-server.mk
+> +++ b/package/freeradius-server/freeradius-server.mk
+> @@ -87,7 +87,7 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBKRB5),y)
+>  FREERADIUS_SERVER_CONF_OPTS += \
+> -	ac_cv_path_krb5-config=$(STAGING_DIR)/usr/bin/krb5-config \
+> +	ac_cv_path_krb5_config=$(STAGING_DIR)/usr/bin/krb5-config \
+>  	--with-rlm_krb5
+>  FREERADIUS_SERVER_DEPENDENCIES += libkrb5
+>  else
+> -- 
+> 2.35.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
-index 492a99cf55..711fd6de05 100644
---- a/package/libcamera-apps/Config.in
-+++ b/package/libcamera-apps/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS # libcamera
- 	depends on BR2_INSTALL_LIBSTDCPP # libcamera/boost
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17/libcamera
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libcamera
- 	depends on !BR2_STATIC_LIBS # gnutls/libcamera
- 	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
- 	select BR2_PACKAGE_BOOST
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
- 
- 	  https://github.com/raspberrypi/libcamera-apps
- 
--comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
-+comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 0febfef4bc..63c06173db 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -10,7 +10,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
- 	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_GNUTLS
-@@ -92,7 +92,7 @@ comment "lc-compliance test application needs a toolchain w/ C++, wchar, threads
- 
- endif # BR2_PACKAGE_LIBCAMERA
- 
--comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
-+comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
