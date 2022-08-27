@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAA99C0502C
-	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 07:51:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A83D1C0502C
+	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 07:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 638AD60BF0;
-	Sat, 27 Aug 2022 07:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 638AD60BF0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4698A60BDF;
+	Sat, 27 Aug 2022 07:51:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4698A60BDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id abqfZMMsmxpW; Sat, 27 Aug 2022 07:51:24 +0000 (UTC)
+	with ESMTP id GCXFKkccNgJy; Sat, 27 Aug 2022 07:51:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04BEF60BB8;
-	Sat, 27 Aug 2022 07:51:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04BEF60BB8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0318A1BF962
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 07:51:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD86960BF0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5471C60C15;
+	Sat, 27 Aug 2022 07:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5471C60C15
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 023471BF95D
  for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 07:51:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD86960BF0
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDD2E404E9
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 07:51:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDD2E404E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id El9mGakGpALe for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pFbJdE0Vt1LH for <buildroot@lists.busybox.net>;
  Sat, 27 Aug 2022 07:51:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5955C60BB8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46D9340017
  for <buildroot@buildroot.org>; Sat, 27 Aug 2022 07:51:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5955C60BB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46D9340017
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 34343879AC; Sat, 27 Aug 2022 07:36:08 +0000 (UTC)
+ id 1F93087632; Sat, 27 Aug 2022 07:36:07 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 27 Aug 2022 09:50:33 +0200
+Date: Sat, 27 Aug 2022 09:47:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f5b43ba02db6d7c8feffc7ef7cebaa1fc9542c8
-X-Git-Newrev: e47c4fbcde541e50f79b572170ee4870058d76c4
+X-Git-Oldrev: ae2807821d897c16141d003f646475fee9e77cba
+X-Git-Newrev: 71283535b6aa8187ad7963687ae961f41ca3c0b4
 X-Patchwork-Hint: ignore
-Message-Id: <20220827073608.34343879AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zerofree: fix legal-info
+Message-Id: <20220827073608.1F93087632@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dbus-broker: add
+ DBUS_BROKER_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,31 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e47c4fbcde541e50f79b572170ee4870058d76c4
+commit: https://git.buildroot.net/buildroot/commit/?id=71283535b6aa8187ad7963687ae961f41ca3c0b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix typo: ZEROFREE_LICENSE_FILE -> ZEROFREE_LICENSE_FILES
-added by commit 98ecdd1d1125f2529a8d61c01a2bec6d8dbc48d1
+cpe:2.3:a:dbus-broker_project:dbus-broker is a valid CPE identifier for
+this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adbus-broker_project%3Adbus-broker
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/zerofree/zerofree.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dbus-broker/dbus-broker.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/zerofree/zerofree.mk b/package/zerofree/zerofree.mk
-index f26280cc2a..3a9c16ee78 100644
---- a/package/zerofree/zerofree.mk
-+++ b/package/zerofree/zerofree.mk
-@@ -8,7 +8,7 @@ ZEROFREE_VERSION = 1.1.1
- ZEROFREE_SOURCE = zerofree-$(ZEROFREE_VERSION).tgz
- ZEROFREE_SITE = https://frippery.org/uml
- ZEROFREE_LICENSE = GPL-2.0
--ZEROFREE_LICENSE_FILE = COPYING
-+ZEROFREE_LICENSE_FILES = COPYING
- ZEROFREE_DEPENDENCIES = e2fsprogs
+diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
+index 22c5e8d8b7..85c3f75a3b 100644
+--- a/package/dbus-broker/dbus-broker.mk
++++ b/package/dbus-broker/dbus-broker.mk
+@@ -23,6 +23,7 @@ DBUS_BROKER_LICENSE_FILES = \
+ 	subprojects/c-stdaux/AUTHORS subprojects/c-stdaux/README.md \
+ 	subprojects/c-utf8/AUTHORS subprojects/c-utf8/README.md
  
- # We use the same workaround as in https://bugs.gentoo.org/716136
++DBUS_BROKER_CPE_ID_VENDOR = dbus-broker_project
+ DBUS_BROKER_DEPENDENCIES = expat systemd
+ DBUS_BROKER_CONF_OPTS = -Dlauncher=true
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
