@@ -4,85 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6210CECAAD2
-	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 07:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F997ECAAD2
+	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 07:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A11064175E;
-	Sat, 27 Aug 2022 07:38:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A11064175E
+	by smtp4.osuosl.org (Postfix) with ESMTP id D72EB416EC;
+	Sat, 27 Aug 2022 07:51:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D72EB416EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w8lESE6sD8kS; Sat, 27 Aug 2022 07:38:40 +0000 (UTC)
+	with ESMTP id 90hIi5R5g16I; Sat, 27 Aug 2022 07:51:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DDC7403AC;
-	Sat, 27 Aug 2022 07:38:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DDC7403AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F069415F8;
+	Sat, 27 Aug 2022 07:51:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F069415F8
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 09E8D1BF853
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 07:38:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F27921BF853
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 07:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9B8A82C04
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 07:38:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9B8A82C04
+ by smtp1.osuosl.org (Postfix) with ESMTP id CCFBA82B93
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 07:51:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCFBA82B93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9TO0Pqb7rUvY for <buildroot@lists.busybox.net>;
- Sat, 27 Aug 2022 07:38:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BFEA82BD6
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0BFEA82BD6
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 07:38:28 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id bu22so3854038wrb.3
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 00:38:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
- bh=oezERZCnU1TuoIgplxpA9H9F+p9T2VUpCaGYpsslOEQ=;
- b=iwoNUfM/ZysN0Lg2sJdxmbLwMVWDhU1PzY+ZUvolXnurEVrdAscgYbbIMVn37lOoA8
- CpC+u1WTVFc/Ujs2vwUFnXt/o2Qb58UZXO7Wz5X/Afypr2F6pW5FkMmBbvG0nw1rlTnZ
- ONGGbr2Vz6Wy5FPCeddsYblKJLVXaZYITDf2IFacbc3f2dISTz3cwVhwqWtheE2y3QXV
- /+u1E1Yavg9ki+QXDRi/HCYhcqTzxTOTCWEZL7VYBQbgPcnJEbqYepEaPg0fCCbRuvmE
- aZaGxHhB/CEgFld2SAkmby1y/u25nbU++6jmQ1HJ2UCdH5yMVbsLhK3ZhDw8rbpUTlig
- 0DTQ==
-X-Gm-Message-State: ACgBeo2ImuDVvGFGb0u0khiI/4rR8ZA0sL5URFBUv48aSmJUn7Aq5TFU
- EWe5cJrdQ6bphTnonSn0q8FELe6QCI4=
-X-Google-Smtp-Source: AA6agR58BleHpSQPAHzlZw9LefhTL3TjCoUdUVHe6g3jCSZ8P3xfAaXophlp4Rx2D1vZLgcnUdjLBQ==
-X-Received: by 2002:adf:eb4c:0:b0:220:6aaf:ef5e with SMTP id
- u12-20020adfeb4c000000b002206aafef5emr1493491wrn.488.1661585906692; 
- Sat, 27 Aug 2022 00:38:26 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- w10-20020a05600c474a00b003a601a1c2f7sm1851961wmo.19.2022.08.27.00.38.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Aug 2022 00:38:26 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id 60M-Cro3KfPP for <buildroot@lists.busybox.net>;
+ Sat, 27 Aug 2022 07:51:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4EF6E82779
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 07:51:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EF6E82779
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 2A2F7879A7; Sat, 27 Aug 2022 07:36:08 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 27 Aug 2022 09:38:16 +0200
-Message-Id: <20220827073816.59961-2-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220827073816.59961-1-fontaine.fabrice@gmail.com>
-References: <20220827073816.59961-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc;
- bh=oezERZCnU1TuoIgplxpA9H9F+p9T2VUpCaGYpsslOEQ=;
- b=KVTLWwrU0Cyjplc7dyjNlFEQra5+pC+fK4+MPIc3zAppWreoPdeXWA+P9aYxg5Yxyo
- Cuj5zLxc/afigt6+f615Bx60M5H76SCRxwtiJAWMxkviyUIUJzyRy4g72JV/FmilvViQ
- DA7dkbj1QxDXbvziNAAZDTANMmqYYKr9F6at7XhIqZrUWeyNsRmpkqbdgF67Tg2/4uRA
- a/DokiRTBYJUyKlqNo9fLUUyQIF/OMlxiYvsrSpcWy5uS6cNlC9HEl2mkhupIF8ZLNbt
- Rf0hrAdzEAZrIt6X7LQiNDXSkAkc6wzzOPZSg3SoyTkBYTMXin69GMcJwvZWc1E57tt5
- 6OgA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=KVTLWwrU
-Subject: [Buildroot] [PATCH 2/2] package/dbus-broker: fix legal-info
+Date: Sat, 27 Aug 2022 09:47:42 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 71283535b6aa8187ad7963687ae961f41ca3c0b4
+X-Git-Newrev: 0f5b43ba02db6d7c8feffc7ef7cebaa1fc9542c8
+X-Patchwork-Hint: ignore
+Message-Id: <20220827073608.2A2F7879A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dbus-broker: fix legal-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,18 +56,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0f5b43ba02db6d7c8feffc7ef7cebaa1fc9542c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Commit bd3cf3fb5b0da97e6d4dd9c9321e44c376c1f36a forgot to add all hashes
 of license files
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/dbus-broker/dbus-broker.hash | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
@@ -132,9 +96,6 @@ index 26ebab7ac1..fc661003b5 100644
 +sha256  481e73f260f6fa1073b7bb91f8f7b46b89dd7e6caa9d0922a5c2ed2dd41d65a0  subprojects/c-stdaux/README.md
 +sha256  36438bc0796d76828e104d2766e28effe8c6a1a14f90440a2223b1a2fab6c69a  subprojects/c-utf8/AUTHORS
 +sha256  f195e6943366a0b0014b65920a5becb7ed64f0a589b7d55ddb7489a0e5893364  subprojects/c-utf8/README.md
--- 
-2.35.1
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
