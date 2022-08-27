@@ -1,87 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A663ECAAD5
-	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 20:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B32C1ECAAD1
+	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 20:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4376B82681;
-	Sat, 27 Aug 2022 20:25:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4376B82681
+	by smtp2.osuosl.org (Postfix) with ESMTP id 083ED405C8;
+	Sat, 27 Aug 2022 20:27:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 083ED405C8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kk-0Z6zvSjaz; Sat, 27 Aug 2022 20:25:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7_HqsoIzE_LX; Sat, 27 Aug 2022 20:27:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54E9582422;
-	Sat, 27 Aug 2022 20:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54E9582422
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8467D1BF95D
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:25:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5D20405B1;
+	Sat, 27 Aug 2022 20:27:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5D20405B1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A8A591BF95D
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:27:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B4A660BF9
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:25:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B4A660BF9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 824BD4093F
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 20:27:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 824BD4093F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2s2g756zmeHE for <buildroot@lists.busybox.net>;
- Sat, 27 Aug 2022 20:25:30 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3957E60B5C
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3957E60B5C
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 20:25:30 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id e20so5582529wri.13
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 13:25:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc;
- bh=yvVHKucwNNJjMwtVLGgFasGUHNsxUIwJDXeRC1ZSIbc=;
- b=gfcBrCD5aqYI0M3aFLzjuOc+OYda2PVUhZTqVf+I8H6ulpFXAAfHx3k5gHt0DZi/FT
- 1n+Ej5D88FyBEy1nrd4Ff4AZ2/kj0GGt9iRj31IDSssbUn0j1VTqovPBczV2630rckOy
- UUIV8fabJyz5Cxp4YCFPwr5kthHWAxLjRO51U1cBjdIf4ceQREmf6ocMW9+eybiSCa/G
- mUlz6ZAJfa8z7k2QnbApnE62CHvX/kaUPQNcaSz9D/nsjJYW+NjWEw236b+xKYkbweLn
- LUjkcA/Dg0vmRAJe2PlIzuEm+fohn4smkkU6H1L2/B6ihia7Kc7A1ks1n/PD1LzUQiGx
- 32eA==
-X-Gm-Message-State: ACgBeo1QfvOcPUJr/3ZDpR0rpNE2rnNUyhRUUIWfvc1iA1E63QGGYkTV
- HA1BgKLfP530SJbCe5+cH/sYBhT/9qU=
-X-Google-Smtp-Source: AA6agR5XfMMiQZRQ3/0O7391iDgg3RIo/5epU+paI0GXH8b1+zEYFZlxLZhs9/gAOrjvnVI3pVOWrw==
-X-Received: by 2002:a5d:4d83:0:b0:226:d08d:35c8 with SMTP id
- b3-20020a5d4d83000000b00226d08d35c8mr2740496wru.4.1661631927990; 
- Sat, 27 Aug 2022 13:25:27 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- j34-20020a05600c1c2200b003a682354f63sm4132794wms.11.2022.08.27.13.25.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Aug 2022 13:25:27 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hewZ0WQvgyW5 for <buildroot@lists.busybox.net>;
+ Sat, 27 Aug 2022 20:27:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E5034092D
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 20:27:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E5034092D
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id EBA3687E30; Sat, 27 Aug 2022 20:12:40 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 27 Aug 2022 22:25:14 +0200
-Message-Id: <20220827202514.265143-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc;
- bh=yvVHKucwNNJjMwtVLGgFasGUHNsxUIwJDXeRC1ZSIbc=;
- b=ET2IzdA8/tRcmOsRSA/YJ30YVzuGcxj9+YpLVVix7GqUC5HpNCynTdRFlPEdHCNnSN
- tvhHpXtg/rTdWrEbljDg+hjOOcfXgQE0XWo6nknWE5sFA5AdyP526p7jkU1OQYlxf1Sk
- 3kC4rSJvfO3fwHtKWuLnBa6qOVltwgc5cg2vB+W9t3jHcgdQis+aMkNsciiWLxnJJAe0
- gMgAOuR34haEzu1oQ69KKQnddwn23hfmW11kZkdDxPKHHAQqvyKypwr9pi00cm6A/TgJ
- aYhfWPvMsGflGNn1FurNOqmDZtp/CkvdV9bN3uRMSuJyDfIo2E1UzKPurQ6GZMAr31+j
- yOXA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ET2IzdA8
-Subject: [Buildroot] [PATCH 1/1] package/freeradius-server: correctly set
- krb5-config
+Date: Sat, 27 Aug 2022 22:23:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4ebdf1c47bd0d4e16f0fecc6363281f8cb59227b
+X-Git-Newrev: a26ab27397c81928bdacc96473f80b2c47fc534d
+X-Patchwork-Hint: ignore
+Message-Id: <20220827201240.EBA3687E30@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ffmpeg: altivec needs VSX with
+ little endian
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,41 +57,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David GOUARIN <dgouarin@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix typo added by commit 84d32e53657db32784608c1130ec5290667a652f:
+commit: https://git.buildroot.net/buildroot/commit/?id=a26ab27397c81928bdacc96473f80b2c47fc534d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-configure: error: invalid variable name: `ac_cv_path_krb5-config'
+Fix the following build failure:
+
+In file included from libavcodec/ppc/audiodsp.c:31:
+libavcodec/ppc/audiodsp.c: In function 'scalarproduct_int16_altivec':
+./libavutil/ppc/util_altivec.h:123:5: error: implicit declaration of function 'vec_vsx_ld'; did you mean 'vec_vslh'? [-Werror=implicit-function-declaration]
+  123 |     vec_vsx_ld(offset, b)
+      |     ^~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/5a0e5023c274223b5eb7623165395549e7f446bf
+ - http://autobuild.buildroot.org/results/b772d285f978ff9bc3b07872d009633c943f20b1
+
+VSX is indeed an extension to AltiVec, so havinf VSX implies having
+AltiVec [0], so we can condition he altivec support on LE ,on VSX being
+available.
+
+To be noted, however, is that ffmpeg has a configre switch dedicated to
+VSX: --enable-vsx. We do not use it add support for that here, as we are
+just fixing the AltiVec support. Adding VSX configure flag is left as an
+excercise for a future feature addition.
+
+[0] https://en.wikipedia.org/wiki/AltiVec#VSX_(Vector_Scalar_Extension)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998@free.fr:
+  - add comment in .mk
+  - exend commit log to explain VSX implies AltiVec
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/freeradius-server/freeradius-server.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ffmpeg/ffmpeg.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/freeradius-server/freeradius-server.mk b/package/freeradius-server/freeradius-server.mk
-index f77413a170..ebd459341d 100644
---- a/package/freeradius-server/freeradius-server.mk
-+++ b/package/freeradius-server/freeradius-server.mk
-@@ -87,7 +87,7 @@ endif
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 82d229903f..ced5ce598f 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -511,7 +511,11 @@ endif
+ FFMPEG_CONF_OPTS += --disable-asm
+ endif # MIPS
  
- ifeq ($(BR2_PACKAGE_LIBKRB5),y)
- FREERADIUS_SERVER_CONF_OPTS += \
--	ac_cv_path_krb5-config=$(STAGING_DIR)/usr/bin/krb5-config \
-+	ac_cv_path_krb5_config=$(STAGING_DIR)/usr/bin/krb5-config \
- 	--with-rlm_krb5
- FREERADIUS_SERVER_DEPENDENCIES += libkrb5
+-ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
++ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC):$(BR2_powerpc64le),y:)
++FFMPEG_CONF_OPTS += --enable-altivec
++else ifeq ($(BR2_POWERPC_CPU_HAS_VSX):$(BR2_powerpc64le),y:y)
++# On LE, ffmpeg AltiVec support needs VSX intrinsics, and VSX
++# is an extension to AltiVec.
+ FFMPEG_CONF_OPTS += --enable-altivec
  else
--- 
-2.35.1
-
+ FFMPEG_CONF_OPTS += --disable-altivec
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
