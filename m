@@ -1,96 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D50DEECAAD1
-	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 21:15:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05594ECAAD1
+	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 21:36:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81F3C60E0D;
-	Sat, 27 Aug 2022 21:15:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81F3C60E0D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 627ED40929;
+	Sat, 27 Aug 2022 21:36:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 627ED40929
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d9ypVcBsJucJ; Sat, 27 Aug 2022 21:15:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rj7hEB-0lR3s; Sat, 27 Aug 2022 21:36:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80A44605B1;
-	Sat, 27 Aug 2022 21:15:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80A44605B1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6731E1BF479
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 21:15:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1DA5408EA;
+	Sat, 27 Aug 2022 21:36:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1DA5408EA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FD491BF479
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 21:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 413D64038E
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 21:15:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 413D64038E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3737582662
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 21:36:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3737582662
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id plH9HtHUSjSZ for <buildroot@lists.busybox.net>;
- Sat, 27 Aug 2022 21:15:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zXWzIFrjHU8P for <buildroot@lists.busybox.net>;
+ Sat, 27 Aug 2022 21:36:07 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36AE6400CC
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 36AE6400CC
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 21:15:35 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id b16so5939041edd.4
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 14:15:35 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCC1A81D70
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BCC1A81D70
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 21:36:06 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id e20so5693776wri.13
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 14:36:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc;
- bh=PlI9sj7tWNI+sH1+5I4rMzmK7gC96ffq8ZYq9PYlbOU=;
- b=mejHlVHbTcLtiXm2p1Z7/tNJBS7me6gfE4BiYqPXR3O2sbJAnv8F83th9lxNC8vf5P
- GjMZydF2EdnuYsm90FCNJskedRZCxGlkEtPNtQscWVT26ZBYA4mXmbxJEW02aNunCTX1
- 6vHLezMhKpvJY5SiRzPxQXFaNt11dMtXZgrExnjoT9bEzzidKmb4PvS4BfoEWIpjaR09
- BBIDR9CvgdfbsuEii8rqeLiZ2qABbV7HhLJ5eo+8ettyZ7as2qFJtxPGzVLcmVNiKWjc
- GoGA7Z2HfGj95pm6BZvETlRYzFl2WKahIQC737UtVvoYO0dQbhWJwWWGELYy/58eXet1
- 3sKA==
-X-Gm-Message-State: ACgBeo1Mz/LBe9Dd1qGynS60OIkkRoqzdkRRTiSW+8NrcvDjde+SEgio
- wVIDowbt/tiJIsi6O1Zob+W19w==
-X-Google-Smtp-Source: AA6agR6TYa41EkaOiyCi1ETM2IAZS5yNPTcN2/6SIeUILxwDpLnsb5sWpA8FY07jqKCOuX+bDXQoFQ==
-X-Received: by 2002:a05:6402:1e8c:b0:43d:db52:78a8 with SMTP id
- f12-20020a0564021e8c00b0043ddb5278a8mr11085718edf.324.1661634933423; 
- Sat, 27 Aug 2022 14:15:33 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- m24-20020a509318000000b00445b5874249sm3268906eda.62.2022.08.27.14.15.32
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 27 Aug 2022 14:15:33 -0700 (PDT)
-Message-ID: <05404f6d-7300-93af-f1e2-056a715baaa5@mind.be>
-Date: Sat, 27 Aug 2022 23:15:30 +0200
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=s4HSvvjI9YHb+Z6NHr8jUqVxy21lc2Js01nRh1sDIRI=;
+ b=QlZYFCh6guAaiUn1VHuAvXQj17ggdUTZ2vGih1b7uDbQqYCiYad15ci5f1S0g5jgSt
+ P4/ofBcu/ZFAvYt5ONTwu/chW5vvBBHP+KL8l1bxNyyhhw+2knlYuDXsh4Y24/IWh+8J
+ C+RbpqYAmLMW0VFWYb9rCm8IIW28uVIyUcTlqR4RU7Rhpb+6vh+mwbjf24/IN8Q0okuV
+ pi0FFq3vxGfRWTToOoijSSBMXMjQZ00g2Xu6YIYFCFLQsDn8gJNuv7w4eGTRAVT78Gms
+ JQvV8j+OgrQV+CRqrJJ0bQq7MnlAJ2oNBrYPG/ywQMYLV5PrBSmzLMG8hoioVaOy2ZH7
+ 4PRg==
+X-Gm-Message-State: ACgBeo2SrKnrOJyTzwaDIwDCZkJ5dgf+3fP3a0P1G4mehIad/Tk19rL2
+ AH32PZOEI7SBqJaenRao5krm255wsL0=
+X-Google-Smtp-Source: AA6agR6KSlDtMFYxt78cegXaA0yru2pCMt+Sia567AcJBWX2qITLFVh/x3bJhgf7pGh2T+gRqz3F/g==
+X-Received: by 2002:a5d:6d8a:0:b0:225:2e6c:8a1b with SMTP id
+ l10-20020a5d6d8a000000b002252e6c8a1bmr2884636wrs.647.1661636164226; 
+ Sat, 27 Aug 2022 14:36:04 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ j34-20020a05600c1c2200b003a682354f63sm4276103wms.11.2022.08.27.14.36.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 27 Aug 2022 14:36:03 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 27 Aug 2022 23:35:58 +0200
+Message-Id: <20220827213558.476660-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-GB
-To: Jesse Van Gavere <jesseevg@gmail.com>, buildroot@buildroot.org
-References: <20220826135503.20612-1-jesseevg@gmail.com>
- <20220826135503.20612-3-jesseevg@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20220826135503.20612-3-jesseevg@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc;
- bh=PlI9sj7tWNI+sH1+5I4rMzmK7gC96ffq8ZYq9PYlbOU=;
- b=Wi+TRC6r3UYBroiyj/Xny0DfQkytqKnNhFKpTel75xXeqqxETlnwty5XffKPzU1M4n
- 6vnhprBeeJLbFY1RZcQaTdn/usCkiIiTbUdUhghUB+P+AWRKDl18fUKwpj5Ax7Q3zVBr
- XgwqwcaIoSuAKqemQUtqb1MKSPwFEy6Lnbn+uF9Nd9XDmnngrCnTeWeK8n30y3TCpUvL
- upA8P7EOFJwRPZTXFSdPbonFiCoGt65jwFJpWAzpSr2NikG1GK24FAFnIPdrANc9AneB
- w3srP1/9tNdiMPlDKEPbxt6wNmV41a6iQV6J/PPq4pIK6flXPXiHPnFQAX4W0u3b2m1r
- ZeLQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Wi+TRC6r
-Subject: Re: [Buildroot] [PATCH v4 02/29] package/qt6/qt6base: Add license
- information
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=s4HSvvjI9YHb+Z6NHr8jUqVxy21lc2Js01nRh1sDIRI=;
+ b=myUsKIJdUukqir3Dxiog9sgjv2bkWpkXZ+tcuZ3fRcyKIy1rfDFetrT15pmUECcOKY
+ 25uEJbchSBSXpNm8EQLiwDQ+m6e4vZ9ooWpLDCzI7sGALYGTeKP75qWDQNN2E3h1wESf
+ iLT/x0FV99h3HjbHTYgecXwApFA6W938ztGamhkIAfPbMTv6liX7yqWtcKeAvHrbj1qJ
+ 40O/oy+3BI46mGSyvyHpEkXm+a0jTNeoB0zYdFFqnGAP1FNVvHFA9r6HKA90wp8OG3Hc
+ IthNV9x4641ssO9F/UXl2qY40TtZML0Pi2ONN8jTT7oZLUn+9eDBUXBTbtWdOK87PzxD
+ W33Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=myUsKIJd
+Subject: [Buildroot] [PATCH 1/1] package/libgpgme: fix build without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,65 +92,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following build failure without threads raised since bump to
+version 1.17.1 in commit 3f121357ae225be9ac2fbf4505027c2cc690626b and
+https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commit;h=f3177d3ee0a1d30e15f33ff226b5e4c96b7610db:
 
+run-wkdlookup.cpp: In function 'int main(int, char**)':
+run-wkdlookup.cpp:130:18: error: 'std::this_thread' has not been declared
+  130 |             std::this_thread::sleep_for(std::chrono::milliseconds{250 * cnt});
+      |                  ^~~~~~~~~~~
 
-On 26/08/2022 15:54, Jesse Van Gavere wrote:
-> Add license hashes to the hash file and add the information into the makefile
+Fixes:
+ - http://autobuild.buildroot.org/results/2915f6105bae595274fabaa12de7cc53926d22d0
 
-  Commit messages are normally wrapped at 72 columns.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-Fix-build-without-threads.patch      | 59 +++++++++++++++++++
+ package/libgpgme/libgpgme.mk                  |  3 +
+ 2 files changed, 62 insertions(+)
+ create mode 100644 package/libgpgme/0001-Fix-build-without-threads.patch
 
-> 
-> Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
-> ---
->   package/qt6/qt6base/qt6base.hash | 6 ++++++
->   package/qt6/qt6base/qt6base.mk   | 2 ++
->   2 files changed, 8 insertions(+)
-> 
-> diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
-> index 31ed2494af..5efc5c2815 100644
-> --- a/package/qt6/qt6base/qt6base.hash
-> +++ b/package/qt6/qt6base/qt6base.hash
-> @@ -1,2 +1,8 @@
->   # Hash from: https://download.qt.io/official_releases/qt/6.3/6.3.1/submodules/qtbase-everywhere-src-6.3.1.tar.xz.sha256
->   sha256  0a64421d9c2469c2c48490a032ab91d547017c9cc171f3f8070bc31888f24e03  qtbase-everywhere-src-6.3.1.tar.xz
-> +# Hashes for license files:
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-> +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-> +sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-> +sha256  88ec689407cf2df9b2eb5c45952564d51ce73c129a3bdffb15c0d2d161ad7558  LICENSE.LGPLv3
+diff --git a/package/libgpgme/0001-Fix-build-without-threads.patch b/package/libgpgme/0001-Fix-build-without-threads.patch
+new file mode 100644
+index 0000000000..caa4ed7d78
+--- /dev/null
++++ b/package/libgpgme/0001-Fix-build-without-threads.patch
+@@ -0,0 +1,59 @@
++From fc1b821c80c78f4ae635639c7fce5bad754edda7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 27 Aug 2022 23:24:44 +0200
++Subject: [PATCH] Fix build without threads
++
++Allow the user to disable cpp tests to avoid the following build failure
++without threads raised since version 1.17.1 and
++https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=commit;h=f3177d3ee0a1d30e15f33ff226b5e4c96b7610db
++
++run-wkdlookup.cpp: In function 'int main(int, char**)':
++run-wkdlookup.cpp:130:18: error: 'std::this_thread' has not been declared
++  130 |             std::this_thread::sleep_for(std::chrono::milliseconds{250 * cnt});
++      |                  ^~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/2915f6105bae595274fabaa12de7cc53926d22d0
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://dev.gnupg.org/T6165]
++---
++ configure.ac         | 5 +++++
++ lang/cpp/Makefile.am | 6 +++++-
++ 2 files changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index e7fe04a7..d1c87486 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -553,6 +553,11 @@ AC_ARG_ENABLE(g13-test,
++          run_g13_test=$enableval)
++ AM_CONDITIONAL(RUN_G13_TESTS, test "$run_g13_test" = "yes")
++ 
+++run_cpp_test="yes"
+++AC_ARG_ENABLE(cpp-test,
+++  AS_HELP_STRING([--disable-cpp-test],[disable CPP regression test]),
+++         run_cpp_test=$enableval)
+++AM_CONDITIONAL(RUN_CPP_TESTS, test "$run_cpp_test" = "yes")
++ 
++ # Checks for header files.
++ AC_CHECK_HEADERS_ONCE([locale.h sys/select.h sys/uio.h argp.h stdint.h
++diff --git a/lang/cpp/Makefile.am b/lang/cpp/Makefile.am
++index 724da6ca..243c463d 100644
++--- a/lang/cpp/Makefile.am
+++++ b/lang/cpp/Makefile.am
++@@ -18,6 +18,10 @@
++ # License along with this program; if not, see <https://gnu.org/licenses/>.
++ # SPDX-License-Identifier: LGPL-2.1-or-later
++ 
++-SUBDIRS = src tests
+++SUBDIRS = src
+++
+++if RUN_CPP_TESTS
+++SUBDIRS += tests
+++endif
++ 
++ EXTRA_DIST = README
++-- 
++2.35.1
++
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 1b57b18872..2120ee8e3c 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -14,6 +14,8 @@ LIBGPGME_CPE_ID_PRODUCT = gpgme
+ LIBGPGME_INSTALL_STAGING = YES
+ LIBGPGME_DEPENDENCIES = libassuan libgpg-error
+ LIBGPGME_CONFIG_SCRIPTS = gpgme-config
++# We're patching configure.ac
++LIBGPGME_AUTORECONF = YES
+ 
+ LIBGPGME_LANGUAGE_BINDINGS = cl
+ # C++ bindings require a C++11 capable gcc, and -Wsuggest-override support
+@@ -28,6 +30,7 @@ LIBGPGME_CONF_OPTS = \
+ 	--disable-gpgconf-test \
+ 	--disable-g13-test \
+ 	--disable-gpg-test \
++	--disable-cpp-test \
+ 	--enable-languages=$(subst $(space),$(comma),$(LIBGPGME_LANGUAGE_BINDINGS))
+ 
+ # Handle argp-standalone or it errors out during build
+-- 
+2.35.1
 
-  You clearly just copied this from qt5base... However, the name has changes to 
-LICENSE.GPL3, and the file has been reflowed and the Qt-specific blurb in the 
-beginning has been removed. So the hash is not the same.
-
-> +sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
-
-  This one also had some whitespace differences with the qt5base one.
-
-  Applied to master with the hashes and filenames fixed, thanks!
-
-  Regards,
-  Arnout
-
-> diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-> index c67d94e193..7a0838b2bc 100644
-> --- a/package/qt6/qt6base/qt6base.mk
-> +++ b/package/qt6/qt6base/qt6base.mk
-> @@ -7,6 +7,8 @@
->   QT6BASE_VERSION = $(QT6_VERSION)
->   QT6BASE_SITE = $(QT6_SITE)
->   QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
-> +QT6BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
-> +QT6BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
->   QT6BASE_DEPENDENCIES = \
->   	host-ninja \
->   	host-qt6base \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
