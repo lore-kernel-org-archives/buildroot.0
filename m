@@ -1,70 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16520ECAAD2
-	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 13:42:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11E0FC0502A
+	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 13:45:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A473D40547;
-	Sat, 27 Aug 2022 13:42:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A473D40547
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NG-pnnNOP5_J; Sat, 27 Aug 2022 13:42:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 29A1A40516;
-	Sat, 27 Aug 2022 13:42:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29A1A40516
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AACA81BF588
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 13:42:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84417410B7
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 13:42:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84417410B7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F90F410B7;
+	Sat, 27 Aug 2022 13:45:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F90F410B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XX-92h2agaHq for <buildroot@lists.busybox.net>;
- Sat, 27 Aug 2022 13:42:38 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MLP6wNYxVmt9; Sat, 27 Aug 2022 13:45:33 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2572140988;
+	Sat, 27 Aug 2022 13:45:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2572140988
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AFD8D1BF588
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 13:45:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B97040541
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 13:45:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B97040541
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o3lgLA1-QDvA for <buildroot@lists.busybox.net>;
+ Sat, 27 Aug 2022 13:45:29 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EC0F40AB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8608D40286
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3EC0F40AB9
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 13:42:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8608D40286
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 13:45:29 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:e2dc:5f1b:7f23:232])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 72058780346;
- Sat, 27 Aug 2022 15:42:33 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 965AD78050E;
+ Sat, 27 Aug 2022 15:45:25 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 27 Aug 2022 15:42:33 +0200
-Date: Sat, 27 Aug 2022 15:42:33 +0200
+ Sat, 27 Aug 2022 15:45:25 +0200
+Date: Sat, 27 Aug 2022 15:45:25 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Adrian Perez de Castro <aperez@igalia.com>
-Message-ID: <20220827134233.GZ37358@scaer>
-References: <20220824131826.345495-1-aperez@igalia.com>
+Message-ID: <20220827134525.GA37358@scaer>
+References: <20220824122601.266641-1-aperez@igalia.com>
+ <20220827134203.GY37358@scaer>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220824131826.345495-1-aperez@igalia.com>
+In-Reply-To: <20220827134203.GY37358@scaer>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661607755;
- bh=xhe0EsHUaV9v7T9vCowJhxQ3/xoCulwLhIbEFgcEu7Q=;
+ d=free.fr; s=smtp-20201208; t=1661607927;
+ bh=r63pq5gOgtvhh4og5b4NJLQbOVcKp5jSeosTEh3GTe0=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=qcGluINbQf0nrHV6fw+04cYc6jTGNjVLbhX8VjtUyxgB3e+KPNpRvx5ncFDwtzj2l
- c4xpeV1gy821Sav1thVb+k6OrJXh5GV9A0C85lo2mOh/cmte0tKy7Az05sIC4CCgAZ
- HpYhIoK089+8eZOq/G9+AJmgQ5tiG8QK9/bv0vwAfJkz7ILeQrlbTzY9Wsf7ALhQv3
- BeQSw9fxxZFCotqME6UW6HC5kqIAm38HlOp7V4YYXQ24rMFghMKZaVP+WLlkG4H2/C
- a1QChrHk2LUi0DOXU5q3+Fu8g4AV5hd5Px6bhQUykUrlwh1PchB2O0iqPoGGdV/uCt
- 1DK56OW2RnVyg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=iHoYldpK6MERWYlJ05z/0pUPy8JU/q72z5GZBVZJ5vyRRIaZJvMKvM+NXveG3+985
+ PCAiDmC3lnViMjBWPq7t8qi4jhhU10GoQexUzuqDxTrfDNTgaMG7i15KA1NupBDI1Y
+ 4knS5mo2yGg9wjX5ntjawtuT8AvIimyWq58NoSXYlELbWvzsRhgV3PX6Ene4+GiKK0
+ 0ExMIMJT2AswZRTDS6FERIOWGpeN96RNQmB0/a09VJgcvv/FgdzS/V6nWxoLFY60cq
+ JmDSpWSgFf+qVx+1UlgF1qncIx7rKxKU9v8W55F+yud6kOuUmwnLLAv/6lwczp50nH
+ HswUQUs/RP+7g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=qcGluINb
-Subject: Re: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.14.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=iHoYldpK
+Subject: Re: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
+ 1.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,55 +86,75 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Adrian, All,
 
-On 2022-08-24 16:18 +0300, Adrian Perez de Castro spake thusly:
-> This new version includes many improvements. Release notes:
-> 
->   https://wpewebkit.org/release/cog-0.14.0.html
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+On 2022-08-27 15:42 +0200, Yann E. MORIN spake thusly:
+> On 2022-08-24 15:26 +0300, Adrian Perez de Castro spake thusly:
+> > This minor release fixes a crash. Release notes:
+> > 
+> >   https://wpewebkit.org/release/wpebackend-fdo-1.12.1.html
+> > 
+> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Applied to next, thanks.
 
-Applied to next, thanks.
+Damn, sent too fast..
+
+I meant to ask:  the release notes state "in certain situations". Is
+that occuring often enough to warrant being applied on master?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/cog/cog.hash | 8 ++++----
->  package/cog/cog.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> Regards,
+> Yann E. MORIN.
 > 
-> diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-> index 00d3a4e191..3fd480c2a8 100644
-> --- a/package/cog/cog.hash
-> +++ b/package/cog/cog.hash
-> @@ -1,7 +1,7 @@
-> -# From https://wpewebkit.org/releases/cog-0.12.4.tar.xz.sums
-> -md5  cdb8acdc3acc9b5082e7db9c279155c3  cog-0.12.4.tar.xz
-> -sha1  600b30efadf55bf94ea5062a0a1b2ea0b74053e5  cog-0.12.4.tar.xz
-> -sha256  9983c621c8e14fca3792ff566cb6b86d6a1f17446eb4c083af4a5a749112982f  cog-0.12.4.tar.xz
-> +# From https://wpewebkit.org/releases/cog-0.14.0.tar.xz.sums
-> +md5  2352aaba1a4ff31b1d1fb559c4941a01  cog-0.14.0.tar.xz
-> +sha1  2da37ea6c25e45425aa80de4a129484ee226dd96  cog-0.14.0.tar.xz
-> +sha256  e23936f1ce350ea5ea6fa0709b63d34776b05709388aed9c6cf3fdc41299de9f  cog-0.14.0.tar.xz
->  
->  # Hashes for license files:
->  sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> index 95b6220629..348c17c336 100644
-> --- a/package/cog/cog.mk
-> +++ b/package/cog/cog.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -COG_VERSION = 0.12.4
-> +COG_VERSION = 0.14.0
->  COG_SITE = https://wpewebkit.org/releases
->  COG_SOURCE = cog-$(COG_VERSION).tar.xz
->  COG_INSTALL_STAGING = YES
+> > ---
+> >  package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+> >  package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+> >  2 files changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+> > index 06289900b0..49c60fce0f 100644
+> > --- a/package/wpebackend-fdo/wpebackend-fdo.hash
+> > +++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+> > @@ -1,7 +1,7 @@
+> > -# From https://wpewebkit.org/releases/wpebackend-fdo-1.12.0.tar.xz.sums
+> > -md5  c43b34a4b4933bcd80068ae5776ee346  wpebackend-fdo-1.12.0.tar.xz
+> > -sha1  e2576d564bd6d9a86737a4cd31dd5827ebc00fdf  wpebackend-fdo-1.12.0.tar.xz
+> > -sha256  6239c9c15523410798d66315de6b491712ab30009ba180f3e0dd076d9b0074ac  wpebackend-fdo-1.12.0.tar.xz
+> > +# From https://wpewebkit.org/releases/wpebackend-fdo-1.12.1.tar.xz.sums
+> > +md5  494f4a5b2bd89dacef37b69534b2e1ce  wpebackend-fdo-1.12.1.tar.xz
+> > +sha1  72a85e4615e085926f7ad8fc8414f9c6a878ef28  wpebackend-fdo-1.12.1.tar.xz
+> > +sha256  45aa833c44ec292f31fa943b01b8cc75e54eb623ad7ba6a66fc2f118fe69e629  wpebackend-fdo-1.12.1.tar.xz
+> >  
+> >  # Hashes for license files:
+> >  sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
+> > diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+> > index 5fe9c5397f..2e2bdee94e 100644
+> > --- a/package/wpebackend-fdo/wpebackend-fdo.mk
+> > +++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >  
+> > -WPEBACKEND_FDO_VERSION = 1.12.0
+> > +WPEBACKEND_FDO_VERSION = 1.12.1
+> >  WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+> >  WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+> >  WPEBACKEND_FDO_INSTALL_STAGING = YES
+> > -- 
+> > 2.37.2
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
 > -- 
-> 2.37.2
-> 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
