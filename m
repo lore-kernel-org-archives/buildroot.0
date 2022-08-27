@@ -1,72 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11E0FC0502A
-	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 13:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01DCCECAAD2
+	for <buildroot@archiver.kernel.org>; Sat, 27 Aug 2022 16:14:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F90F410B7;
-	Sat, 27 Aug 2022 13:45:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F90F410B7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 321C260D7F;
+	Sat, 27 Aug 2022 16:14:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 321C260D7F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MLP6wNYxVmt9; Sat, 27 Aug 2022 13:45:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dPHbmCbzTW5S; Sat, 27 Aug 2022 16:14:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2572140988;
-	Sat, 27 Aug 2022 13:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2572140988
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AD7D60D76;
+	Sat, 27 Aug 2022 16:14:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AD7D60D76
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AFD8D1BF588
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 13:45:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 975C11BF314
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 16:14:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B97040541
- for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 13:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B97040541
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73002404BA
+ for <buildroot@lists.busybox.net>; Sat, 27 Aug 2022 16:14:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73002404BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o3lgLA1-QDvA for <buildroot@lists.busybox.net>;
- Sat, 27 Aug 2022 13:45:29 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8608D40286
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8608D40286
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 13:45:29 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:e2dc:5f1b:7f23:232])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 965AD78050E;
- Sat, 27 Aug 2022 15:45:25 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 27 Aug 2022 15:45:25 +0200
-Date: Sat, 27 Aug 2022 15:45:25 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Adrian Perez de Castro <aperez@igalia.com>
-Message-ID: <20220827134525.GA37358@scaer>
-References: <20220824122601.266641-1-aperez@igalia.com>
- <20220827134203.GY37358@scaer>
+ with ESMTP id YcgxdrmSU03n for <buildroot@lists.busybox.net>;
+ Sat, 27 Aug 2022 16:14:44 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69270401B7
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 69270401B7
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 16:14:44 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id e13so4254385wrm.1
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 09:14:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc;
+ bh=L0oK/iMge38zbZ2XGLJRImbOcra4L7I8PgDSRmujYjI=;
+ b=NUWlmjn2lpweX6TjrDNDKQh2STbbzHVDh9zWUXic0JtRwajwz+TiWc9iRtFMdKbs8y
+ 4QkPPbfbGqo1iACTCAkn4QiQwXYK4iWf5kP8hKSasMuRIJALYT54ueWiS8Umes48YGRN
+ /RQVI0IUOWtENm8R1EB+mUDvpXC59VOaOzELvJP9hX3EIV0ttHxLLMGZR5ktovm2BHLa
+ D4zLriN/TCFr0rgD209hswQf+MoZaJB9XwLIUsuXcjAqaJgVYYPgKUF5nzNT6kT5D7hH
+ 1dw77r4nBnWlxla1ouzfki6WgpqlQRCYH39goWt2I21UpuKT8WEa4bY9Y4tcxgcyd5TQ
+ C2lw==
+X-Gm-Message-State: ACgBeo1xRu1QC2E6WSYDUDiFTEZvywbfxrbjYC9UzZUlReHRhXvZZLf5
+ 173uIevW6Ntu9+XqJNdyBKbUXcc6JWI=
+X-Google-Smtp-Source: AA6agR6G0CIs1FEXzjxn1I3sPax6Pw5xPUBNI0s9PZAtMaqBAn0x2sUVWmsbF+Woe4w2GifIpbdp4Q==
+X-Received: by 2002:a5d:6f08:0:b0:225:3bc2:ac94 with SMTP id
+ ay8-20020a5d6f08000000b002253bc2ac94mr2303674wrb.203.1661616882457; 
+ Sat, 27 Aug 2022 09:14:42 -0700 (PDT)
+Received: from atlas.home
+ (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
+ by smtp.gmail.com with ESMTPSA id
+ p17-20020a5d6391000000b0022511d35d5bsm2696016wru.12.2022.08.27.09.14.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 27 Aug 2022 09:14:41 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 27 Aug 2022 18:14:30 +0200
+Message-Id: <20220827161431.333659-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220827134203.GY37358@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661607927;
- bh=r63pq5gOgtvhh4og5b4NJLQbOVcKp5jSeosTEh3GTe0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=iHoYldpK6MERWYlJ05z/0pUPy8JU/q72z5GZBVZJ5vyRRIaZJvMKvM+NXveG3+985
- PCAiDmC3lnViMjBWPq7t8qi4jhhU10GoQexUzuqDxTrfDNTgaMG7i15KA1NupBDI1Y
- 4knS5mo2yGg9wjX5ntjawtuT8AvIimyWq58NoSXYlELbWvzsRhgV3PX6Ene4+GiKK0
- 0ExMIMJT2AswZRTDS6FERIOWGpeN96RNQmB0/a09VJgcvv/FgdzS/V6nWxoLFY60cq
- JmDSpWSgFf+qVx+1UlgF1qncIx7rKxKU9v8W55F+yud6kOuUmwnLLAv/6lwczp50nH
- HswUQUs/RP+7g==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc;
+ bh=L0oK/iMge38zbZ2XGLJRImbOcra4L7I8PgDSRmujYjI=;
+ b=OhFnXVw14XmI3cO2ik4h5UHvGHCCeodLpf33VnEoCtSggmbnd5oR6tX/seWXcFOA0w
+ 7bacspp2jcop3p9ue+wj3yf63tqE2qBhVQKTibS9dXvQQ7g+21U7R97wtGI0kj5vrSBY
+ Oj2x7pGfPHmwPonXOERCoGpRc9R9PlGGNF5ER2LW8aIaetZWr+aXEt5U7uxXHsCe6s4B
+ Lu+2M7Q4xPxdHoD41mbQTfHBwmhknwscIUZQt7AEyu6z9z2nMseTOFlhWHOOk05Xm8La
+ qgRNYl5tHGqS8zqhnAOSx1KJ4Xvz/ljQxVIfcP3GQi9P5KpeQGH/Q5wUhepWngm4BIN/
+ nSrw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iHoYldpK
-Subject: Re: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
- 1.12.1
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=OhFnXVw1
+Subject: [Buildroot] [for-master 1/2] package/glibc: glibc on or1k needs a
+ toolchain w/ headers >= 5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,95 +95,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adrian, All,
+Commit [1] enabled glibc on or1k since it's now supported but it
+requires a toolchain with linux-headers >= 5.4.
 
-On 2022-08-27 15:42 +0200, Yann E. MORIN spake thusly:
-> On 2022-08-24 15:26 +0300, Adrian Perez de Castro spake thusly:
-> > This minor release fixes a crash. Release notes:
-> > 
-> >   https://wpewebkit.org/release/wpebackend-fdo-1.12.1.html
-> > 
-> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> Applied to next, thanks.
+From [2]:
+"Here we define the minumum linux kernel version at 5.4.0, as that is the
+long term support version where 32-bit architectures start to support
+64-bit time API's.  The OpenRISC kernel had some bugs up until version 5.8
+which caused issues with glibc fork/clone, they have been backported to
+5.4 but not previous versions."
 
-Damn, sent too fast..
+Fixes:
 
-I meant to ask:  the release notes state "in certain situations". Is
-that occuring often enough to warrant being applied on master?
+  checking installed Linux kernel header files... 3.2.0 or later
+  checking for kernel header at least 5.4.0... too old!
+  configure: error: *** The available kernel headers are older than the requested
 
-Regards,
-Yann E. MORIN.
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/2875256686
 
-> Regards,
-> Yann E. MORIN.
-> 
-> > ---
-> >  package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
-> >  package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
-> >  2 files changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-> > index 06289900b0..49c60fce0f 100644
-> > --- a/package/wpebackend-fdo/wpebackend-fdo.hash
-> > +++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-> > @@ -1,7 +1,7 @@
-> > -# From https://wpewebkit.org/releases/wpebackend-fdo-1.12.0.tar.xz.sums
-> > -md5  c43b34a4b4933bcd80068ae5776ee346  wpebackend-fdo-1.12.0.tar.xz
-> > -sha1  e2576d564bd6d9a86737a4cd31dd5827ebc00fdf  wpebackend-fdo-1.12.0.tar.xz
-> > -sha256  6239c9c15523410798d66315de6b491712ab30009ba180f3e0dd076d9b0074ac  wpebackend-fdo-1.12.0.tar.xz
-> > +# From https://wpewebkit.org/releases/wpebackend-fdo-1.12.1.tar.xz.sums
-> > +md5  494f4a5b2bd89dacef37b69534b2e1ce  wpebackend-fdo-1.12.1.tar.xz
-> > +sha1  72a85e4615e085926f7ad8fc8414f9c6a878ef28  wpebackend-fdo-1.12.1.tar.xz
-> > +sha256  45aa833c44ec292f31fa943b01b8cc75e54eb623ad7ba6a66fc2f118fe69e629  wpebackend-fdo-1.12.1.tar.xz
-> >  
-> >  # Hashes for license files:
-> >  sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
-> > diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-> > index 5fe9c5397f..2e2bdee94e 100644
-> > --- a/package/wpebackend-fdo/wpebackend-fdo.mk
-> > +++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -WPEBACKEND_FDO_VERSION = 1.12.0
-> > +WPEBACKEND_FDO_VERSION = 1.12.1
-> >  WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
-> >  WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
-> >  WPEBACKEND_FDO_INSTALL_STAGING = YES
-> > -- 
-> > 2.37.2
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+[1] 68d0aede597d32816c5b2ff32de0ce33cc14eb93
+[2] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=0c3c62ca7d9ff3bdacdd13e636bc858101e3e288
 
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/glibc/Config.in                 | 1 +
+ toolchain/toolchain-buildroot/Config.in | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 23cbfcd9aa..ba9f691d80 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -36,6 +36,7 @@ config BR2_PACKAGE_GLIBC_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_RISCV_64
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 || !BR2_arc
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_or1k
+ 
+ if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 836af3b22a..154cf69ef1 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -67,6 +67,10 @@ comment "glibc on ARC needs a toolchain w/ headers >= 5.1"
+ 	depends on BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+ 
++comment "glibc on or1k needs a toolchain w/ headers >= 5.4"
++	depends on BR2_or1k
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl"
+ 	depends on BR2_PACKAGE_MUSL_SUPPORTS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.37.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
