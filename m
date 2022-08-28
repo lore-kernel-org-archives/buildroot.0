@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 156ABECAAD5
-	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 18:56:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D577ECAAA2
+	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 18:59:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 667C760E7B;
-	Sun, 28 Aug 2022 18:56:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 667C760E7B
+	by smtp1.osuosl.org (Postfix) with ESMTP id C363082CEC;
+	Sun, 28 Aug 2022 18:59:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C363082CEC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tVBRI3uUnUe0; Sun, 28 Aug 2022 18:56:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aQLPEuGg1tIh; Sun, 28 Aug 2022 18:59:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 954D360E74;
-	Sun, 28 Aug 2022 18:56:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 954D360E74
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B5B2F1BF2F6
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 18:55:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD5B0819B4;
+	Sun, 28 Aug 2022 18:59:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD5B0819B4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 74B7C1BF2F6
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 18:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FD4A400EF
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 18:55:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FD4A400EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DCAB408D8
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 18:59:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DCAB408D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3Le6IroXv09t for <buildroot@lists.busybox.net>;
- Sun, 28 Aug 2022 18:55:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A081F400C6
- for <buildroot@buildroot.org>; Sun, 28 Aug 2022 18:55:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A081F400C6
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 2A2DE87EB3; Sun, 28 Aug 2022 18:40:58 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 28 Aug 2022 20:52:59 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7cb17577d42aad959a65702074061eeaf54447d7
-X-Git-Newrev: 04d3aef6805aa2dbd5483ed4f9826b14c29faa50
-X-Patchwork-Hint: ignore
-Message-Id: <20220828184058.2A2DE87EB3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mbedtls: add
- configurable DTLS-SRTP support
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9gNMrmJdxzeS for <buildroot@lists.busybox.net>;
+ Sun, 28 Aug 2022 18:59:49 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3795408D3
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B3795408D3
+ for <buildroot@buildroot.org>; Sun, 28 Aug 2022 18:59:49 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:c66a:3d95:4f85:baec])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 86C82780510;
+ Sun, 28 Aug 2022 20:59:43 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 28 Aug 2022 20:59:43 +0200
+Date: Sun, 28 Aug 2022 20:59:43 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Dmitry Ilyin <dima@doty.ru>
+Message-ID: <20220828185943.GR37358@scaer>
+References: <20220828155304.4398-1-dima@doty.ru>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220828155304.4398-1-dima@doty.ru>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1661713186;
+ bh=VdlMqHzLUzimM54ZMkmF4r77riyTrF+LNAAouQZpveI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=OvlTus3QXExSiYwn1rTeNYJUYNlmPuxMo7VjnzOojuxnV3qe67Iq/gQ5h+X1Dmmz4
+ e4Wnax9tFFooKJgocaolm1Oabd8FQsKjXOtnQ6H2Tcm67sKkAxdGfZdSiaDG+y3hFP
+ B8sLHd4o3pA0PPuaj3VRj7BnlqYf5Wb69XlXS4gjGxYrB2PjdKfOZ8x3Ngt8qsxh+L
+ wsbZgcD6U4+MbfUTtBzsDiOyQTuK3pSLVTcKx6PoT7DIk8Fde9KZDdoDBZ6jQ8qvGl
+ wjNO7+ADWEV6aZtd3OEUqVX+3/uq5wms/LH53T56gyGBVwZRtEjD4lNpMhzezypMVF
+ o+QUITnMJ7n9g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=OvlTus3Q
+Subject: Re: [Buildroot] [PATCH] package/mbedtls: add configurable SRTP
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,62 +77,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04d3aef6805aa2dbd5483ed4f9826b14c29faa50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dmitry, All,
 
-Add a new option to have MbedTLS builds that support DTLS-SRTP.
-We can only enable the support, it's disabled by default.
+On 2022-08-28 18:53 +0300, Dmitry Ilyin spake thusly:
+> This adds new BR2_PACKAGE_MBEDTLS_SRTP_SUPPORT option to have MbedTLS
+> builds that support SRTP (required option for AWS WebRTC library)
 
-Signed-off-by: Dmitry Ilyin <dima@doty.ru>
-[yann.morin.1998@free.fr:
-  - rename variable
-  - fix variable name in .mk
-  - drop unnecessary ref to AWS library
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/mbedtls/Config.in  | 6 ++++++
- package/mbedtls/mbedtls.mk | 8 ++++++++
- 2 files changed, 14 insertions(+)
+I've slightly reworded the commit log.
 
-diff --git a/package/mbedtls/Config.in b/package/mbedtls/Config.in
-index a39ba65d98..abbe3356d8 100644
---- a/package/mbedtls/Config.in
-+++ b/package/mbedtls/Config.in
-@@ -29,4 +29,10 @@ config BR2_PACKAGE_MBEDTLS_COMPRESSION
- 	  sure CRIME and similar attacks are not applicable to your
- 	  particular situation.
- 
-+config BR2_PACKAGE_MBEDTLS_DTLS_SRTP
-+	bool "enable DTLS-SRTP support"
-+	help
-+	  Enable support for negotiation of DTLS-SRTP (RFC 5764)
-+	  through the use_srtp extension.
-+
- endif
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index af87d62b30..1a888e8c67 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -72,4 +72,12 @@ else ifeq ($(BR2_microblaze)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
- MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_DISABLE_ASM
- endif
- 
-+ifeq ($(BR2_PACKAGE_MBEDTLS_DTLS_SRTP),y)
-+define MBEDTLS_ENABLE_DTLS_SRTP
-+	$(SED) "s://#define MBEDTLS_SSL_DTLS_SRTP:#define MBEDTLS_SSL_DTLS_SRTP:" \
-+		$(@D)/include/mbedtls/config.h
-+endef
-+MBEDTLS_POST_PATCH_HOOKS += MBEDTLS_ENABLE_DTLS_SRTP
-+endif
-+
- $(eval $(cmake-package))
+> Signed-off-by: Dmitry Ilyin <dima@doty.ru>
+> ---
+>  package/mbedtls/Config.in  | 6 ++++++
+>  package/mbedtls/mbedtls.mk | 8 ++++++++
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/package/mbedtls/Config.in b/package/mbedtls/Config.in
+> index a39ba65d98..f06a27fc5c 100644
+> --- a/package/mbedtls/Config.in
+> +++ b/package/mbedtls/Config.in
+> @@ -29,4 +29,10 @@ config BR2_PACKAGE_MBEDTLS_COMPRESSION
+>  	  sure CRIME and similar attacks are not applicable to your
+>  	  particular situation.
+>  
+> +config BR2_PACKAGE_MBEDTLS_SRTP
+
+I've renamed the option to BR2_PACKAGE_MBEDTLS_DTLS_SRTP because this is
+what it drives: support for DTLS-SRTP.
+
+> +	bool "enable SRTP support"
+> +	help
+> +	  Enable support for negotiation of DTLS-SRTP (RFC 5764)
+> +	  through the use_srtp extension.
+> +
+>  endif
+> diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+> index af87d62b30..9f9aee1fec 100644
+> --- a/package/mbedtls/mbedtls.mk
+> +++ b/package/mbedtls/mbedtls.mk
+> @@ -72,4 +72,12 @@ else ifeq ($(BR2_microblaze)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
+>  MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_DISABLE_ASM
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_MBEDTLS_SRTP_SUPPORT),y)
+
+The variable was not what it is named in the Config.in. Anyway, I also
+renamed it accordingly.
+
+> +define MBEDTLS_ENABLE_SRTP
+
+And I have also renamed the hook.
+
+Applied to next, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> +	$(SED) "s://#define MBEDTLS_SSL_DTLS_SRTP:#define MBEDTLS_SSL_DTLS_SRTP:" \
+> +		$(@D)/include/mbedtls/config.h
+> +endef
+> +MBEDTLS_POST_PATCH_HOOKS += MBEDTLS_ENABLE_SRTP
+> +endif
+> +
+>  $(eval $(cmake-package))
+> -- 
+> 2.37.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
