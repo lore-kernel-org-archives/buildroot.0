@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DFB3ECAAD2
-	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 10:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67F38ECAAD2
+	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 10:16:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0669360B60;
-	Sun, 28 Aug 2022 10:15:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0669360B60
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB815408C7;
+	Sun, 28 Aug 2022 10:16:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB815408C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id of16OomixIl0; Sun, 28 Aug 2022 10:15:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NamRmN16kYjZ; Sun, 28 Aug 2022 10:16:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AEC660585;
-	Sun, 28 Aug 2022 10:15:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AEC660585
+	by smtp4.osuosl.org (Postfix) with ESMTP id 833144090E;
+	Sun, 28 Aug 2022 10:16:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 833144090E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A9661BF5AA
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 10:15:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7D5901BF5AA
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 10:15:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29E3B4049D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53DE940420
  for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 10:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29E3B4049D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53DE940420
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VWchsexpaJ9z for <buildroot@lists.busybox.net>;
+ with ESMTP id 7f-vxE41lSAf for <buildroot@lists.busybox.net>;
  Sun, 28 Aug 2022 10:15:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5EECA40420
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59A29400E4
  for <buildroot@buildroot.org>; Sun, 28 Aug 2022 10:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EECA40420
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59A29400E4
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id AF7BD87EA4; Sun, 28 Aug 2022 10:00:20 +0000 (UTC)
+ id A50C987EA3; Sun, 28 Aug 2022 10:00:20 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 28 Aug 2022 12:13:21 +0200
+Date: Sun, 28 Aug 2022 12:12:26 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8fe5de96f700bc93b64c61e6e4075555f025fa1f
-X-Git-Newrev: 5ac054b45ebf6669206c8bf2cb26f83cc229aa00
+X-Git-Oldrev: 836f49e7f9c6a536e6ddb96fff541b4373eabb02
+X-Git-Newrev: 8fe5de96f700bc93b64c61e6e4075555f025fa1f
 X-Patchwork-Hint: ignore
-Message-Id: <20220828100020.AF7BD87EA4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/poco: reflow
- multi-line assignments
+Message-Id: <20220828100020.A50C987EA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/poco: bump version to
+ 1.12.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,150 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ac054b45ebf6669206c8bf2cb26f83cc229aa00
+commit: https://git.buildroot.net/buildroot/commit/?id=8fe5de96f700bc93b64c61e6e4075555f025fa1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The rule is one-item per line in multi-line assignments, starting with
-the first item on its own line too?
+poco 1.12.0 updated its pcre depencency to pcre2, see:
+https://github.com/pocoproject/poco/blob/poco-1.12.2-release/CHANGELOG#L37
+The Kconfig selection and dependencies are updated accordingly. This
+commit also reorder those Kconfig options alphabetically.
 
+This commit adds an upstream patch to fix compilation failure with
+oracle-mysql. See:
+https://github.com/pocoproject/poco/commit/3884c734c261231c34f59e56cde7ae02945b4dae
+
+This commit also adds "-latomic" to ldflags at configuration time, if
+the toolchain has it. This is required for some architecture: without
+this, compilation with bootlin-riscv64-glibc toolchain (for example)
+fails at link time with undefined reference to '__atomic_exchange_1'.
+The --ldflags option was introduced in 1.12.0 (Thanks Fabrice). See:
+https://github.com/pocoproject/poco/pull/3545
+
+For the full Poco change log since 1.11.12, see:
+https://github.com/pocoproject/poco/blob/poco-1.12.2-release/CHANGELOG
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/poco/poco.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ ...-Fix-optional-JSON-support-for-MySQL-3753.patch | 45 ++++++++++++++++++++++
+ package/poco/Config.in                             |  2 +-
+ package/poco/poco.hash                             |  2 +-
+ package/poco/poco.mk                               | 10 ++++-
+ 4 files changed, 55 insertions(+), 4 deletions(-)
 
+diff --git a/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch b/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
+new file mode 100644
+index 0000000000..ba2f073a59
+--- /dev/null
++++ b/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
+@@ -0,0 +1,45 @@
++From 3884c734c261231c34f59e56cde7ae02945b4dae Mon Sep 17 00:00:00 2001
++From: Hernan Martinez <hernan.c.martinez@gmail.com>
++Date: Tue, 16 Aug 2022 23:07:25 -0500
++Subject: [PATCH] Fix optional JSON support for MySQL (#3753)
++
++* Fix optional JSON support for MySQL
++
++* Fix optional JSON support for MySQLTest
++---
++ Data/MySQL/src/ResultMetadata.cpp      | 2 ++
++ Data/MySQL/testsuite/src/MySQLTest.cpp | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/Data/MySQL/src/ResultMetadata.cpp b/Data/MySQL/src/ResultMetadata.cpp
++index 61b49dd54..adb5dae84 100644
++--- a/Data/MySQL/src/ResultMetadata.cpp
+++++ b/Data/MySQL/src/ResultMetadata.cpp
++@@ -133,8 +133,10 @@ namespace
++ 		case MYSQL_TYPE_LONG_BLOB:
++ 		case MYSQL_TYPE_BLOB:
++ 			return Poco::Data::MetaColumn::FDT_BLOB;
+++#ifdef POCO_MYSQL_JSON
++ 		case MYSQL_TYPE_JSON:
++ 			return Poco::Data::MetaColumn::FDT_JSON;
+++#endif
++ 		default:
++ 			return Poco::Data::MetaColumn::FDT_UNKNOWN;
++ 		}
++diff --git a/Data/MySQL/testsuite/src/MySQLTest.cpp b/Data/MySQL/testsuite/src/MySQLTest.cpp
++index 80a3683b1..2a286d35e 100644
++--- a/Data/MySQL/testsuite/src/MySQLTest.cpp
+++++ b/Data/MySQL/testsuite/src/MySQLTest.cpp
++@@ -976,7 +976,9 @@ CppUnit::Test* MySQLTest::suite()
++ 	CppUnit_addTest(pSuite, MySQLTest, testBLOBStmt);
++ 	CppUnit_addTest(pSuite, MySQLTest, testLongBLOB);
++ 	CppUnit_addTest(pSuite, MySQLTest, testLongTEXT);
+++#ifdef POCO_MYSQL_JSON
++ 	CppUnit_addTest(pSuite, MySQLTest, testJSON);
+++#endif
++ 	CppUnit_addTest(pSuite, MySQLTest, testUnsignedInts);
++ 	CppUnit_addTest(pSuite, MySQLTest, testFloat);
++ 	CppUnit_addTest(pSuite, MySQLTest, testDouble);
++-- 
++2.37.2
++
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index 95f9a46e6e..cb447960f1 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -17,8 +17,8 @@ config BR2_PACKAGE_POCO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+ 	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
++	select BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_PCRE
+ 	help
+ 	  The C++ Portable Components Libraries
+ 
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index 4bf20f3f6b..eea3e2494a 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9774651a02e4cfa79fc43b7db617e45d353ede00b7be8afd0e74e6afb23d3793  poco-1.11.2.tar.gz
++sha256  30442ccb097a0074133f699213a59d6f8c77db5b2c98a7c1ad9c5eeb3a2b06f3  poco-1.12.2.tar.gz
+ sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
 diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 3bcc42c455..bf18126a82 100644
+index c06e55210e..3bcc42c455 100644
 --- a/package/poco/poco.mk
 +++ b/package/poco/poco.mk
-@@ -11,7 +11,9 @@ POCO_LICENSE_FILES = LICENSE
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
+-POCO_VERSION = 1.11.2
++POCO_VERSION = 1.12.2
+ POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
  POCO_CPE_ID_VENDOR = pocoproject
  POCO_INSTALL_STAGING = YES
  
--POCO_DEPENDENCIES = pcre2 zlib \
-+POCO_DEPENDENCIES = \
-+	pcre2 \
-+	zlib \
+-POCO_DEPENDENCIES = pcre zlib \
++POCO_DEPENDENCIES = pcre2 zlib \
  	$(if $(BR2_PACKAGE_POCO_CRYPTO),openssl) \
  	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),mysql) \
  	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),sqlite) \
-@@ -19,7 +21,9 @@ POCO_DEPENDENCIES = pcre2 zlib \
- 	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),openssl) \
- 	$(if $(BR2_PACKAGE_POCO_XML),expat)
+@@ -60,11 +60,17 @@ else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ POCO_MAKE_TARGET = all_release
+ endif
  
--POCO_OMIT = Data/ODBC PageCompiler \
-+POCO_OMIT = \
-+	Data/ODBC \
-+	PageCompiler \
- 	$(if $(BR2_PACKAGE_POCO_ACTIVERECORD),,ActiveRecord) \
- 	$(if $(BR2_PACKAGE_POCO_CPP_PARSER),,CppParser) \
- 	$(if $(BR2_PACKAGE_POCO_CRYPTO),,Crypto) \
++POCO_LDFLAGS=$(TARGET_LDFLAGS)
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++POCO_LDFLAGS += -latomic
++endif
++
+ define POCO_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) ./configure \
+ 		--config=Linux \
+ 		--prefix=/usr \
+ 		--cflags=-std=c++14 \
++		--ldflags="$(POCO_LDFLAGS)" \
+ 		--omit="$(POCO_OMIT)" \
+ 		$(POCO_CONF_OPTS) \
+ 		--unbundled \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
