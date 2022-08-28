@@ -1,65 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 870BFECAAD2
-	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 09:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA4E2ECAAD2
+	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 09:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09B7A60B4F;
-	Sun, 28 Aug 2022 09:24:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09B7A60B4F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1FD9B4046B;
+	Sun, 28 Aug 2022 09:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FD9B4046B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kqf8lgoNC1U8; Sun, 28 Aug 2022 09:24:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1oo5vX0nRZCt; Sun, 28 Aug 2022 09:32:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36BE160ABA;
-	Sun, 28 Aug 2022 09:24:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36BE160ABA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 541241BF5AE
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 09:24:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37E634040D;
+	Sun, 28 Aug 2022 09:32:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37E634040D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B6341BF5AE
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 09:32:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D5DD409A0
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 09:24:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D5DD409A0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 834054040D
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 09:32:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 834054040D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OPj36WEllDgk for <buildroot@lists.busybox.net>;
- Sun, 28 Aug 2022 09:24:43 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8AED40999
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B8AED40999
- for <buildroot@buildroot.org>; Sun, 28 Aug 2022 09:24:43 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.167.235.193])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 8A43D19F733;
- Sun, 28 Aug 2022 11:24:37 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LfuTkDNKP4LR for <buildroot@lists.busybox.net>;
+ Sun, 28 Aug 2022 09:32:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2CDC400E4
+ for <buildroot@buildroot.org>; Sun, 28 Aug 2022 09:32:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2CDC400E4
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 3576F87E73; Sun, 28 Aug 2022 09:17:17 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 28 Aug 2022 11:24:30 +0200
-Message-Id: <20220828092430.21572-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661678680;
- bh=nKsfVr9F50nZ/2vWMFimUvVhv9QBOsjdgq27aYQnZvA=;
- h=From:To:Cc:Subject:Date:From;
- b=tgMM05s7kQaj6dwcp7s/L4chf+JOmfmn3BM6CkqH5vKMuSAg+8YP9YHKPewrhLHk5
- efIpoujt1VRyTbs1WsIfvoGt3cwAjB3jeYcMRqklUOTpuESKiHK7tIuaSfkBfUwXaI
- Fwn9Ako8EQmj1trVYJOBkNEkg2vzcBETXHXhMbZNXQmG4EZmE/AFVVN25Wmyy84RNb
- +i652HdBn4t2aujS6KGVAS+oEedVaeOeXLMl2unGZGT9Ub7Rk7f6mcDYT9Fci3N3sg
- 6/y5qhohNr5wFNbHCQNWbjKAeHuYcWNL9DVWqniPmKASr6h9Qa/PCWXX5Gh/kltP4l
- zlMitH61Z969A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tgMM05s7
-Subject: [Buildroot] [next 1/1] docs/manual/patch-policy.txt: patch subjects
- shall not be numbered
+Date: Sun, 28 Aug 2022 11:31:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b218ba178dd10b53b9ff676958d43147e5ebfb5a
+X-Git-Newrev: 782a1526f829a02e163eee609d6f38f1347dc9eb
+X-Patchwork-Hint: ignore
+Message-Id: <20220828091717.3576F87E73@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vim: security bump to version
+ 9.0.0292
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,48 +57,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The script "utils/check-package" checks that patch email prefix are
-not be numbered. See:
-https://git.buildroot.org/buildroot/tree/utils/checkpackagelib/lib_patch.py?h=2022.08-rc1#n42
+commit: https://git.buildroot.net/buildroot/commit/?id=782a1526f829a02e163eee609d6f38f1347dc9eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The error message recommends to generate patches to be included in
-Buildroot with the command 'git format-patch -N'.
+Fix CVE-2022-2257, CVE-2022-2264, CVE-2022-2284, CVE-2022-2285,
+CVE-2022-2286, CVE-2022-2287, CVE-2022-2288, CVE-2022-2289,
+CVE-2022-2304, CVE-2022-2343, CVE-2022-2344, CVE-2022-2345,
+CVE-2022-2522, CVE-2022-2571, CVE-2022-2580, CVE-2022-2581,
+CVE-2022-2598, CVE-2022-2816, CVE-2022-2817, CVE-2022-2819,
+CVE-2022-2845, CVE-2022-2849, CVE-2022-2862, CVE-2022-2874,
+CVE-2022-2889, CVE-2022-2923, CVE-2022-2946, CVE-2022-2980
+CVE-2022-2982
 
-The patch policy section in the Buildroot manual does mention that.
-
-This commit adds a note about that requirement.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- docs/manual/patch-policy.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index e704a0d3f3..063ef984d8 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -44,6 +44,11 @@ These patch files should be named +<number>-<description>.patch+.
- - The field +<number>+ in the patch file name refers to the 'apply order',
-   and shall start at 1; It is preferred to pad the number with zeros up to 4
-   digits, like 'git-format-patch' does. E.g.: +0001-foobar-the-buz.patch+
-+- The patch email subject prefix shall not be numbered. Patches shall
-+  be generated with the +git format-patch -N+ command, since this
-+  numbering is automatically added for series. For example, the patch
-+  subject line should look like +Subject: [PATCH] foobar the buz+ rather
-+  than +Subject: [PATCH n/m] foobar the buz+.
- - Previously, it was mandatory for patches to be prefixed with the name of
-   the package, like +<package>-<number>-<description>.patch+, but that is
-   no longer the case. Existing packages will be fixed as time passes. 'Do
--- 
-2.37.2
-
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 62b11fea7b..f06d084cb3 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  86aa403632beea5827f305e471a245d14ee9c79072f67ce8e9536169a1deaad9  vim-9.0.0008.tar.gz
++sha256  7c97f8e8cc56157cad7d461633beb347472e134e96b5545d24d1fe451dfaecc2  vim-9.0.0292.tar.gz
+ sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+ sha256  4afae7c984ab1a4ccd0b474a695f316e7435ab6ed46537648af925c18835d853  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index c3308b4542..5e7c34abbb 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = 9.0.0008
++VIM_VERSION = 9.0.0292
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
