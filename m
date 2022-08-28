@@ -1,70 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0612FECAAD2
-	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 10:18:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51885ECAAD2
+	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 10:18:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A012A60B60;
-	Sun, 28 Aug 2022 10:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A012A60B60
+	by smtp2.osuosl.org (Postfix) with ESMTP id E77BD404B7;
+	Sun, 28 Aug 2022 10:18:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E77BD404B7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rVZ239tFxW-Y; Sun, 28 Aug 2022 10:18:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R63BbnQ9JXJd; Sun, 28 Aug 2022 10:18:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B258B60585;
-	Sun, 28 Aug 2022 10:18:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B258B60585
+	by smtp2.osuosl.org (Postfix) with ESMTP id 255A840420;
+	Sun, 28 Aug 2022 10:18:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 255A840420
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8B23A1BF5AA
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 10:18:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B51591BF5AA
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 10:18:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 65E3F81D70
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 10:18:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65E3F81D70
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9069181D70
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 10:18:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9069181D70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VjS-HfsCJDBg for <buildroot@lists.busybox.net>;
- Sun, 28 Aug 2022 10:18:07 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74C4F81A47
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 74C4F81A47
- for <buildroot@buildroot.org>; Sun, 28 Aug 2022 10:18:07 +0000 (UTC)
+ with ESMTP id uJjyxahfCb2E for <buildroot@lists.busybox.net>;
+ Sun, 28 Aug 2022 10:18:21 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 957F981A47
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 957F981A47
+ for <buildroot@buildroot.org>; Sun, 28 Aug 2022 10:18:21 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:e2dc:5f1b:7f23:232])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id BD555780346;
- Sun, 28 Aug 2022 12:18:03 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id C0682780511;
+ Sun, 28 Aug 2022 12:18:17 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 28 Aug 2022 12:18:03 +0200
-Date: Sun, 28 Aug 2022 12:18:03 +0200
+ Sun, 28 Aug 2022 12:18:17 +0200
+Date: Sun, 28 Aug 2022 12:18:17 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20220828101803.GM37358@scaer>
+Message-ID: <20220828101817.GN37358@scaer>
 References: <20220828084033.13660-1-ju.o@free.fr>
+ <20220828084033.13660-2-ju.o@free.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220828084033.13660-1-ju.o@free.fr>
+In-Reply-To: <20220828084033.13660-2-ju.o@free.fr>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661681885;
- bh=fHEEzWHGCquRVfLJgyfvK4/DyQLzCOgF+T8yLY5rG4A=;
+ d=free.fr; s=smtp-20201208; t=1661681899;
+ bh=jMff3bvs50nkQi2Y4GWD1IRZKC/+Je5EJWeC2qYxDMI=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=FL62P5uLsor1hE5u5TgbK6rxGqIy18VN5sx9ASyGeh0I82PnnEj51aDI2PEBJhHp0
- ynW+4hsQVgI01xzTMB9rd+RAchLK0idqyyIBmezehBv7rZMk1lJdulwd8wjzGDYq4C
- yysodAJD+pTtOtZROayusrVyHrUeTj1P7u/HK8bbB1qaDqBkWn8IomK9UUlVZei41P
- JHOkQDxO+yqzZnaE4U25XxmN7jmI4s6CitPa8IQzTheLaOVWlw9QEmY0djiZhn2jn+
- FAqcj8vx0zoaIoKlM0FqWXdT4TpNvfC2y9Nu6rub7Nv6OeigpyDvyZAWfi4DMPbu/R
- Jl3ZFtQnsXejA==
+ b=vMqNURpA6G1sSGeFpP73WhvaMgOl9W80eDarB+MIfHgJOE3/y/j17MsAS4RULydcI
+ o+xUiBWPxL93d2HPte7/QPZYeTPrG9eSn0Zr36EgD8aVGYxJnOBDwkIRiZFhKlGs0V
+ 43F8CXfjvpq3suhaxPcgSjbxhJ3r5Hp9SW9kLVWs2ENiQKoq/i1/58iIDXyXoZfQG3
+ NMGssYvOtagjI+fxygaRt9QcJVD2AcCCley78IRBk6NleLrxF2cWrERhGujvDuOIgQ
+ Cn7Z2caLKSX7E2hWs4diQFjHpfGPc/IRfuaW4it/Bfy4093vP5AcjLJs79E4y+IBxg
+ n11o9K2FZ1akw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FL62P5uL
-Subject: Re: [Buildroot] [next 1/2] package/poco: bump version to 1.12.2
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=vMqNURpA
+Subject: Re: [Buildroot] [next 2/2] package/poco: add the new Prometheus
+ component
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,65 +87,70 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Julien, All,
 
 On 2022-08-28 10:40 +0200, Julien Olivain spake thusly:
-> poco 1.12.0 updated its pcre depencency to pcre2, see:
-> https://github.com/pocoproject/poco/blob/poco-1.12.2-release/CHANGELOG#L37
-> The Kconfig selection and dependencies are updated accordingly. This
-> commit also reorder those Kconfig options alphabetically.
+> The Poco Prometheus component was added in 1.12.0. See:
+> https://github.com/pocoproject/poco/blob/poco-1.12.0-release/CHANGELOG#L6
 > 
-> This commit adds an upstream patch to fix compilation failure with
-> oracle-mysql. See:
-> https://github.com/pocoproject/poco/commit/3884c734c261231c34f59e56cde7ae02945b4dae
-> 
-> This commit also adds "-latomic" to ldflags at configuration time, if
-> the toolchain has it. This is required for some architecture: without
-> this, compilation with bootlin-riscv64-glibc toolchain (for example)
-> fails at link time with undefined reference to '__atomic_exchange_1'.
-> The --ldflags option was introduced in 1.12.0 (Thanks Fabrice). See:
-> https://github.com/pocoproject/poco/pull/3545
-> 
-> For the full Poco change log since 1.11.12, see:
-> https://github.com/pocoproject/poco/blob/poco-1.12.2-release/CHANGELOG
+> For Prometheus information, see: https://prometheus.io/
 > 
 > Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-[--SNIP--]
-> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-> index c06e55210e..3bcc42c455 100644
-> --- a/package/poco/poco.mk
-> +++ b/package/poco/poco.mk
-[--SNIP--]
-> -POCO_DEPENDENCIES = pcre zlib \
-> +POCO_DEPENDENCIES = pcre2 zlib \
-
-I've pushed up a followup patch that reflows the dependencies one item
-per line.
 
 Applied to next, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  	$(if $(BR2_PACKAGE_POCO_CRYPTO),openssl) \
->  	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),mysql) \
->  	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),sqlite) \
-> @@ -60,11 +60,17 @@ else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
->  POCO_MAKE_TARGET = all_release
->  endif
+> ---
+> Tested with previous patch on BR commit 6c7061f with command:
+>     cat > poco.config <<EOF
+>     BR2_PACKAGE_POCO=y
+>     BR2_PACKAGE_POCO_ACTIVERECORD=y
+>     BR2_PACKAGE_POCO_CPP_PARSER=y
+>     BR2_PACKAGE_POCO_DATA_MYSQL=y
+>     BR2_PACKAGE_POCO_DATA_PGSQL=y
+>     BR2_PACKAGE_POCO_DATA_SQLITE=y
+>     BR2_PACKAGE_POCO_JWT=y
+>     BR2_PACKAGE_POCO_MONGODB=y
+>     BR2_PACKAGE_POCO_NETSSL_OPENSSL=y
+>     BR2_PACKAGE_POCO_PDF=y
+>     BR2_PACKAGE_POCO_PROMETHEUS=y
+>     BR2_PACKAGE_POCO_REDIS=y
+>     BR2_PACKAGE_POCO_ZIP=y
+>     EOF
+>     utils/test-pkg -a -p poco -c poco.config
+>     ...
+>     44 builds, 16 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+> ---
+>  package/poco/Config.in | 4 ++++
+>  package/poco/poco.mk   | 1 +
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/package/poco/Config.in b/package/poco/Config.in
+> index cb447960f1..820e631966 100644
+> --- a/package/poco/Config.in
+> +++ b/package/poco/Config.in
+> @@ -92,6 +92,10 @@ config BR2_PACKAGE_POCO_PDF
+>  	select BR2_PACKAGE_POCO_UTIL
+>  	select BR2_PACKAGE_POCO_XML
 >  
-> +POCO_LDFLAGS=$(TARGET_LDFLAGS)
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +POCO_LDFLAGS += -latomic
-> +endif
+> +config BR2_PACKAGE_POCO_PROMETHEUS
+> +	bool "Prometheus"
+> +	select BR2_PACKAGE_POCO_NET
 > +
->  define POCO_CONFIGURE_CMDS
->  	(cd $(@D); $(TARGET_MAKE_ENV) ./configure \
->  		--config=Linux \
->  		--prefix=/usr \
->  		--cflags=-std=c++14 \
-> +		--ldflags="$(POCO_LDFLAGS)" \
->  		--omit="$(POCO_OMIT)" \
->  		$(POCO_CONF_OPTS) \
->  		--unbundled \
+>  config BR2_PACKAGE_POCO_REDIS
+>  	bool "Redis"
+>  	select BR2_PACKAGE_POCO_NET
+> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+> index 3bcc42c455..e37effd690 100644
+> --- a/package/poco/poco.mk
+> +++ b/package/poco/poco.mk
+> @@ -33,6 +33,7 @@ POCO_OMIT = Data/ODBC PageCompiler \
+>  	$(if $(BR2_PACKAGE_POCO_NET),,Net) \
+>  	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),,NetSSL_OpenSSL) \
+>  	$(if $(BR2_PACKAGE_POCO_PDF),,PDF) \
+> +	$(if $(BR2_PACKAGE_POCO_PROMETHEUS),,Prometheus) \
+>  	$(if $(BR2_PACKAGE_POCO_REDIS),,Redis) \
+>  	$(if $(BR2_PACKAGE_POCO_UTIL),,Util) \
+>  	$(if $(BR2_PACKAGE_POCO_XML),,XML) \
 > -- 
 > 2.37.2
 > 
