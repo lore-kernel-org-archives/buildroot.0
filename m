@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 284CAECAAD2
-	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 06:10:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F28FECAAD2
+	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 06:37:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88FFD60B01;
-	Sun, 28 Aug 2022 06:10:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88FFD60B01
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34C4560B60;
+	Sun, 28 Aug 2022 06:37:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34C4560B60
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DiS1OHJrKCHv; Sun, 28 Aug 2022 06:10:48 +0000 (UTC)
+	with ESMTP id fcL4NgW1iqWL; Sun, 28 Aug 2022 06:37:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BA9760AEE;
-	Sun, 28 Aug 2022 06:10:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BA9760AEE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43EA160B33;
+	Sun, 28 Aug 2022 06:37:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43EA160B33
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 70C801BF2E4
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 06:10:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0E1151BF2E4
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 06:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BDE6402E0
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 06:10:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BDE6402E0
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD4E440190
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 06:37:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD4E440190
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QhebR30KPHSS for <buildroot@lists.busybox.net>;
- Sun, 28 Aug 2022 06:10:44 +0000 (UTC)
+ with ESMTP id kOkRCw29b3Yg for <buildroot@lists.busybox.net>;
+ Sun, 28 Aug 2022 06:37:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CDA940137
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4CDA940137
- for <buildroot@buildroot.org>; Sun, 28 Aug 2022 06:10:44 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- m3-20020a05600c3b0300b003a5e0557150so5040022wms.0
- for <buildroot@buildroot.org>; Sat, 27 Aug 2022 23:10:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D658A40137
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D658A40137
+ for <buildroot@buildroot.org>; Sun, 28 Aug 2022 06:37:33 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ h204-20020a1c21d5000000b003a5b467c3abso6519440wmh.5
+ for <buildroot@buildroot.org>; Sat, 27 Aug 2022 23:37:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc;
- bh=MqXlUXsvXN22BjweoJH5WTs+5+N7Cl6F6auu18hso8A=;
- b=RmGbEH6E59rrwiRXdF1JAPJ9W38xfKTamnWTSvTWQSWTbRttRgUGczrJ1RluPBvFnq
- yLNvtno2aYhPr7c/2JRtSh/EtN9sW4y35R9eRvXaWnlaN7tymnDIaVGRs3kh/22j+RCo
- Ka4MNYMGdB0f447Cq8dl9pmnCu4nGJ1ZnzYc9HseGRsEMNOUpsNhYwgQjq3PKUfuuYeO
- cpFJBxuuXs7J+d311+0ZtNAYCM4iQAVT/5+sp6+Gxs2ddg2Z9EUWNUbVcP/KZFI/r6Vx
- 4s9GFSRtETTItHBf3SEt9XWKjamfZA6b4fHSGR+YfApgBTQITl0OvZboS+JrLErpH8BD
- a5xA==
-X-Gm-Message-State: ACgBeo318Zot3I1s72HaMWH47u+Gh7Cdfo+lFvF7Q1AFR2DmQ68ZQV3w
- EqpyQnQW+6njEn17F9tw40XxW2vxjbI=
-X-Google-Smtp-Source: AA6agR5SxQovroxH5NrvIUg+RTaBvzO9Re9sAaS6b+4shV/upjgG2nMojB96K//v/qoU5YoiSRteag==
-X-Received: by 2002:a05:600c:1546:b0:3a6:a99:aa7 with SMTP id
- f6-20020a05600c154600b003a60a990aa7mr3522329wmg.109.1661667042197; 
- Sat, 27 Aug 2022 23:10:42 -0700 (PDT)
+ bh=BFfWHVeICW0C/2raquRHJQ7xN4j8LxcKwA8yFEpdB9s=;
+ b=LdiDbm52A1yHAodU9d9FtjfbfYDz0uovl6LpYczm3wNEgotMkou1KzkOvWXOOQRiOH
+ htckAdus5NVAOO54ab+j338+u7N2ddx7Ge/OsrembmAAyGln6NUhZ+foyEkTwCmf/WIY
+ qmTJ7X+uE1uFbSMvYA2EuAdeeXWx4l/ri42DHPqNHrcnnV3GjQyJNe7hN4pK0AkEJEqh
+ bJ6XWbQo3PfBlj3oWs8E56RvXaL9geeLN5L1W5TThExtWk6QY1WAvIDHUKgeCTwMQVsV
+ r7JteXgGSsmFzTajtYi16lp3jllVLpaKC+cvaygEWrSvgbVjoGWrNawH+erOMZHBAxXF
+ SwRw==
+X-Gm-Message-State: ACgBeo1PKPUi5b5xP9dVG07KcdiyYVjG14sV+Q1KyFyCgxEeKceNUTpQ
+ qEqKhRc7Pu3uqJl/3V6hUded03MBn9Q=
+X-Google-Smtp-Source: AA6agR6ysLE6VRT7++UCerm7eYaHNbm8h35lPPYy14ZfoxievmTeCnBL2dP6kLf82jQfW0TKzKSyhQ==
+X-Received: by 2002:a05:600c:4e15:b0:3a6:152a:9143 with SMTP id
+ b21-20020a05600c4e1500b003a6152a9143mr3727814wmq.20.1661668651914; 
+ Sat, 27 Aug 2022 23:37:31 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- j18-20020adfea52000000b002206203ed3dsm3718329wrn.29.2022.08.27.23.10.41
+ i9-20020adfefc9000000b002251c75c09csm4440611wrp.90.2022.08.27.23.37.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Aug 2022 23:10:41 -0700 (PDT)
+ Sat, 27 Aug 2022 23:37:31 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Aug 2022 08:10:38 +0200
-Message-Id: <20220828061038.36755-1-fontaine.fabrice@gmail.com>
+Date: Sun, 28 Aug 2022 08:37:24 +0200
+Message-Id: <20220828063724.4028-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc;
- bh=MqXlUXsvXN22BjweoJH5WTs+5+N7Cl6F6auu18hso8A=;
- b=kidBlxZVCc50BPuUdk6wFUVX780pKYySMM6GH7QNg/L3a3Q3Qev20SKZtn45viIuhC
- MfZjRafthymlCiue1sqra+2AQLwLAGSAy49TzarYq6YXPMtcjBPdIVIOkGpzWJRT8X4x
- N1mulroJYb+ji77VXjZoEbTz1sLviy47zShTrk74M2pDWjToMbdBkOr/VRORVs9JGqwQ
- 6QQlrOihDO2ek8BQIevlshgHlGvoL0vxH7GeNyn70DsOlteCq6PBXpsnKpYEQXmbof1V
- eysbw5fBp2NHmySg7lZX8tcHmrK+kDRtAzr6UaMEdd85yZCLsILJZ/Dh2m/mXeb6jlzj
- uaWA==
+ bh=BFfWHVeICW0C/2raquRHJQ7xN4j8LxcKwA8yFEpdB9s=;
+ b=HkboHmzWpzArdy1KA2GKkZt5Ew5SpsEgmiHN+Q6StNNfra39by57OuywiCmjwcsj1B
+ L6EB929qetgmT751dTS9f171XJZH1nMS5LxnI2w7iRKhaUkEq7hSo9hAL1FnOQYk68vc
+ 8cpVxh/0IdKfJYF+UvWGsQJG6kJyjvemZNGR3SlvgKWYAjkolXj2Qq87xmZSU9k6mYZw
+ 6HrpRwv4sKW0Zez5Cd/c8IM7qhXdVlWdjo1S9P+iZ5BcSYZz/XxDJkNOn930E+xHV3ZI
+ oJWP6098WDLGA27k8o6+axJAnXatRxAw79I2dHTkLi/XqpMeHRM1XPFMkdmpFpwsqc/Z
+ cmnw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=kidBlxZV
-Subject: [Buildroot] [PATCH 1/1] package/vim: security bump to version
- 9.0.0292
+ header.a=rsa-sha256 header.s=20210112 header.b=HkboHmzW
+Subject: [Buildroot] [PATCH 1/1] package/mutt: bump to version 2.2.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,44 +99,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2022-2257, CVE-2022-2264, CVE-2022-2284, CVE-2022-2285,
-CVE-2022-2286, CVE-2022-2287, CVE-2022-2288, CVE-2022-2289,
-CVE-2022-2304, CVE-2022-2343, CVE-2022-2344, CVE-2022-2345,
-CVE-2022-2522, CVE-2022-2571, CVE-2022-2580, CVE-2022-2581,
-CVE-2022-2598, CVE-2022-2816, CVE-2022-2817, CVE-2022-2819,
-CVE-2022-2845, CVE-2022-2849, CVE-2022-2862, CVE-2022-2874,
-CVE-2022-2889, CVE-2022-2923, CVE-2022-2946, CVE-2022-2980
-CVE-2022-2982
+This is a bug-fix release, fixing a $edit_headers bug on MacOS, along
+with a few other small bugs. It also tightens the $query_command parser
+to accept a single tab between fields, and changes $pager to accept a %s
+expando.
+
+https://gitlab.com/muttmua/mutt/-/blob/mutt-2-2-7-rel/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 62b11fea7b..f06d084cb3 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  86aa403632beea5827f305e471a245d14ee9c79072f67ce8e9536169a1deaad9  vim-9.0.0008.tar.gz
-+sha256  7c97f8e8cc56157cad7d461633beb347472e134e96b5545d24d1fe451dfaecc2  vim-9.0.0292.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  4afae7c984ab1a4ccd0b474a695f316e7435ab6ed46537648af925c18835d853  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index c3308b4542..5e7c34abbb 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index 0bec59def4..27e439183a 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ffa2d93517cfc606fe01daffc5f12e42062a1c134d3b9af78484ebc5430888d3  mutt-2.2.6.tar.gz
++sha256  eb13858f58bb369f477bf652d90e9b6aaddd0d610acbea3455049e5efad36df1  mutt-2.2.7.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 5b1119c79b..7a4bc1b10c 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VIM_VERSION = 9.0.0008
-+VIM_VERSION = 9.0.0292
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+-MUTT_VERSION = 2.2.6
++MUTT_VERSION = 2.2.7
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
 -- 
 2.35.1
 
