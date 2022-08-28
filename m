@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA4E2ECAAD2
-	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 09:32:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4BC1C0502C
+	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 09:32:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FD9B4046B;
-	Sun, 28 Aug 2022 09:32:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FD9B4046B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CB5C60B4F;
+	Sun, 28 Aug 2022 09:32:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CB5C60B4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1oo5vX0nRZCt; Sun, 28 Aug 2022 09:32:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yhKeXabCeQzP; Sun, 28 Aug 2022 09:32:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 37E634040D;
-	Sun, 28 Aug 2022 09:32:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37E634040D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9B6341BF5AE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91E9F60AF7;
+	Sun, 28 Aug 2022 09:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91E9F60AF7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AD47D1BF97C
  for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 09:32:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 834054040D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 892CD81CDB
  for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 09:32:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 834054040D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 892CD81CDB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LfuTkDNKP4LR for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ULJBXtJAjt79 for <buildroot@lists.busybox.net>;
  Sun, 28 Aug 2022 09:32:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2CDC400E4
+ by smtp1.osuosl.org (Postfix) with ESMTP id B257D81CD0
  for <buildroot@buildroot.org>; Sun, 28 Aug 2022 09:32:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2CDC400E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B257D81CD0
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 3576F87E73; Sun, 28 Aug 2022 09:17:17 +0000 (UTC)
+ id 222A987E65; Sun, 28 Aug 2022 09:17:17 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 28 Aug 2022 11:31:33 +0200
+Date: Sun, 28 Aug 2022 11:19:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b218ba178dd10b53b9ff676958d43147e5ebfb5a
-X-Git-Newrev: 782a1526f829a02e163eee609d6f38f1347dc9eb
+X-Git-Oldrev: 74a326abaa82a419bc358996a5cb86625fa32804
+X-Git-Newrev: 5c2d07b0b39ebce7f9537fb930ce7b977fe75f4e
 X-Patchwork-Hint: ignore
-Message-Id: <20220828091717.3576F87E73@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vim: security bump to version
- 9.0.0292
+Message-Id: <20220828091717.222A987E65@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/minetest: add
+ MINETEST_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=782a1526f829a02e163eee609d6f38f1347dc9eb
+commit: https://git.buildroot.net/buildroot/commit/?id=5c2d07b0b39ebce7f9537fb930ce7b977fe75f4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2022-2257, CVE-2022-2264, CVE-2022-2284, CVE-2022-2285,
-CVE-2022-2286, CVE-2022-2287, CVE-2022-2288, CVE-2022-2289,
-CVE-2022-2304, CVE-2022-2343, CVE-2022-2344, CVE-2022-2345,
-CVE-2022-2522, CVE-2022-2571, CVE-2022-2580, CVE-2022-2581,
-CVE-2022-2598, CVE-2022-2816, CVE-2022-2817, CVE-2022-2819,
-CVE-2022-2845, CVE-2022-2849, CVE-2022-2862, CVE-2022-2874,
-CVE-2022-2889, CVE-2022-2923, CVE-2022-2946, CVE-2022-2980
-CVE-2022-2982
+cpe:2.3:a:minetest:minetest is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminetest%3Aminetest
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/minetest/minetest.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 62b11fea7b..f06d084cb3 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  86aa403632beea5827f305e471a245d14ee9c79072f67ce8e9536169a1deaad9  vim-9.0.0008.tar.gz
-+sha256  7c97f8e8cc56157cad7d461633beb347472e134e96b5545d24d1fe451dfaecc2  vim-9.0.0292.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  4afae7c984ab1a4ccd0b474a695f316e7435ab6ed46537648af925c18835d853  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index c3308b4542..5e7c34abbb 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
+index 5c007ada5e..6d56c3222f 100644
+--- a/package/minetest/minetest.mk
++++ b/package/minetest/minetest.mk
+@@ -8,6 +8,7 @@ MINETEST_VERSION = 5.5.1
+ MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
+ MINETEST_LICENSE = LGPL-2.1+ (code), CC-BY-SA-3.0 (textures and sounds), Zlib (irrlicht)
+ MINETEST_LICENSE_FILES = LICENSE.txt lib/irrlichtmt/doc/irrlicht-license.txt
++MINETEST_CPE_ID_VENDOR = minetest
  
--VIM_VERSION = 9.0.0008
-+VIM_VERSION = 9.0.0292
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+ MINETEST_DEPENDENCIES = gmp jsoncpp luajit sqlite zlib zstd
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
