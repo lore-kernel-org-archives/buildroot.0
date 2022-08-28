@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD82ECAAD5
-	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 14:02:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2375CECAAD2
+	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 14:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17FD6409BC;
-	Sun, 28 Aug 2022 14:02:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17FD6409BC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9277481A8E;
+	Sun, 28 Aug 2022 14:13:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9277481A8E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DSeUxZnLKc-0; Sun, 28 Aug 2022 14:13:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FCF6819D1;
+	Sun, 28 Aug 2022 14:13:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FCF6819D1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E12EE1BF414
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 14:13:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C887D40571
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 14:13:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C887D40571
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hwNQamhFh9Qb; Sun, 28 Aug 2022 14:02:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9DB140915;
-	Sun, 28 Aug 2022 14:02:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9DB140915
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DDCCA1BF283
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 14:01:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B2CF860BE8
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 14:01:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2CF860BE8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id naVQvf4oaGmD for <buildroot@lists.busybox.net>;
- Sun, 28 Aug 2022 14:01:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92268605DB
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 92268605DB
- for <buildroot@buildroot.org>; Sun, 28 Aug 2022 14:01:57 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pc1T1URDyrG3 for <buildroot@lists.busybox.net>;
+ Sun, 28 Aug 2022 14:13:18 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47C92404E8
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 47C92404E8
+ for <buildroot@buildroot.org>; Sun, 28 Aug 2022 14:13:18 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:c66a:3d95:4f85:baec])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 14545780518;
- Sun, 28 Aug 2022 16:01:50 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 67C0F780346;
+ Sun, 28 Aug 2022 16:13:14 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 28 Aug 2022 16:01:50 +0200
-Date: Sun, 28 Aug 2022 16:01:50 +0200
+ Sun, 28 Aug 2022 16:13:14 +0200
+Date: Sun, 28 Aug 2022 16:13:14 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Dmitry Ilyin <dima@doty.ru>
-Message-ID: <20220828140150.GP37358@scaer>
-References: <20220828130520.26945-1-dima@doty.ru>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220828141314.GQ37358@scaer>
+References: <20220828112330.12852-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220828130520.26945-1-dima@doty.ru>
+In-Reply-To: <20220828112330.12852-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661695314;
- bh=DvHH6E5VwYsOCpZ2E7lmdxCVrhMePgzCeqi+OaCY4mg=;
+ d=free.fr; s=smtp-20201208; t=1661695996;
+ bh=HDOx/8YBIXan679mod+fj9FRkdCy6FN09sy+vAPMuwA=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=eezMObxHLA6XdJKUACia7n8sugwSOgMp8OL79IieSoQcsw6dVOf1g3YDcumuZYFlA
- VTkwv+j/Rcrm6tH5udnp/DGxrJ24ImkodXOd0N5ltXgzuQz5sMIWEMTeX/zigQC2si
- svy16QqmT1g7UGeyTJSr5rNy9ys6D3XpK1SHJN0LrUf6+14opCRYkkM9/Pe23xlIw3
- XrVrbcP6yrabffQFNNZvLr45m4dr3ntpVVY/dttcZmB8no9mu0zWhCJH0yDtCkr+LY
- pJpEgF1uxvlUD0HuCH3fhvZzKojVMbTU3pMj3T9RmHiMUi1KVLfBkO8EU5OZ8UpYoF
- k0FKWqgrM3ndA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=oUp23/nT1zCSudF+IGwyVN0tv49SXh9P476mlBnJCdsl31e/wM7pdFVk43aCq9jZU
+ i2lUVPQpawqRHvn2O3e46un9JNzWKYLPFPxuwW5dfl/ldbgsjkiIpM8R6mmbtgnh3z
+ 4lkzTxdFmCSnST9mzTH7UCNovx85ZsUYb1xL97q9oLcKKE66D1EmMAfHacLAgRlcMx
+ CjW+YBPoF+7ZFVsXD84skF3B+VFDYDx8qJ08BJ7di4X18BEp7wUkvoHVvm0AW+3Of3
+ 2cS3cYroYyS7W9ojWbhAIRlMxBckYTxErSoo3nPcClwJBNP+/PpDG2UAh2opBAek2B
+ DY7sxvY1B3Pvg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=eezMObxH
-Subject: Re: [Buildroot] [PATCH] package/mbedtls: add configurable SRTP
- support
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=oUp23/nT
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/memcached: bump to version
+ 1.6.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,75 +77,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Dmitry, All,
+Fabrice, All,
 
-On 2022-08-28 16:05 +0300, Dmitry Ilyin spake thusly:
-> This adds new BR2_PACKAGE_MBEDTLS_SRTP_SUPPORT option to have MbedTLS
-> builds that support SRTP (required option for AWS WebRTC library)
+On 2022-08-28 13:23 +0200, Fabrice Fontaine spake thusly:
+> - Refresh second patch
+> - openssl is an optional dependency since version 1.5.13 and
+>   https://github.com/memcached/memcached/commit/ee1cfe3bf9384d1a93545fc942e25bed6437d910
 
-You need to sign-off your change:
-    https://buildroot.org/downloads/manual/manual.html#submitting-patches
+So, do we need the conditional dependency to be also added to master?
 
-Also, what do you mean by "required option for AWS WebRTC library"?
+>   which can be found through pkg-config since version 1.6.17 and
+>   https://github.com/memcached/memcached/commit/656dedad48c81541060448d008b90290196263c5
 
-If you are referring to a package that is present in Buildroot, then
-that package should also be fixed to select that option. The only
-package I could find in Buildroot, that is both websocket-related and
-uses mbedtls, is package/libwebsockets/. If that's what you were
-refering to, then the conditin to use mbedtls should be changed (in a
-separate, follow-up patch):
+As I understand this change, memcached would previously detect openssl
+iwith an ad-hoc (ugly) code path, so we are already in a situation where
+the depednency to openssl depends on the build order.
 
-    -else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-    +else ifeq ($(BR2_PACKAGE_MBEDTLS_SRTP),y)
+So, it is my undestanding that, on master, we ould want to have the
+conditional openssl dependency sans the host-pkgconf dependency, no?
+
+If so, then can you respin with the contional dependency added as a
+separate patch (so that we can apply that to master), and the version
+bump plus host-pkgconf dependency in a second patch (so that we can
+apply both on next)?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/mbedtls/Config.in  | 6 ++++++
->  package/mbedtls/mbedtls.mk | 8 ++++++++
->  2 files changed, 14 insertions(+)
+> https://github.com/memcached/memcached/wiki/ReleaseNotes1617
 > 
-> diff --git a/package/mbedtls/Config.in b/package/mbedtls/Config.in
-> index a39ba65d98..f06a27fc5c 100644
-> --- a/package/mbedtls/Config.in
-> +++ b/package/mbedtls/Config.in
-> @@ -29,4 +29,10 @@ config BR2_PACKAGE_MBEDTLS_COMPRESSION
->  	  sure CRIME and similar attacks are not applicable to your
->  	  particular situation.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/memcached/0002-check-for-sys-auxv.h.patch | 8 ++++----
+>  package/memcached/memcached.hash                  | 6 +++---
+>  package/memcached/memcached.mk                    | 9 ++++++++-
+>  3 files changed, 15 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/memcached/0002-check-for-sys-auxv.h.patch b/package/memcached/0002-check-for-sys-auxv.h.patch
+> index 8c41bb4f01..ff6d84527c 100644
+> --- a/package/memcached/0002-check-for-sys-auxv.h.patch
+> +++ b/package/memcached/0002-check-for-sys-auxv.h.patch
+> @@ -40,11 +40,11 @@ index 26df879..05e61ff 100644
+>       }
+>   }
+>   
+> --#elif defined(__aarch64__) && defined(__linux__)
+> -+#elif defined(__aarch64__) && defined(__linux__) && defined(HAVE_SYS_AUX_H)
+> +-#elif defined(__aarch64__) && (defined(__linux__) || defined(__APPLE__))
+> ++#elif defined(__aarch64__) && ((defined(__linux__) && defined(HAVE_SYS_AUX_H))|| defined(__APPLE__))
+> + #if defined(__linux__)
+>   #include <sys/auxv.h>
+> - 
+> - #if defined(HWCAP_CRC32)
+> + #elif defined(__APPLE__)
+>  -- 
+>  2.35.1
 >  
-> +config BR2_PACKAGE_MBEDTLS_SRTP
-> +	bool "enable SRTP support"
-> +	help
-> +	  Enable support for negotiation of DTLS-SRTP (RFC 5764)
-> +	  through the use_srtp extension.
-> +
->  endif
-> diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-> index af87d62b30..9f9aee1fec 100644
-> --- a/package/mbedtls/mbedtls.mk
-> +++ b/package/mbedtls/mbedtls.mk
-> @@ -72,4 +72,12 @@ else ifeq ($(BR2_microblaze)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
->  MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_DISABLE_ASM
+> diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+> index 3bdd1e5e33..78875dde66 100644
+> --- a/package/memcached/memcached.hash
+> +++ b/package/memcached/memcached.hash
+> @@ -1,6 +1,6 @@
+> -# From http://www.memcached.org/files/memcached-1.6.16.tar.gz.sha1
+> -sha1  724f31c3462fb6b07264d72d0043fd65545fd84a  memcached-1.6.16.tar.gz
+> +# From http://www.memcached.org/files/memcached-1.6.17.tar.gz.sha1
+> +sha1  e25639473e15f1bd9516b915fb7e03ab8209030f  memcached-1.6.17.tar.gz
+>  
+>  # Locally computed
+> -sha256  3051a93bf1dd0c3af2d0e589ff6ef6511f876385a35b18e9ff8741e4a1ab34da  memcached-1.6.16.tar.gz
+> +sha256  2055e373613d8fc21529aff9f0adce3e23b9ce01ba0478d30e7941d9f2bd1224  memcached-1.6.17.tar.gz
+>  sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
+> diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+> index bddb713458..dbd59d91e6 100644
+> --- a/package/memcached/memcached.mk
+> +++ b/package/memcached/memcached.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -MEMCACHED_VERSION = 1.6.16
+> +MEMCACHED_VERSION = 1.6.17
+>  MEMCACHED_SITE = http://www.memcached.org/files
+>  MEMCACHED_DEPENDENCIES = libevent
+>  MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+> @@ -22,4 +22,11 @@ else
+>  MEMCACHED_CONF_ENV += ac_cv_c_endian=little
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_MBEDTLS_SRTP_SUPPORT),y)
-> +define MBEDTLS_ENABLE_SRTP
-> +	$(SED) "s://#define MBEDTLS_SSL_DTLS_SRTP:#define MBEDTLS_SSL_DTLS_SRTP:" \
-> +		$(@D)/include/mbedtls/config.h
-> +endef
-> +MBEDTLS_POST_PATCH_HOOKS += MBEDTLS_ENABLE_SRTP
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +MEMCACHED_CONF_OPTS += --enable-tls
+> +MEMCACHED_DEPENDENCIES += host-pkgconf openssl
+> +else
+> +MEMCACHED_CONF_OPTS += --disable-tls
 > +endif
 > +
->  $(eval $(cmake-package))
+>  $(eval $(autotools-package))
 > -- 
-> 2.37.1
+> 2.35.1
 > 
 > _______________________________________________
 > buildroot mailing list
