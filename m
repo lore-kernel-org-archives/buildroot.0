@@ -1,67 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9953C0502C
-	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 08:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 870BFECAAD2
+	for <buildroot@archiver.kernel.org>; Sun, 28 Aug 2022 09:24:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5269540B94;
-	Sun, 28 Aug 2022 08:41:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5269540B94
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09B7A60B4F;
+	Sun, 28 Aug 2022 09:24:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09B7A60B4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8y1AapaCQDLy; Sun, 28 Aug 2022 08:41:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kqf8lgoNC1U8; Sun, 28 Aug 2022 09:24:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 526D640137;
-	Sun, 28 Aug 2022 08:41:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 526D640137
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F97E1BF330
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 08:40:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36BE160ABA;
+	Sun, 28 Aug 2022 09:24:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36BE160ABA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 541241BF5AE
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 09:24:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B23240137
- for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 08:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B23240137
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D5DD409A0
+ for <buildroot@lists.busybox.net>; Sun, 28 Aug 2022 09:24:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D5DD409A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YEfKZORVlYo5 for <buildroot@lists.busybox.net>;
- Sun, 28 Aug 2022 08:40:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OPj36WEllDgk for <buildroot@lists.busybox.net>;
+ Sun, 28 Aug 2022 09:24:43 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E782400E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8AED40999
 Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1E782400E4
- for <buildroot@buildroot.org>; Sun, 28 Aug 2022 08:40:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B8AED40999
+ for <buildroot@buildroot.org>; Sun, 28 Aug 2022 09:24:43 +0000 (UTC)
 Received: from b52572-12.ea.freescale.net.net (unknown [37.167.235.193])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 8530A19F73B;
- Sun, 28 Aug 2022 10:40:48 +0200 (CEST)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 8A43D19F733;
+ Sun, 28 Aug 2022 11:24:37 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 28 Aug 2022 10:40:33 +0200
-Message-Id: <20220828084033.13660-2-ju.o@free.fr>
+Date: Sun, 28 Aug 2022 11:24:30 +0200
+Message-Id: <20220828092430.21572-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220828084033.13660-1-ju.o@free.fr>
-References: <20220828084033.13660-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661676052;
- bh=nq/r3HLSVZtzXudvsULVPTMgcXg37XMk/GM+qJsnIfY=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=k4RK5A2rWoUWolzq1GGAm+i2C0XuJfGOPsLXXYk1DKtDj0RLxlQbxdz+shA4DrGF1
- BENCYXW1hvoR0uAJHcEqrxlcb40jpbzAP5MW/XmkMHTvYRetJTRNuVcZ9KyO+7uAAg
- Nxlqo8QRRwXgb08mwoEI0EGyZ2mGnH3YZ5VARZCBcJXAJ4cSRFLAM9EKZdRsrbheSq
- kr5w1TtaCCFLvXdu0hwyhDUMuTIF4NoL0npPKjCmQdny9trXEEz1HoHX2k//1B3ZTf
- +thiVCZV4TOeiZoAbjEoCmprwGHI7cEV+DEOWvaJmOZKXH4OqTrmGrxwTQmO+cKw9T
- KW6Aits7qBIpg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1661678680;
+ bh=nKsfVr9F50nZ/2vWMFimUvVhv9QBOsjdgq27aYQnZvA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=tgMM05s7kQaj6dwcp7s/L4chf+JOmfmn3BM6CkqH5vKMuSAg+8YP9YHKPewrhLHk5
+ efIpoujt1VRyTbs1WsIfvoGt3cwAjB3jeYcMRqklUOTpuESKiHK7tIuaSfkBfUwXaI
+ Fwn9Ako8EQmj1trVYJOBkNEkg2vzcBETXHXhMbZNXQmG4EZmE/AFVVN25Wmyy84RNb
+ +i652HdBn4t2aujS6KGVAS+oEedVaeOeXLMl2unGZGT9Ub7Rk7f6mcDYT9Fci3N3sg
+ 6/y5qhohNr5wFNbHCQNWbjKAeHuYcWNL9DVWqniPmKASr6h9Qa/PCWXX5Gh/kltP4l
+ zlMitH61Z969A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=k4RK5A2r
-Subject: [Buildroot] [next 2/2] package/poco: add the new Prometheus
- component
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=tgMM05s7
+Subject: [Buildroot] [next 1/1] docs/manual/patch-policy.txt: patch subjects
+ shall not be numbered
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,70 +71,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The Poco Prometheus component was added in 1.12.0. See:
-https://github.com/pocoproject/poco/blob/poco-1.12.0-release/CHANGELOG#L6
+The script "utils/check-package" checks that patch email prefix are
+not be numbered. See:
+https://git.buildroot.org/buildroot/tree/utils/checkpackagelib/lib_patch.py?h=2022.08-rc1#n42
 
-For Prometheus information, see: https://prometheus.io/
+The error message recommends to generate patches to be included in
+Buildroot with the command 'git format-patch -N'.
+
+The patch policy section in the Buildroot manual does mention that.
+
+This commit adds a note about that requirement.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Tested with previous patch on BR commit 6c7061f with command:
-    cat > poco.config <<EOF
-    BR2_PACKAGE_POCO=y
-    BR2_PACKAGE_POCO_ACTIVERECORD=y
-    BR2_PACKAGE_POCO_CPP_PARSER=y
-    BR2_PACKAGE_POCO_DATA_MYSQL=y
-    BR2_PACKAGE_POCO_DATA_PGSQL=y
-    BR2_PACKAGE_POCO_DATA_SQLITE=y
-    BR2_PACKAGE_POCO_JWT=y
-    BR2_PACKAGE_POCO_MONGODB=y
-    BR2_PACKAGE_POCO_NETSSL_OPENSSL=y
-    BR2_PACKAGE_POCO_PDF=y
-    BR2_PACKAGE_POCO_PROMETHEUS=y
-    BR2_PACKAGE_POCO_REDIS=y
-    BR2_PACKAGE_POCO_ZIP=y
-    EOF
-    utils/test-pkg -a -p poco -c poco.config
-    ...
-    44 builds, 16 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- package/poco/Config.in | 4 ++++
- package/poco/poco.mk   | 1 +
- 2 files changed, 5 insertions(+)
+ docs/manual/patch-policy.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index cb447960f1..820e631966 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -92,6 +92,10 @@ config BR2_PACKAGE_POCO_PDF
- 	select BR2_PACKAGE_POCO_UTIL
- 	select BR2_PACKAGE_POCO_XML
- 
-+config BR2_PACKAGE_POCO_PROMETHEUS
-+	bool "Prometheus"
-+	select BR2_PACKAGE_POCO_NET
-+
- config BR2_PACKAGE_POCO_REDIS
- 	bool "Redis"
- 	select BR2_PACKAGE_POCO_NET
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 3bcc42c455..e37effd690 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -33,6 +33,7 @@ POCO_OMIT = Data/ODBC PageCompiler \
- 	$(if $(BR2_PACKAGE_POCO_NET),,Net) \
- 	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),,NetSSL_OpenSSL) \
- 	$(if $(BR2_PACKAGE_POCO_PDF),,PDF) \
-+	$(if $(BR2_PACKAGE_POCO_PROMETHEUS),,Prometheus) \
- 	$(if $(BR2_PACKAGE_POCO_REDIS),,Redis) \
- 	$(if $(BR2_PACKAGE_POCO_UTIL),,Util) \
- 	$(if $(BR2_PACKAGE_POCO_XML),,XML) \
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index e704a0d3f3..063ef984d8 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -44,6 +44,11 @@ These patch files should be named +<number>-<description>.patch+.
+ - The field +<number>+ in the patch file name refers to the 'apply order',
+   and shall start at 1; It is preferred to pad the number with zeros up to 4
+   digits, like 'git-format-patch' does. E.g.: +0001-foobar-the-buz.patch+
++- The patch email subject prefix shall not be numbered. Patches shall
++  be generated with the +git format-patch -N+ command, since this
++  numbering is automatically added for series. For example, the patch
++  subject line should look like +Subject: [PATCH] foobar the buz+ rather
++  than +Subject: [PATCH n/m] foobar the buz+.
+ - Previously, it was mandatory for patches to be prefixed with the name of
+   the package, like +<package>-<number>-<description>.patch+, but that is
+   no longer the case. Existing packages will be fixed as time passes. 'Do
 -- 
 2.37.2
 
