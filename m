@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2BE4ECAAD2
-	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 20:07:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B6BAECAAD2
+	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 20:08:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7505240461;
-	Mon, 29 Aug 2022 20:07:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7505240461
+	by smtp2.osuosl.org (Postfix) with ESMTP id D98E840465;
+	Mon, 29 Aug 2022 20:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D98E840465
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9mYjQyinVyEw; Mon, 29 Aug 2022 20:07:58 +0000 (UTC)
+	with ESMTP id ui-NL3lwtrya; Mon, 29 Aug 2022 20:08:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 797524048C;
-	Mon, 29 Aug 2022 20:07:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 797524048C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 009CD404BD;
+	Mon, 29 Aug 2022 20:08:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 009CD404BD
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 518891BF3D9
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:06:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 138D81BF3D9
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:07:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A5F44048E
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:06:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A5F44048E
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2B2440465
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:07:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2B2440465
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GEOQrhaVN0B3 for <buildroot@lists.busybox.net>;
- Mon, 29 Aug 2022 20:06:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 23D3540465
- for <buildroot@buildroot.org>; Mon, 29 Aug 2022 20:06:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23D3540465
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4B73E87FAF; Mon, 29 Aug 2022 19:51:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 29 Aug 2022 21:54:17 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4337d4b8334e08e5baab03e6d9c64edc5afa802d
-X-Git-Newrev: c3c944e4214ad30f98e0dbc5e409b4c9e9aea71d
-X-Patchwork-Hint: ignore
-Message-Id: <20220829195150.4B73E87FAF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qt6/qt6base: add
- support for syslog backend
+ with ESMTP id 2Q98xQfz5ICW for <buildroot@lists.busybox.net>;
+ Mon, 29 Aug 2022 20:07:34 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9926640461
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9926640461
+ for <buildroot@buildroot.org>; Mon, 29 Aug 2022 20:07:33 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3D24FFF80B;
+ Mon, 29 Aug 2022 20:07:30 +0000 (UTC)
+Date: Mon, 29 Aug 2022 22:07:28 +0200
+To: Jesse Van Gavere <jesseevg@gmail.com>
+Message-ID: <20220829220728.6950179a@windsurf>
+In-Reply-To: <20220826135503.20612-4-jesseevg@gmail.com>
+References: <20220826135503.20612-1-jesseevg@gmail.com>
+ <20220826135503.20612-4-jesseevg@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1661803650;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=TcxWDnns9IeA2oVuhgOEqGDDP03l2fjKSgJsQUpPE3A=;
+ b=ax5+X658iFMN6nwxMGDDReWWRp6VHodEnSWOX9PyEgorshfA8FMW+C14RbTPZ4zb4um+ks
+ 9VXGf4ThEv9whA72lyzQC+EoG2A+w2Y7U3sjRbSIJee65ProFhBrZ4EU0iuLOghKqFCnG8
+ Jt3BQk5uDM1bG6aoZX4Bae+sgmjWyTumeS9IK6GDLw8Z5FoDVKTfMSjJQ1BbkjwmeNGvuc
+ vCYynL0uqI26Z+uAcUsDVutqkbMKiXZmy61Xc7EKvyom0czgNWinhuyLKBkpjRK1QVznLl
+ RuiPsDQmJpv+kRBL+FPN8FAEM3DUGZjcUxUmGoFokm39WqxymjUT7C20AgIHSQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ax5+X658
+Subject: Re: [Buildroot] [PATCH v4 03/29] package/qt6/qt6base: add support
+ for network module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,54 +79,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3c944e4214ad30f98e0dbc5e409b4c9e9aea71d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Fri, 26 Aug 2022 15:54:37 +0200
+Jesse Van Gavere <jesseevg@gmail.com> wrote:
 
-Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt6/qt6base/Config.in  | 5 +++++
- package/qt6/qt6base/qt6base.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+> Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+> ---
+>  package/qt6/qt6base/Config.in  | 9 +++++++++
+>  package/qt6/qt6base/qt6base.mk | 6 ++++++
+>  2 files changed, 15 insertions(+)
 
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 2d4a4df223..f3e56aefa4 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -35,6 +35,11 @@ config BR2_PACKAGE_QT6BASE_NETWORK
- 	help
- 	  This options enables the Qt6Network library.
- 
-+config BR2_PACKAGE_QT6BASE_SYSLOG
-+	bool "syslog support"
-+	help
-+	  Logs to the standard UNIX logging mechanism.
-+
- config BR2_PACKAGE_QT6BASE_TEST
- 	bool "test module"
- 	help
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 36176367e5..6603d08bf1 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -111,5 +111,11 @@ else
- QT6BASE_CONF_OPTS += -DFEATURE_xml=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT6BASE_SYSLOG),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_syslog=ON
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_syslog=OFF
-+endif
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
