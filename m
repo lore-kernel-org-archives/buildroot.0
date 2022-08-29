@@ -1,64 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21266ECAAD2
-	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 19:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03C9FECAAD2
+	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 20:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9958C40465;
-	Mon, 29 Aug 2022 19:58:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9958C40465
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bRx9vKGZ-OyD; Mon, 29 Aug 2022 19:58:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B39A940461;
-	Mon, 29 Aug 2022 19:58:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B39A940461
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F04041BF379
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 19:58:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D636460B00
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 19:58:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D636460B00
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7BB0060B1D;
+	Mon, 29 Aug 2022 20:06:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BB0060B1D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ueQmLt4YrV2Q for <buildroot@lists.busybox.net>;
- Mon, 29 Aug 2022 19:58:45 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFECA60AFF
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BFECA60AFF
- for <buildroot@buildroot.org>; Mon, 29 Aug 2022 19:58:44 +0000 (UTC)
-Received: from b52572-12.ea.freescale.net.net (unknown [37.166.113.163])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id EA222B00592;
- Mon, 29 Aug 2022 21:58:38 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f09rSxIWGBeO; Mon, 29 Aug 2022 20:06:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A718B60B14;
+	Mon, 29 Aug 2022 20:06:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A718B60B14
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3585E1BF3D9
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:06:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D76A40867
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:06:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D76A40867
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gr9660At3CEl for <buildroot@lists.busybox.net>;
+ Mon, 29 Aug 2022 20:06:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF3E7405CE
+ for <buildroot@buildroot.org>; Mon, 29 Aug 2022 20:06:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF3E7405CE
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 2071687FB3; Mon, 29 Aug 2022 19:51:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 29 Aug 2022 21:58:31 +0200
-Message-Id: <20220829195831.397183-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661803122;
- bh=/c09O4B09kW5/3fPXXFIIEUaFO9vQOqb08TtOK16ReI=;
- h=From:To:Cc:Subject:Date:From;
- b=QDR9l9m3jeyQMtCQZVwWlzmc4+08AoqQri5IxsjqH7XijBR7oLwPXJkyJ4ZdoCLaq
- 8Vr7LOvVlKZ9g40mqVhfRd3xcteBYU3EjaxTCiZIU5QG/SSdZ1g4Z9WF2IxB9MfaeH
- r3Uel+tROuvGEYze4ArUXdoWnFyAPMuHF96HVzdzbj/6BBip9b694KtuvQBA7MD4TW
- opAXU7Qj09LeS4RYe2gkzE8wlPt0bjtJcM09IkwpeRHV4eXHroKHRLvCnX2I42hZzF
- 6V/TqUfjRwPzBHOod6JZi9KHpxXoYvpXTnhiQ6qIwheLdJgPciJnZ5945T/c04F9wJ
- jZyAH5UV/Lu1Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=QDR9l9m3
-Subject: [Buildroot] [next 1/1] package/python-gnupg: bump to version 0.5.0
+Date: Mon, 29 Aug 2022 21:16:51 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 26ebde7013ee1b291918b05a67d5b5bfdb59af32
+X-Git-Newrev: a39e0b95e1d927599e212098d1db4d2fafb2a35c
+X-Patchwork-Hint: ignore
+Message-Id: <20220829195150.2071687FB3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt6/qt6base: add
+ support for concurrent module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,67 +56,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://github.com/vsajip/python-gnupg/releases/tag/0.5.0
+commit: https://git.buildroot.net/buildroot/commit/?id=a39e0b95e1d927599e212098d1db4d2fafb2a35c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Tested on BR commit 04d3aef with commands:
+ package/qt6/qt6base/Config.in  | 5 +++++
+ package/qt6/qt6base/qt6base.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-    make check-package
-    ...
-    0 warnings generated
-
-    make python-gnupg-legal-info
-    ...
-    LICENSE.txt: OK
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_python_gnupg.TestPythonPy3GnuPG
-    ...
-    OK
----
- package/python-gnupg/python-gnupg.hash | 4 ++--
- package/python-gnupg/python-gnupg.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-gnupg/python-gnupg.hash b/package/python-gnupg/python-gnupg.hash
-index f7267308f6..7886ff7dae 100644
---- a/package/python-gnupg/python-gnupg.hash
-+++ b/package/python-gnupg/python-gnupg.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-gnupg/json
--md5  e27cd8c6ce3b5c9197e931b65bbb4c9a  python-gnupg-0.4.9.tar.gz
--sha256  aaa748795572591aaf127b4ac8985684f3673ff82b39f370c836b006e68fc537  python-gnupg-0.4.9.tar.gz
-+md5  19cc1aef3a612b7b5f13e388260e65d4  python-gnupg-0.5.0.tar.gz
-+sha256  70758e387fc0e0c4badbcb394f61acbe68b34970a8fed7e0f7c89469fe17912a  python-gnupg-0.5.0.tar.gz
- # Locally computed sha256 checksums
- sha256  4104ca980dbca7603fc553078378eb14566a76f819d033d7bff89fd6a97e181b  LICENSE.txt
-diff --git a/package/python-gnupg/python-gnupg.mk b/package/python-gnupg/python-gnupg.mk
-index 582a649f9a..b51ac61892 100644
---- a/package/python-gnupg/python-gnupg.mk
-+++ b/package/python-gnupg/python-gnupg.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
+index 68bca728e2..fe488f1cc9 100644
+--- a/package/qt6/qt6base/Config.in
++++ b/package/qt6/qt6base/Config.in
+@@ -17,6 +17,11 @@ config BR2_PACKAGE_QT6BASE
  
--PYTHON_GNUPG_VERSION = 0.4.9
--PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/c8/cb/46fb80639cf0dd4251aeb075a1a5e2ebbb8c9656f28ddfe9d8c99b68b6da
-+PYTHON_GNUPG_VERSION = 0.5.0
-+PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/e3/5c/5ff9877001616912a74f4377cd5f80925b31a678087800beae5b28bdb80e
- PYTHON_GNUPG_LICENSE = BSD-3-Clause
- PYTHON_GNUPG_LICENSE_FILES = LICENSE.txt
- PYTHON_GNUPG_CPE_ID_VENDOR = python
--- 
-2.37.2
-
+ if BR2_PACKAGE_QT6BASE
+ 
++config BR2_PACKAGE_QT6BASE_CONCURRENT
++	bool "concurrent module"
++	help
++	  This options enables the Qt6Concurrent library.
++
+ config BR2_PACKAGE_QT6BASE_NETWORK
+ 	bool "network module"
+ 	help
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index a93e98e035..35ab516795 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -81,5 +81,11 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT6BASE_CONCURRENT),y)
++QT6BASE_CONF_OPTS += -DFEATURE_concurrent=ON
++else
++QT6BASE_CONF_OPTS += -DFEATURE_concurrent=OFF
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
