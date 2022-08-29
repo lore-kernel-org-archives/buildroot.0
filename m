@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03C9FECAAD2
-	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 20:06:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95116ECAAD2
+	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 20:07:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BB0060B1D;
-	Mon, 29 Aug 2022 20:06:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BB0060B1D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17F6D60B14;
+	Mon, 29 Aug 2022 20:07:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17F6D60B14
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f09rSxIWGBeO; Mon, 29 Aug 2022 20:06:55 +0000 (UTC)
+	with ESMTP id vNY0DOh19cqO; Mon, 29 Aug 2022 20:07:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A718B60B14;
-	Mon, 29 Aug 2022 20:06:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A718B60B14
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3585E1BF3D9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4885460B3F;
+	Mon, 29 Aug 2022 20:07:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4885460B3F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E2D81BF9A4
  for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:06:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D76A40867
+ by smtp1.osuosl.org (Postfix) with ESMTP id 19028813D4
  for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:06:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D76A40867
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19028813D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gr9660At3CEl for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id baM2DFme9WeW for <buildroot@lists.busybox.net>;
  Mon, 29 Aug 2022 20:06:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF3E7405CE
- for <buildroot@buildroot.org>; Mon, 29 Aug 2022 20:06:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF3E7405CE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1AA59813D2
+ for <buildroot@buildroot.org>; Mon, 29 Aug 2022 20:06:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AA59813D2
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2071687FB3; Mon, 29 Aug 2022 19:51:50 +0000 (UTC)
+ id 40F9387FB6; Mon, 29 Aug 2022 19:51:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 29 Aug 2022 21:16:51 +0200
+Date: Mon, 29 Aug 2022 21:30:57 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 26ebde7013ee1b291918b05a67d5b5bfdb59af32
-X-Git-Newrev: a39e0b95e1d927599e212098d1db4d2fafb2a35c
+X-Git-Oldrev: bb6352c9eddf51f13e033ea7bba846a1bdaf3cc6
+X-Git-Newrev: 4337d4b8334e08e5baab03e6d9c64edc5afa802d
 X-Patchwork-Hint: ignore
-Message-Id: <20220829195150.2071687FB3@busybox.osuosl.org>
+Message-Id: <20220829195150.40F9387FB6@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next] package/qt6/qt6base: add
- support for concurrent module
+ support for dbus module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a39e0b95e1d927599e212098d1db4d2fafb2a35c
+commit: https://git.buildroot.net/buildroot/commit/?id=4337d4b8334e08e5baab03e6d9c64edc5afa802d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/qt6base/Config.in  | 5 +++++
- package/qt6/qt6base/qt6base.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+ package/qt6/qt6base/Config.in  |  8 ++++++++
+ package/qt6/qt6base/qt6base.mk | 12 ++++++++++++
+ 2 files changed, 20 insertions(+)
 
 diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 68bca728e2..fe488f1cc9 100644
+index 354e02280a..2d4a4df223 100644
 --- a/package/qt6/qt6base/Config.in
 +++ b/package/qt6/qt6base/Config.in
-@@ -17,6 +17,11 @@ config BR2_PACKAGE_QT6BASE
+@@ -22,6 +22,14 @@ config BR2_PACKAGE_QT6BASE_CONCURRENT
+ 	help
+ 	  This options enables the Qt6Concurrent library.
  
- if BR2_PACKAGE_QT6BASE
- 
-+config BR2_PACKAGE_QT6BASE_CONCURRENT
-+	bool "concurrent module"
++config BR2_PACKAGE_QT6BASE_DBUS
++	bool "DBus module"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
++	select BR2_PACKAGE_DBUS
 +	help
-+	  This options enables the Qt6Concurrent library.
++	  This option enables the D-Bus module.
 +
  config BR2_PACKAGE_QT6BASE_NETWORK
  	bool "network module"
  	help
 diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index a93e98e035..35ab516795 100644
+index db70386507..36176367e5 100644
 --- a/package/qt6/qt6base/qt6base.mk
 +++ b/package/qt6/qt6base/qt6base.mk
-@@ -81,5 +81,11 @@ else
- QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
- endif
+@@ -75,6 +75,18 @@ define HOST_QT6BASE_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(BR2_CMAKE) --install $(HOST_QT6BASE_BUILDDIR)
+ endef
  
-+ifeq ($(BR2_PACKAGE_QT6BASE_CONCURRENT),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_concurrent=ON
++# We need host-qt6base with D-Bus support, otherwise: "the tool
++# "Qt6::qdbuscpp2xml" was not found in the Qt6DBusTools package."
++ifeq ($(BR2_PACKAGE_QT6BASE_DBUS),y)
++QT6BASE_CONF_OPTS += -DFEATURE_dbus=ON -DINPUT_dbus=linked
++QT6BASE_DEPENDENCIES += dbus
++HOST_QT6BASE_CONF_OPTS += -DFEATURE_dbus=ON
++HOST_QT6BASE_DEPENDENCIES += host-dbus
 +else
-+QT6BASE_CONF_OPTS += -DFEATURE_concurrent=OFF
++QT6BASE_CONF_OPTS += -DFEATURE_dbus=OFF
++HOST_QT6BASE_CONF_OPTS += -DFEATURE_dbus=OFF
 +endif
 +
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+ ifeq ($(BR2_PACKAGE_QT6BASE_NETWORK),y)
+ QT6BASE_CONF_OPTS += -DFEATURE_network=ON
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
