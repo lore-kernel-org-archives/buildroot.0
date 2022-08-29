@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86148ECAAD4
-	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 11:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F4C3ECAAD4
+	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 11:37:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 278D7416F4;
-	Mon, 29 Aug 2022 11:37:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 278D7416F4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 18FE740C22;
+	Mon, 29 Aug 2022 11:37:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18FE740C22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g7aYli1EzdUO; Mon, 29 Aug 2022 11:37:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sxjXWyY7puv2; Mon, 29 Aug 2022 11:37:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11653416D0;
-	Mon, 29 Aug 2022 11:37:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11653416D0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4CF8940C0B;
+	Mon, 29 Aug 2022 11:37:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CF8940C0B
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6B5D81BF9A4
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 11:36:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2B3751BF2BD
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 11:36:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4637640C41
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53F9940C4B
  for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 11:36:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4637640C41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53F9940C4B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dyX_DNBjvIiE for <buildroot@lists.busybox.net>;
+ with ESMTP id E-nyetCoHqZ6 for <buildroot@lists.busybox.net>;
  Mon, 29 Aug 2022 11:36:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 76C7540C1D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9AD4E40C3F
  for <buildroot@buildroot.org>; Mon, 29 Aug 2022 11:36:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76C7540C1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AD4E40C3F
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 615D087F52; Mon, 29 Aug 2022 11:21:11 +0000 (UTC)
+ id 9327687F56; Mon, 29 Aug 2022 11:21:11 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 29 Aug 2022 13:11:28 +0200
+Date: Mon, 29 Aug 2022 13:35:28 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 8657bd624385519fc457a66b126f5c72a452fcc4
-X-Git-Newrev: d7a54191fbde92a6edefcb0c6306ab72604ee68f
+X-Git-Oldrev: 774e310383bc16f1918302693be57bbddaf780ac
+X-Git-Newrev: cd4fc11abb56d56561c4e32dbbc1f7fce65320c3
 X-Patchwork-Hint: ignore
-Message-Id: <20220829112111.615D087F52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x]
- support/dependencies/dependencies.sh: check for 'cmp'
+Message-Id: <20220829112111.9327687F56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/netdata: add
+ freeipmi optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7a54191fbde92a6edefcb0c6306ab72604ee68f
+commit: https://git.buildroot.net/buildroot/commit/?id=cd4fc11abb56d56561c4e32dbbc1f7fce65320c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-cmp from diffutils is part of the host system requirements, so check
-for it. It is used in package/pkg-generic.mk.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1ca7348fd445c6842ba2d8c20e4e76e49aa54fdb)
+(cherry picked from commit 55106a056e09cbb1c16c561c41ba160464305c62)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.sh | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/netdata/netdata.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index c604a9efcc..d69d97afaa 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -163,7 +163,7 @@ fi
+diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+index 04b146591f..c0ce74d18b 100644
+--- a/package/netdata/netdata.mk
++++ b/package/netdata/netdata.mk
+@@ -36,6 +36,13 @@ else
+ NETDATA_CONF_OPTS += --disable-plugin-cups
+ endif
  
- # Check that a few mandatory programs are installed
- missing_progs="no"
--for prog in perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
-+for prog in perl tar wget cpio unzip rsync bc cmp ${DL_TOOLS} ; do
- 	if ! which $prog > /dev/null ; then
- 		echo "You must install '$prog' on your build machine";
- 		missing_progs="yes"
-@@ -175,6 +175,8 @@ for prog in perl tar wget cpio unzip rsync bc ${DL_TOOLS} ; do
- 			echo "  zcat is usually part of the gzip package in your distribution"
- 		elif test $prog = "bzcat" ; then
- 			echo "  bzcat is usually part of the bzip2 package in your distribution"
-+		elif test $prog = "cmp" ; then
-+			echo "  cmp is usually part of the diffutils package in your distribution"
- 		fi
- 	fi
- done
++ifeq ($(BR2_PACKAGE_FREEIPMI),y)
++NETDATA_CONF_OPTS += --enable-plugin-freeipmi
++NETDATA_DEPENDENCIES += freeipmi
++else
++NETDATA_CONF_OPTS += --disable-plugin-freeipmi
++endif
++
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
+ NETDATA_CONF_OPTS += --enable-jsonc
+ NETDATA_DEPENDENCIES += json-c
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
