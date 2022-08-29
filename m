@@ -4,70 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27BCFECAAD4
-	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 19:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21266ECAAD2
+	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 19:58:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 779B84048D;
-	Mon, 29 Aug 2022 19:48:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 779B84048D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9958C40465;
+	Mon, 29 Aug 2022 19:58:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9958C40465
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X33XIU2J8PKp; Mon, 29 Aug 2022 19:48:38 +0000 (UTC)
+	with ESMTP id bRx9vKGZ-OyD; Mon, 29 Aug 2022 19:58:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92B2C40465;
-	Mon, 29 Aug 2022 19:48:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92B2C40465
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 399381BF379
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 19:48:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B39A940461;
+	Mon, 29 Aug 2022 19:58:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B39A940461
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F04041BF379
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 19:58:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 146D0812E1
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 19:48:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 146D0812E1
+ by smtp3.osuosl.org (Postfix) with ESMTP id D636460B00
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 19:58:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D636460B00
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JvWqk0zoS9pT for <buildroot@lists.busybox.net>;
- Mon, 29 Aug 2022 19:48:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9A808109A
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B9A808109A
- for <buildroot@buildroot.org>; Mon, 29 Aug 2022 19:48:34 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [80.9.176.139])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 7C3C9780501;
- Mon, 29 Aug 2022 21:48:28 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 29 Aug 2022 21:48:28 +0200
-Date: Mon, 29 Aug 2022 21:48:28 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Message-ID: <20220829194828.GA3615594@scaer>
-References: <20220614175048.6352-1-raphael.pavlidis@gmail.com>
- <20220614180152.15846-1-raphael.pavlidis@gmail.com>
- <a7ed0285-fea7-16f6-6ef8-9ff93fee1461@googlemail.com>
- <20220827120837.GV37358@scaer>
- <553c9903-0b75-d35b-cd30-848a05168eb7@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ueQmLt4YrV2Q for <buildroot@lists.busybox.net>;
+ Mon, 29 Aug 2022 19:58:45 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFECA60AFF
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BFECA60AFF
+ for <buildroot@buildroot.org>; Mon, 29 Aug 2022 19:58:44 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.166.113.163])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id EA222B00592;
+ Mon, 29 Aug 2022 21:58:38 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 29 Aug 2022 21:58:31 +0200
+Message-Id: <20220829195831.397183-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <553c9903-0b75-d35b-cd30-848a05168eb7@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661802511;
- bh=3yLNWbJrqBFJ6a+5ATCMaGrPjQDs1zRtHqrWKWZAhWg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MZ9acLuFRWLFmlDGGmbxPcxmK/D5yFjQOaab7720zdm4wSifWrJg2yD5Y4O+qk97l
- vBUZTuUbGoHst0PyKzuJxwV9ratD5sYu9UJs0uVrGkkox58BR87/dpkIelDzUoojrA
- yp0va5DVdSkrYcA2yODo3+I5rBNfCX6NwTAI4b+7/bgWnGmdNJSHYXUUQih8M7x/IR
- ZjTtmLVfCUvvja+6PjImu9/gKYSuquU+0CEMWpZNIsvuhYMFHmMx0E92XQc7ag9hJr
- ZwdSq6G2PJ4Um2o0UZTq7zBL/W4MJOqlvlhSnnADkcWlwg8lkhfqqMl6TjdI5fk+QG
- A0iJNtkwydLMg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1661803122;
+ bh=/c09O4B09kW5/3fPXXFIIEUaFO9vQOqb08TtOK16ReI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=QDR9l9m3jeyQMtCQZVwWlzmc4+08AoqQri5IxsjqH7XijBR7oLwPXJkyJ4ZdoCLaq
+ 8Vr7LOvVlKZ9g40mqVhfRd3xcteBYU3EjaxTCiZIU5QG/SSdZ1g4Z9WF2IxB9MfaeH
+ r3Uel+tROuvGEYze4ArUXdoWnFyAPMuHF96HVzdzbj/6BBip9b694KtuvQBA7MD4TW
+ opAXU7Qj09LeS4RYe2gkzE8wlPt0bjtJcM09IkwpeRHV4eXHroKHRLvCnX2I42hZzF
+ 6V/TqUfjRwPzBHOod6JZi9KHpxXoYvpXTnhiQ6qIwheLdJgPciJnZ5945T/c04F9wJ
+ jZyAH5UV/Lu1Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MZ9acLuF
-Subject: Re: [Buildroot] [PATCH v2] package/slirp4netns: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=QDR9l9m3
+Subject: [Buildroot] [next 1/1] package/python-gnupg: bump to version 0.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,45 +70,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Raphael, All,
+For change log, see:
+https://github.com/vsajip/python-gnupg/releases/tag/0.5.0
 
-On 2022-08-29 20:55 +0200, Raphael Pavlidis spake thusly:
-> On 27.08.22 14:08, Yann E. MORIN wrote:
-> >You forgot to add an entry in the DEVELOPERS file, and I forgot to
-> >commit-amend my change, so I pushed a follow-up commit to add it.
-> Thanks. I did not know that I have to add an entry to DEVELOPERS. So, the
-> creator of the package have to be in the DEVELOPERS?
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Tested on BR commit 04d3aef with commands:
 
-Yes, the idea is that, by submitting a package, you show an interest in
-having that package work flawlessly in Buildroot.
+    make check-package
+    ...
+    0 warnings generated
 
-Listing the package in DEVELOPERS will ensure that you are copied on the
-build failures about that package, that the autobuilders [0] may uncover
-when running the random configurations.
+    make python-gnupg-legal-info
+    ...
+    LICENSE.txt: OK
 
-It also ensures that, should someone submit a change to that package,
-you get listed by the utils/get-developers script, so they would put you
-on Cc to the change, on the assumption that you know (at least a bit)
-about the package.
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_python_gnupg.TestPythonPy3GnuPG
+    ...
+    OK
+---
+ package/python-gnupg/python-gnupg.hash | 4 ++--
+ package/python-gnupg/python-gnupg.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-[0] http://autobuild.buildroot.net/
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/python-gnupg/python-gnupg.hash b/package/python-gnupg/python-gnupg.hash
+index f7267308f6..7886ff7dae 100644
+--- a/package/python-gnupg/python-gnupg.hash
++++ b/package/python-gnupg/python-gnupg.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-gnupg/json
+-md5  e27cd8c6ce3b5c9197e931b65bbb4c9a  python-gnupg-0.4.9.tar.gz
+-sha256  aaa748795572591aaf127b4ac8985684f3673ff82b39f370c836b006e68fc537  python-gnupg-0.4.9.tar.gz
++md5  19cc1aef3a612b7b5f13e388260e65d4  python-gnupg-0.5.0.tar.gz
++sha256  70758e387fc0e0c4badbcb394f61acbe68b34970a8fed7e0f7c89469fe17912a  python-gnupg-0.5.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4104ca980dbca7603fc553078378eb14566a76f819d033d7bff89fd6a97e181b  LICENSE.txt
+diff --git a/package/python-gnupg/python-gnupg.mk b/package/python-gnupg/python-gnupg.mk
+index 582a649f9a..b51ac61892 100644
+--- a/package/python-gnupg/python-gnupg.mk
++++ b/package/python-gnupg/python-gnupg.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_GNUPG_VERSION = 0.4.9
+-PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/c8/cb/46fb80639cf0dd4251aeb075a1a5e2ebbb8c9656f28ddfe9d8c99b68b6da
++PYTHON_GNUPG_VERSION = 0.5.0
++PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/e3/5c/5ff9877001616912a74f4377cd5f80925b31a678087800beae5b28bdb80e
+ PYTHON_GNUPG_LICENSE = BSD-3-Clause
+ PYTHON_GNUPG_LICENSE_FILES = LICENSE.txt
+ PYTHON_GNUPG_CPE_ID_VENDOR = python
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.37.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
