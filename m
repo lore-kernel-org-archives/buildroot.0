@@ -4,57 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59C90ECAAD2
-	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 20:15:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE71FECAAD4
+	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 20:17:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA6FC60B26;
-	Mon, 29 Aug 2022 20:15:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA6FC60B26
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D17560B85;
+	Mon, 29 Aug 2022 20:17:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D17560B85
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GVeJUSy53yDU; Mon, 29 Aug 2022 20:15:21 +0000 (UTC)
+	with ESMTP id C21e9Ugj9aO6; Mon, 29 Aug 2022 20:17:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D12860B16;
-	Mon, 29 Aug 2022 20:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D12860B16
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 302DD1BF3D9
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:15:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3E9C60B1D;
+	Mon, 29 Aug 2022 20:17:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3E9C60B1D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 517C21BF3D9
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:17:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0BD0C40461
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BD0C40461
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B218405CE
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 20:17:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B218405CE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9VKyxGqbtrRp for <buildroot@lists.busybox.net>;
- Mon, 29 Aug 2022 20:15:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51826400FE
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 51826400FE
- for <buildroot@buildroot.org>; Mon, 29 Aug 2022 20:15:18 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7F1DF60006;
- Mon, 29 Aug 2022 20:15:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oSlAB-00HWDn-HY; Mon, 29 Aug 2022 22:15:15 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20220726163951.2111731-1-thomas.petazzoni@bootlin.com>
- <20220726163951.2111731-2-thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Aug 2022 22:15:15 +0200
-In-Reply-To: <20220726163951.2111731-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Tue, 26 Jul 2022 18:39:49
- +0200")
-Message-ID: <87h71u4xik.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 2/4] package/Makefile.in: add detection
- for the lack of C library
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TwiNNecw9vW8 for <buildroot@lists.busybox.net>;
+ Mon, 29 Aug 2022 20:17:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FC0C4035D
+ for <buildroot@buildroot.org>; Mon, 29 Aug 2022 20:17:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FC0C4035D
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 2FD9187FC6; Mon, 29 Aug 2022 20:01:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 29 Aug 2022 22:16:41 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 9b5caa2ab45d7ec01e1657b10f94c2f60c7afe8e
+X-Git-Newrev: 6c24f7cb8da5651bdfbcb40da5c762e1e85a93fc
+X-Patchwork-Hint: ignore
+Message-Id: <20220829200159.2FD9187FC6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/most: bump version to
+ 5.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,26 +56,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6c24f7cb8da5651bdfbcb40da5c762e1e85a93fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > We recently had several cases of architecture configurations for which
- > no C library was available, leading to a build failure during the gcc
- > build. In order to more easily detect those bogus configurations,
- > let's bail out very early by detecting the lack of C library
- > selection.
+The COPYRIGHT file hash has changed due to:
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+- Copyright (c) 1991, 1999, 2002, 2005-2018,2019 John E. Davis
++ Copyright (c) 1991, 1999, 2002, 2005-2021, 2022 John E. Davis
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Signed-off-by: Sven Oliver Moll <svolli@svolli.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/most/most.hash | 6 +++---
+ package/most/most.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/most/most.hash b/package/most/most.hash
+index db0eb6db59..ec9da9adcd 100644
+--- a/package/most/most.hash
++++ b/package/most/most.hash
+@@ -1,6 +1,6 @@
+ # From https://www.jedsoft.org/releases/most/
+-sha1  db811669a6b22c15478c957b439b5e4483ce1c95  most-5.1.0.tar.gz
++sha1  322073ee6e8c45ce084f4fccd08d3f026aa1f66d  most-5.2.0.tar.gz
+ # Locally computed
+-sha256  db805d1ffad3e85890802061ac8c90e3c89e25afb184a794e03715a3ed190501  most-5.1.0.tar.gz
++sha256  9455aeb8f826fa8385c850dc22bf0f22cf9069b3c3423fba4bf2c6f6226d9903  most-5.2.0.tar.gz
+ sha256  1b2a567f289f66a143c56353e7b3d4fa5862514a5e3c5cfdf8b02ee5e5aaa953  COPYING
+-sha256  47ad1c3f9b94d6ec42d9bee6c5df980c5c2daa5b9d22113545ae6a3f21ca2f52  COPYRIGHT
++sha256  3d8f860532c9f202db9300375fb29a1e7b32f538c6033e7013266ad55317fc3e  COPYRIGHT
+diff --git a/package/most/most.mk b/package/most/most.mk
+index 28d82cddf1..24627c046a 100644
+--- a/package/most/most.mk
++++ b/package/most/most.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MOST_SITE = http://www.jedsoft.org/releases/most
+-MOST_VERSION = 5.1.0
++MOST_VERSION = 5.2.0
+ MOST_LICENSE = GPL-2.0+
+ MOST_LICENSE_FILES = COPYING COPYRIGHT
+ MOST_DEPENDENCIES = slang
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
