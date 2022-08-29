@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3660ECAAD2
-	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 06:22:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5A34ECAAD2
+	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 06:23:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 547FA4159D;
-	Mon, 29 Aug 2022 06:22:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 547FA4159D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fuWPHU5onksv; Mon, 29 Aug 2022 06:22:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F91441550;
-	Mon, 29 Aug 2022 06:22:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F91441550
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5669A1BF32A
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 06:22:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3188E60F15
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 06:22:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3188E60F15
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70B6B60F2F;
+	Mon, 29 Aug 2022 06:23:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70B6B60F2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id etGG6CHtIrba for <buildroot@lists.busybox.net>;
- Mon, 29 Aug 2022 06:22:45 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4dNwczmmPfMS; Mon, 29 Aug 2022 06:23:08 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D88260F15;
+	Mon, 29 Aug 2022 06:23:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D88260F15
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AFF8D1BF32A
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 06:22:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A3FB41528
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 06:22:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A3FB41528
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mrVSpzkDMcQI for <buildroot@lists.busybox.net>;
+ Mon, 29 Aug 2022 06:22:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7580660EFE
- for <buildroot@buildroot.org>; Mon, 29 Aug 2022 06:22:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7580660EFE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AA0940541
+ for <buildroot@buildroot.org>; Mon, 29 Aug 2022 06:22:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AA0940541
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id DF76587E79; Mon, 29 Aug 2022 06:07:44 +0000 (UTC)
+ id 05C2D87ED2; Mon, 29 Aug 2022 06:07:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 29 Aug 2022 08:21:34 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 1f4a9dbebcb4d0125715c39fb23ec4fa1f2a1cd5
-X-Git-Newrev: 8176126b0ad63a06136321ffc8d8fb7c806cdd25
+Date: Mon, 29 Aug 2022 08:13:23 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: c56da683c8edd1c7555d394d4501a8423c5fcda6
+X-Git-Newrev: b6c7870bf500e4dfc33bdf2c15731b2cef618435
 X-Patchwork-Hint: ignore
-Message-Id: <20220829060744.DF76587E79@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] toolchain: handle white
+Message-Id: <20220829060749.05C2D87ED2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] toolchain: handle white
  spaces in sysroot dir in copy_toolchain_sysroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8176126b0ad63a06136321ffc8d8fb7c806cdd25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b6c7870bf500e4dfc33bdf2c15731b2cef618435
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 When changing permissions on all directories in the staging directory,
 after copying sysroot, paths that contain spaces break the call to
