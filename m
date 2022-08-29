@@ -1,61 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45608ECAAD5
-	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 15:47:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6C2AECAAD2
+	for <buildroot@archiver.kernel.org>; Mon, 29 Aug 2022 17:14:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D01BA818CA;
-	Mon, 29 Aug 2022 15:47:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D01BA818CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10F4740352;
+	Mon, 29 Aug 2022 17:14:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10F4740352
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tsJeDxPeQNWS; Mon, 29 Aug 2022 15:47:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O6Y-K6OPiMen; Mon, 29 Aug 2022 17:14:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1891818C0;
-	Mon, 29 Aug 2022 15:47:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1891818C0
+	by smtp4.osuosl.org (Postfix) with ESMTP id D48EC40353;
+	Mon, 29 Aug 2022 17:14:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D48EC40353
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98EF51BF28E
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 15:47:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 90C891BF280
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 17:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70048407D7
- for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 15:47:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70048407D7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6476140360
+ for <buildroot@lists.busybox.net>; Mon, 29 Aug 2022 17:14:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6476140360
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 088zFqubheME for <buildroot@lists.busybox.net>;
- Mon, 29 Aug 2022 15:47:09 +0000 (UTC)
-X-Greylist: delayed 00:32:42 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 013394086D
-Received: from mail.h8u.de (mail.h8u.de [95.156.226.87])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 013394086D
- for <buildroot@buildroot.org>; Mon, 29 Aug 2022 15:47:08 +0000 (UTC)
-Received: from [192.168.255.242] (helo=svolli.dynxs.de)
- by mail.h8u.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.92) (envelope-from <buildroot@svol.li>) id 1oSgT0-0008Qb-KD
- for buildroot@buildroot.org; Mon, 29 Aug 2022 17:14:23 +0200
-Received: from localhost ([127.0.0.1] ident=svolli)
- by svolli.dynxs.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
- (Exim 4.89) (envelope-from <buildroot@svol.li>) id 1oSgT0-0001IG-Bs
- for buildroot@buildroot.org; Mon, 29 Aug 2022 17:14:22 +0200
-Date: Mon, 29 Aug 2022 17:14:22 +0200 (CEST)
-From: Sven Oliver Moll <buildroot@svol.li>
-X-X-Sender: svolli@defender.svolli.xa
+ with ESMTP id vqD-RbTEc04X for <buildroot@lists.busybox.net>;
+ Mon, 29 Aug 2022 17:14:19 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EB7A40353
+Received: from mout-b-203.mailbox.org (mout-b-203.mailbox.org [195.10.208.52])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8EB7A40353
+ for <buildroot@buildroot.org>; Mon, 29 Aug 2022 17:14:19 +0000 (UTC)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by mout-b-203.mailbox.org (Postfix) with ESMTPS id 4MGcVd0zSKz9t4T;
+ Mon, 29 Aug 2022 19:14:17 +0200 (CEST)
+From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 To: buildroot@buildroot.org
-Message-ID: <alpine.DEB.2.20.2208291701140.18923@defender.svolli.xa>
-User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
+Date: Mon, 29 Aug 2022 19:14:14 +0200
+Message-Id: <20220829171415.129914-3-marcus.hoffmann@othermo.de>
+In-Reply-To: <20220829171415.129914-1-marcus.hoffmann@othermo.de>
+References: <20220829171415.129914-1-marcus.hoffmann@othermo.de>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 192.168.255.242
-X-SA-Exim-Rcpt-To: buildroot@buildroot.org
-X-SA-Exim-Mail-From: buildroot@svol.li
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.h8u.de)
-Subject: [Buildroot] [PATCH 1/1] package/most: bump version to 5.2.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=othermo.de; s=MBO0001; t=1661793257;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=oZcHFB/pRgQzuQckYPv/21upeyxnSotm+/GqjeirU5Y=;
+ b=M8PZh0pWboLYuyGVVNxpeNDECswJ/kOfgVy7TSRvfTjp1uHcgsT539fQ0/+WLXnN+YA1ii
+ I1lWbmFeynCNr55cjxSvdX4VRXbuvkVOsi9rUz2MB3PsqVNKqFi68O3VQ9TTi1VgM5Mt+J
+ kRskMrvZ534vZIJnRyig1i7OFeyo8Rkz3g2xx3hSz6UD78AKp0c8VJ7KB+SzZDoucHC6Hm
+ AiuMKexy6Ewye35e1kiFcGNgwBjvtv3r7J+sZzhePHdib2tcUbi/XeiXsxFIRJtXugoEQl
+ VfHkFUMZNysKZfAY95nGWSH1JuUDO0dAuQtOrQUCEbEkS2fZPLpLLAM4kMV4UA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=othermo.de header.i=@othermo.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=M8PZh0pW
+Subject: [Buildroot] [PATCH 2/2] package/libzlib: backport security fix for
+ CVE-2022-37434
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,46 +76,117 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Davide Viti <zinosat@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-Signed-off-by: Sven Oliver Moll <svolli@svolli.de>
+See: https://security-tracker.debian.org/tracker/CVE-2022-37434
+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 ---
-  package/most/most.hash | 4 ++--
-  package/most/most.mk   | 2 +-
-  2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libzlib/0002-fix-CVE-2022-37434.patch | 35 +++++++++++++++++++
+ .../0003-fix-CVE-2022-37434-regression.patch  | 32 +++++++++++++++++
+ package/libzlib/libzlib.mk                    |  3 ++
+ 3 files changed, 70 insertions(+)
+ create mode 100644 package/libzlib/0002-fix-CVE-2022-37434.patch
+ create mode 100644 package/libzlib/0003-fix-CVE-2022-37434-regression.patch
 
-diff --git a/package/most/most.hash b/package/most/most.hash
-index db0eb6db59..5c0fd5751c 100644
---- a/package/most/most.hash
-+++ b/package/most/most.hash
-@@ -1,6 +1,6 @@
-  # From https://www.jedsoft.org/releases/most/
--sha1  db811669a6b22c15478c957b439b5e4483ce1c95  most-5.1.0.tar.gz
-+sha1  322073ee6e8c45ce084f4fccd08d3f026aa1f66d  most-5.2.0.tar.gz
-  # Locally computed
--sha256  db805d1ffad3e85890802061ac8c90e3c89e25afb184a794e03715a3ed190501  most-5.1.0.tar.gz
-+sha256  9455aeb8f826fa8385c850dc22bf0f22cf9069b3c3423fba4bf2c6f6226d9903  most-5.2.0.tar.gz
-  sha256  1b2a567f289f66a143c56353e7b3d4fa5862514a5e3c5cfdf8b02ee5e5aaa953  COPYING
-  sha256  47ad1c3f9b94d6ec42d9bee6c5df980c5c2daa5b9d22113545ae6a3f21ca2f52  COPYRIGHT
-diff --git a/package/most/most.mk b/package/most/most.mk
-index 28d82cddf1..24627c046a 100644
---- a/package/most/most.mk
-+++ b/package/most/most.mk
-@@ -5,7 +5,7 @@
-  ################################################################################
-
-  MOST_SITE = http://www.jedsoft.org/releases/most
--MOST_VERSION = 5.1.0
-+MOST_VERSION = 5.2.0
-  MOST_LICENSE = GPL-2.0+
-  MOST_LICENSE_FILES = COPYING COPYRIGHT
-  MOST_DEPENDENCIES = slang
+diff --git a/package/libzlib/0002-fix-CVE-2022-37434.patch b/package/libzlib/0002-fix-CVE-2022-37434.patch
+new file mode 100644
+index 0000000000..a61be48536
+--- /dev/null
++++ b/package/libzlib/0002-fix-CVE-2022-37434.patch
+@@ -0,0 +1,35 @@
++From eff308af425b67093bab25f80f1ae950166bece1 Mon Sep 17 00:00:00 2001
++From: Mark Adler <fork@madler.net>
++Date: Sat, 30 Jul 2022 15:51:11 -0700
++Subject: [PATCH] Fix a bug when getting a gzip header extra field with
++ inflate().
++
++If the extra field was larger than the space the user provided with
++inflateGetHeader(), and if multiple calls of inflate() delivered
++the extra header data, then there could be a buffer overflow of the
++provided space. This commit assures that provided space is not
++exceeded.
++
++Backported from: eff308af425b67093bab25f80f1ae950166bece1
++Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
++---
++ inflate.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/inflate.c b/inflate.c
++index 7be8c6366..7a7289749 100644
++--- a/inflate.c
+++++ b/inflate.c
++@@ -763,9 +763,10 @@ int flush;
++                 copy = state->length;
++                 if (copy > have) copy = have;
++                 if (copy) {
+++                    len = state->head->extra_len - state->length;
++                     if (state->head != Z_NULL &&
++-                        state->head->extra != Z_NULL) {
++-                        len = state->head->extra_len - state->length;
+++                        state->head->extra != Z_NULL &&
+++                        len < state->head->extra_max) {
++                         zmemcpy(state->head->extra + len, next,
++                                 len + copy > state->head->extra_max ?
++                                 state->head->extra_max - len : copy);
+diff --git a/package/libzlib/0003-fix-CVE-2022-37434-regression.patch b/package/libzlib/0003-fix-CVE-2022-37434-regression.patch
+new file mode 100644
+index 0000000000..46a58710d2
+--- /dev/null
++++ b/package/libzlib/0003-fix-CVE-2022-37434-regression.patch
+@@ -0,0 +1,32 @@
++From 1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d Mon Sep 17 00:00:00 2001
++From: Mark Adler <fork@madler.net>
++Date: Mon, 8 Aug 2022 10:50:09 -0700
++Subject: [PATCH] Fix extra field processing bug that dereferences NULL
++ state->head.
++
++The recent commit to fix a gzip header extra field processing bug
++introduced the new bug fixed here.
++
++Backported from: 1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d
++Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
++---
++ inflate.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/inflate.c b/inflate.c
++index 7a7289749..2a3c4fe98 100644
++--- a/inflate.c
+++++ b/inflate.c
++@@ -763,10 +763,10 @@ int flush;
++                 copy = state->length;
++                 if (copy > have) copy = have;
++                 if (copy) {
++-                    len = state->head->extra_len - state->length;
++                     if (state->head != Z_NULL &&
++                         state->head->extra != Z_NULL &&
++-                        len < state->head->extra_max) {
+++                        (len = state->head->extra_len - state->length) <
+++                            state->head->extra_max) {
++                         zmemcpy(state->head->extra + len, next,
++                                 len + copy > state->head->extra_max ?
++                                 state->head->extra_max - len : copy);
+diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
+index 431c48739a..f75502326b 100644
+--- a/package/libzlib/libzlib.mk
++++ b/package/libzlib/libzlib.mk
+@@ -14,6 +14,9 @@ LIBZLIB_PROVIDES = zlib
+ LIBZLIB_CPE_ID_VENDOR = zlib
+ LIBZLIB_CPE_ID_PRODUCT = zlib
+ 
++# 0002-fix-CVE-2022-37434.patch
++LIBZLIB_IGNORE_CVES = CVE-2022-37434
++
+ # It is not possible to build only a shared version of zlib, so we build both
+ # shared and static, unless we only want the static libs, and we eventually
+ # selectively remove what we do not want
 -- 
-2.30.2
+2.25.1
 
 _______________________________________________
 buildroot mailing list
