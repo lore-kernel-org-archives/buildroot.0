@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8653FECAAA1
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:09:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D641EECAAA1
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3467461094;
-	Sun, 11 Sep 2022 09:09:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3467461094
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FC3B6FB57;
+	Sun, 11 Sep 2022 09:10:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FC3B6FB57
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ll-1OB51G6bl; Sun, 11 Sep 2022 09:09:48 +0000 (UTC)
+	with ESMTP id Fx2KHTctSGEd; Sun, 11 Sep 2022 09:10:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D6E060AFE;
-	Sun, 11 Sep 2022 09:09:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D6E060AFE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 909671BF368
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:49:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B54D46FB40;
+	Sun, 11 Sep 2022 09:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B54D46FB40
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 069401BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:49:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9DF216FB3E
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DF216FB3E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 56BB682404
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56BB682404
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L1J6MdLSI2yI for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2xe10_8W7AsJ for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFC706FB32
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFC706FB32
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4B22581415
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B22581415
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C7D8783624; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 41CE78361F; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 27 Aug 2022 11:15:30 +0200
+Date: Mon, 29 Aug 2022 21:16:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9e4a70dc2725c07e80cc74b7f325aba0f484e27
-X-Git-Newrev: 89d764720db365f55f725db1e2beecd134276c21
+X-Git-Oldrev: 26ebde7013ee1b291918b05a67d5b5bfdb59af32
+X-Git-Newrev: a39e0b95e1d927599e212098d1db4d2fafb2a35c
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084827.C7D8783624@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.65
+Message-Id: <20220911084828.41CE78361F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6/qt6base: add support for
+ concurrent module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,62 +56,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89d764720db365f55f725db1e2beecd134276c21
+commit: https://git.buildroot.net/buildroot/commit/?id=a39e0b95e1d927599e212098d1db4d2fafb2a35c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bluez 5.65 contains various fixes.
-
-Signed-off-by: Andrea Daoud <andreadaoud6@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
- package/bluez5_utils/bluez5_utils.hash               | 2 +-
- package/bluez5_utils/bluez5_utils.mk                 | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/qt6/qt6base/Config.in  | 5 +++++
+ package/qt6/qt6base/qt6base.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index 2f3a290ea8..565511120f 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
+index 68bca728e2..fe488f1cc9 100644
+--- a/package/qt6/qt6base/Config.in
++++ b/package/qt6/qt6base/Config.in
+@@ -17,6 +17,11 @@ config BR2_PACKAGE_QT6BASE
  
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.64
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.65
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 0324dd2d77..e0c9f3cdb9 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  ae437e65b6b3070c198bc5b0109fe9cdeb9eaa387380e2072f9de65fe8a1de34  bluez-5.64.tar.xz
-+sha256  2565a4d48354b576e6ad92e25b54ed66808296581c8abb80587051f9993d96d4  bluez-5.65.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 8e2c657899..76070dc3a9 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ if BR2_PACKAGE_QT6BASE
  
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.64
-+BLUEZ5_UTILS_VERSION = 5.65
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
++config BR2_PACKAGE_QT6BASE_CONCURRENT
++	bool "concurrent module"
++	help
++	  This options enables the Qt6Concurrent library.
++
+ config BR2_PACKAGE_QT6BASE_NETWORK
+ 	bool "network module"
+ 	help
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index a93e98e035..35ab516795 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -81,5 +81,11 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT6BASE_CONCURRENT),y)
++QT6BASE_CONF_OPTS += -DFEATURE_concurrent=ON
++else
++QT6BASE_CONF_OPTS += -DFEATURE_concurrent=OFF
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
