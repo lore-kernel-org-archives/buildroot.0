@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 720E6ECAAA1
-	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:14:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 334C1ECAAD8
+	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F5E18139F;
-	Tue, 30 Aug 2022 16:14:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F5E18139F
+	by smtp4.osuosl.org (Postfix) with ESMTP id D289D417A6;
+	Tue, 30 Aug 2022 16:15:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D289D417A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d2k_7FAUVD1u; Tue, 30 Aug 2022 16:14:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PmiurvIL3g5A; Tue, 30 Aug 2022 16:15:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F6498133B;
-	Tue, 30 Aug 2022 16:14:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F6498133B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C4BEB1BF3A8
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:14:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D5A3D4179E;
+	Tue, 30 Aug 2022 16:15:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5A3D4179E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E6D6E1BF3A8
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A03CC8133B
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:14:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A03CC8133B
+ by smtp3.osuosl.org (Postfix) with ESMTP id C260160FE5
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C260160FE5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Oxu7Rt8nobC for <buildroot@lists.busybox.net>;
- Tue, 30 Aug 2022 16:14:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74E7C812FE
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 74E7C812FE
- for <buildroot@buildroot.org>; Tue, 30 Aug 2022 16:14:49 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E4B6860002;
- Tue, 30 Aug 2022 16:14:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oT3t0-001Y10-2b; Tue, 30 Aug 2022 18:14:46 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gT1w_pdNguUE for <buildroot@lists.busybox.net>;
+ Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0A88060FE3
+ for <buildroot@buildroot.org>; Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A88060FE3
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 4814E88097; Tue, 30 Aug 2022 15:59:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: TIAN Yuanhao <tianyuanhao3@163.com>
-References: <20220727140822.355859-1-tianyuanhao3@163.com>
-Date: Tue, 30 Aug 2022 18:14:46 +0200
-In-Reply-To: <20220727140822.355859-1-tianyuanhao3@163.com> (TIAN Yuanhao's
- message of "Wed, 27 Jul 2022 07:08:22 -0700")
-Message-ID: <87fshd1zex.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/pkg-utils: refine
- KCONFIG_MUNGE_DOT_CONFIG
+To: buildroot@buildroot.org
+Date: Tue, 30 Aug 2022 18:02:24 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: a8d2f65334a29bc961dcb2bd47e0950aa1eef45d
+X-Git-Newrev: 207149b6230f6d4fb17c31db287e55e18909c98b
+X-Patchwork-Hint: ignore
+Message-Id: <20220830155958.4814E88097@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/postgis: drop
+ optional dependency on gdal
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,36 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "TIAN" == TIAN Yuanhao <tianyuanhao3@163.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=207149b6230f6d4fb17c31db287e55e18909c98b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
- > Given a .config with:
- >     FOO="1234"
- >     BAR="$(FOO)"
+The BR2_PACKAGE_LIBGDAL option does not exist, so drop this dead code,
+and unconditionally disable GDAL support.
 
- > and then:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d48af707737ece6242d58e83b98e5c601fa55acc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/postgis/postgis.mk | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
- >     $(call KCONFIG_SET_OPT,FOO,azerty)
-
- > would yield a .config with just:
-
- >     FOO="azerty"
-
- > because \<FOO\> would match the assignment to BAR.
-
- > Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
- > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+index b77071d03b..652e7951ae 100644
+--- a/package/postgis/postgis.mk
++++ b/package/postgis/postgis.mk
+@@ -19,14 +19,8 @@ POSTGIS_DEPENDENCIES = postgresql libgeos proj libxml2
+ POSTGIS_CONF_OPTS += \
+ 	--with-pgconfig=$(STAGING_DIR)/usr/bin/pg_config \
+ 	--with-geosconfig=$(STAGING_DIR)/usr/bin/geos-config \
+-	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config
+-
+-ifeq ($(BR2_PACKAGE_LIBGDAL),y)
+-POSTGIS_DEPENDENCIES += libgdal
+-POSTGIS_CONF_OPTS += --with-raster
+-else
+-POSTGIS_CONF_OPTS += --without-raster
+-endif
++	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config \
++	--without-raster
+ 
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
+ POSTGIS_DEPENDENCIES += json-c
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
