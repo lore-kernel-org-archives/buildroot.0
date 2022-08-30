@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E18BECAAA1
-	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:18:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C433AC3DA6B
+	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13CF4812D4;
-	Tue, 30 Aug 2022 16:18:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13CF4812D4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Wp3qVVvoPRq; Tue, 30 Aug 2022 16:18:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FF7881261;
-	Tue, 30 Aug 2022 16:18:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FF7881261
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BD3771BF3A8
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98E3660FE6
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98E3660FE6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75AF360FEF;
+	Tue, 30 Aug 2022 16:18:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75AF360FEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5o-V7ni5_6VA for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jtuR6NRGwf28; Tue, 30 Aug 2022 16:18:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7B3060FEA;
+	Tue, 30 Aug 2022 16:18:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7B3060FEA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C28041BF9BA
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AB5941776
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AB5941776
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mfSROoKrSdhB for <buildroot@lists.busybox.net>;
  Tue, 30 Aug 2022 16:15:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C71EF60FE3
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1E3541770
  for <buildroot@buildroot.org>; Tue, 30 Aug 2022 16:15:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C71EF60FE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1E3541770
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 10BDC880E2; Tue, 30 Aug 2022 16:00:07 +0000 (UTC)
+ id EE9E0880D3; Tue, 30 Aug 2022 16:00:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Aug 2022 17:57:06 +0200
+Date: Tue, 30 Aug 2022 17:52:57 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3ede0a9ef783bbecd278c98423c3d8382bed68e8
-X-Git-Newrev: c5210469c94554e1b491f5552794190ee96097cd
+X-Git-Oldrev: 47dc6a6917ca595d58a8607308d922551cfeca89
+X-Git-Newrev: 63e7b382a83b9e04d1bd23bfecb48e606d4d9d50
 X-Patchwork-Hint: ignore
-Message-Id: <20220830160007.10BDC880E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gdk-pixbuf: bump
- to version 2.42.8
+Message-Id: <20220830160006.EE9E0880D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/paho-mqtt-c:
+ sample file path without white-space
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,84 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5210469c94554e1b491f5552794190ee96097cd
+commit: https://git.buildroot.net/buildroot/commit/?id=63e7b382a83b9e04d1bd23bfecb48e606d4d9d50
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/blob/2.42.8/NEWS
+By default sample files are installed to share/doc/Eclipse Paho C/.
+The white-space can cause problems later down the line.
+Therefore the path is changed to the one used by paho-mqtt-c
+when configured to build the .deb package, which is share/doc/libpaho-mqtt.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Before:
+Install configuration: "Release"
+Installing: $(STAGING_DIR)/usr/share/doc/Eclipse Paho C/MQTTAsync_publish.c
+Installing: $(STAGING_DIR)/usr/share/doc/Eclipse Paho C/MQTTAsync_publish_time.c
+Installing: $(STAGING_DIR)/usr/share/doc/Eclipse Paho C/MQTTAsync_subscribe.c
+
+After:
+Install configuration: "Release"
+Installing: $(STAGING_DIR)/usr/share/doc/libpaho-mqtt/MQTTAsync_publish.c
+Installing: $(STAGING_DIR)/usr/share/doc/libpaho-mqtt/MQTTAsync_publish_time.c
+Installing: $(STAGING_DIR)/usr/share/doc/libpaho-mqtt/MQTTAsync_subscribe.c
+
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8237c5202e46260a945de474ecb6537d86a93991)
+(cherry picked from commit 51eedcf465581e06db3f487e4581bfc2dc45e326)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.hash |  4 ++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 22 +++++++++++-----------
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ package/paho-mqtt-c/paho-mqtt-c.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index 5e7dc7e03b..4bb246aa50 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
-@@ -1,3 +1,3 @@
--# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.4.sha256sum
--sha256  fe9c5dd88f486194ea2bc09b8814c1ed895bb6c530f37cbbf259757c4e482e4d  gdk-pixbuf-2.42.4.tar.xz
-+# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.8.sha256sum
-+sha256  84acea3acb2411b29134b32015a5b1aaa62844b19c4b1ef8b8971c6b0759f4c6  gdk-pixbuf-2.42.8.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 329c05520e..57e8bbd511 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index d6356a7ccc..1b6fc5785c 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -11,6 +11,7 @@ PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+ PAHO_MQTT_C_INSTALL_STAGING = YES
  
- GDK_PIXBUF_VERSION_MAJOR = 2.42
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).4
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).8
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPL-2.1+
-@@ -41,30 +41,30 @@ GDK_PIXBUF_CONF_OPTS += -Dintrospection=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
--GDK_PIXBUF_CONF_OPTS += -Dpng=true
-+GDK_PIXBUF_CONF_OPTS += -Dpng=enabled
- GDK_PIXBUF_DEPENDENCIES += libpng
- else
--GDK_PIXBUF_CONF_OPTS += -Dpng=false
-+GDK_PIXBUF_CONF_OPTS += -Dpng=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_JPEG),y)
--GDK_PIXBUF_CONF_OPTS += -Djpeg=true
--HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=true
-+GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
- GDK_PIXBUF_DEPENDENCIES += jpeg
- HOST_GDK_PIXBUF_DEPENDENCIES += host-libjpeg
- else
--GDK_PIXBUF_CONF_OPTS += -Djpeg=false
--HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=false
-+GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_TIFF),y)
--GDK_PIXBUF_CONF_OPTS += -Dtiff=true
--HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=true
-+GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
- GDK_PIXBUF_DEPENDENCIES += tiff
- HOST_GDK_PIXBUF_DEPENDENCIES += host-tiff
- else
--GDK_PIXBUF_CONF_OPTS += -Dtiff=false
--HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=false
-+GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
- endif
- 
- # gdk-pixbuf requires the loaders.cache file populated to work properly
+ PAHO_MQTT_C_CONF_OPTS = \
++	-DCMAKE_INSTALL_DOCDIR=share/doc/libpaho-mqtt \
+ 	-DPAHO_ENABLE_TESTING=FALSE \
+ 	-DPAHO_ENABLE_CPACK=FALSE \
+ 	-DPAHO_HIGH_PERFORMANCE=TRUE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
