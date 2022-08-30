@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23CB5ECAAA1
-	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:16:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83452ECAAD8
+	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A72266103D;
-	Tue, 30 Aug 2022 16:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A72266103D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XJ21dbzWQrfV; Tue, 30 Aug 2022 16:16:10 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26AC960FF3;
-	Tue, 30 Aug 2022 16:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26AC960FF3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 589581BF3A8
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC5A840BAB
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC5A840BAB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 218EB40BA7;
+	Tue, 30 Aug 2022 16:16:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 218EB40BA7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3jK2ys8XVdpK for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GywlAVITJ5UI; Tue, 30 Aug 2022 16:16:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3040040A79;
+	Tue, 30 Aug 2022 16:16:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3040040A79
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0773C1BF3A8
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7901A8137A
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7901A8137A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GNzS6q80oDkU for <buildroot@lists.busybox.net>;
  Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA588400CB
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFFD4813A1
  for <buildroot@buildroot.org>; Tue, 30 Aug 2022 16:15:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA588400CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFFD4813A1
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 333DC88096; Tue, 30 Aug 2022 15:59:58 +0000 (UTC)
+ id 12D7788097; Tue, 30 Aug 2022 15:59:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Aug 2022 17:59:43 +0200
+Date: Tue, 30 Aug 2022 17:56:38 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 2a7a38573b6572d96c0282cb7f30b3e779e3713b
-X-Git-Newrev: 6d5d5c0693fd72a7585ffb25ef6e0cc89e45b327
+X-Git-Oldrev: 6d032404275b9840100f8da8c1b7ef6f41419b64
+X-Git-Newrev: 9d2111fbfb92bb78c6ad7184ef2ad047e8178c1f
 X-Patchwork-Hint: ignore
-Message-Id: <20220830155958.333DC88096@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/sconeserver: add
- sqlite optional dependency
+Message-Id: <20220830155958.12D7788097@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/gdk-pixbuf: bump
+ to version 2.42.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +63,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d5d5c0693fd72a7585ffb25ef6e0cc89e45b327
+commit: https://git.buildroot.net/buildroot/commit/?id=9d2111fbfb92bb78c6ad7184ef2ad047e8178c1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-sqlite is an optional dependency which is enabled by default since
-https://github.com/sconemad/sconeserver/commit/4120395991c2c63abef58426beee4ecf5879c204
+https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/blob/2.42.8/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 117b15866a1d1b87adc87b95768f2a0a62b13905)
+(cherry picked from commit 8237c5202e46260a945de474ecb6537d86a93991)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sconeserver/Config.in      | 6 ++++++
- package/sconeserver/sconeserver.mk | 7 +++++++
- 2 files changed, 13 insertions(+)
+ package/gdk-pixbuf/gdk-pixbuf.hash |  4 ++--
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 22 +++++++++++-----------
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index 4ade8b4590..eed777ae96 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -76,6 +76,12 @@ config BR2_PACKAGE_SCONESERVER_RSS
- 	help
- 	  RSS module for Sconeserver
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 5e7dc7e03b..4bb246aa50 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,3 +1,3 @@
+-# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.4.sha256sum
+-sha256  fe9c5dd88f486194ea2bc09b8814c1ed895bb6c530f37cbbf259757c4e482e4d  gdk-pixbuf-2.42.4.tar.xz
++# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.8.sha256sum
++sha256  84acea3acb2411b29134b32015a5b1aaa62844b19c4b1ef8b8971c6b0759f4c6  gdk-pixbuf-2.42.8.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 329c05520e..57e8bbd511 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+config BR2_PACKAGE_SCONESERVER_SQLITE
-+	bool "sqlite"
-+	select BR2_PACKAGE_SQLITE
-+	help
-+	  SQLite module for Sconeserver
-+
- config BR2_PACKAGE_SCONESERVER_TESTBUILDER
- 	bool "testbuilder"
- 	help
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index bad050210e..fd7e6774eb 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -91,6 +91,13 @@ else
- SCONESERVER_CONF_OPTS += --without-rss
+ GDK_PIXBUF_VERSION_MAJOR = 2.42
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).4
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).8
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPL-2.1+
+@@ -41,30 +41,30 @@ GDK_PIXBUF_CONF_OPTS += -Dintrospection=disabled
  endif
  
-+ifeq ($(BR2_PACKAGE_SCONESERVER_SQLITE),y)
-+SCONESERVER_DEPENDENCIES += sqlite
-+SCONESERVER_CONF_OPTS += --with-sqlite
-+else
-+SCONESERVER_CONF_OPTS += --without-sqlite
-+endif
-+
- ifeq ($(BR2_PACKAGE_SCONESERVER_TESTBUILDER),y)
- SCONESERVER_CONF_OPTS += --with-testbuilder
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+-GDK_PIXBUF_CONF_OPTS += -Dpng=true
++GDK_PIXBUF_CONF_OPTS += -Dpng=enabled
+ GDK_PIXBUF_DEPENDENCIES += libpng
  else
+-GDK_PIXBUF_CONF_OPTS += -Dpng=false
++GDK_PIXBUF_CONF_OPTS += -Dpng=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+-GDK_PIXBUF_CONF_OPTS += -Djpeg=true
+-HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=true
++GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
++HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
+ GDK_PIXBUF_DEPENDENCIES += jpeg
+ HOST_GDK_PIXBUF_DEPENDENCIES += host-libjpeg
+ else
+-GDK_PIXBUF_CONF_OPTS += -Djpeg=false
+-HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=false
++GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
++HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+-GDK_PIXBUF_CONF_OPTS += -Dtiff=true
+-HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=true
++GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
++HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
+ GDK_PIXBUF_DEPENDENCIES += tiff
+ HOST_GDK_PIXBUF_DEPENDENCIES += host-tiff
+ else
+-GDK_PIXBUF_CONF_OPTS += -Dtiff=false
+-HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=false
++GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
++HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
+ endif
+ 
+ # gdk-pixbuf requires the loaders.cache file populated to work properly
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
