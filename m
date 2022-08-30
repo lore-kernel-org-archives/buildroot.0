@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E579CECAAA1
-	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 15:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA203ECAAD1
+	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 15:57:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7584181310;
-	Tue, 30 Aug 2022 15:54:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7584181310
+	by smtp1.osuosl.org (Postfix) with ESMTP id 718B481AAD;
+	Tue, 30 Aug 2022 15:57:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 718B481AAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KnGJRnyBPYrD; Tue, 30 Aug 2022 15:54:35 +0000 (UTC)
+	with ESMTP id 0Brhq-fTlJcE; Tue, 30 Aug 2022 15:57:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 376F281A1C;
-	Tue, 30 Aug 2022 15:54:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 376F281A1C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D2D61BF3DA
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 15:54:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9852F81A2B;
+	Tue, 30 Aug 2022 15:57:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9852F81A2B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BF8521BF3DA
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 15:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0533681A1C
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 15:54:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0533681A1C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 997CC60FE2
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 15:57:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 997CC60FE2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jT7GkfeqdF9o for <buildroot@lists.busybox.net>;
- Tue, 30 Aug 2022 15:54:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cc9Eho709NiW for <buildroot@lists.busybox.net>;
+ Tue, 30 Aug 2022 15:57:22 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D94FE81310
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D94FE81310
- for <buildroot@buildroot.org>; Tue, 30 Aug 2022 15:54:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69BDF60FDF
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 69BDF60FDF
+ for <buildroot@buildroot.org>; Tue, 30 Aug 2022 15:57:22 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C9E1C40007;
- Tue, 30 Aug 2022 15:54:28 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 080CEE0009;
+ Tue, 30 Aug 2022 15:57:18 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oT3ZL-001Wor-Ss; Tue, 30 Aug 2022 17:54:27 +0200
+ id 1oT3c5-001Wzl-Un; Tue, 30 Aug 2022 17:57:17 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220727085023.876407-1-fontaine.fabrice@gmail.com>
-Date: Tue, 30 Aug 2022 17:54:27 +0200
-In-Reply-To: <20220727085023.876407-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 27 Jul 2022 10:50:23 +0200")
-Message-ID: <87v8q93ex8.fsf@dell.be.48ers.dk>
+References: <20220727091607.979180-1-fontaine.fabrice@gmail.com>
+Date: Tue, 30 Aug 2022 17:57:17 +0200
+In-Reply-To: <20220727091607.979180-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 27 Jul 2022 11:16:07 +0200")
+Message-ID: <87r10x3esi.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/pulseaudio: drop ncurses
- dependency
+Subject: Re: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: bump to version
+ 2.42.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +64,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -72,12 +72,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > ncurses dependency was wrongly added by commit
- > a6d88d3ba5e30e11f4d726f341bc56c1be7c71c9
-
+ > https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/blob/2.42.8/NEWS
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Committed to 2022.05.x and 2022.02.x given the fixes, thanks.
 
 -- 
 Bye, Peter Korsgaard
