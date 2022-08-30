@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AEB4ECAAD1
-	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:17:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82058ECAAA1
+	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:17:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ACE2140BAE;
-	Tue, 30 Aug 2022 16:17:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACE2140BAE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 298C740BC6;
+	Tue, 30 Aug 2022 16:17:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 298C740BC6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id okMMJ-Ywsgq1; Tue, 30 Aug 2022 16:17:13 +0000 (UTC)
+	with ESMTP id Z50-i0PaEthl; Tue, 30 Aug 2022 16:17:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A291040BA7;
-	Tue, 30 Aug 2022 16:17:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A291040BA7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 232B61BF9BA
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A2CE40BA9;
+	Tue, 30 Aug 2022 16:17:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A2CE40BA9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 101DF1BF3A8
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E25E41770
+ by smtp2.osuosl.org (Postfix) with ESMTP id 014D840B8B
  for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E25E41770
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 014D840B8B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zD5lrH8gT8dl for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lWD7xgbkmk5f for <buildroot@lists.busybox.net>;
  Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6FE941772
- for <buildroot@buildroot.org>; Tue, 30 Aug 2022 16:15:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6FE941772
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B70640BAE
+ for <buildroot@buildroot.org>; Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B70640BAE
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1D6B388098; Tue, 30 Aug 2022 15:59:58 +0000 (UTC)
+ id 660BE88098; Tue, 30 Aug 2022 15:59:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Aug 2022 17:58:11 +0200
+Date: Tue, 30 Aug 2022 18:07:58 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 9d2111fbfb92bb78c6ad7184ef2ad047e8178c1f
-X-Git-Newrev: 6b29f656a35b268dc7621aef44c37125d3c17549
+X-Git-Oldrev: 839106302e8ef95373ea9db1f6d70eb91ef3f2d0
+X-Git-Newrev: c3983b5e8c027e64c41a9fa4b6c86d2ca2d75b7a
 X-Patchwork-Hint: ignore
-Message-Id: <20220830155958.1D6B388098@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/jszip: security
- bump to version 3.10.0
+Message-Id: <20220830155958.660BE88098@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/jack2: libsndfile
+ is optional, not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,122 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b29f656a35b268dc7621aef44c37125d3c17549
+commit: https://git.buildroot.net/buildroot/commit/?id=c3983b5e8c027e64c41a9fa4b6c86d2ca2d75b7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
-
-- Santize filenames when files are loaded with loadAsync, to avoid "zip
-  slip" attacks. The original filename is available on each zip entry as
-  unsafeOriginalName. See the documentation.
-- Drop patch (already in version)
-- Update hash of license file (dual licensing clarification with
-  https://github.com/Stuk/jszip/commit/f81c2d700d8e5fec4ed89fb565e4a266bb4dd26e)
-- Update indentation in hash file (two spaces)
-
-https://github.com/Stuk/jszip/blob/v3.10.0/CHANGES.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fe522b9c17f2579a3c698354aa326962311053f2)
+(cherry picked from commit 69284b6700e5f45e25a583e87b86ed1eb95038fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...se-a-null-prototype-object-for-this-files.patch | 56 ----------------------
- package/jszip/jszip.hash                           |  4 +-
- package/jszip/jszip.mk                             |  5 +-
- 3 files changed, 3 insertions(+), 62 deletions(-)
+ package/jack2/Config.in | 1 -
+ package/jack2/jack2.mk  | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/jszip/0001-fix-Use-a-null-prototype-object-for-this-files.patch b/package/jszip/0001-fix-Use-a-null-prototype-object-for-this-files.patch
-deleted file mode 100644
-index 969db5b403..0000000000
---- a/package/jszip/0001-fix-Use-a-null-prototype-object-for-this-files.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 22357494f424178cb416cdb7d93b26dd4f824b36 Mon Sep 17 00:00:00 2001
--From: Michael Aquilina <michaelaquilina@gmail.com>
--Date: Mon, 14 Jun 2021 12:28:46 +0100
--Subject: [PATCH] fix: Use a null prototype object for this.files
--
--This approach is taken to prevent overriding object methods that would
--exist on a normal object Object.create({})
--
--[Retrieved from:
--https://github.com/Stuk/jszip/commit/22357494f424178cb416cdb7d93b26dd4f824b36]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- lib/index.js  | 5 ++++-
-- lib/object.js | 6 +++---
-- 2 files changed, 7 insertions(+), 4 deletions(-)
--
--diff --git a/lib/index.js b/lib/index.js
--index b449877..b4c95ba 100644
----- a/lib/index.js
--+++ b/lib/index.js
--@@ -19,7 +19,10 @@ function JSZip() {
--     //   "folder/" : {...},
--     //   "folder/data.txt" : {...}
--     // }
---    this.files = {};
--+    // NOTE: we use a null prototype because we do not
--+    // want filenames like "toString" coming from a zip file
--+    // to overwrite methods and attributes in a normal Object.
--+    this.files = Object.create(null);
-- 
--     this.comment = null;
-- 
--diff --git a/lib/object.js b/lib/object.js
--index 1c9d8e8..aec3db7 100644
----- a/lib/object.js
--+++ b/lib/object.js
--@@ -179,16 +179,16 @@ var out = {
--      */
--     forEach: function(cb) {
--         var filename, relativePath, file;
--+        /* jshint ignore:start */
--+        // ignore warning about unwanted properties because this.files is a null prototype object
--         for (filename in this.files) {
---            if (!this.files.hasOwnProperty(filename)) {
---                continue;
---            }
--             file = this.files[filename];
--             relativePath = filename.slice(this.root.length, filename.length);
--             if (relativePath && filename.slice(0, this.root.length) === this.root) { // the file is in the current root
--                 cb(relativePath, file); // TODO reverse the parameters ? need to be clean AND consistent with the filter search fn...
--             }
--         }
--+        /* jshint ignore:end */
--     },
-- 
--     /**
-diff --git a/package/jszip/jszip.hash b/package/jszip/jszip.hash
-index 13a2076ade..d0c56a44ab 100644
---- a/package/jszip/jszip.hash
-+++ b/package/jszip/jszip.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	e5343decfb781b15c54c0df9ddedd6c8518c800a4667a0a95741c694a4f38d34  jszip-3.2.2.tar.gz
--sha256	14450c78405ad2a2173e25740b56406556779149df9c4c83523a8c63d0686210  LICENSE.markdown
-+sha256  aa3033c6bb5357a0b0965c92fbdb6d6abe64676e70ffa7933b63c573ab79ee45  jszip-3.10.0.tar.gz
-+sha256  566c953c6090b1218ca6217dd7359d45dde46581968586dc607d59a78af6a9c4  LICENSE.markdown
-diff --git a/package/jszip/jszip.mk b/package/jszip/jszip.mk
-index a93766be11..3504368675 100644
---- a/package/jszip/jszip.mk
-+++ b/package/jszip/jszip.mk
-@@ -4,15 +4,12 @@
- #
- ################################################################################
+diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+index e02449ba87..f5ac0399eb 100644
+--- a/package/jack2/Config.in
++++ b/package/jack2/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_JACK2
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_HWDEP
+ 	select BR2_PACKAGE_ALSA_LIB_SEQ
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 4059fa689c..3b45474cc4 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -9,7 +9,7 @@ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK2_LICENSE_FILES = COPYING
+ JACK2_CPE_ID_VENDOR = jackaudio
+-JACK2_DEPENDENCIES = libsndfile alsa-lib
++JACK2_DEPENDENCIES = alsa-lib
+ JACK2_INSTALL_STAGING = YES
  
--JSZIP_VERSION = 3.2.2
-+JSZIP_VERSION = 3.10.0
- JSZIP_SITE = $(call github,Stuk,jszip,v$(JSZIP_VERSION))
- JSZIP_LICENSE = MIT or GPL-3.0
- JSZIP_LICENSE_FILES = LICENSE.markdown
- JSZIP_CPE_ID_VENDOR = jszip_project
+ JACK2_CONF_OPTS = --alsa
+@@ -26,6 +26,13 @@ else
+ JACK2_CONF_OPTS += --samplerate=no
+ endif
  
--# 0001-fix-Use-a-null-prototype-object-for-this-files.patch
--JSZIP_IGNORE_CVES += CVE-2021-23413
--
- define JSZIP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/dist/jszip.min.js \
- 		$(TARGET_DIR)/var/www/jszip/js/jszip.min.js
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++JACK2_DEPENDENCIES += libsndfile
++JACK2_CONF_OPTS += --sndfile=yes
++else
++JACK2_CONF_OPTS += --sndfile=no
++endif
++
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ JACK2_DEPENDENCIES += opus
+ JACK2_CONF_OPTS += --opus=yes
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
