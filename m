@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83452ECAAD8
-	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:16:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5D9FECAAD1
+	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:16:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 218EB40BA7;
-	Tue, 30 Aug 2022 16:16:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 218EB40BA7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75D1840BB5;
+	Tue, 30 Aug 2022 16:16:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75D1840BB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GywlAVITJ5UI; Tue, 30 Aug 2022 16:16:23 +0000 (UTC)
+	with ESMTP id 5M8CVC541bzC; Tue, 30 Aug 2022 16:16:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3040040A79;
-	Tue, 30 Aug 2022 16:16:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3040040A79
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0773C1BF3A8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7853A40BB6;
+	Tue, 30 Aug 2022 16:16:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7853A40BB6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 123801BF9BA
  for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7901A8137A
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7901A8137A
+ by smtp2.osuosl.org (Postfix) with ESMTP id C0B7C40BB5
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0B7C40BB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GNzS6q80oDkU for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3uX6SvaR-uyF for <buildroot@lists.busybox.net>;
  Tue, 30 Aug 2022 16:15:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CFFD4813A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 021A340B8B
  for <buildroot@buildroot.org>; Tue, 30 Aug 2022 16:15:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFFD4813A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 021A340B8B
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 12D7788097; Tue, 30 Aug 2022 15:59:58 +0000 (UTC)
+ id 3E11E8809C; Tue, 30 Aug 2022 15:59:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Aug 2022 17:56:38 +0200
+Date: Tue, 30 Aug 2022 18:01:33 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 6d032404275b9840100f8da8c1b7ef6f41419b64
-X-Git-Newrev: 9d2111fbfb92bb78c6ad7184ef2ad047e8178c1f
+X-Git-Oldrev: 6d5d5c0693fd72a7585ffb25ef6e0cc89e45b327
+X-Git-Newrev: a8d2f65334a29bc961dcb2bd47e0950aa1eef45d
 X-Patchwork-Hint: ignore
-Message-Id: <20220830155958.12D7788097@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/gdk-pixbuf: bump
- to version 2.42.8
+Message-Id: <20220830155958.3E11E8809C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] DEVELOPERS: drop myself
+ from Pulseaudio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,84 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d2111fbfb92bb78c6ad7184ef2ad047e8178c1f
+commit: https://git.buildroot.net/buildroot/commit/?id=a8d2f65334a29bc961dcb2bd47e0950aa1eef45d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/blob/2.42.8/NEWS
+I am not using this package anymore.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8237c5202e46260a945de474ecb6537d86a93991)
+(cherry picked from commit 9912d438afdd388d580ee094b8e1b1eb4bb6c53b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.hash |  4 ++--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 22 +++++++++++-----------
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index 5e7dc7e03b..4bb246aa50 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
-@@ -1,3 +1,3 @@
--# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.4.sha256sum
--sha256  fe9c5dd88f486194ea2bc09b8814c1ed895bb6c530f37cbbf259757c4e482e4d  gdk-pixbuf-2.42.4.tar.xz
-+# From https://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.8.sha256sum
-+sha256  84acea3acb2411b29134b32015a5b1aaa62844b19c4b1ef8b8971c6b0759f4c6  gdk-pixbuf-2.42.8.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 329c05520e..57e8bbd511 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GDK_PIXBUF_VERSION_MAJOR = 2.42
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).4
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).8
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPL-2.1+
-@@ -41,30 +41,30 @@ GDK_PIXBUF_CONF_OPTS += -Dintrospection=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
--GDK_PIXBUF_CONF_OPTS += -Dpng=true
-+GDK_PIXBUF_CONF_OPTS += -Dpng=enabled
- GDK_PIXBUF_DEPENDENCIES += libpng
- else
--GDK_PIXBUF_CONF_OPTS += -Dpng=false
-+GDK_PIXBUF_CONF_OPTS += -Dpng=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_JPEG),y)
--GDK_PIXBUF_CONF_OPTS += -Djpeg=true
--HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=true
-+GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=enabled
- GDK_PIXBUF_DEPENDENCIES += jpeg
- HOST_GDK_PIXBUF_DEPENDENCIES += host-libjpeg
- else
--GDK_PIXBUF_CONF_OPTS += -Djpeg=false
--HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=false
-+GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_TIFF),y)
--GDK_PIXBUF_CONF_OPTS += -Dtiff=true
--HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=true
-+GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=enabled
- GDK_PIXBUF_DEPENDENCIES += tiff
- HOST_GDK_PIXBUF_DEPENDENCIES += host-tiff
- else
--GDK_PIXBUF_CONF_OPTS += -Dtiff=false
--HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=false
-+GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
-+HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=disabled
- endif
- 
- # gdk-pixbuf requires the loaders.cache file populated to work properly
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9f71ea89db..f9c519a14a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -428,7 +428,6 @@ F:	package/php/
+ F:	package/pixman/
+ F:	package/pngquant/
+ F:	package/pound/
+-F:	package/pulseaudio/
+ F:	package/pure-ftpd/
+ F:	package/python-couchdb/
+ F:	package/python-cssutils/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
