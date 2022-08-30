@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DABB7ECAAA1
-	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:20:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1F22ECAAD1
+	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 16:20:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F03A4174F;
-	Tue, 30 Aug 2022 16:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F03A4174F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DFF760FFC;
+	Tue, 30 Aug 2022 16:20:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DFF760FFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oRa9qmtR6kvE; Tue, 30 Aug 2022 16:20:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lc1UsMNMLRZo; Tue, 30 Aug 2022 16:20:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67760415DF;
-	Tue, 30 Aug 2022 16:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67760415DF
+	by smtp3.osuosl.org (Postfix) with ESMTP id B07C660FF8;
+	Tue, 30 Aug 2022 16:20:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B07C660FF8
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0986B1BF3A8
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 160061BF3A8
+ for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7342A40BB1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7331F40BAE
  for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 16:15:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7342A40BB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7331F40BAE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id glqVdvVf9jvq for <buildroot@lists.busybox.net>;
+ with ESMTP id Ip3_0Nv5yv6E for <buildroot@lists.busybox.net>;
  Tue, 30 Aug 2022 16:15:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37A3040BC9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C01540BB8
  for <buildroot@buildroot.org>; Tue, 30 Aug 2022 16:15:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37A3040BC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C01540BB8
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 81C09880D3; Tue, 30 Aug 2022 16:00:07 +0000 (UTC)
+ id 76D3F880E1; Tue, 30 Aug 2022 16:00:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 30 Aug 2022 18:09:18 +0200
+Date: Tue, 30 Aug 2022 18:09:13 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 342993ed87bb5e40517dbc20f9b99181806b18ad
-X-Git-Newrev: dd0e1dede47c53199693696c4b9467147576f5b5
+X-Git-Oldrev: dbf8744aff6c316894923dc68a0977194f229337
+X-Git-Newrev: 342993ed87bb5e40517dbc20f9b99181806b18ad
 X-Patchwork-Hint: ignore
-Message-Id: <20220830160007.81C09880D3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/jack2: add
- systemd optional dependency
+Message-Id: <20220830160007.76D3F880E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/jack2: libsndfile
+ is optional, not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd0e1dede47c53199693696c4b9467147576f5b5
+commit: https://git.buildroot.net/buildroot/commit/?id=342993ed87bb5e40517dbc20f9b99181806b18ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
-
-Add systemd optional dependency (enabled by default)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 166ea61fb4400f9d1b23a89a7a2c1c6fbee62327)
+(cherry picked from commit 69284b6700e5f45e25a583e87b86ed1eb95038fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jack2/jack2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/jack2/Config.in | 1 -
+ package/jack2/jack2.mk  | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
+diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+index e02449ba87..f5ac0399eb 100644
+--- a/package/jack2/Config.in
++++ b/package/jack2/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_JACK2
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_HWDEP
+ 	select BR2_PACKAGE_ALSA_LIB_SEQ
 diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index 3b45474cc4..73f723aef0 100644
+index 4059fa689c..3b45474cc4 100644
 --- a/package/jack2/jack2.mk
 +++ b/package/jack2/jack2.mk
-@@ -47,6 +47,13 @@ else
- JACK2_CONF_OPTS += --readline=no
+@@ -9,7 +9,7 @@ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK2_LICENSE_FILES = COPYING
+ JACK2_CPE_ID_VENDOR = jackaudio
+-JACK2_DEPENDENCIES = libsndfile alsa-lib
++JACK2_DEPENDENCIES = alsa-lib
+ JACK2_INSTALL_STAGING = YES
+ 
+ JACK2_CONF_OPTS = --alsa
+@@ -26,6 +26,13 @@ else
+ JACK2_CONF_OPTS += --samplerate=no
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+JACK2_DEPENDENCIES += systemd
-+JACK2_CONF_OPTS += --systemd=yes
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++JACK2_DEPENDENCIES += libsndfile
++JACK2_CONF_OPTS += --sndfile=yes
 +else
-+JACK2_CONF_OPTS += --systemd=no
++JACK2_CONF_OPTS += --sndfile=no
 +endif
 +
- ifeq ($(BR2_PACKAGE_JACK2_LEGACY),y)
- JACK2_CONF_OPTS += --classic
- else
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ JACK2_DEPENDENCIES += opus
+ JACK2_CONF_OPTS += --opus=yes
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
