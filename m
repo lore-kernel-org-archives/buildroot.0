@@ -1,72 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3057ECAAD4
-	for <buildroot@archiver.kernel.org>; Wed, 31 Aug 2022 19:44:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1710ECAAD4
+	for <buildroot@archiver.kernel.org>; Wed, 31 Aug 2022 20:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6220361132;
-	Wed, 31 Aug 2022 19:44:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6220361132
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D7E98330B;
+	Wed, 31 Aug 2022 20:10:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D7E98330B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HepdE5J0QaSJ; Wed, 31 Aug 2022 19:44:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SD8LWdWvPfn0; Wed, 31 Aug 2022 20:10:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 814CC60B67;
-	Wed, 31 Aug 2022 19:44:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 814CC60B67
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 944F41BF2BC
- for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 19:44:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B37D082B97;
+	Wed, 31 Aug 2022 20:10:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B37D082B97
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 080EA1BF422
+ for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 20:10:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E0A441872
- for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 19:44:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E0A441872
+ by smtp1.osuosl.org (Postfix) with ESMTP id E44FF83300
+ for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 20:10:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E44FF83300
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ogqFEoOIwoDK for <buildroot@lists.busybox.net>;
- Wed, 31 Aug 2022 19:44:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F3A417B2
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 18F3A417B2
- for <buildroot@buildroot.org>; Wed, 31 Aug 2022 19:44:17 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:a07:37d4:42bb:3116])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 7745013F8B3;
- Wed, 31 Aug 2022 21:44:11 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 31 Aug 2022 21:44:11 +0200
-Date: Wed, 31 Aug 2022 21:44:11 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-Message-ID: <20220831194411.GJ68979@scaer>
-References: <20220829171820.130690-1-marcus.hoffmann@othermo.de>
- <20220831194243.GH68979@scaer>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220831194243.GH68979@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1661975055;
- bh=zQFkqqdAvuXgrbObbeKdch69qfTO4qmfr3kx5bpDh34=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nZRXJQOYvPzEyoQpAEtPb18Ukoh4348fJz3pWlqOB4LMvTmCMzbdiTOA1cPGdPv5g
- QNHrfcJmen5iiUWqNff/LILO1REblbZ7K9wB9HXf53ve02ihYhK9qRT2BucNk65KW/
- BgOOxmOQPw4fdUktnolLByIWkH9JXxUurtN+FkF/L2B2OfB0j7V70oYLwwO2W4EvlU
- LW8CujzrGjNmqQrvchbkLx4MWwMDBi9subAAsrShLISaImC2fw4+f4VDolsv1eL2Xf
- hSqC7/ZGFkYhISknz5RhvlT7HNOfIgmhFVunr62uDI5GuZkuta3U9M0KVLpUYiElbt
- prRTAcCKLvfig==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nZRXJQOY
-Subject: Re: [Buildroot] [next v2 2/2]
- support/testing/tests/package/test_python_paho_mqtt: new runtime test
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ezME0XOvBf7O for <buildroot@lists.busybox.net>;
+ Wed, 31 Aug 2022 20:10:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C49082B97
+ for <buildroot@buildroot.org>; Wed, 31 Aug 2022 20:10:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C49082B97
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id B93408819D; Wed, 31 Aug 2022 19:54:55 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 31 Aug 2022 22:08:58 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: f05c1f5da4c599dd01a24e1d534a540d56c159d3
+X-Git-Newrev: 6c872197f412b011ceefc6fb5ebbb34f2fb00c15
+X-Patchwork-Hint: ignore
+Message-Id: <20220831195455.B93408819D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] Update for 2022.02.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,110 +56,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Davide Viti <zinosat@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Marcus, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6c872197f412b011ceefc6fb5ebbb34f2fb00c15
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-On 2022-08-31 21:42 +0200, Yann E. MORIN spake thusly:
-> Markus, All,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                  | 34 ++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 37 insertions(+), 3 deletions(-)
 
-Sorry for the typo, Marcus, sorry.. :-/
-
-Regards,
-Yann E. MORIN.
-
-> On 2022-08-29 19:18 +0200, Marcus Hoffmann spake thusly:
-> > Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-> > Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > ---
-> [--SNIP--]
-> > diff --git a/support/testing/tests/package/test_python_paho_mqtt.py b/support/testing/tests/package/test_python_paho_mqtt.py
-> > new file mode 100644
-> > index 0000000000..b1e2b8fb42
-> > --- /dev/null
-> > +++ b/support/testing/tests/package/test_python_paho_mqtt.py
-> > @@ -0,0 +1,29 @@
-> [--SNIP--]
-> > +    def test_run(self):
-> > +        self.login()
-> > +        self.check_sample_scripts_exist()
-> > +        cmd = "mosquitto > /dev/null 2>&1 &"
-> > +        _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-> 
-> No need to manually start it, it is already started with a startu
-> script, as can be seen n the run log:
-> 
->     Starting mosquitto: OK
-> 
-> And indeed, manually running the qemu on the test image, and trying to
-> launch mosquitto yields an error:
-> 
->     [...]
->     Starting network: OK
->     Starting mosquitto: OK
-> 
->     Welcome to Buildroot
->     buildroot login: root
->     # mosquitto
->     [...]
->     11: Opening ipv4 listen socket on port 1883.
->     11: Error: Address already in use
->     11: Opening ipv6 listen socket on port 1883.
->     11: Error: Address already in use
-> 
-> So I dropped, that.
-> 
-> > +        # Give some time for mosquitto broker to start up
-> > +        time.sleep(1)
-> 
-> And thus, that too.
-> 
-> > +        cmd = "%s %s" % (self.interpreter, os.path.basename(self.sample_scripts[0]))
-> > +        output, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-> 
-> The test class does not provide its own timeout, so it inherits the one
-> from its base classs, which defines it as -1, which means no timeout, as
-> is the default for emulator.run(), so I also dropped it.
-> 
-> Applied to master with the above changes, thanks.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > +        self.assertEqual(exit_code, 0)
-> > +        self.assertEqual(output[0], "Hello, World!")
-> > -- 
-> > 2.25.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/CHANGES b/CHANGES
+index dc5edc1cdf..4d7076e908 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,37 @@
++2022.02.5, released August 31st, 2022
++
++	Important / security related fixes.
++
++	dependencies: Ensure 'cmp' is available on the build host.
++
++	pkg-utils: The KCONFIG_ENABLE_OPT macro used to enforce a specific
++	Kconfig option to be enabled (E.G. for kernel options needed by
++	packages) no longer changes a =m (modular) with =y (built in).
++
++	check-host-rpath: Silence readelf warnings when clang is used
++
++	GCC 10.x updated to 10.4.0
++
++	Updated/fixed packages: apg, arm-trusted-firmware, assimp,
++	bayer2rgb-neon, bind, bird, cog, cwiid, diffutils, fluidsynth,
++	freerdp, gcc, glibc, glslsandbox-player, gdk-pixbuf, gnupg2,
++	gtest, i2pd, jack2, jquery-validation, jszip, libbsd, libcamera,
++	libcurl, libest, libiio, libkrb5, libopenssl, libpsl,
++	luasyslog, lxc, mbedtls, mstpd, mutt, netdata, netsniff-ng,
++	nodejs, nvidia-driver, openssl, opkg-utils, paho-mqtt-c,
++	pango, pcsc-lite, perl, pimd, poppler, postgis, powerpc-utils,
++	pppd, protobuf-c, pulseaudio, python-bottle, python-django,
++	python-lxml, python3, qt5webkit, rpi-userland, rsyslog, runc,
++	rustc, sconeserver, sg3_utils, shadowsocks-libev, suricata,
++	tcpreplay, uacme, uclibc, v4l2loopback,, webkitgtk, wine,
++	wpewebkit, xdg-dbus-proxy, xserver_xorg-server, zeromq, zfs,
++	zlib-ng
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13796: Problems compiling package gst-plugins-good
++	#14926: package/nodejs: build for host fails with GTEST errors
++
+ 2022.02.4, released July 28th, 2022
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index e14bb8f1ec..17f2f912a4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2022.02.4
++export BR2_VERSION := 2022.02.5
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1659087600
++BR2_VERSION_EPOCH = 1661977000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 4415f94418..cf6192a9d6 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2022.02.4'
++RELEASE='2022.02.5'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
