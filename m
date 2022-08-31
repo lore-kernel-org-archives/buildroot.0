@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1710ECAAD4
-	for <buildroot@archiver.kernel.org>; Wed, 31 Aug 2022 20:10:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 394E4ECAAD4
+	for <buildroot@archiver.kernel.org>; Wed, 31 Aug 2022 20:17:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D7E98330B;
-	Wed, 31 Aug 2022 20:10:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D7E98330B
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB4694012D;
+	Wed, 31 Aug 2022 20:17:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB4694012D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SD8LWdWvPfn0; Wed, 31 Aug 2022 20:10:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FcfP5eQPR115; Wed, 31 Aug 2022 20:17:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B37D082B97;
-	Wed, 31 Aug 2022 20:10:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B37D082B97
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 080EA1BF422
- for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 20:10:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AADE540198;
+	Wed, 31 Aug 2022 20:17:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AADE540198
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 511481BF422
+ for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 20:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E44FF83300
- for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 20:10:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E44FF83300
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2C68F610E7
+ for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 20:17:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C68F610E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ezME0XOvBf7O for <buildroot@lists.busybox.net>;
- Wed, 31 Aug 2022 20:10:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hsHcDKSc53jk for <buildroot@lists.busybox.net>;
+ Wed, 31 Aug 2022 20:17:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C49082B97
- for <buildroot@buildroot.org>; Wed, 31 Aug 2022 20:10:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C49082B97
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B93408819D; Wed, 31 Aug 2022 19:54:55 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FE0060BD6
+ for <buildroot@buildroot.org>; Wed, 31 Aug 2022 20:17:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FE0060BD6
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id ECEDC881E0; Wed, 31 Aug 2022 20:02:17 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 31 Aug 2022 22:08:58 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f05c1f5da4c599dd01a24e1d534a540d56c159d3
-X-Git-Newrev: 6c872197f412b011ceefc6fb5ebbb34f2fb00c15
+Date: Wed, 31 Aug 2022 21:56:31 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 4fbce4ea35a0c86313f11200f9496878f8a45d73
+X-Git-Newrev: fc7ba3ab8fa6c3144098fae057c758d35279e46f
 X-Patchwork-Hint: ignore
-Message-Id: <20220831195455.B93408819D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Update for 2022.02.5
+Message-Id: <20220831200217.ECEDC881E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-paho-mqtt: bump
+ to 1.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,87 +63,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c872197f412b011ceefc6fb5ebbb34f2fb00c15
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fc7ba3ab8fa6c3144098fae057c758d35279e46f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+We need to switch to the github download as the sdist published to pypi
+doesn't package the epl-v20 license file isn't included there:
+
+https://github.com/eclipse/paho.mqtt.python/pull/635
+
+License changed to EPL-2.0 and EDLv1.0.
+
+Changelog:
+https://github.com/eclipse/paho.mqtt.python/blob/master/ChangeLog.txt
+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+[yann.morin.1998@free.fr:
+  - use spaces in hash file
+  - drop localy computed md5
+  - license is EPL *and* EDL, not _or_
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- CHANGES                  | 34 ++++++++++++++++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 37 insertions(+), 3 deletions(-)
+ package/python-paho-mqtt/python-paho-mqtt.hash | 9 ++++-----
+ package/python-paho-mqtt/python-paho-mqtt.mk   | 9 ++++-----
+ 2 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index dc5edc1cdf..4d7076e908 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,37 @@
-+2022.02.5, released August 31st, 2022
-+
-+	Important / security related fixes.
-+
-+	dependencies: Ensure 'cmp' is available on the build host.
-+
-+	pkg-utils: The KCONFIG_ENABLE_OPT macro used to enforce a specific
-+	Kconfig option to be enabled (E.G. for kernel options needed by
-+	packages) no longer changes a =m (modular) with =y (built in).
-+
-+	check-host-rpath: Silence readelf warnings when clang is used
-+
-+	GCC 10.x updated to 10.4.0
-+
-+	Updated/fixed packages: apg, arm-trusted-firmware, assimp,
-+	bayer2rgb-neon, bind, bird, cog, cwiid, diffutils, fluidsynth,
-+	freerdp, gcc, glibc, glslsandbox-player, gdk-pixbuf, gnupg2,
-+	gtest, i2pd, jack2, jquery-validation, jszip, libbsd, libcamera,
-+	libcurl, libest, libiio, libkrb5, libopenssl, libpsl,
-+	luasyslog, lxc, mbedtls, mstpd, mutt, netdata, netsniff-ng,
-+	nodejs, nvidia-driver, openssl, opkg-utils, paho-mqtt-c,
-+	pango, pcsc-lite, perl, pimd, poppler, postgis, powerpc-utils,
-+	pppd, protobuf-c, pulseaudio, python-bottle, python-django,
-+	python-lxml, python3, qt5webkit, rpi-userland, rsyslog, runc,
-+	rustc, sconeserver, sg3_utils, shadowsocks-libev, suricata,
-+	tcpreplay, uacme, uclibc, v4l2loopback,, webkitgtk, wine,
-+	wpewebkit, xdg-dbus-proxy, xserver_xorg-server, zeromq, zfs,
-+	zlib-ng
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13796: Problems compiling package gst-plugins-good
-+	#14926: package/nodejs: build for host fails with GTEST errors
-+
- 2022.02.4, released July 28th, 2022
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index e14bb8f1ec..17f2f912a4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.02.4
-+export BR2_VERSION := 2022.02.5
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1659087600
-+BR2_VERSION_EPOCH = 1661977000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 4415f94418..cf6192a9d6 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
+index bf3993e919..81b9dda81d 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.hash
++++ b/package/python-paho-mqtt/python-paho-mqtt.hash
+@@ -1,6 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/paho-mqtt/json, sha256 locally computed
+-md5  e3ac29cd5dc247a01083a2a8f3fddd08  paho-mqtt-1.4.0.tar.gz
+-sha256  e440a052b46d222e184be3be38676378722072fcd4dfd2c8f509fb861a7b0b79  paho-mqtt-1.4.0.tar.gz
+-sha256  76f13729e84e9222e543303df00f87d1b2c0995b6a505cd859a285667e44babb  LICENSE.txt
++# locally computed
++sha256  6e35c1be242a901fc9c00bad7d37b5cc4a497f398dfceb4ed0d8018a959be650  python-paho-mqtt-1.6.1.tar.gz
++sha256  66408b049249c3bdb0ba1ed285f5422ce67e371d40151bebd4d806af454ffe7c  LICENSE.txt
+ sha256  e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
+-sha256  3b9be6b894d0769de796e653571ff6cef494913c0ce78c35a97db939e7d9087c  epl-v10
++sha256  8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c  epl-v20
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
+index d192749e1e..f255a7847d 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.mk
++++ b/package/python-paho-mqtt/python-paho-mqtt.mk
+@@ -4,11 +4,10 @@
+ #
  ################################################################################
  
- # Buildroot version to use
--RELEASE='2022.02.4'
-+RELEASE='2022.02.5'
+-PYTHON_PAHO_MQTT_VERSION = 1.4.0
+-PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
+-PYTHON_PAHO_MQTT_SITE = https://files.pythonhosted.org/packages/25/63/db25e62979c2a716a74950c9ed658dce431b5cb01fde29eb6cba9489a904
+-PYTHON_PAHO_MQTT_LICENSE = EPL-1.0 or EDLv1.0
+-PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
++PYTHON_PAHO_MQTT_VERSION = 1.6.1
++PYTHON_PAHO_MQTT_SITE = $(call github,eclipse,paho.mqtt.python,v$(PYTHON_PAHO_MQTT_VERSION))
++PYTHON_PAHO_MQTT_LICENSE = EPL-2.0, EDLv1.0
++PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+ PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
  
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
