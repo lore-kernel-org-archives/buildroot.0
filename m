@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56079ECAAD5
-	for <buildroot@archiver.kernel.org>; Tue, 30 Aug 2022 05:25:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11360ECAAD4
+	for <buildroot@archiver.kernel.org>; Wed, 31 Aug 2022 15:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A288B8144E;
-	Tue, 30 Aug 2022 05:25:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A288B8144E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6EE9A40CA1;
+	Wed, 31 Aug 2022 15:00:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EE9A40CA1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PrjyYHT1impV; Tue, 30 Aug 2022 05:25:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k1V-5EDEtQUY; Wed, 31 Aug 2022 15:00:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D15D181435;
-	Tue, 30 Aug 2022 05:25:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D15D181435
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0F0C91BF328
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 05:25:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FA1440C9B;
+	Wed, 31 Aug 2022 15:00:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FA1440C9B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E88C51BF361
+ for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 15:00:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC7AD40913
- for <buildroot@lists.busybox.net>; Tue, 30 Aug 2022 05:25:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC7AD40913
+ by smtp3.osuosl.org (Postfix) with ESMTP id C38B9610DD
+ for <buildroot@lists.busybox.net>; Wed, 31 Aug 2022 15:00:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C38B9610DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DiVC0cWbtWqR for <buildroot@lists.busybox.net>;
- Tue, 30 Aug 2022 05:25:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6Xc-A6kltxgq for <buildroot@lists.busybox.net>;
+ Wed, 31 Aug 2022 15:00:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00121408F0
- for <buildroot@uclibc.org>; Tue, 30 Aug 2022 05:25:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00121408F0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 20E13610DC
+ for <buildroot@uclibc.org>; Wed, 31 Aug 2022 15:00:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20E13610DC
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 3DA7087F4D; Tue, 30 Aug 2022 05:10:07 +0000 (UTC)
+ id 30B5C86FBF; Wed, 31 Aug 2022 14:45:19 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 30 Aug 2022 05:25:09 +0000
+Date: Wed, 31 Aug 2022 15:00:24 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
+X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02
+X-Bugzilla-Version: 2022.02.4
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: lars.george@biotronik.com
+X-Bugzilla-Who: dmrauh@posteo.de
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14976-163-cVrte0Y80t@https.bugs.busybox.net/>
-In-Reply-To: <bug-14976-163@https.bugs.busybox.net/>
-References: <bug-14976-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone
+Message-ID: <bug-14981-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14976] Ghostscript package can not process pdf
- files anymore
+Subject: [Buildroot] [Bug 14981] New: package/qt5/qt5webengine: build fails
+ with undefined reference to `icu_70::Unicode ...
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,33 +79,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14976
+https://bugs.busybox.net/show_bug.cgi?id=14981
 
---- Comment #1 from Lars <lars.george@biotronik.com> ---
-I digged into the problem a little bit and got a fix for myself. First of all I
-patched the mk file of the Ghostscript package:
-
- define GHOSTSCRIPT_REMOVE_LIBS
-        rm -rf $(@D)/freetype $(@D)/ijs $(@D)/jbig2dec $(@D)/jpeg \
--               $(@D)/lcms2mt $(@D)/libpng $(@D)/openjpeg $(@D)/tiff \
-+               $(@D)/lcms2mt $(@D)/libpng $(@D)/tiff \
-                $(@D)/zlib
- endef
- GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
-@@ -43,7 +43,7 @@
-        --enable-freetype \
-        --disable-gtk \
-        --without-libpaper \
--       --without-pdf \
-+       --with-pdf \
-        --with-system-libtiff
-
- ifeq ($(BR2_PACKAGE_JBIG2DEC),y)
-
-
-Furthermore I do need to have the following BR packages:
-- BR2_PACKAGE_JBIG2DEC
-- BR2_PACKAGE_OPENJPEG
+            Bug ID: 14981
+           Summary: package/qt5/qt5webengine: build fails with undefined
+                    reference to `icu_70::Unicode ...
+           Product: buildroot
+           Version: 2022.02.4
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: dmrauh@posteo.de
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
 -- 
 You are receiving this mail because:
