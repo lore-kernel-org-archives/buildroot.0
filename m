@@ -1,64 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7240ECAAD2
-	for <buildroot@archiver.kernel.org>; Thu,  1 Sep 2022 04:46:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96637ECAAD3
+	for <buildroot@archiver.kernel.org>; Thu,  1 Sep 2022 08:20:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C4384105B;
-	Thu,  1 Sep 2022 04:46:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C4384105B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A45F60BB1;
+	Thu,  1 Sep 2022 08:20:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A45F60BB1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id APaRzQHuoDco; Thu,  1 Sep 2022 04:46:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0blmbgRC4QFq; Thu,  1 Sep 2022 08:20:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 615CC4105D;
-	Thu,  1 Sep 2022 04:46:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 615CC4105D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7C6431BF5A4
- for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 04:46:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F95460A8D;
+	Thu,  1 Sep 2022 08:20:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F95460A8D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F8CF1BF34A
+ for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 08:20:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 56646825E6
- for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 04:46:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56646825E6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A4EF60A8D
+ for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 08:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A4EF60A8D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IrFLvqyPJi92 for <buildroot@lists.busybox.net>;
- Thu,  1 Sep 2022 04:46:07 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F705826B4
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8F705826B4
- for <buildroot@busybox.net>; Thu,  1 Sep 2022 04:46:06 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 4D1BF440516;
- Thu,  1 Sep 2022 07:44:50 +0300 (IDT)
-To: buildroot@busybox.net
-Date: Thu,  1 Sep 2022 07:45:54 +0300
-Message-Id: <a8ea0d5fc6b7f447cbfab2426e1fe3687ee7e0d1.1662007555.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1662007490;
- bh=GaYxIYgFShjdBNQDThNkqSaZqMqZOCXNQy2nF1vTCl8=;
- h=From:To:Cc:Subject:Date:From;
- b=DhEEcVcyE3MZPeph8FnnOA6oNqZqDrAf4v4hvzhndgnlU6GKuez9ahjfnCGxmqnu8
- /yJ0dcGVYo5yotwFd7kPKtQuxPK9lf5Ah1ozNLySmDDiTqISV6mS9rmWm6/ljGztJT
- DHl+yXS6+sx7jt8TSCoXHaEDK3owzW5R/OB38nrlDjw7dh2lnwcpFe+ds80r6dQPXb
- eyhQfqddtIVZaRxze+K+MYaREzDEuE3XTjBui5ZoyNwAw6YIjKHwiuhIFVzOyszeR/
- Cu+BsX5wLLSm1QdHmET2dAohgDIoPiaS0poH55v7zqBoB2lDjjsSfq/EBvL/comtsi
- JBwB5aDq/dncw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=DhEEcVcy
-Subject: [Buildroot] [PATCH 1/2] boot/mv-ddr-marvell: bump to latest commit
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8SxwQ_JZm7Rw for <buildroot@lists.busybox.net>;
+ Thu,  1 Sep 2022 08:20:15 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1204E60A89
+ for <buildroot@buildroot.org>; Thu,  1 Sep 2022 08:20:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1204E60A89
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 7B71188220; Thu,  1 Sep 2022 08:05:07 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu, 1 Sep 2022 10:19:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 02104e86cc799f435632f30e1af80ca50bc90eea
+X-Git-Newrev: 1c0da88a83837abaa6b52c7805ea73753caa9625
+X-Patchwork-Hint: ignore
+Message-Id: <20220901080507.7B71188220@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2022.08-rc2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,57 +56,163 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This update fixes build with gcc 11.
+commit: https://git.buildroot.net/buildroot/commit/?id=1c0da88a83837abaa6b52c7805ea73753caa9625
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update license file hash for unrelated code changes.
-
-Tested on Macchiatobin.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2931841699
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2931841700
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/mv-ddr-marvell/mv-ddr-marvell.hash | 4 ++--
- boot/mv-ddr-marvell/mv-ddr-marvell.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ CHANGES                    | 33 +++++++++++++++++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 4 files changed, 65 insertions(+), 11 deletions(-)
 
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-index 5bfae8af4576..75e87d833df3 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  bfab74a625d65238c569b9df282b55c0fc9a1e2d3decedcf194d44774df2ede4  mv-ddr-marvell-305d923e6bc4236cd3b902f6679b0aef9e5fa52d.tar.gz
--sha256  48bb930b6fbc3f5db72e29c849b096df3868e4a6d2bdc0e2dd3365c768241cd5  ddr3_init.c
-+sha256  16f02232e21a15979b3d9971e28f7e59562484a5c1f99c2b28c248a3b76a63fa  mv-ddr-marvell-d5acc10c287e40cc2feeb28710b92e45c93c702c.tar.gz
-+sha256  907a03943ca940790e97620aca8d46b5b04c653dcf2ab6c66a25238b60cf5635  ddr3_init.c
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-index 442b6aed5351..e05192fe9b8f 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/CHANGES b/CHANGES
+index e22005540e..ae3929d856 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,36 @@
++2022.08-rc2, released September 1st, 2022
++
++	Fixes all over the tree.
++
++	dependencies: Ensure 'find' and 'xargs' are available on the
++	build host.
++
++	A large number of typo fixes.
++
++	Defconfigs: bananapi m1, olimex a20/a33/lime: Use standard FPU
++	configuration, pine64_sopine: Use mainline ATF to fix build
++
++	Updated/fixed packages: ace, alsa-utils, busybox, cups,
++	dbus-broker, directfb, domoticz, drbd-utils, edk2,
++	edk2-platforms, ffmpeg, freeradius-server, freeswitch, gauche,
++	gcc, gdb, glibc, gnutls, gst1-plugins-bad, gst1-plugins-good,
++	hawktracer, igd-ethercat, imagemagick, intel-mediadriver,
++	jack2, jose, jpeg, jquery-ui-themes, kodi, libcamera, libdill,
++	libgit2, libglvnd, libgpg-error, libgpgme, libinput, libp11,
++	libsepol, libtirpc, libvirtd, libvncserver, libwpe, libzlib,
++	linux, linux-tools-perf, llvm, lshw, makedumpfile,
++	mali-driver, memcached, minetest, mutt, ne10, netsniff-ng,
++	ntpsec, ocrad, ola, opencv4, openocd, opensc, optee-os,
++	pcsc-lite, postgresql, protobuf, pulseaudio, python-autobahn,
++	python-paho-mqtt, python-protobuf, python-pygame, python3, qemu,
++	qoriq-cadence-dp-firmware, qt5doc, qt6base, ranger, rng-tools,
++	rsync, rustc, sconeserver, sdl2, snort, sqlite, squid,
++	stress-ng, strongswan, sunxi-mali-utgard-driver, sysdig,
++	sysklogd, syslinux, syslog-ng, tcf-agent, tcpreplay,
++	tesseract-ocr, uacme, uboot-tools, uclibc, udpcast, usbguard,
++	v4l2loopback, vim, webkitgtk, wolftpm, wpewebkit, xenomai,
++	xserver_xorg-server, zeek, zerofree
++
+ 2022.08-rc1, released August 12th, 2022
  
--# This is the latest commit on mv-ddr-devel as of 20201207
--MV_DDR_MARVELL_VERSION = 305d923e6bc4236cd3b902f6679b0aef9e5fa52d
-+# This is the latest commit on mv-ddr-devel as of 20220529
-+MV_DDR_MARVELL_VERSION = d5acc10c287e40cc2feeb28710b92e45c93c702c
- MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
- MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
- MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
--- 
-2.35.1
-
+ 	Fixes all over the tree and new features.
+diff --git a/Makefile b/Makefile
+index b40b7632f5..bd0b906cde 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2022.08-rc1
++export BR2_VERSION := 2022.08-rc2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1660332552
++BR2_VERSION_EPOCH = 1662020000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index db150ff432..8086878f38 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest release candidate: <b>2022.08-rc1</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2022.08-rc2</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.08-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.08-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2022.08-rc1.tar.gz">buildroot-2022.05-rc2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.08-rc1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.08-rc2.tar.gz">buildroot-2022.08-rc2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.08-rc2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2022.08-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.08-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2022.08-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2022.08-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2022.08-rc1.tar.xz">buildroot-2022.05-rc2.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2022.08-rc1.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2022.08-rc2.tar.xz">buildroot-2022.08-rc2.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2022.08-rc2.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 75d7a69910..fb62d5a6df 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2022.08-rc2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>1 September 2022</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>2022.08-rc2 has been released with more cleanups and build fixes. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2022.08-rc2">CHANGES</a>
++	  file for details.</p>
++
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2022.08-rc2.tar.xz">2022.08-rc2
++	  release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
