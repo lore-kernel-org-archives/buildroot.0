@@ -1,84 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8677ECAAD3
-	for <buildroot@archiver.kernel.org>; Thu,  1 Sep 2022 15:43:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69EDDECAAD1
+	for <buildroot@archiver.kernel.org>; Thu,  1 Sep 2022 16:01:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 37ED240256;
-	Thu,  1 Sep 2022 15:43:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37ED240256
+	by smtp1.osuosl.org (Postfix) with ESMTP id D847381340;
+	Thu,  1 Sep 2022 16:01:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D847381340
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FeMD-ifgTy5c; Thu,  1 Sep 2022 15:43:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CyjJc9BEf9ga; Thu,  1 Sep 2022 16:01:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4283C40126;
-	Thu,  1 Sep 2022 15:43:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4283C40126
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C93021BF3C4
- for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 15:43:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8D87812A7;
+	Thu,  1 Sep 2022 16:01:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8D87812A7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0094A1BF3C4
+ for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 16:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3C5740126
- for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 15:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3C5740126
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD490408F9
+ for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 16:01:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD490408F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xd_21OhEIS2h for <buildroot@lists.busybox.net>;
- Thu,  1 Sep 2022 15:43:43 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA43E400BF
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com
- [IPv6:2607:f8b0:4864:20::52a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BA43E400BF
- for <buildroot@buildroot.org>; Thu,  1 Sep 2022 15:43:43 +0000 (UTC)
-Received: by mail-pg1-x52a.google.com with SMTP id q63so16732176pga.9
- for <buildroot@buildroot.org>; Thu, 01 Sep 2022 08:43:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc;
- bh=YOv6UAhbwVXScqy6BliujNKAl70WBqrZR6/tDicc9Vk=;
- b=1FIHfmkoCdIA9NAA3uSKFnzTUbCH/vusmYFJvrzQId0t4U+kkn8J4iDm1Aed05OxIW
- 96rRgF0B9W44f2gC7QFugrrRGl80Dcqk5hIOB/1QGdgxEWrhElSpTNaPZ2qO/fd4qzAy
- yEXWOOcBv/i0DZpXIfQCy0w4J2hMNsnSWQQ+Xs8pIaylzj40tJyS0zq9pkqmk2C6kDjk
- 3CYHB9xVF6BL29pL1UPueh4t+kyDwWxB+CG8N47cPZua/blAI62ZLnIv2FUfuiLDb+2V
- 3+VdxDaM4O0JwMBgVtCIk1TSP5V1anrTwWyGarEr7lFcA73umW/wYvqYyCD+KnbFANZ+
- BNuQ==
-X-Gm-Message-State: ACgBeo1v5+bTARmqUyZ14NpZ9/7ipBb6hd67HUdBoYro7wwLbP3MHGAt
- v+n3H0k6PuiEvHvSYMLfVC4Dm3UNbe9+0Cea4uBvU2Ug
-X-Google-Smtp-Source: AA6agR7BnCXC6trNzU0LPmuM323Tkm79LMbyLw0fvJ2/Q5AYXSkGooDWeLsQRar1rfMAf+glmFRbtlZZchdJAfsY+NE=
-X-Received: by 2002:a63:5a41:0:b0:430:673e:1e13 with SMTP id
- k1-20020a635a41000000b00430673e1e13mr4483250pgm.435.1662047023082; Thu, 01
- Sep 2022 08:43:43 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id givFf-YRIAHo for <buildroot@lists.busybox.net>;
+ Thu,  1 Sep 2022 16:01:38 +0000 (UTC)
+X-Greylist: delayed 00:05:04 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2C26408C7
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F2C26408C7
+ for <buildroot@buildroot.org>; Thu,  1 Sep 2022 16:01:37 +0000 (UTC)
+Received: from harderbit.localdomain ([92.154.77.116]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.184]) with ESMTPSA (Nemesis)
+ id 1MoNyA-1p9T5a2NIG-00onOa; Thu, 01 Sep 2022 17:56:30 +0200
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+To: buildroot@buildroot.org
+Date: Thu,  1 Sep 2022 17:56:05 +0200
+Message-Id: <20220901155605.118365-1-thomas.claveirole@green-communications.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <3453234.iIbC2pHGDl@harderbit>
+References: <3453234.iIbC2pHGDl@harderbit>
 MIME-Version: 1.0
-References: <20220826130843.264607-1-johan.oudinet@gmail.com>
- <20220827084732.GR37358@scaer> <20220828100605.509b1ead@windsurf>
- <20220828083526.GF37358@scaer>
-In-Reply-To: <20220828083526.GF37358@scaer>
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Thu, 1 Sep 2022 17:43:31 +0200
-Message-ID: <CAJtjsKY806+igied9tjUAPJXrknXddSAFYaYS6ViC-EMigSWaQ@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc;
- bh=YOv6UAhbwVXScqy6BliujNKAl70WBqrZR6/tDicc9Vk=;
- b=oIdxAeA71S82tcL+WENPoXyKsvaAa2te9uqu5ipNAyfxY2XfDu4RHH1ay3BfCdoFVJ
- NtKYh/xPMBgeNflhDrrkS8dA69t/EsJQD6P8ou9sd3EoYPlWUtv7ylZXuHdvbEiyYLPO
- mMUJhyXkkLaOGZpu+R+/uLviiM9bDHI11C39q7MKTxdzAkMDUrgSMuQ+nTdff1KoJl1J
- L26F5s1RIjX+J4JmV2DnRbnFu5CUi3gSiKkKK4VFVuFvuMYmdEU7P1gPf4na1OfvanyA
- mZH0VRtzTLal0Hjf5ySQw63vqllg2U2tjdXZQ4OQLi3i4e6l8GcprJ1/8yXLtNpM/sWF
- Go5g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=oIdxAeA7
-Subject: Re: [Buildroot] [PATCH v2] package/forge: new package
+X-Provags-ID: V03:K1:/iqrAXUebycuQiTgL80oISdfMhY4Q77NYQOKNHQBq1xe1OW/+oj
+ tHBmH17DiYdULz21LtW7FZIplvN/Swx9R9o7blOAnRXdqsjNTYMHHAMWOruoKPu6ORju+ut
+ kfm6pvnkRaJMgCKzSwwdodZn4/WE8II8q+IHZMRW22UHN4CAFtHtpma4/l9jGgCldk66qIv
+ TlW9vaelib2qXPFPidMQg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ryrRrvgb8is=:b8/xjEW/VaoS9jzdg0I3r6
+ M5zWGUvbdmhu82vil4C0hy9Pk1b5zG6AQvYrhUaNbFNSze1OrwDkRew4qbDSRdcb24KRg3mq/
+ CZElX+kpr/Dzo5CFM6DIWEUj4d8XWnBcKz4Df3q4HJU5kWf3MzxAUWxf36iud6YDBQIpzb0cI
+ S8GBY2mUR/R2t3GivmkwIRUTV2BuV5P6tWUGJBd7ve6LfSgshtj9d3E6kqNm/JqBnIJ4Wo8uh
+ hZwx/NOgyiNKSsDXYWAq4MDZOh2vbdDINF3FzxPq5dP2NJ3M66Ly03hb08k89pgs3LdPsoegO
+ Tu2J7CmmVZcfQ4m+0VGdq64UKmoCFhBRTNWLX38hBtZVNex9bifsNvozxAUYa6xNCnKvY1zti
+ tSHdnlKrQztGJPKDj70tXsbArplzKTaEwFG83MEsl4pJi6/o7c8y5GiR1qe1k3iemDcf1jAxQ
+ 8vO0Z+W7aaDLC/elksGSVpj5SataKKGbc+bVxTaY4jLwJfb9SazT36mz9nlz06WngCftuzoxS
+ WEk2EVsYhvsIqcxoO5/FPQuJJ5kbKT4oYxet8X/OzwmvZWkpvznrC3jKT5KpOC3qMkRruEhmG
+ p56p3oEItc0yUqZXMDdbxXSmCGC5/B1BcF7fx/fWejfPt/DG/avYhVauMwOO+kZc6uwf/T05B
+ bdJ8x/QEI9/XFRxlbgquhEYzN719u28+rHEH8gfqog6YZ/0BGh3AMifgexd6aJQFFV7hfYQ+O
+ EN+TzvcLH1MXjxZWphoXyMQ6E2QX5bxUH5Ja4iTWg8BuXiOGFO4+g4kxXxNW7XjyY++poU8oT
+ AlAzeHu+CNp6aiH2CJe0ULgBfZHQd5u9iAVzZf6IQ4tq+tj7wo=
+Subject: [Buildroot] [PATCH v2 1/1] package/openlayers: bump to version 7.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,59 +75,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yann, Thomas, All,
+OpenLayers changed its release format again, only two weeks after the
+previous change.  The good news is, though, that they now ship a
+single release archive that includes the compiled JavaScript code
+together with the source code.  Furthermore, they ship both code with
+a single license, which file is part of the archive.
 
-On Sun, Aug 28, 2022 at 10:35 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> On 2022-08-28 10:06 +0200, Thomas Petazzoni spake thusly:
-> > On Sat, 27 Aug 2022 10:47:32 +0200
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> [--SNIP--]
-> > > > +define FORGE_BUILD_CMDS
-> > > > + cd $(@D) && $(NPM) install && $(NPM) run build
-> [--SNIP--]
-> > And side questions are:
-> >  - Does this $(NPM) install step downloads stuff? If it does, then it's
-> >    wrong, because it works around Buildroot's download infrastructure.
->
-> Yes, as far as I understand, that's where the vendoring step happens.
-> Unless we have a download post-process step like we have for go and
-> cargo, there is not much we can do about that. See also my further reply
-> on the previous iteration [0].
->
-> Also that install-then-build sequence seems to be canon, see [1].
->
-> But before we introduce either a download prost-process and/or an
-> npm-package infrastructure, it would be better [2] to have more than
-> two data-points.
->
-> [0] https://lore.kernel.org/buildroot/20220826210712.GE37358@scaer/
-> [1] https://lore.kernel.org/buildroot/20220827093603.GT37358@scaer/
-> [2] I said "better", not "nice", on purpose. ;-]
+Hence, we still do not need to rely on host-nodejs for this package,
+at least not for this version.
 
-This is exactly that.
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+---
+ package/openlayers/openlayers.hash |  3 ++-
+ package/openlayers/openlayers.mk   | 10 ++++------
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-> >  - Does this $(NPM) install step installs extra stuff? If it does, are
-> >    these extra things accounted for from a legal information
-> >    perspective?
->
-> Yeah, it does install the vendored stuff. And of course it is not
-> accounted for, what did you hope? ;-)
->
-> So, yes, FORGE_LICENSE should include something like:
->
->     , vendored dependencies licenses probably not listed
->
-
-Ok, do I propose a v3 with the suggested sentence to FORGE_LICENSE or
-should I do something else?
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index 1c93b9a729..1b3f3cce51 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256  8a9fda6e392688c049ebb88fb2c73b5788b4965b625443de4cca7d4688b1fb82  v6.14.1-dist.zip
++sha256  37a0e5fde4df3db6e6c11ed0ceb8e20608121afe5f8f7f91cf03990e89a919ca  v7.1.0-package.zip
++sha256  6c4347b83a8c9feef18d57b18e3b6c44cf901b3c344a4a1fbd837e421555ab8e  LICENSE.md
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index 4626e7545a..7396e38fb9 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
+@@ -4,21 +4,19 @@
+ #
+ ################################################################################
+ 
+-OPENLAYERS_VERSION = 6.14.1
+-OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
++OPENLAYERS_VERSION = 7.1.0
++OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-package.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
+-# There's no separate license file in the archive, only minified files.
++OPENLAYERS_LICENSE_FILES = LICENSE.md
+ 
+ define OPENLAYERS_EXTRACT_CMDS
+ 	unzip $(OPENLAYERS_DL_DIR)/$(OPENLAYERS_SOURCE) -d $(@D)
+-	mv $(@D)/v$(OPENLAYERS_VERSION)-dist/* $(@D)
+-	rmdir $(@D)/v$(OPENLAYERS_VERSION)-dist/
+ endef
+ 
+ define OPENLAYERS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/ol.css $(TARGET_DIR)/var/www/ol.css
+-	$(INSTALL) -D -m 0644 $(@D)/ol.js $(TARGET_DIR)/var/www/ol.js
++	$(INSTALL) -D -m 0644 $(@D)/dist/ol.js $(TARGET_DIR)/var/www/ol.js
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Johan
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
