@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 658CDECAAD3
-	for <buildroot@archiver.kernel.org>; Thu,  1 Sep 2022 12:53:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5DCCECAAD3
+	for <buildroot@archiver.kernel.org>; Thu,  1 Sep 2022 12:53:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B567061136;
-	Thu,  1 Sep 2022 12:53:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B567061136
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EE444114E;
+	Thu,  1 Sep 2022 12:53:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EE444114E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y46cW88BX6QQ; Thu,  1 Sep 2022 12:53:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jOZ9tYGgh3bD; Thu,  1 Sep 2022 12:53:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1898A60C2D;
-	Thu,  1 Sep 2022 12:53:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1898A60C2D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 70C1B404EC;
+	Thu,  1 Sep 2022 12:53:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70C1B404EC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E8C281BF356
- for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 12:53:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B3D4D1BF356
+ for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 12:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D13AE60C2D
- for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 12:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D13AE60C2D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F7BD60C34
+ for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 12:53:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F7BD60C34
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3T3P2Li1FJb0 for <buildroot@lists.busybox.net>;
- Thu,  1 Sep 2022 12:53:37 +0000 (UTC)
+ with ESMTP id i0bn2FfUjaAM for <buildroot@lists.busybox.net>;
+ Thu,  1 Sep 2022 12:53:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C478E607CA
- for <buildroot@buildroot.org>; Thu,  1 Sep 2022 12:53:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C478E607CA
+ by smtp3.osuosl.org (Postfix) with ESMTP id B827C60C2D
+ for <buildroot@buildroot.org>; Thu,  1 Sep 2022 12:53:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B827C60C2D
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C18B188231; Thu,  1 Sep 2022 12:38:29 +0000 (UTC)
+ id B6A9B85CBB; Thu,  1 Sep 2022 12:38:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 1 Sep 2022 14:27:59 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: bf0d8c96599f3dc09d8fa7b706c3cf19294fd70e
-X-Git-Newrev: 93ae35df721ad5f471c420b7ffbfccb5c65dc2f3
+Date: Thu, 1 Sep 2022 14:28:16 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 6c872197f412b011ceefc6fb5ebbb34f2fb00c15
+X-Git-Newrev: 45b4eddae6d0e60f4d545854265a7973f552d1e6
 X-Patchwork-Hint: ignore
-Message-Id: <20220901123829.C18B188231@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/connman: add an
+Message-Id: <20220901123836.B6A9B85CBB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/connman: add an
  option to disable stats generation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93ae35df721ad5f471c420b7ffbfccb5c65dc2f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=45b4eddae6d0e60f4d545854265a7973f552d1e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 By default connman periodically saves network interface statistics
 into an mmap'd round robin file. These are not accessible over the
