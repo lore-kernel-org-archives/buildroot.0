@@ -1,69 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69EDDECAAD1
-	for <buildroot@archiver.kernel.org>; Thu,  1 Sep 2022 16:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B864EECAAD1
+	for <buildroot@archiver.kernel.org>; Thu,  1 Sep 2022 18:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D847381340;
-	Thu,  1 Sep 2022 16:01:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D847381340
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9F4360B67;
+	Thu,  1 Sep 2022 18:33:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9F4360B67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CyjJc9BEf9ga; Thu,  1 Sep 2022 16:01:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KT4wVLmJhAFr; Thu,  1 Sep 2022 18:33:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8D87812A7;
-	Thu,  1 Sep 2022 16:01:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8D87812A7
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF81B607A4;
+	Thu,  1 Sep 2022 18:33:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF81B607A4
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0094A1BF3C4
- for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 16:01:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 66FDC1BF31B
+ for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 18:33:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CD490408F9
- for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 16:01:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD490408F9
+ by smtp4.osuosl.org (Postfix) with ESMTP id C189E400EE
+ for <buildroot@lists.busybox.net>; Thu,  1 Sep 2022 18:33:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C189E400EE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id givFf-YRIAHo for <buildroot@lists.busybox.net>;
- Thu,  1 Sep 2022 16:01:38 +0000 (UTC)
-X-Greylist: delayed 00:05:04 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2C26408C7
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F2C26408C7
- for <buildroot@buildroot.org>; Thu,  1 Sep 2022 16:01:37 +0000 (UTC)
-Received: from harderbit.localdomain ([92.154.77.116]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.184]) with ESMTPSA (Nemesis)
- id 1MoNyA-1p9T5a2NIG-00onOa; Thu, 01 Sep 2022 17:56:30 +0200
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-To: buildroot@buildroot.org
-Date: Thu,  1 Sep 2022 17:56:05 +0200
-Message-Id: <20220901155605.118365-1-thomas.claveirole@green-communications.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <3453234.iIbC2pHGDl@harderbit>
-References: <3453234.iIbC2pHGDl@harderbit>
+ with ESMTP id cGiz2HUt6rLn for <buildroot@lists.busybox.net>;
+ Thu,  1 Sep 2022 18:33:27 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 598DB4174A
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com
+ [IPv6:2607:f8b0:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 598DB4174A
+ for <buildroot@buildroot.org>; Thu,  1 Sep 2022 18:33:27 +0000 (UTC)
+Received: by mail-pg1-x52f.google.com with SMTP id x80so13582829pgx.0
+ for <buildroot@buildroot.org>; Thu, 01 Sep 2022 11:33:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date;
+ bh=5RbNV7ZUfu/q3OGRUGAg8OnUeaBWjIbncwLzC6NYqD8=;
+ b=3/pXDTV/dWuvpx0tb7OWGvjDKGn3J7OZiqikv6HSc2ruHiqwETM+RzceAR65fQoy5k
+ dU0vF0bnKTP6HNeOLwoBJmMHumr/2Of9mOITsAmgQrYi5/t6YqmyyTuZDYzukNK3UbMa
+ XlUGDvqoUCV32wbwLkci/1PdKyv/ishAhuhvAYnT5o72iI6nqPGNjm0HSLDWqGgUsRvs
+ qBBuLw3d7kidoy3BsaLHbDux0fwPxN4LIQK16Bl8mY0QKzAR/cqnMM4wpB6mIwqbRN87
+ rGb0+n0JnMwWLraH/J/SHl696TXnln3XIBPNLEk5NuH+EC4pnZh0hb/TbOhr+XzdXqRV
+ dy6A==
+X-Gm-Message-State: ACgBeo1ZwMAhpmhohZrblfovjLOY/Xg85DEVMXqn2BWUKCXlIMzTcZCM
+ scaGXRAuUBVJq5kgtSfm2YaDbasWhGXcivT6hWU=
+X-Google-Smtp-Source: AA6agR4H/gjhxBVxt0WBGCiokC8/BcL9X3jj9K4CwE77KcH9laVfiKPhvpKg8WYRrvdv9s3/JPpqdKi1OaGgMDL9ct8=
+X-Received: by 2002:a63:e156:0:b0:42b:5541:80d4 with SMTP id
+ h22-20020a63e156000000b0042b554180d4mr26658251pgk.183.1662057206675; Thu, 01
+ Sep 2022 11:33:26 -0700 (PDT)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:/iqrAXUebycuQiTgL80oISdfMhY4Q77NYQOKNHQBq1xe1OW/+oj
- tHBmH17DiYdULz21LtW7FZIplvN/Swx9R9o7blOAnRXdqsjNTYMHHAMWOruoKPu6ORju+ut
- kfm6pvnkRaJMgCKzSwwdodZn4/WE8II8q+IHZMRW22UHN4CAFtHtpma4/l9jGgCldk66qIv
- TlW9vaelib2qXPFPidMQg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ryrRrvgb8is=:b8/xjEW/VaoS9jzdg0I3r6
- M5zWGUvbdmhu82vil4C0hy9Pk1b5zG6AQvYrhUaNbFNSze1OrwDkRew4qbDSRdcb24KRg3mq/
- CZElX+kpr/Dzo5CFM6DIWEUj4d8XWnBcKz4Df3q4HJU5kWf3MzxAUWxf36iud6YDBQIpzb0cI
- S8GBY2mUR/R2t3GivmkwIRUTV2BuV5P6tWUGJBd7ve6LfSgshtj9d3E6kqNm/JqBnIJ4Wo8uh
- hZwx/NOgyiNKSsDXYWAq4MDZOh2vbdDINF3FzxPq5dP2NJ3M66Ly03hb08k89pgs3LdPsoegO
- Tu2J7CmmVZcfQ4m+0VGdq64UKmoCFhBRTNWLX38hBtZVNex9bifsNvozxAUYa6xNCnKvY1zti
- tSHdnlKrQztGJPKDj70tXsbArplzKTaEwFG83MEsl4pJi6/o7c8y5GiR1qe1k3iemDcf1jAxQ
- 8vO0Z+W7aaDLC/elksGSVpj5SataKKGbc+bVxTaY4jLwJfb9SazT36mz9nlz06WngCftuzoxS
- WEk2EVsYhvsIqcxoO5/FPQuJJ5kbKT4oYxet8X/OzwmvZWkpvznrC3jKT5KpOC3qMkRruEhmG
- p56p3oEItc0yUqZXMDdbxXSmCGC5/B1BcF7fx/fWejfPt/DG/avYhVauMwOO+kZc6uwf/T05B
- bdJ8x/QEI9/XFRxlbgquhEYzN719u28+rHEH8gfqog6YZ/0BGh3AMifgexd6aJQFFV7hfYQ+O
- EN+TzvcLH1MXjxZWphoXyMQ6E2QX5bxUH5Ja4iTWg8BuXiOGFO4+g4kxXxNW7XjyY++poU8oT
- AlAzeHu+CNp6aiH2CJe0ULgBfZHQd5u9iAVzZf6IQ4tq+tj7wo=
-Subject: [Buildroot] [PATCH v2 1/1] package/openlayers: bump to version 7.1.0
+References: <20220727083753.935654-1-romain.naour@smile.fr>
+ <CADvTj4pSAe_nAr993-GpCGUdsz2RcQa8n+ECme3tvhQwne6s5Q@mail.gmail.com>
+ <20220830192242.GD68979@scaer>
+In-Reply-To: <20220830192242.GD68979@scaer>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 1 Sep 2022 12:33:15 -0600
+Message-ID: <CADvTj4rRb8nbieEcssDGRb_YdrB4SEmYQRGdd-NJP2AyWEFaEg@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date;
+ bh=5RbNV7ZUfu/q3OGRUGAg8OnUeaBWjIbncwLzC6NYqD8=;
+ b=kgHLv9JWRYfJ/WeJ/06szo/tfkrgGXV0iueG7rk4PxJ3k+2UAOZwSgou8Cv/3gbR0j
+ 9oIUIpXkIu8BzNUm/xncG/1an+ccYyhSjh6h0a7UrGuokWOGciI4Uu2GxdryvocVpaC9
+ cq3JjqPHifR7vHNmQW5JZJtWAUM4VuX+CGjbDODZIPQdvS3C5FK79h2N0adSSlvFVJLa
+ Z/4csG+jweg2f8ZA+xpz+jb1r7MqnvIWxAsujwKu0S7mi3gm3SDRBsFfn/G21IdEY9QS
+ c2WPAYM24oOCOMoxi0R5Sj00t85vpyGwA0yehvYLOuqE/0xrzKcOlGD5IIOtrY/lNLzF
+ HwJQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kgHLv9JW
+Subject: Re: [Buildroot] [PATCHv3] package/rustc: needs C++ compiler with
+ musl based toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,69 +91,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-OpenLayers changed its release format again, only two weeks after the
-previous change.  The good news is, though, that they now ship a
-single release archive that includes the compiled JavaScript code
-together with the source code.  Furthermore, they ship both code with
-a single license, which file is part of the archive.
+On Tue, Aug 30, 2022 at 1:22 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2022-07-28 15:07 -0600, James Hilliard spake thusly:
+> > On Wed, Jul 27, 2022 at 2:38 AM Romain Naour <romain.naour@smile.fr> wrote:
+> > > While building host-rust with a musl based toolchain without C++ compiler,
+> > > the build fail since libunwind bundled in rust sources needs a C++ compiler.
+> > >
+> > > cargo:warning=i686-buildroot-linux-musl-gcc.br_real: error: [...]/host-rust-1.62.0/src/llvm-project/libunwind/src/Unwind-EHABI.cpp: C++ compiler not installed on this system
+> > AFAIU rust should be able to use normal(ie non-llvm) libunwind which doesn't
+> > require C++:
+> > https://github.com/buildroot/buildroot/blob/master/package/libunwind/libunwind.mk
+>
+> I've applied Romain's patch as a stop-gap measure, until someone comes
+> up with a better solution, like implementing your proposal of using an
+> unbundled libunwind.
 
-Hence, we still do not need to rely on host-nodejs for this package,
-at least not for this version.
+FYI I sent some preliminary patches improving unbundled libunwind target
+arch support:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220811063502.1823571-1-james.hilliard1@gmail.com/
+https://patchwork.ozlabs.org/project/buildroot/patch/20220811063502.1823571-2-james.hilliard1@gmail.com/
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- package/openlayers/openlayers.hash |  3 ++-
- package/openlayers/openlayers.mk   | 10 ++++------
- 2 files changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index 1c93b9a729..1b3f3cce51 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256  8a9fda6e392688c049ebb88fb2c73b5788b4965b625443de4cca7d4688b1fb82  v6.14.1-dist.zip
-+sha256  37a0e5fde4df3db6e6c11ed0ceb8e20608121afe5f8f7f91cf03990e89a919ca  v7.1.0-package.zip
-+sha256  6c4347b83a8c9feef18d57b18e3b6c44cf901b3c344a4a1fbd837e421555ab8e  LICENSE.md
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index 4626e7545a..7396e38fb9 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
-@@ -4,21 +4,19 @@
- #
- ################################################################################
- 
--OPENLAYERS_VERSION = 6.14.1
--OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
-+OPENLAYERS_VERSION = 7.1.0
-+OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-package.zip
- OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
- OPENLAYERS_LICENSE = BSD-2-Clause
--# There's no separate license file in the archive, only minified files.
-+OPENLAYERS_LICENSE_FILES = LICENSE.md
- 
- define OPENLAYERS_EXTRACT_CMDS
- 	unzip $(OPENLAYERS_DL_DIR)/$(OPENLAYERS_SOURCE) -d $(@D)
--	mv $(@D)/v$(OPENLAYERS_VERSION)-dist/* $(@D)
--	rmdir $(@D)/v$(OPENLAYERS_VERSION)-dist/
- endef
- 
- define OPENLAYERS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/ol.css $(TARGET_DIR)/var/www/ol.css
--	$(INSTALL) -D -m 0644 $(@D)/ol.js $(TARGET_DIR)/var/www/ol.js
-+	$(INSTALL) -D -m 0644 $(@D)/dist/ol.js $(TARGET_DIR)/var/www/ol.js
- endef
- 
- $(eval $(generic-package))
--- 
-2.35.1
-
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
