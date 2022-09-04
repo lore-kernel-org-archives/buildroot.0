@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EC53C6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:13:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82AD8C6FA83
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:13:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E906B6FB32;
-	Sun, 11 Sep 2022 09:13:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E906B6FB32
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FEF340BB8;
+	Sun, 11 Sep 2022 09:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FEF340BB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5FoUpDMEzwhI; Sun, 11 Sep 2022 09:13:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id As0pcjap3-QX; Sun, 11 Sep 2022 09:13:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4D0B6FB09;
-	Sun, 11 Sep 2022 09:13:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4D0B6FB09
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8326A1BF368
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:49:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4854E40BC2;
+	Sun, 11 Sep 2022 09:13:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4854E40BC2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 13A801BF368
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:49:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 22ED96106E
+ by smtp1.osuosl.org (Postfix) with ESMTP id D24E081415
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 08:48:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22ED96106E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D24E081415
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w2C_Q7pxU_Pr for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IgBVC6dczofP for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF45E6FB30
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF45E6FB30
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2C24818C0
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2C24818C0
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AAB098361F; Sun, 11 Sep 2022 08:48:27 +0000 (UTC)
+ id AE91983518; Sun, 11 Sep 2022 08:48:28 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 26 Aug 2022 19:30:23 +0200
+Date: Sun, 4 Sep 2022 09:38:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d68628a5382844a40856be486cd41dbfb0c7cabb
-X-Git-Newrev: 3c09118dc42f48156376527665a38d1cbb871a38
+X-Git-Oldrev: fc7ba3ab8fa6c3144098fae057c758d35279e46f
+X-Git-Newrev: 5a8c013bb0f0d1be9eb8f1c169f9ee69a6389635
 X-Patchwork-Hint: ignore
-Message-Id: <20220911084827.AAB098361F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gobject-introspection: bump
- version to 1.72.0
+Message-Id: <20220911084828.AE91983518@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-lunix: bump to version 20220331
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,305 +57,139 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0928999761146985708=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0928999761146985708==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3c09118dc42f48156376527665a38d1cbb871a38
+commit: https://git.buildroot.net/buildroot/commit/?id=5a8c013bb0f0d1be9eb8f1c169f9ee69a6389635
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove upstreamed patch 0004-build-Avoid-the-doctemplates-hack.patch.
-- Update license hashes due to address changes.
+remove merged patches
 
-Signed-off-by: Adam Duskett <aduskett@rivian.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../gobject-introspection/0001-disable-tests.patch |   2 +-
- .../0004-build-Avoid-the-doctemplates-hack.patch   | 221 ---------------------
- .../gobject-introspection.hash                     |   8 +-
- .../gobject-introspection/gobject-introspection.mk |   2 +-
- 4 files changed, 6 insertions(+), 227 deletions(-)
+ package/lua-lunix/0001-fix-with-uClibc.patch       | 28 ----------------------
+ ...brt.patch => 0001-remove-link-with-librt.patch} |  8 +++----
+ package/lua-lunix/0003-fix-sysctl-detection.patch  | 24 -------------------
+ package/lua-lunix/lua-lunix.hash                   |  4 ++--
+ package/lua-lunix/lua-lunix.mk                     |  2 +-
+ 5 files changed, 7 insertions(+), 59 deletions(-)
 
-diff --git a/package/gobject-introspection/0001-disable-tests.patch b/package/gobject-introspection/0001-disable-tests.patch
-index ed2d9d6fc0..390707c10a 100644
---- a/package/gobject-introspection/0001-disable-tests.patch
-+++ b/package/gobject-introspection/0001-disable-tests.patch
-@@ -16,7 +16,7 @@ diff --git a/meson.build b/meson.build
- index c2cb577f..65ce7adf 100644
- --- a/meson.build
- +++ b/meson.build
--@@ -225,12 +225,6 @@ else
-+@@ -232,12 +232,6 @@ else
-  endif
-  subdir('docs')
-  
-diff --git a/package/gobject-introspection/0004-build-Avoid-the-doctemplates-hack.patch b/package/gobject-introspection/0004-build-Avoid-the-doctemplates-hack.patch
+diff --git a/package/lua-lunix/0001-fix-with-uClibc.patch b/package/lua-lunix/0001-fix-with-uClibc.patch
 deleted file mode 100644
-index 0b70b5c4c0..0000000000
---- a/package/gobject-introspection/0004-build-Avoid-the-doctemplates-hack.patch
+index 236eec47a1..0000000000
+--- a/package/lua-lunix/0001-fix-with-uClibc.patch
 +++ /dev/null
-@@ -1,221 +0,0 @@
--From 0504b26ec2adb13dfdff51679d84ad2f69af5918 Mon Sep 17 00:00:00 2001
--From: Emmanuele Bassi <ebassi@gnome.org>
--Date: Tue, 11 Jan 2022 15:51:10 +0000
--Subject: [PATCH] build: Avoid the doctemplates hack
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,28 +0,0 @@
+-From ee41d97a80b978f54941ac6857c00b8a8f28de24 Mon Sep 17 00:00:00 2001
+-From: Francois Perrad <francois.perrad@gadz.org>
+-Date: Sun, 6 Jun 2021 17:55:06 +0200
+-Subject: [PATCH] fix with uClibc
 -
--The hack that copies the doctemplates directory into the build
--directory has stopped working with newer versions of Meson; while it's
--possible to copy files, custom_target() cannot depend on a directory.
--Additionally, the dependency has always been broken.
+-uClibc doesn't have is no sys_siglist.
 -
--Instead, we enumerate the template files—after all, it's not like they
--change a lot—and then we list them as dependencies for the test targets.
--
--Fixes: #414
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[james.hilliard1@gmail.com: backport from upstream commit
--effb1e09dee263cdac4ec593e8caf316e6f01fe2]
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ----
-- giscanner/doctemplates/devdocs/meson.build | 19 +++++++
-- giscanner/doctemplates/mallard/meson.build | 63 ++++++++++++++++++++++
-- giscanner/meson.build                      | 14 ++---
-- tests/scanner/meson.build                  | 24 +++++----
-- 4 files changed, 98 insertions(+), 22 deletions(-)
-- create mode 100644 giscanner/doctemplates/devdocs/meson.build
-- create mode 100644 giscanner/doctemplates/mallard/meson.build
+- lunix-rel-20170920/src/unix.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/giscanner/doctemplates/devdocs/meson.build b/giscanner/doctemplates/devdocs/meson.build
--new file mode 100644
--index 00000000..2037182a
----- /dev/null
--+++ b/giscanner/doctemplates/devdocs/meson.build
--@@ -0,0 +1,19 @@
--+doc_templates += files([
--+  'Gjs/_doc.tmpl',
--+  'Gjs/_index.tmpl',
--+  'Gjs/_method.tmpl',
--+  'Gjs/_methods.tmpl',
--+  'Gjs/_properties.tmpl',
--+  'Gjs/_signals.tmpl',
--+  'Gjs/_staticmethods.tmpl',
--+  'Gjs/_vfuncs.tmpl',
--+  'Gjs/base.tmpl',
--+  'Gjs/callback.tmpl',
--+  'Gjs/class.tmpl',
--+  'Gjs/default.tmpl',
--+  'Gjs/enum.tmpl',
--+  'Gjs/function.tmpl',
--+  'Gjs/interface.tmpl',
--+  'Gjs/method.tmpl',
--+  'Gjs/namespace.tmpl',
--+])
--diff --git a/giscanner/doctemplates/mallard/meson.build b/giscanner/doctemplates/mallard/meson.build
--new file mode 100644
--index 00000000..5fe4e2af
----- /dev/null
--+++ b/giscanner/doctemplates/mallard/meson.build
--@@ -0,0 +1,63 @@
--+base_templates = files([
--+  'base.tmpl',
--+  'class.tmpl',
--+  'namespace.tmpl',
--+])
--+
--+c_templates = files([
--+  'C/callback.tmpl',
--+  'C/class.tmpl',
--+  'C/constructor.tmpl',
--+  'C/default.tmpl',
--+  'C/enum.tmpl',
--+  'C/field.tmpl',
--+  'C/function.tmpl',
--+  'C/interface.tmpl',
--+  'C/method.tmpl',
--+  'C/namespace.tmpl',
--+  'C/property.tmpl',
--+  'C/record.tmpl',
--+  'C/signal.tmpl',
--+  'C/vfunc.tmpl',
--+])
--+
--+gjs_templates = files([
--+  'Gjs/callback.tmpl',
--+  'Gjs/class.tmpl',
--+  'Gjs/constructor.tmpl',
--+  'Gjs/default.tmpl',
--+  'Gjs/enum.tmpl',
--+  'Gjs/field.tmpl',
--+  'Gjs/function.tmpl',
--+  'Gjs/interface.tmpl',
--+  'Gjs/method.tmpl',
--+  'Gjs/namespace.tmpl',
--+  'Gjs/property.tmpl',
--+  'Gjs/record.tmpl',
--+  'Gjs/signal.tmpl',
--+  'Gjs/vfunc.tmpl',
--+])
--+
--+py_templates = files([
--+  'Python/callback.tmpl',
--+  'Python/class.tmpl',
--+  'Python/constructor.tmpl',
--+  'Python/default.tmpl',
--+  'Python/enum.tmpl',
--+  'Python/field.tmpl',
--+  'Python/function.tmpl',
--+  'Python/interface.tmpl',
--+  'Python/method.tmpl',
--+  'Python/namespace.tmpl',
--+  'Python/property.tmpl',
--+  'Python/record.tmpl',
--+  'Python/signal.tmpl',
--+  'Python/vfunc.tmpl',
--+])
--+
--+doc_templates += [
--+  base_templates,
--+  c_templates,
--+  gjs_templates,
--+  py_templates,
--+]
--diff --git a/giscanner/meson.build b/giscanner/meson.build
--index 41edcd44..3d7dc678 100644
----- a/giscanner/meson.build
--+++ b/giscanner/meson.build
--@@ -53,17 +53,9 @@ configure_file(input : '../girepository/gdump.c',
+-diff --git a/lunix-rel-20170920/src/unix.c b/lunix-rel-20170920/src/unix.c
+-index 5f3a70a..e561ab2 100644
+---- a/lunix-rel-20170920/src/unix.c
+-+++ b/lunix-rel-20170920/src/unix.c
+-@@ -438,7 +438,7 @@
+- #endif
 - 
-- install_subdir('doctemplates', install_dir: giscannerdir)
+- #ifndef HAVE_SYS_SIGLIST
+--#define HAVE_SYS_SIGLIST (!MUSL_MAYBE && !__sun && !_AIX)
+-+#define HAVE_SYS_SIGLIST (!MUSL_MAYBE && !__sun && !_AIX && !__UCLIBC__)
+- #endif
 - 
---# XXX: this doesn't track the input, but there is nothing to copy many files
---# in meson.
---doc_templates = custom_target('copy-templates',
---  input : 'doctemplates',
---  output : 'doctemplates',
---  command : [
---    python, '-c',
---      'import sys, shutil;' +
---      'shutil.rmtree(sys.argv[2], ignore_errors=True);' +
---      'shutil.copytree(sys.argv[1], sys.argv[2])',
---    '@INPUT@', '@OUTPUT@'])
--+doc_templates = []
--+subdir('doctemplates/devdocs')
--+subdir('doctemplates/mallard')
-- 
-- flex = find_program('flex', 'win_flex')
-- bison = find_program('bison', 'win_bison')
--diff --git a/tests/scanner/meson.build b/tests/scanner/meson.build
--index 5176b957..b81b3fd5 100644
----- a/tests/scanner/meson.build
--+++ b/tests/scanner/meson.build
--@@ -525,19 +525,26 @@ foreach gir : test_girs
-- endforeach
-- 
-- if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
--+  doctool_env = environment()
--+  doctool_env.set('srcdir', meson.current_source_dir())
--+  doctool_env.set('builddir', meson.current_build_dir())
--+
--   foreach language : ['C', 'Python', 'Gjs']
--     regress_docs = custom_target(
--       'generate-docs-' + language,
--       input: regress_gir,
---      depends: [doc_templates],
--+      depend_files: doc_templates,
--       build_by_default: not cairo_deps_found,
--+      env: doctool_env,
--       output: 'Regress-1.0-' + language,
--       command: [
--         python, girdoctool,
--         '--add-include-path=' + join_paths(build_root, 'gir'),
--         '--add-include-path=' + meson.current_build_dir(),
--         '--language', language,
---        '@INPUT@', '-o', '@OUTPUT@'],
--+        '--templates-dir=' + join_paths(meson.current_source_dir(), '../../giscanner/doctemplates'),
--+        '@INPUT@', '-o', '@OUTPUT@',
--+      ],
--     )
-- 
--     if cairo_deps_found
--@@ -546,10 +553,7 @@ if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
--         python,
--         args: [gi_tester, 'Regress-1.0-' + language],
--         depends: [regress_docs],
---        env: [
---          'srcdir=' + meson.current_source_dir(),
---          'builddir=' + meson.current_build_dir(),
---        ],
--+        env: doctool_env,
--       )
--     endif
--   endforeach
--@@ -557,9 +561,10 @@ if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
--   regress_sections = custom_target(
--     'generate-docs-sections',
--     input: regress_gir,
---    depends: [doc_templates],
--+    depend_files: [doc_templates],
--     build_by_default: not cairo_deps_found,
--     output: 'Regress-1.0-sections.txt',
--+    env: doctool_env,
--     command: [
--       python, girdoctool,
--       '--add-include-path=' + join_paths(build_root, 'gir'),
--@@ -574,10 +579,7 @@ if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
--       python,
--       args: [gi_tester, 'Regress-1.0-sections.txt'],
--       depends: [regress_sections],
---      env: [
---        'srcdir=' + meson.current_source_dir(),
---        'builddir=' + meson.current_build_dir(),
---      ],
--+      env: doctool_env,
--     )
--   endif
-- endif
+- #ifndef HAVE_UNLINKAT
 --- 
--2.25.1
+-2.30.2
 -
-diff --git a/package/gobject-introspection/gobject-introspection.hash b/package/gobject-introspection/gobject-introspection.hash
-index 5b76df6b40..8f9d323d9a 100644
---- a/package/gobject-introspection/gobject-introspection.hash
-+++ b/package/gobject-introspection/gobject-introspection.hash
-@@ -1,5 +1,5 @@
--#From http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/1.70/gobject-introspection-1.70.0.sha256sum
--sha256  902b4906e3102d17aa2fcb6dad1c19971c70f2a82a159ddc4a94df73a3cafc4a  gobject-introspection-1.70.0.tar.xz
--sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING.LGPL
--sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING.GPL
-+#From http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/1.70/gobject-introspection-1.72.0.sha256sum
-+sha256  02fe8e590861d88f83060dd39cda5ccaa60b2da1d21d0f95499301b186beaabc  gobject-introspection-1.72.0.tar.xz
-+sha256  faa2e414bd5f91d2d2c39e85c7cc3f2ccde05c3306f96b404f8ed8cf0266c279  COPYING.LGPL
-+sha256  4c1cedcbb4a12ea964f1160dbbf36099e5a59b96129a99a1a1a61f2cb09271fb  COPYING.GPL
- sha256  23f82cbc9808cdd8e902df38271434040ce0562ca382ac2a96f5e3bf807b6d31  giscanner/scannerlexer.l
-diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-index 41d64171a7..c8ad9b3c72 100644
---- a/package/gobject-introspection/gobject-introspection.mk
-+++ b/package/gobject-introspection/gobject-introspection.mk
+diff --git a/package/lua-lunix/0002-remove-link-with-librt.patch b/package/lua-lunix/0001-remove-link-with-librt.patch
+similarity index 70%
+rename from package/lua-lunix/0002-remove-link-with-librt.patch
+rename to package/lua-lunix/0001-remove-link-with-librt.patch
+index 7b1c8ddd57..2650e9117c 100644
+--- a/package/lua-lunix/0002-remove-link-with-librt.patch
++++ b/package/lua-lunix/0001-remove-link-with-librt.patch
+@@ -7,13 +7,13 @@ librt is not available with musl
+ 
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ ---
+- lunix-rel-20170920/lunix-20170920-1.rockspec | 10 ----------
++ lunix-rel-20220331/lunix-20220331-1.rockspec | 10 ----------
+  1 file changed, 10 deletions(-)
+ 
+-diff --git a/lunix-rel-20170920/lunix-20170920-1.rockspec b/lunix-rel-20170920/lunix-20170920-1.rockspec
++diff --git a/lunix-rel-20220331/lunix-20220331-1.rockspec b/lunix-rel-20220331/lunix-20220331-1.rockspec
+ index 741179d..76cafeb 100644
+---- a/lunix-rel-20170920/lunix-20170920-1.rockspec
+-+++ b/lunix-rel-20170920/lunix-20170920-1.rockspec
++--- a/lunix-rel-20220331/lunix-20220331-1.rockspec
+++++ b/lunix-rel-20220331/lunix-20220331-1.rockspec
+ @@ -26,16 +26,6 @@ build = {
+  		};
+  	};
+diff --git a/package/lua-lunix/0003-fix-sysctl-detection.patch b/package/lua-lunix/0003-fix-sysctl-detection.patch
+deleted file mode 100644
+index 18656b1921..0000000000
+--- a/package/lua-lunix/0003-fix-sysctl-detection.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-sys/sysctl.h was removed with glibc 2.32
+-
+-Fetched from: https://github.com/wahern/lunix/pull/20/files
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+----
+- lunix-rel-20170920/src/unix.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lunix-rel-20170920/src/unix.c b/lunix-rel-20170920/src/unix.c
+-index 272820a..fa00876 100644
+---- a/lunix-rel-20170920/src/unix.c
+-+++ b/lunix-rel-20170920/src/unix.c
+-@@ -165,7 +165,7 @@
+- #endif
+- 
+- #ifndef HAVE_SYS_SYSCTL_H /* missing on musl libc */
+--#define HAVE_SYS_SYSCTL_H (defined BSD || GLIBC_PREREQ(0,0) || UCLIBC_PREREQ(0,0,0))
+-+#define HAVE_SYS_SYSCTL_H (defined BSD || (__GLIBC__ && !GLIBC_PREREQ(2,32)) || UCLIBC_PREREQ(0,0,0))
+- #endif
+- 
+- #ifndef HAVE_STRUCT_IN_PKTINFO
+--- 
+-2.30.2
+-
+diff --git a/package/lua-lunix/lua-lunix.hash b/package/lua-lunix/lua-lunix.hash
+index 6e3c920db4..911f475b0e 100644
+--- a/package/lua-lunix/lua-lunix.hash
++++ b/package/lua-lunix/lua-lunix.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  4a4007b394ae884e18e9d0319ea584e8b4a682d7bf8fa5b99c7eea9baf1e5ed6  lunix-20170920-1.src.rock
+-sha256  9b74be104d59caa45bf3321ebe771f9cc7874209261a93f1cf971ceca44fbe03  lunix-rel-20170920/LICENSE
++sha256  eb13e89e1dfcc82aec3915ed4185f3a2a9205ec3e98a991b13cc39d7f389c427  lunix-20220331-1.src.rock
++sha256  9b74be104d59caa45bf3321ebe771f9cc7874209261a93f1cf971ceca44fbe03  lunix-rel-20220331/LICENSE
+diff --git a/package/lua-lunix/lua-lunix.mk b/package/lua-lunix/lua-lunix.mk
+index 28cb2dc411..f3c159cbf4 100644
+--- a/package/lua-lunix/lua-lunix.mk
++++ b/package/lua-lunix/lua-lunix.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.70
-+GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.72
- GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).0
- GOBJECT_INTROSPECTION_SITE = http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
- GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
-
---===============0928999761146985708==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-LUA_LUNIX_VERSION_UPSTREAM = 20170920
++LUA_LUNIX_VERSION_UPSTREAM = 20220331
+ LUA_LUNIX_VERSION = $(LUA_LUNIX_VERSION_UPSTREAM)-1
+ LUA_LUNIX_NAME_UPSTREAM = lunix
+ LUA_LUNIX_SUBDIR = lunix-rel-$(LUA_LUNIX_VERSION_UPSTREAM)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0928999761146985708==--
