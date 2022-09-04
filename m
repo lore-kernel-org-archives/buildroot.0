@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B5D9ECAAD3
-	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 13:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6900CECAAD4
+	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 13:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C22FA40573;
-	Sun,  4 Sep 2022 13:46:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C22FA40573
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CtBB84XDjMbE; Sun,  4 Sep 2022 13:46:56 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A1864056A;
-	Sun,  4 Sep 2022 13:46:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A1864056A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7FCA31BF3F0
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 13:46:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58BDB408BB
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 13:46:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58BDB408BB
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA249408A8;
+	Sun,  4 Sep 2022 13:58:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA249408A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U7DHD6XDgchs for <buildroot@lists.busybox.net>;
- Sun,  4 Sep 2022 13:46:52 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4oX2PfgRictj; Sun,  4 Sep 2022 13:58:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7969440343;
+	Sun,  4 Sep 2022 13:58:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7969440343
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BD30D1BF3F0
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 13:57:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59A5E4055E
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 13:57:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59A5E4055E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Peot6ydAZrgD for <buildroot@lists.busybox.net>;
+ Sun,  4 Sep 2022 13:57:57 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CA2840363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B40940201
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5CA2840363
- for <buildroot@buildroot.org>; Sun,  4 Sep 2022 13:46:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8B40940201
+ for <buildroot@buildroot.org>; Sun,  4 Sep 2022 13:57:57 +0000 (UTC)
 Received: from localhost.localdomain (unknown [92.184.105.16])
  (Authenticated sender: thierry.guibert@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id A7873780346;
- Sun,  4 Sep 2022 15:46:45 +0200 (CEST)
-To: yann.morin.1998@free.fr, thomas.petazzoni@bootlin.com,
- buildroot@buildroot.org
-Date: Sun,  4 Sep 2022 15:46:13 +0200
-Message-Id: <20220904134613.31886-1-thierry.guibert@croix-rouge.fr>
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 4ACC3780346;
+ Sun,  4 Sep 2022 15:57:52 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Sun,  4 Sep 2022 15:57:13 +0200
+Message-Id: <20220904135712.103226-1-thierry.guibert@croix-rouge.fr>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] Add documentation about docker registry
+Subject: [Buildroot] [PATCH] Tagging targets names without hyphens does not
+ run gitlab CI
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,39 +67,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Thierry GUIBERT <thierry.guibert@croix-rouge.fr>
 ---
- docs/manual/adding-board-support.txt | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ support/scripts/generate-gitlab-ci-yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-index cd90a5871f..f68e192468 100644
---- a/docs/manual/adding-board-support.txt
-+++ b/docs/manual/adding-board-support.txt
-@@ -48,9 +48,22 @@ and configurations in these directories, and reference them from the main
- Buildroot configuration. Refer to xref:customize[] for more details.
- 
- Before submitting patches for new boards it is recommended to test it by
--building it using latest gitlab-CI docker container. To do this use
--utils/docker-run script and inside it issue these commands:
-+building it using latest gitlab-CI docker container. 
-+To do this use utils/docker-run script and inside it issue these commands:
- --------------------
-- $ make +<boardname>_defconfig+
-+ $ make <boardname>_defconfig
-  $ make
- --------------------
-+
-+By defaut, buildroot developpers use our gitlab.com registry and it should
-+be convenient for most usages. 
-+If you still want to build your own docker images :
-+--------------------
-+ $ DOCKER_REGISTRY=registry.gitlab.com
-+ $ IMAGE_NAME=buildroot.org/buildroot/base
-+ $ IMAGE_TAG=YYYYMMDD.HHMM
-+ $ docker build  --pull --no-cache \
-+	-t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} support/docker
-+ $ docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
-+--------------------
-+
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index aa43aac019..4ae4d13be2 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -71,7 +71,7 @@ gen_tests() {
+             defconfigs=( $(cd configs; LC_ALL=C ls -1 | grep ^${pattern}) )
+             do_defconfigs=base
+             ;;
+-          (*-*_defconfig)
++          (*_defconfig)
+             defconfigs=( "${CI_COMMIT_REF_NAME##*-}" )
+             do_defconfigs=base
+             ;;
 -- 
 2.37.2
 
