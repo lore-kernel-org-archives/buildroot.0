@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 696A5C54EE9
-	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 20:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 008E0ECAAD3
+	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 20:57:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F1DA4405A0;
-	Sun,  4 Sep 2022 20:50:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1DA4405A0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 533FB81373;
+	Sun,  4 Sep 2022 20:57:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 533FB81373
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Iw2PAZ-tJLEF; Sun,  4 Sep 2022 20:50:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5N5Do8rQGabn; Sun,  4 Sep 2022 20:57:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B131405AA;
-	Sun,  4 Sep 2022 20:50:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B131405AA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 451401BF38B
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 20:50:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8CDC381338;
+	Sun,  4 Sep 2022 20:57:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CDC381338
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CA9C01BF38B
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 20:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28B264028F
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 20:50:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28B264028F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A543D81338
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 20:57:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A543D81338
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dunm5tqXbsjI for <buildroot@lists.busybox.net>;
- Sun,  4 Sep 2022 20:50:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OQHgfpMZ-9EO for <buildroot@lists.busybox.net>;
+ Sun,  4 Sep 2022 20:57:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C491C40204
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C491C40204
- for <buildroot@buildroot.org>; Sun,  4 Sep 2022 20:50:12 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id t7so3906039wrm.10
- for <buildroot@buildroot.org>; Sun, 04 Sep 2022 13:50:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A869E81317
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
+ [IPv6:2a00:1450:4864:20::129])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A869E81317
+ for <buildroot@buildroot.org>; Sun,  4 Sep 2022 20:57:08 +0000 (UTC)
+Received: by mail-lf1-x129.google.com with SMTP id z25so10636387lfr.2
+ for <buildroot@buildroot.org>; Sun, 04 Sep 2022 13:57:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=mUremROJculbrmu7aJsCF5JUMgNNXfi6QmT3wzcYeqM=;
- b=rGWuFgLSSt2Eccx6JlSkPPyLdpK2Um0dR/d3wwWWbHkCE6jUVkZWkmUFaLltWbdqa1
- UdG2MVb3KF/XFQW13KrgN6tgJNglXL9wsIX3Auo8kxocurOWV4tB+A1FxuqiJMuNLBzM
- 9O+weOfiLvTCAt2rj+fu0CAy+4tiIfd9kn6Ulht4eme2j4uk7fp3GakAXcazRHJl68yE
- hAAUkOR9Vs2IXCtPzXbacCP5qixHzW/c1t+g2b5LeV7MJvFNd4TblY2RxeGn0xs6q0U5
- CCtfT7KhPaAHDwpsbrnL64gKkbiN9Yk2EY26jdccTrAvGHecTaBWyycaBblJbvhDSEZa
- KlUw==
-X-Gm-Message-State: ACgBeo1tA41Fkv7Q8BH50V4Lcz2FG5qyGMQHpFWe8j0JjOKP9vICcQxL
- e0kmHS11M4Kwa8IyzQQFZT5F2Tu4XYE=
-X-Google-Smtp-Source: AA6agR7JVgcRo1/cmsCDuGaWuw0yZ8lnDgMSE0xrSZT60TgMWKroUSPe92EpVLkEhGi9f5pH90OtYQ==
-X-Received: by 2002:a5d:528a:0:b0:225:4a8e:221e with SMTP id
- c10-20020a5d528a000000b002254a8e221emr21961078wrv.145.1662324610673; 
- Sun, 04 Sep 2022 13:50:10 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- n19-20020a05600c3b9300b003a846a014c1sm16473662wms.23.2022.09.04.13.50.10
+ bh=uwYJT8eUHrfScYhIptkRFjdh0WtK6+7qetddQUr0ZUA=;
+ b=Irsi5Z3GkATx8tAuqG0ykDRugzuSo54FSWs2hM5vbSAgHXhk/I0Oe0JmpXW+DRagqh
+ 0i/VO6uGEeiN2V+0UuMaKNhNaJ578L5A8WzPpTIvXpF+U3oKFzZI+9f66wn71miOFS/X
+ X+LDv73BYyMllodxTK5r8SyEwjtcsxCgzIJvcuXj7hjKE50x8TUjECs8fOBeLT7GwZje
+ Pj+IFrAiZCjfhwi37sFkmFOx3BLEgNcY3AFtUKOaXNpBdxxpbTB7fIuPvT27nmWYbXif
+ 24BC5gzYjYuSujn5/8w6Gu5FzOvRPxWgUNhpyyXB7QinylF1jpcqbbijhINKoWnZC5/r
+ K+7w==
+X-Gm-Message-State: ACgBeo2WND4kjafWDOPh59M/00YqQEllQFud09C/kiDiLkiODR4Xcmwd
+ XKvr6+XMCuQUK7M055EE9fXa49u84Ss=
+X-Google-Smtp-Source: AA6agR4M3SwUeAVhiPdS1P8ubuR/Mk8UfOturu4tUVBEAcl2QpGTtUW050VnSpiBi3lNEhtj81Gllw==
+X-Received: by 2002:a05:6512:3409:b0:48a:ef20:ddb with SMTP id
+ i9-20020a056512340900b0048aef200ddbmr17142626lfr.597.1662325026178; 
+ Sun, 04 Sep 2022 13:57:06 -0700 (PDT)
+Received: from localhost.localdomain ([5.188.167.245])
+ by smtp.googlemail.com with ESMTPSA id
+ o12-20020ac25e2c000000b0049468f9e697sm1013502lfg.236.2022.09.04.13.57.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Sep 2022 13:50:10 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sun, 04 Sep 2022 13:57:05 -0700 (PDT)
+From: Sergey Matyukevich <geomatsi@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  4 Sep 2022 22:50:04 +0200
-Message-Id: <20220904205004.53601-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sun,  4 Sep 2022 23:57:02 +0300
+Message-Id: <20220904205702.1488199-1-geomatsi@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date;
- bh=mUremROJculbrmu7aJsCF5JUMgNNXfi6QmT3wzcYeqM=;
- b=JqADTHuKZW+fYF58j47MQdPI3zsbClQGN/93ad9RRwoyxsc+vNlSHdWY0t251W/S6J
- +4tqKwQgqSl0kiM8c4ZvVCJ0T+VwSXsLG7YZxRda+kgjaClx5jbXEqjAgntTdm1Qe055
- WnMUhRr8FZjD59R35yVmQ62PwW+QRToaA/zcj+rh109EYNuOj9kYneGjQjeoPBE+4sdI
- 2crsCW/lP/me9jvyoYNrMO2CEj2/QTno4r26x1T1sCEBKAFK9QfRWCYmMUQYexRwlcK0
- Qzl0GaBKaZcNeFzv2hkT+FphN8yaBepBvBp2wYbDpaGs+pXLX9mcww9ju4l1yrjcZF0X
- m8mg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=uwYJT8eUHrfScYhIptkRFjdh0WtK6+7qetddQUr0ZUA=;
+ b=DcfMPBTtS/NLPX+dQIbcv46WeDc11Qxo3TXzBExstfxinM9gmpEG5ShcCaKGGFd8/2
+ ItAJ+fVdoYVZYk0ieoIq2dJS2dGiKEkR/pI0w2AxFob458Ml62BAgBDVLfqzA8KOYMOm
+ cfGFRtywBzse/N2r6iXXVbpjyqhNih499WFNAlHejtRmr+P7VdHvaSZcWM01tBauWSpX
+ zvbG7+a5xmELIghJS6ZptWyNFuzcdWxRr8d3MkGrFGXDqjh19/o5u0a8kpDdpySRW1H3
+ 9c/tpuA/61KMzzgJ4slhmPpNikLSda8AefonL/+k2aywzfXHHKu+DQsXykusyw7LJ2CJ
+ lFBg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=JqADTHuK
-Subject: [Buildroot] [PATCH 1/1] package/sconeserver: fix build with gcc 4.8
+ header.a=rsa-sha256 header.s=20210112 header.b=DcfMPBTt
+Subject: [Buildroot] [PATCH 1/1] package/linux-tools: perf: add host-python3
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,51 +93,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Simon Dawson <spdawson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with gcc 4.8 raised since commit
-8b42bbf30a914b0fd40a4518e61ac7bc511a7deb:
+Linux kernel commit 00facc760903 ("perf jevents: Switch build to use
+jevents.py") switched to auto-generation of arch-specific PMU events
+using python script. Now custom PMU events for different platforms of
+the selected target architecture are not embedded into perf binary if
+an appropriate host python interpreter is not present. In practice it
+means that perf is successfully built, but 'perf list pmu' will show
+no custom events on a target platform even if those events are supported
+and properly defined in tools/perf/pmu-events/arch/<target arch>
+directory in the kernel source tree.
 
-/home/buildroot/autobuild/run/instance-1/output-1/build/sconeserver-8d1935919a2013358993a8e9dfa992cbde56e503/http/AuthRealmDB.cpp: In member function 'virtual std::string http::AuthRealmDB::lookup_hash(const string&)':
-/home/buildroot/autobuild/run/instance-1/output-1/build/sconeserver-8d1935919a2013358993a8e9dfa992cbde56e503/http/AuthRealmDB.cpp:93:3: error: 'unique_ptr' is not a member of 'std'
-   std::unique_ptr<scx::DbQuery> query(m_db->object()->new_query(
-   ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/198c23f1de5cc90efe2d3b4ce053939457e003f7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 ---
- package/sconeserver/sconeserver.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/linux-tools/linux-tool-perf.mk.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index d15b112801..bfbd5dc6ed 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -17,14 +17,10 @@ SCONESERVER_DEPENDENCIES = \
- # https://github.com/sconemad/sconeserver/tree/master/markdown
- # has no cross-compile support provided by the sconeserver build system
- SCONESERVER_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -std=c++11" \
- 	-DWITH_IMAGE=OFF \
- 	-DWITH_MARKDOWN=OFF
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index 057c6f80e7..44c1bbdf83 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -6,7 +6,7 @@
  
--ifeq ($(BR2_PACKAGE_LIBXML2),y)
--# Needed to fix build failure when icu is enabled in libxml2
--SCONESERVER_CONF_OPTS += -DCMAKE_CXX_FLAGS="-std=c++11"
--endif
--
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SCONESERVER_DEPENDENCIES += openssl
- SCONESERVER_CONF_OPTS += -DWITH_SSL=ON
+ LINUX_TOOLS += perf
+ 
+-PERF_DEPENDENCIES = host-flex host-bison
++PERF_DEPENDENCIES = host-flex host-bison host-python3
+ 
+ ifeq ($(NORMALIZED_ARCH),x86_64)
+ PERF_ARCH=x86
 -- 
-2.35.1
+2.37.1
 
 _______________________________________________
 buildroot mailing list
