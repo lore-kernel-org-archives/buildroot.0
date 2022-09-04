@@ -1,86 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A005BECAAD3
-	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 12:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB57AECAAD3
+	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 12:54:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E847B40521;
-	Sun,  4 Sep 2022 12:43:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E847B40521
+	by smtp4.osuosl.org (Postfix) with ESMTP id 119AA403D0;
+	Sun,  4 Sep 2022 12:54:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 119AA403D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rtX0siGc-c1K; Sun,  4 Sep 2022 12:43:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9utfilF3scim; Sun,  4 Sep 2022 12:54:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D23B040518;
-	Sun,  4 Sep 2022 12:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D23B040518
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AF40B1BF3FC
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 12:43:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 156BB40386;
+	Sun,  4 Sep 2022 12:54:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 156BB40386
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 111D91BF3FC
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 12:54:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 96F6B60BB6
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 12:43:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96F6B60BB6
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE46340386
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 12:54:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE46340386
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dZlXmyEuEdz2 for <buildroot@lists.busybox.net>;
- Sun,  4 Sep 2022 12:43:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RuCviT8Rc0iu for <buildroot@lists.busybox.net>;
+ Sun,  4 Sep 2022 12:54:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DEAE60774
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1DEAE60774
- for <buildroot@buildroot.org>; Sun,  4 Sep 2022 12:43:41 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id e17so636583edc.5
- for <buildroot@buildroot.org>; Sun, 04 Sep 2022 05:43:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 245C040339
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 245C040339
+ for <buildroot@buildroot.org>; Sun,  4 Sep 2022 12:54:12 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id bj12so12190544ejb.13
+ for <buildroot@buildroot.org>; Sun, 04 Sep 2022 05:54:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=zsKBI1wmYsEnALSnb2dQBP2ScHCz2qv1xGG2HK9nqYM=;
- b=WgvTV/K+bltxhzSE/rZQx3Q3yhR/4h5rt6upUyKK3D41yDELnJF4S+5jTnR6eLM113
- zMADw8loudYeSsU2A4KJQRs9eJFsryR75unLLBbtvLf+9elychXQ+6NPyS8LVfCjWxVG
- 2I3KAVbq+YTri4whxemQhf40976L76/3hgzLB7Uc3EmQo0Lz20U7ZxaQiUcJGCRB1zRA
- JTsuD0FZYgEg59SK8od4NSi39Z8iue9dFQqHEJdwmEt8D6Pb09sjozh5s4DMJb1pZd2z
- xs+UQoGHoNmoFHWLeJBV9b/v9BljoOewYdk7pvoyDFH8xYBIz9K+IA96s4ewQhVgTos3
- 6B1A==
-X-Gm-Message-State: ACgBeo1QyRbpBBA97oiJLQqr9DahzffOklLrq3yaSbCWmxOxwdrSP8bq
- fzWVkvsTdI5ry5DbWrC2dF36jVL1K0dCENoC
-X-Google-Smtp-Source: AA6agR575FXMjWK6rDYvURa7sncjcbtr+ZI4SxCF+62vP6QypZA1q1GjdEK++83tDZpFzW/LCcTfHw==
-X-Received: by 2002:a05:6402:5c9:b0:446:fb0:56bb with SMTP id
- n9-20020a05640205c900b004460fb056bbmr40659839edx.173.1662295419327; 
- Sun, 04 Sep 2022 05:43:39 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date;
+ bh=edW5valKkOX4P/eYsyNxcfuMndrHTfOP3WMQO0tmFmw=;
+ b=1sVwxhhSkQlWFoH323mIxICMzDpzQT3Ot2ayz70wMPInWf6oHjbuTP7wTNYNI0b8ok
+ NX/T1XONgZPAfEL2Y8kw5G8AGOK6y9Y13bmbLfKpTWo6PoNZC/03uwKePISqpjtaq+zk
+ bxAzP5zTPLIog1Q/2mmeJG/8sLPwY6jOmnscKv0SjkznFk8peubaFnCspftzB8ItXoNK
+ km1bGqtrUhBQEZ1udrcwOb3ctWVZ9AZkn+He0FaDIcE4u4AMZeEUYpOrnSYBNKUiMCoy
+ Lbu9Oip6fZ1OsNDgt3R0wBn9hj546df0+vWByDBUEFqJQpCE4OF5I9wy+YYuX8MhppF3
+ oA3w==
+X-Gm-Message-State: ACgBeo3GtzoMmQNWlvcOiTZ5cz8OU+AmJZPIJZfYxjEuuvb+dfEoRI9M
+ QIHAOytrqYeh1C439HMuxa+ohlM5jLyAJwVb
+X-Google-Smtp-Source: AA6agR6Ar9EdI0ClhRZ7aYzs6G8hszSL4/4WeL87/bNFk1j1icg5lOgzm/NR3QGrJcZP5VGqus89Ow==
+X-Received: by 2002:a17:906:8479:b0:73d:da77:8fbe with SMTP id
+ hx25-20020a170906847900b0073dda778fbemr30235795ejc.373.1662296051257; 
+ Sun, 04 Sep 2022 05:54:11 -0700 (PDT)
 Received: from LinkTed.fritz.box ([2a02:8070:4182:37a0:97b2:fd91:46b3:8d3a])
  by smtp.gmail.com with ESMTPSA id
- lc18-20020a170906dff200b007307c4c8a5dsm3663916ejc.58.2022.09.04.05.43.38
+ w6-20020a50c446000000b004476c19d126sm4774788edf.38.2022.09.04.05.54.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Sep 2022 05:43:39 -0700 (PDT)
+ Sun, 04 Sep 2022 05:54:10 -0700 (PDT)
 From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  4 Sep 2022 14:43:15 +0200
-Message-Id: <20220904124315.12728-1-raphael.pavlidis@gmail.com>
+Date: Sun,  4 Sep 2022 14:53:59 +0200
+Message-Id: <20220904125359.18844-1-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220616163309.5271-1-raphael.pavlidis@gmail.com>
+References: <20220616163309.5271-1-raphael.pavlidis@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=zsKBI1wmYsEnALSnb2dQBP2ScHCz2qv1xGG2HK9nqYM=;
- b=NzvyIQvzTdxe24v/5MUIW86t0LwFir2EyEpKbtuH1nXFbDEu6kAYfn2hUtw9hlm7Iw
- B3s6kkEiz9YvipqpCaDNdmCGgRBKYhV3/oGKBCMxA2+PPPTZxUKVJTCMPSHI5MdLv4z8
- P/LLdnDBo8N8IdeCm6jWP44X4QdMSK/X4ToUVVW9/KFAyhAo4isxUgS74qV8GoIm5tTB
- C3nqtZiANEBZ6IDdbkFbIwil49hzV0HU2u2xj6RFXUQ48O/0lESwH2Y8ZeXQOmlXfxUj
- 9ph8ItkiDroGxJSO6AWFhbDL+b8yzZwQ2E8sFHn6kvGVOjpoRdfYSDoX1o/tEusLXEvx
- lwFQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+ bh=edW5valKkOX4P/eYsyNxcfuMndrHTfOP3WMQO0tmFmw=;
+ b=N9e6ajx3ThqPISeO0KNWaBr8CdRrej9F1jfDX+0cbTOeBKCdA9WqmnsrGlQhj6NQNY
+ PiJwD0N4aukLKpdE1YFf9qdmBCi0vHx/PJ6SKZI8X6ZkMnD9B7EaK4TGLPI672AP12eS
+ JSGfZTX0yy1Tm0OEdRkHUOS1/T9JcD0Ej2BHiWMeq/YSqyDDcu5cJKO/QsJ1d7TVBDe9
+ y5T+LW/Rz00/DWR3iZx6qyIrB6cy6340SeBdov2VsnrYM8Ux1FsHsuljUzjNTs6Uie8H
+ i97GXHhMd+sjPba7c3P42kVlZSIvrVOWvBcIlcu9Q+l7HGYWjwp/7QrxvdfKy9OR7OiQ
+ 9zRQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=NzvyIQvz
-Subject: [Buildroot] [PATCH v2 1/1] package/shadow: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=N9e6ajx3
+Subject: [Buildroot] [PATCH v3 1/1] package/cni-plugins: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,32 +95,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Anisse Astier <anisse@astier.eu>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-shadow provides utilities to deal with user accounts.
+cni-plugins contains some reference networking plugins, maintained by
+the CNI team.
 
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
-Changes v1 -> v2:
-- DEVELOPERS: add Raphael Pavlids for shadow
+Changes v2 -> v3:
+  - DEVELOPERS: add Raphael Pavlids for cni-plugins
 
- DEVELOPERS                 |   3 +
- package/Config.in          |   1 +
- package/shadow/Config.in   |  81 ++++++++++++++++++
- package/shadow/shadow.hash |   3 +
- package/shadow/shadow.mk   | 171 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 259 insertions(+)
- create mode 100644 package/shadow/Config.in
- create mode 100644 package/shadow/shadow.hash
- create mode 100644 package/shadow/shadow.mk
+Changes v1 -> v2:
+  - change BR2_PACKAGE_CNI_PLUGINS from config to menuconfig
+  - turn on all plugins by default
+
+ DEVELOPERS                           |   3 +
+ package/Config.in                    |   1 +
+ package/cni-plugins/Config.in        | 108 +++++++++++++++++++++++++++
+ package/cni-plugins/cni-plugins.hash |   3 +
+ package/cni-plugins/cni-plugins.mk   |  77 +++++++++++++++++++
+ 5 files changed, 192 insertions(+)
+ create mode 100644 package/cni-plugins/Config.in
+ create mode 100644 package/cni-plugins/cni-plugins.hash
+ create mode 100644 package/cni-plugins/cni-plugins.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d2bd0d809a..38c25a0ae2 100644
+index d2bd0d809a..208330881c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -2506,6 +2506,9 @@ F:	support/testing/tests/package/test_python_jmespath.py
@@ -125,296 +133,229 @@ index d2bd0d809a..38c25a0ae2 100644
  F:	support/testing/tests/package/test_python_s3transfer.py
  
 +N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
-+F:	package/shadow/
++F:	package/cni-plugins/
 +
  N:	Refik Tuzakli <tuzakli.refik@gmail.com>
  F:	package/freescale-imx/
  F:	package/paho-mqtt-cpp/
 diff --git a/package/Config.in b/package/Config.in
-index d1c098c48f..c13ba09056 100644
+index d1c098c48f..00e9a5a99f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2635,6 +2635,7 @@ menu "System tools"
- 	source "package/sdbus-cpp/Config.in"
- 	source "package/sdbusplus/Config.in"
- 	source "package/seatd/Config.in"
-+	source "package/shadow/Config.in"
- 	source "package/smack/Config.in"
- 	source "package/start-stop-daemon/Config.in"
- 	source "package/supervisor/Config.in"
-diff --git a/package/shadow/Config.in b/package/shadow/Config.in
+@@ -1812,6 +1812,7 @@ menu "Networking"
+ 	source "package/bluez5_utils-headers/Config.in"
+ 	source "package/c-ares/Config.in"
+ 	source "package/cgic/Config.in"
++	source "package/cni-plugins/Config.in"
+ 	source "package/cppzmq/Config.in"
+ 	source "package/curlpp/Config.in"
+ 	source "package/czmq/Config.in"
+diff --git a/package/cni-plugins/Config.in b/package/cni-plugins/Config.in
 new file mode 100644
-index 0000000000..616f002618
+index 0000000000..9ce13f4bbe
 --- /dev/null
-+++ b/package/shadow/Config.in
-@@ -0,0 +1,81 @@
-+menuconfig BR2_PACKAGE_SHADOW
-+	bool "shadow"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
++++ b/package/cni-plugins/Config.in
+@@ -0,0 +1,108 @@
++menuconfig BR2_PACKAGE_CNI_PLUGINS
++	bool "cni-plugins"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
 +	help
-+	  Utilities to deal with user accounts.
++	  Some reference and example networking plugins, maintained by the CNI team.
 +
-+	  https://github.com/shadow-maint/shadow
++	  https://github.com/containernetworking/plugins
 +
-+if BR2_PACKAGE_SHADOW
++if BR2_PACKAGE_CNI_PLUGINS
 +
-+config BR2_PACKAGE_SHADOW_SHADOWGRP
-+	bool "shadowgrp"
++config BR2_PACKAGE_CNI_PLUGINS_BRIDGE
++	bool "bridge"
 +	default y
 +	help
-+	  Enable shadow group support.
++	  Creates a bridge, adds the host and the container to it.
 +
-+if BR2_PACKAGE_LINUX_PAM
-+
-+config BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID
-+	bool "account-tools-setuid"
-+	help
-+	  Install the user and group management tools setuid and authenticate the
-+	  callers.
-+
-+endif # BR2_PACKAGE_LINUX_PAM
-+
-+config BR2_PACKAGE_SHADOW_UTMPX
-+	bool "utmpx"
-+	help
-+	  Enable loggin in utmpx / wtmpx.
-+
-+config BR2_PACKAGE_SHADOW_SUBORDINATE_IDS
-+	bool "subordinate-ids"
++config BR2_PACKAGE_CNI_PLUGINS_IPVLAN
++	bool "ipvlan"
 +	default y
 +	help
-+	  Support subordinate ids.
++	  Adds an ipvlan interface in the container.
 +
-+config BR2_PACKAGE_SHADOW_SHA_CRYPT
-+	bool "sha-crypt"
++config BR2_PACKAGE_CNI_PLUGINS_LOOPBACK
++	bool "loopback"
 +	default y
 +	help
-+	  Allow the SHA256 and SHA512 password encryption algorithms.
++	  Set the state of loopback interface to up.
 +
-+config BR2_PACKAGE_SHADOW_BCRYPT
-+	bool "bcrypt"
-+	help
-+	  Allow the bcrypt password encryption algorithm.
-+
-+config BR2_PACKAGE_SHADOW_YESCRYPT
-+	bool "yescrypt"
-+	help
-+	  Allow the yescrypt password encryption algorithm.
-+
-+config BR2_PACKAGE_SHADOW_NSCD
-+	bool "nscd"
++config BR2_PACKAGE_CNI_PLUGINS_MACVLAN
++	bool "macvlan"
 +	default y
 +	help
-+	  Enable support for nscd.
++	  Creates a new MAC address, forwards all traffic to that to the container.
 +
-+config BR2_PACKAGE_SHADOW_SSSD
-+	bool "sssd"
++config BR2_PACKAGE_CNI_PLUGINS_PTP
++	bool "ptp"
 +	default y
 +	help
-+	  Define to support flushing of sssd caches.
++	  Creates a veth pair.
 +
-+config BR2_PACKAGE_SHADOW_GROUP_NAME_MAX_LENGTH
-+	int "group-name-max-length"
-+	default 16
-+	help
-+	  Set max group name length. (0 equals infinity)
-+
-+config BR2_PACKAGE_SHADOW_SU
-+	bool "su"
++config BR2_PACKAGE_CNI_PLUGINS_VLAN
++	bool "vlan"
 +	default y
 +	help
-+	  Build and install su program.
++	  Creates a veth pair.
 +
-+endif # BR2_PACKAGE_SHADOW
++config BR2_PACKAGE_CNI_PLUGINS_HOST_DEVICE
++	bool "host-device"
++	default y
++	help
++	  Move an already-existing device into a container.
 +
-+comment "shadow needs a toolchain w/ headers >= 4.14"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
++config BR2_PACKAGE_CNI_PLUGINS_DHCP
++	bool "dhcp"
++	default y
++	help
++	  Runs a daemon on the host to make DHCP requests on behalf of the
++	  container.
++
++config BR2_PACKAGE_CNI_PLUGINS_HOST_LOCAL
++	bool "host-local"
++	default y
++	help
++	  Maintains a local database of allocated IPs.
++
++config BR2_PACKAGE_CNI_PLUGINS_STATIC
++	bool "static"
++	default y
++	help
++	  Allocate a single static IPv4/IPv6 address to container. It's useful in
++	  debugging purpose.
++
++config BR2_PACKAGE_CNI_PLUGINS_TUNING
++	bool "tuning"
++	default y
++	help
++	  Tweaks sysctl parameters of an existing interface.
++
++config BR2_PACKAGE_CNI_PLUGINS_PORTMAP
++	bool "portmap"
++	default y
++	help
++	  An iptables-based portmapping plugin. Maps ports from the host's address
++	  space to the container.
++
++config BR2_PACKAGE_CNI_PLUGINS_BANDWIDTH
++	bool "bandwidth"
++	default y
++	help
++	  Allows bandwidth-limiting through use of traffic control tbf
++	  (ingress/egress).
++
++config BR2_PACKAGE_CNI_PLUGINS_SBR
++	bool "sbr"
++	default y
++	help
++	  A plugin that configures source based routing for an interface (from which
++	  it is chained).
++
++config BR2_PACKAGE_CNI_PLUGINS_FIREWALL
++	bool "firewall"
++	default y
++	help
++	  A firewall plugin which uses iptables or firewalld to add rules to allow
++	  traffic to/from the container.
++
++endif # BR2_PACKAGE_CNI_PLUGINS
+diff --git a/package/cni-plugins/cni-plugins.hash b/package/cni-plugins/cni-plugins.hash
 new file mode 100644
-index 0000000000..6b9faac10f
+index 0000000000..c987e1ff45
 --- /dev/null
-+++ b/package/shadow/shadow.hash
++++ b/package/cni-plugins/cni-plugins.hash
 @@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  41f093ce58b2ae5f389a1c5553e0c18bc73e6fe27f66273891991198a7707c95  shadow-4.11.1.tar.xz
-+sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
++# Locally computed:
++sha256  c86c44877c47f69cd23611e22029ab26b613f620195b76b3ec20f589367a7962  cni-plugins-1.1.1.tar.gz
++sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/cni-plugins/cni-plugins.mk b/package/cni-plugins/cni-plugins.mk
 new file mode 100644
-index 0000000000..140d830cb9
+index 0000000000..02abcd283c
 --- /dev/null
-+++ b/package/shadow/shadow.mk
-@@ -0,0 +1,171 @@
++++ b/package/cni-plugins/cni-plugins.mk
+@@ -0,0 +1,77 @@
 +################################################################################
 +#
-+# shadow
++# cni-plugins
 +#
 +################################################################################
 +
-+SHADOW_VERSION = 4.11.1
-+SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/v$(SHADOW_VERSION)
-+SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
-+SHADOW_LICENSE = BSD-3-Clause
-+SHADOW_LICENSE_FILES = COPYING
++CNI_PLUGINS_VERSION = 1.1.1
++CNI_PLUGINS_SITE = $(call github,containernetworking,plugins,v$(CNI_PLUGINS_VERSION))
++CNI_PLUGINS_LICENSE = Apache-2.0
++CNI_PLUGINS_LICENSE_FILES = LICENSE
 +
-+SHADOW_CONF_OPTS += \
-+	--disable-man \
-+	--without-btrfs \
-+	--without-skey \
-+	--without-tcb
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+SHADOW_CONF_OPTS += --enable-static
-+else
-+SHADOW_CONF_OPTS += --disable-static
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_BRIDGE),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/main/bridge
 +endif
 +
-+ifeq ($(BR2_SHARED_LIBS),y)
-+SHADOW_CONF_OPTS += --enable-shared
-+else
-+SHADOW_CONF_OPTS += --disable-shared
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_IPVLAN),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/main/ipvlan
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SHADOW_SHADOWGRP),y)
-+SHADOW_CONF_OPTS += --enable-shadowgrp
-+else
-+SHADOW_CONF_OPTS += --disable-shadowgrp
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_LOOPBACK),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/main/loopback
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID),y)
-+SHADOW_CONF_OPTS += --enable-account-tools-setuid
-+SHADOW_ACCOUNT_TOOLS_SETUID = \
-+	/usr/sbin/chgpasswd f 4755 0 0 - - - - - \
-+	/usr/sbin/chpasswd f 4755 0 0 - - - - - \
-+	/usr/sbin/groupadd f 4755 0 0 - - - - - \
-+	/usr/sbin/groupdel f 4755 0 0 - - - - - \
-+	/usr/sbin/groupmod f 4755 0 0 - - - - - \
-+	/usr/sbin/newusers f 4755 0 0 - - - - - \
-+	/usr/sbin/useradd f 4755 0 0 - - - - - \
-+	/usr/sbin/usermod f 4755 0 0 - - - - -
-+else
-+SHADOW_CONF_OPTS += --disable-account-tools-setuid
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_MACVLAN),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/main/macvlan
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SHADOW_UTMPX),y)
-+SHADOW_CONF_OPTS += --enable-utmpx
-+else
-+SHADOW_CONF_OPTS += --disable-utmpx
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_PTP),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/main/ptp
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
-+SHADOW_CONF_OPTS += --enable-subordinate-ids
-+SHADOW_SUBORDINATE_IDS_PERMISSIONS =  \
-+	/usr/bin/newuidmap f 4755 0 0 - - - - - \
-+	/usr/bin/newgidmap f 4755 0 0 - - - - -
-+else
-+SHADOW_CONF_OPTS += --disable-subordinate-ids
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_VLAN),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/main/vlan
 +endif
 +
-+ifeq ($(BR2_PACKAGE_ACL),y)
-+SHADOW_CONF_OPTS += --with-acl
-+SHADOW_DEPENDENCIES += acl
-+else
-+SHADOW_CONF_OPTS += --without-acl
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_HOST_DEVICE),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/main/host-device
 +endif
 +
-+ifeq ($(BR2_PACKAGE_ATTR),y)
-+SHADOW_CONF_OPTS += --with-attr
-+SHADOW_DEPENDENCIES += attr
-+else
-+SHADOW_CONF_OPTS += --without-attr
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_DHCP),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/ipam/dhcp
 +endif
 +
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+SHADOW_CONF_OPTS += --with-audit
-+SHADOW_DEPENDENCIES += audit
-+else
-+SHADOW_CONF_OPTS += --without-audit
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_HOST_LOCAL),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/ipam/host-local
 +endif
 +
-+ifeq ($(BR2_PACKAGE_CRACKLIB),y)
-+SHADOW_CONF_OPTS += --with-libcrack
-+SHADOW_DEPENDENCIES += cracklib
-+else
-+SHADOW_CONF_OPTS += --without-libcrack
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_STATIC),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/ipam/static
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SHADOW_CONF_OPTS += --with-selinux
-+SHADOW_DEPENDENCIES += libselinux libsemanage
-+else
-+SHADOW_CONF_OPTS += --without-selinux
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_TUNING),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/meta/tuning
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+SHADOW_CONF_OPTS += --with-libpam
-+SHADOW_DEPENDENCIES += linux-pam
-+else
-+SHADOW_CONF_OPTS += --without-libpam
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_PORTMAP),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/meta/portmap
 +endif
 +
-+ifeq ($(BR2_ENABLE_LOCALE),y)
-+SHADOW_CONF_OPTS += --enable-nls
-+else
-+SHADOW_CONF_OPTS += --disable-nls
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_BANDWIDTH),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/meta/bandwidth
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SHADOW_SHA_CRYPT),y)
-+SHADOW_CONF_OPTS += --with-sha-crypt
-+else
-+SHADOW_CONF_OPTS += --without-sha-crypt
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_SBR),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/meta/sbr
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SHADOW_BCRYPT),y)
-+SHADOW_CONF_OPTS += --with-bcrypt
-+else
-+SHADOW_CONF_OPTS += --without-bcrypt
++ifeq ($(BR2_PACKAGE_CNI_PLUGINS_FIREWALL),y)
++CNI_PLUGINS_BUILD_TARGETS += plugins/meta/firewall
 +endif
 +
-+ifeq ($(BR2_PACKAGE_SHADOW_YESCRYPT),y)
-+SHADOW_CONF_OPTS += --with-yescrypt
-+else
-+SHADOW_CONF_OPTS += --without-yescrypt
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_NSCD),y)
-+SHADOW_CONF_OPTS += --with-nscd
-+else
-+SHADOW_CONF_OPTS += --without-nscd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_SSSD),y)
-+SHADOW_CONF_OPTS += --with-sssd
-+else
-+SHADOW_CONF_OPTS += --without-sssd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_GROUP_NAME_MAX_LENGTH),0)
-+SHADOW_CONF_OPTS += --without-group-name-max-length
-+else
-+SHADOW_CONF_OPTS += --with-group-name-max-length=$(BR2_PACKAGE_SHADOW_GROUP_NAME_MAX_LENGTH)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_SU),y)
-+SHADOW_CONF_OPTS += --with-su
-+SHADOW_SU_PERMISSIONS = /bin/su f 4755 0 0 - - - - -
-+else
-+SHADOW_CONF_OPTS += --without-su
-+endif
-+
-+define SHADOW_PERMISSIONS
-+	/usr/bin/chage f 4755 0 0 - - - - -
-+	/usr/bin/chfn f 4755 0 0 - - - - -
-+	/usr/bin/chsh f 4755 0 0 - - - - -
-+	/usr/bin/expiry f 4755 0 0 - - - - -
-+	/usr/bin/gpasswd f 4755 0 0 - - - - -
-+	/usr/bin/newgrp f 4755 0 0 - - - - -
-+	/usr/bin/passwd f 4755 0 0 - - - - -
-+	$(SHADOW_ACCOUNT_TOOLS_SETUID)
-+	$(SHADOW_SUBORDINATE_IDS_PERMISSIONS)
-+	$(SHADOW_SU_PERMISSIONS)
++define CNI_PLUGINS_INSTALL_TARGET_CMDS
++	$(INSTALL) -d  $(TARGET_DIR)/usr/libexec/cni
++	$(INSTALL) -D -m 0755 $(@D)/bin/* $(TARGET_DIR)/usr/libexec/cni/
 +endef
 +
-+$(eval $(autotools-package))
++$(eval $(golang-package))
 -- 
 2.35.1
 
