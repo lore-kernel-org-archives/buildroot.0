@@ -1,71 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03EF0C54EE9
-	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 19:02:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 420D6C54EE9
+	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 19:02:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DC7C813EC;
-	Sun,  4 Sep 2022 19:02:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DC7C813EC
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0EB160F3E;
+	Sun,  4 Sep 2022 19:02:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0EB160F3E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id upERJLRS4Zex; Sun,  4 Sep 2022 19:02:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HVUC3BC0X0An; Sun,  4 Sep 2022 19:02:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A585813AA;
-	Sun,  4 Sep 2022 19:02:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A585813AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id C971D60F25;
+	Sun,  4 Sep 2022 19:02:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C971D60F25
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D7AEF1BF574
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 19:02:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3DD2E1BF574
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 19:02:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABA034024B
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 19:02:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABA034024B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 195A34024B
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 19:02:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 195A34024B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wQvfDU7zWEWj for <buildroot@lists.busybox.net>;
- Sun,  4 Sep 2022 19:02:23 +0000 (UTC)
+ with ESMTP id Da2h4oPihWdm for <buildroot@lists.busybox.net>;
+ Sun,  4 Sep 2022 19:02:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEAD1401A3
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com
- [209.85.215.170])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DEAD1401A3
- for <buildroot@buildroot.org>; Sun,  4 Sep 2022 19:02:22 +0000 (UTC)
-Received: by mail-pg1-f170.google.com with SMTP id q9so6347764pgq.6
- for <buildroot@buildroot.org>; Sun, 04 Sep 2022 12:02:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61A4C401A3
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com
+ [209.85.214.180])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 61A4C401A3
+ for <buildroot@buildroot.org>; Sun,  4 Sep 2022 19:02:24 +0000 (UTC)
+Received: by mail-pl1-f180.google.com with SMTP id u22so6567047plq.12
+ for <buildroot@buildroot.org>; Sun, 04 Sep 2022 12:02:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=QhuWePsLKTXjtdsAvNzxSumygAzaP8ThQRTN8n6ONYE=;
- b=o3hfzyTa+d3Z7q0lEk4TWj9a2y6IKsvXxC1pVcOGfTtSDEBEHofiaHwtOJOCCOJBrN
- DCeMcnndwopJzStloQSo97ECrEqteYd3Jz60gEeI3h0izIEKd/PufK/bQZFPVkl6NjIo
- Yz02EXkvNqV/6zBy+TmMD4yauJx7Z+yCBANM5K+8KnomAwwaxW0TRHVxwU7bxb3pmoue
- qz00iglog/EnNgPo1Ncf/q+Cv/kU4YVLhpa9sj3EDI6JVkrO85GtmfrdEvuEqZ4QPybm
- Sj2TpLHDEmr31LNkJlRq8lr/NsqQAkn641RtXD4ctIfXxFS2+P+Ob+p9y5a4C6SiGY4z
- yc/g==
-X-Gm-Message-State: ACgBeo2cYtE47rnc4Y2RJsJdhNMk7HmFZUQqkw1y4Tu/AHux18U3/f8k
- o8Bi0uuPPZKoWM5RwmngRTlDXTUY4ZjYmQ==
-X-Google-Smtp-Source: AA6agR5qFhTa0LGOcX13LjsCUVQMoCBoHC7B8MzFAEmY6SquCqIyaCs+SCFCCou2Ct1qV9OXl8oF1A==
-X-Received: by 2002:a65:6d19:0:b0:42a:37d7:90da with SMTP id
- bf25-20020a656d19000000b0042a37d790damr38918794pgb.16.1662318141816; 
- Sun, 04 Sep 2022 12:02:21 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date;
+ bh=nX8b77bLnNoTq22X+s67whdMbps0frsh4kKzvI3MrDE=;
+ b=A1aIMUX/JguK6Y8jtZOuW1jSySvug4fhIUnCwbB/EkOyEhbfhxi7NLGo0yuKOUXJpe
+ /9GzoiZFSK25UeNeYk/RPBrikx90JABQCra8LptM3xNiPZYy00LlNwzcBqgLM6WItFXL
+ F2w83XPsifyZE8FiHtGrC7VH9Ln4KByx0MZ81AQffhiHJihdFK63wg/C6/e7Ad6JcIO7
+ UBhhztv84TyRVk3wnOIe//ARVxq+Z6Oy7Rl5+hxjI7YVR4N9u8o5Qk1paKtCZsMfhLef
+ uR1tXnoMwyFJj1AAreyqoPN4NTZZFv3pkxF2DhWIP0QY1tJvrdy+EUL6dzvEM4VOmXxY
+ PnQA==
+X-Gm-Message-State: ACgBeo3c7KNdBAggFuYtqJK0oRCx06C6/bBOU3OcZq9qksp3Z0ZcmMv1
+ NJz3u13kgsToo2X1X4DzUnBv/ABgEH1OQg==
+X-Google-Smtp-Source: AA6agR6Tw0g+QmeTsZL4kx1xSnSpmUKZO1EatRWJy+TJBl5uUWSoPGfnhxZZm58KHz3jVxQDSaGU/w==
+X-Received: by 2002:a17:90b:4a10:b0:1fb:2e77:a33 with SMTP id
+ kk16-20020a17090b4a1000b001fb2e770a33mr15704413pjb.67.1662318143308; 
+ Sun, 04 Sep 2022 12:02:23 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- x19-20020aa78f13000000b00537b11ccfafsm5970989pfr.127.2022.09.04.12.02.20
+ x19-20020aa78f13000000b00537b11ccfafsm5970989pfr.127.2022.09.04.12.02.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Sep 2022 12:02:21 -0700 (PDT)
+ Sun, 04 Sep 2022 12:02:22 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sun,  4 Sep 2022 12:02:17 -0700
-Message-Id: <20220904190218.198854-1-christian@paral.in>
+Date: Sun,  4 Sep 2022 12:02:18 -0700
+Message-Id: <20220904190218.198854-2-christian@paral.in>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20220904190218.198854-1-christian@paral.in>
+References: <20220904190218.198854-1-christian@paral.in>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/2] package/libyaml: add host package
+Subject: [Buildroot] [PATCH v1 2/2] package/python-pyyaml: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,41 +90,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a Config.in.host to enable the host-libyaml package.
+Add the Config.in.host for the host python-pyyaml package.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in.host         | 1 +
- package/libyaml/Config.in.host | 7 +++++++
+ package/Config.in.host               | 1 +
+ package/python-pyyaml/Config.in.host | 7 +++++++
  2 files changed, 8 insertions(+)
- create mode 100644 package/libyaml/Config.in.host
+ create mode 100644 package/python-pyyaml/Config.in.host
 
 diff --git a/package/Config.in.host b/package/Config.in.host
-index 99edeafece..66b64fd7c6 100644
+index 66b64fd7c6..bc6e470313 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -47,6 +47,7 @@ menu "Host utilities"
- 	source "package/jsmin/Config.in.host"
- 	source "package/kmod/Config.in.host"
- 	source "package/libp11/Config.in.host"
-+	source "package/libyaml/Config.in.host"
- 	source "package/lld/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
-diff --git a/package/libyaml/Config.in.host b/package/libyaml/Config.in.host
+@@ -76,6 +76,7 @@ menu "Host utilities"
+ 	source "package/python-greenlet/Config.in.host"
+ 	source "package/python-kflash/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
++	source "package/python-pyyaml/Config.in.host"
+ 	source "package/python-six/Config.in.host"
+ 	source "package/python-xlrd/Config.in.host"
+ 	source "package/python3/Config.in.host"
+diff --git a/package/python-pyyaml/Config.in.host b/package/python-pyyaml/Config.in.host
 new file mode 100644
-index 0000000000..fd47362a91
+index 0000000000..f50697d857
 --- /dev/null
-+++ b/package/libyaml/Config.in.host
++++ b/package/python-pyyaml/Config.in.host
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_LIBYAML
-+	bool "host libyaml"
++config BR2_PACKAGE_HOST_PYTHON_PYYAML
++	bool "host python-pyyaml"
++	select BR2_PACKAGE_HOST_LIBYAML
 +	help
-+	  LibYAML is a YAML 1.1 parser and emitter written in C.
-+	  Host package.
++	  The host PyYAML package contains binding to the libyaml API.
 +
-+	  http://pyyaml.org/wiki/LibYAML
-\ No newline at end of file
++	  http://pyyaml.org/
 -- 
 2.37.3
 
