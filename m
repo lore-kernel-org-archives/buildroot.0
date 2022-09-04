@@ -1,89 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB57AECAAD3
-	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 12:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB3F5ECAAD3
+	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 12:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 119AA403D0;
-	Sun,  4 Sep 2022 12:54:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 119AA403D0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6ABCB81446;
+	Sun,  4 Sep 2022 12:59:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ABCB81446
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9utfilF3scim; Sun,  4 Sep 2022 12:54:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zrVIBaXHFH47; Sun,  4 Sep 2022 12:59:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 156BB40386;
-	Sun,  4 Sep 2022 12:54:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 156BB40386
+	by smtp1.osuosl.org (Postfix) with ESMTP id 775E681442;
+	Sun,  4 Sep 2022 12:59:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 775E681442
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 111D91BF3FC
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 12:54:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 97E371BF215
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 12:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE46340386
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 12:54:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE46340386
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F87B403D0
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 12:59:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F87B403D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RuCviT8Rc0iu for <buildroot@lists.busybox.net>;
- Sun,  4 Sep 2022 12:54:13 +0000 (UTC)
+ with ESMTP id a65LBFx5aWZs for <buildroot@lists.busybox.net>;
+ Sun,  4 Sep 2022 12:59:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 245C040339
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDCCD4035F
 Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
  [IPv6:2a00:1450:4864:20::629])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 245C040339
- for <buildroot@buildroot.org>; Sun,  4 Sep 2022 12:54:12 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id bj12so12190544ejb.13
- for <buildroot@buildroot.org>; Sun, 04 Sep 2022 05:54:12 -0700 (PDT)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DDCCD4035F
+ for <buildroot@buildroot.org>; Sun,  4 Sep 2022 12:59:05 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id kk26so12220421ejc.11
+ for <buildroot@buildroot.org>; Sun, 04 Sep 2022 05:59:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date;
- bh=edW5valKkOX4P/eYsyNxcfuMndrHTfOP3WMQO0tmFmw=;
- b=1sVwxhhSkQlWFoH323mIxICMzDpzQT3Ot2ayz70wMPInWf6oHjbuTP7wTNYNI0b8ok
- NX/T1XONgZPAfEL2Y8kw5G8AGOK6y9Y13bmbLfKpTWo6PoNZC/03uwKePISqpjtaq+zk
- bxAzP5zTPLIog1Q/2mmeJG/8sLPwY6jOmnscKv0SjkznFk8peubaFnCspftzB8ItXoNK
- km1bGqtrUhBQEZ1udrcwOb3ctWVZ9AZkn+He0FaDIcE4u4AMZeEUYpOrnSYBNKUiMCoy
- Lbu9Oip6fZ1OsNDgt3R0wBn9hj546df0+vWByDBUEFqJQpCE4OF5I9wy+YYuX8MhppF3
- oA3w==
-X-Gm-Message-State: ACgBeo3GtzoMmQNWlvcOiTZ5cz8OU+AmJZPIJZfYxjEuuvb+dfEoRI9M
- QIHAOytrqYeh1C439HMuxa+ohlM5jLyAJwVb
-X-Google-Smtp-Source: AA6agR6Ar9EdI0ClhRZ7aYzs6G8hszSL4/4WeL87/bNFk1j1icg5lOgzm/NR3QGrJcZP5VGqus89Ow==
-X-Received: by 2002:a17:906:8479:b0:73d:da77:8fbe with SMTP id
- hx25-20020a170906847900b0073dda778fbemr30235795ejc.373.1662296051257; 
- Sun, 04 Sep 2022 05:54:11 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=tg4hYoTKf6sLJ6q0sAe72FjGN8egSI0qHCSsePN6yZ4=;
+ b=zwJ/cQePuLad3O7InQ7jj/LIcY3s/VIV7Ql6rGxc6JVqwzzfooMOviL+exAb+uOGq2
+ VvYTMkb9k9ZLJrRwOM/AaX+2cQ78xM/lQVGbdrO/boJU35wrpbFA3I8zyYeEshHU9EoL
+ 3Vwc8+jprYwx7usibnFP9wOuXnvxiwTDUrzI63Ig+y9uAHMKIPvqktCfkuhUayB8/Ycc
+ gE1ftMg3Q6B//KcuhUQHE5EcIaJh9zToo6ZDARu9A3QdnDQhy1arJ4PAqhArz1n3xd27
+ 7XpC1BBOvAiWhE6uuJKIIfEtT6RNK73WC58/3h4zIx7PUVfL5b4+7V7JFpg7aThkPS1C
+ j2sg==
+X-Gm-Message-State: ACgBeo0nYQ7rz8MO4oey/L8Rr8ocp3h5WQwg0/n95jfdj6D3kAOocUzM
+ s/AxaOTvcROa1tG5XnVueDfCKN9PF6YKzeEg
+X-Google-Smtp-Source: AA6agR52hN91PLCoeI8oNZ+wVq7KrEMmUzg1ekiA4Dnbs7JsNYE5eH6iuMynTv0uDRXyq6xFWSB0Yw==
+X-Received: by 2002:a17:907:6288:b0:72f:90ba:f0b2 with SMTP id
+ nd8-20020a170907628800b0072f90baf0b2mr31733948ejc.696.1662296344138; 
+ Sun, 04 Sep 2022 05:59:04 -0700 (PDT)
 Received: from LinkTed.fritz.box ([2a02:8070:4182:37a0:97b2:fd91:46b3:8d3a])
  by smtp.gmail.com with ESMTPSA id
- w6-20020a50c446000000b004476c19d126sm4774788edf.38.2022.09.04.05.54.10
+ 18-20020a170906311200b00718e4e64b7bsm3681028ejx.79.2022.09.04.05.59.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Sep 2022 05:54:10 -0700 (PDT)
+ Sun, 04 Sep 2022 05:59:03 -0700 (PDT)
 From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  4 Sep 2022 14:53:59 +0200
-Message-Id: <20220904125359.18844-1-raphael.pavlidis@gmail.com>
+Date: Sun,  4 Sep 2022 14:58:54 +0200
+Message-Id: <20220904125854.20486-1-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220616163309.5271-1-raphael.pavlidis@gmail.com>
-References: <20220616163309.5271-1-raphael.pavlidis@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
- bh=edW5valKkOX4P/eYsyNxcfuMndrHTfOP3WMQO0tmFmw=;
- b=N9e6ajx3ThqPISeO0KNWaBr8CdRrej9F1jfDX+0cbTOeBKCdA9WqmnsrGlQhj6NQNY
- PiJwD0N4aukLKpdE1YFf9qdmBCi0vHx/PJ6SKZI8X6ZkMnD9B7EaK4TGLPI672AP12eS
- JSGfZTX0yy1Tm0OEdRkHUOS1/T9JcD0Ej2BHiWMeq/YSqyDDcu5cJKO/QsJ1d7TVBDe9
- y5T+LW/Rz00/DWR3iZx6qyIrB6cy6340SeBdov2VsnrYM8Ux1FsHsuljUzjNTs6Uie8H
- i97GXHhMd+sjPba7c3P42kVlZSIvrVOWvBcIlcu9Q+l7HGYWjwp/7QrxvdfKy9OR7OiQ
- 9zRQ==
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=tg4hYoTKf6sLJ6q0sAe72FjGN8egSI0qHCSsePN6yZ4=;
+ b=NaO3xC7F6YUXXOBF9PExmnUt0E20h199+cAZDZq0pA2MAhaecFESWDXijSB6p6hs0v
+ j2W7pkO3h2C3priicwFKY6Ko3M1AH/8vPDydLsVyLafEwfNQmLE75TFmuE6hkkKAoGI/
+ fI3z2QV3ngPIrLxZh0qTx4eXNX3lnHzixW9CkbBFQpIQuHF05FTG/L1DBZXbOpPxZ0Bs
+ vtMiJ1oLfdgwaCY+q1f9ZEY4EM1bAU8FcN/FnhOj1NgXy4XQqVVc/7Tq80yX4sU81abD
+ xhEOKK1+Kft4vny9DIXLVPtwA/fS4ykFmWv6i5rQ1I0UIY+PisyxNjEmsG3WEKI+WFQ5
+ tFEw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=N9e6ajx3
-Subject: [Buildroot] [PATCH v3 1/1] package/cni-plugins: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=NaO3xC7F
+Subject: [Buildroot] [PATCH v3 1/1] package/nvidia-persistenced: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,37 +92,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cni-plugins contains some reference networking plugins, maintained by
-the CNI team.
+NVIDIA driver persistence daemon.
 
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
 Changes v2 -> v3:
-  - DEVELOPERS: add Raphael Pavlids for cni-plugins
+  - DEVELOPERS: add Raphael Pavlids for nvidia-persistenced
 
 Changes v1 -> v2:
-  - change BR2_PACKAGE_CNI_PLUGINS from config to menuconfig
-  - turn on all plugins by default
+  - fix typo in Config.in
 
- DEVELOPERS                           |   3 +
- package/Config.in                    |   1 +
- package/cni-plugins/Config.in        | 108 +++++++++++++++++++++++++++
- package/cni-plugins/cni-plugins.hash |   3 +
- package/cni-plugins/cni-plugins.mk   |  77 +++++++++++++++++++
- 5 files changed, 192 insertions(+)
- create mode 100644 package/cni-plugins/Config.in
- create mode 100644 package/cni-plugins/cni-plugins.hash
- create mode 100644 package/cni-plugins/cni-plugins.mk
+ DEVELOPERS                                    |  3 ++
+ package/Config.in                             |  1 +
+ package/nvidia-persistenced/Config.in         | 13 +++++
+ .../nvidia-persistenced.conf                  |  1 +
+ .../nvidia-persistenced.hash                  |  3 ++
+ .../nvidia-persistenced.mk                    | 49 +++++++++++++++++++
+ 6 files changed, 70 insertions(+)
+ create mode 100644 package/nvidia-persistenced/Config.in
+ create mode 100644 package/nvidia-persistenced/nvidia-persistenced.conf
+ create mode 100644 package/nvidia-persistenced/nvidia-persistenced.hash
+ create mode 100644 package/nvidia-persistenced/nvidia-persistenced.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d2bd0d809a..208330881c 100644
+index d2bd0d809a..ff58fb240d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -2506,6 +2506,9 @@ F:	support/testing/tests/package/test_python_jmespath.py
@@ -133,229 +130,113 @@ index d2bd0d809a..208330881c 100644
  F:	support/testing/tests/package/test_python_s3transfer.py
  
 +N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
-+F:	package/cni-plugins/
++F:	package/nvidia-persistenced/
 +
  N:	Refik Tuzakli <tuzakli.refik@gmail.com>
  F:	package/freescale-imx/
  F:	package/paho-mqtt-cpp/
 diff --git a/package/Config.in b/package/Config.in
-index d1c098c48f..00e9a5a99f 100644
+index d1c098c48f..41f34908ba 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1812,6 +1812,7 @@ menu "Networking"
- 	source "package/bluez5_utils-headers/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/cgic/Config.in"
-+	source "package/cni-plugins/Config.in"
- 	source "package/cppzmq/Config.in"
- 	source "package/curlpp/Config.in"
- 	source "package/czmq/Config.in"
-diff --git a/package/cni-plugins/Config.in b/package/cni-plugins/Config.in
+@@ -543,6 +543,7 @@ endmenu
+ 	source "package/neard/Config.in"
+ 	source "package/nvidia-driver/Config.in"
+ 	source "package/nvidia-modprobe/Config.in"
++	source "package/nvidia-persistenced/Config.in"
+ 	source "package/nvme/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+diff --git a/package/nvidia-persistenced/Config.in b/package/nvidia-persistenced/Config.in
 new file mode 100644
-index 0000000000..9ce13f4bbe
+index 0000000000..6ade2a5ceb
 --- /dev/null
-+++ b/package/cni-plugins/Config.in
-@@ -0,0 +1,108 @@
-+menuconfig BR2_PACKAGE_CNI_PLUGINS
-+	bool "cni-plugins"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++++ b/package/nvidia-persistenced/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_NVIDIA_PERSISTENCED
++	bool "nvidia-persistenced"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc
++	select BR2_PACKAGE_LIBTIRPC
 +	help
-+	  Some reference and example networking plugins, maintained by the CNI team.
++	  NVIDIA driver persistence daemon.
 +
-+	  https://github.com/containernetworking/plugins
++	  https://github.com/NVIDIA/nvidia-persistenced
 +
-+if BR2_PACKAGE_CNI_PLUGINS
-+
-+config BR2_PACKAGE_CNI_PLUGINS_BRIDGE
-+	bool "bridge"
-+	default y
-+	help
-+	  Creates a bridge, adds the host and the container to it.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_IPVLAN
-+	bool "ipvlan"
-+	default y
-+	help
-+	  Adds an ipvlan interface in the container.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_LOOPBACK
-+	bool "loopback"
-+	default y
-+	help
-+	  Set the state of loopback interface to up.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_MACVLAN
-+	bool "macvlan"
-+	default y
-+	help
-+	  Creates a new MAC address, forwards all traffic to that to the container.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_PTP
-+	bool "ptp"
-+	default y
-+	help
-+	  Creates a veth pair.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_VLAN
-+	bool "vlan"
-+	default y
-+	help
-+	  Creates a veth pair.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_HOST_DEVICE
-+	bool "host-device"
-+	default y
-+	help
-+	  Move an already-existing device into a container.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_DHCP
-+	bool "dhcp"
-+	default y
-+	help
-+	  Runs a daemon on the host to make DHCP requests on behalf of the
-+	  container.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_HOST_LOCAL
-+	bool "host-local"
-+	default y
-+	help
-+	  Maintains a local database of allocated IPs.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_STATIC
-+	bool "static"
-+	default y
-+	help
-+	  Allocate a single static IPv4/IPv6 address to container. It's useful in
-+	  debugging purpose.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_TUNING
-+	bool "tuning"
-+	default y
-+	help
-+	  Tweaks sysctl parameters of an existing interface.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_PORTMAP
-+	bool "portmap"
-+	default y
-+	help
-+	  An iptables-based portmapping plugin. Maps ports from the host's address
-+	  space to the container.
-+
-+config BR2_PACKAGE_CNI_PLUGINS_BANDWIDTH
-+	bool "bandwidth"
-+	default y
-+	help
-+	  Allows bandwidth-limiting through use of traffic control tbf
-+	  (ingress/egress).
-+
-+config BR2_PACKAGE_CNI_PLUGINS_SBR
-+	bool "sbr"
-+	default y
-+	help
-+	  A plugin that configures source based routing for an interface (from which
-+	  it is chained).
-+
-+config BR2_PACKAGE_CNI_PLUGINS_FIREWALL
-+	bool "firewall"
-+	default y
-+	help
-+	  A firewall plugin which uses iptables or firewalld to add rules to allow
-+	  traffic to/from the container.
-+
-+endif # BR2_PACKAGE_CNI_PLUGINS
-diff --git a/package/cni-plugins/cni-plugins.hash b/package/cni-plugins/cni-plugins.hash
++comment "nvidia-persistenced needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/nvidia-persistenced/nvidia-persistenced.conf b/package/nvidia-persistenced/nvidia-persistenced.conf
 new file mode 100644
-index 0000000000..c987e1ff45
+index 0000000000..48f24cfb1d
 --- /dev/null
-+++ b/package/cni-plugins/cni-plugins.hash
++++ b/package/nvidia-persistenced/nvidia-persistenced.conf
+@@ -0,0 +1 @@
++u nvidia-persistenced - 'NVIDIA Persistence Daemon'
+diff --git a/package/nvidia-persistenced/nvidia-persistenced.hash b/package/nvidia-persistenced/nvidia-persistenced.hash
+new file mode 100644
+index 0000000000..06c71b35f5
+--- /dev/null
++++ b/package/nvidia-persistenced/nvidia-persistenced.hash
 @@ -0,0 +1,3 @@
 +# Locally computed:
-+sha256  c86c44877c47f69cd23611e22029ab26b613f620195b76b3ec20f589367a7962  cni-plugins-1.1.1.tar.gz
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/cni-plugins/cni-plugins.mk b/package/cni-plugins/cni-plugins.mk
++sha256  b84fb8eb86127a725d0134a2c64a64e7844e125dece137e7fe8adf8a33cbe817  nvidia-persistenced-515.48.07.tar.gz
++sha256  279d814320adc07ca5a4ee101a0b428ddf22a6f3513b8c051f9eb7be47b2e797  COPYING
+diff --git a/package/nvidia-persistenced/nvidia-persistenced.mk b/package/nvidia-persistenced/nvidia-persistenced.mk
 new file mode 100644
-index 0000000000..02abcd283c
+index 0000000000..2a34d3608d
 --- /dev/null
-+++ b/package/cni-plugins/cni-plugins.mk
-@@ -0,0 +1,77 @@
++++ b/package/nvidia-persistenced/nvidia-persistenced.mk
+@@ -0,0 +1,49 @@
 +################################################################################
 +#
-+# cni-plugins
++# nvidia-persistenced
 +#
 +################################################################################
 +
-+CNI_PLUGINS_VERSION = 1.1.1
-+CNI_PLUGINS_SITE = $(call github,containernetworking,plugins,v$(CNI_PLUGINS_VERSION))
-+CNI_PLUGINS_LICENSE = Apache-2.0
-+CNI_PLUGINS_LICENSE_FILES = LICENSE
++NVIDIA_PERSISTENCED_VERSION = 515.48.07
++NVIDIA_PERSISTENCED_SITE = $(call github,NVIDIA,nvidia-persistenced,$(NVIDIA_PERSISTENCED_VERSION))
++NVIDIA_PERSISTENCED_LICENSE = MIT
++NVIDIA_PERSISTENCED_LICENSE_FILES = COPYING
 +
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_BRIDGE),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/main/bridge
-+endif
++NVIDIA_PERSISTENCED_DEPENDENCIES = host-pkgconf libtirpc
 +
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_IPVLAN),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/main/ipvlan
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_LOOPBACK),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/main/loopback
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_MACVLAN),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/main/macvlan
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_PTP),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/main/ptp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_VLAN),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/main/vlan
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_HOST_DEVICE),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/main/host-device
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_DHCP),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/ipam/dhcp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_HOST_LOCAL),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/ipam/host-local
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_STATIC),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/ipam/static
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_TUNING),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/meta/tuning
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_PORTMAP),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/meta/portmap
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_BANDWIDTH),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/meta/bandwidth
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_SBR),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/meta/sbr
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CNI_PLUGINS_FIREWALL),y)
-+CNI_PLUGINS_BUILD_TARGETS += plugins/meta/firewall
-+endif
-+
-+define CNI_PLUGINS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -d  $(TARGET_DIR)/usr/libexec/cni
-+	$(INSTALL) -D -m 0755 $(@D)/bin/* $(TARGET_DIR)/usr/libexec/cni/
++define NVIDIA_PERSISTENCED_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		OUTPUTDIR=. ./nvidia-persistenced
 +endef
 +
-+$(eval $(golang-package))
++define NVIDIA_PERSISTENCED_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/nvidia-persistenced \
++		$(TARGET_DIR)/usr/bin/nvidia-persistenced
++endef
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
++define NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_SYSTEMD_SYSUSERS
++	$(INSTALL) -D -m 0644 $(NVIDIA_PERSISTENCED_PKGDIR)/nvidia-persistenced.conf \
++		$(TARGET_DIR)/usr/lib/sysusers.d/nvidia-persistenced.conf
++endef
++NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_HOOKS += NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_SYSTEMD_SYSUSERS
++else
++NVIDIA_PERSISTENCED_SYSTEMD_USERS = \
++	nvidia-persistenced -1 nvidia-persistenced -1 * - - - NVIDIA Persistence Daemon
++endif
++
++define NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_SYSTEMD_SERVICE
++	$(INSTALL) -D -m 0644 $(@D)/init/systemd/nvidia-persistenced.service.template \
++		$(TARGET_DIR)/usr/lib/systemd/system/nvidia-persistenced.service
++	$(SED) 's/__USER__/nvidia-persistenced/g' \
++		$(TARGET_DIR)/usr/lib/systemd/system/nvidia-persistenced.service
++endef
++NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_HOOKS += NVIDIA_PERSISTENCED_POST_INSTALL_TARGET_SYSTEMD_SERVICE
++endif # BR2_PACKAGE_SYSTEMD
++
++define NVIDIA_PERSISTENCED_USERS
++	$(NVIDIA_PERSISTENCED_SYSTEMD_USERS)
++endef
++
++$(eval $(generic-package))
 -- 
 2.35.1
 
