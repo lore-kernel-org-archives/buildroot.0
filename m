@@ -1,51 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C4AAC6FA82
-	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 07:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92DA6C6FA82
+	for <buildroot@archiver.kernel.org>; Sun,  4 Sep 2022 07:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 954CE60BC6;
-	Sun,  4 Sep 2022 07:41:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 954CE60BC6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2041D817B3;
+	Sun,  4 Sep 2022 07:41:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2041D817B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5cjEtEH04cIa; Sun,  4 Sep 2022 07:41:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j30MjKb4vM8D; Sun,  4 Sep 2022 07:41:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7683E60669;
-	Sun,  4 Sep 2022 07:41:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7683E60669
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0CB3C1BF2CC
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 07:40:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0444E81466;
+	Sun,  4 Sep 2022 07:41:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0444E81466
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 697E81BF2CC
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 07:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E7983408C2
- for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 07:40:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7983408C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 518C181466
+ for <buildroot@lists.busybox.net>; Sun,  4 Sep 2022 07:41:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 518C181466
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rdaaaTjkoJFw for <buildroot@lists.busybox.net>;
- Sun,  4 Sep 2022 07:40:53 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ADCF540891
- for <buildroot@buildroot.org>; Sun,  4 Sep 2022 07:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADCF540891
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 60906881F5; Sun,  4 Sep 2022 07:25:39 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 4 Sep 2022 09:38:41 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fc7ba3ab8fa6c3144098fae057c758d35279e46f
-X-Git-Newrev: 5a8c013bb0f0d1be9eb8f1c169f9ee69a6389635
-X-Patchwork-Hint: ignore
-Message-Id: <20220904072539.60906881F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lua-lunix: bump to
- version 20220331
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DVLNA8fb_I79 for <buildroot@lists.busybox.net>;
+ Sun,  4 Sep 2022 07:41:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AB4E8144E
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1AB4E8144E
+ for <buildroot@busybox.net>; Sun,  4 Sep 2022 07:41:15 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:4ec6:5d03:99e:22c7])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0F77A13F895;
+ Sun,  4 Sep 2022 09:41:11 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 04 Sep 2022 09:41:10 +0200
+Date: Sun, 4 Sep 2022 09:41:10 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20220904074110.GR68979@scaer>
+References: <20220903135840.2001959-1-francois.perrad@gadz.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220903135840.2001959-1-francois.perrad@gadz.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1662277273;
+ bh=FEEKWxp69+i7qN6ohmoq/lRuaPMeCTBUgrttNmCOcwY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Nf7hFbrc8KRtn4UMjcfE4VOktS7lYkv0ZpwpYOGDRpBCxt357XmiHG6aHuCEcJ9o6
+ RYYtGEPSwrHZgHPiPcKrtUU47mFBG7eNBegoWS6jRG4eoi0TNBJeTWPEhe5K2bl4bp
+ 5BCyXv07Ht8kU/PuaNVOpzf4A4zPkyVcsrcIQxOfHzh/EJdfP/cpvARtKbSxs1cMlc
+ L5iMW4UkyMpqeBQOV0xJgpwJRyTujBx4xME1NyhcsbpkwQuGtWXrLLo5REY60TwNyF
+ FokeNnW3KZSy4MzPCoXDGckxxQWgL1Yb1v7AA08tJhzYl6ILWrIXB6epu3JtLJbDFJ
+ i1C1RophDC3ZA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Nf7hFbrc
+Subject: Re: [Buildroot] [PATCH] package/lua-lunix: bump to version 20220331
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,140 +76,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a8c013bb0f0d1be9eb8f1c169f9ee69a6389635
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-remove merged patches
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/lua-lunix/0001-fix-with-uClibc.patch       | 28 ----------------------
- ...brt.patch => 0001-remove-link-with-librt.patch} |  8 +++----
- package/lua-lunix/0003-fix-sysctl-detection.patch  | 24 -------------------
- package/lua-lunix/lua-lunix.hash                   |  4 ++--
- package/lua-lunix/lua-lunix.mk                     |  2 +-
- 5 files changed, 7 insertions(+), 59 deletions(-)
-
-diff --git a/package/lua-lunix/0001-fix-with-uClibc.patch b/package/lua-lunix/0001-fix-with-uClibc.patch
-deleted file mode 100644
-index 236eec47a1..0000000000
---- a/package/lua-lunix/0001-fix-with-uClibc.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From ee41d97a80b978f54941ac6857c00b8a8f28de24 Mon Sep 17 00:00:00 2001
--From: Francois Perrad <francois.perrad@gadz.org>
--Date: Sun, 6 Jun 2021 17:55:06 +0200
--Subject: [PATCH] fix with uClibc
--
--uClibc doesn't have is no sys_siglist.
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-----
-- lunix-rel-20170920/src/unix.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lunix-rel-20170920/src/unix.c b/lunix-rel-20170920/src/unix.c
--index 5f3a70a..e561ab2 100644
----- a/lunix-rel-20170920/src/unix.c
--+++ b/lunix-rel-20170920/src/unix.c
--@@ -438,7 +438,7 @@
-- #endif
-- 
-- #ifndef HAVE_SYS_SIGLIST
---#define HAVE_SYS_SIGLIST (!MUSL_MAYBE && !__sun && !_AIX)
--+#define HAVE_SYS_SIGLIST (!MUSL_MAYBE && !__sun && !_AIX && !__UCLIBC__)
-- #endif
-- 
-- #ifndef HAVE_UNLINKAT
---- 
--2.30.2
--
-diff --git a/package/lua-lunix/0002-remove-link-with-librt.patch b/package/lua-lunix/0001-remove-link-with-librt.patch
-similarity index 70%
-rename from package/lua-lunix/0002-remove-link-with-librt.patch
-rename to package/lua-lunix/0001-remove-link-with-librt.patch
-index 7b1c8ddd57..2650e9117c 100644
---- a/package/lua-lunix/0002-remove-link-with-librt.patch
-+++ b/package/lua-lunix/0001-remove-link-with-librt.patch
-@@ -7,13 +7,13 @@ librt is not available with musl
- 
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- ---
-- lunix-rel-20170920/lunix-20170920-1.rockspec | 10 ----------
-+ lunix-rel-20220331/lunix-20220331-1.rockspec | 10 ----------
-  1 file changed, 10 deletions(-)
- 
--diff --git a/lunix-rel-20170920/lunix-20170920-1.rockspec b/lunix-rel-20170920/lunix-20170920-1.rockspec
-+diff --git a/lunix-rel-20220331/lunix-20220331-1.rockspec b/lunix-rel-20220331/lunix-20220331-1.rockspec
- index 741179d..76cafeb 100644
----- a/lunix-rel-20170920/lunix-20170920-1.rockspec
--+++ b/lunix-rel-20170920/lunix-20170920-1.rockspec
-+--- a/lunix-rel-20220331/lunix-20220331-1.rockspec
-++++ b/lunix-rel-20220331/lunix-20220331-1.rockspec
- @@ -26,16 +26,6 @@ build = {
-  		};
-  	};
-diff --git a/package/lua-lunix/0003-fix-sysctl-detection.patch b/package/lua-lunix/0003-fix-sysctl-detection.patch
-deleted file mode 100644
-index 18656b1921..0000000000
---- a/package/lua-lunix/0003-fix-sysctl-detection.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--sys/sysctl.h was removed with glibc 2.32
--
--Fetched from: https://github.com/wahern/lunix/pull/20/files
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-----
-- lunix-rel-20170920/src/unix.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lunix-rel-20170920/src/unix.c b/lunix-rel-20170920/src/unix.c
--index 272820a..fa00876 100644
----- a/lunix-rel-20170920/src/unix.c
--+++ b/lunix-rel-20170920/src/unix.c
--@@ -165,7 +165,7 @@
-- #endif
-- 
-- #ifndef HAVE_SYS_SYSCTL_H /* missing on musl libc */
---#define HAVE_SYS_SYSCTL_H (defined BSD || GLIBC_PREREQ(0,0) || UCLIBC_PREREQ(0,0,0))
--+#define HAVE_SYS_SYSCTL_H (defined BSD || (__GLIBC__ && !GLIBC_PREREQ(2,32)) || UCLIBC_PREREQ(0,0,0))
-- #endif
-- 
-- #ifndef HAVE_STRUCT_IN_PKTINFO
---- 
--2.30.2
--
-diff --git a/package/lua-lunix/lua-lunix.hash b/package/lua-lunix/lua-lunix.hash
-index 6e3c920db4..911f475b0e 100644
---- a/package/lua-lunix/lua-lunix.hash
-+++ b/package/lua-lunix/lua-lunix.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  4a4007b394ae884e18e9d0319ea584e8b4a682d7bf8fa5b99c7eea9baf1e5ed6  lunix-20170920-1.src.rock
--sha256  9b74be104d59caa45bf3321ebe771f9cc7874209261a93f1cf971ceca44fbe03  lunix-rel-20170920/LICENSE
-+sha256  eb13e89e1dfcc82aec3915ed4185f3a2a9205ec3e98a991b13cc39d7f389c427  lunix-20220331-1.src.rock
-+sha256  9b74be104d59caa45bf3321ebe771f9cc7874209261a93f1cf971ceca44fbe03  lunix-rel-20220331/LICENSE
-diff --git a/package/lua-lunix/lua-lunix.mk b/package/lua-lunix/lua-lunix.mk
-index 28cb2dc411..f3c159cbf4 100644
---- a/package/lua-lunix/lua-lunix.mk
-+++ b/package/lua-lunix/lua-lunix.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_LUNIX_VERSION_UPSTREAM = 20170920
-+LUA_LUNIX_VERSION_UPSTREAM = 20220331
- LUA_LUNIX_VERSION = $(LUA_LUNIX_VERSION_UPSTREAM)-1
- LUA_LUNIX_NAME_UPSTREAM = lunix
- LUA_LUNIX_SUBDIR = lunix-rel-$(LUA_LUNIX_VERSION_UPSTREAM)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJhbsOnb2lzLCBBbGwsCgpPbiAyMDIyLTA5LTAzIDE1OjU4ICswMjAwLCBGcmFuY29pcyBQZXJy
+YWQgc3Bha2UgdGh1c2x5Ogo+IHJlbW92ZSBtZXJnZWQgcGF0Y2hlcwo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNvaXMucGVycmFkQGdhZHoub3JnPgoKQXBwbGllZCB0
+byBuZXh0LCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAtLS0KPiAgcGFja2Fn
+ZS9sdWEtbHVuaXgvMDAwMS1maXgtd2l0aC11Q2xpYmMucGF0Y2ggIHwgMjggLS0tLS0tLS0tLS0t
+LS0tLS0tLQo+ICAuLi5hdGNoID0+IDAwMDEtcmVtb3ZlLWxpbmstd2l0aC1saWJydC5wYXRjaH0g
+fCAgOCArKystLS0KPiAgLi4uL2x1YS1sdW5peC8wMDAzLWZpeC1zeXNjdGwtZGV0ZWN0aW9uLnBh
+dGNoIHwgMjQgLS0tLS0tLS0tLS0tLS0tLQo+ICBwYWNrYWdlL2x1YS1sdW5peC9sdWEtbHVuaXgu
+aGFzaCAgICAgICAgICAgICAgfCAgNCArLS0KPiAgcGFja2FnZS9sdWEtbHVuaXgvbHVhLWx1bml4
+Lm1rICAgICAgICAgICAgICAgIHwgIDIgKy0KPiAgNSBmaWxlcyBjaGFuZ2VkLCA3IGluc2VydGlv
+bnMoKyksIDU5IGRlbGV0aW9ucygtKQo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9sdWEt
+bHVuaXgvMDAwMS1maXgtd2l0aC11Q2xpYmMucGF0Y2gKPiAgcmVuYW1lIHBhY2thZ2UvbHVhLWx1
+bml4L3swMDAyLXJlbW92ZS1saW5rLXdpdGgtbGlicnQucGF0Y2ggPT4gMDAwMS1yZW1vdmUtbGlu
+ay13aXRoLWxpYnJ0LnBhdGNofSAoNzAlKQo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9s
+dWEtbHVuaXgvMDAwMy1maXgtc3lzY3RsLWRldGVjdGlvbi5wYXRjaAo+IAo+IGRpZmYgLS1naXQg
+YS9wYWNrYWdlL2x1YS1sdW5peC8wMDAxLWZpeC13aXRoLXVDbGliYy5wYXRjaCBiL3BhY2thZ2Uv
+bHVhLWx1bml4LzAwMDEtZml4LXdpdGgtdUNsaWJjLnBhdGNoCj4gZGVsZXRlZCBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gaW5kZXggMjM2ZWVjNDdhLi4wMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL2x1YS1s
+dW5peC8wMDAxLWZpeC13aXRoLXVDbGliYy5wYXRjaAo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSwy
+OCArMCwwIEBACj4gLUZyb20gZWU0MWQ5N2E4MGI5NzhmNTQ5NDFhYzY4NTdjMDBiOGE4ZjI4ZGUy
+NCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAtRnJvbTogRnJhbmNvaXMgUGVycmFkIDxmcmFu
+Y29pcy5wZXJyYWRAZ2Fkei5vcmc+Cj4gLURhdGU6IFN1biwgNiBKdW4gMjAyMSAxNzo1NTowNiAr
+MDIwMAo+IC1TdWJqZWN0OiBbUEFUQ0hdIGZpeCB3aXRoIHVDbGliYwo+IC0KPiAtdUNsaWJjIGRv
+ZXNuJ3QgaGF2ZSBpcyBubyBzeXNfc2lnbGlzdC4KPiAtCj4gLVNpZ25lZC1vZmYtYnk6IEZyYW5j
+b2lzIFBlcnJhZCA8ZnJhbmNvaXMucGVycmFkQGdhZHoub3JnPgo+IC0tLS0KPiAtIGx1bml4LXJl
+bC0yMDE3MDkyMC9zcmMvdW5peC5jIHwgMiArLQo+IC0gMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
+aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gLQo+IC1kaWZmIC0tZ2l0IGEvbHVuaXgtcmVsLTIwMTcw
+OTIwL3NyYy91bml4LmMgYi9sdW5peC1yZWwtMjAxNzA5MjAvc3JjL3VuaXguYwo+IC1pbmRleCA1
+ZjNhNzBhLi5lNTYxYWIyIDEwMDY0NAo+IC0tLS0gYS9sdW5peC1yZWwtMjAxNzA5MjAvc3JjL3Vu
+aXguYwo+IC0rKysgYi9sdW5peC1yZWwtMjAxNzA5MjAvc3JjL3VuaXguYwo+IC1AQCAtNDM4LDcg
+KzQzOCw3IEBACj4gLSAjZW5kaWYKPiAtIAo+IC0gI2lmbmRlZiBIQVZFX1NZU19TSUdMSVNUCj4g
+LS0jZGVmaW5lIEhBVkVfU1lTX1NJR0xJU1QgKCFNVVNMX01BWUJFICYmICFfX3N1biAmJiAhX0FJ
+WCkKPiAtKyNkZWZpbmUgSEFWRV9TWVNfU0lHTElTVCAoIU1VU0xfTUFZQkUgJiYgIV9fc3VuICYm
+ICFfQUlYICYmICFfX1VDTElCQ19fKQo+IC0gI2VuZGlmCj4gLSAKPiAtICNpZm5kZWYgSEFWRV9V
+TkxJTktBVAo+IC0tLSAKPiAtMi4zMC4yCj4gLQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2x1YS1s
+dW5peC8wMDAyLXJlbW92ZS1saW5rLXdpdGgtbGlicnQucGF0Y2ggYi9wYWNrYWdlL2x1YS1sdW5p
+eC8wMDAxLXJlbW92ZS1saW5rLXdpdGgtbGlicnQucGF0Y2gKPiBzaW1pbGFyaXR5IGluZGV4IDcw
+JQo+IHJlbmFtZSBmcm9tIHBhY2thZ2UvbHVhLWx1bml4LzAwMDItcmVtb3ZlLWxpbmstd2l0aC1s
+aWJydC5wYXRjaAo+IHJlbmFtZSB0byBwYWNrYWdlL2x1YS1sdW5peC8wMDAxLXJlbW92ZS1saW5r
+LXdpdGgtbGlicnQucGF0Y2gKPiBpbmRleCA3YjFjOGRkZDUuLjI2NTBlOTExNyAxMDA2NDQKPiAt
+LS0gYS9wYWNrYWdlL2x1YS1sdW5peC8wMDAyLXJlbW92ZS1saW5rLXdpdGgtbGlicnQucGF0Y2gK
+PiArKysgYi9wYWNrYWdlL2x1YS1sdW5peC8wMDAxLXJlbW92ZS1saW5rLXdpdGgtbGlicnQucGF0
+Y2gKPiBAQCAtNywxMyArNywxMyBAQCBsaWJydCBpcyBub3QgYXZhaWxhYmxlIHdpdGggbXVzbAo+
+ICAKPiAgU2lnbmVkLW9mZi1ieTogRnJhbmNvaXMgUGVycmFkIDxmcmFuY29pcy5wZXJyYWRAZ2Fk
+ei5vcmc+Cj4gIC0tLQo+IC0gbHVuaXgtcmVsLTIwMTcwOTIwL2x1bml4LTIwMTcwOTIwLTEucm9j
+a3NwZWMgfCAxMCAtLS0tLS0tLS0tCj4gKyBsdW5peC1yZWwtMjAyMjAzMzEvbHVuaXgtMjAyMjAz
+MzEtMS5yb2Nrc3BlYyB8IDEwIC0tLS0tLS0tLS0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxMCBkZWxl
+dGlvbnMoLSkKPiAgCj4gLWRpZmYgLS1naXQgYS9sdW5peC1yZWwtMjAxNzA5MjAvbHVuaXgtMjAx
+NzA5MjAtMS5yb2Nrc3BlYyBiL2x1bml4LXJlbC0yMDE3MDkyMC9sdW5peC0yMDE3MDkyMC0xLnJv
+Y2tzcGVjCj4gK2RpZmYgLS1naXQgYS9sdW5peC1yZWwtMjAyMjAzMzEvbHVuaXgtMjAyMjAzMzEt
+MS5yb2Nrc3BlYyBiL2x1bml4LXJlbC0yMDIyMDMzMS9sdW5peC0yMDIyMDMzMS0xLnJvY2tzcGVj
+Cj4gIGluZGV4IDc0MTE3OWQuLjc2Y2FmZWIgMTAwNjQ0Cj4gLS0tLSBhL2x1bml4LXJlbC0yMDE3
+MDkyMC9sdW5peC0yMDE3MDkyMC0xLnJvY2tzcGVjCj4gLSsrKyBiL2x1bml4LXJlbC0yMDE3MDky
+MC9sdW5peC0yMDE3MDkyMC0xLnJvY2tzcGVjCj4gKy0tLSBhL2x1bml4LXJlbC0yMDIyMDMzMS9s
+dW5peC0yMDIyMDMzMS0xLnJvY2tzcGVjCj4gKysrKyBiL2x1bml4LXJlbC0yMDIyMDMzMS9sdW5p
+eC0yMDIyMDMzMS0xLnJvY2tzcGVjCj4gIEBAIC0yNiwxNiArMjYsNiBAQCBidWlsZCA9IHsKPiAg
+IAkJfTsKPiAgIAl9Owo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2x1YS1sdW5peC8wMDAzLWZpeC1z
+eXNjdGwtZGV0ZWN0aW9uLnBhdGNoIGIvcGFja2FnZS9sdWEtbHVuaXgvMDAwMy1maXgtc3lzY3Rs
+LWRldGVjdGlvbi5wYXRjaAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDE4NjU2
+YjE5Mi4uMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9sdWEtbHVuaXgvMDAwMy1maXgtc3lzY3Rs
+LWRldGVjdGlvbi5wYXRjaAo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSwyNCArMCwwIEBACj4gLXN5
+cy9zeXNjdGwuaCB3YXMgcmVtb3ZlZCB3aXRoIGdsaWJjIDIuMzIKPiAtCj4gLUZldGNoZWQgZnJv
+bTogaHR0cHM6Ly9naXRodWIuY29tL3dhaGVybi9sdW5peC9wdWxsLzIwL2ZpbGVzCj4gLVNpZ25l
+ZC1vZmYtYnk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNvaXMucGVycmFkQGdhZHoub3JnPgo+IC0t
+LS0KPiAtIGx1bml4LXJlbC0yMDE3MDkyMC9zcmMvdW5peC5jIHwgMiArLQo+IC0gMSBmaWxlIGNo
+YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gLQo+IC1kaWZmIC0tZ2l0IGEv
+bHVuaXgtcmVsLTIwMTcwOTIwL3NyYy91bml4LmMgYi9sdW5peC1yZWwtMjAxNzA5MjAvc3JjL3Vu
+aXguYwo+IC1pbmRleCAyNzI4MjBhLi5mYTAwODc2IDEwMDY0NAo+IC0tLS0gYS9sdW5peC1yZWwt
+MjAxNzA5MjAvc3JjL3VuaXguYwo+IC0rKysgYi9sdW5peC1yZWwtMjAxNzA5MjAvc3JjL3VuaXgu
+Ywo+IC1AQCAtMTY1LDcgKzE2NSw3IEBACj4gLSAjZW5kaWYKPiAtIAo+IC0gI2lmbmRlZiBIQVZF
+X1NZU19TWVNDVExfSCAvKiBtaXNzaW5nIG9uIG11c2wgbGliYyAqLwo+IC0tI2RlZmluZSBIQVZF
+X1NZU19TWVNDVExfSCAoZGVmaW5lZCBCU0QgfHwgR0xJQkNfUFJFUkVRKDAsMCkgfHwgVUNMSUJD
+X1BSRVJFUSgwLDAsMCkpCj4gLSsjZGVmaW5lIEhBVkVfU1lTX1NZU0NUTF9IIChkZWZpbmVkIEJT
+RCB8fCAoX19HTElCQ19fICYmICFHTElCQ19QUkVSRVEoMiwzMikpIHx8IFVDTElCQ19QUkVSRVEo
+MCwwLDApKQo+IC0gI2VuZGlmCj4gLSAKPiAtICNpZm5kZWYgSEFWRV9TVFJVQ1RfSU5fUEtUSU5G
+Two+IC0tLSAKPiAtMi4zMC4yCj4gLQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2x1YS1sdW5peC9s
+dWEtbHVuaXguaGFzaCBiL3BhY2thZ2UvbHVhLWx1bml4L2x1YS1sdW5peC5oYXNoCj4gaW5kZXgg
+NmUzYzkyMGRiLi45MTFmNDc1YjAgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9sdWEtbHVuaXgvbHVh
+LWx1bml4Lmhhc2gKPiArKysgYi9wYWNrYWdlL2x1YS1sdW5peC9sdWEtbHVuaXguaGFzaAo+IEBA
+IC0xLDMgKzEsMyBAQAo+ICAjIGNvbXB1dGVkIGJ5IGx1YXJvY2tzL2J1aWxkcm9vdAo+IC1zaGEy
+NTYgIDRhNDAwN2IzOTRhZTg4NGUxOGU5ZDAzMTllYTU4NGU4YjRhNjgyZDdiZjhmYTViOTljN2Vl
+YTliYWYxZTVlZDYgIGx1bml4LTIwMTcwOTIwLTEuc3JjLnJvY2sKPiAtc2hhMjU2ICA5Yjc0YmUx
+MDRkNTljYWE0NWJmMzMyMWViZTc3MWY5Y2M3ODc0MjA5MjYxYTkzZjFjZjk3MWNlY2E0NGZiZTAz
+ICBsdW5peC1yZWwtMjAxNzA5MjAvTElDRU5TRQo+ICtzaGEyNTYgIGViMTNlODllMWRmY2M4MmFl
+YzM5MTVlZDQxODVmM2EyYTkyMDVlYzNlOThhOTkxYjEzY2MzOWQ3ZjM4OWM0MjcgIGx1bml4LTIw
+MjIwMzMxLTEuc3JjLnJvY2sKPiArc2hhMjU2ICA5Yjc0YmUxMDRkNTljYWE0NWJmMzMyMWViZTc3
+MWY5Y2M3ODc0MjA5MjYxYTkzZjFjZjk3MWNlY2E0NGZiZTAzICBsdW5peC1yZWwtMjAyMjAzMzEv
+TElDRU5TRQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2x1YS1sdW5peC9sdWEtbHVuaXgubWsgYi9w
+YWNrYWdlL2x1YS1sdW5peC9sdWEtbHVuaXgubWsKPiBpbmRleCAyOGNiMmRjNDEuLmYzYzE1OWNi
+ZiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2x1YS1sdW5peC9sdWEtbHVuaXgubWsKPiArKysgYi9w
+YWNrYWdlL2x1YS1sdW5peC9sdWEtbHVuaXgubWsKPiBAQCAtNCw3ICs0LDcgQEAKPiAgIwo+ICAj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAKPiAtTFVBX0xVTklYX1ZFUlNJT05fVVBTVFJFQU0g
+PSAyMDE3MDkyMAo+ICtMVUFfTFVOSVhfVkVSU0lPTl9VUFNUUkVBTSA9IDIwMjIwMzMxCj4gIExV
+QV9MVU5JWF9WRVJTSU9OID0gJChMVUFfTFVOSVhfVkVSU0lPTl9VUFNUUkVBTSktMQo+ICBMVUFf
+TFVOSVhfTkFNRV9VUFNUUkVBTSA9IGx1bml4Cj4gIExVQV9MVU5JWF9TVUJESVIgPSBsdW5peC1y
+ZWwtJChMVUFfTFVOSVhfVkVSU0lPTl9VUFNUUkVBTSkKPiAtLSAKPiAyLjM0LjEKPiAKPiBfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBt
+YWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0t
+LS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
+LS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFT
+Q0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29m
+dHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8
+CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAg
+ICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8
+IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0t
+LS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
