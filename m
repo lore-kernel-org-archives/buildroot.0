@@ -1,93 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD3E0ECAAD3
-	for <buildroot@archiver.kernel.org>; Mon,  5 Sep 2022 10:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6203EECAAD5
+	for <buildroot@archiver.kernel.org>; Mon,  5 Sep 2022 11:51:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 47B3F40187;
-	Mon,  5 Sep 2022 10:06:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47B3F40187
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MHCemLf8Jc9b; Mon,  5 Sep 2022 10:06:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16EE34014B;
-	Mon,  5 Sep 2022 10:06:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16EE34014B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 43DE81BF9AD
- for <buildroot@lists.busybox.net>; Mon,  5 Sep 2022 10:06:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2611960B78
- for <buildroot@lists.busybox.net>; Mon,  5 Sep 2022 10:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2611960B78
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D94B60F8B;
+	Mon,  5 Sep 2022 11:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D94B60F8B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HicXz6KkF_GK for <buildroot@lists.busybox.net>;
- Mon,  5 Sep 2022 10:06:41 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JQTj33hgrg4a; Mon,  5 Sep 2022 11:51:32 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62E7960AFC;
+	Mon,  5 Sep 2022 11:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62E7960AFC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B52FA1BF318
+ for <buildroot@lists.busybox.net>; Mon,  5 Sep 2022 11:51:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89D4F401F2
+ for <buildroot@lists.busybox.net>; Mon,  5 Sep 2022 11:51:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89D4F401F2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qpU9CriUnKjV for <buildroot@lists.busybox.net>;
+ Mon,  5 Sep 2022 11:51:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72BCC60670
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 72BCC60670
- for <buildroot@buildroot.org>; Mon,  5 Sep 2022 10:06:39 +0000 (UTC)
-Received: by mail-ed1-x532.google.com with SMTP id s11so10633175edd.13
- for <buildroot@buildroot.org>; Mon, 05 Sep 2022 03:06:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date;
- bh=IJZuUFx65l3nMoZBLp8QenZuLVqsyGRfdglwyAmxthw=;
- b=P/A6qU6ip0QeHvjgxoroLowicTbtSzmgZhU298C4Vnpc8D6YgV3H1eX2SvHo3pI+rG
- k90gpKWxfLxPat5+BSVNezFQ/gVHtfxLjWUEnQ/YtgjM6SNrcvEv/4lTjSHyL1t20Nyz
- x2W9TIE9YEVTLi01FzcOjC+T//vdOfrc4AFCMsFzn0j3qOHT5TzssH2h896GQYbJ6XwI
- 30D0PlX4xBUTR5aI/wW53CCTMnrjT+M72Iq1d0Yp1OFNbFUN6EIiID/kjJrwWBnKQly0
- VIRdMudoqpZZPV+03wFwQx05FRGdWK/bYynFy3cLmZH3EKogShunhFkwlmITds/i/5BC
- xj+A==
-X-Gm-Message-State: ACgBeo1OV4cES7hgoKik3wHmDiuxJoHiztcC9x3Q+tyYGlXPrYS+CxXA
- 73masTIeCuax/2Fou0O7DNwZPA==
-X-Google-Smtp-Source: AA6agR5N3xC8Q1CsoYAG5YG/M9pcD3e7SX/XS/Rk5O0yHpSsHlbM4txL0r4IcfxLlsOxCzkp5bX8EA==
-X-Received: by 2002:a05:6402:3907:b0:431:6776:64e7 with SMTP id
- fe7-20020a056402390700b00431677664e7mr42488099edb.0.1662372397567; 
- Mon, 05 Sep 2022 03:06:37 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- c9-20020a17090618a900b0072b7d76211dsm4903073ejf.107.2022.09.05.03.06.34
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 05 Sep 2022 03:06:34 -0700 (PDT)
-Message-ID: <e305347d-b691-e925-6ce5-dbf69adb249d@mind.be>
-Date: Mon, 5 Sep 2022 12:06:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-GB
-To: Raphael Pavlidis <raphael.pavlidis@gmail.com>, buildroot@buildroot.org
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB5C8400AF
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DB5C8400AF
+ for <buildroot@buildroot.org>; Mon,  5 Sep 2022 11:51:27 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:a5dc:9bd4:48b0:8ef0])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 9AA63B00772;
+ Mon,  5 Sep 2022 13:51:21 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 05 Sep 2022 13:51:21 +0200
+Date: Mon, 5 Sep 2022 13:51:21 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Message-ID: <20220905115121.GC1490660@scaer>
 References: <20220904124315.12728-1-raphael.pavlidis@gmail.com>
-From: Arnout Vandecappelle <arnout@mind.be>
+MIME-Version: 1.0
+Content-Disposition: inline
 In-Reply-To: <20220904124315.12728-1-raphael.pavlidis@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date;
- bh=IJZuUFx65l3nMoZBLp8QenZuLVqsyGRfdglwyAmxthw=;
- b=OJS3zQGi5nbmI4da1QbJyTUkdlqMefGbqGj+NtPaSp9io19ZvS+Mwah3nSO7qlV1Yx
- Uc3Os5o83IJwSldz41eFem0FhIPBsPLaikhxFI1s8d684TCleUTClLxn8Ut8XHaUnRar
- duTeyrIC4gARnKJhd5xGQQqvcPzooLrwvVeR6xZc11/cvlOdQXOqCYyGpRZbAYiu2+Oq
- 9Xy4bcW9w0ufhWFlleHGdGWixr2wfETlmep9r7d6074C+kOGrwtw0xloHTccW/r1hKYT
- yA2xLxtFqkDh4fPu0uqluCjtV8sO41lXldw0fu1U0qovQYniOk1kKq1+xpq30KWOdUFl
- 9M4Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=OJS3zQGi
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1662378684;
+ bh=OfsgIMbAMMgIAicbQcos86gVu/7rCwK9rUp1KO7MagU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=coML8HknTlUMUz4HYWPub1d1A+5KEhR5NV67f+WWLDiGPosNtZLZwlEkZRftQ9fob
+ m9IaP9v09hRkJ1j8+6xR0c9ZlmzLURebsbxmn/5mhXKJff2X+u5k4V36AIniYhUl8J
+ Xb193EWAbI0BHLLgGTify1HZkdtRNgs08RQpWzrnBD7CpDb3TqXDk1kKeH1NrZiFcB
+ RGQ0uvhgr8aIWAm5ulA1FfgVNMrgTHQa5/0/jQNvBl0qGLRop+t1pgNN0lMeXRzUcX
+ zTr1qBoaAW7IKU7ApRI5CX8a0+Fxq8Qhp1L4N1QMvsYVewINXEAnEUfKJv5+x7SDu2
+ zX2ferhtr/oQw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=coML8Hkn
 Subject: Re: [Buildroot] [PATCH v2 1/1] package/shadow: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -100,69 +76,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Raphael,
+Raphael, All,
 
-On 04/09/2022 14:43, Raphael Pavlidis wrote:
+On 2022-09-04 14:43 +0200, Raphael Pavlidis spake thusly:
 > shadow provides utilities to deal with user accounts.
-> 
+
+You will probably have more explanations to provide in the commit log,
+to explain how the pacakge is integrated in Buildroot. See the qustions
+below...
+
 > Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 
-  Not a full review, but just a small comment: I believe the shadow package 
-installs (or may install) some files that also have a busybox equivalent. If 
-this is the case, a dependency has to be added to busybox, to make sure that the 
-busybox version doesn't overwrite the one from shadow when per-package 
-directories are enabled. See the large list of other dependencies already 
-present in busybox.mk.
+In addition to Arnout's quick review, here's my own quick review...
 
-  Regards,
-  Arnout
-
-> ---
-> Changes v1 -> v2:
-> - DEVELOPERS: add Raphael Pavlids for shadow
-> 
->   DEVELOPERS                 |   3 +
->   package/Config.in          |   1 +
->   package/shadow/Config.in   |  81 ++++++++++++++++++
->   package/shadow/shadow.hash |   3 +
->   package/shadow/shadow.mk   | 171 +++++++++++++++++++++++++++++++++++++
->   5 files changed, 259 insertions(+)
->   create mode 100644 package/shadow/Config.in
->   create mode 100644 package/shadow/shadow.hash
->   create mode 100644 package/shadow/shadow.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d2bd0d809a..38c25a0ae2 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2506,6 +2506,9 @@ F:	support/testing/tests/package/test_python_jmespath.py
->   F:	support/testing/tests/package/test_python_rsa.py
->   F:	support/testing/tests/package/test_python_s3transfer.py
->   
-> +N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
-> +F:	package/shadow/
-> +
->   N:	Refik Tuzakli <tuzakli.refik@gmail.com>
->   F:	package/freescale-imx/
->   F:	package/paho-mqtt-cpp/
-> diff --git a/package/Config.in b/package/Config.in
-> index d1c098c48f..c13ba09056 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2635,6 +2635,7 @@ menu "System tools"
->   	source "package/sdbus-cpp/Config.in"
->   	source "package/sdbusplus/Config.in"
->   	source "package/seatd/Config.in"
-> +	source "package/shadow/Config.in"
->   	source "package/smack/Config.in"
->   	source "package/start-stop-daemon/Config.in"
->   	source "package/supervisor/Config.in"
+[--SNIP--]
 > diff --git a/package/shadow/Config.in b/package/shadow/Config.in
 > new file mode 100644
 > index 0000000000..616f002618
@@ -172,6 +105,17 @@ present in busybox.mk.
 > +menuconfig BR2_PACKAGE_SHADOW
 > +	bool "shadow"
 > +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+
+As Arnout noted, shadow, or ony some of its utilities, may come
+conflicting with busybox' provided applets.
+
+So, we also need a dependency in Config.in:
+
+    depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+
+Note: *if* only sub-options of shadow do conflict, then the dependency
+should be moved dow to those sub-options.
+
 > +	help
 > +	  Utilities to deal with user accounts.
 > +
@@ -182,17 +126,51 @@ present in busybox.mk.
 > +config BR2_PACKAGE_SHADOW_SHADOWGRP
 > +	bool "shadowgrp"
 > +	default y
+
+We usually have no option that defaults to 'y', and when we do, there
+is a reason for that, so please explain that in the commit log. This
+comment is also valid for all the symbols below that default to y.
+
 > +	help
 > +	  Enable shadow group support.
 > +
 > +if BR2_PACKAGE_LINUX_PAM
-> +
+
+When there is a single symbol that is conditional, I think a singluar
+depends on is better:
+
 > +config BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID
 > +	bool "account-tools-setuid"
+
+    depends on BR2_PACKAGE_LINUX_PAM
+
+Also, I was wondering if that should instead be a select rather than a
+depends-on. I.e. is account-tools-setuid something that "manages" PAM
+settings, or is it something that uses PAM to amanage accounts? If the
+former, then a depends-on is more appropriate, but if the latter, then a
+select is better.
+
+If that makes more sense to select, then:
+
+    config BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID
+        bool "account-tools-setuid"
+        depends on BR2_USE_MMU  # linux-pam
+        depends on BR2_ENABLE_LOCALE  # linux-pam
+        depends on BR2_USE_WCHAR  # linux-pam
+        depends on !BR2_STATIC_LIBS  # linux-pam
+        select BR2_PACKAGE_LINUX_PAM
+
+    comment "account-tools-setuid needs a toolchain w/ shared libs, wchar, locale"
+        depends on BR2_USE_MMU
+        depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+                || !BR2_ENABLE_LOCALE
+
 > +	help
 > +	  Install the user and group management tools setuid and authenticate the
 > +	  callers.
-> +
+
+(hint: here, it seems to suggest we would better use a select)
+
 > +endif # BR2_PACKAGE_LINUX_PAM
 > +
 > +config BR2_PACKAGE_SHADOW_UTMPX
@@ -205,18 +183,26 @@ present in busybox.mk.
 > +	default y
 > +	help
 > +	  Support subordinate ids.
-> +
+
+An help entry that just repeats the prompt is totally useless. If there
+is nothing better than to repeat the prompt, then don't provide a help
+entry. Otherwise, provide actual help.
+
 > +config BR2_PACKAGE_SHADOW_SHA_CRYPT
 > +	bool "sha-crypt"
 > +	default y
 > +	help
 > +	  Allow the SHA256 and SHA512 password encryption algorithms.
-> +
+
+Note: the is a very good and terse help entry.
+
 > +config BR2_PACKAGE_SHADOW_BCRYPT
 > +	bool "bcrypt"
 > +	help
 > +	  Allow the bcrypt password encryption algorithm.
-> +
+
+s/bcrypt/blowfish block cipher/ and you get a better help entry.
+
 > +config BR2_PACKAGE_SHADOW_YESCRYPT
 > +	bool "yescrypt"
 > +	help
@@ -237,28 +223,30 @@ present in busybox.mk.
 > +config BR2_PACKAGE_SHADOW_GROUP_NAME_MAX_LENGTH
 > +	int "group-name-max-length"
 > +	default 16
+
+Does it really make sense to have this be configurable?
+If so, why is 16 the default, rather than unlimited?
+
+And if we keep it, then the prompt should not have dashes, but be a
+sentence (i.e. it is not the name of program installed by shwadow):
+
+    bool "max length of group names"
+
 > +	help
 > +	  Set max group name length. (0 equals infinity)
 > +
 > +config BR2_PACKAGE_SHADOW_SU
 > +	bool "su"
 > +	default y
+
+This one will definitely conflict with Busybox' own su.
+
 > +	help
 > +	  Build and install su program.
-> +
-> +endif # BR2_PACKAGE_SHADOW
-> +
-> +comment "shadow needs a toolchain w/ headers >= 4.14"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-> diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
-> new file mode 100644
-> index 0000000000..6b9faac10f
-> --- /dev/null
-> +++ b/package/shadow/shadow.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256  41f093ce58b2ae5f389a1c5553e0c18bc73e6fe27f66273891991198a7707c95  shadow-4.11.1.tar.xz
-> +sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
+
+This does not provide much help, so I'd just drop the help entry.
+
+[--SNIP--]
 > diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
 > new file mode 100644
 > index 0000000000..140d830cb9
@@ -278,6 +266,10 @@ present in busybox.mk.
 > +SHADOW_LICENSE_FILES = COPYING
 > +
 > +SHADOW_CONF_OPTS += \
+
+This is the first, unconditional assignment; it should be a simple
+assignment, not an append-assignment.
+
 > +	--disable-man \
 > +	--without-btrfs \
 > +	--without-skey \
@@ -294,13 +286,14 @@ present in busybox.mk.
 > +else
 > +SHADOW_CONF_OPTS += --disable-shared
 > +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SHADOW_SHADOWGRP),y)
-> +SHADOW_CONF_OPTS += --enable-shadowgrp
-> +else
-> +SHADOW_CONF_OPTS += --disable-shadowgrp
-> +endif
-> +
+
+So, first, both options are already passed appropriately by the
+autotools package infrastructure, so why do you need to pass them?
+
+Second, --{en,disable}-{static,shared} is supposed to drive the build
+of static or shared libraries, not the fact that anything is shared or
+statically linked.
+
 > +ifeq ($(BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID),y)
 > +SHADOW_CONF_OPTS += --enable-account-tools-setuid
 > +SHADOW_ACCOUNT_TOOLS_SETUID = \
@@ -312,103 +305,75 @@ present in busybox.mk.
 > +	/usr/sbin/newusers f 4755 0 0 - - - - - \
 > +	/usr/sbin/useradd f 4755 0 0 - - - - - \
 > +	/usr/sbin/usermod f 4755 0 0 - - - - -
+
+Use a define here (also, the other two conditional permissions end with
+_PERMISSIONS, so do it here to):
+
+    define SHADOW_ACCOUNT_TOOLS_SETUID_PERMISSIONS
+    	/usr/sbin/chgpasswd f 4755 0 0 - - - - -
+    	/usr/sbin/chpasswd f 4755 0 0 - - - - -
+    	/usr/sbin/groupadd f 4755 0 0 - - - - -
+    	/usr/sbin/groupdel f 4755 0 0 - - - - -
+    	/usr/sbin/groupmod f 4755 0 0 - - - - -
+    	/usr/sbin/newusers f 4755 0 0 - - - - -
+    	/usr/sbin/useradd f 4755 0 0 - - - - -
+    	/usr/sbin/usermod f 4755 0 0 - - - - -
+    endef
+
+Note: ditto for SHADOW_SUBORDINATE_IDS_PERMISSIONS: use a define rather
+than a multi-line (and I suspect a multi-line does not actually work...)
+
 > +else
 > +SHADOW_CONF_OPTS += --disable-account-tools-setuid
 > +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SHADOW_UTMPX),y)
-> +SHADOW_CONF_OPTS += --enable-utmpx
-> +else
-> +SHADOW_CONF_OPTS += --disable-utmpx
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
-> +SHADOW_CONF_OPTS += --enable-subordinate-ids
-> +SHADOW_SUBORDINATE_IDS_PERMISSIONS =  \
-> +	/usr/bin/newuidmap f 4755 0 0 - - - - - \
-> +	/usr/bin/newgidmap f 4755 0 0 - - - - -
-> +else
-> +SHADOW_CONF_OPTS += --disable-subordinate-ids
-> +endif
-> +
+
+[--SNIP--]
 > +ifeq ($(BR2_PACKAGE_ACL),y)
 > +SHADOW_CONF_OPTS += --with-acl
 > +SHADOW_DEPENDENCIES += acl
+
+Pet peeve of mine: I prefer that dependencies be listed before config
+options. Indeed, semantically, we need the dependency to be fulfilled
+before we can use it; it also more closely match the unconditional
+dependencies and config options.
+
 > +else
 > +SHADOW_CONF_OPTS += --without-acl
 > +endif
-> +
-> +ifeq ($(BR2_PACKAGE_ATTR),y)
-> +SHADOW_CONF_OPTS += --with-attr
-> +SHADOW_DEPENDENCIES += attr
-> +else
-> +SHADOW_CONF_OPTS += --without-attr
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_AUDIT),y)
-> +SHADOW_CONF_OPTS += --with-audit
-> +SHADOW_DEPENDENCIES += audit
-> +else
-> +SHADOW_CONF_OPTS += --without-audit
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_CRACKLIB),y)
-> +SHADOW_CONF_OPTS += --with-libcrack
-> +SHADOW_DEPENDENCIES += cracklib
-> +else
-> +SHADOW_CONF_OPTS += --without-libcrack
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> +SHADOW_CONF_OPTS += --with-selinux
-> +SHADOW_DEPENDENCIES += libselinux libsemanage
-> +else
-> +SHADOW_CONF_OPTS += --without-selinux
-> +endif
-> +
+[--SNIP--]
 > +ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
 > +SHADOW_CONF_OPTS += --with-libpam
 > +SHADOW_DEPENDENCIES += linux-pam
 > +else
 > +SHADOW_CONF_OPTS += --without-libpam
 > +endif
-> +
+
+Is the dependency on linux-pam only needed for account-tools-setuid, or
+can shadow also use linux-pam for something else?
+
+If the former, then the dependency and activating of the PAM opotion
+should be moved together in the conditional block that deals with
+enabling account-tools-setuid. If the latter, then a small comment could
+be added, like:
+
+    # linux-pam is also used without account-tools-setuid enabled
+
 > +ifeq ($(BR2_ENABLE_LOCALE),y)
 > +SHADOW_CONF_OPTS += --enable-nls
 > +else
 > +SHADOW_CONF_OPTS += --disable-nls
 > +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SHADOW_SHA_CRYPT),y)
-> +SHADOW_CONF_OPTS += --with-sha-crypt
-> +else
-> +SHADOW_CONF_OPTS += --without-sha-crypt
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SHADOW_BCRYPT),y)
-> +SHADOW_CONF_OPTS += --with-bcrypt
-> +else
-> +SHADOW_CONF_OPTS += --without-bcrypt
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SHADOW_YESCRYPT),y)
-> +SHADOW_CONF_OPTS += --with-yescrypt
-> +else
-> +SHADOW_CONF_OPTS += --without-yescrypt
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SHADOW_NSCD),y)
-> +SHADOW_CONF_OPTS += --with-nscd
-> +else
-> +SHADOW_CONF_OPTS += --without-nscd
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SHADOW_SSSD),y)
-> +SHADOW_CONF_OPTS += --with-sssd
-> +else
-> +SHADOW_CONF_OPTS += --without-sssd
-> +endif
-> +
+
+This is supposed to also be already handled by the autotools-package
+infrastructure, see:
+    package/pkg-autotools.mk@201
+    package/Makefile.in@392
+
+So, why is it needed to explicitly handle them here?
+
+Regards,
+Yann E. MORIN.
+
 > +ifeq ($(BR2_PACKAGE_SHADOW_GROUP_NAME_MAX_LENGTH),0)
 > +SHADOW_CONF_OPTS += --without-group-name-max-length
 > +else
@@ -436,6 +401,21 @@ present in busybox.mk.
 > +endef
 > +
 > +$(eval $(autotools-package))
+> -- 
+> 2.35.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
