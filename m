@@ -1,76 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6073AECAAD5
-	for <buildroot@archiver.kernel.org>; Mon,  5 Sep 2022 01:23:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2C10ECAAA1
+	for <buildroot@archiver.kernel.org>; Mon,  5 Sep 2022 07:02:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB5A7405DC;
-	Mon,  5 Sep 2022 01:23:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB5A7405DC
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA53540893;
+	Mon,  5 Sep 2022 07:02:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA53540893
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id K0b690VXRvSQ; Mon,  5 Sep 2022 07:02:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCAA040650;
+	Mon,  5 Sep 2022 07:02:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCAA040650
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6979B1BF334
+ for <buildroot@lists.busybox.net>; Mon,  5 Sep 2022 07:02:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 20ADF40146
+ for <buildroot@lists.busybox.net>; Mon,  5 Sep 2022 07:02:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20ADF40146
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nj9nkZB9bvtv; Mon,  5 Sep 2022 01:23:28 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D285402D7;
-	Mon,  5 Sep 2022 01:23:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D285402D7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 856C61BF2A9
- for <buildroot@lists.busybox.net>; Mon,  5 Sep 2022 01:23:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 603F360B9A
- for <buildroot@lists.busybox.net>; Mon,  5 Sep 2022 01:23:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 603F360B9A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8fvaJH_bJZvV for <buildroot@lists.busybox.net>;
- Mon,  5 Sep 2022 01:23:21 +0000 (UTC)
-X-Greylist: delayed 00:13:22 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B2C6605D6
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2B2C6605D6
- for <buildroot@buildroot.org>; Mon,  5 Sep 2022 01:23:20 +0000 (UTC)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
- by mail.sberdevices.ru (Postfix) with ESMTP id 974AC5FD02;
- Mon,  5 Sep 2022 04:09:56 +0300 (MSK)
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru
- [172.16.1.4]) by mail.sberdevices.ru (Postfix) with ESMTP;
- Mon,  5 Sep 2022 04:09:56 +0300 (MSK)
-To: <buildroot@buildroot.org>
-Date: Mon, 5 Sep 2022 04:09:13 +0300
-Message-ID: <20220905010913.13640-1-KAMenyaev@sberdevices.ru>
-X-Mailer: git-send-email 2.37.2
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iz11UQywoWAc for <buildroot@lists.busybox.net>;
+ Mon,  5 Sep 2022 07:02:24 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B500C4012E
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B500C4012E
+ for <buildroot@buildroot.org>; Mon,  5 Sep 2022 07:02:23 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5D9CD2000F;
+ Mon,  5 Sep 2022 07:02:20 +0000 (UTC)
+Date: Mon, 5 Sep 2022 09:02:19 +0200
+To: Sergey Matyukevich <geomatsi@gmail.com>
+Message-ID: <20220905090219.47aaf9ca@windsurf>
+In-Reply-To: <20220904201429.1480971-2-geomatsi@gmail.com>
+References: <20220904201429.1480971-1-geomatsi@gmail.com>
+ <20220904201429.1480971-2-geomatsi@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30,
- bases: 2022/09/04 21:35:00 #20235785
-X-KSMG-AntiVirus-Status: Clean, skipped
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sberdevices.ru; s=mail; t=1662340196;
- bh=wNapp7BciCp9MOaTGNsv/3dpQvT7oxn/uDkwM1+tvEI=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
- b=SfiuoaxnB0X54bJXzl4yI4OyQP4FfZxI9M7bGRFMrZhpmAdZbShdVlRWeG1o15vXh
- j/YtW9bfFXjeb01btmwmsYWhWm8qPCy2qgGuBQvaxkTSCpYDUMJpGSHn1StxUBES+p
- tMLUvufUV2d7+Savi+4q9F1lE/KEviEzLqRZogLQGvG0UCqw96C3y18jkSgF1hxjet
- l/Bx8xUiDAPVEpvWBflAnJPYa/mMJ9wOP/y9EoJyhJcjI34uIw8q9xtBaktED1awAg
- G77IC1JywvT25KoAsHFoYsWXwlNkUA/iJn6d0kuu8+RIg5TLet+fVDbe/Bpxp/Xoaz
- dlGmpHa8en55g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=sberdevices.ru header.i=@sberdevices.ru
- header.a=rsa-sha256 header.s=mail header.b=Sfiuoaxn
-Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: pid path fixed.
+ d=bootlin.com; s=gm1; t=1662361340;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=e4Pdq3F65cKhNmXEG5aA2bG02LsbnFB8jH4lYIuuLB4=;
+ b=mmIWbtZljm96VgIR5mvd7WKqtm5U1Ta0t8w0G2SwI6yf3ahh2mG6wZRiJ1aNxv/T5JNQf6
+ OWL8ioG2TiO3cNfIq7+nmOczQiRCWE5LWyXCnCgyVb/a4RNZ3RJ735EHmeXub31tX2tKvl
+ zhu9TrFe/jfh5bUCygqEg04zd7k8BzUF2k3Afgeyt7cREcn/4ZKQ/547YrvwTq2oTZM5Hh
+ W8PVUL60oPiqrrxb5pgM4tgCaxlVsExMxnkpeT2UwOB3qva511uxJs78zEwF9aydYFfP4S
+ SDEU/2/MFLpwbIsOEnWfqI51kmzwF5z94BwszrHmwJFstC4emtFQjEJGPjUZMQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mmIWbtZl
+Subject: Re: [Buildroot] [PATCH 1/2] package/hostapd: disable build with
+ static zlib-ng
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,55 +77,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Konstantin Menyaev via buildroot <buildroot@buildroot.org>
-Reply-To: KAMenyaev@sberdevices.ru
-Cc: John Stile <johns@msli.com>, Konstantin Menyaev <KAMenyaev@sberdevices.ru>,
- sdfw_system_team@sberdevices.ru
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
+On Sun,  4 Sep 2022 23:14:28 +0300
+Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-dhcpcd-9 defaults the run directory to `/var/run/dhcpcd` instead of
-`/var/run` and the prefix of dhcpcd has been removed from the files.
+> Static linking fails because both hostapd and zlib-ng define functions
+> with the same name 'crc32'. For now do not allow to select zlib-ng as
+> zlib provider for hostapd in the case if static libraries are enabled.
+> 
+> Fixes: http://autobuild.buildroot.net/results/9901df820d3afa4cde78e8ad6d62cb8ce7e69fdb/
+> 
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> ---
+>  package/hostapd/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+> index f4206ceea5..3a88a9d276 100644
+> --- a/package/hostapd/Config.in
+> +++ b/package/hostapd/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_HOSTAPD
+>  	bool "hostapd"
+>  	depends on BR2_USE_MMU # fork()
+> +	depends on !(BR2_PACKAGE_ZLIB_NG && BR2_STATIC_LIBS)
 
-Signed-off-by: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
----
- package/dhcpcd/S41dhcpcd      | 2 +-
- package/dhcpcd/dhcpcd.service | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for your patch. However, we generally don't like to add such
+weird dependencies. Instead, we prefer to fix the actual problem:
+hostapd/wpa_supplicant should probably not define a crc32() function,
+but use some other naming for it.
 
-diff --git a/package/dhcpcd/S41dhcpcd b/package/dhcpcd/S41dhcpcd
-index 3e5c22f715..55794f4075 100644
---- a/package/dhcpcd/S41dhcpcd
-+++ b/package/dhcpcd/S41dhcpcd
-@@ -5,7 +5,7 @@
- 
- DAEMON=/sbin/dhcpcd
- CONFIG=/etc/dhcpcd.conf
--PIDFILE=/var/run/dhcpcd.pid
-+PIDFILE=/var/run/dhcpcd/pid
- 
- [ -f $CONFIG ] || exit 0
- 
-diff --git a/package/dhcpcd/dhcpcd.service b/package/dhcpcd/dhcpcd.service
-index e648092c9b..4da49818a7 100644
---- a/package/dhcpcd/dhcpcd.service
-+++ b/package/dhcpcd/dhcpcd.service
-@@ -5,7 +5,7 @@ After=network.target
- [Service]
- Type=forking
- EnvironmentFile=-/etc/default/dhcpcd
--PIDFile=/run/dhcpcd.pid
-+PIDFile=/run/dhcpcd/pid
- ExecStart=/sbin/dhcpcd $DAEMON_ARGS
- Restart=always
- 
+Thanks!
+
+Thomas
 -- 
-2.37.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
