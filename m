@@ -1,90 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51116ECAAA1
-	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 19:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DB9AC38145
+	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 19:46:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4E3D82FF9;
-	Tue,  6 Sep 2022 19:36:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4E3D82FF9
+	by smtp3.osuosl.org (Postfix) with ESMTP id A20386115A;
+	Tue,  6 Sep 2022 19:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A20386115A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q3ZDly4UaRzw; Tue,  6 Sep 2022 19:36:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TlUVMRCK6nnP; Tue,  6 Sep 2022 19:46:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D1F983089;
-	Tue,  6 Sep 2022 19:36:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D1F983089
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 564D41BF57C
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 19:36:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20FF5610D9;
+	Tue,  6 Sep 2022 19:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20FF5610D9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 301B91BF57C
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 19:46:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FB3B40305
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 19:36:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FB3B40305
+ by smtp2.osuosl.org (Postfix) with ESMTP id 186D24048D
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 19:46:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 186D24048D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4tlZaFiUkENQ for <buildroot@lists.busybox.net>;
- Tue,  6 Sep 2022 19:36:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U6QrTUA9RD4Z for <buildroot@lists.busybox.net>;
+ Tue,  6 Sep 2022 19:46:19 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37E17402DC
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com
- [IPv6:2607:f8b0:4864:20::442])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 37E17402DC
- for <buildroot@buildroot.org>; Tue,  6 Sep 2022 19:36:30 +0000 (UTC)
-Received: by mail-pf1-x442.google.com with SMTP id c198so2537200pfc.13
- for <buildroot@buildroot.org>; Tue, 06 Sep 2022 12:36:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F319940169
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F319940169
+ for <buildroot@buildroot.org>; Tue,  6 Sep 2022 19:46:18 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id 29so11472191edv.2
+ for <buildroot@buildroot.org>; Tue, 06 Sep 2022 12:46:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date;
- bh=mio0lyoTm6W7KtmvIVkCV+l2uK3wVo+5KDkiOtb6nHM=;
- b=VVsMV59TXGounM8L3m1HoMO9SuZOCYp4ZNh6x4KULl3PpzaW0hgqYSi7GpwyJsvdHS
- r3pP1KY1oDis2z/+eY+TmpHGJ4HhZ1oN0qQvnLHq1pLDv8EePD3yZsks88U/cvw9TQMO
- nR3auCb7WfFY01EXp6cv3lCq9P5PS31COukovYPqbqTcil4BtvPC8OhsWT8tYfQ/615k
- AfED8Eu4xGZEsVhuuUtGne0rL8+X7noo/OE2MKCL9Nq35QGvU7TELf6ePqx0dZnVWmep
- POd4Y01rHnxLosgwfVNQ2Dcm2qSHakIoB++z8JupQ6mnburs3UzV1yvvKQbmfyvnOi1C
- ey4w==
-X-Gm-Message-State: ACgBeo3yC8R6C/9YAI18fz95S9EHXZEN1YIVp3jtzvWsH90LDe8iXdcr
- bKjnXqCFmXgzJqrm6res1ipIBtap55MuiQmv
-X-Google-Smtp-Source: AA6agR6GBqom7mhxWl/GD1f/ChQ6B8PpYBX63fpByE98njr8cLwgMotBncDqDuvLO1x/AcFs8LrRkA==
-X-Received: by 2002:a05:6a00:1a0b:b0:52f:3789:9604 with SMTP id
- g11-20020a056a001a0b00b0052f37899604mr4426pfv.61.1662492989421; 
- Tue, 06 Sep 2022 12:36:29 -0700 (PDT)
-Received: from chris-jammy.socal.rr.com
- (2603-8000-3f01-0100-8cb2-b692-12b4-bda3.res6.spectrum.com.
- [2603:8000:3f01:100:8cb2:b692:12b4:bda3])
- by smtp.googlemail.com with ESMTPSA id
- b68-20020a62cf47000000b00537bdc9c2f2sm10904135pfg.170.2022.09.06.12.36.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 06 Sep 2022 12:36:29 -0700 (PDT)
-From: Chris Dimich <chris.dimich@boundarydevices.com>
-To: buildroot@buildroot.org
-Date: Tue,  6 Sep 2022 12:36:20 -0700
-Message-Id: <20220906193620.2778490-2-chris.dimich@boundarydevices.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220906193620.2778490-1-chris.dimich@boundarydevices.com>
-References: <20220906193620.2778490-1-chris.dimich@boundarydevices.com>
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date;
+ bh=U1VCR/U6ONF47HK5YIJjNJBttM/F1ZVEdEx/nb/3Anw=;
+ b=RDxhl9x+dCWeJcAQfit/HaO03ThqJULmZgH2rN6YuS6ba/Af96OsQdhsJzzu2oMBT6
+ Tuyv8nXiceXyuVIkiJ3+JBy5z+VeiBT/xTTvqGfqKHl5N8M1Lf+3YiKSpD3REe01Y++Q
+ 76rJuoQa0ELGMoLWpZ0JabmQS1jmQQux44pw3hkClKJCeTf1bw9UVbtQ6YqBKHswMEwC
+ t5j2BVYkhaLgjJefKz7kqscQrnhxsLOIf1VxLOQD7qoA3vdeRBn5XwjHL80fidFfU31/
+ dSN1HijwSFyDJljZBgk75ME7WEnilw95njvNy77wOUSLwiMzuQZCxEjIOObXBRlUrZC5
+ nCCA==
+X-Gm-Message-State: ACgBeo33H6jltJjludGJ1aIcJ3wVTJ/vFSnamBHrwGTrmhommV9AN+iA
+ yBXKTXMi9Ny2WVI+xHq2LthicA==
+X-Google-Smtp-Source: AA6agR6CQ3hYhYcwjnELOyWfur4ys8hEKwbweIMfaCVAMwYTShQuTsTm3+IoBX/iZGOX7ddNuXqftg==
+X-Received: by 2002:aa7:da9a:0:b0:44e:9774:c2ab with SMTP id
+ q26-20020aa7da9a000000b0044e9774c2abmr203107eds.10.1662493577214; 
+ Tue, 06 Sep 2022 12:46:17 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ w8-20020a170906384800b0074a82932e3bsm7051284ejc.77.2022.09.06.12.46.16
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 06 Sep 2022 12:46:16 -0700 (PDT)
+Message-ID: <23566bac-ad05-3bd6-1b0b-ad4f3b3f5c20@mind.be>
+Date: Tue, 6 Sep 2022 21:46:14 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Sergey Matyukevich <geomatsi@gmail.com>
+References: <20220904205702.1488199-1-geomatsi@gmail.com>
+ <20220905201727.GJ1490660@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20220905201727.GJ1490660@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=boundarydevices.com; s=google;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
- bh=mio0lyoTm6W7KtmvIVkCV+l2uK3wVo+5KDkiOtb6nHM=;
- b=Wb4CBb4jGxWONFquokdJz4jAKTxFgSfzT0lNEvdFHSet+/66PWaR9aa3waBPrjPeS5
- DibzQV5YXs7X4ozKjGQpDMwkLH4cfLbUX3NSByh69P5EMMHGHdl5FWcpw6xyREG6cSBo
- S020lmYcOQfbKl7/mNMNw8nHTKFGzeGSXbAVQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=boundarydevices.com
- header.i=@boundarydevices.com header.a=rsa-sha256 header.s=google
- header.b=Wb4CBb4j
-Subject: [Buildroot] [PATCH]
- package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p4.2
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date;
+ bh=U1VCR/U6ONF47HK5YIJjNJBttM/F1ZVEdEx/nb/3Anw=;
+ b=b4yypwVUXiDv8gjpSo0AFpTlldMLOd00BdWOgk7EJgVrJgQgvV6zB79iSILCysQzpy
+ uas9VSgVk7wVcfi5JGg55Ao6PkubvoJnZYZG2cff/ybFv5RIOR//cTKj2+1cVz7A0TY6
+ SkxlFX1JCPIao52JE3u5m8YyoPsOGZsfH+4o1lGdsWhf53zr1/INye+TZAU2vBiFrgty
+ h3mqqHqXc7kqS2W6lvBQwgrzg4iA0yZ4/CYc54nAK+d/NMPzdDNfSS8wOymST25KCYWs
+ DhfNgqVFHpG6dIS2pqaAswCcmSY0dTAR7JimFptSp5omLTjK6hg9uhY/Xf9RtRoBcAK3
+ RPMA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=b4yypwVU
+Subject: Re: [Buildroot] [PATCH 1/1] package/linux-tools: perf: add
+ host-python3 dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,52 +103,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- Chris Dimich <chris.dimich@boundarydevices.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Refik Tuzakli <tuzakli.refik@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-To match NXP 5.15.32-2.0.0 release.
 
-Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
----
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash    | 2 +-
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-index ee105ef82c..ccb28bc4f6 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  257c6cd8b01cfb6543827cbeb78409e6a2ad4ae321891751dcea1abc47d89379  kernel-module-imx-gpu-viv-ae0f3be0b7240f11cca191a3e2bdd4a445ee46e5.tar.gz
-+sha256  b816ab94b1d248cfc5fe5f6381422346c273d01760bb324303e0298e10bd46e2  kernel-module-imx-gpu-viv-82c6cb6c607424403b8d76805bb17e7be74292f6.tar.gz
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-index 10505fdf17..d301494a0b 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KERNEL_MODULE_IMX_GPU_VIV_VERSION = ae0f3be0b7240f11cca191a3e2bdd4a445ee46e5
-+KERNEL_MODULE_IMX_GPU_VIV_VERSION = 82c6cb6c607424403b8d76805bb17e7be74292f6
- KERNEL_MODULE_IMX_GPU_VIV_SITE = \
- 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
- KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
--- 
-2.34.1
+On 05/09/2022 22:17, Yann E. MORIN wrote:
+> Sergey, All,
+> 
+> On 2022-09-04 23:57 +0300, Sergey Matyukevich spake thusly:
+>> Linux kernel commit 00facc760903 ("perf jevents: Switch build to use
+>> jevents.py")
+> 
+> 00facc760903 is only parts of 6.0-rc kernels so far, so unless one uses
+> bleeding edge technology, there is no issue. So, paying the price of a
+> host-pytohn3 build just for release-candidate kernels is a bit too much
+> in my opinion.
+> 
+> So, I added a config knob to drive this, like we have for host-openssl
+> and a few other host programs for building the kernel.
 
+  If only python is needed, no modules, then $(BR2_PYTHON3_HOST_DEPENDENCY) 
+should be used instead. That checks for python 3.4 but I think that that is fine 
+for the kernel as well. If not, we should probably bump the minimum system 
+python3 version.
+
+  Regards,
+  Arnout
+
+> 
+> Applied to master with the above change, thanks.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> switched to auto-generation of arch-specific PMU events
+>> using python script. Now custom PMU events for different platforms of
+>> the selected target architecture are not embedded into perf binary if
+>> an appropriate host python interpreter is not present. In practice it
+>> means that perf is successfully built, but 'perf list pmu' will show
+>> no custom events on a target platform even if those events are supported
+>> and properly defined in tools/perf/pmu-events/arch/<target arch>
+>> directory in the kernel source tree.
+>>
+>> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+>> ---
+>>   package/linux-tools/linux-tool-perf.mk.in | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+>> index 057c6f80e7..44c1bbdf83 100644
+>> --- a/package/linux-tools/linux-tool-perf.mk.in
+>> +++ b/package/linux-tools/linux-tool-perf.mk.in
+>> @@ -6,7 +6,7 @@
+>>   
+>>   LINUX_TOOLS += perf
+>>   
+>> -PERF_DEPENDENCIES = host-flex host-bison
+>> +PERF_DEPENDENCIES = host-flex host-bison host-python3
+>>   
+>>   ifeq ($(NORMALIZED_ARCH),x86_64)
+>>   PERF_ARCH=x86
+>> -- 
+>> 2.37.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
