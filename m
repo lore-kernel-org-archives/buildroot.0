@@ -4,56 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C230ECAAA1
-	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 16:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 969F2ECAAD5
+	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 16:20:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 993A581D7D;
-	Tue,  6 Sep 2022 16:20:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 993A581D7D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3453782C99;
+	Tue,  6 Sep 2022 16:20:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3453782C99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K6_oL8iugmOX; Tue,  6 Sep 2022 16:20:14 +0000 (UTC)
+	with ESMTP id hac5yRZvJeDB; Tue,  6 Sep 2022 16:20:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C80ED8143C;
-	Tue,  6 Sep 2022 16:20:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C80ED8143C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 38C0D1BF2C5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FAFA82A2E;
+	Tue,  6 Sep 2022 16:20:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FAFA82A2E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CC0F91BF2C5
  for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 16:20:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1310A60A9F
+ by smtp4.osuosl.org (Postfix) with ESMTP id A611F408E3
  for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 16:20:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1310A60A9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A611F408E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7MtaG42HURNR for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sZZ-H8pNsvAt for <buildroot@lists.busybox.net>;
  Tue,  6 Sep 2022 16:20:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 569516072A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C046540347
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 569516072A
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C046540347
  for <buildroot@buildroot.org>; Tue,  6 Sep 2022 16:20:10 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id BF1B8CE238
- for <buildroot@buildroot.org>; Tue,  6 Sep 2022 16:16:10 +0000 (UTC)
+Received: from relay10.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::230])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id A2CADC3D06
+ for <buildroot@buildroot.org>; Tue,  6 Sep 2022 16:16:07 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5B3AB24000B;
- Tue,  6 Sep 2022 16:16:01 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id F28B3240007;
+ Tue,  6 Sep 2022 16:16:00 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peko@dell.be.48ers.dk>)
- id 1oVbF3-00B6IY-1J; Tue, 06 Sep 2022 18:16:01 +0200
+ id 1oVbF1-00B6IT-PK; Tue, 06 Sep 2022 18:15:59 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue,  6 Sep 2022 18:15:57 +0200
-Message-Id: <20220906161557.2645766-2-peter@korsgaard.com>
+Date: Tue,  6 Sep 2022 18:15:56 +0200
+Message-Id: <20220906161557.2645766-1-peter@korsgaard.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220906161557.2645766-1-peter@korsgaard.com>
-References: <20220906161557.2645766-1-peter@korsgaard.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH-next 2/2] nezha_defconfig: configure eth0 using
- DHCP
+Subject: [Buildroot] [PATCH-next 1/2] nezha_defconfig: bump opensbi,
+ u-boot and linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,26 +68,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With the move to 5.19-rc1, the ethernet interface is now supported.
-Configure it using DHCP at startup.
+Opensbi is now based on 1.1, U-Boot on 2022.07-rc3 and Linux on 5.19-rc1.
+We don't yet support 5.19 kernel headers, so use 5.17 instead.
+
+The incompatibility between opensbi and u-boot is now fixed, so drop
+0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch.
+
+The updated device tree in the kernel tree no longer specifies a memory node
+(and the board exists in 512M/1G/2G variants, so instead use the (otherwise
+identical) device tree provided by u-boot, where the memory node is fixed up
+based on the detected memory size.  Keep the kernel build configuration in
+place so host-{bison,flex} is built.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/nezha_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ .../nezha/overlay/boot/extlinux/extlinux.conf |  2 +-
+ ...port-building-u-boot.toc1-for-nezda.patch} |  0
+ ...un20i-d1.dtsi-adjust-plic-compatible.patch | 36 -------------------
+ configs/nezha_defconfig                       |  8 ++---
+ 4 files changed, 5 insertions(+), 41 deletions(-)
+ rename board/nezha/patches/uboot/{0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch => 0001-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch} (100%)
+ delete mode 100644 board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch
 
+diff --git a/board/nezha/overlay/boot/extlinux/extlinux.conf b/board/nezha/overlay/boot/extlinux/extlinux.conf
+index 02232f4d16..91b2298628 100644
+--- a/board/nezha/overlay/boot/extlinux/extlinux.conf
++++ b/board/nezha/overlay/boot/extlinux/extlinux.conf
+@@ -1,4 +1,4 @@
+ label linux
+   kernel /boot/Image
+-  devicetree /boot/sun20i-d1-nezha.dtb
++  # use devicetree from u-boot
+   append console=ttyS0,115200 root=/dev/mmcblk0p1 ro rootwait
+diff --git a/board/nezha/patches/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch b/board/nezha/patches/uboot/0001-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch
+similarity index 100%
+rename from board/nezha/patches/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch
+rename to board/nezha/patches/uboot/0001-Makefile-HACK-Support-building-u-boot.toc1-for-nezda.patch
+diff --git a/board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch b/board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch
+deleted file mode 100644
+index 3524f44a61..0000000000
+--- a/board/nezha/patches/uboot/0001-arch-riscv-dts-sun20i-d1.dtsi-adjust-plic-compatible.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 99cf8f37ceb1def9e7bbaccc395cf2275723e03d Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <peter@korsgaard.com>
+-Date: Thu, 4 Nov 2021 22:15:13 +0100
+-Subject: [PATCH] arch/riscv/dts/sun20i-d1.dtsi: adjust plic compatible to
+- match opensbi
+-
+-The T-HEAD PLIC is by default not accessible from S-mode, and access must be
+-enabled by opensbi to make it accessible to Linux.
+-
+-The DTB is used both by U-Boot and opensbi (but the PLIC node is ignored by
+-U-Boot), so change the compatible to match what opensbi expects to fix a
+-crash during Linux boot:
+-
+-https://github.com/riscv-software-src/opensbi/commit/78c2b19218bd
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- arch/riscv/dts/sun20i-d1.dtsi | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/arch/riscv/dts/sun20i-d1.dtsi b/arch/riscv/dts/sun20i-d1.dtsi
+-index 280e0336d4..56d02c33b0 100644
+---- a/arch/riscv/dts/sun20i-d1.dtsi
+-+++ b/arch/riscv/dts/sun20i-d1.dtsi
+-@@ -1136,7 +1136,7 @@
+- 
+- 		plic: interrupt-controller@10000000 {
+- 			compatible = "allwinner,sun20i-d1-plic",
+--				     "sifive,plic-1.0.0";
+-+				     "thead,c900-plic";
+- 			reg = <0x10000000 0x4000000>;
+- 			#address-cells = <0>;
+- 			interrupts-extended = <&cpu0_intc 11>,
+--- 
+-2.20.1
+-
 diff --git a/configs/nezha_defconfig b/configs/nezha_defconfig
-index 7a7e86ceab..2e2df3c09d 100644
+index 2d66d6cb4a..7a7e86ceab 100644
 --- a/configs/nezha_defconfig
 +++ b/configs/nezha_defconfig
-@@ -1,6 +1,7 @@
+@@ -1,12 +1,12 @@
  BR2_riscv=y
  BR2_GLOBAL_PATCH_DIR="board/nezha/patches"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
-+BR2_SYSTEM_DHCP="eth0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
  BR2_ROOTFS_OVERLAY="board/nezha/overlay"
  BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/nezha/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,012f5a3d01be6d44e32c74bb3637ec281790b297)/linux-012f5a3d01be6d44e32c74bb3637ec281790b297.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,fe178cf0153d98b71cb01a46c8cc050826a17e77)/linux-fe178cf0153d98b71cb01a46c8cc050826a17e77.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nezha"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1-nezha"
+@@ -16,14 +16,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_OPENSBI=y
+ BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
+-BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,opensbi,b9125c6f8909d1cc0417795737fc13cb6297ff11)/opensbi-b9125c6f8909d1cc0417795737fc13cb6297ff11.tar.gz"
++BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,opensbi,e6793dc36a71537023f078034fe795c64a9992a3)/opensbi-e6793dc36a71537023f078034fe795c64a9992a3.tar.gz"
+ BR2_TARGET_OPENSBI_PLAT="generic"
+ # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
+ BR2_TARGET_SUN20I_D1_SPL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,u-boot,62392d3b8a624a80646c1876533336f90140088d)/uboot-62392d3b8a624a80646c1876533336f90140088d.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,u-boot,d1-2022-05-26)/uboot-d1-2022-05-26.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nezha"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 -- 
 2.30.2
 
