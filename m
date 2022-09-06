@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1BF1C38145
-	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 09:42:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA274C38145
+	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 09:42:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F5166108B;
-	Tue,  6 Sep 2022 09:42:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F5166108B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A9B781441;
+	Tue,  6 Sep 2022 09:42:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A9B781441
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I5VSdyj5Pd9l; Tue,  6 Sep 2022 09:42:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id AWS7wYWsjEs7; Tue,  6 Sep 2022 09:42:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42CC060AE2;
-	Tue,  6 Sep 2022 09:42:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42CC060AE2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54D8381317;
+	Tue,  6 Sep 2022 09:42:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54D8381317
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B0A01BF2FF
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 09:42:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A9D81BF2FF
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 09:42:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 305548142A
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 09:42:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 305548142A
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9E3F81317
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 09:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9E3F81317
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eF6VFDE738ZX for <buildroot@lists.busybox.net>;
- Tue,  6 Sep 2022 09:42:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4240A8140D
- for <buildroot@buildroot.org>; Tue,  6 Sep 2022 09:42:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4240A8140D
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 39E908130A; Tue,  6 Sep 2022 09:27:02 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 6 Sep 2022 11:41:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1891419db38e4d85595b2111db448f68eef684b8
-X-Git-Newrev: b42c6b24755170a8eb015b3ea0b25e6d91e037cb
-X-Patchwork-Hint: ignore
-Message-Id: <20220906092702.39E908130A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: 11.3.0: fix glibc crash on G4
- ppc cpus
+ with ESMTP id QN0PnLCBtXdF for <buildroot@lists.busybox.net>;
+ Tue,  6 Sep 2022 09:42:53 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EAB880C38
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6EAB880C38
+ for <buildroot@buildroot.org>; Tue,  6 Sep 2022 09:42:53 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:5e76:18ec:e237:5279])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 03DCFB005A4;
+ Tue,  6 Sep 2022 11:42:47 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 06 Sep 2022 11:42:47 +0200
+Date: Tue, 6 Sep 2022 11:42:47 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20220906094247.GV1490660@scaer>
+References: <20220904130501.1983806-1-romain.naour@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220904130501.1983806-1-romain.naour@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1662457371;
+ bh=NxW1ZtJLSgA4TZ6YSjh6ByqQrmdkRKVoErFfZbEazzg=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ImXjiKPFmD1D80ipkKDV7JJvy9iWYYARPooAdkecgaEjTfpXgm+7bMOYemyyieDno
+ LtSARGre1dFwNNX9il8ClSvVIFMQpRJ8n1Ol58L5ur8Y3iCCFRJRBq82Wk/NGqHAoC
+ wUwU/mgV9TZAZkcyLjf/qVC4rvXOPMTr1VxlbG8Xa5YRqhVzU/TgeMQWDlVOO3VINn
+ SNXMXJHRI9V1FxroyGAZxU/IAZZaPJU97KrqX7IqxKT9q0s0rOg6KYx+gX1vGOgBO8
+ GaANN/JjCo6PnxGTivprEtRc3IHxa8sutQJeLp9OJIO45g6OqGTGNwlmGukND001sd
+ XRkFMbnYDlgeA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ImXjiKPF
+Subject: Re: [Buildroot] [PATCH for-master] package/gcc: 11.3.0: fix glibc
+ crash on G4 ppc cpus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,244 +77,265 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b42c6b24755170a8eb015b3ea0b25e6d91e037cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Romain, All,
 
-gcc 11.3.0 contains a backported patch [1] that introduce
-a regression for old powerpc cpus like the powerpc 7400 (G4).
+On 2022-09-04 15:05 +0200, Romain Naour spake thusly:
+> gcc 11.3.0 contains a backported patch [1] that introduce
+> a regression for old powerpc cpus like the powerpc 7400 (G4).
+> 
+> The glibc crash the init process due to a wrong asm machine
+> directive (.machine).
+> 
+> Run /sbin/init as init process
+> init[1]: segfault (11) at 7369693e nip 6f6e08 lr 6f6a68 code 1 in libc.so.6[690000+18f000]
+> init[1]: code: 280a000c 41c1ffe0 811edb80 554a103a 7d48502e 7d4a4214 7d4903a6 4e800420
+> init[1]: code: 2c08007a 4bffffbc 89290000 5529103a <7d2a482e> 2c090000 41c2ff78 7fe4fb78
+> Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+> 
+> Backport two patches from the gcc-11 stable branch (the upcoming gcc
+> 11.4.0).
+> 
+> [1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=3cb53c10831be59d967d9dce8e7980fee4703500
+> 
+> Fixes:
+> https://gitlab.com/kubu93/buildroot/-/jobs/2976071284
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Joel Stanley <joel@jms.id.au>
 
-The glibc crash the init process due to a wrong asm machine
-directive (.machine).
+Applied to master, thanks.
 
-Run /sbin/init as init process
-init[1]: segfault (11) at 7369693e nip 6f6e08 lr 6f6a68 code 1 in libc.so.6[690000+18f000]
-init[1]: code: 280a000c 41c1ffe0 811edb80 554a103a 7d48502e 7d4a4214 7d4903a6 4e800420
-init[1]: code: 2c08007a 4bffffbc 89290000 5529103a <7d2a482e> 2c090000 41c2ff78 7fe4fb78
-Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+Regards,
+Yann E. MORIN.
 
-Backport two patches from the gcc-11 stable branch (the upcoming gcc
-11.4.0).
+> ---
+>  .../11.3.0/0005-rs6000-Improve-.machine.patch | 120 ++++++++++++++++++
+>  ...e-rs6000_cpu-for-.machine-ppc-and-pp.patch |  68 ++++++++++
+>  2 files changed, 188 insertions(+)
+>  create mode 100644 package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
+>  create mode 100644 package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
+> 
+> diff --git a/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch b/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
+> new file mode 100644
+> index 0000000000..7a4564b59e
+> --- /dev/null
+> +++ b/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
+> @@ -0,0 +1,120 @@
+> +From ca2c3a7d3db7a699c358d3408f820396dd536fc8 Mon Sep 17 00:00:00 2001
+> +From: Segher Boessenkool <segher@kernel.crashing.org>
+> +Date: Tue, 1 Mar 2022 17:04:29 +0000
+> +Subject: [PATCH 5/6] rs6000: Improve .machine
+> +
+> +This adds more correct .machine for most older CPUs.  It should be
+> +conservative in the sense that everything we handled before we handle at
+> +least as well now.  This does not yet revamp the server CPU handling, it
+> +is too risky at this point in time.
+> +
+> +Tested on powerpc64-linux {-m32,-m64}.  Also manually tested with all
+> +-mcpu=, and the output of that passed through the GNU assembler.
+> +
+> +2022-03-04  Segher Boessenkool  <segher@kernel.crashing.org>
+> +
+> +	* config/rs6000/rs6000.c (rs6000_machine_from_flags): Restructure a
+> +	bit.  Handle most older CPUs.
+> +
+> +(cherry picked from commit 77eccbf39ed55297802bb66dff5f62507a7239e3)
+> +(cherry picked from commit fc7e603edc67c66a14f893f3b5a0a34e7d26f77c)
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> +---
+> + gcc/config/rs6000/rs6000.c | 81 +++++++++++++++++++++++++-------------
+> + 1 file changed, 54 insertions(+), 27 deletions(-)
+> +
+> +diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
+> +index 0421dc7adb3..0a55c979c36 100644
+> +--- a/gcc/config/rs6000/rs6000.c
+> ++++ b/gcc/config/rs6000/rs6000.c
+> +@@ -5742,33 +5742,60 @@ const char *rs6000_machine;
+> + const char *
+> + rs6000_machine_from_flags (void)
+> + {
+> +-  /* For some CPUs, the machine cannot be determined by ISA flags.  We have to
+> +-     check them first.  */
+> +-  switch (rs6000_cpu)
+> +-    {
+> +-    case PROCESSOR_PPC8540:
+> +-    case PROCESSOR_PPC8548:
+> +-      return "e500";
+> +-
+> +-    case PROCESSOR_PPCE300C2:
+> +-    case PROCESSOR_PPCE300C3:
+> +-      return "e300";
+> +-
+> +-    case PROCESSOR_PPCE500MC:
+> +-      return "e500mc";
+> +-
+> +-    case PROCESSOR_PPCE500MC64:
+> +-      return "e500mc64";
+> +-
+> +-    case PROCESSOR_PPCE5500:
+> +-      return "e5500";
+> +-
+> +-    case PROCESSOR_PPCE6500:
+> +-      return "e6500";
+> +-
+> +-    default:
+> +-      break;
+> +-    }
+> ++  /* e300 and e500 */
+> ++  if (rs6000_cpu == PROCESSOR_PPCE300C2 || rs6000_cpu == PROCESSOR_PPCE300C3)
+> ++    return "e300";
+> ++  if (rs6000_cpu == PROCESSOR_PPC8540 || rs6000_cpu == PROCESSOR_PPC8548)
+> ++    return "e500";
+> ++  if (rs6000_cpu == PROCESSOR_PPCE500MC)
+> ++    return "e500mc";
+> ++  if (rs6000_cpu == PROCESSOR_PPCE500MC64)
+> ++    return "e500mc64";
+> ++  if (rs6000_cpu == PROCESSOR_PPCE5500)
+> ++    return "e5500";
+> ++  if (rs6000_cpu == PROCESSOR_PPCE6500)
+> ++    return "e6500";
+> ++
+> ++  /* 400 series */
+> ++  if (rs6000_cpu == PROCESSOR_PPC403)
+> ++    return "\"403\"";
+> ++  if (rs6000_cpu == PROCESSOR_PPC405)
+> ++    return "\"405\"";
+> ++  if (rs6000_cpu == PROCESSOR_PPC440)
+> ++    return "\"440\"";
+> ++  if (rs6000_cpu == PROCESSOR_PPC476)
+> ++    return "\"476\"";
+> ++
+> ++  /* A2 */
+> ++  if (rs6000_cpu == PROCESSOR_PPCA2)
+> ++    return "a2";
+> ++
+> ++  /* Cell BE */
+> ++  if (rs6000_cpu == PROCESSOR_CELL)
+> ++    return "cell";
+> ++
+> ++  /* Titan */
+> ++  if (rs6000_cpu == PROCESSOR_TITAN)
+> ++    return "titan";
+> ++
+> ++  /* 500 series and 800 series */
+> ++  if (rs6000_cpu == PROCESSOR_MPCCORE)
+> ++    return "\"821\"";
+> ++
+> ++  /* 600 series and 700 series, "classic" */
+> ++  if (rs6000_cpu == PROCESSOR_PPC601 || rs6000_cpu == PROCESSOR_PPC603
+> ++      || rs6000_cpu == PROCESSOR_PPC604 || rs6000_cpu == PROCESSOR_PPC604e
+> ++      || rs6000_cpu == PROCESSOR_PPC750 || rs6000_cpu == PROCESSOR_POWERPC)
+> ++    return "ppc";
+> ++
+> ++  /* Classic with AltiVec, "G4" */
+> ++  if (rs6000_cpu == PROCESSOR_PPC7400 || rs6000_cpu == PROCESSOR_PPC7450)
+> ++    return "\"7450\"";
+> ++
+> ++  /* The older 64-bit CPUs */
+> ++  if (rs6000_cpu == PROCESSOR_PPC620 || rs6000_cpu == PROCESSOR_PPC630
+> ++      || rs6000_cpu == PROCESSOR_RS64A || rs6000_cpu == PROCESSOR_POWERPC64)
+> ++    return "ppc64";
+> + 
+> +   HOST_WIDE_INT flags = rs6000_isa_flags;
+> + 
+> +-- 
+> +2.34.3
+> +
+> diff --git a/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch b/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
+> new file mode 100644
+> index 0000000000..8e31c8241c
+> --- /dev/null
+> +++ b/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
+> @@ -0,0 +1,68 @@
+> +From 6de33ed642f119f1e2543095dd56e4a94f97c27f Mon Sep 17 00:00:00 2001
+> +From: Segher Boessenkool <segher@kernel.crashing.org>
+> +Date: Fri, 11 Mar 2022 21:15:18 +0000
+> +Subject: [PATCH 6/6] rs6000: Do not use rs6000_cpu for .machine ppc and ppc64
+> + (PR104829)
+> +
+> +Fixes: 77eccbf39ed5
+> +
+> +rs6000.h has
+> +  #define PROCESSOR_POWERPC   PROCESSOR_PPC604
+> +  #define PROCESSOR_POWERPC64 PROCESSOR_RS64A
+> +which means that if you use things like  -mcpu=powerpc -mvsx  it will no
+> +longer work after my latest .machine patch.  This causes GCC build errors
+> +in some cases, not a good idea (even if the errors are actually
+> +pre-existing: using -mvsx with a machine that does not have VSX cannot
+> +work properly).
+> +
+> +2022-03-11  Segher Boessenkool  <segher@kernel.crashing.org>
+> +
+> +	PR target/104829
+> +	* config/rs6000/rs6000.c (rs6000_machine_from_flags): Don't output
+> +	"ppc" and "ppc64" based on rs6000_cpu.
+> +
+> +(cherry picked from commit 80fcc4b6afee72443bef551064826b3b4b6785e6)
+> +(cherry picked from commit d87e0e297b1cba73a0c055d2a3e9267d288f435a)
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> +---
+> + gcc/config/rs6000/rs6000.c | 12 ++++++++++--
+> + 1 file changed, 10 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
+> +index 0a55c979c36..7e5cdd34840 100644
+> +--- a/gcc/config/rs6000/rs6000.c
+> ++++ b/gcc/config/rs6000/rs6000.c
+> +@@ -5782,20 +5782,28 @@ rs6000_machine_from_flags (void)
+> +   if (rs6000_cpu == PROCESSOR_MPCCORE)
+> +     return "\"821\"";
+> + 
+> ++#if 0
+> ++  /* This (and ppc64 below) are disabled here (for now at least) because
+> ++     PROCESSOR_POWERPC, PROCESSOR_POWERPC64, and PROCESSOR_COMMON
+> ++     are #define'd as some of these.  Untangling that is a job for later.  */
+> ++
+> +   /* 600 series and 700 series, "classic" */
+> +   if (rs6000_cpu == PROCESSOR_PPC601 || rs6000_cpu == PROCESSOR_PPC603
+> +       || rs6000_cpu == PROCESSOR_PPC604 || rs6000_cpu == PROCESSOR_PPC604e
+> +-      || rs6000_cpu == PROCESSOR_PPC750 || rs6000_cpu == PROCESSOR_POWERPC)
+> ++      || rs6000_cpu == PROCESSOR_PPC750)
+> +     return "ppc";
+> ++#endif
+> + 
+> +   /* Classic with AltiVec, "G4" */
+> +   if (rs6000_cpu == PROCESSOR_PPC7400 || rs6000_cpu == PROCESSOR_PPC7450)
+> +     return "\"7450\"";
+> + 
+> ++#if 0
+> +   /* The older 64-bit CPUs */
+> +   if (rs6000_cpu == PROCESSOR_PPC620 || rs6000_cpu == PROCESSOR_PPC630
+> +-      || rs6000_cpu == PROCESSOR_RS64A || rs6000_cpu == PROCESSOR_POWERPC64)
+> ++      || rs6000_cpu == PROCESSOR_RS64A)
+> +     return "ppc64";
+> ++#endif
+> + 
+> +   HOST_WIDE_INT flags = rs6000_isa_flags;
+> + 
+> +-- 
+> +2.34.3
+> +
+> -- 
+> 2.34.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=3cb53c10831be59d967d9dce8e7980fee4703500
-
-Fixes:
-https://gitlab.com/kubu93/buildroot/-/jobs/2976071284
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Joel Stanley <joel@jms.id.au>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../gcc/11.3.0/0005-rs6000-Improve-.machine.patch  | 120 +++++++++++++++++++++
- ...ot-use-rs6000_cpu-for-.machine-ppc-and-pp.patch |  68 ++++++++++++
- 2 files changed, 188 insertions(+)
-
-diff --git a/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch b/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
-new file mode 100644
-index 0000000000..6107900736
---- /dev/null
-+++ b/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
-@@ -0,0 +1,120 @@
-+From ca2c3a7d3db7a699c358d3408f820396dd536fc8 Mon Sep 17 00:00:00 2001
-+From: Segher Boessenkool <segher@kernel.crashing.org>
-+Date: Tue, 1 Mar 2022 17:04:29 +0000
-+Subject: [PATCH 5/6] rs6000: Improve .machine
-+
-+This adds more correct .machine for most older CPUs.  It should be
-+conservative in the sense that everything we handled before we handle at
-+least as well now.  This does not yet revamp the server CPU handling, it
-+is too risky at this point in time.
-+
-+Tested on powerpc64-linux {-m32,-m64}.  Also manually tested with all
-+-mcpu=, and the output of that passed through the GNU assembler.
-+
-+2022-03-04  Segher Boessenkool  <segher@kernel.crashing.org>
-+
-+	* config/rs6000/rs6000.c (rs6000_machine_from_flags): Restructure a
-+	bit.  Handle most older CPUs.
-+
-+(cherry picked from commit 77eccbf39ed55297802bb66dff5f62507a7239e3)
-+(cherry picked from commit fc7e603edc67c66a14f893f3b5a0a34e7d26f77c)
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gcc/config/rs6000/rs6000.c | 81 +++++++++++++++++++++++++-------------
-+ 1 file changed, 54 insertions(+), 27 deletions(-)
-+
-+diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
-+index 0421dc7adb3..0a55c979c36 100644
-+--- a/gcc/config/rs6000/rs6000.c
-++++ b/gcc/config/rs6000/rs6000.c
-+@@ -5742,33 +5742,60 @@ const char *rs6000_machine;
-+ const char *
-+ rs6000_machine_from_flags (void)
-+ {
-+-  /* For some CPUs, the machine cannot be determined by ISA flags.  We have to
-+-     check them first.  */
-+-  switch (rs6000_cpu)
-+-    {
-+-    case PROCESSOR_PPC8540:
-+-    case PROCESSOR_PPC8548:
-+-      return "e500";
-+-
-+-    case PROCESSOR_PPCE300C2:
-+-    case PROCESSOR_PPCE300C3:
-+-      return "e300";
-+-
-+-    case PROCESSOR_PPCE500MC:
-+-      return "e500mc";
-+-
-+-    case PROCESSOR_PPCE500MC64:
-+-      return "e500mc64";
-+-
-+-    case PROCESSOR_PPCE5500:
-+-      return "e5500";
-+-
-+-    case PROCESSOR_PPCE6500:
-+-      return "e6500";
-+-
-+-    default:
-+-      break;
-+-    }
-++  /* e300 and e500 */
-++  if (rs6000_cpu == PROCESSOR_PPCE300C2 || rs6000_cpu == PROCESSOR_PPCE300C3)
-++    return "e300";
-++  if (rs6000_cpu == PROCESSOR_PPC8540 || rs6000_cpu == PROCESSOR_PPC8548)
-++    return "e500";
-++  if (rs6000_cpu == PROCESSOR_PPCE500MC)
-++    return "e500mc";
-++  if (rs6000_cpu == PROCESSOR_PPCE500MC64)
-++    return "e500mc64";
-++  if (rs6000_cpu == PROCESSOR_PPCE5500)
-++    return "e5500";
-++  if (rs6000_cpu == PROCESSOR_PPCE6500)
-++    return "e6500";
-++
-++  /* 400 series */
-++  if (rs6000_cpu == PROCESSOR_PPC403)
-++    return "\"403\"";
-++  if (rs6000_cpu == PROCESSOR_PPC405)
-++    return "\"405\"";
-++  if (rs6000_cpu == PROCESSOR_PPC440)
-++    return "\"440\"";
-++  if (rs6000_cpu == PROCESSOR_PPC476)
-++    return "\"476\"";
-++
-++  /* A2 */
-++  if (rs6000_cpu == PROCESSOR_PPCA2)
-++    return "a2";
-++
-++  /* Cell BE */
-++  if (rs6000_cpu == PROCESSOR_CELL)
-++    return "cell";
-++
-++  /* Titan */
-++  if (rs6000_cpu == PROCESSOR_TITAN)
-++    return "titan";
-++
-++  /* 500 series and 800 series */
-++  if (rs6000_cpu == PROCESSOR_MPCCORE)
-++    return "\"821\"";
-++
-++  /* 600 series and 700 series, "classic" */
-++  if (rs6000_cpu == PROCESSOR_PPC601 || rs6000_cpu == PROCESSOR_PPC603
-++      || rs6000_cpu == PROCESSOR_PPC604 || rs6000_cpu == PROCESSOR_PPC604e
-++      || rs6000_cpu == PROCESSOR_PPC750 || rs6000_cpu == PROCESSOR_POWERPC)
-++    return "ppc";
-++
-++  /* Classic with AltiVec, "G4" */
-++  if (rs6000_cpu == PROCESSOR_PPC7400 || rs6000_cpu == PROCESSOR_PPC7450)
-++    return "\"7450\"";
-++
-++  /* The older 64-bit CPUs */
-++  if (rs6000_cpu == PROCESSOR_PPC620 || rs6000_cpu == PROCESSOR_PPC630
-++      || rs6000_cpu == PROCESSOR_RS64A || rs6000_cpu == PROCESSOR_POWERPC64)
-++    return "ppc64";
-+ 
-+   HOST_WIDE_INT flags = rs6000_isa_flags;
-+ 
-+-- 
-+2.34.3
-+
-diff --git a/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch b/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
-new file mode 100644
-index 0000000000..d2335cd689
---- /dev/null
-+++ b/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
-@@ -0,0 +1,68 @@
-+From 6de33ed642f119f1e2543095dd56e4a94f97c27f Mon Sep 17 00:00:00 2001
-+From: Segher Boessenkool <segher@kernel.crashing.org>
-+Date: Fri, 11 Mar 2022 21:15:18 +0000
-+Subject: [PATCH 6/6] rs6000: Do not use rs6000_cpu for .machine ppc and ppc64
-+ (PR104829)
-+
-+Fixes: 77eccbf39ed5
-+
-+rs6000.h has
-+  #define PROCESSOR_POWERPC   PROCESSOR_PPC604
-+  #define PROCESSOR_POWERPC64 PROCESSOR_RS64A
-+which means that if you use things like  -mcpu=powerpc -mvsx  it will no
-+longer work after my latest .machine patch.  This causes GCC build errors
-+in some cases, not a good idea (even if the errors are actually
-+pre-existing: using -mvsx with a machine that does not have VSX cannot
-+work properly).
-+
-+2022-03-11  Segher Boessenkool  <segher@kernel.crashing.org>
-+
-+	PR target/104829
-+	* config/rs6000/rs6000.c (rs6000_machine_from_flags): Don't output
-+	"ppc" and "ppc64" based on rs6000_cpu.
-+
-+(cherry picked from commit 80fcc4b6afee72443bef551064826b3b4b6785e6)
-+(cherry picked from commit d87e0e297b1cba73a0c055d2a3e9267d288f435a)
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gcc/config/rs6000/rs6000.c | 12 ++++++++++--
-+ 1 file changed, 10 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
-+index 0a55c979c36..7e5cdd34840 100644
-+--- a/gcc/config/rs6000/rs6000.c
-++++ b/gcc/config/rs6000/rs6000.c
-+@@ -5782,20 +5782,28 @@ rs6000_machine_from_flags (void)
-+   if (rs6000_cpu == PROCESSOR_MPCCORE)
-+     return "\"821\"";
-+ 
-++#if 0
-++  /* This (and ppc64 below) are disabled here (for now at least) because
-++     PROCESSOR_POWERPC, PROCESSOR_POWERPC64, and PROCESSOR_COMMON
-++     are #define'd as some of these.  Untangling that is a job for later.  */
-++
-+   /* 600 series and 700 series, "classic" */
-+   if (rs6000_cpu == PROCESSOR_PPC601 || rs6000_cpu == PROCESSOR_PPC603
-+       || rs6000_cpu == PROCESSOR_PPC604 || rs6000_cpu == PROCESSOR_PPC604e
-+-      || rs6000_cpu == PROCESSOR_PPC750 || rs6000_cpu == PROCESSOR_POWERPC)
-++      || rs6000_cpu == PROCESSOR_PPC750)
-+     return "ppc";
-++#endif
-+ 
-+   /* Classic with AltiVec, "G4" */
-+   if (rs6000_cpu == PROCESSOR_PPC7400 || rs6000_cpu == PROCESSOR_PPC7450)
-+     return "\"7450\"";
-+ 
-++#if 0
-+   /* The older 64-bit CPUs */
-+   if (rs6000_cpu == PROCESSOR_PPC620 || rs6000_cpu == PROCESSOR_PPC630
-+-      || rs6000_cpu == PROCESSOR_RS64A || rs6000_cpu == PROCESSOR_POWERPC64)
-++      || rs6000_cpu == PROCESSOR_RS64A)
-+     return "ppc64";
-++#endif
-+ 
-+   HOST_WIDE_INT flags = rs6000_isa_flags;
-+ 
-+-- 
-+2.34.3
-+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
