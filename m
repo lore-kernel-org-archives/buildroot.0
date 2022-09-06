@@ -1,69 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FEE0ECAAD5
-	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 10:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39A7FECAAA1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 10:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03E9E61038;
-	Tue,  6 Sep 2022 10:23:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03E9E61038
+	by smtp4.osuosl.org (Postfix) with ESMTP id A34E140228;
+	Tue,  6 Sep 2022 10:25:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A34E140228
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p9WNun1ZwYum; Tue,  6 Sep 2022 10:23:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R1CUv2G2_Lc1; Tue,  6 Sep 2022 10:25:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3653161018;
-	Tue,  6 Sep 2022 10:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3653161018
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0C9940282;
+	Tue,  6 Sep 2022 10:25:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0C9940282
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7E1511BF25F
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 10:23:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F206B1BF25F
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 10:25:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59433404B5
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 10:23:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59433404B5
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9FE9404B5
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 10:25:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9FE9404B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b4i-asHjunZO for <buildroot@lists.busybox.net>;
- Tue,  6 Sep 2022 10:23:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1801340BB0
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1801340BB0
- for <buildroot@buildroot.org>; Tue,  6 Sep 2022 10:23:29 +0000 (UTC)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E80A120010;
- Tue,  6 Sep 2022 10:23:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue,  6 Sep 2022 12:23:21 +0200
-Message-Id: <20220906102322.899679-2-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220906102322.899679-1-kory.maincent@bootlin.com>
-References: <20220906102322.899679-1-kory.maincent@bootlin.com>
+ with ESMTP id VuImS9XYBOHa for <buildroot@lists.busybox.net>;
+ Tue,  6 Sep 2022 10:25:52 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F93D400BB
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F93D400BB
+ for <buildroot@buildroot.org>; Tue,  6 Sep 2022 10:25:51 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:5e76:18ec:e237:5279])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 83F40B0053F;
+ Tue,  6 Sep 2022 12:25:46 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 06 Sep 2022 12:25:46 +0200
+Date: Tue, 6 Sep 2022 12:25:46 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20220906102546.GW1490660@scaer>
+References: <20220904144233.2795176-1-romain.naour@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1662459805;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=wLZT7+PzlA5UnRDHPWF44zgl0B1nodxz89Y1oJEAI5E=;
- b=DtliRTxUPWeG8RTCuvouYZI0LXwCizs0jLtM0704GeJlBnW+2iClIvOZg/kgw/y/w1ajmC
- UF125nnFDvLV8bb39sH2dO4nInDLDVnOgSMbIWd+yQiXwJ/dQBMQoQvE/+dTWNSspqA6OO
- TyfBEqMchl+jL+YfBzib2oCDH75JZ3fanneCmn2J7N6vqrXjQWygwOEyXuWhNhqc6j+6b2
- uTNP8wwre/XVzi3Fdfz4JdTaxj1cF20yAJAArK+2zdPJiE2XKR+9rLuXfPZD+Tft+NWIlN
- mr5PAV8n9jTGeAfNr7QhsP0NrzKo/rx8htOxc9fCeVPRS0OvKJES/UfxVtr69A==
+Content-Disposition: inline
+In-Reply-To: <20220904144233.2795176-1-romain.naour@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1662459949;
+ bh=rGhu2Eavo1szDVHX2IrYOnWx7IZNkQgm0VX5e2YScQQ=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=XiemIfDMuUmAqo4L34U6WSWh0CpdLC9Gl9oLsZrPTcESvv9n5IEhUQuO4CgElXUNb
+ ndzsVdS1UdqK/Yawe/r8hAU1rELNy38jbrr7BkFtEEsvvF43Qkj6dU7z6FCpFiE92c
+ 1Zi7MQvSmA5adQbITGg52nNvogAtMA4R8B6kea3MyQG4x6lRr8xt0uQE7gCvREA6Qz
+ RR3fmF4jUL5JOg6TyT5FjluFDu9yvQPZA3GqLPmFwGYQA067uC827enlnAEn4NNF98
+ lNjCLJvYTM1NKf076KpKP3U7va1qOeL+/RqWiwFrXE+CwQrnQktSnBJVq2JewsC/GT
+ B9Wm8a0zPgJKQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DtliRTxU
-Subject: [Buildroot] [PATCH v2 2/2] package/python-pillow: remove
- host-python-pillow support
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XiemIfDM
+Subject: Re: [Buildroot] [PATCH for-next] configs: remove uClibc config
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,53 +77,441 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?K=C3=B6ry_Maincent_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
-Cc: Kory Maincent <kory.maincent@bootlin.com>, Asaf Kahlon <asafka7@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- thomas.petazzoni@bootlin.com, yann.morin.1998@free.fr
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Kory Maincent <kory.maincent@bootlin.com>
+Romain, All,
 
-host-python-pillow was needed to build optee-os from STMicroelecronics
-during its rc versions but is is not needed anymore in the release.
-It is then useless to keep this support.
++Joel for PPC issues, see below...
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
----
- package/python-pillow/python-pillow.mk | 14 --------------
- 1 file changed, 14 deletions(-)
+On 2022-09-04 16:42 +0200, Romain Naour spake thusly:
+> Following the switch to Glibc as the default libc in Buildroot [1],
+> all defconfigs expecting uClibc with wchar (or any other uClibc
+> specific option) should now select BR2_TOOLCHAIN_BUILDROOT_UCLIBC too.
+> 
+> Even if all defconfigs has been tested with uClibc, maintainers
+> prefer to not enforce a C library and use the default of Buildroot,
+> which is now glibc.
+> 
+> This commit remove uClibc specific options BR2_TOOLCHAIN_BUILDROOT_WCHAR,
+> BR2_PTHREAD_DEBUG (required by gdb) and BR2_TOOLCHAIN_BUILDROOT_USE_SSP.
+> 
+> Fixes:
+> https://gitlab.com/kubu93/buildroot/-/jobs/2911738579
 
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 7cff54e9ea..31725a3e46 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -71,18 +71,4 @@ else
- PYTHON_PILLOW_BUILD_OPTS += --disable-webp --disable-webpmux
- endif
- 
--HOST_PYTHON_PILLOW_DEPENDENCIES = host-pkgconf
--HOST_PYTHON_PILLOW_BUILD_OPTS = \
--	build_ext \
--	--disable-freetype \
--	--disable-jpeg \
--	--disable-lcms \
--	--disable-xcb \
--	--disable-jpeg2000 \
--	--disable-tiff \
--	--disable-webp \
--	--disable-webpmux
--HOST_PYTHON_PILLOW_INSTALL_OPTS = $(HOST_PYTHON_PILLOW_BUILD_OPTS)
--
- $(eval $(python-package))
--$(eval $(host-python-package))
+There are still a few build failures:
+
+    https://gitlab.com/ymorin/buildroot/-/jobs/2984588988
+    https://gitlab.com/ymorin/buildroot/-/jobs/2984589017
+    https://gitlab.com/ymorin/buildroot/-/jobs/2984588991
+    https://gitlab.com/ymorin/buildroot/-/jobs/2984588999
+    https://gitlab.com/ymorin/buildroot/-/jobs/2984589009
+    --> Missing: BR2_PACKAGE_ARGP_STANDALONE=y
+
+The argp-standlone issue is trivial: remove the package, so that's what
+I did.
+
+    https://gitlab.com/ymorin/buildroot/-/jobs/2984744356
+    https://gitlab.com/ymorin/buildroot/-/jobs/2984744357
+    https://gitlab.com/ymorin/buildroot/-/jobs/2984744359
+    https://gitlab.com/ymorin/buildroot/-/jobs/2984744362
+    --> Missing: BR2_BINUTILS_VERSION_2_36_X=y
+    --> all on ppc64 or ppc64le
+
+The binutils one, however, is not due to the switch to glibc. We simply
+removed binutils 2.36.x earlier in August... What should we do? Joel,
+any idea?
+
+Anyway, since the binutils issues seems unrelated: applied to next, with
+the argp-standalone pacakge removed, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> [1] 4057e36ca9665edd5248512e4edba2c243b8f4be
+> [2] http://lists.busybox.net/pipermail/buildroot/2022-August/649998.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> 
+> Commit [1] also break all defconfig fragments from
+> support/config-fragments/autobuild, but they are now deprecated
+> following utils/genrandconfig --no-toolchains-csv option:
+> aeee90ec109b83c42779e6a2617f7d57e25a2b65
+> ---
+>  configs/aarch64_efi_defconfig                          | 3 ---
+>  configs/at91sam9x5ek_dev_defconfig                     | 4 ----
+>  configs/at91sam9x5ek_mmc_dev_defconfig                 | 4 ----
+>  configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig       | 2 --
+>  configs/atmel_sama5d2_xplained_mmc_dev_defconfig       | 4 ----
+>  configs/atmel_sama5d3_xplained_dev_defconfig           | 4 ----
+>  configs/atmel_sama5d3_xplained_mmc_dev_defconfig       | 4 ----
+>  configs/atmel_sama5d4_xplained_dev_defconfig           | 4 ----
+>  configs/atmel_sama5d4_xplained_mmc_dev_defconfig       | 4 ----
+>  configs/bananapro_defconfig                            | 3 ---
+>  configs/engicam_imx6qdl_icore_qt5_defconfig            | 1 -
+>  configs/galileo_defconfig                              | 2 --
+>  configs/imx6-sabresd_qt5_defconfig                     | 1 -
+>  configs/kontron_smarc_sal28_defconfig                  | 1 -
+>  configs/lego_ev3_defconfig                             | 3 ---
+>  configs/mender_x86_64_efi_defconfig                    | 4 ----
+>  configs/microchip_sam9x60ek_mmc_dev_defconfig          | 2 --
+>  configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig | 2 --
+>  configs/microchip_sama5d2_icp_mmc_dev_defconfig        | 2 --
+>  configs/microchip_sama7g5ek_mmc_dev_defconfig          | 2 --
+>  configs/minnowboard_max_defconfig                      | 2 --
+>  configs/pc_x86_64_bios_defconfig                       | 3 ---
+>  configs/pc_x86_64_efi_defconfig                        | 3 ---
+>  configs/qemu_aarch64_sbsa_defconfig                    | 3 ---
+>  24 files changed, 67 deletions(-)
+> 
+> diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
+> index 1bd06c51f3..443113e47b 100644
+> --- a/configs/aarch64_efi_defconfig
+> +++ b/configs/aarch64_efi_defconfig
+> @@ -1,9 +1,6 @@
+>  # Architecture
+>  BR2_aarch64=y
+>  
+> -# Toolchain, required for eudev and grub
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -
+>  # System
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>  
+> diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
+> index 8714463d89..824aa8b1f7 100644
+> --- a/configs/at91sam9x5ek_dev_defconfig
+> +++ b/configs/at91sam9x5ek_dev_defconfig
+> @@ -5,10 +5,6 @@ BR2_arm926t=y
+>  # Toolchain
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+>  # Needed for some packages
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -# Needed for gdb
+> -BR2_PTHREAD_DEBUG=y
+> -# Needed for some packages
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # System Configuration
+> diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+> index 9481594716..3b2016b970 100644
+> --- a/configs/at91sam9x5ek_mmc_dev_defconfig
+> +++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+> @@ -5,10 +5,6 @@ BR2_arm926t=y
+>  # Toolchain
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+>  # Needed for some packages
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -# Needed for gdb
+> -BR2_PTHREAD_DEBUG=y
+> -# Needed for some packages
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # System Configuration
+> diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> index 38618a5732..85ff29771a 100644
+> --- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> @@ -4,8 +4,6 @@ BR2_ARM_ENABLE_NEON=y
+>  BR2_ARM_ENABLE_VFP=y
+>  BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -BR2_PTHREAD_DEBUG=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+> index 1654408aa5..4ee7fca35f 100644
+> --- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+> @@ -8,10 +8,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  # Toolchain
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+>  # Needed for some packages
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -# Needed for gdb
+> -BR2_PTHREAD_DEBUG=y
+> -# Needed for some packages
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # System Configuration
+> diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+> index 64455cb2e0..ef09df3fce 100644
+> --- a/configs/atmel_sama5d3_xplained_dev_defconfig
+> +++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+> @@ -7,10 +7,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  # Toolchain
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+>  # Needed for some packages
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -# Needed for gdb
+> -BR2_PTHREAD_DEBUG=y
+> -# Needed for some packages
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # System Configuration
+> diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+> index 8f5724d631..f5aa3e382f 100644
+> --- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+> @@ -7,10 +7,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  # Toolchain
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+>  # Needed for some packages
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -# Needed for gdb
+> -BR2_PTHREAD_DEBUG=y
+> -# Needed for some packages
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # System Configuration
+> diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+> index fab91cf0b3..ca51ef5b5f 100644
+> --- a/configs/atmel_sama5d4_xplained_dev_defconfig
+> +++ b/configs/atmel_sama5d4_xplained_dev_defconfig
+> @@ -8,10 +8,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  # Toolchain
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+>  # Needed for some packages
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -# Needed for gdb
+> -BR2_PTHREAD_DEBUG=y
+> -# Needed for some packages
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # System Configuration
+> diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+> index f9074e9862..e8d126c7b0 100644
+> --- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+> +++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+> @@ -8,10 +8,6 @@ BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  # Toolchain
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+>  # Needed for some packages
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -# Needed for gdb
+> -BR2_PTHREAD_DEBUG=y
+> -# Needed for some packages
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # System Configuration
+> diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+> index e18c83d593..dbebdf3e37 100644
+> --- a/configs/bananapro_defconfig
+> +++ b/configs/bananapro_defconfig
+> @@ -8,9 +8,6 @@ BR2_ARM_FPU_NEON_VFPV4=y
+>  # Linux headers same as kernel, a 5.4 series
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+>  
+> -# Toolchain
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -
+>  # System configuration
+>  BR2_TARGET_GENERIC_HOSTNAME="bananapro"
+>  BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pro!"
+> diff --git a/configs/engicam_imx6qdl_icore_qt5_defconfig b/configs/engicam_imx6qdl_icore_qt5_defconfig
+> index 2d213e4ab9..6d3a344bdd 100644
+> --- a/configs/engicam_imx6qdl_icore_qt5_defconfig
+> +++ b/configs/engicam_imx6qdl_icore_qt5_defconfig
+> @@ -47,7 +47,6 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
+>  BR2_ROOTFS_OVERLAY="board/engicam/icorem6/rootfs_overlay"
+>  
+>  # qt5 dependencies
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # qt5
+> diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
+> index 312162b7a8..29110677bb 100644
+> --- a/configs/galileo_defconfig
+> +++ b/configs/galileo_defconfig
+> @@ -1,7 +1,5 @@
+>  BR2_x86_x1000=y
+>  BR2_GLOBAL_PATCH_DIR="board/intel/galileo/patches"
+> -# Needed for TARGET_GRUB2
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+>  # Linux headers same as kernel, a 3.14 series
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+> diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+> index d962ac6897..e385e86b81 100644
+> --- a/configs/imx6-sabresd_qt5_defconfig
+> +++ b/configs/imx6-sabresd_qt5_defconfig
+> @@ -8,7 +8,6 @@ BR2_ARM_FPU_VFPV3=y
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+>  
+>  # Additional features needed for packages
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # System
+> diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+> index 37e415cf32..877903a1fe 100644
+> --- a/configs/kontron_smarc_sal28_defconfig
+> +++ b/configs/kontron_smarc_sal28_defconfig
+> @@ -1,7 +1,6 @@
+>  BR2_aarch64=y
+>  BR2_cortex_a72=y
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>  BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
+>  BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/smarc-sal28/post-build.sh"
+> diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
+> index 555a63e36c..1ce2817d42 100644
+> --- a/configs/lego_ev3_defconfig
+> +++ b/configs/lego_ev3_defconfig
+> @@ -2,9 +2,6 @@
+>  BR2_arm=y
+>  BR2_arm926t=y
+>  
+> -# Toolchain
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -
+>  # system
+>  BR2_TARGET_GENERIC_GETTY=y
+>  BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
+> diff --git a/configs/mender_x86_64_efi_defconfig b/configs/mender_x86_64_efi_defconfig
+> index 4ab4c7b03d..6919a60c90 100644
+> --- a/configs/mender_x86_64_efi_defconfig
+> +++ b/configs/mender_x86_64_efi_defconfig
+> @@ -3,10 +3,6 @@ BR2_x86_64=y
+>  
+>  # Toolchain
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_17=y
+> -# Required for eudev (to autoload drivers)
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -# Required for sysvinit
+> -BR2_TOOLCHAIN_BUILDROOT_USE_SSP=y
+>  
+>  # System
+>  BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> diff --git a/configs/microchip_sam9x60ek_mmc_dev_defconfig b/configs/microchip_sam9x60ek_mmc_dev_defconfig
+> index 2b4e234297..7fe992e3fc 100644
+> --- a/configs/microchip_sam9x60ek_mmc_dev_defconfig
+> +++ b/configs/microchip_sam9x60ek_mmc_dev_defconfig
+> @@ -1,7 +1,5 @@
+>  BR2_arm=y
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -BR2_PTHREAD_DEBUG=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  BR2_TARGET_GENERIC_HOSTNAME="sam9x60ek"
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> diff --git a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
+> index f9aa6cdc05..8d483287af 100644
+> --- a/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
+> +++ b/configs/microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig
+> @@ -4,8 +4,6 @@ BR2_ARM_ENABLE_NEON=y
+>  BR2_ARM_ENABLE_VFP=y
+>  BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -BR2_PTHREAD_DEBUG=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> diff --git a/configs/microchip_sama5d2_icp_mmc_dev_defconfig b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
+> index b1b22c1312..9f784d362e 100644
+> --- a/configs/microchip_sama5d2_icp_mmc_dev_defconfig
+> +++ b/configs/microchip_sama5d2_icp_mmc_dev_defconfig
+> @@ -4,8 +4,6 @@ BR2_ARM_ENABLE_NEON=y
+>  BR2_ARM_ENABLE_VFP=y
+>  BR2_ARM_INSTRUCTIONS_THUMB2=y
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -BR2_PTHREAD_DEBUG=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> diff --git a/configs/microchip_sama7g5ek_mmc_dev_defconfig b/configs/microchip_sama7g5ek_mmc_dev_defconfig
+> index d68846e553..8cf0310133 100644
+> --- a/configs/microchip_sama7g5ek_mmc_dev_defconfig
+> +++ b/configs/microchip_sama7g5ek_mmc_dev_defconfig
+> @@ -2,8 +2,6 @@ BR2_arm=y
+>  BR2_cortex_a7=y
+>  BR2_ARM_FPU_NEON_VFPV4=y
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -BR2_PTHREAD_DEBUG=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+> index 1270f23953..83a970f601 100644
+> --- a/configs/minnowboard_max_defconfig
+> +++ b/configs/minnowboard_max_defconfig
+> @@ -10,8 +10,6 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/minnowboard/genimage.cfg"
+>  
+>  # Linux headers same as kernel, a 5.10 series
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+> -# Needed for grub2
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+>  
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>  BR2_PACKAGE_HOST_GENIMAGE=y
+> diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+> index df5988d75e..ec34a41667 100644
+> --- a/configs/pc_x86_64_bios_defconfig
+> +++ b/configs/pc_x86_64_bios_defconfig
+> @@ -1,9 +1,6 @@
+>  # Architecture
+>  BR2_x86_64=y
+>  
+> -# Toolchain, required for eudev (to autoload drivers)
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -
+>  # System
+>  BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+> index 18d2c477d5..da05471e28 100644
+> --- a/configs/pc_x86_64_efi_defconfig
+> +++ b/configs/pc_x86_64_efi_defconfig
+> @@ -1,9 +1,6 @@
+>  # Architecture
+>  BR2_x86_64=y
+>  
+> -# Toolchain, required for eudev (to autoload drivers)
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -
+>  # System
+>  BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
+> index 0d4e8b2c29..609444e787 100644
+> --- a/configs/qemu_aarch64_sbsa_defconfig
+> +++ b/configs/qemu_aarch64_sbsa_defconfig
+> @@ -2,9 +2,6 @@
+>  BR2_aarch64=y
+>  BR2_cortex_a57=y
+>  
+> -# Toolchain
+> -BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> -
+>  # System
+>  BR2_SYSTEM_DHCP="eth0"
+>  BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> -- 
+> 2.34.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.25.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
