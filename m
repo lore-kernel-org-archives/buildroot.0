@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC6F5C38145
-	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 09:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1BF1C38145
+	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 09:42:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 83C4440BC4;
-	Tue,  6 Sep 2022 09:40:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83C4440BC4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X7rwOULR67vv; Tue,  6 Sep 2022 09:40:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 707AE40B7F;
-	Tue,  6 Sep 2022 09:40:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 707AE40B7F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9CE8B1BF2FF
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 09:39:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85C0F60AE2
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 09:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85C0F60AE2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F5166108B;
+	Tue,  6 Sep 2022 09:42:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F5166108B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W8xveRxaCDg2 for <buildroot@lists.busybox.net>;
- Tue,  6 Sep 2022 09:39:58 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C60B60AAE
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7C60B60AAE
- for <buildroot@buildroot.org>; Tue,  6 Sep 2022 09:39:58 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:5e76:18ec:e237:5279])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id C875FB005A4;
- Tue,  6 Sep 2022 11:39:49 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 06 Sep 2022 11:39:46 +0200
-Date: Tue, 6 Sep 2022 11:39:46 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220906093946.GU1490660@scaer>
-References: <20220904092629.16495-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220904092629.16495-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1662457196;
- bh=MMpz/D4WYAVS35NKZoM2B39OQR2dhWWcS4H4aJtUbgQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=bEnMP5gll7GRp/v8WPCBb4+J5EGsjq2hKAJucl7ZOwQCy8HNVDaCuA/NIM2vL6ViM
- nBCWLbDc6PahGHPLFfwnDzgOEmyRzkrviQsJO/vTGdO79kEmkd/WHNaBv0yH1cknvJ
- 4HL+u4sJqXmA60EpM/0/1xnF6DAg4dCqJss0wXYPuQ/RihxuIQE9QduWHfP3DWV97N
- uwIQmmIZyPpR25ZdUGufu/zGbGFA1TE5d8+6SqJaCSKTdEkAgVPr9s77lTxmRvWo6I
- rMYlxsx5f2CJPCvbEty7rGLvPwnnmmB52jJK2Z0pLbTz1ftcFWA2BfxhqRPOwHgH8X
- kM36uyAlzL9xA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bEnMP5gl
-Subject: Re: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to
- version 5.5.0
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id I5VSdyj5Pd9l; Tue,  6 Sep 2022 09:42:25 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 42CC060AE2;
+	Tue,  6 Sep 2022 09:42:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42CC060AE2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B0A01BF2FF
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 09:42:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 305548142A
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 09:42:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 305548142A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eF6VFDE738ZX for <buildroot@lists.busybox.net>;
+ Tue,  6 Sep 2022 09:42:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4240A8140D
+ for <buildroot@buildroot.org>; Tue,  6 Sep 2022 09:42:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4240A8140D
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 39E908130A; Tue,  6 Sep 2022 09:27:02 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 6 Sep 2022 11:41:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1891419db38e4d85595b2111db448f68eef684b8
+X-Git-Newrev: b42c6b24755170a8eb015b3ea0b25e6d91e037cb
+X-Patchwork-Hint: ignore
+Message-Id: <20220906092702.39E908130A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: 11.3.0: fix glibc crash on G4
+ ppc cpus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,84 +57,245 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RmFicmljZSwgQWxsLAoKT24gMjAyMi0wOS0wNCAxMToyNiArMDIwMCwgRmFicmljZSBGb250YWlu
-ZSBzcGFrZSB0aHVzbHk6Cj4gRml4IHRoZSBmb2xsb3dpbmcgc2VjdXJpdHkgdnVsbmVyYWJpbGl0
-aWVzOgo+ICAtIFtMb3ddIEZhdWx0IGluamVjdGlvbiBhdHRhY2sgb24gUkFNIHZpYSBSb3doYW1t
-ZXIgbGVhZHMgdG8gRUNEU0Ega2V5Cj4gICAgZGlzY2xvc3VyZS4gVXNlcnMgZG9pbmcgb3BlcmF0
-aW9ucyB3aXRoIHByaXZhdGUgRUNDIGtleXMgc3VjaCBhcwo+ICAgIHNlcnZlciBzaWRlIFRMUyBj
-b25uZWN0aW9ucyBhbmQgY3JlYXRpbmcgRUNDIHNpZ25hdHVyZXMsIHdobyBhbHNvCj4gICAgaGF2
-ZSBoYXJkd2FyZSB0aGF0IGNvdWxkIGJlIHRhcmdldGVkIHdpdGggYSBzb3BoaXN0aWNhdGVkIFJv
-d2hhbW1lcgo+ICAgIGF0dGFjayBzaG91bGQgdXBkYXRlIHRoZSB2ZXJzaW9uIG9mIHdvbGZTU0wg
-YW5kIGNvbXBpbGUgdXNpbmcgdGhlCj4gICAgbWFjcm8gV09MRlNTTF9DSEVDS19TSUdfRkFVTFRT
-Lgo+ICAtIFtMb3ddIEluIHdvbGZTU0wgdmVyc2lvbiA1LjMuMCBpZiBjb21waWxlZCB3aXRoCj4g
-ICAgLS1lbmFibGUtc2Vzc2lvbi10aWNrZXQgYW5kIHRoZSBjbGllbnQgaGFzIG5vbi1lbXB0eSBz
-ZXNzaW9uIGNhY2hlLAo+ICAgIHdpdGggVExTIDEuMiB0aGVyZSBpcyB0aGUgcG9zc2liaWxpdHkg
-b8OgZiBhIG1hbiBpbiB0aGUgbWlkZGxlIHBhc3NpbmcKPiAgICBhIGxhcmdlIHNlc3Npb24gdGlj
-a2V0IHRvIHRoZSBjbGllbnQgYW5kIGNhdXNpbmcgYSBjcmFzaCBkdWUgdG8gYW4KPiAgICBpbnZh
-bGlkIGZyZWUuIFRoZXJlIGlzIGFsc28gdGhlIHBvdGVudGlhbCBmb3IgYSBtYWxpY2lvdXMgVExT
-IDEuMwo+ICAgIHNlcnZlciB0byBjcmFzaCBhIGNsaWVudCBpbiBhIHNpbWlsYXIgbWFubmVyIGV4
-Y2VwdCBpbiBUTFMgMS4zIGl0IGlzCj4gICAgbm90IHN1c2NlcHRpYmxlIHRvIGEgbWFuIGluIHRo
-ZSBtaWRkbGUgYXR0YWNrLiBVc2VycyBvbiB0aGUgY2xpZW50Cj4gICAgc2lkZSB3aXRoIOKAk2Vu
-YWJsZS1zZXNzaW9uLXRpY2tldCBjb21waWxlZCBpbiBhbmQgdXNpbmcgd29sZlNTTAo+ICAgIHZl
-cnNpb24gNS4zLjAgc2hvdWxkIHVwZGF0ZSB0aGVpciB2ZXJzaW9uIG9mIHdvbGZTU0wuCj4gIC0g
-W0xvd10gSWYgdXNpbmcgd29sZlNTTF9jbGVhciB0byByZXNldCBhIFdPTEZTU0wgb2JqZWN0ICh2
-cyB0aGUgbm9ybWFsCj4gICAgd29sZlNTTF9mcmVlL3dvbGZTU0xfbmV3KSBpdCBjYW4gcmVzdWx0
-IGluIHJ1bnRpbWUgaXNzdWVzLiBUaGlzCj4gICAgZXhpc3RzIHdpdGggYnVpbGRzIHVzaW5nIHRo
-ZSB3b2xmU1NMIGNvbXBhdGliaWxpdHkgbGF5ZXIKPiAgICAoLS1lbmFibGUtb3BuZXNzbGV4dHJh
-KSBhbmQgb25seSB3aGVuIHRoZSBhcHBsaWNhdGlvbiBpcyBtYWtpbmcgdXNlCj4gICAgb2Ygd29s
-ZlNTTF9jbGVhciBpbnN0ZWFkIG9mIFNTTF9mcmVlL1NTTF9uZXcuIEluIHRoZSBjYXNlIG9mIGEg
-VExTCj4gICAgMS4zIHJlc3VtcHRpb24sIGFmdGVyIGNvbnRpbnVpbmcgdG8gdXNlIHRoZSBXT0xG
-U1NIIG9iamVjdCBhZnRlcgo+ICAgIGhhdmluZyBjYWxsZWQgd29sZlNTTF9jbGVhciwgYW4gYXBw
-bGljYXRpb24gY291bGQgY3Jhc2guIEl0IGlzCj4gICAgc3VnZ2VzdGVkIHRoYXQgdXNlcnMgY2Fs
-bGluZyB3b2xmU1NMX2NsZWFyIHVwZGF0ZSB0aGUgdmVyc2lvbiBvZgo+ICAgIHdvbGZTU0wgdXNl
-ZC4KPiAgLSBQb3RlbnRpYWwgRG9TIGF0dGFjayBvbiBEVExTIDEuMi4gSW4gdGhlIGNhc2Ugb2Yg
-cmVjZWl2aW5nIGEKPiAgICBtYWxpY2lvdXMgcGxhaW50ZXh0IGhhbmRzaGFrZSBtZXNzYWdlIGF0
-IGVwb2NoIDAgdGhlIGNvbm5lY3Rpb24gd2lsbAo+ICAgIGVudGVyIGFuIGVycm9yIHN0YXRlIHJl
-cG9ydGluZyBhIGR1cGxpY2F0ZSBtZXNzYWdlLiBUaGlzIGFmZmVjdHMgYm90aAo+ICAgIHNlcnZl
-ciBhbmQgY2xpZW50IHNpZGUuIFVzZXJzIHRoYXQgaGF2ZSBEVExTIGVuYWJsZWQgYW5kIGluIHVz
-ZQo+ICAgIHNob3VsZCB1cGRhdGUgdGhlaXIgdmVyc2lvbiBvZiB3b2xmU1NMIHRvIG1pdGlnYXRl
-IHRoZSBwb3RlbnRpYWwgZm9yCj4gICAgYSBEb1MgYXR0YWNrLgo+IAo+IGh0dHBzOi8vZ2l0aHVi
-LmNvbS93b2xmU1NML3dvbGZzc2wvcmVsZWFzZXMvdGFnL3Y1LjUuMC1zdGFibGUKPiAKPiBTaWdu
-ZWQtb2ZmLWJ5OiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4K
-CkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiAt
-LS0KPiAgcGFja2FnZS93b2xmc3NsL3dvbGZzc2wuaGFzaCB8IDIgKy0KPiAgcGFja2FnZS93b2xm
-c3NsL3dvbGZzc2wubWsgICB8IDIgKy0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMo
-KyksIDIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvd29sZnNzbC93b2xm
-c3NsLmhhc2ggYi9wYWNrYWdlL3dvbGZzc2wvd29sZnNzbC5oYXNoCj4gaW5kZXggMDFiMjE1OTZl
-Ny4uZjE0MDFlNGNkYSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3dvbGZzc2wvd29sZnNzbC5oYXNo
-Cj4gKysrIGIvcGFja2FnZS93b2xmc3NsL3dvbGZzc2wuaGFzaAo+IEBAIC0xLDUgKzEsNSBAQAo+
-ICAjIExvY2FsbHkgY29tcHV0ZWQ6Cj4gLXNoYTI1NiAgZGMzNmNjMTlkYWQxOTcyNTNlNWMyZWNh
-YTQ5MGM3ZWVmNTc5YWQ0NDg3MDZlNTVkNzNkNzkzOTZlODE0MDk4YiAgd29sZnNzbC01LjQuMC50
-YXIuZ3oKPiArc2hhMjU2ICBjMzRiNzRiNWY2ODlmYWM3YmVjYjA1NTgzYjA0NGU4NGQzYjEwZDM5
-ZjM4NzA5ZjAwOTVkZDVkNDIzZGVkNjdmICB3b2xmc3NsLTUuNS4wLnRhci5nego+ICAKPiAgIyBI
-YXNoIGZvciBsaWNlbnNlIGZpbGVzOgo+ICBzaGEyNTYgIDgxNzdmOTc1MTMyMTM1MjZkZjJjZjYx
-ODRkOGZmOTg2YzY3NWFmYjUxNGQ0ZTY4YTQwNDAxMDUyMWI4ODA2NDMgIENPUFlJTkcKPiBkaWZm
-IC0tZ2l0IGEvcGFja2FnZS93b2xmc3NsL3dvbGZzc2wubWsgYi9wYWNrYWdlL3dvbGZzc2wvd29s
-ZnNzbC5tawo+IGluZGV4IDUzNmZkODYzZmUuLmNhMzYwMzEyYzkgMTAwNjQ0Cj4gLS0tIGEvcGFj
-a2FnZS93b2xmc3NsL3dvbGZzc2wubWsKPiArKysgYi9wYWNrYWdlL3dvbGZzc2wvd29sZnNzbC5t
-awo+IEBAIC00LDcgKzQsNyBAQAo+ICAjCj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gIAo+
-IC1XT0xGU1NMX1ZFUlNJT04gPSA1LjQuMAo+ICtXT0xGU1NMX1ZFUlNJT04gPSA1LjUuMAo+ICBX
-T0xGU1NMX1NJVEUgPSAkKGNhbGwgZ2l0aHViLHdvbGZTU0wsd29sZnNzbCx2JChXT0xGU1NMX1ZF
-UlNJT04pLXN0YWJsZSkKPiAgV09MRlNTTF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiAgCj4gLS0g
-Cj4gMi4zNS4xCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-PiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
-Ci0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
-LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGlt
-ZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICsz
-MyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAg
-X19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0t
-LS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9y
-aW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25z
-cGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0t
-LS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=b42c6b24755170a8eb015b3ea0b25e6d91e037cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+gcc 11.3.0 contains a backported patch [1] that introduce
+a regression for old powerpc cpus like the powerpc 7400 (G4).
+
+The glibc crash the init process due to a wrong asm machine
+directive (.machine).
+
+Run /sbin/init as init process
+init[1]: segfault (11) at 7369693e nip 6f6e08 lr 6f6a68 code 1 in libc.so.6[690000+18f000]
+init[1]: code: 280a000c 41c1ffe0 811edb80 554a103a 7d48502e 7d4a4214 7d4903a6 4e800420
+init[1]: code: 2c08007a 4bffffbc 89290000 5529103a <7d2a482e> 2c090000 41c2ff78 7fe4fb78
+Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+
+Backport two patches from the gcc-11 stable branch (the upcoming gcc
+11.4.0).
+
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=3cb53c10831be59d967d9dce8e7980fee4703500
+
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/2976071284
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Joel Stanley <joel@jms.id.au>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../gcc/11.3.0/0005-rs6000-Improve-.machine.patch  | 120 +++++++++++++++++++++
+ ...ot-use-rs6000_cpu-for-.machine-ppc-and-pp.patch |  68 ++++++++++++
+ 2 files changed, 188 insertions(+)
+
+diff --git a/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch b/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
+new file mode 100644
+index 0000000000..6107900736
+--- /dev/null
++++ b/package/gcc/11.3.0/0005-rs6000-Improve-.machine.patch
+@@ -0,0 +1,120 @@
++From ca2c3a7d3db7a699c358d3408f820396dd536fc8 Mon Sep 17 00:00:00 2001
++From: Segher Boessenkool <segher@kernel.crashing.org>
++Date: Tue, 1 Mar 2022 17:04:29 +0000
++Subject: [PATCH 5/6] rs6000: Improve .machine
++
++This adds more correct .machine for most older CPUs.  It should be
++conservative in the sense that everything we handled before we handle at
++least as well now.  This does not yet revamp the server CPU handling, it
++is too risky at this point in time.
++
++Tested on powerpc64-linux {-m32,-m64}.  Also manually tested with all
++-mcpu=, and the output of that passed through the GNU assembler.
++
++2022-03-04  Segher Boessenkool  <segher@kernel.crashing.org>
++
++	* config/rs6000/rs6000.c (rs6000_machine_from_flags): Restructure a
++	bit.  Handle most older CPUs.
++
++(cherry picked from commit 77eccbf39ed55297802bb66dff5f62507a7239e3)
++(cherry picked from commit fc7e603edc67c66a14f893f3b5a0a34e7d26f77c)
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gcc/config/rs6000/rs6000.c | 81 +++++++++++++++++++++++++-------------
++ 1 file changed, 54 insertions(+), 27 deletions(-)
++
++diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
++index 0421dc7adb3..0a55c979c36 100644
++--- a/gcc/config/rs6000/rs6000.c
+++++ b/gcc/config/rs6000/rs6000.c
++@@ -5742,33 +5742,60 @@ const char *rs6000_machine;
++ const char *
++ rs6000_machine_from_flags (void)
++ {
++-  /* For some CPUs, the machine cannot be determined by ISA flags.  We have to
++-     check them first.  */
++-  switch (rs6000_cpu)
++-    {
++-    case PROCESSOR_PPC8540:
++-    case PROCESSOR_PPC8548:
++-      return "e500";
++-
++-    case PROCESSOR_PPCE300C2:
++-    case PROCESSOR_PPCE300C3:
++-      return "e300";
++-
++-    case PROCESSOR_PPCE500MC:
++-      return "e500mc";
++-
++-    case PROCESSOR_PPCE500MC64:
++-      return "e500mc64";
++-
++-    case PROCESSOR_PPCE5500:
++-      return "e5500";
++-
++-    case PROCESSOR_PPCE6500:
++-      return "e6500";
++-
++-    default:
++-      break;
++-    }
+++  /* e300 and e500 */
+++  if (rs6000_cpu == PROCESSOR_PPCE300C2 || rs6000_cpu == PROCESSOR_PPCE300C3)
+++    return "e300";
+++  if (rs6000_cpu == PROCESSOR_PPC8540 || rs6000_cpu == PROCESSOR_PPC8548)
+++    return "e500";
+++  if (rs6000_cpu == PROCESSOR_PPCE500MC)
+++    return "e500mc";
+++  if (rs6000_cpu == PROCESSOR_PPCE500MC64)
+++    return "e500mc64";
+++  if (rs6000_cpu == PROCESSOR_PPCE5500)
+++    return "e5500";
+++  if (rs6000_cpu == PROCESSOR_PPCE6500)
+++    return "e6500";
+++
+++  /* 400 series */
+++  if (rs6000_cpu == PROCESSOR_PPC403)
+++    return "\"403\"";
+++  if (rs6000_cpu == PROCESSOR_PPC405)
+++    return "\"405\"";
+++  if (rs6000_cpu == PROCESSOR_PPC440)
+++    return "\"440\"";
+++  if (rs6000_cpu == PROCESSOR_PPC476)
+++    return "\"476\"";
+++
+++  /* A2 */
+++  if (rs6000_cpu == PROCESSOR_PPCA2)
+++    return "a2";
+++
+++  /* Cell BE */
+++  if (rs6000_cpu == PROCESSOR_CELL)
+++    return "cell";
+++
+++  /* Titan */
+++  if (rs6000_cpu == PROCESSOR_TITAN)
+++    return "titan";
+++
+++  /* 500 series and 800 series */
+++  if (rs6000_cpu == PROCESSOR_MPCCORE)
+++    return "\"821\"";
+++
+++  /* 600 series and 700 series, "classic" */
+++  if (rs6000_cpu == PROCESSOR_PPC601 || rs6000_cpu == PROCESSOR_PPC603
+++      || rs6000_cpu == PROCESSOR_PPC604 || rs6000_cpu == PROCESSOR_PPC604e
+++      || rs6000_cpu == PROCESSOR_PPC750 || rs6000_cpu == PROCESSOR_POWERPC)
+++    return "ppc";
+++
+++  /* Classic with AltiVec, "G4" */
+++  if (rs6000_cpu == PROCESSOR_PPC7400 || rs6000_cpu == PROCESSOR_PPC7450)
+++    return "\"7450\"";
+++
+++  /* The older 64-bit CPUs */
+++  if (rs6000_cpu == PROCESSOR_PPC620 || rs6000_cpu == PROCESSOR_PPC630
+++      || rs6000_cpu == PROCESSOR_RS64A || rs6000_cpu == PROCESSOR_POWERPC64)
+++    return "ppc64";
++ 
++   HOST_WIDE_INT flags = rs6000_isa_flags;
++ 
++-- 
++2.34.3
++
+diff --git a/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch b/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
+new file mode 100644
+index 0000000000..d2335cd689
+--- /dev/null
++++ b/package/gcc/11.3.0/0006-rs6000-Do-not-use-rs6000_cpu-for-.machine-ppc-and-pp.patch
+@@ -0,0 +1,68 @@
++From 6de33ed642f119f1e2543095dd56e4a94f97c27f Mon Sep 17 00:00:00 2001
++From: Segher Boessenkool <segher@kernel.crashing.org>
++Date: Fri, 11 Mar 2022 21:15:18 +0000
++Subject: [PATCH 6/6] rs6000: Do not use rs6000_cpu for .machine ppc and ppc64
++ (PR104829)
++
++Fixes: 77eccbf39ed5
++
++rs6000.h has
++  #define PROCESSOR_POWERPC   PROCESSOR_PPC604
++  #define PROCESSOR_POWERPC64 PROCESSOR_RS64A
++which means that if you use things like  -mcpu=powerpc -mvsx  it will no
++longer work after my latest .machine patch.  This causes GCC build errors
++in some cases, not a good idea (even if the errors are actually
++pre-existing: using -mvsx with a machine that does not have VSX cannot
++work properly).
++
++2022-03-11  Segher Boessenkool  <segher@kernel.crashing.org>
++
++	PR target/104829
++	* config/rs6000/rs6000.c (rs6000_machine_from_flags): Don't output
++	"ppc" and "ppc64" based on rs6000_cpu.
++
++(cherry picked from commit 80fcc4b6afee72443bef551064826b3b4b6785e6)
++(cherry picked from commit d87e0e297b1cba73a0c055d2a3e9267d288f435a)
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gcc/config/rs6000/rs6000.c | 12 ++++++++++--
++ 1 file changed, 10 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
++index 0a55c979c36..7e5cdd34840 100644
++--- a/gcc/config/rs6000/rs6000.c
+++++ b/gcc/config/rs6000/rs6000.c
++@@ -5782,20 +5782,28 @@ rs6000_machine_from_flags (void)
++   if (rs6000_cpu == PROCESSOR_MPCCORE)
++     return "\"821\"";
++ 
+++#if 0
+++  /* This (and ppc64 below) are disabled here (for now at least) because
+++     PROCESSOR_POWERPC, PROCESSOR_POWERPC64, and PROCESSOR_COMMON
+++     are #define'd as some of these.  Untangling that is a job for later.  */
+++
++   /* 600 series and 700 series, "classic" */
++   if (rs6000_cpu == PROCESSOR_PPC601 || rs6000_cpu == PROCESSOR_PPC603
++       || rs6000_cpu == PROCESSOR_PPC604 || rs6000_cpu == PROCESSOR_PPC604e
++-      || rs6000_cpu == PROCESSOR_PPC750 || rs6000_cpu == PROCESSOR_POWERPC)
+++      || rs6000_cpu == PROCESSOR_PPC750)
++     return "ppc";
+++#endif
++ 
++   /* Classic with AltiVec, "G4" */
++   if (rs6000_cpu == PROCESSOR_PPC7400 || rs6000_cpu == PROCESSOR_PPC7450)
++     return "\"7450\"";
++ 
+++#if 0
++   /* The older 64-bit CPUs */
++   if (rs6000_cpu == PROCESSOR_PPC620 || rs6000_cpu == PROCESSOR_PPC630
++-      || rs6000_cpu == PROCESSOR_RS64A || rs6000_cpu == PROCESSOR_POWERPC64)
+++      || rs6000_cpu == PROCESSOR_RS64A)
++     return "ppc64";
+++#endif
++ 
++   HOST_WIDE_INT flags = rs6000_isa_flags;
++ 
++-- 
++2.34.3
++
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
