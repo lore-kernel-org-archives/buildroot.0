@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FF8EECAAA1
-	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 15:57:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC1BCECAAA1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 16:15:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC69E610F0;
-	Tue,  6 Sep 2022 15:57:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC69E610F0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A808404BE;
+	Tue,  6 Sep 2022 16:15:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A808404BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4fr2c28PT3tN; Tue,  6 Sep 2022 15:57:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NjDpUj1dypcG; Tue,  6 Sep 2022 16:15:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1F39607AA;
-	Tue,  6 Sep 2022 15:57:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1F39607AA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 911FB1BF337
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:57:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC93D410D0;
+	Tue,  6 Sep 2022 16:15:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC93D410D0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 241C41BF9BA
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 16:15:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C81E607AA
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:57:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C81E607AA
+ by smtp1.osuosl.org (Postfix) with ESMTP id F351C8130E
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 16:15:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F351C8130E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oFAN9Z5EDziO for <buildroot@lists.busybox.net>;
- Tue,  6 Sep 2022 15:57:00 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09490605EC
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 09490605EC
- for <buildroot@buildroot.org>; Tue,  6 Sep 2022 15:56:59 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:5e76:18ec:e237:5279])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 50012B00572;
- Tue,  6 Sep 2022 17:56:56 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 06 Sep 2022 17:56:56 +0200
-Date: Tue, 6 Sep 2022 17:56:56 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20220906155656.GG1585594@scaer>
-References: <20220904200409.3153993-1-romain.naour@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220904200409.3153993-1-romain.naour@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1662479818;
- bh=h2KKwB+7PfkjlXKruVwEpza6ym5yThnmtrG1IAwzpkY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=dAbrxT4kmeF7/9mrrv3v1VvMiJU9Pcfvo07NjiQHMJKAqLEDTDWF7NMlidHmh+TyQ
- JbwRrAZYLlW+ckU6AfTsTXpGmyaAzqrBlTZpcW0e+TdUEeaZaBDJ/GiWEinwd+kg/t
- 47Y677mGDk6KEbdDsNOHAlWGDUu1viBDwQk8MAQBI8AEsza+slEjfpNHRNYzd+gGO+
- lh9fPdR/ev17lQp6oQnXsdDaUus9hxIsLqsXxKilCc7HeWSOMuzrg/HTp8+zx397Cx
- TdNE5krUWdwgZbFoW9JeRQj+VbrPp07X52g1K2uUJZr4K0rHyyDQ/Ca24+xijGCbAL
- 4R9lC/AagRrNw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dAbrxT4k
-Subject: Re: [Buildroot] [PATCH] arch/xtensa: xtensa little endian target
- requires an overlay file
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rFfU1fgGyVbh for <buildroot@lists.busybox.net>;
+ Tue,  6 Sep 2022 16:15:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1FE41812F2
+ for <buildroot@buildroot.org>; Tue,  6 Sep 2022 16:15:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FE41812F2
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 7022481DD5; Tue,  6 Sep 2022 16:00:25 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 6 Sep 2022 18:15:28 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: ec1b5c59a183ecbaf5774856b8b3228363993fef
+X-Git-Newrev: 812b8526f8e6260d8ea90b6d4aff7d7788614b1f
+X-Patchwork-Hint: ignore
+Message-Id: <20220906160025.7022481DD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qemu: bump to version
+ 7.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,97 +57,137 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=812b8526f8e6260d8ea90b6d4aff7d7788614b1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2022-09-04 22:04 +0200, Romain Naour spake thusly:
-> Using a custom Xtensa processor configuration select little endian
-> by default. But xtensa for little endian requires an xtensa overlay
-> file containing a version of xtensa-config.h header for gcc setting
-> XCHAL_HAVE_BE to 0.
-> 
-> When BR2_XTENSA_LITTLE_ENDIAN is selected, we have to check if
-> an overlay file is provided. Error out if BR2_XTENSA_OVERLAY_FILE
-> is empty.
+Remove upstream commit:
+0003-linux-user-syscall.c-fix-build-without-RLIMIT_RTTIME.patch
 
-Well, why don't we always check for an overlay when BR2_XTENSA_CUSTOM=y?
+Changes log:
+https://wiki.qemu.org/ChangeLog/7.1
 
-Indeed, whether big or little endian, if the user selects a custom
-xtensa configuration, they better provide the overlay for that
-configuration, otherwise that does not make sense, and they should be
-using BR2_xtensa_fsf=y instead.
+vnc-png option renamed to png:
+https://gitlab.com/qemu-project/qemu/-/commit/95f8510ef428f988897176b9585b8ba1432f939f
 
-So, maybe just this
+linux-user has been fixed to build with glibc >= 2.36 (sys/mount.h):
+https://gitlab.com/qemu-project/qemu/-/commit/3cd3df2a9584e6f753bb62a0028bd67124ab5532
 
-    diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
-    index fd410f6bfa..9cf6f45678 100644
-    --- a/arch/arch.mk.xtensa
-    +++ b/arch/arch.mk.xtensa
-    @@ -10,6 +10,9 @@
-     #   endif
-     ################################################################################
-     BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
-    +ifeq ($(BR_BUILDING)$(BR2_XTENSA_CUSTOM):$(BR_ARCH_XTENSA_OVERLAY_FILE),yy:)
-    +$(error No xtensa overlay file provided. Check your BR2_XTENSA_OVERLAY_FILE setting)
-    +endif
-     ifneq ($(filter http://% https://% ftp://% scp://%,$(BR_ARCH_XTENSA_OVERLAY_FILE)),)
-     ARCH_XTENSA_OVERLAY_URL = $(BR_ARCH_XTENSA_OVERLAY_FILE)
-     ARCH_XTENSA_OVERLAY_FILE = $($(PKG)_DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
+Runtime tested in gitlab:
+https://gitlab.com/kubu93/buildroot/-/pipelines/630473210
 
-Thoughts?
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...syscall.c-fix-build-without-RLIMIT_RTTIME.patch | 48 ----------------------
+ package/qemu/qemu.hash                             |  2 +-
+ package/qemu/qemu.mk                               |  8 ++--
+ 3 files changed, 5 insertions(+), 53 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> Fixes:
-> http://autobuild.buildroot.org/results/f0b/f0ba47d2534aeb3cc2921124aa639ae3aa072b9b
-> 
-> xtensa-buildroot-linux-uclibc/bin/ld: ldso/ldso/ld-uClibc_so.a(ldso.oS): compiled for a big endian system and target is little endian
-> 
-> [1] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=include/xtensa-config.h;hb=2ee5e4300186a92ad73f1a1a64cb918dc76c8d67#l28
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  arch/arch.mk.xtensa | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
-> index fd410f6bfa..516d77bf91 100644
-> --- a/arch/arch.mk.xtensa
-> +++ b/arch/arch.mk.xtensa
-> @@ -34,3 +34,11 @@ define arch-xtensa-overlay-extract
->  		$(ARCH_XTENSA_OVERLAY_FILE) | \
->  	$(TAR) --strip-components=1 -C $(1) $(TAR_OPTIONS) - $(2)
->  endef
-> +
-> +# By default GCC build xtensa for Big Endian. To build for Little Endian a
-> +# Xtensa overlay file must be provided.
-> +ifeq ($(BR2_XTENSA_LITTLE_ENDIAN),y)
-> +ifeq ($(call qstrip,$(BR2_XTENSA_OVERLAY_FILE)),)
-> +$(error No xtensa overlay file provided. Check your BR2_XTENSA_OVERLAY_FILE setting)
-> +endif
-> +endif
-> -- 
-> 2.34.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/qemu/0003-linux-user-syscall.c-fix-build-without-RLIMIT_RTTIME.patch b/package/qemu/0003-linux-user-syscall.c-fix-build-without-RLIMIT_RTTIME.patch
+deleted file mode 100644
+index 729c2e9be8..0000000000
+--- a/package/qemu/0003-linux-user-syscall.c-fix-build-without-RLIMIT_RTTIME.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 84863e007d4ef0858e74a1250e2472954924c617 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 14 May 2022 16:10:16 +0200
+-Subject: [PATCH] linux-user/syscall.c: fix build without RLIMIT_RTTIME
+-
+-RLIMIT_RTTIME is not provided by uclibc-ng or by musl prior to version
+-1.2.0 and
+-https://github.com/bminor/musl/commit/2507e7f5312e79620f6337935d0a6c9045ccba09
+-resulting in the following build failure since
+-https://git.qemu.org/?p=qemu.git;a=commit;h=244fd08323088db73590ff2317dfe86f810b51d7:
+-
+-../linux-user/syscall.c: In function 'target_to_host_resource':
+-../linux-user/syscall.c:1057:16: error: 'RLIMIT_RTTIME' undeclared (first use in this function); did you mean 'RLIMIT_NOFILE'?
+- 1057 |         return RLIMIT_RTTIME;
+-      |                ^~~~~~~~~~~~~
+-      |                RLIMIT_NOFILE
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/22d3b584b704613d030e1ea9e6b709b713e4cc26
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://patchwork.ozlabs.org/project/qemu-devel/patch/20220523105239.1499162-1-fontaine.fabrice@gmail.com]
+----
+-Changes v1 -> v2 (after review of Laurent Vivier):
+- - Use an ifdef block instead of defining RLIMIT_RTTIME
+-
+- linux-user/syscall.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/linux-user/syscall.c b/linux-user/syscall.c
+-index dd0d92ba4e..488facb356 100644
+---- a/linux-user/syscall.c
+-+++ b/linux-user/syscall.c
+-@@ -1053,8 +1053,10 @@ static inline int target_to_host_resource(int code)
+-         return RLIMIT_RSS;
+-     case TARGET_RLIMIT_RTPRIO:
+-         return RLIMIT_RTPRIO;
+-+#ifdef RLIMIT_RTTIME
+-     case TARGET_RLIMIT_RTTIME:
+-         return RLIMIT_RTTIME;
+-+#endif
+-     case TARGET_RLIMIT_SIGPENDING:
+-         return RLIMIT_SIGPENDING;
+-     case TARGET_RLIMIT_STACK:
+--- 
+-2.35.1
+-
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 9c1a85a347..06d090bd1d 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256  f6b375c7951f728402798b0baabb2d86478ca53d44cedbefabbe1c46bf46f839  qemu-7.0.0.tar.xz
++sha256  a0634e536bded57cf38ec8a751adb124b89c776fe0846f21ab6c6728f1cbbbe6  qemu-7.1.0.tar.xz
+ sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 9e1bec3836..57d7e31cb6 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QEMU_VERSION = 7.0.0
++QEMU_VERSION = 7.1.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+@@ -124,10 +124,10 @@ QEMU_OPTS += \
+ 	--disable-vnc-sasl
+ QEMU_DEPENDENCIES += libvncserver
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+-QEMU_OPTS += --enable-vnc-png
++QEMU_OPTS += --enable-png
+ QEMU_DEPENDENCIES += libpng
+ else
+-QEMU_OPTS += --disable-vnc-png
++QEMU_OPTS += --disable-png
+ endif
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ QEMU_OPTS += --enable-vnc-jpeg
+@@ -388,7 +388,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--disable-vhost-user-blk-server \
+ 		--disable-virtiofsd \
+ 		--disable-vnc-jpeg \
+-		--disable-vnc-png \
++		--disable-png \
+ 		--disable-vnc-sasl \
+ 		--enable-tools \
+ 		$(HOST_QEMU_OPTS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
