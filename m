@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8334C38145
-	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 08:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A49EECAAA1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 08:43:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CF1C6108C;
-	Tue,  6 Sep 2022 08:40:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CF1C6108C
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6CC681272;
+	Tue,  6 Sep 2022 08:43:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6CC681272
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ek3JFAzaHI76; Tue,  6 Sep 2022 08:40:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BY9JSUWo6eGJ; Tue,  6 Sep 2022 08:43:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95C336108B;
-	Tue,  6 Sep 2022 08:40:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95C336108B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6F4221BF28F
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 08:40:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D6CF380F5D;
+	Tue,  6 Sep 2022 08:43:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6CF380F5D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 791061BF28F
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 08:43:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48E35417B1
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 08:40:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48E35417B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53E3A40B7F
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 08:43:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53E3A40B7F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pm39K_qg8Fy2 for <buildroot@lists.busybox.net>;
- Tue,  6 Sep 2022 08:40:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FQ_0x4ARFKh3 for <buildroot@lists.busybox.net>;
+ Tue,  6 Sep 2022 08:43:00 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE101417B6
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BE101417B6
- for <buildroot@buildroot.org>; Tue,  6 Sep 2022 08:40:05 +0000 (UTC)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 878C41C000F;
- Tue,  6 Sep 2022 08:40:01 +0000 (UTC)
-Date: Tue, 6 Sep 2022 10:39:59 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20220906103959.6a22e057@kmaincent-XPS-13-7390>
-In-Reply-To: <20220906082438.GQ1490660@scaer>
-References: <20220906081425.854318-1-kory.maincent@bootlin.com>
- <20220906082438.GQ1490660@scaer>
-Organization: bootlin
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6125E404BF
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6125E404BF
+ for <buildroot@buildroot.org>; Tue,  6 Sep 2022 08:43:00 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:5e76:18ec:e237:5279])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 061ECB0057C;
+ Tue,  6 Sep 2022 10:42:53 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 06 Sep 2022 10:42:53 +0200
+Date: Tue, 6 Sep 2022 10:42:53 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Christian Stewart <christian@paral.in>
+Message-ID: <20220906084253.GR1490660@scaer>
+References: <20220904190218.198854-1-christian@paral.in>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1662453603;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=AN01hbDhEwdER1TaqOrYTm9U01onPwFsT53gj2k9x+w=;
- b=dTa5E7pO0v8P3o3HvZ+XRZoQ5WA7UFxcyvwu0WLkEHSsvDXJy7lj90oUlOopwQXha24yg3
- w1aID83V/sEF9l1Ky2FMKtskRFjHvGGVe1WGswTjDXUeAkMWfmUzxmleXfny5mpAtgcVu5
- yiiFEH/estQSA+PbYhlqP61bPa4yHlGALx3qR/e+C5b2NhqievlMmoyoWg+4IhJqcmIpbB
- vEK9rCqAyRQnovdOAiic7RtMSrirMSGM9PLIWXnFQBdiLUWwUBK93xQ2QxKvFupGd/kpev
- +8K7SPoo9N0c7Xw0uuNcaV7egP7aOAy1069p4X79asEc3+eAThhD4Hz/UyD5hA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dTa5E7pO
-Subject: Re: [Buildroot] [PATCH] package/python-pillow: remove
- host-python-pillow support
+Content-Disposition: inline
+In-Reply-To: <20220904190218.198854-1-christian@paral.in>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1662453777;
+ bh=yvrMfpMh+Rt1xrLxXQrq2/uAXRahQFHfQOhjz2lPedI=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=R1aDsZBaLc/Sea7cikLO6SX9hBborpDR/eq4aPeeBdoUn3bzbJjXoankrSKid9SsX
+ 2DeaNpmNXJ7nzCwpwA7odgvp2AeKPFbF8p7a2u/Mn9cGvllCeulwcu2Yeh9P4g5n/v
+ Z4fjQSmgMAVR5qhYpo/hg2GMwHxXhxVLiruGtNmnl8m4qPLcXUd6CXe9/Vxb49VXyt
+ vsMXovLbCc3K4a++dVyWVsBAUmHaz7CfHqxNVNhooyUrVhZmxhrGq9HgkB2hBO3djm
+ 0ysARYOkIRziBYMiilcw1nJ4iAmPIZ7oMvA4qg2/Nux4IYYVQVsREh4vKtUFcnpdSs
+ MvJCpdufpjqRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=R1aDsZBa
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/libyaml: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,25 +76,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?K=C3=B6ry_Maincent_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCA2IFNlcCAyMDIyIDEwOjI0OjM4ICswMjAwCiJZYW5uIEUuIE1PUklOIiA8eWFubi5t
-b3Jpbi4xOTk4QGZyZWUuZnI+IHdyb3RlOgoKPiBLw7ZyeSwgQWxsLAo+IAo+IE9uIDIwMjItMDkt
-MDYgMTA6MTQgKzAyMDAsIEvDtnJ5IE1haW5jZW50IHNwYWtlIHRodXNseToKPiA+IEZyb206IEtv
-cnkgTWFpbmNlbnQgPGtvcnkubWFpbmNlbnRAYm9vdGxpbi5jb20+Cj4gPiAKPiA+IGhvc3QtcHl0
-aG9uLXBpbGxvdyB3YXMgbmVlZGVkIHRvIGJ1aWxkIG9wdGVlLW9zIGZyb20gU1RNaWNyb2VsZWNy
-b25pY3MKPiA+IGR1cmluZyBpdHMgcmMgdmVyc2lvbnMgYnV0IGlzIGlzIG5vdCBuZWVkZWQgYW55
-bW9yZSBpbiB0aGUgcmVsZWFzZS4KPiA+IEl0IGlzIHRoZW4gdXNlbGVzcyB0byBrZWVwIHRoaXMg
-c3VwcG9ydC4gIAo+IAo+IEVyciwgZGlkIHlvdSBmb3JnZXQgdG8gcmVtb3ZlIGl0IGZyb20gb3B0
-ZWUtb3M/CgpEb2gsIFRoYXQncyB0cnVlIEkgZGlkIGl0IHRvIHF1aWNrbHkuIEkgd2lsbCBmaXgg
-dGhhdCB3aXRoIG5ldyBwYXRjaGVzLgpTb3JyeSBmb3IgaXQuCgpSZWdhcmRzLAoKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Christian, All,
+
+On 2022-09-04 12:02 -0700, Christian Stewart via buildroot spake thusly:
+> Add a Config.in.host to enable the host-libyaml package.
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+
+Following the comment by Thomas, I've marked this two-patch series as
+changes-requested in Patchwork.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/Config.in.host         | 1 +
+>  package/libyaml/Config.in.host | 7 +++++++
+>  2 files changed, 8 insertions(+)
+>  create mode 100644 package/libyaml/Config.in.host
+> 
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 99edeafece..66b64fd7c6 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -47,6 +47,7 @@ menu "Host utilities"
+>  	source "package/jsmin/Config.in.host"
+>  	source "package/kmod/Config.in.host"
+>  	source "package/libp11/Config.in.host"
+> +	source "package/libyaml/Config.in.host"
+>  	source "package/lld/Config.in.host"
+>  	source "package/lpc3250loader/Config.in.host"
+>  	source "package/lttng-babeltrace/Config.in.host"
+> diff --git a/package/libyaml/Config.in.host b/package/libyaml/Config.in.host
+> new file mode 100644
+> index 0000000000..fd47362a91
+> --- /dev/null
+> +++ b/package/libyaml/Config.in.host
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_HOST_LIBYAML
+> +	bool "host libyaml"
+> +	help
+> +	  LibYAML is a YAML 1.1 parser and emitter written in C.
+> +	  Host package.
+> +
+> +	  http://pyyaml.org/wiki/LibYAML
+> \ No newline at end of file
+> -- 
+> 2.37.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
