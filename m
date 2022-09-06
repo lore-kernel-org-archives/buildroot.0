@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC0B6ECAAD5
-	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 15:48:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42F08ECAAD5
+	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 15:50:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AD0841757;
-	Tue,  6 Sep 2022 15:48:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AD0841757
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE68781489;
+	Tue,  6 Sep 2022 15:50:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE68781489
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sPf0JJBbV2sO; Tue,  6 Sep 2022 15:48:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FTYAqbC0mDgo; Tue,  6 Sep 2022 15:50:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A42B34173B;
-	Tue,  6 Sep 2022 15:48:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A42B34173B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 874AE814B8;
+	Tue,  6 Sep 2022 15:50:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 874AE814B8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A0AF31BF337
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:48:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7F57F1BF337
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:50:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 88AC4610E9
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:48:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88AC4610E9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6798A610E9
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:50:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6798A610E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o1t8MiGtD3vT for <buildroot@lists.busybox.net>;
- Tue,  6 Sep 2022 15:48:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 691DE60596
- for <buildroot@buildroot.org>; Tue,  6 Sep 2022 15:48:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 691DE60596
-Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id C513481D9F; Tue,  6 Sep 2022 15:32:56 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 6 Sep 2022 17:48:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 40a1c141b33c10e996623920c01eff62a9f8fbb9
-X-Git-Newrev: 4765efb22231e377866bc6456971886d970f9d7a
-X-Patchwork-Hint: ignore
-Message-Id: <20220906153256.C513481D9F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdb: include gdbarch.h in
+ with ESMTP id Y-0cs27vyKNm for <buildroot@lists.busybox.net>;
+ Tue,  6 Sep 2022 15:50:16 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D113760596
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D113760596
+ for <buildroot@buildroot.org>; Tue,  6 Sep 2022 15:50:15 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:5e76:18ec:e237:5279])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id EE70BB0059B;
+ Tue,  6 Sep 2022 17:50:10 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 06 Sep 2022 17:50:10 +0200
+Date: Tue, 6 Sep 2022 17:50:10 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20220906155010.GF1585594@scaer>
+References: <20220829202159.407642-1-romain.naour@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220829202159.407642-1-romain.naour@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1662479413;
+ bh=NwIBiy2t7eNQ3EsKoew8eEalYFGbRfZiFGl7PfozHkE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=kxo7kXNjSAcIIzMWQNMe9kCQBLEeelyfcsAF6jjWgv5NiwLG3jWeun5268Zh6hoRI
+ YmRFUBt7WI/IuvoHDbyroKt7JbZOMk+5Qaedyx31nawl95SSSNYZus4PIh8ay+ZOQh
+ SIVRSwGME+Nlm9BfJO0zFULfuPKNcmXD3lqTDMltEUyjqGmkD8NFRebzX+hCJSfJpp
+ IzOueZvYbylmrtal2NcGkrOu7elZJoAdXAbUiKipi4ZduFEDom81DUT6656IcAIYyK
+ vXrbC6+CL9oNgmg/c0ogMx2sWZZ+q7vDRk9qpTNe4kY2JlKAAIpUm0v4EG+J3XNUAE
+ 3ytvEaJ4SYVhg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=kxo7kXNj
+Subject: Re: [Buildroot] [for-master] package/gdb: include gdbarch.h in
  xtensa-linux-nat.c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,250 +77,230 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6243563576260774255=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6243563576260774255==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=4765efb22231e377866bc6456971886d970f9d7a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-It seems that gdb doesn't build for xtensa since a while, indeed commit
-[1] merged in gdb 9 introduced a few number of build issues on several
-architectures:
-
-[Fix gdb build on macOS]
-https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=b1c896b365f2dbcd14145a88d103623244cf0fb0
-
-[gdb: Fix gdb build on mips64-linux]
-https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=2208ee917050bcc901c7faefdee257ffbf8ef2ab
-
-[gdb: Fix native build on Linux/Alpha.]
-https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=7a27b85f6d9b5eea9bd1493f903158fbea4b2231
-
-[Include gdbarch.h in m68k-linux-nat.c]
-https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=a7cdaa914f4b937544d8f102679bb5129bb1ef08
-
-[gdb: include gdbarch.h in hppa-linux-nat.c]
-https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=ad75efa628656716982f2674008952bfd2c268af
-
-Most of them has been fixed before the gdb 9 release but it seems
-that xtensa is the last one on this list and still unfixed with
-gdb 11 (not even noticed by Buildroot autobuilders).
-
-[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=0d12e84cfc9bd36b7bbda01a3c8f83f65a832398
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../10.2/0009-gdb-Fix-native-build-on-xtensa.patch | 57 ++++++++++++++++++++++
- .../11.2/0009-gdb-Fix-native-build-on-xtensa.patch | 57 ++++++++++++++++++++++
- .../9.2/0009-gdb-Fix-native-build-on-xtensa.patch  | 57 ++++++++++++++++++++++
- 3 files changed, 171 insertions(+)
-
-diff --git a/package/gdb/10.2/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/10.2/0009-gdb-Fix-native-build-on-xtensa.patch
-new file mode 100644
-index 0000000000..927bf20de5
---- /dev/null
-+++ b/package/gdb/10.2/0009-gdb-Fix-native-build-on-xtensa.patch
-@@ -0,0 +1,57 @@
-+From 02d9e6a3bc47dfe138ef4511aaeeae26b7dbd1ba Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 28 Aug 2022 23:21:37 +0200
-+Subject: [PATCH] gdb: Fix native build on xtensa
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Apply a similar fix than for Alpha architecture on gdb 9:
-+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=7a27b85f6d9b5eea9bd1493f903158fbea4b2231
-+
-+Fixes:
-+
-+../../gdb/xtensa-linux-nat.c: In function ‘void fill_gregset(const regcache*, elf_greg_t (*)[128], int)’:
-+../../gdb/xtensa-linux-nat.c:66:17: error: ‘gdbarch_pc_regnum’ was not declared in this scope
-+   66 |   if (regnum == gdbarch_pc_regnum (gdbarch) || regnum == -1)
-+      |                 ^~~~~~~~~~~~~~~~~
-+  CXX    complaints.o
-+../../gdb/xtensa-linux-nat.c:68:17: error: ‘gdbarch_ps_regnum’ was not declared in this scope
-+   68 |   if (regnum == gdbarch_ps_regnum (gdbarch) || regnum == -1)
-+      |                 ^~~~~~~~~~~~~~~~~
-+../../gdb/xtensa-linux-nat.c:71:38: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
-+   71 |   if (regnum == gdbarch_tdep (gdbarch)->wb_regnum || regnum == -1)
-+      |                                      ^
-+In file included from ../../gdb/xtensa-linux-nat.c:38:
-+../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘gdbarch_tdep::gdbarch_tdep()’
-+  160 | struct gdbarch_tdep
-+      |        ^~~~~~~~~~~~
-+../../gdb/xtensa-tdep.h:160:8: note:   candidate expects 0 arguments, 1 provided
-+../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(const gdbarch_tdep&)’
-+../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘const gdbarch_tdep&’
-+../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(gdbarch_tdep&&)’
-+../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘gdbarch_tdep&&’
-+../../gdb/xtensa-linux-nat.c:72:49: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
-+   72 |     regcache->raw_collect (gdbarch_tdep (gdbarch)->wb_regnum,
-+      |                                                 ^
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/xtensa-linux-nat.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
-+index b2b3db182bc..b230e08b69f 100644
-+--- a/gdb/xtensa-linux-nat.c
-++++ b/gdb/xtensa-linux-nat.c
-+@@ -36,6 +36,7 @@
-+ 
-+ #include "gregset.h"
-+ #include "xtensa-tdep.h"
-++#include "gdbarch.h"
-+ 
-+ /* Defines ps_err_e, struct ps_prochandle.  */
-+ #include "gdb_proc_service.h"
-+-- 
-+2.37.2
-+
-diff --git a/package/gdb/11.2/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/11.2/0009-gdb-Fix-native-build-on-xtensa.patch
-new file mode 100644
-index 0000000000..bf4d617fc1
---- /dev/null
-+++ b/package/gdb/11.2/0009-gdb-Fix-native-build-on-xtensa.patch
-@@ -0,0 +1,57 @@
-+From d3bb361eb0b6cbf0257f515f9d5e64add89e6bfa Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 28 Aug 2022 23:21:37 +0200
-+Subject: [PATCH] gdb: Fix native build on xtensa
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Apply a similar fix than for Alpha architecture on gdb 9:
-+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=7a27b85f6d9b5eea9bd1493f903158fbea4b2231
-+
-+Fixes:
-+
-+../../gdb/xtensa-linux-nat.c: In function ‘void fill_gregset(const regcache*, elf_greg_t (*)[128], int)’:
-+../../gdb/xtensa-linux-nat.c:66:17: error: ‘gdbarch_pc_regnum’ was not declared in this scope
-+   66 |   if (regnum == gdbarch_pc_regnum (gdbarch) || regnum == -1)
-+      |                 ^~~~~~~~~~~~~~~~~
-+  CXX    complaints.o
-+../../gdb/xtensa-linux-nat.c:68:17: error: ‘gdbarch_ps_regnum’ was not declared in this scope
-+   68 |   if (regnum == gdbarch_ps_regnum (gdbarch) || regnum == -1)
-+      |                 ^~~~~~~~~~~~~~~~~
-+../../gdb/xtensa-linux-nat.c:71:38: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
-+   71 |   if (regnum == gdbarch_tdep (gdbarch)->wb_regnum || regnum == -1)
-+      |                                      ^
-+In file included from ../../gdb/xtensa-linux-nat.c:38:
-+../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘gdbarch_tdep::gdbarch_tdep()’
-+  160 | struct gdbarch_tdep
-+      |        ^~~~~~~~~~~~
-+../../gdb/xtensa-tdep.h:160:8: note:   candidate expects 0 arguments, 1 provided
-+../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(const gdbarch_tdep&)’
-+../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘const gdbarch_tdep&’
-+../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(gdbarch_tdep&&)’
-+../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘gdbarch_tdep&&’
-+../../gdb/xtensa-linux-nat.c:72:49: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
-+   72 |     regcache->raw_collect (gdbarch_tdep (gdbarch)->wb_regnum,
-+      |                                                 ^
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/xtensa-linux-nat.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
-+index ec33f4a10f2..73f35eac683 100644
-+--- a/gdb/xtensa-linux-nat.c
-++++ b/gdb/xtensa-linux-nat.c
-+@@ -36,6 +36,7 @@
-+ 
-+ #include "gregset.h"
-+ #include "xtensa-tdep.h"
-++#include "gdbarch.h"
-+ 
-+ /* Defines ps_err_e, struct ps_prochandle.  */
-+ #include "gdb_proc_service.h"
-+-- 
-+2.37.2
-+
-diff --git a/package/gdb/9.2/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/9.2/0009-gdb-Fix-native-build-on-xtensa.patch
-new file mode 100644
-index 0000000000..4ff3828f2a
---- /dev/null
-+++ b/package/gdb/9.2/0009-gdb-Fix-native-build-on-xtensa.patch
-@@ -0,0 +1,57 @@
-+From 222cb32acf044fe90e8534b064f9168ad0d8c705 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 28 Aug 2022 23:21:37 +0200
-+Subject: [PATCH] gdb: Fix native build on xtensa
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Apply a similar fix than for Alpha architecture on gdb 9:
-+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=7a27b85f6d9b5eea9bd1493f903158fbea4b2231
-+
-+Fixes:
-+
-+../../gdb/xtensa-linux-nat.c: In function ‘void fill_gregset(const regcache*, elf_greg_t (*)[128], int)’:
-+../../gdb/xtensa-linux-nat.c:66:17: error: ‘gdbarch_pc_regnum’ was not declared in this scope
-+   66 |   if (regnum == gdbarch_pc_regnum (gdbarch) || regnum == -1)
-+      |                 ^~~~~~~~~~~~~~~~~
-+  CXX    complaints.o
-+../../gdb/xtensa-linux-nat.c:68:17: error: ‘gdbarch_ps_regnum’ was not declared in this scope
-+   68 |   if (regnum == gdbarch_ps_regnum (gdbarch) || regnum == -1)
-+      |                 ^~~~~~~~~~~~~~~~~
-+../../gdb/xtensa-linux-nat.c:71:38: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
-+   71 |   if (regnum == gdbarch_tdep (gdbarch)->wb_regnum || regnum == -1)
-+      |                                      ^
-+In file included from ../../gdb/xtensa-linux-nat.c:38:
-+../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘gdbarch_tdep::gdbarch_tdep()’
-+  160 | struct gdbarch_tdep
-+      |        ^~~~~~~~~~~~
-+../../gdb/xtensa-tdep.h:160:8: note:   candidate expects 0 arguments, 1 provided
-+../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(const gdbarch_tdep&)’
-+../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘const gdbarch_tdep&’
-+../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(gdbarch_tdep&&)’
-+../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘gdbarch_tdep&&’
-+../../gdb/xtensa-linux-nat.c:72:49: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
-+   72 |     regcache->raw_collect (gdbarch_tdep (gdbarch)->wb_regnum,
-+      |                                                 ^
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/xtensa-linux-nat.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
-+index 097d7bd6f96..4e4290fe038 100644
-+--- a/gdb/xtensa-linux-nat.c
-++++ b/gdb/xtensa-linux-nat.c
-+@@ -36,6 +36,7 @@
-+ 
-+ #include "gregset.h"
-+ #include "xtensa-tdep.h"
-++#include "gdbarch.h"
-+ 
-+ /* Defines ps_err_e, struct ps_prochandle.  */
-+ #include "gdb_proc_service.h"
-+-- 
-+2.37.2
-+
-
---===============6243563576260774255==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6243563576260774255==--
+Um9tYWluLCBBbGwsCgpPbiAyMDIyLTA4LTI5IDIyOjIxICswMjAwLCBSb21haW4gTmFvdXIgc3Bh
+a2UgdGh1c2x5Ogo+IEl0IHNlZW1zIHRoYXQgZ2RiIGRvZXNuJ3QgYnVpbGQgZm9yIHh0ZW5zYSBz
+aW5jZSBhIHdoaWxlLCBpbmRlZWQgY29tbWl0Cj4gWzFdIG1lcmdlZCBpbiBnZGIgOSBpbnRyb2R1
+Y2VkIGEgZmV3IG51bWJlciBvZiBidWlsZCBpc3N1ZXMgb24gc2V2ZXJhbAo+IGFyY2hpdGVjdHVy
+ZXM6Cj4gCj4gW0ZpeCBnZGIgYnVpbGQgb24gbWFjT1NdCj4gaHR0cHM6Ly9zb3VyY2V3YXJlLm9y
+Zy9naXQvP3A9YmludXRpbHMtZ2RiLmdpdDthPWNvbW1pdGRpZmY7aD1iMWM4OTZiMzY1ZjJkYmNk
+MTQxNDVhODhkMTAzNjIzMjQ0Y2YwZmIwCj4gCj4gW2dkYjogRml4IGdkYiBidWlsZCBvbiBtaXBz
+NjQtbGludXhdCj4gaHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9naXQvP3A9YmludXRpbHMtZ2RiLmdp
+dDthPWNvbW1pdGRpZmY7aD0yMjA4ZWU5MTcwNTBiY2M5MDFjN2ZhZWZkZWUyNTdmZmJmOGVmMmFi
+Cj4gCj4gW2dkYjogRml4IG5hdGl2ZSBidWlsZCBvbiBMaW51eC9BbHBoYS5dCj4gaHR0cHM6Ly9z
+b3VyY2V3YXJlLm9yZy9naXQvP3A9YmludXRpbHMtZ2RiLmdpdDthPWNvbW1pdGRpZmY7aD03YTI3
+Yjg1ZjZkOWI1ZWVhOWJkMTQ5M2Y5MDMxNThmYmVhNGIyMjMxCj4gCj4gW0luY2x1ZGUgZ2RiYXJj
+aC5oIGluIG02OGstbGludXgtbmF0LmNdCj4gaHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9naXQvP3A9
+YmludXRpbHMtZ2RiLmdpdDthPWNvbW1pdGRpZmY7aD1hN2NkYWE5MTRmNGI5Mzc1NDRkOGYxMDI2
+NzliYjUxMjliYjFlZjA4Cj4gCj4gW2dkYjogaW5jbHVkZSBnZGJhcmNoLmggaW4gaHBwYS1saW51
+eC1uYXQuY10KPiBodHRwczovL3NvdXJjZXdhcmUub3JnL2dpdC8/cD1iaW51dGlscy1nZGIuZ2l0
+O2E9Y29tbWl0ZGlmZjtoPWFkNzVlZmE2Mjg2NTY3MTY5ODJmMjY3NDAwODk1MmJmZDJjMjY4YWYK
+PiAKPiBNb3N0IG9mIHRoZW0gaGFzIGJlZW4gZml4ZWQgYmVmb3JlIHRoZSBnZGIgOSByZWxlYXNl
+IGJ1dCBpdCBzZWVtcwo+IHRoYXQgeHRlbnNhIGlzIHRoZSBsYXN0IG9uZSBvbiB0aGlzIGxpc3Qg
+YW5kIHN0aWxsIHVuZml4ZWQgd2l0aAo+IGdkYiAxMSAobm90IGV2ZW4gbm90aWNlZCBieSBCdWls
+ZHJvb3QgYXV0b2J1aWxkZXJzKS4KPiAKPiBbMV0gaHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9naXQv
+P3A9YmludXRpbHMtZ2RiLmdpdDthPWNvbW1pdGRpZmY7aD0wZDEyZTg0Y2ZjOWJkMzZiN2JiZGEw
+MWEzYzhmODNmNjVhODMyMzk4Cj4gCj4gU2lnbmVkLW9mZi1ieTogUm9tYWluIE5hb3VyIDxyb21h
+aW4ubmFvdXJAZ21haWwuY29tPgo+IENjOiBNYXggRmlsaXBwb3YgPGpjbXZia2JjQGdtYWlsLmNv
+bT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgo+IC0tLQo+IGdjYyAxMiBpcyBhbHNvIGJy
+b2tlbiBkdWUgdG8gdG9vIG9sZCB4dGVuc2Egb3ZlcmxheSBmb3IgZ2RiOgo+IAo+IHh0ZW5zYSBv
+dmVybGF5cyBmb3JtIDIwMTYgb3ZlcnJpZGUgZ2RiL3h0ZW5zYS1jb25maWcuYyBicmVha2luZwo+
+IHRoZSBnZGIgMTIgYnVpbGQgZHVlIGEgcmVjZW50IGNoYW5nZXMgZnJvbSBjb21taXQ6Cj4gaHR0
+cHM6Ly9zb3VyY2V3YXJlLm9yZy9naXQvP3A9YmludXRpbHMtZ2RiLmdpdDthPWNvbW1pdGRpZmY7
+aD0zNDViZDA3Y2NlMzM1NjVmMWNkNjZhY2FiZGFmMzg3Y2EzYTdjY2IzCgpTaG91bGQgd2UgbWFz
+ayBvdXQgZ2RiLTEyIGZvciB4dGVuc2EgaW4gbmV4dCwgdGhlbj8KClJlZ2FyZHMsCllhbm4gRS4g
+TU9SSU4uCgo+IC0tLQo+ICAuLi4vMDAwOS1nZGItRml4LW5hdGl2ZS1idWlsZC1vbi14dGVuc2Eu
+cGF0Y2ggfCA1NyArKysrKysrKysrKysrKysrKysrCj4gIC4uLi8wMDA5LWdkYi1GaXgtbmF0aXZl
+LWJ1aWxkLW9uLXh0ZW5zYS5wYXRjaCB8IDU3ICsrKysrKysrKysrKysrKysrKysKPiAgLi4uLzAw
+MDktZ2RiLUZpeC1uYXRpdmUtYnVpbGQtb24teHRlbnNhLnBhdGNoIHwgNTcgKysrKysrKysrKysr
+KysrKysrKwo+ICAzIGZpbGVzIGNoYW5nZWQsIDE3MSBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBwYWNrYWdlL2dkYi8xMC4yLzAwMDktZ2RiLUZpeC1uYXRpdmUtYnVpbGQtb24t
+eHRlbnNhLnBhdGNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2dkYi8xMS4yLzAwMDkt
+Z2RiLUZpeC1uYXRpdmUtYnVpbGQtb24teHRlbnNhLnBhdGNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBwYWNrYWdlL2dkYi85LjIvMDAwOS1nZGItRml4LW5hdGl2ZS1idWlsZC1vbi14dGVuc2EucGF0
+Y2gKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9nZGIvMTAuMi8wMDA5LWdkYi1GaXgtbmF0aXZl
+LWJ1aWxkLW9uLXh0ZW5zYS5wYXRjaCBiL3BhY2thZ2UvZ2RiLzEwLjIvMDAwOS1nZGItRml4LW5h
+dGl2ZS1idWlsZC1vbi14dGVuc2EucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4
+IDAwMDAwMDAwMDAuLjkyN2JmMjBkZTUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9n
+ZGIvMTAuMi8wMDA5LWdkYi1GaXgtbmF0aXZlLWJ1aWxkLW9uLXh0ZW5zYS5wYXRjaAo+IEBAIC0w
+LDAgKzEsNTcgQEAKPiArRnJvbSAwMmQ5ZTZhM2JjNDdkZmUxMzhlZjQ1MTFhYWVlYWUyNmI3ZGJk
+MWJhIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBSb21haW4gTmFvdXIgPHJvbWFp
+bi5uYW91ckBnbWFpbC5jb20+Cj4gK0RhdGU6IFN1biwgMjggQXVnIDIwMjIgMjM6MjE6MzcgKzAy
+MDAKPiArU3ViamVjdDogW1BBVENIXSBnZGI6IEZpeCBuYXRpdmUgYnVpbGQgb24geHRlbnNhCj4g
+K01JTUUtVmVyc2lvbjogMS4wCj4gK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1V
+VEYtOAo+ICtDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Cj4gKwo+ICtBcHBseSBhIHNp
+bWlsYXIgZml4IHRoYW4gZm9yIEFscGhhIGFyY2hpdGVjdHVyZSBvbiBnZGIgOToKPiAraHR0cHM6
+Ly9zb3VyY2V3YXJlLm9yZy9naXQvP3A9YmludXRpbHMtZ2RiLmdpdDthPWNvbW1pdGRpZmY7aD03
+YTI3Yjg1ZjZkOWI1ZWVhOWJkMTQ5M2Y5MDMxNThmYmVhNGIyMjMxCj4gKwo+ICtGaXhlczoKPiAr
+Cj4gKy4uLy4uL2dkYi94dGVuc2EtbGludXgtbmF0LmM6IEluIGZ1bmN0aW9uIOKAmHZvaWQgZmls
+bF9ncmVnc2V0KGNvbnN0IHJlZ2NhY2hlKiwgZWxmX2dyZWdfdCAoKilbMTI4XSwgaW50KeKAmToK
+PiArLi4vLi4vZ2RiL3h0ZW5zYS1saW51eC1uYXQuYzo2NjoxNzogZXJyb3I6IOKAmGdkYmFyY2hf
+cGNfcmVnbnVt4oCZIHdhcyBub3QgZGVjbGFyZWQgaW4gdGhpcyBzY29wZQo+ICsgICA2NiB8ICAg
+aWYgKHJlZ251bSA9PSBnZGJhcmNoX3BjX3JlZ251bSAoZ2RiYXJjaCkgfHwgcmVnbnVtID09IC0x
+KQo+ICsgICAgICB8ICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fgo+ICsgIENYWCAg
+ICBjb21wbGFpbnRzLm8KPiArLi4vLi4vZ2RiL3h0ZW5zYS1saW51eC1uYXQuYzo2ODoxNzogZXJy
+b3I6IOKAmGdkYmFyY2hfcHNfcmVnbnVt4oCZIHdhcyBub3QgZGVjbGFyZWQgaW4gdGhpcyBzY29w
+ZQo+ICsgICA2OCB8ICAgaWYgKHJlZ251bSA9PSBnZGJhcmNoX3BzX3JlZ251bSAoZ2RiYXJjaCkg
+fHwgcmVnbnVtID09IC0xKQo+ICsgICAgICB8ICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+
+fn5+fgo+ICsuLi8uLi9nZGIveHRlbnNhLWxpbnV4LW5hdC5jOjcxOjM4OiBlcnJvcjogbm8gbWF0
+Y2hpbmcgZnVuY3Rpb24gZm9yIGNhbGwgdG8g4oCYZ2RiYXJjaF90ZGVwOjpnZGJhcmNoX3RkZXAo
+Z2RiYXJjaComKeKAmQo+ICsgICA3MSB8ICAgaWYgKHJlZ251bSA9PSBnZGJhcmNoX3RkZXAgKGdk
+YmFyY2gpLT53Yl9yZWdudW0gfHwgcmVnbnVtID09IC0xKQo+ICsgICAgICB8ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4gK0luIGZpbGUgaW5jbHVkZWQgZnJvbSAuLi8u
+Li9nZGIveHRlbnNhLWxpbnV4LW5hdC5jOjM4Ogo+ICsuLi8uLi9nZGIveHRlbnNhLXRkZXAuaDox
+NjA6ODogbm90ZTogY2FuZGlkYXRlOiDigJhnZGJhcmNoX3RkZXA6OmdkYmFyY2hfdGRlcCgp4oCZ
+Cj4gKyAgMTYwIHwgc3RydWN0IGdkYmFyY2hfdGRlcAo+ICsgICAgICB8ICAgICAgICBefn5+fn5+
+fn5+fn4KPiArLi4vLi4vZ2RiL3h0ZW5zYS10ZGVwLmg6MTYwOjg6IG5vdGU6ICAgY2FuZGlkYXRl
+IGV4cGVjdHMgMCBhcmd1bWVudHMsIDEgcHJvdmlkZWQKPiArLi4vLi4vZ2RiL3h0ZW5zYS10ZGVw
+Lmg6MTYwOjg6IG5vdGU6IGNhbmRpZGF0ZTog4oCYY29uc3RleHByIGdkYmFyY2hfdGRlcDo6Z2Ri
+YXJjaF90ZGVwKGNvbnN0IGdkYmFyY2hfdGRlcCYp4oCZCj4gKy4uLy4uL2dkYi94dGVuc2EtdGRl
+cC5oOjE2MDo4OiBub3RlOiAgIG5vIGtub3duIGNvbnZlcnNpb24gZm9yIGFyZ3VtZW50IDEgZnJv
+bSDigJhnZGJhcmNoKuKAmSB0byDigJhjb25zdCBnZGJhcmNoX3RkZXAm4oCZCj4gKy4uLy4uL2dk
+Yi94dGVuc2EtdGRlcC5oOjE2MDo4OiBub3RlOiBjYW5kaWRhdGU6IOKAmGNvbnN0ZXhwciBnZGJh
+cmNoX3RkZXA6OmdkYmFyY2hfdGRlcChnZGJhcmNoX3RkZXAmJinigJkKPiArLi4vLi4vZ2RiL3h0
+ZW5zYS10ZGVwLmg6MTYwOjg6IG5vdGU6ICAgbm8ga25vd24gY29udmVyc2lvbiBmb3IgYXJndW1l
+bnQgMSBmcm9tIOKAmGdkYmFyY2gq4oCZIHRvIOKAmGdkYmFyY2hfdGRlcCYm4oCZCj4gKy4uLy4u
+L2dkYi94dGVuc2EtbGludXgtbmF0LmM6NzI6NDk6IGVycm9yOiBubyBtYXRjaGluZyBmdW5jdGlv
+biBmb3IgY2FsbCB0byDigJhnZGJhcmNoX3RkZXA6OmdkYmFyY2hfdGRlcChnZGJhcmNoKiYp4oCZ
+Cj4gKyAgIDcyIHwgICAgIHJlZ2NhY2hlLT5yYXdfY29sbGVjdCAoZ2RiYXJjaF90ZGVwIChnZGJh
+cmNoKS0+d2JfcmVnbnVtLAo+ICsgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIF4KPiArCj4gK1NpZ25lZC1vZmYtYnk6IFJvbWFpbiBOYW91ciA8
+cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4KPiArLS0tCj4gKyBnZGIveHRlbnNhLWxpbnV4LW5hdC5j
+IHwgMSArCj4gKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPiArCj4gK2RpZmYgLS1n
+aXQgYS9nZGIveHRlbnNhLWxpbnV4LW5hdC5jIGIvZ2RiL3h0ZW5zYS1saW51eC1uYXQuYwo+ICtp
+bmRleCBiMmIzZGIxODJiYy4uYjIzMGUwOGI2OWYgMTAwNjQ0Cj4gKy0tLSBhL2dkYi94dGVuc2Et
+bGludXgtbmF0LmMKPiArKysrIGIvZ2RiL3h0ZW5zYS1saW51eC1uYXQuYwo+ICtAQCAtMzYsNiAr
+MzYsNyBAQAo+ICsgCj4gKyAjaW5jbHVkZSAiZ3JlZ3NldC5oIgo+ICsgI2luY2x1ZGUgInh0ZW5z
+YS10ZGVwLmgiCj4gKysjaW5jbHVkZSAiZ2RiYXJjaC5oIgo+ICsgCj4gKyAvKiBEZWZpbmVzIHBz
+X2Vycl9lLCBzdHJ1Y3QgcHNfcHJvY2hhbmRsZS4gICovCj4gKyAjaW5jbHVkZSAiZ2RiX3Byb2Nf
+c2VydmljZS5oIgo+ICstLSAKPiArMi4zNy4yCj4gKwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2dk
+Yi8xMS4yLzAwMDktZ2RiLUZpeC1uYXRpdmUtYnVpbGQtb24teHRlbnNhLnBhdGNoIGIvcGFja2Fn
+ZS9nZGIvMTEuMi8wMDA5LWdkYi1GaXgtbmF0aXZlLWJ1aWxkLW9uLXh0ZW5zYS5wYXRjaAo+IG5l
+dyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uYmY0ZDYxN2ZjMQo+IC0tLSAv
+ZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2dkYi8xMS4yLzAwMDktZ2RiLUZpeC1uYXRpdmUtYnVp
+bGQtb24teHRlbnNhLnBhdGNoCj4gQEAgLTAsMCArMSw1NyBAQAo+ICtGcm9tIGQzYmIzNjFlYjBi
+NmNiZjAyNTdmNTE1ZjlkNWU2NGFkZDg5ZTZiZmEgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4g
+K0Zyb206IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4KPiArRGF0ZTogU3Vu
+LCAyOCBBdWcgMjAyMiAyMzoyMTozNyArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIGdkYjogRml4
+IG5hdGl2ZSBidWlsZCBvbiB4dGVuc2EKPiArTUlNRS1WZXJzaW9uOiAxLjAKPiArQ29udGVudC1U
+eXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rp
+bmc6IDhiaXQKPiArCj4gK0FwcGx5IGEgc2ltaWxhciBmaXggdGhhbiBmb3IgQWxwaGEgYXJjaGl0
+ZWN0dXJlIG9uIGdkYiA5Ogo+ICtodHRwczovL3NvdXJjZXdhcmUub3JnL2dpdC8/cD1iaW51dGls
+cy1nZGIuZ2l0O2E9Y29tbWl0ZGlmZjtoPTdhMjdiODVmNmQ5YjVlZWE5YmQxNDkzZjkwMzE1OGZi
+ZWE0YjIyMzEKPiArCj4gK0ZpeGVzOgo+ICsKPiArLi4vLi4vZ2RiL3h0ZW5zYS1saW51eC1uYXQu
+YzogSW4gZnVuY3Rpb24g4oCYdm9pZCBmaWxsX2dyZWdzZXQoY29uc3QgcmVnY2FjaGUqLCBlbGZf
+Z3JlZ190ICgqKVsxMjhdLCBpbnQp4oCZOgo+ICsuLi8uLi9nZGIveHRlbnNhLWxpbnV4LW5hdC5j
+OjY2OjE3OiBlcnJvcjog4oCYZ2RiYXJjaF9wY19yZWdudW3igJkgd2FzIG5vdCBkZWNsYXJlZCBp
+biB0aGlzIHNjb3BlCj4gKyAgIDY2IHwgICBpZiAocmVnbnVtID09IGdkYmFyY2hfcGNfcmVnbnVt
+IChnZGJhcmNoKSB8fCByZWdudW0gPT0gLTEpCj4gKyAgICAgIHwgICAgICAgICAgICAgICAgIF5+
+fn5+fn5+fn5+fn5+fn5+Cj4gKyAgQ1hYICAgIGNvbXBsYWludHMubwo+ICsuLi8uLi9nZGIveHRl
+bnNhLWxpbnV4LW5hdC5jOjY4OjE3OiBlcnJvcjog4oCYZ2RiYXJjaF9wc19yZWdudW3igJkgd2Fz
+IG5vdCBkZWNsYXJlZCBpbiB0aGlzIHNjb3BlCj4gKyAgIDY4IHwgICBpZiAocmVnbnVtID09IGdk
+YmFyY2hfcHNfcmVnbnVtIChnZGJhcmNoKSB8fCByZWdudW0gPT0gLTEpCj4gKyAgICAgIHwgICAg
+ICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+Cj4gKy4uLy4uL2dkYi94dGVuc2EtbGludXgt
+bmF0LmM6NzE6Mzg6IGVycm9yOiBubyBtYXRjaGluZyBmdW5jdGlvbiBmb3IgY2FsbCB0byDigJhn
+ZGJhcmNoX3RkZXA6OmdkYmFyY2hfdGRlcChnZGJhcmNoKiYp4oCZCj4gKyAgIDcxIHwgICBpZiAo
+cmVnbnVtID09IGdkYmFyY2hfdGRlcCAoZ2RiYXJjaCktPndiX3JlZ251bSB8fCByZWdudW0gPT0g
+LTEpCj4gKyAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4KPiAr
+SW4gZmlsZSBpbmNsdWRlZCBmcm9tIC4uLy4uL2dkYi94dGVuc2EtbGludXgtbmF0LmM6Mzg6Cj4g
+Ky4uLy4uL2dkYi94dGVuc2EtdGRlcC5oOjE2MDo4OiBub3RlOiBjYW5kaWRhdGU6IOKAmGdkYmFy
+Y2hfdGRlcDo6Z2RiYXJjaF90ZGVwKCnigJkKPiArICAxNjAgfCBzdHJ1Y3QgZ2RiYXJjaF90ZGVw
+Cj4gKyAgICAgIHwgICAgICAgIF5+fn5+fn5+fn5+fgo+ICsuLi8uLi9nZGIveHRlbnNhLXRkZXAu
+aDoxNjA6ODogbm90ZTogICBjYW5kaWRhdGUgZXhwZWN0cyAwIGFyZ3VtZW50cywgMSBwcm92aWRl
+ZAo+ICsuLi8uLi9nZGIveHRlbnNhLXRkZXAuaDoxNjA6ODogbm90ZTogY2FuZGlkYXRlOiDigJhj
+b25zdGV4cHIgZ2RiYXJjaF90ZGVwOjpnZGJhcmNoX3RkZXAoY29uc3QgZ2RiYXJjaF90ZGVwJini
+gJkKPiArLi4vLi4vZ2RiL3h0ZW5zYS10ZGVwLmg6MTYwOjg6IG5vdGU6ICAgbm8ga25vd24gY29u
+dmVyc2lvbiBmb3IgYXJndW1lbnQgMSBmcm9tIOKAmGdkYmFyY2gq4oCZIHRvIOKAmGNvbnN0IGdk
+YmFyY2hfdGRlcCbigJkKPiArLi4vLi4vZ2RiL3h0ZW5zYS10ZGVwLmg6MTYwOjg6IG5vdGU6IGNh
+bmRpZGF0ZTog4oCYY29uc3RleHByIGdkYmFyY2hfdGRlcDo6Z2RiYXJjaF90ZGVwKGdkYmFyY2hf
+dGRlcCYmKeKAmQo+ICsuLi8uLi9nZGIveHRlbnNhLXRkZXAuaDoxNjA6ODogbm90ZTogICBubyBr
+bm93biBjb252ZXJzaW9uIGZvciBhcmd1bWVudCAxIGZyb20g4oCYZ2RiYXJjaCrigJkgdG8g4oCY
+Z2RiYXJjaF90ZGVwJibigJkKPiArLi4vLi4vZ2RiL3h0ZW5zYS1saW51eC1uYXQuYzo3Mjo0OTog
+ZXJyb3I6IG5vIG1hdGNoaW5nIGZ1bmN0aW9uIGZvciBjYWxsIHRvIOKAmGdkYmFyY2hfdGRlcDo6
+Z2RiYXJjaF90ZGVwKGdkYmFyY2gqJinigJkKPiArICAgNzIgfCAgICAgcmVnY2FjaGUtPnJhd19j
+b2xsZWN0IChnZGJhcmNoX3RkZXAgKGdkYmFyY2gpLT53Yl9yZWdudW0sCj4gKyAgICAgIHwgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXgo+ICsKPiArU2ln
+bmVkLW9mZi1ieTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPgo+ICstLS0K
+PiArIGdkYi94dGVuc2EtbGludXgtbmF0LmMgfCAxICsKPiArIDEgZmlsZSBjaGFuZ2VkLCAxIGlu
+c2VydGlvbigrKQo+ICsKPiArZGlmZiAtLWdpdCBhL2dkYi94dGVuc2EtbGludXgtbmF0LmMgYi9n
+ZGIveHRlbnNhLWxpbnV4LW5hdC5jCj4gK2luZGV4IGVjMzNmNGExMGYyLi43M2YzNWVhYzY4MyAx
+MDA2NDQKPiArLS0tIGEvZ2RiL3h0ZW5zYS1saW51eC1uYXQuYwo+ICsrKysgYi9nZGIveHRlbnNh
+LWxpbnV4LW5hdC5jCj4gK0BAIC0zNiw2ICszNiw3IEBACj4gKyAKPiArICNpbmNsdWRlICJncmVn
+c2V0LmgiCj4gKyAjaW5jbHVkZSAieHRlbnNhLXRkZXAuaCIKPiArKyNpbmNsdWRlICJnZGJhcmNo
+LmgiCj4gKyAKPiArIC8qIERlZmluZXMgcHNfZXJyX2UsIHN0cnVjdCBwc19wcm9jaGFuZGxlLiAg
+Ki8KPiArICNpbmNsdWRlICJnZGJfcHJvY19zZXJ2aWNlLmgiCj4gKy0tIAo+ICsyLjM3LjIKPiAr
+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ2RiLzkuMi8wMDA5LWdkYi1GaXgtbmF0aXZlLWJ1aWxk
+LW9uLXh0ZW5zYS5wYXRjaCBiL3BhY2thZ2UvZ2RiLzkuMi8wMDA5LWdkYi1GaXgtbmF0aXZlLWJ1
+aWxkLW9uLXh0ZW5zYS5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAw
+MDAwMC4uNGZmMzgyOGYyYQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2dkYi85LjIv
+MDAwOS1nZGItRml4LW5hdGl2ZS1idWlsZC1vbi14dGVuc2EucGF0Y2gKPiBAQCAtMCwwICsxLDU3
+IEBACj4gK0Zyb20gMjIyY2IzMmFjZjA0NGZlOTBlODUzNGIwNjRmOTE2OGFkMGQ4YzcwNSBNb24g
+U2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJA
+Z21haWwuY29tPgo+ICtEYXRlOiBTdW4sIDI4IEF1ZyAyMDIyIDIzOjIxOjM3ICswMjAwCj4gK1N1
+YmplY3Q6IFtQQVRDSF0gZ2RiOiBGaXggbmF0aXZlIGJ1aWxkIG9uIHh0ZW5zYQo+ICtNSU1FLVZl
+cnNpb246IDEuMAo+ICtDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKPiAr
+Q29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAo+ICsKPiArQXBwbHkgYSBzaW1pbGFyIGZp
+eCB0aGFuIGZvciBBbHBoYSBhcmNoaXRlY3R1cmUgb24gZ2RiIDk6Cj4gK2h0dHBzOi8vc291cmNl
+d2FyZS5vcmcvZ2l0Lz9wPWJpbnV0aWxzLWdkYi5naXQ7YT1jb21taXRkaWZmO2g9N2EyN2I4NWY2
+ZDliNWVlYTliZDE0OTNmOTAzMTU4ZmJlYTRiMjIzMQo+ICsKPiArRml4ZXM6Cj4gKwo+ICsuLi8u
+Li9nZGIveHRlbnNhLWxpbnV4LW5hdC5jOiBJbiBmdW5jdGlvbiDigJh2b2lkIGZpbGxfZ3JlZ3Nl
+dChjb25zdCByZWdjYWNoZSosIGVsZl9ncmVnX3QgKCopWzEyOF0sIGludCnigJk6Cj4gKy4uLy4u
+L2dkYi94dGVuc2EtbGludXgtbmF0LmM6NjY6MTc6IGVycm9yOiDigJhnZGJhcmNoX3BjX3JlZ251
+beKAmSB3YXMgbm90IGRlY2xhcmVkIGluIHRoaXMgc2NvcGUKPiArICAgNjYgfCAgIGlmIChyZWdu
+dW0gPT0gZ2RiYXJjaF9wY19yZWdudW0gKGdkYmFyY2gpIHx8IHJlZ251bSA9PSAtMSkKPiArICAg
+ICAgfCAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn4KPiArICBDWFggICAgY29tcGxh
+aW50cy5vCj4gKy4uLy4uL2dkYi94dGVuc2EtbGludXgtbmF0LmM6Njg6MTc6IGVycm9yOiDigJhn
+ZGJhcmNoX3BzX3JlZ251beKAmSB3YXMgbm90IGRlY2xhcmVkIGluIHRoaXMgc2NvcGUKPiArICAg
+NjggfCAgIGlmIChyZWdudW0gPT0gZ2RiYXJjaF9wc19yZWdudW0gKGdkYmFyY2gpIHx8IHJlZ251
+bSA9PSAtMSkKPiArICAgICAgfCAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn4KPiAr
+Li4vLi4vZ2RiL3h0ZW5zYS1saW51eC1uYXQuYzo3MTozODogZXJyb3I6IG5vIG1hdGNoaW5nIGZ1
+bmN0aW9uIGZvciBjYWxsIHRvIOKAmGdkYmFyY2hfdGRlcDo6Z2RiYXJjaF90ZGVwKGdkYmFyY2gq
+JinigJkKPiArICAgNzEgfCAgIGlmIChyZWdudW0gPT0gZ2RiYXJjaF90ZGVwIChnZGJhcmNoKS0+
+d2JfcmVnbnVtIHx8IHJlZ251bSA9PSAtMSkKPiArICAgICAgfCAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgXgo+ICtJbiBmaWxlIGluY2x1ZGVkIGZyb20gLi4vLi4vZ2RiL3h0
+ZW5zYS1saW51eC1uYXQuYzozODoKPiArLi4vLi4vZ2RiL3h0ZW5zYS10ZGVwLmg6MTYwOjg6IG5v
+dGU6IGNhbmRpZGF0ZTog4oCYZ2RiYXJjaF90ZGVwOjpnZGJhcmNoX3RkZXAoKeKAmQo+ICsgIDE2
+MCB8IHN0cnVjdCBnZGJhcmNoX3RkZXAKPiArICAgICAgfCAgICAgICAgXn5+fn5+fn5+fn5+Cj4g
+Ky4uLy4uL2dkYi94dGVuc2EtdGRlcC5oOjE2MDo4OiBub3RlOiAgIGNhbmRpZGF0ZSBleHBlY3Rz
+IDAgYXJndW1lbnRzLCAxIHByb3ZpZGVkCj4gKy4uLy4uL2dkYi94dGVuc2EtdGRlcC5oOjE2MDo4
+OiBub3RlOiBjYW5kaWRhdGU6IOKAmGNvbnN0ZXhwciBnZGJhcmNoX3RkZXA6OmdkYmFyY2hfdGRl
+cChjb25zdCBnZGJhcmNoX3RkZXAmKeKAmQo+ICsuLi8uLi9nZGIveHRlbnNhLXRkZXAuaDoxNjA6
+ODogbm90ZTogICBubyBrbm93biBjb252ZXJzaW9uIGZvciBhcmd1bWVudCAxIGZyb20g4oCYZ2Ri
+YXJjaCrigJkgdG8g4oCYY29uc3QgZ2RiYXJjaF90ZGVwJuKAmQo+ICsuLi8uLi9nZGIveHRlbnNh
+LXRkZXAuaDoxNjA6ODogbm90ZTogY2FuZGlkYXRlOiDigJhjb25zdGV4cHIgZ2RiYXJjaF90ZGVw
+OjpnZGJhcmNoX3RkZXAoZ2RiYXJjaF90ZGVwJiYp4oCZCj4gKy4uLy4uL2dkYi94dGVuc2EtdGRl
+cC5oOjE2MDo4OiBub3RlOiAgIG5vIGtub3duIGNvbnZlcnNpb24gZm9yIGFyZ3VtZW50IDEgZnJv
+bSDigJhnZGJhcmNoKuKAmSB0byDigJhnZGJhcmNoX3RkZXAmJuKAmQo+ICsuLi8uLi9nZGIveHRl
+bnNhLWxpbnV4LW5hdC5jOjcyOjQ5OiBlcnJvcjogbm8gbWF0Y2hpbmcgZnVuY3Rpb24gZm9yIGNh
+bGwgdG8g4oCYZ2RiYXJjaF90ZGVwOjpnZGJhcmNoX3RkZXAoZ2RiYXJjaComKeKAmQo+ICsgICA3
+MiB8ICAgICByZWdjYWNoZS0+cmF3X2NvbGxlY3QgKGdkYmFyY2hfdGRlcCAoZ2RiYXJjaCktPndi
+X3JlZ251bSwKPiArICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBeCj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5u
+YW91ckBnbWFpbC5jb20+Cj4gKy0tLQo+ICsgZ2RiL3h0ZW5zYS1saW51eC1uYXQuYyB8IDEgKwo+
+ICsgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4gKwo+ICtkaWZmIC0tZ2l0IGEvZ2Ri
+L3h0ZW5zYS1saW51eC1uYXQuYyBiL2dkYi94dGVuc2EtbGludXgtbmF0LmMKPiAraW5kZXggMDk3
+ZDdiZDZmOTYuLjRlNDI5MGZlMDM4IDEwMDY0NAo+ICstLS0gYS9nZGIveHRlbnNhLWxpbnV4LW5h
+dC5jCj4gKysrKyBiL2dkYi94dGVuc2EtbGludXgtbmF0LmMKPiArQEAgLTM2LDYgKzM2LDcgQEAK
+PiArIAo+ICsgI2luY2x1ZGUgImdyZWdzZXQuaCIKPiArICNpbmNsdWRlICJ4dGVuc2EtdGRlcC5o
+Igo+ICsrI2luY2x1ZGUgImdkYmFyY2guaCIKPiArIAo+ICsgLyogRGVmaW5lcyBwc19lcnJfZSwg
+c3RydWN0IHBzX3Byb2NoYW5kbGUuICAqLwo+ICsgI2luY2x1ZGUgImdkYl9wcm9jX3NlcnZpY2Uu
+aCIKPiArLS0gCj4gKzIuMzcuMgo+ICsKPiAtLSAKPiAyLjM3LjIKPiAKPiBfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0t
+LS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0u
+CnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJP
+TiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERl
+c2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2
+MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8g
+IFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwg
+LyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0t
+LS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
