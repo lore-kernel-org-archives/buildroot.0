@@ -4,68 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74E03ECAAD5
-	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 15:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC0B6ECAAD5
+	for <buildroot@archiver.kernel.org>; Tue,  6 Sep 2022 15:48:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01DD041686;
-	Tue,  6 Sep 2022 15:05:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01DD041686
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AD0841757;
+	Tue,  6 Sep 2022 15:48:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AD0841757
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I3EtSgqgoRtm; Tue,  6 Sep 2022 15:05:40 +0000 (UTC)
+	with ESMTP id sPf0JJBbV2sO; Tue,  6 Sep 2022 15:48:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 853B54167A;
-	Tue,  6 Sep 2022 15:05:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 853B54167A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5BC9A1BF2C5
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:05:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A42B34173B;
+	Tue,  6 Sep 2022 15:48:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A42B34173B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A0AF31BF337
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:48:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44578404F7
- for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:05:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44578404F7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88AC4610E9
+ for <buildroot@lists.busybox.net>; Tue,  6 Sep 2022 15:48:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88AC4610E9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hVq-gG6ya72j for <buildroot@lists.busybox.net>;
- Tue,  6 Sep 2022 15:05:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29C17400FD
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 29C17400FD
- for <buildroot@buildroot.org>; Tue,  6 Sep 2022 15:05:37 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:5e76:18ec:e237:5279])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6EFA2B00539;
- Tue,  6 Sep 2022 17:05:33 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 06 Sep 2022 17:05:33 +0200
-Date: Tue, 6 Sep 2022 17:05:33 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Message-ID: <20220906150533.GE1585594@scaer>
-References: <20220901155605.118365-1-thomas.claveirole@green-communications.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220901155605.118365-1-thomas.claveirole@green-communications.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1662476735;
- bh=E6DvsKWyb+m3KGm6S/MEvix1qMY45NJJvlg6+0N+dtA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=b5rVx76bDRcz1fVWZ/r7Nt271kKKMxzzKwEREvhzPxGoOWihnnYOxiQackRswDumo
- EtL5guPP4P0OhQbb/AL+VwEEx7v7V1PJr6srwnu7Nkm35V0eA3CJFTEQLvEtYQhSKt
- 84EYICH2xZTCGqobxl8QRHtgtcAoLuyhSxR3y3RlGeb3C4onMRez1N7R1Wqg+mhVJS
- hpF6GKwrkH4i/Eu5LbwD9Z3kWRc4oOaphLJf0kWGNlMtR/HPPAqBHBLzI9RymChPdc
- wwhYgYRUmNXtENGK1y6bJUp3Jbl+oKv7QJdXhjhllWNMQHDF9d3QQv5PGdIfII98yh
- TxUFT3DaBuTwg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=b5rVx76b
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/openlayers: bump to version
- 7.1.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o1t8MiGtD3vT for <buildroot@lists.busybox.net>;
+ Tue,  6 Sep 2022 15:48:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 691DE60596
+ for <buildroot@buildroot.org>; Tue,  6 Sep 2022 15:48:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 691DE60596
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id C513481D9F; Tue,  6 Sep 2022 15:32:56 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 6 Sep 2022 17:48:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 40a1c141b33c10e996623920c01eff62a9f8fbb9
+X-Git-Newrev: 4765efb22231e377866bc6456971886d970f9d7a
+X-Patchwork-Hint: ignore
+Message-Id: <20220906153256.C513481D9F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdb: include gdbarch.h in
+ xtensa-linux-nat.c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,97 +57,250 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6243563576260774255=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+--===============6243563576260774255==
+Content-Type: text/plain
 
-On 2022-09-01 17:56 +0200, Thomas Claveirole spake thusly:
-> OpenLayers changed its release format again, only two weeks after the
-> previous change.  The good news is, though, that they now ship a
-> single release archive that includes the compiled JavaScript code
-> together with the source code.  Furthermore, they ship both code with
-> a single license, which file is part of the archive.
+commit: https://git.buildroot.net/buildroot/commit/?id=4765efb22231e377866bc6456971886d970f9d7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'd still be more comfortable if we were to do that build, because it
-ensures the generated files are actual derived from the source files,
-while there is no telling what in the bundled minified ones...
+It seems that gdb doesn't build for xtensa since a while, indeed commit
+[1] merged in gdb 9 introduced a few number of build issues on several
+architectures:
 
-But call me paranoid if you want... ;-)
+[Fix gdb build on macOS]
+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=b1c896b365f2dbcd14145a88d103623244cf0fb0
 
-> Hence, we still do not need to rely on host-nodejs for this package,
-> at least not for this version.
-> 
-> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+[gdb: Fix gdb build on mips64-linux]
+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=2208ee917050bcc901c7faefdee257ffbf8ef2ab
 
-Applied to next, thanks.
+[gdb: Fix native build on Linux/Alpha.]
+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=7a27b85f6d9b5eea9bd1493f903158fbea4b2231
 
-Regards,
-Yann E. MORIN.
+[Include gdbarch.h in m68k-linux-nat.c]
+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=a7cdaa914f4b937544d8f102679bb5129bb1ef08
 
-> ---
->  package/openlayers/openlayers.hash |  3 ++-
->  package/openlayers/openlayers.mk   | 10 ++++------
->  2 files changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-> index 1c93b9a729..1b3f3cce51 100644
-> --- a/package/openlayers/openlayers.hash
-> +++ b/package/openlayers/openlayers.hash
-> @@ -1,2 +1,3 @@
->  # Locally computed:
-> -sha256  8a9fda6e392688c049ebb88fb2c73b5788b4965b625443de4cca7d4688b1fb82  v6.14.1-dist.zip
-> +sha256  37a0e5fde4df3db6e6c11ed0ceb8e20608121afe5f8f7f91cf03990e89a919ca  v7.1.0-package.zip
-> +sha256  6c4347b83a8c9feef18d57b18e3b6c44cf901b3c344a4a1fbd837e421555ab8e  LICENSE.md
-> diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-> index 4626e7545a..7396e38fb9 100644
-> --- a/package/openlayers/openlayers.mk
-> +++ b/package/openlayers/openlayers.mk
-> @@ -4,21 +4,19 @@
->  #
->  ################################################################################
->  
-> -OPENLAYERS_VERSION = 6.14.1
-> -OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
-> +OPENLAYERS_VERSION = 7.1.0
-> +OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-package.zip
->  OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
->  OPENLAYERS_LICENSE = BSD-2-Clause
-> -# There's no separate license file in the archive, only minified files.
-> +OPENLAYERS_LICENSE_FILES = LICENSE.md
->  
->  define OPENLAYERS_EXTRACT_CMDS
->  	unzip $(OPENLAYERS_DL_DIR)/$(OPENLAYERS_SOURCE) -d $(@D)
-> -	mv $(@D)/v$(OPENLAYERS_VERSION)-dist/* $(@D)
-> -	rmdir $(@D)/v$(OPENLAYERS_VERSION)-dist/
->  endef
->  
->  define OPENLAYERS_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D -m 0644 $(@D)/ol.css $(TARGET_DIR)/var/www/ol.css
-> -	$(INSTALL) -D -m 0644 $(@D)/ol.js $(TARGET_DIR)/var/www/ol.js
-> +	$(INSTALL) -D -m 0644 $(@D)/dist/ol.js $(TARGET_DIR)/var/www/ol.js
->  endef
->  
->  $(eval $(generic-package))
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+[gdb: include gdbarch.h in hppa-linux-nat.c]
+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=ad75efa628656716982f2674008952bfd2c268af
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Most of them has been fixed before the gdb 9 release but it seems
+that xtensa is the last one on this list and still unfixed with
+gdb 11 (not even noticed by Buildroot autobuilders).
+
+[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=0d12e84cfc9bd36b7bbda01a3c8f83f65a832398
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../10.2/0009-gdb-Fix-native-build-on-xtensa.patch | 57 ++++++++++++++++++++++
+ .../11.2/0009-gdb-Fix-native-build-on-xtensa.patch | 57 ++++++++++++++++++++++
+ .../9.2/0009-gdb-Fix-native-build-on-xtensa.patch  | 57 ++++++++++++++++++++++
+ 3 files changed, 171 insertions(+)
+
+diff --git a/package/gdb/10.2/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/10.2/0009-gdb-Fix-native-build-on-xtensa.patch
+new file mode 100644
+index 0000000000..927bf20de5
+--- /dev/null
++++ b/package/gdb/10.2/0009-gdb-Fix-native-build-on-xtensa.patch
+@@ -0,0 +1,57 @@
++From 02d9e6a3bc47dfe138ef4511aaeeae26b7dbd1ba Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 28 Aug 2022 23:21:37 +0200
++Subject: [PATCH] gdb: Fix native build on xtensa
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Apply a similar fix than for Alpha architecture on gdb 9:
++https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=7a27b85f6d9b5eea9bd1493f903158fbea4b2231
++
++Fixes:
++
++../../gdb/xtensa-linux-nat.c: In function ‘void fill_gregset(const regcache*, elf_greg_t (*)[128], int)’:
++../../gdb/xtensa-linux-nat.c:66:17: error: ‘gdbarch_pc_regnum’ was not declared in this scope
++   66 |   if (regnum == gdbarch_pc_regnum (gdbarch) || regnum == -1)
++      |                 ^~~~~~~~~~~~~~~~~
++  CXX    complaints.o
++../../gdb/xtensa-linux-nat.c:68:17: error: ‘gdbarch_ps_regnum’ was not declared in this scope
++   68 |   if (regnum == gdbarch_ps_regnum (gdbarch) || regnum == -1)
++      |                 ^~~~~~~~~~~~~~~~~
++../../gdb/xtensa-linux-nat.c:71:38: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
++   71 |   if (regnum == gdbarch_tdep (gdbarch)->wb_regnum || regnum == -1)
++      |                                      ^
++In file included from ../../gdb/xtensa-linux-nat.c:38:
++../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘gdbarch_tdep::gdbarch_tdep()’
++  160 | struct gdbarch_tdep
++      |        ^~~~~~~~~~~~
++../../gdb/xtensa-tdep.h:160:8: note:   candidate expects 0 arguments, 1 provided
++../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(const gdbarch_tdep&)’
++../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘const gdbarch_tdep&’
++../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(gdbarch_tdep&&)’
++../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘gdbarch_tdep&&’
++../../gdb/xtensa-linux-nat.c:72:49: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
++   72 |     regcache->raw_collect (gdbarch_tdep (gdbarch)->wb_regnum,
++      |                                                 ^
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gdb/xtensa-linux-nat.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
++index b2b3db182bc..b230e08b69f 100644
++--- a/gdb/xtensa-linux-nat.c
+++++ b/gdb/xtensa-linux-nat.c
++@@ -36,6 +36,7 @@
++ 
++ #include "gregset.h"
++ #include "xtensa-tdep.h"
+++#include "gdbarch.h"
++ 
++ /* Defines ps_err_e, struct ps_prochandle.  */
++ #include "gdb_proc_service.h"
++-- 
++2.37.2
++
+diff --git a/package/gdb/11.2/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/11.2/0009-gdb-Fix-native-build-on-xtensa.patch
+new file mode 100644
+index 0000000000..bf4d617fc1
+--- /dev/null
++++ b/package/gdb/11.2/0009-gdb-Fix-native-build-on-xtensa.patch
+@@ -0,0 +1,57 @@
++From d3bb361eb0b6cbf0257f515f9d5e64add89e6bfa Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 28 Aug 2022 23:21:37 +0200
++Subject: [PATCH] gdb: Fix native build on xtensa
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Apply a similar fix than for Alpha architecture on gdb 9:
++https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=7a27b85f6d9b5eea9bd1493f903158fbea4b2231
++
++Fixes:
++
++../../gdb/xtensa-linux-nat.c: In function ‘void fill_gregset(const regcache*, elf_greg_t (*)[128], int)’:
++../../gdb/xtensa-linux-nat.c:66:17: error: ‘gdbarch_pc_regnum’ was not declared in this scope
++   66 |   if (regnum == gdbarch_pc_regnum (gdbarch) || regnum == -1)
++      |                 ^~~~~~~~~~~~~~~~~
++  CXX    complaints.o
++../../gdb/xtensa-linux-nat.c:68:17: error: ‘gdbarch_ps_regnum’ was not declared in this scope
++   68 |   if (regnum == gdbarch_ps_regnum (gdbarch) || regnum == -1)
++      |                 ^~~~~~~~~~~~~~~~~
++../../gdb/xtensa-linux-nat.c:71:38: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
++   71 |   if (regnum == gdbarch_tdep (gdbarch)->wb_regnum || regnum == -1)
++      |                                      ^
++In file included from ../../gdb/xtensa-linux-nat.c:38:
++../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘gdbarch_tdep::gdbarch_tdep()’
++  160 | struct gdbarch_tdep
++      |        ^~~~~~~~~~~~
++../../gdb/xtensa-tdep.h:160:8: note:   candidate expects 0 arguments, 1 provided
++../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(const gdbarch_tdep&)’
++../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘const gdbarch_tdep&’
++../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(gdbarch_tdep&&)’
++../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘gdbarch_tdep&&’
++../../gdb/xtensa-linux-nat.c:72:49: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
++   72 |     regcache->raw_collect (gdbarch_tdep (gdbarch)->wb_regnum,
++      |                                                 ^
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gdb/xtensa-linux-nat.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
++index ec33f4a10f2..73f35eac683 100644
++--- a/gdb/xtensa-linux-nat.c
+++++ b/gdb/xtensa-linux-nat.c
++@@ -36,6 +36,7 @@
++ 
++ #include "gregset.h"
++ #include "xtensa-tdep.h"
+++#include "gdbarch.h"
++ 
++ /* Defines ps_err_e, struct ps_prochandle.  */
++ #include "gdb_proc_service.h"
++-- 
++2.37.2
++
+diff --git a/package/gdb/9.2/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/9.2/0009-gdb-Fix-native-build-on-xtensa.patch
+new file mode 100644
+index 0000000000..4ff3828f2a
+--- /dev/null
++++ b/package/gdb/9.2/0009-gdb-Fix-native-build-on-xtensa.patch
+@@ -0,0 +1,57 @@
++From 222cb32acf044fe90e8534b064f9168ad0d8c705 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 28 Aug 2022 23:21:37 +0200
++Subject: [PATCH] gdb: Fix native build on xtensa
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Apply a similar fix than for Alpha architecture on gdb 9:
++https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=7a27b85f6d9b5eea9bd1493f903158fbea4b2231
++
++Fixes:
++
++../../gdb/xtensa-linux-nat.c: In function ‘void fill_gregset(const regcache*, elf_greg_t (*)[128], int)’:
++../../gdb/xtensa-linux-nat.c:66:17: error: ‘gdbarch_pc_regnum’ was not declared in this scope
++   66 |   if (regnum == gdbarch_pc_regnum (gdbarch) || regnum == -1)
++      |                 ^~~~~~~~~~~~~~~~~
++  CXX    complaints.o
++../../gdb/xtensa-linux-nat.c:68:17: error: ‘gdbarch_ps_regnum’ was not declared in this scope
++   68 |   if (regnum == gdbarch_ps_regnum (gdbarch) || regnum == -1)
++      |                 ^~~~~~~~~~~~~~~~~
++../../gdb/xtensa-linux-nat.c:71:38: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
++   71 |   if (regnum == gdbarch_tdep (gdbarch)->wb_regnum || regnum == -1)
++      |                                      ^
++In file included from ../../gdb/xtensa-linux-nat.c:38:
++../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘gdbarch_tdep::gdbarch_tdep()’
++  160 | struct gdbarch_tdep
++      |        ^~~~~~~~~~~~
++../../gdb/xtensa-tdep.h:160:8: note:   candidate expects 0 arguments, 1 provided
++../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(const gdbarch_tdep&)’
++../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘const gdbarch_tdep&’
++../../gdb/xtensa-tdep.h:160:8: note: candidate: ‘constexpr gdbarch_tdep::gdbarch_tdep(gdbarch_tdep&&)’
++../../gdb/xtensa-tdep.h:160:8: note:   no known conversion for argument 1 from ‘gdbarch*’ to ‘gdbarch_tdep&&’
++../../gdb/xtensa-linux-nat.c:72:49: error: no matching function for call to ‘gdbarch_tdep::gdbarch_tdep(gdbarch*&)’
++   72 |     regcache->raw_collect (gdbarch_tdep (gdbarch)->wb_regnum,
++      |                                                 ^
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gdb/xtensa-linux-nat.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
++index 097d7bd6f96..4e4290fe038 100644
++--- a/gdb/xtensa-linux-nat.c
+++++ b/gdb/xtensa-linux-nat.c
++@@ -36,6 +36,7 @@
++ 
++ #include "gregset.h"
++ #include "xtensa-tdep.h"
+++#include "gdbarch.h"
++ 
++ /* Defines ps_err_e, struct ps_prochandle.  */
++ #include "gdb_proc_service.h"
++-- 
++2.37.2
++
+
+--===============6243563576260774255==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6243563576260774255==--
