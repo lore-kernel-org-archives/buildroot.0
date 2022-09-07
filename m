@@ -1,98 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA824C38145
-	for <buildroot@archiver.kernel.org>; Wed,  7 Sep 2022 12:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF34FC54EE9
+	for <buildroot@archiver.kernel.org>; Wed,  7 Sep 2022 12:24:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7937408A6;
-	Wed,  7 Sep 2022 12:19:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7937408A6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F6B4815CD;
+	Wed,  7 Sep 2022 12:24:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F6B4815CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U20wPySz8DlL; Wed,  7 Sep 2022 12:19:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ac4Y8r48rCsh; Wed,  7 Sep 2022 12:24:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 582514049F;
-	Wed,  7 Sep 2022 12:19:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 582514049F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A0DEF1BF59E
- for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 12:19:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FA39814B8;
+	Wed,  7 Sep 2022 12:24:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FA39814B8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F9551BF59E
+ for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 12:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8660C408B0
- for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 12:19:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8660C408B0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B458814B8
+ for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 12:24:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B458814B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3rYZNbpWfXro for <buildroot@lists.busybox.net>;
- Wed,  7 Sep 2022 12:19:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gFkFwZ3vnDXt for <buildroot@lists.busybox.net>;
+ Wed,  7 Sep 2022 12:24:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A3BD4049A
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9A3BD4049A
- for <buildroot@buildroot.org>; Wed,  7 Sep 2022 12:18:58 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id z17so1825023eje.0
- for <buildroot@buildroot.org>; Wed, 07 Sep 2022 05:18:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E481C8130C
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E481C8130C
+ for <buildroot@buildroot.org>; Wed,  7 Sep 2022 12:24:32 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id t7so15107293wrm.10
+ for <buildroot@buildroot.org>; Wed, 07 Sep 2022 05:24:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date;
- bh=caxIqPDiw0fQE/2pz+5PoJJ5lOkcHDkQc7FCrF3CQ3U=;
- b=y9Aq2jlsdF7Q2NXshe7tchiRUrD4VKLV24gLzDbfpAfzuT/gbx0BX48SbFAa1Hr9+t
- /zRTqx9nGDo/KvEMihiwGI64dkrxyN2NxV0JAQLcZ0ayyjTCFWVfJGkuiHRdZZaC+Zc/
- pyOE/MT7UmNo4dxA3Zk2WGlGn9YwC1AWoBA0/ErdBy2CzBoWL1PBjUZxtFZOxz/5Ivrt
- 1+XBcj63YyYA2+pw+NTRW8m6LH4GNvNnJcVvDiJNTV+QdBjlP/mcmzbq1U7uveSOq1Ag
- d3mCisNPB85adgC8DWtuEnoXLj01Ah1KV2adJ0K6MZEQHTeQyI2hZKkUuPWTkstNhfC9
- 6X3w==
-X-Gm-Message-State: ACgBeo3lz0Ni9RNj9L6lxtPRVEC3nogg5z2jBdaeGdR2JWwjJfaaWaf2
- Za+v0IALUEYELSh65LMPQs/bIQ==
-X-Google-Smtp-Source: AA6agR6nV5zNMBiH/ACt0IYlf7Na5O7KubCSOOhnMVETSm88bpy8NqkkVLLd+ij4zDQ7W4r/z8eibA==
-X-Received: by 2002:a17:907:a0c6:b0:766:57ed:567e with SMTP id
- hw6-20020a170907a0c600b0076657ed567emr2169590ejc.15.1662553136860; 
- Wed, 07 Sep 2022 05:18:56 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=2Ur7uvzzQlDhq/E/sbR13Lvsl87hNPEeLxvtKpuXtTo=;
+ b=PbB14ssacUNnfQG4M7FrJUpL4TbH82cq+Fzt7+tQ4TcgAv+OqCiglA9GCE9v27xiSW
+ MH1tgRMnOQChuF3R1kOTgWsVah8025x3rJOLZUQ8Jlw7XyTFC+PZz8JX+D3HE/4Tq/A6
+ bajNSrlJ1755T2mqocp6SW2V9yCx4cy/n81nJ+YT9caZXPF0iJV6M19jVI7LNtH2MJf9
+ NFpdukX+9Bpskkqfim5SLzz7lPkU4z47PoeRu74yzoxToQlG4yAPchlvZDH35fnUUO+s
+ LKKSD+GWW/Rf0y2NmQGBeXzNOGUvY1gZXL3BW6vWfR7iDSVfqGbSh/yTvStB5lf7mevB
+ bN0g==
+X-Gm-Message-State: ACgBeo0vqMTCVP0Vr23cpHo6UTByt2QsZr44qdlduP+FYRj7vTPMS6eF
+ YCFJfgmLPvTEuJUgXfGFgMzqJJvqpjBjrQ==
+X-Google-Smtp-Source: AA6agR5tW1Qc1N75uhKFMM1ihfhnaoucOCY0EcTEAJmV0ZZp96O/xbchUI74uf04Pqnm4xPKNVeKZg==
+X-Received: by 2002:adf:eb10:0:b0:225:70d5:e994 with SMTP id
+ s16-20020adfeb10000000b0022570d5e994mr1930175wrn.425.1662553470878; 
+ Wed, 07 Sep 2022 05:24:30 -0700 (PDT)
+Received: from sprado-office.spo.virtua.com.br ([2804:14c:46:297c::32fd])
  by smtp.gmail.com with ESMTPSA id
- 10-20020a170906308a00b0073d218af237sm8269243ejv.216.2022.09.07.05.18.56
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 07 Sep 2022 05:18:56 -0700 (PDT)
-Message-ID: <93b9c9bf-ed68-c177-f30f-defb8ba82388@mind.be>
-Date: Wed, 7 Sep 2022 14:18:54 +0200
+ m10-20020a056000008a00b00228db6b9406sm7685110wrx.45.2022.09.07.05.24.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 07 Sep 2022 05:24:30 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Wed,  7 Sep 2022 09:24:23 -0300
+Message-Id: <20220907122423.1783908-1-sergio.prado@e-labworks.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220904205702.1488199-1-geomatsi@gmail.com>
- <20220905201727.GJ1490660@scaer>
- <23566bac-ad05-3bd6-1b0b-ad4f3b3f5c20@mind.be>
- <20220906200718.GA1490660@scaer> <20220906203747.GB1490660@scaer>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20220906203747.GB1490660@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date;
- bh=caxIqPDiw0fQE/2pz+5PoJJ5lOkcHDkQc7FCrF3CQ3U=;
- b=C6vnFFTsAuVFWAwdbhE0ksMzWT7yWaFMrZKyHNfo0XVC16OHOXpLabdcuKwXYZ0Gxc
- rujG0w4Dsf4r+D1uJJFhrHvOh9b8x4OGF8QFFg/w7agoJp4Ld6NwG2Qy1hzf5kOnEt6d
- 0wuzvOe6kqTDfNYMPcUJ+3WYMXM+BMPlvh7vEREMeNodgERbTjyoEaNey2LFgdwAx30C
- gMXdFsXJyw2FrQdryT674Q0RXH+cZ+cshpdv0endJ4nJab2zsd6GrwRbglqcZ8dDgqkS
- ab8lB1ol/2ZDHXp+4Jqb8DCJfNU6KNxp77EKOLZUKd788biUH/wgvZSzN6xpsIQ3+oNs
- HRhw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=C6vnFFTs
-Subject: Re: [Buildroot] [PATCH 1/1] package/linux-tools: perf: add
- host-python3 dependency
+ d=e-labworks-com.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=2Ur7uvzzQlDhq/E/sbR13Lvsl87hNPEeLxvtKpuXtTo=;
+ b=4a1Q5KkA2+4sMP1xwxEL4cLyOROs2pPnpbhOS7v+cXYaGNCk4xDx9NhKrIQKb/qMr5
+ uTROhx/EXCXGq6jyqfcviHFQ8YOp0ATW+UZhETjX5yhOobqmOMrsfkmqcv9k6JUmu5o4
+ MGkZDj/G03KfL7HV7A7uaj2jpdJ5R0UIpgc31FEw27ogfbEuqfCeBqbb5HADwFTJls7v
+ x0eVBOErZQKj1FKpQSN+c3VqHvJsNTSI6eYprGtAiydXi/RmhSZTkkfLqnq6iymWA47s
+ XolT0u+QN83kB6TSByw/iWOLIcVcuY8iWTMdIYJ7N7hG+1Lv6gzycKx71Lbwktabw/dL
+ rGCQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=e-labworks-com.20210112.gappssmtp.com
+ header.i=@e-labworks-com.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=4a1Q5KkA
+Subject: [Buildroot] [PATCH] package/snort: bump to version 2.9.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,54 +92,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Sergio Prado via buildroot <buildroot@buildroot.org>
+Reply-To: Sergio Prado <sergio.prado@e-labworks.com>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+https://www.snort.org/downloads/snort/release_notes_2.9.20.txt
 
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/snort/snort.hash | 4 ++--
+ package/snort/snort.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 06/09/2022 22:37, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2022-09-06 22:07 +0200, Yann E. MORIN spake thusly:
->> On 2022-09-06 21:46 +0200, Arnout Vandecappelle spake thusly:
->>> On 05/09/2022 22:17, Yann E. MORIN wrote:
->>>> On 2022-09-04 23:57 +0300, Sergey Matyukevich spake thusly:
->>>>> Linux kernel commit 00facc760903 ("perf jevents: Switch build to use
->>>>> jevents.py")
->>>> 00facc760903 is only parts of 6.0-rc kernels so far, so unless one uses
->>>> bleeding edge technology, there is no issue. So, paying the price of a
->>>> host-pytohn3 build just for release-candidate kernels is a bit too much
->>>> in my opinion.
->>>> So, I added a config knob to drive this, like we have for host-openssl
->>>> and a few other host programs for building the kernel.
->>>   If only python is needed, no modules, then $(BR2_PYTHON3_HOST_DEPENDENCY)
->>
->> Dang, that's right, I totally forgot about that one...
-> [--SNIP--]
->> So, indeed, BR2_PYTHON3_HOST_DEPENDENCY seems a much better fit...
-> 
-> Err, hold on, no: we still do not want to pay the price for a
-> host-python3 build if the local system does not have python-3.4+ and the
-> kernel does not even need it, in fact.
-> 
-> So, I think we want to keep BR2_PACKAGE_LINUX_TOOLS_PERF_NEEDS_HOST_PYTHON3
-> but switch the _DEPENDENCY to BR2_PYTHON3_HOST_DEPENDENCY.
+diff --git a/package/snort/snort.hash b/package/snort/snort.hash
+index ac098564aa5e..a807d051d977 100644
+--- a/package/snort/snort.hash
++++ b/package/snort/snort.hash
+@@ -1,8 +1,8 @@
+ # From https://www.snort.org/downloads/snort/md5s
+-md5  b0350425e0c1e9c044c25aa13b47edf8  snort-2.9.19.tar.gz
++md5  b52cdf14e97ef953c800c3ef123beaa5  snort-2.9.20.tar.gz
+ 
+ # Locally computed:
+-sha256  b12fc6db72afb58987a2bf1954b8f45bde02047c235513c7663857b9506369c7  snort-2.9.19.tar.gz
++sha256  29400e13f53b1831e0b8b10ec1224a1cbaa6dc1533a5322a20dd80bb84b4981c  snort-2.9.20.tar.gz
+ 
+ # Hash for license files:
+ sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index 41f450541f84..8ce8ed5fa641 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNORT_VERSION = 2.9.19
++SNORT_VERSION = 2.9.20
+ SNORT_SITE = https://www.snort.org/downloads/snort
+ SNORT_LICENSE = GPL-2.0
+ SNORT_LICENSE_FILES = LICENSE COPYING
+-- 
+2.25.1
 
-  Yes, that's what I meant. The place where I added my comment was maybe not ideal.
-
-  Regards,
-  Arnout
-
-> 
-> Thoughts?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
