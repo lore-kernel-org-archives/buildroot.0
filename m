@@ -1,97 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F81EC54EE9
-	for <buildroot@archiver.kernel.org>; Wed,  7 Sep 2022 19:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92FB7C54EE9
+	for <buildroot@archiver.kernel.org>; Wed,  7 Sep 2022 20:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B808416C2;
-	Wed,  7 Sep 2022 19:54:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B808416C2
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9BBA83E6E;
+	Wed,  7 Sep 2022 20:30:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9BBA83E6E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pDQrEhqszrhR; Wed,  7 Sep 2022 19:54:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nSPLAXO0L4_a; Wed,  7 Sep 2022 20:30:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A809416A9;
-	Wed,  7 Sep 2022 19:54:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A809416A9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D38D83E64;
+	Wed,  7 Sep 2022 20:30:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D38D83E64
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 93BF81BF30D
- for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 19:54:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B3E0F1BF20D
+ for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 20:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B1E260D62
- for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 19:54:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B1E260D62
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83E9260FA1
+ for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 20:30:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83E9260FA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IjtHLq1FfsAE for <buildroot@lists.busybox.net>;
- Wed,  7 Sep 2022 19:54:23 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 482D160701
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 482D160701
- for <buildroot@buildroot.org>; Wed,  7 Sep 2022 19:54:23 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- n23-20020a7bc5d7000000b003a62f19b453so12605575wmk.3
- for <buildroot@buildroot.org>; Wed, 07 Sep 2022 12:54:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date;
- bh=QyWL0JA3gm6uWOzLZybppsF/DH8zXCrr+OKdO9yTrHU=;
- b=TBUcQVEkZi61vzGFsAnZGoZ2SEHAEwldApKy+0wcchJD9gaA0IvkIiFO87222hsXsc
- Sfx4XMmhCnbuiAPxv820ok3Z++ckEOxYDfp4n+czPuEA6VmFP8RKTjlJBRysaGhgQQF4
- IZL03JZyMBvN1h2ImMnkfa7xiKJ5Dwz1GCHuDL/T4Gx5op/EjwSlYPxpuG7uqe0wF6l5
- 8RXhU4E4exPylBbnZ70NfjsW9JrO2jHVB2uCbUHBMRTT9Qqcz4/tIICvIruy0XlMyUAq
- 8go4eByFDGzoN6kjBHR4oI/9bkbkwtwiyd5BBj2f1OV/5/Fuj4P+bN87DAq5oV8LsPXI
- HTEw==
-X-Gm-Message-State: ACgBeo392t5gdVmtvwSEDnRschC83qlT2Xa4fafnMqmZ746At7Cvlx6s
- f3BJ5mqhl7yqp2Xht7dzTms=
-X-Google-Smtp-Source: AA6agR5pg+ksmY5XFxsdN0+tcQgeA8LcVHeSBEavVJsjdK+mKBVzo+0hBmzOxPGG4edz4myRzonrWQ==
-X-Received: by 2002:a1c:4c03:0:b0:3a5:d65c:c1e7 with SMTP id
- z3-20020a1c4c03000000b003a5d65cc1e7mr68944wmf.4.1662580461247; 
- Wed, 07 Sep 2022 12:54:21 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521?
- (2a01cb058f8a18003dbee9eed79eb521.ipv6.abo.wanadoo.fr.
- [2a01:cb05:8f8a:1800:3dbe:e9ee:d79e:b521])
- by smtp.gmail.com with ESMTPSA id
- bp6-20020a5d5a86000000b00228692033dcsm13804119wrb.91.2022.09.07.12.54.19
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 07 Sep 2022 12:54:20 -0700 (PDT)
-Message-ID: <b16e1fd7-b766-4757-aba8-bef94cf9eec9@gmail.com>
-Date: Wed, 7 Sep 2022 21:54:18 +0200
+ with ESMTP id ZFb-lKxJUCyf for <buildroot@lists.busybox.net>;
+ Wed,  7 Sep 2022 20:30:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0E9160F6C
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D0E9160F6C
+ for <buildroot@buildroot.org>; Wed,  7 Sep 2022 20:30:29 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8198D240006;
+ Wed,  7 Sep 2022 20:30:26 +0000 (UTC)
+Date: Wed, 7 Sep 2022 22:30:25 +0200
+To: Sourabh Hegde <hrsourabh011@gmail.com>
+Message-ID: <20220907223025.35c93769@windsurf>
+In-Reply-To: <CADYjeSu2TUq3Wkk-AFK8TM=xazH66jKPD8Vg6HA9W3WnX2xymg@mail.gmail.com>
+References: <CADYjeSu2TUq3Wkk-AFK8TM=xazH66jKPD8Vg6HA9W3WnX2xymg@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220906203423.476196-1-romain.naour@gmail.com>
- <20220907073025.GG1490660@scaer>
-Content-Language: en-US
-From: Romain Naour <romain.naour@gmail.com>
-In-Reply-To: <20220907073025.GG1490660@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date;
- bh=QyWL0JA3gm6uWOzLZybppsF/DH8zXCrr+OKdO9yTrHU=;
- b=JOAJkb3kMV3QQjbmzZnTlC/beWWKds2QgV7wkjz2lfcDQTvxPHQ5sgLeibyAewgJuR
- 3GmY5Gt+XYaHAqF40lCvYoN3lS6stxkPy+Pfxq9gOP5j1i52Ixdy7IdBx/QSVP298Ktf
- 1BIaVzoQGyk334Zw9R+FHTrXWcEZe6KTBw8NKqg0s4HHUtcWq0HRhpVFZlsk6xM5ttEC
- hiyz50EZhDhcdcA4r0qbVdkoaXkK/Bq0rJt7c9sQaVwMoNVlzsKeE9uaF8PmgCPCDNay
- Gnf42r04M4ijiigEo8ocLRrp0txBF9KbDZtCbfGytN12v7DceI215/oV2lhwq1yXTv7D
- eo6A==
+ d=bootlin.com; s=gm1; t=1662582626;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=arrmT+Wyf0TgygmEG+728RhViiqATUJ5vqLlF3KnnX4=;
+ b=VYe5ctvmCGRWgKohA2xuBjvEsGIPGVEJke1airnN9VKTdlJtmHIPJijX3Kau6tLPhuVRji
+ FLxXxH1CXJ2WsJh980yIxXkNxZS6UlJORWATEUZkTyMW63XY0klhqn+aeoFXa78QSG+Gax
+ Jcy7ngVGQNOX/uqY5NJAFOAZaXHzt7pjBIrWiMgkpb2x8KzKqZyZqeicfB+JVbcb/DcgZo
+ 2BfE0pX934X5l3s+r+py2rkSiHnDKiC7DXkf9KDh9PkXBfh/n97YPavJYSXMWr8SoyQagd
+ 34NjryzmbsX1wg+ugHOXI7KhqI74I+HoGi4SRPDcuwRTZP+BbkV9KiPIzFiLgw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=JOAJkb3k
-Subject: Re: [Buildroot] [PATCH] arch/Config.in.powerpc: disable 64bits only
- target for PowerPC target variant
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=VYe5ctvm
+Subject: Re: [Buildroot] How to include prebuilt binary using buildroot?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,41 +75,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gWWFubiwgQWxsLAoKTGUgMDcvMDkvMjAyMiDDoCAwOTozMCwgWWFubiBFLiBNT1JJTiBh
-IMOpY3JpdMKgOgo+IFJvbWFpbiwgQWxsLAo+IAo+IE9uIDIwMjItMDktMDYgMjI6MzQgKzAyMDAs
-IFJvbWFpbiBOYW91ciBzcGFrZSB0aHVzbHk6Cj4+IEl0IHR1cm4gb3V0IHRoYXQgc29tZSBQb3dl
-clBDIHZhcmlhbnQgYXJlIGFjdHVhbGx5IDY0Yml0cyBvbmx5IGFuZAo+PiBmYWlsIHRvIGJ1aWxk
-IGFuIGludGVybmFsIHRvb2xjaGFpbiAoZmFpbCBvbiBnbGliYywgdUNsaWJjLW5nIG9yIG11c2wK
-Pj4gYnVpbGQpLgo+IFstLVNOSVAtLV0KPj4gZGlmZiAtLWdpdCBhL2FyY2gvQ29uZmlnLmluLnBv
-d2VycGMgYi9hcmNoL0NvbmZpZy5pbi5wb3dlcnBjCj4+IGluZGV4IGM0OGVkZDNiYjQuLmIzMjFk
-ZDJkNGMgMTAwNjQ0Cj4+IC0tLSBhL2FyY2gvQ29uZmlnLmluLnBvd2VycGMKPj4gKysrIGIvYXJj
-aC9Db25maWcuaW4ucG93ZXJwYwo+PiBAQCAtNjYsMTAgKzY2LDE0IEBAIGNvbmZpZyBCUjJfcG93
-ZXJwY182MDRlCj4+ICAJZGVwZW5kcyBvbiAhQlIyX0FSQ0hfSVNfNjQKPj4gIGNvbmZpZyBCUjJf
-cG93ZXJwY182MjAKPj4gIAlib29sICI2MjAiCj4+ICsJIyBnY2Mgc3VwcG9ydCBvbmx5IHBvd2Vy
-cGM2NCB0YXJnZXQKPj4gKwlkZXBlbmRzIG9uIEJSMl9BUkNIX0lTXzY0Cj4+ICAJIyBObyBDIGxp
-YnJhcnkgc3VwcG9ydHMgdGhpcyB2YXJpYW50IG9uIHBwYzY0bGUKPj4gIAlkZXBlbmRzIG9uICFC
-UjJfcG93ZXJwYzY0bGUKPiAKPiBBcyBUaG9tYXMgcHJldmlvdXNseSBzdWdnZXN0ZWQsIGxldCdz
-IHVzZSBwb3NpdGl2ZSBsb2dpYzoKPiAKPiAgICAgIyBnY2Mgc3VwcG9ydCBvbmx5IHBvd2VycGM2
-NCB0YXJnZXQsIGFuZAo+ICAgICAjIG5vIEMgbGlicmFyeSBzdXBwb3J0cyB0aGlzIHZhcmlhbnQg
-b24gcHBjNjRsZQo+ICAgICBkZXBlbmRzIG9uIEJSMl9wb3dlcnBjNjQKPiAKPiBBbmQgc28gb24g
-Zm9yIHRoZSBvdGhlcnMuCj4gCj4gTGV0J3MgdHJ5IGFuZCBnZXQgc2ltcGxlciBkZXBlbmRlbmNp
-ZXMsIHdoaWNoIG1ha2UgaXQgb2J2aW91cyB1bmRlciB3aGF0Cj4gY29uZGl0aW9ucyBlYWNoIENQ
-VSB2YXJpYW50IGlzIGFjdHVhbGx5IGF2YWlsYWJsZS4KPiAKPiBBbHNvLCBJIHRoaW5rIEpvZWwn
-cyBzZXJpZXMgWzBdIGhhZCBldmVuIG1vcmUgY2hhbmdlcyBpbiB0aGF0IGFyZWEsIGFuZAo+IGl0
-IHdvdWxkIGJlIHNvIG5pY2UgdG8gc2VlIGFuIHVwZGF0ZWQgcmV2aXNpb24uCgpTb3JyeSBJIGRp
-ZG4ndCByZW1lbWJlciBvZiB0aGlzIHBhdGNoIHNlcmllcyAobW9yZSBvbmUgbW9udGggYWdvKSBh
-bmQgbWFya2VkCmNoYW5nZXMgcmVxdWVzdGVkLiBBY3R1YWxseSBJIHdhcyBub3QgbGlzdGVuaW5n
-IHRvIHRoZSBtYWlsaW5nIGxpc3QgYXQgdGhhdCB0aW1lCmR1ZSB0byB2YWNhdGlvbnMgOnAKCkpv
-ZWwsIGNhbiB5b3UgcmVzZW5kIHlvdXIgc2VyaWVzIGFuZCBpbmNsdWRlIGFsbCB0aGUgbGluayBJ
-IHByb3ZpZGVkIGluIG15CmNvbW1pdCBsb2c/CgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKPiAKPiBb
-MF0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290LzIwMjIwNzI5MDAwOTA0LjEyOTUy
-OTUtMS1qb2VsQGptcy5pZC5hdS8KPiAKPiBSZWdhcmRzLAo+IFlhbm4gRS4gTU9SSU4uCj4gCgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+On Wed, 7 Sep 2022 16:40:24 +0200
+Sourabh Hegde <hrsourabh011@gmail.com> wrote:
+
+> An application package is not part of buildroot But I am looking for
+> possibilities to include it in my image. But there are prebuilt binary
+> available for the application in github. Now I am thinking to include them
+> by downloading and extracting the downloaded package (.tar.gz). I believe
+> this is something possible using Yocto using SRC_URI. But is this feasible
+> with buildroot also, may be with BR2_ROOTFS_POST_IMAGE_SCRIPT?
+> 
+> *Or*, using rootfs overlay the only solution?
+> 
+> Can someone please let me know what is the best approach?
+
+Just do a package that is responsible for downloading the package. Its
+CONFIGURE_CMDS and BUILD_CMDS will be left empty, and its
+INSTALL_TARGET_CMDS will simply install the precompiled binary to
+$(TARGET_DIR).
+
+See the Buildroot manual for more details on how to create new packages.
+
+Hope this helps!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
