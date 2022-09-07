@@ -1,71 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A05DFC38145
-	for <buildroot@archiver.kernel.org>; Wed,  7 Sep 2022 22:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6C60C38145
+	for <buildroot@archiver.kernel.org>; Wed,  7 Sep 2022 22:51:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE83061058;
-	Wed,  7 Sep 2022 22:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE83061058
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D04883EB2;
+	Wed,  7 Sep 2022 22:51:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D04883EB2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q-Vkw01evZ8L; Wed,  7 Sep 2022 22:08:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ItZUCwQhv32E; Wed,  7 Sep 2022 22:51:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F349360F3C;
-	Wed,  7 Sep 2022 22:08:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F349360F3C
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECD6C83EA9;
+	Wed,  7 Sep 2022 22:51:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECD6C83EA9
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B4B3B1BF255
- for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 22:08:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E6F661BF255
+ for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 22:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 897F081365
- for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 22:08:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 897F081365
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA66E83EA9
+ for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 22:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA66E83EA9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OiId46WKmkMt for <buildroot@lists.busybox.net>;
- Wed,  7 Sep 2022 22:08:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCE4B81346
-Received: from eu-smtp-delivery-151.mimecast.com
- (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BCE4B81346
- for <buildroot@busybox.net>; Wed,  7 Sep 2022 22:08:48 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-270-3fK99hWSN7asibRdXhGK4A-1; Wed, 07 Sep 2022 23:07:26 +0100
-X-MC-Unique: 3fK99hWSN7asibRdXhGK4A-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 7 Sep
- 2022 23:07:26 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Wed, 7 Sep 2022 23:07:26 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Grant Edwards' <grant.b.edwards@gmail.com>, "buildroot@busybox.net"
- <buildroot@busybox.net>
-Thread-Topic: [Buildroot] How to include prebuilt binary using buildroot?
-Thread-Index: AQHYwvkl+WxESnkON0W4WUMb1qMQwq3UhYzw
-Date: Wed, 7 Sep 2022 22:07:26 +0000
-Message-ID: <dc20805594c84f369d5be87bf5eb224b@AcuMS.aculab.com>
-References: <CADYjeSu2TUq3Wkk-AFK8TM=xazH66jKPD8Vg6HA9W3WnX2xymg@mail.gmail.com>
- <tfav6k$uda$1@ciao.gmane.io>
-In-Reply-To: <tfav6k$uda$1@ciao.gmane.io>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ with ESMTP id CJueFrCkCtm2 for <buildroot@lists.busybox.net>;
+ Wed,  7 Sep 2022 22:51:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6521E83EA8
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com
+ [IPv6:2607:f8b0:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6521E83EA8
+ for <buildroot@buildroot.org>; Wed,  7 Sep 2022 22:51:35 +0000 (UTC)
+Received: by mail-pg1-x52b.google.com with SMTP id 202so14943225pgc.8
+ for <buildroot@buildroot.org>; Wed, 07 Sep 2022 15:51:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date;
+ bh=6czUvL4OgfGZ30e/N3WXkgRc4tS8fdf42+mTgh7NuhE=;
+ b=hH893hWPn7pi9IPBPcu6Zh9nioqZCih3otlxpZh6mkwaXSmESfGJszTz/1V8ad3DPT
+ wc0LUUBNIpRGd5Ih4GFpWD83rV+dWw0TzT3pLvEkKybBcsaT18t201Tb6Wn3wKdNxcWf
+ 2K0aVj37NW9Et5//SRtR6xQ3ejQCUyugLx9ULy0g+IoY8DiRhAeeVqquRkta8jgPPwQJ
+ DAdrdooSir8GHDinipDnQWxz2HIBC5ihxySZzDeRv3+gUt1U6dbLjkgaeYbaTd2RnQYP
+ SOvB/pkEP5c0KkcxNC5cpJxqmTicImKyB8U48raFh9kxbPY5JroU9fonNysY6/Pog2vE
+ GkLA==
+X-Gm-Message-State: ACgBeo0UyM7sYkNINicT0sn8qNuCJ68jQ8m+JXw6FT+H10JMgXfxaUSy
+ NW4NUSpvGqsP4bkORNQ3cXoArQi9HcFHffEmCjclLEjV1Dg=
+X-Google-Smtp-Source: AA6agR4zj3OcnswYqs1TMLqrKmNW1XFj1mKwlFsB/hCZAopkOAz0o9zNmqeeF4uRFBCkZ4ykXrwkjqCkgqRelIolXx8=
+X-Received: by 2002:a05:6a00:228a:b0:53e:a46d:aa38 with SMTP id
+ f10-20020a056a00228a00b0053ea46daa38mr2059397pfe.79.1662591094673; Wed, 07
+ Sep 2022 15:51:34 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Subject: Re: [Buildroot] How to include prebuilt binary using buildroot?
+References: <20220905202002.4183680-1-james.hilliard1@gmail.com>
+ <20220906072158.GM1490660@scaer>
+ <CADvTj4rCFTZOm0MA+Ph7u8DmjPqgJw39oXqWoxPLWmERRCJrPg@mail.gmail.com>
+ <09be7323-3af8-2fa2-2d45-16d3d92e1c13@mind.be>
+In-Reply-To: <09be7323-3af8-2fa2-2d45-16d3d92e1c13@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 7 Sep 2022 16:51:23 -0600
+Message-ID: <CADvTj4pk0+0fQbFarBZ5vfoAjBHz1UJhJzEAyLJounQns7Exbw@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date;
+ bh=6czUvL4OgfGZ30e/N3WXkgRc4tS8fdf42+mTgh7NuhE=;
+ b=nBlygEY+EW39b7RSzb08Q1sYfvSGZji8I6KMYKAJ3Rb0HMjD5Rl+pEAJ2G8W0yw+kg
+ FcfGV/Qp5eq4ru6XqnOHGX10sQ6YbhcLdwPZ6IIhEl/HfyF1SIrlqoKlhwiThdLD4ICJ
+ Fzz/esY7zHlUG585VBRz4Ii9M6H+Lb15DDghfvVqb63PZnQi0ia4EprpJl01pnHuHDGe
+ WameNTgJ/B9KjnJDl1T0xI6ck4yxaiJrqIAMOlhtIgZch7gw/HTMwRDzHoJDN90wlSdI
+ ly5zANNnQ8h85HKo6T9zMfBKni7EtZwtYU+PR4rEDtS98ZGR+UHI5U4eJwSwRe/x57ZB
+ 4ZUg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=nBlygEY+
+Subject: Re: [Buildroot] [PATCH 1/1] Makefile: unexport TARGET env variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,38 +92,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Grant Edwards
-> Sent: 07 September 2022 21:33
-> 
-> On 2022-09-07, Sourabh Hegde <hrsourabh011@gmail.com> wrote:
+On Wed, Sep 7, 2022 at 6:42 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 06/09/2022 23:15, James Hilliard wrote:
+> > On Tue, Sep 6, 2022 at 1:22 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >>
+> >> James, All,
+> >>
+> >> On 2022-09-05 14:20 -0600, James Hilliard spake thusly:
+> >>> If set this can may break package builds in some cases such as the
+> >>
+> >> So, this is very probabilistic: 'can' and 'may'! ;-)
 > >
-> > I think this is rather a basic question:
+> > Well I think the breaking behavior depends on what TARGET is set to.
 > >
-> > An application package is not part of buildroot But I am looking for
-> > possibilities to include it in my image.
-> 
-> I configured buildroot to run a post-build script. In that script, I
-> copy various files to various places in the output/target tree. I'm
-> admittedly
+> >>
+> >>> host-icu build.
+> >>
+> >> Can you provide an actual error message and an explanation on how that
+> >> actually fails?
+> >
+> > I had set this in my env(for some non-buildroot compiler testing), and noticed
+> > it broke buildroot builds unless cleared:
+> > export TARGET=bpf
+> >
+> >>>> host-icu 70-1 Building
+> > PATH="/home/buildroot/buildroot/output/per-package/host-icu/host/bin:/home/buildroot/buildroot/output/per-package/host-icu/host/sbin:/home/buildroot/bin:/home/buildroot/.local/bin:/home/buildroot/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+> > PKG_CONFIG="/home/buildroot/buildroot/output/per-package/host-icu/host/bin/pkg-config"
+> > PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+> > PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+> > PKG_CONFIG_LIBDIR="/home/buildroot/buildroot/output/per-package/host-icu/host/lib/pkgconfig:/home/buildroot/buildroot/output/per-package/host-icu/host/share/pkgconfig"
+> >   /usr/bin/make -j33  -C
+> > /home/buildroot/buildroot/output/build/host-icu-70-1/source
+> > cd ./config; \
+> >      /usr/bin/make -f pkgdataMakefile
+> > rm -rf config/icu-config
+> > rebuilding config/icucross.mk
+> > rebuilding config/icucross.inc
+> > /bin/bash ./mkinstalldirs lib
+> > /bin/bash ./mkinstalldirs bin
+> > /usr/bin/install -c ./config/icu-config-top config/icu-config
+> > rm -rf pkgdata.inc
+> > chmod u+w config/icu-config
+> > mkdir lib
+> > mkdir bin
+> > LC_ALL=C /usr/bin/sed -f ./config/make2sh.sed < ./config/Makefile.inc
+> > | grep -v '#M#' | uniq >> config/icu-config
+> > config/icu-uc.pc updated.
+> > config/icu-i18n.pc updated.
+> > /usr/bin/make[2]: Making `all' in `stubdata'
+> > LC_ALL=C /usr/bin/sed -f ./config/make2sh.sed < ./config/mh-linux |
+> > grep -v '#M#' | uniq >> config/icu-config
+> > cat ./config/icu-config-bottom >> config/icu-config
+> >     (deps)     stubdata.cpp
+> > chmod u-w config/icu-config
+> > Note: rebuild with "/usr/bin/make VERBOSE=1 " to show all compiler parameters.
+> > make[3]: *** No rule to make target 'bpf', needed by 'all-local'.  Stop.
+> >
+> >>
+> >> I've looked at the icu source code, and all I could see are plain
+> >> assignments and references to TARGET. Variables assigned in a Makefile
+> >> are supposed to take precedence to variables from the environment, so I
+> >> am not sure I can see how that can actually fail...
+> >
+> > I assume it's not actually assigned in the makefile then?
+>
+>   It's conditionally assigned:
+>
+> ifneq ($(ENABLE_STATIC),)
+> TARGET = $(STUBDATA_LIBDIR)$(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
+> endif
+>
+>   There are a couple of Makefile.in where it's defined like that....
+>
+>   This does look like a very icu-specific thing though, so I think it should be
+> fixed in icu.mk itself, by setting TARGET= in the _ENV.
 
-We just use fakeroot again to expand the cpio archive
-buildroot generates, delete some stuff, copy some more files in,
-and then archive it back up.
+Set to empty like this?
+ICU_CONF_ENV += TARGET=""
+ICU_MAKE_ENV += TARGET=""
 
-That also means we can change our bits without having
-to rerun all the buildroot makefiles.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+>
+>   Regards,
+>   Arnout
+>
+>
+> >
+> >>
+> >> See for example commits which describes the actual reasons it fails:
+> >>      20ca008d0266 unexport TERMINFO to correct ncurses behavior
+> >>      2e32330c4a49 Makefile: unexport O
+> >>      d3910057c6ae Makefile: unexport 'DEVICE_TREE' environment variable
+> >>      6cff741ebaf7 package/ccache: do not force colored diagnostics
+> >>
+> >> Regards,
+> >> Yann E. MORIN.
+> >>
+> >>> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >>> ---
+> >>>   Makefile | 1 +
+> >>>   1 file changed, 1 insertion(+)
+> >>>
+> >>> diff --git a/Makefile b/Makefile
+> >>> index bd0b906cde..a82a22a276 100644
+> >>> --- a/Makefile
+> >>> +++ b/Makefile
+> >>> @@ -427,6 +427,7 @@ unexport GCC_COLORS
+> >>>   unexport PLATFORM
+> >>>   unexport OS
+> >>>   unexport DEVICE_TREE
+> >>> +unexport TARGET
+> >>>
+> >>>   GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+> >>>
+> >>> --
+> >>> 2.34.1
+> >>>
+> >>> _______________________________________________
+> >>> buildroot mailing list
+> >>> buildroot@buildroot.org
+> >>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> >>
+> >> --
+> >> .-----------------.--------------------.------------------.--------------------.
+> >> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> >> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> >> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> >> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> >> '------------------------------^-------^------------------^--------------------'
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
