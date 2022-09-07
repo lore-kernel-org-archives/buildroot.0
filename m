@@ -1,86 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF34FC54EE9
-	for <buildroot@archiver.kernel.org>; Wed,  7 Sep 2022 12:24:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BCF0C38145
+	for <buildroot@archiver.kernel.org>; Wed,  7 Sep 2022 12:26:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F6B4815CD;
-	Wed,  7 Sep 2022 12:24:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F6B4815CD
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7B7860AE0;
+	Wed,  7 Sep 2022 12:26:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7B7860AE0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ac4Y8r48rCsh; Wed,  7 Sep 2022 12:24:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id E3lbnPBZK4eW; Wed,  7 Sep 2022 12:26:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FA39814B8;
-	Wed,  7 Sep 2022 12:24:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FA39814B8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2F9551BF59E
- for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 12:24:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29DDF60AE7;
+	Wed,  7 Sep 2022 12:26:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29DDF60AE7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 622FF1BF59E
+ for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 12:26:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B458814B8
- for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 12:24:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B458814B8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BE52408B6
+ for <buildroot@lists.busybox.net>; Wed,  7 Sep 2022 12:26:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BE52408B6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gFkFwZ3vnDXt for <buildroot@lists.busybox.net>;
- Wed,  7 Sep 2022 12:24:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G2qBhKtJ-qdn for <buildroot@lists.busybox.net>;
+ Wed,  7 Sep 2022 12:26:31 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E481C8130C
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E481C8130C
- for <buildroot@buildroot.org>; Wed,  7 Sep 2022 12:24:32 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id t7so15107293wrm.10
- for <buildroot@buildroot.org>; Wed, 07 Sep 2022 05:24:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33E78408B4
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33E78408B4
+ for <buildroot@buildroot.org>; Wed,  7 Sep 2022 12:26:31 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id gh9so8069597ejc.8
+ for <buildroot@buildroot.org>; Wed, 07 Sep 2022 05:26:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=2Ur7uvzzQlDhq/E/sbR13Lvsl87hNPEeLxvtKpuXtTo=;
- b=PbB14ssacUNnfQG4M7FrJUpL4TbH82cq+Fzt7+tQ4TcgAv+OqCiglA9GCE9v27xiSW
- MH1tgRMnOQChuF3R1kOTgWsVah8025x3rJOLZUQ8Jlw7XyTFC+PZz8JX+D3HE/4Tq/A6
- bajNSrlJ1755T2mqocp6SW2V9yCx4cy/n81nJ+YT9caZXPF0iJV6M19jVI7LNtH2MJf9
- NFpdukX+9Bpskkqfim5SLzz7lPkU4z47PoeRu74yzoxToQlG4yAPchlvZDH35fnUUO+s
- LKKSD+GWW/Rf0y2NmQGBeXzNOGUvY1gZXL3BW6vWfR7iDSVfqGbSh/yTvStB5lf7mevB
- bN0g==
-X-Gm-Message-State: ACgBeo0vqMTCVP0Vr23cpHo6UTByt2QsZr44qdlduP+FYRj7vTPMS6eF
- YCFJfgmLPvTEuJUgXfGFgMzqJJvqpjBjrQ==
-X-Google-Smtp-Source: AA6agR5tW1Qc1N75uhKFMM1ihfhnaoucOCY0EcTEAJmV0ZZp96O/xbchUI74uf04Pqnm4xPKNVeKZg==
-X-Received: by 2002:adf:eb10:0:b0:225:70d5:e994 with SMTP id
- s16-20020adfeb10000000b0022570d5e994mr1930175wrn.425.1662553470878; 
- Wed, 07 Sep 2022 05:24:30 -0700 (PDT)
-Received: from sprado-office.spo.virtua.com.br ([2804:14c:46:297c::32fd])
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date;
+ bh=KYrESJOPuWFsflB0Y++9G1qyuFEfC9RTvHUhGY2keV8=;
+ b=Xr4sqZxcosuVOGk9Tg/6Us7+1N5OQW7ntps1dP+F8C1r7AqYNLG5A0oP7Gw/C6ON7P
+ sRxBsgM3ItfpiuYvR2HZfazUfYngWjpFoeRWLYZw3s6kM8YcTOKlTPEvqJtJhycLt5Uf
+ oUwO6d3y6YQIz5uhrAxGXoz51eSGx2DruGPiyP2I+xXJ0c8YFNJ5/otDg3TC/HqAj++Q
+ Pbw3xxEz9PtDUxgOjE8CiauBD/rWM2bVE/P2BzSASOUsgOTYuo66LsUBbit3liLQ27zS
+ IVnDqctaHfzll4UbAyI6x0W2XYCf3ovVJ+IPEEByXC+CQhTI8PB2lysZ9GPH1x/4fnUn
+ qsew==
+X-Gm-Message-State: ACgBeo02BaPJRc4o+vCBXCFLPSAh7G2yaBxSPJBiLfuC+slvZG5ydOOp
+ CA3G4fUKtBGrdk/6STLhEA0T+mb6YPFQMw==
+X-Google-Smtp-Source: AA6agR66mQL1LbeKJqwiivxORtQqiQRZpKdFMT1kzA4Nue25EJ4JlGfRG0ewphHJcJW0CBeuzzfA5A==
+X-Received: by 2002:a17:906:eeca:b0:730:6880:c397 with SMTP id
+ wu10-20020a170906eeca00b007306880c397mr2158447ejb.593.1662553589326; 
+ Wed, 07 Sep 2022 05:26:29 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- m10-20020a056000008a00b00228db6b9406sm7685110wrx.45.2022.09.07.05.24.29
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 07 Sep 2022 05:24:30 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Wed,  7 Sep 2022 09:24:23 -0300
-Message-Id: <20220907122423.1783908-1-sergio.prado@e-labworks.com>
-X-Mailer: git-send-email 2.25.1
+ lb26-20020a170907785a00b007708851c6f0sm484219ejc.146.2022.09.07.05.26.28
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 07 Sep 2022 05:26:28 -0700 (PDT)
+Message-ID: <91856098-4b98-970b-667c-d05681ff0299@mind.be>
+Date: Wed, 7 Sep 2022 14:26:26 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-GB
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>, buildroot@buildroot.org
+References: <20220902063939.2761040-1-dario.binacchi@amarulasolutions.com>
+ <20220902063939.2761040-2-dario.binacchi@amarulasolutions.com>
+ <f2bc336a-b07e-3f17-4a13-226be75eba64@benettiengineering.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <f2bc336a-b07e-3f17-4a13-226be75eba64@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=e-labworks-com.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=2Ur7uvzzQlDhq/E/sbR13Lvsl87hNPEeLxvtKpuXtTo=;
- b=4a1Q5KkA2+4sMP1xwxEL4cLyOROs2pPnpbhOS7v+cXYaGNCk4xDx9NhKrIQKb/qMr5
- uTROhx/EXCXGq6jyqfcviHFQ8YOp0ATW+UZhETjX5yhOobqmOMrsfkmqcv9k6JUmu5o4
- MGkZDj/G03KfL7HV7A7uaj2jpdJ5R0UIpgc31FEw27ogfbEuqfCeBqbb5HADwFTJls7v
- x0eVBOErZQKj1FKpQSN+c3VqHvJsNTSI6eYprGtAiydXi/RmhSZTkkfLqnq6iymWA47s
- XolT0u+QN83kB6TSByw/iWOLIcVcuY8iWTMdIYJ7N7hG+1Lv6gzycKx71Lbwktabw/dL
- rGCQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=e-labworks-com.20210112.gappssmtp.com
- header.i=@e-labworks-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=4a1Q5KkA
-Subject: [Buildroot] [PATCH] package/snort: bump to version 2.9.20
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date;
+ bh=KYrESJOPuWFsflB0Y++9G1qyuFEfC9RTvHUhGY2keV8=;
+ b=Rw2oPBvnKS8CidkhPQIZThwKqrnpHPbJkbZhFqMHWfeKpxpHIpEzik2aWTPRjpmjLI
+ MoQ/Mh2U0nSNIC/BwajTB0HH0wq9YKMsgY/xP8MqDm9Mr3s3Dp7rw8b71o/YGQSgeq/r
+ h7AEd9Rvs7F81ZuIjIhnVu+Msb4d2AN7sqiKE4vk9MwNLXOlM2EsfDbioKh5CwxGBBct
+ kC1npVjKhUtOoQu6J7/MuWd9R5DMkizzW/Ny8O6kyMHlp/PfY2TNK3mRkdzVc4FIHI3K
+ 11h79SMJLItbv4N5CoGIS5YgctMBdavKI7O8i7LS72w1/KhA79jKq1TByldQAphzJXry
+ HZJg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Rw2oPBvn
+Subject: Re: [Buildroot] [PATCH v4 1/2] configs/imx8mn_bsh_smm_s2_defconfig:
+ new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,53 +104,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Sergio Prado via buildroot <buildroot@buildroot.org>
-Reply-To: Sergio Prado <sergio.prado@e-labworks.com>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Michael Trimarchi <michael@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com,
+ Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://www.snort.org/downloads/snort/release_notes_2.9.20.txt
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- package/snort/snort.hash | 4 ++--
- package/snort/snort.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/snort/snort.hash b/package/snort/snort.hash
-index ac098564aa5e..a807d051d977 100644
---- a/package/snort/snort.hash
-+++ b/package/snort/snort.hash
-@@ -1,8 +1,8 @@
- # From https://www.snort.org/downloads/snort/md5s
--md5  b0350425e0c1e9c044c25aa13b47edf8  snort-2.9.19.tar.gz
-+md5  b52cdf14e97ef953c800c3ef123beaa5  snort-2.9.20.tar.gz
- 
- # Locally computed:
--sha256  b12fc6db72afb58987a2bf1954b8f45bde02047c235513c7663857b9506369c7  snort-2.9.19.tar.gz
-+sha256  29400e13f53b1831e0b8b10ec1224a1cbaa6dc1533a5322a20dd80bb84b4981c  snort-2.9.20.tar.gz
- 
- # Hash for license files:
- sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index 41f450541f84..8ce8ed5fa641 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNORT_VERSION = 2.9.19
-+SNORT_VERSION = 2.9.20
- SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
--- 
-2.25.1
+On 06/09/2022 23:04, Giulio Benetti wrote:
+> Hi Dario, Michael, All,
+> 
+> On 02/09/22 08:39, Dario Binacchi wrote:
+[snip]
+>> +# CONFIG_CRYPTO_DEV_SUN8I_CE is not set
+>> +# CONFIG_CRYPTO_DEV_FSL_DPAA2_CAAM is not set
+>> +# CONFIG_CRYPTO_DEV_QCOM_RNG is not set
+>> +CONFIG_CRYPTO_DEV_AMLOGIC_GXL=m
+>> +CONFIG_INDIRECT_PIO=y
+>> +CONFIG_CRC_CCITT=m
+>> +# CONFIG_CRYPTO_DEV_HISI_SEC2 is not set
+>> +# CONFIG_CRYPTO_DEV_HISI_ZIP is not set
+>> +# CONFIG_CRYPTO_DEV_HISI_HPRE is not set
+>> +# CONFIG_CRYPTO_DEV_HISI_TRNG is not set
+>> +CONFIG_IRQ_POLL=y
+>> +# CONFIG_DEBUG_INFO is not set
+>> +# CONFIG_DEBUG_INFO_REDUCED is not set
+>> +CONFIG_CORESIGHT=y
+>> +CONFIG_CORESIGHT_LINK_AND_SINK_TMC=y
+>> +CONFIG_CORESIGHT_SOURCE_ETM4X=y
+> 
+> This ^^^ produces a very shrinked Linux image, but here in Buildroot we
+> usually want a generic defconfig or fragment that makes the boards
+> working.
+> 
+> Then I ask you to only add the mandatory CONFIG_* needed for the board
+> to work correctly and drop all the CONFIG_* that optimize for size or
+> build modules to speed up Linux loading.
 
+  I don't think I agree with that. There are many boards where we don't use a 
+full v6_v7_defconfig. It's true that it's annoying that we need to have such a 
+large kernel config in Buildroot, but I do think it's a good thing to have it.
+
+
+> The goal is to be generic and let the user to have all enabled by arch
+> default and just in case tweak Linux configuration. And in that case the
+> user will have a complete defconfig. This is instead a fragment only
+> where you usually add few CONFIG_*.
+> 
+> Try to check the other *.fragment under buildroot/board for that.
+> 
+
+[snip]
+>> b/board/bsh/imx8mn-bsh-smm-s2/patches/linux/0001-dmaengine-mxs-use-platform_driver_register.patch 
+>>
+>> @@ -0,0 +1,45 @@
+>> +From 7ec9f1a48b1041f1bc11ed0f858245fd2626f4e6 Mon Sep 17 00:00:00 2001
+>> +From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>> +Date: Sun, 22 May 2022 17:40:15 +0200
+>> +Subject: [PATCH 1/2] dmaengine: mxs: use platform_driver_register
+> 
+> Patches must be git formatted one by one, 
+
+  Not actually one by one - just generate thim with "git format-patch -N".
+
+> this to have no patch number.
+> The reason is that if you later remove some patch only need to rename
+> the file name index. So please re-generate all patches one by one so the
+> subject becomes [PATCH] without numbers.
+
+  Note that the check-package script will warn you about this issue.
+
+
+  Regards,
+  Arnout
+
+[snip]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
