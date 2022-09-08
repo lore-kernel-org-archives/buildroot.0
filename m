@@ -1,71 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8ABEC38145
-	for <buildroot@archiver.kernel.org>; Thu,  8 Sep 2022 09:46:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6DE5ECAAD5
+	for <buildroot@archiver.kernel.org>; Thu,  8 Sep 2022 09:54:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 274124156D;
-	Thu,  8 Sep 2022 09:46:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 274124156D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4396261226;
+	Thu,  8 Sep 2022 09:54:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4396261226
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PT2AEYTUwHiw; Thu,  8 Sep 2022 09:46:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rJKcX8ZSPX74; Thu,  8 Sep 2022 09:54:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 313D440B20;
-	Thu,  8 Sep 2022 09:46:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 313D440B20
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1BC3C1BF36A
- for <buildroot@lists.busybox.net>; Thu,  8 Sep 2022 09:46:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5888E61208;
+	Thu,  8 Sep 2022 09:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5888E61208
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 513171BF36A
+ for <buildroot@lists.busybox.net>; Thu,  8 Sep 2022 09:54:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03DCE84079
- for <buildroot@lists.busybox.net>; Thu,  8 Sep 2022 09:46:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03DCE84079
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3626B61208
+ for <buildroot@lists.busybox.net>; Thu,  8 Sep 2022 09:54:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3626B61208
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RYHov2DgEXhR for <buildroot@lists.busybox.net>;
- Thu,  8 Sep 2022 09:46:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HvRSHYX1Sp-v for <buildroot@lists.busybox.net>;
+ Thu,  8 Sep 2022 09:54:43 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75AFF83EF0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 75AFF83EF0
- for <buildroot@buildroot.org>; Thu,  8 Sep 2022 09:46:43 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:440f:501d:7d45:a1fe])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id AB8E15FFC1;
- Thu,  8 Sep 2022 11:46:36 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 08 Sep 2022 11:46:36 +0200
-Date: Thu, 8 Sep 2022 11:46:36 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20220908094636.GI1585594@scaer>
-References: <20220904200409.3153993-1-romain.naour@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BE7260BF8
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com
+ [IPv6:2001:4860:4864:20::2a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3BE7260BF8
+ for <buildroot@buildroot.org>; Thu,  8 Sep 2022 09:54:42 +0000 (UTC)
+Received: by mail-oa1-x2a.google.com with SMTP id
+ 586e51a60fabf-12ab0eaa366so3520347fac.13
+ for <buildroot@buildroot.org>; Thu, 08 Sep 2022 02:54:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date;
+ bh=8I5lcIrtYTmdHtsqlGxAQEsBvyL4n9yWr/zJj9GwZYg=;
+ b=Gri72IkRN4NSyLwDNK6YUL2HNey38jZQ9UHqH62+DgshwFgtkw8HryX86ubwzDgHJF
+ OQhGa7z9fP0J0w8zVL+9w1ySUJv9EcbfYS/syVHWVBbD3VG01DCD243zGEMPJYZNsiGg
+ 1r35Biq60cxn817MaEjSB+Q5cCvJtUuEiJFSY66NvjYB4zztcR31kX3VRr5rCX7eRDul
+ Z+nNPc464daOal/lmp+8zcw5wYbrrqAFkWix3Rhdn0R1kj3g2kwE59fnaIV+uZMa47ky
+ MbvKctBnYtOPJDyr4lo2dBJoefqIJsnZi7PE/r5vlP5ZD4fa8VvDFpxQXuvceLU2JfCw
+ VXzQ==
+X-Gm-Message-State: ACgBeo1bKNLhlQTA0ii/1XBHpOHAuQX8ORWFf+f5EjK1JG36iTCdrkjS
+ FIuWBvSNfs/aW30/Z8ob6dBH8yLEdQo/76URkW8nueukFOs=
+X-Google-Smtp-Source: AA6agR6Ni5D2+Q3p3rMvRtqxVST5Lxljgifh5Qe9rQbKazalGJ2tH7+W8hxzdMRo+1Jc7n1jFsJ0AyJxGPpk0PxfY1A=
+X-Received: by 2002:a05:6870:344d:b0:11e:4aa4:869b with SMTP id
+ i13-20020a056870344d00b0011e4aa4869bmr1335195oah.208.1662630876490; Thu, 08
+ Sep 2022 02:54:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220904200409.3153993-1-romain.naour@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1662630399;
- bh=8X61pogtlFiAEy3qljnem5rbEbedEpfggUa8XTt8Ga0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=b9WadJpbGMn6/2GzxFmFcFsrkxNcfl4MD6sdZSAey2PYNUhEo00SEGg9Fqv4YAGvh
- fZk2UYleyxYnstVZo2CLdK5h8RuZardxtq/7Uh8XIlhRrKWcHQseN6RVFyVdwPdiKm
- psmhZ0MHBZ1gphTAPJMW0CI1BrGfFPuj4Nxf9qt92pCRHd/wuX6jIctKg9WamMnXFH
- ps3jnRin8/Xir54jOfwMwDh4mvE6vZKXjjDRiGluGp7A47205NOn03t6lLxA5E0MLz
- G7KThIWY6JUWf3ZMb1VjrKDVr7NKiZHuUsMnQeRD3tSUDDrlDULkxjtI6IaQEIXV7o
- bFhXc6rA5/jkA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=b9WadJpb
-Subject: Re: [Buildroot] [PATCH] arch/xtensa: xtensa little endian target
- requires an overlay file
+From: Sourabh Hegde <hrsourabh011@gmail.com>
+Date: Thu, 8 Sep 2022 11:54:25 +0200
+Message-ID: <CADYjeSumGE326iMjWw=NJoHpcp+L0tzSvMbufoNU1WxjPmbXag@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date;
+ bh=8I5lcIrtYTmdHtsqlGxAQEsBvyL4n9yWr/zJj9GwZYg=;
+ b=qYkk1CGeSnY6oca+AsTsz5fOvXRelZeBhvXcDPNOnTeHc6dQr32L9eeOG16PbwYjn5
+ bD6H6GsWqhLI575+K93+/3W9CLUVgnIQEPk5/dlVVeJ0aw2N9Zujgv3naapFWQzhqrtu
+ kEwZcQjMuAqKf+ZWFzTwSqI6dGrkNy9arQ2OvuvD5GmbvoavCfskjKzfV61TU3uQk/ON
+ 85f5IWEZcVZey28K7oYGmraaS921jGSXPSe3NvJo+5k2gk5rh0GFdId0CBHRz4F74vLO
+ Iht90sILY8ArLozzICGFqVsTZKuk8hviqHWxNPpleZvFBqj1JFReaFuAU6EO0SvWYQDN
+ XlZA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=qYkk1CGe
+Subject: [Buildroot] How to configure cron in BusyBox to obtain similar
+ behavior as systemd service?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,76 +88,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2738652372598254480=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Romain, All,
+--===============2738652372598254480==
+Content-Type: multipart/alternative; boundary="000000000000c933d605e8276a2a"
 
-On 2022-09-04 22:04 +0200, Romain Naour spake thusly:
-> Using a custom Xtensa processor configuration select little endian
-> by default. But xtensa for little endian requires an xtensa overlay
-> file containing a version of xtensa-config.h header for gcc setting
-> XCHAL_HAVE_BE to 0.
-> 
-> When BR2_XTENSA_LITTLE_ENDIAN is selected, we have to check if
-> an overlay file is provided. Error out if BR2_XTENSA_OVERLAY_FILE
-> is empty.
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/f0b/f0ba47d2534aeb3cc2921124aa639ae3aa072b9b
-> 
-> xtensa-buildroot-linux-uclibc/bin/ld: ldso/ldso/ld-uClibc_so.a(ldso.oS): compiled for a big endian system and target is little endian
-> 
-> [1] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=include/xtensa-config.h;hb=2ee5e4300186a92ad73f1a1a64cb918dc76c8d67#l28
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  arch/arch.mk.xtensa | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
-> index fd410f6bfa..516d77bf91 100644
-> --- a/arch/arch.mk.xtensa
-> +++ b/arch/arch.mk.xtensa
-> @@ -34,3 +34,11 @@ define arch-xtensa-overlay-extract
->  		$(ARCH_XTENSA_OVERLAY_FILE) | \
->  	$(TAR) --strip-components=1 -C $(1) $(TAR_OPTIONS) - $(2)
->  endef
-> +
-> +# By default GCC build xtensa for Big Endian. To build for Little Endian a
-> +# Xtensa overlay file must be provided.
-> +ifeq ($(BR2_XTENSA_LITTLE_ENDIAN),y)
-> +ifeq ($(call qstrip,$(BR2_XTENSA_OVERLAY_FILE)),)
-> +$(error No xtensa overlay file provided. Check your BR2_XTENSA_OVERLAY_FILE setting)
-> +endif
-> +endif
+--000000000000c933d605e8276a2a
+Content-Type: text/plain; charset="UTF-8"
 
-Following the discussion in this thread, and the feedback from Max, I've
-applied the changes I suggested, and then applied to master, thanks.
+Hello All,
 
-Regards,
-Yann E. MORIN.
+I am fairly new to BusyBox and has previously worked with systemd as init
+system. Now I want to switch to BusyBox as init system. I am using
+Buildroot tool develop custom linux distribution. I have bunch of systemd
+service and timer files and they run at certain interval to trigger some
+actions. But now I have to adapt it to BusyBox scripts to obtain similar
+behavior. I couldn't find any example/manual to demonstrate how this can be
+done. And also I wanted to know if cron or crontab or anacron could be used
+to schedule these executions and what are the downsides to it? Below I have
+added some systemd service and timer files as reference and I would like to
+know how this could be converted to BusyBox compatible. This would be the
+starting point for me to continue further.
 
-> -- 
-> 2.34.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+example.service
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[Unit]
+Description=Test
+After=network.target
+
+[Service]
+User=root
+Environment="x=/etc/xx.cnf"
+ExecStartPre=/bin/ping www.google.com
+ExecStart=/usr/bin/example
+WorkingDirectory=/mnt/test/
+TimeoutStartSec=20m
+Restart=on-failure
+RestartSec=2m
+
+[Install]
+WantedBy=multi-user.target
+
+example.timer
+
+[Unit]
+Description=Example timer setup
+
+[Timer]
+OnActiveSec=1m
+OnUnitActiveSec=20m
+
+[Install]
+WantedBy=basic.target
+
+I am interested to know how failed jobs could be retriggered automatically
+and how "Environment", "ExecStartPre" and "WorkingDirectory" could be
+adapted in crontab to have similar behavior to systemd.
+
+I also read that if cron is used then there could be issue with
+/var/spool/cron/crontabs dir as this will be deleted after reboot and cron
+jobs will fail. Is this true? Or do I need to put cron files in boot image
+rather than rootfs image?
+
+If there is any other way in busybox to achieve this, I would be happy to
+know about it.
+
+Your help will be much appreciated.
+
+Thanks in advance
+
+P.S: Please let me know if any info is missing here
+
+--000000000000c933d605e8276a2a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello All,<br><div><br></div><div>I am fairly new to BusyB=
+ox and has previously worked with systemd as init system. Now I want to swi=
+tch to BusyBox as init system. I am using Buildroot tool develop custom lin=
+ux distribution. I have bunch of systemd service and timer files and they r=
+un at certain interval to trigger some actions. But now I have to adapt it =
+to BusyBox scripts to obtain similar behavior. I couldn&#39;t find any exam=
+ple/manual to demonstrate how this can be done. And also I wanted to know i=
+f cron or crontab or anacron could be used to schedule these executions and=
+ what are the downsides to it? Below I have added some systemd service and =
+timer files as reference and I would like to know how this could be convert=
+ed to BusyBox compatible. This would be the starting point for me to contin=
+ue further.<br></div><div><br></div><div>example.service<br><br>[Unit]<br>D=
+escription=3DTest<br>After=3Dnetwork.target<br><br>[Service]<br>User=3Droot=
+<br>Environment=3D&quot;x=3D/etc/xx.cnf&quot;<br>ExecStartPre=3D/bin/ping <=
+a href=3D"http://www.google.com">www.google.com</a><br>ExecStart=3D/usr/bin=
+/example<br>WorkingDirectory=3D/mnt/test/<br>TimeoutStartSec=3D20m<br>Resta=
+rt=3Don-failure<br>RestartSec=3D2m<br><br>[Install]<br>WantedBy=3Dmulti-use=
+r.target</div><div><br>example.timer<br><br>[Unit]<br>Description=3DExample=
+ timer setup<br><br>[Timer]<br>OnActiveSec=3D1m<br>OnUnitActiveSec=3D20m<br=
+><br>[Install]<br>WantedBy=3Dbasic.target</div><div><br></div><div>I am int=
+erested to know how failed jobs could be retriggered automatically and how =
+&quot;Environment&quot;, &quot;ExecStartPre&quot; and &quot;WorkingDirector=
+y&quot; could be adapted in crontab to have similar behavior to systemd.</d=
+iv><div><br></div><div>I also read that if cron is used then there could be=
+ issue with /var/spool/cron/crontabs dir as this will be deleted after rebo=
+ot and cron jobs will fail. Is this true? Or do I need to put cron files in=
+ boot image rather than rootfs image?</div><div><br>If there is any other w=
+ay in busybox to achieve this, I would be happy to know about it.<br><br>Yo=
+ur help will be much appreciated.<br><br>Thanks in advance<br><br>P.S: Plea=
+se let me know if any info is missing here<br></div></div>
+
+--000000000000c933d605e8276a2a--
+
+--===============2738652372598254480==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2738652372598254480==--
