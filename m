@@ -1,73 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F818ECAAD3
-	for <buildroot@archiver.kernel.org>; Fri,  9 Sep 2022 14:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23485ECAAD3
+	for <buildroot@archiver.kernel.org>; Fri,  9 Sep 2022 15:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 625F641A42;
-	Fri,  9 Sep 2022 14:47:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 625F641A42
+	by smtp2.osuosl.org (Postfix) with ESMTP id AECD541642;
+	Fri,  9 Sep 2022 15:40:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AECD541642
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3u4YEGGwhWAI; Fri,  9 Sep 2022 14:47:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ub62VZHHZAQ5; Fri,  9 Sep 2022 15:40:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17FB041A45;
-	Fri,  9 Sep 2022 14:47:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17FB041A45
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F0311BF370
- for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 14:47:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E37DE415EE;
+	Fri,  9 Sep 2022 15:40:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E37DE415EE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 998C51BF232
+ for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 15:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2A8576FB0F
- for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 14:47:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A8576FB0F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 74D1283449
+ for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 15:40:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74D1283449
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cvvK_uNqAdRS for <buildroot@lists.busybox.net>;
- Fri,  9 Sep 2022 14:47:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC65160A97
-Received: from smtpdh17-2.aruba.it (smtpdh17-2.aruba.it [62.149.155.117])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC65160A97
- for <buildroot@buildroot.org>; Fri,  9 Sep 2022 14:47:05 +0000 (UTC)
-Received: from [192.168.50.173] ([146.241.28.15])
- by Aruba Outgoing Smtp  with ESMTPSA
- id WfHZoKd08yUocWfHZol7Um; Fri, 09 Sep 2022 16:47:02 +0200
-Message-ID: <e669a83d-5721-7ff6-4108-2ec043f08d82@benettiengineering.com>
-Date: Fri, 9 Sep 2022 16:47:00 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TSokjC4qJt08 for <buildroot@lists.busybox.net>;
+ Fri,  9 Sep 2022 15:40:24 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C53D383E17
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C53D383E17
+ for <buildroot@buildroot.org>; Fri,  9 Sep 2022 15:40:23 +0000 (UTC)
+Received: from [192.168.0.66] ([92.154.77.116]) by mrelayeu.kundenserver.de
+ (mreue107 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1Mleo0-1pEIOB0pO6-00imii; Fri, 09 Sep 2022 17:40:17 +0200
+Message-ID: <c1d1e5ac-efe5-eeff-af5d-dd9d6eae5696@green-communications.fr>
+Date: Fri, 9 Sep 2022 17:40:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-References: <20220909140241.909074-1-dario.binacchi@amarulasolutions.com>
+To: Alex <earthquake.de@freenet.de>, buildroot@buildroot.org
+References: <661e0716-bbca-eec2-8a4a-0d155edea5c6@freenet.de>
 Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220909140241.909074-1-dario.binacchi@amarulasolutions.com>
-X-CMAE-Envelope: MS4xfKMGIW9xgkbso5eiQyilUn4gwEgi9HdnH/8FoQRt+/BB9+fwB/dktIWkFLN3yBnHnukqOejYs8U4EI0L9ZoSJaBg/0A0E/obzYRPpX+k7GmcDkNpN6C3
- Q0d6gLRKmxIMv95QtT1+D9EbKjFXSBzrXJNhf3mQSG15i7YbNfn5iRqB03pE96QE+2DMpuE/YHpJyk5BAKu1ik5LPL49upOeFTYKTrIzD/n56ynarCYYCnpk
- +/LM07Gk0t8hEV4zBW4NtsYmHqpjUk4r8ioY8fq6lqaFQdNVge+qrjfO4MYJeSUMIDoWgaICbQAJ/JWv5AGscjVJlaOooV+yYoymzbKHjy+EnKuJwV9YMua2
- zJQSv4nWvYy3lIIskmABZrCFdQXMDASt5yRn7gx3u3M/nb5CVyTkrUIMjPtV+eXnQJgbqidV5SYDyQM6Dq5eEYQEriqG3+P+Yjda3LLDoqHJTDDryE8=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1662734822; bh=qHSL6UGptZ07V13zfwDAlc2Q/KOmBtMU2+V7ZJi5OVE=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=krTGXqdZ/vd8L2+lH7sD+CYhidDppp7b6QILjDYw+uhibPVRxYP7cOv/LsX0CIeO0
- uX0FVqONgwzEM9KeLi/5eExLRhcukcGKNyyfjBQg3T4VWNk54sQEnxPMBKSD0mh0IU
- 9NSpGMhy8HEKCEamYoSVnJyrOtItjW/sr2S/wmDNF3B/5SllG9UpfB4lnEQFeKNKRs
- Q98sRsNmxVE78HqhYOssxwGjGjV2/RF9fgnxms4epzD5Z/4ONrBl5VNUEDuQB0WSgq
- HLYsEtbqkAcxgTUlFm0ZHjytw+OtEHkSfDIKeUYA/p6kADhp2GUstYhmEDwVp8H7b9
- NAw1K/0irPWFA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=krTGXqdZ
-Subject: Re: [Buildroot] [PATCH v7 0/2] Add support for BSH smm s2 [pro]
- boards
+From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+In-Reply-To: <661e0716-bbca-eec2-8a4a-0d155edea5c6@freenet.de>
+X-Provags-ID: V03:K1:jFsyGImckYNPkzMLNv34ln/N7CkM8oB9xCGvi3Wq5vcS4M6jmTk
+ qlxGrwAz7jpoEw9NzKliyJBnc+h4hT3BWuz9U5p869lakk2dEt0onjq++fWHfysDbOuQsUD
+ kMzZohHvs8ViJvESWS67dAaG9JcHZfT4CStpYc/C7o4XzywUOXKeFNuASV8Yf5qZq4BapUi
+ Ro35hph5VWhSmz+XmR4+g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xs+F8TPVJSY=:mLeSV2WFz94Li2JfwBeqLS
+ hcG8g9j51mjkZHVfr2BkRVOA763irWuLhw58s0By9v8IsY9H/8LL26SZG4h7H3b1kB0EUfOwT
+ +4/MUw+WH4h7tJ/LG7b4Fis35T0IgYQGPX3Knjf4iuXxrdXmEjI8gArPYKokl3pL8nzmFJy8i
+ O6m5sZrBxUSc/59S9Eh7CFrQWTam9eqQAIirFDANuviDQSXe540jNEofI+w0bsfbIUHErv+Km
+ RwRipfOBF5SGkggyBX8vxCd2oAj+x0+C+Bhv+rn9R6JOxdATxXtfFzOOi3LBbI7G3z1CsaSaZ
+ G8bAXAjrqvEW2tbGEgDVEwcrFFG28O9HKRGa1g3fYTYHnsiTrZ/GxiAWCnHPvUnpcghETcjSz
+ 9QXn0aOaEDa5XwLEVMRl7/yD67M39qWhivHFHwIBACb+reIelkiAdsf201DdtdHYzLZMb32pT
+ qttSr2910hACzSeK66zc+DRQd0AXtfQEimqmLECZD8odDr4vkOq3ssUfgYSgKKHAkT8//FpVH
+ YiSJp1/3GgO9i1MZAyWkbRArIHkAzcGMwEb4mCr79OGl0jiZcm+YbEgUVGOludc5/kS8nI/Wz
+ 1znixdaQDfUYu9sSKaQ8rbynECsqWMGbqFku4uLI46nadPAWe8PHMdR/veklVXnphpMWRvTzw
+ rB90K3ms+v/jmAlNINjhNU92imtoDuj7p1Z7/qDfbYk4FE6Pi6qc+Eg9pva+LQwdsAJnpo34M
+ 2MaVcF4+W82ObtSHqsZvM1MB0r7BKvYRAkaqt2TOU8s+Y2Eu6wRmWyFiXopwl72vwOUQti8Ks
+ TZm758aBwjiUZBuggyU6AL65uT1G726Gbgp9+C9MrMTBACr/AQ=
+Subject: Re: [Buildroot] libstdc++ DSO missing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,122 +77,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>,
- Michael Trimarchi <michael@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com,
- Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
+On 09/09/2022 14:34, Alex wrote:
+> Hi,
+> 
+> I intergrated my application to buildroot. Complie is successfull by
+> when linking I get errors:
+> 
+> x86_64-buildroot-linux-gnu/sysroot/usr/lib64/libstdc++.so.6: error
+> adding symbols: DSO missing from command line
 
-thank you but this was not needed since patchwork already combines the
-various tags.
+This error means that:
+- the linker found a library with a DT_NEEDED dependency on libstdc++.so.6
+- the linker found libstdc++.so.6
+- the linker is missing symbols
+- the linker found the missing symbols in libstdc++.so.6
+- but the linker command line does not include libstdc++.so.6
+- so the linker is not sure if the user actually intended to link with 
+libstdc++.so.6.
+- so it refuses to link.
 
-Best regards!
--- 
-Giulio Benetti
-Benetti Engineering sas
+Since libstdc++.so.6 is the C++ runtime library, this either mean that:
+- you are linking a C++ program with ld or gcc instead of g++
+- you are linking a C program with a C++ library that requires libstdc++.so.6, 
+in this case you may need -lstdc++ on the linker command line.
 
-On 09/09/22 16:02, Dario Binacchi wrote:
-> The series adds support to BSH smm s2 [pro] boards.
-> 
-> Changes in v7:
-> - Add Giulio Benetti Reviewed-by tag.
-> - Add Heiko Thiery Reviewed-by tag.
-> 
-> Changes in v6:
-> - Change offset in imx-boot partition of genimage.cfg from 33k to 32k.
-> 
-> Changes in v5:
-> - Update the commit description.
-> - Bump the kernel version to 5.19.7.
-> - Remove the 0003-Revert-Revert-mtd-rawnand-gpmi-Fix-setting-busy-time.patch
->    patch.
-> - Regenerate all added patches (Linux kernel and U-boot) so that they contain
->    the [PATCH] header without numbering.
-> - Add patchwork link to U-boot patch.
-> 
-> Changes in v4:
-> - Update the commit description.
-> - Bump the kernel version to 5.18.19.
-> - Shrink the Linux configuration.
-> - Add 3 dashes to the kernel patches to avoid having the version history
->    to fall into the final commit log.
-> - Add lore.kernel.org links to the submitted patches.
-> - Apply the 0003-Revert-Revert-mtd-rawnand-gpmi-Fix-setting-busy-time.patch
->    to the kernel.
-> 
-> Changes in v3:
-> - Update the commit description.
-> - Bump U-Boot to version 2022-07.
-> - Remove U-Boot patches merged in version 2022-07.
-> - Update the Linux patches.
-> 
-> Changes in v2:
-> - Drop the patch that added the 'uuu' package. It has been merged.
-> - Patch 1/2: "configs/imx8mn_bsh_smm_s2_defconfig: new defconfig":
->    - Change commit subject and description.
->    - Update linux patch to version 4. It hasn't been merged yet but has
->      been reviewed. This is the most up-to-date version.
->    - Replace `Co-developed-by:' tag with `Co-authored-by'.
->    - Use the buildroot's output directory if the binaries directory is
->      not passed as a parameter to the `flash.sh' script.
->    - Replace the linux.config file with an architectural defconfig and
->      a config fragment for the changes.
->    - Remove useless and deprecated statements in nand-full.lst.
->    - Remove the buildroot configurations for ext2/ext4 filesystem creation.
-> - Patch 2/2: "configs/imx8mn_bsh_smm_s2_pro_defconfig: new defconfig":
->    - Change commit subject line.
->    - Use the buildroot's output directory if the binaries directory is
->      not passed as a parameter to the `flash.sh' script.
->    - Replace the linux.config file with an architectural defconfig and
->      a config fragment for the changes.
-> 
-> Dario Binacchi (1):
->    configs/imx8mn_bsh_smm_s2_defconfig: new defconfig
-> 
-> Michael Trimarchi (1):
->    configs/imx8mn_bsh_smm_s2_pro_defconfig: new defconfig
-> 
->   DEVELOPERS                                    |   8 +
->   .../common/imx8mn-bsh-smm-s2/linux.fragment   | 895 ++++++++++++++++++
->   board/bsh/imx8mn-bsh-smm-s2-pro/extlinux.conf |   4 +
->   board/bsh/imx8mn-bsh-smm-s2-pro/flash.sh      |  23 +
->   board/bsh/imx8mn-bsh-smm-s2-pro/genimage.cfg  |  17 +
->   board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh |   7 +
->   board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh |   3 +
->   board/bsh/imx8mn-bsh-smm-s2-pro/readme.txt    |  73 ++
->   board/bsh/imx8mn-bsh-smm-s2/flash.sh          |  26 +
->   board/bsh/imx8mn-bsh-smm-s2/nand-full.lst     |  29 +
->   ...ine-mxs-use-platform_driver_register.patch |  45 +
->   ...2-dmaengine-mxs-fix-section-mismatch.patch |  39 +
->   ...Remove-rootwait-1-to-all-the-affecte.patch | 160 ++++
->   board/bsh/imx8mn-bsh-smm-s2/post-build.sh     |   4 +
->   board/bsh/imx8mn-bsh-smm-s2/readme.txt        |  75 ++
->   configs/imx8mn_bsh_smm_s2_defconfig           |  40 +
->   configs/imx8mn_bsh_smm_s2_pro_defconfig       |  41 +
->   17 files changed, 1489 insertions(+)
->   create mode 100644 board/bsh/common/imx8mn-bsh-smm-s2/linux.fragment
->   create mode 100644 board/bsh/imx8mn-bsh-smm-s2-pro/extlinux.conf
->   create mode 100755 board/bsh/imx8mn-bsh-smm-s2-pro/flash.sh
->   create mode 100644 board/bsh/imx8mn-bsh-smm-s2-pro/genimage.cfg
->   create mode 100755 board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh
->   create mode 100755 board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh
->   create mode 100644 board/bsh/imx8mn-bsh-smm-s2-pro/readme.txt
->   create mode 100755 board/bsh/imx8mn-bsh-smm-s2/flash.sh
->   create mode 100644 board/bsh/imx8mn-bsh-smm-s2/nand-full.lst
->   create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/linux/0001-dmaengine-mxs-use-platform_driver_register.patch
->   create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/linux/0002-dmaengine-mxs-fix-section-mismatch.patch
->   create mode 100644 board/bsh/imx8mn-bsh-smm-s2/patches/uboot/0001-include-configs-Remove-rootwait-1-to-all-the-affecte.patch
->   create mode 100755 board/bsh/imx8mn-bsh-smm-s2/post-build.sh
->   create mode 100644 board/bsh/imx8mn-bsh-smm-s2/readme.txt
->   create mode 100644 configs/imx8mn_bsh_smm_s2_defconfig
->   create mode 100644 configs/imx8mn_bsh_smm_s2_pro_defconfig
-> 
+> Are libraries missing from buildroot environment?
 
+No, only the linker command line is incorrect.
+
+> Additional I get warnings that some .so files not found, but they are
+> available in output/build/<Tool>/lib
+
+The compiler will only search libraries in output/staging/lib or 
+output/staging/usr/lib.
+The package for <Tool> should install the libraries there, so that other 
+programs can link with them. This is done by putting
+
+<TOOL>_INSTALL_STAGING = YES
+
+in its .mk file.  If <Tool> is a generic-package (and not a 
+autotools/meson/cmake package), then you also need to manually explain how to 
+install libraries to $(STAGING_DIR)/lib:
+
+https://nightly.buildroot.org/manual.html#_infrastructure_for_packages_with_specific_build_systems
+
+> But I included this path by $(@D)/../<Tool>/lib
+
+While it may work, this is a kludge.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
