@@ -1,134 +1,134 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E60CECAAA1
-	for <buildroot@archiver.kernel.org>; Fri,  9 Sep 2022 09:17:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBF09ECAAA1
+	for <buildroot@archiver.kernel.org>; Fri,  9 Sep 2022 09:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC43540CDA;
-	Fri,  9 Sep 2022 09:17:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC43540CDA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3216D60C19;
+	Fri,  9 Sep 2022 09:17:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3216D60C19
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sHcTHygdknxU; Fri,  9 Sep 2022 09:17:31 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 609B060C03;
+	Fri,  9 Sep 2022 09:17:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 609B060C03
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 38DA31BF3A6
+ for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 09:17:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 134AE40CD8
+ for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 09:17:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 134AE40CD8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o2h9zcahs_U8; Fri,  9 Sep 2022 09:17:07 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 091F340BF2;
-	Fri,  9 Sep 2022 09:17:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 091F340BF2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3DBC21BF3A6
- for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 09:17:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0808541A19
- for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 09:17:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0808541A19
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y_L0ppgZYE2A for <buildroot@lists.busybox.net>;
- Fri,  9 Sep 2022 09:17:00 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3EAaMmag4fmv for <buildroot@lists.busybox.net>;
+ Fri,  9 Sep 2022 09:17:28 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC33441A04
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
- (mail-eopbgr80080.outbound.protection.outlook.com [40.107.8.80])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EC33441A04
- for <buildroot@buildroot.org>; Fri,  9 Sep 2022 09:16:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B16B140BF2
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com
+ (mail-vi1eur05on2049.outbound.protection.outlook.com [40.107.21.49])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B16B140BF2
+ for <buildroot@buildroot.org>; Fri,  9 Sep 2022 09:17:27 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oWCNfX+WgomSE0QIRPo0hIiM1yW8ZqvxES82G75PDhUlT1rWrq1srxL8YEbNLsXCHseumUlXmKqobBxIea5f8obEUGJsMFnsggd9Z+K7rWN+/AQQr+uzXOAaI2y5ezUnQcn+qeViDpzE0sQYSehBhXkSYYVCb9WnHLIy5N4DOqbb/QkdBCp1lBK7exnbsIUnCJYj84NFL4CbcbJS3malgzPC4EM3EY5pmQXR1jHGnjzzGg5dXrCZ9/AtjqcYQOtUC2so9VH1UeeiOF3wL7afY7nEPcmh2WQKfpbAhZI3PTyfZhufPkSlOjd50K02ikGAdwJO1HoRKQdxb5D4FT9zRA==
+ b=bnF066PpPo1yTwZ+QUu59LsUJEfdl/A2vrn8ht6ft7ADf3NcrA1JevX94wPt7x6DTf020h7tm9RXCwSQlyL2ioFSK7+ilb4Y+fEgfB+9WCt8VeDswdjqZkdnTjAlzS/aY1z+wI5d2hd3vVq+5Tho9vYW8CVz62VqvAmUAACesvH2RsfmoUCsqi/zdcsufv8xYQBmTrfEnWKkcaZSHs0EdmHdlLZu/mrzjm0Z0Mn7b9D2Js9mvuB4aGrSvm/KRtsVvaMI7W4kWDp3OCGypNyO9YvPEjzoaxU+DacK/9LqEQOCU/i8OCPaH241YgzRnk77/W8Uc0A4DxfyV2W1bUy2Eg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Dj/cEYPmct59BbcXOMc+Fr2XuoO1B6nxNk96QpvV+J4=;
- b=LWxBv0/PE6RLZouwWY50v+a4fX+BcyVNfzg2ny/560vz6nQUVBz0DsIsOKUHQ+ovYHdBpv6MaREvNCZW9W+GfcjO4Jr9ippcdb64wqOyRryFIFT8MuBb42bui8iaIwtI2j6McJTcX7nRCG+FT/NRg7Qc0TP6fR184QRrwwmrDDE6/+ovX0MTH2hx7kAkJ5Jc5+466fDASexTe1hLTcxhxZcOZufqDvN7+WxTZGoN8872hDdXRTcj05doVSj9abnKw/MZ7dn+k6z1TJ5hEsC/etKjkzQLczNdztNn6r3y055WAF/IvtJ+nyce920s15dZtMbwblDOfIh1Fdl41KWtQQ==
+ bh=C301FJGeR8vS9Jb4PHZcagpIKRKzvDiDt7+5m6rJj+4=;
+ b=JEpjczBg7kqIUU2C/YEwtwhCVKqkhdfkLz6iy+AJiR+hGilNM3cbDE4vXHYlhebMOZ82mMaNUWW7Nk1fHyvZ076X5JcnlioK8YBKjHQMPflATCuv5hNDzX10mbDzwZsfDwJthF7qHZI8GG7Bx0eGLncZcEkstvnxY2fbeNOKuFADlJCWxjUh/Hg5PRObX7rQnesnu920wI7lPWp3JsW0fIf/R3URxoSMXjN0ReKcoa0eO7UFXIDxZhr+efulave/yT0n+T+eFfomjvYi47R9vonjD7aSqKLPEl7jKz1AraInBgcUovH8MY+NdDQpc8el+07VrBFWNkGBWHVl3PiUrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
  dkim=pass header.d=abatec.at; arc=none
 Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
- by PR3P190MB0924.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:90::5) with
+ by PR3P190MB1018.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:93::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.12; Fri, 9 Sep
- 2022 09:16:51 +0000
+ 2022 09:17:23 +0000
 Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::40ee:4b47:3d8b:cb76]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
  ([fe80::40ee:4b47:3d8b:cb76%4]) with mapi id 15.20.5612.014; Fri, 9 Sep 2022
- 09:16:51 +0000
+ 09:17:23 +0000
 To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 1/4] package/polkit: fix typo in POLKIT_IGNORE_CVES
-Thread-Index: AQHYxCfztIEGIAYANkqDg5oN2uBXxA==
-Date: Fri, 9 Sep 2022 09:16:51 +0000
-Message-ID: <VI1P190MB0493E3FB0F35DECBF7EF12089F439@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Thread-Topic: [PATCH 2/4] package/polkit: test /usr/share/polkit-1/rules.d
+Thread-Index: AQHYxCiauSUijWEQcEqHkN+6ook5NQ==
+Date: Fri, 9 Sep 2022 09:17:23 +0000
+Message-ID: <VI1P190MB0493802F19F29DD225F55FDF9F439@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
 Accept-Language: en-GB, en-US
 Content-Language: en-GB
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1P190MB0493:EE_|PR3P190MB0924:EE_
-x-ms-office365-filtering-correlation-id: a66d154d-fc7e-4b91-7177-08da92440817
+x-ms-traffictypediagnostic: VI1P190MB0493:EE_|PR3P190MB1018:EE_
+x-ms-office365-filtering-correlation-id: e94b1cca-4ac9-465b-1095-08da92441af3
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mMquWFbL68otPD/5plohuw5sKBTEkqAyVCjN85EClfeAQDvKYRi4kvAsVHFFnlUGMg0fJ6VH6GlPdZosv4ld6fcAwdggak8pDRZeQFPonfLBSQW9BuEZbJVc/yHwC2bTlWC1YWlfHBokaFfHQR+OB63hmB7VSyLdybt0GzwrHkBurtzPM5MZZumbeqgpOFJwZsV83lFgBo6uJzkvHkQxHvKQJ49Gq00wVtNciqqIwXFBExsX3p9F4Lh67l0fCnfOG5JCFMFzczPMwMuPt7Kfri3hUpl5dzO16Kvw6R4xkMaR9KmnQQ3QX6tBCdugVmHIXrD3ZG6XgQdt/t7eWx5hDntEHf1mpkz3XmwNNowTDYDLfW9g3SUYo8srqRf+OfW0G+Su9jMEM6HITrv/HsdLt9ysAVlLlQXXclJC/CTg2OBCvcCSI6ZszpqUVlxIq8CYIpj7TE64pTOAIqOwee31eqB6/V9GXe/8V15AvDPGc8KVJGisSFapS5Is67fTPKbzAaV/1R5vHKAG2hlYAI/6uz6Uwpagm6Emocjnq8bwa3lyeKXEDlxM0HJWGkcQZO+mg3JnK91f3O1z7F/R+VV0RwDiHqJkJnuKzzOaAVZ4ZF2kHVNZUxTDSn7LSNGNeG9tgeKlTH2ZJmirJ9ji8/+GrEqjQr+DoIFbNvum7o0QDlroOtMkuWOT8PP+IajCrFgoRb2BWEyfnjOoNfXPgNQqDC1vVIDw9Nx9lYAvPexUt2IK6S8hLqGQ4j3yg8Bq5LrPxy5DDCKMJzPactLlVBPU6w==
+x-microsoft-antispam-message-info: EquRO2l9wjkwpQwL2nTNgJAJ0POyMe3YULrKG6kWcGL+TO65MnF0QlkKT0Gf4XhI/XwEaLZDTq7APdw/tsqaNpGbTOoSNr7nPwqjLJNa7GreXVudzO4ZLqiEIfb5KsuthfwGu9quCaHZ5oGmWTVJnN/LFxDqGPMH6L5e47V7FOKzfaISvlr0sPfhFpULDysRk34VAQR/Mwr/lv4MXontryEn7Ng2QAtiS2lmRFZPzUOkAFU2cugKS50hD/h6vt8+ywFWPxdxPOwOX0RoFa+nsx96Oqu0FHTgIIOUWUz6dhwSUuFMUjBM/Uxpjyr/dRjui5T8HhULbndQ4Y6uH6EMNWoasLyQrUp/YV74ipBixmZDRbRL2bqdBHvf8Xo2oOsCCSxeYeroA5dLZUeoYyZNI3epIC90dZ1R7FrhvtcnfIl0aIgyFZ7BQW+5BOSQLekoF9c2vCor1kJzHw+u1aKYkCNfzITA8FiUHZtTvvkpw3W5Jhq7wMNcBKazit8iAGX8M+WC0Fgd3UusyaH9ss2m+mNX2TR3lr89fTD0Mk6fv4Lu8M7BZicbfELFwCZWAdJfDCeLYhrDr7fktINM092pVVMLFfurgfQ2oETLFBVG/0mtuKY0NBD/G889vpAV1z5rf+GVj7yvTcImY+FFdyaN2jRU97SIiL8Fs9MPPa8FOXZ/zchbRSo7zqK3kqyAr1Ow1GTEgwfIz6vRugfzRGRsf/shK4woGRHIQiex23n+rZUTffTGqC9Qv5aEEvIGxg9FJrGPPhY/1M/qsQBAL2uryQ==
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230016)(4636009)(396003)(376002)(346002)(136003)(39840400004)(366004)(6916009)(8936002)(52536014)(4326008)(8676002)(76116006)(5660300002)(4744005)(64756008)(66446008)(33656002)(316002)(2906002)(66946007)(66476007)(66556008)(478600001)(41300700001)(6506007)(186003)(55016003)(83380400001)(38100700002)(7696005)(9686003)(26005)(122000001)(71200400001)(86362001)(38070700005);
+ SFS:(13230016)(4636009)(376002)(396003)(366004)(136003)(39840400004)(346002)(6506007)(7696005)(478600001)(9686003)(41300700001)(26005)(71200400001)(2906002)(52536014)(8936002)(5660300002)(316002)(55016003)(6916009)(186003)(66946007)(66446008)(66556008)(66476007)(76116006)(8676002)(4326008)(64756008)(86362001)(33656002)(122000001)(38100700002)(38070700005);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?H8r2/7GifWXBIPOO+OQ1n/tj+3Sx20V4jPlMqAQ7KtrOM2yur1vemezWM/?=
- =?iso-8859-1?Q?V05R0HMmdim0I+C4ABT5krsksE1mepp+IUjEa+3lb+UIE3xd49RplDdsfY?=
- =?iso-8859-1?Q?m/ghFqvANA6U2/+SdlSizfxl4CLQRcPkVnQeV3IknXBGKvd8roVAEoTCVY?=
- =?iso-8859-1?Q?s3J/hwwImGMbzdXGaelfRN+A02b4lyEorfRsQ7xegfjfe1dKyiuDFJMgs3?=
- =?iso-8859-1?Q?O2ipwGxUUM6kVX5zQYdTKxhbJLU59+DtA7XEMZwCkBpBeqb2TNofwHrzFq?=
- =?iso-8859-1?Q?7aNkYs0wFeiAvT9juPQ1qNEEBCrmPyzAsyh5o4ezAmr0c60lCtQOQh/5RT?=
- =?iso-8859-1?Q?qYv5H6MP00TF+hJaMv9mGfVw47lMgBvG2rTu60s9OtXjhPUvMk/Sui7Oxc?=
- =?iso-8859-1?Q?iPEykM+30dX5sofPNnMfDyW88YtJW7ihwf1aR10aoutkPAUDbyHeuTss4C?=
- =?iso-8859-1?Q?hcVJR6ExAOq06dPTFQ+t+ziyGZ2UuWabpumQiFAyE1UeJknrfARwpsJ1lQ?=
- =?iso-8859-1?Q?kS2aoVhZf/W2zLC+KzlrxXfd9lErfvVfJIl9RT4iKASlbPemaJ8176X0Tr?=
- =?iso-8859-1?Q?aLPlAIIH4GyDtOrgMxLbIjUw+jJdbmtXC1wJSChd/w4lPKp/bIraInujpa?=
- =?iso-8859-1?Q?s7GOfbW1WSyN+B/mK0hWWvkBCx5I530cIeyqTXAjFBUIJYTqP1durATm4x?=
- =?iso-8859-1?Q?MiSKWI+g6ijNhz5roXWjeHAIq7E2fZdk7lF1jhv0v8OudkPfuHSNkkA3rx?=
- =?iso-8859-1?Q?rKOQ7oBag2q2I5PxaPs60g5jDw0GRfCEItjOz69tS6UIvUo6z/fuRLvuVp?=
- =?iso-8859-1?Q?w2ec0H1EmYZ7uUFM3ZSGhb8Lc1KxSpUKPCA9DxNen5KVLy++PZgsCzNfCq?=
- =?iso-8859-1?Q?vt5s7bMR82NNQpxLz9FU6ig0omcRELGZFMScUL+GNup+lKkM6tdr/xn8M6?=
- =?iso-8859-1?Q?RI3ApRCg2OugcKXbtluI9U4aSbkhRY/H4UiNkdsgBLzEuXIK6gCUKibzWM?=
- =?iso-8859-1?Q?SMkl88G4jHX72DI15ENrD+7g92XLWOucY9K84L3uv/kHc8RQLibG1LLD1k?=
- =?iso-8859-1?Q?nGJpGREtOsbML8kLLWr2C6xAeePkb6WQ+QREDC2Nu98r/e+Wi2IfIWUQW4?=
- =?iso-8859-1?Q?tWP5D99kKCom8r1HWoYgiAOgVtK0HmQy+K9h1ejeATQQxMBtwinSy2qfN2?=
- =?iso-8859-1?Q?+eBgb+284mb7WwUkAyhvMvDO1AfSim2AWOKbsc75CMQXgUmv17J9OGVrC9?=
- =?iso-8859-1?Q?CBhaulkdsuXoYxtU+jlljCKIN4lsyihtcKS7TVZyKVchA60Hb6MaKswOtK?=
- =?iso-8859-1?Q?0Gmt3MSq/ymTrMWIIYK0EMmvIgDwNuPayErsO7vCiTSQAF06KRxzommurT?=
- =?iso-8859-1?Q?L5MwdSniiBpQLkC8vmqu+PD78lWJjb8VKtjQgJNRehCupmyvj8fIwNsg6Q?=
- =?iso-8859-1?Q?f0noYalrnwWctychm4gfzX6uhqzES4b+pkvsDGbNCaeTdz290+LNMl85H9?=
- =?iso-8859-1?Q?AhSOu6RvbMfYC/J8+DZhHY5X1IDAsT5JDM6Lrv6+RXnnRy6jL8bJx72aan?=
- =?iso-8859-1?Q?Uzq4e3O339nNpffamLIo5GYoKIaVhAzCKdwSTJLcPNu63WDz/0SnyB67Jf?=
- =?iso-8859-1?Q?C+RtOWKPFoLJc=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?iEAyRXnJTL5pM+t4fT81jJZK7XXBonqGmrbpeJACQEi813uZOb3f//Xu3I?=
+ =?iso-8859-1?Q?rasuNutv8FBCCCx698zsz2eGbwu2tOA6bhwDglGsJriWXVXABDmfdH+9A9?=
+ =?iso-8859-1?Q?WUmc6A+30pWjZqylTN907QruZXQQvT8tGrQWVIt+Czi1rP6HVL4tQDoaYA?=
+ =?iso-8859-1?Q?RJxGTxxKgsW5iKgPDU5ALZpdT7eDzA7OCtTHGZ6GQEwXwSgm/aGlaGNoaW?=
+ =?iso-8859-1?Q?c5uDhB3MtfStKESsqaRQOM9BoWifg/xNoGL9zRcY8Ud7PmWWRjHZlboGs+?=
+ =?iso-8859-1?Q?QW0cetli+Ql5+YV2ySRIOBSxhK33iqz/NHigxAS4zh6wWiOHm1sOkpRSyo?=
+ =?iso-8859-1?Q?mTDEQ3Uuo4FVtTvEN0gsxSJ8H4UMQbKB9qOjj/jnW0+AsEt5mYR4/2mUDQ?=
+ =?iso-8859-1?Q?qd6D0oawvfrJ4bD+GDyoNFRkLmd+oEayuJlqiDFRGZyXRWm0VZzfgcUcHs?=
+ =?iso-8859-1?Q?1gynx48nvrPJahPhFJy1v8dgMRkR5jpRNhPDOFTuAACLzx7pgjYjwGAj9P?=
+ =?iso-8859-1?Q?VrzjzW77W/Z+Yuu7jd2920sx9ZYp0p5MOIWpdvSiUCrIczGYHE6jE74Cfa?=
+ =?iso-8859-1?Q?z0TjcFyvx5g6NSXPA+VM/NyV9lFbrLbfhOuObnSOUcYDERIZ1cNzB0PSmN?=
+ =?iso-8859-1?Q?aUPbBeCjZOvr+REEzslo4d5mT/d0QyM3PK7UkkCr8PLHyZXODxq8anw+Ut?=
+ =?iso-8859-1?Q?KBtnLnlKfxRKExuYheopGX3AlsGawL0qvVcm5kUld14VzQX6CONJajJcT5?=
+ =?iso-8859-1?Q?bws8UuiIFsSVb6KgClsbi9gMgN+o1pc/z0GLlFe88Tqj7WIaLbX20a0im1?=
+ =?iso-8859-1?Q?AySrreZILiwt327YCtBMBNoDoPU2SieubLfiWGThbh8hvMOgmjOQ0EeQnN?=
+ =?iso-8859-1?Q?GYpDbCwCY3d2nZZUotw5FnTtVpnAYTQWcxPYtXR8EMVo54ACy8la4PtNbV?=
+ =?iso-8859-1?Q?dmNEnpC+ezUeJMcQnz9x83HNDJk+5yN0eu5TX+qLP8jXCUvpuWnxEAkyJG?=
+ =?iso-8859-1?Q?xJfybdP+xTWiFfGWufVIIrUDxTwmMhpmxBMP4fqsSW9bWxdy9UpPMEtqsZ?=
+ =?iso-8859-1?Q?Eb4V2g7sepwybj489ucr+IFOVK9s2tDEP6thLGOgK64Eln6fHo+OUvk7IM?=
+ =?iso-8859-1?Q?gkTNkkCcH1aycmqMBqxkGkEtdJjqiu/+eCazF8JzmxiVhu4ziR2tL5QL96?=
+ =?iso-8859-1?Q?nX5Ca/f0eAnuT00jmUhztJbya3DBi7rmTOJidEmdLj6ZgPxKEm7RaCllIL?=
+ =?iso-8859-1?Q?k1z+IuvF3y1fdH7s4Ux4wX9yEUSkax3IGbDHuEpi9wJEML9U3Ow7ZEU4CY?=
+ =?iso-8859-1?Q?p08eykEUhIfD9S7Uqyu9sY4+UiM41V78lJwVq5Ci+UBV4jd0Vrkm2EPnB2?=
+ =?iso-8859-1?Q?LaEZ9jIFBvO0+Guym85LivyZx4hbxe9pUEk8je+nKcIlvSuYRN6w8XmZcF?=
+ =?iso-8859-1?Q?/hSr6txGDGkQ1Hv9/dyTujJKT1uh+QpXNSpTpb7ieKglMe+NStiZxzz7L+?=
+ =?iso-8859-1?Q?RZICzA3u8K8t82jbgF31hSZoStp8SAK8/kJO//0PmYKujByMZSIPdEUgn9?=
+ =?iso-8859-1?Q?QSFuSBaM995p55XrRxceEdp2Sck8ytwutg/YQtWx+cylseLYGSbqp5OJCM?=
+ =?iso-8859-1?Q?SPHfvAtySo8VU=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: abatec.at
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: a66d154d-fc7e-4b91-7177-08da92440817
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2022 09:16:51.6907 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e94b1cca-4ac9-465b-1095-08da92441af3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2022 09:17:23.3759 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iSL+xraEMTfMZOg38lipDqvy0T49chnfEyMoYCfDDVgfqy9GTiwKdr1InB3jkgb+F9Y2g+JpJlah7aGciCy+uQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P190MB0924
+X-MS-Exchange-CrossTenant-userprincipalname: Lyk9sU/AgoIZDIerLKoiA9EJQuIJ9UoJB6oEUHbUQEKn9v2qwbBuTN8W8a/PoFQ2AB1tO2152lyezWndxkg0Fw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P190MB1018
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=abatec.at; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Dj/cEYPmct59BbcXOMc+Fr2XuoO1B6nxNk96QpvV+J4=;
- b=CFeBuRYcqZ4+zg7gyduailU3I0ddgCsM7nCwrzTQ1g0R02qEiRVn0XHgkTRcJhot/sjzx/cgaa0M7jePtAqetVD6eSb8RchZlSJED5d2E3R8Pg/wSkP7BIVZCRzvyznOA6xbekAxLXM7Ij1QgCXFRQJPtrvf1Ff8LdVmBf5BYwo=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=C301FJGeR8vS9Jb4PHZcagpIKRKzvDiDt7+5m6rJj+4=;
+ b=Abh1lEs8AeAeIjhPSW0HAMXrLpTzebMB3nRdI+CeovCodIdQwrORMBUz1yjn5TCj6IOvR4jtlCEXh001nR5C1HpGOF9zBGmMgorO75ycUzDAHQNLAly8V+E+8TqttKkpCDm9pvtdWRAXvNx+nkkvoolBv5i6KmJyC5XpKqhj+Io=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=CFeBuRYc
+ header.s=selector1 header.b=Abh1lEs8
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH 1/4] package/polkit: fix typo in
- POLKIT_IGNORE_CVES
+Subject: [Buildroot] [PATCH 2/4] package/polkit: test
+ /usr/share/polkit-1/rules.d
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -148,27 +148,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The POLKIT_IGNORE_CVES variable was missing a "S",
-therefore the CVE still showed up in the wrong column.
+Polkit has two directories that are used to store rules.
+Add the second directory to the existing tests, to ensure
+that both work in the future.
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 ---
- package/polkit/polkit.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/package/test_polkit.py | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index 61666594a2..a8b371acf8 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -12,7 +12,7 @@ POLKIT_CPE_ID_VENDOR = polkit_project
- POLKIT_INSTALL_STAGING = YES
+diff --git a/support/testing/tests/package/test_polkit.py b/support/testing/tests/package/test_polkit.py
+index 502d38d13e..dbba42042b 100644
+--- a/support/testing/tests/package/test_polkit.py
++++ b/support/testing/tests/package/test_polkit.py
+@@ -48,6 +48,14 @@ class TestPolkitSystemd(TestPolkitInfra):
+         _, exit_code = self.emulator.run(cmd, 10)
+         self.assertEqual(exit_code, 0)
  
- # Fix was comitted in a2bf5c9c83b6ae46cbd5c779d3055bff81ded683
--POLKIT_IGNORE_CVE = CVE-2021-4034
-+POLKIT_IGNORE_CVES += CVE-2021-4034
++        cmd = "mv /etc/polkit-1/rules.d/systemd-timesyncd-restart.rules /usr/share/polkit-1/rules.d"
++        _, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "su brtest -c '/bin/systemctl restart systemd-timesyncd.service'"
++        _, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 0)
++
  
- POLKIT_DEPENDENCIES = \
- 	duktape libglib2 host-intltool expat $(TARGET_NLS_DEPENDENCIES)
+ class TestPolkitInitd(TestPolkitInfra):
+     config = TestPolkitInfra.config
+@@ -68,3 +76,12 @@ class TestPolkitInitd(TestPolkitInfra):
+         output, exit_code = self.emulator.run(cmd, 10)
+         self.assertEqual(exit_code, 0)
+         self.assertEqual(output[0], "Hello polkit!")
++
++        cmd = "mv /etc/polkit-1/rules.d/hello-polkit.rules /usr/share/polkit-1/rules.d/hello-polkit.rules"
++        _, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "su brtest -c 'pkexec hello-polkit'"
++        output, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0], "Hello polkit!")
 -- 
 2.25.1
 _______________________________________________
