@@ -1,91 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4D01ECAAA1
-	for <buildroot@archiver.kernel.org>; Fri,  9 Sep 2022 05:08:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1217ECAAD3
+	for <buildroot@archiver.kernel.org>; Fri,  9 Sep 2022 06:54:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A929941607;
-	Fri,  9 Sep 2022 05:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A929941607
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TRZITepEn6cZ; Fri,  9 Sep 2022 05:08:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85E2B415F6;
-	Fri,  9 Sep 2022 05:08:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85E2B415F6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 035901C2744
- for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 05:08:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D18F4402E8
- for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 05:08:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D18F4402E8
+	by smtp2.osuosl.org (Postfix) with ESMTP id E03084049E;
+	Fri,  9 Sep 2022 06:54:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E03084049E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P9OW1bs-JVG0 for <buildroot@lists.busybox.net>;
- Fri,  9 Sep 2022 05:08:17 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NN8gPiBtIXTt; Fri,  9 Sep 2022 06:54:07 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 022AA40323;
+	Fri,  9 Sep 2022 06:54:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 022AA40323
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C54AA1BF3F7
+ for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 06:54:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A69B460BCF
+ for <buildroot@lists.busybox.net>; Fri,  9 Sep 2022 06:54:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A69B460BCF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 74X3EP35oXyk for <buildroot@lists.busybox.net>;
+ Fri,  9 Sep 2022 06:54:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C45AD402C3
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com
- [IPv6:2607:f8b0:4864:20::c30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C45AD402C3
- for <buildroot@buildroot.org>; Fri,  9 Sep 2022 05:08:16 +0000 (UTC)
-Received: by mail-oo1-xc30.google.com with SMTP id
- u3-20020a4ab5c3000000b0044b125e5d9eso114914ooo.12
- for <buildroot@buildroot.org>; Thu, 08 Sep 2022 22:08:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F94360BB4
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
+ [IPv6:2a00:1450:4864:20::12d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1F94360BB4
+ for <buildroot@buildroot.org>; Fri,  9 Sep 2022 06:54:00 +0000 (UTC)
+Received: by mail-lf1-x12d.google.com with SMTP id k10so1134053lfm.4
+ for <buildroot@buildroot.org>; Thu, 08 Sep 2022 23:54:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date;
- bh=VsV4Ewq3uIcv6vHCN55PK+En7afmblICvh6LpAenhNw=;
- b=cA7fCHTgYlJmmS+9n5Gxq5HZ+DJyY7A+ExWPqVd0h2gXPFPmKInhJEm5nJgcp7XDlU
- S616xornPO/P0b5eTUsVihcMhiUQ13CrPlj8MXbPCny9PGy+sbaPf8YwZ0s9MtqTam8U
- UJMCS2NLjoar/AQObjDbUKbvjwlSENupp2s1AIt3443ynZfQy4FfG+30ZxdMe/GKzgQP
- +pL/3DDv7py6IdVR+qT7eq8u1wOx8w3KfRPj5LQLzh1OnDuYL5NI3Mq25QpYBF3pdlr6
- BmnUNtTCSGtBRU/qo1mDC48kA4ybuhdoZvav21M1BYwdrj0x9SLGpfYxU9nFciB+p8gB
- LDKg==
-X-Gm-Message-State: ACgBeo0Km73z+rI/8NEUJfJOFlzRm0thzdoIUXC7y2s9kzGqCshKRU2B
- bZ8rLvDNxe6CjRXJl3M0HUzLz+OW+dA=
-X-Google-Smtp-Source: AA6agR7MmVtxFav8XgjGvV12QvBid2OVINm6yZ+oKhBiDUGiBRrAJYRqJJhZDJhBsbK4EzueGDbzsA==
-X-Received: by 2002:a4a:d0b3:0:b0:44b:5c3d:c75a with SMTP id
- t19-20020a4ad0b3000000b0044b5c3dc75amr4198562oor.30.1662700094027; 
- Thu, 08 Sep 2022 22:08:14 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net.
- [71.33.138.207]) by smtp.gmail.com with ESMTPSA id
- d85-20020a4a5258000000b004320b0cc5acsm283125oob.48.2022.09.08.22.08.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Sep 2022 22:08:13 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  8 Sep 2022 23:08:00 -0600
-Message-Id: <20220909050800.3520691-2-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220909050800.3520691-1-james.hilliard1@gmail.com>
-References: <20220909050800.3520691-1-james.hilliard1@gmail.com>
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date;
+ bh=ky3TqoFm8uJ4oXDz7wdajXToqszsQ8gEWCzbL0Wa418=;
+ b=Mxtkm9X9h0DCE+4iz4D8FMAj5bURsCcjJmCPV/ogamGv9zkg8NAM/P9YJZAmv0bVDD
+ uBsERQQM8fSA/dZ8uRCxu2QE8b04s+3whrJltB8xAt9PVrsmpXb8puPFMlrpuHJBkpKV
+ mG+YIDvfpxeQSM5opUovhlwC4kJeRs9TXsN8zppfhyO9bEQVJEcWM/zzTtA3hEdBZrmi
+ a5waJaRrsQhhfqddpSWZqVfDXRp+enIAm3VYHrkmlFopkVuz7uwDwUnWSoMqdzyHdy9q
+ Tz9QCh6Hb0lsHU2OkDunmY+quuCbbBkoEoz9DNNH0q4CE/NVyHMHD6BaCVWRHNg/8+EQ
+ BAVg==
+X-Gm-Message-State: ACgBeo3xpYWnFBm0od5D/TS3fXBgIYrpzxnpIKh1bZ9RMTH7Cf6pzVog
+ gfKpWSJz2KJzI5m3Fwl93v0DrNBh8Eqp9QwRg0Br8rXlkks=
+X-Google-Smtp-Source: AA6agR5HmgL83HaDwt9FQP+q3flTi2NOBBGtAqBb2pKHBzufWhQWk+80ieVUFNULMvXVauOQ4j8aRprYL6/ns7De2pM=
+X-Received: by 2002:a05:6512:6d5:b0:494:990f:a820 with SMTP id
+ u21-20020a05651206d500b00494990fa820mr4202935lff.536.1662706435873; Thu, 08
+ Sep 2022 23:53:55 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220908191904.823806-1-dario.binacchi@amarulasolutions.com>
+ <20220908191904.823806-2-dario.binacchi@amarulasolutions.com>
+ <e537c779-8ff0-676d-b642-971f79170f14@benettiengineering.com>
+ <752089ce-ee11-84fd-db54-42d46cba7c27@benettiengineering.com>
+In-Reply-To: <752089ce-ee11-84fd-db54-42d46cba7c27@benettiengineering.com>
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Fri, 9 Sep 2022 08:53:45 +0200
+Message-ID: <CABGWkvrYS8KxybPx0W_DMh0ceGEm3rpXsqkmY6bP7LHQFb1Ufw@mail.gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
- bh=VsV4Ewq3uIcv6vHCN55PK+En7afmblICvh6LpAenhNw=;
- b=ZCAoNJl25AIOBpsWIMwWxPnFDEW+7RWOguGCZmUe0lhbqUawjJ4/+ABpvVmHuGgRdR
- XddvSGOETqAqwrnz/H4SxqUpKeQ35lE/SqmMz+m2KIYhNFqxN5WRBXfMc8ZhCZjFBj/7
- +pdF6ALZiyfgBlFL75RP+7W0iJamA0YptIh2X0+3NCwWG3bOjRPxGNQp5M7RS8A9UagZ
- kNmooZ/euPenbUPaWKE7rPG3C5WFBenOaw2Gza80Uy9Acgj5/Nx67CP2OUqVoc6groO2
- DHp9ax4SIBjeUI5NrnPhFShdqX4FM1Sv2MX6aewBkADicW7SfhunWP8XFUXbO0WesfEk
- ppEQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZCAoNJl2
-Subject: [Buildroot] [PATCH 2/2] package/cog: add weston direct display
- support
+ d=amarulasolutions.com; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date;
+ bh=ky3TqoFm8uJ4oXDz7wdajXToqszsQ8gEWCzbL0Wa418=;
+ b=QzNY9llWPIxEX0K/JJaNPFXeiVEAS5yrNGBMYHE1mnPcrdjxqkFjsJii+0Ma5LLh+I
+ bGVlOBZsUJakAm51wK36oFc5dzb/7cM4QVFb/nfPw6flIL8OLQPLDul6f7ww7TM2Gq1E
+ QA0lCa8gqYTDNEL8BMYGEHd5u4vw6+MNEAhH8=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=QzNY9llW
+Subject: Re: [Buildroot] [PATCH v5 1/2] configs/imx8mn_bsh_smm_s2_defconfig:
+ new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,49 +90,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable optional weston direct display support when weston is
-available.
+Hi Giulio,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/cog/cog.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On Thu, Sep 8, 2022 at 10:21 PM Giulio Benetti
+<giulio.benetti@benettiengineering.com> wrote:
+>
+> I've forgotten:
+> please set as superseded the previous 2 patchsets(V3 and V4) in
+> patchwork:
+> https://patchwork.ozlabs.org/project/buildroot/list/?submitter=83038
 
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 5f7abcab1f..1f24bebee4 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -14,11 +14,17 @@ COG_LICENSE_FILES = COPYING
- COG_CONF_OPTS = \
- 	-DCOG_BUILD_PROGRAMS=ON \
- 	-DCOG_PLATFORM_HEADLESS=ON \
--	-DCOG_WESTON_DIRECT_DISPLAY=OFF \
- 	-DINSTALL_MAN_PAGES=OFF \
- 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
- 	-DUSE_SOUP2=ON
- 
-+ifeq ($(BR2_PACKAGE_WESTON),y)
-+COG_CONF_OPTS += -DCOG_WESTON_DIRECT_DISPLAY=ON
-+COG_DEPENDENCIES += weston
-+else
-+COG_CONF_OPTS += -DCOG_WESTON_DIRECT_DISPLAY=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
- COG_CONF_OPTS += -DCOG_PLATFORM_WL=ON
- COG_DEPENDENCIES += libxkbcommon wayland-protocols
+Done.
+
+Thanks and regards,
+Dario
+>
+> Thank you!
+>
+> Best regards
+> --
+> Giulio Benetti
+> Benetti Engineering sas
+>
+> On 08/09/22 22:09, Giulio Benetti wrote:
+> > Hi Dario, Ariel, Michael, All,
+> >
+> > On 08/09/22 21:19, Dario Binacchi wrote:
+> >> BSH SMM S2 (SystemMaster S2) Board is an add-on board which provide
+> >> input and output interfaces to a dedicated carrier board. It is designed
+> >> mainly to provide graphical/video and connectivity interfaces to the
+> >> appliance.
+> >>
+> >> Board support package includes the following components:
+> >> - mainline Linux kernel 5.19.7
+> >> - mainline U-Boot 2022-07
+> >> - default packages from buildroot
+> >>
+> >> Patches applied to the Linux kernel and U-Boot have been submitted but
+> >> not merged yet.
+> >>
+> >> https://www.apertis.org/reference_hardware/imx8mn_bsh_smm_s2pro_setup/
+> >> The smm s2 board is basically the same as the pro except it boots from
+> >> NAND instead of eMMC.
+> >>
+> >> Co-authored-by: Michael Trimarchi <michael@amarulasolutions.com>
+> >> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> >> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >
+> > It looks all good to me now and I've rebuilt with utils/docker-run
+> > successfully, so:
+> > Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> >
+> > I've also rebuilt successfully imx8mn_bsh_smm_s2_pro_defconfig.
+> >
+> > Best regards!
+>
+
+
 -- 
-2.34.1
 
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
