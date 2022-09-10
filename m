@@ -4,68 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CDCDC6FA82
-	for <buildroot@archiver.kernel.org>; Sat, 10 Sep 2022 16:14:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67798ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 10 Sep 2022 18:33:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BEB8841C8E;
-	Sat, 10 Sep 2022 16:14:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEB8841C8E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CFDD41607;
+	Sat, 10 Sep 2022 18:33:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CFDD41607
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CxlB_uf17wYR; Sat, 10 Sep 2022 16:14:47 +0000 (UTC)
+	with ESMTP id Jnj8T_3-TX0Q; Sat, 10 Sep 2022 18:33:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9509341C73;
-	Sat, 10 Sep 2022 16:14:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9509341C73
+	by smtp4.osuosl.org (Postfix) with ESMTP id 011DB410E8;
+	Sat, 10 Sep 2022 18:33:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 011DB410E8
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 548C11BF592
- for <buildroot@lists.busybox.net>; Sat, 10 Sep 2022 16:14:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0D1A81BF37A
+ for <buildroot@lists.busybox.net>; Sat, 10 Sep 2022 18:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B2578406C
- for <buildroot@lists.busybox.net>; Sat, 10 Sep 2022 16:14:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B2578406C
+ by smtp1.osuosl.org (Postfix) with ESMTP id E552A83F2A
+ for <buildroot@lists.busybox.net>; Sat, 10 Sep 2022 18:33:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E552A83F2A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UU_Rtj8o5oS1 for <buildroot@lists.busybox.net>;
- Sat, 10 Sep 2022 16:14:40 +0000 (UTC)
+ with ESMTP id NLQBgs4WCV5N for <buildroot@lists.busybox.net>;
+ Sat, 10 Sep 2022 18:33:24 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7824684066
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7824684066
- for <buildroot@buildroot.org>; Sat, 10 Sep 2022 16:14:40 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:981a:f392:e207:b56b])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 5F4F219F58C;
- Sat, 10 Sep 2022 18:14:34 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 10 Sep 2022 18:14:33 +0200
-Date: Sat, 10 Sep 2022 18:14:33 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Sen Hastings <sen@phobosdpl.com>
-Message-ID: <20220910161433.GE264214@scaer>
-References: <db619fc8-b861-21b7-562d-5590fa53cf05@phobosdpl.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A196983F29
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A196983F29
+ for <buildroot@buildroot.org>; Sat, 10 Sep 2022 18:33:23 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id u9so11327463ejy.5
+ for <buildroot@buildroot.org>; Sat, 10 Sep 2022 11:33:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date;
+ bh=RxY8C4RWmX1yy4A5v+ZtiFg5x7Ms3VDrO2r8fHhcwoA=;
+ b=hj5Sqhr3qJqAzh6Hmf1/gmXIFTc0o5+OimBo8lQG85dxHXq/wnBHanqilO22rLZ+VU
+ J6B5l0MyA7sQjG75u31clTfLWbtkmpkVNiCvYgqrlA9GPR1P0dE3He36I2aedeKp92i6
+ +LuvqFPCNpoknniTB4ATW7UH6zr+Uzkh6xoxECTLboVKuaU+WVD4U9rGMTjqoQDszMDA
+ oRxQG8HzbCwY71hh1/q2vFMtueSz1Wt98XEaje/lJ0liYOuBKmiNDCymh266hFVh7Pqb
+ DeJKuPxFPjkKizi1hcdkc9idgdOMQBUW35aocf2vi+anOFO9cqJ9aaZ16psdavN+Alk3
+ 6vxA==
+X-Gm-Message-State: ACgBeo3ahrV4jGszn47cD2P59HERm9Y0tWBfKXAY5U7bnX8ms6xBG/q4
+ sQt7q0tkuuRRpLfWyc5nEibQVfFBNeW6qg==
+X-Google-Smtp-Source: AA6agR4x0iupnvf/v13zV+YFZyNgUbC8sjT8EOOPGOLqfGOzHeSVgvGbg1x7sfin+8Al2XYyA+0V9g==
+X-Received: by 2002:a17:906:c154:b0:733:197:a8c with SMTP id
+ dp20-20020a170906c15400b0073301970a8cmr13933928ejc.483.1662834797942; 
+ Sat, 10 Sep 2022 11:33:17 -0700 (PDT)
+Received: from ?IPV6:2a02:8070:4182:37a0:97b2:fd91:46b3:8d3a?
+ ([2a02:8070:4182:37a0:97b2:fd91:46b3:8d3a])
+ by smtp.gmail.com with ESMTPSA id
+ f8-20020a50fc88000000b0044e9e5ce396sm2559306edq.95.2022.09.10.11.33.17
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 10 Sep 2022 11:33:17 -0700 (PDT)
+Message-ID: <f424c29d-f6b3-735d-a90e-8df128e8d789@gmail.com>
+Date: Sat, 10 Sep 2022 20:33:18 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <db619fc8-b861-21b7-562d-5590fa53cf05@phobosdpl.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1662826477;
- bh=GXpVf/o4cv70z4e6F/PTZLn/WM2NXtyUf8WWbvB/yGA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=CG2JB8aDF2vwC+s42WBFaE5Tx0SrKsjoetKsD+w3B4nEKfIdXK/c8XgGHbKlB6wiC
- +rrIHfnfa25wmhM7ZaopnUC2i9f/59xlwTSbCtNdhe38r9FHWy1bIwsRTEDMHLNeSy
- /2xi19T/eu03CCawCKTKGzAWgiMe5K5apxMB32Ucmgp//buIRPTrol3H3fEStmEf//
- IyNeONct27UsvDpTc5ZWEuD0clb2TP+NyMWmc3trOH5zQ2jRmyONCvI7lIpR8yDpOE
- tXtotNpl2S9hv2l4CWbIK96IESJO3H1tDB8R4JkTH9CqxhflhRwpY3M+NJAm51sxh7
- OHv6ig7Zf324g==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To: Christian Stewart <christian@paral.in>
+References: <20220616163309.5271-1-raphael.pavlidis@gmail.com>
+ <20220904125359.18844-1-raphael.pavlidis@gmail.com>
+ <CA+h8R2rReW+jaQLWObg7HEbhjtA9TKwTexMeK2=38aQXheASrg@mail.gmail.com>
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+In-Reply-To: <CA+h8R2rReW+jaQLWObg7HEbhjtA9TKwTexMeK2=38aQXheASrg@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date;
+ bh=RxY8C4RWmX1yy4A5v+ZtiFg5x7Ms3VDrO2r8fHhcwoA=;
+ b=arOGQPBWBaeir34ZDxQEWPc8t/vWX27Xt5h99BBKCQ8UHs3zR8OigJTYgTuOr5dWgU
+ t8a8P85vvrgogJ5WXnX2yT6pidSFWlwXyPzVGco3nrz/e3vhSE7vTSvFBE0/r4alYL53
+ yarhSfekgTEWZpCuyuTjQ/SJB7xnyzfvYiMjdK2dhMpuzfDvzN0elSoC7ND3TwB9iijR
+ bW1wOjoAn+PmXLmbSnw9XmOUxYGnT02pPsz7uRhtIDjzOZazgkogCenMvhaa90wbRCj6
+ Mq030y8IgQGSWNZYwkQgCX4lpj7ssBa51hYrQcBTYI/p36mF2ipLLhvbnsSBS+wzgc5h
+ VzNg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CG2JB8aD
-Subject: Re: [Buildroot] How to register to attend the buildroot annual
- meeting ?
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=arOGQPBW
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/cni-plugins: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,34 +101,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Anisse Astier <anisse@astier.eu>,
+ Buildroot Mailing List <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sen, All,
+Hi Christian
 
-On 2022-09-09 17:21 -0500, Sen Hastings spake thusly:
-> I am interested in attending the buildroot annual meeting, but I am a
-> bit confused as to how I am supposed to register.
+On 04.09.22 21:06, Christian Stewart wrote:
+> Hi Raphael,
+> 
+> On Sun, Sep 4, 2022 at 5:54 AM Raphael Pavlidis
+> <raphael.pavlidis@gmail.com> wrote:
+>>
+>> cni-plugins contains some reference networking plugins, maintained by
+>> the CNI team.
+>>
+>> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+> 
+> I guess this is a follow-up to my cni-plugins submission?
+> 
+> https://patchwork.ozlabs.org/project/buildroot/patch/20220821053547.667311-1-christian@paral.in/
 
-Registration is now closed, unfortunately. Even as the event is free to
-join, we still need to know in advance how many will be joining, so that
-we can organise the event, which means registration closes about 10 days
-before the event. This might not have been properly advertised, though,
-and we shall try and do better next time.
+No, I already started with this patch series since June.
 
-Regards,
-Yann E. MORIN.
+https://lists.buildroot.org/pipermail/buildroot/2022-June/644972.html
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
+> You're missing a few things:
+> 
+> +ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+> +CNI_PLUGINS_DEPENDENCIES += libapparmor
+> +CNI_PLUGINS_TAGS += apparmor
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+> +CNI_PLUGINS_TAGS += seccomp
+> +CNI_PLUGINS_DEPENDENCIES += libseccomp host-pkgconf
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+> +CNI_PLUGINS_TAGS += selinux
+> +CNI_PLUGINS_DEPENDENCIES += libselinux
+> +endif
+> 
+
+Yes, you are right, thanks.
+
+>> ---
+>> Changes v2 -> v3:
+>>    - DEVELOPERS: add Raphael Pavlids for cni-plugins
+>>
+>> Changes v1 -> v2:
+>>    - change BR2_PACKAGE_CNI_PLUGINS from config to menuconfig
+>>    - turn on all plugins by default
+> 
+> Was v2 submitted before?
+
+Yes, see:
+
+https://lists.buildroot.org/pipermail/buildroot/2022-June/644974.html
+
+> 
+> I like adding the options for the plugins, but you're missing some -
+> here is the list from the other submission:
+> 
+> +
+> +CNI_PLUGINS_BUILD_TARGETS = \
+> + plugins/ipam/dhcp \
+> + plugins/main/bridge \
+> + plugins/main/host-device \
+> + plugins/main/ipvlan \
+> + plugins/main/loopback \
+> + plugins/main/macvlan \
+> + plugins/main/ptp \
+> + plugins/main/vlan \
+> + plugins/meta/bandwidth \
+> + plugins/meta/firewall \
+> + plugins/meta/portmap \
+> + plugins/meta/tuning \
+> + plugins/meta/vrf
+> 
+> 
+
+Oh, I see I forgot the vrf plugin.
+
+>> +
+>> +if BR2_PACKAGE_CNI_PLUGINS
+>> +
+>> +config BR2_PACKAGE_CNI_PLUGINS_BRIDGE
+>> +       bool "bridge"
+>> +       default y
+>> +       help
+>> +         Creates a bridge, adds the host and the container to it.
+>> +
+>> [snip]
+> 
+> Thanks,
+> Christian Stewart
+
+Quite funny, I also need this package for podman. :)
+
+Thanks,
+Raphael Pavlidis
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
