@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12865C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 18:26:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AF64ECAAD3
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 18:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A73AC845FD;
-	Sun, 11 Sep 2022 18:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A73AC845FD
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF319845FB;
+	Sun, 11 Sep 2022 18:26:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF319845FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QcmObn5gSGxb; Sun, 11 Sep 2022 18:26:04 +0000 (UTC)
+	with ESMTP id SYp6Qa5WGIh0; Sun, 11 Sep 2022 18:26:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D67F9845FB;
-	Sun, 11 Sep 2022 18:26:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D67F9845FB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9AA981BF3EB
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:25:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3170284605;
+	Sun, 11 Sep 2022 18:26:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3170284605
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BD711BF3EB
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:25:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 71DD94251C
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:25:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71DD94251C
+ by smtp1.osuosl.org (Postfix) with ESMTP id D643D845FA
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:25:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D643D845FA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gRg2xDNKAcSj for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lncHw9ta6-Kq for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5559142506
+ by smtp1.osuosl.org (Postfix) with ESMTP id 69BA8845F0
  for <buildroot@buildroot.org>; Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5559142506
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69BA8845F0
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 41B14836D1; Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
+ id 58BBC836D6; Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Sep 2022 20:24:45 +0200
+Date: Sun, 11 Sep 2022 20:24:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f7c841c75e84faedf2628a556b1e0bbbafbbf210
-X-Git-Newrev: ac9c077fb832098e38c1b846fb3023253b27d105
+X-Git-Oldrev: 2de653832029877a7b1d166b86814fcd56e2d329
+X-Git-Newrev: 29948fec118c7ad99c8fe95cfcb3e05c49b923d2
 X-Patchwork-Hint: ignore
-Message-Id: <20220911182524.41B14836D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mariadb: security bump to version
- 10.3.36
+Message-Id: <20220911182524.58BBC836D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flac: bump to version 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,75 +62,154 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac9c077fb832098e38c1b846fb3023253b27d105
+commit: https://git.buildroot.net/buildroot/commit/?id=29948fec118c7ad99c8fe95cfcb3e05c49b923d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fixes for the following security vulnerabilities:
-  - CVE-2018-25032
-  - CVE-2022-32091
-  - CVE-2022-32084
-- Refresh first patch
+This release fixes a lot of bugs found by fuzzing, and fuzzing coverage
+has improved much. Also, compression should be better but a little
+slower. Speedups for 64-bit ARM have been implemented. Encoding and
+decoding 32 bps PCM is now possible.
 
-https://mariadb.com/kb/en/mariadb-10336-release-notes
+- Drop sha1 (not provided anymore)
+- Drop patch (already in version) and so autoreconf
+- Update hash of COPYING.Xiph (year updated with:
+  https://github.com/xiph/flac/commit/10d7ce268b758b7cf62c3663338f180370a9a415)
+
+https://github.com/xiph/flac/releases/tag/1.4.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mariadb/0001-add-extra-check-for-librt.patch | 6 ++++--
- package/mariadb/mariadb.hash                         | 4 ++--
- package/mariadb/mariadb.mk                           | 2 +-
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/flac/0001-Fix-uclibc-build.patch | 81 --------------------------------
+ package/flac/flac.hash                   |  6 +--
+ package/flac/flac.mk                     |  5 +-
+ 3 files changed, 3 insertions(+), 89 deletions(-)
 
-diff --git a/package/mariadb/0001-add-extra-check-for-librt.patch b/package/mariadb/0001-add-extra-check-for-librt.patch
-index 0dd4c546fb..6e3fc70276 100644
---- a/package/mariadb/0001-add-extra-check-for-librt.patch
-+++ b/package/mariadb/0001-add-extra-check-for-librt.patch
-@@ -8,6 +8,8 @@ https://jira.mariadb.org/browse/MDEV-10841
- Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
- [Rebased on mariadb-10.3.30]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+[Rebased on mariadb-10.3.36]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  configure.cmake | 3 +++
-  1 file changed, 3 insertions(+)
-@@ -23,9 +25,9 @@ index 1b85c31b..4a1cd847 100644
- +  IF(NOT LIBRT)
- +    MY_SEARCH_LIBS(posix_spawn_file_actions_addclose rt LIBRT)
- +  ENDIF()
--   set(THREADS_PREFER_PTHREAD_FLAG ON)
--   FIND_PACKAGE(Threads)
-+   MY_SEARCH_LIBS(backtrace_symbols_fd execinfo LIBEXECINFO)
-  
-+   set(THREADS_PREFER_PTHREAD_FLAG ON)
- -- 
- 2.32.0
- 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index f7e3c7b744..c4064cff66 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.3.35
--sha512  9355de944eccef4e0bc01b19ffc3c0c72cf88befae7385c6f0ee1ea47dbd98d23f6bb46af9c140acc48d9d9613552870684bc0b7ca1f3cff1dc09c1a2c801573  mariadb-10.3.35.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.36
-+sha512  321b4c48fcea4413eb239c4904c806306de660f2844edfa1d2a2a15213db287070d0f923db976588dfe329559d565bd98bddef3aaf8f14502f8c3db2ee27757a  mariadb-10.3.36.tar.gz
- 
- # Hash for license files
- sha256  084aa0007efac6dda6aafffb3f3ef8b66b105862dad7ee23f6a4b52813f84464  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 4c855985b1..5fb8876278 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
+diff --git a/package/flac/0001-Fix-uclibc-build.patch b/package/flac/0001-Fix-uclibc-build.patch
+deleted file mode 100644
+index fcba670fae..0000000000
+--- a/package/flac/0001-Fix-uclibc-build.patch
++++ /dev/null
+@@ -1,81 +0,0 @@
+-From 4c62082f64132bfcbcb6569aa914c5ec283303f9 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 21 Feb 2022 18:21:11 +0100
+-Subject: [PATCH] Fix uclibc build
+-
+-Commit 4fbb6d4f2ecf2a96c17ea9880108409f852c08a9 reverted commit
+-44036c9a9b45d03373fe90e9c112852bfc054c51 and so broke again the build on
+-uclibc
+-
+-So put back the sys/auxv.h check as well as a getauxval check in a way
+-that doesn't break iOS
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/xiph/flac/pull/292]
+----
+- configure.ac      | 5 ++++-
+- src/libFLAC/cpu.c | 9 ++++-----
+- 2 files changed, 8 insertions(+), 6 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 4d7dc2e4..6f32fa45 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -69,7 +69,7 @@ AC_C_INLINE
+- AC_C_VARARRAYS
+- AC_C_TYPEOF
+- 
+--AC_CHECK_HEADERS([stdint.h inttypes.h byteswap.h sys/param.h sys/ioctl.h termios.h x86intrin.h cpuid.h])
+-+AC_CHECK_HEADERS([stdint.h inttypes.h byteswap.h sys/auxv.h sys/param.h sys/ioctl.h termios.h x86intrin.h cpuid.h])
+- 
+- XIPH_C_BSWAP32
+- XIPH_C_BSWAP16
+-@@ -101,6 +101,9 @@ fi
+- # For the XMMS plugin.
+- AC_CHECK_TYPES(socklen_t, [], [])
+- 
+-+dnl check for getauxval in standard library
+-+AC_CHECK_FUNCS(getauxval)
+-+
+- dnl check for getopt in standard library
+- dnl AC_CHECK_FUNCS(getopt_long , , [LIBOBJS="$LIBOBJS getopt.o getopt1.o"] )
+- AC_CHECK_FUNCS(getopt_long, [], [])
+-diff --git a/src/libFLAC/cpu.c b/src/libFLAC/cpu.c
+-index 8b92f4c7..64c6acad 100644
+---- a/src/libFLAC/cpu.c
+-+++ b/src/libFLAC/cpu.c
+-@@ -53,11 +53,9 @@
+- #define dfprintf(file, format, ...)
+- #endif
+- 
+--#if defined FLAC__CPU_PPC
+--#if defined(__linux__) || (defined(__FreeBSD__) && (__FreeBSD__ >= 12))
+-+#if defined(HAVE_SYS_AUXV_H)
+- #include <sys/auxv.h>
+- #endif
+--#endif
+- 
+- #if (defined FLAC__CPU_IA32 || defined FLAC__CPU_X86_64) && (defined FLAC__HAS_NASM || FLAC__HAS_X86INTRIN) && !defined FLAC__NO_ASM
+- 
+-@@ -247,7 +245,7 @@ ppc_cpu_info (FLAC__CPUInfo *info)
+- #define PPC_FEATURE2_ARCH_2_07		0x80000000
+- #endif
+- 
+--#ifdef __linux__
+-+#if defined (__linux__) && defined(HAVE_GETAUXVAL)
+- 	if (getauxval(AT_HWCAP2) & PPC_FEATURE2_ARCH_3_00) {
+- 		info->ppc.arch_3_00 = true;
+- 	} else if (getauxval(AT_HWCAP2) & PPC_FEATURE2_ARCH_2_07) {
+-@@ -267,7 +265,8 @@ ppc_cpu_info (FLAC__CPUInfo *info)
+- 	info->ppc.arch_2_07 = false;
+- 	info->ppc.arch_3_00 = false;
+- #else
+--#error Unsupported platform! Please add support for reading ppc hwcaps.
+-+	info->ppc.arch_2_07 = false;
+-+	info->ppc.arch_3_00 = false;
+- #endif
+- 
+- #else
+--- 
+-2.34.1
+-
+diff --git a/package/flac/flac.hash b/package/flac/flac.hash
+index 2444535e0f..1f7763fd6e 100644
+--- a/package/flac/flac.hash
++++ b/package/flac/flac.hash
+@@ -1,8 +1,6 @@
+-# From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA1SUMS
+-sha1  99c28482a8b2d81deaf740639e4cb55658427420  flac-1.3.4.tar.xz
+ # From http://downloads.xiph.org/releases/flac/SHA256SUMS.txt
+-sha256  8ff0607e75a322dd7cd6ec48f4f225471404ae2730d0ea945127b1355155e737  flac-1.3.4.tar.xz
++sha256  af41c0733c93c237c3e52f64dd87e3b0d9af38259f1c7d11e8cbf583c48c2506  flac-1.4.0.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
+-sha256  fa27cb11f13f97b0c5f3ff363b1e2610c6efe87ed175779cb2a78e44eb19d34c  COPYING.Xiph
++sha256  6e58d3036f05e2a0d58af854c12a505ddbe75011d71a598a2170987f3b15408d  COPYING.Xiph
+diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+index 27fc63e2c2..91d5840d72 100644
+--- a/package/flac/flac.mk
++++ b/package/flac/flac.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MARIADB_VERSION = 10.3.35
-+MARIADB_VERSION = 10.3.36
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+-FLAC_VERSION = 1.3.4
++FLAC_VERSION = 1.4.0
+ FLAC_SITE = http://downloads.xiph.org/releases/flac
+ FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+ FLAC_INSTALL_STAGING = YES
+@@ -13,9 +13,6 @@ FLAC_LICENSE = Xiph BSD-like (libFLAC), GPL-2.0+ (tools), LGPL-2.1+ (other libra
+ FLAC_LICENSE_FILES = COPYING.Xiph COPYING.GPL COPYING.LGPL
+ FLAC_CPE_ID_VENDOR = flac_project
+ 
+-# patch touching configure.ac
+-FLAC_AUTORECONF = YES
+-
+ FLAC_CONF_OPTS = \
+ 	$(if $(BR2_POWERPC_CPU_HAS_ALTIVEC),--enable-altivec,--disable-altivec) \
+ 	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-cpplibs,--disable-cpplibs) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
