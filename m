@@ -1,74 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4FF3ECAAD3
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 17:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C572ECAAD3
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 17:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E298640C15;
-	Sun, 11 Sep 2022 17:57:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E298640C15
+	by smtp1.osuosl.org (Postfix) with ESMTP id A43B682456;
+	Sun, 11 Sep 2022 17:58:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A43B682456
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xRg0VUCKxVNi; Sun, 11 Sep 2022 17:57:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GSES1fUypZhi; Sun, 11 Sep 2022 17:58:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B663E40256;
-	Sun, 11 Sep 2022 17:57:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B663E40256
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D784F1BF5D7
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 17:57:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D308B81D35;
+	Sun, 11 Sep 2022 17:58:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D308B81D35
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 079AF1BF5D7
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 17:58:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6ED140256
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 17:57:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6ED140256
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5CF4410E7
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 17:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5CF4410E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZEhWpfNwsuyg for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 17:57:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VbmoVrQfZQWM for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 17:58:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FF3C40183
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5FF3C40183
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 17:57:33 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:41d6:744a:8631:c709])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id DB40913F8C6;
- Sun, 11 Sep 2022 19:57:26 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 11 Sep 2022 19:57:26 +0200
-Date: Sun, 11 Sep 2022 19:57:26 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Message-ID: <20220911175726.GH264214@scaer>
-References: <20220904124315.12728-1-raphael.pavlidis@gmail.com>
- <20220905115121.GC1490660@scaer>
- <75e277ba-99aa-78f3-a60d-5e8cf2c1b9a8@gmail.com>
- <20220911121457.GG264214@scaer>
- <36548884-9180-1dfa-cbca-2ab45a037632@gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3CB1410BA
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com
+ [IPv6:2607:f8b0:4864:20::e2d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B3CB1410BA
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 17:58:33 +0000 (UTC)
+Received: by mail-vs1-xe2d.google.com with SMTP id k2so6822372vsk.8
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 10:58:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date;
+ bh=0u5ic8cHLL+wFJRZCMH+UxVKzLF6norwhP7jp6xafdI=;
+ b=mkQjvX07vsiAbzmmABUHnJzsy/3wO22jlsPTBwj/Qbt9niwDHuWA7Gf5oxqRsxrNly
+ rZhrA/jx3ppV30aVN6617Zb2XcXhkN47/dUlS8gdgKKGrhxfGjrSLd0JlDo11l0XmsJ0
+ 7DCdyd1Ck8OCTkypO5E1z37VO5ldBoX/QHmioqeZjn7nTx8vCw8zn+DWWv2rxrHw9H31
+ mPquNHsT4f7xW1fgbngxTPDvycxsliyF/WUe2wvflkb87K9MWT6MTjI2GetNiVkEWnbF
+ 0sClpgAq+OJeQw5yL7CGep3cbySxQd6wrDaj/3X9OakwLcGhoC9H7jMbupEvIKHDJJu7
+ 2yHw==
+X-Gm-Message-State: ACgBeo0+YzcmkuXtZbQDWxPAhGVzo5XbZ0RXzWjTuFfOzz2TCZjLFl1x
+ lWNEH/taIduLzqn7zUMSYoKtxAJbyunhfza1ASdBUhN5ddI=
+X-Google-Smtp-Source: AA6agR4ygqPt7iFSSH+ItPgiOG6i8+xXqvRyzXN4sg9cI5HmdPvQfQTornzkcXGVJ19XrxZPJ3VNXRHW9H4zXbRuLuY=
+X-Received: by 2002:a05:6102:1511:b0:398:73bd:9b4d with SMTP id
+ f17-20020a056102151100b0039873bd9b4dmr1395671vsv.33.1662919112254; Sun, 11
+ Sep 2022 10:58:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <36548884-9180-1dfa-cbca-2ab45a037632@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1662919050;
- bh=S3DygbQBvN+fwrCm6ThGEcgAKHwGMpGE4tb86frFWaI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ilvAprdz83sNDv1PCP8vcTetnA1lSCunAS/hh8XaQCkJZgrccK0zK+m+JSbzXxYQ2
- S9KB/yNyyKh2LHh+4QolYFE6MkuKeVN8KtKNoNYJrMlcoIxAL7d8l4TExL36o/PwBk
- OYuKxvVYHpY++5qyz1XgY3dVTRwAgKruj62Hk1GL9xYuoz931a3InRSTzVzTpOJv4B
- /kmq1Lq874A2NAxUpaAsFKOvVz44KuRNr5jaUwS6NOjGKMnfJGk3PPaaSSnBQgZsDb
- WjZ0GnpzOYdd2qppyrN5DM5xvHP01wegtFaP9jXweoNXlOfsn+DVOQRerITHZntBeo
- UtUSTKASvHO6A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ilvAprdz
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/shadow: new package
+From: Zvi Vered <veredz72@gmail.com>
+Date: Sun, 11 Sep 2022 20:58:22 +0300
+Message-ID: <CABRndgyUttoHU1dUOacMsbKFWTBvUn+Fr99WmQ57EC0CoX4JCA@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date;
+ bh=0u5ic8cHLL+wFJRZCMH+UxVKzLF6norwhP7jp6xafdI=;
+ b=pkQIVt29i4h8neZvk1uXQQuvOZvmOfBB/zDRWfOHfk3CfMY2+9fsTvUvRXCL/wZSU9
+ whnbiIS5J9wQf2CUSSUcd7MpQqI1q2BinysmoqTfddGkzPJxo0KIau3FxnrBlWxhLX3M
+ qnMfxJWi+Z5IH42ajIopzKVmBCQBRw5DfXSA/vEGled2Ymo4cXrGGlv9kS+/IU3FPQrM
+ d5YHcU29WfucnLC3E14+ULxMZ7R34c8s0xJcS548asQ1O+1Ueqv8d3Z7O1NgyoylnW5Z
+ jttQkF9/sY6RRyE9REoUi+HVBW9pQLm/R08fCNZITehCaYmqiK+Kyx0jU5AUE2MQ/SRY
+ T7Qg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=pkQIVt29
+Subject: [Buildroot] 2022.02.1: read-only file system
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,101 +86,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5362221192220086500=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Raphael, All,
+--===============5362221192220086500==
+Content-Type: multipart/alternative; boundary="000000000000f9e9b605e86a8679"
 
-On 2022-09-11 14:55 +0200, Raphael Pavlidis spake thusly:
-> On 11.09.22 14:14, Yann E. MORIN wrote:
-[--SNIP--]
-> >Of course, the above is just for demonstration and mostly made up, the
-> >actual commit content should be adapted. But you get the idea.
-> I will try it, thanks. Technically, I need this package to use podman for
-> non-root user (newuidmap and newgidmap).
+--000000000000f9e9b605e86a8679
+Content-Type: text/plain; charset="UTF-8"
 
-You can also indeed add a (terse) explanation why that package is
-useful, indeed, as that explains the purpose and can then lead to a
-better understanding of the integration. The sentence above is good, but
-should be rephrased to a more neutral form:
+Hello,
 
-    shadow is used by podman to enable support for non-root users (with
-    newuidmap and newgidmap).
+I'm using buildroot 2022.02.1 under x86 embedded SBC.
+The root file system is located on the on-board disk.
+The boot argument contains 'ro' (checked with /proc/cmdline after login)
+but the disk is not read-only.
 
-(again, adapt as appropriate.)
+When I used the same boot args with busybox, it worked fine.
+Of course with busybox I had to tailor all other mandatory files and
+directories.
 
-[--SNIP--]
-> >So, for shadow, I think at least the 'su' option should also depend on
-> >BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, if not the whole package (yet, I'd
-> >vote for the whole package for simplicity sake).
-> I think I understand it now. It is an option to show option or package,
-> which install a non-busybox version of a binary, correct? I will add it to
-> the whole package then.
+I need read-only rootfs to defend this embedded system in case of
+power-down / cold reset.
 
-Yes, you got it. :-)
+Beyond the default configuration, the rootfs also contains ntp client,
+httpd, pci tools.
 
-[--SNIP--]
-> >Also, if you did not have an actual use-case for an option, then do not
-> >expose it at all. When/if someone actually has a need for that option,
-> >then they can send a patch to add it.
-> But this approach, I think have the disadvantage, that if it happens that
-> somebody needs an option then he/she have to wait until is there, which it
-> can take sometime. (Happen at least to me)
-> I understand it for such options, which are useless for buildroot like if it
-> is something Windows specific. IMHO, I do not see any harm to expose those
-> options.
+Thank you,
+Zvika
 
-But exposing options you did not have a need for, and thus did not
-exercise, means they can easily be mis-handled. Case in point: the max
-length for group names.
+--000000000000f9e9b605e86a8679
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[--SNIP--]
-> >We expose options in the menuconfig only when it actually makes sense.
-> >What is the purpose of limiting the group name length? Why do we want to
-> >allow the user to be able to set that value, rather than let the package
-> >decide?
-> At least in my case, I need only BR2_PACKAGE_SHADOW_SUBORDINATE_IDS, so it
-> would be nice that everything else could be deactivated to keep it small.
+<div dir=3D"ltr">Hello,<div><br></div><div>I&#39;m using buildroot 2022.02.=
+1 under x86 embedded SBC.=C2=A0</div><div>The root file system is located o=
+n the on-board disk.=C2=A0</div><div>The boot argument contains &#39;ro&#39=
+; (checked with /proc/cmdline after login) but the disk is not read-only.=
+=C2=A0</div><div><br></div><div>When I used the same boot args with busybox=
+, it worked fine.</div><div>Of course with busybox I had to tailor all othe=
+r mandatory files and directories.=C2=A0</div><div><br></div><div>I need re=
+ad-only rootfs to defend this embedded system in case of power-down / cold =
+reset.=C2=A0</div><div><br></div><div>Beyond the default configuration, the=
+ rootfs also contains ntp client, httpd, pci tools.=C2=A0</div><div><br></d=
+iv><div>Thank you,</div><div>Zvika=C2=A0</div><div><br></div><div>=C2=A0=C2=
+=A0</div><div><br></div></div>
 
-If you have a need for the option and you did exercise it, then that's
-fine exposing it in the menuconfig.
+--000000000000f9e9b605e86a8679--
 
-If you want to "keep it small", then just make it so by disabling
-everything, and leave it to people that actually need an option and can
-test it, to add support for it.
+--===============5362221192220086500==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Yes, it can take some time before a new feature lands in Buildroot.
-
-> I tried to figure out, why this option was set to 32, and it seems that
-> Linux only support username up to 32 characters. So, I will remove this
-> option and set the value to 32 in the package because buildroot is only
-> supporting Linux, as far as I know, correct?
-> 
-> https://github.com/shadow-maint/shadow/commit/1882c66bda31e50367d41b36fea41cd04fa19c73
-
-Aha! ;-)
-
-I won't say I knew it, but I really suspected something along those
-lines. Indeed, we do not need to expose that option. It is a very good
-example that exposing an untested option is not correct.
-
-Just do not set that at all; just let the configure script use its
-default. It is better to leave that untouched.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5362221192220086500==--
