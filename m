@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4D61C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 18:25:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66B09C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 18:25:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AF246FC2C;
-	Sun, 11 Sep 2022 18:25:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AF246FC2C
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2F1E6FC36;
+	Sun, 11 Sep 2022 18:25:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2F1E6FC36
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FHDD2mONQckw; Sun, 11 Sep 2022 18:25:27 +0000 (UTC)
+	with ESMTP id MzAnxTzkuoPq; Sun, 11 Sep 2022 18:25:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B43F36FC29;
-	Sun, 11 Sep 2022 18:25:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B43F36FC29
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 51ED41BF990
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FF516FC2D;
+	Sun, 11 Sep 2022 18:25:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FF516FC2D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 874721BF3EB
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B95E41888
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E94D4251A
  for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:25:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B95E41888
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E94D4251A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2NuGO5ugvQ3g for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GuTAn5QbYAuG for <buildroot@lists.busybox.net>;
  Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 49565400C6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76F7D42515
  for <buildroot@buildroot.org>; Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49565400C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76F7D42515
 Received: by busybox.osuosl.org (Postfix, from userid 4049)
- id 35433836CF; Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
+ id 64BAE836CF; Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 Sep 2022 20:24:43 +0200
+Date: Sun, 11 Sep 2022 20:24:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4ac4aa795ab8b6081f5fc1af3b1243c33cf28bc3
-X-Git-Newrev: f7c841c75e84faedf2628a556b1e0bbbafbbf210
+X-Git-Oldrev: 29948fec118c7ad99c8fe95cfcb3e05c49b923d2
+X-Git-Newrev: 95c2493a8e52c32ce97f0a1348bfc71dcb2b28b9
 X-Patchwork-Hint: ignore
-Message-Id: <20220911182524.35433836CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/jpeg-turbo: bump to version 2.1.4
+Message-Id: <20220911182524.64BAE836CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rhash: bump to version 1.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,47 +62,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7c841c75e84faedf2628a556b1e0bbbafbbf210
+commit: https://git.buildroot.net/buildroot/commit/?id=95c2493a8e52c32ce97f0a1348bfc71dcb2b28b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/2.1.4
+https://github.com/rhash/RHash/releases/tag/v1.4.3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
- package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/rhash/rhash.hash | 6 +++---
+ package/rhash/rhash.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index a892fd3eaa..6e1278b48a 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/libjpeg-turbo/files/2.1.3/
--sha1  6dec48193bb27e1c07abae8230031ce9ecb1cfec  libjpeg-turbo-2.1.3.tar.gz
--md5  85244dedeaf06f636a9e7ddea6d236d8  libjpeg-turbo-2.1.3.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/2.1.4/
-+sha1  5a355c08caa326cef7c2a61e062edfe8dd02ac07  libjpeg-turbo-2.1.4.tar.gz
-+md5  3241b54016c445e5d8f0ebb0ad9294ed  libjpeg-turbo-2.1.4.tar.gz
- # Locally computed
--sha256  467b310903832b033fe56cd37720d1b73a6a3bd0171dbf6ff0b620385f4f76d0  libjpeg-turbo-2.1.3.tar.gz
-+sha256  d3ed26a1131a13686dfca4935e520eb7c90ae76fbc45d98bb50a8dc86230342b  libjpeg-turbo-2.1.4.tar.gz
- sha256  ee1eaf194d5924b6360af8a6ba6a4e1554037091f7505943300cdeec65f1aebb  LICENSE.md
- sha256  4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 475eb5fa84..e5bc8e7cf2 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
+diff --git a/package/rhash/rhash.hash b/package/rhash/rhash.hash
+index e0555af3c2..355b5c275b 100644
+--- a/package/rhash/rhash.hash
++++ b/package/rhash/rhash.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/rhash/files/rhash/1.4.2/
+-sha1  fdb0b0c16f3ba3eba734b3adf9f2fc4c427ff987  rhash-1.4.2-src.tar.gz
++# From https://sourceforge.net/projects/rhash/files/rhash/1.4.3/
++sha1  6e698e6d5b13aeac55076d6a53dc4dab55f2114e  rhash-1.4.3-src.tar.gz
+ # Locally calculated
+-sha256  600d00f5f91ef04194d50903d3c79412099328c42f28ff43a0bdb777b00bec62  rhash-1.4.2-src.tar.gz
++sha256  1e40fa66966306920f043866cbe8612f4b939b033ba5e2708c3f41be257c8a3e  rhash-1.4.3-src.tar.gz
+ sha256  953e55838353335148c90b5a38a4894292680b1d4c37228ffddddbf18ce54bf5  COPYING
+diff --git a/package/rhash/rhash.mk b/package/rhash/rhash.mk
+index 02af0aa57b..8c33de1862 100644
+--- a/package/rhash/rhash.mk
++++ b/package/rhash/rhash.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JPEG_TURBO_VERSION = 2.1.3
-+JPEG_TURBO_VERSION = 2.1.4
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
+-RHASH_VERSION = 1.4.2
++RHASH_VERSION = 1.4.3
+ RHASH_SOURCE = rhash-$(RHASH_VERSION)-src.tar.gz
+ RHASH_SITE = https://sourceforge.net/projects/rhash/files/rhash/$(RHASH_VERSION)
+ RHASH_LICENSE = 0BSD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
