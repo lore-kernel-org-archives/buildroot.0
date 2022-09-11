@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45C09C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 18:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4D61C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 18:25:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D01F340C15;
-	Sun, 11 Sep 2022 18:17:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D01F340C15
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AF246FC2C;
+	Sun, 11 Sep 2022 18:25:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AF246FC2C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FHDD2mONQckw; Sun, 11 Sep 2022 18:25:27 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B43F36FC29;
+	Sun, 11 Sep 2022 18:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B43F36FC29
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 51ED41BF990
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:25:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B95E41888
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:25:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B95E41888
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rDxO8KX0Mrox; Sun, 11 Sep 2022 18:17:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 036FE403F8;
-	Sun, 11 Sep 2022 18:17:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 036FE403F8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7F9271BF3EB
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:17:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B13484582
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 18:17:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B13484582
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TSxAhPP78lzK for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 18:17:00 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5366884540
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5366884540
- for <buildroot@busybox.net>; Sun, 11 Sep 2022 18:17:00 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:41d6:744a:8631:c709])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 8A7CC13F8AF;
- Sun, 11 Sep 2022 20:16:53 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 11 Sep 2022 20:16:53 +0200
-Date: Sun, 11 Sep 2022 20:16:53 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20220911181653.GA898622@scaer>
-References: <20220911162550.2257072-1-francois.perrad@gadz.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220911162550.2257072-1-francois.perrad@gadz.org>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1662920216;
- bh=Jm4rSkEt42HNv5mOSC7m+ly2Uod85vMMclsWfEEEciQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=oE0JONkpnnwzUUICZ85LBSISLp3QuZJp6yKbKqrebHzbTc626OSVKBLkksJAqVfN5
- t37eEEZtPZ94doc8lU7Zk5QVMd1kjRIy7Fa2gQnanpAv/qwfXVYwockHlWD55hxpW3
- XCIwhBxwc024e196Oz/z91VRUx+mhP1pPK4xEyuR39FVPRoG0iyUXVGFfYlMdWgiIV
- 9VA4LVtkfNBYenCdQAOeeuPIOPaaYaigkHIlI5Sc4+3eiKmgbpt1NxljT8EJRgK/VO
- y6lY89HDof/34mvQq53PEXeL+ic9aPvEcFtHfu4qOk7duewmpJZVnDOfMZ2wqOF3iq
- cQjED4ORFwgtQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=oE0JONkp
-Subject: Re: [Buildroot] [PATCH] package/luarocks: use two spaces
- indentation in hash file
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2NuGO5ugvQ3g for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49565400C6
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49565400C6
+Received: by busybox.osuosl.org (Postfix, from userid 4049)
+ id 35433836CF; Sun, 11 Sep 2022 18:25:24 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 11 Sep 2022 20:24:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4ac4aa795ab8b6081f5fc1af3b1243c33cf28bc3
+X-Git-Newrev: f7c841c75e84faedf2628a556b1e0bbbafbbf210
+X-Patchwork-Hint: ignore
+Message-Id: <20220911182524.35433836CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jpeg-turbo: bump to version 2.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,44 +56,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RmFuw6dvaXMsIEFsbCwKCk9uIDIwMjItMDktMTEgMTg6MjUgKzAyMDAsIEZyYW5jb2lzIFBlcnJh
-ZCBzcGFrZSB0aHVzbHk6Cj4gU2lnbmVkLW9mZi1ieTogRnJhbmNvaXMgUGVycmFkIDxmcmFuY29p
-cy5wZXJyYWRAZ2Fkei5vcmc+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKUmVnYXJkcywK
-WWFubiBFLiBNT1JJTi4KCj4gLS0tCj4gIHBhY2thZ2UvbHVhcm9ja3MvYnVpbGRyb290Lmx1YSB8
-IDQgKystLQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygt
-KQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2x1YXJvY2tzL2J1aWxkcm9vdC5sdWEgYi9wYWNr
-YWdlL2x1YXJvY2tzL2J1aWxkcm9vdC5sdWEKPiBpbmRleCAyZDE2MGYwMmIuLjNjMDQ0ZDg5YiAx
-MDA2NDQKPiAtLS0gYS9wYWNrYWdlL2x1YXJvY2tzL2J1aWxkcm9vdC5sdWEKPiArKysgYi9wYWNr
-YWdlL2x1YXJvY2tzL2J1aWxkcm9vdC5sdWEKPiBAQCAtMjY1LDEwICsyNjUsMTAgQEAgbG9jYWwg
-ZnVuY3Rpb24gZ2VuZXJhdGVfaGFzaCAocm9ja3NwZWMsIGxjbmFtZSwgcm9ja19maWxlLCBsaWNl
-bnNlcywgZGlnZXN0KQo+ICAgICBsb2NhbCBmID0gYXNzZXJ0KGlvLm9wZW4oZm5hbWUsICd3Jykp
-Cj4gICAgIHV0aWwucHJpbnRvdXQoJ3dyaXRlICcgLi4gZm5hbWUpCj4gICAgIGY6d3JpdGUoJyMg
-Y29tcHV0ZWQgYnkgbHVhcm9ja3MvYnVpbGRyb290XG4nKQo+IC0gICBmOndyaXRlKCdzaGEyNTYg
-JyAuLiBkaWdlc3Rbcm9ja19maWxlXSAuLiAnICAnIC4uIHJvY2tfZmlsZSAuLiAnXG4nKQo+ICsg
-ICBmOndyaXRlKCdzaGEyNTYgICcgLi4gZGlnZXN0W3JvY2tfZmlsZV0gLi4gJyAgJyAuLiByb2Nr
-X2ZpbGUgLi4gJ1xuJykKPiAgICAgZm9yIGkgPSAxLCAjbGljZW5zZXMgZG8KPiAgICAgICAgbG9j
-YWwgZmlsZSA9IGxpY2Vuc2VzW2ldCj4gLSAgICAgIGY6d3JpdGUoJ3NoYTI1NiAnIC4uIGRpZ2Vz
-dFtmaWxlXSAuLiAnICAnIC4uIHN1YmRpciAuLiAnLycgLi4gZmlsZSAuLiAnXG4nKQo+ICsgICAg
-ICBmOndyaXRlKCdzaGEyNTYgICcgLi4gZGlnZXN0W2ZpbGVdIC4uICcgICcgLi4gc3ViZGlyIC4u
-ICcvJyAuLiBmaWxlIC4uICdcbicpCj4gICAgIGVuZAo+ICAgICBmOmNsb3NlKCkKPiAgZW5kCj4g
-LS0gCj4gMi4zNC4xCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0t
-LS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwt
-VGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8
-ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAg
-fCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0t
-LS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95
-bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBj
-b25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0t
-LS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=f7c841c75e84faedf2628a556b1e0bbbafbbf210
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/2.1.4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
+ package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index a892fd3eaa..6e1278b48a 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/libjpeg-turbo/files/2.1.3/
+-sha1  6dec48193bb27e1c07abae8230031ce9ecb1cfec  libjpeg-turbo-2.1.3.tar.gz
+-md5  85244dedeaf06f636a9e7ddea6d236d8  libjpeg-turbo-2.1.3.tar.gz
++# From https://sourceforge.net/projects/libjpeg-turbo/files/2.1.4/
++sha1  5a355c08caa326cef7c2a61e062edfe8dd02ac07  libjpeg-turbo-2.1.4.tar.gz
++md5  3241b54016c445e5d8f0ebb0ad9294ed  libjpeg-turbo-2.1.4.tar.gz
+ # Locally computed
+-sha256  467b310903832b033fe56cd37720d1b73a6a3bd0171dbf6ff0b620385f4f76d0  libjpeg-turbo-2.1.3.tar.gz
++sha256  d3ed26a1131a13686dfca4935e520eb7c90ae76fbc45d98bb50a8dc86230342b  libjpeg-turbo-2.1.4.tar.gz
+ sha256  ee1eaf194d5924b6360af8a6ba6a4e1554037091f7505943300cdeec65f1aebb  LICENSE.md
+ sha256  4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb  README.ijg
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 475eb5fa84..e5bc8e7cf2 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JPEG_TURBO_VERSION = 2.1.3
++JPEG_TURBO_VERSION = 2.1.4
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
