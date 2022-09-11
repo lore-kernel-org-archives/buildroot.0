@@ -1,73 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68FA5ECAAD3
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 19:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62C86ECAAD3
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 19:45:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE581424DD;
-	Sun, 11 Sep 2022 19:43:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE581424DD
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6D3761038;
+	Sun, 11 Sep 2022 19:45:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6D3761038
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4tNo_s5wXXvh; Sun, 11 Sep 2022 19:43:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dJZVBgG8pQ10; Sun, 11 Sep 2022 19:45:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BA7141DB9;
-	Sun, 11 Sep 2022 19:43:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BA7141DB9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C79E41BF281
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 19:43:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBBBF61030;
+	Sun, 11 Sep 2022 19:45:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBBBF61030
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 803101BF281
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 19:45:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0075843C0
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 19:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0075843C0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5AF7E40119
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 19:45:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AF7E40119
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DRVUP3ba99tx for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 19:43:46 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF488843B3
-Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF488843B3
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 19:43:44 +0000 (UTC)
-Received: from [192.168.50.173] ([146.241.22.4])
- by Aruba Outgoing Smtp  with ESMTPSA
- id XSrmoezRWMW5FXSrmoxeYO; Sun, 11 Sep 2022 21:43:43 +0200
-Message-ID: <a94b9207-0af3-10c0-dbde-1b7dbd8d8880@benettiengineering.com>
-Date: Sun, 11 Sep 2022 21:43:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-US
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AALqA7tpnSDe for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 19:45:35 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2F24400C6
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F2F24400C6
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 19:45:34 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:41d6:744a:8631:c709])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id E726E13F85F;
+ Sun, 11 Sep 2022 21:45:25 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 11 Sep 2022 21:45:25 +0200
+Date: Sun, 11 Sep 2022 21:45:25 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20220911194525.GI898622@scaer>
 References: <20220910135256.1689860-1-giulio.benetti@benettiengineering.com>
- <20220911193046.GH898622@scaer>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220911193046.GH898622@scaer>
-X-CMAE-Envelope: MS4xfDK6hbiYKlrfZAbCO8yaa5Lo8Lcct4/XxgHRuaWWNHKPMTOoy5al0VR//J5Ydbx8F5n/1I0mw+n6JEGBFhlg6TuYoxY+IailaVno+YYeW0Q+KSVcXdVd
- mugO2pi+3x9SVyCkgYhGh3loGoKqRJoQ0I0qXBx9n1ZupW9JV/9t3iW0T8wET1onBdCfbkuv+kwbAtPqagsbGM7sR1OasaESLFd7sHULT82eBdwcceP+9WXp
- zahFVA402RKB3B5NtsJ+EjnRWitqpaT3r6XSqy2l/uT3DsIdNiwaoqbqfRjGVdrbLGI31j7GIB4SqMIVTpK9qyxwHDiSYUsFcergI4orFl8AXh3GJCEh9hYZ
- QOaX8b34H8T1qmF5dOpH1NOCWZNL7IBezvO8k6P++7+QFJZrGbAsMC+D7FI5VliKLHfan9c78smVZQ29QSpT4kUs3ekbCg==
+ <20220910135256.1689860-2-giulio.benetti@benettiengineering.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220910135256.1689860-2-giulio.benetti@benettiengineering.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1662925423; bh=TMXijp8cmAeyRRYWms5kYDiUfc3Hq1khkUDdUqNz0Js=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=KUaCw3w5tNbDwXuP7LHQ4BuJGv6BCxL/C8vfH4PvZz6pZmALpJFbGsRdzytQDPog7
- GogkFot2rmWjdmmuMmqOTlx0zbPbqdaSgRnjxaHOHDEtWyKdxycJGbt0NDpSXCxaUa
- XWxnqyQeG0BtX2qxVgmwz44/DOHjcOegTevgW3FrmJEin0cruA4FJJm2SLrB3N7isC
- gYUO+Qr6k0zJM3+T3lAd0xmm/No40NpbBgO/JC2eh9+FPQegUajUvN+rlEoU3oqZPD
- URCMEZDKSYy3RxVzhTLVXlym/u45+B0nCpW7PpuMrDee+Wm1ThAARzIrcIg4+exRpI
- e4ydjrPBXeJQQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=KUaCw3w5
-Subject: Re: [Buildroot] [PATCH 1/2] toolchain/Config.in: update gcc bug
- 90620
+ d=free.fr; s=smtp-20201208; t=1662925533;
+ bh=0/JjglxFnVu+5d7zVfbanWb4PqYX60zmm8NtGHgbU14=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DXr39uW2wvYzBB/U+6/BCPfUwcVLbCZhgRwICDP05l2HCGBdZsL0p8WbCiWeq59t0
+ XOivB4AajIfF7t2nwXk9VK94B9ZUINCa3AiyUnUbUg7Oh6p7Sogx6/PauuHiZZSn59
+ MQ41bC5Je4Ipr64YsCjDSbdXASNL/+YlPpbrn9/4GHSOuKMDQwdJhnrbVbUFZiyfCq
+ dKTKSUSK0Z4+zKvSSQnRboX91cQch2oQ4VUYbXbldimnCri/4lkn21+Xp4NjSpDxjZ
+ x8Qn2p0HRTeWnGvku6xQBSwk2c8awaBYZVDA7uulgdMvRKQMeDOLi+k8FtgC+z18wz
+ c7mM9eDkw3gLQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DXr39uW2
+Subject: Re: [Buildroot] [PATCH 2/2] package/qt5/qt5xmlpatterns: fix build
+ failure due to gcc bug 90620
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,90 +82,68 @@ Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
  Romain Naour <romain.naour@gmail.com>,
  Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 11/09/22 21:30, Yann E. MORIN wrote:
-> Giulio, All,
+Giulio, All,
+
+On 2022-09-10 15:52 +0200, Giulio Benetti spake thusly:
+> The qt5xmlpatterns package exhibits gcc bug 90620 when built for the
+> Microblaze architecture with optimization enabled, which causes a build
+> failure.
 > 
-> On 2022-09-10 15:52 +0200, Giulio Benetti spake thusly:
->> Gcc bug 90620 reappeared with gcc 11.x so let's update
->> BR2_TOOLCHAIN_HAS_GCC_BUG_90620 conditions.
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->>   toolchain/Config.in | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/toolchain/Config.in b/toolchain/Config.in
->> index fbc2f28553..16e358344d 100644
->> --- a/toolchain/Config.in
->> +++ b/toolchain/Config.in
->> @@ -168,11 +168,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_85862
->>   
->>   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
->>   # ICE: in do_output_reload, at reload1.c:7978 on microblaze.
->> -# This bug no longer exists in gcc 10.x
->> +# This bug no longer exists in gcc 10.x but reappeared in gcc 11.x
->>   config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
->>   	bool
->> -	default y if BR2_microblaze
->> -	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
->> +	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_10
->> +	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_11
->> +	depends on BR2_microblaze
+> As done for other packages in Buildroot work around this gcc bug by
+> setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_90620=y like we
+> already do for BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y.
+
+I don't see the point of mentionning 85180 here, because it is not
+already used for qt5xmlpatterns, or any other qt5 package, and there is
+no reason to refer to it more than to e.g. 68485 that has the same
+workaround. So I drop that part.
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> Fixes:
+> http://autobuild.buildroot.net/results/346/346e6d502a8927c8e95eea156f5b2943a85d0a6b/
 > 
-> I am not sure why the switch of default to depends is needed, because the
-> same condition can still be written without changing the default:
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
->      default y if BR2_microblaze
->      depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 \
->              || BR2_TOOLCHAIN_GCC_AT_LEAST_11
-
-It was an attempt to propose a standard shape to use here
-
-> Yeah, I see that other symbols that have a dependency on two gcc version
-> have the default/depends inverted, but symbols that have a dependency on
-> a single gcc version do not, e.g.:
+> diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+> index 3bb4ef74fd..6711e9bf70 100644
+> --- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+> +++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+> @@ -20,4 +20,8 @@ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+>  QT5XMLPATTERNS_LICENSE += , BSD-3-Clause (examples)
+>  endif
+>  
+> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_90620),y)
+> +QT5XMLPATTERNS_CONF_OPTS += "QMAKE_CXXFLAGS+=-O0"
+> +endif
+> +
+>  $(eval $(qmake-package))
+> -- 
+> 2.34.1
 > 
->      config BR2_TOOLCHAIN_HAS_GCC_BUG_85862
->          bool
->          default y if BR2_microblaze
->          depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-> 
-> So, I think it is better to keep the same semantics between the two
-> situations.
-> 
-> So, I fixed that, and applied to master, thanks.
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Thank you
-
-> Note, there is also a third way to write it, and obviouslty we are also
-> using that:
-> 
->      config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
->          bool
->          default y if BR2_nios2 && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
-> 
-> Meh... :-(
-
-Exactly :-)
-
-> Note: this is *not* a plea for patches to fix that, at all. I just like
-> ranting a bit. ;-)
-
-Why don't we choose a standard way instead? This for next patches, or
-even to send a patchset to keep consistency between all the bugs, but
-I know that it doesn't add anything and can add regressions.
-
-What do you think?
-
-Best regards
 -- 
-Giulio Benetti
-Benetti Engineering sas
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
