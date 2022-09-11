@@ -4,84 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E53A3C6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 20:52:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ED22ECAAD3
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 21:05:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A4828458E;
-	Sun, 11 Sep 2022 20:52:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A4828458E
+	by smtp1.osuosl.org (Postfix) with ESMTP id B470C81A58;
+	Sun, 11 Sep 2022 21:05:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B470C81A58
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IdO0hfhqHff1; Sun, 11 Sep 2022 20:52:14 +0000 (UTC)
+	with ESMTP id tLKWbgke5aC8; Sun, 11 Sep 2022 21:05:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85DE68458D;
-	Sun, 11 Sep 2022 20:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85DE68458D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E1911BF591
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 20:52:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 29D5F817BA;
+	Sun, 11 Sep 2022 21:05:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29D5F817BA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D56B01BF36D
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 21:05:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D3F0D424D3
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 20:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3F0D424D3
+ by smtp3.osuosl.org (Postfix) with ESMTP id AD38A60674
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 21:05:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD38A60674
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rwnKCFJR0GpC for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 20:52:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7j3ns3T37Snx for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 21:05:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2834042533
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2834042533
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 20:52:10 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- z14-20020a7bc7ce000000b003a5db0388a8so1484755wmk.1
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 13:52:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 774A4605A9
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 774A4605A9
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 21:05:11 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id l8so485430wmi.2
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 14:05:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=i4afPxZ+rtpI6wWN7sJsoZzPlbce532eVe8zTgnA8a0=;
- b=Ec26mQO+fUoZJ9Yclk49GbKsx6yQ9i02HCPvmQ0hGvTJP5ddC5P2sssJo2VonlPg+4
- ST8AAe89n/hZALzVQPClAhFqr1kHZSIK1SZB/Tgv4p59hrNCqW7jjnN4uoHeCtkowUm6
- S+t6FTjc0YxIJAGL3qPiIn1hRN8rBuTxxfui+nTIf1/GXBZ80Cr4M2e08aqBpiOCHmdL
- MVgOvPnsq1u9OQinsdBQrM69ToXBOBONR30pqQE98MQrHaDHn9Ov1BvM1868z7ApxjpM
- PNwB9XC8098oJ+m3xsSWBIkS8j7WuROIIlSoPVbXKcJu80Aab1evM+dlrGh+GXpuT6bo
- 12MQ==
-X-Gm-Message-State: ACgBeo0sC/avq41q1WkFwus3qMIh3/zTGbtRDRbUdlEXY5rIyqXdAXr5
- W8/ErfL2j0b9oY2/+1Rrh+xc76ZCon8=
-X-Google-Smtp-Source: AA6agR7VnD13XoH0kV3Gp/0MyhLFLrtzE+KNV/q8c4xnRyzCEPzQQNn5y0qeNB05HM8SuLhgbjbdtA==
-X-Received: by 2002:a05:600c:a0b:b0:3ab:945:77c2 with SMTP id
- z11-20020a05600c0a0b00b003ab094577c2mr11964353wmp.201.1662929526715; 
- Sun, 11 Sep 2022 13:52:06 -0700 (PDT)
+ bh=9AIbShpNMhtXN9QgXveR7UTB0qlqtuWAvfDv1pj/0m8=;
+ b=HptMDydlgmpdHC5BsUnADnQ0fJusOh5ryNfChnOAEtXkY+ZND3R7jHYnbrKXbY7T1z
+ dMNANjD2JKesU4uUmD32LSXr5ahndCmigJeHtNGZSW+0fksJjonLJF776Vyi6UGMAmXH
+ U5mltyDBJUVjpa37oyQx1AGWatwIKbucPzYKVk2IHgoEtbxVvl/+j0G7SVyV3DfoQ7Zl
+ G+2aNKp0idQMjj+Ej0wTou+ftM7OXxE08Hd4ZrGbsgv6eGzmtd+1K4Ndli2xYsn0WWKX
+ p9v0VHV3epIC6WqJs8ng8ziuTUuQOTIOCH+AhUTIfOPaDCSNLNItvVuYL6NiJcuRqqeQ
+ OMzA==
+X-Gm-Message-State: ACgBeo3TJVdveqJfVt+xOqSelzntkmCl3n0JGL+ZVZdSDJYmOJ0RsW5s
+ 8kZUb5SvfG3D2e53QGtNm0KWYsJqdiY=
+X-Google-Smtp-Source: AA6agR6ZUjdhyuCIjJyND2tanAY3yMCa0+1g2TmvyejYojqxAge/dwEirCa0VknPhnKPJulo62XbOw==
+X-Received: by 2002:a05:600c:3d05:b0:3a5:dd21:e201 with SMTP id
+ bh5-20020a05600c3d0500b003a5dd21e201mr11856790wmb.132.1662930309342; 
+ Sun, 11 Sep 2022 14:05:09 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- g5-20020a5d4885000000b00228de58ae2bsm5575016wrq.12.2022.09.11.13.52.05
+ v6-20020a5d6786000000b00228cbac7a25sm5674696wru.64.2022.09.11.14.05.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Sep 2022 13:52:06 -0700 (PDT)
+ Sun, 11 Sep 2022 14:05:08 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Sep 2022 22:52:03 +0200
-Message-Id: <20220911205203.5750-1-fontaine.fabrice@gmail.com>
+Date: Sun, 11 Sep 2022 23:04:59 +0200
+Message-Id: <20220911210459.122463-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date;
- bh=i4afPxZ+rtpI6wWN7sJsoZzPlbce532eVe8zTgnA8a0=;
- b=iQVvkjp15pL0CP8MOtPLLF5Zv890PrAsfcX+a9huj3IlhC26v+7VzIJBKT58JcUbeN
- NtPCQFXMve9Vna4efwlUILDMwevH+it5ocTdZHvzJdWc5SAnRNY0tF82E0+Y+Mjt+Ft6
- A5PXGJqZu5yfsGzrnHFKRbUvRlRgyL7ak96KFT+IQNKwIQVWO4VFQRDKn8fdA6eUsoq2
- gZKKt9xov1gKxPYIGx153OD5/oz8fTh70OfwFVTusnVB+hPOi93NQxwgDZAq6clSkTpL
- v8M45+T36eTg21gkKmUrTiQdKEpLt1VMQ9kG+K0TqMELKCIPurliC0SX3BU22kaG0kbD
- h41A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=9AIbShpNMhtXN9QgXveR7UTB0qlqtuWAvfDv1pj/0m8=;
+ b=IChs4ADupys1iQN1Rb0qTbszSGbNIG7ICK4+PqGM4Me+JG74lE+75Zrx9mJqp14ukw
+ u88xJ64ewW2WOn8eTO7R29mm0SDb6ZnRv/V5tf7bDDqMbLfI9veJoZAB6kS3LsCEZyYa
+ BsF0r2pO5w1dpvWSmn9AFnU0/4vNGb6zpBx5ri3jHOTJzdErhStM5Vzaa2SDDmGKEaf1
+ rNrnRa4qOfiIS3GQCm75zOArP5k0wYqSk5oC/xiq31ihkNqUQ3KDylBmSRDnOF94Db8l
+ LVPvmAaEgWCTyh8b5+CiUcIjKYfZcj4xQgpKWp6oMvZX3ETGxqDJQGwFOsM86plp3pUS
+ IxBw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=iQVvkjp1
-Subject: [Buildroot] [PATCH 1/1] package/gensio: fix musl build
+ header.a=rsa-sha256 header.s=20210112 header.b=IChs4ADu
+Subject: [Buildroot] [PATCH 1/1] package/libnice: bump to version 0.1.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,64 +92,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
+Cc: Gregory Dymarek <gregd72002@gmail.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following musl build failure raised since bump to version 2.5.2
-in commit 5bb747f0b783a0d3f1712350ca3277263045b299:
-
-gensiotool.c:47:10: fatal error: sys/unistd.h: No such file or directory
-   47 | #include <sys/unistd.h>
-      |          ^~~~~~~~~~~~~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/99a60831da94f94fdf798c1c30cc09f0e51416c7
+https://gitlab.freedesktop.org/libnice/libnice/-/blob/0.1.19/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...01-tools-gensiot-Fix-build-with-musl.patch | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/gensio/0001-tools-gensiot-Fix-build-with-musl.patch
+ package/libnice/libnice.hash | 2 +-
+ package/libnice/libnice.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gensio/0001-tools-gensiot-Fix-build-with-musl.patch b/package/gensio/0001-tools-gensiot-Fix-build-with-musl.patch
-new file mode 100644
-index 0000000000..7cda950c9e
---- /dev/null
-+++ b/package/gensio/0001-tools-gensiot-Fix-build-with-musl.patch
-@@ -0,0 +1,29 @@
-+From 64f8f754447572a6b7bed4038a9a29a12b448479 Mon Sep 17 00:00:00 2001
-+From: Jan Luebbe <jlu@pengutronix.de>
-+Date: Thu, 25 Aug 2022 12:19:16 +0200
-+Subject: [PATCH] tools:gensiot: Fix build with musl
-+
-+According to POSIX getpid() is available in unistd.h, not sys/unistd.h.
-+
-+Signed-off-by: Jan Luebbe <jlu@pengutronix.de>
-+
-+[Retrieved from:
-+https://github.com/cminyard/gensio/commit/64f8f754447572a6b7bed4038a9a29a12b448479]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tools/gensiotool.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/gensiotool.c b/tools/gensiotool.c
-+index cac531bb..ab0bb958 100644
-+--- a/tools/gensiotool.c
-++++ b/tools/gensiotool.c
-+@@ -44,7 +44,7 @@
-+ #include <signal.h>
-+ #include <errno.h>
-+ #include <sys/types.h>
-+-#include <sys/unistd.h>
-++#include <unistd.h>
-+ #include <syslog.h>
-+ #endif
-+ 
+diff --git a/package/libnice/libnice.hash b/package/libnice/libnice.hash
+index 55785cd5ff..83b28a9ad9 100644
+--- a/package/libnice/libnice.hash
++++ b/package/libnice/libnice.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking pgp signature
+-sha256  5eabd25ba2b54e817699832826269241abaa1cf78f9b240d1435f936569273f4  libnice-0.1.18.tar.gz
++sha256  6747af710998cf708a2e8ceef51cccd181373d94201dd4b8d40797a070ed47cc  libnice-0.1.19.tar.gz
+ 
+ # Hash for license files:
+ sha256  9246b2ee8b1db30cf03d5d9719ad8bb5edce1cadc85f8cfef319c23d24d950b5  COPYING
+diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
+index 5889b24ba2..2b223bedd3 100644
+--- a/package/libnice/libnice.mk
++++ b/package/libnice/libnice.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNICE_VERSION = 0.1.18
++LIBNICE_VERSION = 0.1.19
+ LIBNICE_SITE = http://nice.freedesktop.org/releases
+ LIBNICE_LICENSE = MPL-1.1 or LGPL-2.1
+ LIBNICE_LICENSE_FILES = COPYING COPYING.MPL COPYING.LGPL
 -- 
 2.35.1
 
