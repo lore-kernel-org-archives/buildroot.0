@@ -4,76 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EFA0C6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 09:42:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E2A7C6FA83
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 10:41:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D58F64193F;
-	Sun, 11 Sep 2022 09:42:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D58F64193F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2698F41970;
+	Sun, 11 Sep 2022 10:41:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2698F41970
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NOMsWRQ42ASF; Sun, 11 Sep 2022 09:42:04 +0000 (UTC)
+	with ESMTP id 46OUEWmB0szc; Sun, 11 Sep 2022 10:41:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99F354194C;
-	Sun, 11 Sep 2022 09:42:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99F354194C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2C2F21BF3D4
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 09:42:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AFD9419E6;
+	Sun, 11 Sep 2022 10:41:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AFD9419E6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A7601BF5F5
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 10:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07AC14058F
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 09:42:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07AC14058F
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6E7C61053
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 10:41:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6E7C61053
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aLfu3jDdmrF8 for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 09:42:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCF7B403E2
-Received: from mout1.freenet.de (mout1.freenet.de [IPv6:2001:748:100:40::2:3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BCF7B403E2
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 09:41:59 +0000 (UTC)
-Received: from [195.4.92.123] (helo=sub4.freenet.de)
- by mout1.freenet.de with esmtpa (ID earthquake.de@freenet.de) (port 25) (Exim
- 4.94.2 #2) id 1oXJTO-003JMV-Cs; Sun, 11 Sep 2022 11:41:55 +0200
-Received: from ipbcc0e031.dynamic.kabel-deutschland.de ([188.192.224.49]:61141
- helo=[192.168.0.11])
- by sub4.freenet.de with esmtpsa (ID earthquake.de@freenet.de)
- (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (port 465) (Exim
- 4.94.2 #2) id 1oXJTO-009LOr-FL; Sun, 11 Sep 2022 11:41:54 +0200
-Message-ID: <a5f78f21-7b6e-6e68-0104-d51879d82e35@freenet.de>
-Date: Sun, 11 Sep 2022 11:41:51 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6lXDOxlHXvXk for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 10:41:11 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E473A6102C
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E473A6102C
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 10:41:10 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id e16so10881528wrx.7
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 03:41:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=NDW286GvNzTafjDpNYVgBbGj4UFf/DcBsf/g83jgABU=;
+ b=40Fkv6v0VioEtREf4TATpwevozc28E1win5sryjnBXo5LIsko7iKFRcxovMkO9vy4H
+ LERkRAiHEfoEgNO7ywhwSx8I/qOVEgqiCLiQ8yPLkwEd25hb3UsyFegOR6JQqucZ9mpv
+ FxfN/Mnr9KkPiQXx/AuZ8xcbT1+yIATTzMoIZieiOQLD+Zs7KqbyMUsm7MSxNBjeq3sO
+ oH86LtFfwZMX3kgRl3fNAVuTVVHlb/unhZdvKvvajek0XY0HRNkD3hXgUtBGvUYvPgP6
+ SKVOsrSFxxLZATkNkuWHoYnmGdW+VRxwc+n++NvypEtqvbHC7sS2zX5RhaotRaB4OnND
+ G+Uw==
+X-Gm-Message-State: ACgBeo2hpIROrY1VUIoHzkBBY/4PjaTblOO9svkr+z1Ke1Nw6a+Z8CUG
+ OvYuLcquuVd+Kr3qtij/znR41NTL0Gc=
+X-Google-Smtp-Source: AA6agR78tPluUPNzxW+vYzRS4iCmUPOmlSPN4BonKxtJk3OgAOG2aPuP3Jj8mO38bFG+Zw208LtCuQ==
+X-Received: by 2002:adf:fac1:0:b0:226:d790:7644 with SMTP id
+ a1-20020adffac1000000b00226d7907644mr12064826wrs.471.1662892868805; 
+ Sun, 11 Sep 2022 03:41:08 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ j13-20020adff54d000000b00229d55994e0sm4571292wrp.59.2022.09.11.03.41.07
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 11 Sep 2022 03:41:08 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 11 Sep 2022 12:40:58 +0200
+Message-Id: <20220911104058.8928-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: de-DE
-To: buildroot@buildroot.org, busybox@busybox.net
-References: <661e0716-bbca-eec2-8a4a-0d155edea5c6@freenet.de>
- <c1d1e5ac-efe5-eeff-af5d-dd9d6eae5696@green-communications.fr>
-From: Alex <earthquake.de@freenet.de>
-In-Reply-To: <c1d1e5ac-efe5-eeff-af5d-dd9d6eae5696@green-communications.fr>
-X-FN-MUUID: 16628893149E8ED8AABD1CO
-X-Originated-At: 188.192.224.49!61141
-X-Scan-TS: Sun, 11 Sep 2022 11:41:54 +0200
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=freenet.de; 
- s=mjaymdexmjqk; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Cc:From:
- References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
- :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
- Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
- :List-Post:List-Owner:List-Archive;
- bh=c1T+OpbMaNmMCSWvUa2VZtPYCwb6xubF9LEZiCLVxk4=; b=yMl+Ixbydul1c4sBUqBNGNfQ17
- 2jWHPOA1OiozuWIu7lcyzftZ4eKdLwUR0bLk9BQ+hgCHqS4LzlPdmX9xOUhvTrBlfqhev4EH07FXL
- w2+z/Tu194MPQz2iXVBZvcopr4dJXiEUplewIJE3EKqzPuLi472WedisTBt5x2ZwZS3nLbU3zxTsX
- 94aCIBD46gFhLdoqrd89PUO8Q8K1vOXwiq7uUBARwHQrO4yXd9O3ah8HgeW4FuvjizED2h3djxTJ2
- osVt3W6ZFIDrJARBzTFQdwxltB1YbiXr+xjMNtPyeSt69NlZ/OnJh6dSbXBCvXVJ+ChvRo0tZqbCE
- SE+xnFFw==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=freenet.de header.i=@freenet.de
- header.a=rsa-sha256 header.s=mjaymdexmjqk header.b=yMl+Ixby
-Subject: Re: [Buildroot] libstdc++ DSO missing
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=NDW286GvNzTafjDpNYVgBbGj4UFf/DcBsf/g83jgABU=;
+ b=CEzcnUXSHDEIKDPoaqqGgKMTmIrrJx6gPSE7giH3lxIBK5fKT9aZyi8+v96eNuO7pH
+ JPsVu/Ypn0zNAM0c3I5AU2J5OCT5I7ntVSCIwSS1Oah2dKqLnmHbg3/gOXzoukm7kvQk
+ KKxEcrHSWN4tzysYOtbuBrR93qHi1CjVYOFG38n3JuD+2X2EhMj/5tReaZ/pGchDO7Sc
+ lo+4zcO790m0rz1EEtlAcKDByyrHwaw6KQr5/tLYpOk00k1yB07z/FBdxKlyqFvL7Wcp
+ VxetPVPGpm4ORK+wD3tXYcx/6fE/cm4LcUllfx6SxWDttohC+TV9oGVMLkbsYCVfyUYJ
+ a4fQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=CEzcnUXS
+Subject: [Buildroot] [PATCH 1/1] package/qlibc: bump to version 2.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,59 +92,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhhbmsgeW91IGZvciB5b3VyIGRldGFpbGVkIGV4cGxhbmF0aW9uLgo+IE9uIDA5LzA5LzIwMjIg
-MTQ6MzQsIEFsZXggd3JvdGU6Cj4+IEhpLAo+Pgo+PiBJIGludGVyZ3JhdGVkIG15IGFwcGxpY2F0
-aW9uIHRvIGJ1aWxkcm9vdC4gQ29tcGxpZSBpcyBzdWNjZXNzZnVsbCBieQo+PiB3aGVuIGxpbmtp
-bmcgSSBnZXQgZXJyb3JzOgo+Pgo+PiB4ODZfNjQtYnVpbGRyb290LWxpbnV4LWdudS9zeXNyb290
-L3Vzci9saWI2NC9saWJzdGRjKysuc28uNjogZXJyb3IKPj4gYWRkaW5nIHN5bWJvbHM6IERTTyBt
-aXNzaW5nIGZyb20gY29tbWFuZCBsaW5lCj4KPiBUaGlzIGVycm9yIG1lYW5zIHRoYXQ6Cj4gLSB0
-aGUgbGlua2VyIGZvdW5kIGEgbGlicmFyeSB3aXRoIGEgRFRfTkVFREVEIGRlcGVuZGVuY3kgb24g
-Cj4gbGlic3RkYysrLnNvLjYKPiAtIHRoZSBsaW5rZXIgZm91bmQgbGlic3RkYysrLnNvLjYKPiAt
-IHRoZSBsaW5rZXIgaXMgbWlzc2luZyBzeW1ib2xzCj4gLSB0aGUgbGlua2VyIGZvdW5kIHRoZSBt
-aXNzaW5nIHN5bWJvbHMgaW4gbGlic3RkYysrLnNvLjYKPiAtIGJ1dCB0aGUgbGlua2VyIGNvbW1h
-bmQgbGluZSBkb2VzIG5vdCBpbmNsdWRlIGxpYnN0ZGMrKy5zby42Cj4gLSBzbyB0aGUgbGlua2Vy
-IGlzIG5vdCBzdXJlIGlmIHRoZSB1c2VyIGFjdHVhbGx5IGludGVuZGVkIHRvIGxpbmsgd2l0aCAK
-PiBsaWJzdGRjKysuc28uNi4KPiAtIHNvIGl0IHJlZnVzZXMgdG8gbGluay4KPgo+IFNpbmNlIGxp
-YnN0ZGMrKy5zby42IGlzIHRoZSBDKysgcnVudGltZSBsaWJyYXJ5LCB0aGlzIGVpdGhlciBtZWFu
-IHRoYXQ6Cj4gLSB5b3UgYXJlIGxpbmtpbmcgYSBDKysgcHJvZ3JhbSB3aXRoIGxkIG9yIGdjYyBp
-bnN0ZWFkIG9mIGcrKwoKWWFwLCBvdXRzaWRlIG9mIGJ1aWxkcm9vdCwgbGlua2luZyBjYWxscyB0
-aGUgZysrIGJ1dCB3aGVuIGxpbmtpbmcgaW5zaWRlIApidWlsZHJvb3QswqAgY2FsbHMgdGhlIHg4
-Nl82NC1idWlsZHJvb3QtbGludXgtZ251LWxkLApiZWNhdXNlICQoTEQpIGluIHRoZSBtYWtlZmls
-ZSBpcyBzZXQgdG8geDg2XzY0LWJ1aWxkcm9vdC1saW51eC1nbnUtbGQgCndpdGhpbiBidWlsZHJv
-b3QuCgpJbnNpZGUgdGhlIHBhY2thZ2UgLm1rIGZpbGUgb2YgdGhlIEJVSUxEX0NNRFMgY2FsbHMg
-bWFrZToKCiQoTUFLRSkgJChUQVJHRVRfQ09ORklHVVJFX09QVFMpwqAgLUMgJChARCkKClNvIChh
-IGtsdWRnZSB0byB0ZXN0KSwgaSByZXBsYWNlZCBpbiB0aGUgTWFrZWZpbGUKJChMRCkKYnkKJChI
-T1NUX0RJUikvYmluL3g4Nl82NC1saW51eC1nKysKTm93IGxpbmtpbmcgaXMgc3VjY2Vzc2Z1bGwu
-Li4KSXMgdGhlcmUgYSBtb3JlICJlbGVnYW50IiB3YXkgdG8gZG8gdGhpcy4uLj8gTm90IHNvIGEg
-a2x1ZGdlIGxpa2UgdGhhdCwgCm1lYW4gc2V0dGluZyB0aGlzIHdpdGhpbiB0aGUgbWsgZmlsZSBi
-ZWZvcmUgY2FsbGluZyB0aGUgcHJvamVrdCBtYWtlLi4uCkFuZCBob3cgdG8gc3BlY2lmZXkgJChD
-QykgYWxzbyB0byBnKys/PwoKCj4gLSB5b3UgYXJlIGxpbmtpbmcgYSBDIHByb2dyYW0gd2l0aCBh
-IEMrKyBsaWJyYXJ5IHRoYXQgcmVxdWlyZXMgCj4gbGlic3RkYysrLnNvLjYsIGluIHRoaXMgY2Fz
-ZSB5b3UgbWF5IG5lZWQgLWxzdGRjKysgb24gdGhlIGxpbmtlciAKPiBjb21tYW5kIGxpbmUuCj4K
-Pj4gQXJlIGxpYnJhcmllcyBtaXNzaW5nIGZyb20gYnVpbGRyb290IGVudmlyb25tZW50Pwo+Cj4g
-Tm8sIG9ubHkgdGhlIGxpbmtlciBjb21tYW5kIGxpbmUgaXMgaW5jb3JyZWN0Lgo+Cj4+IEFkZGl0
-aW9uYWwgSSBnZXQgd2FybmluZ3MgdGhhdCBzb21lIC5zbyBmaWxlcyBub3QgZm91bmQsIGJ1dCB0
-aGV5IGFyZQo+PiBhdmFpbGFibGUgaW4gb3V0cHV0L2J1aWxkLzxUb29sPi9saWIKPgo+IFRoZSBj
-b21waWxlciB3aWxsIG9ubHkgc2VhcmNoIGxpYnJhcmllcyBpbiBvdXRwdXQvc3RhZ2luZy9saWIg
-b3IgCj4gb3V0cHV0L3N0YWdpbmcvdXNyL2xpYi4KPiBUaGUgcGFja2FnZSBmb3IgPFRvb2w+IHNo
-b3VsZCBpbnN0YWxsIHRoZSBsaWJyYXJpZXMgdGhlcmUsIHNvIHRoYXQgCj4gb3RoZXIgcHJvZ3Jh
-bXMgY2FuIGxpbmsgd2l0aCB0aGVtLiBUaGlzIGlzIGRvbmUgYnkgcHV0dGluZwo+Cj4gPFRPT0w+
-X0lOU1RBTExfU1RBR0lORyA9IFlFUwo+Cj4gaW4gaXRzIC5tayBmaWxlLsKgIElmIDxUb29sPiBp
-cyBhIGdlbmVyaWMtcGFja2FnZSAoYW5kIG5vdCBhIAo+IGF1dG90b29scy9tZXNvbi9jbWFrZSBw
-YWNrYWdlKSwgdGhlbiB5b3UgYWxzbyBuZWVkIHRvIG1hbnVhbGx5IGV4cGxhaW4gCj4gaG93IHRv
-IGluc3RhbGwgbGlicmFyaWVzIHRvICQoU1RBR0lOR19ESVIpL2xpYjoKCkluZGVlZCBJIGZvcmdv
-dCBvbmUgb2YgdGhlIC5zbyB0byBiZcKgIGluc3RhbGxlZCB0byBzdGFnaW5nLiBBZnRlciBhZGRp
-bmcgCnRoaXMgYW5kIGFwcGVuZCB0byB0aGUgJChNQUtFKSBjYWxsIHRoZSBMRF9MSUJSQVJZX1BB
-VEg9IiQoQEQpLi4vPFRvb2w+L2xpYiIKY29tcGlsZSBhbmQgbGlua2luZyBpcyBzdWNjZXNzZnVs
-bC4KCj4KPiBodHRwczovL25pZ2h0bHkuYnVpbGRyb290Lm9yZy9tYW51YWwuaHRtbCNfaW5mcmFz
-dHJ1Y3R1cmVfZm9yX3BhY2thZ2VzX3dpdGhfc3BlY2lmaWNfYnVpbGRfc3lzdGVtcyAKPgo+Cj4+
-IEJ1dCBJIGluY2x1ZGVkIHRoaXMgcGF0aCBieSAkKEBEKS8uLi88VG9vbD4vbGliCj4KPiBXaGls
-ZSBpdCBtYXkgd29yaywgdGhpcyBpcyBhIGtsdWRnZS4KX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+This is a maintenance release that includes improvements and bug fixes.
+
+https://github.com/wolkykim/qlibc/releases/tag/v2.4.6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/qlibc/qlibc.hash | 2 +-
+ package/qlibc/qlibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/qlibc/qlibc.hash b/package/qlibc/qlibc.hash
+index 6abb16b274..5cd6e1860f 100644
+--- a/package/qlibc/qlibc.hash
++++ b/package/qlibc/qlibc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e195c97453c260acea4421146ba992d9a4d89732eac345b3765c43cc3326d2ad  qlibc-2.4.5.tar.gz
++sha256  bd98c19f96c0d374adb69c99627c80cf967b5e860c8a4f28c13fa1b0d652a06e  qlibc-2.4.6.tar.gz
+ sha256  7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
+diff --git a/package/qlibc/qlibc.mk b/package/qlibc/qlibc.mk
+index 6cce8201bd..3996bb3706 100644
+--- a/package/qlibc/qlibc.mk
++++ b/package/qlibc/qlibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QLIBC_VERSION = 2.4.5
++QLIBC_VERSION = 2.4.6
+ QLIBC_SITE = $(call github,wolkykim,qlibc,v$(QLIBC_VERSION))
+ QLIBC_LICENSE = BSD-2-Clause
+ QLIBC_LICENSE_FILES = LICENSE
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
