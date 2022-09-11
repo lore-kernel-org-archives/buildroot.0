@@ -1,86 +1,96 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53F17ECAAD3
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 12:55:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3275DC54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 12:56:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9B4A841634;
-	Sun, 11 Sep 2022 12:55:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B4A841634
+	by smtp4.osuosl.org (Postfix) with ESMTP id 953A741E1B;
+	Sun, 11 Sep 2022 12:56:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 953A741E1B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CE63uzdst4dP; Sun, 11 Sep 2022 12:55:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Eu3fmh70YPKf; Sun, 11 Sep 2022 12:56:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE89A40BCE;
-	Sun, 11 Sep 2022 12:55:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE89A40BCE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A4F2D1BF373
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 12:55:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37C7841E18;
+	Sun, 11 Sep 2022 12:56:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37C7841E18
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 392281BF373
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 12:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 802F26FBBB
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 12:55:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 802F26FBBB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1A4C241E18
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 12:55:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A4C241E18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VKJERsjt9Kzy for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 12:55:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bd4WvCyGqvOd for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 12:55:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ED8F6FB50
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9ED8F6FB50
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 12:55:46 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id az6so5292268wmb.4
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 05:55:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C0B841DC5
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8C0B841DC5
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 12:55:49 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id 29so9119321edv.2
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 05:55:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=G83f8bK2D51PLf/03jVYlr0tn6g4Hfm3loY1TlShwLI=;
- b=XXHw8rOC4siQcx+kqZOF6OJr6iYZ4ZegMmPM3jd5qwUHroDj2skTh+OEt+NCVgVGwN
- Jrl9rCMlF0nV93jI1Pa9iMMq3VvfmLu3WcZ118vzO2jKMjCOZ9n9itJXXqqV0Y8klcWB
- tz48iy4HdamdA2UNVbt+jxxbwdJCrVx8nk716WdT1wbTYOljpz3DNZ04OzlDF+7a8j5S
- /ygnKfx9Ffmx53ATsK9cYYzusjNrYYjq8j4Uco6nriDYWAQJLvBjwa4bN87tdftqO1Yo
- 1PfSLJDHmlMtsj2v8NBM2uSZCZMSKqgXtN2rTqtqQlRAwqQWgrQaS/rPKezBdEEUpwg8
- Ikpw==
-X-Gm-Message-State: ACgBeo2yCpdyuHfs9/9wDu62Zma4qF/wybKeKpEHW4ta7Hns+t4khydZ
- ETEVwgaAhcX/gYqATCoyqmBxMqGQRX8=
-X-Google-Smtp-Source: AA6agR5GDdyfSg8k8NS1LzmIVbjhIO/LUlA1rVF7HkGqjFZFTwGPSWnZdmo/hQrYg0s+53cvTrjjdg==
-X-Received: by 2002:a05:600c:1c84:b0:3b3:ef37:afd3 with SMTP id
- k4-20020a05600c1c8400b003b3ef37afd3mr7234805wms.155.1662900941661; 
- Sun, 11 Sep 2022 05:55:41 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- l16-20020a5d5610000000b0021e43b4edf0sm4879223wrv.20.2022.09.11.05.55.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Sep 2022 05:55:41 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 11 Sep 2022 14:55:33 +0200
-Message-Id: <20220911125533.29246-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date;
+ bh=PESnIx/DiE1eb+OyzUabn4qwxe2l1KvIMbcjj4CMGZI=;
+ b=bAN2lohJmzlk7jSSCL/KL9wSd6pKp6MnA5gVRtcmx8ZMHTekXnXFo6Zd44lPZgCvfP
+ M3mZUihRTd5DVPHt0tXWxGkSH7WxlB3zS++ksBSJUG512dvHLW9luvVrYtXc4QDjzvPx
+ bzwzdZgsCNcLVCbbr0V/H6OS+cyvNFVC37GAxHQXlclT+JSp4yMtI2Vn9gUh7zu8IIHz
+ T1o2pYXO+DCxYa/KNpJAT6XBXBqKtHIrsDtXiDUnWNLHDdXUf4CtGCS5zaAZNINNAqJC
+ EEw66i0+SeI+bl4xSS2XOz/8wPeAIYljBXMHYwmUeJ57h2W14ogp5BmpVNwcbs+epT4+
+ UVdg==
+X-Gm-Message-State: ACgBeo172XHN5deeHVNSU6rvePvgYpi0+8vW/F3H3EOniQIPPAlFr3Bv
+ HXNc5yMXixIHU4w/05TrLEw2NLLzXBNfBoQK
+X-Google-Smtp-Source: AA6agR6k+ZOmRa3lclC6OhLhz8OVdrLl077ciOUxPa5nSGB9Kh2m+WNhd95YWSZncsZp5eplS52DSQ==
+X-Received: by 2002:a05:6402:1d4e:b0:451:d378:eed2 with SMTP id
+ dz14-20020a0564021d4e00b00451d378eed2mr529903edb.23.1662900944574; 
+ Sun, 11 Sep 2022 05:55:44 -0700 (PDT)
+Received: from ?IPV6:2a02:8070:4182:37a0:97b2:fd91:46b3:8d3a?
+ ([2a02:8070:4182:37a0:97b2:fd91:46b3:8d3a])
+ by smtp.gmail.com with ESMTPSA id
+ kw4-20020a170907770400b0073dcdf9b0bcsm3050355ejc.17.2022.09.11.05.55.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 11 Sep 2022 05:55:44 -0700 (PDT)
+Message-ID: <36548884-9180-1dfa-cbca-2ab45a037632@gmail.com>
+Date: Sun, 11 Sep 2022 14:55:45 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220904124315.12728-1-raphael.pavlidis@gmail.com>
+ <20220905115121.GC1490660@scaer>
+ <75e277ba-99aa-78f3-a60d-5e8cf2c1b9a8@gmail.com>
+ <20220911121457.GG264214@scaer>
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+In-Reply-To: <20220911121457.GG264214@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=G83f8bK2D51PLf/03jVYlr0tn6g4Hfm3loY1TlShwLI=;
- b=VPnXFYPbzzGqQn2bfAvlPJjquBIcwtcH3hWbwxgHrMLGWH2Scx2RcOXGhMsHIYEArU
- +0cYP6DtTJ7PWtUkmhgIR1pXGnFkHbrjTHDzQDe2e/8IfbyDTxtxCektNVZfu26xeS4S
- cB5TeUmLwNPISzOU4xvteKuYPZR3ZQ0Kh/MAEd8a400/xPKMJPrTWVrC/Cn818+sPk/A
- gyhAWYkRkOj7Byhv09KrjZltB0m2fkoEsgUfiwD1wjhoYOlOuFyovT0+RvfGiPUXbUTD
- AdzrmHLH/yLNKaNUkJwUY11I/brVIauy/I/B/7dhe7XgCQ5fK3MMkUinbJXgshku9KmK
- tOzw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date;
+ bh=PESnIx/DiE1eb+OyzUabn4qwxe2l1KvIMbcjj4CMGZI=;
+ b=mAPZQdDdT8KUNBseRbRfrzPvhoD0Tp1U1DT2q/ofJbQ+F77sftI3pCoiQLa8ngsuZs
+ oOya5JaZEyhVXIYGJMLnkJ6KierEHYyf78XfTFOt5O8T4fft5XinrRnqbPw32iktu5OK
+ QbAivqNt8my1sZL3AxyAovdGfg1L47eyeAlROe0Yrr2cpPHRsA5RL4cTxUsyziFzcGF3
+ jdf9OxTJHDRdJBPyAtxE60+ZPou1WnNTDJzv6hDIGwPr/j6ZOqMg43vKu9RD+rH8sb52
+ OTz8IayJlGpwUnyKYyH/cgzuw+LRyW86P1bMIHTwXLpF4zOd1zAct0Zu8ByuEVzFDxjc
+ RCiA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=VPnXFYPb
-Subject: [Buildroot] [PATCH 1/1] package/rhash: bump to version 1.4.3
+ header.a=rsa-sha256 header.s=20210112 header.b=mAPZQdDd
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/shadow: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,49 +102,177 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/rhash/RHash/releases/tag/v1.4.3
+Yann, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/rhash/rhash.hash | 6 +++---
- package/rhash/rhash.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+(Thank you Yann for your review comments)
 
-diff --git a/package/rhash/rhash.hash b/package/rhash/rhash.hash
-index e0555af3c2..355b5c275b 100644
---- a/package/rhash/rhash.hash
-+++ b/package/rhash/rhash.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/rhash/files/rhash/1.4.2/
--sha1  fdb0b0c16f3ba3eba734b3adf9f2fc4c427ff987  rhash-1.4.2-src.tar.gz
-+# From https://sourceforge.net/projects/rhash/files/rhash/1.4.3/
-+sha1  6e698e6d5b13aeac55076d6a53dc4dab55f2114e  rhash-1.4.3-src.tar.gz
- # Locally calculated
--sha256  600d00f5f91ef04194d50903d3c79412099328c42f28ff43a0bdb777b00bec62  rhash-1.4.2-src.tar.gz
-+sha256  1e40fa66966306920f043866cbe8612f4b939b033ba5e2708c3f41be257c8a3e  rhash-1.4.3-src.tar.gz
- sha256  953e55838353335148c90b5a38a4894292680b1d4c37228ffddddbf18ce54bf5  COPYING
-diff --git a/package/rhash/rhash.mk b/package/rhash/rhash.mk
-index 02af0aa57b..8c33de1862 100644
---- a/package/rhash/rhash.mk
-+++ b/package/rhash/rhash.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RHASH_VERSION = 1.4.2
-+RHASH_VERSION = 1.4.3
- RHASH_SOURCE = rhash-$(RHASH_VERSION)-src.tar.gz
- RHASH_SITE = https://sourceforge.net/projects/rhash/files/rhash/$(RHASH_VERSION)
- RHASH_LICENSE = 0BSD
--- 
-2.35.1
+On 11.09.22 14:14, Yann E. MORIN wrote:
+> Raphael, All,
+> [--SNIP--]
+> 
+> Starting the commit log with a terse explanations of the package purpose
+> is interesting, but what really matters are the details of the
+> integration in Buildroot.
+> 
+> For example:
+> 
+>      package/shawdow: new package
+> 
+>      shadow provides utilities to deal with user accounts.
+> 
+>      We decided to expose all the options present in configure, as
+>      options in Config.in, because those are sensitive, security-related
+>      options, and we want the user to take responsibility on the
+>      settings. The defaults are as they are exposed by the configure
+>      script; we especially default the max group name mength to 32,
+>      because accepting too long group names is a path to DoS attacks.
+> 
+>      Signed-off-by: Your REALNAM <your-email>
+> 
+> Of course, the above is just for demonstration and mostly made up, the
+> actual commit content should be adapted. But you get the idea.
 
+I will try it, thanks. Technically, I need this package to use podman 
+for non-root user (newuidmap and newgidmap).
+
+[--SNIP--]
+> 
+> Right, this is not trivial. Busybox installs a set of programs, for
+> example /bin/ash or /bin/wc, which are also provided by the bigger ones,
+> resp. dash and coreutils.
+> 
+> So, we by default do not want to show dash and coreutils in the
+> menuconfig, as the programs they install are already installed by
+> busybox, and even though the busybox variants may be slightly less
+> capable that the bigger ones, they are far smaller and, more often than
+> not, are sufficient.
+> 
+> Howerver, in some cases, most busybox applets are enough for the system,
+> except a very sall subset, for which we want to be able to use the
+> bigger ones.
+> 
+> That's when BR2_PACKAGE_BUSYBOX_SHOW_OTHERS comes into play: the user
+> can enable that option in the menuconfig, and so packages that install
+> the same set of programs as busybox applets, are now visible in the
+> menuconfig too.
+> 
+> See for example package/dash/Config.in:
+> 
+>      1 config BR2_PACKAGE_DASH
+>      2     bool "dash"
+>      3     depends on BR2_USE_MMU # fork()
+>      4     depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> 
+> So, for shadow, I think at least the 'su' option should also depend on
+> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, if not the whole package (yet, I'd
+> vote for the whole package for simplicity sake).
+
+I think I understand it now. It is an option to show option or package, 
+which install a non-busybox version of a binary, correct? I will add it 
+to the whole package then.
+
+[--SNIP--]
+> 
+> I see the reasoning.
+> 
+> I'm still not entirely sure, and stating "shadow developpers know best"
+> is still not very correct, because the one who knows best _in their
+> specific case_ is the user.
+> 
+> Also, if you did not have an actual use-case for an option, then do not
+> expose it at all. When/if someone actually has a need for that option,
+> then they can send a patch to add it.
+
+But this approach, I think have the disadvantage, that if it happens 
+that somebody needs an option then he/she have to wait until is there, 
+which it can take sometime. (Happen at least to me)
+
+I understand it for such options, which are useless for buildroot like 
+if it is something Windows specific. IMHO, I do not see any harm to 
+expose those options.
+
+[--SNIP--]
+> 
+> Yeah, I get it:
+>      --enable-foo    Enable foo.
+> 
+> That still does not help at all. Help text should be able to actually
+> help, and so must provide more info than the prompt does.
+
+Okay, I will remove such help text then.
+
+[--SNIP--]> The packaging in Buildroot mostly only (globally) expose 
+just a very
+> small subset of all options exposed by the configure (or similar)
+> scripts.
+> 
+> We expose options in the menuconfig only when it actually makes sense.
+> What is the purpose of limiting the group name length? Why do we want to
+> allow the user to be able to set that value, rather than let the package
+> decide?
+> 
+
+At least in my case, I need only BR2_PACKAGE_SHADOW_SUBORDINATE_IDS, so 
+it would be nice that everything else could be deactivated to keep it small.
+
+I tried to figure out, why this option was set to 32, and it seems that 
+Linux only support username up to 32 characters. So, I will remove this 
+option and set the value to 32 in the package because buildroot is only 
+supporting Linux, as far as I know, correct?
+
+https://github.com/shadow-maint/shadow/commit/1882c66bda31e50367d41b36fea41cd04fa19c73
+
+[--SNIP--]
+> 
+> Note: it is not the _name_, it is the _prompt_ (i.e. what is shown to
+> the user).
+
+Sorry, I meant the prompt ;)
+
+[--SNIP--]
+> 
+> OK, so this indeed gets a little bit more tricky.
+> 
+> The Config.in entry for account-tools-setuid should indeed use select
+> (as seen above; plus help text as an example):
+> 
+>      config BR2_PACAKGE_SHADOW_ACCOUNT_TOOLS_SETUID
+>          bool "account-tool setuid"
+>          select BR2_PACKAGE_LINUX_PAM
+>          help
+>            chmod the account-tool utility setuid, so that non-root
+>            users can use it, subjet to their PAM profile.
+> 
+> and then the .mk should propbably look like:
+> 
+>      ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+>      SHADOW_DEPENDENCIES += linux-pam
+>      SHADOW_CONF_OPTS += --enable-pam
+>      else
+>      SHADOW_CONF_OPTS += --disable-pam
+>      endif
+> 
+>      ifeq ($(BR2_PACAKGE_SHADOW_ACCOUNT_TOOLS_SETUID),y)
+>      # PAM dependency handled above
+>      SHADOW_CONF_OPTS += --enable-account-tools-setuid-I-can-t-remember-the-option-name
+>      else
+>      SHADOW_CONF_OPTS += --disable-account-tools-setuid-I-can-t-remember-the-option-name
+>      endif
+
+Okay, I will change it then.
+
+> 
+> Regards,
+> Yann E. MORIN.
+>
+Thanks,
+Raphael Pavlidis
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
