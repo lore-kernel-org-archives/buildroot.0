@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 469DAECAAD3
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 22:48:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A567CECAAD3
+	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 22:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDF548242D;
-	Sun, 11 Sep 2022 22:48:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDF548242D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 460C7610E3;
+	Sun, 11 Sep 2022 22:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 460C7610E3
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4OaC6KLeYt5G; Sun, 11 Sep 2022 22:53:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69D9F6104E;
+	Sun, 11 Sep 2022 22:53:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69D9F6104E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6EA111BF34F
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 22:53:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A55883E68
+ for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 22:53:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A55883E68
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HBHhjsCrTp8s; Sun, 11 Sep 2022 22:48:34 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEB9D81B23;
-	Sun, 11 Sep 2022 22:48:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEB9D81B23
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 94CB11BF34F
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 22:48:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C1834163D
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 22:48:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C1834163D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N2MnPQ12wAK5 for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 22:48:30 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xD4jujso9-iM for <buildroot@lists.busybox.net>;
+ Sun, 11 Sep 2022 22:53:42 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34AC3415A6
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 34AC3415A6
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 22:48:30 +0000 (UTC)
-Received: by mail-il1-x133.google.com with SMTP id h14so3690166ilh.10
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 15:48:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 734EF83E32
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
+ [IPv6:2607:f8b0:4864:20::12f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 734EF83E32
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 22:53:42 +0000 (UTC)
+Received: by mail-il1-x12f.google.com with SMTP id b17so3728496ilh.0
+ for <buildroot@buildroot.org>; Sun, 11 Sep 2022 15:53:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=CfmzCgjr/4aEyltd7We4PeF3Fnv+LAyUZ723NIzT100=;
- b=VudgSUVI8p02KNZneJyGQBSWSGFq7cCnZfwISjEGXwoxkgVM2qYjd7SdyV3T+vj0tr
- VZi/HYjuCtdbXmhWO65QdMFcPH93rdqeyepDkynlb6nnmpZjI3Cld/Q1FtnEDJZ28E1q
- Im8nd8Ncb3XYEyzJYQLnHFaZYv2uOK4aX/5Vcvkpg1fa1dc6XYWBTHy4e2QqYKrj+h2f
- b38BqMqRDpdvd9lRgd4oLcSdJ4cCqzpVfiu3TwDpko7oXWOdeQj6k9Y+EkOaBZ+Yrgno
- Qfc0jmZg2m1IHFyszI2gXRIv4+J2AbRbeInaoAyQ+Vzyok1n4Xymf+SUaqeze3+lutRA
- ABXQ==
-X-Gm-Message-State: ACgBeo0VUPzE/5xhAh7A/CeLmUAWCbxLUe4WviRU5tdSxvnvVhsiAZz+
- MBIIT+ZtzRzNNLwRO93XnnIPpEhUVFY=
-X-Google-Smtp-Source: AA6agR5gthl8d6lI1PjDuKLaM04yFJ6bcahQ9JBqGTOIsLwjim35H/ytMHBhoSRNYOS1/hZPa0HJxg==
-X-Received: by 2002:a92:ca4b:0:b0:2eb:6bd4:627f with SMTP id
- q11-20020a92ca4b000000b002eb6bd4627fmr8591274ilo.51.1662936508975; 
- Sun, 11 Sep 2022 15:48:28 -0700 (PDT)
+ bh=vlaLXz1jxcKSaPHZnIPZL4BYaIFFPWpB58WEez9Z1m4=;
+ b=1SuVZ+XhForkkGzENN1orTmeWlpzChlFlMtLVS4xXhLZC8+EGkEGMwgpyxq+LseuPN
+ CE8kBmqR8jcvnAPEPgNbrV6EvMysbnIN1+41ZLV2ORCjCCTPwmHLdRG73vJ2mVB2DpVC
+ o5/Z+Q5PgdICC7i/R4iRww4eHhhKmMkyg6/niqfzYrdgNyI8opgMt66zZVTcQ5GW+juz
+ siSJmwPkPOXF6x2rCutikUw81l8e6Y5TtGKQUkS6hrURSREd9RvkIddjsxRY0c1q46wY
+ Ywx3/xr16wZ0DYaDi5FC5/K8TNzGFkHA1d5p/P67xkxuQekby9a6woYwcR+2E0nmfqfM
+ JhoA==
+X-Gm-Message-State: ACgBeo36BXvTci4u3plYPmLTxtOg1FhtZv8iZidWeJF+kIa2b5v83Q/D
+ 6kt9oLJKnU3nSV+BZ6vkKRrffTzaBAU=
+X-Google-Smtp-Source: AA6agR7RFdRySLoItaty7M9kQKUkGeAvwVRkUpU6+4WfGua4p9YNzK7/NQp1FEY8RxgfNecRKx3U6A==
+X-Received: by 2002:a92:d12:0:b0:2eb:5775:79a9 with SMTP id
+ 18-20020a920d12000000b002eb577579a9mr8568571iln.25.1662936821103; 
+ Sun, 11 Sep 2022 15:53:41 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net.
  [71.33.138.207]) by smtp.gmail.com with ESMTPSA id
- n19-20020a02a193000000b0034c164e05c4sm2807811jah.177.2022.09.11.15.48.28
+ f5-20020a056638112500b003495b85a3b9sm2792477jar.178.2022.09.11.15.53.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Sep 2022 15:48:28 -0700 (PDT)
+ Sun, 11 Sep 2022 15:53:40 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Sep 2022 16:48:27 -0600
-Message-Id: <20220911224827.3710470-1-james.hilliard1@gmail.com>
+Date: Sun, 11 Sep 2022 16:53:39 -0600
+Message-Id: <20220911225339.3713775-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date;
- bh=CfmzCgjr/4aEyltd7We4PeF3Fnv+LAyUZ723NIzT100=;
- b=LmCsPpP6xLkHoPMaQR2AoJ7Jak0IvtMPV7E38dw6uPSZPJFsQh2YfsKv7B0Qfb4r1d
- 7dG4v+KLzgsz3EQVo2g6WPZiOfPi4mj6Vx8n2FhICwI5R8SZOKTaby4LOS50wyPE8JFn
- CZ6kJRF5zqEPbKXUhxOrx+f+uyRwpnA8eykudjnAhZ52K4HqReXox+KSzaNFtXT7ndQJ
- 5YZO+Gtyh9M0NMA9RxfaJBaH1+1pd3E8EPru8lqYmVxYmtMfkB+vAG218QXvXgWgNo67
- rIjvnD0DHVJQQrgvhuIYdLL8Tvq7IhEYXcc/sIrjyCc3ClDUS0xkV/vlfR8HA734AmUb
- yu6g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=vlaLXz1jxcKSaPHZnIPZL4BYaIFFPWpB58WEez9Z1m4=;
+ b=QzFePn1QMJstlr0J+pMOSm/8LHgCNZ1Nk7ce/GUz3ovv40FSWlsgrZD2R8Qfhr0fOh
+ triQ7ukcnO2f1HhUbPYeff33Z+D00Xfo0AbvmNuyhEt50kEtcEnPqacxGVMt5tyI6I3t
+ 7DHWLzk6Ex2zGaMsGjxI1twAtQ1Z+E5IwG4E+8FUJQ4ApCp8OqNzkNygAvJNyncZBb2v
+ XYkt2D7Kyg2963R/z2qrRjQpF6QHoF7y0RRVNeZJTF8rHiz+CVfCOAi6aW4CpzocPorv
+ oDRmCYqkFnBd1mivGXTEEYHc54ABX5bL8XkrHJJhsvtjubDD8UpX59M4y/u6j4ndxkJB
+ 8sug==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=LmCsPpP6
-Subject: [Buildroot] [PATCH 1/1] package/python-certifi: bump to version
- 2022.6.15.1
+ header.a=rsa-sha256 header.s=20210112 header.b=QzFePn1Q
+Subject: [Buildroot] [PATCH 1/1] package/python-chardet: bump to version
+ 5.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,44 +99,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to updated link in license file:
-https://github.com/certifi/python-certifi/commit/b0b48e059995f455ac1e79b3ad373ad4ef355516
+License hash changed due to reformatting:
+https://github.com/chardet/chardet/commit/c5e5d5a8f1b6e135a8bffd8d60b2f726bb168339
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-certifi/python-certifi.hash | 6 +++---
- package/python-certifi/python-certifi.mk   | 4 ++--
+ package/python-chardet/python-chardet.hash | 6 +++---
+ package/python-chardet/python-chardet.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index 4d3c20afee..e93a228d7e 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
+diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
+index fb4260a227..7721814279 100644
+--- a/package/python-chardet/python-chardet.hash
++++ b/package/python-chardet/python-chardet.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5  d8a2f5d006b656e2b9ee102a3be11a26  certifi-2022.6.15.tar.gz
--sha256  84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d  certifi-2022.6.15.tar.gz
-+md5  10b6970c3e64d037137f4bd052ef417c  certifi-2022.6.15.1.tar.gz
-+sha256  cffdcd380919da6137f76633531a5817e3a9f268575c128249fb637e4f9e73fb  certifi-2022.6.15.1.tar.gz
- # Locally computed sha256 checksums
--sha256  be9d82f36112f87a7f1d74ecd4887e1467bbae8878a84004a00117b1e475a3e2  LICENSE
-+sha256  a02f6c638f9fb84d06f7764c3ab085d8af7eda5b93c166da54312479077c6fb0  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index 6c8a7ffc2b..c03cd6e1e4 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+ # md5, sha256 from https://pypi.org/pypi/chardet/json
+-md5  bc9a5603d8d0994b2d4cbf255f99e654  chardet-4.0.0.tar.gz
+-sha256  0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa  chardet-4.0.0.tar.gz
++md5  8013c248c098e165ac53d900e1a1278a  chardet-5.0.0.tar.gz
++sha256  0368df2bfd78b5fc20572bb4e9bb7fb53e2c094f60ae9993339e8671d0afb8aa  chardet-5.0.0.tar.gz
+ # Locally computed
+-sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
+diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
+index 448877d056..1d737891a0 100644
+--- a/package/python-chardet/python-chardet.mk
++++ b/package/python-chardet/python-chardet.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2022.6.15
-+PYTHON_CERTIFI_VERSION = 2022.6.15.1
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/cc/85/319a8a684e8ac6d87a1193090e06b6bbb302717496380e225ee10487c888
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/90/c2/4e37394b66e7211ad120f216fc2e8b38d4f43b89c8100dd3917c9da9bfc6
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_CHARDET_VERSION = 4.0.0
++PYTHON_CHARDET_VERSION = 5.0.0
+ PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
+-PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/ee/2d/9cdc2b527e127b4c9db64b86647d567985940ac3698eeabc7ffaccb4ea61
++PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/31/a2/12c090713b3d0e141f367236d3a8bdc3e5fca0d83ff3647af4892c16c205
+ PYTHON_CHARDET_SETUP_TYPE = setuptools
+ PYTHON_CHARDET_LICENSE = LGPL-2.1+
+ PYTHON_CHARDET_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
