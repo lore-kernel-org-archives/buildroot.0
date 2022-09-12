@@ -1,87 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A05F2C6FA83
-	for <buildroot@archiver.kernel.org>; Sun, 11 Sep 2022 23:41:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BFF9ECAAD3
+	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 00:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F2BB14052D;
-	Sun, 11 Sep 2022 23:41:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2BB14052D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00440414E5;
+	Mon, 12 Sep 2022 00:53:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00440414E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k-izFaxyzPx8; Sun, 11 Sep 2022 23:41:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LEoOYoklEfJh; Mon, 12 Sep 2022 00:53:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F3BE40C2C;
-	Sun, 11 Sep 2022 23:41:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F3BE40C2C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9908A1BF427
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 23:41:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A30CF415EB;
+	Mon, 12 Sep 2022 00:53:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A30CF415EB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 191B21BF3E1
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 00:53:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7495A404EC
- for <buildroot@lists.busybox.net>; Sun, 11 Sep 2022 23:41:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7495A404EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3D5E415EB
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 00:53:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3D5E415EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qvH45PJgEQMk for <buildroot@lists.busybox.net>;
- Sun, 11 Sep 2022 23:41:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C87A404A6
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9C87A404A6
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 23:41:49 +0000 (UTC)
-Received: by mail-il1-x12b.google.com with SMTP id l6so3728919ilk.13
- for <buildroot@buildroot.org>; Sun, 11 Sep 2022 16:41:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=go1oCAeYt4AGuT6OYpUjeXK1eT03CPXUu/JuO5/jDO4=;
- b=SpVLqYOCQTxSliaFT6nqMMK2YdzJJiyPCbWQ95PLlEwRs7OjhJoofXQ5Qehy2+NcSy
- L9eprlSIZ+56dFR1l+l/SetefzaAYQA4DH9aCgQxHfIQfIpjoHgiboTJ6EF8CQrrhD0X
- ni769DMt5dMH1K9gVbOhgntSM8Tx7nPQrWUeoMyq6oc0GGwkZ5kg1cX86A4KjSS1V9vU
- ezPB+KqoncfA1VDp+6sR40+LEE35FyAIFUvRtUSvQw3XAW/VftkSqcr6xfP2At+2tMCH
- EFuHJqbgm8Idj+gcAto6jJjPaOWe+dnMTVkv4Qi2guE3FuxD8O8AWYAvT4mzwnvQCgsq
- na1A==
-X-Gm-Message-State: ACgBeo0JewM86rRelgcgPbCQVdPiEwxN8ISVcdAc2GOdTs0bc9WRnKwl
- BfruM9SbWcNzMANUycd1Bp/Ht0z3Rq4=
-X-Google-Smtp-Source: AA6agR6WsmADxxaLEkMkl2Xu81HePBpRll5jQvt6Vb31c16+knklfJ+xZONFE07wRKgD2Fq3Q51BpQ==
-X-Received: by 2002:a05:6e02:eea:b0:2ea:9ece:63ea with SMTP id
- j10-20020a056e020eea00b002ea9ece63eamr8790162ilk.86.1662939705984; 
- Sun, 11 Sep 2022 16:41:45 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net.
- [71.33.138.207]) by smtp.gmail.com with ESMTPSA id
- n25-20020a056638111900b003583a010e85sm2900098jal.94.2022.09.11.16.41.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Sep 2022 16:41:45 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 01w5NKqs1RZU for <buildroot@lists.busybox.net>;
+ Mon, 12 Sep 2022 00:53:31 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF361414E5
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF361414E5
+ for <buildroot@buildroot.org>; Mon, 12 Sep 2022 00:53:30 +0000 (UTC)
+Received: from localhost.localdomain (unknown [123.185.180.101])
+ by smtp8 (Coremail) with SMTP id DMCowAB3ExH_gh5jgonoaQ--.39388S2;
+ Mon, 12 Sep 2022 08:53:21 +0800 (CST)
+From: TIAN Yuanhao <tianyuanhao3@163.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Sep 2022 17:41:43 -0600
-Message-Id: <20220911234143.3740819-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 11 Sep 2022 17:52:42 -0700
+Message-Id: <20220912005242.3344520-1-tianyuanhao3@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+X-CM-TRANSID: DMCowAB3ExH_gh5jgonoaQ--.39388S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXw4kJr1xCF13tw1DAFyDAwb_yoW7JFyxpa
+ 13W3Z8Gw4kKrnakrySgrnF9r43Cr4kur4DJ39rGw4jqrW5tFy8Xr1DtanrCr43X3yxAw4U
+ Zr4ruFyUWrWUtaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUh0ePUUUUU=
+X-Originating-IP: [123.185.180.101]
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbB2AR6jWBHL6wrmQAAs9
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=go1oCAeYt4AGuT6OYpUjeXK1eT03CPXUu/JuO5/jDO4=;
- b=ISzP5klmAGQmqyHWUPGjQ/joeSZFOE+Wokx/DS1uCM50Y2/ilAeE+pD4Np+Y7K6Gxg
- YVnD8cqdRQHKUYXw9kT/+kjZdFpV3rkPuqwn06jxhSunBWNqewRNJGVkmA+D5q8fvoCf
- vqoPCvqNkVn19iD5DHYOk8ko9r5Fv9Qf82d7RXUC3uYx3b1vEkT0ZHco9xQCtpJz96jZ
- vS5EevCLJd3gwbL26ALHCyQw9HwdEneiNUvBNQfAoPUA0skJmN9GjFLgF3TFRdbNH7QI
- GUriA4k/NhwGEpp+sehphGyn9BczFmFhFJxPj69ywdwwn45AafTvTRqIlJZAE0TNsOSG
- mYCg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ISzP5klm
-Subject: [Buildroot] [PATCH 1/1] package/python-setuptools: bump to version
- 65.3.0
+ d=163.com; 
+ s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cDPht
+ vokfCTLDZ1HgIuAmw6JxUVhJDhggnHTXvJPlw0=; b=IslDgV0H37eby6mbaQTRb
+ TJBFQPfhiI/FkntUjShP2jUX3bamFWYrnlfnnS9rmX1auBEe8nbVXiqMNxbAQTnM
+ xk2XA/s4KsvJeB1dko5aOoR/MFdiSHuYJ2SLuTF2I1Mhs8cOqM7kkPMTzYDD5uWL
+ mhOPGKhJDCqcA0GJ1xiehQ=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
+ header.a=rsa-sha256 header.s=s110527 header.b=IslDgV0H
+Subject: [Buildroot] [PATCH 1/1] package/open-isns: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,47 +73,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 ---
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                       |  3 ++
+ package/Config.in                |  1 +
+ package/open-isns/Config.in      | 20 +++++++++++
+ package/open-isns/open-isns.hash |  3 ++
+ package/open-isns/open-isns.mk   | 62 ++++++++++++++++++++++++++++++++
+ 5 files changed, 89 insertions(+)
+ create mode 100644 package/open-isns/Config.in
+ create mode 100644 package/open-isns/open-isns.hash
+ create mode 100644 package/open-isns/open-isns.mk
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index e01350124c..3f68084068 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,4 @@
- # From https://pypi.org/pypi/setuptools/json
--md5  d72acb93671bde8e4ca0971866f9cdda  setuptools-63.2.0.tar.gz
--sha256  c04b44a57a6265fe34a4a444e965884716d34bae963119a76353434d6f18e450  setuptools-63.2.0.tar.gz
-+md5  66c6b8819c5306c12c38d7fad41b7f99  setuptools-65.3.0.tar.gz
-+sha256  7732871f4f7fa58fb6bdcaeadb0161b2bd046c85905dbaa066bdcbcc81953b57  setuptools-65.3.0.tar.gz
- sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 082b293eef..b7483c6347 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d2bd0d809a..54216450f4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2790,6 +2790,9 @@ F:	package/python-influxdb/
+ N:	Sven Oliver Moll <svolli@svolli.de>
+ F:	package/most/
  
--PYTHON_SETUPTOOLS_VERSION = 63.2.0
-+PYTHON_SETUPTOOLS_VERSION = 65.3.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/0a/ba/52611dc8278828eb9ec339e6914a0f865f9e2af967214905927835dfac0a
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/cc/83/7ea9d9b3a6ff3225aca2fce5e4df373bee7e0a74c539711a4fbfda53374f
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
++N:	TIAN Yuanhao <tianyuanhao3@163.com>
++F:	package/open-isns/
++
+ N:	Theo Debrouwere <t.debrouwere@televic.com>
+ F:	board/beagleboardx15/
+ F:	configs/beagleboardx15_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index d1c098c48f..de51be400b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1919,6 +1919,7 @@ menu "Networking"
+ 	source "package/nss-myhostname/Config.in"
+ 	source "package/nss-pam-ldapd/Config.in"
+ 	source "package/omniorb/Config.in"
++	source "package/open-isns/Config.in"
+ 	source "package/open62541/Config.in"
+ 	source "package/openldap/Config.in"
+ 	source "package/openmpi/Config.in"
+diff --git a/package/open-isns/Config.in b/package/open-isns/Config.in
+new file mode 100644
+index 0000000000..d3f391342a
+--- /dev/null
++++ b/package/open-isns/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_OPEN_ISNS
++	bool "open-isns (libisns)"
++	depends on BR2_USE_MMU # fork()
++	help
++	  iSNS server and client for Linux.
++
++	  Note that this option only installs the libraries, and not the
++	  programs.
++
++	  https://github.com/open-iscsi/open-isns
++
++if BR2_PACKAGE_OPEN_ISNS
++
++config BR2_PACKAGE_OPEN_ISNS_PROGS
++	bool "open-isns programs"
++	help
++	  This option tells open-isns to not only install the libraries,
++	  but also the programs.
++
++endif
+diff --git a/package/open-isns/open-isns.hash b/package/open-isns/open-isns.hash
+new file mode 100644
+index 0000000000..653fabaa9f
+--- /dev/null
++++ b/package/open-isns/open-isns.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  9611344733c0cdf14395f60880950ea4c3c7d6b765565b6493ad3e1afbe216de  open-isns-0.102.tar.gz
++sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/open-isns/open-isns.mk b/package/open-isns/open-isns.mk
+new file mode 100644
+index 0000000000..c63e25735c
+--- /dev/null
++++ b/package/open-isns/open-isns.mk
+@@ -0,0 +1,62 @@
++################################################################################
++#
++# open-isns
++#
++################################################################################
++
++OPEN_ISNS_VERSION = 0.102
++OPEN_ISNS_SITE = $(call github,open-iscsi,open-isns,v$(OPEN_ISNS_VERSION))
++OPEN_ISNS_LICENSE = LGPL-2.1
++OPEN_ISNS_LICENSE_FILES = COPYING
++OPEN_ISNS_INSTALL_STAGING = YES
++
++OPEN_ISNS_CONF_OPTS = -Dslp=disabled
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++OPEN_ISNS_DEPENDENCIES += openssl
++OPEN_ISNS_CONF_OPTS += -Dsecurity=enabled
++else
++OPEN_ISNS_CONF_OPTS += -Dsecurity=disabled
++endif
++
++define OPEN_ISNS_INSTALL_STAGING_CMDS
++	$(INSTALL) -d -m 755 $(STAGING_DIR)/usr/include/libisns \
++		$(STAGING_DIR)/usr/lib
++	cp -dpf $(@D)/build/include/libisns/*.h $(@D)/include/libisns/*.h \
++		$(STAGING_DIR)/usr/include/libisns/
++	cp -dpf $(if $(BR2_STATIC_LIBS),$(@D)/build/libisns.a,$(@D)/build/libisns.so $(@D)/build/libisns.so.0) \
++		$(STAGING_DIR)/usr/lib/
++	$(INSTALL) -D -m 644 $(@D)/libisns.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/libisns.pc
++endef
++
++define OPEN_ISNS_INSTALL_TARGET_CMDS
++	$(OPEN_ISNS_INSTALL_LIBS)
++	$(OPEN_ISNS_INSTALL_PROGS)
++endef
++
++ifeq ($(BR2_STATIC_LIBS),)
++define OPEN_ISNS_INSTALL_LIBS
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib
++	cp -dpf $(@D)/build/libisns.so $(@D)/build/libisns.so.0 \
++		$(TARGET_DIR)/usr/lib/
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_OPEN_ISNS_PROGS),y)
++define OPEN_ISNS_INSTALL_PROGS
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/isns $(TARGET_DIR)/usr/sbin
++	$(INSTALL) -d -m 700 $(TARGET_DIR)/var/lib/isns
++	$(INSTALL) -m 555 -t $(TARGET_DIR)/usr/sbin $(@D)/build/isnsadm \
++		$(@D)/build/isnsd $(@D)/build/isnsdd
++	cp -dpf $(@D)/etc/*.conf $(TARGET_DIR)/etc/isns/
++endef
++
++define OPEN_ISNS_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib/systemd/system
++	$(INSTALL) -m 644 -t $(TARGET_DIR)/usr/lib/systemd/system \
++		$(@D)/isnsd.service $(@D)/isnsd.socket
++endef
++endif
++
++$(eval $(meson-package))
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
