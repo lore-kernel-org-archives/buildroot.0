@@ -4,68 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D2F2ECAAD5
-	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 09:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F681C6FA83
+	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 09:57:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D7B0740445;
-	Mon, 12 Sep 2022 09:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7B0740445
+	by smtp2.osuosl.org (Postfix) with ESMTP id A92CC418D5;
+	Mon, 12 Sep 2022 09:57:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A92CC418D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id abroKvbLRwVz; Mon, 12 Sep 2022 09:12:50 +0000 (UTC)
+	with ESMTP id 1yFVLE70Wk_d; Mon, 12 Sep 2022 09:57:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B884E40414;
-	Mon, 12 Sep 2022 09:12:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B884E40414
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C51901BF476
- for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 09:12:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F9DD40390;
+	Mon, 12 Sep 2022 09:57:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F9DD40390
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 114771BF476
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 09:57:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADAE340414
- for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 09:12:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADAE340414
+ by smtp1.osuosl.org (Postfix) with ESMTP id E0719844A1
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 09:57:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0719844A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dr5io0_cjNGx for <buildroot@lists.busybox.net>;
- Mon, 12 Sep 2022 09:12:45 +0000 (UTC)
-X-Greylist: delayed 00:07:37 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 616D94039D
-Received: from mout-b-203.mailbox.org (mout-b-203.mailbox.org
- [IPv6:2001:67c:2050:102:465::203])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 616D94039D
- for <buildroot@buildroot.org>; Mon, 12 Sep 2022 09:12:45 +0000 (UTC)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id moqsnkgWkr24 for <buildroot@lists.busybox.net>;
+ Mon, 12 Sep 2022 09:57:44 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3323C8449D
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.40])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3323C8449D
+ for <buildroot@buildroot.org>; Mon, 12 Sep 2022 09:57:44 +0000 (UTC)
+Received: from opfedar06.francetelecom.fr (unknown [xx.xx.xx.8])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by mout-b-203.mailbox.org (Postfix) with ESMTPS id 4MR0zf0qs5z9sd3;
- Mon, 12 Sep 2022 11:05:02 +0200 (CEST)
-Message-ID: <5554ec40-062b-2e1e-e395-66509b97832e@othermo.de>
-Date: Mon, 12 Sep 2022 11:05:01 +0200
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by opfedar24.francetelecom.fr (ESMTP service) with ESMTPS id 4MR28P6hb6z5vVp; 
+ Mon, 12 Sep 2022 11:57:41 +0200 (CEST)
+Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
+ Mon, 12 Sep 2022 11:57:39 +0200
+From: <yann.morin@orange.com>
+To: <buildroot@buildroot.org>
+Date: Mon, 12 Sep 2022 11:57:39 +0200
+Message-ID: <24827_1662976661_631F0295_24827_299_14_6f9b848a35cb9647b133c662924b4d82cf759b19.1662976659.git.yann.morin@orange.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Language: en-US
-To: erichiggins@gmail.com, buildroot@buildroot.org
-References: <CAHfxMJ69P8NVSqJr2tkNajMbFG-FD=Wz2DUfdstRQSqi86_3qw@mail.gmail.com>
-From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-In-Reply-To: <CAHfxMJ69P8NVSqJr2tkNajMbFG-FD=Wz2DUfdstRQSqi86_3qw@mail.gmail.com>
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX503.corporate.adroot.infra.ftgroup
+ (10.115.26.27) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=othermo.de; s=MBO0001; t=1662973502;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=jkH9YK8ToEvNhW2c38a5ZNg5r9meheh4bslHwxR2xnA=;
- b=ASAnFxO63xZv7yfdQD1TYVkjbPT6S81XF4X/KEkHr9cRI0gf8LLXrMH+rV8/zUuv4jH6bc
- 0SPnn2gZ+xZXxXJrROwBOvodZLUUjfqUJpxHWAkzvidNDO1+yxM20gTV0NIUKp7EE4r8X9
- 2tizGFx1GxFIA8O07BbrrkyFHeq2jbBNXNA9jMEFsxXsEBexVONcHKgzf7uXH2C2GQIDKO
- Ht+8PNx5Vy2K1Y4LOeUJcObhG7Fhzqvw3QPYYahW4O2fV5yP9Gx0HPTbFxgB4Zrrh+29Rh
- ICxgHDve7DhMzNAsi8HMJKK0OoD4QMHNuxTV0XaGA4uyLgR1/ZCYYsJ8GHfeBQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=othermo.de header.i=@othermo.de
- header.a=rsa-sha256 header.s=MBO0001 header.b=ASAnFxO6
-Subject: Re: [Buildroot] Patch for buildroot script utils/scanpypi
+ d=orange.com; s=ORANGE001; t=1662976661;
+ bh=6GhMyogrYH46pe5UPbi49CbzKsllKu0RzH3a1hCvSB8=;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:
+ Content-Transfer-Encoding:Content-Type;
+ b=b8jRd91rTlFSe8I8LjpvHuwrE/RsRq5kmg8ix7KTUJBdju3S5eE6c7kL6pN3+JMMW
+ l6YAbuycbYpoyi08oCcNQ7WHXy1hk0nEAs25h9DGbXDJ/eq0+ECKLUgNND/o9ETcMb
+ QIvkQA9H8gpUnzFjWrce5xt2Rtfz0zIFkvrpNcZYepudsJTrlBIfiD3tRVHb1BVAP6
+ He1rEEOlv+3a2IGlY5JPQI0BWUh0AeeqqU45bQIYjlAaGwKuEe+WRMQPWE+FUapy0j
+ XabbSMNjZD7/FntdNXy3xjOOu92xrarhNFfVDJqrKd7u/i0RryyF9gVxjuU+d0xcJ0
+ JoVP/LP15caNw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=b8jRd91r
+Subject: [Buildroot] [PATCH] package/mosquitto: add mosquitto group
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,26 +79,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ "Yann E. MORIN" <yann.morin@orange.com>, Francois Perrad <fperrad@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRXJpYywKCmNhbiB5b3Ugc3VibWl0IHRoaXMgYXMgYSBwcm9wZXIgcGF0Y2ggdmlhIHRoaXMg
-bWFpbGluZyBsaXN0IHNvIGl0IGNhbiBiZSAKcHJvcGVybHkgcmV2aWV3ZWQgaGVyZT8KClNlZSBo
-dHRwczovL25pZ2h0bHkuYnVpbGRyb290Lm9yZy9tYW51YWwuaHRtbCNzdWJtaXR0aW5nLXBhdGNo
-ZXMgZnJvbSAKdGhlIG1hbnVhbC4KCkJlc3QsCk1hcmN1cwoKT24gMDguMDkuMjIgMTc6NTMsIGVy
-aWNoaWdnaW5zQGdtYWlsLmNvbSB3cm90ZToKPiBIZWxsbyBhbGwsCj4gCj4gSSd2ZSBjcmVhdGVk
-IGEgbWlub3IgcGF0Y2ggdG8gcmVzb2x2ZSBhIGJ1ZyBpbiB0aGUgdXRpbHMvc2NhbnB5cGkgCj4g
-c2NyaXB0LiBJJ3ZlIHdyaXR0ZW7CoHVwIHRoZSBqdXN0aWZpY2F0aW9uLCBleGFtcGxlcywgYW5k
-IHRlY2huaWNhbCAKPiBkZXRhaWxzIGluIHRoZSBmb2xsb3dpbmcgR2l0SHViIGdpc3Qgd2hpY2gg
-YWxzbyBjb250YWlucyB0aGUgcGF0Y2ggY29udGVudHMuCj4gCj4gaHR0cHM6Ly9naXN0LmdpdGh1
-Yi5jb20vZXJpY2hpZ2dpbnMvMjIzYjI0OTVhZGE2NDAwMWM0NGRlZWRkM2EzZGY2ZWQgCj4gPGh0
-dHBzOi8vZ2lzdC5naXRodWIuY29tL2VyaWNoaWdnaW5zLzIyM2IyNDk1YWRhNjQwMDFjNDRkZWVk
-ZDNhM2RmNmVkPgo+IAo+IEhhcHB5IHRvIGRpc2N1c3MgZnVydGhlciBlaXRoZXIgb3ZlciBlbWFp
-bCBvciBJUkMuCj4gCj4gVGhhbmtzIQo+IC1FcmljCj4gCj4gX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+From: "Yann E. MORIN" <yann.morin@orange.com>
+
+Since version 2.0.15, and upstream commit 71a90177d7b2 (Systemd: Add
+mosquitto group ownership), mosquitto uses its own group rather than
+the generic nobody group.
+
+This means that mosauitto can now no longer start ona  systemd-based
+system.
+
+Change our mosquitto user definition to specify a mosquitto group.
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>
+Cc: Francois Perrad <fperrad@gmail.com>
+---
+ package/mosquitto/mosquitto.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index c47e61850b..12de2946b7 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -124,7 +124,7 @@ define MOSQUITTO_INSTALL_INIT_SYSTEMD
+ endef
+ 
+ define MOSQUITTO_USERS
+-	mosquitto -1 nobody -1 * - - - Mosquitto user
++	mosquitto -1 mosquitto -1 * - - - Mosquitto user
+ endef
+ endif
+ 
+-- 
+2.25.1
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
