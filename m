@@ -4,64 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BFF9ECAAD3
-	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 00:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D00B9ECAAA1
+	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 03:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00440414E5;
-	Mon, 12 Sep 2022 00:53:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00440414E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE6184256C;
+	Mon, 12 Sep 2022 03:34:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE6184256C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LEoOYoklEfJh; Mon, 12 Sep 2022 00:53:36 +0000 (UTC)
+	with ESMTP id hZDOEG5syzin; Mon, 12 Sep 2022 03:34:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A30CF415EB;
-	Mon, 12 Sep 2022 00:53:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A30CF415EB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 191B21BF3E1
- for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 00:53:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4C5341DD6;
+	Mon, 12 Sep 2022 03:34:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4C5341DD6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FC9F1BF9AD
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 03:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3D5E415EB
- for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 00:53:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3D5E415EB
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF78D84012
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 03:34:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF78D84012
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 01w5NKqs1RZU for <buildroot@lists.busybox.net>;
- Mon, 12 Sep 2022 00:53:31 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF361414E5
-Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF361414E5
- for <buildroot@buildroot.org>; Mon, 12 Sep 2022 00:53:30 +0000 (UTC)
-Received: from localhost.localdomain (unknown [123.185.180.101])
- by smtp8 (Coremail) with SMTP id DMCowAB3ExH_gh5jgonoaQ--.39388S2;
- Mon, 12 Sep 2022 08:53:21 +0800 (CST)
-From: TIAN Yuanhao <tianyuanhao3@163.com>
-To: buildroot@buildroot.org
-Date: Sun, 11 Sep 2022 17:52:42 -0700
-Message-Id: <20220912005242.3344520-1-tianyuanhao3@163.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0GedPczz0RWK for <buildroot@lists.busybox.net>;
+ Mon, 12 Sep 2022 03:34:34 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5EDB84214
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A5EDB84214
+ for <buildroot@busybox.net>; Mon, 12 Sep 2022 03:34:33 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id d2so13311166wrn.1
+ for <buildroot@busybox.net>; Sun, 11 Sep 2022 20:34:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date;
+ bh=VA7R4myhbWIdPB2rhVYZq/ip9tzpsyLDTWFvsgBwEvA=;
+ b=6dPf2Cla+z2qLdvmQotrJ/MunJbQGb0++maxWZicGS1Txk0OVW2sVzjeSEhHdjletQ
+ rLWKBrbyeOgVJywE1F3fGR9gT8dHNhtDo2ZtzLe0bl7vBCClgz31iNLe8wg/E15A+Msb
+ CUYrnUiGSFe/exgXjFWr7vttRtiEI4ycl4q3bcnSf3LaQ3R4CN5uneip5EDXqFbh8zm8
+ evEtqjKAzLF0WoHXAY3JT1umWT+7GZpAIKU+arWe6QLe02RODRGYGEljJCr60wt2PbiO
+ 6iLd1dw1AfZob5AVSbkbO7Vj7En9c5HWN4HOoJ7gCPxJYyGd+gk7UX90sL3q07/G20xw
+ ndaQ==
+X-Gm-Message-State: ACgBeo3A0QI06NAvVpmxBOlWGucbb1nOqKVERyjbTqyzPfL6B8CkuvRe
+ SmE8TEwSiWG3EPANwBFyiCnPuDInzBU=
+X-Google-Smtp-Source: AA6agR7fNUn4VehCJpUMRsmJoqWmwdDFGJImzJ3MdWwrnIF4FeTZJkV7IcUXk5K2NYqT7nsIkbM5CQ==
+X-Received: by 2002:adf:d1ec:0:b0:228:d9ea:cbd2 with SMTP id
+ g12-20020adfd1ec000000b00228d9eacbd2mr13800101wrd.609.1662953673200; 
+ Sun, 11 Sep 2022 20:34:33 -0700 (PDT)
+Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
+ by smtp.gmail.com with ESMTPSA id
+ x14-20020a5d60ce000000b0022862fd933asm6009588wrt.96.2022.09.11.20.34.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 11 Sep 2022 20:34:32 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon, 12 Sep 2022 05:34:15 +0200
+Message-Id: <20220912033418.2587016-6-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220912033418.2587016-1-francois.perrad@gadz.org>
+References: <20220912033418.2587016-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
-X-CM-TRANSID: DMCowAB3ExH_gh5jgonoaQ--.39388S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXw4kJr1xCF13tw1DAFyDAwb_yoW7JFyxpa
- 13W3Z8Gw4kKrnakrySgrnF9r43Cr4kur4DJ39rGw4jqrW5tFy8Xr1DtanrCr43X3yxAw4U
- Zr4ruFyUWrWUtaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
- 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUh0ePUUUUU=
-X-Originating-IP: [123.185.180.101]
-X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbB2AR6jWBHL6wrmQAAs9
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=163.com; 
- s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cDPht
- vokfCTLDZ1HgIuAmw6JxUVhJDhggnHTXvJPlw0=; b=IslDgV0H37eby6mbaQTRb
- TJBFQPfhiI/FkntUjShP2jUX3bamFWYrnlfnnS9rmX1auBEe8nbVXiqMNxbAQTnM
- xk2XA/s4KsvJeB1dko5aOoR/MFdiSHuYJ2SLuTF2I1Mhs8cOqM7kkPMTzYDD5uWL
- mhOPGKhJDCqcA0GJ1xiehQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
- header.a=rsa-sha256 header.s=s110527 header.b=IslDgV0H
-Subject: [Buildroot] [PATCH 1/1] package/open-isns: new package
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+ bh=VA7R4myhbWIdPB2rhVYZq/ip9tzpsyLDTWFvsgBwEvA=;
+ b=qA2/EwCb/SGblpiM3b1eN+vp2G++rIsrxWRxMtVDDF4fUFCyCsbNim6oLUkBAuTQpc
+ 1S0Q9rEDPB9Fl7dPjFWx0hjh7Hr1vrpRktC1dGM9fWZjPeOlF2ifrJINyZWltzbYGmmw
+ FaqlnA4H7l+3/l+UA4dQ7arLRcABniJsEciGNERiuswQXDzZdXLdVXk3Rxk6Y8D6EwWj
+ R5ZGbaR+1k57J+gDfJ9yEhzqe8WKEnqWuH5Br/PygGO+rALDANPPd4qrsSC+Pk0tm5Vh
+ q+Upg3oFAAX1aQfRZIoTC+4s51lw0KWHjTFzPxJEcMIxUTsG6ZK3tI/cbso0SQbYzOhu
+ 9V4g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=qA2/EwCb
+Subject: [Buildroot] [PATCH 6/9] package/perl-net-dns: bump to version 1.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,155 +96,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: TIAN Yuanhao <tianyuanhao3@163.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS                       |  3 ++
- package/Config.in                |  1 +
- package/open-isns/Config.in      | 20 +++++++++++
- package/open-isns/open-isns.hash |  3 ++
- package/open-isns/open-isns.mk   | 62 ++++++++++++++++++++++++++++++++
- 5 files changed, 89 insertions(+)
- create mode 100644 package/open-isns/Config.in
- create mode 100644 package/open-isns/open-isns.hash
- create mode 100644 package/open-isns/open-isns.mk
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d2bd0d809a..54216450f4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2790,6 +2790,9 @@ F:	package/python-influxdb/
- N:	Sven Oliver Moll <svolli@svolli.de>
- F:	package/most/
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 1af14e2a4..52f2f2bff 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  f3ba5295ee588d25dabc74a2ecda296a  Net-DNS-1.33.tar.gz
+-sha256  5a40e7cf524e4bd2c33cf03b82b47d5308b712083aa5ee180b0b5af54c71fbd2  Net-DNS-1.33.tar.gz
++md5  f10276a44ce157cd5f709be4c70c34a8  Net-DNS-1.34.tar.gz
++sha256  de756e3fb6addbd32beafc869c4dd1c6a0b3783c5ef56dbefc6809443a4b1d15  Net-DNS-1.34.tar.gz
  
-+N:	TIAN Yuanhao <tianyuanhao3@163.com>
-+F:	package/open-isns/
-+
- N:	Theo Debrouwere <t.debrouwere@televic.com>
- F:	board/beagleboardx15/
- F:	configs/beagleboardx15_defconfig
-diff --git a/package/Config.in b/package/Config.in
-index d1c098c48f..de51be400b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1919,6 +1919,7 @@ menu "Networking"
- 	source "package/nss-myhostname/Config.in"
- 	source "package/nss-pam-ldapd/Config.in"
- 	source "package/omniorb/Config.in"
-+	source "package/open-isns/Config.in"
- 	source "package/open62541/Config.in"
- 	source "package/openldap/Config.in"
- 	source "package/openmpi/Config.in"
-diff --git a/package/open-isns/Config.in b/package/open-isns/Config.in
-new file mode 100644
-index 0000000000..d3f391342a
---- /dev/null
-+++ b/package/open-isns/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_OPEN_ISNS
-+	bool "open-isns (libisns)"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  iSNS server and client for Linux.
-+
-+	  Note that this option only installs the libraries, and not the
-+	  programs.
-+
-+	  https://github.com/open-iscsi/open-isns
-+
-+if BR2_PACKAGE_OPEN_ISNS
-+
-+config BR2_PACKAGE_OPEN_ISNS_PROGS
-+	bool "open-isns programs"
-+	help
-+	  This option tells open-isns to not only install the libraries,
-+	  but also the programs.
-+
-+endif
-diff --git a/package/open-isns/open-isns.hash b/package/open-isns/open-isns.hash
-new file mode 100644
-index 0000000000..653fabaa9f
---- /dev/null
-+++ b/package/open-isns/open-isns.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  9611344733c0cdf14395f60880950ea4c3c7d6b765565b6493ad3e1afbe216de  open-isns-0.102.tar.gz
-+sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/open-isns/open-isns.mk b/package/open-isns/open-isns.mk
-new file mode 100644
-index 0000000000..c63e25735c
---- /dev/null
-+++ b/package/open-isns/open-isns.mk
-@@ -0,0 +1,62 @@
-+################################################################################
-+#
-+# open-isns
-+#
-+################################################################################
-+
-+OPEN_ISNS_VERSION = 0.102
-+OPEN_ISNS_SITE = $(call github,open-iscsi,open-isns,v$(OPEN_ISNS_VERSION))
-+OPEN_ISNS_LICENSE = LGPL-2.1
-+OPEN_ISNS_LICENSE_FILES = COPYING
-+OPEN_ISNS_INSTALL_STAGING = YES
-+
-+OPEN_ISNS_CONF_OPTS = -Dslp=disabled
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+OPEN_ISNS_DEPENDENCIES += openssl
-+OPEN_ISNS_CONF_OPTS += -Dsecurity=enabled
-+else
-+OPEN_ISNS_CONF_OPTS += -Dsecurity=disabled
-+endif
-+
-+define OPEN_ISNS_INSTALL_STAGING_CMDS
-+	$(INSTALL) -d -m 755 $(STAGING_DIR)/usr/include/libisns \
-+		$(STAGING_DIR)/usr/lib
-+	cp -dpf $(@D)/build/include/libisns/*.h $(@D)/include/libisns/*.h \
-+		$(STAGING_DIR)/usr/include/libisns/
-+	cp -dpf $(if $(BR2_STATIC_LIBS),$(@D)/build/libisns.a,$(@D)/build/libisns.so $(@D)/build/libisns.so.0) \
-+		$(STAGING_DIR)/usr/lib/
-+	$(INSTALL) -D -m 644 $(@D)/libisns.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libisns.pc
-+endef
-+
-+define OPEN_ISNS_INSTALL_TARGET_CMDS
-+	$(OPEN_ISNS_INSTALL_LIBS)
-+	$(OPEN_ISNS_INSTALL_PROGS)
-+endef
-+
-+ifeq ($(BR2_STATIC_LIBS),)
-+define OPEN_ISNS_INSTALL_LIBS
-+	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib
-+	cp -dpf $(@D)/build/libisns.so $(@D)/build/libisns.so.0 \
-+		$(TARGET_DIR)/usr/lib/
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPEN_ISNS_PROGS),y)
-+define OPEN_ISNS_INSTALL_PROGS
-+	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/isns $(TARGET_DIR)/usr/sbin
-+	$(INSTALL) -d -m 700 $(TARGET_DIR)/var/lib/isns
-+	$(INSTALL) -m 555 -t $(TARGET_DIR)/usr/sbin $(@D)/build/isnsadm \
-+		$(@D)/build/isnsd $(@D)/build/isnsdd
-+	cp -dpf $(@D)/etc/*.conf $(TARGET_DIR)/etc/isns/
-+endef
-+
-+define OPEN_ISNS_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib/systemd/system
-+	$(INSTALL) -m 644 -t $(TARGET_DIR)/usr/lib/systemd/system \
-+		$(@D)/isnsd.service $(@D)/isnsd.socket
-+endef
-+endif
-+
-+$(eval $(meson-package))
+ # computed by scancpan
+ sha256  1e44fcf65509b47a251eda0ce1f8bd6aefa13517e38cb1e95b8d36120fb15452  LICENSE
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index fa7b50c02..cfb16d8de 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_NET_DNS_VERSION = 1.33
++PERL_NET_DNS_VERSION = 1.34
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
