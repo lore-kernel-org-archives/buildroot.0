@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C6B0ECAAA1
-	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 10:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9857ECAAD5
+	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 10:17:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 472746112D;
-	Mon, 12 Sep 2022 10:17:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 472746112D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B31C6112F;
+	Mon, 12 Sep 2022 10:17:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B31C6112F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ae7i_i17pXB7; Mon, 12 Sep 2022 10:17:37 +0000 (UTC)
+	with ESMTP id cSHVLoru-jEO; Mon, 12 Sep 2022 10:17:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85B1760AA4;
-	Mon, 12 Sep 2022 10:17:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85B1760AA4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2AD2B1BF41D
- for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 10:16:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BAF6B6113E;
+	Mon, 12 Sep 2022 10:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAF6B6113E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CF2C41BF41D
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 10:16:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 051684256D
- for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 10:16:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 051684256D
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAE3940390
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 10:16:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAE3940390
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6Ko08As_f5UT for <buildroot@lists.busybox.net>;
- Mon, 12 Sep 2022 10:16:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AG6JQE5o-Mem for <buildroot@lists.busybox.net>;
+ Mon, 12 Sep 2022 10:16:48 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BF434253B
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1BF434253B
- for <buildroot@buildroot.org>; Mon, 12 Sep 2022 10:16:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38C0740377
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 38C0740377
+ for <buildroot@buildroot.org>; Mon, 12 Sep 2022 10:16:48 +0000 (UTC)
+Received: from relay12.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::232])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id B5C3AC6AC0
+ for <buildroot@buildroot.org>; Mon, 12 Sep 2022 10:16:46 +0000 (UTC)
 Received: (Authenticated sender: foss@0leil.net)
- by mail.gandi.net (Postfix) with ESMTPSA id E406C200005;
- Mon, 12 Sep 2022 10:16:43 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id C4716200009;
+ Mon, 12 Sep 2022 10:16:38 +0000 (UTC)
 From: Quentin Schulz <foss+buildroot@0leil.net>
 To: buildroot@buildroot.org
-Date: Mon, 12 Sep 2022 12:16:23 +0200
-Message-Id: <20220912101623.960482-6-foss+buildroot@0leil.net>
+Date: Mon, 12 Sep 2022 12:16:18 +0200
+Message-Id: <20220912101623.960482-1-foss+buildroot@0leil.net>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220912101623.960482-1-foss+buildroot@0leil.net>
-References: <20220912101623.960482-1-foss+buildroot@0leil.net>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 5/5] package/nftables: support libedit cli
- implementation
+Subject: [Buildroot] [PATCH v2 0/5] add support for libedit and linenoise
+ CLI implementations for nftables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,8 +60,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- Quentin Schulz <foss+buildroot@0leil.net>
+Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -68,38 +68,44 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-libedit CLI implementation is supported since commit 9420423900a2
-("cli: add libedit support"), nftables v0.9.8. There's an important fix
-for Buildroot in v1.0.2, commit 3847fccf0045 ("cli: remove #include
-<editline/history.h>").
+nftables supports three different cli implementations at the moment:
+libedit, readline and linenoise. When --without_cli and --with_cli are
+omitted, libedit is the default implementation if the lib is found by
+the configure script. To select readline or linenoise implementation the
+appropriate --with_cli option should be given.
 
-Also in nftables v1.0.1, libedit/editline cli implementation is made the
-default implementation so let's favor libedit implementation over
-readline and linenoise if its package is enabled in Buildroot.
+linenoise 1.0 is unfortunately incompatible with linenoise CLI
+implementation and requires to be bumped.
 
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
----
- package/nftables/nftables.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+libedit implementation suffers from a missing header in v1.0.1 and
+earlier which is fixed by bumping nftables to its latest version, 1.0.5.
 
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 56cef56524..9d60736d7f 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -20,7 +20,11 @@ else
- NFTABLES_CONF_OPTS += --with-mini-gmp
- endif
- 
--ifeq ($(BR2_PACKAGE_READLINE),y)
-+ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-+NFTABLES_CONF_OPTS += --with-cli=editline
-+NFTABLES_DEPENDENCIES += libedit
-+NFTABLES_LIBS += -lncurses
-+else ifeq ($(BR2_PACKAGE_READLINE),y)
- NFTABLES_CONF_OPTS += --with-cli=readline
- NFTABLES_DEPENDENCIES += readline
- NFTABLES_LIBS += -lncurses
+nftables 1.0.5 requires libnftnl 1.2.3 or later so the latter is also
+bumped to its latest version.
+
+This has only been build tested, the nft binary is created properly.
+
+Cheers,
+Quentin
+
+v2:
+ - removed spurious patches, sorry for the noise,
+
+Quentin Schulz (5):
+  package/linenoise: bump linenoise to latest commit
+  package/nftables: support linenoise cli backend support
+  package/libnftnl: bump to version 1.2.3
+  package/nftables: bump to version 1.0.5
+  package/nftables: support libedit cli implementation
+
+ package/libnftnl/libnftnl.hash   |  2 +-
+ package/libnftnl/libnftnl.mk     |  2 +-
+ package/linenoise/linenoise.hash |  2 +-
+ package/linenoise/linenoise.mk   |  2 +-
+ package/nftables/nftables.hash   |  2 +-
+ package/nftables/nftables.mk     | 11 +++++++++--
+ 6 files changed, 14 insertions(+), 7 deletions(-)
+
 -- 
 2.37.3
 
