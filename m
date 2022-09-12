@@ -4,69 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C67E0ECAAA1
-	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 03:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CF97ECAAD3
+	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 03:35:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7981F418AC;
-	Mon, 12 Sep 2022 03:35:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7981F418AC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3EDAF418B2;
+	Mon, 12 Sep 2022 03:35:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EDAF418B2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wv2-IdFh9y55; Mon, 12 Sep 2022 03:35:29 +0000 (UTC)
+	with ESMTP id zLAQ4uzopVcP; Mon, 12 Sep 2022 03:35:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F9784014A;
-	Mon, 12 Sep 2022 03:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F9784014A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B65D418B0;
+	Mon, 12 Sep 2022 03:35:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B65D418B0
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8923D1BF9AD
- for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 03:34:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8C27A1BF9AD
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 03:34:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B46C841C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE4B783F4C
  for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 03:34:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B46C841C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE4B783F4C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QKv14ATiMTeK for <buildroot@lists.busybox.net>;
+ with ESMTP id AD_cdjaA5VYS for <buildroot@lists.busybox.net>;
  Mon, 12 Sep 2022 03:34:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D544E84214
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D544E84214
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A07C84012
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9A07C84012
  for <buildroot@busybox.net>; Mon, 12 Sep 2022 03:34:36 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- bg5-20020a05600c3c8500b003a7b6ae4eb2so10073595wmb.4
+Received: by mail-wr1-x435.google.com with SMTP id h8so6308885wrf.3
  for <buildroot@busybox.net>; Sun, 11 Sep 2022 20:34:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date;
- bh=WW3LVJHCd2FMXbWlSs+VKEHldmQmAzOhgp9tfvdbkeQ=;
- b=blisZC3YrASYoTEuKngObi4TQCOycfljKK7erfGcXVXligPOWlJE/EslRwBjmoqDx0
- bMBNRZqQM4cn+Xwp6i8CMj0tJ0+aij4kS+ays/DGmapso5PsrK+N8d1pP8SzQEvlLHeT
- JZj9VGExbJeehpbwYNMxyvcqUSKWh8D5iXRj9smamiOctg5arfyeKoTybkAcUdh7H2ru
- rouUFEOjOd0DCS5416+jhquxIXPQ1sPd7zkuN0qPw0Pr6ulQmMki0UvC60wVL6ABFKnN
- gfvGkN0Ip9X1JzJDjlg7C+CN8kx8cRhwKSNspS2LpXrNWM2HhyzriVE2TSNA/dXUFjqI
- /Nqg==
-X-Gm-Message-State: ACgBeo087Yy+jHvFCUzL3K2TFSrlp+/HBWAtEZhwC4VjzC0UE3KmFQYh
- P6rtnUMtghlFn+l0XyONFP6n5Hq6uRU=
-X-Google-Smtp-Source: AA6agR4pqyMxNyJdcc1CR/jv2HMBPwcFQlDoMMsDaY9BlvqfamKKCpfC8eFLWHgxZuMSdAJWfALa2A==
-X-Received: by 2002:a05:600c:2311:b0:3a5:af18:75c1 with SMTP id
- 17-20020a05600c231100b003a5af1875c1mr12391459wmo.90.1662953674044; 
- Sun, 11 Sep 2022 20:34:34 -0700 (PDT)
+ bh=+TR53L5siqjm2CY/0eYGf28qFwmIRHFyC2eI7sioUJA=;
+ b=QMeRRZHu9n+ptE1DMGwUnHqqEOcZRRoezcjyy30JvsB2C31pzqItyzn1LC5Qrqqlp7
+ KNlMAjsJ24ArceOPJUETfSlJBjtrlK/RqxdhGKtxf7rMdif7KevikK8BEGCEaP8fwJss
+ 4whF4xTXZ9jjPk0CPDtnAP+fqhzJrDVq6FT4pi5RufLMYeBL6Ey+gp6htGL785HgVMTh
+ nHCFiV+aGVIUYwTsAu1/ZDPE5OHRR3qsCBPg8+bppwXYP9GQ/xXw/tq+MCVBMdf9xHoV
+ ELMn+vTDTYiXcgkgpbG75DJvHa5D+961MTS5aZwEssuwv1i3CTGow5StTCbVtX44Phil
+ GAaw==
+X-Gm-Message-State: ACgBeo1G0pYeBYuiBGrGYDzNGYt6+H37AjoG2q8XFS3bpMyJoDAs6FP2
+ rcsI1ZC5wYlSYXGi3nk+qZCBu+nsLJQ=
+X-Google-Smtp-Source: AA6agR7ktxwFaxd9ljFGq7jJisPfNzWgcc6K92/Ui5AXg+tdibRAYmOpuA0qaJPasENO9WT1H/7ixw==
+X-Received: by 2002:a5d:65c2:0:b0:228:68b7:e7b2 with SMTP id
+ e2-20020a5d65c2000000b0022868b7e7b2mr13625785wrw.440.1662953671698; 
+ Sun, 11 Sep 2022 20:34:31 -0700 (PDT)
 Received: from vm22.. (12.197.24.93.rev.sfr.net. [93.24.197.12])
  by smtp.gmail.com with ESMTPSA id
- x14-20020a5d60ce000000b0022862fd933asm6009588wrt.96.2022.09.11.20.34.33
+ x14-20020a5d60ce000000b0022862fd933asm6009588wrt.96.2022.09.11.20.34.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Sep 2022 20:34:33 -0700 (PDT)
+ Sun, 11 Sep 2022 20:34:31 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Mon, 12 Sep 2022 05:34:16 +0200
-Message-Id: <20220912033418.2587016-7-francois.perrad@gadz.org>
+Date: Mon, 12 Sep 2022 05:34:13 +0200
+Message-Id: <20220912033418.2587016-4-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220912033418.2587016-1-francois.perrad@gadz.org>
 References: <20220912033418.2587016-1-francois.perrad@gadz.org>
@@ -75,17 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
- bh=WW3LVJHCd2FMXbWlSs+VKEHldmQmAzOhgp9tfvdbkeQ=;
- b=WdAAkXpENtL0+KAQ+zBhoYciH7JRcRPy7Yg4qYfVVWR2MlzfdBdWlZNMy4CZHqI7uP
- 35kMFmXxyjCNu031GE253akkZ4GbxviR8vqoU5/rBYMRl/ju7pggfysllIoNSf7lX/bU
- 4zm2f+FMUana5x5rGbR563z1KwaiU1FqUE4VZGP9TX4lGVgLFGrjhJ9sRMkcz9ptx0/m
- rP4ZjJ50C/6+m/P3kAFjbAvbZ9otrLbZYxwQmO0RCByaKHjfOWLJXZv9iq41SM5M6uqU
- M1GvIhdCdoU6ke01XRC9gt3E+5qRSfPx9Dp4rsmFI4/6ul8PDkuKPnFzRuFcWyNDPbD9
- 9u8A==
+ bh=+TR53L5siqjm2CY/0eYGf28qFwmIRHFyC2eI7sioUJA=;
+ b=gw7EOqnQMoE3idHYL0+v4tD3KDCskmEfVQ4/pTtCX9U+hxLljT5RX2SppXkajm1u4v
+ Uo4532j9kJLgOIOgfamVxSRIoNb8LvkgqRMMESeFvzjJxtzQ3aG+7RDkMdVWxk/g5a7z
+ fflVLnFcxv2piAgJ1E5FVEJy8qmRJNACOy8YkgmKBkDV7xN9fgygv22RTPF6ZVquJTiG
+ OBH0DeMxGccgWQ3cHZgkaAIZtCcZC1aQ1QzJS25MXFR/YLKE7oV7t+AveNqxpaHuXqto
+ pVhfNXkXKpn4JzM1Dl5C75GwIh26wEo2oLLFTW64/mIBQxuYCnBeW1HACPDpJ1PGLqxd
+ 5+sg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=WdAAkXpE
-Subject: [Buildroot] [PATCH 7/9] package/perl-net-http: bump to version 6.22
+ header.a=rsa-sha256 header.s=20210112 header.b=gw7EOqnQ
+Subject: [Buildroot] [PATCH 4/9] package/perl-libwww-perl: bump to version
+ 6.67
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,43 +102,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-diff LICENSE:
--This software is copyright (c) 2020 by Toby Inkster.
-+This software is copyright (c) 2022 by Toby Inkster.
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-net-http/perl-net-http.hash | 6 +++---
- package/perl-net-http/perl-net-http.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
+ package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
-index 85ddad6ee..f02fd9080 100644
---- a/package/perl-net-http/perl-net-http.hash
-+++ b/package/perl-net-http/perl-net-http.hash
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
+index 25b6675ec..8b4b229b5 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.hash
++++ b/package/perl-libwww-perl/perl-libwww-perl.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  dbe27483034a79a7d43f61cc48540641  Net-HTTP-6.21.tar.gz
--sha256  375aa35b76be99f06464089174d66ac76f78ce83a5c92a907bbfab18b099eec4  Net-HTTP-6.21.tar.gz
-+md5  1d46019fb8559070a5ec1d838b690657  Net-HTTP-6.22.tar.gz
-+sha256  62faf9a5b84235443fe18f780e69cecf057dea3de271d7d8a0ba72724458a1a2  Net-HTTP-6.22.tar.gz
+-md5  3cc193bbddb1dc9e867e88582b440a92  libwww-perl-6.62.tar.gz
+-sha256  569ac15eb69d54b2a8d932403610690b89c68d6a987eab2f627c0639bae7de18  libwww-perl-6.62.tar.gz
++md5  ff7621d0350da3052f24db9a74692672  libwww-perl-6.67.tar.gz
++sha256  96eec40a3fd0aa1bd834117be5eb21c438f73094d861a1a7e5774f0b1226b723  libwww-perl-6.67.tar.gz
  
  # computed by scancpan
--sha256  49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79  LICENSE
-+sha256  0ed700a4bfc022e999d83407f71ab62ead96662d8f7bbebfd857376bf3ed6528  LICENSE
-diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
-index de0809d0b..b4cef6188 100644
---- a/package/perl-net-http/perl-net-http.mk
-+++ b/package/perl-net-http/perl-net-http.mk
+ sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENSE
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+index 43bd4db78..6c4bd2980 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.mk
++++ b/package/perl-libwww-perl/perl-libwww-perl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_NET_HTTP_VERSION = 6.21
-+PERL_NET_HTTP_VERSION = 6.22
- PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
- PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_NET_HTTP_LICENSE = Artistic or GPL-1.0+
+-PERL_LIBWWW_PERL_VERSION = 6.62
++PERL_LIBWWW_PERL_VERSION = 6.67
+ PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
+ PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
 -- 
 2.34.1
 
