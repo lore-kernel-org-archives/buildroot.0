@@ -1,55 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80F37ECAAA1
-	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 10:04:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BED93ECAAA1
+	for <buildroot@archiver.kernel.org>; Mon, 12 Sep 2022 10:04:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21D65422B4;
-	Mon, 12 Sep 2022 10:04:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21D65422B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 69BCC418FA;
+	Mon, 12 Sep 2022 10:04:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69BCC418FA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 58Ov4PM50I4F; Mon, 12 Sep 2022 10:04:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id o-ddFuwM6e1Z; Mon, 12 Sep 2022 10:04:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEEA542161;
-	Mon, 12 Sep 2022 10:04:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEEA542161
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7449B1BF9AF
- for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 10:03:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8A34541902;
+	Mon, 12 Sep 2022 10:04:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A34541902
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AC4B01BF476
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 10:03:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2BEE66113D
- for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 10:03:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BEE66113D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 88470418DD
+ for <buildroot@lists.busybox.net>; Mon, 12 Sep 2022 10:03:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88470418DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zZzLIdaUAXox for <buildroot@lists.busybox.net>;
- Mon, 12 Sep 2022 10:03:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8WyyPflyScoO for <buildroot@lists.busybox.net>;
+ Mon, 12 Sep 2022 10:03:09 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B13AA60AA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B51AE40481
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B13AA60AA7
- for <buildroot@buildroot.org>; Mon, 12 Sep 2022 10:03:06 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 9CB70CC406
- for <buildroot@buildroot.org>; Mon, 12 Sep 2022 09:56:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B51AE40481
+ for <buildroot@buildroot.org>; Mon, 12 Sep 2022 10:03:08 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::225])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 13C72C44B5
+ for <buildroot@buildroot.org>; Mon, 12 Sep 2022 09:56:11 +0000 (UTC)
 Received: (Authenticated sender: foss@0leil.net)
- by mail.gandi.net (Postfix) with ESMTPSA id 353641C0019;
- Mon, 12 Sep 2022 09:56:04 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 850F11C0008;
+ Mon, 12 Sep 2022 09:56:05 +0000 (UTC)
 From: Quentin Schulz <foss+buildroot@0leil.net>
 To: buildroot@buildroot.org
-Date: Mon, 12 Sep 2022 11:55:38 +0200
-Message-Id: <20220912095540.957477-7-foss+buildroot@0leil.net>
+Date: Mon, 12 Sep 2022 11:55:39 +0200
+Message-Id: <20220912095540.957477-8-foss+buildroot@0leil.net>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220912095540.957477-1-foss+buildroot@0leil.net>
 References: <20220912095540.957477-1-foss+buildroot@0leil.net>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 4/5] package/nftables: bump to version 1.0.5
+Subject: [Buildroot] [PATCH 4/4] package/nftables: support libedit cli
+ implementation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,40 +71,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-This bumps nftables to its 1.0.5 version. This will allow us to enable
-the libedit cli implementation in a later commit thanks to a fix in
-version 1.0.2, commit 3847fccf0045 ("cli: remove #include
+libedit CLI implementation is supported since commit 9420423900a2
+("cli: add libedit support"), nftables v0.9.8. There's an important fix
+for Buildroot in v1.0.2, commit 3847fccf0045 ("cli: remove #include
 <editline/history.h>").
+
+Also in nftables v1.0.1, libedit/editline cli implementation is made the
+default implementation so let's favor libedit implementation over
+readline and linenoise if its package is enabled in Buildroot.
 
 Cc: Quentin Schulz <foss+buildroot@0leil.net>
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 ---
- package/nftables/nftables.hash | 2 +-
- package/nftables/nftables.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nftables/nftables.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
-index 53878abba9..5e5134b61d 100644
---- a/package/nftables/nftables.hash
-+++ b/package/nftables/nftables.hash
-@@ -1,3 +1,3 @@
- # From https://netfilter.org/projects/nftables/downloads.html
--sha256  3ceeba625818e81a0be293e9dd486c3ef799ebd92165270f1e57e9a201efa423  nftables-1.0.1.tar.bz2
-+sha256  8d1b4b18393af43698d10baa25d2b9b6397969beecac7816c35dd0714e4de50a  nftables-1.0.5.tar.bz2
- sha256  c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e  COPYING
 diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index e42108e159..56cef56524 100644
+index 56cef56524..9d60736d7f 100644
 --- a/package/nftables/nftables.mk
 +++ b/package/nftables/nftables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -20,7 +20,11 @@ else
+ NFTABLES_CONF_OPTS += --with-mini-gmp
+ endif
  
--NFTABLES_VERSION = 1.0.1
-+NFTABLES_VERSION = 1.0.5
- NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
- NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
- NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+-ifeq ($(BR2_PACKAGE_READLINE),y)
++ifeq ($(BR2_PACKAGE_LIBEDIT),y)
++NFTABLES_CONF_OPTS += --with-cli=editline
++NFTABLES_DEPENDENCIES += libedit
++NFTABLES_LIBS += -lncurses
++else ifeq ($(BR2_PACKAGE_READLINE),y)
+ NFTABLES_CONF_OPTS += --with-cli=readline
+ NFTABLES_DEPENDENCIES += readline
+ NFTABLES_LIBS += -lncurses
 -- 
 2.37.3
 
