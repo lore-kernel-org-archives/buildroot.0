@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A9DC54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 14:22:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EB5AC6FA82
+	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 14:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E679B60E60;
-	Tue, 13 Sep 2022 14:22:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E679B60E60
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ElRGLcA8vhXm; Tue, 13 Sep 2022 14:22:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15E5A60E2D;
-	Tue, 13 Sep 2022 14:22:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15E5A60E2D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6950B1BF2F3
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 14:21:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4589A408BF
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 14:21:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4589A408BF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 34A9040A8C;
+	Tue, 13 Sep 2022 14:22:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34A9040A8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cIlk9ZosWw71 for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DTEX4qh95NaP; Tue, 13 Sep 2022 14:22:38 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 574B3408BF;
+	Tue, 13 Sep 2022 14:22:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 574B3408BF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B81E1BF9B5
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 14:21:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4579982C98
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 14:21:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4579982C98
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kh-w4mUVwLQh for <buildroot@lists.busybox.net>;
  Tue, 13 Sep 2022 14:21:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 701FB40A81
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B60281A23
  for <buildroot@buildroot.org>; Tue, 13 Sep 2022 14:21:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 701FB40A81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B60281A23
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 60671837CC; Tue, 13 Sep 2022 14:21:55 +0000 (UTC)
+ id 6BB92837D1; Tue, 13 Sep 2022 14:21:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Sep 2022 16:12:09 +0200
+Date: Tue, 13 Sep 2022 16:12:47 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: d928bd39dd94e6a739191b76c2819129899d11e8
-X-Git-Newrev: b27d504747597c1cbaeb188d088d54982d4e3de8
+X-Git-Oldrev: b27d504747597c1cbaeb188d088d54982d4e3de8
+X-Git-Newrev: b88e5b2fa1f6aa6742e211218b8f767544c1961f
 X-Patchwork-Hint: ignore
-Message-Id: <20220913142155.60671837CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] toolchain/Config.in:
- update gcc bug 99410
+Message-Id: <20220913142155.6BB92837D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/mariadb: work
+ around gcc bug 68485
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b27d504747597c1cbaeb188d088d54982d4e3de8
+commit: https://git.buildroot.net/buildroot/commit/?id=b88e5b2fa1f6aa6742e211218b8f767544c1961f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Gcc bug 99410 reappeared while building with gcc 11.x and while
-testing it also shows up with gcc 12.x, so let's enable this bug for
-all gcc versions except gcc 8.x.
+With Microblaze Gcc version <= 12.x the build fails due to gcc bug
+68485: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. The bug
+show up when building mariadb with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_68458=y,
+we force using -O0.
 
 Fixes:
-
-  http://autobuild.buildroot.net/results/64e54ef5ba3a3dee391b788315615d57a1dd9fa2/
+http://autobuild.buildroot.net/results/9b5/9b5dce4958b602c80140440addb1f072332e53c2/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1e1d45a9bcb38e37d1b27388b267a790b56eb642)
+(cherry picked from commit 4900fc717cea67a6e2692c714377d27093a5f76a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mariadb/mariadb.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 0c5c290a76..ba1af1ece6 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -186,12 +186,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 06fd1484b6..4c855985b1 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -82,6 +82,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ MARIADB_CXXFLAGS += -latomic
+ endif
  
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
- # Error: branch offset out of range on Nios II. This bug
--# no longer exists in gcc 8.x but reappeared on gcc 9.x and has been
--# fixed on gcc 11.x.
-+# no longer exists in gcc 8.x but reappeared on gcc 9.x and still exists
-+# on gcc 12.x
- config BR2_TOOLCHAIN_HAS_GCC_BUG_99410
- 	bool
- 	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
--	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9 && !BR2_TOOLCHAIN_GCC_AT_LEAST_11
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	depends on BR2_nios2
- 
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101737
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++MARIADB_CXXFLAGS += -O0
++endif
++
+ MARIADB_CONF_OPTS += \
+ 	-DCMAKE_CXX_FLAGS="$(MARIADB_CXXFLAGS)" \
+ 	-DINSTALL_DOCDIR=share/doc/mariadb-$(MARIADB_VERSION) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
