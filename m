@@ -4,54 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD1E3C6FA82
-	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 12:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B20C54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 12:36:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 253DC410D3;
-	Tue, 13 Sep 2022 12:16:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 253DC410D3
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7B3741503;
+	Tue, 13 Sep 2022 12:36:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7B3741503
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ktgw5-fL0mDT; Tue, 13 Sep 2022 12:16:30 +0000 (UTC)
+	with ESMTP id cBYk-6kKaCkN; Tue, 13 Sep 2022 12:36:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 062FC410A6;
-	Tue, 13 Sep 2022 12:16:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 062FC410A6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2AB751BF3AD
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:16:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B68D1410DB;
+	Tue, 13 Sep 2022 12:36:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B68D1410DB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D7531BF3AD
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 02932409D3
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:16:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02932409D3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 269B060E46
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:36:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 269B060E46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ieu1zWiFFbuU for <buildroot@lists.busybox.net>;
- Tue, 13 Sep 2022 12:16:18 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1700640167
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1700640167
- for <buildroot@buildroot.org>; Tue, 13 Sep 2022 12:16:17 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 193F420000F;
- Tue, 13 Sep 2022 12:16:15 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oY4pr-003LPH-AA; Tue, 13 Sep 2022 14:16:15 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p25_jycaH_pW for <buildroot@lists.busybox.net>;
+ Tue, 13 Sep 2022 12:36:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5778B60E44
+ for <buildroot@buildroot.org>; Tue, 13 Sep 2022 12:36:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5778B60E44
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 44F0B83755; Tue, 13 Sep 2022 12:36:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-References: <20220729052809.793581-1-aperez@igalia.com>
-Date: Tue, 13 Sep 2022 14:16:15 +0200
-In-Reply-To: <20220729052809.793581-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Fri, 29 Jul 2022 08:28:09 +0300")
-Message-ID: <87czbzv59s.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
- version 2.36.5
+To: buildroot@buildroot.org
+Date: Tue, 13 Sep 2022 13:54:22 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: f18d87065387e58df9b751aaa7f6df52695e7ca3
+X-Git-Newrev: afd83944f679ea1ef4a0216db421eafeedeacd4e
+X-Patchwork-Hint: ignore
+Message-Id: <20220913123609.44F0B83755@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ configs/galileo_defconfig: add missing double quotes around
+ BR2_GLOBAL_PATCH_DIR value
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +58,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=afd83944f679ea1ef4a0216db421eafeedeacd4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > Bugfix release, including the patch that can be now removed, and
- > security patches for CVE-2022-32792, CVE-2022-32816, and CVE-2022-2294.
+This bogus BR2_GLOBAL_PATCH_DIR value was added in commit
+9dd5382d791c3d5197b9ef401a0d103ad1457d5d ("board/intel/galileo: fix
+build failure with host gcc 10") back in February.
 
- > Release notes:
+This should help fixing
+https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800667, as it
+complains with:
 
- >   https://webkitgtk.org/2022/07/28/webkitgtk2.36.5-released.html
+WARN: defconfig ./configs/galileo_defconfig can't be used:
+      Missing: BR2_GLOBAL_PATCH_DIR=board/intel/galileo/patches
 
- > Accompanying security advisory:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0005048ec6be44f1bf7b2458beb698f7acf23ccf)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/galileo_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >   https://webkitgtk.org/security/WSA-2022-0007.html
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
+index a8fd0a6dcc..312162b7a8 100644
+--- a/configs/galileo_defconfig
++++ b/configs/galileo_defconfig
+@@ -1,5 +1,5 @@
+ BR2_x86_x1000=y
+-BR2_GLOBAL_PATCH_DIR=board/intel/galileo/patches
++BR2_GLOBAL_PATCH_DIR="board/intel/galileo/patches"
+ # Needed for TARGET_GRUB2
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Linux headers same as kernel, a 3.14 series
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
