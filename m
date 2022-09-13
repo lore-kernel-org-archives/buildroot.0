@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8973C6FA82
-	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 12:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C185EC54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 12:38:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E564812AF;
-	Tue, 13 Sep 2022 12:38:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E564812AF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C6A981316;
+	Tue, 13 Sep 2022 12:38:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C6A981316
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ETPYhRFvGI-U; Tue, 13 Sep 2022 12:38:40 +0000 (UTC)
+	with ESMTP id S6LoHU4mzxrS; Tue, 13 Sep 2022 12:38:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA0A6812A7;
-	Tue, 13 Sep 2022 12:38:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA0A6812A7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 96C881BF9B5
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:38:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A8B2812DA;
+	Tue, 13 Sep 2022 12:38:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A8B2812DA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B1F6D1BF3AD
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 719CD41519
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:38:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 719CD41519
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9AA4682C4D
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:38:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AA4682C4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KvenlQ1RonRw for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id funXoB9u9TeW for <buildroot@lists.busybox.net>;
  Tue, 13 Sep 2022 12:38:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B587410DC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4EBB982BFD
  for <buildroot@buildroot.org>; Tue, 13 Sep 2022 12:38:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B587410DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EBB982BFD
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5618F8376F; Tue, 13 Sep 2022 12:38:00 +0000 (UTC)
+ id 39E0083757; Tue, 13 Sep 2022 12:38:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Sep 2022 13:54:12 +0200
+Date: Tue, 13 Sep 2022 13:46:18 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 43c434f69125e212aa386f59fca46ce34d1cecba
-X-Git-Newrev: 302923216e9d31a918994a8e90dc3e9b1e70eb7b
+X-Git-Oldrev: 93ae35df721ad5f471c420b7ffbfccb5c65dc2f3
+X-Git-Newrev: f2f19d3d45f51dba2ab849148043ac84e397b2a5
 X-Patchwork-Hint: ignore
-Message-Id: <20220913123800.5618F8376F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x]
- configs/galileo_defconfig: add missing double quotes around
- BR2_GLOBAL_PATCH_DIR value
+Message-Id: <20220913123800.39E0083757@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] boot, package, support,
+ toolchain: switch to 2 spaces for the hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,39 +63,804 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=302923216e9d31a918994a8e90dc3e9b1e70eb7b
+commit: https://git.buildroot.net/buildroot/commit/?id=f2f19d3d45f51dba2ab849148043ac84e397b2a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-This bogus BR2_GLOBAL_PATCH_DIR value was added in commit
-9dd5382d791c3d5197b9ef401a0d103ad1457d5d ("board/intel/galileo: fix
-build failure with host gcc 10") back in February.
+It's time to finally switch over globally to the new spacing format
+that we have agreed on for the hash file, with 2 spaces as a separator
+between fields.
 
-This should help fixing
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800667, as it
-complains with:
+This commit was mechanically generated using:
 
-WARN: defconfig ./configs/galileo_defconfig can't be used:
-      Missing: BR2_GLOBAL_PATCH_DIR=board/intel/galileo/patches
+find . -type f -name '*.hash' | xargs sed -i 's%^md5[ \t]*\([^ \t]*\)[ \t]*\(.*\)$%md5  \1  \2%'
+find . -type f -name '*.hash' | xargs sed -i 's%^sha1[ \t]*\([^ \t]*\)[ \t]*\(.*\)$%sha1  \1  \2%'
+find . -type f -name '*.hash' | xargs sed -i 's%^sha256[ \t]*\([^ \t]*\)[ \t]*\(.*\)$%sha256  \1  \2%'
+find . -type f -name '*.hash' | xargs sed -i 's%^sha512[ \t]*\([^ \t]*\)[ \t]*\(.*\)$%sha512  \1  \2%'
+
+This commit can easily be backported on the LTS branch by re-running
+the same commands, if needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0005048ec6be44f1bf7b2458beb698f7acf23ccf)
+(cherry picked from commit ebe5d9edfe8d07eafd7b61c4f77ce509bb98a0ad)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/galileo_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/binaries-marvell/binaries-marvell.hash        |    4 +-
+ boot/grub2/grub2.hash                              |    4 +-
+ boot/s500-bootloader/s500-bootloader.hash          |    2 +-
+ boot/shim/shim.hash                                |    4 +-
+ package/abootimg/abootimg.hash                     |    4 +-
+ package/acpitool/acpitool.hash                     |    4 +-
+ package/aespipe/aespipe.hash                       |    6 +-
+ package/alsamixergui/alsamixergui.hash             |    2 +-
+ package/alure/alure.hash                           |    4 +-
+ package/android-tools/android-tools.hash           |    4 +-
+ package/angular-websocket/angular-websocket.hash   |    4 +-
+ package/aoetools/aoetools.hash                     |    4 +-
+ package/apr-util/apr-util.hash                     |    4 +-
+ package/apr/apr.hash                               |    4 +-
+ package/argparse/argparse.hash                     |    4 +-
+ package/argus/argus.hash                           |    6 +-
+ .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |    2 +-
+ package/arp-scan/arp-scan.hash                     |    4 +-
+ package/arptables/arptables.hash                   |    4 +-
+ package/ascii-invaders/ascii-invaders.hash         |    4 +-
+ package/asterisk/asterisk.hash                     |    4 +-
+ package/atest/atest.hash                           |    4 +-
+ package/atf/atf.hash                               |    4 +-
+ package/aubio/aubio.hash                           |    4 +-
+ package/autossh/autossh.hash                       |    8 +-
+ package/avahi/avahi.hash                           |    4 +-
+ package/b43-firmware/b43-firmware.hash             |    4 +-
+ package/b43-fwcutter/b43-fwcutter.hash             |    4 +-
+ package/bc/bc.hash                                 |    6 +-
+ package/bcache-tools/bcache-tools.hash             |    4 +-
+ package/bcg729/bcg729.hash                         |    4 +-
+ package/bdwgc/bdwgc.hash                           |    4 +-
+ package/berkeleydb/berkeleydb.hash                 |    4 +-
+ package/biosdevname/biosdevname.hash               |    4 +-
+ package/bitstream/bitstream.hash                   |    6 +-
+ package/bonnie/bonnie.hash                         |    2 +-
+ package/bsdiff/bsdiff.hash                         |    2 +-
+ package/bzip2/bzip2.hash                           |    4 +-
+ package/cache-calibrator/cache-calibrator.hash     |    4 +-
+ package/cage/cage.hash                             |    4 +-
+ package/cairo/cairo.hash                           |   10 +-
+ package/caps/caps.hash                             |    4 +-
+ package/cbootimage/cbootimage.hash                 |    4 +-
+ package/cctz/cctz.hash                             |    4 +-
+ package/cgic/cgic.hash                             |    4 +-
+ package/cgilua/cgilua.hash                         |    4 +-
+ package/chartjs/chartjs.hash                       |    4 +-
+ package/chipmunk/chipmunk.hash                     |    4 +-
+ package/clang/clang.hash                           |    4 +-
+ package/cmocka/cmocka.hash                         |    4 +-
+ package/collectd/collectd.hash                     |    8 +-
+ package/comix-cursors/comix-cursors.hash           |    2 +-
+ package/connman-gtk/connman-gtk.hash               |    4 +-
+ package/conntrack-tools/conntrack-tools.hash       |    4 +-
+ package/copas/copas.hash                           |    4 +-
+ package/coxpcall/coxpcall.hash                     |    4 +-
+ package/cpio/cpio.hash                             |    8 +-
+ package/cppdb/cppdb.hash                           |    4 +-
+ package/cppunit/cppunit.hash                       |    6 +-
+ package/cpuburn-arm/cpuburn-arm.hash               |    4 +-
+ package/cpuload/cpuload.hash                       |    4 +-
+ package/cracklib/cracklib.hash                     |    6 +-
+ package/ctorrent/ctorrent.hash                     |    2 +-
+ package/cunit/cunit.hash                           |    4 +-
+ package/curlpp/curlpp.hash                         |    4 +-
+ package/cwiid/cwiid.hash                           |    4 +-
+ package/cxxtest/cxxtest.hash                       |    4 +-
+ package/czmq/czmq.hash                             |    8 +-
+ package/dacapo/dacapo.hash                         |    4 +-
+ package/dado/dado.hash                             |    4 +-
+ package/datatables-buttons/datatables-buttons.hash |    4 +-
+ .../datatables-fixedcolumns.hash                   |    4 +-
+ .../datatables-responsive.hash                     |    4 +-
+ package/datatables/datatables.hash                 |    4 +-
+ package/dc3dd/dc3dd.hash                           |    2 +-
+ package/debianutils/debianutils.hash               |    4 +-
+ package/dhcpdump/dhcpdump.hash                     |    4 +-
+ package/dhrystone/dhrystone.hash                   |    2 +-
+ package/dieharder/dieharder.hash                   |    4 +-
+ package/dmraid/dmraid.hash                         |    2 +-
+ package/docker-compose/docker-compose.hash         |    4 +-
+ package/doom-wad/doom-wad.hash                     |    2 +-
+ package/dos2unix/dos2unix.hash                     |    4 +-
+ package/dt/dt.hash                                 |    6 +-
+ package/dump1090/dump1090.hash                     |    4 +-
+ package/dvblast/dvblast.hash                       |    8 +-
+ package/dvdauthor/dvdauthor.hash                   |    4 +-
+ package/e2tools/e2tools.hash                       |    4 +-
+ package/ecryptfs-utils/ecryptfs-utils.hash         |    6 +-
+ package/efivar/efivar.hash                         |    4 +-
+ package/elftosb/elftosb.hash                       |    2 +-
+ package/elixir/elixir.hash                         |    4 +-
+ package/emlog/emlog.hash                           |    4 +-
+ package/enscript/enscript.hash                     |    4 +-
+ package/erlang-base64url/erlang-base64url.hash     |    4 +-
+ package/erlang-goldrush/erlang-goldrush.hash       |    4 +-
+ package/erlang-idna/erlang-idna.hash               |    4 +-
+ package/erlang-jose/erlang-jose.hash               |    4 +-
+ package/erlang-lager/erlang-lager.hash             |    4 +-
+ package/erlang-rebar/erlang-rebar.hash             |    4 +-
+ package/evtest/evtest.hash                         |    4 +-
+ package/exfat-utils/exfat-utils.hash               |    4 +-
+ package/exfat/exfat.hash                           |    4 +-
+ package/f2fs-tools/f2fs-tools.hash                 |    4 +-
+ package/fan-ctrl/fan-ctrl.hash                     |    2 +-
+ package/fbdump/fbdump.hash                         |    4 +-
+ package/fbterm/fbterm.hash                         |    2 +-
+ package/feh/feh.hash                               |    4 +-
+ package/fftw/fftw.hash                             |    6 +-
+ package/flannel/flannel.hash                       |    4 +-
+ package/flatcc/flatcc.hash                         |    4 +-
+ package/flex/flex.hash                             |    4 +-
+ package/flickcurl/flickcurl.hash                   |   10 +-
+ package/flot/flot.hash                             |    4 +-
+ package/fluid-soundfont/fluid-soundfont.hash       |    4 +-
+ package/font-awesome/font-awesome.hash             |    2 +-
+ package/fontconfig/fontconfig.hash                 |    4 +-
+ .../imx-m4fwloader/imx-m4fwloader.hash             |    4 +-
+ package/freescale-imx/imx-uuc/imx-uuc.hash         |    4 +-
+ package/fscryptctl/fscryptctl.hash                 |    4 +-
+ package/fstrcmp/fstrcmp.hash                       |    8 +-
+ package/ftop/ftop.hash                             |    8 +-
+ package/gcnano-binaries/gcnano-binaries.hash       |    4 +-
+ package/gconf/gconf.hash                           |    4 +-
+ package/gengetopt/gengetopt.hash                   |    6 +-
+ package/genpart/genpart.hash                       |    2 +-
+ package/geoip/geoip.hash                           |    4 +-
+ package/gflags/gflags.hash                         |    4 +-
+ package/ghostscript-fonts/ghostscript-fonts.hash   |    6 +-
+ package/giflib/giflib.hash                         |    6 +-
+ package/git-crypt/git-crypt.hash                   |    6 +-
+ package/gli/gli.hash                               |    4 +-
+ package/glm/glm.hash                               |    4 +-
+ package/glorytun/glorytun.hash                     |    4 +-
+ package/gnu-efi/gnu-efi.hash                       |    8 +-
+ package/gnuradio/gnuradio.hash                     |    4 +-
+ package/gob2/gob2.hash                             |    6 +-
+ .../googlefontdirectory/googlefontdirectory.hash   | 1982 ++++++++++----------
+ package/gperf/gperf.hash                           |    4 +-
+ package/gstreamer1/gst1-imx/gst1-imx.hash          |    4 +-
+ package/gtkmm3/gtkmm3.hash                         |    2 +-
+ package/gtksourceview/gtksourceview.hash           |    4 +-
+ package/hans/hans.hash                             |    4 +-
+ package/heimdal/heimdal.hash                       |    6 +-
+ package/heirloom-mailx/heirloom-mailx.hash         |    2 +-
+ package/httping/httping.hash                       |    4 +-
+ package/ibrcommon/ibrcommon.hash                   |    6 +-
+ package/ifenslave/ifenslave.hash                   |    2 +-
+ package/ifmetric/ifmetric.hash                     |    6 +-
+ package/igh-ethercat/igh-ethercat.hash             |    2 +-
+ package/ijs/ijs.hash                               |    4 +-
+ package/ima-evm-utils/ima-evm-utils.hash           |    4 +-
+ package/intltool/intltool.hash                     |    6 +-
+ package/iodine/iodine.hash                         |    2 +-
+ package/iputils/iputils.hash                       |    8 +-
+ package/irrlicht/irrlicht.hash                     |    4 +-
+ package/iucode-tool/iucode-tool.hash               |    4 +-
+ package/jailhouse/jailhouse.hash                   |    4 +-
+ package/joe/joe.hash                               |    8 +-
+ package/jquery/jquery.hash                         |    2 +-
+ package/jsmin/jsmin.hash                           |    4 +-
+ package/jsmn/jsmn.hash                             |    4 +-
+ package/kvazaar/kvazaar.hash                       |    4 +-
+ package/kyua/kyua.hash                             |    4 +-
+ package/lbreakout2/lbreakout2.hash                 |    4 +-
+ package/lensfun/lensfun.hash                       |    4 +-
+ package/libaio/libaio.hash                         |    2 +-
+ package/libao/libao.hash                           |    4 +-
+ package/libart/libart.hash                         |    4 +-
+ package/libasplib/libasplib.hash                   |    4 +-
+ package/libatasmart/libatasmart.hash               |    4 +-
+ package/libavl/libavl.hash                         |    4 +-
+ package/libbacktrace/libbacktrace.hash             |    4 +-
+ package/libbson/libbson.hash                       |    6 +-
+ package/libcddb/libcddb.hash                       |    4 +-
+ package/libcdio-paranoia/libcdio-paranoia.hash     |    4 +-
+ package/libcdio/libcdio.hash                       |    4 +-
+ package/libcgi/libcgi.hash                         |    2 +-
+ package/libcgicc/libcgicc.hash                     |    2 +-
+ package/libcorrect/libcorrect.hash                 |    4 +-
+ package/libcsv/libcsv.hash                         |    4 +-
+ package/libcue/libcue.hash                         |    4 +-
+ package/libcuefile/libcuefile.hash                 |    6 +-
+ package/libcutl/libcutl.hash                       |    6 +-
+ package/libdaemon/libdaemon.hash                   |    4 +-
+ package/libdcadec/libdcadec.hash                   |    4 +-
+ package/libdri2/libdri2.hash                       |    4 +-
+ package/libdvbcsa/libdvbcsa.hash                   |    6 +-
+ package/libdvbpsi/libdvbpsi.hash                   |    6 +-
+ package/libeastl/libeastl.hash                     |    4 +-
+ package/libee/libee.hash                           |    4 +-
+ package/libenca/libenca.hash                       |    4 +-
+ package/libestr/libestr.hash                       |    4 +-
+ package/libfcgi/libfcgi.hash                       |    4 +-
+ package/libfreefare/libfreefare.hash               |    4 +-
+ package/libfreeimage/libfreeimage.hash             |   12 +-
+ package/libfuse/libfuse.hash                       |    6 +-
+ package/libgdiplus/libgdiplus.hash                 |    4 +-
+ package/libglade/libglade.hash                     |    4 +-
+ package/libical/libical.hash                       |    4 +-
+ package/libiconv/libiconv.hash                     |    6 +-
+ package/libiio/libiio.hash                         |    4 +-
+ package/libimxvpuapi/libimxvpuapi.hash             |    4 +-
+ package/libiscsi/libiscsi.hash                     |    8 +-
+ package/libkcapi/libkcapi.hash                     |    8 +-
+ package/libllcp/libllcp.hash                       |    4 +-
+ package/liblog4c-localtime/liblog4c-localtime.hash |    4 +-
+ package/liblogging/liblogging.hash                 |    4 +-
+ package/libloki/libloki.hash                       |    6 +-
+ package/libmbus/libmbus.hash                       |    4 +-
+ package/libmemcached/libmemcached.hash             |    4 +-
+ package/libmng/libmng.hash                         |    6 +-
+ package/libmpd/libmpd.hash                         |    4 +-
+ package/libmspack/libmspack.hash                   |    4 +-
+ package/libnatpmp/libnatpmp.hash                   |    4 +-
+ package/libnet/libnet.hash                         |    2 +-
+ package/libnetfilter_acct/libnetfilter_acct.hash   |    6 +-
+ .../libnetfilter_cthelper.hash                     |    6 +-
+ .../libnetfilter_cttimeout.hash                    |    6 +-
+ package/libnfnetlink/libnfnetlink.hash             |    6 +-
+ package/libnfs/libnfs.hash                         |   10 +-
+ package/libnl/libnl.hash                           |    6 +-
+ package/libnpth/libnpth.hash                       |    4 +-
+ package/libodb-mysql/libodb-mysql.hash             |    6 +-
+ package/libodb-pgsql/libodb-pgsql.hash             |    6 +-
+ package/libodb/libodb.hash                         |    6 +-
+ package/libopenaptx/libopenaptx.hash               |    4 +-
+ package/liboping/liboping.hash                     |    4 +-
+ package/libpam-radius-auth/libpam-radius-auth.hash |    4 +-
+ package/libpciaccess/libpciaccess.hash             |   10 +-
+ package/libpng/libpng.hash                         |    8 +-
+ package/libpqxx/libpqxx.hash                       |    4 +-
+ package/libpthread-stubs/libpthread-stubs.hash     |    4 +-
+ package/libraw1394/libraw1394.hash                 |    4 +-
+ package/libreplaygain/libreplaygain.hash           |    2 +-
+ package/libroxml/libroxml.hash                     |    4 +-
+ package/libsamplerate/libsamplerate.hash           |    2 +-
+ package/libserial/libserial.hash                   |    4 +-
+ package/libsha1/libsha1.hash                       |    4 +-
+ package/libsidplay2/libsidplay2.hash               |    2 +-
+ package/libsigrok/libsigrok.hash                   |    4 +-
+ package/libsigrokdecode/libsigrokdecode.hash       |    4 +-
+ package/libsodium/libsodium.hash                   |    4 +-
+ package/libsquish/libsquish.hash                   |    6 +-
+ package/libsvg-cairo/libsvg-cairo.hash             |    2 +-
+ package/libsvg/libsvg.hash                         |    2 +-
+ package/libtelnet/libtelnet.hash                   |    4 +-
+ package/libtheora/libtheora.hash                   |    6 +-
+ package/libtommath/libtommath.hash                 |    4 +-
+ package/libtool/libtool.hash                       |    6 +-
+ package/libtorrent/libtorrent.hash                 |    4 +-
+ package/libucl/libucl.hash                         |    4 +-
+ package/libuecc/libuecc.hash                       |    2 +-
+ package/libwebsock/libwebsock.hash                 |    4 +-
+ package/libxml-parser-perl/libxml-parser-perl.hash |    4 +-
+ package/lightning/lightning.hash                   |    4 +-
+ package/linux-zigbee/linux-zigbee.hash             |    4 +-
+ package/lirc-tools/lirc-tools.hash                 |    4 +-
+ package/ljlinenoise/ljlinenoise.hash               |    4 +-
+ package/ljsyscall/ljsyscall.hash                   |    4 +-
+ package/lksctp-tools/lksctp-tools.hash             |    4 +-
+ package/lld/lld.hash                               |    4 +-
+ package/llvm/llvm.hash                             |    4 +-
+ package/log4cpp/log4cpp.hash                       |    8 +-
+ package/logsurfer/logsurfer.hash                   |    4 +-
+ package/lpeg/lpeg.hash                             |    2 +-
+ package/lpty/lpty.hash                             |    4 +-
+ package/lrandom/lrandom.hash                       |    2 +-
+ package/lsqlite3/lsqlite3.hash                     |    2 +-
+ package/lttng-babeltrace/lttng-babeltrace.hash     |    8 +-
+ package/lua-binaryheap/lua-binaryheap.hash         |    2 +-
+ package/lua-bit32/lua-bit32.hash                   |    4 +-
+ package/lua-cjson/lua-cjson.hash                   |    4 +-
+ package/lua-coat/lua-coat.hash                     |    4 +-
+ package/lua-coatpersistent/lua-coatpersistent.hash |    6 +-
+ package/lua-codegen/lua-codegen.hash               |    4 +-
+ package/lua-compat53/lua-compat53.hash             |    4 +-
+ package/lua-csnappy/lua-csnappy.hash               |    4 +-
+ package/lua-datafile/lua-datafile.hash             |    4 +-
+ package/lua-fifo/lua-fifo.hash                     |    4 +-
+ package/lua-flu/lua-flu.hash                       |    4 +-
+ package/lua-http/lua-http.hash                     |    4 +-
+ package/lua-iconv/lua-iconv.hash                   |    4 +-
+ package/lua-inotify/lua-inotify.hash               |    4 +-
+ package/lua-livr-extra/lua-livr-extra.hash         |    4 +-
+ package/lua-livr/lua-livr.hash                     |    4 +-
+ package/lua-lpeg-patterns/lua-lpeg-patterns.hash   |    4 +-
+ package/lua-lunitx/lua-lunitx.hash                 |    4 +-
+ package/lua-lunix/lua-lunix.hash                   |    4 +-
+ package/lua-markdown/lua-markdown.hash             |    4 +-
+ package/lua-messagepack/lua-messagepack.hash       |    6 +-
+ package/lua-periphery/lua-periphery.hash           |    4 +-
+ package/lua-resty-http/lua-resty-http.hash         |    4 +-
+ package/lua-rotas/lua-rotas.hash                   |    4 +-
+ package/lua-sailor/lua-sailor.hash                 |    4 +-
+ package/lua-silva/lua-silva.hash                   |    4 +-
+ package/lua-std-debug/lua-std-debug.hash           |    4 +-
+ package/lua-std-normalize/lua-std-normalize.hash   |    4 +-
+ package/lua-stdlib/lua-stdlib.hash                 |    4 +-
+ package/lua-testmore/lua-testmore.hash             |    4 +-
+ package/lua-utf8/lua-utf8.hash                     |    4 +-
+ package/lua-valua/lua-valua.hash                   |    4 +-
+ package/lua-zlib/lua-zlib.hash                     |    2 +-
+ package/luadbi-sqlite3/luadbi-sqlite3.hash         |    4 +-
+ package/luadbi/luadbi.hash                         |    4 +-
+ package/luaexpatutils/luaexpatutils.hash           |    2 +-
+ package/luafilesystem/luafilesystem.hash           |    4 +-
+ package/luajson/luajson.hash                       |    4 +-
+ package/lualdap/lualdap.hash                       |    4 +-
+ package/lualogging/lualogging.hash                 |    4 +-
+ package/luaossl/luaossl.hash                       |    4 +-
+ package/luasql-sqlite3/luasql-sqlite3.hash         |    4 +-
+ package/luksmeta/luksmeta.hash                     |    4 +-
+ package/lzma/lzma.hash                             |    8 +-
+ package/lzo/lzo.hash                               |    6 +-
+ package/lzop/lzop.hash                             |    4 +-
+ package/make/make.hash                             |    2 +-
+ package/mali-driver/mali-driver.hash               |    4 +-
+ package/matchbox-common/matchbox-common.hash       |    2 +-
+ package/matchbox-desktop/matchbox-desktop.hash     |    2 +-
+ package/matchbox-keyboard/matchbox-keyboard.hash   |    2 +-
+ package/matchbox-panel/matchbox-panel.hash         |    2 +-
+ .../matchbox-startup-monitor.hash                  |    2 +-
+ package/memstat/memstat.hash                       |    2 +-
+ package/mender-grubenv/mender-grubenv.hash         |    4 +-
+ package/menu-cache/menu-cache.hash                 |    6 +-
+ package/mesa3d-demos/mesa3d-demos.hash             |    6 +-
+ package/mg/mg.hash                                 |    4 +-
+ package/mini-snmpd/mini-snmpd.hash                 |    4 +-
+ package/minimodem/minimodem.hash                   |    4 +-
+ package/mjpg-streamer/mjpg-streamer.hash           |    4 +-
+ .../mobile-broadband-provider-info.hash            |    4 +-
+ package/monolite/monolite.hash                     |    2 +-
+ package/mosh/mosh.hash                             |    6 +-
+ package/most/most.hash                             |    8 +-
+ package/multicat/multicat.hash                     |    6 +-
+ package/mupdf/mupdf.hash                           |    2 +-
+ package/murata-cyw-fw/murata-cyw-fw.hash           |    8 +-
+ package/musepack/musepack.hash                     |    2 +-
+ .../musl-compat-headers/musl-compat-headers.hash   |    2 +-
+ package/musl-fts/musl-fts.hash                     |    4 +-
+ package/nanomsg/nanomsg.hash                       |    4 +-
+ package/neardal/neardal.hash                       |    4 +-
+ package/netcalc/netcalc.hash                       |    6 +-
+ package/netifrc/netifrc.hash                       |    4 +-
+ package/newt/newt.hash                             |    6 +-
+ package/nfacct/nfacct.hash                         |    4 +-
+ package/nginx-dav-ext/nginx-dav-ext.hash           |    4 +-
+ package/nilfs-utils/nilfs-utils.hash               |    4 +-
+ package/nload/nload.hash                           |    4 +-
+ package/nss-mdns/nss-mdns.hash                     |    4 +-
+ package/nss-myhostname/nss-myhostname.hash         |    4 +-
+ package/nss-pam-ldapd/nss-pam-ldapd.hash           |    6 +-
+ package/nvidia-driver/nvidia-driver.hash           |    6 +-
+ package/nvidia-modprobe/nvidia-modprobe.hash       |    4 +-
+ package/obsidian-cursors/obsidian-cursors.hash     |    2 +-
+ package/ocrad/ocrad.hash                           |    4 +-
+ package/odb/odb.hash                               |    6 +-
+ package/olsr/olsr.hash                             |    6 +-
+ package/omxplayer/omxplayer.hash                   |    2 +-
+ package/opencore-amr/opencore-amr.hash             |    8 +-
+ package/openmpi/openmpi.hash                       |    8 +-
+ package/openobex/openobex.hash                     |    8 +-
+ package/openpowerlink/openpowerlink.hash           |    4 +-
+ package/opentyrian-data/opentyrian-data.hash       |    2 +-
+ package/opus-tools/opus-tools.hash                 |    4 +-
+ package/opus/opus.hash                             |    4 +-
+ package/oracle-mysql/oracle-mysql.hash             |    2 +-
+ package/orbit/orbit.hash                           |    6 +-
+ package/pamtester/pamtester.hash                   |    4 +-
+ package/patch/patch.hash                           |    4 +-
+ package/patchelf/patchelf.hash                     |    4 +-
+ .../perl-apache-logformat-compiler.hash            |    6 +-
+ package/perl-appconfig/perl-appconfig.hash         |    6 +-
+ package/perl-astro-suntime/perl-astro-suntime.hash |    6 +-
+ .../perl-class-inspector/perl-class-inspector.hash |    6 +-
+ package/perl-class-load/perl-class-load.hash       |    6 +-
+ .../perl-class-method-modifiers.hash               |    6 +-
+ .../perl-class-std-fast/perl-class-std-fast.hash   |    6 +-
+ package/perl-class-std/perl-class-std.hash         |    6 +-
+ package/perl-cookie-baker/perl-cookie-baker.hash   |    6 +-
+ .../perl-crypt-blowfish/perl-crypt-blowfish.hash   |    6 +-
+ package/perl-crypt-cbc/perl-crypt-cbc.hash         |    6 +-
+ .../perl-crypt-openssl-aes.hash                    |    6 +-
+ .../perl-crypt-openssl-random.hash                 |    6 +-
+ package/perl-datetime-tiny/perl-datetime-tiny.hash |    6 +-
+ package/perl-dbd-mysql/perl-dbd-mysql.hash         |    6 +-
+ package/perl-dbi/perl-dbi.hash                     |    6 +-
+ .../perl-devel-globaldestruction.hash              |    6 +-
+ .../perl-devel-stacktrace-ashtml.hash              |    6 +-
+ .../perl-devel-stacktrace.hash                     |    6 +-
+ .../perl-device-serialport.hash                    |    6 +-
+ package/perl-digest-sha1/perl-digest-sha1.hash     |    6 +-
+ .../perl-dist-checkconflicts.hash                  |    6 +-
+ package/perl-encode-detect/perl-encode-detect.hash |    6 +-
+ package/perl-encode-locale/perl-encode-locale.hash |    6 +-
+ .../perl-extutils-config/perl-extutils-config.hash |    6 +-
+ .../perl-extutils-helpers.hash                     |    6 +-
+ .../perl-extutils-installpaths.hash                |    6 +-
+ .../perl-file-sharedir-install.hash                |    6 +-
+ .../perl-filesys-notify-simple.hash                |    6 +-
+ package/perl-gdgraph/perl-gdgraph.hash             |    8 +-
+ package/perl-gdtextutil/perl-gdtextutil.hash       |    8 +-
+ .../perl-hash-multivalue/perl-hash-multivalue.hash |    6 +-
+ package/perl-html-tagset/perl-html-tagset.hash     |    6 +-
+ package/perl-http-date/perl-http-date.hash         |    6 +-
+ .../perl-http-headers-fast.hash                    |    6 +-
+ .../perl-http-multipartparser.hash                 |    6 +-
+ .../perl-http-negotiate/perl-http-negotiate.hash   |    6 +-
+ package/perl-i18n/perl-i18n.hash                   |    6 +-
+ package/perl-io-interface/perl-io-interface.hash   |    6 +-
+ .../perl-io-socket-multicast.hash                  |    6 +-
+ package/perl-json-tiny/perl-json-tiny.hash         |    6 +-
+ .../perl-locale-maketext-lexicon.hash              |    6 +-
+ .../perl-lwp-mediatypes/perl-lwp-mediatypes.hash   |    6 +-
+ package/perl-mailtools/perl-mailtools.hash         |    6 +-
+ .../perl-math-prime-util/perl-math-prime-util.hash |    6 +-
+ .../perl-mime-base64-urlsafe.hash                  |    6 +-
+ package/perl-mime-tools/perl-mime-tools.hash       |    6 +-
+ .../perl-module-build-tiny.hash                    |    6 +-
+ package/perl-module-build/perl-module-build.hash   |    6 +-
+ .../perl-module-implementation.hash                |    6 +-
+ .../perl-module-runtime/perl-module-runtime.hash   |    6 +-
+ .../perl-mojolicious-plugin-cspheader.hash         |    6 +-
+ .../perl-mojolicious-plugin-i18n.hash              |    6 +-
+ .../perl-mojolicious-plugin-securityheader.hash    |    6 +-
+ package/perl-net-snmp/perl-net-snmp.hash           |    6 +-
+ package/perl-net-ssleay/perl-net-ssleay.hash       |    6 +-
+ package/perl-netaddr-ip/perl-netaddr-ip.hash       |    8 +-
+ .../perl-number-bytes-human.hash                   |    6 +-
+ package/perl-path-class/perl-path-class.hash       |    6 +-
+ .../perl-stream-buffered/perl-stream-buffered.hash |    6 +-
+ .../perl-sub-exporter-progressive.hash             |    6 +-
+ package/perl-sub-install/perl-sub-install.hash     |    6 +-
+ package/perl-sub-quote/perl-sub-quote.hash         |    6 +-
+ package/perl-sys-meminfo/perl-sys-meminfo.hash     |    6 +-
+ package/perl-sys-mmap/perl-sys-mmap.hash           |    8 +-
+ .../perl-time-parsedate/perl-time-parsedate.hash   |    8 +-
+ .../perl-www-form-urlencoded.hash                  |    6 +-
+ .../perl-www-robotrules/perl-www-robotrules.hash   |    6 +-
+ package/perl-x10/perl-x10.hash                     |    6 +-
+ package/perl-xml-libxml/perl-xml-libxml.hash       |    6 +-
+ .../perl-xml-namespacesupport.hash                 |    6 +-
+ package/perl-xml-sax-base/perl-xml-sax-base.hash   |    6 +-
+ package/perl-xml-sax/perl-xml-sax.hash             |    6 +-
+ package/php-pecl-dbus/php-pecl-dbus.hash           |    4 +-
+ package/physfs/physfs.hash                         |    4 +-
+ package/picocom/picocom.hash                       |    4 +-
+ package/pimd/pimd.hash                             |    6 +-
+ package/pixiewps/pixiewps.hash                     |    4 +-
+ package/policycoreutils/policycoreutils.hash       |    4 +-
+ package/popperjs/popperjs.hash                     |    4 +-
+ package/pound/pound.hash                           |    4 +-
+ package/pptp-linux/pptp-linux.hash                 |    8 +-
+ .../pru-software-support/pru-software-support.hash |    2 +-
+ package/ptm2human/ptm2human.hash                   |    4 +-
+ package/pwgen/pwgen.hash                           |    6 +-
+ .../python-aiohttp-cors/python-aiohttp-cors.hash   |    6 +-
+ .../python-aiohttp-debugtoolbar.hash               |    6 +-
+ .../python-aiohttp-mako/python-aiohttp-mako.hash   |    6 +-
+ .../python-aiohttp-security.hash                   |    6 +-
+ package/python-aiologstash/python-aiologstash.hash |    6 +-
+ package/python-aiomonitor/python-aiomonitor.hash   |    6 +-
+ package/python-alsaaudio/python-alsaaudio.hash     |    6 +-
+ package/python-argh/python-argh.hash               |    4 +-
+ package/python-asgiref/python-asgiref.hash         |    6 +-
+ package/python-bunch/python-bunch.hash             |    6 +-
+ package/python-canopen/python-canopen.hash         |    4 +-
+ package/python-cbor/python-cbor.hash               |    4 +-
+ .../python-channels-redis.hash                     |    6 +-
+ package/python-channels/python-channels.hash       |    6 +-
+ .../python-characteristic.hash                     |    4 +-
+ package/python-cheetah/python-cheetah.hash         |    2 +-
+ package/python-cheroot/python-cheroot.hash         |    4 +-
+ package/python-cherrypy/python-cherrypy.hash       |    4 +-
+ package/python-constantly/python-constantly.hash   |    4 +-
+ package/python-couchdb/python-couchdb.hash         |    6 +-
+ package/python-crcmod/python-crcmod.hash           |    4 +-
+ package/python-cssselect/python-cssselect.hash     |    6 +-
+ package/python-daemonize/python-daemonize.hash     |    6 +-
+ package/python-daphne/python-daphne.hash           |    4 +-
+ package/python-dialog3/python-dialog3.hash         |    2 +-
+ package/python-dicttoxml/python-dicttoxml.hash     |    4 +-
+ .../python-django-enumfields.hash                  |    2 +-
+ .../python-docker-pycreds.hash                     |    6 +-
+ package/python-docker/python-docker.hash           |    6 +-
+ package/python-dockerpty/python-dockerpty.hash     |    6 +-
+ package/python-entrypoints/python-entrypoints.hash |    6 +-
+ .../python-fastentrypoints.hash                    |    6 +-
+ package/python-flask-babel/python-flask-babel.hash |    4 +-
+ .../python-flask-jsonrpc/python-flask-jsonrpc.hash |    4 +-
+ .../python-flask-sqlalchemy.hash                   |    6 +-
+ package/python-flup/python-flup.hash               |    6 +-
+ package/python-future/python-future.hash           |    6 +-
+ package/python-gitdb2/python-gitdb2.hash           |    6 +-
+ package/python-huepy/python-huepy.hash             |    4 +-
+ package/python-ibmiotf/python-ibmiotf.hash         |    6 +-
+ package/python-iniparse/python-iniparse.hash       |    2 +-
+ package/python-iowait/python-iowait.hash           |    4 +-
+ .../python-ipython-genutils.hash                   |    2 +-
+ .../python-jaraco-classes.hash                     |    2 +-
+ .../python-jaraco-functools.hash                   |    2 +-
+ .../python-json-schema-validator.hash              |    4 +-
+ package/python-jsonmodels/python-jsonmodels.hash   |    6 +-
+ package/python-jsonschema/python-jsonschema.hash   |    4 +-
+ package/python-keyring/python-keyring.hash         |    4 +-
+ package/python-kiwisolver/python-kiwisolver.hash   |    4 +-
+ package/python-libusb1/python-libusb1.hash         |    2 +-
+ package/python-lockfile/python-lockfile.hash       |    6 +-
+ package/python-logbook/python-logbook.hash         |    6 +-
+ package/python-m2r/python-m2r.hash                 |    6 +-
+ package/python-matplotlib/python-matplotlib.hash   |    4 +-
+ package/python-mimeparse/python-mimeparse.hash     |    6 +-
+ package/python-mistune/python-mistune.hash         |    4 +-
+ package/python-nested-dict/python-nested-dict.hash |    6 +-
+ package/python-netaddr/python-netaddr.hash         |    4 +-
+ .../python-networkmanager.hash                     |    4 +-
+ package/python-numpy/python-numpy.hash             |    4 +-
+ package/python-paho-mqtt/python-paho-mqtt.hash     |   10 +-
+ package/python-pathpy/python-pathpy.hash           |    6 +-
+ package/python-pathtools/python-pathtools.hash     |    4 +-
+ package/python-pexpect/python-pexpect.hash         |    6 +-
+ package/python-pickleshare/python-pickleshare.hash |    6 +-
+ package/python-piexif/python-piexif.hash           |    4 +-
+ package/python-ply/python-ply.hash                 |    6 +-
+ package/python-portend/python-portend.hash         |    6 +-
+ package/python-pyaes/python-pyaes.hash             |    6 +-
+ package/python-pyicu/python-pyicu.hash             |    2 +-
+ package/python-pylibftdi/python-pylibftdi.hash     |    4 +-
+ package/python-pylru/python-pylru.hash             |    6 +-
+ package/python-pyqrcode/python-pyqrcode.hash       |    4 +-
+ package/python-pyqt5/python-pyqt5.hash             |    6 +-
+ package/python-pyratemp/python-pyratemp.hash       |    2 +-
+ package/python-pyroute2/python-pyroute2.hash       |   10 +-
+ package/python-pysmi/python-pysmi.hash             |    6 +-
+ package/python-pysnmp-mibs/python-pysnmp-mibs.hash |    4 +-
+ package/python-pysnmp/python-pysnmp.hash           |    6 +-
+ package/python-pysocks/python-pysocks.hash         |    6 +-
+ .../python-pytablereader/python-pytablereader.hash |    6 +-
+ .../python-pytablewriter/python-pytablewriter.hash |    6 +-
+ package/python-pytest/python-pytest.hash           |    6 +-
+ package/python-pyxb/python-pyxb.hash               |    4 +-
+ package/python-raven/python-raven.hash             |    6 +-
+ .../python-requests-toolbelt.hash                  |    6 +-
+ package/python-rpi-gpio/python-rpi-gpio.hash       |    4 +-
+ package/python-rsa/python-rsa.hash                 |    2 +-
+ package/python-scandir/python-scandir.hash         |    6 +-
+ package/python-sdnotify/python-sdnotify.hash       |    6 +-
+ package/python-see/python-see.hash                 |    4 +-
+ .../python-setuptools-scm-git-archive.hash         |    6 +-
+ package/python-shutilwhich/python-shutilwhich.hash |    4 +-
+ .../python-simplegeneric/python-simplegeneric.hash |    4 +-
+ .../python-simplesqlite/python-simplesqlite.hash   |    6 +-
+ package/python-sip/python-sip.hash                 |   10 +-
+ package/python-smbus-cffi/python-smbus-cffi.hash   |    2 +-
+ package/python-smmap2/python-smmap2.hash           |    6 +-
+ package/python-spidev/python-spidev.hash           |    4 +-
+ package/python-sqlalchemy/python-sqlalchemy.hash   |    6 +-
+ package/python-sqlparse/python-sqlparse.hash       |    6 +-
+ package/python-systemd/python-systemd.hash         |    2 +-
+ package/python-tempora/python-tempora.hash         |    6 +-
+ package/python-termcolor/python-termcolor.hash     |    6 +-
+ package/python-tomako/python-tomako.hash           |    4 +-
+ package/python-tqdm/python-tqdm.hash               |    6 +-
+ package/python-txtorcon/python-txtorcon.hash       |    2 +-
+ package/python-vcversioner/python-vcversioner.hash |    4 +-
+ package/python-visitor/python-visitor.hash         |    6 +-
+ .../python-webencodings/python-webencodings.hash   |    6 +-
+ package/python-webpy/python-webpy.hash             |    6 +-
+ package/python-whoosh/python-whoosh.hash           |    2 +-
+ package/python-ws4py/python-ws4py.hash             |    6 +-
+ package/python-xlib/python-xlib.hash               |    6 +-
+ package/python-xlutils/python-xlutils.hash         |    4 +-
+ package/python-xlwt/python-xlwt.hash               |    4 +-
+ package/python-xmltodict/python-xmltodict.hash     |    6 +-
+ package/python-zc-lockfile/python-zc-lockfile.hash |    6 +-
+ .../qoriq-cadence-dp-firmware.hash                 |    4 +-
+ package/qt5/qt5enginio/qt5enginio.hash             |    2 +-
+ package/quagga/quagga.hash                         |    4 +-
+ package/quotatool/quotatool.hash                   |    4 +-
+ package/rapidjson/rapidjson.hash                   |    4 +-
+ package/rapidxml/rapidxml.hash                     |    4 +-
+ package/raspi-gpio/raspi-gpio.hash                 |    4 +-
+ package/rcw-smarc-sal28/rcw-smarc-sal28.hash       |    4 +-
+ package/reaver/reaver.hash                         |    4 +-
+ package/rings/rings.hash                           |    4 +-
+ package/ripgrep/ripgrep.hash                       |    4 +-
+ package/rockchip-mali/rockchip-mali.hash           |    4 +-
+ package/rpcbind/rpcbind.hash                       |    4 +-
+ package/rrdtool/rrdtool.hash                       |    6 +-
+ package/rs485conf/rs485conf.hash                   |    4 +-
+ package/rt-tests/rt-tests.hash                     |    4 +-
+ package/rtorrent/rtorrent.hash                     |    4 +-
+ package/rtptools/rtptools.hash                     |    4 +-
+ package/rubix/rubix.hash                           |    4 +-
+ package/sconeserver/sconeserver.hash               |    4 +-
+ package/sdl/sdl.hash                               |    4 +-
+ package/sdl2_image/sdl2_image.hash                 |    4 +-
+ package/sdl_gfx/sdl_gfx.hash                       |    4 +-
+ package/sedutil/sedutil.hash                       |    4 +-
+ package/setools/setools.hash                       |    8 +-
+ package/shapelib/shapelib.hash                     |    6 +-
+ package/shared-mime-info/shared-mime-info.hash     |    4 +-
+ package/shellinabox/shellinabox.hash               |    6 +-
+ package/slang/slang.hash                           |    6 +-
+ package/smcroute/smcroute.hash                     |    4 +-
+ package/smstools3/smstools3.hash                   |    2 +-
+ package/snmpclitools/snmpclitools.hash             |    6 +-
+ package/softether/softether.hash                   |    4 +-
+ .../sound-theme-borealis/sound-theme-borealis.hash |    2 +-
+ .../sound-theme-freedesktop.hash                   |    2 +-
+ package/speex/speex.hash                           |    6 +-
+ package/squeezelite/squeezelite.hash               |    4 +-
+ package/supertuxkart/supertuxkart.hash             |    4 +-
+ package/swig/swig.hash                             |    8 +-
+ package/sylpheed/sylpheed.hash                     |    6 +-
+ package/synergy/synergy.hash                       |    4 +-
+ package/sysvinit/sysvinit.hash                     |    4 +-
+ package/szip/szip.hash                             |    4 +-
+ package/taskd/taskd.hash                           |    2 +-
+ package/tcping/tcping.hash                         |    4 +-
+ package/thttpd/thttpd.hash                         |    4 +-
+ package/ti-cgt-pru/ti-cgt-pru.hash                 |    6 +-
+ package/time/time.hash                             |    6 +-
+ package/tinc/tinc.hash                             |    6 +-
+ package/tinymembench/tinymembench.hash             |    4 +-
+ package/tinyxml/tinyxml.hash                       |    4 +-
+ package/tio/tio.hash                               |    4 +-
+ package/tovid/tovid.hash                           |    4 +-
+ package/tpm-tools/tpm-tools.hash                   |    8 +-
+ package/tpm2-totp/tpm2-totp.hash                   |    4 +-
+ package/traceroute/traceroute.hash                 |    6 +-
+ package/trinity/trinity.hash                       |    4 +-
+ package/tstools/tstools.hash                       |    2 +-
+ package/turbolua/turbolua.hash                     |    4 +-
+ .../udev-gentoo-scripts/udev-gentoo-scripts.hash   |    4 +-
+ package/uftrace/uftrace.hash                       |    4 +-
+ package/ulogd/ulogd.hash                           |    8 +-
+ package/upower/upower.hash                         |    4 +-
+ package/urg/urg.hash                               |    6 +-
+ .../usb_modeswitch_data/usb_modeswitch_data.hash   |    6 +-
+ package/ussp-push/ussp-push.hash                   |    4 +-
+ package/utp_com/utp_com.hash                       |    4 +-
+ .../vdr-plugin-vnsiserver.hash                     |    4 +-
+ package/vmtouch/vmtouch.hash                       |    4 +-
+ package/vtun/vtun.hash                             |    8 +-
+ package/watchdogd/watchdogd.hash                   |    4 +-
+ .../webrtc-audio-processing.hash                   |    4 +-
+ package/wf111/wf111.hash                           |    6 +-
+ package/whetstone/whetstone.hash                   |    2 +-
+ package/wireless_tools/wireless_tools.hash         |    4 +-
+ package/wpan-tools/wpan-tools.hash                 |    4 +-
+ package/wsapi-fcgi/wsapi-fcgi.hash                 |    6 +-
+ package/wsapi-xavante/wsapi-xavante.hash           |    6 +-
+ package/wsapi/wsapi.hash                           |    6 +-
+ package/x11r7/xapp_bdftopcf/xapp_bdftopcf.hash     |   10 +-
+ package/x11r7/xapp_ico/xapp_ico.hash               |   10 +-
+ package/x11r7/xapp_oclock/xapp_oclock.hash         |   10 +-
+ package/x11r7/xapp_sessreg/xapp_sessreg.hash       |   10 +-
+ package/x11r7/xapp_viewres/xapp_viewres.hash       |   10 +-
+ package/x11r7/xapp_x11perf/xapp_x11perf.hash       |   10 +-
+ package/x11r7/xapp_xauth/xapp_xauth.hash           |    2 +-
+ package/x11r7/xapp_xbacklight/xapp_xbacklight.hash |   10 +-
+ package/x11r7/xapp_xbiff/xapp_xbiff.hash           |   10 +-
+ package/x11r7/xapp_xcompmgr/xapp_xcompmgr.hash     |   10 +-
+ package/x11r7/xapp_xcursorgen/xapp_xcursorgen.hash |   10 +-
+ package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.hash   |    2 +-
+ package/x11r7/xapp_xditview/xapp_xditview.hash     |   10 +-
+ package/x11r7/xapp_xdriinfo/xapp_xdriinfo.hash     |   10 +-
+ package/x11r7/xapp_xf86dga/xapp_xf86dga.hash       |    2 +-
+ package/x11r7/xapp_xfd/xapp_xfd.hash               |   10 +-
+ package/x11r7/xapp_xfontsel/xapp_xfontsel.hash     |   10 +-
+ package/x11r7/xapp_xfs/xapp_xfs.hash               |    8 +-
+ package/x11r7/xapp_xfsinfo/xapp_xfsinfo.hash       |   10 +-
+ package/x11r7/xapp_xhost/xapp_xhost.hash           |   10 +-
+ package/x11r7/xapp_xinit/xapp_xinit.hash           |   10 +-
+ package/x11r7/xapp_xinput/xapp_xinput.hash         |   10 +-
+ package/x11r7/xapp_xkbprint/xapp_xkbprint.hash     |   10 +-
+ package/x11r7/xapp_xkill/xapp_xkill.hash           |   10 +-
+ package/x11r7/xapp_xlogo/xapp_xlogo.hash           |   10 +-
+ package/x11r7/xapp_xlsatoms/xapp_xlsatoms.hash     |   10 +-
+ package/x11r7/xapp_xlsclients/xapp_xlsclients.hash |   10 +-
+ package/x11r7/xapp_xman/xapp_xman.hash             |   10 +-
+ package/x11r7/xapp_xmessage/xapp_xmessage.hash     |   10 +-
+ package/x11r7/xapp_xmodmap/xapp_xmodmap.hash       |   10 +-
+ package/x11r7/xapp_xmore/xapp_xmore.hash           |   10 +-
+ package/x11r7/xapp_xpr/xapp_xpr.hash               |   10 +-
+ package/x11r7/xapp_xprop/xapp_xprop.hash           |    2 +-
+ package/x11r7/xapp_xrandr/xapp_xrandr.hash         |   10 +-
+ package/x11r7/xapp_xrefresh/xapp_xrefresh.hash     |   10 +-
+ package/x11r7/xapp_xset/xapp_xset.hash             |   10 +-
+ .../x11r7/xapp_xsetpointer/xapp_xsetpointer.hash   |    8 +-
+ package/x11r7/xapp_xsetroot/xapp_xsetroot.hash     |   10 +-
+ package/x11r7/xapp_xstdcmap/xapp_xstdcmap.hash     |    8 +-
+ package/x11r7/xapp_xvinfo/xapp_xvinfo.hash         |   10 +-
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.hash     |   10 +-
+ package/x11r7/xapp_xwud/xapp_xwud.hash             |   10 +-
+ package/x11r7/xcb-util-cursor/xcb-util-cursor.hash |    2 +-
+ package/x11r7/xcb-util-image/xcb-util-image.hash   |    4 +-
+ .../x11r7/xcb-util-keysyms/xcb-util-keysyms.hash   |    2 +-
+ package/x11r7/xcb-util-wm/xcb-util-wm.hash         |    4 +-
+ package/x11r7/xdata_xbitmaps/xdata_xbitmaps.hash   |   10 +-
+ .../xdata_xcursor-themes/xdata_xcursor-themes.hash |   10 +-
+ .../xdriver_xf86-input-evdev.hash                  |   10 +-
+ .../xdriver_xf86-input-mouse.hash                  |   10 +-
+ .../xdriver_xf86-input-synaptics.hash              |   10 +-
+ .../xdriver_xf86-input-tslib.hash                  |    2 +-
+ .../xdriver_xf86-video-amdgpu.hash                 |   10 +-
+ .../xdriver_xf86-video-ati.hash                    |   10 +-
+ .../xdriver_xf86-video-fbdev.hash                  |    2 +-
+ .../xdriver_xf86-video-i128.hash                   |    8 +-
+ .../xdriver_xf86-video-mach64.hash                 |   10 +-
+ .../xdriver_xf86-video-mga.hash                    |   10 +-
+ .../xdriver_xf86-video-neomagic.hash               |   10 +-
+ .../xdriver_xf86-video-openchrome.hash             |    8 +-
+ .../xdriver_xf86-video-r128.hash                   |   10 +-
+ .../xdriver_xf86-video-siliconmotion.hash          |    4 +-
+ .../xdriver_xf86-video-sis.hash                    |    8 +-
+ .../xdriver_xf86-video-tdfx.hash                   |   10 +-
+ .../xdriver_xf86-video-trident.hash                |    4 +-
+ .../xdriver_xf86-video-vmware.hash                 |   10 +-
+ package/x11r7/xfont_encodings/xfont_encodings.hash |   10 +-
+ .../x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.hash |    2 +-
+ package/x11r7/xfont_font-util/xfont_font-util.hash |   10 +-
+ package/x11r7/xlib_libFS/xlib_libFS.hash           |   10 +-
+ package/x11r7/xlib_libICE/xlib_libICE.hash         |   10 +-
+ package/x11r7/xlib_libSM/xlib_libSM.hash           |    8 +-
+ .../xlib_libXScrnSaver/xlib_libXScrnSaver.hash     |   10 +-
+ package/x11r7/xlib_libXau/xlib_libXau.hash         |   10 +-
+ .../xlib_libXcomposite/xlib_libXcomposite.hash     |   10 +-
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.hash |   10 +-
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.hash     |   10 +-
+ package/x11r7/xlib_libXext/xlib_libXext.hash       |   10 +-
+ package/x11r7/xlib_libXfixes/xlib_libXfixes.hash   |    2 +-
+ package/x11r7/xlib_libXfont/xlib_libXfont.hash     |    8 +-
+ .../x11r7/xlib_libXinerama/xlib_libXinerama.hash   |   10 +-
+ package/x11r7/xlib_libXmu/xlib_libXmu.hash         |   10 +-
+ package/x11r7/xlib_libXpm/xlib_libXpm.hash         |   12 +-
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.hash   |   10 +-
+ package/x11r7/xlib_libXrender/xlib_libXrender.hash |    4 +-
+ package/x11r7/xlib_libXt/xlib_libXt.hash           |    2 +-
+ package/x11r7/xlib_libXv/xlib_libXv.hash           |    4 +-
+ .../x11r7/xlib_libXxf86dga/xlib_libXxf86dga.hash   |   10 +-
+ package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash |    6 +-
+ package/x11r7/xlib_libdmx/xlib_libdmx.hash         |   10 +-
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.hash |   10 +-
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash |   10 +-
+ .../x11r7/xlib_libxshmfence/xlib_libxshmfence.hash |   10 +-
+ package/x11r7/xlib_xtrans/xlib_xtrans.hash         |   10 +-
+ .../x11r7/xutil_makedepend/xutil_makedepend.hash   |   10 +-
+ package/xavante/xavante.hash                       |    4 +-
+ package/xmlstarlet/xmlstarlet.hash                 |    4 +-
+ package/xutil_util-macros/xutil_util-macros.hash   |    2 +-
+ package/yad/yad.hash                               |    6 +-
+ package/zip/zip.hash                               |    4 +-
+ package/zmqpp/zmqpp.hash                           |    4 +-
+ package/zxing-cpp/zxing-cpp.hash                   |    4 +-
+ support/legal-info/buildroot.hash                  |    2 +-
+ .../package/gitlab-release/gitlab-release.hash     |    4 +-
+ .../toolchain-external-andes-nds32.hash            |    2 +-
+ .../toolchain-external-codescape-img-mips.hash     |    4 +-
+ .../toolchain-external-codescape-mti-mips.hash     |    4 +-
+ .../toolchain-external-codesourcery-aarch64.hash   |    4 +-
+ .../toolchain-external-codesourcery-arm.hash       |    4 +-
+ .../toolchain-external-codesourcery-mips.hash      |    4 +-
+ .../toolchain-external-codesourcery-niosII.hash    |    8 +-
+ .../toolchain-external-linaro-aarch64-be.hash      |    4 +-
+ .../toolchain-external-linaro-aarch64.hash         |    4 +-
+ .../toolchain-external-linaro-arm.hash             |    4 +-
+ .../toolchain-external-linaro-armeb.hash           |    4 +-
+ .../toolchain-external-synopsys-arc.hash           |    8 +-
+ 771 files changed, 2962 insertions(+), 2962 deletions(-)
 
-diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
-index a8fd0a6dcc..312162b7a8 100644
---- a/configs/galileo_defconfig
-+++ b/configs/galileo_defconfig
-@@ -1,5 +1,5 @@
- BR2_x86_x1000=y
--BR2_GLOBAL_PATCH_DIR=board/intel/galileo/patches
-+BR2_GLOBAL_PATCH_DIR="board/intel/galileo/patches"
- # Needed for TARGET_GRUB2
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Linux headers same as kernel, a 3.14 series
+Patch is too large, so refusing to show it
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
