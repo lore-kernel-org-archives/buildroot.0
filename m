@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B20C54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 12:36:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8297DC54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 12:36:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7B3741503;
-	Tue, 13 Sep 2022 12:36:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7B3741503
+	by smtp2.osuosl.org (Postfix) with ESMTP id 243BB40A17;
+	Tue, 13 Sep 2022 12:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 243BB40A17
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cBYk-6kKaCkN; Tue, 13 Sep 2022 12:36:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FNuiVW_WI30K; Tue, 13 Sep 2022 12:36:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B68D1410DB;
-	Tue, 13 Sep 2022 12:36:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B68D1410DB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3D7531BF3AD
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFA3E4047C;
+	Tue, 13 Sep 2022 12:36:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFA3E4047C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F6A41BF9B5
  for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 269B060E46
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B4D482E95
  for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 12:36:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 269B060E46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B4D482E95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p25_jycaH_pW for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UcftdyofabxL for <buildroot@lists.busybox.net>;
  Tue, 13 Sep 2022 12:36:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5778B60E44
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E70082BFD
  for <buildroot@buildroot.org>; Tue, 13 Sep 2022 12:36:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5778B60E44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E70082BFD
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 44F0B83755; Tue, 13 Sep 2022 12:36:09 +0000 (UTC)
+ id 3D01883753; Tue, 13 Sep 2022 12:36:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Sep 2022 13:54:22 +0200
+Date: Tue, 13 Sep 2022 13:50:30 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f18d87065387e58df9b751aaa7f6df52695e7ca3
-X-Git-Newrev: afd83944f679ea1ef4a0216db421eafeedeacd4e
+X-Git-Oldrev: e8c86bf95cc3d92aad48f5920f4b597e72557b42
+X-Git-Newrev: f18d87065387e58df9b751aaa7f6df52695e7ca3
 X-Patchwork-Hint: ignore
-Message-Id: <20220913123609.44F0B83755@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- configs/galileo_defconfig: add missing double quotes around
- BR2_GLOBAL_PATCH_DIR value
+Message-Id: <20220913123609.3D01883753@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] Makefile: enable checking
+ of hash spacing in check-package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afd83944f679ea1ef4a0216db421eafeedeacd4e
+commit: https://git.buildroot.net/buildroot/commit/?id=f18d87065387e58df9b751aaa7f6df52695e7ca3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This bogus BR2_GLOBAL_PATCH_DIR value was added in commit
-9dd5382d791c3d5197b9ef401a0d103ad1457d5d ("board/intel/galileo: fix
-build failure with host gcc 10") back in February.
-
-This should help fixing
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2781800667, as it
-complains with:
-
-WARN: defconfig ./configs/galileo_defconfig can't be used:
-      Missing: BR2_GLOBAL_PATCH_DIR=board/intel/galileo/patches
+Now that all hash files have been fixed, enable checking of hash
+spacing in check-package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0005048ec6be44f1bf7b2458beb698f7acf23ccf)
+(cherry picked from commit 64f1603bb805cd651d34a7cfe1a1c12c4242fed7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/galileo_defconfig | 2 +-
+ Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
-index a8fd0a6dcc..312162b7a8 100644
---- a/configs/galileo_defconfig
-+++ b/configs/galileo_defconfig
-@@ -1,5 +1,5 @@
- BR2_x86_x1000=y
--BR2_GLOBAL_PATCH_DIR=board/intel/galileo/patches
-+BR2_GLOBAL_PATCH_DIR="board/intel/galileo/patches"
- # Needed for TARGET_GRUB2
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Linux headers same as kernel, a 3.14 series
+diff --git a/Makefile b/Makefile
+index 17f2f912a4..ff5d5bb151 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1248,7 +1248,7 @@ check-flake8:
+ 
+ check-package:
+ 	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' -o -name '*.patch' \) \
+-		-exec ./utils/check-package --exclude=Sob --exclude=HashSpaces {} +
++		-exec ./utils/check-package --exclude=Sob {} +
+ 
+ include docs/manual/manual.mk
+ -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(sort $(wildcard $(dir)/docs/*/*.mk)))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
