@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66085C54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 16:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AE50C54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 17:31:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E371260F51;
-	Tue, 13 Sep 2022 16:05:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E371260F51
+	by smtp1.osuosl.org (Postfix) with ESMTP id 62F778149C;
+	Tue, 13 Sep 2022 17:31:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62F778149C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DKyyO-i383lV; Tue, 13 Sep 2022 17:31:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69C27813F9;
+	Tue, 13 Sep 2022 17:31:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69C27813F9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D4F01BF853
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 17:31:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 08BB9600C4
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 17:31:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08BB9600C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U9UbmSgoZDmT; Tue, 13 Sep 2022 16:05:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 070CA60F47;
-	Tue, 13 Sep 2022 16:05:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 070CA60F47
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 529811BF4E7
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 16:05:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D373415EA
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 16:05:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D373415EA
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fd_RQbNeh3wV for <buildroot@lists.busybox.net>;
- Tue, 13 Sep 2022 16:05:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03BA540883
- for <buildroot@buildroot.org>; Tue, 13 Sep 2022 16:05:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03BA540883
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E76CB83850; Tue, 13 Sep 2022 16:05:14 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ofmR4WgAuvIF for <buildroot@lists.busybox.net>;
+ Tue, 13 Sep 2022 17:31:53 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDE1C600B8
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BDE1C600B8
+ for <buildroot@buildroot.org>; Tue, 13 Sep 2022 17:31:52 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A018A40002;
+ Tue, 13 Sep 2022 17:31:49 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oY9lE-003SCc-F8; Tue, 13 Sep 2022 19:31:48 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 13 Sep 2022 18:03:05 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: e0bbcf78ff1a694657c3fa582a3cff7202df9416
-X-Git-Newrev: ea0207e54ec0622c1e267bedcf6f3d669ef5c3e1
-X-Patchwork-Hint: ignore
-Message-Id: <20220913160514.E76CB83850@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/clamav: security
- bump version to 0.103.7
+To: Thomas Devoogdt <thomas@devoogdt.com>
+References: <20220913145541.3567799-1-thomas.devoogdt@barco.com>
+Date: Tue, 13 Sep 2022 19:31:48 +0200
+In-Reply-To: <20220913145541.3567799-1-thomas.devoogdt@barco.com> (Thomas
+ Devoogdt's message of "Tue, 13 Sep 2022 16:55:41 +0200")
+Message-ID: <87mtb3rxiz.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/gdk-pixbuf: fix test compilation
+ (don't build the test suite)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,56 +64,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea0207e54ec0622c1e267bedcf6f3d669ef5c3e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
 
-Release notes:
-https://blog.clamav.net/2022/07/clamav-01037-01041-and-01051-patch.html
+ > Not needed + breaks compilation on some platforms.
+ > Patch is part of 2.42.9, so can be dropped with the next minor/major bump.
+ > https://github.com/GNOME/gdk-pixbuf/commit/801eef111df624f4377baed9a90c94b6a2d4340c
 
-By bumping the vendored UnRAR library to version 6.1.7 in commit
-https://github.com/Cisco-Talos/clamav/commit/b709eac4003ad01b609615cbbb86c7d5b3821d92
+What tree is this against? We are already using 2.42.9 (since the merge
+of next to master after the 2022.08 release).
 
-CVE-2022-30333 was fixed.
+Patches should be against current master.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fe6aa1f5c91ba33d71b8d43ddfa2b485542a04ee)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 579b0ec89e..60439400ee 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  aaa12e3dc19f1d323b1c50d7a10fa8af557e4390149e864d59bde39b6ad9ba33  clamav-0.103.6.tar.gz
-+sha256  1e34c31f600cb3b5bd1bf76690590cdeebe9409b330959b1c0f77d421bb17e50  clamav-0.103.7.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index bb95cb8d2b..dfdc416601 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.103.6
-+CLAMAV_VERSION = 0.103.7
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
