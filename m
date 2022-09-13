@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 198E8C54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 14:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A9DC54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 14:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A612C82C98;
-	Tue, 13 Sep 2022 14:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A612C82C98
+	by smtp3.osuosl.org (Postfix) with ESMTP id E679B60E60;
+	Tue, 13 Sep 2022 14:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E679B60E60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bTTvCWlNwB1k; Tue, 13 Sep 2022 14:22:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ElRGLcA8vhXm; Tue, 13 Sep 2022 14:22:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCD55828DD;
-	Tue, 13 Sep 2022 14:22:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCD55828DD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7FCFE1BF2F3
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 14:21:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15E5A60E2D;
+	Tue, 13 Sep 2022 14:22:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15E5A60E2D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6950B1BF2F3
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 14:21:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67E7640866
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 14:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67E7640866
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4589A408BF
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 14:21:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4589A408BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9E7RKQ4_b8hh for <buildroot@lists.busybox.net>;
- Tue, 13 Sep 2022 14:21:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cIlk9ZosWw71 for <buildroot@lists.busybox.net>;
+ Tue, 13 Sep 2022 14:21:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB3924088C
- for <buildroot@buildroot.org>; Tue, 13 Sep 2022 14:21:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB3924088C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 701FB40A81
+ for <buildroot@buildroot.org>; Tue, 13 Sep 2022 14:21:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 701FB40A81
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C6598837A4; Tue, 13 Sep 2022 14:21:30 +0000 (UTC)
+ id 60671837CC; Tue, 13 Sep 2022 14:21:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 Sep 2022 16:11:36 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 6ff163ac0f8325459311a276f60f1fe0cfe6d1a1
-X-Git-Newrev: baf818d688539da8917106ea89160125b8380cc4
+Date: Tue, 13 Sep 2022 16:12:09 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: d928bd39dd94e6a739191b76c2819129899d11e8
+X-Git-Newrev: b27d504747597c1cbaeb188d088d54982d4e3de8
 X-Patchwork-Hint: ignore
-Message-Id: <20220913142130.C6598837A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] toolchain/Config.in:
+Message-Id: <20220913142155.60671837CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] toolchain/Config.in:
  update gcc bug 99410
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=baf818d688539da8917106ea89160125b8380cc4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b27d504747597c1cbaeb188d088d54982d4e3de8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 Gcc bug 99410 reappeared while building with gcc 11.x and while
 testing it also shows up with gcc 12.x, so let's enable this bug for
@@ -83,10 +83,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 14c879e6a9..d399a5e834 100644
+index 0c5c290a76..ba1af1ece6 100644
 --- a/toolchain/Config.in
 +++ b/toolchain/Config.in
-@@ -184,12 +184,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
+@@ -186,12 +186,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
  
  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
  # Error: branch offset out of range on Nios II. This bug
