@@ -1,69 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B84CECAAD8
-	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 17:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4156EECAAD8
+	for <buildroot@archiver.kernel.org>; Tue, 13 Sep 2022 18:03:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75A2E40160;
-	Tue, 13 Sep 2022 17:42:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75A2E40160
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6EC5606BF;
+	Tue, 13 Sep 2022 18:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6EC5606BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L9qYhybYVfta; Tue, 13 Sep 2022 17:42:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dQh9xb0TQ_vf; Tue, 13 Sep 2022 18:03:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2627940173;
-	Tue, 13 Sep 2022 17:42:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2627940173
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4C48D1BF853
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 17:41:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F115260675;
+	Tue, 13 Sep 2022 18:03:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F115260675
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BA26C1BF853
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 18:03:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 283784025F
- for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 17:41:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 283784025F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 955D9812D4
+ for <buildroot@lists.busybox.net>; Tue, 13 Sep 2022 18:03:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 955D9812D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 67Hp1ZFcIgrw for <buildroot@lists.busybox.net>;
- Tue, 13 Sep 2022 17:41:49 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3F4A40222
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A3F4A40222
- for <buildroot@buildroot.org>; Tue, 13 Sep 2022 17:41:47 +0000 (UTC)
-Received: from houde.tangerine ([185.213.154.234]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.168]) with ESMTPSA (Nemesis) id
- 1M6UqP-1of3nV3pxR-006wl4; Tue, 13 Sep 2022 19:41:45 +0200
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-To: buildroot@buildroot.org
-Date: Tue, 13 Sep 2022 19:40:39 +0200
-Message-Id: <20220913174039.182887-3-thomas.claveirole@green-communications.fr>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220913174039.182887-1-thomas.claveirole@green-communications.fr>
-References: <20220913174039.182887-1-thomas.claveirole@green-communications.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pESSCIRUGAAd for <buildroot@lists.busybox.net>;
+ Tue, 13 Sep 2022 18:03:42 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 431F0812B8
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 431F0812B8
+ for <buildroot@buildroot.org>; Tue, 13 Sep 2022 18:03:40 +0000 (UTC)
+Received: from 91-152-140-132.elisa-laajakaista.fi ([91.152.140.132]
+ helo=momiji.lan) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1oYAFx-001bGH-FT; Tue, 13 Sep 2022 20:03:33 +0200
+Received: from localhost (momiji.lan [local])
+ by momiji.lan (OpenSMTPD) with ESMTPA id 595297de;
+ Tue, 13 Sep 2022 18:03:22 +0000 (UTC)
+Date: Tue, 13 Sep 2022 21:03:18 +0300
+Message-ID: <20220913210318.GB297238@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20220909050800.3520691-1-james.hilliard1@gmail.com>
+References: <20220909050800.3520691-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Se4wodvU/2juNf8CqugEWb0kyFtXjJCp6TI3YNEnYEnwsGON+PH
- k2rA0hBoCp6oHIg7f5UV/JJ8SWRgZw8ZG8M2jKl9iCyScVRMnOaXOlqxYOAsWVghd6IBxmc
- erHSAXndog7qAe3X18lwytACqBDbok1Y/CrV3IwuLe12oYV62R+SoBhd2oIGvh3NGlOjI06
- KJJu5w5VPaIwc8duHD8hg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WieyV/EX0Uc=:tBQZcwZBuGUophercF0RTm
- uOHNAEalFxHD1f0LVmVA2i0Om31XCyXiB817ofxOoG2rHmP9O1+nYelJ3Bv351ZgQsMPTzQAz
- 4EkiWc2YrukEgvqaYDUHMLsEMTRXlJGs9htUPkkfW87RMf6FtYGvcJ4nX55R6BGDgcDAe8n8y
- 6SLTkwem4rEeuEe+8qDxwgjRse+4Vp61xHlXAhp1YqnCi5NvZrgveo63wc3x7tViLlM2JxZI9
- JdiNNWPxleRnF2rnqfml0ENHsY1Q64/EQy19mYDpwRRc0kQCJjOXworbmPihCMz0GiSVAriRs
- O33koyGz/xSzEHdqKY9imx9d/dy2rlSDSLCzFtiHMwPVwgEFHiwWTPj/BpxKMVv39gXm0ni94
- nYP3wl/wyOypvEo7IgGcRY9Cx0uNgPaGnwQU6Pyg140NeBeGU/kz9Zz1wQgUir5mBFipq62iz
- ZegIamnjxifwax1GlWLrGOP3aIAYMWcdfCaBxDpI49l1SAtl4IhMw7FNbwBbsMbBsX+pAuEOG
- 6mgsU4ug+p8HbrTLTxIvIoPQji1HPpfZ/hEoxoUCmuUHBO8imTgC0vczEnm0XejyCx0WmrBoC
- nq0hy9xNhg9lC31E7x1cJiFd91U/4/AR0xSDtpkKzBj/b+HP+XGgAZvlcZgK2H+RHZQTKrnzF
- 6Z+e+4pcSUt7VuFAkdJnPNy64oY6i15GUGF775uNeNtnEr3x6vb3niSFi6GLsivFjGrv0YXNo
- +DzBOkGRsuSnmO6gkR+0XdAOaFVY+KDFtx1mUH/dPPTaB7DtEhmgM+MVqUFiU8xtficZ9S9ry
- UrI7CTCL9JiZ3Id8mavcoA3evfPi0LE8y9zQ7YsvCvwJlW7BLQ=
-Subject: [Buildroot] [PATCH 2/2] package/vuejs: bump to version 3.2.39
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=+cypfnzrGWggRZR9thka6UQnO7OoSJfEm5MQDBUZcdQ=; b=opJWg4abapUbsKXvv7U1jp5snV
+ DvNPBl9iPxqwsGJuUcFasVUqklbYvPvELkmZvMGzuRzGVQbKovSWero5iBx2xJWFy5twjvYxgP0Lq
+ 7NDvLqLTuP0QmTYRmwVRVGyoNhP9UY+GMtVJObcjl+rCUjf+mKIOf8kOCMVgn9XdnDiVd2pKrPN9h
+ DrEEjKBPYqAUrvmfnpztwWCVgfPErbWTg8vdVpzx9FmLXTjEAoSZFkdCJkndkRQ9Q8KFAABBuHvUM
+ Xl8m4U3ah8vpAfj2Hw+N6+T0ZK+XHFUoEKigzzIZqQiCclpvfNbk4vEehBKQr6kyfsQ1rifHKMRx3
+ 3QNz1VZw==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=opJWg4ab
+Subject: Re: [Buildroot] [PATCH 1/2] package/weston: install to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,112 +77,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Claveirole <thomas.claveirole@green-communications.fr>,
- Martin Bark <martin@barkynet.com>, Johan Oudinet <johan.oudinet@gmail.com>,
- Daniel Price <daniel.price@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============5494081101186655292=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- DEVELOPERS                                         |  1 +
- ...hardcode-build-commit-to-v3.2.39-f79c4236.patch | 13 +++++++++++++
- package/vuejs/Config.in                            |  4 ++++
- package/vuejs/vuejs.hash                           |  2 +-
- package/vuejs/vuejs.mk                             | 14 ++++++++++----
- 5 files changed, 29 insertions(+), 5 deletions(-)
- create mode 100644 package/vuejs/0001-hardcode-build-commit-to-v3.2.39-f79c4236.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a707b0e5e1..fd32716282 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2818,6 +2818,7 @@ F:	package/x265/
- N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
- F:	package/fcgiwrap/
- F:	package/openlayers/
-+F:	package/vuejs/
- F:	package/vuejs-router/
- 
- N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-diff --git a/package/vuejs/0001-hardcode-build-commit-to-v3.2.39-f79c4236.patch b/package/vuejs/0001-hardcode-build-commit-to-v3.2.39-f79c4236.patch
-new file mode 100644
-index 0000000000..11a84e5c83
---- /dev/null
-+++ b/package/vuejs/0001-hardcode-build-commit-to-v3.2.39-f79c4236.patch
-@@ -0,0 +1,13 @@
-+diff --git a/scripts/build.js b/scripts/build.js
-+index efa5d7f0..f577dc61 100644
-+--- a/scripts/build.js
-++++ b/scripts/build.js
-+@@ -31,7 +31,7 @@ const sourceMap = args.sourcemap || args.s
-+ const isRelease = args.release
-+ const buildTypes = args.t || args.types || isRelease
-+ const buildAllMatching = args.all || args.a
-+-const commit = execa.sync('git', ['rev-parse', 'HEAD']).stdout.slice(0, 7)
-++const commit = "f79c4236"
-+ 
-+ run()
-+ 
-diff --git a/package/vuejs/Config.in b/package/vuejs/Config.in
-index 6456d288f9..5413de0a01 100644
---- a/package/vuejs/Config.in
-+++ b/package/vuejs/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_VUEJS
- 	bool "vuejs"
-+	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS # host-nodejs
-+	depends on BR2_HOST_GCC_AT_LEAST_8 # host-nodejs
-+	select BR2_PACKAGE_HOST_NODEJS
-+	select BR2_PACKAGE_HOST_NODEJS_COREPACK
- 	help
- 	  VueJS web application framework.
- 
-diff --git a/package/vuejs/vuejs.hash b/package/vuejs/vuejs.hash
-index c53364e97d..5218cce0b2 100644
---- a/package/vuejs/vuejs.hash
-+++ b/package/vuejs/vuejs.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  042033a2a8e6d45f750924953f03c34058d5afd9cc1571fbaf1827eaf04f6943  vue-3.2.33.tgz
-+sha256  de7ce8e2493ac8f78f7cc0c31a4c7c3874ca9392bfa38dfb1ef5471e65adde31  vuejs-3.2.39.tar.gz
- sha256  1bb85cc9b13b81ef41c81c51866172fc345e0503c86726a6755b796590b70175  LICENSE
-diff --git a/package/vuejs/vuejs.mk b/package/vuejs/vuejs.mk
-index d544124bbc..3e80d5519b 100644
---- a/package/vuejs/vuejs.mk
-+++ b/package/vuejs/vuejs.mk
-@@ -4,15 +4,21 @@
- #
- ################################################################################
- 
--VUEJS_VERSION = 3.2.33
--VUEJS_SOURCE = vue-$(VUEJS_VERSION).tgz
--VUEJS_SITE = https://registry.npmjs.org/vue/-
-+VUEJS_VERSION = 3.2.39
-+VUEJS_SITE = $(call github,vuejs,core,v$(VUEJS_VERSION))
- VUEJS_LICENSE = MIT
- VUEJS_LICENSE_FILES = LICENSE
- 
-+VUEJS_DEPENDENCIES = host-nodejs
-+
-+# See https://github.com/vuejs/core/blob/main/.github/contributing.md#development-setup
-+define VUEJS_BUILD_CMDS
-+	cd $(@D) && $(PNPM) install && $(NPM) run build -- vue -f global
-+endef
-+
- # Install .prod.js as .js
- define VUEJS_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 644 -D $(@D)/dist/vue.global.prod.js \
-+	$(INSTALL) -m 644 -D $(@D)/packages/vue/dist/vue.global.prod.js \
- 		$(TARGET_DIR)/var/www/vue.js
- endef
- 
--- 
-2.37.2
+--===============5494081101186655292==
+Content-Type: multipart/signed; boundary="ZSw0qiOnJaD4GrUP"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+
+
+--ZSw0qiOnJaD4GrUP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+SGksCgpQYXRjaCBzZXQgTEdUTS4KCk9uIFRodSwgMDggU2VwIDIwMjIgMjM6MDc6NTkgLTA2MDAg
+SmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+IHdyb3RlOgo+IFdlIG5l
+ZWQgdG8gaW5zdGFsbCB3ZXN0b24gdG8gc3RhZ2luZyBzbyB0aGF0IGFwcGxpY2F0aW9ucyBsaWtl
+IGNvZwo+IGNhbiB1c2Ugd2VzdG9uLWRpcmVjdC1kaXNwbGF5Lgo+IAo+IFNpZ25lZC1vZmYtYnk6
+IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgoKUmV2aWV3ZWQtYnk6
+IEFkcmlhbiBQZXJleiBkZSBDYXN0cm8gPGFwZXJlekBpZ2FsaWEuY29tPgoKPiAtLS0KPiAgcGFj
+a2FnZS93ZXN0b24vd2VzdG9uLm1rIHwgMSArCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlv
+bigrKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dlc3Rvbi93ZXN0b24ubWsgYi9wYWNrYWdl
+L3dlc3Rvbi93ZXN0b24ubWsKPiBpbmRleCBlNmM1NGVlN2FhLi41ZTcxNDczNjQwIDEwMDY0NAo+
+IC0tLSBhL3BhY2thZ2Uvd2VzdG9uL3dlc3Rvbi5tawo+ICsrKyBiL3BhY2thZ2Uvd2VzdG9uL3dl
+c3Rvbi5tawo+IEBAIC0xMCw2ICsxMCw3IEBAIFdFU1RPTl9TT1VSQ0UgPSB3ZXN0b24tJChXRVNU
+T05fVkVSU0lPTikudGFyLnh6Cj4gIFdFU1RPTl9MSUNFTlNFID0gTUlUCj4gIFdFU1RPTl9MSUNF
+TlNFX0ZJTEVTID0gQ09QWUlORwo+ICBXRVNUT05fQ1BFX0lEX1ZFTkRPUiA9IHdheWxhbmQKPiAr
+V0VTVE9OX0lOU1RBTExfU1RBR0lORyA9IFlFUwo+ICAKPiAgV0VTVE9OX0RFUEVOREVOQ0lFUyA9
+IGhvc3QtcGtnY29uZiB3YXlsYW5kIHdheWxhbmQtcHJvdG9jb2xzIFwKPiAgCWxpYnhrYmNvbW1v
+biBwaXhtYW4gbGlicG5nIHVkZXYgY2Fpcm8gbGliaW5wdXQgbGliZHJtCj4gLS0gCj4gMi4zNC4x
+Cj4gCj4gCgpDaGVlcnMsCuKAlEFkcmnDoW4K
+
+--ZSw0qiOnJaD4GrUP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYyDF5gAKCRCRxVnb5MkS
+O5mBAJ0YS26EN3Z1V7S8fQfsU8HwgVi9jQCfUBhtNSG+SqZFMQs6Ma/+RJFbKDw=
+=1Ix/
+-----END PGP SIGNATURE-----
+
+--ZSw0qiOnJaD4GrUP--
+
+--===============5494081101186655292==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5494081101186655292==--
