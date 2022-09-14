@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24D06ECAAD3
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 09:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05612ECAAD3
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 09:38:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B302B8196A;
-	Wed, 14 Sep 2022 09:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B302B8196A
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB0EB81970;
+	Wed, 14 Sep 2022 09:38:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB0EB81970
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DnAd70dZ9btq; Wed, 14 Sep 2022 09:38:11 +0000 (UTC)
+	with ESMTP id TFWhDiKUbw_E; Wed, 14 Sep 2022 09:38:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5640981991;
-	Wed, 14 Sep 2022 09:38:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5640981991
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0851F1BF355
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1D26819F6;
+	Wed, 14 Sep 2022 09:38:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1D26819F6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B9141C1148
  for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D270140B53
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBC9460BBC
  for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:38:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D270140B53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBC9460BBC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k4V8N3FcenS3 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bgiKF05r1onC for <buildroot@lists.busybox.net>;
  Wed, 14 Sep 2022 09:38:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0429740B63
+ by smtp3.osuosl.org (Postfix) with ESMTP id 07EB960BAD
  for <buildroot@buildroot.org>; Wed, 14 Sep 2022 09:38:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0429740B63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07EB960BAD
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E0B8F838FD; Wed, 14 Sep 2022 09:38:07 +0000 (UTC)
+ id E9F5F838D9; Wed, 14 Sep 2022 09:38:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Sep 2022 11:22:31 +0200
+Date: Wed, 14 Sep 2022 11:22:39 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: ff3b466025c0f1d508eadeac1d43a14f8027978d
-X-Git-Newrev: 8326fd9b2fe5cfc633e4d6d8bc00c40cdff8096e
+X-Git-Oldrev: 8326fd9b2fe5cfc633e4d6d8bc00c40cdff8096e
+X-Git-Newrev: 4011982bc3a8f53802c8b7c4b7181c32a28217d2
 X-Patchwork-Hint: ignore
-Message-Id: <20220914093807.E0B8F838FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] Makefile: workaround make
- 4.3 issue for 'printvars and 'show-vars'
+Message-Id: <20220914093807.E9F5F838D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] Makefile: fix show-vars
+ for good this time
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,80 +63,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8326fd9b2fe5cfc633e4d6d8bc00c40cdff8096e
+commit: https://git.buildroot.net/buildroot/commit/?id=4011982bc3a8f53802c8b7c4b7181c32a28217d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Event though the bug with make 4.3 has been reported and fixed, there
-has not been a release of make with the fix for a long time, see [1].
+Commit 5c54c3ef3db2 (Makefile: workaround make 4.3 issue for 'printvars
+and 'show-vars') did not fully fix the show-vars case, which still
+segfaults.
 
-As the root cause seems the 'filter' command cannot handle large
-chunks of data, like .VARIABLES, we can workaround the problem by
-using a foreach command over .VARIABLES, then use the filter command.
+Overall, show-vars generates a JSON blurb. That is supposed to be
+machine-readable, so we do not care that the variables are sorted, so
+we get rid of it to (slightly) simplify the code.
 
-It might not be logical to program it that way, but at least the
-functionality is now usable.
+Then, we currently iterate twice on the list of variables: the first one
+to filter-out the 'internal' variables, and the second one to filter
+only the variables matching the pattern. We can do away by iterating
+only once, and applying both filters at once.
 
-[1] https://savannah.gnu.org/bugs/?59093#comment10
+Since we now have an 'and' condition, we can take advantage of it: when
+none of the items in $(and) are empty, $(and) evaluates to the last
+item, while it evaluates to empty if any of the items is empty. So we
+can coalesce the $(if) and $(and) together: $(if $(and a,b),c) is
+equivalent to: $(and a,b,c) ; this gains us one parentheses depth.
 
-Signed-off-by: Henri Roosen <henri.roosen@ginzinger.com>
-[yann.morin.1998@free.fr: add comment to reference the bug]
+Finally, the cause for the segfault is an overly-long call to $(info).
+Reducing that is not easy: we want to call clean-json on the whole of
+the JSON blurb, so we can't emit the individual variables one by one, or
+the trailing comma would not be trimmed away.
+
+So, we go crazy: we just output each word from clean-json with $(info).
+
+We can do that, because mk-json-str transforms all spaces in a string
+to an escaped UTF-8 sequence, so we will never have spaces in values;
+the keys are the variables, so they won't have spaces either; spaces in
+the rest of the JSON blurb are totally optional, so we don't care how
+many there are. We know there are spaces, because we explicitly
+introduce some (after "expanded" or "raw", for example), so we should
+never hit a too-big word for $(info) to print.
+
+Thanks to Henri for the suggestion to push $(info) further inside the
+macro.
+
+Reported-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5c54c3ef3db26d3630c79fc1bad10469b889d0dd)
+Cc: Roosen Henri <Henri.Roosen@ginzinger.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 83f71e7cebb887d19b7ef2098e520d54129324c6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ Makefile | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 2c28f3cfc4..5b22216fc4 100644
+index 5b22216fc4..dc9916b35d 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1049,23 +1049,19 @@ ifeq ($(NEED_WRAPPER),y)
- 	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
- endif
- 
--.PHONY: check-make-version
--check-make-version:
--ifneq ($(filter $(RUNNING_MAKE_VERSION),4.3),)
--	@echo "Make 4.3 doesn't support 'printvars' and 'show-vars' recipes"
--	@exit 1
--endif
--
- # printvars prints all the variables currently defined in our
- # Makefiles. Alternatively, if a non-empty VARS variable is passed,
- # only the variables matching the make pattern passed in VARS are
- # displayed.
- # show-vars does the same, but as a JSON dictionnary.
-+#
-+# Note: we iterate of .VARIABLES and filter each variable individually,
-+# to workaround a bug in make 4.3; see https://savannah.gnu.org/bugs/?59093
- .PHONY: printvars
--printvars: check-make-version
-+printvars:
- 	@:
- 	$(foreach V, \
--		$(sort $(filter $(VARS),$(.VARIABLES))), \
-+		$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
- 		$(if $(filter-out environment% default automatic, \
- 				$(origin $V)), \
- 		$(if $(QUOTED_VARS),\
-@@ -1073,13 +1069,14 @@ printvars: check-make-version
- 			$(info $V=$(if $(RAW_VARS),$(value $V),$($V))))))
- # ')))) # Syntax colouring...
- 
-+# See details above, same as for printvars
- .PHONY: show-vars
+@@ -1074,17 +1074,24 @@ printvars:
  show-vars: VARS?=%
--show-vars: check-make-version
-+show-vars:
+ show-vars:
  	@:
- 	$(info $(call clean-json, { \
+-	$(info $(call clean-json, { \
++	$(foreach i, \
++		$(call clean-json, { \
  			$(foreach V, \
--				$(sort $(filter $(VARS),$(.VARIABLES))), \
-+				$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
- 				$(if $(filter-out environment% default automatic, $(origin $V)), \
+-				$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
+-				$(if $(filter-out environment% default automatic, $(origin $V)), \
++				$(.VARIABLES), \
++				$(and $(filter $(VARS),$(V)) \
++					, \
++					$(filter-out environment% default automatic, $(origin $V)) \
++					, \
  					"$V": { \
  						"expanded": $(call mk-json-str,$($V))$(comma) \
+ 						"raw": $(call mk-json-str,$(value $V)) \
+ 					}$(comma) \
+ 				) \
+ 			) \
+-	} ))
++		} ) \
++		, \
++		$(info $(i)) \
++	)
+ 
+ .PHONY: clean
+ clean:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
