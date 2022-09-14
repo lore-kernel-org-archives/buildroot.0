@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2C27ECAAD3
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 09:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E0F4C6FA86
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 09:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BE5D81399;
-	Wed, 14 Sep 2022 09:38:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BE5D81399
+	by smtp4.osuosl.org (Postfix) with ESMTP id E40ED4174D;
+	Wed, 14 Sep 2022 09:39:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E40ED4174D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sGaRee6OtUlc; Wed, 14 Sep 2022 09:38:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YqdE20JjaMmu; Wed, 14 Sep 2022 09:39:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61BD381336;
-	Wed, 14 Sep 2022 09:38:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61BD381336
+	by smtp4.osuosl.org (Postfix) with ESMTP id C86264171A;
+	Wed, 14 Sep 2022 09:38:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C86264171A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 167611BF355
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:38:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 11A0A1BF355
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B044240886
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:38:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B044240886
+ by smtp4.osuosl.org (Postfix) with ESMTP id C031140213
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:38:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C031140213
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id puZengnw6DJM for <buildroot@lists.busybox.net>;
+ with ESMTP id MNvhKLJAFjeP for <buildroot@lists.busybox.net>;
  Wed, 14 Sep 2022 09:38:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3EB6940284
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49C1140287
  for <buildroot@buildroot.org>; Wed, 14 Sep 2022 09:38:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EB6940284
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49C1140287
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 012B8838FF; Wed, 14 Sep 2022 09:38:07 +0000 (UTC)
+ id 159C383902; Wed, 14 Sep 2022 09:38:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Sep 2022 11:22:56 +0200
+Date: Wed, 14 Sep 2022 11:37:57 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 4011982bc3a8f53802c8b7c4b7181c32a28217d2
-X-Git-Newrev: 3443db75b0f0dbd668b789490f486b352179c907
+X-Git-Oldrev: 8c7c750fc8f1bc4534cd17c3db7d5986719d286c
+X-Git-Newrev: 236fc63332fb9a35be297c15bd67ade3c23097fa
 X-Patchwork-Hint: ignore
-Message-Id: <20220914093808.012B8838FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] Makefile: error out
- printvars target when VARS is empty or unset
+Message-Id: <20220914093808.159C383902@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] Makefile: enhance
+ reporting error about empty VARS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3443db75b0f0dbd668b789490f486b352179c907
+commit: https://git.buildroot.net/buildroot/commit/?id=236fc63332fb9a35be297c15bd67ade3c23097fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-printvars returns nothing when VARS is not passed or empty. This is done
-on purpose, see commit fd5bd12379dc ("Makefile: printvars: don't print
-anything when VARS is not set").
+Use $(error) to simplify the code (drop "exit 1") and sned the message
+to stderr.
 
-An error message making explicit what is required from the user in order
-to use printvars is however better than silently doing nothing.
-
-This adds a check for a non-empty VARS variable.
-
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Reported-by: David Laight <David.Laight@ACULAB.COM>
+Reported-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ec82347cdee190a5fa451b83cdb3727c78cda315)
+Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+(cherry picked from commit 466d65d73e38545252528a81c31632ba316c77fa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index dc9916b35d..e8a4703a51 100644
+index 093fbb660c..14edc46865 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1059,6 +1059,10 @@ endif
- # to workaround a bug in make 4.3; see https://savannah.gnu.org/bugs/?59093
+@@ -1060,8 +1060,7 @@ endif
  .PHONY: printvars
  printvars:
-+ifndef VARS
-+	@echo "Please pass a non-empty VARS to 'make printvars'"
-+	@exit 1
-+endif
+ ifndef VARS
+-	@echo "Please pass a non-empty VARS to 'make printvars'"
+-	@exit 1
++	$(error Please pass a non-empty VARS to 'make printvars')
+ endif
  	@:
  	$(foreach V, \
- 		$(sort $(foreach X, $(.VARIABLES), $(filter $(VARS),$(X)))), \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
