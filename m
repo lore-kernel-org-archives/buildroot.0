@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5C6C6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:30:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B72F2ECAAD3
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFE2160E2C;
-	Wed, 14 Sep 2022 22:30:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFE2160E2C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63B3D60AE7;
+	Wed, 14 Sep 2022 22:31:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63B3D60AE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OaEOIXRu3dAB; Wed, 14 Sep 2022 22:30:51 +0000 (UTC)
+	with ESMTP id LDo5Lqwj0TkU; Wed, 14 Sep 2022 22:31:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D847B60AE7;
-	Wed, 14 Sep 2022 22:30:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D847B60AE7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4BD2A1BF38C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A28260EFD;
+	Wed, 14 Sep 2022 22:31:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A28260EFD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B9581C1148
  for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:29:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 334D9415DE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 44DBB60E11
  for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:29:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 334D9415DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44DBB60E11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 943VGAUDT9Nr for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 40r2d7D8n1YK for <buildroot@lists.busybox.net>;
  Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F044408E1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EB1960E2C
  for <buildroot@buildroot.org>; Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F044408E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EB1960E2C
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1E97683BA2; Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
+ id 28C7983B96; Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 00:19:04 +0200
+Date: Thu, 15 Sep 2022 00:20:26 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 36807c65badb1f2a06777ce06d790fda326d8309
-X-Git-Newrev: bbe4a64e36c7c4fa10741c752e2172d94976b864
+X-Git-Oldrev: bbe4a64e36c7c4fa10741c752e2172d94976b864
+X-Git-Newrev: 34280e0e9ba7e2b7c0802596d298c06b0243b6ef
 X-Patchwork-Hint: ignore
-Message-Id: <20220914222927.1E97683BA2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] support/testing: octave:
- increase test timeout
+Message-Id: <20220914222927.28C7983B96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/rsyslog: add
+ hiredis optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbe4a64e36c7c4fa10741c752e2172d94976b864
+commit: https://git.buildroot.net/buildroot/commit/?id=34280e0e9ba7e2b7c0802596d298c06b0243b6ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Octave package test can occasionally fail due to timeout while testing
-some octave modules. This commit slightly increase the timeout value
-to reduce those failures.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4b291f1bace77b0f462d663b16fab719187dab88)
+(cherry picked from commit 328674465ce2f072d23e7102ae22123b1c5ab8ec)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_octave.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rsyslog/rsyslog.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/support/testing/tests/package/test_octave.py b/support/testing/tests/package/test_octave.py
-index 82a70e09c2..cdbe2688df 100644
---- a/support/testing/tests/package/test_octave.py
-+++ b/support/testing/tests/package/test_octave.py
-@@ -76,4 +76,4 @@ class TestOctave(infra.basetest.BRTest):
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index a6e32ecea1..84fd2d2e5e 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -73,6 +73,13 @@ else
+ RSYSLOG_CONF_OPTS += --disable-gnutls
+ endif
  
-         for mod in octave_modules:
-             cmd = self.octave_cmd('assert(test(\"{}\"),true)'.format(mod))
--            self.assertRunOk(cmd)
-+            self.assertRunOk(cmd, timeout=10)
++ifeq ($(BR2_PACKAGE_HIREDIS),y)
++RSYSLOG_DEPENDENCIES += hiredis
++RSYSLOG_CONF_OPTS += --enable-omhiredis
++else
++RSYSLOG_CONF_OPTS += --disable-omhiredis
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ RSYSLOG_DEPENDENCIES += libgcrypt
+ RSYSLOG_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
