@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 782A6ECAAD3
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 19:03:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9034AECAAD3
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 19:04:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B44360DF0;
-	Wed, 14 Sep 2022 19:03:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B44360DF0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3EABF40C61;
+	Wed, 14 Sep 2022 19:04:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EABF40C61
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2OrRxzFESQko; Wed, 14 Sep 2022 19:03:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9i3kR9R5qAAA; Wed, 14 Sep 2022 19:04:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 446F560BA1;
-	Wed, 14 Sep 2022 19:03:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 446F560BA1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 805051BF33C
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 19:03:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 61CAD403E2;
+	Wed, 14 Sep 2022 19:04:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61CAD403E2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9ABED1BF283
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 19:04:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C4CC60BA1
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 19:03:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C4CC60BA1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7577C41794
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 19:04:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7577C41794
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KYx8jttG8XtO for <buildroot@lists.busybox.net>;
- Wed, 14 Sep 2022 19:03:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA0D9607FE
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BA0D9607FE
- for <buildroot@buildroot.org>; Wed, 14 Sep 2022 19:03:27 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BDCAF1C0004;
- Wed, 14 Sep 2022 19:03:22 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oYXfN-004DNE-NB; Wed, 14 Sep 2022 21:03:21 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9FhHMGgfG9kx for <buildroot@lists.busybox.net>;
+ Wed, 14 Sep 2022 19:04:28 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 75F234177A
+ for <buildroot@buildroot.org>; Wed, 14 Sep 2022 19:04:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75F234177A
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id 6112F83949; Wed, 14 Sep 2022 19:04:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: <yann.morin@orange.com>
-References: <31813_1659684220_62ECC57C_31813_212_5_89e764dbf0f4937be712b62946582072287cd163.1659683862.git.yann.morin@orange.com>
-Date: Wed, 14 Sep 2022 21:03:21 +0200
-In-Reply-To: <31813_1659684220_62ECC57C_31813_212_5_89e764dbf0f4937be712b62946582072287cd163.1659683862.git.yann.morin@orange.com>
- (yann morin's message of "Fri, 5 Aug 2022 09:23:36 +0200")
-Message-ID: <8735ctrd6u.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/3] package/lshw: allso uses hwdata' PNP IDs
+To: buildroot@buildroot.org
+Date: Wed, 14 Sep 2022 21:03:03 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 292e363a29e4590d4d11df4801a592bd49036165
+X-Git-Newrev: 98690b10d483728a27fd5b6c0089147075dcb379
+X-Patchwork-Hint: ignore
+Message-Id: <20220914190428.6112F83949@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/lshw: also uses
+ hwdata's PNP IDs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +57,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>>   <yann.morin@orange.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=98690b10d483728a27fd5b6c0089147075dcb379
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
- > From: "Yann E. MORIN" <yann.morin@orange.com>
- > Commit 29bccabdebff (lshw: use data files provided by hwdata) removed
- > the hardware info DBs installed by lshw, in favour of those provided by
- > hwdata, as the former are way out-dated while the latter are more
- > up-to-date.
+Commit 29bccabdebff (lshw: use data files provided by hwdata) removed
+the hardware info DBs installed by lshw, in favour of those provided by
+hwdata, as the former are way out-dated while the latter are more
+up-to-date.
 
- > However, it forgot to also select the PNP ID database, to replace the
- > one lshw would install.
+However, it forgot to also select the PNP ID database, to replace the
+one lshw would install.
 
- > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c6241bc2ca335a405f1ccf387d5d77ad141277a2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lshw/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lshw/Config.in b/package/lshw/Config.in
+index 5e0e47b6e2..fb557aacff 100644
+--- a/package/lshw/Config.in
++++ b/package/lshw/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LSHW
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_HWDATA # runtime
+ 	select BR2_PACKAGE_HWDATA_PCI_IDS
++	select BR2_PACKAGE_HWDATA_PNP_IDS
+ 	select BR2_PACKAGE_HWDATA_USB_IDS
+ 	help
+ 	  lshw (Hardware Lister) is a small tool to provide
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
