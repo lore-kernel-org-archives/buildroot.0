@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 196FCECAAD3
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 09:29:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9DDFECAAD8
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 09:36:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94B114092A;
-	Wed, 14 Sep 2022 09:29:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94B114092A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B7E740B78;
+	Wed, 14 Sep 2022 09:36:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B7E740B78
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r38GCKquxQou; Wed, 14 Sep 2022 09:29:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jK_23MFrPJ7s; Wed, 14 Sep 2022 09:36:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84615402EC;
-	Wed, 14 Sep 2022 09:29:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84615402EC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BCEDD1BF355
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:29:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 26C7140B63;
+	Wed, 14 Sep 2022 09:36:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26C7140B63
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 399B01BF355
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A485A402EC
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:29:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A485A402EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 159BE40B53
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 09:36:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 159BE40B53
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u4zenttltK-u for <buildroot@lists.busybox.net>;
- Wed, 14 Sep 2022 09:29:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l6NUX9MK0QEn for <buildroot@lists.busybox.net>;
+ Wed, 14 Sep 2022 09:36:26 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88CE340266
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D930404F4
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88CE340266
- for <buildroot@buildroot.org>; Wed, 14 Sep 2022 09:29:42 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0D930404F4
+ for <buildroot@buildroot.org>; Wed, 14 Sep 2022 09:36:25 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D639CE0014;
- Wed, 14 Sep 2022 09:29:38 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 5FD85E0006;
+ Wed, 14 Sep 2022 09:36:23 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oYOi9-0046lG-75; Wed, 14 Sep 2022 11:29:37 +0200
+ id 1oYOog-00475J-HG; Wed, 14 Sep 2022 11:36:22 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Quentin Schulz <foss+buildroot@0leil.net>
-References: <20220802123559.2514433-1-foss+buildroot@0leil.net>
-Date: Wed, 14 Sep 2022 11:29:37 +0200
-In-Reply-To: <20220802123559.2514433-1-foss+buildroot@0leil.net> (Quentin
- Schulz's message of "Tue, 2 Aug 2022 14:35:59 +0200")
-Message-ID: <87sfkuqp6m.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20220803192400.208270-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 14 Sep 2022 11:36:22 +0200
+In-Reply-To: <20220803192400.208270-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Wed, 3 Aug 2022 21:23:59 +0200")
+Message-ID: <87o7viqovd.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] Makefile: error out printvars target when
- VARS is empty or unset
+Subject: Re: [Buildroot] [PATCH] Makefile: ignore *.orig and *.rej in
+ check-package target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +64,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- yann.morin.1998@free.fr, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Quentin" == Quentin Schulz <foss+buildroot@0leil.net> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
- > printvars returns nothing when VARS is not passed or empty. This is done
- > on purpose, see commit fd5bd12379dc ("Makefile: printvars: don't print
- > anything when VARS is not set").
+ > When one is applying patches, it is pretty common to end up with .orig
+ > and/or .rej files lying around. Unfortunately, our 'Config.*' match in
+ > check-package ends up matching those files, causing false positives
+ > when running "make check-package". To avoid this, this commit
+ > excludes *.orig and *.rej files for the find logic used in the
+ > check-package target.
 
- > An error message making explicit what is required from the user in order
- > to use printvars is however better than silently doing nothing.
-
- > This adds a check for a non-empty VARS variable.
-
- > Cc: Quentin Schulz <foss+buildroot@0leil.net>
- > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2022.05.x and 2022.02.x, thanks.
 
