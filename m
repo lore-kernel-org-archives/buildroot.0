@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C03BC6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:05:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E786AC6FA86
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:05:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8CCD41809;
-	Wed, 14 Sep 2022 22:05:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8CCD41809
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FAD1417D1;
+	Wed, 14 Sep 2022 22:05:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FAD1417D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qMAHmpy1wW5K; Wed, 14 Sep 2022 22:05:21 +0000 (UTC)
+	with ESMTP id lIsn6MlAvMBz; Wed, 14 Sep 2022 22:05:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9F22417D1;
-	Wed, 14 Sep 2022 22:05:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9F22417D1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7FC8B1BF38C
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:04:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B75D41832;
+	Wed, 14 Sep 2022 22:05:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B75D41832
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B0EC81BF38C
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 598F2417D1
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:04:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 598F2417D1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C1F540C9B
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:05:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C1F540C9B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xhGJBcwNmpwV for <buildroot@lists.busybox.net>;
- Wed, 14 Sep 2022 22:04:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oc8jkzg2yLgI for <buildroot@lists.busybox.net>;
+ Wed, 14 Sep 2022 22:05:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21946417CD
- for <buildroot@buildroot.org>; Wed, 14 Sep 2022 22:04:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21946417CD
+ by smtp2.osuosl.org (Postfix) with ESMTP id A012A40BA7
+ for <buildroot@buildroot.org>; Wed, 14 Sep 2022 22:05:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A012A40BA7
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0C26083A88; Wed, 14 Sep 2022 22:04:53 +0000 (UTC)
+ id 8E99283A91; Wed, 14 Sep 2022 22:05:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Sep 2022 23:15:37 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 227dcd3428cc4e36fd6b5d3251b2fa55ec15fa37
-X-Git-Newrev: 9aaa8ee02f41a16598306d976a8bff1e7b9c9299
+Date: Wed, 14 Sep 2022 23:15:02 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: d45dbafc06d84d7ec9979df24a18ae83f822da38
+X-Git-Newrev: 9fb6a415a8c16fb43e89f1f766addded8afb794e
 X-Patchwork-Hint: ignore
-Message-Id: <20220914220453.0C26083A88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/rsyslog: imhttp
+Message-Id: <20220914220506.8E99283A91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rsyslog: imhttp
  support needs apr-util
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aaa8ee02f41a16598306d976a8bff1e7b9c9299
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9fb6a415a8c16fb43e89f1f766addded8afb794e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 imhttp support needs apr-util in addition to civetweb since bump to
 version 8.2204.1 in commit bc469ee6329555284b2fe9162597917122fbbe3a
