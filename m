@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63D7BECAAD3
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 20:14:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C15E4ECAAD3
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 20:15:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E0E38275C;
-	Wed, 14 Sep 2022 20:14:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E0E38275C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LFA8a82hufmH; Wed, 14 Sep 2022 20:14:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2035982741;
-	Wed, 14 Sep 2022 20:14:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2035982741
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B3DAF1BF28A
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 20:14:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8CA3F40C97
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 20:14:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CA3F40C97
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B06F40C8C;
+	Wed, 14 Sep 2022 20:15:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B06F40C8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MTZN-cwHJ86y for <buildroot@lists.busybox.net>;
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V5vrgJmb54di; Wed, 14 Sep 2022 20:15:00 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9392A403E2;
+	Wed, 14 Sep 2022 20:14:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9392A403E2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DC4671C1148
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 20:14:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B598441794
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 20:14:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B598441794
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vV5FKwc0UXEE for <buildroot@lists.busybox.net>;
  Wed, 14 Sep 2022 20:14:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C10D440C51
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB314410E6
  for <buildroot@buildroot.org>; Wed, 14 Sep 2022 20:14:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C10D440C51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB314410E6
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id AEFB283999; Wed, 14 Sep 2022 20:14:44 +0000 (UTC)
+ id 9A1E88398E; Wed, 14 Sep 2022 20:14:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Sep 2022 21:12:57 +0200
+Date: Wed, 14 Sep 2022 21:12:21 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 6cd658d0c04d3273ee7c8376c13f6e10219a6c6f
-X-Git-Newrev: e39aced8fd35c3abea58723aaca816dc091edafa
+X-Git-Oldrev: 98690b10d483728a27fd5b6c0089147075dcb379
+X-Git-Newrev: 71c27e7991b13f8330ac7b91f46ddb6eac1efe73
 X-Patchwork-Hint: ignore
-Message-Id: <20220914201444.AEFB283999@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/containerd:
- security bump to 1.6.6
+Message-Id: <20220914201444.9A1E88398E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/docker-cli: bump
+ to version 20.10.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,59 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e39aced8fd35c3abea58723aaca816dc091edafa
+commit: https://git.buildroot.net/buildroot/commit/?id=71c27e7991b13f8330ac7b91f46ddb6eac1efe73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
-
-v1.6.2 -> v1.6.6:
-
-The third patch release for containerd 1.6 includes various fixes and updates.
-
-https://github.com/containerd/containerd/releases/tag/v1.6.3
-
-The fourth patch release for containerd 1.6 includes two fixes for CNI and SELinux.
-
-https://github.com/containerd/containerd/releases/tag/v1.6.4
-
-The fifth patch release for containerd 1.6 includes a few fixes.
-
-https://github.com/containerd/containerd/releases/tag/v1.6.5
-
-The sixth patch release for containerd 1.6 includes a fix for
-CVE-2022-31030.
-
-https://github.com/containerd/containerd/releases/tag/v1.6.6
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7e7ae463d177ac6f3a9b0d22d3c34cd81a867d39)
+(cherry picked from commit c48aebea8c75d00edfd9788cd9e2b4a4c69ec402)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index eb9f2894a9..c0c926f2e4 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 9a07acf89f..87c5d949c6 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
- # Computed locally
--sha256  4ea21a6b4649512366e7c31ae547ad89c6a69c6586a6d8565cff07898de344b0  containerd-1.6.2.tar.gz
-+sha256  27afb673c20d53aa5c31aec07b38eb7e4dc911e7e1f0c76fac9513bbf070bd24  containerd-1.6.6.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 36f2db4125..80952914e6 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
+ # Locally calculated
+-sha256  bda289b27b18675d6a6ff07568453768fe68c16c27b5e52724e46896d5464a55  docker-cli-20.10.14.tar.gz
++sha256  ab2b59c2302017fea9ad2f70827e8a6f0204b557ce28e66bcb80fea262c9fbdc  docker-cli-20.10.17.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index c7458f85dd..75507ed48e 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONTAINERD_VERSION = 1.6.2
-+CONTAINERD_VERSION = 1.6.6
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
+-DOCKER_CLI_VERSION = 20.10.14
++DOCKER_CLI_VERSION = 20.10.17
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
