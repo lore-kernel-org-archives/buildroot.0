@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F083CECAAD3
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40836C6FA82
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:29:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FCCD60F47;
-	Wed, 14 Sep 2022 22:29:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FCCD60F47
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1B9380C06;
+	Wed, 14 Sep 2022 22:29:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1B9380C06
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Yqs-dJ_QOql; Wed, 14 Sep 2022 22:29:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ee_9lS1oPZx7; Wed, 14 Sep 2022 22:29:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC73F60EFE;
-	Wed, 14 Sep 2022 22:29:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC73F60EFE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 549051BF38C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E8B180C01;
+	Wed, 14 Sep 2022 22:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E8B180C01
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 84A891C1148
  for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:29:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3099160DFC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F698408E1
  for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:29:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3099160DFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F698408E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xy9b6ndytVmM for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8_E_GFJsyuzR for <buildroot@lists.busybox.net>;
  Wed, 14 Sep 2022 22:29:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50C8B60AE7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5AFDC40876
  for <buildroot@buildroot.org>; Wed, 14 Sep 2022 22:29:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50C8B60AE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AFDC40876
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3F10283B35; Wed, 14 Sep 2022 22:29:19 +0000 (UTC)
+ id 4854283B18; Wed, 14 Sep 2022 22:29:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 00:22:58 +0200
+Date: Thu, 15 Sep 2022 00:27:24 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 6e4e92fc2d9a565f86129d6bcd0565ba418654f4
-X-Git-Newrev: a6366b24c2fadd31b7f195bf4d2c32e368c4e0a0
+X-Git-Oldrev: a6366b24c2fadd31b7f195bf4d2c32e368c4e0a0
+X-Git-Newrev: 36f80f6d87be7503f0e8ced90738a04426d6d02b
 X-Patchwork-Hint: ignore
-Message-Id: <20220914222919.3F10283B35@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/ocrad: fix license
+Message-Id: <20220914222919.4854283B18@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/weston: remove
+ md5 and sha1 hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,36 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6366b24c2fadd31b7f195bf4d2c32e368c4e0a0
+commit: https://git.buildroot.net/buildroot/commit/?id=36f80f6d87be7503f0e8ced90738a04426d6d02b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-ocrad is licensed under GPL-2.0+ since version 0.24, here is an extract
-of https://lists.gnu.org/archive/html/bug-ocrad/2014-10/msg00000.html:
+Since weston 10.0.0, md5 and sha1 hashes are not published
+with the release announce email.
 
-"The license has been changed to GPL version 2 or later for better GPL
-compatibility. GPLv2 and GPLv2+ programs may use the library now."
+The values were probably calculated locally, so remove them
+since upstream provide stronger hashes.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+f67a6e9b7a7be9adbc405b3126000056120a01af
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 61360da1051f30d232fd136fbb0edf4bba69e9ab)
+(cherry picked from commit af972178bdee45469fffdaa3a53ecb9fd8a322f3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ocrad/ocrad.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/weston/weston.hash | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/ocrad/ocrad.mk b/package/ocrad/ocrad.mk
-index e037a08195..914d53a59c 100644
---- a/package/ocrad/ocrad.mk
-+++ b/package/ocrad/ocrad.mk
-@@ -7,7 +7,7 @@
- OCRAD_VERSION = 0.27
- OCRAD_SOURCE = ocrad-$(OCRAD_VERSION).tar.lz
- OCRAD_SITE = $(BR2_GNU_MIRROR)/ocrad
--OCRAD_LICENSE = GPL-3.0+
-+OCRAD_LICENSE = GPL-2.0+
- OCRAD_LICENSE_FILES = COPYING
- OCRAD_INSTALL_STAGING = YES
- 
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index 951d62a100..d58ca1ef70 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,6 +1,4 @@
+ # From https://lists.freedesktop.org/archives/wayland-devel/2022-June/042260.html
+-md5  dac91aecc97a85bf9664dec0d5c90ae3  weston-10.0.1.tar.xz
+-sha1  87cc339503f01317a0ca8d986b1b211c8aae99bb  weston-10.0.1.tar.xz
+ sha256  8a9e52506a865a7410981b04f8341b89b84106db8531ab1f9fdd37b5dc034115  weston-10.0.1.tar.xz
+ sha512  688d843096a95b463161b98e85ca3443b31ba2ee49fc8d456a2780cc96f576e9d097054e9f361997a66e9cc8373cf29e406a742dae3884b3b50b26acf1710c8c  weston-10.0.1.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
