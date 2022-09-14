@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5CFCECAAD3
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:31:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AF46C6FA82
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9945540CA9;
-	Wed, 14 Sep 2022 22:31:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9945540CA9
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7961824CB;
+	Wed, 14 Sep 2022 22:31:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7961824CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uwMGwLk0LISL; Wed, 14 Sep 2022 22:31:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OcuF1GIN7xx1; Wed, 14 Sep 2022 22:31:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F0C240A18;
-	Wed, 14 Sep 2022 22:31:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F0C240A18
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8AD6C1BF38C
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB27281D4D;
+	Wed, 14 Sep 2022 22:31:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB27281D4D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 93D951C1148
  for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:29:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F1AD404E5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6433E60E11
  for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:29:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F1AD404E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6433E60E11
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rw_284_Jnp9n for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xU9NQPJ5G7UO for <buildroot@lists.busybox.net>;
  Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 40FD540124
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1298160E1E
  for <buildroot@buildroot.org>; Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40FD540124
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1298160E1E
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 3195683B9A; Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
+ id 0296F83B9A; Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 00:21:45 +0200
+Date: Thu, 15 Sep 2022 00:10:28 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 34280e0e9ba7e2b7c0802596d298c06b0243b6ef
-X-Git-Newrev: 3b586a3ffd69080f9eb7c3359b2a710ee48dd612
+X-Git-Oldrev: f615b6513c27a39f83d9db8ed7f59ff62e1e8b38
+X-Git-Newrev: 358fa203abe6e5290d823fc81e8f8d113a90daa4
 X-Patchwork-Hint: ignore
-Message-Id: <20220914222927.3195683B9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/xfsprogs: fix
- build for architectures without MAP_SYNC
+Message-Id: <20220914222927.0296F83B9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/python-crossbar:
+ adjust dependencies based on requirements-min.txt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,218 +63,290 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b586a3ffd69080f9eb7c3359b2a710ee48dd612
+commit: https://git.buildroot.net/buildroot/commit/?id=358fa203abe6e5290d823fc81e8f8d113a90daa4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Back port a patch from upstream that will be in the next xfsprogs release:
+This commit makes sure that the python-crossbar package pulls in the
+right dependencies, based on the requirements-min.txt.
 
-https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?h=for-next&id=28965957f4ea5c79fc0b91b997168c656a4426c5
+It does so by:
 
-required a tiny bit of massaging to apply cleanly to xfsprogs-5.14.2.
+ - Changing the 0002-Remove-idna-requirement patch by a more thorough
+   patch that drops all indirect dependencies from
+   requirements-min.txt, making it easier to have a 1:1 mapping
+   between lines in requirements-min.txt and Buildroot selects.
 
-Fixes: http://autobuild.buildroot.net/results/407131b767fc8241e8f5f5001c0b5d4e2c488dea
+ - Changing the
+   0003-crossbar-webservice-wap-use-markupsafe-instead-of-we patch to
+   update requirements-min.txt to indicate the new MarkupSafe
+   dependency. Here again, to have a 1:1 mapping between lines in
+   requirements-min.txt and Buildroot selects.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+ - Updating the Buildroot selects to match requirements-min.txt, with
+   relevant comments when it does not.
+
+ - Fixing up the Crossbar test case to no longer force autobahn to use
+   umsgpack. Instead, we now use the default of msgpack that is
+   expected by autobahn.
+
+Fixes bug #14556, https://bugs.busybox.net/show_bug.cgi?id=14556.
+
+Signed-off-by: Emile Cormier <emile.cormier.jr@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8acfedf922325a0fb7d7d6e7a1287eab6fae386a)
+(cherry picked from commit bfafb08c62a214fc24f6f33ce4c0b18ad6f67dfd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-overriding-MAP_SYNC-in-publicly-exported.patch | 187 +++++++++++++++++++++
- 1 file changed, 187 insertions(+)
+ .../0002-Remove-idna-requirement.patch             | 29 ---------
+ ...ements-min.txt-drop-indirect-dependencies.patch | 74 ++++++++++++++++++++++
+ ...bservice-wap-use-markupsafe-instead-of-we.patch | 19 +++++-
+ package/python-crossbar/Config.in                  | 39 +++++++++---
+ .../tests/package/sample_python_crossbar.py        |  1 -
+ 5 files changed, 119 insertions(+), 43 deletions(-)
 
-diff --git a/package/xfsprogs/0003-libxfs-stop-overriding-MAP_SYNC-in-publicly-exported.patch b/package/xfsprogs/0003-libxfs-stop-overriding-MAP_SYNC-in-publicly-exported.patch
+diff --git a/package/python-crossbar/0002-Remove-idna-requirement.patch b/package/python-crossbar/0002-Remove-idna-requirement.patch
+deleted file mode 100644
+index 5e19a467c2..0000000000
+--- a/package/python-crossbar/0002-Remove-idna-requirement.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 9164d21cc66c1f78de37c9383528c5d528cbdbeb Mon Sep 17 00:00:00 2001
+-From: Asaf Kahlon <asafka7@gmail.com>
+-Date: Wed, 26 Sep 2018 15:33:43 +0300
+-Subject: [PATCH] Remove idna requirement.
+-
+-The latest version of idna is 2.7, but it seems like idna is not a direct
+-dependency anymore (a short "git grep" shows it's only written in requirement
+-and readme files).
+-
+-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+----
+- requirements-min.txt | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/requirements-min.txt b/requirements-min.txt
+-index 92fb0f8f..13cdac87 100644
+---- a/requirements-min.txt
+-+++ b/requirements-min.txt
+-@@ -8,7 +8,6 @@ click>=6.7
+- constantly>=15.1.0
+- cryptography>=2.6.1
+- h2>=3.2.0
+--idna<2.6,>=2.5
+- importlib-resources>=4.1.1
+- incremental>=17.5.0
+- jinja2>=2.10.1
+--- 
+-2.17.1
+-
+diff --git a/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch b/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
 new file mode 100644
-index 0000000000..510ed5b642
+index 0000000000..12027d779c
 --- /dev/null
-+++ b/package/xfsprogs/0003-libxfs-stop-overriding-MAP_SYNC-in-publicly-exported.patch
-@@ -0,0 +1,187 @@
-+From b82bd75c80aadcc2890b23f63eec9ba2c560b2e5 Mon Sep 17 00:00:00 2001
-+From: "Darrick J. Wong" <djwong@kernel.org>
-+Date: Thu, 4 Aug 2022 21:26:43 -0500
-+Subject: [PATCH] libxfs: stop overriding MAP_SYNC in publicly exported header
-+ files
++++ b/package/python-crossbar/0002-requirements-min.txt-drop-indirect-dependencies.patch
+@@ -0,0 +1,74 @@
++From 3ae2b36e48fc0f75f0bb6c89f893ece033bccd87 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 7 Aug 2022 18:44:29 +0200
++Subject: [PATCH] requirements-min.txt: drop indirect dependencies
 +
-+Florian Fainelli most recently reported that xfsprogs doesn't build with
-+musl on mips:
++For some interesting reason, the crossbar maintainers have decided to
++include indirect dependencies in their requirements-min.txt, i.e
++dependencies that they don't use directly, but that packages they
++depend on themselves depend on.
 +
-+"MIPS platforms building with recent kernel headers and the musl-libc
-+toolchain will expose the following build failure:
++This makes the packaging in Buildroot confusing, as it means not all
++dependencies in requirements-min.txt should be taken into
++account. Also some of these indirect dependencies cause issues due to
++upper bounds set on the version (which is the case for idna and
++urllib3).
 +
-+mmap.c: In function 'mmap_f':
-+mmap.c:196:12: error: 'MAP_SYNC' undeclared (first use in this function); did you mean 'MS_SYNC'?
-+  196 |    flags = MAP_SYNC | MAP_SHARED_VALIDATE;
-+      |            ^~~~~~~~
-+      |            MS_SYNC
-+mmap.c:196:12: note: each undeclared identifier is reported only once for each function it appears in
-+make[4]: *** [../include/buildrules:81: mmap.o] Error 1"
++This patch therefore clarifies the situation by removing such indirect
++dependencies from requirements-min.txt. As the patch is obviously not
++upstreamable, it will require some maintenance effort, but that effort
++is anyway already there to sort out direct dependencies from indirect
++dependencies when updating the Buildroot packaging for crossbar.
 +
-+At first glance, the build failure here is caused by the fact that:
-+
-+1. The configure script doesn't detect MAP_SYNC support
-+2. The build system doesn't set HAVE_MAP_SYNC
-+2. io/mmap.c includes input.h -> projects.h -> xfs.h and later sys/mman.h
-+3. include/linux.h #define's MAP_SYNC to 0 if HAVE_MAP_SYNC is not set
-+4. musl's sys/mman.h #undef MAP_SYNC on platforms that don't support it
-+5. io/mmap.c tries to use MAP_SYNC, not realizing that libc undefined it
-+
-+Normally, xfs_io only exports functionality that is defined by the libc
-+and/or kernel headers on the build system.  We often make exceptions for
-+new functionality so that we have a way to test them before the header
-+file packages catch up, hence this '#ifndef HAVE_FOO #define FOO'
-+paradigm.
-+
-+MAP_SYNC is a gross and horribly broken example of this.  These support
-+crutches are supposed to be *private* to xfsprogs for benefit of early
-+testing, but they were instead added to include/linux.h, which we
-+provide to user programs in the xfslibs-dev package.  IOWs, we've been
-+
-+Worst yet, gcc 11.3 doesn't even warn about overriding a #define to 0:
-+
-+int main(int argc, char *argv[]) {
-+	printf("MAP_SYNC 0x%x\n", MAP_SYNC);
-+}
-+
-+$ gcc -o a a.c -Wall
-+$ ./a
-+MAP_SYNC 0x80000
-+$ gcc -DSTUPID -o a a.c -Wall
-+$ ./a
-+MAP_SYNC 0x0
-+
-+Four years have gone by since the introduction of MAP_SYNC, so let's get
-+rid of the override code entirely -- any platform that supports MAP_SYNC
-+has had plenty of chances to ensure their header files have the right
-+bits.  While we're at it, fix AC_HAVE_MAP_SYNC to look for MAP_SYNC in
-+the same header file that the one user (io/mmap.c) uses -- sys/mman.h.
-+
-+Annoyingly, I had to test this by hand because the sole fstest that
-+exercises MAP_SYNC (generic/470) requires dm-logwrites and dm-thinp,
-+neither of which support fsdax on current kernels.
-+
-+Reported-by: info@mobile-stream.com
-+Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-+Reviewed-by: Carlos Maiolino <cmaiolino@redhat.com>
-+Signed-off-by: Eric Sandeen <sandeen@sandeen.net>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ include/linux.h       |  8 --------
-+ io/io.h               |  2 +-
-+ io/mmap.c             | 25 +++++++++++++------------
-+ m4/package_libcdev.m4 |  3 +--
-+ 4 files changed, 15 insertions(+), 23 deletions(-)
++ requirements-min.txt | 12 ------------
++ 1 file changed, 12 deletions(-)
 +
-+diff --git a/include/linux.h b/include/linux.h
-+index de8a71221146..052facc15db5 100644
-+--- a/include/linux.h
-++++ b/include/linux.h
-+@@ -356,14 +356,6 @@ fsmap_advance(
-+ #define HAVE_GETFSMAP
-+ #endif /* HAVE_GETFSMAP */
-+ 
-+-#ifndef HAVE_MAP_SYNC
-+-#define MAP_SYNC 0
-+-#define MAP_SHARED_VALIDATE 0
-+-#else
-+-#include <asm-generic/mman.h>
-+-#include <asm-generic/mman-common.h>
-+-#endif /* HAVE_MAP_SYNC */
-+-
-+ /*
-+  * Reminder: anything added to this file will be compiled into downstream
-+  * userspace projects!
-+diff --git a/io/io.h b/io/io.h
-+index 49db902fc44f..64b7a663a8cf 100644
-+--- a/io/io.h
-++++ b/io/io.h
-+@@ -55,7 +55,7 @@ typedef struct mmap_region {
-+ 	size_t		length;		/* length of mapping */
-+ 	off64_t		offset;		/* start offset into backing file */
-+ 	int		prot;		/* protection mode of the mapping */
-+-	bool		map_sync;	/* is this a MAP_SYNC mapping? */
-++	int		flags;		/* MAP_* flags passed to mmap() */
-+ 	char		*name;		/* name of backing file */
-+ } mmap_region_t;
-+ 
-+diff --git a/io/mmap.c b/io/mmap.c
-+index 8c048a0ab6d0..425957d4b487 100644
-+--- a/io/mmap.c
-++++ b/io/mmap.c
-+@@ -46,8 +46,11 @@ print_mapping(
-+ 	for (i = 0, p = pflags; p->prot != PROT_NONE; i++, p++)
-+ 		buffer[i] = (map->prot & p->prot) ? p->mode : '-';
-+ 
-+-	if (map->map_sync)
-++#ifdef HAVE_MAP_SYNC
-++	if ((map->flags & (MAP_SYNC | MAP_SHARED_VALIDATE)) ==
-++			  (MAP_SYNC | MAP_SHARED_VALIDATE))
-+ 		sprintf(&buffer[i], " S");
-++#endif
-+ 
-+ 	printf("%c%03d%c 0x%lx - 0x%lx %s  %14s (%lld : %ld)\n",
-+ 		braces? '[' : ' ', index, braces? ']' : ' ',
-+@@ -139,7 +142,9 @@ mmap_help(void)
-+ " -r -- map with PROT_READ protection\n"
-+ " -w -- map with PROT_WRITE protection\n"
-+ " -x -- map with PROT_EXEC protection\n"
-++#ifdef HAVE_MAP_SYNC
-+ " -S -- map with MAP_SYNC and MAP_SHARED_VALIDATE flags\n"
-++#endif
-+ " -s <size> -- first do mmap(size)/munmap(size), try to reserve some free space\n"
-+ " If no protection mode is specified, all are used by default.\n"
-+ "\n"));
-+@@ -193,18 +198,14 @@ mmap_f(
-+ 			prot |= PROT_EXEC;
-+ 			break;
-+ 		case 'S':
-++#ifdef HAVE_MAP_SYNC
-+ 			flags = MAP_SYNC | MAP_SHARED_VALIDATE;
-+-
-+-			/*
-+-			 * If MAP_SYNC and MAP_SHARED_VALIDATE aren't defined
-+-			 * in the system headers we will have defined them
-+-			 * both as 0.
-+-			 */
-+-			if (!flags) {
-+-				printf("MAP_SYNC not supported\n");
-+-				return 0;
-+-			}
-+ 			break;
-++#else
-++			printf("MAP_SYNC not supported\n");
-++			exitcode = 1;
-++			return command_usage(&mmap_cmd);
-++#endif
-+ 		case 's':
-+ 			length2 = cvtnum(blocksize, sectsize, optarg);
-+ 			break;
-+@@ -281,7 +282,7 @@ mmap_f(
-+ 	mapping->offset = offset;
-+ 	mapping->name = filename;
-+ 	mapping->prot = prot;
-+-	mapping->map_sync = (flags == (MAP_SYNC | MAP_SHARED_VALIDATE));
-++	mapping->flags = flags;
-+ 	return 0;
-+ }
-+ 
-+diff --git a/m4/package_libcdev.m4 b/m4/package_libcdev.m4
-+index adab9bb9773a..3a0c23453176 100644
-+--- a/m4/package_libcdev.m4
-++++ b/m4/package_libcdev.m4
-+@@ -339,8 +339,7 @@ AC_DEFUN([AC_HAVE_STATFS_FLAGS],
-+ AC_DEFUN([AC_HAVE_MAP_SYNC],
-+   [ AC_MSG_CHECKING([for MAP_SYNC])
-+     AC_TRY_COMPILE([
-+-#include <asm-generic/mman.h>
-+-#include <asm-generic/mman-common.h>
-++#include <sys/mman.h>
-+     ], [
-+         int flags = MAP_SYNC | MAP_SHARED_VALIDATE;
-+     ], have_map_sync=yes
++diff --git a/requirements-min.txt b/requirements-min.txt
++index 5ac4e0ee..cdd82d27 100644
++--- a/requirements-min.txt
+++++ b/requirements-min.txt
++@@ -1,20 +1,13 @@
++-attrs>=17.2.0
++ autobahn[asyncio,twisted,encryption,compress,serialization,scram]>=21.3.1
++ bitstring>=3.1.5
++-bcrypt>=3.1.6
++ cbor>=1.0.0
++ click>=6.7
++ colorama>=0.4.4
++-constantly>=15.1.0
++ cryptography>=2.6.1
++-h2>=3.2.0
++-idna<2.6,>=2.5
++ importlib-resources>=4.1.1
++-incremental>=17.5.0
++ jinja2>=2.10.1
++ lmdb>=0.92
++ mistune>=0.7.4
++-netaddr>=0.7.19
++ passlib>=1.7.1
++ priority>=1.3.0
++ psutil>=5.2.2
++@@ -28,7 +21,6 @@ pyqrcode>=1.2.1
++ pytrie>=0.3
++ pyyaml>=4.2b4
++ sdnotify>=0.3.1
++-service_identity>=17.0.0
++ setproctitle>=1.1.10
++ setuptools>=36.2.7
++ treq>=20.4.1
++@@ -37,10 +29,6 @@ twisted[tls,conch,http2,osx_platform]>=20.3.0; sys_platform == 'darwin'
++ twisted[tls,conch,http2,windows_platform]>=20.3.0; sys_platform == 'win32'
++ txaio>=21.2.1
++ txtorcon>=20.0.0
++-u-msgpack-python>=2.4.1
++-# urllib3 is an indirect dependency, but we force a recent version because of https://nvd.nist.gov/vuln/detail/CVE-2019-11324
++-# workaround for version conflict in requests vs sth else:
++-urllib3<1.25,>=1.21.1
++ vmprof>=0.4.12; platform_machine=='x86_64' or platform_machine=='i386' or platform_machine=='arm'
++ watchdog>=0.8.3
++ werkzeug>=0.14.1
 +-- 
-+2.25.1
++2.37.1
 +
+diff --git a/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch b/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
+index 65ffc508ab..ab2d4709bd 100644
+--- a/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
++++ b/package/python-crossbar/0003-crossbar-webservice-wap-use-markupsafe-instead-of-we.patch
+@@ -1,4 +1,4 @@
+-From ac5fc826e33492bb0c4283a954389d7fd355fa61 Mon Sep 17 00:00:00 2001
++From a6866509b0387ab6d6f99f68cd82bcac922fe839 Mon Sep 17 00:00:00 2001
+ From: Romain Naour <romain.naour@gmail.com>
+ Date: Mon, 30 May 2022 19:38:11 +0200
+ Subject: [PATCH] crossbar/webservice/wap: use markupsafe instead of werkzeug
+@@ -15,7 +15,8 @@ Replace with escape from markupsafe like upstream commit [2]
+ Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+  crossbar/webservice/wap.py | 7 ++++++-
+- 1 file changed, 6 insertions(+), 1 deletion(-)
++ requirements-min.txt       | 1 +
++ 2 files changed, 7 insertions(+), 1 deletion(-)
+ 
+ diff --git a/crossbar/webservice/wap.py b/crossbar/webservice/wap.py
+ index 825558b1..6daa9b21 100644
+@@ -35,6 +36,18 @@ index 825558b1..6daa9b21 100644
+  
+  from jinja2 import Environment, FileSystemLoader
+  from jinja2.sandbox import SandboxedEnvironment
++diff --git a/requirements-min.txt b/requirements-min.txt
++index cdd82d27..50cb1489 100644
++--- a/requirements-min.txt
+++++ b/requirements-min.txt
++@@ -7,6 +7,7 @@ cryptography>=2.6.1
++ importlib-resources>=4.1.1
++ jinja2>=2.10.1
++ lmdb>=0.92
+++MarkupSafe>=1.1.1
++ mistune>=0.7.4
++ passlib>=1.7.1
++ priority>=1.3.0
+ -- 
+-2.35.3
++2.37.1
+ 
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+index 60b60b1740..fb06f7672a 100644
+--- a/package/python-crossbar/Config.in
++++ b/package/python-crossbar/Config.in
+@@ -1,23 +1,35 @@
+ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	bool "python-crossbar"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
+-	# All the following dependencies are runtime dependencies
+-	select BR2_PACKAGE_PYTHON_ATTRS
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
++	# All the following dependencies are runtime dependencies. It
++	# matches almost 1:1 the requirements-min.txt from crossbar
++	# with the following exceptions:
++	# - importlib-resources is in Python itself, so no external
++	#   module is needed
++	# - vmprof, while listed as a needed dependency, isn't
++	#   actually strictly necesary
++	# - wsaccel is not a direct dependency, it is there to make
++	#   sure autobahn has the 'accelerate' feature, when the
++	#   Python implementation is CPython, and our package does
++	#   enable autobahn[accelerate]
+ 	select BR2_PACKAGE_PYTHON_AUTOBAHN
++	select BR2_PACKAGE_PYTHON_AUTOBAHN_ACCELERATE
++	select BR2_PACKAGE_PYTHON_AUTOBAHN_COMPRESS
++	select BR2_PACKAGE_PYTHON_AUTOBAHN_ENCRYPTION
++	select BR2_PACKAGE_PYTHON_AUTOBAHN_SCRAM
++	select BR2_PACKAGE_PYTHON_AUTOBAHN_SERIALIZATION
++	select BR2_PACKAGE_PYTHON_AUTOBAHN_TWISTED
+ 	select BR2_PACKAGE_PYTHON_BITSTRING
+ 	select BR2_PACKAGE_PYTHON_CBOR
+-	select BR2_PACKAGE_PYTHON_CBOR2
+ 	select BR2_PACKAGE_PYTHON_CLICK
+-	select BR2_PACKAGE_PYTHON_CONSTANTLY
++	select BR2_PACKAGE_PYTHON_COLORAMA
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
+-	select BR2_PACKAGE_PYTHON_H2
+-	select BR2_PACKAGE_PYTHON_IDNA
+-	select BR2_PACKAGE_PYTHON_INCREMENTAL
+ 	select BR2_PACKAGE_PYTHON_JINJA2
+ 	select BR2_PACKAGE_PYTHON_LMDB
+ 	select BR2_PACKAGE_PYTHON_MARKUPSAFE
+ 	select BR2_PACKAGE_PYTHON_MISTUNE
+-	select BR2_PACKAGE_PYTHON_NETADDR
+ 	select BR2_PACKAGE_PYTHON_PASSLIB
+ 	select BR2_PACKAGE_PYTHON_PRIORITY
+ 	select BR2_PACKAGE_PYTHON_PSUTIL
+@@ -30,17 +42,19 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	select BR2_PACKAGE_PYTHON_PYTRIE
+ 	select BR2_PACKAGE_PYTHON_PYYAML
+ 	select BR2_PACKAGE_PYTHON_SDNOTIFY
+-	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 	select BR2_PACKAGE_PYTHON_SETPROCTITLE
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+ 	select BR2_PACKAGE_PYTHON_TREQ
+ 	select BR2_PACKAGE_PYTHON_TWISTED
++	select BR2_PACKAGE_PYTHON_TWISTED_CONCH
++	select BR2_PACKAGE_PYTHON_TWISTED_HTTP2
++	select BR2_PACKAGE_PYTHON_TWISTED_TLS
+ 	select BR2_PACKAGE_PYTHON_TXAIO
+ 	select BR2_PACKAGE_PYTHON_TXTORCON
+-	select BR2_PACKAGE_PYTHON_U_MSGPACK
+ 	select BR2_PACKAGE_PYTHON_UBJSON
+ 	select BR2_PACKAGE_PYTHON_WATCHDOG
+ 	select BR2_PACKAGE_PYTHON_WERKZEUG
++	select BR2_PACKAGE_PYTHON_ZLMDB
+ 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
+ 	help
+ 	  Crossbar.io is an open-source WAMP application router that
+@@ -48,3 +62,8 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	  components that can talk in real-time with each other.
+ 
+ 	  https://pypi.python.org/pypi/crossbar
++
++comment "python-crossbar needs glibc or musl"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+diff --git a/support/testing/tests/package/sample_python_crossbar.py b/support/testing/tests/package/sample_python_crossbar.py
+index 374cccd837..8160a37219 100644
+--- a/support/testing/tests/package/sample_python_crossbar.py
++++ b/support/testing/tests/package/sample_python_crossbar.py
+@@ -1,5 +1,4 @@
+ import os
+ import crossbar
+ 
+-os.environ["AUTOBAHN_USE_UMSGPACK"] = "1"
+ crossbar.run(["version"])
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
