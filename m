@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F126ECAAD3
-	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21117C6FA82
+	for <buildroot@archiver.kernel.org>; Wed, 14 Sep 2022 22:33:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D893C40C9D;
-	Wed, 14 Sep 2022 22:32:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D893C40C9D
+	by smtp4.osuosl.org (Postfix) with ESMTP id B854C40438;
+	Wed, 14 Sep 2022 22:33:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B854C40438
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gpguUvWq8Bkh; Wed, 14 Sep 2022 22:32:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7AvqVWW74Slu; Wed, 14 Sep 2022 22:33:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 001D340C0D;
-	Wed, 14 Sep 2022 22:32:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 001D340C0D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1676F40361;
+	Wed, 14 Sep 2022 22:33:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1676F40361
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7459C1BF38C
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:29:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5E7E31BF38C
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:33:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE39A40345
- for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:29:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE39A40345
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38B5540361
+ for <buildroot@lists.busybox.net>; Wed, 14 Sep 2022 22:33:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38B5540361
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bQpCJ4Q-7CnY for <buildroot@lists.busybox.net>;
- Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2627C40876
- for <buildroot@buildroot.org>; Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2627C40876
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 15AC683BA0; Wed, 14 Sep 2022 22:29:27 +0000 (UTC)
+ with ESMTP id Zz3EpEkzbOLo for <buildroot@lists.busybox.net>;
+ Wed, 14 Sep 2022 22:33:23 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1287940352
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1287940352
+ for <buildroot@buildroot.org>; Wed, 14 Sep 2022 22:33:22 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id F2441100002;
+ Wed, 14 Sep 2022 22:33:20 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oYawa-007s9L-3i; Thu, 15 Sep 2022 00:33:20 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 00:14:36 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 963b7acafae89d2b499168e76451c91f8f445b2e
-X-Git-Newrev: 36807c65badb1f2a06777ce06d790fda326d8309
-X-Patchwork-Hint: ignore
-Message-Id: <20220914222927.15AC683BA0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/wolfssl: security
- bump to version 5.4.0
+To: Maxim Kochetkov <fido_max@inbox.ru>
+References: <20220811084734.1620010-1-fido_max@inbox.ru>
+Date: Thu, 15 Sep 2022 00:33:20 +0200
+In-Reply-To: <20220811084734.1620010-1-fido_max@inbox.ru> (Maxim Kochetkov's
+ message of "Thu, 11 Aug 2022 11:47:34 +0300")
+Message-ID: <87tu59mvrj.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/postgis: bump version to 3.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,63 +63,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36807c65badb1f2a06777ce06d790fda326d8309
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Maxim" == Maxim Kochetkov <fido_max@inbox.ru> writes:
 
-Fix the following vulnerabilities:
- - [High] Potential for DTLS DoS attack. In wolfSSL versions before
-   5.4.0 the return-routability check is wrongly skipped in a specific
-   edge case. The check on the return-routability is there for stopping
-   attacks that either consume excessive resources on the server, or try
-   to use the server as an amplifier sending an excessive amount of
-   messages to a victim IP. If using DTLS 1.0/1.2 on the server side
-   users should update to avoid the potential DoS attack. CVE-2022-34293
- - [Medium] Ciphertext side channel attack on ECC and DH operations.
-   Users on systems where rogue agents can monitor memory use should
-   update the version of wolfSSL and change private ECC keys.
+ > https://git.osgeo.org/gitea/postgis/postgis/src/tag/3.2.2/NEWS
+ > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 
-https://github.com/wolfSSL/wolfssl/releases/tag/v5.4.0-stable
-https://www.wolfssl.com/docs/security-vulnerabilities/
+Committed to 2022.05.x and 2022.02.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cd82a913d420458007bb43460fb6a7281f963771)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 63eebf93bb..01b21596e7 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  409b4646c5f54f642de0e9f3544c3b83de7238134f5b1ff93fb44527bf119d05  wolfssl-5.2.0.tar.gz
-+sha256  dc36cc19dad197253e5c2ecaa490c7eef579ad448706e55d73d79396e814098b  wolfssl-5.4.0.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 58b6f296ab..536fd863fe 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 5.2.0
-+WOLFSSL_VERSION = 5.4.0
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
