@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67C25ECAAA1
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 07:29:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D02D0ECAAD3
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 07:35:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A25E60FF3;
-	Thu, 15 Sep 2022 07:29:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A25E60FF3
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6704C40FCF;
+	Thu, 15 Sep 2022 07:35:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6704C40FCF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3XW1AqNcId15; Thu, 15 Sep 2022 07:29:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6Og9uNzfv8wm; Thu, 15 Sep 2022 07:35:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDAB160F4C;
-	Thu, 15 Sep 2022 07:29:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDAB160F4C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1DAFD1BF344
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:29:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8A4B04039D;
+	Thu, 15 Sep 2022 07:35:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A4B04039D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 75DCF1BF344
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:35:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE303832E7
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:29:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE303832E7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5BBF5418CF
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:35:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BBF5418CF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C9-YohE5KKWy for <buildroot@lists.busybox.net>;
- Thu, 15 Sep 2022 07:29:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 280D9832AA
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 07:29:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 280D9832AA
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 179F383C13; Thu, 15 Sep 2022 07:29:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UHuKrkL5hiRB for <buildroot@lists.busybox.net>;
+ Thu, 15 Sep 2022 07:35:46 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9D35418CC
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E9D35418CC
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 07:35:45 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B0C9B40009;
+ Thu, 15 Sep 2022 07:35:43 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oYjPS-008AK0-PM; Thu, 15 Sep 2022 09:35:42 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 09:27:26 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3207b28fc42cc6225c4175fa27c9a9fb609ffbdc
-X-Git-Newrev: 028251bd7c36dcdb066cc0548421c901dd58bc2c
-X-Patchwork-Hint: ignore
-Message-Id: <20220915072944.179F383C13@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/ficl: fix musl
- static build
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220813102643.978802-1-fontaine.fabrice@gmail.com>
+Date: Thu, 15 Sep 2022 09:35:42 +0200
+In-Reply-To: <20220813102643.978802-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 13 Aug 2022 12:26:43 +0200")
+Message-ID: <87czbxm6nl.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/ne10: fix build without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,74 +63,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=028251bd7c36dcdb066cc0548421c901dd58bc2c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Pass LDFLAGS to avoid the following musl static build failure raised
-since the addition of the package in commit
-814911aecb6d49bb603c34dbfcc0d86614516b41:
+ > Fix the following build failure without C++ raised since bump to version
+ > 1.2.0 in commit 8cdf680799d7055a272190387064f87c7c638906 and
+ > https://github.com/projectNe10/Ne10/commit/20b1896fd6532336e6a46608778bd6e0396dc4dc:
 
-/home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/sh4eb-buildroot-linux-musl/11.3.0/../../../../sh4eb-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/sh4eb-buildroot-linux-musl/11.3.0/libgcc.a(unwind-dw2.o): in function `size_of_encoded_value':
-/home/autobuild/autobuild/instance-5/output-1/build/host-gcc-final-11.3.0/build/sh4eb-buildroot-linux-musl/libgcc/../../../libgcc/unwind-pe.h:89: undefined reference to `abort'
+ > CMake Error at /nvmedata/autobuild/instance-11/output-1/host/share/cmake-3.18/Modules/CMakeTestCXXCompiler.cmake:59 (message):
+ >   The C++ compiler
 
-Fixes:
- - http://autobuild.buildroot.org/results/bf041723ed813746c61892262630a3ac2bc43b14
+ >     "/usr/bin/clang++"
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 47354cfce67c1898813ce124decfa5b3fb76f46b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../ficl/0002-Makefile.linux-pass-LDFLAGS.patch    | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ >   is not able to compile a simple test program.
 
-diff --git a/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch b/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch
-new file mode 100644
-index 0000000000..2138089b0e
---- /dev/null
-+++ b/package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch
-@@ -0,0 +1,35 @@
-+From 33b16f2c4f996a98c3bbbec9af542d020ac276fa Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 9 Aug 2022 23:53:06 +0200
-+Subject: [PATCH] Makefile.linux: pass LDFLAGS
-+
-+Pass LDFLAGS to avoid the following musl static build failure:
-+
-+/home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/sh4eb-buildroot-linux-musl/11.3.0/../../../../sh4eb-buildroot-linux-musl/bin/ld: /home/autobuild/autobuild/instance-5/output-1/host/lib/gcc/sh4eb-buildroot-linux-musl/11.3.0/libgcc.a(unwind-dw2.o): in function `size_of_encoded_value':
-+/home/autobuild/autobuild/instance-5/output-1/build/host-gcc-final-11.3.0/build/sh4eb-buildroot-linux-musl/libgcc/../../../libgcc/unwind-pe.h:89: undefined reference to `abort'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bf041723ed813746c61892262630a3ac2bc43b14
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: upstream is dead]
-+---
-+ Makefile.linux | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.linux b/Makefile.linux
-+index 5f1a41f..df887e6 100644
-+--- a/Makefile.linux
-++++ b/Makefile.linux
-+@@ -14,7 +14,7 @@ MAJOR = 4
-+ MINOR = 0.31
-+ 
-+ ficl: main.o $(HEADERS) libficl.a
-+-	$(CC) main.o -o ficl -L. -lficl -lm
-++	$(CC) $(LDFLAGS) main.o -o ficl -L. -lficl -lm
-+ 
-+ lib: libficl.so.$(MAJOR).$(MINOR)
-+ 
-+-- 
-+2.35.1
-+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a86d09d569babe6b88cb8e5fbb47483772f42aed
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
