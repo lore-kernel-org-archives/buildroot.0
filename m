@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A70BFECAAD3
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 07:36:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EBADECAAA1
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 07:37:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CCB2832FF;
-	Thu, 15 Sep 2022 07:36:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CCB2832FF
+	by smtp2.osuosl.org (Postfix) with ESMTP id B14654101F;
+	Thu, 15 Sep 2022 07:37:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B14654101F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bi-QDkC-KtfI; Thu, 15 Sep 2022 07:36:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Gj2eRypE0Ykf; Thu, 15 Sep 2022 07:36:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 204C5832E8;
-	Thu, 15 Sep 2022 07:36:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 204C5832E8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 78E574039D;
+	Thu, 15 Sep 2022 07:36:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78E574039D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 49F9D1BF344
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:36:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 623F41BF344
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 260B3832E8
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:36:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 260B3832E8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E1398330B
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:36:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E1398330B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RyJgPzCdaq9p for <buildroot@lists.busybox.net>;
- Thu, 15 Sep 2022 07:36:31 +0000 (UTC)
+ with ESMTP id 0uHYIfB2Xm8R for <buildroot@lists.busybox.net>;
+ Thu, 15 Sep 2022 07:36:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47BAA832E7
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 07:36:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47BAA832E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D0AB832E8
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 07:36:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D0AB832E8
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 351C580501; Thu, 15 Sep 2022 07:36:31 +0000 (UTC)
+ id 4D63D80FC1; Thu, 15 Sep 2022 07:36:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 09:35:08 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 028251bd7c36dcdb066cc0548421c901dd58bc2c
-X-Git-Newrev: d646d751b46b1f1919333638287f2f1ecd3cf7c0
+Date: Thu, 15 Sep 2022 09:35:01 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: ab76ef9797196cf7a243e233e15aed09fb38927f
+X-Git-Newrev: 7e903fa5a06fd894dcef9794684f7df0e0d17373
 X-Patchwork-Hint: ignore
-Message-Id: <20220915073631.351C580501@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/ne10: fix build
+Message-Id: <20220915073654.4D63D80FC1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/ne10: fix build
  without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d646d751b46b1f1919333638287f2f1ecd3cf7c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7e903fa5a06fd894dcef9794684f7df0e0d17373
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 Fix the following build failure without C++ raised since bump to version
 1.2.0 in commit 8cdf680799d7055a272190387064f87c7c638906 and
