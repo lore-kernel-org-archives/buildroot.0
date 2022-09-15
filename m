@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1647CECAAA1
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 08:43:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3618AECAAA1
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 08:44:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A97DC41046;
-	Thu, 15 Sep 2022 08:43:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A97DC41046
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XpdovBJPewPZ; Thu, 15 Sep 2022 08:43:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3D3E41030;
-	Thu, 15 Sep 2022 08:43:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3D3E41030
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2A02D1C11A0
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:43:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11CB4403D0
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:43:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11CB4403D0
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF8DB41910;
+	Thu, 15 Sep 2022 08:44:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF8DB41910
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YvUpXrhyZ65v for <buildroot@lists.busybox.net>;
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5W9Bi6kjupBA; Thu, 15 Sep 2022 08:44:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C3B4400AF;
+	Thu, 15 Sep 2022 08:44:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C3B4400AF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 46B131BF475
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:43:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EBA1A80B2B
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:43:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBA1A80B2B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NNaHixo0dtlA for <buildroot@lists.busybox.net>;
  Thu, 15 Sep 2022 08:43:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0A1EA40382
+ by smtp1.osuosl.org (Postfix) with ESMTP id 10A0A80B3B
  for <buildroot@buildroot.org>; Thu, 15 Sep 2022 08:43:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A1EA40382
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10A0A80B3B
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id EAF9E83BF3; Thu, 15 Sep 2022 08:43:26 +0000 (UTC)
+ id F3D9383C12; Thu, 15 Sep 2022 08:43:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 10:40:16 +0200
+Date: Thu, 15 Sep 2022 10:42:47 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 03b6692026d501c1737ffd5680180e79f828558b
-X-Git-Newrev: e47b4b2a54b29043f46d411219778562035815a6
+X-Git-Oldrev: e47b4b2a54b29043f46d411219778562035815a6
+X-Git-Newrev: 2a15f65c8f84aec05e5fbe0c44911d2e954737ae
 X-Patchwork-Hint: ignore
-Message-Id: <20220915084326.EAF9E83BF3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] linux/linux: fix
- firmware-imx dependency
+Message-Id: <20220915084326.F3D9383C12@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] configs/pine64_sopine:
+ Use mainline ATF
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,36 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e47b4b2a54b29043f46d411219778562035815a6
+commit: https://git.buildroot.net/buildroot/commit/?id=2a15f65c8f84aec05e5fbe0c44911d2e954737ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Commit 666084f4943773fd659393e16982ab2baaa99d0e ("linux:linux.mk: Add
-"firmware-imx" dependency if needed") introduced a dependency from
-linux to firmware-imx, but based on the incorrect BR2 option.
+Use the mainline ATF as it supports the Pine64 SoPine module.
 
-This commit fixes this mistake.
+Fixes:
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053812
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0276a6fccfd738914767c56bebe5dc8bb9342b6c)
+(cherry picked from commit 3d5ba95da6084d5d6cadca06018925f2172453cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/pine64_sopine_defconfig | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 322ccabbd9..ffe68ded9d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -77,7 +77,7 @@ LINUX_DEPENDENCIES = host-kmod
- LINUX_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode) \
- 	$(if $(BR2_PACKAGE_LINUX_FIRMWARE),linux-firmware) \
--	$(if $(BR2_PACKAGE_FREESCALE_IMX),firmware-imx) \
-+	$(if $(BR2_PACKAGE_FIRMWARE_IMX),firmware-imx) \
- 	$(if $(BR2_PACKAGE_WIRELESS_REGDB),wireless-regdb)
+diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
+index 6fa511477c..f59f2387eb 100644
+--- a/configs/pine64_sopine_defconfig
++++ b/configs/pine64_sopine_defconfig
+@@ -7,10 +7,9 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
- # Starting with 4.16, the generated kconfig paser code is no longer
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ 
+ # Bootloader
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
