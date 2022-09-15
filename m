@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB49FECAAA1
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 18:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68B7BECAAA1
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 18:30:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BCC9419B3;
-	Thu, 15 Sep 2022 18:29:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BCC9419B3
+	by smtp1.osuosl.org (Postfix) with ESMTP id F30FD83EAC;
+	Thu, 15 Sep 2022 18:30:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F30FD83EAC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DfJ9eMrt4mND; Thu, 15 Sep 2022 18:29:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yMqhTg9Xw7cR; Thu, 15 Sep 2022 18:30:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43E5E419A1;
-	Thu, 15 Sep 2022 18:28:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43E5E419A1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 490561BF5AA
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 18:28:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2ECE583EA6;
+	Thu, 15 Sep 2022 18:30:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ECE583EA6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D58181BF5AA
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 18:30:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 300B3419A1
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 18:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 300B3419A1
+ by smtp1.osuosl.org (Postfix) with ESMTP id B117283EA6
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 18:30:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B117283EA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gs8zYGUbPa3i for <buildroot@lists.busybox.net>;
- Thu, 15 Sep 2022 18:28:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bR1zOShm5TLQ for <buildroot@lists.busybox.net>;
+ Thu, 15 Sep 2022 18:30:51 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 069F7419A0
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com
- [209.85.214.180])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 069F7419A0
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 18:28:55 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id jm11so19128539plb.13
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 11:28:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13CF783EA2
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com
+ [209.85.215.176])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 13CF783EA2
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 18:30:51 +0000 (UTC)
+Received: by mail-pg1-f176.google.com with SMTP id r23so9502312pgr.6
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 11:30:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=HnH4TgFLok5lYgjRv5EwhApSus+Y7gwANFll2xSYUZw=;
- b=XEd0BNASyEzLRSCPHgfRW0f8XjTpkHzbGjZK3hE6YSTZtCX7IRWt5fKRqxa3dwN8cb
- 4GRQsjkP1Vf6HHa5HLBK531Ny/eNfPoLn1XnAnxpd5OGz0uibFOrrjMpCaPIOmwkTeMu
- k2H1GRioaocVjZpzmzdU0e7ladswGSf9hbOTRMeepcJ0al8XB9RQ7qalw/ikzVzUAZEz
- Ea5oauwViwbDFZFpi6LtY0wCDxXdLFkjyl0Im249zzS46ZkBIummKKKmXVyq9woCpfwx
- 6CtkdkPfMLb/O8AihdUZ/cnKllHj4z8d8d6C2OT6/dP+RXeQt249npZikVeA0jqMMANu
- CQZg==
-X-Gm-Message-State: ACrzQf0EAH8XH0VvX2mE8lhPtLBHFjlAJSwcli7wN9CLziB9ki/pinYF
- dbJAP0j63Gj+y9QcYCTRznIabmZt7Z6mtQ==
-X-Google-Smtp-Source: AA6agR57DXDqcgkP3NBApGTrQv3ZdQGUePIwZIodlOKQcjNYSVV4sRjOuq5uCD9PLRQVENf2eOBmcw==
-X-Received: by 2002:a17:90b:3808:b0:202:c5ba:d71b with SMTP id
- mq8-20020a17090b380800b00202c5bad71bmr11876770pjb.18.1663266534859; 
- Thu, 15 Sep 2022 11:28:54 -0700 (PDT)
+ bh=vcSkDMEEmBIbHRS3fdyshk+vvJgx7RE8mexd3GEHoZ0=;
+ b=k1sRa1HbQkGxBxuW+7/BEgGwRzY//cOGMRO7vmXNMsYdYfvDafvsvlP/ANWkA0Qq6r
+ YC9tzEA0AycpoK+0Zu9gMpsOqhVX/M9RcC2mh3cAaI0J8EMYaYSzRo3v+RvxrQl9zenH
+ 02ZeFxTbv5TwAcongRWB82viSxEjDZakTpl+9nsqY0cRX1DTB3vA3RiKymbK9GjL4mUi
+ FJu+Xt/GDfg+S9OT5muDLHMDJ5Wf7T7eB41LCQQibKER6im/oblyQg3BhXtDGz774Zxj
+ bAos+AfMJdSzw08NFoA2UVD3naBmtmArWrJ6kH9ZQ5WPli9DuvONxHVUT73PGgQT2rk7
+ He+g==
+X-Gm-Message-State: ACrzQf1JSVHdonoRdmvrDv+cTt12QJgHLqnHkDKdPn/4d0/0EiWse8hI
+ YzpiKtnpw07a353y5F+AqkfP2jVvGh88Tg==
+X-Google-Smtp-Source: AMsMyM5jK0KwfrbI6sHeyO72b+3hxAElP7CZOxb9h0J3K6uMtP1nsu4lcHEZE9BKD36KqaiW+jd0SA==
+X-Received: by 2002:a63:1450:0:b0:439:3806:9b91 with SMTP id
+ 16-20020a631450000000b0043938069b91mr983127pgu.407.1663266649946; 
+ Thu, 15 Sep 2022 11:30:49 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- 5-20020a17090a098500b001fdbb2e38acsm2008304pjo.5.2022.09.15.11.28.53
+ r20-20020a63ec54000000b00434e1d3b2ecsm12034416pgj.79.2022.09.15.11.30.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 15 Sep 2022 11:28:54 -0700 (PDT)
+ Thu, 15 Sep 2022 11:30:49 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 11:28:51 -0700
-Message-Id: <20220915182851.448169-1-christian@paral.in>
+Date: Thu, 15 Sep 2022 11:30:46 -0700
+Message-Id: <20220915183046.458486-1-christian@paral.in>
 X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/runc: bump to version 1.1.4
+Subject: [Buildroot] [PATCH 1/1] package/containerd: bump to version 1.6.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,48 +87,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is the fourth patch release in the 1.1.z series of runc, primarily fixing a
-regression introduced in 1.1.3 related to device rules, as well as other bugs.
-
- - Fix mounting via wrong proc fd. When the user and mount namespaces are used,
- and the bind mount is followed by the cgroup mount in the spec, the cgroup was
- mounted using the bind mount's mount fd.
- - Switch kill() in libcontainer/nsenter to sane_kill().
- - Fix "permission denied" error from runc run on noexec fs.
- - Fix failed exec after systemctl daemon-reload. Due to a regression in v1.1.3,
- the DeviceAllow=char-pts rwm rule was no longer added and was causing an error
- open /dev/pts/0: operation not permitted: unknown when systemd was reloaded.
-
-https://github.com/opencontainers/runc/releases/tag/v1.1.4
+https://github.com/containerd/containerd/releases/tag/v1.6.8
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index d94a0c20ca..6c8fddd397 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index c0c926f2e4..285519441a 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  fc1c70e095d662e38a5889bc6de41857762ce022caaf8be2852663198c533a63  runc-1.1.3.tar.gz
-+sha256  4f02077432642eebd768fc857318ae7929290b3a3511eb1be338005e360cfa34  runc-1.1.4.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index aef52de618..b60f1da2e7 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+ # Computed locally
+-sha256  27afb673c20d53aa5c31aec07b38eb7e4dc911e7e1f0c76fac9513bbf070bd24  containerd-1.6.6.tar.gz
++sha256  f5f938513c28377f64f85e84f2750d39f26b01262f3a062b7e8ce35b560ca407  containerd-1.6.8.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 80952914e6..89bbbf5c03 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.1.3
-+RUNC_VERSION = 1.1.4
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
+-CONTAINERD_VERSION = 1.6.6
++CONTAINERD_VERSION = 1.6.8
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 -- 
 2.37.3
 
