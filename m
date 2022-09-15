@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E42CCECAAA1
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 08:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65554ECAAD3
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 08:43:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A7E860A97;
-	Thu, 15 Sep 2022 08:43:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A7E860A97
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E04841025;
+	Thu, 15 Sep 2022 08:43:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E04841025
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SLqm19K1-wwG; Thu, 15 Sep 2022 08:43:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3xHRim7nUzv2; Thu, 15 Sep 2022 08:43:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC2D5607B4;
-	Thu, 15 Sep 2022 08:43:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC2D5607B4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 31C001BF475
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:43:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D41240FCF;
+	Thu, 15 Sep 2022 08:43:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D41240FCF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 038F21BF475
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A910607B4
+ by smtp1.osuosl.org (Postfix) with ESMTP id D163580B9C
  for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:43:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A910607B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D163580B9C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qKpENRDFBwtg for <buildroot@lists.busybox.net>;
- Thu, 15 Sep 2022 08:43:26 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2CBC606F5
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D2CBC606F5
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 08:43:25 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CE9581BF213;
- Thu, 15 Sep 2022 08:43:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oYkSu-008CsQ-J0; Thu, 15 Sep 2022 10:43:20 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 96itqd6Ma1-t for <buildroot@lists.busybox.net>;
+ Thu, 15 Sep 2022 08:43:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB9D180B2B
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 08:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB9D180B2B
+Received: by busybox.osuosl.org (Postfix, from userid 4021)
+ id D810D83BB4; Thu, 15 Sep 2022 08:43:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Alistair Francis <alistair@alistair23.me>
-References: <20220812111651.329130-1-alistair@alistair23.me>
-Date: Thu, 15 Sep 2022 10:43:20 +0200
-In-Reply-To: <20220812111651.329130-1-alistair@alistair23.me> (Alistair
- Francis's message of "Fri, 12 Aug 2022 21:16:51 +1000")
-Message-ID: <87illpkoyf.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] pine64_sopine_defconfig: Use mainline ATF
+To: buildroot@buildroot.org
+Date: Thu, 15 Sep 2022 10:36:19 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: fff6fc909892daed6790046387d2f7b40f12fd2b
+X-Git-Newrev: 144236b3c78eeb5e8371b880ddb1d1ec29d718a5
+X-Patchwork-Hint: ignore
+Message-Id: <20220915084326.D810D83BB4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/stress-ng: fix
+ build with kernel >= 5.1 and < 5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +57,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jagan Teki <jagan@amarulasolutions.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Alistair" == Alistair Francis <alistair@alistair23.me> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=144236b3c78eeb5e8371b880ddb1d1ec29d718a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
- > Use the mainline ATF as it supports the Pine64 SoPine module.
- > Fixes:
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/2812053812
+Fix the following build failure with kernel >= 5.1 and < 5.6 (i.e.
+before
+https://github.com/torvalds/linux/commit/9e3aa61ae3e01ce1ce6361a41ef725e1f4d1d2bf)
+raised since bump to version 0.12.02 in commit
+e551fe76e2073f15b0fcf92a73bb6b7334b017b3 and
+https://github.com/ColinIanKing/stress-ng/commit/3d6fccdbe53d0cbcb75dd4b91571aaaae7ee1ad4:
 
- > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+In file included from stress-io-uring.c:26:
+io-uring.h:1:9: error: macro names must be identifiers
+    1 | #define #define HAVE_IORING_OP_NOP 0
+      |         ^
 
-Committed to 2022.05.x and 2022.02.x, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/1bf3f2bbc849bdce531d56b1024fa87f0c1ae667
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8c1868eb31951b56a9cec6268d49195899e890b3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-Makefile-fix-build-with-kernel-5.6.patch  | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+
+diff --git a/package/stress-ng/0001-Makefile-fix-build-with-kernel-5.6.patch b/package/stress-ng/0001-Makefile-fix-build-with-kernel-5.6.patch
+new file mode 100644
+index 0000000000..4c62da3241
+--- /dev/null
++++ b/package/stress-ng/0001-Makefile-fix-build-with-kernel-5.6.patch
+@@ -0,0 +1,60 @@
++From 5d419c790e648c7a2f96f34ed1b93b326f725545 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 13 Aug 2022 17:17:05 +0200
++Subject: [PATCH] Makefile: fix build with kernel < 5.6
++
++Fix the following build failure with kernel >= 5.1 and < 5.5 (i.e.
++before
++https://github.com/torvalds/linux/commit/9e3aa61ae3e01ce1ce6361a41ef725e1f4d1d2bf)
++raised since version 0.11.21 and
++https://github.com/ColinIanKing/stress-ng/commit/3d6fccdbe53d0cbcb75dd4b91571aaaae7ee1ad4:
++
++In file included from stress-io-uring.c:26:
++io-uring.h:1:9: error: macro names must be identifiers
++    1 | #define #define HAVE_IORING_OP_NOP 0
++      |         ^
++
++Moreover, IORING_OP_FALLOCATE is not available before kernel 5.6 and
++https://github.com/torvalds/linux/commit/d63d1b5edb7b832210bfde587ba9e7549fa064eb
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1bf3f2bbc849bdce531d56b1024fa87f0c1ae667
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved (and backported) from
++https://github.com/ColinIanKing/stress-ng/commit/5d419c790e648c7a2f96f34ed1b93b326f725545]
++---
++ Makefile          | 2 +-
++ stress-io-uring.c | 6 +++++-
++ 2 files changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 2f9cc9918..ee17ae08b 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -528,7 +528,7 @@ stress-personality.c: personality.h
++ #
++ io-uring.h:
++ 	$(V)$(CPP) $(CFLAGS) core-io-uring.c  | $(GREP) IORING_OP | sed 's/,//' | \
++-	sed 's/IORING_OP_/#define HAVE_IORING_OP_/' > io-uring.h
+++	sed 's/.*\(IORING_OP_.*\)/#define HAVE_\1/' > io-uring.h
++ 	$(Q)echo "MK io-uring.h"
++ 
++ stress-io-uring.c: io-uring.h
++diff --git a/stress-io-uring.c b/stress-io-uring.c
++index ab9fd0749..84f463611 100644
++--- a/stress-io-uring.c
+++++ b/stress-io-uring.c
++@@ -311,7 +311,11 @@ static inline int stress_io_uring_complete(
++ 			break;
++ 
++ 		cqe = &cring->cqes[head & *submit->cq_ring.ring_mask];
++-		if ((cqe->res < 0) && (opcode != IORING_OP_FALLOCATE)) {
+++		if ((cqe->res < 0)
+++#ifdef HAVE_IORING_OP_FALLOCATE
+++			&& (opcode != IORING_OP_FALLOCATE)
+++#endif
+++		) {
++ 			const int err = abs(cqe->res);
++ 
++ 			/* Silently ignore EOPNOTSUPP completion errors */
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
