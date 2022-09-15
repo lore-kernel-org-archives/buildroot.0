@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D21C3ECAAD3
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 08:36:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A9AAC6FA8D
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 08:36:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 737806104A;
-	Thu, 15 Sep 2022 08:36:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 737806104A
+	by smtp3.osuosl.org (Postfix) with ESMTP id E01B261005;
+	Thu, 15 Sep 2022 08:36:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E01B261005
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CinQITtdBUII; Thu, 15 Sep 2022 08:36:09 +0000 (UTC)
+	with ESMTP id wzUxaAPz1Vs9; Thu, 15 Sep 2022 08:36:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 835B660FEE;
-	Thu, 15 Sep 2022 08:36:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 835B660FEE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F2D9E1BF475
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:34:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B12E60FAA;
+	Thu, 15 Sep 2022 08:36:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B12E60FAA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 233181BF475
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D9D44402D4
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:34:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9D44402D4
+ by smtp1.osuosl.org (Postfix) with ESMTP id F234A83366
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:36:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F234A83366
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ugb_pL0mbg7h for <buildroot@lists.busybox.net>;
- Thu, 15 Sep 2022 08:34:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE591418E2
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 08:34:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE591418E2
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BDF8683809; Thu, 15 Sep 2022 08:34:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4dqqwzKBd4w0 for <buildroot@lists.busybox.net>;
+ Thu, 15 Sep 2022 08:36:44 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 023238333F
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 023238333F
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 08:36:43 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id BE01DC001D;
+ Thu, 15 Sep 2022 08:36:41 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oYkMS-008CMX-V0; Thu, 15 Sep 2022 10:36:40 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 10:25:42 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 091035968a54657cd9d747c7796feeb72b87f83f
-X-Git-Newrev: 9f5f395f58fb7c90eaf0bad23e69f7443a2c6137
-X-Patchwork-Hint: ignore
-Message-Id: <20220915083439.BDF8683809@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/gnutls: security
- bump to version 3.7.7
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220813184448.2303650-1-fontaine.fabrice@gmail.com>
+Date: Thu, 15 Sep 2022 10:36:40 +0200
+In-Reply-To: <20220813184448.2303650-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 13 Aug 2022 20:44:48 +0200")
+Message-ID: <87v8ppkp9j.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/stress-ng: fix build with
+ kernel >= 5.1 and < 5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +64,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f5f395f58fb7c90eaf0bad23e69f7443a2c6137
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-fix GNUTLS-SA-2022-07-07
+ > Fix the following build failure with kernel >= 5.1 and < 5.6 (i.e.
+ > before
+ > https://github.com/torvalds/linux/commit/9e3aa61ae3e01ce1ce6361a41ef725e1f4d1d2bf)
+ > raised since bump to version 0.12.02 in commit
+ > e551fe76e2073f15b0fcf92a73bb6b7334b017b3 and
+ > https://github.com/ColinIanKing/stress-ng/commit/3d6fccdbe53d0cbcb75dd4b91571aaaae7ee1ad4:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 648174ad369e8a71e579bf507fb6792efe809a15)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > In file included from stress-io-uring.c:26:
+ > io-uring.h:1:9: error: macro names must be identifiers
+ >     1 | #define #define HAVE_IORING_OP_NOP 0
+ >       |         ^
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index ff191278ca..46dd99291c 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.6.tar.xz.sig
--sha256  77065719a345bfb18faa250134be4c53bef70c1bd61f6c0c23ceb8b44f0262ff  gnutls-3.7.6.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.7.tar.xz.sig
-+sha256  be9143d0d58eab64dba9b77114aaafac529b6c0d7e81de6bdf1c9b59027d2106  gnutls-3.7.7.tar.xz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index f1af1e7b3c..dece16140d 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -6,7 +6,7 @@
- 
- # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
- GNUTLS_VERSION_MAJOR = 3.7
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/1bf3f2bbc849bdce531d56b1024fa87f0c1ae667
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
