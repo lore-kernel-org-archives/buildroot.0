@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D155ECAAA1
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 08:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 751DEECAAA1
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 08:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB549402D4;
-	Thu, 15 Sep 2022 08:34:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB549402D4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EngzcIMPkr4I; Thu, 15 Sep 2022 08:34:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D04CB401E7;
-	Thu, 15 Sep 2022 08:34:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D04CB401E7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 36C6A1C11A0
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:33:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 127B2812F3
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:33:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 127B2812F3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18735832D1;
+	Thu, 15 Sep 2022 08:34:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18735832D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id caOwHl6nAvH2 for <buildroot@lists.busybox.net>;
- Thu, 15 Sep 2022 08:33:44 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4gJJE8Qfsp9Q; Thu, 15 Sep 2022 08:34:15 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 340E68275C;
+	Thu, 15 Sep 2022 08:34:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 340E68275C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A9111C11A5
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:33:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15A23418E0
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 08:33:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15A23418E0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id riKOghIpq1rR for <buildroot@lists.busybox.net>;
+ Thu, 15 Sep 2022 08:33:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC8AE8127C
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 08:33:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC8AE8127C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1DADA418D0
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 08:33:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DADA418D0
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B832583516; Thu, 15 Sep 2022 08:33:44 +0000 (UTC)
+ id 0C07D8046B; Thu, 15 Sep 2022 08:33:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 10:23:26 +0200
+Date: Thu, 15 Sep 2022 10:32:51 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d646d751b46b1f1919333638287f2f1ecd3cf7c0
-X-Git-Newrev: cccb84cc1648b2516bd82f250894f625eec82c22
+X-Git-Oldrev: 142596564f442dee75d7ff219d0c98ccf5454e42
+X-Git-Newrev: 423eef7a0c100400c40c4a7a26fcbddf387d46cd
 X-Patchwork-Hint: ignore
-Message-Id: <20220915083344.B832583516@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/sqlite: bump to
- version 3.38.1
+Message-Id: <20220915083345.0C07D8046B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/jack2: add
+ host-pkgconf dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cccb84cc1648b2516bd82f250894f625eec82c22
+commit: https://git.buildroot.net/buildroot/commit/?id=423eef7a0c100400c40c4a7a26fcbddf387d46cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Release notes: https://sqlite.org/releaselog/3_38_1.html
+Fix the following build failure raised since commit
+69284b6700e5f45e25a583e87b86ed1eb95038fd:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Checking for program 'pkg-config'        : not found
+The above check failed, but the checkee is required for --alsa.
+
+Indeed, before this commit, host-pkgconf was pulled by libsndfile
+dependency
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cbdc251980f5571f75281202ebffc04ddecbf28d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c9af74adcaf572fab40f788127d2e9cda191d91c)
+(cherry picked from commit 4e9d04986e6545e9258a8ba925c4538e6a9a481a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/jack2/jack2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index deb8d4c14c..1b3dc35ccb 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4089a8d9b467537b3f246f217b84cd76e00b1d1a971fe5aca1e30e230e46b2d8  sqlite-autoconf-3370200.tar.gz
-+sha256  8e3a8ceb9794d968399590d2ddf9d5c044a97dd83d38b9613364a245ec8a2fc4  sqlite-autoconf-3380100.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index b702139f6c..a0c90b7f62 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 9e56dcdfd8..9d6a3b6479 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -9,7 +9,7 @@ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
+ JACK2_LICENSE_FILES = COPYING
+ JACK2_CPE_ID_VENDOR = jackaudio
+-JACK2_DEPENDENCIES = alsa-lib
++JACK2_DEPENDENCIES = host-pkgconf alsa-lib
+ JACK2_INSTALL_STAGING = YES
  
--SQLITE_VERSION = 3.37.2
--SQLITE_TAR_VERSION = 3370200
-+SQLITE_VERSION = 3.38.1
-+SQLITE_TAR_VERSION = 3380100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2022
- SQLITE_LICENSE = Public domain
+ JACK2_CONF_OPTS = --alsa --example-tools=no
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
