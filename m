@@ -1,66 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF1E2C32771
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 19:42:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 009D3C32771
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 20:48:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66C0A41132;
-	Thu, 15 Sep 2022 19:42:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66C0A41132
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J3ZVO2reT6f2; Thu, 15 Sep 2022 19:42:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 73BEB41129;
-	Thu, 15 Sep 2022 19:42:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73BEB41129
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 081DB1BF309
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 19:42:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7C3B83EE0
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 19:42:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7C3B83EE0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54FC3818C4;
+	Thu, 15 Sep 2022 20:48:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54FC3818C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RmKgl0gDCSdu for <buildroot@lists.busybox.net>;
- Thu, 15 Sep 2022 19:42:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D797D83EDE
-Received: from smtpcmd0872.aruba.it (smtpcmd0872.aruba.it [62.149.156.72])
- by smtp1.osuosl.org (Postfix) with ESMTP id D797D83EDE
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 19:41:59 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.22.4])
- by Aruba Outgoing Smtp  with ESMTPSA
- id YukHosPa7MW5FYukHo5Yat; Thu, 15 Sep 2022 21:41:57 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ftKkymAg18hu; Thu, 15 Sep 2022 20:48:50 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A1D9813DE;
+	Thu, 15 Sep 2022 20:48:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A1D9813DE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8EA371BF314
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 20:48:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7593F41949
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 20:48:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7593F41949
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2wQgfNtjBAXp for <buildroot@lists.busybox.net>;
+ Thu, 15 Sep 2022 20:48:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF20541947
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BF20541947
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 20:48:45 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.164.86.190])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 7A952B0053E;
+ Thu, 15 Sep 2022 22:48:39 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 21:41:56 +0200
-Message-Id: <20220915194156.1700991-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu, 15 Sep 2022 22:48:31 +0200
+Message-Id: <20220915204831.1547363-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfEG3lg9LQi/N+tITlddR8/PlRplJXNYuk0CqPtyfcH9UPc5IzX+lf0icFOqf85r11UxeRU8LutB4JBn3rhqZeW1hvbDil/pHDHFHewoKHVJXzuwlMEhp
- D6ppO5/ImaA8K8kGQ4+1sRVshZV7F9n2gPJN5QcRTqdtnED0wJAX6TAuc4W5DsL7otLRcJ86HQIRAuop/k4iR/vm4iIemmegrfS1pSk7b3IO2nvbwxrMirq5
- LT/smImTBJdbYhhIWmsJajE3Z58zUsaCwRIVutyiIEqIvE2UcxY0JagFauDraGVrsfmJx7XXKATeLxIIKLCAaA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1663270917; bh=BMHFxXEJPWH7yYHwkwaPpHN+Is84lnUmcMv8UhPkdpA=;
- h=From:To:Subject:Date:MIME-Version;
- b=Yn0xbxcSJzzWrjBjno/DRVf4IS0Bz8bD26CCLkCSUB/WCUPjJRyrrQAmuCgFz9Uzz
- sEb/6f8B4EBQ+6DyT6kExkpvbPwZkuvQujQegRueCITVvooShzm4IZc9Qxfk/WL8Lz
- y9YNaasY3cutni6hwdYFj5OTbgeJMT2DBTW9xHMhcLF/fQwsqZa0hiP5mXoOKDEbn7
- dt7tU9OJID4V3XnpPu3VSziU3agE9l/AFSDsbPb85l0Vz+rgTj4/3LdDkCGFcQVEV+
- ZZ6u8muIYMxZ09M5UxrcQWBasr/h7nvhl2z4rq7WOr06eYZclrGKM4vJ9cNMRPz+Wx
- tYxcDBsfKi1EA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=Yn0xbxcS
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.83
+ d=free.fr; s=smtp-20201208; t=1663274922;
+ bh=n0U1NllK/gRMuYgKaOfFJrAJRhtvLhe9DTtrkgwMZXo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=qyyH3Jzzx5DjBs91+7lFHJXLEvguhYhIFbUEwYMKAb1UopakGnJkhg7Ul65J+WxOa
+ m6kMPqpYX3pB0Jvp4HnsZNQj3w7vpz1Z9fGo8Kg/6NGH+LhvIMFm+8zRxtu5sFCnxv
+ UnEpFaAoV5KPgLscImumDDrqM5sSiDhYrC2MJi74j8XYHmldyJk5SIKA/QTLI8LH/7
+ RtxmE+YjGcDdoZCJ3+BWy3VdC99dwZDcYLYApAOx/O6nd9LKjSx0gCDnP7OwtocWLc
+ o1nfI8hXaIrS0VwcpnAS2zNObDFNvVvfmLd6Bt1EvRt9MpcoUlgmdocSiOCknZYjTo
+ b7zfAuzA/f6CQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qyyH3Jzz
+Subject: [Buildroot] [PATCH 1/1] package/hwloc: bump to version 2.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,45 +70,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Steven Noonan <steven@uplinklabs.net>, Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This commit also adds the md5 and sha1 hashes published on the project
+download page.
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 2133113a4f..026344668f 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_82_RTM/src/SHA256SUMS
--sha256  32bf673b72c2f9953ed3b4c7033abf5a6cad302854a24ae588c575a6567c1573  nss-3.82.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_83_RTM/src/SHA256SUMS
-+sha256  ab23ea67f964090b8b73c80a674082571c36e5f4eba92057ac648c9c1def0128  nss-3.83.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 6e839cced6..1099ae199c 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+For change log, see:
+- https://github.com/open-mpi/hwloc/blob/hwloc-2.8.0/NEWS#L20
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/hwloc/hwloc.hash | 6 ++++--
+ package/hwloc/hwloc.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
+index ca77e3301c..b146472195 100644
+--- a/package/hwloc/hwloc.hash
++++ b/package/hwloc/hwloc.hash
+@@ -1,4 +1,6 @@
+-# From https://www.open-mpi.org/software/hwloc/v2.7/
+-sha256  028cee53ebcfe048283a2b3e87f2fa742c83645fc3ae329134bf5bb8b90384e0  hwloc-2.7.0.tar.bz2
++# From https://www.open-mpi.org/software/hwloc/v2.8/
++md5  1d40ecdded67bbe4bafc8f8e8479376c  hwloc-2.8.0.tar.bz2
++sha1  314faaeda9f1982da97fca93b83307bc34d5b414  hwloc-2.8.0.tar.bz2
++sha256  348a72fcd48c32a823ee1da149ae992203e7ad033549e64aed6ea6eeb01f42c1  hwloc-2.8.0.tar.bz2
+ # Locally computed
+ sha256  d79a936a42f3c6cb7c8375a023d43f4435f4664d3a5a2ea6b4623cff83c7fc06  COPYING
+diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
+index 04543a7e64..3f73b3ecc8 100644
+--- a/package/hwloc/hwloc.mk
++++ b/package/hwloc/hwloc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.82
-+LIBNSS_VERSION = 3.83
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-HWLOC_VERSION_MAJOR = 2.7
++HWLOC_VERSION_MAJOR = 2.8
+ HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).0
+ HWLOC_SOURCE = hwloc-$(HWLOC_VERSION).tar.bz2
+ HWLOC_SITE = https://download.open-mpi.org/release/hwloc/v$(HWLOC_VERSION_MAJOR)
 -- 
-2.34.1
+2.37.3
 
 _______________________________________________
 buildroot mailing list
