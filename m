@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0303FECAAD3
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 07:29:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67C25ECAAA1
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 07:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94D6E41028;
-	Thu, 15 Sep 2022 07:29:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94D6E41028
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A25E60FF3;
+	Thu, 15 Sep 2022 07:29:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A25E60FF3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uWod0Dcnxgcx; Thu, 15 Sep 2022 07:29:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3XW1AqNcId15; Thu, 15 Sep 2022 07:29:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9BE1541021;
-	Thu, 15 Sep 2022 07:29:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BE1541021
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDAB160F4C;
+	Thu, 15 Sep 2022 07:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDAB160F4C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C68B91BF344
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:29:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1DAFD1BF344
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF63B83300
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:29:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF63B83300
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE303832E7
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 07:29:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE303832E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c6FVT9ALgm7E for <buildroot@lists.busybox.net>;
- Thu, 15 Sep 2022 07:29:08 +0000 (UTC)
+ with ESMTP id C9-YohE5KKWy for <buildroot@lists.busybox.net>;
+ Thu, 15 Sep 2022 07:29:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1F2D83330
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 07:29:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1F2D83330
+ by smtp1.osuosl.org (Postfix) with ESMTP id 280D9832AA
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 07:29:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 280D9832AA
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B986D83BF4; Thu, 15 Sep 2022 07:29:08 +0000 (UTC)
+ id 179F383C13; Thu, 15 Sep 2022 07:29:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 09:27:17 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 3babdc0765c56b8635262e65000422fcbae8145f
-X-Git-Newrev: ab76ef9797196cf7a243e233e15aed09fb38927f
+Date: Thu, 15 Sep 2022 09:27:26 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 3207b28fc42cc6225c4175fa27c9a9fb609ffbdc
+X-Git-Newrev: 028251bd7c36dcdb066cc0548421c901dd58bc2c
 X-Patchwork-Hint: ignore
-Message-Id: <20220915072908.B986D83BF4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/ficl: fix musl
+Message-Id: <20220915072944.179F383C13@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ficl: fix musl
  static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab76ef9797196cf7a243e233e15aed09fb38927f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=028251bd7c36dcdb066cc0548421c901dd58bc2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Pass LDFLAGS to avoid the following musl static build failure raised
 since the addition of the package in commit
