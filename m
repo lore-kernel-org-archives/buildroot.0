@@ -1,51 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD41C6FA86
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 17:08:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33A58ECAAA1
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 18:28:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F27060B9A;
-	Thu, 15 Sep 2022 17:08:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F27060B9A
+	by smtp2.osuosl.org (Postfix) with ESMTP id A082D40895;
+	Thu, 15 Sep 2022 18:28:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A082D40895
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0PWbznAJajzD; Thu, 15 Sep 2022 17:08:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lgx3PsZB-aCi; Thu, 15 Sep 2022 18:28:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4983C60A88;
-	Thu, 15 Sep 2022 17:08:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4983C60A88
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 58C201BF41B
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 17:08:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA74E410CC;
+	Thu, 15 Sep 2022 18:28:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA74E410CC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D0491BF5AA
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 18:28:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4203F61038
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 17:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4203F61038
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECF6240895
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 18:28:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECF6240895
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 45TQ6GrKvtPh for <buildroot@lists.busybox.net>;
- Thu, 15 Sep 2022 17:08:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4982D60E48
- for <buildroot@buildroot.org>; Thu, 15 Sep 2022 17:08:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4982D60E48
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 390C283C82; Thu, 15 Sep 2022 17:08:11 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 16gfrBopqRYH for <buildroot@lists.busybox.net>;
+ Thu, 15 Sep 2022 18:28:31 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84CFC40359
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 84CFC40359
+ for <buildroot@buildroot.org>; Thu, 15 Sep 2022 18:28:31 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.164.96.174])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id CA6A5780313;
+ Thu, 15 Sep 2022 20:28:26 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 19:06:57 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: ea995d63e2bcb425f210ab74e94784e59bfc32a2
-X-Git-Newrev: 45cd870acc96c7fe7361cf1e7eaceb8baddfc308
-X-Patchwork-Hint: ignore
-Message-Id: <20220915170811.390C283C82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/jose: disable man
- pages
+Date: Thu, 15 Sep 2022 20:28:20 +0200
+Message-Id: <20220915182820.674274-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1663266508;
+ bh=g7bEUaK9QdiJLQhHgOUkB4mEKkheo0lZotwu0XFhK7U=;
+ h=From:To:Cc:Subject:Date:From;
+ b=hhTB7eG4KXZYgr8nBMQv0JcXJqMHij2/cS+RI+HbtLgGvYQO0H2OT02+ceUIUpnnI
+ I+XLzbPTlsMWI6N2wI9uqSelb56t/vXPzXNNw25R+xUgbXkg22zoFvakhL4/7Pud8Q
+ +9kBSOkYZQ6fAtisDDeva1FnWmskrzsWbr2nm666lIC0jbrAAufYxLR/qcb71qrTAL
+ pQQ1ZusoaRG9ELH1V0b6XeORXF1FKZqGUXYYf5DV3XlXQBoq2y6Wc6q7G8GQ2GATly
+ 1JvD29C4HfncHXBXiENqzyvEtrrzxER6xZ/kls9zMTX504Drfzu6+3hI3rcU5NipyZ
+ J6f5bfUoHzdXw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=hhTB7eG4
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,115 +70,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45cd870acc96c7fe7361cf1e7eaceb8baddfc308
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+For change log since v2.2.8, see:
+- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.9
 
-Disable man pages to avoid the following build failure if a non-working
-a2x is found on the system raised since bump to version 11 in commit
-b72b849ad597810823ecf9efe471a40e2427c8e8:
-
-/usr/bin/a2x -f manpage -D /nvmedata/autobuild/instance-23/output-1/build/jose-11/build /nvmedata/autobuild/instance-23/output-1/build/jose-11/doc/man/jose.1.adoc
-/nvmedata/autobuild/instance-23/output-1/host/bin/python3: Error while finding module specification for 'asciidoc.a2x' (ModuleNotFoundError: No module named 'asciidoc')
-
-Fixes:
- - http://autobuild.buildroot.org/results/ae69f7fd1258d99a5b08eeb8c67904be53eabf15
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 70db731a792f992f4ea8304a95a167c0c9203783)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...man-add-option-to-skip-building-man-pages.patch | 64 ++++++++++++++++++++++
- package/jose/jose.mk                               |  1 +
- 2 files changed, 65 insertions(+)
+Tested on commit 24261a1 with:
 
-diff --git a/package/jose/0002-man-add-option-to-skip-building-man-pages.patch b/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
-new file mode 100644
-index 0000000000..3a5ad1eadc
---- /dev/null
-+++ b/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
-@@ -0,0 +1,64 @@
-+From 506132d3edc8d062f65fdacf007a15613d27e5c5 Mon Sep 17 00:00:00 2001
-+From: Eneas U de Queiroz <cotequeiroz@gmail.com>
-+Date: Wed, 6 Apr 2022 09:49:48 -0300
-+Subject: [PATCH] man: add option to skip building man pages
-+
-+Add a 'skip_manpages' option to meson, so that man pages do not get
-+built.
-+
-+Signed-off-by: Eneas U de Queiroz <cotequeiroz@gmail.com>
-+[Retrieved from: https://github.com/latchset/jose/pull/115]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ meson.build       | 24 +++++++++++++-----------
-+ meson_options.txt |  1 +
-+ 2 files changed, 14 insertions(+), 11 deletions(-)
-+ create mode 100644 meson_options.txt
-+
-+diff --git a/meson.build b/meson.build
-+index 1edfbe7..9b40efb 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -37,7 +37,6 @@ zlib = dependency('zlib')
-+ threads = dependency('threads')
-+ jansson = dependency('jansson', version: '>=2.10')
-+ libcrypto = dependency('libcrypto', version: '>=1.0.2')
-+-a2x = find_program('a2x', required: false)
-+ 
-+ mans = []
-+ 
-+@@ -63,14 +62,17 @@ pkg.generate(
-+   requires: 'jansson',
-+ )
-+ 
-+-if a2x.found()
-+-  foreach m : mans
-+-    custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
-+-      command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
-+-      install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
-+-      install: true
-+-    )
-+-  endforeach
-+-else
-+-  warning('Will not build man pages due to missing dependencies!')
-++if not get_option('skip_manpages')
-++  a2x = find_program('a2x', required: false)
-++  if a2x.found()
-++    foreach m : mans
-++      custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
-++        command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
-++        install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
-++        install: true
-++      )
-++    endforeach
-++  else
-++    warning('Will not build man pages due to missing dependencies!')
-++  endif
-+ endif
-+diff --git a/meson_options.txt b/meson_options.txt
-+new file mode 100644
-+index 0000000..0885515
-+--- /dev/null
-++++ b/meson_options.txt
-+@@ -0,0 +1 @@
-++option('skip_manpages', type: 'boolean', value: false, description: 'Do not build manpages')
-diff --git a/package/jose/jose.mk b/package/jose/jose.mk
-index 8a60e20cc6..723ebe8bb9 100644
---- a/package/jose/jose.mk
-+++ b/package/jose/jose.mk
-@@ -11,5 +11,6 @@ JOSE_LICENSE = Apache-2.0
- JOSE_LICENSE_FILES = COPYING
- JOSE_INSTALL_STAGING = YES
- JOSE_DEPENDENCIES = host-pkgconf zlib jansson openssl
-+JOSE_CONF_OPTS = -Dskip_manpages=true
+    make check-package
+    ...
+    0 warnings generated
+
+    ./utils/test-pkg -p fluidsynth
+    ...
+    6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ package/fluidsynth/fluidsynth.hash | 2 +-
+ package/fluidsynth/fluidsynth.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index 25f9c4f07e..b1e9f08bbf 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7c29a5cb7a2755c8012d941d1335da7bda957bbb0a86b7c59215d26773bb51fe  fluidsynth-2.2.8.tar.gz
++sha256  bc62494ec2554fdcfc01512a2580f12fc1e1b01ce37a18b370dd7902af7a8159  fluidsynth-2.2.9.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index 3ae005f85f..32fb88144e 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(meson-package))
+-FLUIDSYNTH_VERSION = 2.2.8
++FLUIDSYNTH_VERSION = 2.2.9
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
+-- 
+2.37.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
