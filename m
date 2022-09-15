@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C67FECAAA1
-	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 09:47:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EBB6ECAAD3
+	for <buildroot@archiver.kernel.org>; Thu, 15 Sep 2022 09:47:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0107F41044;
-	Thu, 15 Sep 2022 09:47:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0107F41044
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jMHBTASXDZHT; Thu, 15 Sep 2022 09:47:37 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B6594102D;
-	Thu, 15 Sep 2022 09:47:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B6594102D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E196A1BF3C3
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 09:47:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA3FC6102A
- for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 09:47:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA3FC6102A
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8D6561041;
+	Thu, 15 Sep 2022 09:47:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8D6561041
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u3tbdP5DnyGm for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2QC_Lpc8wJEC; Thu, 15 Sep 2022 09:47:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5C0561012;
+	Thu, 15 Sep 2022 09:47:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5C0561012
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E75C91C11A0
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 09:47:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C32D183381
+ for <buildroot@lists.busybox.net>; Thu, 15 Sep 2022 09:47:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C32D183381
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id py2ItGM2ikbE for <buildroot@lists.busybox.net>;
  Thu, 15 Sep 2022 09:47:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1E2761012
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9BE983372
  for <buildroot@buildroot.org>; Thu, 15 Sep 2022 09:47:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1E2761012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9BE983372
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E081F83C43; Thu, 15 Sep 2022 09:47:33 +0000 (UTC)
+ id D61D483C42; Thu, 15 Sep 2022 09:47:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 15 Sep 2022 11:46:23 +0200
+Date: Thu, 15 Sep 2022 11:46:12 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 6757c071ef2b01dca150fc841a0478d98acae1a3
-X-Git-Newrev: 2a66954390163df510adbc8bc54e16844fbe785e
+X-Git-Oldrev: d8ebbf55478176df5580d063a1d503f68ee24ede
+X-Git-Newrev: 6757c071ef2b01dca150fc841a0478d98acae1a3
 X-Patchwork-Hint: ignore
-Message-Id: <20220915094733.E081F83C43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] paclage/ace: explain why
- we use C++ pre-processor flags for C++ flags
+Message-Id: <20220915094733.D61D483C42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ace: fix build
+ failure due to gcc bug 101915
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a66954390163df510adbc8bc54e16844fbe785e
+commit: https://git.buildroot.net/buildroot/commit/?id=6757c071ef2b01dca150fc841a0478d98acae1a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Commit e8011a08b6fd (package/ace: needs C++11) did not explain why it
-passed C++ flags via the pre-processor flags rather than as C++ flags
-(via ACE's CCFLAGS).
+The ace package exhibits gcc bug 101915 when built for the Microblaze
+architecture with optimization enabled, which causes a build failure.
 
-This caused some head-scratching when reviewing and applying
-803247337d35 (package/ace: fix build failure due to gcc bug 101915).
+As done for other packages in Buildroot work around this gcc bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_101915=y.
 
-Add a comment to try and explain the non-standard use of pre-processor
-flags to pass actual C++ flags.
+Fixes:
+http://autobuild.buildroot.net/results/f8f/f8f8de99abe92175954c370ad99fee43942bcdcc/
 
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998@free.fr: slight simplification]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc; Weber, Matthew L Collins <Matthew.Weber@collins.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-(cherry picked from commit b717880f1fb7728648a2426dc20c3985fa3c530b)
+(cherry picked from commit 803247337d35643afdca9718c4616500b9930f2d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ace/ace.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/ace/ace.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/ace/ace.mk b/package/ace/ace.mk
-index e67e597bbe..3f7fe5e994 100644
+index 7299f0d40c..e67e597bbe 100644
 --- a/package/ace/ace.mk
 +++ b/package/ace/ace.mk
-@@ -23,6 +23,9 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101915),y)
- ACE_CPPFLAGS += -O0
- endif
+@@ -17,9 +17,15 @@ ACE_CPE_ID_PRODUCT = adaptive_communication_environment
+ # Only compiling ACE libraries (no TAO)
+ ACE_LIBARIES = ace ACEXML Kokyu netsvcs protocols/ace
  
-+# ACE uses DEFFLAGS as C++ pre-processor flags, and CCFLAGS as the C++ flags.
-+# Ace passes the pre-processor flags after the C++ flags, so we pass our
-+# C++ flags as pre-processor flags, via DEFFLAGS.
++ACE_CPPFLAGS = $(TARGET_CPPFLAGS) -std=c++11
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101915),y)
++ACE_CPPFLAGS += -O0
++endif
++
  ACE_MAKE_OPTS = \
  	ACE_ROOT="$(@D)" \
- 	DEFFLAGS="$(ACE_CPPFLAGS)"
+-	DEFFLAGS="$(TARGET_CPPFLAGS) -std=c++11"
++	DEFFLAGS="$(ACE_CPPFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ ACE_LIBARIES += ace/SSL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
