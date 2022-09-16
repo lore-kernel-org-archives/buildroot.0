@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0D6CC54EE9
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 12:24:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FC13C54EE9
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 12:24:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58A244164A;
-	Fri, 16 Sep 2022 12:24:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58A244164A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 496AE61223;
+	Fri, 16 Sep 2022 12:24:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 496AE61223
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RX52ohZCSoZQ; Fri, 16 Sep 2022 12:24:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mc7K8VZlFhgM; Fri, 16 Sep 2022 12:24:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E862D41643;
-	Fri, 16 Sep 2022 12:24:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E862D41643
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AF22C1BF2E5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7756561028;
+	Fri, 16 Sep 2022 12:24:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7756561028
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B15CA1C2744
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:23:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 962334162E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B53461220
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 962334162E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B53461220
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8USkNsXGW2q7 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xfaYrltTt2dr for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 12:23:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B82E941630
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB66061028
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 12:23:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B82E941630
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB66061028
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A404383D0E; Fri, 16 Sep 2022 12:23:50 +0000 (UTC)
+ id B74B183D11; Fri, 16 Sep 2022 12:23:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 14:08:40 +0200
+Date: Fri, 16 Sep 2022 14:20:58 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: e25212443cf22d18a2c48250ebf355a7355af603
-X-Git-Newrev: 6d29c8aeb185a37ec41da356e07af5520b0e8cb5
+X-Git-Oldrev: 7bce3d6a97393772b4ed9da35fd3991977b7ec19
+X-Git-Newrev: 3fa2a869740e365b1800146106f1e6f3d5e902a9
 X-Patchwork-Hint: ignore
-Message-Id: <20220916122350.A404383D0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/sunxi-mali-utgard-driver: move package SITE to Github
- giuliobenetti/sunxi-mali
+Message-Id: <20220916122350.B74B183D11@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/opencv4:
+ BR2_PACKAGE_OPENCV4_LIB_OBJDETECT requires BR2_PACKAGE_OPENCV4_LIB_DNN
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,58 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d29c8aeb185a37ec41da356e07af5520b0e8cb5
+commit: https://git.buildroot.net/buildroot/commit/?id=3fa2a869740e365b1800146106f1e6f3d5e902a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Github repository mripard/sunxi-mali states to use Lima in place of
-sunxi-mali because it's deprecated, but this package is still useful in
-Buildroot so I want to move the SITE to my Github fork of the original
-repository that already contains a patch to fix a build failure showing
-up with Linux version >= 5.15.
-
-The upstream patch fixes missing DMA_BUF module inclusion that leads to
-build failure. The patch includes DMA_BUF by using:
-MODULE_IMPORT_NS(DMA_BUF);
-
-My idea is to continue to maintain this package in parallel to Lima since
-it seems to be still useful.
-
-Fixes:
-http://autobuild.buildroot.net/results/8f25c26de737c358b3b43a10737609465b4e1398/
+Opencv4 library objdetect needs library dnn, otherwise it throws:
+```
+-- Module opencv_objdetect disabled because opencv_dnn dependency can't be resolved!
+```
+So let's "select BR2_PACKAGE_OPENCV4_LIB_DNN" if
+BR2_PACKAGE_OPENCV4_LIB_OBJDETECT is enabled.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6dcaa20ca4adea12c9d5fbc6af5793f08fe81634)
+(cherry picked from commit e229943785534e0884c62c7346a8c6df8d565e1e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash | 2 +-
- package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/opencv4/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-index 4b276fecb7..ac6587b27a 100644
---- a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-+++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0197271dbf503e866dd4873091f61bb3de1f2c3031701aac1ba205d1e2f267ac  sunxi-mali-utgard-driver-e4a91c95096bb31450b556fcb13f3c4ba79f60b4.tar.gz
-+sha256  64f15a8c7d383ac92230ef82711507a7f3a309462999f6694863fbbb4f12e0be  sunxi-mali-utgard-driver-c4cf7aabed25e0fd27159564caf588a37016870d.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-index 5f9090f492..594a770e61 100644
---- a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-+++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
+index 5b07f52ba1..88a7a01151 100644
+--- a/package/opencv4/Config.in
++++ b/package/opencv4/Config.in
+@@ -153,14 +153,21 @@ config BR2_PACKAGE_OPENCV4_LIB_ML
  
--SUNXI_MALI_UTGARD_DRIVER_VERSION = e4a91c95096bb31450b556fcb13f3c4ba79f60b4
--SUNXI_MALI_UTGARD_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_UTGARD_DRIVER_VERSION))
-+SUNXI_MALI_UTGARD_DRIVER_VERSION = c4cf7aabed25e0fd27159564caf588a37016870d
-+SUNXI_MALI_UTGARD_DRIVER_SITE = $(call github,giuliobenetti,sunxi-mali,$(SUNXI_MALI_UTGARD_DRIVER_VERSION))
- SUNXI_MALI_UTGARD_DRIVER_DEPENDENCIES = linux
- SUNXI_MALI_UTGARD_DRIVER_LICENSE = GPL-2.0
- SUNXI_MALI_UTGARD_DRIVER_LICENSE_FILES = LICENSE
+ config BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+ 	bool "objdetect"
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # dnn support
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # dnn support
+ 	# opencv_core dependency is already enabled
+ 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
++	select BR2_PACKAGE_OPENCV4_LIB_DNN
+ 	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
+ 	select BR2_PACKAGE_OPENCV4_LIB_ML
+ 	help
+ 	  Include opencv_objdetect (object detection) module into the
+ 	  OpenCV build.
+ 
++comment "objdetect needs a glibc or musl toolchain"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_USES_UCLIBC
++
+ config BR2_PACKAGE_OPENCV4_LIB_PHOTO
+ 	bool "photo"
+ 	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
