@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E38C3ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 21:58:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7BF0ECAAA1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 21:58:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8255541864;
-	Fri, 16 Sep 2022 21:58:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8255541864
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E75B41D6B;
+	Fri, 16 Sep 2022 21:58:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E75B41D6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1GXjix_I6XGF; Fri, 16 Sep 2022 21:58:18 +0000 (UTC)
+	with ESMTP id GMD-d5m4zS8d; Fri, 16 Sep 2022 21:58:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 54DA841795;
-	Fri, 16 Sep 2022 21:58:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54DA841795
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F0D381C2744
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AF8F41BA2;
+	Fri, 16 Sep 2022 21:58:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AF8F41BA2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0E22E1C2745
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB83940C20
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA38841D69
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB83940C20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA38841D69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tBTa_v8-fM8j for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Pk4T2y7KWLUz for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 91763408EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D10F41D63
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91763408EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D10F41D63
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 814AD83DF9; Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
+ id 4B5D983DFA; Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 23:52:33 +0200
+Date: Fri, 16 Sep 2022 23:45:31 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: c1e3ac9898dfef0aab1dd422e911bc8f0740ea70
-X-Git-Newrev: 7fb33d0827374b72b78737421923d5811da3a464
+X-Git-Oldrev: c50df50138874aafc0ecd8104dc0aa69ee14b56e
+X-Git-Newrev: 0f74e1b9089fcac5c5ddab58e81e81552b99d6ea
 X-Patchwork-Hint: ignore
-Message-Id: <20220916215759.814AD83DF9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/imagemagick:
- security bump to version 7.1.0-45
+Message-Id: <20220916215759.4B5D983DFA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] Revert
+ "configs/bananapi_m1: use NEON+VFPv4 as FPU strategy"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fb33d0827374b72b78737421923d5811da3a464
+commit: https://git.buildroot.net/buildroot/commit/?id=0f74e1b9089fcac5c5ddab58e81e81552b99d6ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-- Fix CVE-2022-1114: A heap-use-after-free flaw was found in
-  ImageMagick's RelinquishDCMInfo() function of dcm.c file. This
-  vulnerability is triggered when an attacker passes a specially crafted
-  DICOM image file to ImageMagick for conversion, potentially leading to
-  information disclosure and a denial of service.
-- Fix CVE-2022-32545: A vulnerability was found in ImageMagick, causing
-  an outside the range of representable values of type 'unsigned char'
-  at coders/psd.c, when crafted or untrusted input is processed. This
-  leads to a negative impact to application availability or other
-  problems related to undefined behavior.
-- Fix CVE-2022-32546: A vulnerability was found in ImageMagick, causing
-  an outside the range of representable values of type 'unsigned long'
-  at coders/pcl.c, when crafted or untrusted input is processed. This
-  leads to a negative impact to application availability or other
-  problems related to undefined behavior.
-- Fix CVE-2022-32547: In ImageMagick, there is load of misaligned
-  address for type 'double', which requires 8 byte alignment and for
-  type 'float', which requires 4 byte alignment at
-  MagickCore/property.c. Whenever crafted or untrusted input is
-  processed by ImageMagick, this causes a negative impact to application
-  availability or other problems related to undefined behavior.
-- Update hash of LICENSE (year updated with
-  https://github.com/ImageMagick/ImageMagick/commit/80629dfb3fea55eefa2dd8bdd9ca1be341502e16)
+The gcc man page states that specifying Neon as part of the fpu setting
+has no effect, unless the -funsafe-math-optimizations is also specified,
+because Neon is not compliant with IEEE 754:
+```
+    If the selected floating-point hardware includes the NEON extension
+    (e.g. -mfpu=neon), note that floating-point operations are not
+    generated by GCC's auto-vectorization pass unless
+    -funsafe-math-optimizations is also specified. This is because NEON
+    hardware does not fully implement the IEEE 754 standard for
+    floating-point arithmetic (in particular denormal values are treated
+    as zero), so the use of NEON instructions may lead to a loss of
+    precision.
+```
 
-https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
+-funsafe-math-optimizations must be explictly specified per package to
+really use NEON as FPU, but it's something that is left to the user as
+well as setting BR2_ARM_FPU_NEON_VFPV4. This way the default
+BR2_ARM_FPU_VFPV4D16 is used as previously. So let's revert the
+offending patch.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This reverts commit aaced92e8c69e3eb71c2cba4c5ae6a1770ae8972.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 685100fe85f5ee0849adae7c68dfabf9c844f77e)
+(cherry picked from commit 25ecee3f173763cdf54350cbf4115c123843627c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 4 ++--
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/bananapi_m1_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 278becd2ab..ff0f3e26c6 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  385ca5bd8ce9b37e685779c46868171af949265c9db40067c1c4d7442dbc723e  imagemagick-7.1.0-19.tar.gz
--sha256  040badb77b659e751ea16113490a937e1e01f3f5d32181e966b8982413533fb2  LICENSE
-+sha256  3df6ca6dff15a4e8a20b4593c60285a59e38890440494d91a344e5c0e2bb3eec  imagemagick-7.1.0-45.tar.gz
-+sha256  8cceeb67d4e783cb63075c7311fdb990fa0369ee80fbd0f481064cd02386ca2d  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 64a530c6d2..893606ff01 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.1.0-19
-+IMAGEMAGICK_VERSION = 7.1.0-45
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
+index 2d948ec223..23da363345 100644
+--- a/configs/bananapi_m1_defconfig
++++ b/configs/bananapi_m1_defconfig
+@@ -1,6 +1,5 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_ARM_FPU_NEON_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
