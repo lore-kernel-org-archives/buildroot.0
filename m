@@ -1,58 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38473ECAAA1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 21:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84E70ECAAA1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 21:47:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D0ACA40C18;
-	Fri, 16 Sep 2022 21:47:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0ACA40C18
+	by smtp1.osuosl.org (Postfix) with ESMTP id 23DEB8434E;
+	Fri, 16 Sep 2022 21:47:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23DEB8434E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9nzWLeZAEpM5; Fri, 16 Sep 2022 21:47:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49781842F8;
+	Fri, 16 Sep 2022 21:47:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49781842F8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3AF211BF3DA
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:47:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 162C540524
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:47:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 162C540524
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vlAdgtk6pSt9; Fri, 16 Sep 2022 21:47:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1409440524;
-	Fri, 16 Sep 2022 21:47:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1409440524
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6F83A1BF3DA
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:46:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56D1241D63
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:46:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56D1241D63
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sAFY3S1xKV8U for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 21:46:56 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yCXivTo2SZWE for <buildroot@lists.busybox.net>;
+ Fri, 16 Sep 2022 21:47:02 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9A0D41D5F
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D9A0D41D5F
- for <buildroot@buildroot.org>; Fri, 16 Sep 2022 21:46:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1256D40137
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1256D40137
+ for <buildroot@buildroot.org>; Fri, 16 Sep 2022 21:47:01 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3D44E100004;
- Fri, 16 Sep 2022 21:46:51 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 81A9B20004;
+ Fri, 16 Sep 2022 21:46:57 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oZJAh-008lMW-4I; Fri, 16 Sep 2022 23:46:51 +0200
+ id 1oZJAm-008lMd-HJ; Fri, 16 Sep 2022 23:46:56 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 References: <20220815154854.17628-1-giulio.benetti@benettiengineering.com>
- <20220815154854.17628-3-giulio.benetti@benettiengineering.com>
-Date: Fri, 16 Sep 2022 23:46:51 +0200
-In-Reply-To: <20220815154854.17628-3-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Mon, 15 Aug 2022 17:48:52 +0200")
-Message-ID: <874jx76lh0.fsf@dell.be.48ers.dk>
+ <20220815154854.17628-4-giulio.benetti@benettiengineering.com>
+Date: Fri, 16 Sep 2022 23:46:56 +0200
+In-Reply-To: <20220815154854.17628-4-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Mon, 15 Aug 2022 17:48:53 +0200")
+Message-ID: <87zgez56wf.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/4] Revert
- "configs/olimex_a20_olinuxino_lime2: use NEON+VFPv4 as FPU strategy"
+Subject: Re: [Buildroot] [PATCH 3/4] Revert
+ "configs/olimex_a20_olinuxino_lime: use NEON+VFPv4 as FPU strategy"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,7 +95,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  > BR2_ARM_FPU_VFPV4D16 is used as previously. So let's revert the
  > offending patch.
 
- > This reverts commit f8528acdfda278ea9f2f9bc8a47eb77ace0c050f.
+ > This reverts commit 115ee0521430d89db8be1a79457b0721ceafc484.
 
  > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
