@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABA24C54EE9
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 08:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72236ECAAD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 08:53:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31B456120B;
-	Fri, 16 Sep 2022 08:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31B456120B
+	by smtp4.osuosl.org (Postfix) with ESMTP id D151B41C97;
+	Fri, 16 Sep 2022 08:52:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D151B41C97
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rXM-Iu8kj6Sa; Fri, 16 Sep 2022 08:52:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZP9P_9-lz8rq; Fri, 16 Sep 2022 08:52:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B9F161203;
-	Fri, 16 Sep 2022 08:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B9F161203
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AF4541C8E;
+	Fri, 16 Sep 2022 08:52:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF4541C8E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7A4D01BF2BD
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 08:52:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 533441BF2BD
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 08:52:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63774842C0
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 08:52:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63774842C0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2FB6D842BD
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 08:52:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FB6D842BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lUYT0Y0nSCa9 for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 08:52:25 +0000 (UTC)
+ with ESMTP id mA6BUc4siwfB for <buildroot@lists.busybox.net>;
+ Fri, 16 Sep 2022 08:52:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DBBB842B6
- for <buildroot@buildroot.org>; Fri, 16 Sep 2022 08:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DBBB842B6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 67E74842BC
+ for <buildroot@buildroot.org>; Fri, 16 Sep 2022 08:52:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67E74842BC
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1A18983CB7; Fri, 16 Sep 2022 08:52:25 +0000 (UTC)
+ id 5810783CBB; Fri, 16 Sep 2022 08:52:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 10:52:07 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 12fc00cac2e509e7799dd97c5cc260cec6af1d07
-X-Git-Newrev: 6e3f8e35b83520ae0312c21e9baf9a8b8f0c840d
+Date: Fri, 16 Sep 2022 10:51:57 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 45cd870acc96c7fe7361cf1e7eaceb8baddfc308
+X-Git-Newrev: 5c6883694a7ccc556e144bc8c2ee737f385bacda
 X-Patchwork-Hint: ignore
-Message-Id: <20220916085225.1A18983CB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/syslinux: disable
+Message-Id: <20220916085255.5810783CBB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/syslinux: disable
  documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e3f8e35b83520ae0312c21e9baf9a8b8f0c840d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5c6883694a7ccc556e144bc8c2ee737f385bacda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 Disable documentation to avoid the following build failure if a non
 working asciidoc or a2x is found on the system:
