@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 654CAC54EE9
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 14:12:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99141ECAAD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 14:12:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1077540499;
-	Fri, 16 Sep 2022 14:12:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1077540499
+	by smtp2.osuosl.org (Postfix) with ESMTP id 402AC41654;
+	Fri, 16 Sep 2022 14:12:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 402AC41654
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TuUo4JJqn5L1; Fri, 16 Sep 2022 14:12:30 +0000 (UTC)
+	with ESMTP id ce-teqT5xKiR; Fri, 16 Sep 2022 14:12:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 31E5F40C02;
-	Fri, 16 Sep 2022 14:12:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31E5F40C02
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AD66F1BF362
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9D4E40C02;
+	Fri, 16 Sep 2022 14:12:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9D4E40C02
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CA0BE1C2744
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 14:12:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 89750610DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1EEF41848
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 14:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89750610DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1EEF41848
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EUNabl43lK2p for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lxtSuljZkF7v for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 14:12:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A03AC6106A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9ADC841824
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 14:12:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A03AC6106A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ADC841824
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8E8A483D2C; Fri, 16 Sep 2022 14:12:26 +0000 (UTC)
+ id 84A7B83D5F; Fri, 16 Sep 2022 14:12:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 16:11:27 +0200
+Date: Fri, 16 Sep 2022 16:03:28 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 1167f95b78f368543ab56ead07c242c4d2d40d10
-X-Git-Newrev: 8fb72879e295f24dbc940735715a48e8e207af89
+X-Git-Oldrev: eed6b96216102f66f8cd6e4c0ef5f4bf66899c55
+X-Git-Newrev: 1167f95b78f368543ab56ead07c242c4d2d40d10
 X-Patchwork-Hint: ignore
-Message-Id: <20220916141226.8E8A483D2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/qoriq-cadence-dp-firmware: fix license info
+Message-Id: <20220916141226.84A7B83D5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/netsniff-ng:
+ needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fb72879e295f24dbc940735715a48e8e207af89
+commit: https://git.buildroot.net/buildroot/commit/?id=1167f95b78f368543ab56ead07c242c4d2d40d10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+netsniff-ng unconditionally uses pthread_spin_lock since its addition in
+commit 500d287b07190c9c1a1284bc91b37d07e1a835a3 and
+https://github.com/netsniff-ng/netsniff-ng/commit/1a9fbac03c684f29cff9ac44875bd9504a89f54e
+resulting in the following build failure:
+
+/home/autobuild/autobuild/instance-1/output-1/per-package/netsniff-ng/host/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/10.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: netsniff-ng/tprintf.o: in function `tprintf_flush':
+tprintf.c:(.text+0x42c): undefined reference to `pthread_spin_lock'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ceadbdea8cc35bfd7d601a6d4b18137f81f61406
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a0ad1a68692d55aef407b8862a836ad1bcbf5897)
+(cherry picked from commit a969e0f63ce7c9f500286deb5d5f5c8259bdc3f2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash | 2 ++
- package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/netsniff-ng/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-index d302d92783..88ac3db977 100644
---- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-@@ -1,3 +1,5 @@
- # Locally calculated
- sha256  5871c5717be32f14a59624d5699d405e8ce9ae2e9c9ef86fd16e13d264a40e58  firmware-cadence-lsdk1909.bin
- sha256  d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
-+sha256  9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
-+sha256  53e3eb0b2bd81c171fa04c17514e20b39b7bb1fe1224c593f7717f615fb9d52b  EULA.txt
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-index 23643d24e0..7d701c4ac2 100644
---- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-@@ -7,8 +7,8 @@
- QORIQ_CADENCE_DP_FIRMWARE_VERSION = lsdk1909
- QORIQ_CADENCE_DP_FIRMWARE_SITE = http://www.nxp.com/lgfiles/sdk/$(QORIQ_CADENCE_DP_FIRMWARE_VERSION)
- QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
--QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP-Binary-EULA
--QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING
-+QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP Semiconductor Software License Agreement
-+QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING EULA EULA.txt
- QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
- QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
- QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET = NO
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index bbb4172cd3..9ad3628f14 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_NETSNIFF_NG
+ 	bool "netsniff-ng"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_spin_lock
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+@@ -28,7 +28,7 @@ comment "mausezahn needs glibc or musl toolchain"
+ 
+ endif
+ 
+-comment "netsniff-ng needs a toolchain w/ threads, headers >= 3.0"
++comment "netsniff-ng needs a toolchain w/ NPTL, headers >= 3.0"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
