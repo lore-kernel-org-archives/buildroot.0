@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F3CBECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 22:00:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5856ECAAA1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 22:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AFCB84399;
-	Fri, 16 Sep 2022 22:00:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AFCB84399
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6014D40C23;
+	Fri, 16 Sep 2022 22:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6014D40C23
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BBISK6niC5w5; Fri, 16 Sep 2022 22:00:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Df8FMZl93ktu; Fri, 16 Sep 2022 22:01:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 474BF84368;
-	Fri, 16 Sep 2022 22:00:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 474BF84368
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 76F511C2744
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8294C40516;
+	Fri, 16 Sep 2022 22:01:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8294C40516
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AE8FB1BF3DA
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6120141728
+ by smtp3.osuosl.org (Postfix) with ESMTP id 140FE6FAEF
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6120141728
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 140FE6FAEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0b7d0A6tydYz for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b5uKefbTUsYw for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 664F6409A3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E4DC6FAE7
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 664F6409A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E4DC6FAE7
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 492B083E7E; Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
+ id 289D983E72; Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 23:51:35 +0200
+Date: Fri, 16 Sep 2022 23:45:08 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 5eb9b65467d4954fd5d136292c1e78c29c659d30
-X-Git-Newrev: f7d5533cc6487d3c6a62a36161b544c250f7e836
+X-Git-Oldrev: 5d4f33823486045e49574f9e22aa16160c30ddb2
+X-Git-Newrev: fe4197f21f8889d5d4a7d23bbe173bd8d4f56be4
 X-Patchwork-Hint: ignore
-Message-Id: <20220916215809.492B083E7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/uacme: ualpn
- needs libopenssl
+Message-Id: <20220916215809.289D983E72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] Revert
+ "configs/olimex_a20_olinuxino_lime: use NEON+VFPv4 as FPU strategy"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7d5533cc6487d3c6a62a36161b544c250f7e836
+commit: https://git.buildroot.net/buildroot/commit/?id=fe4197f21f8889d5d4a7d23bbe173bd8d4f56be4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-ualpn is not compatible with libressl as stated by upstream in
-https://github.com/ndilieto/uacme/commit/32546c7caa1626bbef860cf81e53d10e29fca5cb
-resulting in the following build failure:
+The gcc man page states that specifying Neon as part of the fpu setting
+has no effect, unless the -funsafe-math-optimizations is also specified,
+because Neon is not compliant with IEEE 754:
+```
+    If the selected floating-point hardware includes the NEON extension
+    (e.g. -mfpu=neon), note that floating-point operations are not
+    generated by GCC's auto-vectorization pass unless
+    -funsafe-math-optimizations is also specified. This is because NEON
+    hardware does not fully implement the IEEE 754 standard for
+    floating-point arithmetic (in particular denormal values are treated
+    as zero), so the use of NEON instructions may lead to a loss of
+    precision.
+```
 
-ualpn.c: In function 'ssl_client_hello_cb':
-ualpn.c:2038:16: error: 'SSL_CLIENT_HELLO_RETRY' undeclared (first use in this function); did you mean 'SSL_F_CLIENT_HELLO'?
- 2038 |         return SSL_CLIENT_HELLO_RETRY;
-      |                ^~~~~~~~~~~~~~~~~~~~~~
-      |                SSL_F_CLIENT_HELLO
+-funsafe-math-optimizations must be explictly specified per package to
+really use NEON as FPU, but it's something that is left to the user as
+well as setting BR2_ARM_FPU_NEON_VFPV4. This way the default
+BR2_ARM_FPU_VFPV4D16 is used as previously. So let's revert the
+offending patch.
 
-Fixes:
- - http://autobuild.buildroot.org/results/d7d49cfce6f99c59e99c8e15399164fd5ecacc21
+This reverts commit 115ee0521430d89db8be1a79457b0721ceafc484.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ac64086ce5f299b146c670ad4f3b63a163335ee2)
+(cherry picked from commit d5c1e67d3adf4d5c32e94ad7eac7a940fb17f9f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uacme/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/olimex_a20_olinuxino_lime_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/uacme/Config.in b/package/uacme/Config.in
-index 796f54754e..2c6864871c 100644
---- a/package/uacme/Config.in
-+++ b/package/uacme/Config.in
-@@ -21,6 +21,8 @@ config BR2_PACKAGE_UACME_UALPN
- 	bool "enable ualpn"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBEV
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL \
-+		if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_MBEDTLS)
- 	help
- 	  Build and install ualpn, the transparent proxying tls-alpn-01
- 	  challenge responder.
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 698137e46c..fd7b4ac189 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -2,7 +2,6 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+-BR2_ARM_FPU_NEON_VFPV4=y
+ 
+ # Linux headers same as kernel, a 5.14 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
