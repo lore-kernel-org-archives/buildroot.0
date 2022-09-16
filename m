@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39132ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 12:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D01D3ECAAD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 12:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8B6384300;
-	Fri, 16 Sep 2022 12:07:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8B6384300
+	by smtp3.osuosl.org (Postfix) with ESMTP id 76A6161220;
+	Fri, 16 Sep 2022 12:08:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76A6161220
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mfwVwmr78Rtn; Fri, 16 Sep 2022 12:07:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1F_FDWEiJhKJ; Fri, 16 Sep 2022 12:08:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11718842E9;
-	Fri, 16 Sep 2022 12:07:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11718842E9
+	by smtp3.osuosl.org (Postfix) with ESMTP id B11E06121C;
+	Fri, 16 Sep 2022 12:08:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B11E06121C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 068631BF2E5
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:06:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 222521BF2E5
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2F2F41740
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:06:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2F2F41740
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0524C41B5E
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:08:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0524C41B5E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OOY66MuibETq for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 12:06:31 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23E0C417A8
- for <buildroot@buildroot.org>; Fri, 16 Sep 2022 12:06:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23E0C417A8
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 124A683CEB; Fri, 16 Sep 2022 12:06:31 +0000 (UTC)
+ with ESMTP id kZhMLmDfVkMk for <buildroot@lists.busybox.net>;
+ Fri, 16 Sep 2022 12:08:54 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B881A41B5C
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B881A41B5C
+ for <buildroot@buildroot.org>; Fri, 16 Sep 2022 12:08:53 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id DE00A20014;
+ Fri, 16 Sep 2022 12:08:51 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZA9K-008crY-VG; Fri, 16 Sep 2022 14:08:50 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 14:02:55 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7b5b8e4f968d51ca194f664f12ad98388db6a6bb
-X-Git-Newrev: 511ea0c89da9906e555bafd65746e5debb01b7a6
-X-Patchwork-Hint: ignore
-Message-Id: <20220916120631.124A683CEB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libvirt: fix
- libvirtd dependency
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20220805232404.3586797-1-giulio.benetti@benettiengineering.com>
+Date: Fri, 16 Sep 2022 14:08:50 +0200
+In-Reply-To: <20220805232404.3586797-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Sat, 6 Aug 2022 01:24:04 +0200")
+Message-ID: <874jx78qst.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/sunxi-mali-utgard-driver: move
+ package SITE to Github giuliobenetti/sunxi-mali
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,62 +64,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=511ea0c89da9906e555bafd65746e5debb01b7a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Commit 4dff1be05e90 (package/libvirt: libvirtd needs C++ for nmap-ncat)
-introduce a recursive dependency (really: a circular dependency):
+ > Github repository mripard/sunxi-mali states to use Lima in place of
+ > sunxi-mali because it's deprecated, but this package is still useful in
+ > Buildroot so I want to move the SITE to my Github fork of the original
+ > repository that already contains a patch to fix a build failure showing
+ > up with Linux version >= 5.15.
 
-    package/busybox/Config.in:33:error: recursive dependency detected!
-    package/busybox/Config.in:33:   symbol BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is selected by BR2_PACKAGE_EBTABLES_UTILS_SAVE
-    package/ebtables/Config.in:11:  symbol BR2_PACKAGE_EBTABLES_UTILS_SAVE depends on BR2_PACKAGE_EBTABLES
-    package/ebtables/Config.in:1:   symbol BR2_PACKAGE_EBTABLES is selected by BR2_PACKAGE_LIBVIRT_DAEMON
-    package/libvirt/Config.in:44:   symbol BR2_PACKAGE_LIBVIRT_DAEMON depends on BR2_PACKAGE_NETCAT_OPENBSD
-    package/netcat-openbsd/Config.in:1:     symbol BR2_PACKAGE_NETCAT_OPENBSD depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ > The upstream patch fixes missing DMA_BUF module inclusion that leads to
+ > build failure. The patch includes DMA_BUF by using:
+ > MODULE_IMPORT_NS(DMA_BUF);
 
-We can't drop the C++ dependency and switch the netcat-openbsd and
-nmap-ncat dependencies conditions without adding a glibc dependency.
+ > My idea is to continue to maintain this package in parallel to Lima since
+ > it seems to be still useful.
 
-So always mandate C++ even if is only needed by nmap and not
-netcat-openbsd
+ > Fixes:
+ > http://autobuild.buildroot.net/results/8f25c26de737c358b3b43a10737609465b4e1398/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a17c456b2ccd44566c2395efc90d403cd27a2902)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libvirt/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-index 65226af336..f0687cd5db 100644
---- a/package/libvirt/Config.in
-+++ b/package/libvirt/Config.in
-@@ -44,7 +44,7 @@ if BR2_PACKAGE_LIBVIRT
- config BR2_PACKAGE_LIBVIRT_DAEMON
- 	bool "libvirtd"
- 	default y
--	depends on BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_NETCAT_OPENBSD # nmap
-+	depends on BR2_INSTALL_LIBSTDCPP # nmap
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_DNSMASQ
- 	select BR2_PACKAGE_EBTABLES
-@@ -58,6 +58,9 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
- 	  Build the libvirt daemon (libvirtd) otherwise build only the
- 	  utility programs.
- 
-+comment "libvirtd needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- # Stateful drivers are useful only when building the daemon.
- if BR2_PACKAGE_LIBVIRT_DAEMON
- 
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
