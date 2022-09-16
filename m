@@ -1,74 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA2C8ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 13:06:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A2FC54EE9
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 13:06:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D30C41C90;
-	Fri, 16 Sep 2022 13:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D30C41C90
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30B6E41637;
+	Fri, 16 Sep 2022 13:06:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30B6E41637
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nxXegj0Ekjfn; Fri, 16 Sep 2022 13:06:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 18K4WRhY33Xp; Fri, 16 Sep 2022 13:06:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A22BF41BEE;
-	Fri, 16 Sep 2022 13:06:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A22BF41BEE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5F2511BF2C0
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 13:06:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1632A41635;
+	Fri, 16 Sep 2022 13:06:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1632A41635
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 08C6F1BF2C0
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 13:06:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 349E1842F6
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 13:06:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 349E1842F6
+ by smtp3.osuosl.org (Postfix) with ESMTP id D86A7611DA
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 13:06:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D86A7611DA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xFH2b88E-GUT for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 13:06:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Rj93zjXprt6l for <buildroot@lists.busybox.net>;
+ Fri, 16 Sep 2022 13:06:23 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87976842D1
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.40])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 87976842D1
- for <buildroot@buildroot.org>; Fri, 16 Sep 2022 13:06:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FEFE610F8
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.41])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6FEFE610F8
+ for <buildroot@buildroot.org>; Fri, 16 Sep 2022 13:06:23 +0000 (UTC)
 Received: from opfedar01.francetelecom.fr (unknown [xx.xx.xx.2])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits))
  (No client certificate requested)
- by opfedar21.francetelecom.fr (ESMTP service) with ESMTPS id 4MTZ8C1wttz7tq3; 
- Fri, 16 Sep 2022 15:06:19 +0200 (CEST)
+ by opfedar20.francetelecom.fr (ESMTP service) with ESMTPS id 4MTZ8F0NZwz8tCg; 
+ Fri, 16 Sep 2022 15:06:21 +0200 (CEST)
 Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Fri, 16 Sep 2022 15:06:17 +0200
+ Fri, 16 Sep 2022 15:06:18 +0200
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Fri, 16 Sep 2022 15:06:15 +0200
-Message-ID: <10723_1663333579_632474CB_10723_500_30_a3b3a73905917c76ad928862912b96e167b7d876.1663333493.git.yann.morin@orange.com>
+Date: Fri, 16 Sep 2022 15:06:16 +0200
+Message-ID: <9650_1663333580_632474CC_9650_255_6_6f2223bd3fc15e0232f22fb8f0ba23e5a0ddb017.1663333493.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <a3b3a73905917c76ad928862912b96e167b7d876.1663333493.git.yann.morin@orange.com>
+References: <a3b3a73905917c76ad928862912b96e167b7d876.1663333493.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX608.corporate.adroot.infra.ftgroup
- (10.115.27.32) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX307.corporate.adroot.infra.ftgroup
+ (10.115.27.12) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1663333579;
- bh=ZBbMqfEiu9w76nHgB1j7ibKVzwkKrqYdT7MCoFSNmak=;
+ d=orange.com; s=ORANGE001; t=1663333581;
+ bh=LiSRmnLLJn57yiOJB4zQa0QnC6PqoHlZJQX6NJvDAck=;
  h=From:To:Subject:Date:Message-ID:MIME-Version:
  Content-Transfer-Encoding:Content-Type;
- b=gb01Yky71hN3LS7m5drx+SLifrxiBGU3uBRJW0mkv4FwOGlJQxYLOMgFHulO//GNq
- brWt/Ep5Exussxu/0ud06y6KPaK7ZV9hSFxKS/+OuxyDULcihZKlPfFpb47C7Wczba
- 3msrFHleLTrNGmdIQt2KIU8LHvozBwVWVyw/MMCwz9HJhFipB0bkq3CV/d8xu9iada
- hxo6WAIKLexfsJMfkaLm1BPAFb9K8spY5Dif/zco3prrN0LeUk1U0ETRAhiZmC46MR
- 1m/DnJJUe26T0+SBu6LmeDC3WG13fmM07PYKFE4Dyl2QlqUDoLWlohBlljJwlHSLKR
- uobgU2mVwTGYA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=ptnTlFnxN032cSjz/+axUsp71YoVkxKE5t0sS3gNPYn8u0QCtt2hI6y0Q49/fUSs1
+ TkUuitITcu5514zkYnwZN1ImfFJDi9hNflOmw5v4skOcnbLYiE5VEPV83k3wVbX/F5
+ rBoP3relinDh3Cj/+OPE4xEWOH5KJ8dwgbxqe2qj3So4qK3EkE5wmU5zZu1qUGPY47
+ nubZzdpEAfNW5u9EJyZg6tRVTMX9poyZ8ZVG31qo9dzWliuBh0mWozPW2ZDUTEcFtU
+ ayN6obi/WLBfjK3wlsYEbUqX1p8nJM02789+bQS0hxyDEkqu30FZLYYo/ud7xYtHrN
+ kmTjkHedemKWg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=gb01Yky7
-Subject: [Buildroot] [PATCH v2 1/3] package/gpsd: remove obsolete config
- option
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=ptnTlFnx
+Subject: [Buildroot] [PATCH v2 2/3] package/gpsd: bump to 3.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,64 +90,158 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-The oldstyle option has been removed a while ago now:
-    2015-02-22 a5a123b4f3b0 Feature removal - delete last remnants of
-                            old pre-JSON protocol from libgps.
+In 3.24, the NTRIP and NMEA0183 drivers are now always enabled, so the
+configure options ntrip and nmea0183 have been removed (upstream commits
+f8cf4c922 and 838220fee respectively).
 
-Drop it from Buildroot now.
+As a consequence, drop the options in menuconfig. We do not need to add
+legacy support for those options. Indeed, users who had those enabled
+will still get the feature, and those who did not will get them, in both
+cases without loss of feature.
+
+Finally, we need to fix a runtime issue that makes the kernel segfault
+(yeah, that much), because upstream has been yoda-ifying their code, and
+they actually borked a comparison. The issue has been fixed upstream,
+but that is in a patch tha cobbles up many changes and brings new stuff,
+so we just fix the issue with an unupstreamable patch (which we can drop
+when we bump when upstream tags a newer release and we update).
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy       | 6 ++++++
- package/gpsd/Config.in | 3 ---
- package/gpsd/gpsd.mk   | 3 ---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ .../gpsd/0001-gpsctl-fix-yodaification.patch  | 44 +++++++++++++++++++
+ package/gpsd/Config.in                        | 16 -------
+ package/gpsd/gpsd.hash                        |  2 +-
+ package/gpsd/gpsd.mk                          | 11 +----
+ 4 files changed, 46 insertions(+), 27 deletions(-)
+ create mode 100644 package/gpsd/0001-gpsctl-fix-yodaification.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3a7c49e339..631b31689b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2022.11"
- 
-+config BR2_PACKAGE_GPSD_OLDSTYLE
-+	bool "gpsd oldstyle removed"
-+	select BR2_LEGACY
-+	help
-+	  gpsd oldstyle option has been removed by upstream in 2015.
+diff --git a/package/gpsd/0001-gpsctl-fix-yodaification.patch b/package/gpsd/0001-gpsctl-fix-yodaification.patch
+new file mode 100644
+index 0000000000..753ff300eb
+--- /dev/null
++++ b/package/gpsd/0001-gpsctl-fix-yodaification.patch
+@@ -0,0 +1,44 @@
++From 72ae7ce646792b07061cbbb31ed47f55a1d2422c Mon Sep 17 00:00:00 2001
++Message-Id: <72ae7ce646792b07061cbbb31ed47f55a1d2422c.1663075350.git.yann.morin@orange.com>
++From: "Yann E. MORIN" <yann.morin@orange.com>
++Date: Tue, 13 Sep 2022 15:10:48 +0200
++Subject: [PATCH] gpsctl: fix yodaification
 +
- config BR2_GDB_VERSION_9_2
- 	bool "gdb 9.2 removed"
- 	help
++Commit d5a672abd98a (gpsctl.c: Style tweaks.  Yoda style, braces, //
++comments.) claimed "No functional changes", but mis-treated a comparison
++when it was converted to yoda-style (simplified diff):
++
++    -    if (write(gpsdata->gps_fd, buf, strlen(buf)) <= 0) {
++    +    if (0 <= write(gpsdata->gps_fd, buf, strlen(buf))) {
++
++As one may notice, the comparison operator was not reversed while the
++operands were.
++
++This got silently fixed in commit 3219ab9f6a89 (gpsctl.c: First cut at
++--ship sending commands to running gpsd.) but this is completely
++unrelated.
++
++Fix that comparison.
++
++Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
++Upstream status: not applicable as already fixed.
++---
++ gpsctl.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gpsctl.c b/gpsctl.c
++index cb342af87..ef59a6622 100644
++--- a/gpsctl.c
+++++ b/gpsctl.c
++@@ -96,7 +96,7 @@ static bool gps_query(struct gps_data_t *gpsdata,
++     if ('\n' != buf[strnlen(buf, sizeof(buf) - 1) - 1]) {
++         (void)strlcat(buf, "\n", sizeof(buf));
++     }
++-    if (0 <= write(gpsdata->gps_fd, buf, strnlen(buf, sizeof(buf)))) {
+++    if (0 >= write(gpsdata->gps_fd, buf, strnlen(buf, sizeof(buf)))) {
++         GPSD_LOG(LOG_ERROR, &context.errout, "gps_query(), write failed\n");
++         return false;
++     }
++-- 
++2.25.1
++
 diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index b66d0952dd..126a907aa2 100644
+index 126a907aa2..8c28c05efd 100644
 --- a/package/gpsd/Config.in
 +++ b/package/gpsd/Config.in
-@@ -31,9 +31,6 @@ comment "Features"
- config BR2_PACKAGE_GPSD_CLIENT_DEBUG
- 	bool "client debugging support"
+@@ -154,22 +154,11 @@ config BR2_PACKAGE_GPSD_ITRAX
+ 	help
+ 	  iTrax support
  
--config BR2_PACKAGE_GPSD_OLDSTYLE
--	bool "oldstyle (pre-JSON) protocol support"
+-config BR2_PACKAGE_GPSD_MTK3301
+-	bool "MTK-3301"
+-	help
+-	  Mediatek MTK-3301 support
 -
- config BR2_PACKAGE_GPSD_PROFILING
- 	bool "profiling support"
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ config BR2_PACKAGE_GPSD_NAVCOM
+ 	bool "Navcom"
+ 	help
+ 	  Navcom binary support
+ 
+-config BR2_PACKAGE_GPSD_NMEA
+-	bool "NMEA"
+-	default y
+-	help
+-	  Generic NMEA support
+-
+ config BR2_PACKAGE_GPSD_NMEA2000
+ 	bool "NMEA2000"
+ 	select BR2_PACKAGE_GPSD_NAVCOM
+@@ -177,11 +166,6 @@ config BR2_PACKAGE_GPSD_NMEA2000
+ 	help
+ 	  NMEA2000/CAN support
+ 
+-config BR2_PACKAGE_GPSD_NTRIP
+-	bool "NTRIP"
+-	help
+-	  NTRIP support
+-
+ config BR2_PACKAGE_GPSD_OCEANSERVER
+ 	bool "OceanServer"
+ 	help
+diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
+index 6d93e7b553..f415c3af0f 100644
+--- a/package/gpsd/gpsd.hash
++++ b/package/gpsd/gpsd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0b991ce9a46538c4ea450f7a8ee428ff44fb4f8d665fddf2ffe40fe0ae9a6c09  gpsd-3.23.1.tar.gz
++sha256  00ee13f615655284874a661be13553abe66128e6deb5cd648af9bc0cb345fe5c  gpsd-3.24.tar.gz
+ sha256  fdf339997bbca9eaf507476b82fbcac608fc39a3d89b86b51e16db4c9f933716  COPYING
 diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 4388b7e24d..dec2371f68 100644
+index dec2371f68..0c7018f26d 100644
 --- a/package/gpsd/gpsd.mk
 +++ b/package/gpsd/gpsd.mk
-@@ -168,9 +168,6 @@ endif
- ifeq ($(BR2_PACKAGE_GPSD_SQUELCH),y)
- GPSD_SCONS_OPTS += squelch=yes
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GPSD_VERSION = 3.23.1
++GPSD_VERSION = 3.24
+ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+ GPSD_LICENSE = BSD-2-Clause
+ GPSD_LICENSE_FILES = COPYING
+@@ -115,15 +115,6 @@ endif
+ ifneq ($(BR2_PACKAGE_GPSD_ITRAX),y)
+ GPSD_SCONS_OPTS += itrax=no
  endif
--ifneq ($(BR2_PACKAGE_GPSD_OLDSTYLE),y)
--GPSD_SCONS_OPTS += oldstyle=no
+-ifneq ($(BR2_PACKAGE_GPSD_MTK3301),y)
+-GPSD_SCONS_OPTS += mtk3301=no
 -endif
- ifeq ($(BR2_PACKAGE_GPSD_PROFILING),y)
- GPSD_SCONS_OPTS += profiling=yes
+-ifneq ($(BR2_PACKAGE_GPSD_NMEA),y)
+-GPSD_SCONS_OPTS += nmea0183=no
+-endif
+-ifneq ($(BR2_PACKAGE_GPSD_NTRIP),y)
+-GPSD_SCONS_OPTS += ntrip=no
+-endif
+ ifneq ($(BR2_PACKAGE_GPSD_NAVCOM),y)
+ GPSD_SCONS_OPTS += navcom=no
  endif
 -- 
 2.25.1
