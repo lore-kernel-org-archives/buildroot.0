@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4181ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 11:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B15C54EE9
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 11:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 710A541CB7;
-	Fri, 16 Sep 2022 11:52:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 710A541CB7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D13261234;
+	Fri, 16 Sep 2022 11:52:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D13261234
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W4xdvfTo3RGt; Fri, 16 Sep 2022 11:52:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vUO5g9HuL0wZ; Fri, 16 Sep 2022 11:52:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C94741964;
-	Fri, 16 Sep 2022 11:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C94741964
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEAAF60B9F;
+	Fri, 16 Sep 2022 11:52:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEAAF60B9F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2AF3B1BF2B9
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:47:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0F8E41BF2B9
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:47:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 721FA41C5F
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6DD5419C7
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:46:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 721FA41C5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6DD5419C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OZZ5-317eOAj for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 11:46:46 +0000 (UTC)
+ with ESMTP id YZCKG3u0L_ZU for <buildroot@lists.busybox.net>;
+ Fri, 16 Sep 2022 11:46:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E3DD419C7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30CD241959
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 11:46:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E3DD419C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30CD241959
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5B69A83CC0; Fri, 16 Sep 2022 11:46:45 +0000 (UTC)
+ id 1DC1383CC5; Fri, 16 Sep 2022 11:46:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 12:20:15 +0200
+Date: Fri, 16 Sep 2022 12:16:28 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d0c57ba94cd0a0052e7a90d0f969dab24dc58bdd
-X-Git-Newrev: 92e6ac8ae4bea28183159ed8fd253e1863d32ba6
+X-Git-Oldrev: 0ccf43c02da5606778911e80ff557142a692bb4f
+X-Git-Newrev: fcf9525dd890db93a8050eccfa4bd6eafdc5dad3
 X-Patchwork-Hint: ignore
-Message-Id: <20220916114645.5B69A83CC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/freeswitch: fix
- typo on BR2_powerpc64le
+Message-Id: <20220916114645.1DC1383CC5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ace: fix typo on
+ variable names
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92e6ac8ae4bea28183159ed8fd253e1863d32ba6
+commit: https://git.buildroot.net/buildroot/commit/?id=fcf9525dd890db93a8050eccfa4bd6eafdc5dad3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The typo was added by commit from 2016
-'0480bbc1a0 package/freeswitch: new package'
+LIBARIES -> LIBRARIES
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Matt Weber <matthew.weber@collins.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4a8753719312bdc99785f59896bbe4455ba69d8a)
+(cherry picked from commit 46915443a5d8fddb3819a9260e6e415405894b25)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freeswitch/freeswitch.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ace/ace.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index c576e5f267..24c1ee4dd4 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -80,7 +80,7 @@ FREESWITCH_CONF_OPTS = \
+diff --git a/package/ace/ace.mk b/package/ace/ace.mk
+index 3f7fe5e994..29555eea74 100644
+--- a/package/ace/ace.mk
++++ b/package/ace/ace.mk
+@@ -15,7 +15,7 @@ ACE_CPE_ID_PRODUCT = adaptive_communication_environment
  
- # zrtp supports a limited set of archs, sparc support is also broken due
- # to a broken ld call by gcc, see libs/libzrtp/include/zrtp_config.h
--ifeq ($(BR2_i386)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpcle)$(BR2_x86_64),y)
-+ifeq ($(BR2_i386)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le)$(BR2_x86_64),y)
- FREESWITCH_LICENSE_FILES += libs/libzrtp/src/zrtp_legal.c
- FREESWITCH_CONF_OPTS += --enable-zrtp
- else
+ # Note: We are excluding examples, apps and tests
+ # Only compiling ACE libraries (no TAO)
+-ACE_LIBARIES = ace ACEXML Kokyu netsvcs protocols/ace
++ACE_LIBRARIES = ace ACEXML Kokyu netsvcs protocols/ace
+ 
+ ACE_CPPFLAGS = $(TARGET_CPPFLAGS) -std=c++11
+ 
+@@ -31,7 +31,7 @@ ACE_MAKE_OPTS = \
+ 	DEFFLAGS="$(ACE_CPPFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-ACE_LIBARIES += ace/SSL
++ACE_LIBRARIES += ace/SSL
+ ACE_DEPENDENCIES += openssl
+ define ACE_CONFIGURE_SSL
+ 	echo "ssl = 1" >> $(@D)/include/makeinclude/platform_macros.GNU
+@@ -51,25 +51,25 @@ define ACE_CONFIGURE_CMDS
+ endef
+ 
+ define ACE_BUILD_CMDS
+-	$(foreach lib,$(ACE_LIBARIES), \
++	$(foreach lib,$(ACE_LIBRARIES), \
+ 		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$(lib) \
+ 			$(ACE_MAKE_OPTS) all
+ 	)
+ endef
+ 
+-define  ACE_LIBARIES_INSTALL
++define  ACE_LIBRARIES_INSTALL
+ 	mkdir -p $(1)/usr/share/ace
+-	$(foreach lib,$(ACE_LIBARIES), \
++	$(foreach lib,$(ACE_LIBRARIES), \
+ 		$(MAKE) -C $(@D)/$(lib) $(ACE_MAKE_OPTS) DESTDIR=$(1) install
+ 	)
+ endef
+ 
+ define  ACE_INSTALL_TARGET_CMDS
+-	$(call ACE_LIBARIES_INSTALL,$(TARGET_DIR))
++	$(call ACE_LIBRARIES_INSTALL,$(TARGET_DIR))
+ endef
+ 
+ define  ACE_INSTALL_STAGING_CMDS
+-	$(call ACE_LIBARIES_INSTALL,$(STAGING_DIR))
++	$(call ACE_LIBRARIES_INSTALL,$(STAGING_DIR))
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
