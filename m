@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06919ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 17:39:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5B6EECAAD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 17:56:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EBDD41C5D;
-	Fri, 16 Sep 2022 17:39:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EBDD41C5D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A14340912;
+	Fri, 16 Sep 2022 17:56:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A14340912
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mNS46n5j8Vxk; Fri, 16 Sep 2022 17:39:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YSTtKfoFKBam; Fri, 16 Sep 2022 17:56:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 135F741933;
-	Fri, 16 Sep 2022 17:39:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 135F741933
+	by smtp2.osuosl.org (Postfix) with ESMTP id 338BE4036F;
+	Fri, 16 Sep 2022 17:56:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 338BE4036F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B77381BF33B
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 17:39:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 93E531BF33B
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 17:56:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92D16400EA
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 17:39:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92D16400EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F3F74036F
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 17:56:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F3F74036F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L1fdfMlPkVkU for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 17:39:35 +0000 (UTC)
+ with ESMTP id 3lMgUtJi-FlZ for <buildroot@lists.busybox.net>;
+ Fri, 16 Sep 2022 17:56:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10E25404F7
- for <buildroot@uclibc.org>; Fri, 16 Sep 2022 17:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10E25404F7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DDAF400D2
+ for <buildroot@uclibc.org>; Fri, 16 Sep 2022 17:56:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DDAF400D2
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id F33DE83D7F; Fri, 16 Sep 2022 17:39:34 +0000 (UTC)
+ id 8C29883D7F; Fri, 16 Sep 2022 17:56:11 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 16 Sep 2022 17:39:34 +0000
+Date: Fri, 16 Sep 2022 17:56:11 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -55,7 +55,7 @@ X-Bugzilla-Assigned-To: yann.morin.1998@free.fr
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14996-163-eipqn2hpSQ@https.bugs.busybox.net/>
+Message-ID: <bug-14996-163-LPmbkaGNwk@https.bugs.busybox.net/>
 In-Reply-To: <bug-14996-163@https.bugs.busybox.net/>
 References: <bug-14996-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,42 +81,23 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14996
 
---- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+--- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
 David, All,
 
-Here's how I prepared the test br2-external trees:
+To be noted: on my machine, in the directory I was using, I was limited
+to using just 2446 br2-external trees, otherwise, make would whine with:
 
-$ for i in $(seq 1 1000); do
-    mkdir -p br2-external-${i}/configs
-    touch br2-external-${i}/{Config.in,external.mk}
-    echo "name: BR_TEST_${i}" >br2-external-${i}/external.desc
-    touch br2-external-${i}/configs/foo{,_${i}}_defconfig
-done
+- with 2447:
+  make: execvp: /bin/sh: Argument list too long
 
-So, I get minimal br2-external trees, each with two defconfigs:
-one that is present in all br2external trees, and one that is
-specific to each tree.
+- with 2248 and above:
+  -bash: /usr/bin/make: Argument list too long
 
-And here is exactly how I tested that:
+Yes, note how 2446 succeeds, 2447 has a special error, and 2448 and above
+have another error... Meh...
 
-$ make --version
-GNU Make 4.2.1
-
-$ for ext in 1 10 100 1000; do time make BR2_EXTERNAL="$(for i in $(seq 1
-${ext}); do echo $(pwd)/br2-external-${i}; done)" list-defconfigs >/dev/null;
-done 2>&1 |grep real
-real    0m0.179s
-real    0m0.245s
-real    0m1.299s
-real    0m18.277s
-
-What version of make are you using? How many br2-external trees do you have?
-
-However, please do note that indeed, it was never envisioned that more than a
-few
-br2-external trees be used simultaneously. But that it feels like it got stuck
-is
-still not a nice behaviour...
+But still, 2446 br2-external trees is clearly way more than was ever
+expected when the feature was added... back in 2016!
 
 Regards,
 Yann E. MORIN.
