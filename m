@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3D4CECAAA1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 22:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A051ECAAA1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 22:01:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C1FF4104D;
-	Fri, 16 Sep 2022 22:01:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C1FF4104D
+	by smtp3.osuosl.org (Postfix) with ESMTP id C82826FAFA;
+	Fri, 16 Sep 2022 22:01:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C82826FAFA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U6VW2lEolxRX; Fri, 16 Sep 2022 22:01:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fTuIlUo1YjPj; Fri, 16 Sep 2022 22:01:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7062440C18;
-	Fri, 16 Sep 2022 22:01:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7062440C18
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2B6D6FAE8;
+	Fri, 16 Sep 2022 22:01:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2B6D6FAE8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7FDC11BF3DA
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 68C3E1BF3DA
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 834F76FAE7
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 834F76FAE7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 941CE6FAD0
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 941CE6FAD0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q6gmD0Rtp9c4 for <buildroot@lists.busybox.net>;
+ with ESMTP id bwjD8nee7R1r for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 263286FAD0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 674FF6FAE8
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 263286FAD0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 674FF6FAE8
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 163F583E6F; Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
+ id 5716483E70; Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 23:45:00 +0200
+Date: Fri, 16 Sep 2022 23:53:00 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 8fb72879e295f24dbc940735715a48e8e207af89
-X-Git-Newrev: c8cbd05e347d81a0efa52facc3b593a3f5221b1f
+X-Git-Oldrev: f7d5533cc6487d3c6a62a36161b544c250f7e836
+X-Git-Newrev: b2fb18e6d058675bb17aa8b9c841b14470d93ba9
 X-Patchwork-Hint: ignore
-Message-Id: <20220916215809.163F583E6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Revert
- "configs/olimex_a33_olinuxino: use NEON+VFPv4 as FPU strategy"
+Message-Id: <20220916215809.5716483E70@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/imagemagick:
+ security bump to version 7.1.0-45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8cbd05e347d81a0efa52facc3b593a3f5221b1f
+commit: https://git.buildroot.net/buildroot/commit/?id=b2fb18e6d058675bb17aa8b9c841b14470d93ba9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The gcc man page states that specifying Neon as part of the fpu setting
-has no effect, unless the -funsafe-math-optimizations is also specified,
-because Neon is not compliant with IEEE 754:
-```
-    If the selected floating-point hardware includes the NEON extension
-    (e.g. -mfpu=neon), note that floating-point operations are not
-    generated by GCC's auto-vectorization pass unless
-    -funsafe-math-optimizations is also specified. This is because NEON
-    hardware does not fully implement the IEEE 754 standard for
-    floating-point arithmetic (in particular denormal values are treated
-    as zero), so the use of NEON instructions may lead to a loss of
-    precision.
-```
+- Fix CVE-2022-1114: A heap-use-after-free flaw was found in
+  ImageMagick's RelinquishDCMInfo() function of dcm.c file. This
+  vulnerability is triggered when an attacker passes a specially crafted
+  DICOM image file to ImageMagick for conversion, potentially leading to
+  information disclosure and a denial of service.
+- Fix CVE-2022-32545: A vulnerability was found in ImageMagick, causing
+  an outside the range of representable values of type 'unsigned char'
+  at coders/psd.c, when crafted or untrusted input is processed. This
+  leads to a negative impact to application availability or other
+  problems related to undefined behavior.
+- Fix CVE-2022-32546: A vulnerability was found in ImageMagick, causing
+  an outside the range of representable values of type 'unsigned long'
+  at coders/pcl.c, when crafted or untrusted input is processed. This
+  leads to a negative impact to application availability or other
+  problems related to undefined behavior.
+- Fix CVE-2022-32547: In ImageMagick, there is load of misaligned
+  address for type 'double', which requires 8 byte alignment and for
+  type 'float', which requires 4 byte alignment at
+  MagickCore/property.c. Whenever crafted or untrusted input is
+  processed by ImageMagick, this causes a negative impact to application
+  availability or other problems related to undefined behavior.
+- Update hash of LICENSE (year updated with
+  https://github.com/ImageMagick/ImageMagick/commit/80629dfb3fea55eefa2dd8bdd9ca1be341502e16)
 
--funsafe-math-optimizations must be explictly specified per package to
-really use NEON as FPU, but it's something that is left to the user as
-well as setting BR2_ARM_FPU_NEON_VFPV4. This way the default
-BR2_ARM_FPU_VFPV4D16 is used as previously. So let's revert the
-offending patch.
+https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
 
-This reverts commit 23329364e206d5ca67a9eb9c733d3d556ccdbac4.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 68d0385533698e49747a070a03bd7a06652288bd)
+(cherry picked from commit 685100fe85f5ee0849adae7c68dfabf9c844f77e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/olimex_a33_olinuxino_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ package/imagemagick/imagemagick.hash | 4 ++--
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/olimex_a33_olinuxino_defconfig b/configs/olimex_a33_olinuxino_defconfig
-index 27924b9e92..cdbc63efe1 100644
---- a/configs/olimex_a33_olinuxino_defconfig
-+++ b/configs/olimex_a33_olinuxino_defconfig
-@@ -1,7 +1,6 @@
- # Architecture
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 278becd2ab..ff0f3e26c6 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  385ca5bd8ce9b37e685779c46868171af949265c9db40067c1c4d7442dbc723e  imagemagick-7.1.0-19.tar.gz
+-sha256  040badb77b659e751ea16113490a937e1e01f3f5d32181e966b8982413533fb2  LICENSE
++sha256  3df6ca6dff15a4e8a20b4593c60285a59e38890440494d91a344e5c0e2bb3eec  imagemagick-7.1.0-45.tar.gz
++sha256  8cceeb67d4e783cb63075c7311fdb990fa0369ee80fbd0f481064cd02386ca2d  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 64a530c6d2..893606ff01 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Linux headers same as kernel, a 5.14 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
+-IMAGEMAGICK_VERSION = 7.1.0-19
++IMAGEMAGICK_VERSION = 7.1.0-45
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
