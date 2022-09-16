@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 643C2ECAAA1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 21:59:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78AAEECAAD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 21:59:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 001E54173D;
-	Fri, 16 Sep 2022 21:59:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 001E54173D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14B1541D8F;
+	Fri, 16 Sep 2022 21:59:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14B1541D8F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U0k6L6GrEVpb; Fri, 16 Sep 2022 21:59:26 +0000 (UTC)
+	with ESMTP id aDdZlxlAAhXN; Fri, 16 Sep 2022 21:59:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A989541DA7;
-	Fri, 16 Sep 2022 21:59:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A989541DA7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CC0251BF3DA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FD3C41DA2;
+	Fri, 16 Sep 2022 21:59:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FD3C41DA2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D02731C2744
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8BD2640C20
+ by smtp3.osuosl.org (Postfix) with ESMTP id A8FE46FAD0
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BD2640C20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8FE46FAD0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2f_lKkfV2elU for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9rfP_Ug7Y1qf for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB0E640C18
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99E926FAE7
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB0E640C18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99E926FAE7
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id A81F783DF5; Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
+ id 96DAB83DF3; Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 23:56:15 +0200
+Date: Fri, 16 Sep 2022 23:54:31 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 5955fdee9cfa610b08906e349e53953ad70388d2
-X-Git-Newrev: b1ea4af36a6f3e760280316c952e2313bf76c566
+X-Git-Oldrev: 7fb33d0827374b72b78737421923d5811da3a464
+X-Git-Newrev: 5955fdee9cfa610b08906e349e53953ad70388d2
 X-Patchwork-Hint: ignore
-Message-Id: <20220916215759.A81F783DF5@busybox.osuosl.org>
+Message-Id: <20220916215759.96DAB83DF3@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.05.x]
- docs/manual/prerequisite.txt: add findutils in dependencies
+ package/linux-tools/linux-tool-perf.mk.in: Fix disabling of documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1ea4af36a6f3e760280316c952e2313bf76c566
+commit: https://git.buildroot.net/buildroot/commit/?id=5955fdee9cfa610b08906e349e53953ad70388d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-The "find" and "xargs" commands, from the "findutils" package are used
-during the build process. See for example [1].
+We are trying to not build the perf documentation. However, the hook
+being used to do so was named incorrectly. As a result, the build steps
+to disable the documentation were never executed.
 
-Even if it's a quite common package which is almost sure to be present
-on the host, it should be listed here. When writing new recipes, hooks
-and scripts, it is generally safe and portable to restrict to the
-host dependencies listed in those prerequisites.
+Rename the hook from
+    LINUX_POST_PATCH_HOOKS
+to
+    LINUX_TOOLS_POST_PATCH_HOOKS
+to fix the issue.
 
-This commit just add the missing "findutils" package in this list.
-
-[1] https://git.buildroot.org/buildroot/tree/Makefile?h=2022.05.1#n737
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7652817c93a02715e0d334d70118a0d8b6917ca6)
+Fixes: 20b144666909 ("linux/tools: make it a real, separate package")
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 612ae4bd180de764becb48f609ffe836d362a87b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/prerequisite.txt | 1 +
- 1 file changed, 1 insertion(+)
+ package/linux-tools/linux-tool-perf.mk.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-index 763fe79041..48be489f90 100644
---- a/docs/manual/prerequisite.txt
-+++ b/docs/manual/prerequisite.txt
-@@ -37,6 +37,7 @@ between distributions).
- ** +rsync+
- ** +file+ (must be in +/usr/bin/file+)
- ** +bc+
-+** +findutils+
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index d82d45973c..3ec4dc6fee 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -126,7 +126,7 @@ define PERF_DISABLE_DOCUMENTATION
+ 		printf "%%:\n\t@:\n" >$(LINUX_DIR)/tools/perf/Documentation/GNUmakefile; \
+ 	fi
+ endef
+-LINUX_POST_PATCH_HOOKS += PERF_DISABLE_DOCUMENTATION
++LINUX_TOOLS_POST_PATCH_HOOKS += PERF_DISABLE_DOCUMENTATION
  
- * Source fetching tools:
- ** +wget+
+ # O must be redefined here to overwrite the one used by Buildroot for
+ # out of tree build. We build perf in $(LINUX_DIR)/tools/perf/ and not just
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
