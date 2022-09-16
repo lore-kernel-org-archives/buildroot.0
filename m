@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35015C54EE9
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 11:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9E60ECAAD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 11:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D322261228;
-	Fri, 16 Sep 2022 11:51:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D322261228
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5297661363;
+	Fri, 16 Sep 2022 11:51:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5297661363
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UG-wbQjnBthD; Fri, 16 Sep 2022 11:51:10 +0000 (UTC)
+	with ESMTP id hYTNI-KE0fOj; Fri, 16 Sep 2022 11:51:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1ACD261222;
-	Fri, 16 Sep 2022 11:51:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ACD261222
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EFD36133E;
+	Fri, 16 Sep 2022 11:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EFD36133E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6F5D81BF2B9
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:46:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 803861BF2B9
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:46:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CBE641C7B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89A0A41C8F
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:46:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CBE641C7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89A0A41C8F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LYa8abE7nCbX for <buildroot@lists.busybox.net>;
+ with ESMTP id YcwBYQ2r4jPJ for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 11:46:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 060F341CA0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2378941CA8
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 11:46:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 060F341CA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2378941CA8
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 03A8283CC0; Fri, 16 Sep 2022 11:46:46 +0000 (UTC)
+ id 1EDD783CC0; Fri, 16 Sep 2022 11:46:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 12:29:43 +0200
+Date: Fri, 16 Sep 2022 12:30:40 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 8fbc70228859b4aa11fc6bdf17392f54dd1fe564
-X-Git-Newrev: 9bac5ee1c16953b9a013084d4baee552a812a3b4
+X-Git-Oldrev: f6fe48ebabad3424d8ece5bf49ca07849f00d163
+X-Git-Newrev: 2133c921b2a4f05ea94de2c8b6d2e8b5452a78e0
 X-Patchwork-Hint: ignore
-Message-Id: <20220916114646.03A8283CC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/directfb: drop
- bogus BR2_PACKAGE_DIRECTFB_CYBER5K
+Message-Id: <20220916114646.1EDD783CC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/gstreamer1/gst1-plugins-good: drop bogus
+ BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bac5ee1c16953b9a013084d4baee552a812a3b4
+commit: https://git.buildroot.net/buildroot/commit/?id=2133c921b2a4f05ea94de2c8b6d2e8b5452a78e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The inexistent symbol is reference since 2008, see commit '8a12bab608
-widen options to configure directfb, patch by Micha Nelissen
-<micha@neli.hopto.org>'
+Commit 'dc7ca780a0 package/gstreamer1/gst1-plugins-good: convert package
+type to meson' from 2019 removed the symbol, stating:
+  Remove BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB
+  Existing configs will already have BR2_PACKAGE_ZLIB selected, so no
+  legacy entry is needed for BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB
+
+So drop the reference to the symbol.
 
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b24ba50ab1e9b080900b0f24a329e222904ce370)
+(cherry picked from commit fa77b1b9f270d09f20ce5f9924dae27d91c7f883)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/directfb/directfb.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 56a396ab99..094e87e7e7 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -67,7 +67,6 @@ endif
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 61ffc7b989..de7dcb985d 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -480,10 +480,6 @@ else
+ GST1_PLUGINS_GOOD_CONF_OPTS += -Dwavpack=disabled
+ endif
  
- DIRECTFB_GFX = \
- 	$(if $(BR2_PACKAGE_DIRECTFB_ATI128),ati128) \
--	$(if $(BR2_PACKAGE_DIRECTFB_CYBER5K),cyber5k) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_MATROX),matrox) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_PXA3XX),pxa3xx) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_I830),i830) \
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB),y)
+-GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_BZ2),y)
+ GST1_PLUGINS_GOOD_CONF_OPTS += -Dbz2=enabled
+ GST1_PLUGINS_GOOD_DEPENDENCIES += bzip2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
