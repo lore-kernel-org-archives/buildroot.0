@@ -1,44 +1,44 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5B6EECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 17:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01409ECAAA1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 18:40:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A14340912;
-	Fri, 16 Sep 2022 17:56:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A14340912
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7142F41D2E;
+	Fri, 16 Sep 2022 18:40:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7142F41D2E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YSTtKfoFKBam; Fri, 16 Sep 2022 17:56:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KF9AiQD13RS6; Fri, 16 Sep 2022 18:40:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 338BE4036F;
-	Fri, 16 Sep 2022 17:56:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 338BE4036F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BFE641D30;
+	Fri, 16 Sep 2022 18:40:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BFE641D30
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 93E531BF33B
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 17:56:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 050341BF3E9
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 18:40:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F3F74036F
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 17:56:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F3F74036F
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDDEF40217
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 18:40:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDDEF40217
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3lMgUtJi-FlZ for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 17:56:11 +0000 (UTC)
+ with ESMTP id x-TLOz92pj_z for <buildroot@lists.busybox.net>;
+ Fri, 16 Sep 2022 18:40:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DDAF400D2
- for <buildroot@uclibc.org>; Fri, 16 Sep 2022 17:56:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DDAF400D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D9F0401C2
+ for <buildroot@uclibc.org>; Fri, 16 Sep 2022 18:40:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D9F0401C2
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 8C29883D7F; Fri, 16 Sep 2022 17:56:11 +0000 (UTC)
+ id 1BB3983D7F; Fri, 16 Sep 2022 18:40:35 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 16 Sep 2022 17:56:11 +0000
+Date: Fri, 16 Sep 2022 18:40:34 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,7 +47,7 @@ X-Bugzilla-Component: Other
 X-Bugzilla-Version: unspecified
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Who: david.lawson1@tx.rr.com
 X-Bugzilla-Status: ASSIGNED
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -55,7 +55,7 @@ X-Bugzilla-Assigned-To: yann.morin.1998@free.fr
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-14996-163-LPmbkaGNwk@https.bugs.busybox.net/>
+Message-ID: <bug-14996-163-9dK46mQgqH@https.bugs.busybox.net/>
 In-Reply-To: <bug-14996-163@https.bugs.busybox.net/>
 References: <bug-14996-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,26 +81,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=14996
 
---- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-David, All,
+--- Comment #5 from David Lawson <david.lawson1@tx.rr.com> ---
+Here is a simple project that shows the problem:
 
-To be noted: on my machine, in the directory I was using, I was limited
-to using just 2446 br2-external trees, otherwise, make would whine with:
-
-- with 2447:
-  make: execvp: /bin/sh: Argument list too long
-
-- with 2248 and above:
-  -bash: /usr/bin/make: Argument list too long
-
-Yes, note how 2446 succeeds, 2447 has a special error, and 2448 and above
-have another error... Meh...
-
-But still, 2446 br2-external trees is clearly way more than was ever
-expected when the feature was added... back in 2016!
-
-Regards,
-Yann E. MORIN.
+https://github.com/dclawso/buldroot-recursive
 
 -- 
 You are receiving this mail because:
