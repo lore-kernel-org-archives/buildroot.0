@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A62AAECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 12:07:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AE25C54EE9
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 12:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54323842F5;
-	Fri, 16 Sep 2022 12:07:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54323842F5
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3B5141CC7;
+	Fri, 16 Sep 2022 12:07:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3B5141CC7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JaWWeVaS1r08; Fri, 16 Sep 2022 12:07:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T09V4_NR_leS; Fri, 16 Sep 2022 12:07:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 739B0842E0;
-	Fri, 16 Sep 2022 12:07:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 739B0842E0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 193211BF2E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAF95418B2;
+	Fri, 16 Sep 2022 12:07:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAF95418B2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 60ED31BF2E5
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:06:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E82CC40A88
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:06:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E82CC40A88
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B9E8418B2
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:06:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B9E8418B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7UanMpv5nILp for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mYUl3gFn6Ldr for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 12:06:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CF8140017
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18E5541740
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 12:06:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CF8140017
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18E5541740
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 1C30083CEE; Fri, 16 Sep 2022 12:06:31 +0000 (UTC)
+ id 07C3083CEA; Fri, 16 Sep 2022 12:06:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 14:05:05 +0200
+Date: Fri, 16 Sep 2022 14:02:53 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 511ea0c89da9906e555bafd65746e5debb01b7a6
-X-Git-Newrev: e25212443cf22d18a2c48250ebf355a7355af603
+X-Git-Oldrev: 284419a95f8c76be3e1853eaa4031a9dd6f94661
+X-Git-Newrev: 7b5b8e4f968d51ca194f664f12ad98388db6a6bb
 X-Patchwork-Hint: ignore
-Message-Id: <20220916120631.1C30083CEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/makedumpfile: set
- CROSS
+Message-Id: <20220916120631.07C3083CEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] Revert "package/libvirtd:
+ fix recursive dependency in Kconfig"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e25212443cf22d18a2c48250ebf355a7355af603
+commit: https://git.buildroot.net/buildroot/commit/?id=7b5b8e4f968d51ca194f664f12ad98388db6a6bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Set CROSS variable otherwise makedumpfile will use it to undefine the
-host architecture through -U__$(HOST_ARCH)__ if $(TARGET) is not equal
-to $(HOST_ARCH). This will result in the following build failure since
-the addition of the package in commit
-adb64a97e79bcb4e28450dd858654003ec8706c3 if aarch64_be is cross-compiled
-on a aarch64 host for example:
+This reverts commit f81242ae4fb64ab85af5d38e70246222276552ae to avoid
+the following build failure:
 
-/home/autobuild/autobuild/instance-5/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -g -O2 -Wall -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DVERSION='"1.7.0"' -DRELEASE_DATE='"8 Nov 2021"' -D__aarch64_be__ -U__aarch64__ -DUSELZO -c -o ./print_info.o print_info.c
-
-[...]
-
-makedumpfile.c: In function 'is_kvaddr':
-makedumpfile.c:1547:46: error: 'KVBASE' undeclared (first use in this function)
- 1547 |         return (addr >= (unsigned long long)(KVBASE));
-      |                                              ^~~~~~
+Makefile:575: *** libbsd is in the dependency chain of netcat-openbsd that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
 
 Fixes:
- - http://autobuild.buildroot.org/results/e4e10364e1a24099ce31bf20eacf5adedf93e5a7
+ - http://autobuild.buildroot.org/results/aada1d92df6cab0d01e27431b7b7483e3d165e79
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b8665e39f1fa3f77fc390cb2a14884f2cb7c76f4)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ecf49374ee622c7b8ff0ac8d5cb223a9b65141b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/makedumpfile/makedumpfile.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libvirt/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
-index 8399e4d063..815a159b00 100644
---- a/package/makedumpfile/makedumpfile.mk
-+++ b/package/makedumpfile/makedumpfile.mk
-@@ -17,6 +17,7 @@ MAKEDUMPFILE_TARGET = $(BR2_ARCH)
- endif
- 
- MAKEDUMPFILE_MAKE_OPTS = \
-+	CROSS= \
- 	TARGET=$(MAKEDUMPFILE_TARGET) \
- 	LINKTYPE=dynamic
- 
+diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
+index af0fc36aea..65226af336 100644
+--- a/package/libvirt/Config.in
++++ b/package/libvirt/Config.in
+@@ -44,13 +44,15 @@ if BR2_PACKAGE_LIBVIRT
+ config BR2_PACKAGE_LIBVIRT_DAEMON
+ 	bool "libvirtd"
+ 	default y
++	depends on BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_NETCAT_OPENBSD # nmap
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	select BR2_PACKAGE_DNSMASQ
+ 	select BR2_PACKAGE_EBTABLES
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_IPROUTE2
+ 	# These are required because there is no way to unequivocally select a modern netcat
+-	select BR2_PACKAGE_NETCAT_OPENBSD if !BR2_PACKAGE_NMAP_NCAT
++	select BR2_PACKAGE_NMAP      if !BR2_PACKAGE_NETCAT_OPENBSD
++	select BR2_PACKAGE_NMAP_NCAT if !BR2_PACKAGE_NETCAT_OPENBSD
+ 	select BR2_PACKAGE_RADVD
+ 	help
+ 	  Build the libvirt daemon (libvirtd) otherwise build only the
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
