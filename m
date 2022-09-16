@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7BF0ECAAA1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 21:58:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C300AECAAA1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 21:58:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E75B41D6B;
-	Fri, 16 Sep 2022 21:58:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E75B41D6B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F28F6FAE7;
+	Fri, 16 Sep 2022 21:58:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F28F6FAE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GMD-d5m4zS8d; Fri, 16 Sep 2022 21:58:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id d8Rk3PIYMhos; Fri, 16 Sep 2022 21:58:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AF8F41BA2;
-	Fri, 16 Sep 2022 21:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AF8F41BA2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E22E1C2745
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1C9161028;
+	Fri, 16 Sep 2022 21:58:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1C9161028
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 85E291BF3DA
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA38841D69
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA38841D69
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F66D6FAE4
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F66D6FAE4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pk4T2y7KWLUz for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KH6XFD6uW782 for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D10F41D63
+ by smtp3.osuosl.org (Postfix) with ESMTP id 416596FAD0
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D10F41D63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 416596FAD0
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 4B5D983DFA; Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
+ id 2A11D83DF3; Fri, 16 Sep 2022 21:57:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 23:45:31 +0200
+Date: Fri, 16 Sep 2022 23:44:34 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: c50df50138874aafc0ecd8104dc0aa69ee14b56e
-X-Git-Newrev: 0f74e1b9089fcac5c5ddab58e81e81552b99d6ea
+X-Git-Oldrev: f8949e4526df03f80a77d5c00b07e2d3c2ef819f
+X-Git-Newrev: 8b8a72e7da51867208663ca3b50ba4bb1956c754
 X-Patchwork-Hint: ignore
-Message-Id: <20220916215759.4B5D983DFA@busybox.osuosl.org>
+Message-Id: <20220916215759.2A11D83DF3@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.05.x] Revert
- "configs/bananapi_m1: use NEON+VFPv4 as FPU strategy"
+ "configs/olimex_a33_olinuxino: use NEON+VFPv4 as FPU strategy"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f74e1b9089fcac5c5ddab58e81e81552b99d6ea
+commit: https://git.buildroot.net/buildroot/commit/?id=8b8a72e7da51867208663ca3b50ba4bb1956c754
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 The gcc man page states that specifying Neon as part of the fpu setting
@@ -86,27 +86,28 @@ well as setting BR2_ARM_FPU_NEON_VFPV4. This way the default
 BR2_ARM_FPU_VFPV4D16 is used as previously. So let's revert the
 offending patch.
 
-This reverts commit aaced92e8c69e3eb71c2cba4c5ae6a1770ae8972.
+This reverts commit 23329364e206d5ca67a9eb9c733d3d556ccdbac4.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 25ecee3f173763cdf54350cbf4115c123843627c)
+(cherry picked from commit 68d0385533698e49747a070a03bd7a06652288bd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/bananapi_m1_defconfig | 1 -
+ configs/olimex_a33_olinuxino_defconfig | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/configs/bananapi_m1_defconfig b/configs/bananapi_m1_defconfig
-index 2d948ec223..23da363345 100644
---- a/configs/bananapi_m1_defconfig
-+++ b/configs/bananapi_m1_defconfig
-@@ -1,6 +1,5 @@
+diff --git a/configs/olimex_a33_olinuxino_defconfig b/configs/olimex_a33_olinuxino_defconfig
+index 27924b9e92..cdbc63efe1 100644
+--- a/configs/olimex_a33_olinuxino_defconfig
++++ b/configs/olimex_a33_olinuxino_defconfig
+@@ -1,7 +1,6 @@
+ # Architecture
  BR2_arm=y
  BR2_cortex_a7=y
 -BR2_ARM_FPU_NEON_VFPV4=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M1"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ 
+ # Linux headers same as kernel, a 5.14 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_14=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
