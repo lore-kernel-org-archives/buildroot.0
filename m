@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D511ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 11:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C65F7C54EE9
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 11:49:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AD446122C;
-	Fri, 16 Sep 2022 11:49:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AD446122C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7DAE24103A;
+	Fri, 16 Sep 2022 11:49:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DAE24103A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A2GMuWlLlW7S; Fri, 16 Sep 2022 11:49:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3n4v4MIGqbQl; Fri, 16 Sep 2022 11:49:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D15A6123D;
-	Fri, 16 Sep 2022 11:49:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D15A6123D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1C8981BF2B9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9EFDA40BA2;
+	Fri, 16 Sep 2022 11:49:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EFDA40BA2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B35D11BF2B9
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:46:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8AA47419E3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 02AA5842B3
  for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:46:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AA47419E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02AA5842B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8jNVO7tIJZpH for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xlk7Gm7us8Sg for <buildroot@lists.busybox.net>;
  Fri, 16 Sep 2022 11:46:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CDAF341C8F
+ by smtp1.osuosl.org (Postfix) with ESMTP id F06AD842B5
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 11:46:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDAF341C8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F06AD842B5
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id B8C8883CC3; Fri, 16 Sep 2022 11:46:45 +0000 (UTC)
+ id EE46E83CC5; Fri, 16 Sep 2022 11:46:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 12:26:44 +0200
+Date: Fri, 16 Sep 2022 12:29:20 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3cbac6d4c2c7a5d46d65e1520513bbcda55202b0
-X-Git-Newrev: 6f34a1734c9574ebc7802c60a12ab77b1fddb90e
+X-Git-Oldrev: 794eac41cc8e116fedf5b6700cc9d0e494fd5c04
+X-Git-Newrev: 8fbc70228859b4aa11fc6bdf17392f54dd1fe564
 X-Patchwork-Hint: ignore
-Message-Id: <20220916114645.B8C8883CC3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/jquery-ui-themes:
- fix typo on BR2_PACKAGE_JQUERY_UI_THEMES_VADER
+Message-Id: <20220916114645.EE46E83CC5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/openocd: drop
+ bogus BR2_PACKAGE_OPENOCD_ZY1000*
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f34a1734c9574ebc7802c60a12ab77b1fddb90e
+commit: https://git.buildroot.net/buildroot/commit/?id=8fbc70228859b4aa11fc6bdf17392f54dd1fe564
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-The typo was added in 2018 by commit
-'94c146282f jquery-ui-themes: rename options to have proper prefix'
+These inexistent symbols are referenced since 2014, from commit:
+'aa441aa84c openocd: bump to version 0.8.0'
 
-Cc: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f008c74061e604069d9716ac97d2a3f78c9f00b3)
+(cherry picked from commit 086968e8690aac239d4f7f14d6d1c62dcf065a5d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jquery-ui-themes/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openocd/openocd.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/jquery-ui-themes/Config.in b/package/jquery-ui-themes/Config.in
-index 29359544ac..b372d40b60 100644
---- a/package/jquery-ui-themes/Config.in
-+++ b/package/jquery-ui-themes/Config.in
-@@ -112,6 +112,6 @@ config BR2_PACKAGE_JQUERY_UI_THEMES_THEME
- 	default "trontastic"		if BR2_PACKAGE_JQUERY_UI_THEMES_TRONTASTIC
- 	default "ui-darkness"		if BR2_PACKAGE_JQUERY_UI_THEMES_UI_DARKNESS
- 	default "ui-lightness"		if BR2_PACKAGE_JQUERY_UI_THEMES_UI_LIGHTNESS
--	default "vader"			if BR2_PACKAGE_JQUERY_UI_THEMES_UI_VADER
-+	default "vader"			if BR2_PACKAGE_JQUERY_UI_THEMES_VADER
- 
- endif
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index 9f53ae3ee3..37a06ca848 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -56,8 +56,6 @@ OPENOCD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_OPENOCD_VPI),--enable-jtag_vpi,--disable-jtag_vpi) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_UBLASTER),--enable-usb-blaster,--disable-usb-blaster) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_AMTJT),--enable-amtjtagaccel,--disable-amjtagaccel) \
+-	$(if $(BR2_PACKAGE_OPENOCD_ZY1000_MASTER),--enable-zy1000-master,--disable-zy1000-master) \
+-	$(if $(BR2_PACKAGE_OPENOCD_ZY1000),--enable-zy1000,--disable-zy1000) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_EP93XX),--enable-ep93xx,--disable-ep93xx) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_AT91RM),--enable-at91rm9200,--disable-at91rm9200) \
+ 	$(if $(BR2_PACKAGE_OPENOCD_BCM2835),--enable-bcm2835gpio,--disable-bcm2835gpio) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
