@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4390ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 12:06:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 233ECC54EE9
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 12:06:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64B474161F;
-	Fri, 16 Sep 2022 12:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64B474161F
+	by smtp2.osuosl.org (Postfix) with ESMTP id BBEAB41639;
+	Fri, 16 Sep 2022 12:06:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBEAB41639
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0DGbFGmgnYpL; Fri, 16 Sep 2022 12:06:41 +0000 (UTC)
+	with ESMTP id auuAIF4IOYCV; Fri, 16 Sep 2022 12:06:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9154041627;
-	Fri, 16 Sep 2022 12:06:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9154041627
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C55471C2744
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:06:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE95A41635;
+	Fri, 16 Sep 2022 12:06:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE95A41635
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C6991BF2E5
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A10C1842E1
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:06:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A10C1842E1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 077BE41740
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 12:06:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 077BE41740
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m430thnleczL for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 12:06:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N1D0vDci4Z7k for <buildroot@lists.busybox.net>;
+ Fri, 16 Sep 2022 12:06:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D86D7842E0
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2E4640980
  for <buildroot@buildroot.org>; Fri, 16 Sep 2022 12:06:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D86D7842E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2E4640980
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id C5A6183CDF; Fri, 16 Sep 2022 12:06:24 +0000 (UTC)
+ id CFE6083CE0; Fri, 16 Sep 2022 12:06:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 14:02:31 +0200
+Date: Fri, 16 Sep 2022 14:05:09 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: aeecb25abcf13d20b882c2418c2ef5c7db1c8fc8
-X-Git-Newrev: c65cf580ad5c3bde8e7e92c5532b5c5b7db4857c
+X-Git-Oldrev: c65cf580ad5c3bde8e7e92c5532b5c5b7db4857c
+X-Git-Newrev: bc9363b7248892b1ade8f19bb9fd778bcc0f46cb
 X-Patchwork-Hint: ignore
-Message-Id: <20220916120624.C5A6183CDF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libvirt: fix
- libvirtd dependency
+Message-Id: <20220916120624.CFE6083CE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/makedumpfile: set
+ CROSS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c65cf580ad5c3bde8e7e92c5532b5c5b7db4857c
+commit: https://git.buildroot.net/buildroot/commit/?id=bc9363b7248892b1ade8f19bb9fd778bcc0f46cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Commit 4dff1be05e90 (package/libvirt: libvirtd needs C++ for nmap-ncat)
-introduce a recursive dependency (really: a circular dependency):
+Set CROSS variable otherwise makedumpfile will use it to undefine the
+host architecture through -U__$(HOST_ARCH)__ if $(TARGET) is not equal
+to $(HOST_ARCH). This will result in the following build failure since
+the addition of the package in commit
+adb64a97e79bcb4e28450dd858654003ec8706c3 if aarch64_be is cross-compiled
+on a aarch64 host for example:
 
-    package/busybox/Config.in:33:error: recursive dependency detected!
-    package/busybox/Config.in:33:   symbol BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is selected by BR2_PACKAGE_EBTABLES_UTILS_SAVE
-    package/ebtables/Config.in:11:  symbol BR2_PACKAGE_EBTABLES_UTILS_SAVE depends on BR2_PACKAGE_EBTABLES
-    package/ebtables/Config.in:1:   symbol BR2_PACKAGE_EBTABLES is selected by BR2_PACKAGE_LIBVIRT_DAEMON
-    package/libvirt/Config.in:44:   symbol BR2_PACKAGE_LIBVIRT_DAEMON depends on BR2_PACKAGE_NETCAT_OPENBSD
-    package/netcat-openbsd/Config.in:1:     symbol BR2_PACKAGE_NETCAT_OPENBSD depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+/home/autobuild/autobuild/instance-5/output-1/host/bin/aarch64_be-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -g -O2 -Wall -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DVERSION='"1.7.0"' -DRELEASE_DATE='"8 Nov 2021"' -D__aarch64_be__ -U__aarch64__ -DUSELZO -c -o ./print_info.o print_info.c
 
-We can't drop the C++ dependency and switch the netcat-openbsd and
-nmap-ncat dependencies conditions without adding a glibc dependency.
+[...]
 
-So always mandate C++ even if is only needed by nmap and not
-netcat-openbsd
+makedumpfile.c: In function 'is_kvaddr':
+makedumpfile.c:1547:46: error: 'KVBASE' undeclared (first use in this function)
+ 1547 |         return (addr >= (unsigned long long)(KVBASE));
+      |                                              ^~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e4e10364e1a24099ce31bf20eacf5adedf93e5a7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a17c456b2ccd44566c2395efc90d403cd27a2902)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b8665e39f1fa3f77fc390cb2a14884f2cb7c76f4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libvirt/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/makedumpfile/makedumpfile.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-index 65226af336..f0687cd5db 100644
---- a/package/libvirt/Config.in
-+++ b/package/libvirt/Config.in
-@@ -44,7 +44,7 @@ if BR2_PACKAGE_LIBVIRT
- config BR2_PACKAGE_LIBVIRT_DAEMON
- 	bool "libvirtd"
- 	default y
--	depends on BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_NETCAT_OPENBSD # nmap
-+	depends on BR2_INSTALL_LIBSTDCPP # nmap
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_DNSMASQ
- 	select BR2_PACKAGE_EBTABLES
-@@ -58,6 +58,9 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
- 	  Build the libvirt daemon (libvirtd) otherwise build only the
- 	  utility programs.
+diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
+index 8399e4d063..815a159b00 100644
+--- a/package/makedumpfile/makedumpfile.mk
++++ b/package/makedumpfile/makedumpfile.mk
+@@ -17,6 +17,7 @@ MAKEDUMPFILE_TARGET = $(BR2_ARCH)
+ endif
  
-+comment "libvirtd needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- # Stateful drivers are useful only when building the daemon.
- if BR2_PACKAGE_LIBVIRT_DAEMON
+ MAKEDUMPFILE_MAKE_OPTS = \
++	CROSS= \
+ 	TARGET=$(MAKEDUMPFILE_TARGET) \
+ 	LINKTYPE=dynamic
  
 _______________________________________________
 buildroot mailing list
