@@ -1,58 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B1B2ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 11:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D7FCC6FA8B
+	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 11:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B65266121B;
-	Fri, 16 Sep 2022 11:41:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B65266121B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42889419C7;
+	Fri, 16 Sep 2022 11:41:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42889419C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RX8-Ig9TTWnw; Fri, 16 Sep 2022 11:41:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RuDyJqtYpdo4; Fri, 16 Sep 2022 11:41:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF5396121C;
-	Fri, 16 Sep 2022 11:41:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF5396121C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EEC541964;
+	Fri, 16 Sep 2022 11:41:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EEC541964
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C34BA1BF2B9
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:40:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 939581BF2B9
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:40:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F21140BA2
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:40:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F21140BA2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7CD1840017
+ for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 11:40:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CD1840017
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3NHnGRFfiXfj for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 11:40:12 +0000 (UTC)
+ with ESMTP id vxRN-pnklmtA for <buildroot@lists.busybox.net>;
+ Fri, 16 Sep 2022 11:40:17 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD03E40BBB
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD03E40BBB
- for <buildroot@buildroot.org>; Fri, 16 Sep 2022 11:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A30B740B9D
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A30B740B9D
+ for <buildroot@buildroot.org>; Fri, 16 Sep 2022 11:40:16 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B299310000B;
- Fri, 16 Sep 2022 11:40:09 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 62175E0003;
+ Fri, 16 Sep 2022 11:40:14 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oZ9hY-008bO9-Pw; Fri, 16 Sep 2022 13:40:08 +0200
+ id 1oZ9hd-008bOe-Jm; Fri, 16 Sep 2022 13:40:13 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 References: <20220814233845.2247022-1-ricardo.martincoski@gmail.com>
- <20220814233845.2247022-9-ricardo.martincoski@gmail.com>
-Date: Fri, 16 Sep 2022 13:40:08 +0200
-In-Reply-To: <20220814233845.2247022-9-ricardo.martincoski@gmail.com> (Ricardo
- Martincoski's message of "Sun, 14 Aug 2022 20:38:20 -0300")
-Message-ID: <877d23cztz.fsf@dell.be.48ers.dk>
+ <20220814233845.2247022-10-ricardo.martincoski@gmail.com>
+Date: Fri, 16 Sep 2022 13:40:13 +0200
+In-Reply-To: <20220814233845.2247022-10-ricardo.martincoski@gmail.com>
+ (Ricardo Martincoski's message of "Sun, 14 Aug 2022 20:38:21 -0300")
+Message-ID: <8735crcztu.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 08/33] package/libvncserver: fix typo on
- BR2_nios2
+Subject: Re: [Buildroot] [PATCH 09/33] package/libgpg-error: fix typo for
+ BR2_aarch64_be
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,15 +73,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > From time to time we have a reference added to the inexistent BR2_nios:
- > $ git log --oneline -G'BR2_nios\>'
- > 726dcc6eee package/libvncserver: needs dynamic library
- > 8cd840b7e8 package/ffmpeg: fix typo "nios" -> "nios2"
- > bd2544d3d3 package/ffmpeg: simplify BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS logic
- > de7523259b libplayer: fix typo on BR2_nios2
- > 615d65d3c6 mplayer: add missing reverse dependencies for nios2 and sh2a
-
- > Fix the last commit, from 2019, like it was done before.
+ > The typo was introduced in 2016 by commit
+ > '2f89476ad9 package/libgpg-error: bump to version 1.23'
 
  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
