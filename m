@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ADE0ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 16:12:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B29AAECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 16:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E94DE83F6B;
-	Sat, 17 Sep 2022 16:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E94DE83F6B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 58C654057F;
+	Sat, 17 Sep 2022 16:13:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58C654057F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CVU6xRrNMGZ6; Sat, 17 Sep 2022 16:12:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5bKrCg5Tg0H9; Sat, 17 Sep 2022 16:13:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C81F83F63;
-	Sat, 17 Sep 2022 16:12:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C81F83F63
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 224211BF48D
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 16:12:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 855CD4014A;
+	Sat, 17 Sep 2022 16:13:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 855CD4014A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A43491BF48D
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 16:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 02FC9607C1
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 16:12:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02FC9607C1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7FB254014A
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 16:13:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FB254014A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QD657-j8_k4t for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 16:12:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF4226117B
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF4226117B
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 16:12:04 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0723D200003;
- Sat, 17 Sep 2022 16:12:01 +0000 (UTC)
-Date: Sat, 17 Sep 2022 18:12:00 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lt6p0jKiUU-N for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 16:13:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A16E5400E7
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 16:13:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A16E5400E7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9103F845A3; Sat, 17 Sep 2022 16:13:04 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Petr Vorel <pevik@seznam.cz>
-Message-ID: <20220917181200.7203d383@windsurf>
-In-Reply-To: <20220901213356.967671-1-pevik@seznam.cz>
-References: <20220901213356.967671-1-pevik@seznam.cz>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663431123;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=1ExvYUkkGfzP/+iQeHzBLrB955fXQVDwIbJfbm0S1xk=;
- b=EG8Bxry7ipwq47qJy70b6CVKnT34ddLx1Z+r52wJ1gEeGwPB0mBkk2ewi78v6Q4Jj6XzFC
- WhCTnod+o5VCD6C+P+dwh05ZE0BNXC2JoyF0p4jbDoEMDXD55p0nZNzmASWHbFNnjN6ZCG
- RvBpvemXfAnDQey8zwaNESSfpwQ07eGH7uc15amLCfx+O3SpezH2fAVKGGe6rS/0fRDU2Z
- pW+CDeRob6O2JVkxt72OxdxZm3WSBg9FMpGNp24Av0Yga/CJ2CdMEE4+q038OHcJAPrUQb
- Bd6Jpwj6pWaCdFs8P6QS9sWKDrSThy04x4ayccyS/IKHbmPIuWA/QZbhecLlAA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EG8Bxry7
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/iproute2: bump version to
- 5.19.0
+To: buildroot@buildroot.org
+Date: Sat, 17 Sep 2022 18:12:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f640de44fac0c31e26e23a35b39d2b49b2060fbd
+X-Git-Newrev: 3a5389f579de7938f74babd18edd80a272e65d3a
+X-Patchwork-Hint: ignore
+Message-Id: <20220917161304.9103F845A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: bump to version 0.3.57
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,37 +56,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  1 Sep 2022 23:33:56 +0200
-Petr Vorel <pevik@seznam.cz> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3a5389f579de7938f74babd18edd80a272e65d3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Petr Vorel <petr.vorel@gmail.com>
-> 
-> Adjust CFLAGS to be able to compile on uclibc-ng < 1.0.42.
-> 
-> Remove patch from this release, backport 3 patches fixing build from
-> upstream.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Changes v1->v2:
-> * Add -Dstatic_assert=_Static_assert to CFLAGS to be able to compile on
-> * uclibc-ng < 1.0.42 (thanks Arnout!)
+Add support for new bluez5-codec-opus codec feature.
 
-Applied to master, thanks.
+Disable new unsupported flatpak feature.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pipewire/pipewire.hash |  2 +-
+ package/pipewire/pipewire.mk   | 13 ++++++++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 905608c3bf..21c3119945 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  bb4662ee4f4036586905268354329228d763fc08d99ca8f0e8ec7e002e46b88d  pipewire-0.3.56.tar.bz2
++sha256  da1fd2e6ee088aa22f5398caca76ff879e398ec9216fb6b9400c1177b8c68115  pipewire-0.3.57.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index 790d9c8d9f..1aad4a3c5c 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIPEWIRE_VERSION = 0.3.56
++PIPEWIRE_VERSION = 0.3.57
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -32,7 +32,8 @@ PIPEWIRE_CONF_OPTS += \
+ 	-Dsession-managers=[] \
+ 	-Dlegacy-rtkit=false \
+ 	-Davb=disabled \
+-	-Dlibcanberra=disabled
++	-Dlibcanberra=disabled \
++	-Dflatpak=disabled
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ PIPEWIRE_CONF_OPTS += -Ddbus=enabled
+@@ -103,8 +104,14 @@ endif
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC),yy)
+ PIPEWIRE_CONF_OPTS += -Dbluez5=enabled
+ PIPEWIRE_DEPENDENCIES += bluez5_utils sbc
++ifeq ($(BR2_PACKAGE_OPUS),y)
++PIPEWIRE_CONF_OPTS += -Dbluez5-codec-opus=enabled
++PIPEWIRE_DEPENDENCIES += opus
+ else
+-PIPEWIRE_CONF_OPTS += -Dbluez5=disabled
++PIPEWIRE_CONF_OPTS += -Dbluez5-codec-opus=disabled
++endif
++else
++PIPEWIRE_CONF_OPTS += -Dbluez5=disabled -Dbluez5-codec-opus=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FFMPEG),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
