@@ -1,73 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4DEAC6FA82
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 21:19:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E08C5ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 21:26:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7EE134016B;
-	Sat, 17 Sep 2022 21:19:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EE134016B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7424260ADE;
+	Sat, 17 Sep 2022 21:26:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7424260ADE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B7fOvzeSAuQB; Sat, 17 Sep 2022 21:19:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V2VzUMIP67D3; Sat, 17 Sep 2022 21:25:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E75E40119;
-	Sat, 17 Sep 2022 21:19:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E75E40119
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F19211BF3CE
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 21:19:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1E7960AC0;
+	Sat, 17 Sep 2022 21:25:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1E7960AC0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 01D0B1BF3CE
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 21:25:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DA87540119
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 21:19:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA87540119
+ by smtp1.osuosl.org (Postfix) with ESMTP id D16DC83E6F
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 21:25:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D16DC83E6F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id riCU0sPUZwHB for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 21:19:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VzrYkYax-OC9 for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 21:25:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFF13400E4
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CFF13400E4
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 21:19:20 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:2a18:6673:cb9f:3864])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C018713F84C;
- Sat, 17 Sep 2022 23:19:14 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 17 Sep 2022 23:19:14 +0200
-Date: Sat, 17 Sep 2022 23:19:14 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20220917211914.GB1127102@scaer>
-References: <cover.1660931225.git.yann.morin.1998@free.fr>
- <212daefb880a3c5e49ff4aa8278cc4c3bc67360e.1660931225.git.yann.morin.1998@free.fr>
- <d707dd32-af74-0d63-c890-7d81e29ca454@mind.be>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDF1783E66
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CDF1783E66
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 21:25:55 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ i203-20020a1c3bd4000000b003b3df9a5ecbso2059554wma.1
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:25:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=dGrKWmosON97W8kfGdj7QHoqc0jSWbIQq2vjgDW7fRQ=;
+ b=k1ljPa/6Ylp9aXonvsbqGzgVQkSfIG1kZEuUlpW9e+Y3HQJoLYxq8hkC5I18NZbEtq
+ BaYHELhDzkHgDDLI0yIZ2puQqee5T0+Oj5WjbvE3iEFdiIpvbee5zKdmyCTonSs8EQrl
+ WUXlM7M4ClTyBtvY8Lt6JjvL4VqHR1gTYr5PxhiBxyRxcAuXPLGw5Phxr1jaYyL1eBk0
+ YydMO/6KNb/wBzBFq9XFlReOOJI8TRI+lk5WG0p1lmYyXBRZvn8zxcvSJFpM2JB2G0AV
+ SjDHSxy1y94mE52TICxTrFs334hioBzHorlO5+vnmAOFmjCfY3L1ik5APTHBJA3s10Ko
+ eXbg==
+X-Gm-Message-State: ACrzQf1Kr7KTZfUaUayUA/siPQq9BblyiuePhZzK/6cfdWkCMg4SzGVl
+ 4Y/chrAxxz/8Dc2UnE0taXrekX66mNA=
+X-Google-Smtp-Source: AMsMyM74jk7vZIdj1FQ56Vv62ur/gAI4B14R4LVa3/SwWH+FFqcZxKvQ7p5s8uMkTd8tFeIqt9yBMg==
+X-Received: by 2002:a05:600c:2608:b0:3b4:8dac:342a with SMTP id
+ h8-20020a05600c260800b003b48dac342amr7363041wma.102.1663449953614; 
+ Sat, 17 Sep 2022 14:25:53 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ 2-20020a1c1902000000b003b49aa8083esm7109860wmz.42.2022.09.17.14.25.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 17 Sep 2022 14:25:53 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 17 Sep 2022 23:25:51 +0200
+Message-Id: <20220917212551.268739-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <d707dd32-af74-0d63-c890-7d81e29ca454@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1663449558;
- bh=B1l5AY/QrEsl3g77wKUUuOJAIiJT5s2O9piEX7Dx8DQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=vCw7F1t54MqGFjXZyGYFWcR3A8Z2JBUCzU1HbFeBWnBjIGuw+tXWG7ITr+HKUJXOm
- AaziYxsS/AACF494o7NOk7NGSN4QTLYBVKmdOCl2tedvCVyJdllZ70nDIILS7MQVW2
- ZHkKNGv1DB0XW1Axs9RHZzjdGg0B9fvapt4x+Ft5eNmq+WlV4kVucW0cn8YgHLYXiy
- kLeZZdOePzMvuYB2I/25Ct0xUb4PdtOCF0j3DCmp8xLZmq7uTOECxoEqttO/pKVH8O
- o/QH4GgCnQvZZyPF5i1R+zZaglkvqmTlyO4tB43D+6ksnw8O5Fb9WpSyWrlRySvHa5
- Es8ck9tmgbHWQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=vCw7F1t5
-Subject: Re: [Buildroot] [PATCH 2/4] package/dracut: allow users to provide
- their own modules
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=dGrKWmosON97W8kfGdj7QHoqc0jSWbIQq2vjgDW7fRQ=;
+ b=TvowY+XsKfiTqUM8xXt9qzHHG5LMzG4WOIg4JH9ONOBOBCDQg6DKkB7JblQD/vo0a+
+ PEiXe+PurAz8D8kkrcIsHpGRLCiUV636Nsmu78fXVgGPO7CIjVKlZCECOADuRp6esPSl
+ t7+bR0Xd/EGIoZpndy0iuyhipk+zSCeQA/8pDyqcPERQTQMLjchd9eyy1saib0diRDZF
+ snAxmZbKQhqtoDZNDvMt2BHQuYe+74QSsMUEqf6QaL0lz44cmpF1CK+V2ajR8Lpvcmgf
+ ssBWkbjMac0wPXwineG0HBm78vbFrYPQRo9oZ66gkg895S/wKhfR60MeyfDwQsoRkWx1
+ tzHQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=TvowY+Xs
+Subject: [Buildroot] [PATCH 1/1] package/liburcu: bump to version 0.13.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,100 +93,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <aduskett@gmail.com>,
- Thierry Bultel <thierry.bultel@linatsea.fr>, buildroot@buildroot.org
+Cc: Philippe Proulx <eeppeliteloop@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, All,
+https://github.com/urcu/userspace-rcu/blob/v0.13.2/ChangeLog
 
-On 2022-09-17 22:17 +0200, Arnout Vandecappelle spake thusly:
-> On 19/08/2022 19:50, Yann E. MORIN wrote:
-> >Dracut modules can only be looked for in HOST_DIR/lib/dracut/modules.d/
-> >and dracut does not offer the possibility to look elsewhere.
-> >
-> >Installing files in HOST_DIR/ can do done either from a host-package, or
-> >via a post-built script; there is no overlay like there is for target/.
-> >This is a bit cumbersome.
-> >
-> >Add an option to the host-dracut package, so users can point to a list
-> >of modules to install.
-[--SNIP--]
->  Although I agree that conceptually this extra modules thing belongs with
-> the dracut package itself, from a user, practical point of view, you
-> actually want it in the dracut option of fs/cpio. If you use host-dracut
-> without the cpio-dracut fs, it means you are using it in a post-build
-> script, so it's not so weird to also install the extra modules in that
-> script. On the other hand, if you are using cpio-dracut and you need extra
-> modules (which is quite likely), then it extremely annoying that you have to
-> go first to filesystems->cpio and later to hosttools->dracut...
-> 
->  In other words, I think this should be moved to cpio.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/liburcu/liburcu.hash | 4 ++--
+ package/liburcu/liburcu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I beg to differ (of course!). ;-)
-
-Extra modules change the features of dracut; they change what dracut can
-do. They are not like config files, which actually describe what the
-filesystem is to be assemble from.
-
-Besides copying extra modules as done in this patch, a user could also
-patch dracut to add those modules. So, semantically, extra modules from
-a patch or a local directory are the same.
-
-When adding new modules, you will indeed have to add config files that
-reference them (or one of your config files already references one and
-you missed it). Probably, indeed, the modules will be developped in a
-more-or-less closed loop with the config files that use them; but that's
-incidental.
-
-If they were part of the cpio filesystem, they'd be copied on every
-invocation, though, which is conceptually not very nice either (but
-probably very low overhead).
-
-Finally, even if using from a post-build script, it is still nicer to
-expose that option in the menuconfig, rather than require the user to do
-the copy in their script.
-
-So, local modules should really belong to the dracut package, not the
-cpio filesystem.
-
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> >+
-> >+endif
-> >diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
-> >index 2b6a144aac..96fa7db6ba 100644
-> >--- a/package/dracut/dracut.mk
-> >+++ b/package/dracut/dracut.mk
-> >@@ -19,6 +19,15 @@ define HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
-> >  endef
-> >  HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
-> >+HOST_DRACUT_EXTRA_MODULES = $(call qstrip,$(BR2_PACKAGE_HOST_DRACUT_EXTRA_MODULES))
-> >+define HOST_DRACUT_INSTALL_EXTRA_MODULES
-> >+	$(Q)mkdir -p $(HOST_DIR)/lib/dracut/modules.d/
-> >+	$(foreach m,$(HOST_DRACUT_EXTRA_MODULES), \
-> >+		cp -a $(m)/* $(HOST_DIR)/lib/dracut/modules.d/
-> >+	)
-> >+endef
-> >+HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_INSTALL_EXTRA_MODULES
-> >+
-> >  # When using uClibc or musl, there must be "ld-uClibc.so.1" or
-> >  # "ld-musl-x.so" symlinks, respectively - else the init process cannot
-> >  # start
-
+diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
+index 1968c3784e..bed765dd6f 100644
+--- a/package/liburcu/liburcu.hash
++++ b/package/liburcu/liburcu.hash
+@@ -1,5 +1,5 @@
+-# http://www.lttng.org/files/urcu/userspace-rcu-0.13.1.tar.bz2.sha256
+-sha256  3213f33d2b8f710eb920eb1abb279ec04bf8ae6361f44f2513c28c20d3363083  userspace-rcu-0.13.1.tar.bz2
++# http://www.lttng.org/files/urcu/userspace-rcu-0.13.2.tar.bz2.sha256
++sha256  1213fd9f1b0b74da7de2bb74335b76098db9738fec5d3cdc07c0c524f34fc032  userspace-rcu-0.13.2.tar.bz2
+ 
+ # Hash for license files
+ sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index 895dd6bb66..d7776c61ec 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBURCU_VERSION = 0.13.1
++LIBURCU_VERSION = 0.13.2
+ LIBURCU_SITE = http://lttng.org/files/urcu
+ LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
