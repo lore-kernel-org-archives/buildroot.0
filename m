@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AF1DC54EE9
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 09:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A17FBECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 09:54:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 204FC61036;
-	Sat, 17 Sep 2022 09:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 204FC61036
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iLIv1qKFp9gH; Sat, 17 Sep 2022 09:53:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FD9D60AF8;
-	Sat, 17 Sep 2022 09:53:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FD9D60AF8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 887371BF82D
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:53:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71643401CC
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:53:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71643401CC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 46CBC40121;
+	Sat, 17 Sep 2022 09:54:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46CBC40121
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YwI_sP7q5jlj for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 09:53:44 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74B8F40121
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 09:53:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74B8F40121
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 6095784145; Sat, 17 Sep 2022 09:53:44 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3QHRLpmuStUt; Sat, 17 Sep 2022 09:54:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FBE740223;
+	Sat, 17 Sep 2022 09:54:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FBE740223
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 73A741BF82D
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:54:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4EEC8610FA
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:54:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EEC8610FA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O0lO9_0bzgDR for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 09:54:02 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F362D6110E
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F362D6110E
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 09:54:01 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A3C1A1C0008;
+ Sat, 17 Sep 2022 09:53:59 +0000 (UTC)
+Date: Sat, 17 Sep 2022 11:53:58 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 11:36:05 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 308678e528a382ea4c27c33baf92b25871d47415
-X-Git-Newrev: 2ee1bd7bb2e8d01f4ddca3fb1127ec729be1c9bf
-X-Patchwork-Hint: ignore
-Message-Id: <20220917095344.6095784145@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libqb: bump to version 2.0.6
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220917115358.7207b411@windsurf>
+In-Reply-To: <20220911213904.189808-1-fontaine.fabrice@gmail.com>
+References: <20220911213904.189808-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1663408440;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=CpyPbALguBIEKW3hbLyL4/V7btrCKbz8rRrAxCnJJKY=;
+ b=CJnzobJVk28t8sxp9NyyAl0EMLttb4FDR2Uoe3cM53VSnrgjGAxPwceYK0uCm096njqrDe
+ qgd4FhP4ZuPuTy7xLFRpVTDIzvBBK36NI0T9EjDruPv9asWR4vUKngQTUqFvOngM/BhwK/
+ BUe5uoCLHqnxgR2lFnjJJZ41MY9wMtt5uIAtoBlVWjcMX9ogl75zwz5mmx8pIOYKAT+cRc
+ NmWaf3mX59V0fuRk+tbZXr8lJfMr/YZ7aQGd9ggoe1NVIi88GUalXo6zUAV6xyYzMRyJJY
+ 3Mor4QxDG2Ge0q+dKoL5AAbppPZz864ALEheOyHp1CLzky6IsvJCBtGJ23gLCA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CJnzobJV
+Subject: Re: [Buildroot] [PATCH 1/1] package/libqb: bump to version 2.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,51 +76,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Kamel Bouhara <kamel.bouhara@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ee1bd7bb2e8d01f4ddca3fb1127ec729be1c9bf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 11 Sep 2022 23:39:04 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-https://github.com/ClusterLabs/libqb/releases/tag/v2.0.6
-https://github.com/ClusterLabs/libqb/releases/tag/v2.0.5
-https://github.com/ClusterLabs/libqb/releases/tag/v2.0.4
+> https://github.com/ClusterLabs/libqb/releases/tag/v2.0.6
+> https://github.com/ClusterLabs/libqb/releases/tag/v2.0.5
+> https://github.com/ClusterLabs/libqb/releases/tag/v2.0.4
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libqb/libqb.hash | 4 ++--
+>  package/libqb/libqb.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libqb/libqb.hash | 4 ++--
- package/libqb/libqb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/libqb/libqb.hash b/package/libqb/libqb.hash
-index b2c216f24c..de247c2660 100644
---- a/package/libqb/libqb.hash
-+++ b/package/libqb/libqb.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ClusterLabs/libqb/releases/download/v2.0.3/libqb-2.0.3.sha256
--sha256  a74582bc886fa625f5238374c7c8ca98672a2519c8196b91276be55886d84e9c  libqb-2.0.3.tar.xz
-+# From https://github.com/ClusterLabs/libqb/releases/download/v2.0.6/libqb-2.0.6.sha256
-+sha256  f1e744208e8f69934804c14e05d9707668f99d4867de9cccf2f7a6bf4d48331c  libqb-2.0.6.tar.xz
- 
- # Locally calculated
- sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
-index fb132365f1..0f409fd646 100644
---- a/package/libqb/libqb.mk
-+++ b/package/libqb/libqb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQB_VERSION = 2.0.3
-+LIBQB_VERSION = 2.0.6
- LIBQB_SOURCE = libqb-$(LIBQB_VERSION).tar.xz
- LIBQB_SITE = \
- 	https://github.com/ClusterLabs/libqb/releases/download/v$(LIBQB_VERSION)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
