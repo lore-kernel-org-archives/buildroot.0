@@ -1,59 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45EBBC54EE9
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 11:06:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EEC2ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 11:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C256C40399;
-	Sat, 17 Sep 2022 11:06:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C256C40399
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6DCC60C07;
+	Sat, 17 Sep 2022 11:06:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6DCC60C07
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GBcBg8Lo7-Ef; Sat, 17 Sep 2022 11:06:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nqYT8RNtIsVO; Sat, 17 Sep 2022 11:06:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D5A19402FE;
-	Sat, 17 Sep 2022 11:06:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5A19402FE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 71B591BF5A3
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 11:06:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DD8960B74;
+	Sat, 17 Sep 2022 11:06:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DD8960B74
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3672D1BF5A3
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 11:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 49FE2402FE
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 11:06:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49FE2402FE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1183184306
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 11:06:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1183184306
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lzP4EsBXmj8D for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 11:06:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Pj3W7qGryDCa for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 11:06:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23AB740133
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B282842FF
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 23AB740133
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 11:06:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B282842FF
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 11:06:11 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3F5FB1C0003;
- Sat, 17 Sep 2022 11:06:04 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 779B61C0003;
+ Sat, 17 Sep 2022 11:06:09 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oZVe6-009FOq-BY; Sat, 17 Sep 2022 13:06:02 +0200
+ id 1oZVeC-009FP4-8g; Sat, 17 Sep 2022 13:06:08 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 References: <cover.1661071280.git.yann.morin.1998@free.fr>
- <97a9cde33a41915b3b4a9cb4f66ca891873ca767.1661071280.git.yann.morin.1998@free.fr>
-Date: Sat, 17 Sep 2022 13:06:02 +0200
-In-Reply-To: <97a9cde33a41915b3b4a9cb4f66ca891873ca767.1661071280.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 21 Aug 2022 10:41:27 +0200")
-Message-ID: <87tu562rc5.fsf@dell.be.48ers.dk>
+ <e8e8f938d57fc7afb0e6e4a6a971eca7896b7387.1661071280.git.yann.morin.1998@free.fr>
+Date: Sat, 17 Sep 2022 13:06:08 +0200
+In-Reply-To: <e8e8f938d57fc7afb0e6e4a6a971eca7896b7387.1661071280.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 21 Aug 2022 10:41:28 +0200")
+Message-ID: <87pmfu2rbz.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] utils/genrandconfig: fix checking host
- glibc version
+Subject: Re: [Buildroot] [PATCH 2/2] utils/genrandconfig: dump traceback for
+ unhandled exceptions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,17 +73,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Unless explicitly told otherwise, subprocess.check_output() returns
- > bytes objects [0].
-
- > When we try to check the C library version (to check the Linaro
- > toolchain is usable), genrandconfig currently fails with:
+ > In case of an unexpected error, we currently only print the exception as
+ > an str(). For example, the recent issue with the glibc version check
+ > only reported:
  >     TypeError: cannot use a string pattern on a bytes-like object
 
- > So, as suggested in the python documentation, decocde() the output of
- > subprocess.check_output() before we can use it.
+ > That does not help in fixing the issue; the exception text is also not
+ > usually very user-friendly either anyway.
 
- > [0] https://docs.python.org/3/library/subprocess.html#subprocess.check_output
+ > We change the reporting to print the traceback, which in the glibc
+ > version check mentioned above, the error is reported as:
+
+ >     Traceback (most recent call last):
+ >       File "./utils/genrandconfig", line 740, in <module>
+ >         ret = gen_config(args)
+ >       File "./utils/genrandconfig", line 676, in gen_config
+ >         if not is_toolchain_usable(configfile, toolchainconfig):
+ >       File "./utils/genrandconfig", line 186, in is_toolchain_usable
+ >         if StrictVersion('2.14') > StrictVersion(glibc_version):
+ >       File "/usr/lib/python3.8/distutils/version.py", line 40, in __init__
+ >         self.parse(vstring)
+ >       File "/usr/lib/python3.8/distutils/version.py", line 135, in parse
+ >         match = self.version_re.match(vstring)
+ >     TypeError: cannot use a string pattern on a bytes-like object
+
+ > With this, the error is much easier to pinpoint (it's the last one that
+ > is not in a system module).
 
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
