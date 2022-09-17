@@ -4,48 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A051ECAAA1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Sep 2022 22:01:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEA79ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 06:45:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C82826FAFA;
-	Fri, 16 Sep 2022 22:01:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C82826FAFA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38ADB610F0;
+	Sat, 17 Sep 2022 06:45:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38ADB610F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fTuIlUo1YjPj; Fri, 16 Sep 2022 22:01:47 +0000 (UTC)
+	with ESMTP id 4LmlvadKflK4; Sat, 17 Sep 2022 06:45:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2B6D6FAE8;
-	Fri, 16 Sep 2022 22:01:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2B6D6FAE8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 68C3E1BF3DA
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FB6561040;
+	Sat, 17 Sep 2022 06:45:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FB6561040
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0747E1BF846
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 941CE6FAD0
- for <buildroot@lists.busybox.net>; Fri, 16 Sep 2022 21:58:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 941CE6FAD0
+ by smtp1.osuosl.org (Postfix) with ESMTP id D678383FC8
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D678383FC8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bwjD8nee7R1r for <buildroot@lists.busybox.net>;
- Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 674FF6FAE8
- for <buildroot@buildroot.org>; Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 674FF6FAE8
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 5716483E70; Fri, 16 Sep 2022 21:58:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FQF_1RbUtLG6 for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 06:45:10 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E74F83FBD
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6E74F83FBD
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 06:45:10 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 41007200004;
+ Sat, 17 Sep 2022 06:45:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZRZa-0096Gc-3W; Sat, 17 Sep 2022 08:45:06 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 16 Sep 2022 23:53:00 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f7d5533cc6487d3c6a62a36161b544c250f7e836
-X-Git-Newrev: b2fb18e6d058675bb17aa8b9c841b14470d93ba9
-X-Patchwork-Hint: ignore
-Message-Id: <20220916215809.5716483E70@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/imagemagick:
- security bump to version 7.1.0-45
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20220816204259.48DAD878DF@busybox.osuosl.org>
+Date: Sat, 17 Sep 2022 08:45:05 +0200
+In-Reply-To: <20220816204259.48DAD878DF@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Tue, 16 Aug 2022 22:55:50 +0200")
+Message-ID: <87a66y5wjy.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [git commit]
+ support/testing/tests/package/test_python_botocore: use ext2 instead of
+ cpio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,73 +65,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2fb18e6d058675bb17aa8b9c841b14470d93ba9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-- Fix CVE-2022-1114: A heap-use-after-free flaw was found in
-  ImageMagick's RelinquishDCMInfo() function of dcm.c file. This
-  vulnerability is triggered when an attacker passes a specially crafted
-  DICOM image file to ImageMagick for conversion, potentially leading to
-  information disclosure and a denial of service.
-- Fix CVE-2022-32545: A vulnerability was found in ImageMagick, causing
-  an outside the range of representable values of type 'unsigned char'
-  at coders/psd.c, when crafted or untrusted input is processed. This
-  leads to a negative impact to application availability or other
-  problems related to undefined behavior.
-- Fix CVE-2022-32546: A vulnerability was found in ImageMagick, causing
-  an outside the range of representable values of type 'unsigned long'
-  at coders/pcl.c, when crafted or untrusted input is processed. This
-  leads to a negative impact to application availability or other
-  problems related to undefined behavior.
-- Fix CVE-2022-32547: In ImageMagick, there is load of misaligned
-  address for type 'double', which requires 8 byte alignment and for
-  type 'float', which requires 4 byte alignment at
-  MagickCore/property.c. Whenever crafted or untrusted input is
-  processed by ImageMagick, this causes a negative impact to application
-  availability or other problems related to undefined behavior.
-- Update hash of LICENSE (year updated with
-  https://github.com/ImageMagick/ImageMagick/commit/80629dfb3fea55eefa2dd8bdd9ca1be341502e16)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=0813ec1aa0650595f60bd64329d1ddf5d535d4fb
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/ImageMagick/Website/blob/main/ChangeLog.md
+ > The CPIO filesystem generated by the test_python_botocore test is too
+ > large, and doesn't fit as an initramfs in the 256MB of RAM available
+ > in the versatilepb machine. This causes a "Initramfs unpacking failed:
+ > write error" when booting, and many files being missing from the root
+ > filesystem, ultimately causing the test to fail.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 685100fe85f5ee0849adae7c68dfabf9c844f77e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/imagemagick/imagemagick.hash | 4 ++--
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > It would make sense to switch all test cases to use ext2 + a
+ > hard-drive, but for now, let's fix the few test cases that are causing
+ > problems.
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 278becd2ab..ff0f3e26c6 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  385ca5bd8ce9b37e685779c46868171af949265c9db40067c1c4d7442dbc723e  imagemagick-7.1.0-19.tar.gz
--sha256  040badb77b659e751ea16113490a937e1e01f3f5d32181e966b8982413533fb2  LICENSE
-+sha256  3df6ca6dff15a4e8a20b4593c60285a59e38890440494d91a344e5c0e2bb3eec  imagemagick-7.1.0-45.tar.gz
-+sha256  8cceeb67d4e783cb63075c7311fdb990fa0369ee80fbd0f481064cd02386ca2d  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 64a530c6d2..893606ff01 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.1.0-19
-+IMAGEMAGICK_VERSION = 7.1.0-45
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+ > Fixes:
+
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/2884635042
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > [yann.morin.1998@free.fr:
+ >   - drop superfluous# BR2_TARGET_ROOTFS_TAR is not set
+ > ]
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
