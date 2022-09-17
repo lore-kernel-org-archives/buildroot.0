@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 353F4ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 06:55:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDE2BECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 06:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BCEBE4018F;
-	Sat, 17 Sep 2022 06:55:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCEBE4018F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 556C341CD9;
+	Sat, 17 Sep 2022 06:55:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 556C341CD9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qBJkuZsJVpaG; Sat, 17 Sep 2022 06:55:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cZmbo7xwqlAx; Sat, 17 Sep 2022 06:55:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA0C94018B;
-	Sat, 17 Sep 2022 06:55:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA0C94018B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F4BC41CDB;
+	Sat, 17 Sep 2022 06:55:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F4BC41CDB
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5F1911BF846
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:55:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 17CE41BF846
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39A4341B37
+ by smtp4.osuosl.org (Postfix) with ESMTP id E718441B37
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:55:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39A4341B37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E718441B37
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jaorfp0CHbgB for <buildroot@lists.busybox.net>;
+ with ESMTP id kSUZO39hrWsA for <buildroot@lists.busybox.net>;
  Sat, 17 Sep 2022 06:55:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1EE0A41CD1
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 06:55:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EE0A41CD1
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6D80419E4
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 06:55:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6D80419E4
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 0C73483EB4; Sat, 17 Sep 2022 06:55:04 +0000 (UTC)
+ id D556B83EB4; Sat, 17 Sep 2022 06:55:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 08:47:10 +0200
+Date: Sat, 17 Sep 2022 08:43:51 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 73a4d44238cfad6afc8d132c7ab4c2d0a24e462a
-X-Git-Newrev: 253c3b032b1dd0e80727c0059ebfdf297370aad5
+X-Git-Oldrev: b1ea4af36a6f3e760280316c952e2313bf76c566
+X-Git-Newrev: ff48fd658be387b6d94ad3565de48ffd6b508c78
 X-Patchwork-Hint: ignore
-Message-Id: <20220917065504.0C73483EB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/sdl2: be explicit
- about OpenGL ES options
+Message-Id: <20220917065503.D556B83EB4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x]
+ support/testing/tests/package/test_python_boto3: use ext2 instead of cpio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=253c3b032b1dd0e80727c0059ebfdf297370aad5
+commit: https://git.buildroot.net/buildroot/commit/?id=ff48fd658be387b6d94ad3565de48ffd6b508c78
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-In addition to --enable-video-opengles, SDL2 configure script also
-looks at --enable-video-opengles1 and --enable-video-opengles2. Since
-all OpenGL ES providers in Buildroot provide at least up to OpenGL ES
-2, enable both options when BR2_PACKAGE_SDL2_OPENGLES=y.
+The CPIO filesystem generated by the test_python_boto3 test is too
+large, and doesn't fit as an initramfs in the 256MB of RAM available
+in the versatilepb machine. This causes a "Initramfs unpacking failed:
+write error" when booting, and many files being missing from the root
+filesystem, ultimately causing the test to fail.
+
+It would make sense to switch all test cases to use ext2 + a
+hard-drive, but for now, let's fix the few test cases that are causing
+problems.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/2884635041
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998@free.fr: split long lines]
+[yann.morin.1998@free.fr:
+  - drop superfluous# BR2_TARGET_ROOTFS_TAR is not set
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e48121750f084ff330e62e6110544b3e29921177)
+(cherry picked from commit a9df206190e5316808b90314e4254ba9e849e403)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2/sdl2.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_python_boto3.py | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 94533fa9b4..8167cd5eac 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -138,10 +138,16 @@ SDL2_CONF_OPTS += --disable-video-opengl
- endif
+diff --git a/support/testing/tests/package/test_python_boto3.py b/support/testing/tests/package/test_python_boto3.py
+index 756495fec9..126ddae63a 100644
+--- a/support/testing/tests/package/test_python_boto3.py
++++ b/support/testing/tests/package/test_python_boto3.py
+@@ -1,4 +1,5 @@
+ from tests.package.test_python import TestPythonPackageBase
++import os
  
- ifeq ($(BR2_PACKAGE_SDL2_OPENGLES),y)
--SDL2_CONF_OPTS += --enable-video-opengles
-+SDL2_CONF_OPTS += \
-+	--enable-video-opengles \
-+	--enable-video-opengles1 \
-+	--enable-video-opengles2
- SDL2_DEPENDENCIES += libgles
- else
--SDL2_CONF_OPTS += --disable-video-opengles
-+SDL2_CONF_OPTS += \
-+	--disable-video-opengles \
-+	--disable-video-opengles1 \
-+	--disable-video-opengles2
- endif
  
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ class TestPythonPy3Boto3(TestPythonPackageBase):
+@@ -7,6 +8,16 @@ class TestPythonPy3Boto3(TestPythonPackageBase):
+         """
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_BOTO3=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+         """
+     sample_scripts = ["tests/package/sample_python_boto3.py"]
+     timeout = 10
++
++    def login(self):
++        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-drive", "file=%s,if=scsi,format=raw" % ext2_file],
++                           kernel_cmdline=["rootwait", "root=/dev/sda"])
++        self.emulator.login()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
