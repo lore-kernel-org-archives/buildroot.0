@@ -1,72 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37B7DC6FA82
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 20:15:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC399C6FA82
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 20:17:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C616A60BFB;
-	Sat, 17 Sep 2022 20:15:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C616A60BFB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8457940297;
+	Sat, 17 Sep 2022 20:17:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8457940297
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zOUUGF7qzCB7; Sat, 17 Sep 2022 20:15:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id A_fZg07Njfxk; Sat, 17 Sep 2022 20:17:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFA3460AF6;
-	Sat, 17 Sep 2022 20:15:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFA3460AF6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7F6C91BF39A
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:15:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2A0140183;
+	Sat, 17 Sep 2022 20:17:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2A0140183
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 506BB1BF39A
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:17:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5AA4B60AF6
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:15:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AA4B60AF6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38A0084018
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:17:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38A0084018
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Li2_RD0i9T12 for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 20:15:07 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 021C960A80
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 021C960A80
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 20:15:06 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3321A1C0005;
- Sat, 17 Sep 2022 20:15:04 +0000 (UTC)
-Date: Sat, 17 Sep 2022 22:15:02 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Chris Dimich <chris.dimich@boundarydevices.com>
-Message-ID: <20220917221502.3673b1c3@windsurf>
-In-Reply-To: <20220824192604.2549356-12-chris.dimich@boundarydevices.com>
-References: <20220824192604.2549356-1-chris.dimich@boundarydevices.com>
- <20220824192604.2549356-12-chris.dimich@boundarydevices.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pPq8ivQHVOfq for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 20:17:30 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16EB883F65
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 16EB883F65
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 20:17:29 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id g3so20300578wrq.13
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 13:17:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date;
+ bh=PWthIIRYzfD4bvwChxgrHr9/9alzJRfdu3gmhx5vTms=;
+ b=IfLubKyDHIQfZ/b2VAs4vgsEB7/+BtgFMfA9Ti1Fx8Bn3GB3v+bLyiuuav4dfDZ5uS
+ 2f1hAR1siczXOaGXB3K/J77iRwyUD7lzz7xqAtlWFhLteZQgaeLsiqppg53FXj4523mj
+ DL2zErQhC6QZYv/2azFSTpN5tJh2YMLCDuqYDlF9gGNQ8JwObwRDDa3E/wS7vemX1Q3+
+ jWn9S7iThNnDEdzJMkrVAjbvaaFzAePDgD0MinBbaCFQSM6+i8FdBYjOjgUOJCWLBOQr
+ AXU/kLTymdOlJ51nhkBe6qoITcheZyUvMiY4DftDbCuO99G3zrp+IkjqINFnbjkWw/mV
+ kKJA==
+X-Gm-Message-State: ACrzQf1gjUeapAZyPvy/jK/Oe8WxDQe4AGW+Lib31qvPKbMLuPnAqEJF
+ I52QXRe+X35uz5D/VNtP7fbMJw==
+X-Google-Smtp-Source: AMsMyM4G5OleIzbKCa3qVpRJgIMddOHG5H9E2CcEz4gCCSlEgjpGdpnvCUgyjrwafNgHVnCAe7LQjA==
+X-Received: by 2002:adf:db44:0:b0:22a:56eb:927f with SMTP id
+ f4-20020adfdb44000000b0022a56eb927fmr6538788wrj.627.1663445848225; 
+ Sat, 17 Sep 2022 13:17:28 -0700 (PDT)
+Received: from [172.23.97.104] ([79.140.217.34])
+ by smtp.gmail.com with ESMTPSA id
+ c2-20020a1c3502000000b003b4935f04a4sm8426684wma.5.2022.09.17.13.17.27
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 17 Sep 2022 13:17:27 -0700 (PDT)
+Message-ID: <d707dd32-af74-0d63-c890-7d81e29ca454@mind.be>
+Date: Sat, 17 Sep 2022 22:17:26 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-GB
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+References: <cover.1660931225.git.yann.morin.1998@free.fr>
+ <212daefb880a3c5e49ff4aa8278cc4c3bc67360e.1660931225.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <212daefb880a3c5e49ff4aa8278cc4c3bc67360e.1660931225.git.yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663445705;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=TWGoE3cb5ecq1k1+xYnyAMvHmfWWlNiJ+5lCwl1fT6c=;
- b=j8F1XU6YfcKXdpGzQC+Ep+a1cbdDHN4BCQr3LabXgDb4ERVfDxmXrIhxJallZJREujMOVV
- ELUmX9EePonQolWtdpAwSLMwCL82I9tP0+YWgt0YduSTOnvd5scxsKnaQBfEvChuRkF6HB
- sj/aUg7mlQ9e+533SIwZHYstXLnqnrPKtTCpXLuLl2SIakONp7p3tzsyl8WET0PlQOwiFw
- ZxR24SR3miXyolZnglxbkax5oUwLm2pXSe3AjGvTIaJ5JBYkQdvNxZU+YflZLVryCd9Evz
- Kdb7gvdVs46TihNWMNR0336pHxYhNiMkBybVGDnJtT+gDoV1n24WBw0pMhqNRg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=j8F1XU6Y
-Subject: Re: [Buildroot] [PATCH 5/7] package/freescale-imx/imx-gpu-g2d: bump
- version to 6.4.3.p4.2
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date;
+ bh=PWthIIRYzfD4bvwChxgrHr9/9alzJRfdu3gmhx5vTms=;
+ b=B6Qbzz3Ba07FSeMcVLFui0EDRsWFrSfIx1+thh9zSmtrRwd35z4OV4ZIlk+w7oLfZE
+ U3cBoG3Ngz7iJ6wiAfa69YX+AurmigfjokOrReFhHy7VoFKpKZ/dH/sSqZZrAVs2JBqA
+ MTODggC7jSb/cG84X+wEaKjHHPWcF7h4Dy0/cxrL1JeUHZO9oIMhlC7mxtKB3Kknn8NR
+ LBniiDFlmminyKY0rgzJZGll77NqfcazGbKVjrqg4Hs9Gh3pFj8DkdrgRAMzwc4JqWt2
+ v5IYsjf91Pq89ASgNN1EoyNwMbkgJBWLIaSf9GG/xletcmThckM6poDZ6FIOXOVsf5JP
+ BsYQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=B6Qbzz3B
+Subject: Re: [Buildroot] [PATCH 2/4] package/dracut: allow users to provide
+ their own modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,52 +100,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>, "Yann E .
- MORIN" <yann.morin.1998@free.fr>, Refik Tuzakli <tuzakli.refik@gmail.com>,
- buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Adam Duskett <aduskett@gmail.com>,
+ Thierry Bultel <thierry.bultel@linatsea.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 24 Aug 2022 12:26:02 -0700
-Chris Dimich <chris.dimich@boundarydevices.com> wrote:
 
-> -sha256  39fe307916e19a0892a514621121086e276a43858af90230372a1344852116a2  imx-gpu-g2d-6.4.3.p2.0-arm.bin
-> -sha256  2642a49e088daae4cf568a150d01e7c095995e8a6ff1883c02c3fa6d26d254b3  imx-gpu-g2d-6.4.3.p2.0-aarch64.bin
-> -sha256  ea58636bf34f589048fcd46e38497c47229fde8498df086ff5fb52f9ef8e15ee  COPYING
-> -sha256  50099e283cfd307f84f159aeb1a6f462351320273dbcdb80d7f2c9db0494b71c  EULA
-> +sha256  0ba9806c4efa0154fc9f7be406e42bc2c50b975abd32cbe322cf7bcf6ae0d350  imx-gpu-g2d-6.4.3.p4.2-arm.bin
-> +sha256  ff50ddfee2d989798a2aba84ef9114e01f8d867293891dc0aacfab1640cbf8a3  imx-gpu-g2d-6.4.3.p4.2-aarch64.bin
-> +sha256  4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517  COPYING
-> +sha256  4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517  EULA
 
-This hash seems wrong. You have the same hash for the COPYING file and
-the EULA file, and the EULA file hash is incorrect:
+On 19/08/2022 19:50, Yann E. MORIN wrote:
+> Dracut modules can only be looked for in HOST_DIR/lib/dracut/modules.d/
+> and dracut does not offer the possibility to look elsewhere.
+> 
+> Installing files in HOST_DIR/ can do done either from a host-package, or
+> via a post-built script; there is no overlay like there is for target/.
+> This is a bit cumbersome.
+> 
+> Add an option to the host-dracut package, so users can point to a list
+> of modules to install.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Thierry Bultel <thierry.bultel@linatsea.fr>
+> Cc: Adam Duskett <aduskett@gmail.com>
+> ---
+>   package/dracut/Config.in.host | 11 +++++++++++
+>   package/dracut/dracut.mk      |  9 +++++++++
+>   2 files changed, 20 insertions(+)
+> 
+> diff --git a/package/dracut/Config.in.host b/package/dracut/Config.in.host
+> index 18f562b310..5756dbd43f 100644
+> --- a/package/dracut/Config.in.host
+> +++ b/package/dracut/Config.in.host
+> @@ -7,3 +7,14 @@ config BR2_PACKAGE_HOST_DRACUT
+>   	  and combining it with the dracut framework.
+>   
+>   	  https://dracut.wiki.kernel.org
+> +
+> +if BR2_PACKAGE_HOST_DRACUT
+> +
+> +config BR2_PACKAGE_HOST_DRACUT_EXTRA_MODULES
+> +	string "extra dracut modules"
+> +	help
+> +	  Space-separated list of directories containing dracut modules
+> +	  to install. The modules will be installed alongside the ones
+> +	  bundled with dracut.
 
->>> imx-gpu-g2d 6.4.3.p4.2-aarch64 Patching
->>> imx-gpu-g2d 6.4.3.p4.2-aarch64 Collecting legal info
-ERROR: EULA has wrong sha256 hash:
-ERROR: expected: 4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517
-ERROR: got     : 423c76762d50b82fedd3e15c48e436d7272a7e130f9ebb910f76489345707cf6
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+  Although I agree that conceptually this extra modules thing belongs with the 
+dracut package itself, from a user, practical point of view, you actually want 
+it in the dracut option of fs/cpio. If you use host-dracut without the 
+cpio-dracut fs, it means you are using it in a post-build script, so it's not so 
+weird to also install the extra modules in that script. On the other hand, if 
+you are using cpio-dracut and you need extra modules (which is quite likely), 
+then it extremely annoying that you have to go first to filesystems->cpio and 
+later to hosttools->dracut...
 
-Could you check this on your side, and send an updated version?
+  In other words, I think this should be moved to cpio.
 
-When you send an updated version, please always resend the full series,
-and increment the version number (using the -v option of git
-format-patch).
+  Regards,
+  Arnout
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+> +
+> +endif
+> diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+> index 2b6a144aac..96fa7db6ba 100644
+> --- a/package/dracut/dracut.mk
+> +++ b/package/dracut/dracut.mk
+> @@ -19,6 +19,15 @@ define HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+>   endef
+>   HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_WRAPPER_SCRIPT
+>   
+> +HOST_DRACUT_EXTRA_MODULES = $(call qstrip,$(BR2_PACKAGE_HOST_DRACUT_EXTRA_MODULES))
+> +define HOST_DRACUT_INSTALL_EXTRA_MODULES
+> +	$(Q)mkdir -p $(HOST_DIR)/lib/dracut/modules.d/
+> +	$(foreach m,$(HOST_DRACUT_EXTRA_MODULES), \
+> +		cp -a $(m)/* $(HOST_DIR)/lib/dracut/modules.d/
+> +	)
+> +endef
+> +HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_INSTALL_EXTRA_MODULES
+> +
+>   # When using uClibc or musl, there must be "ld-uClibc.so.1" or
+>   # "ld-musl-x.so" symlinks, respectively - else the init process cannot
+>   # start
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
