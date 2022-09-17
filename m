@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D864ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25EF7C54EE9
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0011418F0;
-	Sat, 17 Sep 2022 14:41:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0011418F0
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF4268438F;
+	Sat, 17 Sep 2022 14:41:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF4268438F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JgYpAk6T3VtJ; Sat, 17 Sep 2022 14:41:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0D61842E2;
+	Sat, 17 Sep 2022 14:41:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0D61842E2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DC7A41BF575
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:41:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7033418CC
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:41:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7033418CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fPhKhkidl9uk; Sat, 17 Sep 2022 14:41:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B745418BC;
-	Sat, 17 Sep 2022 14:41:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B745418BC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4804E1BF968
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:41:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E05241127
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:41:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E05241127
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A5TbyUKMUNb0 for <buildroot@lists.busybox.net>;
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UekcU3ApOJne for <buildroot@lists.busybox.net>;
  Sat, 17 Sep 2022 14:40:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 559E740153
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A7A6418B1
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:40:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 559E740153
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A7A6418B1
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 4370B8444D; Sat, 17 Sep 2022 14:40:59 +0000 (UTC)
+ id 75A4B8444D; Sat, 17 Sep 2022 14:40:59 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 16:27:02 +0200
+Date: Sat, 17 Sep 2022 16:27:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a047c675076bdd1de0fd934ce97312efd9535e0f
-X-Git-Newrev: 0f95c7a9b5c4a3c9f90ce2af683621ace524200c
+X-Git-Oldrev: c91170f4436abe914e97748aa4e7df348e60e170
+X-Git-Newrev: 6d86ea12a5c9f37f99ea6543c3074f2745fc3202
 X-Patchwork-Hint: ignore
-Message-Id: <20220917144059.4370B8444D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-certifi: bump to version
- 2022.6.15.1
+Message-Id: <20220917144059.75A4B8444D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cython: bump to version
+ 0.29.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f95c7a9b5c4a3c9f90ce2af683621ace524200c
+commit: https://git.buildroot.net/buildroot/commit/?id=6d86ea12a5c9f37f99ea6543c3074f2745fc3202
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to updated link in license file:
-https://github.com/certifi/python-certifi/commit/b0b48e059995f455ac1e79b3ad373ad4ef355516
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-certifi/python-certifi.hash | 6 +++---
- package/python-certifi/python-certifi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index 4d3c20afee..e93a228d7e 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5  d8a2f5d006b656e2b9ee102a3be11a26  certifi-2022.6.15.tar.gz
--sha256  84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d  certifi-2022.6.15.tar.gz
-+md5  10b6970c3e64d037137f4bd052ef417c  certifi-2022.6.15.1.tar.gz
-+sha256  cffdcd380919da6137f76633531a5817e3a9f268575c128249fb637e4f9e73fb  certifi-2022.6.15.1.tar.gz
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 19f5143b05..3ed9fb56a1 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5  3cf4001b4be42a263f163865235c39d8  Cython-0.29.30.tar.gz
+-sha256  2235b62da8fe6fa8b99422c8e583f2fb95e143867d337b5c75e4b9a1a865f9e3  Cython-0.29.30.tar.gz
++md5  91c36ea86c00adcc5c1c11cf48b733c0  Cython-0.29.32.tar.gz
++sha256  8733cf4758b79304f2a4e39ebfac5e92341bce47bcceb26c1254398b2f8c1af7  Cython-0.29.32.tar.gz
  # Locally computed sha256 checksums
--sha256  be9d82f36112f87a7f1d74ecd4887e1467bbae8878a84004a00117b1e475a3e2  LICENSE
-+sha256  a02f6c638f9fb84d06f7764c3ab085d8af7eda5b93c166da54312479077c6fb0  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index 6c8a7ffc2b..c03cd6e1e4 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+ sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index 44efdd6b16..9a90f6198e 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2022.6.15
-+PYTHON_CERTIFI_VERSION = 2022.6.15.1
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/cc/85/319a8a684e8ac6d87a1193090e06b6bbb302717496380e225ee10487c888
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/90/c2/4e37394b66e7211ad120f216fc2e8b38d4f43b89c8100dd3917c9da9bfc6
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_CYTHON_VERSION = 0.29.30
++PYTHON_CYTHON_VERSION = 0.29.32
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/d4/ad/7ce0cccd68824ac9623daf4e973c587aa7e2d23418cd028f8860c80651f5
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/4c/76/1e41fbb365ad20b6efab2e61b0f4751518444c953b390f9b2d36cf97eea0
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
