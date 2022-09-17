@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57A15ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:43:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 919F8ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 091E08133A;
-	Sat, 17 Sep 2022 14:43:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 091E08133A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 414536112A;
+	Sat, 17 Sep 2022 14:43:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 414536112A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dqY7THvEUjvU; Sat, 17 Sep 2022 14:43:43 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BB7C60C07;
+	Sat, 17 Sep 2022 14:43:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BB7C60C07
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 10AE41BF575
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:43:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D37CB8142F
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:43:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D37CB8142F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id blsPpiW5m5qj; Sat, 17 Sep 2022 14:43:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38A048439D;
-	Sat, 17 Sep 2022 14:43:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38A048439D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 69D5D1BF575
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:43:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4FBA540984
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:43:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FBA540984
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4-Km3bHqbx2b for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 14:43:22 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id df8MQImPF-2N for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 14:43:33 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4CB740914
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A4CB740914
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:43:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A25E813EE
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9A25E813EE
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:43:32 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0826040008;
- Sat, 17 Sep 2022 14:43:18 +0000 (UTC)
-Date: Sat, 17 Sep 2022 16:43:17 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 3AAAA1BF203;
+ Sat, 17 Sep 2022 14:43:29 +0000 (UTC)
+Date: Sat, 17 Sep 2022 16:43:27 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220917164317.04f9f1e9@windsurf>
-In-Reply-To: <20220911224019.3708406-1-james.hilliard1@gmail.com>
-References: <20220911224019.3708406-1-james.hilliard1@gmail.com>
+Message-ID: <20220917164327.736bcc62@windsurf>
+In-Reply-To: <20220911225339.3713775-1-james.hilliard1@gmail.com>
+References: <20220911225339.3713775-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663425799;
+ d=bootlin.com; s=gm1; t=1663425809;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=3CVW1Jbs3ut9ZGWO6zb+JHpXShCdcJlyFpI85+eDMBQ=;
- b=IyvbJZSiqK6RmXupzNAcgbWd2EUBsZm7YHv2J5nCHEl1ksgCB+2f/aTAk+2xP27+5sE0Ud
- 6pifWHHy99tCUFWj/djOxc23SQMIdulN6y0QBsHIEts3hl6a8Np3NQEihtl88N1XXU54Fo
- KrWH8dHoaDVWqvSnivE1PiWWlissvUhOtqvCB6PrNLHG2XrgkfT12YhdyJkX+Oh1cjfuIS
- xFMo86y17iPgybx1U9HZd20gSlYhu5RrTm49jHhOe2fB64Z8nVKIENaiNZNmpftlZJFG41
- DJ2aoYYuSRM1iUpX+g71tKMBggwIlsdSd5THDTa5XMgqzpFtKGxYYXOr74PzHg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=0XB10qLQAPKVapav3CUi5xngvxQUIEnoPZZxWmz+J4Q=;
+ b=dePeOziUH/Ik4DCjss/HdmvZFUmd0jF/f3cSI8yLxSTL+vNGRk6N9N9Lr++vpbK2/Yctaj
+ LboGUowVmH3ELfevxOE7tcHsfDD0KncO2OzZaBEU/z3yvCB13V1FTFNraTBLt1RAX2khF9
+ lJdNYF5nsb/rY0U25D7RpGEwSQ+Nzyxn8NyWUJCmXUGvQvBjsy9Tq7DwBo70JIWCoWsktj
+ 31Zp49rlDJDZxP5xyYNb8WE1Wk0KjhCa+8dIYF0I+BlpNWYEhR+PTiuCuyOUXUNScOo4OA
+ 9C+Am0efXGfkoJ8mgs/DZEtRL6IhvLzFsPgpYJRTk4CEo0EPnZT+wW1BwH/LDg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IyvbJZSi
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to
- version 0.5.1
+ header.s=gm1 header.b=dePeOziU
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-chardet: bump to version
+ 5.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,14 +83,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 11 Sep 2022 16:40:19 -0600
+On Sun, 11 Sep 2022 16:53:39 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
+> License hash changed due to reformatting:
+> https://github.com/chardet/chardet/commit/c5e5d5a8f1b6e135a8bffd8d60b2f726bb168339
+> 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-aioconsole/python-aioconsole.hash | 4 ++--
->  package/python-aioconsole/python-aioconsole.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/python-chardet/python-chardet.hash | 6 +++---
+>  package/python-chardet/python-chardet.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
