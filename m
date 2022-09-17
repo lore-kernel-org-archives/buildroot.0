@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70002ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:54:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6909ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C13784141;
-	Sat, 17 Sep 2022 18:54:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C13784141
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8439660E73;
+	Sat, 17 Sep 2022 18:55:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8439660E73
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xt8d7fLSfxwp; Sat, 17 Sep 2022 18:54:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H4V-9jOF4eeH; Sat, 17 Sep 2022 18:55:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F477840DE;
-	Sat, 17 Sep 2022 18:54:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F477840DE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EF5BD1BF335
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:54:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D66560B19;
+	Sat, 17 Sep 2022 18:55:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D66560B19
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2968D1BF335
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB42B840DE
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:54:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB42B840DE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11CEE4011F
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:55:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11CEE4011F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BUfc4TSrDLPd for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 18:54:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE87F840B3
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:54:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE87F840B3
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DEDF184611; Sat, 17 Sep 2022 18:54:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LjPb9jjn71H6 for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 18:55:38 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAE7F40119
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EAE7F40119
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:55:37 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 24EF240004;
+ Sat, 17 Sep 2022 18:55:36 +0000 (UTC)
+Date: Sat, 17 Sep 2022 20:55:35 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 20:30:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3a5389f579de7938f74babd18edd80a272e65d3a
-X-Git-Newrev: a8879b592311a2b1f4c67e74e95ff9e24b3fbc6b
-X-Patchwork-Hint: ignore
-Message-Id: <20220917185415.DEDF184611@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/snort: bump to version 2.9.20
+To: Sergio Prado via buildroot <buildroot@buildroot.org>
+Message-ID: <20220917205535.4545152f@windsurf>
+In-Reply-To: <20220907122423.1783908-1-sergio.prado@e-labworks.com>
+References: <20220907122423.1783908-1-sergio.prado@e-labworks.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1663440936;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qlAIij6IEXyr55NaK/2fgSCX58PVflDha60Y4MsCK+U=;
+ b=aFJKDH5NRrFYRalxLBQsH+zEQDpUuIqKjE/P1DGrlAEOnHlF+ETQCc+p9/+vfLQClX1sn6
+ WHLnP1aP8Q9xQfqYyHPALYK155Xfy0rYr/egujiPMLEE7MdzEuiRnh1jONJc0bWFyFI50Y
+ VsTCLQ5iz8EQqQT1P7diQVMuQJEkPKVkm2ovBO05/zJqbLuKOu/jIDleUYwpaLvC5WAEZh
+ 0RaLFil7FB7ZOTqHgEZt9hgNwdozKY8dDuATom0gCpoa6y+LB5rxAAlNaDe2YElbxCeC4z
+ +V1S/hOqFKZbKA2+3RUdyHdDY13p2HoKUqh587Gxr31EmupelkGKAoqJ74N28w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=aFJKDH5N
+Subject: Re: [Buildroot] [PATCH] package/snort: bump to version 2.9.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,52 +76,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8879b592311a2b1f4c67e74e95ff9e24b3fbc6b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  7 Sep 2022 09:24:23 -0300
+Sergio Prado via buildroot <buildroot@buildroot.org> wrote:
 
-https://www.snort.org/downloads/snort/release_notes_2.9.20.txt
+> https://www.snort.org/downloads/snort/release_notes_2.9.20.txt
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> ---
+>  package/snort/snort.hash | 4 ++--
+>  package/snort/snort.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/snort/snort.hash | 4 ++--
- package/snort/snort.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/snort/snort.hash b/package/snort/snort.hash
-index ac098564aa..a807d051d9 100644
---- a/package/snort/snort.hash
-+++ b/package/snort/snort.hash
-@@ -1,8 +1,8 @@
- # From https://www.snort.org/downloads/snort/md5s
--md5  b0350425e0c1e9c044c25aa13b47edf8  snort-2.9.19.tar.gz
-+md5  b52cdf14e97ef953c800c3ef123beaa5  snort-2.9.20.tar.gz
- 
- # Locally computed:
--sha256  b12fc6db72afb58987a2bf1954b8f45bde02047c235513c7663857b9506369c7  snort-2.9.19.tar.gz
-+sha256  29400e13f53b1831e0b8b10ec1224a1cbaa6dc1533a5322a20dd80bb84b4981c  snort-2.9.20.tar.gz
- 
- # Hash for license files:
- sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index 41f450541f..8ce8ed5fa6 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNORT_VERSION = 2.9.19
-+SNORT_VERSION = 2.9.20
- SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
