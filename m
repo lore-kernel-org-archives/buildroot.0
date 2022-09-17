@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12C77ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:52:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52A47C6FA82
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:53:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1A3060F53;
-	Sat, 17 Sep 2022 18:52:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1A3060F53
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA69E40182;
+	Sat, 17 Sep 2022 18:53:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA69E40182
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8XepYWRf1bTB; Sat, 17 Sep 2022 18:52:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id I4jFPb-1v7Aw; Sat, 17 Sep 2022 18:53:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B69D460D6F;
-	Sat, 17 Sep 2022 18:52:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B69D460D6F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 093AD4011F;
+	Sat, 17 Sep 2022 18:53:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 093AD4011F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BE3C61BF335
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A081E1BF335
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A4DE4016A
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A4DE4016A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 899F54011F
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 899F54011F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tmfPdn_yhm7L for <buildroot@lists.busybox.net>;
+ with ESMTP id 0wbgagyVVu-5 for <buildroot@lists.busybox.net>;
  Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF7964011F
+ by smtp2.osuosl.org (Postfix) with ESMTP id B409D40119
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF7964011F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B409D40119
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF91084608; Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
+ id A3F1D84607; Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 20:48:23 +0200
+Date: Sat, 17 Sep 2022 20:44:02 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: a722532f00ec8fce5692ed085b6291dec261a524
-X-Git-Newrev: 06e32e8c7a248d0de19a294033eb7033e980bec4
+X-Git-Oldrev: 92c93cff54f7f5971c09d22f905b6b9a4691f421
+X-Git-Newrev: a722532f00ec8fce5692ed085b6291dec261a524
 X-Patchwork-Hint: ignore
-Message-Id: <20220917185246.AF91084608@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/ffmpeg: altivec
- needs VSX with little endian
+Message-Id: <20220917185246.A3F1D84607@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libwpe: security
+ bump to version 1.12.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06e32e8c7a248d0de19a294033eb7033e980bec4
+commit: https://git.buildroot.net/buildroot/commit/?id=a722532f00ec8fce5692ed085b6291dec261a524
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix the following build failure:
+This update fixes a potential memory allocation issue. There is no
+associated advisory, though. Release notes:
 
-In file included from libavcodec/ppc/audiodsp.c:31:
-libavcodec/ppc/audiodsp.c: In function 'scalarproduct_int16_altivec':
-./libavutil/ppc/util_altivec.h:123:5: error: implicit declaration of function 'vec_vsx_ld'; did you mean 'vec_vslh'? [-Werror=implicit-function-declaration]
-  123 |     vec_vsx_ld(offset, b)
-      |     ^~~~~~~~~~
+  https://wpewebkit.org/release/libwpe-1.12.1.html
+  https://wpewebkit.org/release/libwpe-1.12.2.html
+  https://wpewebkit.org/release/libwpe-1.12.3.html
 
-Fixes:
- - http://autobuild.buildroot.org/results/b772d285f978ff9bc3b07872d009633c943f20b1
-
-VSX is indeed an extension to AltiVec, so having VSX implies having
-AltiVec [0], so we can condition the altivec support on LE, on VSX being
-available.
-
-To be noted, however, is that ffmpeg has a configre switch dedicated to VSX:
---enable-vsx.  We do not add support for that here, as we are just fixing
-the AltiVec support.  Adding VSX configure flag is left as an excercise for
-a future feature addition.
-
-[0] https://en.wikipedia.org/wiki/AltiVec#VSX_(Vector_Scalar_Extension)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr:
-  - add comment in .mk
-  - exend commit log to explain VSX implies AltiVec
-]
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a26ab27397c81928bdacc96473f80b2c47fc534d)
+(cherry picked from commit 4ebdf1c47bd0d4e16f0fecc6363281f8cb59227b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/libwpe/libwpe.hash | 8 ++++----
+ package/libwpe/libwpe.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 82d229903f..ced5ce598f 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -511,7 +511,11 @@ endif
- FFMPEG_CONF_OPTS += --disable-asm
- endif # MIPS
+diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+index 2ebe4f19bd..2bbe1f0749 100644
+--- a/package/libwpe/libwpe.hash
++++ b/package/libwpe/libwpe.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/libwpe-1.12.0.tar.xz.sums
+-md5  5a3f11789535d826370ba465ea141393  libwpe-1.12.0.tar.xz
+-sha1  91aa47a593a5db511d667b3bdbaa76dee4301311  libwpe-1.12.0.tar.xz
+-sha256  e8eeca228a6b4c36294cfb63f7d3ba9ada47a430904a5a973b3c99c96a44c18c  libwpe-1.12.0.tar.xz
++# From https://wpewebkit.org/releases/libwpe-1.12.3.tar.xz.sums
++md5  e538eb8e521d92f2bde3c4cd864abaa1  libwpe-1.12.3.tar.xz
++sha1  9d94c411a502a10e68f69bd1fa273539cc6af2ca  libwpe-1.12.3.tar.xz
++sha256  b84fdbfbc849ce4fdf084bb28b58e5463b1b4b6cc8f200dc77b41f8545d5329d  libwpe-1.12.3.tar.xz
  
--ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC):$(BR2_powerpc64le),y:)
-+FFMPEG_CONF_OPTS += --enable-altivec
-+else ifeq ($(BR2_POWERPC_CPU_HAS_VSX):$(BR2_powerpc64le),y:y)
-+# On LE, ffmpeg AltiVec support needs VSX intrinsics, and VSX
-+# is an extension to AltiVec.
- FFMPEG_CONF_OPTS += --enable-altivec
- else
- FFMPEG_CONF_OPTS += --disable-altivec
+ # Hashes for license files:
+ sha256  35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b  COPYING
+diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+index fe3c4b16d7..ac533642d9 100644
+--- a/package/libwpe/libwpe.mk
++++ b/package/libwpe/libwpe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWPE_VERSION = 1.12.0
++LIBWPE_VERSION = 1.12.3
+ LIBWPE_SITE = https://wpewebkit.org/releases
+ LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
+ LIBWPE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
