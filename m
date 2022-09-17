@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E02EECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:53:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70002ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:54:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12C31843EF;
-	Sat, 17 Sep 2022 18:53:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12C31843EF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C13784141;
+	Sat, 17 Sep 2022 18:54:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C13784141
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iI5C97EXQ0yG; Sat, 17 Sep 2022 18:53:15 +0000 (UTC)
+	with ESMTP id Xt8d7fLSfxwp; Sat, 17 Sep 2022 18:54:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 965E6843D7;
-	Sat, 17 Sep 2022 18:53:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 965E6843D7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 67CD51BF335
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F477840DE;
+	Sat, 17 Sep 2022 18:54:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F477840DE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EF5BD1BF335
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:54:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1BB00419D4
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BB00419D4
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB42B840DE
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:54:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB42B840DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KRAF0iMPgAVG for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 18:52:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2222419CF
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A2222419CF
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:52:56 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 67450E0005;
- Sat, 17 Sep 2022 18:52:54 +0000 (UTC)
-Date: Sat, 17 Sep 2022 20:52:53 +0200
-To: jwood+buildroot@starry.com
-Message-ID: <20220917205253.3737d1c6@windsurf>
-In-Reply-To: <20220908152330.2588951-1-jwood+buildroot@starry.com>
-References: <20220908152330.2588951-1-jwood+buildroot@starry.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663440774;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=p2FOpqJCztX6z2Ui2Mz3jItgN+3M6ty8qEyS//Haep0=;
- b=YkcAErLDZU3GlI5rnVzqYURu5I3ITjbt6fBxOOf19OomGU8lwKTA9P/sNjNMirziY7YWBn
- TUeKAx3mdqD6pK+TMC9U+Ag6IHaPmjr2xQ7gponZNNfErm/lN3fsO1S0/nlcp4IJdn5e/q
- 5jvGYi3bP93V8Ee8pfIYtiORY5lBg5+BqdercE/ZKvMuPENMtZhVF5KkZRP06T4aCXdXHx
- UwY+mvVYDbxIN8I1KS0jKlNjEiVVyKUrS3ov95Ti+p2cGegLNFfE5MFX/clcFTWaJOQH5Y
- sNYa0khlkmtBy23mKwNDNBnQ5g8ymt5oZ3w+Rm7iPZr/7bO/TrTVskQL47qKXA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YkcAErLD
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-download: add per package
- download fallback disable
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BUfc4TSrDLPd for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 18:54:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE87F840B3
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:54:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE87F840B3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DEDF184611; Sat, 17 Sep 2022 18:54:15 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Sat, 17 Sep 2022 20:30:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3a5389f579de7938f74babd18edd80a272e65d3a
+X-Git-Newrev: a8879b592311a2b1f4c67e74e95ff9e24b3fbc6b
+X-Patchwork-Hint: ignore
+Message-Id: <20220917185415.DEDF184611@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/snort: bump to version 2.9.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,65 +56,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Justin Wood <jwood@starry.com>, "Yann E .
- MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Justin,
+commit: https://git.buildroot.net/buildroot/commit/?id=a8879b592311a2b1f4c67e74e95ff9e24b3fbc6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  8 Sep 2022 11:23:30 -0400
-jwood+buildroot@starry.com wrote:
+https://www.snort.org/downloads/snort/release_notes_2.9.20.txt
 
-> From: Justin Wood <jwood+buildroot@starry.com>
-> 
-> This is useful in cases where a package is added without hashes (e.g. private packages)
-> and you do not want to risk MITM attacks of the package itself.  While still allowing
-> download of packages that are third party with hashes, from unreliable upstreams.
-> 
-> This adds a new ${PKG}_DISABLE_FALLBACK_DOWNLOAD that is checked when DOWNLOAD would be
-> called to not include URIs from the backup site.
-> 
-> Additionally we use the new backup URIs if the new variable is unset in the json data
-> URI list to ensure consistency for consumers who do not use this feature.
-> 
-> Signed-off-by: Justin Wood <jwood@starry.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/snort/snort.hash | 4 ++--
+ package/snort/snort.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-We just had a discussion with Peter Korsgaard, and it seems like we
-agree with the feedback from Yann. If you're really concerned about
-MITM attacks, you should have hashes in your packages, and generally
-speaking if you're concerned about "leaking" information about the fact
-that you're building something, you should disable using
-BR2_BACKUP_SITE.
-
-However, instead of just saying no to this, we put a bit of thought
-into it. What we don't like is that you're adding yet another very
-specific variable that touches a very particular aspect of the package
-behavior. Instead, we are thinking it might make sense to have a
-variable that tells Buildroot the package is "private" or "internal"
-(or some other similar naming), as opposed to the rest of the
-open-source packages. This could tell Buildroot to not use the backup
-site for this package, but also not mention the package in the
-legal-info output. It should be noted that we already have the
-<pkg>_REDISTRIBUTE = YES/NO boolean, but it only controls whether the
-source code gets copied into the legal-info output: even with
-<pkg>_REDISTRIBUTE = NO, the package gets listed in the legal-info
-manifest. I personally believe it would make more sense to have a
-variable that says the package is internal/private, and from that
-derive the necessary tweaks to the download and legal-info behavior. I
-don't have a good name for this variable though :-/
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/snort/snort.hash b/package/snort/snort.hash
+index ac098564aa..a807d051d9 100644
+--- a/package/snort/snort.hash
++++ b/package/snort/snort.hash
+@@ -1,8 +1,8 @@
+ # From https://www.snort.org/downloads/snort/md5s
+-md5  b0350425e0c1e9c044c25aa13b47edf8  snort-2.9.19.tar.gz
++md5  b52cdf14e97ef953c800c3ef123beaa5  snort-2.9.20.tar.gz
+ 
+ # Locally computed:
+-sha256  b12fc6db72afb58987a2bf1954b8f45bde02047c235513c7663857b9506369c7  snort-2.9.19.tar.gz
++sha256  29400e13f53b1831e0b8b10ec1224a1cbaa6dc1533a5322a20dd80bb84b4981c  snort-2.9.20.tar.gz
+ 
+ # Hash for license files:
+ sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index 41f450541f..8ce8ed5fa6 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNORT_VERSION = 2.9.19
++SNORT_VERSION = 2.9.20
+ SNORT_SITE = https://www.snort.org/downloads/snort
+ SNORT_LICENSE = GPL-2.0
+ SNORT_LICENSE_FILES = LICENSE COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
