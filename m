@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C23EEC6FA82
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 19:31:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AD21C6FA82
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 19:44:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A62761141;
-	Sat, 17 Sep 2022 19:31:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A62761141
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EC7741CD1;
+	Sat, 17 Sep 2022 19:44:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EC7741CD1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KlDjCg-R7A9w; Sat, 17 Sep 2022 19:31:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UwgLG1GsgGcb; Sat, 17 Sep 2022 19:44:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C4C16114C;
-	Sat, 17 Sep 2022 19:31:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C4C16114C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88FDC4193B;
+	Sat, 17 Sep 2022 19:44:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88FDC4193B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 143531BF96B
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:30:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 05EBB1BF267
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:44:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E2B4641CA0
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:30:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2B4641CA0
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4BA14193B
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:44:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4BA14193B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w3YIruFc9fAf for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 19:30:46 +0000 (UTC)
+ with ESMTP id YXbnuCncDCz9 for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 19:44:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 93BD141C98
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 19:30:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93BD141C98
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CB90418FD
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 19:44:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CB90418FD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 81E1F84633; Sat, 17 Sep 2022 19:30:46 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 85E3C8463F; Sat, 17 Sep 2022 19:44:25 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 20:53:21 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 3d41bf63d27339cc76b5123ee3d1884d7931c67b
-X-Git-Newrev: abc9c24de9536fd028680781915310d3942fa9cd
+Date: Sat, 17 Sep 2022 21:33:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fa47ff60dabd28d1356d72fce56bd7b4191788eb
+X-Git-Newrev: 09f75ce62ff267edec73cbf247a099feca96e43c
 X-Patchwork-Hint: ignore
-Message-Id: <20220917193046.81E1F84633@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libcamera: needs
- gcc >= 8
+Message-Id: <20220917194425.85E3C8463F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsigc: bump to version 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,74 +62,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abc9c24de9536fd028680781915310d3942fa9cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=09f75ce62ff267edec73cbf247a099feca96e43c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libcamera needs gcc >= 8 since bump to
-8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98 in commit
-64f67ede01699c47ca3c8801ae5dd440295f1874 and
-https://git.libcamera.org/libcamera/libcamera.git/commit/?id=a7ab5ef1d2f9b05056db450e631a99a73382d589:
+https://github.com/libsigcplusplus/libsigcplusplus/blob/3.2.0/NEWS
 
-../output-1/build/libcamera-ba6435930f08e802cffc688d90f156a8959a0f86/meson.build:82:8: ERROR: Problem encountered: gcc version is too old, libcamera requires 8.0 or newer
-
-Fixes:
- - http://autobuild.buildroot.org/results/f8eba0e564d03b83fcda4085baec16a4857c7d25
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 204002f672a7acb9af326b3ad4e378246cdc65ca)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcamera-apps/Config.in | 6 +++---
- package/libcamera/Config.in      | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/libsigc/libsigc.hash | 4 ++--
+ package/libsigc/libsigc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
-index 492a99cf55..711fd6de05 100644
---- a/package/libcamera-apps/Config.in
-+++ b/package/libcamera-apps/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS # libcamera
- 	depends on BR2_INSTALL_LIBSTDCPP # libcamera/boost
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17/libcamera
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libcamera
- 	depends on !BR2_STATIC_LIBS # gnutls/libcamera
- 	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
- 	select BR2_PACKAGE_BOOST
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
+diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
+index 97c9d0cc84..046584fc2b 100644
+--- a/package/libsigc/libsigc.hash
++++ b/package/libsigc/libsigc.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/3.0/libsigc++-3.0.7.sha256sum
+-sha256  bfbe91c0d094ea6bbc6cbd3909b7d98c6561eea8b6d9c0c25add906a6e83d733  libsigc++-3.0.7.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/3.2/libsigc++-3.2.0.sha256sum
++sha256  8cdcb986e3f0a7c5b4474aa3c833d676e62469509f4899110ddf118f04082651  libsigc++-3.2.0.tar.xz
  
- 	  https://github.com/raspberrypi/libcamera-apps
+ # Locally calculated
+ sha256  97628afebc60f026f5c2b25d7491c46a5c4ee61f693e7cfa07fbd2c03605979b  COPYING
+diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
+index 18be25fd03..eca4111ff6 100644
+--- a/package/libsigc/libsigc.mk
++++ b/package/libsigc/libsigc.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
-+comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index fd7b3c92c4..908e5a3ec5 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -10,7 +10,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
- 	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_GNUTLS
-@@ -91,7 +91,7 @@ comment "lc-compliance test application needs a toolchain w/ C++, wchar, threads
- 
- endif # BR2_PACKAGE_LIBCAMERA
- 
--comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
-+comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
+-LIBSIGC_VERSION_MAJOR = 3.0
+-LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).7
++LIBSIGC_VERSION_MAJOR = 3.2
++LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).0
+ LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.xz
+ LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/$(LIBSIGC_VERSION_MAJOR)
+ LIBSIGC_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
