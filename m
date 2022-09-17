@@ -1,51 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 648B3ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:24:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2AA4ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E15A341D97;
-	Sat, 17 Sep 2022 14:24:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E15A341D97
+	by smtp3.osuosl.org (Postfix) with ESMTP id 78A8361127;
+	Sat, 17 Sep 2022 14:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78A8361127
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Quu78oNS4nvt; Sat, 17 Sep 2022 14:24:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NPSJJP1ZswwC; Sat, 17 Sep 2022 14:25:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B098741D81;
-	Sat, 17 Sep 2022 14:24:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B098741D81
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BCDA91BF575
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:24:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D18461122;
+	Sat, 17 Sep 2022 14:25:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D18461122
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F8421BF575
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96EEA41D81
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:24:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96EEA41D81
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B34840AA8
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:25:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B34840AA8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id won2ep7FkHDr for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 14:24:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B3D341D80
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:24:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B3D341D80
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 7FB358434E; Sat, 17 Sep 2022 14:24:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j5un7rCxBQhn for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 14:25:46 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04BF24049C
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 04BF24049C
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:25:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1B910100003;
+ Sat, 17 Sep 2022 14:25:43 +0000 (UTC)
+Date: Sat, 17 Sep 2022 16:25:42 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 15:58:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d776c65fe9f64b1c27b47fc49b8674515807acea
-X-Git-Newrev: 50980a439cabcd30e1439cbd8de013deb0d2ffa9
-X-Patchwork-Hint: ignore
-Message-Id: <20220917142433.7FB358434E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/minizip-zlib: bump to version
- 1.2.12
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220917162542.16befdf4@windsurf>
+In-Reply-To: <20220904211117.218817-1-fontaine.fabrice@gmail.com>
+References: <20220904211117.218817-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1663424744;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=RWYk3V1Agtn8P9Kftz7uY1xYXd8ibQ9EkXuW522EWeY=;
+ b=RcYOu86uap/W7Xc4+x0hLwAf+6h8Zano8348W7TpzzJleoQP+66U6ODp+Gd+P3OdKREhg+
+ +JwwEzB+m4WJEfxFkn87sJZw/sBylE9SjMfDDLDNci2VAi7Henh72PvBon7Nannv5JZ5PD
+ SGWPZ2BbQlNUNxKXxfSsuBLS9Dt6LasqeUT1cIBWZDhMzM2t3ial0fzfneZq9Bh+cSVQYW
+ 4M0BAWbciPXFufTScFdx1tyELjw3PBcSH4dL4PjMe2dub99LGtAnfVmpH5ch/ymhA9JkiP
+ 4rqlIR0L1P1xxNGIE9scsF/8Cg4Nkz70ukrlCgfOI/jm0g7wXDLgXWWZrDEbmA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RcYOu86u
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/minizip-zlib: bump to
+ version 1.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +76,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50980a439cabcd30e1439cbd8de013deb0d2ffa9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  4 Sep 2022 23:11:17 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Update hash of README (version and year updated with
-https://github.com/madler/zlib/commit/21767c654d31d2dccdde4330529775c6c5fd5389)
+> Update hash of README (version and year updated with
+> https://github.com/madler/zlib/commit/21767c654d31d2dccdde4330529775c6c5fd5389)
+> 
+> https://github.com/madler/zlib/blob/v1.2.12/ChangeLog
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/minizip-zlib/minizip-zlib.hash | 4 ++--
+>  package/minizip-zlib/minizip-zlib.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-https://github.com/madler/zlib/blob/v1.2.12/ChangeLog
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/minizip-zlib/minizip-zlib.hash | 4 ++--
- package/minizip-zlib/minizip-zlib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/minizip-zlib/minizip-zlib.hash b/package/minizip-zlib/minizip-zlib.hash
-index 4d2c5c29d3..e6ca974e2f 100644
---- a/package/minizip-zlib/minizip-zlib.hash
-+++ b/package/minizip-zlib/minizip-zlib.hash
-@@ -1,4 +1,4 @@
- # From http://www.zlib.net/
--sha256  4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066  zlib-1.2.11.tar.xz
-+sha256  7db46b8d7726232a621befaab4a1c870f00a90805511c0e0090441dac57def18  zlib-1.2.12.tar.xz
- # License files, locally calculated
--sha256  7960b6b1cc63e619abb77acaea5427159605afee8c8b362664f4effc7d7f7d15  README
-+sha256  fc2c3368901700f0acdeb1d8afeaca5923296768ec6824ecdf627aac396001fd  README
-diff --git a/package/minizip-zlib/minizip-zlib.mk b/package/minizip-zlib/minizip-zlib.mk
-index 935877678d..ec0c3da7d6 100644
---- a/package/minizip-zlib/minizip-zlib.mk
-+++ b/package/minizip-zlib/minizip-zlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MINIZIP_ZLIB_VERSION = 1.2.11
-+MINIZIP_ZLIB_VERSION = 1.2.12
- MINIZIP_ZLIB_SOURCE = zlib-$(MINIZIP_ZLIB_VERSION).tar.xz
- MINIZIP_ZLIB_SITE = http://www.zlib.net
- MINIZIP_ZLIB_LICENSE = Zlib
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
