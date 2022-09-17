@@ -4,66 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5021CC6FA86
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 08:38:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECFEBC6FA86
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 08:45:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAE07819B8;
-	Sat, 17 Sep 2022 08:38:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAE07819B8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 964A883F11;
+	Sat, 17 Sep 2022 08:45:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 964A883F11
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yelaz4kPB0_u; Sat, 17 Sep 2022 08:38:39 +0000 (UTC)
+	with ESMTP id cguCX65-52i1; Sat, 17 Sep 2022 08:45:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 010AB81499;
-	Sat, 17 Sep 2022 08:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 010AB81499
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3A5083EE7;
+	Sat, 17 Sep 2022 08:45:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3A5083EE7
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1FC331BF82F
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:38:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F005F1BF82F
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:45:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E09928141F
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:38:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E09928141F
+ by smtp1.osuosl.org (Postfix) with ESMTP id D950283EEA
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D950283EEA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6i0OzQKiPByD for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 08:38:34 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 504A3813D9
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 504A3813D9
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 08:38:34 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4E0BF200008;
- Sat, 17 Sep 2022 08:38:31 +0000 (UTC)
-Date: Sat, 17 Sep 2022 10:38:29 +0200
+ with ESMTP id eu3NtkO8KoxY for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 08:45:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1FDD983EE4
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 08:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FDD983EE4
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 0E2E684094; Sat, 17 Sep 2022 08:45:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: <yann.morin@orange.com>
-Message-ID: <20220917103829.02943c4c@windsurf>
-In-Reply-To: <24827_1662976661_631F0295_24827_299_14_6f9b848a35cb9647b133c662924b4d82cf759b19.1662976659.git.yann.morin@orange.com>
-References: <24827_1662976661_631F0295_24827_299_14_6f9b848a35cb9647b133c662924b4d82cf759b19.1662976659.git.yann.morin@orange.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663403911;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=JXCN1sahGtm8HotkUSNlMvIy++gM3Dxbc10VfAsiSh8=;
- b=ODncpoqNahmNPk0VW3OH3jrvy3srWvE1CDl8dsvXhDoLaKXLSZlWEa9J2TwwSo3dN5GKYE
- VTBtd+y42XrWXT1EBkqO65U8T9Y+vT/kwuF0D6Mc6q84w2d+RQIpFC7PQE3Gyv3kgBVWQF
- TvvTlsiGuycBoGmGVByHAqGhzzutC4DehPlzic7cHe+jCWmucEu7xUACS5L+iv3QlEvYE6
- mmUvjxPqEHx7POzSY1Qh6ncnHKK7azFLZlnBgtlGN79WUbkNjipxsAr6ZgbdhUKGSCZLCX
- 9er/akfjsyiTHBxr90df8Ib/99vxU9Wqb44mmbmPGQX5uS39DV3X2AQHuRaEWA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ODncpoqN
-Subject: Re: [Buildroot] [PATCH] package/mosquitto: add mosquitto group
+To: buildroot@buildroot.org
+Date: Sat, 17 Sep 2022 10:39:02 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ebe96e90c2e673089d3bca177bef9e858aebf452
+X-Git-Newrev: aa7ac182f9bf3fdc71f3a851be3507b38264e366
+X-Patchwork-Hint: ignore
+Message-Id: <20220917084511.0E2E684094@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-io-socket-ssl: bump to
+ version 2.075
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,42 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>,
- Francois Perrad <fperrad@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 12 Sep 2022 11:57:39 +0200
-<yann.morin@orange.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=aa7ac182f9bf3fdc71f3a851be3507b38264e366
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> Since version 2.0.15, and upstream commit 71a90177d7b2 (Systemd: Add
-> mosquitto group ownership), mosquitto uses its own group rather than
-> the generic nobody group.
-> 
-> This means that mosauitto can now no longer start ona  systemd-based
-> system.
-> 
-> Change our mosquitto user definition to specify a mosquitto group.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Titouan Christophe <titouanchristophe@gmail.com>
-> Cc: Francois Perrad <fperrad@gmail.com>
-> ---
->  package/mosquitto/mosquitto.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+index 4a1d71e349..8c6bb30523 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  53201b8e4dfaf25d4d661a54fdfda602  IO-Socket-SSL-2.074.tar.gz
+-sha256  36486b6be49da4d029819cf7069a7b41ed48af0c87e23be0f8e6aba23d08a832  IO-Socket-SSL-2.074.tar.gz
++md5  8f0f6bff4db5e4be6e848aa49fd29380  IO-Socket-SSL-2.075.tar.gz
++sha256  c30ee2220b1e181a968ebbc81861d0cadf334b001377a44105ae5a8637ddae8c  IO-Socket-SSL-2.075.tar.gz
+ 
+ # computed by scancpan
+ sha256  090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032  README
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index 1ab70509bd..daa46acf95 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_IO_SOCKET_SSL_VERSION = 2.074
++PERL_IO_SOCKET_SSL_VERSION = 2.075
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
