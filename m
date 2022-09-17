@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6706ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:42:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24BFFECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:42:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 82C1561153;
-	Sat, 17 Sep 2022 15:42:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82C1561153
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3A00843E4;
+	Sat, 17 Sep 2022 15:42:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3A00843E4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5L_j9mdhFClw; Sat, 17 Sep 2022 15:42:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id N78UAUJl6d5P; Sat, 17 Sep 2022 15:42:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A52016111E;
-	Sat, 17 Sep 2022 15:42:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A52016111E
+	by smtp1.osuosl.org (Postfix) with ESMTP id E64A08439A;
+	Sat, 17 Sep 2022 15:42:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E64A08439A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8B2C81BF388
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8D7AB1BF388
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A45661113
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8C6661150
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A45661113
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8C6661150
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fovO6PrBQzD6 for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 15:40:23 +0000 (UTC)
+ with ESMTP id rN6yYFVt4DY6 for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0AB5E6115D
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:40:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AB5E6115D
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB12360A9F
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB12360A9F
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 085CB844EC; Sat, 17 Sep 2022 15:40:23 +0000 (UTC)
+ id AADCA844E8; Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 17:34:57 +0200
+Date: Sat, 17 Sep 2022 17:17:09 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: bf7a9977e7bb1bff8a8c2987b1607e2cb86c6338
-X-Git-Newrev: 3af8d3d32456bb1621c45c7b1085fae3fde8dcf5
+X-Git-Oldrev: 815a4d66ea52326d4bbd9c70f9345f8f906a07fc
+X-Git-Newrev: 9b1efacba95c4700f202cf6baf76aee73e432abd
 X-Patchwork-Hint: ignore
-Message-Id: <20220917154023.085CB844EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/squid: security
- bump to version 5.6
+Message-Id: <20220917154022.AADCA844E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] utils/genrandconfig: add
+ aufs-util handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3af8d3d32456bb1621c45c7b1085fae3fde8dcf5
+commit: https://git.buildroot.net/buildroot/commit/?id=9b1efacba95c4700f202cf6baf76aee73e432abd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix CVE-2021-46784: In Squid 3.x through 3.5.28, 4.x through 4.17, and
-5.x before 5.6, due to improper buffer management, a Denial of Service
-can occur when processing long Gopher server responses.
+Add a custom case to make sure that a random configuration with an empty
+version for aufs-util doesn't fail.
 
-https://github.com/squid-cache/squid/security/advisories/GHSA-f5cp-6rh3-284w
+Fixes:
+ - http://autobuild.buildroot.org/results/e242cf66a02983bcf6e95b37f8e458bd18aee683
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d3ef301f0c2d339eade3188e2a80ff8841ea935f)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fee46b54e7b51c6b40fa57cf03fb150c21fdf8e5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ utils/genrandconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index e18ed8961e..22c6db8c70 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v5/squid-5.3.tar.xz.asc
--md5  9249f30169ab6600e53b4f9b8129b3b0  squid-5.3.tar.xz
--sha1  d3a8310c725616fa7565d60f3bf8fdf5fa20b15a  squid-5.3.tar.xz
-+# From http://www.squid-cache.org/Versions/v5/squid-5.6.tar.xz.asc
-+md5  2f2201a18a0a727ab589d951ebe4f815  squid-5.6.tar.xz
-+sha1  a01f47b3e9ff06245c894773de30bfd88ab14f65  squid-5.6.tar.xz
- # Locally calculated
--sha256  45178588df1311ded41ebadd632840c4d93a8d7f5f60e38e74acf2f1ae2f1715  squid-5.3.tar.xz
-+sha256  38d27338a347597ce0e93d0c3be6e5f66b6750417c474ca87ee0d61bb6d148db  squid-5.6.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 3847fb49dc..86a0c714c6 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 629efbbfd9..739536125e 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -296,6 +296,9 @@ def fixup_config(sysinfo, configfile):
+     if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
+        'BR2_PACKAGE_FLANN=y\n' in configlines:
+         return False
++    if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
++       'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
++        return False
  
--SQUID_VERSION = 5.3
-+SQUID_VERSION = 5.6
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v5
- SQUID_LICENSE = GPL-2.0+
+     if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines:
+         bootenv = os.path.join(args.outputdir, "boot_env.txt")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
