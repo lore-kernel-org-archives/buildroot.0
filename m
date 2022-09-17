@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4A90C54EE9
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 10:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C64B5ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 10:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F12241D1D;
-	Sat, 17 Sep 2022 10:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F12241D1D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IjCqaMeqkTZc; Sat, 17 Sep 2022 10:26:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FBF641A40;
-	Sat, 17 Sep 2022 10:26:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FBF641A40
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F362A1BF5A4
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:26:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9658842E2
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9658842E2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73D648415F;
+	Sat, 17 Sep 2022 10:27:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73D648415F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fyT3EP-09P3N for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 10:26:06 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lcspK-PlAzPj; Sat, 17 Sep 2022 10:27:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D1558402E;
+	Sat, 17 Sep 2022 10:27:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D1558402E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 765041BF5A4
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:27:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5100841A3F
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:27:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5100841A3F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lGMMKttcYSxn for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 10:27:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6E778402E
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 10:26:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6E778402E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B52A41A40
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 10:27:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B52A41A40
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id D6A45841A3; Sat, 17 Sep 2022 10:26:05 +0000 (UTC)
+ id 28E45841BD; Sat, 17 Sep 2022 10:27:05 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 12:14:12 +0200
+Date: Sat, 17 Sep 2022 12:26:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 93f53e4e1732c2834d2661fc3692703bbd26616a
-X-Git-Newrev: ec8e8aaa3af7ae717a3b107d0731a5932f1beb8d
+X-Git-Oldrev: ec8e8aaa3af7ae717a3b107d0731a5932f1beb8d
+X-Git-Newrev: dc8aafa98b4578385e547046fd6c613830d334b2
 X-Patchwork-Hint: ignore
-Message-Id: <20220917102605.D6A45841A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/runc: bump to version 1.1.4
+Message-Id: <20220917102705.28E45841BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/containerd: bump to version 1.6.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,52 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec8e8aaa3af7ae717a3b107d0731a5932f1beb8d
+commit: https://git.buildroot.net/buildroot/commit/?id=dc8aafa98b4578385e547046fd6c613830d334b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is the fourth patch release in the 1.1.z series of runc, primarily fixing a
-regression introduced in 1.1.3 related to device rules, as well as other bugs.
-
- - Fix mounting via wrong proc fd. When the user and mount namespaces are used,
- and the bind mount is followed by the cgroup mount in the spec, the cgroup was
- mounted using the bind mount's mount fd.
- - Switch kill() in libcontainer/nsenter to sane_kill().
- - Fix "permission denied" error from runc run on noexec fs.
- - Fix failed exec after systemctl daemon-reload. Due to a regression in v1.1.3,
- the DeviceAllow=char-pts rwm rule was no longer added and was causing an error
- open /dev/pts/0: operation not permitted: unknown when systemd was reloaded.
-
-https://github.com/opencontainers/runc/releases/tag/v1.1.4
+https://github.com/containerd/containerd/releases/tag/v1.6.8
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
+ package/containerd/containerd.hash | 2 +-
+ package/containerd/containerd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index d94a0c20ca..6c8fddd397 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+index c0c926f2e4..285519441a 100644
+--- a/package/containerd/containerd.hash
++++ b/package/containerd/containerd.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  fc1c70e095d662e38a5889bc6de41857762ce022caaf8be2852663198c533a63  runc-1.1.3.tar.gz
-+sha256  4f02077432642eebd768fc857318ae7929290b3a3511eb1be338005e360cfa34  runc-1.1.4.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index aef52de618..b60f1da2e7 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+ # Computed locally
+-sha256  27afb673c20d53aa5c31aec07b38eb7e4dc911e7e1f0c76fac9513bbf070bd24  containerd-1.6.6.tar.gz
++sha256  f5f938513c28377f64f85e84f2750d39f26b01262f3a062b7e8ce35b560ca407  containerd-1.6.8.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 80952914e6..89bbbf5c03 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.1.3
-+RUNC_VERSION = 1.1.4
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
+-CONTAINERD_VERSION = 1.6.6
++CONTAINERD_VERSION = 1.6.8
+ CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+ CONTAINERD_LICENSE = Apache-2.0
+ CONTAINERD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
