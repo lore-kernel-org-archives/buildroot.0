@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90B23C6FA82
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 19:30:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C23EEC6FA82
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 19:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3635760B19;
-	Sat, 17 Sep 2022 19:30:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3635760B19
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A62761141;
+	Sat, 17 Sep 2022 19:31:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A62761141
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jwLILJ_VQBxe; Sat, 17 Sep 2022 19:30:50 +0000 (UTC)
+	with ESMTP id KlDjCg-R7A9w; Sat, 17 Sep 2022 19:31:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B7E160AC0;
-	Sat, 17 Sep 2022 19:30:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B7E160AC0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DB6451BF267
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:30:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C4C16114C;
+	Sat, 17 Sep 2022 19:31:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C4C16114C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 143531BF96B
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:30:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B77674011F
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2B4641CA0
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:30:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B77674011F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2B4641CA0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SEyW9snzJ7b6 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w3YIruFc9fAf for <buildroot@lists.busybox.net>;
  Sat, 17 Sep 2022 19:30:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FB9A40119
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93BD141C98
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 19:30:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FB9A40119
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93BD141C98
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8D47D84636; Sat, 17 Sep 2022 19:30:46 +0000 (UTC)
+ id 81E1F84633; Sat, 17 Sep 2022 19:30:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 21:27:53 +0200
+Date: Sat, 17 Sep 2022 20:53:21 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: abc9c24de9536fd028680781915310d3942fa9cd
-X-Git-Newrev: bb7d7c21d698d7e7f8e012fdcb0cea919c2fae9f
+X-Git-Oldrev: 3d41bf63d27339cc76b5123ee3d1884d7931c67b
+X-Git-Newrev: abc9c24de9536fd028680781915310d3942fa9cd
 X-Patchwork-Hint: ignore
-Message-Id: <20220917193046.8D47D84636@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/vim: security
- bump to version 9.0.0292
+Message-Id: <20220917193046.81E1F84633@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libcamera: needs
+ gcc >= 8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb7d7c21d698d7e7f8e012fdcb0cea919c2fae9f
+commit: https://git.buildroot.net/buildroot/commit/?id=abc9c24de9536fd028680781915310d3942fa9cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Fix CVE-2022-2257, CVE-2022-2264, CVE-2022-2284, CVE-2022-2285,
-CVE-2022-2286, CVE-2022-2287, CVE-2022-2288, CVE-2022-2289,
-CVE-2022-2304, CVE-2022-2343, CVE-2022-2344, CVE-2022-2345,
-CVE-2022-2522, CVE-2022-2571, CVE-2022-2580, CVE-2022-2581,
-CVE-2022-2598, CVE-2022-2816, CVE-2022-2817, CVE-2022-2819,
-CVE-2022-2845, CVE-2022-2849, CVE-2022-2862, CVE-2022-2874,
-CVE-2022-2889, CVE-2022-2923, CVE-2022-2946, CVE-2022-2980
-CVE-2022-2982
+libcamera needs gcc >= 8 since bump to
+8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98 in commit
+64f67ede01699c47ca3c8801ae5dd440295f1874 and
+https://git.libcamera.org/libcamera/libcamera.git/commit/?id=a7ab5ef1d2f9b05056db450e631a99a73382d589:
+
+../output-1/build/libcamera-ba6435930f08e802cffc688d90f156a8959a0f86/meson.build:82:8: ERROR: Problem encountered: gcc version is too old, libcamera requires 8.0 or newer
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f8eba0e564d03b83fcda4085baec16a4857c7d25
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 782a1526f829a02e163eee609d6f38f1347dc9eb)
+(cherry picked from commit 204002f672a7acb9af326b3ad4e378246cdc65ca)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcamera-apps/Config.in | 6 +++---
+ package/libcamera/Config.in      | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 62b11fea7b..f06d084cb3 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  86aa403632beea5827f305e471a245d14ee9c79072f67ce8e9536169a1deaad9  vim-9.0.0008.tar.gz
-+sha256  7c97f8e8cc56157cad7d461633beb347472e134e96b5545d24d1fe451dfaecc2  vim-9.0.0292.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  4afae7c984ab1a4ccd0b474a695f316e7435ab6ed46537648af925c18835d853  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index c3308b4542..5e7c34abbb 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
+index 492a99cf55..711fd6de05 100644
+--- a/package/libcamera-apps/Config.in
++++ b/package/libcamera-apps/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
+ 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS # libcamera
+ 	depends on BR2_INSTALL_LIBSTDCPP # libcamera/boost
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libcamera/boost
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17/libcamera
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libcamera
+ 	depends on !BR2_STATIC_LIBS # gnutls/libcamera
+ 	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
+ 	select BR2_PACKAGE_BOOST
+@@ -24,7 +24,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
  
--VIM_VERSION = 9.0.0008
-+VIM_VERSION = 9.0.0292
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+ 	  https://github.com/raspberrypi/libcamera-apps
+ 
+-comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
++comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
+ 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index fd7b3c92c4..908e5a3ec5 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -10,7 +10,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
+ 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
+ 	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_WCHAR # gnutls
+ 	select BR2_PACKAGE_GNUTLS
+@@ -91,7 +91,7 @@ comment "lc-compliance test application needs a toolchain w/ C++, wchar, threads
+ 
+ endif # BR2_PACKAGE_LIBCAMERA
+ 
+-comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
++comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
+ 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
