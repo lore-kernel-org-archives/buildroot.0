@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83599C54EE9
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 242ACECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25F0C843B4;
-	Sat, 17 Sep 2022 14:30:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25F0C843B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE4C2415F9;
+	Sat, 17 Sep 2022 14:30:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE4C2415F9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3j7MnBQO833t; Sat, 17 Sep 2022 14:30:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QBgGlAqQD6ZL; Sat, 17 Sep 2022 14:30:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A0D384399;
-	Sat, 17 Sep 2022 14:30:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A0D384399
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 01ED01BF575
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:30:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BE06340C59;
+	Sat, 17 Sep 2022 14:30:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE06340C59
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F34B61BF575
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF502843B2
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:30:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF502843B2
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC15E40C59
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:30:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC15E40C59
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QjOCu5uvsqvK for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 14:30:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LzQbro3HGmWL for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 14:30:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03D8C84399
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:30:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03D8C84399
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0CE1C4049C
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:30:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CE1C4049C
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id E4514843AA; Sat, 17 Sep 2022 14:30:31 +0000 (UTC)
+ id EFD40843AE; Sat, 17 Sep 2022 14:30:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 16:29:15 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 6d335e61986839c27c12d34f3d748149b1432df1
-X-Git-Newrev: d5ac94f8b37a0d11f7fc751902789316e0186d66
+Date: Sat, 17 Sep 2022 16:29:02 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 3d53681c552c3c7c7a4151b113cbf19577a60420
+X-Git-Newrev: 815a4d66ea52326d4bbd9c70f9345f8f906a07fc
 X-Patchwork-Hint: ignore
-Message-Id: <20220917143031.E4514843AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libinput: remove
+Message-Id: <20220917143043.EFD40843AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libinput: remove
  python tools scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5ac94f8b37a0d11f7fc751902789316e0186d66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=815a4d66ea52326d4bbd9c70f9345f8f906a07fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Some libinput tools are actually python scripts and requires at least
 tree python modules: libevdev, pyudev and pyyaml:
