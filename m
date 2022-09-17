@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4508ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E150C6FA82
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C7B28402C;
-	Sat, 17 Sep 2022 18:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C7B28402C
+	by smtp2.osuosl.org (Postfix) with ESMTP id A657A40570;
+	Sat, 17 Sep 2022 18:39:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A657A40570
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3T0hCcnSOwQS; Sat, 17 Sep 2022 18:39:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cq7_SvSktkeJ; Sat, 17 Sep 2022 18:39:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF45E84023;
-	Sat, 17 Sep 2022 18:39:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF45E84023
+	by smtp2.osuosl.org (Postfix) with ESMTP id 013304012D;
+	Sat, 17 Sep 2022 18:39:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 013304012D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 58D371BF335
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:39:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AB6251BF335
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 345F160AE2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4DE476059F
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:39:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 345F160AE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DE476059F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q7L2TQBbjXFu for <buildroot@lists.busybox.net>;
+ with ESMTP id KeGIl9JR37JI for <buildroot@lists.busybox.net>;
  Sat, 17 Sep 2022 18:39:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 643326059F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 68F1260A7B
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:39:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 643326059F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68F1260A7B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4E847845E5; Sat, 17 Sep 2022 18:39:04 +0000 (UTC)
+ id 57B9084564; Sat, 17 Sep 2022 18:39:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 20:28:45 +0200
+Date: Sat, 17 Sep 2022 20:28:48 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b631ea3aef6578fca2ed4917e089c876e72fe99b
-X-Git-Newrev: 946e93f9faa3ff743a1869cdeadce206fdaf7f24
+X-Git-Oldrev: 946e93f9faa3ff743a1869cdeadce206fdaf7f24
+X-Git-Newrev: 92c93cff54f7f5971c09d22f905b6b9a4691f421
 X-Patchwork-Hint: ignore
-Message-Id: <20220917183904.4E847845E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/igh-ethercat: fix
- build without C++
+Message-Id: <20220917183904.57B9084564@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/igh-ethercat:
+ cleanup conditional multi assignments
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=946e93f9faa3ff743a1869cdeadce206fdaf7f24
+commit: https://git.buildroot.net/buildroot/commit/?id=92c93cff54f7f5971c09d22f905b6b9a4691f421
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-tools needs C++ since the addition of the package in commit
-27ad470d7df5509ae4a96edd04521211900090e4 resulting in the following
-build failure:
-
-no -DHAVE_CONFIG_H -I. -I..   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I../include -I../master -Wall -DREV=`if test -s ../revision; then cat ../revision; else hg id -i .. 2>/dev/null || echo "unknown"; fi` -fno-strict-aliasing -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Ofast -g0  -c -o ethercat-Command.o `test -f 'Command.cpp' || echo './'`Command.cpp
-/bin/bash: line 1: no: command not found
-
-Fixes:
- - http://autobuild.buildroot.org/results/89d096006839f32a3d03786e69e51ec3c5ea70f6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998@free.fr: move it before package's options]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 014ebc394d116e886796dd9af377299915cb556d)
+(cherry picked from commit 3ccf0abeeea242a9c95b0ef09c65cb10e1fa93ef)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/igh-ethercat/igh-ethercat.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/igh-ethercat/igh-ethercat.mk | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index b9771e8f8c..cc3f37f883 100644
+index cc3f37f883..9fcfb4f6f2 100644
 --- a/package/igh-ethercat/igh-ethercat.mk
 +++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -15,6 +15,7 @@ IGH_ETHERCAT_INSTALL_STAGING = YES
- IGH_ETHERCAT_CONF_OPTS = \
- 	--with-linux-dir=$(LINUX_DIR)
+@@ -13,14 +13,13 @@ IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
+ IGH_ETHERCAT_INSTALL_STAGING = YES
  
-+IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_INSTALL_LIBSTDCPP),--enable-tool,--disable-tool)
- IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
- IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
- IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
+ IGH_ETHERCAT_CONF_OPTS = \
+-	--with-linux-dir=$(LINUX_DIR)
+-
+-IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_INSTALL_LIBSTDCPP),--enable-tool,--disable-tool)
+-IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
+-IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
+-IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
+-IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
+-IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
++	--with-linux-dir=$(LINUX_DIR) \
++	$(if $(BR2_INSTALL_LIBSTDCPP),--enable-tool,--disable-tool) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e) \
++	$(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
+ 
+ $(eval $(kernel-module))
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
