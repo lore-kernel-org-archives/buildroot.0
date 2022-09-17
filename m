@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81FF2ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:51:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12C77ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AC0F60F53;
-	Sat, 17 Sep 2022 18:51:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AC0F60F53
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1A3060F53;
+	Sat, 17 Sep 2022 18:52:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1A3060F53
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qFNI99bxbqty; Sat, 17 Sep 2022 18:51:44 +0000 (UTC)
+	with ESMTP id 8XepYWRf1bTB; Sat, 17 Sep 2022 18:52:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50EA460E33;
-	Sat, 17 Sep 2022 18:51:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50EA460E33
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 859601BF96B
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:51:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B69D460D6F;
+	Sat, 17 Sep 2022 18:52:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B69D460D6F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BE3C61BF335
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 616F5843EA
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:51:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 616F5843EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A4DE4016A
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A4DE4016A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XdqbmrMYTyp4 for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 18:51:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tmfPdn_yhm7L for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 77F088403F
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77F088403F
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF7964011F
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF7964011F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66CF6845F3; Sat, 17 Sep 2022 18:51:19 +0000 (UTC)
+ id AF91084608; Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 20:49:52 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 6768a84e8e289f6ab37de7b0a7ad4d8e50dded76
-X-Git-Newrev: 3d41bf63d27339cc76b5123ee3d1884d7931c67b
+Date: Sat, 17 Sep 2022 20:48:23 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: a722532f00ec8fce5692ed085b6291dec261a524
+X-Git-Newrev: 06e32e8c7a248d0de19a294033eb7033e980bec4
 X-Patchwork-Hint: ignore
-Message-Id: <20220917185119.66CF6845F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/ffmpeg: altivec
+Message-Id: <20220917185246.AF91084608@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ffmpeg: altivec
  needs VSX with little endian
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d41bf63d27339cc76b5123ee3d1884d7931c67b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=06e32e8c7a248d0de19a294033eb7033e980bec4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Fix the following build failure:
 
