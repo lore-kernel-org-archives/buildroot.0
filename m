@@ -1,51 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52A47C6FA82
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:53:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E02EECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA69E40182;
-	Sat, 17 Sep 2022 18:53:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA69E40182
+	by smtp1.osuosl.org (Postfix) with ESMTP id 12C31843EF;
+	Sat, 17 Sep 2022 18:53:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12C31843EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I4jFPb-1v7Aw; Sat, 17 Sep 2022 18:53:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id iI5C97EXQ0yG; Sat, 17 Sep 2022 18:53:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 093AD4011F;
-	Sat, 17 Sep 2022 18:53:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 093AD4011F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A081E1BF335
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 965E6843D7;
+	Sat, 17 Sep 2022 18:53:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 965E6843D7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 67CD51BF335
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 899F54011F
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 899F54011F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1BB00419D4
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:52:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BB00419D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0wbgagyVVu-5 for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B409D40119
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B409D40119
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3F1D84607; Sat, 17 Sep 2022 18:52:46 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 20:44:02 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 92c93cff54f7f5971c09d22f905b6b9a4691f421
-X-Git-Newrev: a722532f00ec8fce5692ed085b6291dec261a524
-X-Patchwork-Hint: ignore
-Message-Id: <20220917185246.A3F1D84607@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libwpe: security
- bump to version 1.12.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KRAF0iMPgAVG for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 18:52:57 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2222419CF
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A2222419CF
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:52:56 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 67450E0005;
+ Sat, 17 Sep 2022 18:52:54 +0000 (UTC)
+Date: Sat, 17 Sep 2022 20:52:53 +0200
+To: jwood+buildroot@starry.com
+Message-ID: <20220917205253.3737d1c6@windsurf>
+In-Reply-To: <20220908152330.2588951-1-jwood+buildroot@starry.com>
+References: <20220908152330.2588951-1-jwood+buildroot@starry.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1663440774;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=p2FOpqJCztX6z2Ui2Mz3jItgN+3M6ty8qEyS//Haep0=;
+ b=YkcAErLDZU3GlI5rnVzqYURu5I3ITjbt6fBxOOf19OomGU8lwKTA9P/sNjNMirziY7YWBn
+ TUeKAx3mdqD6pK+TMC9U+Ag6IHaPmjr2xQ7gponZNNfErm/lN3fsO1S0/nlcp4IJdn5e/q
+ 5jvGYi3bP93V8Ee8pfIYtiORY5lBg5+BqdercE/ZKvMuPENMtZhVF5KkZRP06T4aCXdXHx
+ UwY+mvVYDbxIN8I1KS0jKlNjEiVVyKUrS3ov95Ti+p2cGegLNFfE5MFX/clcFTWaJOQH5Y
+ sNYa0khlkmtBy23mKwNDNBnQ5g8ymt5oZ3w+Rm7iPZr/7bO/TrTVskQL47qKXA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=YkcAErLD
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-download: add per package
+ download fallback disable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,60 +76,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Justin Wood <jwood@starry.com>, "Yann E .
+ MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a722532f00ec8fce5692ed085b6291dec261a524
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+Hello Justin,
 
-This update fixes a potential memory allocation issue. There is no
-associated advisory, though. Release notes:
+On Thu,  8 Sep 2022 11:23:30 -0400
+jwood+buildroot@starry.com wrote:
 
-  https://wpewebkit.org/release/libwpe-1.12.1.html
-  https://wpewebkit.org/release/libwpe-1.12.2.html
-  https://wpewebkit.org/release/libwpe-1.12.3.html
+> From: Justin Wood <jwood+buildroot@starry.com>
+> 
+> This is useful in cases where a package is added without hashes (e.g. private packages)
+> and you do not want to risk MITM attacks of the package itself.  While still allowing
+> download of packages that are third party with hashes, from unreliable upstreams.
+> 
+> This adds a new ${PKG}_DISABLE_FALLBACK_DOWNLOAD that is checked when DOWNLOAD would be
+> called to not include URIs from the backup site.
+> 
+> Additionally we use the new backup URIs if the new variable is unset in the json data
+> URI list to ensure consistency for consumers who do not use this feature.
+> 
+> Signed-off-by: Justin Wood <jwood@starry.com>
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4ebdf1c47bd0d4e16f0fecc6363281f8cb59227b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libwpe/libwpe.hash | 8 ++++----
- package/libwpe/libwpe.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+We just had a discussion with Peter Korsgaard, and it seems like we
+agree with the feedback from Yann. If you're really concerned about
+MITM attacks, you should have hashes in your packages, and generally
+speaking if you're concerned about "leaking" information about the fact
+that you're building something, you should disable using
+BR2_BACKUP_SITE.
 
-diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
-index 2ebe4f19bd..2bbe1f0749 100644
---- a/package/libwpe/libwpe.hash
-+++ b/package/libwpe/libwpe.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/libwpe-1.12.0.tar.xz.sums
--md5  5a3f11789535d826370ba465ea141393  libwpe-1.12.0.tar.xz
--sha1  91aa47a593a5db511d667b3bdbaa76dee4301311  libwpe-1.12.0.tar.xz
--sha256  e8eeca228a6b4c36294cfb63f7d3ba9ada47a430904a5a973b3c99c96a44c18c  libwpe-1.12.0.tar.xz
-+# From https://wpewebkit.org/releases/libwpe-1.12.3.tar.xz.sums
-+md5  e538eb8e521d92f2bde3c4cd864abaa1  libwpe-1.12.3.tar.xz
-+sha1  9d94c411a502a10e68f69bd1fa273539cc6af2ca  libwpe-1.12.3.tar.xz
-+sha256  b84fdbfbc849ce4fdf084bb28b58e5463b1b4b6cc8f200dc77b41f8545d5329d  libwpe-1.12.3.tar.xz
- 
- # Hashes for license files:
- sha256  35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b  COPYING
-diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
-index fe3c4b16d7..ac533642d9 100644
---- a/package/libwpe/libwpe.mk
-+++ b/package/libwpe/libwpe.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBWPE_VERSION = 1.12.0
-+LIBWPE_VERSION = 1.12.3
- LIBWPE_SITE = https://wpewebkit.org/releases
- LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
- LIBWPE_INSTALL_STAGING = YES
+However, instead of just saying no to this, we put a bit of thought
+into it. What we don't like is that you're adding yet another very
+specific variable that touches a very particular aspect of the package
+behavior. Instead, we are thinking it might make sense to have a
+variable that tells Buildroot the package is "private" or "internal"
+(or some other similar naming), as opposed to the rest of the
+open-source packages. This could tell Buildroot to not use the backup
+site for this package, but also not mention the package in the
+legal-info output. It should be noted that we already have the
+<pkg>_REDISTRIBUTE = YES/NO boolean, but it only controls whether the
+source code gets copied into the legal-info output: even with
+<pkg>_REDISTRIBUTE = NO, the package gets listed in the legal-info
+manifest. I personally believe it would make more sense to have a
+variable that says the package is internal/private, and from that
+derive the necessary tweaks to the download and legal-info behavior. I
+don't have a good name for this variable though :-/
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
