@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 514B8ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:41:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 491F1ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:42:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E944161152;
-	Sat, 17 Sep 2022 15:41:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E944161152
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF56340420;
+	Sat, 17 Sep 2022 15:42:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF56340420
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WA_cx8AoOHrQ; Sat, 17 Sep 2022 15:41:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s9IbAIib1Pwx; Sat, 17 Sep 2022 15:42:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3CF861150;
-	Sat, 17 Sep 2022 15:41:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3CF861150
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7FF6E40153;
+	Sat, 17 Sep 2022 15:42:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FF6E40153
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 175F51BF388
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D26FE1BF388
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D0E566115A
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5AB86115F
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0E566115A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5AB86115F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BuN9tMy_95QI for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
+ with ESMTP id CySdAaQkh_lg for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 15:40:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF20A61150
+ by smtp3.osuosl.org (Postfix) with ESMTP id E263861152
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF20A61150
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E263861152
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BD450844EA; Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
+ id CEF36844EC; Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 17:24:20 +0200
+Date: Sat, 17 Sep 2022 17:25:07 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: a3ba496a7ffdc0b85de4665771466de8c5fd903c
-X-Git-Newrev: d302b0634bd5e750b3034f4e173db23c2d55a557
+X-Git-Oldrev: e5e46179486cfb82493706bae219f176c67903e7
+X-Git-Newrev: 157babea786a21353c81546d749c1883d56d1a76
 X-Patchwork-Hint: ignore
-Message-Id: <20220917154022.BD450844EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/wpewebkit:
- security bump to version 2.36.7
+Message-Id: <20220917154022.CEF36844EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rsync: security
+ bump to version 3.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,139 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d302b0634bd5e750b3034f4e173db23c2d55a557
+commit: https://git.buildroot.net/buildroot/commit/?id=157babea786a21353c81546d749c1883d56d1a76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Bugfix release, with a security patch for CVE-2022-32893.
-Release notes:
+- Fix CVE-2022-29154: An issue was discovered in rsync before 3.2.5 that
+  allows malicious remote servers to write arbitrary files inside the
+  directories of connecting peers. The server chooses which
+  files/directories are sent to the client. However, the rsync client
+  performs insufficient validation of file names. A malicious rsync
+  server (or Man-in-The-Middle attacker) can overwrite arbitrary files
+  in the rsync client target directory and subdirectories (for example,
+  overwrite the .ssh/authorized_keys file).
+- Drop patches (already in version)
+- Update hash of COPYING (make openssl license exception clearer by
+  having it at the top and use modern links in COPYING:
+  https://github.com/WayneD/rsync/commit/dde469513625c0e10216da9b6f6546aa844431f7)
 
-  https://wpewebkit.org/release/wpewebkit-2.36.6.html
-  https://wpewebkit.org/release/wpewebkit-2.36.7.html
+https://github.com/WayneD/rsync/blob/v3.2.5/NEWS.md
 
-Accompanying security advisory:
-
-  https://wpewebkit.org/security/WSA-2022-0008.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a8f604b72fddf92072aeaa2092528dd4a7ac88f7)
+(cherry picked from commit ae2807821d897c16141d003f646475fee9e77cba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 9 ++++-----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ ...ame-in-the-certificate-when-using-openssl.patch | 29 ----------------------
+ ...inking-with-a-zlib-with-external-read_buf.patch | 27 --------------------
+ package/rsync/rsync.hash                           |  6 ++---
+ package/rsync/rsync.mk                             |  5 +---
+ 4 files changed, 4 insertions(+), 63 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 827df1e89a..6881deb8fc 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,8 +1,7 @@
+diff --git a/package/rsync/0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch b/package/rsync/0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch
+deleted file mode 100644
+index 13edeff944..0000000000
+--- a/package/rsync/0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From c3f7414c450faaf6a8281cc4a4403529aeb7d859 Mon Sep 17 00:00:00 2001
+-From: Matt McCutchen <matt@mattmccutchen.net>
+-Date: Wed, 26 Aug 2020 12:16:08 -0400
+-Subject: [PATCH] rsync-ssl: Verify the hostname in the certificate when using
+- openssl.
 -
--# From https://wpewebkit.org/releases/wpewebkit-2.36.5.tar.xz.sums
--md5  99b9b0c3c8757edf03ddf550bea448e2  wpewebkit-2.36.5.tar.xz
--sha1  d7deb766d1ff48b7f9d685fcd67ccc23e2962288  wpewebkit-2.36.5.tar.xz
--sha256  f2461d533cd3820ea1855e2c8b0b0624b39add1389dc3ac09c2f27891a7a8caa  wpewebkit-2.36.5.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.36.7.tar.xz.sums
-+md5  a9f8d521d8171292aab842d3e8ba227e  wpewebkit-2.36.7.tar.xz
-+sha1  e9255b3592bbaac8b20af03cafa31cedfb0b4898  wpewebkit-2.36.7.tar.xz
-+sha256  f3747d72ffc562ad0cfb6218fdf6d897c78c4bdbf5618e0fa26906fba52b95c9  wpewebkit-2.36.7.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 0deb36f28f..b9758083b7 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://git.samba.org/?p=rsync.git;a=commitdiff;h=c3f7414c450faaf6a8281cc4a4403529aeb7d859]
+----
+- rsync-ssl | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/rsync-ssl b/rsync-ssl
+-index 8101975a..46701af1 100755
+---- a/rsync-ssl
+-+++ b/rsync-ssl
+-@@ -129,7 +129,7 @@ function rsync_ssl_helper {
+-     fi
+- 
+-     if [[ $RSYNC_SSL_TYPE == openssl ]]; then
+--	exec $RSYNC_SSL_OPENSSL s_client $caopt $certopt -quiet -verify_quiet -servername $hostname -connect $hostname:$port
+-+	exec $RSYNC_SSL_OPENSSL s_client $caopt $certopt -quiet -verify_quiet -servername $hostname -verify_hostname $hostname -connect $hostname:$port
+-     elif [[ $RSYNC_SSL_TYPE == gnutls ]]; then
+- 	exec $RSYNC_SSL_GNUTLS --logfile=/dev/null $gnutls_cert_opt $gnutls_opts $hostname:$port
+-     else
+--- 
+-2.25.1
+-
+diff --git a/package/rsync/0002-Handle-linking-with-a-zlib-with-external-read_buf.patch b/package/rsync/0002-Handle-linking-with-a-zlib-with-external-read_buf.patch
+deleted file mode 100644
+index 0af090732c..0000000000
+--- a/package/rsync/0002-Handle-linking-with-a-zlib-with-external-read_buf.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 60dd42be603a79cd57cec076fe1680e9037be774 Mon Sep 17 00:00:00 2001
+-From: Wayne Davison <wayne@opencoder.net>
+-Date: Mon, 11 Apr 2022 08:29:54 -0700
+-Subject: [PATCH] Handle linking with a zlib with external read_buf.
+-
+-[Retrieved from:
+-https://github.com/WayneD/rsync/commit/60dd42be603a79cd57cec076fe1680e9037be774]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- rsync.h | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/rsync.h b/rsync.h
+-index 4b30570b..e5aacd25 100644
+---- a/rsync.h
+-+++ b/rsync.h
+-@@ -1172,6 +1172,10 @@ struct name_num_obj {
+- 	struct name_num_item list[10]; /* we'll get a compile error/warning if this is ever too small */
+- };
+- 
+-+#ifdef EXTERNAL_ZLIB
+-+#define read_buf read_buf_
+-+#endif
+-+
+- #ifndef __cplusplus
+- #include "proto.h"
+- #endif
+diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
+index 92f6156ba8..f0ba4d321d 100644
+--- a/package/rsync/rsync.hash
++++ b/package/rsync/rsync.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/rsync/src/rsync-3.2.3.tar.gz.asc
+-sha256  becc3c504ceea499f4167a260040ccf4d9f2ef9499ad5683c179a697146ce50e  rsync-3.2.3.tar.gz
++# https://download.samba.org/pub/rsync/src/rsync-3.2.5.tar.gz.asc
++sha256  2ac4d21635cdf791867bc377c35ca6dda7f50d919a58be45057fd51600c69aba  rsync-3.2.5.tar.gz
+ # Locally calculated
+-sha256  0d33aa97d302cb9df27f99dfa28d58001c2479a02317956f1a7a890f3937a976  COPYING
++sha256  85c19ea50a224c2d0067a69c083584e5717b40b76610ec1218f91385775067dd  COPYING
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index 5b51ca1df7..e288033b98 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.36.5
-+WPEWEBKIT_VERSION = 2.36.7
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-RSYNC_VERSION = 3.2.3
++RSYNC_VERSION = 3.2.5
+ RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPL-3.0+ with exceptions
+ RSYNC_LICENSE_FILES = COPYING
+@@ -21,9 +21,6 @@ RSYNC_CONF_OPTS = \
+ 	--disable-lz4 \
+ 	--disable-asm
+ 
+-# 0001-rsync-ssl-Verify-the-hostname-in-the-certificate-when-using-openssl.patch
+-RSYNC_IGNORE_CVES += CVE-2020-14387
+-
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ RSYNC_DEPENDENCIES += acl
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
