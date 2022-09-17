@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A98ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:44:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BB16ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9093883F93;
-	Sat, 17 Sep 2022 15:44:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9093883F93
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3EEF41DCA;
+	Sat, 17 Sep 2022 15:44:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3EEF41DCA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qaIQpIG8FMt1; Sat, 17 Sep 2022 15:44:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xnrpHxgzOcRT; Sat, 17 Sep 2022 15:44:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1F2283E7E;
-	Sat, 17 Sep 2022 15:44:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1F2283E7E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4796C1BF388
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FDF741746;
+	Sat, 17 Sep 2022 15:44:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FDF741746
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 789CA1BF96B
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:41:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6731740BB7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39DD861113
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6731740BB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39DD861113
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N_PDVCOu_SL3 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tkqdHviN6f1y for <buildroot@lists.busybox.net>;
  Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E26340919
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6BC8D61152
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E26340919
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BC8D61152
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7F11A8455A; Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
+ id 5AE278455B; Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 17:34:47 +0200
+Date: Sat, 17 Sep 2022 17:32:54 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: b90558314aae7109e228143f0e06aed88aca7730
-X-Git-Newrev: d7e93c01e2cc155deb5a781c273de30305e9ba64
+X-Git-Oldrev: 53f306784509867836cdc3b45e44cf6f263fbecf
+X-Git-Newrev: 398aa5a4e117f1fffe361f365aac3e9697d3d73b
 X-Patchwork-Hint: ignore
-Message-Id: <20220917154057.7F11A8455A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/squid: security
- bump to version 5.6
+Message-Id: <20220917154057.5AE278455B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/mali-driver: fix
+ legal-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7e93c01e2cc155deb5a781c273de30305e9ba64
+commit: https://git.buildroot.net/buildroot/commit/?id=398aa5a4e117f1fffe361f365aac3e9697d3d73b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Fix CVE-2021-46784: In Squid 3.x through 3.5.28, 4.x through 4.17, and
-5.x before 5.6, due to improper buffer management, a Denial of Service
-can occur when processing long Gopher server responses.
-
-https://github.com/squid-cache/squid/security/advisories/GHSA-f5cp-6rh3-284w
+Fix typo: MALI_DRIVER_LICENSE_FILE -> MALI_DRIVER_LICENSE_FILES
+added by commit f3ecd9ea4a40d601317f3b7195be4f5d1bdb3146
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d3ef301f0c2d339eade3188e2a80ff8841ea935f)
+(cherry picked from commit 2f4b73adf85f369ecf00aca675b87ab85099d2f6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/mali-driver/mali-driver.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index e18ed8961e..22c6db8c70 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v5/squid-5.3.tar.xz.asc
--md5  9249f30169ab6600e53b4f9b8129b3b0  squid-5.3.tar.xz
--sha1  d3a8310c725616fa7565d60f3bf8fdf5fa20b15a  squid-5.3.tar.xz
-+# From http://www.squid-cache.org/Versions/v5/squid-5.6.tar.xz.asc
-+md5  2f2201a18a0a727ab589d951ebe4f815  squid-5.6.tar.xz
-+sha1  a01f47b3e9ff06245c894773de30bfd88ab14f65  squid-5.6.tar.xz
- # Locally calculated
--sha256  45178588df1311ded41ebadd632840c4d93a8d7f5f60e38e74acf2f1ae2f1715  squid-5.3.tar.xz
-+sha256  38d27338a347597ce0e93d0c3be6e5f66b6750417c474ca87ee0d61bb6d148db  squid-5.6.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 3847fb49dc..86a0c714c6 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
+index b12bfec69d..480b358431 100644
+--- a/package/mali-driver/mali-driver.mk
++++ b/package/mali-driver/mali-driver.mk
+@@ -8,7 +8,7 @@ MALI_DRIVER_VERSION = a742530232d1de41b57465744a1259fa6c35049e
+ MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
+ MALI_DRIVER_DEPENDENCIES = linux
+ MALI_DRIVER_LICENSE = GPL-2.0
+-MALI_DRIVER_LICENSE_FILE = LICENSE
++MALI_DRIVER_LICENSE_FILES = LICENSE
+ MALI_DRIVER_MODULE_SUBDIRS = r8p0/drivers/gpu/arm/midgard
  
--SQUID_VERSION = 5.3
-+SQUID_VERSION = 5.6
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v5
- SQUID_LICENSE = GPL-2.0+
+ $(eval $(kernel-module))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
