@@ -1,71 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57661ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 19:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66560C6FA82
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 19:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5DAA60A6D;
-	Sat, 17 Sep 2022 19:20:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5DAA60A6D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 04C3E40256;
+	Sat, 17 Sep 2022 19:24:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04C3E40256
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N4VLttMmgEtu; Sat, 17 Sep 2022 19:20:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id a5EDrVSxMDVb; Sat, 17 Sep 2022 19:24:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA05B60687;
-	Sat, 17 Sep 2022 19:20:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA05B60687
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F3C381BF267
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:20:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 17D884016B;
+	Sat, 17 Sep 2022 19:24:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17D884016B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BF551BF267
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:24:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C73D260687
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:20:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C73D260687
+ by smtp1.osuosl.org (Postfix) with ESMTP id EBD5B843C4
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:24:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBD5B843C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jWZU5zDruMKV for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 19:20:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fY0g_UQ-FNmt for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 19:24:34 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9D2C605E3
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B9D2C605E3
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 19:20:07 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A2521200004;
- Sat, 17 Sep 2022 19:20:05 +0000 (UTC)
-Date: Sat, 17 Sep 2022 21:20:04 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Lang Daniel via buildroot <buildroot@buildroot.org>
-Message-ID: <20220917212004.134f13f2@windsurf>
-In-Reply-To: <VI1P190MB0493696F52BC73BAD412C26D9F419@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-References: <VI1P190MB0493696F52BC73BAD412C26D9F419@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9A02843C0
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B9A02843C0
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 19:24:33 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2D7C1100004;
+ Sat, 17 Sep 2022 19:24:29 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZdQT-009VU2-2J; Sat, 17 Sep 2022 21:24:29 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220827203557.272100-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Sep 2022 21:24:29 +0200
+In-Reply-To: <20220827203557.272100-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 27 Aug 2022 22:35:57 +0200")
+Message-ID: <87bkrdztw2.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663442406;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=kSGYSHR/1HSQcK+tezfXSaxf1dtWGPTwOHsSh8jLQ3E=;
- b=bZYirMtHNVQ8IO+6tU9o3fAVM/opxeUZxEG0DhJwxGbLDMpy8MaUrJY5nA6kjl2TZDrkGk
- xrCQA7pNLIo5iVQkOInrXa26mb4XpsbpJwPzSxmaTvEXdv83ibkn/J1f/DoKd1VjwoemV/
- A83Zhr/B3NI/1hLLQHgpV3Suc81MgGmUHn9WKfCrYX1srz6ZzHZZQkmeHyWU/TiMMFXlwU
- Q9MPXwduefUMEmfRTaPyKvYHjfpAGUFsESRhD6llOEzzTgUohzu00n06IzHQx6l9vHBqnU
- SW5X9vlwPCWbQJEfbDmlvYkfcRVmYbeHIZ+SFDkl2Sbn11OnXWfCkG2CbgNFgw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bZYirMtH
-Subject: Re: [Buildroot] [PATCH-next 1/1] package/dbus-cxx: bump to version
- 2.3.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcamera: needs gcc >= 8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,28 +63,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lang Daniel <d.lang@abatec.at>
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 7 Sep 2022 08:38:22 +0000
-Lang Daniel via buildroot <buildroot@buildroot.org> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> Signed-off-by: Daniel Lang <d.lang@abatec.at>
-> ---
->  package/dbus-cxx/dbus-cxx.hash | 2 +-
->  package/dbus-cxx/dbus-cxx.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > libcamera needs gcc >= 8 since bump to
+ > 8a845ab078c3fe12ac4edd16c8cbac5b7ec03b98 in commit
+ > 64f67ede01699c47ca3c8801ae5dd440295f1874 and
+ > https://git.libcamera.org/libcamera/libcamera.git/commit/?id=a7ab5ef1d2f9b05056db450e631a99a73382d589:
 
-Applied to master, thanks.
+ > ../output-1/build/libcamera-ba6435930f08e802cffc688d90f156a8959a0f86/meson.build:82:8:
+ > ERROR: Problem encountered: gcc version is too old, libcamera requires
+ > 8.0 or newer
 
-Thomas
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/f8eba0e564d03b83fcda4085baec16a4857c7d25
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2022.05.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
