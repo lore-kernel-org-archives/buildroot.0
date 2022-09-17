@@ -4,67 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2AA4ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44A67C54EE9
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78A8361127;
-	Sat, 17 Sep 2022 14:25:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78A8361127
+	by smtp3.osuosl.org (Postfix) with ESMTP id D61596112A;
+	Sat, 17 Sep 2022 14:26:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D61596112A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NPSJJP1ZswwC; Sat, 17 Sep 2022 14:25:49 +0000 (UTC)
+	with ESMTP id 8h6elR7Pd_bj; Sat, 17 Sep 2022 14:26:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D18461122;
-	Sat, 17 Sep 2022 14:25:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D18461122
+	by smtp3.osuosl.org (Postfix) with ESMTP id 181E261129;
+	Sat, 17 Sep 2022 14:26:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 181E261129
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5F8421BF575
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:25:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B8C091BF575
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B34840AA8
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:25:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B34840AA8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 938F9405B1
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:26:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 938F9405B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j5un7rCxBQhn for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 14:25:46 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04BF24049C
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 04BF24049C
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:25:45 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1B910100003;
- Sat, 17 Sep 2022 14:25:43 +0000 (UTC)
-Date: Sat, 17 Sep 2022 16:25:42 +0200
+ with ESMTP id xWEG-EZbnZee for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 14:26:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA88D4049C
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:26:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA88D4049C
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id C4BF68435B; Sat, 17 Sep 2022 14:26:16 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220917162542.16befdf4@windsurf>
-In-Reply-To: <20220904211117.218817-1-fontaine.fabrice@gmail.com>
-References: <20220904211117.218817-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663424744;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=RWYk3V1Agtn8P9Kftz7uY1xYXd8ibQ9EkXuW522EWeY=;
- b=RcYOu86uap/W7Xc4+x0hLwAf+6h8Zano8348W7TpzzJleoQP+66U6ODp+Gd+P3OdKREhg+
- +JwwEzB+m4WJEfxFkn87sJZw/sBylE9SjMfDDLDNci2VAi7Henh72PvBon7Nannv5JZ5PD
- SGWPZ2BbQlNUNxKXxfSsuBLS9Dt6LasqeUT1cIBWZDhMzM2t3ial0fzfneZq9Bh+cSVQYW
- 4M0BAWbciPXFufTScFdx1tyELjw3PBcSH4dL4PjMe2dub99LGtAnfVmpH5ch/ymhA9JkiP
- 4rqlIR0L1P1xxNGIE9scsF/8Cg4Nkz70ukrlCgfOI/jm0g7wXDLgXWWZrDEbmA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RcYOu86u
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/minizip-zlib: bump to
- version 1.2.12
+To: buildroot@buildroot.org
+Date: Sat, 17 Sep 2022 16:26:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 50980a439cabcd30e1439cbd8de013deb0d2ffa9
+X-Git-Newrev: 515efddf705c03bb7302e2c7c155f8e8740bbcb8
+X-Patchwork-Hint: ignore
+Message-Id: <20220917142616.C4BF68435B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,33 +57,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  4 Sep 2022 23:11:17 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=515efddf705c03bb7302e2c7c155f8e8740bbcb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update hash of README (version and year updated with
-> https://github.com/madler/zlib/commit/21767c654d31d2dccdde4330529775c6c5fd5389)
-> 
-> https://github.com/madler/zlib/blob/v1.2.12/ChangeLog
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/minizip-zlib/minizip-zlib.hash | 4 ++--
->  package/minizip-zlib/minizip-zlib.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+To match NXP 5.15.32-2.0.0 release.
 
-Applied to master, thanks.
+Signed-off-by: Chris Dimich <chris.dimich@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index ee105ef82c..ccb28bc4f6 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  257c6cd8b01cfb6543827cbeb78409e6a2ad4ae321891751dcea1abc47d89379  kernel-module-imx-gpu-viv-ae0f3be0b7240f11cca191a3e2bdd4a445ee46e5.tar.gz
++sha256  b816ab94b1d248cfc5fe5f6381422346c273d01760bb324303e0298e10bd46e2  kernel-module-imx-gpu-viv-82c6cb6c607424403b8d76805bb17e7be74292f6.tar.gz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 10505fdf17..d301494a0b 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = ae0f3be0b7240f11cca191a3e2bdd4a445ee46e5
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 82c6cb6c607424403b8d76805bb17e7be74292f6
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
