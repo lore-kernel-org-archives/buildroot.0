@@ -1,59 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEA79ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 06:45:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C6CC6FA86
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 06:45:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38ADB610F0;
-	Sat, 17 Sep 2022 06:45:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38ADB610F0
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8A4E4018F;
+	Sat, 17 Sep 2022 06:45:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8A4E4018F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4LmlvadKflK4; Sat, 17 Sep 2022 06:45:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IEJqFRiyHIJP; Sat, 17 Sep 2022 06:45:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FB6561040;
-	Sat, 17 Sep 2022 06:45:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FB6561040
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0747E1BF846
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:45:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1C9F4018B;
+	Sat, 17 Sep 2022 06:45:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1C9F4018B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 64C2E1BF846
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D678383FC8
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:45:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D678383FC8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F13641CC6
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:45:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F13641CC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FQF_1RbUtLG6 for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 06:45:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5xeMd16iPRcH for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 06:45:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E74F83FBD
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6E74F83FBD
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 06:45:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C57BC41CA2
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C57BC41CA2
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 06:45:19 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 41007200004;
- Sat, 17 Sep 2022 06:45:07 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id BA9CC20005;
+ Sat, 17 Sep 2022 06:45:16 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oZRZa-0096Gc-3W; Sat, 17 Sep 2022 08:45:06 +0200
+ id 1oZRZj-0096HG-7f; Sat, 17 Sep 2022 08:45:15 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20220816204259.48DAD878DF@busybox.osuosl.org>
-Date: Sat, 17 Sep 2022 08:45:05 +0200
-In-Reply-To: <20220816204259.48DAD878DF@busybox.osuosl.org> (Yann E. MORIN's
- message of "Tue, 16 Aug 2022 22:55:50 +0200")
-Message-ID: <87a66y5wjy.fsf@dell.be.48ers.dk>
+References: <20220816204259.3F34B878DE@busybox.osuosl.org>
+Date: Sat, 17 Sep 2022 08:45:15 +0200
+In-Reply-To: <20220816204259.3F34B878DE@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Tue, 16 Aug 2022 22:55:19 +0200")
+Message-ID: <875yhm5wjo.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Subject: Re: [Buildroot] [git commit]
- support/testing/tests/package/test_python_botocore: use ext2 instead of
- cpio
+ support/testing/tests/package/test_python_boto3: use ext2 instead of cpio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,10 +72,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=0813ec1aa0650595f60bd64329d1ddf5d535d4fb
+ > commit: https://git.buildroot.net/buildroot/commit/?id=a9df206190e5316808b90314e4254ba9e849e403
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The CPIO filesystem generated by the test_python_botocore test is too
+ > The CPIO filesystem generated by the test_python_boto3 test is too
  > large, and doesn't fit as an initramfs in the 256MB of RAM available
  > in the versatilepb machine. This causes a "Initramfs unpacking failed:
  > write error" when booting, and many files being missing from the root
@@ -88,7 +87,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
  > Fixes:
 
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/2884635042
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/2884635041
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  > [yann.morin.1998@free.fr:
