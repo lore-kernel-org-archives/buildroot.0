@@ -1,87 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 087ACC6FA82
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 20:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00775ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 20:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A76A2813F8;
-	Sat, 17 Sep 2022 20:38:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A76A2813F8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K4kTQmaTH1Mk; Sat, 17 Sep 2022 20:38:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC9B2843B9;
-	Sat, 17 Sep 2022 20:38:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC9B2843B9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 226DC1BF39A
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:38:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F22EF4011F
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F22EF4011F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E76540297;
+	Sat, 17 Sep 2022 20:40:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E76540297
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i35fhwQsQTox for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 20:38:21 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E622B40119
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E622B40119
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 20:38:20 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- n40-20020a05600c3ba800b003b49aefc35fso1866806wms.5
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 13:38:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=joLjFW6WhTQjQAVbRJnM2XcWsLhwJUmPT4FtDmcyCRE=;
- b=n44O39zV2chNyK1eVo5Y8q+jXogshzuoBIJg8kdeABRrjyboncZJ6MexmjD+jW1zkN
- 3L6OGxitQ5MolEe90emu9zoGdVpCz7BzdlWMyVabSNTT151Gm0z5TjgykwNw7ZICu9zE
- 5t00QPK6wW9hU2mBwgSvmohGPWp7nDHLp0sIZcjuE9hROJski0z3llZJ50jImS2qOq9U
- tLhmbL31J+xxoYhz1Ww9sE887T08Uh57fIQ/eulVphY1JfUHDJVUVRHcbilqAlp2EtxC
- 3ODtrNDxw09Fy5ekwflPtWj3BhOciotTObfZdbYH9HP+pIZMweJS2i+axWNrk0iLR6+y
- K9dA==
-X-Gm-Message-State: ACgBeo3pr/ypgvttmi93YV9dXX1NAruJOUda9iMdVLYTsCYr65mGOfVV
- 9QREmCOuafykoF1dEa3Pw+TDq96xyts=
-X-Google-Smtp-Source: AA6agR7WRC44VloAf+TMApXqCzhcK7uddZ6vBKdlpp9mf8Z2GrDJhCX2rG8iZTT0/9U2+AgHtm9qgA==
-X-Received: by 2002:a1c:2743:0:b0:3b3:4066:fa61 with SMTP id
- n64-20020a1c2743000000b003b34066fa61mr14481583wmn.79.1663447098635; 
- Sat, 17 Sep 2022 13:38:18 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- bv24-20020a0560001f1800b0021eed2414c9sm8883689wrb.40.2022.09.17.13.38.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 17 Sep 2022 13:38:18 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 22:38:16 +0200
-Message-Id: <20220917203816.213152-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XAECPO-wzfxe; Sat, 17 Sep 2022 20:40:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A51940119;
+	Sat, 17 Sep 2022 20:40:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A51940119
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F5221BF39A
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:40:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 610DC83260
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:40:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 610DC83260
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vorubNp1eRs7 for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 20:40:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D522F823C0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D522F823C0
+ for <buildroot@busybox.net>; Sat, 17 Sep 2022 20:40:31 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id AC6C41C0004;
+ Sat, 17 Sep 2022 20:40:29 +0000 (UTC)
+Date: Sat, 17 Sep 2022 22:40:28 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Michael Fischer <mf@go-sys.de>
+Message-ID: <20220917224028.51d3c07a@windsurf>
+In-Reply-To: <20220822080923.31060-1-mf@go-sys.de>
+References: <20220822080923.31060-1-mf@go-sys.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=joLjFW6WhTQjQAVbRJnM2XcWsLhwJUmPT4FtDmcyCRE=;
- b=EyCLoGa+Xr7kkqa+gnNH6SwSitejUz5yGY+qYFY2IdB+EysaeUyroM2BvI/05+iMim
- GWoDjTRrOm72XSpLv48TLS2pS8vdDhcTsoQFkm7p423cU2gc+3R1oTAtNQqZiCRkKFvk
- nnNk8Xi0nKZDvaxZ6RWqeldhzQN5PF7V/g8NPMA/VLlv+2EBuoApj/kmce3OAeX+shgq
- 6Ep4wXaM/cyy0dqzEE3Xs2vmWYtfc/gseYEj0axxVG3IE2so190QXHuLIEhjFMUZ/1ne
- VmNU4aBmULn6N6SaA9S2htZQabBwi9VoulwcmVYuekYtZV6Y/IDbSJxNVeGWIBTIAP8l
- 8+kw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EyCLoGa+
-Subject: [Buildroot] [PATCH 1/1] package/dracut: bump to version 057
+ d=bootlin.com; s=gm1; t=1663447229;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=XMcukfGPa7TZKpS7Ei6ePKRCpJuXSbKnSM57uG/uKD0=;
+ b=m4CTn06letqpm5G1veB/pj6wv6d5Dbxr6M2MbjyZ+4wuGRW6qO9KYm2z01iYlXyxU4W5Yw
+ irTeMeJt24UfxsD3J/6WtdcMBoRypLwqqduPPIUgThAgwQz+nAMaWhNYSMGXHtZFiug/+e
+ SqKgtDRUiMhE2JlAC8reMyFaZGVhfzlQ/ODbrXyArvQ7/UnFjUwFXPxNWg83j0Y6sE7yxj
+ 7Ezbc+SIthKckdyxjnMVHLHPxdREIhR/S/QICmgmR93s/swR95wDIEGaY0qrSq8L+xBNSY
+ On5BfnpQiXwmeh6QK7wH73E9usaVNlz4S59pM0RNAUfY/naupi8+xc0Vbc2VvQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=m4CTn06l
+Subject: Re: [Buildroot] [PATCH 1/1] package/sdl2_image: bump version to
+ 2.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,52 +77,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thierry Bultel <tbultel@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-kernel tarball is not provided anymore:
-https://github.com/dracutdevs/dracut/issues/1850
+On Mon, 22 Aug 2022 10:09:23 +0200
+Michael Fischer <mf@go-sys.de> wrote:
 
-https://github.com/dracutdevs/dracut/blob/057/NEWS.md
+> Fixed a number of security issues
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/dracut/dracut.hash | 2 +-
- package/dracut/dracut.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+As discussed, I dropped this part from the commit log.
 
-diff --git a/package/dracut/dracut.hash b/package/dracut/dracut.hash
-index 3cda736856..34db6af23b 100644
---- a/package/dracut/dracut.hash
-+++ b/package/dracut/dracut.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4baa08206cceeb124dbf1075a0daf774b5a8f144ce2e01d82a144af3020fd65b  dracut-055.tar.xz
-+sha256  24f149d683d188c0d25756529b7d1e5cd6be8028e0c1043110f303d0d706757d  dracut-057.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
-index 2b6a144aac..742a073a36 100644
---- a/package/dracut/dracut.mk
-+++ b/package/dracut/dracut.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--DRACUT_VERSION = 055
--DRACUT_SOURCE = dracut-$(DRACUT_VERSION).tar.xz
--DRACUT_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/boot/dracut
-+DRACUT_VERSION = 057
-+DRACUT_SITE = $(call github,dracutdevs,dracut,$(DRACUT_VERSION))
- DRACUT_LICENSE = GPL-2.0
- DRACUT_LICENSE_FILES = COPYING
- 
+> -sha256  bdd5f6e026682f7d7e1be0b6051b209da2f402a2dd8bd1c4bd9c25ad263108d0  SDL2_image-2.0.5.tar.gz
+> -sha256  45079362e2230154205413a6940544ca94e3479ccf76205c71c4f542a6815d25  COPYING.txt
+> +# Locally calculated after checking https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.6.2.tar.gz.sig
+> +sha256  48355fb4d8d00bac639cd1c4f4a7661c4afef2c212af60b340e06b7059814777  SDL2_image-2.6.2.tar.gz
+> +sha256  28aabfed22b3cb0b7e23ef40385e4f66297c960082f029c96d073cc1d4e008d5  LICENSE.txt
+
+So indeed, COPYING.txt is gone, and LICENSE.txt is now there, but you
+had forgotten to update the SDL2_IMAGE_LICENSE_FILES variable, causing
+a build failure when doing "make legal-info".
+
+I fixed both aspects, and applied to master. Thanks!
+
+Thomas
 -- 
-2.35.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
