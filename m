@@ -4,49 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D11ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 10:25:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EBA9ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 10:25:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4021F8415F;
-	Sat, 17 Sep 2022 10:25:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4021F8415F
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF4858402D;
+	Sat, 17 Sep 2022 10:25:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF4858402D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zbj_uthRCed0; Sat, 17 Sep 2022 10:25:22 +0000 (UTC)
+	with ESMTP id seJZVAP2AufV; Sat, 17 Sep 2022 10:25:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B77C98402D;
-	Sat, 17 Sep 2022 10:25:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B77C98402D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 861FE1BF968
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:25:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17F8584317;
+	Sat, 17 Sep 2022 10:25:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17F8584317
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 73BCC1BF5A4
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D78541A3E
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:25:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D78541A3E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F2104038E
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:25:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F2104038E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZVa6ACFf0uja for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 10:25:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 461E6419D8
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 10:25:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 461E6419D8
-Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 33A7B84196; Sat, 17 Sep 2022 10:25:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DF7lGLxbSgpC for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 10:25:24 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60AF6401CC
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 60AF6401CC
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 10:25:24 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 647A110000A;
+ Sat, 17 Sep 2022 10:25:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZV0j-009Ds2-2T; Sat, 17 Sep 2022 12:25:21 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 12:23:52 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 4fe9d27021b310aef1f960fb53fbf43e83b4aa29
-X-Git-Newrev: 05a51acabb2be03f590f58dcc1942be39eebc23a
-X-Patchwork-Hint: ignore
-Message-Id: <20220917102506.33A7B84196@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- package/sunxi-mali-utgard-driver: update Config.in link to the new project
- URL
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20220822220654.171970-1-giulio.benetti@benettiengineering.com>
+Date: Sat, 17 Sep 2022 12:25:20 +0200
+In-Reply-To: <20220822220654.171970-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Tue, 23 Aug 2022 00:06:54 +0200")
+Message-ID: <87y1ui2t7z.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/sunxi-mali-utgard-driver: update
+ Config.in link to the new project URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,33 +64,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05a51acabb2be03f590f58dcc1942be39eebc23a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit af582c9f8fb958d8860c9fcaad98c4f70a6488fa)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sunxi-mali-utgard-driver/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/package/sunxi-mali-utgard-driver/Config.in b/package/sunxi-mali-utgard-driver/Config.in
-index 244283f44d..ba4d1919ce 100644
---- a/package/sunxi-mali-utgard-driver/Config.in
-+++ b/package/sunxi-mali-utgard-driver/Config.in
-@@ -36,4 +36,4 @@ config BR2_PACKAGE_SUNXI_MALI_UTGARD_DRIVER
- 	    since the driver requires at least double buffering and
- 	    fails to work with the default value(100).
- 
--	  https://github.com/mripard/sunxi-mali/blob/master/README.md
-+	  https://github.com/giuliobenetti/sunxi-mali/blob/master/README.md
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
