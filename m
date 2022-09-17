@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A79EC54EE9
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 12:36:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33BDAECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 12:36:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4F7384316;
-	Sat, 17 Sep 2022 12:36:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4F7384316
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF59284381;
+	Sat, 17 Sep 2022 12:36:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF59284381
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0x82dbGS2mml; Sat, 17 Sep 2022 12:36:36 +0000 (UTC)
+	with ESMTP id t5GS_ahQoJuI; Sat, 17 Sep 2022 12:36:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBE0E83F7D;
-	Sat, 17 Sep 2022 12:36:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBE0E83F7D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F9518436B;
+	Sat, 17 Sep 2022 12:36:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F9518436B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B8E151BF48C
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 12:36:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 742591BF48C
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 12:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 94B0883F75
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 12:36:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94B0883F75
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4253D83F7D
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 12:36:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4253D83F7D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2LVKxEG_6HWo for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 12:36:10 +0000 (UTC)
+ with ESMTP id m3lsKQd_Megw for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 12:36:12 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89B3783F7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3897783F75
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 89B3783F7D
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 12:36:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3897783F75
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 12:36:12 +0000 (UTC)
 Received: from booty.lan (unknown [80.233.62.104])
  (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id CADF5240007;
- Sat, 17 Sep 2022 12:36:08 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id 16FA6240002;
+ Sat, 17 Sep 2022 12:36:07 +0000 (UTC)
 From: luca.ceresoli@bootlin.com
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 14:36:02 +0200
-Message-Id: <20220917123602.961826-4-luca.ceresoli@bootlin.com>
+Date: Sat, 17 Sep 2022 14:36:01 +0200
+Message-Id: <20220917123602.961826-3-luca.ceresoli@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220917123602.961826-1-luca.ceresoli@bootlin.com>
 References: <20220917123602.961826-1-luca.ceresoli@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663418169;
+ d=bootlin.com; s=gm1; t=1663418168;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=u4Jg2OxcQ5k/DmjCF9In70qyKoHgO9PskSAk6/IKvrM=;
- b=HL7HeBf2Uxi9g5t56fM0w1kSIrqkeDwaFhN/ni6Lt9cm6OxqsHIZ2kRMvUYLcSI4ZeKMH0
- KeQ8arKsUNWGfS/B7cnIDzIvJxEVjcbQPJP6PdXQMK4THrhllQQuWZk4V88Bq/w8p1WcgZ
- wHN93UTYqrJmDIf1kxhmjDpdHgG4I7HPA9/Oadwv/DBMXbt4GAWRAozaTnn+b7stqUk4dC
- sCZHsqBecCA2PASTBozol9dvWdfibHy53zg3GCJ9c+WIh7bRnmteVreGmOfd6x4CiYFGk2
- pMzUZq0mJuk6HewWzkaev0StEsi+ekx0TW6DRuLqXhlm0Ps+QOtyGnraG7aqsw==
+ bh=n5dtZWVVpIW5H14UusMJ066TCTyNzz1hUad79N36IME=;
+ b=jSPclT/UT4YunR14qboT6g1YPuR7PJkCZMJsoblljnVMS8cFMKAfG5pXtS6KXJXXQ6fY/N
+ HdIxOlKsKX8Hdmgt6Z+H9olbNfVc9wOzQqRjmQmry+c4dbIcXqaRCX0R9TJr8XkNsqoW+y
+ hHTLVj/iKp9AgAJoIwsbWHXPqm0Yy0iugumkWYeHkd9hNDn6IbjdMWxaEKHANtDwE6nak2
+ 0BQ8TqO6w85fmYGki+Hh31fmiag1QgIjD4A8xbkJn3CwJFUqwjdvqKOKuvQy3vbmiXy8Wl
+ dnVNqNYotHbj+F1Iyfiao7zjBd2wkkGL7+nfHnBH4snaCvd58uOgBbfdB2N8Zw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HL7HeBf2
-Subject: [Buildroot] [PATCH 4/4] package/agentpp: fix broken URL in help text
+ header.s=gm1 header.b=jSPclT/U
+Subject: [Buildroot] [PATCH 3/4] package/snmppp: fix broken URL in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,22 +89,22 @@ anymore.
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- package/agentpp/Config.in | 2 +-
+ package/snmppp/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/agentpp/Config.in b/package/agentpp/Config.in
-index 8c6b11d644e4..cc7537519aba 100644
---- a/package/agentpp/Config.in
-+++ b/package/agentpp/Config.in
-@@ -16,7 +16,7 @@ config BR2_PACKAGE_AGENTPP
+diff --git a/package/snmppp/Config.in b/package/snmppp/Config.in
+index 1f05f53f9fc0..f3a076714d1d 100644
+--- a/package/snmppp/Config.in
++++ b/package/snmppp/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_SNMPPP
+ 	help
+ 	  SNMP++v3.x is a C++ API which supports SNMP v1, v2c, and v3.
  
- 	  SNMPv3 support is enabled if SNMP++ enables it.
+-	  http://www.agentpp.com/snmp_pp3_x/snmp_pp3_x.html
++	  https://www.agentpp.com/api/cpp/snmp_pp.html
  
--	  http://www.agentpp.com/agentpp3_5/agentpp3_5.html
-+	  https://www.agentpp.com/api/cpp/agent_pp.html
+ if BR2_PACKAGE_SNMPPP
  
- comment "agent++ needs a toolchain w/ threads, C++, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
 -- 
 2.34.1
 
