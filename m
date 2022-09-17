@@ -4,46 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CF67ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2891ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:28:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0F014167A;
-	Sat, 17 Sep 2022 15:27:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0F014167A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D417416BA;
+	Sat, 17 Sep 2022 15:28:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D417416BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W8fsLMUk1mMD; Sat, 17 Sep 2022 15:27:47 +0000 (UTC)
+	with ESMTP id gDfZyMJg7P7f; Sat, 17 Sep 2022 15:28:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C949F41143;
-	Sat, 17 Sep 2022 15:27:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C949F41143
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 69B6B1BF388
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:27:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DB4441143;
+	Sat, 17 Sep 2022 15:27:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DB4441143
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D8FCB1BF388
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:27:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 463AA61113
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:27:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 463AA61113
+ by smtp2.osuosl.org (Postfix) with ESMTP id ADB804055F
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:27:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADB804055F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R3iabOxMpysV for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 15:27:36 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 83CCD607A1
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:27:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83CCD607A1
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 708D684476; Sat, 17 Sep 2022 15:27:36 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 17:25:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0d1daaa7fcc12b8dcd6e47ce75597d16aa6f745
-X-Git-Newrev: 39ef6a1ebb9b5451c62acde5ffd0125386d22054
-X-Patchwork-Hint: ignore
-Message-Id: <20220917152736.708D684476@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8189es: fix build failure due
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N1z4FGqvuojl for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 15:27:42 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E23D40420
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E23D40420
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:27:42 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 842E91C0007;
+ Sat, 17 Sep 2022 15:27:40 +0000 (UTC)
+Date: Sat, 17 Sep 2022 17:27:39 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20220917172739.08047619@windsurf>
+In-Reply-To: <20220911214206.3641655-1-giulio.benetti@benettiengineering.com>
+References: <057e0c0f-ce16-1c0f-3406-3694bb83321b@benettiengineering.com>
+ <20220911214206.3641655-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1663428461;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=OOyWLQ/ity1jfBbXlEPBsCraz63V75FZ3CuD7RK8oMs=;
+ b=iqnkWmyljiQQ1V50T1HhMnPTr8vJucKeOo97gHXcxo/5cGzjj04AQbm2QflTU1SFvUsT7z
+ hT5X0IOrJDG+l9Z0w052AnSO7jo8MjtvXYwr1c6/Rx5MxBF7IuDyhXw6Gkal0TO+zFFtuF
+ 4d86Ie2taEx/SjbvFY3gSdlifYZ0mobuqyfZUlw2ybMuz5t74xokqDHBvSuKZGTfcdC8aH
+ QwRI7hio2C67MPRL6sMNsbabYP76+d00jH0cw3JRt9QAolpr4hkMgmHcyRbS5kLF/G4OjS
+ fJXCslk4yZ+QK+d1ozuz123zm2mWBIwGF7rftqxy+CAxjG1GOzGHtZrj3xBR/w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iqnkWmyl
+Subject: Re: [Buildroot] [PATCH v2] package/rtl8189es: fix build failure due
  to missing Linux options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -56,50 +78,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39ef6a1ebb9b5451c62acde5ffd0125386d22054
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 11 Sep 2022 23:42:06 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-This driver requires:
-CONFIG_NET
-CONFIG_WIRELESS
-CONFIG_CFG80211
-CONFIG_MMC
-to build so let's add them to RTL8189ES_LINUX_CONFIG_FIXUPS.
+> This driver requires:
+> CONFIG_NET
+> CONFIG_WIRELESS
+> CONFIG_CFG80211
+> CONFIG_MMC
+> to build so let's add them to RTL8189ES_LINUX_CONFIG_FIXUPS.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/4b7/4b7b5bbf5b3839d99397eb2597dd7be79f403233/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> V1->V2:
+> * add also CONFIG_NET and CONFIG_WIRELESS to be sure CONFIG_CFG80211 is
+>   selectable
+> * add Fixes: in commit log
+> ---
+>  package/rtl8189es/rtl8189es.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-Fixes:
-http://autobuild.buildroot.net/results/4b7/4b7b5bbf5b3839d99397eb2597dd7be79f403233/
+Applied to master, thanks.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rtl8189es/rtl8189es.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
-index 51477ccc97..2fa6a3a483 100644
---- a/package/rtl8189es/rtl8189es.mk
-+++ b/package/rtl8189es/rtl8189es.mk
-@@ -13,5 +13,12 @@ RTL8189ES_MODULE_MAKE_OPTS = \
- 	KVER=$(LINUX_VERSION_PROBED) \
- 	KSRC=$(LINUX_DIR)
- 
-+define RTL8189ES_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MMC)
-+endef
-+
- $(eval $(kernel-module))
- $(eval $(generic-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
