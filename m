@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6909ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 18:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37039ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 19:20:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8439660E73;
-	Sat, 17 Sep 2022 18:55:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8439660E73
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0066401F1;
+	Sat, 17 Sep 2022 19:20:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0066401F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H4V-9jOF4eeH; Sat, 17 Sep 2022 18:55:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id w66ca8n-F1ra; Sat, 17 Sep 2022 19:20:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D66560B19;
-	Sat, 17 Sep 2022 18:55:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D66560B19
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56BF540125;
+	Sat, 17 Sep 2022 19:20:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56BF540125
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2968D1BF335
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:55:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 138851BF267
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11CEE4011F
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 18:55:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11CEE4011F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E35FF40125
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:19:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E35FF40125
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LjPb9jjn71H6 for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 18:55:38 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAE7F40119
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EAE7F40119
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 18:55:37 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 24EF240004;
- Sat, 17 Sep 2022 18:55:36 +0000 (UTC)
-Date: Sat, 17 Sep 2022 20:55:35 +0200
+ with ESMTP id 4oYaTFSU27mc for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 19:19:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0916B40119
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 19:19:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0916B40119
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EA9098461F; Sat, 17 Sep 2022 19:19:58 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Sergio Prado via buildroot <buildroot@buildroot.org>
-Message-ID: <20220917205535.4545152f@windsurf>
-In-Reply-To: <20220907122423.1783908-1-sergio.prado@e-labworks.com>
-References: <20220907122423.1783908-1-sergio.prado@e-labworks.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663440936;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=qlAIij6IEXyr55NaK/2fgSCX58PVflDha60Y4MsCK+U=;
- b=aFJKDH5NRrFYRalxLBQsH+zEQDpUuIqKjE/P1DGrlAEOnHlF+ETQCc+p9/+vfLQClX1sn6
- WHLnP1aP8Q9xQfqYyHPALYK155Xfy0rYr/egujiPMLEE7MdzEuiRnh1jONJc0bWFyFI50Y
- VsTCLQ5iz8EQqQT1P7diQVMuQJEkPKVkm2ovBO05/zJqbLuKOu/jIDleUYwpaLvC5WAEZh
- 0RaLFil7FB7ZOTqHgEZt9hgNwdozKY8dDuATom0gCpoa6y+LB5rxAAlNaDe2YElbxCeC4z
- +V1S/hOqFKZbKA2+3RUdyHdDY13p2HoKUqh587Gxr31EmupelkGKAoqJ74N28w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aFJKDH5N
-Subject: Re: [Buildroot] [PATCH] package/snort: bump to version 2.9.20
+To: buildroot@buildroot.org
+Date: Sat, 17 Sep 2022 21:16:02 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a8879b592311a2b1f4c67e74e95ff9e24b3fbc6b
+X-Git-Newrev: fa47ff60dabd28d1356d72fce56bd7b4191788eb
+X-Patchwork-Hint: ignore
+Message-Id: <20220917191958.EA9098461F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dbus-cxx: bump to version 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,30 +56,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  7 Sep 2022 09:24:23 -0300
-Sergio Prado via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fa47ff60dabd28d1356d72fce56bd7b4191788eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://www.snort.org/downloads/snort/release_notes_2.9.20.txt
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  package/snort/snort.hash | 4 ++--
->  package/snort/snort.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dbus-cxx/dbus-cxx.hash | 2 +-
+ package/dbus-cxx/dbus-cxx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dbus-cxx/dbus-cxx.hash b/package/dbus-cxx/dbus-cxx.hash
+index 5b3a6188fc..acb059b91d 100644
+--- a/package/dbus-cxx/dbus-cxx.hash
++++ b/package/dbus-cxx/dbus-cxx.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  55b2541b9c3f3fa705e51e12e6971f66826ebc7185071e0cd1bb6ec9e5adf47f  dbus-cxx-2.2.0.tar.gz
++sha256  45663b6dbc289f133dfdcd8b8de771de3a2d54588954c2eec3f97888b03bd8ad  dbus-cxx-2.3.0.tar.gz
+ sha256  99e5d0ad951d96567a6f9a17f3f17ac000c0582f53357c7f3601851c2dcbb786  COPYING
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  cmake-modules/LICENSE_1_0.txt
+ sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  tools/libcppgenerate/LICENSE
+diff --git a/package/dbus-cxx/dbus-cxx.mk b/package/dbus-cxx/dbus-cxx.mk
+index c0bcff1c67..43556195c7 100644
+--- a/package/dbus-cxx/dbus-cxx.mk
++++ b/package/dbus-cxx/dbus-cxx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_CXX_VERSION = 2.2.0
++DBUS_CXX_VERSION = 2.3.0
+ DBUS_CXX_SITE = $(call github,dbus-cxx,dbus-cxx,$(DBUS_CXX_VERSION))
+ DBUS_CXX_LICENSE = LGPL-3.0+ or BSD-3-Clause, Boost license (cmake-modules), Apache 2.0 (libcppgenerate)
+ DBUS_CXX_LICENSE_FILES = COPYING cmake-modules/LICENSE_1_0.txt tools/libcppgenerate/LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
