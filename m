@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3058CECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:44:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B2E3ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C510940153;
-	Sat, 17 Sep 2022 15:44:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C510940153
+	by smtp4.osuosl.org (Postfix) with ESMTP id B465D41DCE;
+	Sat, 17 Sep 2022 15:45:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B465D41DCE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZIOPkJRnXPN0; Sat, 17 Sep 2022 15:44:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WSJGH48aBAfc; Sat, 17 Sep 2022 15:45:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8F3240BB7;
-	Sat, 17 Sep 2022 15:44:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8F3240BB7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 774AB41DC8;
+	Sat, 17 Sep 2022 15:45:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 774AB41DC8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3D4B51BF388
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:41:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 425461BF388
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:41:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C4F3A61150
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4F3A61150
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E0FF61153
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E0FF61153
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id do3g9h9iT_yO for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 15:40:58 +0000 (UTC)
+ with ESMTP id MTvFnnI50dZw for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7923761153
+ by smtp3.osuosl.org (Postfix) with ESMTP id 475146111E
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7923761153
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 475146111E
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 7629284559; Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
+ id 376EE8455C; Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 17:34:28 +0200
+Date: Sat, 17 Sep 2022 17:24:33 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 6b4df81b9fb91c42d1974d416ac0158ade925aca
-X-Git-Newrev: b90558314aae7109e228143f0e06aed88aca7730
+X-Git-Oldrev: 16ed728f86988061f655e5d2bb08e111baa35d0e
+X-Git-Newrev: 536e4053e3897ee3a183730099e2527d9254fe56
 X-Patchwork-Hint: ignore
-Message-Id: <20220917154057.7629284559@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libtirpc:
- security bump to version 1.3.3
+Message-Id: <20220917154057.376EE8455C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/wpewebkit:
+ security bump to version 2.36.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b90558314aae7109e228143f0e06aed88aca7730
+commit: https://git.buildroot.net/buildroot/commit/?id=536e4053e3897ee3a183730099e2527d9254fe56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Fix CVE-2021-46828: In libtirpc before 1.3.3rc1, remote attackers could
-exhaust the file descriptors of a process that uses libtirpc because
-idle TCP connections are mishandled. This can, in turn, lead to an
-svc_run infinite loop without accepting new connections.
+Bugfix release, with a security patch for CVE-2022-32893.
+Release notes:
 
-https://sourceforge.net/projects/libtirpc/files/libtirpc/1.3.3/Release-1.3.3.txt/download
+  https://wpewebkit.org/release/wpewebkit-2.36.6.html
+  https://wpewebkit.org/release/wpewebkit-2.36.7.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Accompanying security advisory:
+
+  https://wpewebkit.org/security/WSA-2022-0008.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 408888a29b97cd6f89b528966d853f486149f6d5)
+(cherry picked from commit a8f604b72fddf92072aeaa2092528dd4a7ac88f7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtirpc/libtirpc.hash | 4 ++--
- package/libtirpc/libtirpc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wpewebkit/wpewebkit.hash | 9 ++++-----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 56c1d9de3f..1efc3e47e2 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
-@@ -1,5 +1,5 @@
- # From sourceforge's info on download page:
--sha1  51d75be0e5acc094a888f40042b23e128d163cb5  libtirpc-1.3.2.tar.bz2
-+sha1  6e52c39148494e4836e2d5d4f28b11ddfa65394b  libtirpc-1.3.3.tar.bz2
- # Locally computed
--sha256  e24eb88b8ce7db3b7ca6eb80115dd1284abc5ec32a8deccfed2224fc2532b9fd  libtirpc-1.3.2.tar.bz2
-+sha256  6474e98851d9f6f33871957ddee9714fdcd9d8a5ee9abb5a98d63ea2e60e12f3  libtirpc-1.3.3.tar.bz2
- sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 9d3c4b5a94..179adc97d0 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 827df1e89a..6881deb8fc 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,8 +1,7 @@
+-
+-# From https://wpewebkit.org/releases/wpewebkit-2.36.5.tar.xz.sums
+-md5  99b9b0c3c8757edf03ddf550bea448e2  wpewebkit-2.36.5.tar.xz
+-sha1  d7deb766d1ff48b7f9d685fcd67ccc23e2962288  wpewebkit-2.36.5.tar.xz
+-sha256  f2461d533cd3820ea1855e2c8b0b0624b39add1389dc3ac09c2f27891a7a8caa  wpewebkit-2.36.5.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.36.7.tar.xz.sums
++md5  a9f8d521d8171292aab842d3e8ba227e  wpewebkit-2.36.7.tar.xz
++sha1  e9255b3592bbaac8b20af03cafa31cedfb0b4898  wpewebkit-2.36.7.tar.xz
++sha256  f3747d72ffc562ad0cfb6218fdf6d897c78c4bdbf5618e0fa26906fba52b95c9  wpewebkit-2.36.7.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 0deb36f28f..b9758083b7 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTIRPC_VERSION = 1.3.2
-+LIBTIRPC_VERSION = 1.3.3
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3-Clause
+-WPEWEBKIT_VERSION = 2.36.5
++WPEWEBKIT_VERSION = 2.36.7
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
