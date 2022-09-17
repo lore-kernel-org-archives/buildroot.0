@@ -1,94 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1617BECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 20:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32D6AECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 20:18:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71A8C41A39;
-	Sat, 17 Sep 2022 20:17:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71A8C41A39
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7390843F3;
+	Sat, 17 Sep 2022 20:18:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7390843F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Qb5gL-YHGyi; Sat, 17 Sep 2022 20:17:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BOSe2F9FY02b; Sat, 17 Sep 2022 20:18:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 218FB41A42;
-	Sat, 17 Sep 2022 20:17:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 218FB41A42
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5E1311BF39A
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:17:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDA0E84018;
+	Sat, 17 Sep 2022 20:18:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDA0E84018
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 39C5B1BF39A
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:18:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43B0D41A42
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43B0D41A42
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1567784018
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:18:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1567784018
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dq9pVLrEVAjT for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 20:17:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SmQLLctpGr9G for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 20:18:03 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B87A541A39
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B87A541A39
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 20:17:40 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id t14so41223908wrx.8
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 13:17:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 505F683F65
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 505F683F65
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 20:18:03 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id k9so41265086wri.0
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 13:18:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date;
- bh=RH/jrDQ0ItFHtnwJv0a7F26zjfiVw0A+9j+8tUTQnPA=;
- b=h2f3P+p+zia9Nin1/6alpF9ij+C24Xcs9eGYNfioV1fZ+VQhd8vioeTU8oimI3K1S5
- nRrBx5IbWE6PC4+h2H717ixWPQAgBeEyhDOUuFtRtoGk/9MM9T6zj+Wh9RWF1snUvQuJ
- nCTfvmoZnHubgRSCXvC/YUJO2aHAJjjKehPmDXiZb+7FBbqwoGc5t7fqYTFAg268QISd
- sDJEDRKF0jwZEEfNBIXnsOZTGOQRBvq+iXMQBctOIK/hF5XaiAXrYzRaPRaCUyzWpFeu
- 2JHvQeMsy1yzXuU+d7CgcD6FoHrzA9dYEL6MT466p8xhK7QCZyNVvrTIn61HdYmw6ae3
- 45Vw==
-X-Gm-Message-State: ACrzQf2tlwTpKx+xJ+mVitRJKAA9oCXGmTaYkv38g5xnilUhzwchuofH
- HkmPa2M/YyhOotsPc/STITRibw==
-X-Google-Smtp-Source: AMsMyM4mamyoi046+s20KgXpDxkr6aQ2JXkGeXUzROuirFHQ4E2EmXH19eWm6QTvJs+FwcvFS64x6A==
-X-Received: by 2002:a05:6000:184d:b0:22a:7428:3ae8 with SMTP id
- c13-20020a056000184d00b0022a74283ae8mr6161830wri.441.1663445858799; 
- Sat, 17 Sep 2022 13:17:38 -0700 (PDT)
+ bh=66NUFJzMo6x5+wW84ZizQOpPH0HrKRNfk3YH9GzgFg0=;
+ b=qR+8dPIrIiWFMeCFxocnmUHpfZGdI0WBiwuxvjX63m2qKgVlx6K5WhvN9tHu3UJ3x0
+ 0unfJ8ckXAfudr+SBY8TKf8keKtk/efAZtU+2mpEdmHvS3Nf2h4Iv+gg9ObIDEjzMq+c
+ xn15M39ixGpdXotUm3t42bOMjbN0CKf4Am70QWtkgf2bF16H75DtolfT4qEASbThnkXK
+ ksFQ2zuaC9LAGBp5yxxO8DZpbd4zP/Rq56amvyWJOipJyiKl/Vp/YbbJnphJQu/+SJ0b
+ Bk8oxTn1CRn9LrDKTyNbDPXYhHeDL1Qi/kmHTQbtIHRBGUYUWQCV46OqPUi7bVe5iMRf
+ 67+g==
+X-Gm-Message-State: ACrzQf0CBKCR0C2GtigEgDiOW1QnGSW3kAjsCuBYaX7Y/Y5aMB37ksS5
+ ohQplhFAD/WNn5qClZvL8UuRS875A9axIr7xJb8=
+X-Google-Smtp-Source: AMsMyM5TApaRJL4Oy+Xs12tDK9c/4Msl6YoT+BwCGxqxbKB7uCiu799uGX5qe26fV/S9uxj8VoDjOA==
+X-Received: by 2002:adf:a31d:0:b0:22a:e41f:3ce4 with SMTP id
+ c29-20020adfa31d000000b0022ae41f3ce4mr4047613wrb.240.1663445881507; 
+ Sat, 17 Sep 2022 13:18:01 -0700 (PDT)
 Received: from [172.23.97.104] ([79.140.217.34])
  by smtp.gmail.com with ESMTPSA id
- z9-20020adfd0c9000000b0022a839d053csm8471451wrh.98.2022.09.17.13.17.38
+ k1-20020a056000004100b00228de58ae2bsm8663652wrx.12.2022.09.17.13.18.00
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 17 Sep 2022 13:17:38 -0700 (PDT)
-Message-ID: <55b0aae8-4e00-990b-2f98-abbb4437c29e@mind.be>
-Date: Sat, 17 Sep 2022 22:17:36 +0200
+ Sat, 17 Sep 2022 13:18:01 -0700 (PDT)
+Message-ID: <b35b9c7f-0586-4d77-ab8d-6d7f3db2f596@mind.be>
+Date: Sat, 17 Sep 2022 22:17:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
 Content-Language: en-GB
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 References: <cover.1660931225.git.yann.morin.1998@free.fr>
- <417c53083693347f5c22298c49c8ff9df1f35d0f.1660931225.git.yann.morin.1998@free.fr>
+ <5cd3be7a788ce6fc3047069feacf48658c231483.1660931225.git.yann.morin.1998@free.fr>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <417c53083693347f5c22298c49c8ff9df1f35d0f.1660931225.git.yann.morin.1998@free.fr>
+In-Reply-To: <5cd3be7a788ce6fc3047069feacf48658c231483.1660931225.git.yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date;
- bh=RH/jrDQ0ItFHtnwJv0a7F26zjfiVw0A+9j+8tUTQnPA=;
- b=iArpOd3XPomXnjgr/OLLO/jZu4N6SCwLmhqquzAJqZ63lizYq7JwOcOW21KyWgjBAj
- k5duGEcmuqN2+njGbBW7cOqxWbmk0ny0GbsBJBbVy3jzQY5kdb8vqRqFmMfh7Ydo/2Is
- HIphNvmDRYzIstCfyuUCB0kC6TtycR2ixvZBnlgThTYVUepb44htxOVtJL1DiskVXFzR
- awKMzycGXaOQ3507L212RFSJCGSpN/1RYyw8TUpc3unfnr+8uHC7ofy0I6ZIhab9k8+M
- s2H3e6GC64eCftxDytq+3Yyyn7QUj/umpqLq4ZCzH99eDnUJw/AKXeWC9epr+pqESC1Q
- nG+g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=66NUFJzMo6x5+wW84ZizQOpPH0HrKRNfk3YH9GzgFg0=;
+ b=YqiuKSWpSfGvqhXkS1+sOvryvNp0us7szDPFMa/vf5RSk4qCAI7cI0dR205m9U4Qzp
+ va6vIa63YNViMr0tC+ThHF8WTxGYNz5J2izzZHhDE2I30nlYtadr8FHFfauInGS3nQVV
+ YmAEE0cyzOO0qEaNM1uKOkh1ulOyXzJtRDo2rTbR7P3LaT0xuSHRuWHpI/3bRNPyMDNi
+ qAB8BU/im8KIO6yCHCORcXOGOwevkjxhxS4KvmkwDdAP15K+pM9qGrQ38M7C6nbCm/yr
+ VaLw8+0+FjIAUcg8I20AgRHmb5y//J21FZcI31F5Am+Pj28M6GX5Tw7KshnqaU2tj39a
+ 6dMQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=iArpOd3X
-Subject: Re: [Buildroot] [PATCH 3/4] fs/cpio: accept a list of dracut.conf
- files
+ header.a=rsa-sha256 header.s=google header.b=YqiuKSWp
+Subject: Re: [Buildroot] [PATCH 4/4] support/tests/cpio: extend runtime tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,100 +109,93 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 19/08/2022 19:51, Yann E. MORIN wrote:
-> It is not unusual that projects can target multiple boards, and in
-> such cases, a lot is shared between boards and only the low-level
-> stuff differ.
+> Check that dependencies that are DT_NEEDED by a program are
+> automatically copied by dracut. We use cramfs, the package,
+> as it is small and just depends on libz.
 > 
-> Allow users to specify more than one dracut config file to cover
-> tose cases.
+> Test extra modules, and test more than one dracut config file.
 > 
-> dracut does not accept more than one config file with the -c option,
-> but it can load more than one from a directory with --confdir. So,
-> we copy all the config files to a temporary directory and se that as
-> --confdir. However, we can't drop passing -c, or dracut would read
-> the system-wide /etc/dracut.conf (not sure if ${prefix} is even used),
-> which we do not want. So, we use an empty file as -c; /dev/null comes
-> in handy as an empty file.
-> 
+> Reported-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Cc: Thierry Bultel <thierry.bultel@linatsea.fr>
 > Cc: Adam Duskett <aduskett@gmail.com>
 
-  Applied to master, thanks.
+  I've removed the bits related to patch 2/4 and applied to master, thanks.
 
   Regards,
   Arnout
 
 > ---
->   fs/cpio/Config.in | 12 +++++++-----
->   fs/cpio/cpio.mk   | 19 ++++++++++++++-----
->   2 files changed, 21 insertions(+), 10 deletions(-)
+>   support/testing/tests/fs/test_cpio.py                 | 11 ++++++++++-
+>   support/testing/tests/fs/test_cpio/dracut-cramfs.conf |  7 +++++++
+>   .../fs/test_cpio/modules/99cramfs/module-setup.sh     | 11 +++++++++++
+>   3 files changed, 28 insertions(+), 1 deletion(-)
+>   create mode 100644 support/testing/tests/fs/test_cpio/dracut-cramfs.conf
+>   create mode 100755 support/testing/tests/fs/test_cpio/modules/99cramfs/module-setup.sh
 > 
-> diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
-> index 861e9a929e..94a826f9e4 100644
-> --- a/fs/cpio/Config.in
-> +++ b/fs/cpio/Config.in
-> @@ -29,13 +29,15 @@ endchoice
+> diff --git a/support/testing/tests/fs/test_cpio.py b/support/testing/tests/fs/test_cpio.py
+> index 9a529f1edd..9c196c1b89 100644
+> --- a/support/testing/tests/fs/test_cpio.py
+> +++ b/support/testing/tests/fs/test_cpio.py
+> @@ -37,11 +37,16 @@ class TestCpioDracutBase(infra.basetest.BRTest):
+>           BR2_TOOLCHAIN_EXTERNAL=y
+>           BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+>           BR2_INIT_BUSYBOX=y
+> +        BR2_PACKAGE_CRAMFS=y
+>           BR2_PACKAGE_PV=y
+> +        BR2_PACKAGE_HOST_DRACUT_EXTRA_MODULES="{}"
+>           BR2_TARGET_ROOTFS_CPIO=y
+>           BR2_TARGET_ROOTFS_CPIO_DRACUT=y
+> +        BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILES="{}"
+>           # BR2_TARGET_ROOTFS_TAR is not set
+> -        """
+> +        """.format("support/testing/tests/fs/test_cpio/modules",
+> +                   " ".join(["fs/cpio/dracut.conf",
+> +                             "support/testing/tests/fs/test_cpio/dracut-cramfs.conf"]))
 >   
->   if BR2_TARGET_ROOTFS_CPIO_DRACUT
+>       def check_dracut(self):
+>           out = subprocess.check_output(["cpio", "--list"],
+> @@ -52,6 +57,10 @@ class TestCpioDracutBase(infra.basetest.BRTest):
+>                                         universal_newlines=True)
+>           # pv should *not* be included in cpio image
+>           self.assertEqual(out.find("bin/pv"), -1)
+> +        # libz should be, because of cramfs
+> +        self.assertNotEqual(out.find("usr/bin/mkcramfs"), -1)
+> +        self.assertNotEqual(out.find("usr/bin/cramfsck"), -1)
+> +        self.assertNotEqual(out.find("usr/lib/libz.so"), -1)
 >   
-> -config BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE
-> -	string "dracut configuration file"
-> +config BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILES
-> +	string "dracut configuration files"
->   	default "fs/cpio/dracut.conf"
->   	help
-> -	  Dracut configuration file. It determines which parts of the
-> -	  rootfs get included in the cpio image. See dracut.conf(5) or
-> -	  https://github.com/dracutdevs/dracut/blob/master/man/dracut.conf.5.asc
-> +	  Space-separated list of Dracut configuration files. They
-> +	  determine which parts of the rootfs get included in the
-> +	  cpio image. See:
-> +	    dracut.conf(5)
-> +	    https://github.com/dracutdevs/dracut/blob/master/man/dracut.conf.5.asc
->   
->   	  The default configuration file is suitable for busybox init.
->   	  It doesn't, however, pivot_root into a full rootfs.
-> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-> index fa66b1c710..d671c337df 100644
-> --- a/fs/cpio/cpio.mk
-> +++ b/fs/cpio/cpio.mk
-> @@ -50,9 +50,14 @@ else ifeq ($(BR2_TARGET_ROOTFS_CPIO_DRACUT),y)
->   
->   ROOTFS_CPIO_DEPENDENCIES += host-dracut
->   
-> -ROOTFS_CPIO_DRACUT_CONF_FILE = $(call qstrip,$(BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE))
-> -ifeq ($(BR_BUILDING):$(ROOTFS_CPIO_DRACUT_CONF_FILE),y:)
-> -$(error No dracut config file name specified, check your BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILE setting)
-> +ROOTFS_CPIO_DRACUT_CONF_FILES = $(call qstrip,$(BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILES))
-> +ifeq ($(BR_BUILDING),y)
-> +ifeq ($(ROOTFS_CPIO_DRACUT_CONF_FILES),)
-> +$(error No dracut config file name specified, check your BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILES setting)
-> +endif
-> +ifneq ($(words $(ROOTFS_CPIO_DRACUT_CONF_FILES)),$(words $(sort $(notdir $(ROOTFS_CPIO_DRACUT_CONF_FILES)))))
-> +$(error No two dracut config files can have the same basename, check your BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILES setting)
-> +endif
->   endif
->   
->   ifeq ($(BR2_LINUX_KERNEL),y)
-> @@ -63,10 +68,14 @@ ROOTFS_CPIO_OPTS += --no-kernel
->   endif
->   
->   define ROOTFS_CPIO_CMD
-> -	mkdir -p $(ROOTFS_CPIO_DIR)/tmp
-> +	mkdir -p $(ROOTFS_CPIO_DIR)/tmp $(ROOTFS_CPIO_DIR)/confdir
-> +	$(foreach cfg,$(ROOTFS_CPIO_DRACUT_CONF_FILES), \
-> +		cp $(cfg) $(ROOTFS_CPIO_DIR)/confdir/$(notdir $(cfg))
-> +	)
->   	$(HOST_DIR)/bin/dracut \
->   		$(ROOTFS_CPIO_OPTS) \
-> -		-c $(ROOTFS_CPIO_DRACUT_CONF_FILE) \
-> +		-c /dev/null \
-> +		--confdir $(ROOTFS_CPIO_DIR)/confdir \
->   		--sysroot $(TARGET_DIR) \
->   		--tmpdir $(ROOTFS_CPIO_DIR)/tmp \
->   		-M \
+>           exit_code = boot_img(self.emulator,
+>                                self.builddir)
+> diff --git a/support/testing/tests/fs/test_cpio/dracut-cramfs.conf b/support/testing/tests/fs/test_cpio/dracut-cramfs.conf
+> new file mode 100644
+> index 0000000000..69e49239fc
+> --- /dev/null
+> +++ b/support/testing/tests/fs/test_cpio/dracut-cramfs.conf
+> @@ -0,0 +1,7 @@
+> +install_items+="
+> +/usr/bin/mkcramfs
+> +"
+> +
+> +add_dracutmodules+="
+> +cramfs
+> +"
+> diff --git a/support/testing/tests/fs/test_cpio/modules/99cramfs/module-setup.sh b/support/testing/tests/fs/test_cpio/modules/99cramfs/module-setup.sh
+> new file mode 100755
+> index 0000000000..60706c8bd9
+> --- /dev/null
+> +++ b/support/testing/tests/fs/test_cpio/modules/99cramfs/module-setup.sh
+> @@ -0,0 +1,11 @@
+> +check() {
+> +    return 0
+> +}
+> +
+> +depends() {
+> +    return 0
+> +}
+> +
+> +install() {
+> +    inst_multiple /usr/bin/cramfsck
+> +}
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
