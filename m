@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26422ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:41:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7CC1ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C443C8439A;
-	Sat, 17 Sep 2022 15:41:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C443C8439A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59C7A61153;
+	Sat, 17 Sep 2022 15:41:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59C7A61153
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LsvLxIRxDrOU; Sat, 17 Sep 2022 15:41:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oUe0LwgMpfSY; Sat, 17 Sep 2022 15:41:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0077843E7;
-	Sat, 17 Sep 2022 15:41:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0077843E7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B89071BF388
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B67E61113;
+	Sat, 17 Sep 2022 15:41:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B67E61113
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E648E1BF968
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9AF9C41DBC
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF9C41DBC
+ by smtp2.osuosl.org (Postfix) with ESMTP id BFEE040BB7
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFEE040BB7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id weBkQYAQX-S7 for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 15:40:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9j7vIwJbWZGi for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F361416F4
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:40:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F361416F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id D80464014A
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D80464014A
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id F2902844EB; Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
+ id C614D844EB; Sat, 17 Sep 2022 15:40:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 17:34:23 +0200
+Date: Sat, 17 Sep 2022 17:24:28 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 252f784276e04498d16747442861127e475d9eaf
-X-Git-Newrev: bf7a9977e7bb1bff8a8c2987b1607e2cb86c6338
+X-Git-Oldrev: d302b0634bd5e750b3034f4e173db23c2d55a557
+X-Git-Newrev: e5e46179486cfb82493706bae219f176c67903e7
 X-Patchwork-Hint: ignore
-Message-Id: <20220917154022.F2902844EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libtirpc:
- security bump to version 1.3.3
+Message-Id: <20220917154022.C614D844EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/webkitgtk:
+ security bump to version 2.36.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,51 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf7a9977e7bb1bff8a8c2987b1607e2cb86c6338
+commit: https://git.buildroot.net/buildroot/commit/?id=e5e46179486cfb82493706bae219f176c67903e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix CVE-2021-46828: In libtirpc before 1.3.3rc1, remote attackers could
-exhaust the file descriptors of a process that uses libtirpc because
-idle TCP connections are mishandled. This can, in turn, lead to an
-svc_run infinite loop without accepting new connections.
+Bugfix release, with a security patch for CVE-2022-32893.
+Release notes:
 
-https://sourceforge.net/projects/libtirpc/files/libtirpc/1.3.3/Release-1.3.3.txt/download
+ https://webkitgtk.org/2022/08/07/webkitgtk2.36.6-released.html
+ https://webkitgtk.org/2022/08/24/webkitgtk2.36.7-released.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Accompanying security advisory:
+
+  https://webkitgtk.org/security/WSA-2022-0008.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 408888a29b97cd6f89b528966d853f486149f6d5)
+(cherry picked from commit 99338a8ab6827b02ae988b32854b8f1efda88b88)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtirpc/libtirpc.hash | 4 ++--
- package/libtirpc/libtirpc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 56c1d9de3f..1efc3e47e2 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
-@@ -1,5 +1,5 @@
- # From sourceforge's info on download page:
--sha1  51d75be0e5acc094a888f40042b23e128d163cb5  libtirpc-1.3.2.tar.bz2
-+sha1  6e52c39148494e4836e2d5d4f28b11ddfa65394b  libtirpc-1.3.3.tar.bz2
- # Locally computed
--sha256  e24eb88b8ce7db3b7ca6eb80115dd1284abc5ec32a8deccfed2224fc2532b9fd  libtirpc-1.3.2.tar.bz2
-+sha256  6474e98851d9f6f33871957ddee9714fdcd9d8a5ee9abb5a98d63ea2e60e12f3  libtirpc-1.3.3.tar.bz2
- sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 9d3c4b5a94..179adc97d0 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index ae86c97c0a..7c6d7d65b5 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.36.5.tar.xz.sums
+-md5  a876da9d8906468f4e1e3d08729cdeec  webkitgtk-2.36.5.tar.xz
+-sha1  49ff8873500a2ce82bad8879095277bb4dfd21de  webkitgtk-2.36.5.tar.xz
+-sha256  d5532fa884c943dc48f1911473dd663aba407a3b35caa7b04bac1419b41e5908  webkitgtk-2.36.5.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.36.7.tar.xz.sums
++md5  466351cf35e4f742590919380b5dee93  webkitgtk-2.36.7.tar.xz
++sha1  36078148b6e0ef002f0279b25b1caf173f851ac8  webkitgtk-2.36.7.tar.xz
++sha256  0c260cf2b32f0481d017670dfed1b61e554967cd067195606c9f9eb5fe731743  webkitgtk-2.36.7.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index b5b9be3778..d1c517452d 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTIRPC_VERSION = 1.3.2
-+LIBTIRPC_VERSION = 1.3.3
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3-Clause
+-WEBKITGTK_VERSION = 2.36.5
++WEBKITGTK_VERSION = 2.36.7
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
