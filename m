@@ -1,71 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C776ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 08:47:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5298ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 08:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0C2E04058B;
-	Sat, 17 Sep 2022 08:47:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C2E04058B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C7CA4196E;
+	Sat, 17 Sep 2022 08:50:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C7CA4196E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id REGvHJ-UtSXG; Sat, 17 Sep 2022 08:47:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yTFxItllBrbl; Sat, 17 Sep 2022 08:50:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71575404AF;
-	Sat, 17 Sep 2022 08:47:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71575404AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69CBB41936;
+	Sat, 17 Sep 2022 08:50:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69CBB41936
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0720D1BF82F
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:46:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EE80B1BF82F
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:50:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E381883EEA
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:46:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E381883EEA
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6FC183F85
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:50:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6FC183F85
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hoty7tjfdO5j for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 08:46:16 +0000 (UTC)
+ with ESMTP id 9MkyIzXxob4a for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 08:50:33 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D75883EE6
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9D75883EE6
- for <buildroot@busybox.net>; Sat, 17 Sep 2022 08:46:15 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 51865100005;
- Sat, 17 Sep 2022 08:46:13 +0000 (UTC)
-Date: Sat, 17 Sep 2022 10:46:10 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20220917104610.398bb63a@windsurf>
-In-Reply-To: <20220912033418.2587016-1-francois.perrad@gadz.org>
-References: <20220912033418.2587016-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D530283F7F
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D530283F7F
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 08:50:32 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 1DF05E0005;
+ Sat, 17 Sep 2022 08:50:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZTWv-0099w1-Uo; Sat, 17 Sep 2022 10:50:29 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220815205011.13423-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Sep 2022 10:50:29 +0200
+In-Reply-To: <20220815205011.13423-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 15 Aug 2022 22:50:11 +0200")
+Message-ID: <87bkre4c6i.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663404373;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=SpBQXFZVIM0O3V0VbW5/NqTkn6xB33KKN6FIPATfOdg=;
- b=aSD6zkUP+9/PizOItGjbfmOPkNtN0Zk9nhFowQt6krRcM8P1dfMxlSd38aysCc/e1Fxcr2
- vBN/UxULPYSkBEiN/SY7lwB2WCcvYMdwVcIjmKpNO54tf0zBfLL3pdEPU0BgecWNu8iAxA
- vfBX4g6QrS7R4GsjjYLi111L+nNp69LjNUPNEST1ltHcosLQEouYaA+EvF+t//WEI6RIb5
- KusdBGLE7t3aNbKgt2Fu3YLKO63RB4+CG8OLgj+jPYD4UokHKESlKJbvUa7lbBdfY+IMh1
- tuYZWUaZfpR2KnYCBowWOm5tJCTHtKrkjGiSLZPK1Go6V4R+fPsOaJeal3IsUg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aSD6zkUP
-Subject: Re: [Buildroot] [PATCH 1/9] package/perl-date-manip: bump to
- version 6.89
+Subject: Re: [Buildroot] [PATCH 1/1] support/dependencies: check for find
+ and xargs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +64,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 12 Sep 2022 05:34:10 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl-date-manip/Config.in            | 2 +-
->  package/perl-date-manip/perl-date-manip.hash | 4 ++--
->  package/perl-date-manip/perl-date-manip.mk   | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
+ > Commit 7652817c93a02715e0d334d70118a0d8b6917ca6 updated the
+ > documentation but forgot to update support/dependencies
 
-Entire series of 9 patches applied to master. Thanks!
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Thomas
+Committed to 2022.05.x and 2022.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
