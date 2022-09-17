@@ -1,94 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7583ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 20:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37B7DC6FA82
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 20:15:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4666E40256;
-	Sat, 17 Sep 2022 20:13:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4666E40256
+	by smtp3.osuosl.org (Postfix) with ESMTP id C616A60BFB;
+	Sat, 17 Sep 2022 20:15:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C616A60BFB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hCrA38c_CRMM; Sat, 17 Sep 2022 20:13:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id zOUUGF7qzCB7; Sat, 17 Sep 2022 20:15:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7837B4016B;
-	Sat, 17 Sep 2022 20:13:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7837B4016B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 12BC11BF39A
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:13:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFA3460AF6;
+	Sat, 17 Sep 2022 20:15:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFA3460AF6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F6C91BF39A
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:15:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF47681776
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:13:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF47681776
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AA4B60AF6
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:15:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AA4B60AF6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9sdBPUTVEdRd for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 20:13:50 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D01C68141F
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D01C68141F
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 20:13:49 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id t7so41161113wrm.10
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 13:13:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date;
- bh=z6z6hyMeto4JuZUClURWinZ6XXzjGNg8cvlp1kOyhRA=;
- b=0v7lYRliA4lRfBh+7H2IrTFM+DSCRYcGyLc89CI8LoLG8j5pC8/YrvOW1ypGswOssD
- 1oTWGp3c67k4q+7SzKCa+ovdSMVTGQWGOBQTPYioWv4RK4cISFLID17K/6kwUyCfVOzn
- 0RVnmF0t4kFhUSzamE0ZLJz+tkL1eJfHbXOwusAk5S3+bvoFgyp/fAZ+Z1+X1VCd6kYD
- 2j2D3J6LnbjRyi2QOUh03B1946/YbMXjT6lNWwxl05Ki9HJStkgS5PC4Uqyfz/HS01s7
- 0SW0iEtGvHubVLCM4WmuhxPgKF5d/iBoUXTrtJjPItcPpyTcJMmEV5EgmLyE6Dcz6SDi
- E4dw==
-X-Gm-Message-State: ACrzQf2yqthA/8iJVZjwZ0y61UkN918QEUf9eBPF2CSsOFas97ZRuCw5
- OZQG4F62ZpN5X6D62X7f8fkUvw==
-X-Google-Smtp-Source: AMsMyM6HNmn4i3P4lxsYNo/xXkGYaa1QFddgp+p6WxRazDiWd28o/Bu15bGNW94CKIbKvrQzQwUvpQ==
-X-Received: by 2002:a5d:5504:0:b0:228:b90c:e5e0 with SMTP id
- b4-20020a5d5504000000b00228b90ce5e0mr6409868wrv.624.1663445627668; 
- Sat, 17 Sep 2022 13:13:47 -0700 (PDT)
-Received: from [172.23.97.104] ([79.140.217.34])
- by smtp.gmail.com with ESMTPSA id
- r17-20020adfbb11000000b0022762b0e2a2sm8785696wrg.6.2022.09.17.13.13.46
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 17 Sep 2022 13:13:47 -0700 (PDT)
-Message-ID: <f51ade4b-6fca-79af-f936-095dd7bcab2e@mind.be>
-Date: Sat, 17 Sep 2022 22:13:45 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Li2_RD0i9T12 for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 20:15:07 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 021C960A80
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 021C960A80
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 20:15:06 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3321A1C0005;
+ Sat, 17 Sep 2022 20:15:04 +0000 (UTC)
+Date: Sat, 17 Sep 2022 22:15:02 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Chris Dimich <chris.dimich@boundarydevices.com>
+Message-ID: <20220917221502.3673b1c3@windsurf>
+In-Reply-To: <20220824192604.2549356-12-chris.dimich@boundarydevices.com>
+References: <20220824192604.2549356-1-chris.dimich@boundarydevices.com>
+ <20220824192604.2549356-12-chris.dimich@boundarydevices.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-GB
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <cover.1660931225.git.yann.morin.1998@free.fr>
- <446f8241f76f0bb59b032b5368e3028e769830f9.1660931225.git.yann.morin.1998@free.fr>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <446f8241f76f0bb59b032b5368e3028e769830f9.1660931225.git.yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date;
- bh=z6z6hyMeto4JuZUClURWinZ6XXzjGNg8cvlp1kOyhRA=;
- b=e1dSqoY8fu/8504A6DZd0n5CbMDh/mXCao3h19ceY1/+JFvOxpihJudFyH5M3nzdhd
- LgZn36idAjw+9kktATWijwesSu/2Ltfpvq1pC2Qd7PILFZDAwar7MUP0q4LY9bOEQTWi
- K/9zNHmN4m6gjaxyQOgbr3sw9PvaKQql2I20WmzsFsVi4AYY7ieIH87/UlhT8l6lNaWp
- S3QcoHqaNaLJ8xzEL4JAxMw41ybXe0ZjIR9CqXrEraWZI0dzn0esTfXhnFLEk4MPKgMC
- GcguE1FGdOwfIb5jUtjHB/8P6L6yGtPba9Xw0F0m+YRn3zXC86vs61ETJM9YjyBMD6YN
- 6sSg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=e1dSqoY8
-Subject: Re: [Buildroot] [PATCH 1/4] support/test/cpio: test for pv already
- done by listing the cpio archive
+ d=bootlin.com; s=gm1; t=1663445705;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=TWGoE3cb5ecq1k1+xYnyAMvHmfWWlNiJ+5lCwl1fT6c=;
+ b=j8F1XU6YfcKXdpGzQC+Ep+a1cbdDHN4BCQr3LabXgDb4ERVfDxmXrIhxJallZJREujMOVV
+ ELUmX9EePonQolWtdpAwSLMwCL82I9tP0+YWgt0YduSTOnvd5scxsKnaQBfEvChuRkF6HB
+ sj/aUg7mlQ9e+533SIwZHYstXLnqnrPKtTCpXLuLl2SIakONp7p3tzsyl8WET0PlQOwiFw
+ ZxR24SR3miXyolZnglxbkax5oUwLm2pXSe3AjGvTIaJ5JBYkQdvNxZU+YflZLVryCd9Evz
+ Kdb7gvdVs46TihNWMNR0336pHxYhNiMkBybVGDnJtT+gDoV1n24WBw0pMhqNRg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=j8F1XU6Y
+Subject: Re: [Buildroot] [PATCH 5/7] package/freescale-imx/imx-gpu-g2d: bump
+ version to 6.4.3.p4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,50 +78,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <aduskett@gmail.com>,
- Thierry Bultel <thierry.bultel@linatsea.fr>
+Cc: Gary Bisson <bisson.gary@gmail.com>, "Yann E .
+ MORIN" <yann.morin.1998@free.fr>, Refik Tuzakli <tuzakli.refik@gmail.com>,
+ buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Wed, 24 Aug 2022 12:26:02 -0700
+Chris Dimich <chris.dimich@boundarydevices.com> wrote:
 
+> -sha256  39fe307916e19a0892a514621121086e276a43858af90230372a1344852116a2  imx-gpu-g2d-6.4.3.p2.0-arm.bin
+> -sha256  2642a49e088daae4cf568a150d01e7c095995e8a6ff1883c02c3fa6d26d254b3  imx-gpu-g2d-6.4.3.p2.0-aarch64.bin
+> -sha256  ea58636bf34f589048fcd46e38497c47229fde8498df086ff5fb52f9ef8e15ee  COPYING
+> -sha256  50099e283cfd307f84f159aeb1a6f462351320273dbcdb80d7f2c9db0494b71c  EULA
+> +sha256  0ba9806c4efa0154fc9f7be406e42bc2c50b975abd32cbe322cf7bcf6ae0d350  imx-gpu-g2d-6.4.3.p4.2-arm.bin
+> +sha256  ff50ddfee2d989798a2aba84ef9114e01f8d867293891dc0aacfab1640cbf8a3  imx-gpu-g2d-6.4.3.p4.2-aarch64.bin
+> +sha256  4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517  COPYING
+> +sha256  4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517  EULA
 
-On 19/08/2022 19:50, Yann E. MORIN wrote:
-> Since we do not pivot_root/switch_root from the cpio, whatever we get
-> in the rootfs was exactly what we got by listing the cpio archive.
-> 
-> Drop the test for the presence of pv, it's redundant.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Thierry Bultel <thierry.bultel@linatsea.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
+This hash seems wrong. You have the same hash for the COPYING file and
+the EULA file, and the EULA file hash is incorrect:
 
-  Applied to master, thanks.
+>>> imx-gpu-g2d 6.4.3.p4.2-aarch64 Patching
+>>> imx-gpu-g2d 6.4.3.p4.2-aarch64 Collecting legal info
+ERROR: EULA has wrong sha256 hash:
+ERROR: expected: 4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517
+ERROR: got     : 423c76762d50b82fedd3e15c48e436d7272a7e130f9ebb910f76489345707cf6
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-  Regards,
-  Arnout
+Could you check this on your side, and send an updated version?
 
-> ---
->   support/testing/tests/fs/test_cpio.py | 4 ----
->   1 file changed, 4 deletions(-)
-> 
-> diff --git a/support/testing/tests/fs/test_cpio.py b/support/testing/tests/fs/test_cpio.py
-> index 3f661e370c..9a529f1edd 100644
-> --- a/support/testing/tests/fs/test_cpio.py
-> +++ b/support/testing/tests/fs/test_cpio.py
-> @@ -57,10 +57,6 @@ class TestCpioDracutBase(infra.basetest.BRTest):
->                                self.builddir)
->           self.assertEqual(exit_code, 0)
->   
-> -        # No pivot_root is done, so pv shouldn't be there
-> -        _, exit_code = self.emulator.run("ls -l /usr/bin/pv")
-> -        self.assertNotEqual(exit_code, 0)
-> -
->   
->   class TestCpioDracutUclibc(TestCpioDracutBase):
->       config = TestCpioDracutBase.config + \
+When you send an updated version, please always resend the full series,
+and increment the version number (using the -v option of git
+format-patch).
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
