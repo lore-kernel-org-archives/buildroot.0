@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7507ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 417BBECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93E3881404;
-	Sat, 17 Sep 2022 15:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93E3881404
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9FFE83EAD;
+	Sat, 17 Sep 2022 15:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9FFE83EAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5wKEG46vGZFb; Sat, 17 Sep 2022 15:53:38 +0000 (UTC)
+	with ESMTP id TL3m0RX-cJD7; Sat, 17 Sep 2022 15:53:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D735F813EE;
-	Sat, 17 Sep 2022 15:53:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D735F813EE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A02951BF968
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:53:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DEC683438;
+	Sat, 17 Sep 2022 15:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DEC683438
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D67411BF388
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:53:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A5CB409AB
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A5CB409AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id ADB1C4014A
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADB1C4014A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8otEJMPJ36Kf for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 15:53:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 932D440918
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:53:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 932D440918
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 81C6C8459F; Sat, 17 Sep 2022 15:53:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y_QQgAA0-ueY for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 15:53:45 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 831E3400E7
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 831E3400E7
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:53:45 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8A21820002;
+ Sat, 17 Sep 2022 15:53:41 +0000 (UTC)
+Date: Sat, 17 Sep 2022 17:53:39 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 17:53:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 17b6372790c33fa317ab6134ad6d5b8882b9cedd
-X-Git-Newrev: 4a53271b77e21e90e46e61a5d0afd9ab9544b25c
-X-Patchwork-Hint: ignore
-Message-Id: <20220917155322.81C6C8459F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-engine: bump to version
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20220917175339.31113c9e@windsurf>
+In-Reply-To: <20220915183359.481550-1-christian@paral.in>
+References: <20220915183359.481550-1-christian@paral.in>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1663430022;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=n2WN34JnGQT8u321efEZQJRU7mk2ZvYMCncBbViePDg=;
+ b=WXvn7IdTYgFWll6xG21WlKuXMRQgeSa8UPDq1TyZ+AGLSAeeXBwAbKgHqxanYQBE0qfWOY
+ ue1xCdq2PPPEdeyQNCniem7rL+dpy2KgbD1xUsp722nswlWH2F4go7NnuthhtubQvnHL3c
+ bJyg4Xkml2kHSQ4l0T2awJfK1Np+0RK5E9wooJ7QL8eFjc+2ZYmj70awT1tzF0aPP6Plx7
+ T7E/VLpYvKyRHa2D3ImXH1gd7YVNwtAEZHCeYzkPWBFtdz8vYD4CHzB732xICuSGwgyhre
+ 3LQmWAB6L2VgrxhXMS5rvu439KFw1zenyq45BM3+XMn3jH12O4gSq7zoDBeklw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WXvn7IdT
+Subject: Re: [Buildroot] [PATCH 1/2] package/docker-engine: bump to version
  20.10.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -57,46 +77,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a53271b77e21e90e46e61a5d0afd9ab9544b25c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 15 Sep 2022 11:33:58 -0700
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-https://github.com/moby/moby/releases/tag/v20.10.18
+> https://github.com/moby/moby/releases/tag/v20.10.18
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/docker-engine/docker-engine.hash | 2 +-
+>  package/docker-engine/docker-engine.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Both applied to master, thanks!
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 2cf2f4a75e..e1c29f0926 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  061cf8579aa3c813c353c80fa480744e2f6cca2e6392f546bd0942a6a10c7a14  docker-engine-20.10.17.tar.gz
-+sha256  9907aaaf39fb1c2c3fd427192e4a63d7adf8ddc9fb0e29c692a6ca10de9c34f6  docker-engine-20.10.18.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index fb489c0f8d..246419ec4f 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = 20.10.17
-+DOCKER_ENGINE_VERSION = 20.10.18
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
