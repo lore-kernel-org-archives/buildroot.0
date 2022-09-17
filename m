@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0552DECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:33:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A7AECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:34:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DC3761150;
-	Sat, 17 Sep 2022 15:33:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DC3761150
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A55361166;
+	Sat, 17 Sep 2022 15:34:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A55361166
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SXaWKrvHtkaW; Sat, 17 Sep 2022 15:33:56 +0000 (UTC)
+	with ESMTP id ipjDvOGMIWtP; Sat, 17 Sep 2022 15:34:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2D2A60A9E;
-	Sat, 17 Sep 2022 15:33:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2D2A60A9E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98B8B1BF388
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:33:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59A5461152;
+	Sat, 17 Sep 2022 15:34:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59A5461152
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 59A471BF388
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:33:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 821D2607EC
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:33:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 821D2607EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3488D41D5E
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:33:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3488D41D5E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id azQ7M_dYea1c for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 15:33:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id txblEQOjYW54 for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 15:33:58 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86F9460888
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 86F9460888
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:33:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB03A41D5D
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BB03A41D5D
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:33:57 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 093C6200008;
- Sat, 17 Sep 2022 15:33:48 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 10CA740004;
+ Sat, 17 Sep 2022 15:33:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oZZpD-009Pzt-L7; Sat, 17 Sep 2022 17:33:47 +0200
+ id 1oZZpL-009Q06-1h; Sat, 17 Sep 2022 17:33:55 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20220826205104.18667-1-fontaine.fabrice@gmail.com>
-Date: Sat, 17 Sep 2022 17:33:47 +0200
-In-Reply-To: <20220826205104.18667-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 26 Aug 2022 22:51:04 +0200")
-Message-ID: <87mtay10dg.fsf@dell.be.48ers.dk>
+References: <20220826205316.20112-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Sep 2022 17:33:55 +0200
+In-Reply-To: <20220826205316.20112-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 26 Aug 2022 22:53:16 +0200")
+Message-ID: <87illm10d8.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mali-driver: fix legal-info
+Subject: Re: [Buildroot] [PATCH 1/1] package/edk2-platforms: fix legal-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,9 +63,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -73,8 +71,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix typo: MALI_DRIVER_LICENSE_FILE -> MALI_DRIVER_LICENSE_FILES
- > added by commit f3ecd9ea4a40d601317f3b7195be4f5d1bdb3146
+ > Fix typo: EDK2_PLATFORMS_LICENSE_FILE -> EDK2_PLATFORMS_LICENSE_FILES
+ > added by commit 33aa59e7b500e60f2d736a17183c7d49b7baf5bd
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
