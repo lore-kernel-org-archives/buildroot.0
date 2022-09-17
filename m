@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34AAEECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 10:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F34CBECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 10:06:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B38E040354;
-	Sat, 17 Sep 2022 10:06:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B38E040354
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CE5F61094;
+	Sat, 17 Sep 2022 10:06:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CE5F61094
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dEvur1SMLfJZ; Sat, 17 Sep 2022 10:06:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C516D60D4E;
+	Sat, 17 Sep 2022 10:06:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C516D60D4E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C96C1BF5A4
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:06:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB29440223
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:06:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB29440223
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5hDuRqr10zYA; Sat, 17 Sep 2022 10:06:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B110740223;
-	Sat, 17 Sep 2022 10:06:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B110740223
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 92FC31BF5A4
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:06:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F5F083F7C
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 10:06:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F5F083F7C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rd88kwFY5Vze for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 10:06:38 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rA1-Tc54kgtL for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 10:06:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C7F583F7F
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 10:06:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C7F583F7F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1EB6E40121
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 10:06:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EB6E40121
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 8385D8416F; Sat, 17 Sep 2022 10:06:38 +0000 (UTC)
+ id 0E33684173; Sat, 17 Sep 2022 10:06:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 11:57:32 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: d53114a569e0b7c4e37f9770d58e5149b79e820c
-X-Git-Newrev: bfb343d2ec87ceb7cec933ac85971072110f599a
+Date: Sat, 17 Sep 2022 11:57:24 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 7a4169c374d5878f7509177b6599c7f1bcf9ff29
+X-Git-Newrev: fb36908ce9297818717963071fdcdca74852f913
 X-Patchwork-Hint: ignore
-Message-Id: <20220917100638.8385D8416F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/Makefile.in: only
+Message-Id: <20220917100647.0E33684173@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/Makefile.in: only
  error out when no C library is configured when building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfb343d2ec87ceb7cec933ac85971072110f599a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fb36908ce9297818717963071fdcdca74852f913
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 Commit fda53f0791f5657d41735a40a29df3c8d0e8ae79 ("package/Makefile.in:
 add detection for the lack of C library") added an $(error ...)
