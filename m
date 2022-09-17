@@ -4,48 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 050CEC6FA82
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 19:52:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 320FAECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 20:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8CDF740192;
-	Sat, 17 Sep 2022 19:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CDF740192
+	by smtp2.osuosl.org (Postfix) with ESMTP id D22E640198;
+	Sat, 17 Sep 2022 20:05:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D22E640198
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jIBC64UGh5WB; Sat, 17 Sep 2022 19:52:17 +0000 (UTC)
+	with ESMTP id IyjFr6X4DbOP; Sat, 17 Sep 2022 20:05:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8689A4016B;
-	Sat, 17 Sep 2022 19:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8689A4016B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 028314011F;
+	Sat, 17 Sep 2022 20:05:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 028314011F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AAB311BF267
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:52:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 572611BF39A
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:05:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 868104011F
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 19:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 868104011F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F9BC4016B
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 20:05:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F9BC4016B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PfiiTAAjY8gF for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 19:52:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B5EAC40119
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 19:52:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5EAC40119
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A2D268465D; Sat, 17 Sep 2022 19:52:13 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 21:51:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7966ddf6d29e45180d9b833dac2f444d6f9bbbb0
-X-Git-Newrev: dbff193c74bfda9cee96e3f6975f7430dd5acbd4
-X-Patchwork-Hint: ignore
-Message-Id: <20220917195213.A2D268465D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/botan: fix build with sh4{a, eb,
- aeb}
+ with ESMTP id dF_HpjCnAsPf for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 20:05:42 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4AA340119
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B4AA340119
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 20:05:41 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ v185-20020a1cacc2000000b003b42e4f278cso1953191wme.5
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 13:05:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date;
+ bh=Cf9Fu2hqFkq7qyJD/tpPTcrRF/ZMzpjWCgtRF9ODYiU=;
+ b=MQi9qZQV9HJXgcXbXyZLUNLIDntHD24Q2BtYxVMxu0oNkAMbZ7i9YfG0nETmk6aaki
+ oLd/eBqQqNy+Z9cmyfghCinjt4+W7zvfiD5547ZIqoRyEOYGwUnjoWrvbXeWpLYaKVln
+ zKsssT7bLvHiF2GmQ2LvdX6VKHUQLKsBRpNVxlvs4nOply19WG7r53DXFwUT6BA8JZx5
+ yv0Hc0myQUANkt9gsiOhJefPygE0UmOhCR4JoVdBMkTTbKJkBIzB+g86eD9u0ilpRKdC
+ 0HwQ5V4DaC7/Ktl6luYerKFA6GvCqcMDg96l2P6Zs7Q28K3phXsEgyevnAqkikffW83R
+ T7fA==
+X-Gm-Message-State: ACgBeo3DESs7UmQKDWAapz7atTp8FGeTVMOeB4nWu+cZKY/Z6+FwkqDb
+ Xx7SoQodNNzMlM//Goj3TX65OQ==
+X-Google-Smtp-Source: AA6agR7lc3SJBjsgzFSiM5GyGY5xULkbzACqjrQizZgwVg+6sSm1C+uWWYTe5OhSECndayVnohqF/w==
+X-Received: by 2002:a7b:c8d6:0:b0:3b4:868b:afc3 with SMTP id
+ f22-20020a7bc8d6000000b003b4868bafc3mr13887987wml.66.1663445139818; 
+ Sat, 17 Sep 2022 13:05:39 -0700 (PDT)
+Received: from [172.23.97.104] ([79.140.217.34])
+ by smtp.gmail.com with ESMTPSA id
+ d13-20020adff2cd000000b00228dcf471e8sm8924208wrp.56.2022.09.17.13.05.39
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 17 Sep 2022 13:05:39 -0700 (PDT)
+Message-ID: <5762dfb5-832f-a075-3be9-7d32cb82b661@mind.be>
+Date: Sat, 17 Sep 2022 22:05:37 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-GB
+To: Zvi Vered <veredz72@gmail.com>, buildroot@buildroot.org
+References: <CABRndgyUttoHU1dUOacMsbKFWTBvUn+Fr99WmQ57EC0CoX4JCA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <CABRndgyUttoHU1dUOacMsbKFWTBvUn+Fr99WmQ57EC0CoX4JCA@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date;
+ bh=Cf9Fu2hqFkq7qyJD/tpPTcrRF/ZMzpjWCgtRF9ODYiU=;
+ b=h46jmwiFh8pZSTIE7DC5DJT0mn1Bm6A+blQ1U8XznovhL8XZt21UkU0Lq82IA66Ssy
+ QgzyAUvIflCAgXVmRUkijLedB+LaZ6ZTTf/3fz0Lfo/ruDPD1fZoH14xe1b7mTgu9Qr2
+ xgODh4byLKRpve1zq2A90EanNzdDso5DfVSr8BD2khoDBGhDQ06Jxv6aDCpcZtdWk3qJ
+ uBisZQzYRy+ct5KvB5uxZHhWgad9iQWSE1LYgruANv+3oSCRumfdYFcv0Ioh0YY5zHDk
+ EeOqUvHhW8Juz3LKImaG9FtA+DoZnru9vuQShp/dNwdnjscQ6zhBS77IUIkjV2tFBtNm
+ DwSQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=h46jmwiF
+Subject: Re: [Buildroot] 2022.02.1: read-only file system
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,95 +99,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbff193c74bfda9cee96e3f6975f7430dd5acbd4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with sh4{a,eb,aeb} probably raised since
-the addition of the package in commit
-e43da7bb32285bbd41b38a379aef77132d149df7:
 
-  ERROR: Unknown or unidentifiable processor "sh4a"
+On 11/09/2022 19:58, Zvi Vered wrote:
+> Hello,
+> 
+> I'm using buildroot 2022.02.1 under x86 embedded SBC.
+> The root file system is located on the on-board disk.
+> The boot argument contains 'ro' (checked with /proc/cmdline after login) but the 
+> disk is not read-only.
 
-Fixes:
- - http://autobuild.buildroot.org/results/fb6885a8a299f20ed77e4c10b330d2a2a7853931
+  There is a buildroot config option BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW which 
+defaults to enabled. It will remount the rootfs to read-write as part of 
+processing /etc/fstab. So you should probably turn that option off. Note that if 
+you use systemd, you'll need to do a clean rebuild before the option is taken 
+into account.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-Add-superh-alias-needed-by-Debian.patch   | 22 ++++++++++++++++
- ...build-data-arch-superh.txt-add-sh4-eb-aeb.patch | 30 ++++++++++++++++++++++
- 2 files changed, 52 insertions(+)
 
-diff --git a/package/botan/0001-Add-superh-alias-needed-by-Debian.patch b/package/botan/0001-Add-superh-alias-needed-by-Debian.patch
-new file mode 100644
-index 0000000000..c6236849e9
---- /dev/null
-+++ b/package/botan/0001-Add-superh-alias-needed-by-Debian.patch
-@@ -0,0 +1,22 @@
-+From 454c7c04385a47d511cf8999ccff2746afbab06b Mon Sep 17 00:00:00 2001
-+From: Jack Lloyd <jack@randombit.net>
-+Date: Sat, 21 Nov 2020 12:37:06 -0500
-+Subject: [PATCH] Add superh alias needed by Debian
-+
-+[Retrieved from:
-+https://github.com/randombit/botan/commit/454c7c04385a47d511cf8999ccff2746afbab06b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/build-data/arch/superh.txt | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/build-data/arch/superh.txt b/src/build-data/arch/superh.txt
-+index 6af6dbe682..8e2833a914 100644
-+--- a/src/build-data/arch/superh.txt
-++++ b/src/build-data/arch/superh.txt
-+@@ -1,4 +1,5 @@
-+ 
-+ <aliases>
-+ sh4
-++sh4a
-+ </aliases>
-diff --git a/package/botan/0002-src-build-data-arch-superh.txt-add-sh4-eb-aeb.patch b/package/botan/0002-src-build-data-arch-superh.txt-add-sh4-eb-aeb.patch
-new file mode 100644
-index 0000000000..aa9f3ad5ba
---- /dev/null
-+++ b/package/botan/0002-src-build-data-arch-superh.txt-add-sh4-eb-aeb.patch
-@@ -0,0 +1,30 @@
-+From c88897ebaf173b97068811b520a4741039f09dcd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 20 Aug 2022 15:16:22 +0200
-+Subject: [PATCH] src/build-data/arch/superh.txt: add sh4{eb,aeb}
-+
-+Fix the following build failure with sh4{eb,aeb}:
-+
-+  ERROR: Unknown or unidentifiable processor "sh4aeb"
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/d7750b734736a66e10bc5a8ee06708041b36443a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/randombit/botan/commit/c88897ebaf173b97068811b520a4741039f09dcd]
-+---
-+ src/build-data/arch/superh.txt | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/build-data/arch/superh.txt b/src/build-data/arch/superh.txt
-+index 8e2833a914..e17edb097a 100644
-+--- a/src/build-data/arch/superh.txt
-++++ b/src/build-data/arch/superh.txt
-+@@ -2,4 +2,6 @@
-+ <aliases>
-+ sh4
-+ sh4a
-++sh4eb
-++sh4aeb
-+ </aliases>
+> When I used the same boot args with busybox, it worked fine.
+> Of course with busybox I had to tailor all other mandatory files and directories.
+> 
+> I need read-only rootfs to defend this embedded system in case of power-down / 
+> cold reset.
+
+  Perhaps you're better off then to use an actual readonly filesystem, like 
+erofs or squashfs? You have to make sure the corresponding kernel options are 
+enabled, of course.
+
+  Regards,
+  Arnout
+
+> 
+> Beyond the default configuration, the rootfs also contains ntp client, httpd, 
+> pci tools.
+> 
+> Thank you,
+> Zvika
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
