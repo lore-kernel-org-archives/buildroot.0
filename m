@@ -1,70 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A17FBECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 09:54:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD3A4C54EE9
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 09:56:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 46CBC40121;
-	Sat, 17 Sep 2022 09:54:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46CBC40121
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E0844194D;
+	Sat, 17 Sep 2022 09:56:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E0844194D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3QHRLpmuStUt; Sat, 17 Sep 2022 09:54:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HNSEgWCkRiLG; Sat, 17 Sep 2022 09:56:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8FBE740223;
-	Sat, 17 Sep 2022 09:54:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FBE740223
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 73A741BF82D
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:54:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33E58418FF;
+	Sat, 17 Sep 2022 09:56:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33E58418FF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A2691BF82D
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4EEC8610FA
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:54:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EEC8610FA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 464518431B
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:56:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 464518431B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O0lO9_0bzgDR for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 09:54:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F362D6110E
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F362D6110E
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 09:54:01 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A3C1A1C0008;
- Sat, 17 Sep 2022 09:53:59 +0000 (UTC)
-Date: Sat, 17 Sep 2022 11:53:58 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Oocoh6oVnJ40 for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 09:56:38 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D5BB84316
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 09:56:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D5BB84316
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id 69BEE8416B; Sat, 17 Sep 2022 09:56:38 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220917115358.7207b411@windsurf>
-In-Reply-To: <20220911213904.189808-1-fontaine.fabrice@gmail.com>
-References: <20220911213904.189808-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663408440;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CpyPbALguBIEKW3hbLyL4/V7btrCKbz8rRrAxCnJJKY=;
- b=CJnzobJVk28t8sxp9NyyAl0EMLttb4FDR2Uoe3cM53VSnrgjGAxPwceYK0uCm096njqrDe
- qgd4FhP4ZuPuTy7xLFRpVTDIzvBBK36NI0T9EjDruPv9asWR4vUKngQTUqFvOngM/BhwK/
- BUe5uoCLHqnxgR2lFnjJJZ41MY9wMtt5uIAtoBlVWjcMX9ogl75zwz5mmx8pIOYKAT+cRc
- NmWaf3mX59V0fuRk+tbZXr8lJfMr/YZ7aQGd9ggoe1NVIi88GUalXo6zUAV6xyYzMRyJJY
- 3Mor4QxDG2Ge0q+dKoL5AAbppPZz864ALEheOyHp1CLzky6IsvJCBtGJ23gLCA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CJnzobJV
-Subject: Re: [Buildroot] [PATCH 1/1] package/libqb: bump to version 2.0.6
+To: buildroot@buildroot.org
+Date: Sat, 17 Sep 2022 11:55:17 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2ee1bd7bb2e8d01f4ddca3fb1127ec729be1c9bf
+X-Git-Newrev: a99f1ee0f68035530247b3dfc1c054eb23549403
+X-Patchwork-Hint: ignore
+Message-Id: <20220917095638.69BEE8416B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gpsd: remove obsolete config option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,32 +56,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kamel Bouhara <kamel.bouhara@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 11 Sep 2022 23:39:04 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a99f1ee0f68035530247b3dfc1c054eb23549403
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/ClusterLabs/libqb/releases/tag/v2.0.6
-> https://github.com/ClusterLabs/libqb/releases/tag/v2.0.5
-> https://github.com/ClusterLabs/libqb/releases/tag/v2.0.4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libqb/libqb.hash | 4 ++--
->  package/libqb/libqb.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+The oldstyle option has been removed a while ago now:
+    2015-02-22 a5a123b4f3b0 Feature removal - delete last remnants of
+                            old pre-JSON protocol from libgps.
 
-Applied to master, thanks.
+Drop it from Buildroot now.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy       | 6 ++++++
+ package/gpsd/Config.in | 3 ---
+ package/gpsd/gpsd.mk   | 3 ---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3a7c49e339..631b31689b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2022.11"
+ 
++config BR2_PACKAGE_GPSD_OLDSTYLE
++	bool "gpsd oldstyle removed"
++	select BR2_LEGACY
++	help
++	  gpsd oldstyle option has been removed by upstream in 2015.
++
+ config BR2_GDB_VERSION_9_2
+ 	bool "gdb 9.2 removed"
+ 	help
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index b66d0952dd..126a907aa2 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -31,9 +31,6 @@ comment "Features"
+ config BR2_PACKAGE_GPSD_CLIENT_DEBUG
+ 	bool "client debugging support"
+ 
+-config BR2_PACKAGE_GPSD_OLDSTYLE
+-	bool "oldstyle (pre-JSON) protocol support"
+-
+ config BR2_PACKAGE_GPSD_PROFILING
+ 	bool "profiling support"
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 4388b7e24d..dec2371f68 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -168,9 +168,6 @@ endif
+ ifeq ($(BR2_PACKAGE_GPSD_SQUELCH),y)
+ GPSD_SCONS_OPTS += squelch=yes
+ endif
+-ifneq ($(BR2_PACKAGE_GPSD_OLDSTYLE),y)
+-GPSD_SCONS_OPTS += oldstyle=no
+-endif
+ ifeq ($(BR2_PACKAGE_GPSD_PROFILING),y)
+ GPSD_SCONS_OPTS += profiling=yes
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
