@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1F6EC54EE9
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 09:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80964C54EE9
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 09:30:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 597B3842F6;
-	Sat, 17 Sep 2022 09:18:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 597B3842F6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08BDB610FA;
+	Sat, 17 Sep 2022 09:30:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08BDB610FA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7LTErJoBa1aQ; Sat, 17 Sep 2022 09:18:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Yp6spXhaYs_3; Sat, 17 Sep 2022 09:30:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7FF018403A;
-	Sat, 17 Sep 2022 09:18:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FF018403A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B3AE1BF82D
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:18:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F154B60BC7;
+	Sat, 17 Sep 2022 09:30:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F154B60BC7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BFCB1BF82D
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:30:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2744A8403A
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:18:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2744A8403A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3460B60BC7
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 09:30:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3460B60BC7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0hCsegvWPIGh for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 09:18:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OJK2dWFyTVNm for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 09:30:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D45D83E0A
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 09:18:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D45D83E0A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C6F560B51
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 09:30:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C6F560B51
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 453DA840F4; Sat, 17 Sep 2022 09:18:19 +0000 (UTC)
+ id F3D8384110; Sat, 17 Sep 2022 09:30:11 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 11:16:06 +0200
+Date: Sat, 17 Sep 2022 11:18:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8ba9b47d6bfca6adbad8d5e37d7c4747722719f3
-X-Git-Newrev: adaf397f0bda533194b1975d23caa6e8a4514875
+X-Git-Oldrev: adaf397f0bda533194b1975d23caa6e8a4514875
+X-Git-Newrev: dde7b6dfacbd18d09dc3a33559ffd1efc7f87cfd
 X-Patchwork-Hint: ignore
-Message-Id: <20220917091819.453DA840F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnftnl: bump to version 1.2.3
+Message-Id: <20220917093011.F3D8384110@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libldns: bump to version 1.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +62,152 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adaf397f0bda533194b1975d23caa6e8a4514875
+commit: https://git.buildroot.net/buildroot/commit/?id=dde7b6dfacbd18d09dc3a33559ffd1efc7f87cfd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://www.netfilter.org/projects/libnftnl/files/changes-libnftnl-1.2.2.txt
-https://www.netfilter.org/projects/libnftnl/files/changes-libnftnl-1.2.3.txt
+Drop patch (already in version)
+
+https://github.com/NLnetLabs/ldns/blob/1.8.3/Changelog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnftnl/libnftnl.hash | 2 +-
- package/libnftnl/libnftnl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...001-Use-accessors-for-DSA-and-RSA-objects.patch | 96 ----------------------
+ package/libldns/libldns.hash                       |  8 +-
+ package/libldns/libldns.mk                         |  2 +-
+ 3 files changed, 5 insertions(+), 101 deletions(-)
 
-diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
-index 0a183eedcf..113110fc1b 100644
---- a/package/libnftnl/libnftnl.hash
-+++ b/package/libnftnl/libnftnl.hash
-@@ -1,3 +1,3 @@
- # From http://www.netfilter.org/projects/libnftnl/downloads.html
--sha256  7508a5c414fab13e3cb3ce8262d0ce4f02c1590a8e4f8628ab497b5b4585937c  libnftnl-1.2.1.tar.bz2
-+sha256  e916ea9b79f9518560b9a187251a7c042442a9ecbce7f36be7908888605d0255  libnftnl-1.2.3.tar.bz2
- sha256  98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24  COPYING
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index 7ba1158154..fd87f70091 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
+diff --git a/package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch b/package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch
+deleted file mode 100644
+index f7ebbbf8b2..0000000000
+--- a/package/libldns/0001-Use-accessors-for-DSA-and-RSA-objects.patch
++++ /dev/null
+@@ -1,96 +0,0 @@
+-From 887d618239312cc8c11e41c45492eee02a8f28a2 Mon Sep 17 00:00:00 2001
+-From: Theo Buehler <tb@openbsd.org>
+-Date: Tue, 11 Jan 2022 21:14:24 +0100
+-Subject: [PATCH] Use accessors for DSA and RSA objects
+-
+-In the upcoming LibreSSL version 3.5, the DSA and RSA structs will
+-become opaque, so we should use the OpenSSL 1.1 setters and getters
+-to fix the build.  The relevant API has been available since
+-LibreSSL 2.7. The last LibreSSL version (2.6) not having these
+-accessors was EOL late 2018, so no users should be affected by this
+-change.
+-
+-[Retrieved from:
+-https://github.com/NLnetLabs/ldns/commit/887d618239312cc8c11e41c45492eee02a8f28a2]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- dnssec.c   | 4 ++--
+- host2str.c | 4 ++--
+- keys.c     | 6 +++---
+- 3 files changed, 7 insertions(+), 7 deletions(-)
+-
+-diff --git a/dnssec.c b/dnssec.c
+-index 63fece52..fbaa518a 100644
+---- a/dnssec.c
+-+++ b/dnssec.c
+-@@ -381,7 +381,7 @@ ldns_key_buf2dsa_raw(const unsigned char* key, size_t len)
+- 		BN_free(Y);
+- 		return NULL;
+- 	}
+--#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+- #ifndef S_SPLINT_S
+- 	dsa->p = P;
+- 	dsa->q = Q;
+-@@ -468,7 +468,7 @@ ldns_key_buf2rsa_raw(const unsigned char* key, size_t len)
+- 		BN_free(modulus);
+- 		return NULL;
+- 	}
+--#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+- #ifndef S_SPLINT_S
+- 	rsa->n = modulus;
+- 	rsa->e = exponent;
+-diff --git a/host2str.c b/host2str.c
+-index a207a913..634c5676 100644
+---- a/host2str.c
+-+++ b/host2str.c
+-@@ -2451,7 +2451,7 @@ ldns_key2buffer_str(ldns_buffer *output, const ldns_key *k)
+- 					const BIGNUM *n=NULL, *e=NULL, *d=NULL,
+- 						*p=NULL, *q=NULL, *dmp1=NULL,
+- 						*dmq1=NULL, *iqmp=NULL;
+--#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+- 					n = rsa->n;
+- 					e = rsa->e;
+- 					d = rsa->d;
+-@@ -2504,7 +2504,7 @@ ldns_key2buffer_str(ldns_buffer *output, const ldns_key *k)
+- 				if(1) {
+- 					const BIGNUM *p=NULL, *q=NULL, *g=NULL,
+- 						*priv_key=NULL, *pub_key=NULL;
+--#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+- #ifndef S_SPLINT_S
+- 					p = dsa->p;
+- 					q = dsa->q;
+-diff --git a/keys.c b/keys.c
+-index 91a3dffd..78bea972 100644
+---- a/keys.c
+-+++ b/keys.c
+-@@ -861,7 +861,7 @@ ldns_key_new_frm_fp_rsa_l(FILE *f, int *line_nr)
+- 	}
+- #endif /* splint */
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+- # ifndef S_SPLINT_S
+- 	rsa->n = n;
+- 	rsa->e = e;
+-@@ -982,7 +982,7 @@ ldns_key_new_frm_fp_dsa_l(FILE *f, ATTR_UNUSED(int *line_nr))
+- 	}
+- #endif /* splint */
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+- # ifndef S_SPLINT_S
+- 	dsa->p = p;
+- 	dsa->q = q;
+-@@ -1660,7 +1660,7 @@ ldns_key_rsa2bin(unsigned char *data, RSA *k, uint16_t *size)
+- 	if (!k) {
+- 		return false;
+- 	}
+--#if OPENSSL_VERSION_NUMBER < 0x10100000 || defined(HAVE_LIBRESSL)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000 || (defined(HAVE_LIBRESSL) && LIBRESSL_VERSION_NUMBER < 0x20700000)
+- 	n = k->n;
+- 	e = k->e;
+- #else
+diff --git a/package/libldns/libldns.hash b/package/libldns/libldns.hash
+index cab8b7dbdf..ff86ae348e 100644
+--- a/package/libldns/libldns.hash
++++ b/package/libldns/libldns.hash
+@@ -1,7 +1,7 @@
+-# From http://www.nlnetlabs.nl/downloads/ldns/ldns-1.8.1.tar.gz.sha1
+-sha1  df19a0404a608821b571525214a18988bc88bb46  ldns-1.8.1.tar.gz
+-# From http://www.nlnetlabs.nl/downloads/ldns/ldns-1.8.1.tar.gz.sha256
+-sha256  958229abce4d3aaa19a75c0d127666564b17216902186e952ca4aef47c6d7fa3  ldns-1.8.1.tar.gz
++# From http://www.nlnetlabs.nl/downloads/ldns/ldns-1.8.3.tar.gz.sha1
++sha1  2796cc49636f68260c9662b60d5a7c9e6eed195c  ldns-1.8.3.tar.gz
++# From http://www.nlnetlabs.nl/downloads/ldns/ldns-1.8.3.tar.gz.sha256
++sha256  c3f72dd1036b2907e3a56e6acf9dfb2e551256b3c1bbd9787942deeeb70e7860  ldns-1.8.3.tar.gz
+ 
+ # Hash for license file:
+ sha256  9e0b1505c358d1a7c79555ee8bd1acbe2985dbc74dd81f3697cebf2161e922e6  LICENSE
+diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+index 86e7c0eafc..06564e3d9f 100644
+--- a/package/libldns/libldns.mk
++++ b/package/libldns/libldns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNFTNL_VERSION = 1.2.1
-+LIBNFTNL_VERSION = 1.2.3
- LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
- LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
- LIBNFTNL_LICENSE = GPL-2.0+
+-LIBLDNS_VERSION = 1.8.1
++LIBLDNS_VERSION = 1.8.3
+ LIBLDNS_SOURCE = ldns-$(LIBLDNS_VERSION).tar.gz
+ LIBLDNS_SITE = http://www.nlnetlabs.nl/downloads/ldns
+ LIBLDNS_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
