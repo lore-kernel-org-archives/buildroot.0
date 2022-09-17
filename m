@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8778ECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7507ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85B916111E;
-	Sat, 17 Sep 2022 15:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85B916111E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93E3881404;
+	Sat, 17 Sep 2022 15:53:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93E3881404
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dYTqckW8B53S; Sat, 17 Sep 2022 15:53:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5wKEG46vGZFb; Sat, 17 Sep 2022 15:53:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0AB960AF6;
-	Sat, 17 Sep 2022 15:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0AB960AF6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 85DAA1BF388
+	by smtp1.osuosl.org (Postfix) with ESMTP id D735F813EE;
+	Sat, 17 Sep 2022 15:53:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D735F813EE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A02951BF968
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6175140BB7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A5CB409AB
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6175140BB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A5CB409AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A4HSkQH9ixtN for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8otEJMPJ36Kf for <buildroot@lists.busybox.net>;
  Sat, 17 Sep 2022 15:53:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D19B40420
+ by smtp4.osuosl.org (Postfix) with ESMTP id 932D440918
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:53:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D19B40420
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 932D440918
 Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 8B73C845A2; Sat, 17 Sep 2022 15:53:22 +0000 (UTC)
+ id 81C6C8459F; Sat, 17 Sep 2022 15:53:22 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 17:53:15 +0200
+Date: Sat, 17 Sep 2022 17:53:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a53271b77e21e90e46e61a5d0afd9ab9544b25c
-X-Git-Newrev: 5b71d1015e26f9815968a0e58e55aa31dbb115d5
+X-Git-Oldrev: 17b6372790c33fa317ab6134ad6d5b8882b9cedd
+X-Git-Newrev: 4a53271b77e21e90e46e61a5d0afd9ab9544b25c
 X-Patchwork-Hint: ignore
-Message-Id: <20220917155322.8B73C845A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-cli: bump to version
+Message-Id: <20220917155322.81C6C8459F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-engine: bump to version
  20.10.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b71d1015e26f9815968a0e58e55aa31dbb115d5
+commit: https://git.buildroot.net/buildroot/commit/?id=4a53271b77e21e90e46e61a5d0afd9ab9544b25c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 https://github.com/moby/moby/releases/tag/v20.10.18
@@ -71,32 +71,32 @@ https://github.com/moby/moby/releases/tag/v20.10.18
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 87c5d949c6..8af47adc63 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 2cf2f4a75e..e1c29f0926 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  ab2b59c2302017fea9ad2f70827e8a6f0204b557ce28e66bcb80fea262c9fbdc  docker-cli-20.10.17.tar.gz
-+sha256  87ba64f76d3bb98666fa44552c3eb0b1c10e5e9c43010e8dbc180ba22690413a  docker-cli-20.10.18.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 75507ed48e..707069512e 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+-sha256  061cf8579aa3c813c353c80fa480744e2f6cca2e6392f546bd0942a6a10c7a14  docker-engine-20.10.17.tar.gz
++sha256  9907aaaf39fb1c2c3fd427192e4a63d7adf8ddc9fb0e29c692a6ca10de9c34f6  docker-engine-20.10.18.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index fb489c0f8d..246419ec4f 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = 20.10.17
-+DOCKER_CLI_VERSION = 20.10.18
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+-DOCKER_ENGINE_VERSION = 20.10.17
++DOCKER_ENGINE_VERSION = 20.10.18
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
  
- DOCKER_CLI_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
