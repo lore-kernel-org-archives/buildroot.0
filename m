@@ -1,71 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB1A3C54EE9
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:49:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1E59ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:18:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D521843DE;
-	Sat, 17 Sep 2022 14:49:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D521843DE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 31147606A9;
+	Sat, 17 Sep 2022 15:18:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31147606A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Hm8plLjoqgn; Sat, 17 Sep 2022 14:49:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EeQuJvbl5HKa; Sat, 17 Sep 2022 15:18:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE360843DC;
-	Sat, 17 Sep 2022 14:48:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE360843DC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28CF91BF575
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:48:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F25660593;
+	Sat, 17 Sep 2022 15:18:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F25660593
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EC93F1BF388
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05A3F843DB
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:48:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05A3F843DB
+ by smtp3.osuosl.org (Postfix) with ESMTP id C81AC60B45
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:18:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C81AC60B45
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TdUZOAvC313e for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 14:48:57 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBDDA842DB
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DBDDA842DB
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:48:56 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 2E6C460005;
- Sat, 17 Sep 2022 14:48:55 +0000 (UTC)
-Date: Sat, 17 Sep 2022 16:48:53 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YilB-oyxLdSQ for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 15:18:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F1E2F60AD5
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:18:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1E2F60AD5
+Received: by busybox.osuosl.org (Postfix, from userid 4045)
+ id DAF9684459; Sat, 17 Sep 2022 15:18:17 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: luca.ceresoli@bootlin.com
-Message-ID: <20220917164853.33923c55@windsurf>
-In-Reply-To: <20220917135626.971371-1-luca.ceresoli@bootlin.com>
-References: <20220917135626.971371-1-luca.ceresoli@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663426135;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=eroeM/th2a6MenIyPM7n9IBakyQnCdKTQ8TsLzCx5QA=;
- b=RU88O9yJGnQ/pTMrWC30DLa1KD8xeGcdxxWsTqIjRduN7btoHGgo6100rK+t57/xACKyjz
- /NV0u5iLtBZsoxfgu3UENxsBWdPxwUuCyf8+EOn/+EGe4aF2P4Lu0WuIkdwEzckhHBF6ev
- jqzVdp5yASwDL9U+K5VMjQb8YzY/Lu1yZHjxxSDijTgK+wxC3JlKaYdj1FnY2jM9tH1P+X
- zBvV+rbnlCTGVkhfRsUGNH9NQWxrIGVqCd78dyFe4jmylFOjAvdr2fLWQ4dOtsr7FK+LoQ
- qTHbLEYt1u+nTyRJWjHEJebg9cva9PCE3mYOUO0VgsvZt7/g2T0zdqj8agAlsA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RU88O9yJ
-Subject: Re: [Buildroot] [PATCH] package/unzip: update security patches from
- Debian
+To: buildroot@buildroot.org
+Date: Sat, 17 Sep 2022 17:17:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7c39958ba1ad9f0b760c72004ceb445e72d7ef86
+X-Git-Newrev: f0d1daaa7fcc12b8dcd6e47ce75597d16aa6f745
+X-Patchwork-Hint: ignore
+Message-Id: <20220917151817.DAF9684459@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpeas: bump to version 1.32.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,32 +56,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 17 Sep 2022 15:56:26 +0200
-luca.ceresoli@bootlin.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f0d1daaa7fcc12b8dcd6e47ce75597d16aa6f745
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> 
-> Fixes CVE-2022-0529 and CVE-2022-0530.
-> 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> ---
->  package/unzip/unzip.hash |  2 +-
->  package/unzip/unzip.mk   | 10 ++++++----
->  2 files changed, 7 insertions(+), 5 deletions(-)
+https://gitlab.gnome.org/GNOME/libpeas/-/blob/libpeas-1.32.0/NEWS
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libpeas/libpeas.hash | 4 ++--
+ package/libpeas/libpeas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libpeas/libpeas.hash b/package/libpeas/libpeas.hash
+index 2b030c01c5..c503558f85 100644
+--- a/package/libpeas/libpeas.hash
++++ b/package/libpeas/libpeas.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.gnome.org/pub/GNOME/sources/libpeas/1.30/libpeas-1.30.0.sha256sum
+-sha256  0bf5562e9bfc0382a9dcb81f64340787542568762a3a367d9d90f6185898b9a3  libpeas-1.30.0.tar.xz
++# From https://ftp.gnome.org/pub/GNOME/sources/libpeas/1.32/libpeas-1.32.0.sha256sum
++sha256  d625520fa02e8977029b246ae439bc218968965f1e82d612208b713f1dcc3d0e  libpeas-1.32.0.tar.xz
+ # Locally calculated
+ sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
+diff --git a/package/libpeas/libpeas.mk b/package/libpeas/libpeas.mk
+index 097cc860eb..5550162e04 100644
+--- a/package/libpeas/libpeas.mk
++++ b/package/libpeas/libpeas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPEAS_VERSION_MAJOR = 1.30
++LIBPEAS_VERSION_MAJOR = 1.32
+ LIBPEAS_VERSION = $(LIBPEAS_VERSION_MAJOR).0
+ LIBPEAS_SOURCE = libpeas-$(LIBPEAS_VERSION).tar.xz
+ LIBPEAS_SITE = http://ftp.gnome.org/pub/gnome/sources/libpeas/$(LIBPEAS_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
