@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C6CC6FA86
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 06:45:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8613BECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 06:46:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8A4E4018F;
-	Sat, 17 Sep 2022 06:45:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8A4E4018F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FF7B84025;
+	Sat, 17 Sep 2022 06:46:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FF7B84025
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IEJqFRiyHIJP; Sat, 17 Sep 2022 06:45:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KTqHwUj6p-dz; Sat, 17 Sep 2022 06:46:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C1C9F4018B;
-	Sat, 17 Sep 2022 06:45:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1C9F4018B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 64C2E1BF846
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:45:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 364F78401E;
+	Sat, 17 Sep 2022 06:46:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 364F78401E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8898C1BF846
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:46:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F13641CC6
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:45:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F13641CC6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5F36483FEE
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 06:46:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F36483FEE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5xeMd16iPRcH for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 06:45:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Bclh680B169l for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 06:46:06 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C57BC41CA2
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C57BC41CA2
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 06:45:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CFC283FEB
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6CFC283FEB
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 06:46:06 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id BA9CC20005;
- Sat, 17 Sep 2022 06:45:16 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 456981C0006;
+ Sat, 17 Sep 2022 06:46:02 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oZRZj-0096HG-7f; Sat, 17 Sep 2022 08:45:15 +0200
+ id 1oZRaU-0096Kz-6A; Sat, 17 Sep 2022 08:46:02 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20220816204259.3F34B878DE@busybox.osuosl.org>
-Date: Sat, 17 Sep 2022 08:45:15 +0200
-In-Reply-To: <20220816204259.3F34B878DE@busybox.osuosl.org> (Yann E. MORIN's
- message of "Tue, 16 Aug 2022 22:55:19 +0200")
-Message-ID: <875yhm5wjo.fsf@dell.be.48ers.dk>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20220817061157.4120650-1-james.hilliard1@gmail.com>
+Date: Sat, 17 Sep 2022 08:46:02 +0200
+In-Reply-To: <20220817061157.4120650-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Wed, 17 Aug 2022 00:11:57 -0600")
+Message-ID: <871qsa5wid.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [git commit]
- support/testing/tests/package/test_python_boto3: use ext2 instead of cpio
+Subject: Re: [Buildroot] [PATCH v3 1/1] utils/scanpypi: restore modules
+ search path in case of error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,30 +70,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=a9df206190e5316808b90314e4254ba9e849e403
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > We extend the modules search path to be able to load the package
+ > metadata. In case that fails, we need to restore it to its previous
+ > state to avoid leaking the path further.
 
- > The CPIO filesystem generated by the test_python_boto3 test is too
- > large, and doesn't fit as an initramfs in the 256MB of RAM available
- > in the versatilepb machine. This causes a "Initramfs unpacking failed:
- > write error" when booting, and many files being missing from the root
- > filesystem, ultimately causing the test to fail.
-
- > It would make sense to switch all test cases to use ext2 + a
- > hard-drive, but for now, let's fix the few test cases that are causing
- > problems.
-
- > Fixes:
-
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/2884635041
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > [yann.morin.1998@free.fr:
- >   - drop superfluous# BR2_TARGET_ROOTFS_TAR is not set
- > ]
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > ---
+ > Changes v2 -> v3:
+ >   - add more detailed commit log
 
 Committed to 2022.05.x and 2022.02.x, thanks.
 
