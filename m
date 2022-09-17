@@ -4,48 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01760ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:48:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB1A3C54EE9
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:49:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99FDD81763;
-	Sat, 17 Sep 2022 14:48:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99FDD81763
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D521843DE;
+	Sat, 17 Sep 2022 14:49:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D521843DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iRPWS7jsighm; Sat, 17 Sep 2022 14:48:31 +0000 (UTC)
+	with ESMTP id 4Hm8plLjoqgn; Sat, 17 Sep 2022 14:49:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D309581380;
-	Sat, 17 Sep 2022 14:48:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D309581380
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4805E1BF575
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:48:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE360843DC;
+	Sat, 17 Sep 2022 14:48:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE360843DC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 28CF91BF575
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:48:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E19460A83
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:48:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E19460A83
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05A3F843DB
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:48:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05A3F843DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y_jyF03CyCdP for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 14:48:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4252C60ACA
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4252C60ACA
-Received: by busybox.osuosl.org (Postfix, from userid 4045)
- id 2EFA984452; Sat, 17 Sep 2022 14:48:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TdUZOAvC313e for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 14:48:57 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBDDA842DB
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DBDDA842DB
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:48:56 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 2E6C460005;
+ Sat, 17 Sep 2022 14:48:55 +0000 (UTC)
+Date: Sat, 17 Sep 2022 16:48:53 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 16:46:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f797baba2b09262fb113bf41067a5f24ea49b3fd
-X-Git-Newrev: 7c39958ba1ad9f0b760c72004ceb445e72d7ef86
-X-Patchwork-Hint: ignore
-Message-Id: <20220917144827.2EFA984452@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/unzip: update security patches
- from Debian
+To: luca.ceresoli@bootlin.com
+Message-ID: <20220917164853.33923c55@windsurf>
+In-Reply-To: <20220917135626.971371-1-luca.ceresoli@bootlin.com>
+References: <20220917135626.971371-1-luca.ceresoli@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1663426135;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=eroeM/th2a6MenIyPM7n9IBakyQnCdKTQ8TsLzCx5QA=;
+ b=RU88O9yJGnQ/pTMrWC30DLa1KD8xeGcdxxWsTqIjRduN7btoHGgo6100rK+t57/xACKyjz
+ /NV0u5iLtBZsoxfgu3UENxsBWdPxwUuCyf8+EOn/+EGe4aF2P4Lu0WuIkdwEzckhHBF6ev
+ jqzVdp5yASwDL9U+K5VMjQb8YzY/Lu1yZHjxxSDijTgK+wxC3JlKaYdj1FnY2jM9tH1P+X
+ zBvV+rbnlCTGVkhfRsUGNH9NQWxrIGVqCd78dyFe4jmylFOjAvdr2fLWQ4dOtsr7FK+LoQ
+ qTHbLEYt1u+nTyRJWjHEJebg9cva9PCE3mYOUO0VgsvZt7/g2T0zdqj8agAlsA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RU88O9yJ
+Subject: Re: [Buildroot] [PATCH] package/unzip: update security patches from
+ Debian
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,67 +77,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c39958ba1ad9f0b760c72004ceb445e72d7ef86
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 17 Sep 2022 15:56:26 +0200
+luca.ceresoli@bootlin.com wrote:
 
-Fixes CVE-2022-0529 and CVE-2022-0530.
+> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> 
+> Fixes CVE-2022-0529 and CVE-2022-0530.
+> 
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> ---
+>  package/unzip/unzip.hash |  2 +-
+>  package/unzip/unzip.mk   | 10 ++++++----
+>  2 files changed, 7 insertions(+), 5 deletions(-)
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/unzip/unzip.hash |  2 +-
- package/unzip/unzip.mk   | 10 ++++++----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
-index 8b3f275533..bbf4f7d71f 100644
---- a/package/unzip/unzip.hash
-+++ b/package/unzip/unzip.hash
-@@ -1,6 +1,6 @@
- # From https://snapshot.debian.org/archive/debian/20210110T204103Z/pool/main/u/unzip/unzip_6.0-26.dsc
- sha256  036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37  unzip_6.0.orig.tar.gz
--sha256  88cb7c0f1fd13252b662dfd224b64b352f9e75cd86389557fcb23fa6d2638599  unzip_6.0-26.debian.tar.xz
-+sha256  67bde7c71d52afd61aa936d4415c8d12fd90ca26e9637a3cd67cae9b71298c12  unzip_6.0-27.debian.tar.xz
- 
- # Locally computed:
- sha256  7469b81d5d29ac4fd670f7c86ba0cb9fa34f137a2d4d5198437d92ddf918984b  LICENSE
-diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-index e8c9366a1b..44cc2013fb 100644
---- a/package/unzip/unzip.mk
-+++ b/package/unzip/unzip.mk
-@@ -6,13 +6,13 @@
- 
- UNZIP_VERSION = 6.0
- UNZIP_SOURCE = unzip_$(UNZIP_VERSION).orig.tar.gz
--UNZIP_PATCH = unzip_$(UNZIP_VERSION)-26.debian.tar.xz
--UNZIP_SITE = https://snapshot.debian.org/archive/debian/20210110T204103Z/pool/main/u/unzip
-+UNZIP_PATCH = unzip_$(UNZIP_VERSION)-27.debian.tar.xz
-+UNZIP_SITE = https://snapshot.debian.org/archive/debian/20220916T090657Z/pool/main/u/unzip
- UNZIP_LICENSE = Info-ZIP
- UNZIP_LICENSE_FILES = LICENSE
- UNZIP_CPE_ID_VENDOR = unzip_project
- 
--# unzip_$(UNZIP_VERSION)-26.debian.tar.xz has patches to fix:
-+# unzip_$(UNZIP_VERSION)-27.debian.tar.xz has patches to fix:
- UNZIP_IGNORE_CVES = \
- 	CVE-2014-8139 \
- 	CVE-2014-8140 \
-@@ -24,6 +24,8 @@ UNZIP_IGNORE_CVES = \
- 	CVE-2016-9844 \
- 	CVE-2018-18384 \
- 	CVE-2018-1000035 \
--	CVE-2019-13232
-+	CVE-2019-13232 \
-+	CVE-2022-0529 \
-+	CVE-2022-0530
- 
- $(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
