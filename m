@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24B20C54EE9
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72A96ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 14:44:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6D2141BEA;
-	Sat, 17 Sep 2022 14:43:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6D2141BEA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F82441D80;
+	Sat, 17 Sep 2022 14:44:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F82441D80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ezoVTA7eaiNP; Sat, 17 Sep 2022 14:43:55 +0000 (UTC)
+	with ESMTP id h02wI2xpEV7k; Sat, 17 Sep 2022 14:44:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D108418FF;
-	Sat, 17 Sep 2022 14:43:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D108418FF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BD5D61BF575
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:43:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E127F41DB3;
+	Sat, 17 Sep 2022 14:44:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E127F41DB3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ED3DC1BF575
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9980682B97
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:43:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9980682B97
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99B3C418BC
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 14:43:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99B3C418BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CzdeJpWmnXJI for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 14:43:39 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D9CF82965
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6D9CF82965
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:43:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ub4JlQ-VFDJA for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 14:43:45 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DCCE41866
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4DCCE41866
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 14:43:45 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4E39CFF805;
- Sat, 17 Sep 2022 14:43:37 +0000 (UTC)
-Date: Sat, 17 Sep 2022 16:43:35 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 4029E240008;
+ Sat, 17 Sep 2022 14:43:42 +0000 (UTC)
+Date: Sat, 17 Sep 2022 16:43:40 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220917164335.6e2ee1f8@windsurf>
-In-Reply-To: <20220911230211.3730844-1-james.hilliard1@gmail.com>
-References: <20220911230211.3730844-1-james.hilliard1@gmail.com>
+Message-ID: <20220917164340.2e19a6b9@windsurf>
+In-Reply-To: <20220911230524.3733051-1-james.hilliard1@gmail.com>
+References: <20220911230524.3733051-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663425817;
+ d=bootlin.com; s=gm1; t=1663425822;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=dfODIYVyOhJDVHNBAMj3LINTWyZKMxdfZ5WQr8x0oSU=;
- b=CE3wy6uQxBke8WOweN+yl/+8fVTfvLQZ3msIbCPjDD9b8iw4FWvuQoSeoJweOZPX5lB9QM
- 6SUSm4B2/mFjkMSHCIUJZHp5IAPqSDMrnO46oa8J3outhTS92334FhSJPgGMtHZY3ZwhYJ
- 45WfntqQ8qQZ4Kw5y5gkEigKHxL+K4IxRJWsSbKXIqVlBTGcDM4l2UZ/fli2a8v3nvWtNo
- S+DUgu8d47c2MB2Tw0LWdVQE2r1wbh896qk6YeG6rPAt4q6q03irsKqxvkKv6g6s23A86b
- XOTSVC7QdRikii+IRmco9b8s3/WwbbsjfQq5hMiesZ3fmViOpu6tK3tEK53dKA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=7LaNK1Pu9Ri1A7r/++f+8QQKU7XPYJH46mx5wqc/9Rs=;
+ b=nloiJtnlfJdS+bMLcfLYfVnpPbB0k81mPSkIWkH3yMLvTlvN+UQ0U3e4WiiCzvh1rRMLdE
+ 1nVEUNXMG6YAfAHUfd8vZzyHPncWA8cr6S8nZ5TirdgNgJbBWsAb2iYlIcjXaTrMfjgcpb
+ Z+SC0BNEBO371O53QeJNocR6P2nEK5/nWjzTJmQs6g8XO0BLXL1C1TqGJIvx6iufE0Th1L
+ v8H8R/8yOmMtppbIdp8li6hVl8oW0S/VigU8kKHvQsEsxPyPLJKzWlwKpzo0My7NDUr00l
+ 6k4A8gb2ZNDLUALWur1TRD4QAwQsLqVq/Tdpza1XmLL1IdOg8GGDVvRLBkk+AQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CE3wy6uQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-cryptography: bump to
- version 38.0.1
+ header.s=gm1 header.b=nloiJtnl
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-setuptools-rust: bump to
+ version 1.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,18 +83,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 11 Sep 2022 17:02:11 -0600
+On Sun, 11 Sep 2022 17:05:24 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Drop patch which is now upstream.
-> 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  ...id-OPENSSL_NO_PSK-defined-guard-7146.patch | 56 -------------------
->  .../python-cryptography.hash                  |  2 +-
->  .../python-cryptography.mk                    |  4 +-
->  3 files changed, 3 insertions(+), 59 deletions(-)
->  delete mode 100644 package/python-cryptography/0001-Remove-invalid-OPENSSL_NO_PSK-defined-guard-7146.patch
+>  package/python-setuptools-rust/python-setuptools-rust.hash | 4 ++--
+>  package/python-setuptools-rust/python-setuptools-rust.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
