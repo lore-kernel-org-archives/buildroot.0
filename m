@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF696ECAAD3
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 08:14:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71B07ECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 08:14:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A350960B51;
-	Sat, 17 Sep 2022 08:14:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A350960B51
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27363842D0;
+	Sat, 17 Sep 2022 08:14:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27363842D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qYxB7V59Jip7; Sat, 17 Sep 2022 08:14:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CBEX5QmwKGgh; Sat, 17 Sep 2022 08:14:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E960360D4E;
-	Sat, 17 Sep 2022 08:14:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E960360D4E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 82DBB1BF82F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DFD484080;
+	Sat, 17 Sep 2022 08:14:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DFD484080
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F16671BF82F
  for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:13:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D9C460D4E
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:13:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D9C460D4E
+ by smtp2.osuosl.org (Postfix) with ESMTP id A180A401A3
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 08:13:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A180A401A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SGsxbalorySh for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DbAS614pdA_B for <buildroot@lists.busybox.net>;
  Sat, 17 Sep 2022 08:13:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CF2DD60BE4
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE0184017A
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 08:13:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF2DD60BE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE0184017A
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id BD92983FBA; Sat, 17 Sep 2022 08:13:44 +0000 (UTC)
+ id AB6E283FAE; Sat, 17 Sep 2022 08:13:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 08:46:25 +0200
+Date: Sat, 17 Sep 2022 08:43:17 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 131db884ce6f0baeea612d5e9c1a0ba2a64c68c7
-X-Git-Newrev: 410bc6afcdc7975163481ce82dc235a506ebd5a6
+X-Git-Oldrev: acd0ee6d45ff40fa8b2770e749484de0e044127b
+X-Git-Newrev: 06a62ca64ed203c3630f02733636e3c49d28342c
 X-Patchwork-Hint: ignore
-Message-Id: <20220917081344.BD92983FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/postgresql:
- security bump version to 14.5
+Message-Id: <20220917081344.AB6E283FAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ support/testing/tests/package/test_python_botocore: use ext2 instead of
+ cpio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +64,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=410bc6afcdc7975163481ce82dc235a506ebd5a6
+commit: https://git.buildroot.net/buildroot/commit/?id=06a62ca64ed203c3630f02733636e3c49d28342c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Release notes:
-https://www.postgresql.org/about/news/postgresql-145-138-1212-1117-1022-and-15-beta-3-released-2496/
+The CPIO filesystem generated by the test_python_botocore test is too
+large, and doesn't fit as an initramfs in the 256MB of RAM available
+in the versatilepb machine. This causes a "Initramfs unpacking failed:
+write error" when booting, and many files being missing from the root
+filesystem, ultimately causing the test to fail.
 
-Fixes CVE-2022-2625:
-https://www.postgresql.org/support/security/CVE-2022-2625/
+It would make sense to switch all test cases to use ext2 + a
+hard-drive, but for now, let's fix the few test cases that are causing
+problems.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/2884635042
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998@free.fr:
+  - drop superfluous# BR2_TARGET_ROOTFS_TAR is not set
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 167cbd76eea17d5995f6e4f88e34d8b3f795cc33)
+(cherry picked from commit 0813ec1aa0650595f60bd64329d1ddf5d535d4fb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 5 ++---
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ support/testing/tests/package/test_python_botocore.py | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index b2e94195e1..8fdaadde99 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v14.4/postgresql-14.4.tar.bz2.sha256
--sha256  c23b6237c5231c791511bdc79098617d6852e9e3bdf360efd8b5d15a1a3d8f6a  postgresql-14.4.tar.bz2
--
-+# From https://ftp.postgresql.org/pub/source/v14.5/postgresql-14.5.tar.bz2.sha256
-+sha256  d4f72cb5fb857c9a9f75ec8cf091a1771272802f2178f0b2e65b7b6ff64f4a30  postgresql-14.5.tar.bz2
- # License file, Locally calculated
- sha256  f6d6616acdb598742e2a7c64fa0551c1c72c309d279fd2d90370e5fdd41c8945  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index c893f8026c..32a44bef0f 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/package/test_python_botocore.py b/support/testing/tests/package/test_python_botocore.py
+index 6336c5658f..48c2f3cc02 100644
+--- a/support/testing/tests/package/test_python_botocore.py
++++ b/support/testing/tests/package/test_python_botocore.py
+@@ -1,4 +1,5 @@
+ from tests.package.test_python import TestPythonPackageBase
++import os
  
--POSTGRESQL_VERSION = 14.4
-+POSTGRESQL_VERSION = 14.5
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ 
+ class TestPythonPy3Botocore(TestPythonPackageBase):
+@@ -7,6 +8,16 @@ class TestPythonPy3Botocore(TestPythonPackageBase):
+         """
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_BOTOCORE=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+         """
+     sample_scripts = ["tests/package/sample_python_botocore.py"]
+     timeout = 10
++
++    def login(self):
++        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-drive", "file=%s,if=scsi,format=raw" % ext2_file],
++                           kernel_cmdline=["rootwait", "root=/dev/sda"])
++        self.emulator.login()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
