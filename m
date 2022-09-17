@@ -1,59 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B992C6FA82
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 12:25:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B90DECAAD3
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 12:32:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5D4B41D86;
-	Sat, 17 Sep 2022 12:25:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5D4B41D86
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25A7C6111A;
+	Sat, 17 Sep 2022 12:32:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25A7C6111A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hu0wnkxtfhDI; Sat, 17 Sep 2022 12:25:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SQEJ6mtORZAY; Sat, 17 Sep 2022 12:32:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F36041D5E;
-	Sat, 17 Sep 2022 12:25:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F36041D5E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DF7E6110D;
+	Sat, 17 Sep 2022 12:32:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DF7E6110D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DC9451BF48C
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 12:25:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E8BEF1BF48C
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 12:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5CEB41D5E
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 12:25:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5CEB41D5E
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC13341DA1
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 12:32:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC13341DA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ehi_sjl7AEY1 for <buildroot@lists.busybox.net>;
- Sat, 17 Sep 2022 12:25:43 +0000 (UTC)
+ with ESMTP id dXHX-ro_GnzB for <buildroot@lists.busybox.net>;
+ Sat, 17 Sep 2022 12:32:51 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C25141D5D
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2C25141D5D
- for <buildroot@buildroot.org>; Sat, 17 Sep 2022 12:25:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 237A741D9F
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 237A741D9F
+ for <buildroot@buildroot.org>; Sat, 17 Sep 2022 12:32:50 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E28D31C0004;
- Sat, 17 Sep 2022 12:25:39 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id DA2EF100004;
+ Sat, 17 Sep 2022 12:32:47 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oZWt8-009Ggq-Lv; Sat, 17 Sep 2022 14:25:38 +0200
+ id 1oZX02-009H77-Ip; Sat, 17 Sep 2022 14:32:46 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20220607202828.1130778-1-fontaine.fabrice@gmail.com>
- <09686b20-b8ca-d698-7416-f24a8c01a376@mind.be>
-Date: Sat, 17 Sep 2022 14:25:38 +0200
-In-Reply-To: <09686b20-b8ca-d698-7416-f24a8c01a376@mind.be> (Arnout
- Vandecappelle's message of "Tue, 23 Aug 2022 22:58:46 +0200")
-Message-ID: <87leqi2nnh.fsf@dell.be.48ers.dk>
+To: Bram Vlerick <bram.vlerick@openpixelsystems.org>
+References: <20220816120718.3021545-1-bram.vlerick@openpixelsystems.org>
+Date: Sat, 17 Sep 2022 14:32:46 +0200
+In-Reply-To: <20220816120718.3021545-1-bram.vlerick@openpixelsystems.org>
+ (Bram Vlerick's message of "Tue, 16 Aug 2022 14:07:17 +0200")
+Message-ID: <87h7162nbl.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/jpeg: SIMD needs VSX with
- little endian
+Subject: Re: [Buildroot] [PATCH 1/2] board/freescale/common/imx: align
+ u-boot-spl to 4 bytes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,27 +63,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Bram" == Bram Vlerick <bram.vlerick@openpixelsystems.org> writes:
 
- > On 07/06/2022 22:28, Fabrice Fontaine wrote:
- >> SIMD needs VSX with little endian to avoid the following build failure:
- >> In file included from
- >> /nvmedata/autobuild/instance-12/output-1/build/jpeg-turbo-2.1.3/simd/powerpc/jccolor-altivec.c:25:
- >> /nvmedata/autobuild/instance-12/output-1/build/jpeg-turbo-2.1.3/simd/powerpc/jccolext-altivec.c: In function 'jsimd_rgb_ycc_convert_altivec':
- >> /nvmedata/autobuild/instance-12/output-1/build/jpeg-turbo-2.1.3/simd/powerpc/jsimd_altivec.h:93:26: warning: implicit declaration of function 'vec_vsx_ld'; did you mean 'vec_vsl'? [-Wimplicit-function-declaration]
- >> 93 | #define VEC_LD(a, b)     vec_vsx_ld(a, b)
- >> |                          ^~~~~~~~~~
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/be6d5ad0cee4ee19eb25e595d44555a1af6e073b
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > When enable DM for SPL binary, the DTB part of SPL may not 4 bytes aligned.
+ > If u-boot-spl is not aligned, the offset of the DDR firmware is not 4
+ > byte aligned when u-boot-spl-ddr.bin is created. This causes the ddr
+ > firmware to not be loaded correctly at boot.
 
- >  Applied to master, thanks.
+ > See imx-mkimage commit bba038d893046b44683182dba540f104dab80fe7 for
+ > implementation in imx-mkimage.
+
+ > Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
 
 Committed to 2022.05.x and 2022.02.x, thanks.
 
