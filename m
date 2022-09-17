@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E5CECAAA1
-	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:43:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A98ECAAA1
+	for <buildroot@archiver.kernel.org>; Sat, 17 Sep 2022 15:44:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4B9841737;
-	Sat, 17 Sep 2022 15:43:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4B9841737
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NfYDeqN5X3qi; Sat, 17 Sep 2022 15:43:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35B1741DC7;
-	Sat, 17 Sep 2022 15:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35B1741DC7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 981631BF388
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 282ED843DD
- for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 282ED843DD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9093883F93;
+	Sat, 17 Sep 2022 15:44:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9093883F93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VAfHs3YXglCe for <buildroot@lists.busybox.net>;
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qaIQpIG8FMt1; Sat, 17 Sep 2022 15:44:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1F2283E7E;
+	Sat, 17 Sep 2022 15:44:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1F2283E7E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4796C1BF388
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:41:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6731740BB7
+ for <buildroot@lists.busybox.net>; Sat, 17 Sep 2022 15:40:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6731740BB7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N_PDVCOu_SL3 for <buildroot@lists.busybox.net>;
  Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5833C843A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E26340919
  for <buildroot@buildroot.org>; Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5833C843A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E26340919
 Received: by busybox.osuosl.org (Postfix, from userid 4021)
- id 401EA8455D; Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
+ id 7F11A8455A; Sat, 17 Sep 2022 15:40:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 Sep 2022 17:24:35 +0200
+Date: Sat, 17 Sep 2022 17:34:47 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 536e4053e3897ee3a183730099e2527d9254fe56
-X-Git-Newrev: 6bfdddec35cd0bdc80d200cd9c9e947e2f3e8df2
+X-Git-Oldrev: b90558314aae7109e228143f0e06aed88aca7730
+X-Git-Newrev: d7e93c01e2cc155deb5a781c273de30305e9ba64
 X-Patchwork-Hint: ignore
-Message-Id: <20220917154057.401EA8455D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/webkitgtk:
- security bump to version 2.36.7
+Message-Id: <20220917154057.7F11A8455A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/squid: security
+ bump to version 5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bfdddec35cd0bdc80d200cd9c9e947e2f3e8df2
+commit: https://git.buildroot.net/buildroot/commit/?id=d7e93c01e2cc155deb5a781c273de30305e9ba64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Bugfix release, with a security patch for CVE-2022-32893.
-Release notes:
+Fix CVE-2021-46784: In Squid 3.x through 3.5.28, 4.x through 4.17, and
+5.x before 5.6, due to improper buffer management, a Denial of Service
+can occur when processing long Gopher server responses.
 
- https://webkitgtk.org/2022/08/07/webkitgtk2.36.6-released.html
- https://webkitgtk.org/2022/08/24/webkitgtk2.36.7-released.html
+https://github.com/squid-cache/squid/security/advisories/GHSA-f5cp-6rh3-284w
 
-Accompanying security advisory:
-
-  https://webkitgtk.org/security/WSA-2022-0008.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 99338a8ab6827b02ae988b32854b8f1efda88b88)
+(cherry picked from commit d3ef301f0c2d339eade3188e2a80ff8841ea935f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index ae86c97c0a..7c6d7d65b5 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.36.5.tar.xz.sums
--md5  a876da9d8906468f4e1e3d08729cdeec  webkitgtk-2.36.5.tar.xz
--sha1  49ff8873500a2ce82bad8879095277bb4dfd21de  webkitgtk-2.36.5.tar.xz
--sha256  d5532fa884c943dc48f1911473dd663aba407a3b35caa7b04bac1419b41e5908  webkitgtk-2.36.5.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.36.7.tar.xz.sums
-+md5  466351cf35e4f742590919380b5dee93  webkitgtk-2.36.7.tar.xz
-+sha1  36078148b6e0ef002f0279b25b1caf173f851ac8  webkitgtk-2.36.7.tar.xz
-+sha256  0c260cf2b32f0481d017670dfed1b61e554967cd067195606c9f9eb5fe731743  webkitgtk-2.36.7.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index b5b9be3778..d1c517452d 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index e18ed8961e..22c6db8c70 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v5/squid-5.3.tar.xz.asc
+-md5  9249f30169ab6600e53b4f9b8129b3b0  squid-5.3.tar.xz
+-sha1  d3a8310c725616fa7565d60f3bf8fdf5fa20b15a  squid-5.3.tar.xz
++# From http://www.squid-cache.org/Versions/v5/squid-5.6.tar.xz.asc
++md5  2f2201a18a0a727ab589d951ebe4f815  squid-5.6.tar.xz
++sha1  a01f47b3e9ff06245c894773de30bfd88ab14f65  squid-5.6.tar.xz
+ # Locally calculated
+-sha256  45178588df1311ded41ebadd632840c4d93a8d7f5f60e38e74acf2f1ae2f1715  squid-5.3.tar.xz
++sha256  38d27338a347597ce0e93d0c3be6e5f66b6750417c474ca87ee0d61bb6d148db  squid-5.6.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 3847fb49dc..86a0c714c6 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.36.5
-+WEBKITGTK_VERSION = 2.36.7
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-SQUID_VERSION = 5.3
++SQUID_VERSION = 5.6
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v5
+ SQUID_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
