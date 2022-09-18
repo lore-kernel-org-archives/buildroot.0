@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CFB2C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 733A5C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B5661408C3;
-	Sun, 18 Sep 2022 07:44:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5661408C3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 139E241B77;
+	Sun, 18 Sep 2022 07:45:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 139E241B77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1OC8HNIhLj8c; Sun, 18 Sep 2022 07:44:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tdlvrQ1vVE5H; Sun, 18 Sep 2022 07:45:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B534840443;
-	Sun, 18 Sep 2022 07:44:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B534840443
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9E8931BF3BD
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:44:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B6E941A3F;
+	Sun, 18 Sep 2022 07:45:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B6E941A3F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 13AC71BF3BD
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A71484050
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:44:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A71484050
+ by smtp3.osuosl.org (Postfix) with ESMTP id F0D9060A7B
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:45:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0D9060A7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tHChSm8fwIad for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 07:44:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jm6z1_Wot3kp for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 07:45:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 846368404E
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:44:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 846368404E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 026A5607CA
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:45:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 026A5607CA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72EE68477C; Sun, 18 Sep 2022 07:44:07 +0000 (UTC)
+ id E5F2F847A0; Sun, 18 Sep 2022 07:45:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 09:42:59 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7a98a82d2898140875153d5d2c6ccad109588a34
-X-Git-Newrev: 429cfdb115247756e981d7bb78c29b785b8a053a
+Date: Sun, 18 Sep 2022 09:42:18 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 6c7de82baa1458eb74a14ed5bd4b6d90f5c27cea
+X-Git-Newrev: 7a3e63122854b8e968cc6c43104018336722aa5a
 X-Patchwork-Hint: ignore
-Message-Id: <20220918074407.72EE68477C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libzlib: backport
- security fix for CVE-2022-37434
+Message-Id: <20220918074512.E5F2F847A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libzlib: fix CPE
+ vendor id
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,114 +63,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=429cfdb115247756e981d7bb78c29b785b8a053a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7a3e63122854b8e968cc6c43104018336722aa5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-See: https://security-tracker.debian.org/tracker/CVE-2022-37434
+gnu vendor is not found for zlib in CPE database [1].
+zlib is the correct vendor [2].
+
+[1] https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:gnu:zlib
+[2] https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe:2.3:a:zlib:zlib
 
 Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 50d5e224a6fb0d8d78727f169d20625285da8f7b)
+(cherry picked from commit 7a94fa901293bda6e0e87eff5dcb677b856c70b4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libzlib/0002-fix-CVE-2022-37434.patch      | 35 ++++++++++++++++++++++
- .../0003-fix-CVE-2022-37434-regression.patch       | 32 ++++++++++++++++++++
- package/libzlib/libzlib.mk                         |  3 ++
- 3 files changed, 70 insertions(+)
+ package/libzlib/libzlib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libzlib/0002-fix-CVE-2022-37434.patch b/package/libzlib/0002-fix-CVE-2022-37434.patch
-new file mode 100644
-index 0000000000..a61be48536
---- /dev/null
-+++ b/package/libzlib/0002-fix-CVE-2022-37434.patch
-@@ -0,0 +1,35 @@
-+From eff308af425b67093bab25f80f1ae950166bece1 Mon Sep 17 00:00:00 2001
-+From: Mark Adler <fork@madler.net>
-+Date: Sat, 30 Jul 2022 15:51:11 -0700
-+Subject: [PATCH] Fix a bug when getting a gzip header extra field with
-+ inflate().
-+
-+If the extra field was larger than the space the user provided with
-+inflateGetHeader(), and if multiple calls of inflate() delivered
-+the extra header data, then there could be a buffer overflow of the
-+provided space. This commit assures that provided space is not
-+exceeded.
-+
-+Backported from: eff308af425b67093bab25f80f1ae950166bece1
-+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-+---
-+ inflate.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/inflate.c b/inflate.c
-+index 7be8c6366..7a7289749 100644
-+--- a/inflate.c
-++++ b/inflate.c
-+@@ -763,9 +763,10 @@ int flush;
-+                 copy = state->length;
-+                 if (copy > have) copy = have;
-+                 if (copy) {
-++                    len = state->head->extra_len - state->length;
-+                     if (state->head != Z_NULL &&
-+-                        state->head->extra != Z_NULL) {
-+-                        len = state->head->extra_len - state->length;
-++                        state->head->extra != Z_NULL &&
-++                        len < state->head->extra_max) {
-+                         zmemcpy(state->head->extra + len, next,
-+                                 len + copy > state->head->extra_max ?
-+                                 state->head->extra_max - len : copy);
-diff --git a/package/libzlib/0003-fix-CVE-2022-37434-regression.patch b/package/libzlib/0003-fix-CVE-2022-37434-regression.patch
-new file mode 100644
-index 0000000000..46a58710d2
---- /dev/null
-+++ b/package/libzlib/0003-fix-CVE-2022-37434-regression.patch
-@@ -0,0 +1,32 @@
-+From 1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d Mon Sep 17 00:00:00 2001
-+From: Mark Adler <fork@madler.net>
-+Date: Mon, 8 Aug 2022 10:50:09 -0700
-+Subject: [PATCH] Fix extra field processing bug that dereferences NULL
-+ state->head.
-+
-+The recent commit to fix a gzip header extra field processing bug
-+introduced the new bug fixed here.
-+
-+Backported from: 1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d
-+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-+---
-+ inflate.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/inflate.c b/inflate.c
-+index 7a7289749..2a3c4fe98 100644
-+--- a/inflate.c
-++++ b/inflate.c
-+@@ -763,10 +763,10 @@ int flush;
-+                 copy = state->length;
-+                 if (copy > have) copy = have;
-+                 if (copy) {
-+-                    len = state->head->extra_len - state->length;
-+                     if (state->head != Z_NULL &&
-+                         state->head->extra != Z_NULL &&
-+-                        len < state->head->extra_max) {
-++                        (len = state->head->extra_len - state->length) <
-++                            state->head->extra_max) {
-+                         zmemcpy(state->head->extra + len, next,
-+                                 len + copy > state->head->extra_max ?
-+                                 state->head->extra_max - len : copy);
 diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
-index 431c48739a..f75502326b 100644
+index 933732d6ba..431c48739a 100644
 --- a/package/libzlib/libzlib.mk
 +++ b/package/libzlib/libzlib.mk
-@@ -14,6 +14,9 @@ LIBZLIB_PROVIDES = zlib
- LIBZLIB_CPE_ID_VENDOR = zlib
+@@ -11,7 +11,7 @@ LIBZLIB_LICENSE = Zlib
+ LIBZLIB_LICENSE_FILES = README
+ LIBZLIB_INSTALL_STAGING = YES
+ LIBZLIB_PROVIDES = zlib
+-LIBZLIB_CPE_ID_VENDOR = gnu
++LIBZLIB_CPE_ID_VENDOR = zlib
  LIBZLIB_CPE_ID_PRODUCT = zlib
  
-+# 0002-fix-CVE-2022-37434.patch
-+LIBZLIB_IGNORE_CVES = CVE-2022-37434
-+
  # It is not possible to build only a shared version of zlib, so we build both
- # shared and static, unless we only want the static libs, and we eventually
- # selectively remove what we do not want
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
