@@ -1,70 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8449BECAAD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 19:50:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7054AECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 20:55:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D32883E93;
-	Sun, 18 Sep 2022 19:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D32883E93
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7D9D4240F;
+	Sun, 18 Sep 2022 20:55:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7D9D4240F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id StV6pzyLo95H; Sun, 18 Sep 2022 19:50:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4RMl_L6FKZ7e; Sun, 18 Sep 2022 20:54:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4847883E94;
-	Sun, 18 Sep 2022 19:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4847883E94
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 231B41BF3F6
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 19:50:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88B224098B;
+	Sun, 18 Sep 2022 20:54:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88B224098B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DBF791BF3CB
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 20:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0D3783E94
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 19:50:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0D3783E94
+ by smtp2.osuosl.org (Postfix) with ESMTP id B78A4400EF
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 20:54:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B78A4400EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tYfpyZtEirTK for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 19:50:35 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 485AD83E93
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 485AD83E93
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 19:50:35 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:4908:486:8484:20b8])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 6A00619F57C;
- Sun, 18 Sep 2022 21:50:30 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 18 Sep 2022 21:50:30 +0200
-Date: Sun, 18 Sep 2022 21:50:30 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220918195030.GL1419013@scaer>
-References: <20220918101317.171735-1-fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5C2teePh0Xz2 for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 20:54:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9ECCD400DA
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9ECCD400DA
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 20:54:55 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 122E440003;
+ Sun, 18 Sep 2022 20:54:51 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oa1JS-00EYer-KS; Sun, 18 Sep 2022 22:54:50 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: John Keeping <john@metanate.com>
+References: <20220527113658.731372-1-john@metanate.com>
+Date: Sun, 18 Sep 2022 22:54:50 +0200
+In-Reply-To: <20220527113658.731372-1-john@metanate.com> (John Keeping's
+ message of "Fri, 27 May 2022 12:36:58 +0100")
+Message-ID: <87o7vcflnp.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220918101317.171735-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1663530633;
- bh=DDlpRuj4OUZYZF82TTh6TS1qKvcXsZZC2gUPTC5jOoo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=hieZJ8+Xw+v91rpTTRWIalCpfWb6ElgaZZR7aZeds0bjcPnlTqYrJQEZnLLVgbRQM
- d2irthWUaG3OcEeduCLBMohwRThf481SKkamKNAZvNhaKPukD3bTyHin71bZ2xayvR
- YZwtc3R8KVWFmZVqTvL+eRQrO+ZT0YTbWKjdRCUOKs10ryQMkuutRhwX9RgiPsYbLm
- Sw/lmm5HMsy1fQv8olMB5sUq9d+S5InYDfQqwMBW+sEJwlH/VaeWl9glKTqsI5lZvQ
- gF/gaUnH24u3qPS+RlTkkJ/tzzzzxgFkDOMo9H/DNJOGCVflAqVzcxp2jedMxWH4xc
- Kazj18QqR17Lw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hieZJ8+X
-Subject: Re: [Buildroot] [PATCH 1/1] package/libconfuse: fix CVE-2022-40320
+Subject: Re: [Buildroot] [PATCH] package/network-manager: support libnss
+ instead of gnutls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,113 +64,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
-+Joachim, which I understand is now handling maintenance upstream
+ > NetworkManager supports compiling against either NSS or GnuTLS and in
+ > fact upstream defaults to NSS if both are available and no choice is
+ > specified.  Providing a choice can shrink images slightly if some other
+ > package is already pulling in NSS but GnuTLS is not otherwise required.
 
-On 2022-09-18 12:13 +0200, Fabrice Fontaine spake thusly:
-> cfg_tilde_expand in confuse.c in libConfuse 3.3 has a heap-based buffer
-> over-read.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Since a crypto provider is required and to maintain backwards
+ > compatibility, select GnuTLS when NSS is not selected.
 
-Applied to master, thanks.
+ > In keeping with the upstream default, choose NSS when both libraries are
+ > available.
 
-Joachim, do you want to extend your entry in DEVELOPPERS with
-libconfuse?
+ > Signed-off-by: John Keeping <john@metanate.com>
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...rminated-username-used-with-getpwnam.patch | 43 +++++++++++++++++++
->  package/libconfuse/libconfuse.mk              |  3 ++
->  2 files changed, 46 insertions(+)
->  create mode 100644 package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
-> 
-> diff --git a/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
-> new file mode 100644
-> index 0000000000..9ff3f5ec1c
-> --- /dev/null
-> +++ b/package/libconfuse/0001-Fix-163-unterminated-username-used-with-getpwnam.patch
-> @@ -0,0 +1,43 @@
-> +From d73777c2c3566fb2647727bb56d9a2295b81669b Mon Sep 17 00:00:00 2001
-> +From: Joachim Wiberg <troglobit@gmail.com>
-> +Date: Fri, 2 Sep 2022 16:12:46 +0200
-> +Subject: [PATCH] Fix #163: unterminated username used with getpwnam()
-> +
-> +Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-> +
-> +[Retrieved (and backported) from:
-> +https://github.com/libconfuse/libconfuse/commit/d73777c2c3566fb2647727bb56d9a2295b81669b]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/confuse.c | 10 ++++++----
-> + 1 file changed, 6 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/src/confuse.c b/src/confuse.c
-> +index 6d1fdbd..05566b5 100644
-> +--- a/src/confuse.c
-> ++++ b/src/confuse.c
-> +@@ -1894,18 +1894,20 @@ DLLIMPORT char *cfg_tilde_expand(const char *filename)
-> + 			passwd = getpwuid(geteuid());
-> + 			file = filename + 1;
-> + 		} else {
-> +-			/* ~user or ~user/path */
-> +-			char *user;
-> ++			char *user; /* ~user or ~user/path */
-> ++			size_t len;
-> + 
-> + 			file = strchr(filename, '/');
-> + 			if (file == 0)
-> + 				file = filename + strlen(filename);
-> + 
-> +-			user = malloc(file - filename);
-> ++			len = file - filename - 1;
-> ++			user = malloc(len + 1);
-> + 			if (!user)
-> + 				return NULL;
-> + 
-> +-			strncpy(user, filename + 1, file - filename - 1);
-> ++			strncpy(user, &filename[1], len);
-> ++			user[len] = 0;
-> + 			passwd = getpwnam(user);
-> + 			free(user);
-> + 		}
-> diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-> index 2beb0e4fbf..e7c2ef0a84 100644
-> --- a/package/libconfuse/libconfuse.mk
-> +++ b/package/libconfuse/libconfuse.mk
-> @@ -14,5 +14,8 @@ LIBCONFUSE_LICENSE_FILES = LICENSE
->  LIBCONFUSE_CPE_ID_VENDOR = libconfuse_project
->  LIBCONFUSE_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
->  
-> +# 0001-Fix-163-unterminated-username-used-with-getpwnam.patch
-> +LIBCONFUSE_IGNORE_CVES += CVE-2022-40320
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> -- 
-> 2.35.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Sorry for the slow response. In the mean time the network-manager
+package has moved to meson, so I rewrote the patch to use the meson
+equivalent and committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
