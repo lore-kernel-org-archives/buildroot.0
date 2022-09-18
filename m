@@ -1,68 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55766C32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 10:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4C90C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 10:43:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04B63841AA;
-	Sun, 18 Sep 2022 10:42:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04B63841AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B7DE6FB0C;
+	Sun, 18 Sep 2022 10:43:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B7DE6FB0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 41PX79reRo-O; Sun, 18 Sep 2022 10:42:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uETpuDvnOaFV; Sun, 18 Sep 2022 10:43:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 391CC83F33;
-	Sun, 18 Sep 2022 10:42:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 391CC83F33
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DB4160E36;
+	Sun, 18 Sep 2022 10:43:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DB4160E36
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 75F2E1BF42D
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:42:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 78D951BF42D
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:43:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5116360E3A
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:42:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5116360E3A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 602C560E36
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:43:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 602C560E36
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xyee6mLCO9LZ for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 10:42:31 +0000 (UTC)
+ with ESMTP id VjUnBwl-ToQQ for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 10:43:45 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F83C60E36
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7F83C60E36
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 10:42:31 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id bq9so42834573wrb.4
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 03:42:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C4BE60E31
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9C4BE60E31
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 10:43:45 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ r3-20020a05600c35c300b003b4b5f6c6bdso2495204wmq.2
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 03:43:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date;
- bh=3rK9dN5u3s8VJ9ZOyG2IElSQQH0+CxZSyz+mPKd3Yys=;
- b=o1vc+Fqw/4Ldnbr6PmHr5pWsIlpyADhLXRZ5Blv67hMTTVfzWQ/4shbPpl89lYrHgo
- 6Hge1JSu0ew4e6ebvOCL4kRFO8xe0Meg0fRN5K+alCSXs/P827Vh0YLeNiimhbRh4vW4
- 27v86xC7v/0hlqVl7NxAkHnb2W9/DwV2WuIt8SNmOizSL/FFyv6eTjGrXK6cPzNaeUJK
- VdQnrXmOqhtM0ij9m+PaBkVimtHIld3/Az6K8yDyQCsyAaW/nfBWocLtBaPaEhAA5E7o
- IKQvwIkIV1UwBiZ8b5veTPbtnD3+ZVJyBIHR9qmjcBj6La/Ug+frPqDyDoh+ppx6V0fv
- m92A==
-X-Gm-Message-State: ACrzQf05dNfS7grGcuZ6QrXp7IaNqrSRZDmh4+wgfuIluKg5Yq01WmTV
- byukJXb6EbWIny7VRuE52lRRfg==
-X-Google-Smtp-Source: AMsMyM6NoCB0vjb09A+09o5Ty7wvBFoUVmqcfSr6HHAidj8FhIP42lJNB+dMufp8vAb0uSELmV2PHw==
-X-Received: by 2002:a5d:4a41:0:b0:228:48c6:7386 with SMTP id
- v1-20020a5d4a41000000b0022848c67386mr7777795wrs.649.1663497749681; 
- Sun, 18 Sep 2022 03:42:29 -0700 (PDT)
+ bh=D+G+F6OHFDia6PdG9SntuNRMOsPWsjC9bzlDQVCu16w=;
+ b=uXpIJqVJFzGicRQTLkM9hj6z+NeciEuSyr1PCcY6GOo6htWT3J+39l08OTOOk/+8wB
+ /ixT0xvd3doEWArhcB28v6FAG6dm2WdrZ67wTv3k/y3lG3+T15caViu2qQmPtZvKBCx+
+ Myqvfqy2UOq3aJpjwkHJMkXQ92ZWNztJxvoeUIs9aPXwimCRctrfdSCOfvN0BmTFASOH
+ /nvdPP0PVTXMOmpOmZ711fG7q4Uc0xAOQLHdUIuNbGQthK7chjWZd21i1VcgTU4EWNpi
+ calz+A/Ggss41+QX8WuRkH60FwpoUjS8FJtTRkP7tNCncUSAP7HyvxTNngJxiuKCZi52
+ SUuA==
+X-Gm-Message-State: ACrzQf0EaBSZlqt//6y5s4iHOMaTRorY7NgAkLk+g9GGS+7Ndk5v4CS5
+ 5bUI6A8Y8mbid0yk4TjlJMDnvQ==
+X-Google-Smtp-Source: AMsMyM6pTrajTNFKAtnNIhwT8o5lsNfIkOqDPhOJ1xyvL6kAqY3ihT4OupSKCvHY/W1FeA9aonFIuQ==
+X-Received: by 2002:a05:600c:600b:b0:3b4:951c:5dc2 with SMTP id
+ az11-20020a05600c600b00b003b4951c5dc2mr8788601wmb.48.1663497823820; 
+ Sun, 18 Sep 2022 03:43:43 -0700 (PDT)
 Received: from [172.23.97.104] ([79.140.217.34])
  by smtp.gmail.com with ESMTPSA id
- ci10-20020a5d5d8a000000b0021e6c52c921sm12617854wrb.54.2022.09.18.03.42.28
+ s15-20020a5d510f000000b00228655a5c8fsm10231964wrt.28.2022.09.18.03.43.42
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 18 Sep 2022 03:42:29 -0700 (PDT)
-Message-ID: <9a3a69ff-f633-d0b1-fa14-3e051bea3c75@mind.be>
-Date: Sun, 18 Sep 2022 12:42:27 +0200
+ Sun, 18 Sep 2022 03:43:43 -0700 (PDT)
+Message-ID: <fc5ad951-756d-5d88-b767-65da7faf2153@mind.be>
+Date: Sun, 18 Sep 2022 12:43:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
@@ -70,26 +71,25 @@ Content-Language: en-GB
 To: Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20220729000904.1295295-1-joel@jms.id.au>
- <20220729000904.1295295-5-joel@jms.id.au>
+ <20220729000904.1295295-6-joel@jms.id.au>
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20220729000904.1295295-5-joel@jms.id.au>
+In-Reply-To: <20220729000904.1295295-6-joel@jms.id.au>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date;
- bh=3rK9dN5u3s8VJ9ZOyG2IElSQQH0+CxZSyz+mPKd3Yys=;
- b=EzaMQTzrA2uAXxPj5XN4Jwjyt+2dH530c6PvfL8ZcePpC4ZENX+Y+cz1JIMB9hVBCp
- 5F24jL/KAM+0dkZXf1M6suJnb8USoWT433LvkTa49xsU4P3nvDJB1/h8T223xPrvjL/a
- pL2MHRXgglMM4cX8xjXydzZ7uTubZU27KtPakbj0r5gD6rkB98Q5zdn855u4YC2kriSy
- EWB1MG/+gvEK5Xiy1cPETqepGq3zUTTWn2g1rMIUi/2qEMG0zWzYvSJ6jKskHH9I1PiS
- kFpZb+R4OEmlEiiFMdvHWW2tb27QVoG3woOlLm0A67TVnf4s2Hp8Hw+p3jpyiSzDLtTQ
- t1vg==
+ bh=D+G+F6OHFDia6PdG9SntuNRMOsPWsjC9bzlDQVCu16w=;
+ b=WIY09Gk9iY/+8TR7YI6WyqPsf42Id103Bn7qHC26fQg5edkVSpLwEnynRLYvlgFWMK
+ xpu9ZiPwSwOQFKSfQlqeBgLnzSs+w1xysO2WhjBUBvjOgap1DWaN1yrQi4EolYTAnMzY
+ 27gp5daS3zopN3thIfY2jr929kLFiUkKhD4RLAJTAnBJXu0HMVZgL1iAZlViGWTepmsW
+ u29yNle6GQpEUI8FC8EGwRXBam/C9co0TjYg82A2kcVTkfHWv4xpcWAm8ofV+jnnMlIe
+ F/tu9j2SUZobo5GaI5C99vT/XwPbi//gNLCBdxD+T/5K2xWT600mdVfwh+hWp4TSnmDU
+ gqRg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=EzaMQTzr
-Subject: Re: [Buildroot] [PATCH 4/9] package/glibc: Use powerpc64le instead
- of power8
+ header.a=rsa-sha256 header.s=google header.b=WIY09Gk9
+Subject: Re: [Buildroot] [PATCH 5/9] arch/powerpc: Add Power9 CPU type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,34 +111,53 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 29/07/2022 02:08, Joel Stanley wrote:
-> With "arch/powerpc: Enable powerpc64le only on CPUs that support it"
-> we can use this symbol to indicate the CPU is supported by glibc.
+On 29/07/2022 02:09, Joel Stanley wrote:
+> The Power9 CPU was released by IBM in 2016. It is a 64-bit CPU
+> implementing ISA v3.0. It runs in big and little endian modes, and
+> supports VSX and AltiVec.
+> 
+> Power9 is supported as of GCC 6.1 and Binutils 2.26.
 > 
 > Signed-off-by: Joel Stanley <joel@jms.id.au>
 
-  Applied to master, after extending commit log as indicated by Yann, thanks.
+  Applied to master, after removing the !64 condition, thanks.
+
+  I didn't continue with the rest of the series - there are merge conflicts with 
+the earlier changes I did. Can you please rebase and resend? And also take into 
+account the comments on the first three patches of the series of course.
 
   Regards,
   Arnout
 
 > ---
->   package/glibc/Config.in | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   arch/Config.in.powerpc | 7 +++++++
+>   1 file changed, 7 insertions(+)
 > 
-> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-> index 23cbfcd9aa4f..e0ce46968278 100644
-> --- a/package/glibc/Config.in
-> +++ b/package/glibc/Config.in
-> @@ -12,7 +12,7 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
->   	default y if BR2_or1k
->   	default y if BR2_powerpc
->   	default y if BR2_powerpc64
-> -	default y if BR2_powerpc_power8
-> +	default y if BR2_powerpc64le
->   	default y if BR2_riscv
->   	default y if BR2_s390x
->   	default y if BR2_sh
+> diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+> index 7c6ae84348e9..4c633c338d86 100644
+> --- a/arch/Config.in.powerpc
+> +++ b/arch/Config.in.powerpc
+> @@ -149,6 +149,12 @@ config BR2_powerpc_power8
+>   	depends on BR2_ARCH_IS_64
+>   	select BR2_POWERPC_CPU_HAS_ALTIVEC
+>   	select BR2_POWERPC_CPU_HAS_VSX
+> +config BR2_powerpc_power9
+> +	bool "power9"
+> +	depends on BR2_ARCH_IS_64
+> +	select BR2_POWERPC_CPU_HAS_ALTIVEC
+> +	select BR2_POWERPC_CPU_HAS_VSX
+> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+>   endchoice
+>   
+>   if BR2_POWERPC_CPU_HAS_SPE
+> @@ -228,6 +234,7 @@ config BR2_GCC_TARGET_CPU
+>   	default "power6"	if BR2_powerpc_power6
+>   	default "power7"	if BR2_powerpc_power7
+>   	default "power8"	if BR2_powerpc_power8
+> +	default "power9"	if BR2_powerpc_power9
+>   	default "powerpc64"	if BR2_generic_powerpc64
+>   	default "powerpc"	if BR2_generic_powerpc
+>   
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
