@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3141C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 09:35:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3741C32771
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 09:35:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 670AE84407;
-	Sun, 18 Sep 2022 09:35:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 670AE84407
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0F0284434;
+	Sun, 18 Sep 2022 09:35:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0F0284434
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t1-04bktwCah; Sun, 18 Sep 2022 09:35:32 +0000 (UTC)
+	with ESMTP id E9o_kyMylKNr; Sun, 18 Sep 2022 09:35:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 854E4843F0;
-	Sun, 18 Sep 2022 09:35:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 854E4843F0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 74C9B1BF328
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EA788442D;
+	Sun, 18 Sep 2022 09:35:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EA788442D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E8E941BF328
  for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:33:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABB0D4181D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 852016FB0C
  for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:33:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABB0D4181D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 852016FB0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uzWQUyXuSQ2s for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W4qOrGY9aPVS for <buildroot@lists.busybox.net>;
  Sun, 18 Sep 2022 09:33:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 941EE41811
+ by smtp3.osuosl.org (Postfix) with ESMTP id 941DF6FB11
  for <buildroot@buildroot.org>; Sun, 18 Sep 2022 09:33:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 941EE41811
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 941DF6FB11
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84DED84A59; Sun, 18 Sep 2022 09:33:46 +0000 (UTC)
+ id 8F4E584A78; Sun, 18 Sep 2022 09:33:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 11:19:24 +0200
+Date: Sun, 18 Sep 2022 11:30:42 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 5bd197f5dbe7148bea5ae702454755b53e957063
-X-Git-Newrev: 82d01e72df81f29aaaa3d91573d4a552cbaec771
+X-Git-Oldrev: 82d01e72df81f29aaaa3d91573d4a552cbaec771
+X-Git-Newrev: 6138dc9857d3f1115c267ca401781010139d119b
 X-Patchwork-Hint: ignore
-Message-Id: <20220918093346.84DED84A59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] boot/mv-ddr-marvell: bump
- to latest commit
+Message-Id: <20220918093346.8F4E584A78@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/go: security bump
+ to version 1.18.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82d01e72df81f29aaaa3d91573d4a552cbaec771
+commit: https://git.buildroot.net/buildroot/commit/?id=6138dc9857d3f1115c267ca401781010139d119b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-This update fixes build with gcc 11.
+go1.18.6 includes security fixes to the net/http package, as well as bug fixes
+to the compiler, the go command, the pprof command, the runtime, and the
+crypto/tls, encoding/xml, and net packages.
 
-Update license file hash for unrelated code changes.
+https://github.com/golang/go/issues?q=milestone%3AGo1.18.6+label%3ACherryPickApproved
 
-Tested on Macchiatobin.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2931841699
-https://gitlab.com/buildroot.org/buildroot/-/jobs/2931841700
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 87ba9890c2dd0bcf6415047c3fb9053f6965d0c1)
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit d2141f65e4491d0123e504cc5adc17ce541b268f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/mv-ddr-marvell/mv-ddr-marvell.hash | 4 ++--
- boot/mv-ddr-marvell/mv-ddr-marvell.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-index 5bfae8af45..75e87d833d 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 2a0f02abfd..959387cb6a 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  bfab74a625d65238c569b9df282b55c0fc9a1e2d3decedcf194d44774df2ede4  mv-ddr-marvell-305d923e6bc4236cd3b902f6679b0aef9e5fa52d.tar.gz
--sha256  48bb930b6fbc3f5db72e29c849b096df3868e4a6d2bdc0e2dd3365c768241cd5  ddr3_init.c
-+sha256  16f02232e21a15979b3d9971e28f7e59562484a5c1f99c2b28c248a3b76a63fa  mv-ddr-marvell-d5acc10c287e40cc2feeb28710b92e45c93c702c.tar.gz
-+sha256  907a03943ca940790e97620aca8d46b5b04c653dcf2ab6c66a25238b60cf5635  ddr3_init.c
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-index 442b6aed53..e05192fe9b 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-@@ -4,8 +4,8 @@
+ # From https://go.dev/dl
+-sha256  9920d3306a1ac536cdd2c796d6cb3c54bc559c226fc3cc39c32f1e0bd7f50d2a  go1.18.5.src.tar.gz
++sha256  a7f1d50424355dabce66d1112b1cae439b6ee5e4f15edba6f104c0a4b173e895  go1.18.6.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 83498823b1..f4025618c3 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# This is the latest commit on mv-ddr-devel as of 20201207
--MV_DDR_MARVELL_VERSION = 305d923e6bc4236cd3b902f6679b0aef9e5fa52d
-+# This is the latest commit on mv-ddr-devel as of 20220529
-+MV_DDR_MARVELL_VERSION = d5acc10c287e40cc2feeb28710b92e45c93c702c
- MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
- MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
- MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
+-GO_VERSION = 1.18.5
++GO_VERSION = 1.18.6
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
