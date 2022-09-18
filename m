@@ -1,57 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F9ABC32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:48:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98092C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:48:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8B90842B4;
-	Sun, 18 Sep 2022 07:48:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8B90842B4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4668560BB1;
+	Sun, 18 Sep 2022 07:48:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4668560BB1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6vPy2VbxxHMO; Sun, 18 Sep 2022 07:48:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sk_hWEErGaik; Sun, 18 Sep 2022 07:48:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2403D8407A;
-	Sun, 18 Sep 2022 07:48:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2403D8407A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7991160A7B;
+	Sun, 18 Sep 2022 07:48:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7991160A7B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 951A71BF3BD
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9D7E71BF3BD
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7BBD541A3F
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BBD541A3F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77E69419E0
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77E69419E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ntGv1CUWzIRh for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 07:48:04 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FF08419A0
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1FF08419A0
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:48:03 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D67B81C0005;
- Sun, 18 Sep 2022 07:48:00 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oZp1z-00BOdJ-F3; Sun, 18 Sep 2022 09:47:59 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-References: <20220831233545.1231117-1-marcus.hoffmann@othermo.de>
-Date: Sun, 18 Sep 2022 09:47:59 +0200
-In-Reply-To: <20220831233545.1231117-1-marcus.hoffmann@othermo.de> (Marcus
- Hoffmann's message of "Thu, 1 Sep 2022 01:35:45 +0200")
-Message-ID: <87k061w2c0.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python3: bump to 3.10.6
+ with ESMTP id KpWoeMypSEdX for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71FC4419D8
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71FC4419D8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 60AE7847C8; Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 18 Sep 2022 09:46:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e78bcf27d42721aea9ff9a3b3877d7e54daa0365
+X-Git-Newrev: 5cd140ca8d40f58f3864b0f267e5e54e5756a45a
+X-Patchwork-Hint: ignore
+Message-Id: <20220918074816.60AE7847C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Config.in.legacy: add missing select
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,24 +56,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Marcus" == Marcus Hoffmann <marcus.hoffmann@othermo.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5cd140ca8d40f58f3864b0f267e5e54e5756a45a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Release notes:
- > https://docs.python.org/release/3.10.6/whatsnew/changelog.html#python-3-10-6-final
+Commit 5c89b00a2052 (package/gdb: remove support for 9.2) forgot to
+select the legacy symbol when gdb 9.2 was previously enabled.
 
- > Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in.legacy | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2022.05.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 631b31689b..5f7274e84b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -154,6 +154,7 @@ config BR2_PACKAGE_GPSD_OLDSTYLE
+ 
+ config BR2_GDB_VERSION_9_2
+ 	bool "gdb 9.2 removed"
++	select BR2_LEGACY
+ 	help
+ 	  Support for GDB 9.2 has been removed. A new version has
+ 	  automatically been selected.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
