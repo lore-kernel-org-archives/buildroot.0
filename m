@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07AF5C32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A27B1C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:45:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FC5060D69;
-	Sun, 18 Sep 2022 07:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FC5060D69
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E3964240D;
+	Sun, 18 Sep 2022 07:45:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E3964240D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I9-hLf5t3oHq; Sun, 18 Sep 2022 07:45:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id U_2L7YjeuAns; Sun, 18 Sep 2022 07:45:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5EA260A7B;
-	Sun, 18 Sep 2022 07:45:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5EA260A7B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2CE591BF97F
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:45:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27CFE41B77;
+	Sun, 18 Sep 2022 07:45:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27CFE41B77
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A7801BF3BD
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:45:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08EF984078
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:45:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08EF984078
+ by smtp4.osuosl.org (Postfix) with ESMTP id E563441B77
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:45:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E563441B77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q-myJPAjKNYo for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 07:45:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0DD4D84077
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:45:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DD4D84077
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1F5E847A3; Sun, 18 Sep 2022 07:45:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TAXR8B6hCq0o for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 07:45:52 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B02741A3F
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8B02741A3F
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:45:52 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 25D9C20009;
+ Sun, 18 Sep 2022 07:45:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZozs-00BOVx-74; Sun, 18 Sep 2022 09:45:48 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 09:42:42 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 7a3e63122854b8e968cc6c43104018336722aa5a
-X-Git-Newrev: 5926b28ea9c13432a5f107a9c8b70b3e2b79a114
-X-Patchwork-Hint: ignore
-Message-Id: <20220918074512.F1F5E847A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libzlib: backport
- security fix for CVE-2022-37434
+To: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+References: <20220829173754.214890-1-marcus.hoffmann@othermo.de>
+Date: Sun, 18 Sep 2022 09:45:48 +0200
+In-Reply-To: <20220829173754.214890-1-marcus.hoffmann@othermo.de> (Marcus
+ Hoffmann's message of "Mon, 29 Aug 2022 19:37:54 +0200")
+Message-ID: <87o7vdw2fn.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-paho-mqtt: fix package
+ for python 3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,120 +64,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Davide Viti <zinosat@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5926b28ea9c13432a5f107a9c8b70b3e2b79a114
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Marcus" == Marcus Hoffmann <marcus.hoffmann@othermo.de> writes:
 
-See: https://security-tracker.debian.org/tracker/CVE-2022-37434
+ > Fixes the following error on calling mqtt.publish():
+ >   File "/usr/lib/python3.10/site-packages/paho/mqtt/publish.py", line 222, in single
+ >     multiple([msg], hostname, port, client_id, keepalive, will, auth, tls,
+ >   File "/usr/lib/python3.10/site-packages/paho/mqtt/publish.py", line 126, in multiple
+ >     if not isinstance(msgs, collections.Iterable):
+ > AttributeError: module 'collections' has no attribute 'Iterable'
 
-Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 50d5e224a6fb0d8d78727f169d20625285da8f7b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libzlib/0002-fix-CVE-2022-37434.patch      | 35 ++++++++++++++++++++++
- .../0003-fix-CVE-2022-37434-regression.patch       | 32 ++++++++++++++++++++
- package/libzlib/libzlib.mk                         |  3 ++
- 3 files changed, 70 insertions(+)
+ > Backported from https://github.com/eclipse/paho.mqtt.python/pull/497/
 
-diff --git a/package/libzlib/0002-fix-CVE-2022-37434.patch b/package/libzlib/0002-fix-CVE-2022-37434.patch
-new file mode 100644
-index 0000000000..a61be48536
---- /dev/null
-+++ b/package/libzlib/0002-fix-CVE-2022-37434.patch
-@@ -0,0 +1,35 @@
-+From eff308af425b67093bab25f80f1ae950166bece1 Mon Sep 17 00:00:00 2001
-+From: Mark Adler <fork@madler.net>
-+Date: Sat, 30 Jul 2022 15:51:11 -0700
-+Subject: [PATCH] Fix a bug when getting a gzip header extra field with
-+ inflate().
-+
-+If the extra field was larger than the space the user provided with
-+inflateGetHeader(), and if multiple calls of inflate() delivered
-+the extra header data, then there could be a buffer overflow of the
-+provided space. This commit assures that provided space is not
-+exceeded.
-+
-+Backported from: eff308af425b67093bab25f80f1ae950166bece1
-+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-+---
-+ inflate.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/inflate.c b/inflate.c
-+index 7be8c6366..7a7289749 100644
-+--- a/inflate.c
-++++ b/inflate.c
-+@@ -763,9 +763,10 @@ int flush;
-+                 copy = state->length;
-+                 if (copy > have) copy = have;
-+                 if (copy) {
-++                    len = state->head->extra_len - state->length;
-+                     if (state->head != Z_NULL &&
-+-                        state->head->extra != Z_NULL) {
-+-                        len = state->head->extra_len - state->length;
-++                        state->head->extra != Z_NULL &&
-++                        len < state->head->extra_max) {
-+                         zmemcpy(state->head->extra + len, next,
-+                                 len + copy > state->head->extra_max ?
-+                                 state->head->extra_max - len : copy);
-diff --git a/package/libzlib/0003-fix-CVE-2022-37434-regression.patch b/package/libzlib/0003-fix-CVE-2022-37434-regression.patch
-new file mode 100644
-index 0000000000..46a58710d2
---- /dev/null
-+++ b/package/libzlib/0003-fix-CVE-2022-37434-regression.patch
-@@ -0,0 +1,32 @@
-+From 1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d Mon Sep 17 00:00:00 2001
-+From: Mark Adler <fork@madler.net>
-+Date: Mon, 8 Aug 2022 10:50:09 -0700
-+Subject: [PATCH] Fix extra field processing bug that dereferences NULL
-+ state->head.
-+
-+The recent commit to fix a gzip header extra field processing bug
-+introduced the new bug fixed here.
-+
-+Backported from: 1eb7682f845ac9e9bf9ae35bbfb3bad5dacbd91d
-+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-+---
-+ inflate.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/inflate.c b/inflate.c
-+index 7a7289749..2a3c4fe98 100644
-+--- a/inflate.c
-++++ b/inflate.c
-+@@ -763,10 +763,10 @@ int flush;
-+                 copy = state->length;
-+                 if (copy > have) copy = have;
-+                 if (copy) {
-+-                    len = state->head->extra_len - state->length;
-+                     if (state->head != Z_NULL &&
-+                         state->head->extra != Z_NULL &&
-+-                        len < state->head->extra_max) {
-++                        (len = state->head->extra_len - state->length) <
-++                            state->head->extra_max) {
-+                         zmemcpy(state->head->extra + len, next,
-+                                 len + copy > state->head->extra_max ?
-+                                 state->head->extra_max - len : copy);
-diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
-index 431c48739a..f75502326b 100644
---- a/package/libzlib/libzlib.mk
-+++ b/package/libzlib/libzlib.mk
-@@ -14,6 +14,9 @@ LIBZLIB_PROVIDES = zlib
- LIBZLIB_CPE_ID_VENDOR = zlib
- LIBZLIB_CPE_ID_PRODUCT = zlib
- 
-+# 0002-fix-CVE-2022-37434.patch
-+LIBZLIB_IGNORE_CVES = CVE-2022-37434
-+
- # It is not possible to build only a shared version of zlib, so we build both
- # shared and static, unless we only want the static libs, and we eventually
- # selectively remove what we do not want
+ > This was deprecated in python 3.9 and stopped working in python 3.10
+
+ > Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+
+Committed to 2022.05.x and 2022.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
