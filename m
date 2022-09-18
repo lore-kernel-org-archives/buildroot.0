@@ -1,93 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73D85C6FA82
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:04:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55E6EECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:09:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AF2F83E7E;
-	Sun, 18 Sep 2022 21:04:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AF2F83E7E
+	by smtp4.osuosl.org (Postfix) with ESMTP id D63B542468;
+	Sun, 18 Sep 2022 21:09:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D63B542468
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mPIDA0mTVAe9; Sun, 18 Sep 2022 21:04:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mdz1dnKYVo-V; Sun, 18 Sep 2022 21:09:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4105B83E75;
-	Sun, 18 Sep 2022 21:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4105B83E75
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7A8341A2B;
+	Sun, 18 Sep 2022 21:09:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7A8341A2B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 093721BF3C4
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:04:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 366DB1BF3C4
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:09:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7DB060B2C
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:04:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7DB060B2C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F57860AE8
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:09:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F57860AE8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MkwnVKYcPayW for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 21:04:24 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA2C060AE6
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EA2C060AE6
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:04:23 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id r18so60354115eja.11
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 14:04:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date;
- bh=b5BNCcKhO9Ta5LM7VwBY0lyw/HKBy7cLZ7+1gEE7kEQ=;
- b=umQEySOzz4me60N/frN7mZ4wauefYobpBT7tAOQeQy/xSTrxHq/nVq7eJXNjhquHUQ
- D9MAa23n4JcJ42ptaZvBimRbYtlyuLd0j77+iWfFeoa4KksnDy4GHbNW5JLqLQNlIlKw
- /PyTYQs6LLIPeG2+HINAs7xtMUHdvtKcMYfWYGUMuLQSvDQsuTzWOMOVYuS0bHD9BYof
- dLB+IvQvqn+iLZI1PujbfMf5XSqQnPoeP+lzccLo44okr0YfPbTYkryRFkKIvwaEdBFW
- G4q5cwU3DN3qXxo68hy4At8VK6TIOzhg19SZOvmeP7ZEBAvAQ+SpS8EdxofqCBHCf60i
- XlXg==
-X-Gm-Message-State: ACrzQf36UhxKDQRocXHNvnf5XHBNYv/bjxv+m7S+VFNxHtok0wRGYIr0
- BOBkm4F1y0Icp1ODsBefPs6SvlF+dc4p1LeO
-X-Google-Smtp-Source: AMsMyM7GUEyEp/SxoCAWwPAilh9MoV3WrJnzx3M1W4AWRhI6U0+GZFRQKNeTqY1lV0srBgL4N33LhA==
-X-Received: by 2002:a17:907:9482:b0:780:ed1f:8d40 with SMTP id
- dm2-20020a170907948200b00780ed1f8d40mr5573144ejc.745.1663535061835; 
- Sun, 18 Sep 2022 14:04:21 -0700 (PDT)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com.
- [209.85.218.52]) by smtp.gmail.com with ESMTPSA id
- hw19-20020a170907a0d300b0078167cb4536sm101494ejc.118.2022.09.18.14.04.20
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 18 Sep 2022 14:04:20 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a26so31633561ejc.4
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 14:04:20 -0700 (PDT)
-X-Received: by 2002:a17:907:760d:b0:77b:1d8d:7700 with SMTP id
- jx13-20020a170907760d00b0077b1d8d7700mr10299543ejc.195.1663535060490; Sun, 18
- Sep 2022 14:04:20 -0700 (PDT)
+ with ESMTP id EoEMUgqcjp4F for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 21:09:47 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E89EE60AE6
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E89EE60AE6
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:09:46 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C2794C0004;
+ Sun, 18 Sep 2022 21:09:43 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oa1Xp-00EZbS-Ae; Sun, 18 Sep 2022 23:09:41 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220911104058.8928-1-fontaine.fabrice@gmail.com>
+Date: Sun, 18 Sep 2022 23:09:41 +0200
+In-Reply-To: <20220911104058.8928-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 11 Sep 2022 12:40:58 +0200")
+Message-ID: <87fsgofkyy.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220821050119.578342-1-christian@paral.in>
-In-Reply-To: <20220821050119.578342-1-christian@paral.in>
-Date: Sun, 18 Sep 2022 14:04:08 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2or7KY0dFzJFV-zbdx8wjhu6r=9YGNG1PLvPpoth27gTA@mail.gmail.com>
-Message-ID: <CA+h8R2or7KY0dFzJFV-zbdx8wjhu6r=9YGNG1PLvPpoth27gTA@mail.gmail.com>
-To: Christian Stewart <christian@paral.in>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=paral.in; s=google;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date;
- bh=b5BNCcKhO9Ta5LM7VwBY0lyw/HKBy7cLZ7+1gEE7kEQ=;
- b=hW41OFMzqPkEDXktTubwLo8+B1OFDHMe8IMcM7dh90PTwPFZ5G8E8FdvEcZ99mJ2n6
- jfTcdBtTgzcSYMTzgZ+ngg8KCsb1ZRXHMTAlZlvOMq4hUGqbyz/KS1nQmJCxd/nIllJc
- FRp+CMHcGOh7wqY8iKJIARJ1n2ONXhVmrlX80F0bXqp1w15lQYSKbx5BH0Jy1thx0F0Y
- b5jcftbGw/8PDf4GfMoRMUR5jMvwFQr4g2woAcH/dxi1R0SzUbCIO+MkXcJdg05JN3RY
- DKfcAidtcFpv9D0Mi/QHT/j1WSGEsAgAvcKBkU0Tynaft3nd8ohy5LCMBmfUU+j6cA41
- ioqA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
- header.a=rsa-sha256 header.s=google header.b=hW41OFMz
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/conmon: new package
+Subject: Re: [Buildroot] [PATCH 1/1] package/qlibc: bump to version 2.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,34 +63,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@paral.in>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi All,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Sat, Aug 20, 2022 at 10:01 PM Christian Stewart <christian@paral.in> wrote:
->
-> Conmon is an OCI container runtime monitor.
->
-> https://github.com/containers/conmon
->
-> Dependency of podman.
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
+ > This is a maintenance release that includes improvements and bug fixes.
+ > https://github.com/wolkykim/qlibc/releases/tag/v2.4.6
 
-This package requires a dependency on host-pkgconf and libglib2
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-I will include this in the next revision.
+Committed to 2022.02.x, 2022.05.x and 2022.08.x given the few commits /
+fixes, thanks.
 
-Best regards,
-Christian Stewart
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
