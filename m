@@ -4,68 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA13BC32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 08:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CEC3C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 08:51:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4680441E2E;
-	Sun, 18 Sep 2022 08:50:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4680441E2E
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED4DB41E33;
+	Sun, 18 Sep 2022 08:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED4DB41E33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9P88t9gZr68R; Sun, 18 Sep 2022 08:50:09 +0000 (UTC)
+	with ESMTP id TVtDbUZDqwpc; Sun, 18 Sep 2022 08:51:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DAD2419A1;
-	Sun, 18 Sep 2022 08:50:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DAD2419A1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B244C1BF282
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 08:50:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA9634155F;
+	Sun, 18 Sep 2022 08:51:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA9634155F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A26D1BF282
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 08:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D69D60E14
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 08:50:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D69D60E14
+ by smtp2.osuosl.org (Postfix) with ESMTP id E9A48404A1
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 08:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9A48404A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ukj0iyp9hA-Z for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 08:50:05 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0379660A6F
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0379660A6F
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 08:50:04 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id C88B3E0003;
- Sun, 18 Sep 2022 08:50:01 +0000 (UTC)
-Date: Sun, 18 Sep 2022 10:50:00 +0200
-To: Jesse Van Gavere <jesseevg@gmail.com>
-Message-ID: <20220918105000.68549cfe@windsurf>
-In-Reply-To: <20220826135503.20612-10-jesseevg@gmail.com>
-References: <20220826135503.20612-1-jesseevg@gmail.com>
- <20220826135503.20612-10-jesseevg@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GlAv85y8dv6O for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 08:51:27 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E047B4011C
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E047B4011C
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 08:51:26 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 4CF9E200007;
+ Sun, 18 Sep 2022 08:51:23 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZq1K-00BT8X-9i; Sun, 18 Sep 2022 10:51:22 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Konstantin Menyaev via buildroot <buildroot@buildroot.org>
+References: <20220905010913.13640-1-KAMenyaev@sberdevices.ru>
+Date: Sun, 18 Sep 2022 10:51:22 +0200
+In-Reply-To: <20220905010913.13640-1-KAMenyaev@sberdevices.ru> (Konstantin
+ Menyaev via buildroot's message of "Mon, 5 Sep 2022 04:09:13 +0300")
+Message-ID: <87pmftjcad.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663491002;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=eNjjNRSWP9TfUdg0WRvR1Mngxupppt9/XLqv0a2TRcc=;
- b=GSepVahERmcFA6cIU2FVCiuuRqd/e3VNpWE6VAONWezhH5tdiKakjyddP46eYWu30fmhrW
- s4/DYa+6FZ2Zen6d/n9dX0+vDu+R3ttG4p11pLOA5xqHsGfyuxM7Jkmfhs5aoUmm++juRZ
- wkgnpRSFuOC26ksrkqKT+Ho+W27Bd+nmKfdf/uIJIMTTGxgEOpebMKm1k0FGTARVEE/fRK
- y1deHfq8k8JqZxgMdXQKUWcNToBBge99foXJOFhYG0p4KrPMwnaemBZIGfrvSxGdUYhe1Q
- 7C9RAMRE5aWy5ocZsIEmrDnql1XF5esotXpK9sVdNEMVxCs6ntDGpGwVHZTfjw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GSepVahE
-Subject: Re: [Buildroot] [PATCH v4 09/29] package/qt6/qt6base: add qt
- support for journald when using systemd
+Subject: Re: [Buildroot] [PATCH 1/1] package/dhcpcd: pid path fixed.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +62,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: John Stile <johns@msli.com>, KAMenyaev@sberdevices.ru,
+ sdfw_system_team@sberdevices.ru
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 26 Aug 2022 15:54:43 +0200
-Jesse Van Gavere <jesseevg@gmail.com> wrote:
+>>>>> "Konstantin" == Konstantin Menyaev via buildroot <buildroot@buildroot.org> writes:
 
-> Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
-> ---
->  package/qt6/qt6base/qt6base.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+ > From: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
+ > dhcpcd-9 defaults the run directory to `/var/run/dhcpcd` instead of
+ > `/var/run` and the prefix of dhcpcd has been removed from the files.
 
-Applied to master, thanks.
+ > Signed-off-by: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
 
-Thomas
+Committed to 2022.05.x and 2022.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
