@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7ADD1ECAAD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:21:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B67B2C6FA82
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24FFF83EDD;
-	Sun, 18 Sep 2022 21:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24FFF83EDD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 686CC83E6E;
+	Sun, 18 Sep 2022 21:22:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 686CC83E6E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IA-JZs1hKmEv; Sun, 18 Sep 2022 21:21:52 +0000 (UTC)
+	with ESMTP id eQ-QEq_b_eJ4; Sun, 18 Sep 2022 21:22:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E77F82A83;
-	Sun, 18 Sep 2022 21:21:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E77F82A83
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 254381BF97F
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:20:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AF1D83F1F;
+	Sun, 18 Sep 2022 21:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AF1D83F1F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A6451BF3C4
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:20:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F19F240150
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:20:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F19F240150
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7759742468
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:20:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7759742468
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 949B6DtOMxdG for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 21:20:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id riYlxz5OoguK for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 21:20:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EA2240A42
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:20:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EA2240A42
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7356242475
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:20:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7356242475
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88D3B856F1; Sun, 18 Sep 2022 21:20:44 +0000 (UTC)
+ id 70D9E856EA; Sun, 18 Sep 2022 21:20:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 23:16:46 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 3e9c048a737f7733fab4ae14d49f80c897a3d7b0
-X-Git-Newrev: edd03f7edc05cf833339018be762785cdf2e187f
+Date: Sun, 18 Sep 2022 23:17:26 +0200
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 056e1c7fecdf0d111bde6e08246dc50f1bffaf8f
+X-Git-Newrev: 4d5f5a7dd42769839cecbaf31c8a19439a1f4217
 X-Patchwork-Hint: ignore
-Message-Id: <20220918212044.88D3B856F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/vim: security
- bump to version 9.0.0453
+Message-Id: <20220918212045.70D9E856EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/libxml2: security
+ bump to version 2.10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edd03f7edc05cf833339018be762785cdf2e187f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4d5f5a7dd42769839cecbaf31c8a19439a1f4217
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Fix CVE-2022-3037, CVE-2022-3099, CVE-2022-3134
+COPYING was a link to Copyright, this link is now removed
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 24261a1762a0017cba8128935a37280c7b876468)
+with 2.10.0, fix CVE-2022-2309
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a7295520a9358929c9655ac4b0a533b4e81119bd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libxml2/libxml2.hash | 6 +++---
+ package/libxml2/libxml2.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index f06d084cb3..0c6b720dd1 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index e67d3b0b8a..4d24c60132 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
 @@ -1,4 +1,4 @@
- # Locally computed
--sha256  7c97f8e8cc56157cad7d461633beb347472e134e96b5545d24d1fe451dfaecc2  vim-9.0.0292.tar.gz
-+sha256  b90063706a2a9ee234275e0dd4b71a11e24867c33203c432fd6e9799fdc3bff9  vim-9.0.0453.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  4afae7c984ab1a4ccd0b474a695f316e7435ab6ed46537648af925c18835d853  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 5e7c34abbb..3f1985f036 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.9/libxml2-2.9.14.sha256sum
+-sha256  60d74a257d1ccec0475e749cba2f21559e48139efba6ff28224357c7c798dfee  libxml2-2.9.14.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.10/libxml2-2.10.2.sha256sum
++sha256  d240abe6da9c65cb1900dd9bf3a3501ccf88b3c2a1cb98317d03f272dda5b265  libxml2-2.10.2.tar.xz
+ # License files, locally calculated
+-sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  COPYING
++sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 3647549a4b..37a4396cbe 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--VIM_VERSION = 9.0.0292
-+VIM_VERSION = 9.0.0453
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+-LIBXML2_VERSION_MAJOR = 2.9
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).14
++LIBXML2_VERSION_MAJOR = 2.10
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).2
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_LICENSE = MIT
+-LIBXML2_LICENSE_FILES = COPYING
++LIBXML2_LICENSE_FILES = Copyright
+ LIBXML2_CPE_ID_VENDOR = xmlsoft
+ LIBXML2_CONFIG_SCRIPTS = xml2-config
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
