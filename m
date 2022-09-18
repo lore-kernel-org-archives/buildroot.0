@@ -1,51 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9782C6FA82
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ABBEECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7222E83F4C;
-	Sun, 18 Sep 2022 21:22:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7222E83F4C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 326CE40A5D;
+	Sun, 18 Sep 2022 21:22:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 326CE40A5D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id algeu_jCKgI9; Sun, 18 Sep 2022 21:22:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42DE74023B;
+	Sun, 18 Sep 2022 21:22:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42DE74023B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 850571BF3C4
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:22:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 607A983F20
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:22:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 607A983F20
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LxR3Dsz3Z6_X; Sun, 18 Sep 2022 21:22:42 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B92B83F1F;
-	Sun, 18 Sep 2022 21:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B92B83F1F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1F71B1BF3C4
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:20:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B25A42468
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:20:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B25A42468
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LfXg887LooJ4 for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 21:20:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F1574247D
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:20:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F1574247D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66D3C856F1; Sun, 18 Sep 2022 21:20:45 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tyDMQvPYiUvz for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 21:22:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D49CB82A83
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D49CB82A83
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:21:59 +0000 (UTC)
+Received: from b52572-12.ea.freescale.net.net (unknown [37.164.23.66])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id E88C413F87E;
+ Sun, 18 Sep 2022 23:21:54 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 23:16:52 +0200
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: ddff6d39481aed37d87462adfd1c862dcd8cdd6c
-X-Git-Newrev: 056e1c7fecdf0d111bde6e08246dc50f1bffaf8f
-X-Patchwork-Hint: ignore
-Message-Id: <20220918212045.66D3C856F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/vim: security
- bump to version 9.0.0453
+Date: Sun, 18 Sep 2022 23:21:44 +0200
+Message-Id: <20220918212144.427007-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1663536116;
+ bh=aeYPqvUm+4vy3LXFxq6MFwyQcQswWN1EM/y4xyVs8cg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=M9dKFXvrYaTzrCHN2ZZi+oRqcQ4G7uQJhS5u1grffM7HL3539XuTe7579/WUleLLQ
+ VfZ1sTFIKrPN5V8CebFudK0Lkj1uyNAHKuYcyLBKwSHj5tfnOuYPd9O6B5LHnuVzlu
+ FD3UhViabOx4BwEnoKzo1iDrII6NQOyJCa1GDoHUxy9FJ5xUU+tgtKsKLijA8zfxcw
+ +qNhBXl88HIF3TLeKw/jG191ogkC/Z5g0gquht8+wmd+bd60dtYr+ohDJWOrzhl4i5
+ nE+A0AMahJERcsWLXdYqZxVrs9Hi0vIP4YdcCzE2Jn7jrlNTCu/1ZcYDDFUfbMs4UN
+ wD36MiHTMajFg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=M9dKFXvr
+Subject: [Buildroot] [PATCH 1/1] security hardening: add support for glibc
+ _FORTIFY_SOURCE=3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +71,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=056e1c7fecdf0d111bde6e08246dc50f1bffaf8f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+A new _FORTIFY_SOURCE=3 level was introduced in glibc, in commit:
+https://sourceware.org/git/?p=glibc.git;a=commit;h=c43c5796121bc5bcc0867f02e5536874aa8196c1
 
-Fix CVE-2022-3037, CVE-2022-3099, CVE-2022-3134
+This commit was first included glibc 2.33. At that time, it was only
+supported by llvm/clang 9, and not by any released gcc version.
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 24261a1762a0017cba8128935a37280c7b876468)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+To support _FORTIFY_SOURCE=3, the needed gcc features were introduced
+in version 12. The gcc 12 support was added in glibc commit:
+https://sourceware.org/git/?p=glibc.git;a=commit;h=86bf0feb0e3ec8e37872f72499d6ae33406561d7
+This commit was first included in glibc 2.35.
+
+Buildroot updated to glibc 2.35 in commit:
+https://git.buildroot.org/buildroot/commit/?id=68d0aede597d32816c5b2ff32de0ce33cc14eb93
+
+Buildroot introduced gcc 12 support in commit:
+https://git.buildroot.org/buildroot/commit/?id=0f1ad4fc93286adaba852c99d6e1c2565b5c4258
+
+Support for _FORTIFY_SOURCE=3 can now be added.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in           | 9 +++++++++
+ package/Makefile.in | 2 ++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index f06d084cb3..0c6b720dd1 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  7c97f8e8cc56157cad7d461633beb347472e134e96b5545d24d1fe451dfaecc2  vim-9.0.0292.tar.gz
-+sha256  b90063706a2a9ee234275e0dd4b71a11e24867c33203c432fd6e9799fdc3bff9  vim-9.0.0453.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  4afae7c984ab1a4ccd0b474a695f316e7435ab6ed46537648af925c18835d853  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 5e7c34abbb..3f1985f036 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in b/Config.in
+index 3c57c591a8..cd26c9f102 100644
+--- a/Config.in
++++ b/Config.in
+@@ -929,6 +929,15 @@ config BR2_FORTIFY_SOURCE_2
+ 	  Also adds checks at run-time (detected buffer overflow
+ 	  terminates the program)
  
--VIM_VERSION = 9.0.0292
-+VIM_VERSION = 9.0.0453
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
++config BR2_FORTIFY_SOURCE_3
++	bool "Extended"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_12
++	help
++	  This option sets _FORTIFY_SOURCES to 3 and even more
++	  checking is added compared to level 2. Extends checks at
++	  run-time that can introduce an additional performance
++	  overhead.
++
+ endchoice
+ 
+ comment "Fortify Source needs a glibc toolchain and optimization"
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 43d214bcbe..7f1b00ba24 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -160,6 +160,8 @@ ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+ TARGET_HARDENED += -D_FORTIFY_SOURCE=1
+ else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
+ TARGET_HARDENED += -D_FORTIFY_SOURCE=2
++else ifeq ($(BR2_FORTIFY_SOURCE_3),y)
++TARGET_HARDENED += -D_FORTIFY_SOURCE=3
+ endif
+ 
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-- 
+2.37.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
