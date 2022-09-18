@@ -1,94 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4354CC54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 12:23:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6F90C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 12:37:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3B5260E40;
-	Sun, 18 Sep 2022 12:23:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3B5260E40
+	by smtp4.osuosl.org (Postfix) with ESMTP id E83C541B9E;
+	Sun, 18 Sep 2022 12:37:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E83C541B9E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bqcc-D2_LCS1; Sun, 18 Sep 2022 12:23:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ol0xAbTU0IjP; Sun, 18 Sep 2022 12:37:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFF4360E2B;
-	Sun, 18 Sep 2022 12:23:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFF4360E2B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3BBEA1BF228
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:23:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDF6D41B92;
+	Sun, 18 Sep 2022 12:36:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDF6D41B92
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 81A681BF228
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:36:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 174F060E2B
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:23:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 174F060E2B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6999584143
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:36:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6999584143
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B83jlIYbI422 for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 12:23:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DvwmInqP0RcY for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 12:36:54 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 107A860AB1
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 107A860AB1
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 12:23:44 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id n8so11356620wmr.5
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 05:23:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 643C984141
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 643C984141
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 12:36:54 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id t7so43008327wrm.10
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 05:36:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date;
- bh=u3W5G2gUU6AcfA1XnIWKrjVsAcoJ0LrxNQG6+z8lVls=;
- b=3eXyUtyG+bD/74myC2oMIn8L2IqcjtoIhNAGg0klY+vPpf/s3uADCq03GEBE+43XXf
- aU0hMNo2xI+j4RzNwfxYWfUvzqY0sMcd8Q98nxONhr4SK2ZWBGw+6Ks9nIAAqlXYIXg/
- uJC7EAbyanJmK+UCtKio+opff1TdmsyRoS8raJFKon2MIVhz8ZJiSSXsaUlmqhtn+w+I
- 6VuGaRb3ZJL4mh+n2iCqkM/egIwTTaQyST7LeNKS9cQaJHwKMrVlE+BFZd55tvFUhb4h
- yf5Zk29P21CnwJReXDX6PrX+pQ0V8MxEUYtO1fS+3VTls17HDtG3PRpnslHVnWq8AWec
- JAsg==
-X-Gm-Message-State: ACrzQf29fQGk1/qVr9HyfGhe0WQsCLOe1+F3lAS23a38jA4MHoecmC8P
- ZmoDhKPH95PCGnHKDRuYhLs/hNY/PVDaZFyq1kY=
-X-Google-Smtp-Source: AMsMyM5QvCe5paHoTreS5pYYK3WJilHokP8sFoSa7XJtyqoD8VG0J5Y624HrEOspWuFF5Xmq3LZtUA==
-X-Received: by 2002:a05:600c:22c7:b0:3b4:92ba:ff99 with SMTP id
- 7-20020a05600c22c700b003b492baff99mr9649267wmg.190.1663503823192; 
- Sun, 18 Sep 2022 05:23:43 -0700 (PDT)
-Received: from [172.23.97.104] ([79.140.217.34])
- by smtp.gmail.com with ESMTPSA id
- bg31-20020a05600c3c9f00b003a5f4fccd4asm10274598wmb.35.2022.09.18.05.23.42
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 18 Sep 2022 05:23:42 -0700 (PDT)
-Message-ID: <d65d7597-60bb-2553-d7fa-cadd99ab8920@mind.be>
-Date: Sun, 18 Sep 2022 14:23:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-GB
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=fYe3ytgrslyae5kmttsATG4AaggqrzEXjXSP3RoLnWY=;
+ b=yrUb/OJIfV3C3uaBTgYTNQYEZ+jRFDPCfQK//nZisTMo7x55PTxIJd2V9wt7nGHIKA
+ 2T7cDAPCLSR8C9avjyA8A5ulRrrx/TnayCW2JjuFNDrnTX8whX0hBvhDfGPBAffP5sMk
+ BUtwGexTZK0xqALN1RoDH4xJnqaL8UQwB+f+UtNnSjojFShx0MjDj6VGuL4siUuT+Bqd
+ 7ZqYb9hR/B/HweKW5SC7SedV3uCN2PmShmIRSQa2/485E7gMD8K8iPTxxqxgIglW0J6+
+ sjzeNGswWWA1B5P38DjGli5bY2Hstec1SFqx3N/ZmywB+P7ZkNBA22+ivDWtlBvIiYNH
+ cgYg==
+X-Gm-Message-State: ACrzQf10SoaaSN8NX8geh3BdX5IQZi2NsyL9sgM2QjvEPUpG2hFecx2d
+ NN0TGoDPIOqZnqc355vnYNoZQ5m+h3k=
+X-Google-Smtp-Source: AMsMyM792OK4UomcDgHor3XYDOuE3PRyUVBELyFQ98NXQ+RAdL7NNoi0KKjAQ544ZwFTwXp6byMwHQ==
+X-Received: by 2002:a05:6000:156b:b0:22a:a83a:d349 with SMTP id
+ 11-20020a056000156b00b0022aa83ad349mr8119257wrz.277.1663504612104; 
+ Sun, 18 Sep 2022 05:36:52 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ g11-20020a05600c310b00b003b33943ce5esm7599838wmo.32.2022.09.18.05.36.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 18 Sep 2022 05:36:51 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-References: <20220918122239.189147-1-arnout@mind.be>
-From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <20220918122239.189147-1-arnout@mind.be>
+Date: Sun, 18 Sep 2022 14:36:18 +0200
+Message-Id: <20220918123618.4959-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date;
- bh=u3W5G2gUU6AcfA1XnIWKrjVsAcoJ0LrxNQG6+z8lVls=;
- b=VXgc+zQyvKTU+BcF8VDN+chygOaVLuphNeZu8a0S+IRpDhxTLEneZnMOUI7vGHp/E6
- j7i97bVom2d0QNdAsT+KpnQ/o74vOS+MK40HOeoqX4ZhFwtocroK9P2viSr2ko5rz9QL
- nQhjdBKgvsVQ+VvQPg5iXKVogbfJnEChnhPCxQ62f/4813+cS18SXCWBkhxqV70eBkY3
- LeZUXrziLL7rU6xnKwKiNw2a8frD6jHUqcCbR+ZOUYqKfJcDroAaDIYO7N9XBzs4MX7x
- nE9UUrLQ2iX5tP8A472tybTD2nxps7IezHBMvE7jV98gliDUp0PDemQOMh4z36DJFqj1
- UyfQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=VXgc+zQy
-Subject: Re: [Buildroot] [PATCH] package/pkg-golang.mk: add osusergo and
- netgo tags in static builds
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=fYe3ytgrslyae5kmttsATG4AaggqrzEXjXSP3RoLnWY=;
+ b=c0QfAf877S2hdRSjz+4x2jamFL5+ya7ljsM2ydFoS4YJqEb6drKQ3015IvPvM5iqn7
+ NkBv1x8E0gXjCXR3TUOKsFhTN0/sa64xGg8rx0WXZq5W3tYkxYPIvxa+sqoAXF7GLShE
+ RDjo54u5BgT9zHpUakrXVRBNL9B8Gbv4tJsjF+tOxxQ+MAtb2D/5aB1wNre7d2KP4kWb
+ nn7DGJtcO9aaOZXhqidHBisH3aAv/fRCuLDOVG7znLPUIOAzaKlHVHA7crmgWKvkqtb9
+ VdZjthFllDEqe2c3Ud+e0zs3KtwrCO3iSvo+pm4MjLJ8vci/NUfiy4vCtU2Fqqg22R8S
+ glwg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=c0QfAf87
+Subject: [Buildroot] [PATCH 1/1] package/python-uvloop: fix legal info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,72 +92,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Commit b1c821b9f7bb3bbd3d104da034dd416c48082591 forgot to update hash of
+license files (copyright updated with
+https://github.com/MagicStack/uvloop/commit/9c6ecb62ba44f607d435441c65eba595d663973b)
 
+Fixes:
+ - http://autobuild.buildroot.org/results/8e2c8294a5388609fd765a1d80ccc2dd31e6011d
 
-On 18/09/2022 14:22, Arnout Vandecappelle wrote:
-> CGO (the Go language C bindings) normally links dynamically with the C
-> libraries. It seems that passing -extldflags=-static is not sufficient
-> to make sure they link statically. As a result, a build using CGO will
-> fail with
-> 
-> runtime.gcdata: missing Go type information for global symbol .dynsym: size 72
-> 
-> There are two modules in the standard Go library that can use CGO:
-> os/user and net. Both of these have pure Go versions, however, which can
-> be selected with the osusergo and netgo tags. Since these two are
-> standard library modules that get used in almost all Go programs, pass
-> those flags in the common infrastructure.
-> 
-> It's not entirely clear if this is always the case or only depending on
-> the specific way CGO is used. In the former case, we could instead
-> disable CGO globally if static libs are enabled. However, it turns out
-> that this doesn't solve the problem completely anyway (delve still fails
-> to link, with different errors). Also, it is possible that other cgo
-> modules do still work. Therefore, just stick to adding the osusergo and
-> netgo tags.
-> 
-> Fixes:
->   - crucible:
->     http://autobuild.buildroot.net/results/c2f/c2f29f55b461899e8e15c0494578304e6f74bf51/
->   - containerd:
->     http://autobuild.buildroot.net/results/699/69910fc6b9f474a7eb0ca7ffa27ac5512cc1bb37/
->   - delve:
->     http://autobuild.buildroot.net/results/552/55225d5da17e85271943f7adce6f07d014d9717d/
->   - probably others...
-> 
-> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-uvloop/python-uvloop.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-  I sent too fast of course, I still wanted to add a reference to this[1] 
-"docuemntation" of Go and static builds.
+diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+index 16c5e81e98..69834d5243 100644
+--- a/package/python-uvloop/python-uvloop.hash
++++ b/package/python-uvloop/python-uvloop.hash
+@@ -2,5 +2,5 @@
+ md5  bc5e841a1c3f6e8935eeaf9d82b5ee29  uvloop-0.17.0.tar.gz
+ sha256  0ddf6baf9cf11a1a22c71487f39f15b2cf78eb5bde7e5b45fbb99e8a9d91b9e1  uvloop-0.17.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
+-sha256  9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
++sha256  377025287798f9dcd819e1f826fa5fc5e2f382528691ab0528c5cf8c8c282c27  LICENSE-APACHE
++sha256  6dd4c399f26de043d77a2ad7e31db4cb5bf08ea8368b0a42d6e158635cc8ab62  LICENSE-MIT
+-- 
+2.35.1
 
-
-  Regards,
-  Arnout
-
-[1] https://www.arp242.net/static-go.html
-
-
-> ---
->   package/pkg-golang.mk | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-> index 0b3dc3d32f..a4fc353e78 100644
-> --- a/package/pkg-golang.mk
-> +++ b/package/pkg-golang.mk
-> @@ -100,6 +100,7 @@ ifeq ($(4),target)
->   
->   ifeq ($(BR2_STATIC_LIBS),y)
->   $(2)_LDFLAGS += -extldflags '-static'
-> +$(2)_TAGS += osusergo netgo
->   endif
->   
->   # Build package for target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
