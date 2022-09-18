@@ -1,57 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B64C4ECAAD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 16:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7B62ECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 16:08:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35FED83F5C;
-	Sun, 18 Sep 2022 16:08:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35FED83F5C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DBAB607B0;
+	Sun, 18 Sep 2022 16:08:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DBAB607B0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VzXQqcM5EGke; Sun, 18 Sep 2022 16:08:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE4A160B08;
+	Sun, 18 Sep 2022 16:08:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE4A160B08
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 30A331BF3FB
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:08:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1644C83F85
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:08:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1644C83F85
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L109YBXCBIOj; Sun, 18 Sep 2022 16:08:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DC0383F48;
-	Sun, 18 Sep 2022 16:07:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DC0383F48
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 772B91BF3FB
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:07:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5232C40A13
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:07:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5232C40A13
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JhG7BuSHshkv for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 16:07:57 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DCC940A0D
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::231])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5DCC940A0D
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 16:07:57 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 0163A100007;
- Sun, 18 Sep 2022 16:07:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oZwpl-00DVl0-Rl; Sun, 18 Sep 2022 18:07:53 +0200
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Bg77UHAlGK5L for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 16:08:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F21083F6D
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 16:08:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F21083F6D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 38A45852B4; Sun, 18 Sep 2022 16:08:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Remi Jouannet <remijouannet@gmail.com>
-References: <1652263403-9321-1-git-send-email-remi.jouannet@outscale.com>
-Date: Sun, 18 Sep 2022 18:07:53 +0200
-In-Reply-To: <1652263403-9321-1-git-send-email-remi.jouannet@outscale.com>
- (Remi Jouannet's message of "Wed, 11 May 2022 10:03:23 +0000")
-Message-ID: <87wna0fyxy.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/busybox: add -O staticroutes
+To: buildroot@buildroot.org
+Date: Sun, 18 Sep 2022 18:06:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fa538315dc02ad011edf6a2a9e25f8589100f15f
+X-Git-Newrev: b153345beca555164a11dae4f2c77862d4fb76b6
+X-Patchwork-Hint: ignore
+Message-Id: <20220918160809.38A45852B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/busybox: add -O staticroutes
  options to udhcpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -64,23 +57,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Remi Jouannet <remi.jouannet@outscale.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Remi" == Remi Jouannet <remijouannet@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b153345beca555164a11dae4f2c77862d4fb76b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >  udhcpc default script can handle staticroutes but it missing from ifupdown
- >  options
+udhcpc default script can handle staticroutes but it is missing from the
+default ifupdown options.
 
- > Signed-off-by: Remi Jouannet <remi.jouannet@outscale.com>
+Signed-off-by: Remi Jouannet <remi.jouannet@outscale.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/busybox/busybox.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 137e44c870..e7f628ca6d 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -1022,7 +1022,7 @@ CONFIG_UDHCP_DEBUG=0
+ CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
+ CONFIG_FEATURE_UDHCP_RFC3397=y
+ CONFIG_FEATURE_UDHCP_8021Q=y
+-CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-t1 -A3 -b -R -O search"
++CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-t1 -A3 -b -R -O search -O staticroutes"
+ 
+ #
+ # Print Utilities
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
