@@ -1,86 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89530C32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 15:38:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E013ECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 15:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F237441B7D;
-	Sun, 18 Sep 2022 15:38:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F237441B7D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5R5o1pjaDISY; Sun, 18 Sep 2022 15:38:43 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA2CE418D6;
-	Sun, 18 Sep 2022 15:38:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA2CE418D6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6D6251BF301
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 15:38:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48E6D60B57
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 15:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48E6D60B57
+	by smtp3.osuosl.org (Postfix) with ESMTP id C58A060BFA;
+	Sun, 18 Sep 2022 15:45:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C58A060BFA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zu-6XpGScUEg for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 15:38:39 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15FA5605AE
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 15FA5605AE
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 15:38:39 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id z6so10962280wrq.1
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 08:38:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=DW/JLiFr+FZO7FBAY6jM8otBXhQIGXIojsR87BOv56k=;
- b=YbA4dY/GmoyC8+9m+k3mQtBOZigekvkmazSC3rhdB9hXkpwkesxAOmKwQvQzY2Esk2
- 6VwDVrCNDJxY/Lhng7R2D1LXrOQ0hkZP5GEuxcl+zuW792tg7Ce+blx71Gjg/dl70uZ0
- IUYgQ4/hDEPHPS4hfLTeYf3anPiDuHCu1mDPe6p2sMvfVnHc60oMA18nZtfoVPAmxrJW
- 5SCXN+1J50ltxkPm4Fy5eehkiAu65DfXBwm9fESc1+C324h6utMoUGPIprB7FzBa4xKt
- DYoZEXDtkwYepzbTPzWK2DQE3zXZSyUKxfrxYxDidWe9Z2Lej7v1xjuLSsf0u2H4zcN+
- JmGw==
-X-Gm-Message-State: ACrzQf2vAAp6HmM5W96OKQjO7uYOyK46r15+hJWHbGPzpDQOT7/wRgsM
- tFsTjs5bpigsV9gQ8Ql1oGIlwoNOT1o=
-X-Google-Smtp-Source: AMsMyM7HVeGVtKd8SgEolioMRceMY4XncWYJyuJHeFY9dwAMxguoZZydc9q+nAPCqGohLaOWuMfnuA==
-X-Received: by 2002:a5d:464e:0:b0:228:c179:6b0a with SMTP id
- j14-20020a5d464e000000b00228c1796b0amr7985879wrs.402.1663515516633; 
- Sun, 18 Sep 2022 08:38:36 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- f12-20020a05600c154c00b003a62052053csm13158937wmg.18.2022.09.18.08.38.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 18 Sep 2022 08:38:36 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 17:38:31 +0200
-Message-Id: <20220918153831.9741-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2PnJ6jpuuGOB; Sun, 18 Sep 2022 15:45:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0583360B57;
+	Sun, 18 Sep 2022 15:45:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0583360B57
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 084B11BF301
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 15:45:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D7F8940181
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 15:45:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7F8940181
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G9uaq5fdRtmz for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 15:45:51 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E97A400F2
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E97A400F2
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 15:45:51 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3F07140002;
+ Sun, 18 Sep 2022 15:45:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZwUH-00DRPm-LZ; Sun, 18 Sep 2022 17:45:41 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220918133049.3180533-1-peter@korsgaard.com>
+ <20220918145816.GI1419013@scaer>
+Date: Sun, 18 Sep 2022 17:45:41 +0200
+In-Reply-To: <20220918145816.GI1419013@scaer> (Yann E. MORIN's message of
+ "Sun, 18 Sep 2022 16:58:16 +0200")
+Message-ID: <871qs8heje.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=DW/JLiFr+FZO7FBAY6jM8otBXhQIGXIojsR87BOv56k=;
- b=PsScXSFr5brlDKVHwJBv+TsXKuyF7rKXT4n7/JFA28dZmRsp9WkirjN3pS5+RTUJFQ
- z/wCGj9mpHmPo91t/U4nOAfLueVqNDvb52GA6W7PBvrya4yuEws3dZJInBvh2fHo4TfQ
- BDKnGvb3Mf/Epi+VDo/6vD4uBe2Daqdcc+swJVkrqYUe1NJanJh82fhCjBYG+SHj5qyu
- EGiTW6mTjQM2T1pFhEof1WpkH87nxObVqd9KEQu6LS7/9smnpi3HKuPOxm7UnfJBFaTL
- oPepfITLmy2IjxwbV4D7JMxZFHsXlcqw/QRTISavuPdyIAl2bJvRdrIlL/n1pemPDuvx
- kBTA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=PsScXSFr
-Subject: [Buildroot] [PATCH 1/1] package/hawkracer: bump to latest git commit
+Subject: Re: [Buildroot] [PATCH] package/openssh: allow sandboxing to be
+ disabled as workaround for seccomp issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,92 +65,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gilles Talis <gilles.talis@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch (merged upstream)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...eatures.cmake-fix-DENABLE_CPU_USAGE_.patch | 38 -------------------
- package/hawktracer/hawktracer.hash            |  2 +-
- package/hawktracer/hawktracer.mk              |  2 +-
- 3 files changed, 2 insertions(+), 40 deletions(-)
- delete mode 100644 package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch
+ > Peter, All,
+ > On 2022-09-18 15:30 +0200, Peter Korsgaard spake thusly:
+ >> As explained in bug #14796, there are situations where the seccomp based
+ >> sandboxing in openssh can get confused, leading to connection issues.
+ > [--SNIP--]
+ >> As a workaround, add a _OPENSSH_SANDBOX option (defaulting to y) to decide
+ >> if sandboxing should be used or not.
+ > [--SNIP--]
+ >> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+ >> index 63a28f3af5..9fab2c9038 100644
+ >> --- a/package/openssh/openssh.mk
+ >> +++ b/package/openssh/openssh.mk
+ >> @@ -24,6 +24,7 @@ OPENSSH_CPE_ID_VENDOR = openbsd
+ >> OPENSSH_CONF_OPTS = \
+ >> --sysconfdir=/etc/ssh \
+ >> --with-default-path=$(BR2_SYSTEM_DEFAULT_PATH) \
+ >> +	$(if $(BR2_PACKAGE_OPENSSH_SANDBOX),--with-sandbox,--without-sandbox) \
 
-diff --git a/package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch b/package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch
-deleted file mode 100644
-index 5c8e6e9e65..0000000000
---- a/package/hawktracer/0001-cmake-platform_features.cmake-fix-DENABLE_CPU_USAGE_.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 65e78e2b972e2fab76b18732941ae611ec782dee Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 12 Aug 2022 14:51:33 +0200
--Subject: [PATCH] cmake/platform_features.cmake: fix
-- -DENABLE_CPU_USAGE_FEATURE=OFF
--
--Fix -DENABLE_CPU_USAGE_FEATURE=OFF to allow the user to disable
--CPU_USAGE and avoid the following build failure without threads:
--
--/home/giuliobenetti/autobuild/run/instance-2/output-1/build/hawktracer-e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8/lib/platform/linux/cpu_usage.c:5:10: fatal error: pthread.h: No such file or directory
--    5 | #include <pthread.h>
--      |          ^~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/7edc29e21e441e66ad7c4df1673e506950930913
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/amzn/hawktracer/pull/86]
-----
-- cmake/platform_features.cmake | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/cmake/platform_features.cmake b/cmake/platform_features.cmake
--index 1abbd41..8d7cfd9 100644
----- a/cmake/platform_features.cmake
--+++ b/cmake/platform_features.cmake
--@@ -18,7 +18,7 @@ macro(_validate_feature_enabled FEATURE_NAME VARIABLE)
-- endmacro(_validate_feature_enabled)
-- 
-- macro(define_platform_feature FEATURE_NAME FEATURE_DEFAULT_FILE DEFAULT_ENABLE)
---    if (NOT "${DEFAULT_ENABLE}" STREQUAL "OFF" OR "${ENABLE_${FEATURE_NAME}_FEATURE}" STREQUAL "ON")
--+    if (NOT "${DEFAULT_ENABLE}" STREQUAL "OFF" AND NOT "${ENABLE_${FEATURE_NAME}_FEATURE}" STREQUAL "OFF")
--         set(OPTION_VALUE ON)
--     else()
--         set(OPTION_VALUE OFF)
---- 
--2.35.1
--
-diff --git a/package/hawktracer/hawktracer.hash b/package/hawktracer/hawktracer.hash
-index 87aa67c4b6..47a8b35b6b 100644
---- a/package/hawktracer/hawktracer.hash
-+++ b/package/hawktracer/hawktracer.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  b6c7fdfbe8178bc7ba49ef840ec18a92d1488ad73ac9f64d2a09042410ad3ef4  hawktracer-e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8.tar.gz
-+sha256  a48e26082fd644222d4a20ecfd5a34700865cf572d41b7eac5b0c8242fef9c5f  hawktracer-2ec19d71923344148928ef45fce549eda67030a4.tar.gz
- sha256  2f377333e64ad08ad3afec8ed6c2c96ced2a6d7d67443eb2784a931bb7b3fd59  LICENSE
-diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
-index a14e2e2528..fd635e350d 100644
---- a/package/hawktracer/hawktracer.mk
-+++ b/package/hawktracer/hawktracer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HAWKTRACER_VERSION = e53b07bc812c4cfe8f6253ddb48ac43de8fa74a8
-+HAWKTRACER_VERSION = 2ec19d71923344148928ef45fce549eda67030a4
- HAWKTRACER_SITE = $(call github,amzn,hawktracer,$(HAWKTRACER_VERSION))
- HAWKTRACER_LICENSE = MIT
- HAWKTRACER_LICENSE_FILES = LICENSE
+ > --with-sandbox expects an argument that specifies what type of sandbox
+ > to use:
+
+ >     --with-sandbox=style Specify privilege separation sandbox (no,
+ >                          capsicum, darwin, rlimit, seccomp_filter,
+ >                          systrace, pledge)
+
+ > If we just pass --with-sandbox without a value, configure will try to
+ > look for a list of available sabdboxing mechanisms, and use the first it
+ > finds:
+
+ >     https://github.com/openssh/openssh-portable/blob/1875042c52a3b950ae5963c9ca3774a4cc7f0380/configure.ac#L3642
+
+Yes, exactly, --with-sandbox is use-the-best-available-sandbox option
+(E.G. the default, so if --with-sandbox / --without-sandbox is not used).
+
+ > All that is before looks like it is BSD-only: pledge and systrace, or
+ > darwin. But then, after seccomp, there is also capsicum and rlimit.
+ > Capsicum on linux does not exist, and rlimit is probably does not bring
+ > much security-wise...
+
+ > So, in all practical matters, on Linux, sandboxing uses seccomp
+ > filtering, or there is no sandboxing.
+
+ > I've added a blurb to explain the above, and applied to master, thanks.
+
+Great, thanks.
+
+ > Note that it looks like we can disable seccomp with:
+
+ >     ac_cv_have_decl_SECCOMP_MODE_FILTER=no
+
+That is also an option, but given that this no-sandbox thing is really
+special in the first case (and arguably because of a bug in glibc and/or
+how seccomp works), I think just having a way to disable it is good
+enough (tm).
+
 -- 
-2.35.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
