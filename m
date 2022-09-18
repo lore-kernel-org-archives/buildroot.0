@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DACEC54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 09:37:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A427C32771
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 09:37:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C87E86FB17;
-	Sun, 18 Sep 2022 09:37:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C87E86FB17
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97E2C418BC;
+	Sun, 18 Sep 2022 09:37:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97E2C418BC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WxOSIyCt09uK; Sun, 18 Sep 2022 09:37:13 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A351418B9;
+	Sun, 18 Sep 2022 09:37:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A351418B9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 34DEC1BF990
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:35:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E51C60E2E
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:35:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E51C60E2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VcNAORHyXywF; Sun, 18 Sep 2022 09:37:01 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE84160E1A;
-	Sun, 18 Sep 2022 09:36:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE84160E1A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 32D5C1BF328
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:35:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F2484011C
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:35:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F2484011C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LIAf_tT0M4eb for <buildroot@lists.busybox.net>;
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q4aPRBgbPm5e for <buildroot@lists.busybox.net>;
  Sun, 18 Sep 2022 09:35:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A8FF404A1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 389626FB0C
  for <buildroot@buildroot.org>; Sun, 18 Sep 2022 09:35:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A8FF404A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 389626FB0C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4894F84BC1; Sun, 18 Sep 2022 09:35:06 +0000 (UTC)
+ id 28CFB84BC8; Sun, 18 Sep 2022 09:35:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 11:16:53 +0200
+Date: Sun, 18 Sep 2022 10:59:53 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 310ceef5ceb2764d5e6585798c7231a7e1e8f26d
-X-Git-Newrev: 2aadfa64e2a5e374f63318a63dfdfa0db9193d64
+X-Git-Oldrev: 1c27a9c836edc36747bc1731ae891a2123ef63c3
+X-Git-Newrev: 4824553c09c9a4459ff2610eb8351ddea4853953
 X-Patchwork-Hint: ignore
-Message-Id: <20220918093506.4894F84BC1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] configs/rockpro64: Use
- mainline ATF
+Message-Id: <20220918093506.28CFB84BC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/networkd-dispatcher: bump to version 2.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2aadfa64e2a5e374f63318a63dfdfa0db9193d64
+commit: https://git.buildroot.net/buildroot/commit/?id=4824553c09c9a4459ff2610eb8351ddea4853953
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Use the mainline ATF as it supports the Pine64 ROCKPro64 board.
+lots of fixes but most importantly:
+ - don't allow unknown operational/admin states (CVE-2022-29799, CVE-2022-29800)
 
-Fixes:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/2812054016
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 0d198311b9d267b3883e9e979fc273f5c61e323c)
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 40a1c141b33c10e996623920c01eff62a9f8fbb9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/rockpro64_defconfig | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/networkd-dispatcher/networkd-dispatcher.hash | 2 +-
+ package/networkd-dispatcher/networkd-dispatcher.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/rockpro64_defconfig b/configs/rockpro64_defconfig
-index 5086320cbc..d39640f855 100644
---- a/configs/rockpro64_defconfig
-+++ b/configs/rockpro64_defconfig
-@@ -7,9 +7,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
+diff --git a/package/networkd-dispatcher/networkd-dispatcher.hash b/package/networkd-dispatcher/networkd-dispatcher.hash
+index ca7c300783..ffb4fa846a 100644
+--- a/package/networkd-dispatcher/networkd-dispatcher.hash
++++ b/package/networkd-dispatcher/networkd-dispatcher.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  1682c0106d9d2879087612e76aebb87672ebf339c43f229a3ee27dadb428575b  networkd-dispatcher-2.1.tar.bz2
++sha256  61270b4c2f39c36da4b0a62724a3cc01f6732493fed0f166ee675bafedff11df  networkd-dispatcher-2.2.3.tar.bz2
+ sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/networkd-dispatcher/networkd-dispatcher.mk b/package/networkd-dispatcher/networkd-dispatcher.mk
+index 4f609db73a..2b1aa257ce 100644
+--- a/package/networkd-dispatcher/networkd-dispatcher.mk
++++ b/package/networkd-dispatcher/networkd-dispatcher.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
+-NETWORKD_DISPATCHER_VERSION = 2.1
++NETWORKD_DISPATCHER_VERSION = 2.2.3
+ NETWORKD_DISPATCHER_SOURCE = networkd-dispatcher-$(NETWORKD_DISPATCHER_VERSION).tar.bz2
+ NETWORKD_DISPATCHER_SITE = https://gitlab.com/craftyguy/networkd-dispatcher/-/archive/$(NETWORKD_DISPATCHER_VERSION)
+ NETWORKD_DISPATCHER_LICENSE = GPL-3.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
