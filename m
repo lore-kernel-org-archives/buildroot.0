@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98092C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:48:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC873C32771
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4668560BB1;
-	Sun, 18 Sep 2022 07:48:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4668560BB1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8410C6F9F5;
+	Sun, 18 Sep 2022 07:49:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8410C6F9F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sk_hWEErGaik; Sun, 18 Sep 2022 07:48:46 +0000 (UTC)
+	with ESMTP id WDu8Ucv3pop4; Sun, 18 Sep 2022 07:48:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7991160A7B;
-	Sun, 18 Sep 2022 07:48:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7991160A7B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9D7E71BF3BD
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B36CF60E16;
+	Sun, 18 Sep 2022 07:48:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B36CF60E16
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 54DB81BF3BD
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 77E69419E0
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77E69419E0
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE25F408C5
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE25F408C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KpWoeMypSEdX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aAiE7vVvNcga for <buildroot@lists.busybox.net>;
  Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 71FC4419D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 107A240471
  for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71FC4419D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 107A240471
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 60AE7847C8; Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id EC601847D2; Sun, 18 Sep 2022 07:48:15 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 09:46:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e78bcf27d42721aea9ff9a3b3877d7e54daa0365
-X-Git-Newrev: 5cd140ca8d40f58f3864b0f267e5e54e5756a45a
+Date: Sun, 18 Sep 2022 09:47:32 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 9d79a10bad1e446c21bcd5ffc6a52418ac00ac56
+X-Git-Newrev: 43ce30dcb91b9150566b9fb3377a7ee248af99b1
 X-Patchwork-Hint: ignore
-Message-Id: <20220918074816.60AE7847C8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Config.in.legacy: add missing select
+Message-Id: <20220918074815.EC601847D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/python3: security
+ bump to 3.10.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,29 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cd140ca8d40f58f3864b0f267e5e54e5756a45a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=43ce30dcb91b9150566b9fb3377a7ee248af99b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Commit 5c89b00a2052 (package/gdb: remove support for 9.2) forgot to
-select the legacy symbol when gdb 9.2 was previously enabled.
+Fixes the following security issues:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+- gh-92888: Fix memoryview use after free when accessing the backing buffer
+  in certain cases.
+
+- gh-87389: http.server: Fix an open redirection vulnerability in the HTTP
+  server when an URI path starts with //.
+
+Release notes:
+https://docs.python.org/release/3.10.6/whatsnew/changelog.html#python-3-10-6-final
+
+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+[Peter: Mark as security bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f4cbf417b59bfdfdfc163a21db71e5e3a75841a0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy | 1 +
- 1 file changed, 1 insertion(+)
+ package/python3/python3.hash | 2 +-
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 631b31689b..5f7274e84b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -154,6 +154,7 @@ config BR2_PACKAGE_GPSD_OLDSTYLE
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 8052e3f6e0..596f3e7c18 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8437efd5b106ef0a75aabfbf23d880625120a73a86a22ade4d2e2e68d7b74486  Python-3.10.5.tar.xz
++sha256  f795ff87d11d4b0c7c33bc8851b0c28648d8a4583aa2100a98c22b4326b6d3f3  Python-3.10.6.tar.xz
+ sha256  f03e17cd594c2085f66a454e695c7ebe5b4d3c0eff534f4f194abc2fd164621b  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 40711dc99c..6dbd33d52c 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_GDB_VERSION_9_2
- 	bool "gdb 9.2 removed"
-+	select BR2_LEGACY
- 	help
- 	  Support for GDB 9.2 has been removed. A new version has
- 	  automatically been selected.
+ PYTHON3_VERSION_MAJOR = 3.10
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
