@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1852ECAAD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3190CC6FA82
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:19:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C169828DA;
-	Sun, 18 Sep 2022 21:19:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C169828DA
+	by smtp1.osuosl.org (Postfix) with ESMTP id D025083EDF;
+	Sun, 18 Sep 2022 21:19:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D025083EDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VQYlJgIVKlnW; Sun, 18 Sep 2022 21:18:59 +0000 (UTC)
+	with ESMTP id I6XcsJNDm3sX; Sun, 18 Sep 2022 21:19:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6E7D8278F;
-	Sun, 18 Sep 2022 21:18:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6E7D8278F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DD1011BF3C4
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:18:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E910C82A83;
+	Sun, 18 Sep 2022 21:19:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E910C82A83
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C1DAD1BF3C4
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:19:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8C9381D0B
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:18:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8C9381D0B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D9C64016C
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:19:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D9C64016C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jdTe_oSGyHbG for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 21:18:56 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 055D181C18
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 055D181C18
- for <buildroot@busybox.net>; Sun, 18 Sep 2022 21:18:55 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E9714200004;
- Sun, 18 Sep 2022 21:18:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oa1gi-00EaRk-K7; Sun, 18 Sep 2022 23:18:52 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sTSAMWL0RApt for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B931D40150
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B931D40150
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A5CF5855CF; Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad <fperrad@gmail.com>
-References: <20220913181841.2703389-1-francois.perrad@gadz.org>
-Date: Sun, 18 Sep 2022 23:18:52 +0200
-In-Reply-To: <20220913181841.2703389-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Tue, 13 Sep 2022 20:18:41 +0200")
-Message-ID: <87pmfse5z7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libxml2: security bump to version
- 2.10.2
+To: buildroot@buildroot.org
+Date: Sun, 18 Sep 2022 23:16:18 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 65b635ef6ae381a7505f987be421257f6b6b5dc8
+X-Git-Newrev: e9ff4ec2dc3ae1677f122ff580fa5c1d9741ae90
+X-Patchwork-Hint: ignore
+Message-Id: <20220918211932.A5CF5855CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/python3: security
+ bump to version 3.10.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,23 +57,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e9ff4ec2dc3ae1677f122ff580fa5c1d9741ae90
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > COPYING was a link to Copyright, this link is now removed
- > with 2.10.0, fix CVE-2022-2309
+Fix CVE-2020-10735
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+https://github.com/python/cpython/blob/v3.10.7/Misc/NEWS.d/3.10.7.rst
 
-Committed to 2022.02.x, 2022.05.x and 2022.08.x, thanks.
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c0ee83d10bd8902c889b773b25a6b96d880f2fad)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0033-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch | 6 ++++--
+ package/python3/python3.hash                                        | 2 +-
+ package/python3/python3.mk                                          | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python3/0033-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch b/package/python3/0033-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
+index 880277eb1d..0458283c18 100644
+--- a/package/python3/0033-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
++++ b/package/python3/0033-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
+@@ -16,6 +16,8 @@ https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
+ [2] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libcrypt/crypt.c?h=v1.0.36#n29
+ 
+ Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Daniel: updated for 3.10.7]
++Signed-off-by: Daniel Lang <d.lang@abatec.at>
+ ---
+  Lib/crypt.py | 4 +++-
+  1 file changed, 3 insertions(+), 1 deletion(-)
+@@ -28,10 +30,10 @@ index 33dbc46bb3..4692a5270c 100644
+          result = crypt('', salt)
+      except OSError as e:
+          # Not all libc libraries support all encryption methods.
+--        if e.errno == errno.EINVAL:
++-        if e.errno in {errno.EINVAL, errno.EPERM, errno.ENOSYS}:
+ +        # Not all libc libraries set errno when encryption method is not
+ +        # available.
+-+        if e.errno == errno.EINVAL or e.errno == 0:
+++        if e.errno in {errno.EINVAL, errno.EPERM, errno.ENOSYS} or e.errno == 0:
+              return False
+          raise
+      if result and len(result) == method.total_size:
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 596f3e7c18..c625e7a8ea 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f795ff87d11d4b0c7c33bc8851b0c28648d8a4583aa2100a98c22b4326b6d3f3  Python-3.10.6.tar.xz
++sha256  6eed8415b7516fb2f260906db5d48dd4c06acc0cb24a7d6cc15296a604dcdc48  Python-3.10.7.tar.xz
+ sha256  f03e17cd594c2085f66a454e695c7ebe5b4d3c0eff534f4f194abc2fd164621b  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 6dbd33d52c..9fd0777be6 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PYTHON3_VERSION_MAJOR = 3.10
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).7
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
