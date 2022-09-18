@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85AB4C32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 09:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D9C5C32771
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 09:39:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30DAC83033;
-	Sun, 18 Sep 2022 09:39:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30DAC83033
+	by smtp4.osuosl.org (Postfix) with ESMTP id D541F418BC;
+	Sun, 18 Sep 2022 09:39:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D541F418BC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U64dxJ1sQb2u; Sun, 18 Sep 2022 09:39:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ty4LVt7Ycmjp; Sun, 18 Sep 2022 09:39:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D14483145;
-	Sun, 18 Sep 2022 09:39:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D14483145
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D32891BF328
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:39:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B099E418B9;
+	Sun, 18 Sep 2022 09:39:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B099E418B9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 149FA1BF97F
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC26682FAE
+ by smtp3.osuosl.org (Postfix) with ESMTP id E510260E2E
  for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC26682FAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E510260E2E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YYOgV8gOILPF for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qXv20T0fi4CE for <buildroot@lists.busybox.net>;
  Sun, 18 Sep 2022 09:39:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 176B882FA2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0EA3860E27
  for <buildroot@buildroot.org>; Sun, 18 Sep 2022 09:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 176B882FA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EA3860E27
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 046A984A39; Sun, 18 Sep 2022 09:39:25 +0000 (UTC)
+ id EE85D84BF0; Sun, 18 Sep 2022 09:39:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 11:35:19 +0200
+Date: Sun, 18 Sep 2022 11:34:14 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: a3f28c84f5d686d5c5c4dd6abdc3229d81b5000b
-X-Git-Newrev: fef387dfa9b45bfe637025f209a61c60403f4b3d
+X-Git-Oldrev: 6138dc9857d3f1115c267ca401781010139d119b
+X-Git-Newrev: a3f28c84f5d686d5c5c4dd6abdc3229d81b5000b
 X-Patchwork-Hint: ignore
-Message-Id: <20220918093925.046A984A39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/polkit: fix typo
- in POLKIT_IGNORE_CVES
+Message-Id: <20220918093924.EE85D84BF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] arch/xtensa: custom
+ configuration requires an overlay
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fef387dfa9b45bfe637025f209a61c60403f4b3d
+commit: https://git.buildroot.net/buildroot/commit/?id=a3f28c84f5d686d5c5c4dd6abdc3229d81b5000b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-The POLKIT_IGNORE_CVES variable was missing a "S",
-therefore the CVE still showed up in the wrong column.
+Using a custom Xtensa configuration requires an overlay that provides
+that configuration; not providing an overlay is like using the default
+configuration, BR2_xtensa_fsf, so there would be no point in that case
+in requesting a custom configuraiton.
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 58e60a32131fec1b363113cae592a45bb1999b05)
+Make providing an overlay mandatory for custom configurations.
+
+Fixes:
+    http://autobuild.buildroot.org/results/f0b/f0ba47d2534aeb3cc2921124aa639ae3aa072b9b
+
+    xtensa-buildroot-linux-uclibc/bin/ld: ldso/ldso/ld-uClibc_so.a(ldso.oS): compiled for a big endian system and target is little endian
+
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=include/xtensa-config.h;hb=2ee5e4300186a92ad73f1a1a64cb918dc76c8d67#l28
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+[yann.morin.1998@free.fr:
+  - always require an overlay for custom configurations, not just for
+    little endian ones
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 4cbf7336914f25478aea943456ba7dc3c892c21a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/polkit/polkit.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arch.mk.xtensa | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index 61666594a2..a8b371acf8 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -12,7 +12,7 @@ POLKIT_CPE_ID_VENDOR = polkit_project
- POLKIT_INSTALL_STAGING = YES
- 
- # Fix was comitted in a2bf5c9c83b6ae46cbd5c779d3055bff81ded683
--POLKIT_IGNORE_CVE = CVE-2021-4034
-+POLKIT_IGNORE_CVES += CVE-2021-4034
- 
- POLKIT_DEPENDENCIES = \
- 	duktape libglib2 host-intltool expat $(TARGET_NLS_DEPENDENCIES)
+diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
+index fd410f6bfa..7b6c59cecd 100644
+--- a/arch/arch.mk.xtensa
++++ b/arch/arch.mk.xtensa
+@@ -1,3 +1,9 @@
++BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
++
++ifeq ($(BR_BUILDING)$(BR2_XTENSA_CUSTOM):$(BR_ARCH_XTENSA_OVERLAY_FILE),yy:)
++$(error No xtensa overlay file provided. Check your BR2_XTENSA_OVERLAY_FILE setting)
++endif
++
+ ################################################################################
+ # This variable can be used by packages that need to extract the overlay.
+ #
+@@ -9,7 +15,6 @@
+ #       tar xf $(ARCH_XTENSA_OVERLAY_FILE) -C $(@D) --strip-components=1 gcc
+ #   endif
+ ################################################################################
+-BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
+ ifneq ($(filter http://% https://% ftp://% scp://%,$(BR_ARCH_XTENSA_OVERLAY_FILE)),)
+ ARCH_XTENSA_OVERLAY_URL = $(BR_ARCH_XTENSA_OVERLAY_FILE)
+ ARCH_XTENSA_OVERLAY_FILE = $($(PKG)_DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
