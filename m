@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18A03ECAAD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07B34ECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A360642468;
-	Sun, 18 Sep 2022 21:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A360642468
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9218E42475;
+	Sun, 18 Sep 2022 21:20:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9218E42475
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PVQ-2O_nwYGz; Sun, 18 Sep 2022 21:20:26 +0000 (UTC)
+	with ESMTP id XsgI0HPjsH65; Sun, 18 Sep 2022 21:20:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DF824246D;
-	Sun, 18 Sep 2022 21:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DF824246D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F23011BF97F
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:19:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 782084247C;
+	Sun, 18 Sep 2022 21:20:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 782084247C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D6E91BF3C4
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:20:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBC9D6072A
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:19:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBC9D6072A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 570BC4049B
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:20:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 570BC4049B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3IsUtTfInxLs for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Rnqgko3Di-KO for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 21:20:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D0E3660AE6
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0E3660AE6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 797744023B
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:20:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 797744023B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BDC3B855CB; Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
+ id 6938F856EA; Sun, 18 Sep 2022 21:20:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 23:18:09 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 297782280c594d9b607e7421f9b551a21ba727c8
-X-Git-Newrev: 7b1ab29d67b3a3fd8853dac75d7a22c17d27b6e9
+Date: Sun, 18 Sep 2022 23:14:49 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 5dc3ee86c360038e49b50544717f6c5eac44cd45
+X-Git-Newrev: 34084edd257a436edf97b7e9d9c048fa4260c294
 X-Patchwork-Hint: ignore
-Message-Id: <20220918211932.BDC3B855CB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libxml2: security
- bump to version 2.10.2
+Message-Id: <20220918212044.6938F856EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] toolchain/Config.in:
+ update gcc bug 90620
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,56 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b1ab29d67b3a3fd8853dac75d7a22c17d27b6e9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=34084edd257a436edf97b7e9d9c048fa4260c294
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-COPYING was a link to Copyright, this link is now removed
+Gcc bug 90620 reappeared with gcc 11.x so let's update
+BR2_TOOLCHAIN_HAS_GCC_BUG_90620 conditions.
 
-with 2.10.0, fix CVE-2022-2309
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a7295520a9358929c9655ac4b0a533b4e81119bd)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998@free.fr:
+  - don't switch arch and gcc-version between select and depends-on
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a9d35fd78cf44c1764b21e396bd383bd8e65a5ac)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 6 +++---
- package/libxml2/libxml2.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ toolchain/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index e67d3b0b8a..4d24c60132 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.9/libxml2-2.9.14.sha256sum
--sha256  60d74a257d1ccec0475e749cba2f21559e48139efba6ff28224357c7c798dfee  libxml2-2.9.14.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.10/libxml2-2.10.2.sha256sum
-+sha256  d240abe6da9c65cb1900dd9bf3a3501ccf88b3c2a1cb98317d03f272dda5b265  libxml2-2.10.2.tar.xz
- # License files, locally calculated
--sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  COPYING
-+sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 3647549a4b..37a4396cbe 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index ba1af1ece6..932130c3c3 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -171,11 +171,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_85862
  
--LIBXML2_VERSION_MAJOR = 2.9
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).14
-+LIBXML2_VERSION_MAJOR = 2.10
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).2
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
--LIBXML2_LICENSE_FILES = COPYING
-+LIBXML2_LICENSE_FILES = Copyright
- LIBXML2_CPE_ID_VENDOR = xmlsoft
- LIBXML2_CONFIG_SCRIPTS = xml2-config
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
+ # ICE: in do_output_reload, at reload1.c:7978 on microblaze.
+-# This bug no longer exists in gcc 10.x
++# This bug no longer exists in gcc 10.x but reappeared in gcc 11.x
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
+ 	bool
+ 	default y if BR2_microblaze
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 \
++		|| BR2_TOOLCHAIN_GCC_AT_LEAST_11
  
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
+ # ICE: compiler error: Segmentation fault on Nios II. This bug
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
