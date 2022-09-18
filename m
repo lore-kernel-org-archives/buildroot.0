@@ -1,86 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76A56C32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 16:29:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF27EECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 16:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB13B41A42;
-	Sun, 18 Sep 2022 16:29:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB13B41A42
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B69F60E3F;
+	Sun, 18 Sep 2022 16:29:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B69F60E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XRSFHhe7Bv8a; Sun, 18 Sep 2022 16:29:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XlCx8L77IAqh; Sun, 18 Sep 2022 16:29:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA41841A3C;
-	Sun, 18 Sep 2022 16:28:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA41841A3C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 715EE1BF5B5
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:28:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EC2E60E25;
+	Sun, 18 Sep 2022 16:29:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EC2E60E25
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CE8671BF5B5
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:29:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C0AC40A1E
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C0AC40A1E
+ by smtp1.osuosl.org (Postfix) with ESMTP id A97E983E6E
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:29:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A97E983E6E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cVoTCDTTL8qP for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 16:28:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t9-1NNXOb6Fz for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 16:29:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F1DD40989
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4F1DD40989
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 16:28:56 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id g3so22659692wrq.13
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 09:28:56 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4932683E51
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4932683E51
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 16:29:37 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id l14so59443505eja.7
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 09:29:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=23lxIDRhFwlxCpN20Q/hVNiPR0EMK4xq+SEur1iWs08=;
- b=Jf40UcEtpRZrP1bRUspLciC0yLMg6vwdxfU3DKOi/cI3KMKuTBMsPPhmHLnXle6RvX
- 71UEXSHk8/YCBBaumXFTjq3gMY76N1+pXeFklLxxgWZTLHfE1Lj33gYAJNZwYjB1DC1i
- 7si7XPs0qIIIwhg8ceYUFKjow+eH21eHsTpDpkmbvb43ILtNZlk1/o+fdIXLmxpncMEq
- /Wxuh4lOO7YCZt2Kuiawaz2nfhHce1qB6DY2Dwt2lWnShI4T0UjwHl/Zjts8ikJ/Wh2H
- mU4+NM0Chrbm8VpmDRquDZCIbnJrSZ2/j9FvEPVdEee6aMC0xA/dimg5ZHJ40R+GQzYg
- o7ng==
-X-Gm-Message-State: ACrzQf0lkX/Wx4UkSL7npOSSJdm+aVO8ln5kKB0kWPV0jBa9H5aaraEN
- 8XLjPqlqXg/fwpSTll7liirLCFTaU/8=
-X-Google-Smtp-Source: AMsMyM5qh2W5i3cYkK5iwIQZFCzZ72nxK7KxlQoeLtPt9jK90WfS02ot3aiQUnwuq8BsJ+vxcl6iMg==
-X-Received: by 2002:a05:6000:186d:b0:22a:45a3:7935 with SMTP id
- d13-20020a056000186d00b0022a45a37935mr8072380wri.209.1663518533903; 
- Sun, 18 Sep 2022 09:28:53 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- o13-20020a5d684d000000b0022a53fe201fsm10698671wrw.68.2022.09.18.09.28.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 18 Sep 2022 09:28:53 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 18:28:50 +0200
-Message-Id: <20220918162850.25720-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date;
+ bh=QTqCX6UJ46GOsNlP/PDbxETpXvi4Wo4g5jlSS4zUlaE=;
+ b=cHchdJlOyuaDcxzi3WTijXNpCvEV+soyxNfT1+FSLljQ02c31ggqzv+SoQoENrHd5M
+ tbRrTbeO830ZFCSuhZLIYN14AlNtBNZ0V9vusUZmbcn6aHAG741t1ec+pSB5YMP6Ng6u
+ vGOIlbC/+lbwjNq+Ch/JbNiqJKi/neySOru7WtqSjZCAvGeRDat7tPKOSlgLWJkb3yjx
+ eMyIAnCheYQ++NpFRIlPlBDffIPaZ2fYHVZWphwXXEYF8xaeI2Dy9SZzsrPv/v/FdkNP
+ Qegzewisc6GK2DCerqvC17aYxApLT+tgMXPv5XiQpVS6TnhqDVYjlkjoJbO7i+ZsFhOs
+ lDLA==
+X-Gm-Message-State: ACrzQf3vNwnDFTjZ0o5JEUDyH8PK5d0Uncas4q1QKUlC/ZhaPG2Tw8ke
+ OZTK/qAETsrHas75uBUfyslbYQ==
+X-Google-Smtp-Source: AMsMyM7lFyQ3/7BqBCL+b6J59Aw0GH3WrgINoqAF5IOjANkMOtnjY2qBymRhRtSR9IvH58uam7M39Q==
+X-Received: by 2002:a17:907:d19:b0:77b:2fb5:43ec with SMTP id
+ gn25-20020a1709070d1900b0077b2fb543ecmr9786941ejc.608.1663518575303; 
+ Sun, 18 Sep 2022 09:29:35 -0700 (PDT)
+Received: from [192.168.43.18] ([109.139.7.201])
+ by smtp.gmail.com with ESMTPSA id
+ kw4-20020a170907770400b0073dcdf9b0bcsm14370642ejc.17.2022.09.18.09.29.33
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 18 Sep 2022 09:29:34 -0700 (PDT)
+Message-ID: <af421cc0-9596-04c0-d1fb-971f8427e456@mind.be>
+Date: Sun, 18 Sep 2022 18:29:31 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-GB
+To: Norbert Lange <nolange79@gmail.com>, buildroot@buildroot.org
+References: <20220215124619.563502-1-nolange79@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20220215124619.563502-1-nolange79@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=23lxIDRhFwlxCpN20Q/hVNiPR0EMK4xq+SEur1iWs08=;
- b=ZFf2HZ+tXsv9ivrRLHzE+H2Osv1hoTW0mbqEiYc8PH3uvokwPVDLSQ5rqgLJUizw0A
- 8w6zqTcgMNuCMk5KelxvDMFJbg9z6i/EXG4B087v0brUQMvJPKKbYd7haY1QAHrfL8I2
- a6vIr9GdRC6l5YAP75xNysTk+w2Ly7EaQ5BUZQsJLMklBOHPReFUgSFN6htJ9A2bbOLV
- 4iAo6B0pgY4PHkdia0RN/7K50Nr6N5x5MX+Sa2i0T9GZ2hSzPbeVkTxfx3hkhHDKMcya
- NXjQeZslJriJh+uT+IT7kjAkDzSh5xAqf8q8LpboTU7HCL9BvSa3x9FQaHOyLEKwc+50
- QF5Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZFf2HZ+t
-Subject: [Buildroot] [PATCH 1/1] utils/genrandconfig: handle a10disp
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date;
+ bh=QTqCX6UJ46GOsNlP/PDbxETpXvi4Wo4g5jlSS4zUlaE=;
+ b=TrpotJezAQls5IT9EJX2zOv6Rbnr3dOFtHzCzVoOkaGorSLDnTc9c8IiQ7kgwYorqI
+ RXlH2Zx4fKVX4zGknTXxI9zRPToKzkP4lDoSHHMZLa58bHj4Oa1s13Y+Iyc90IZUAwe3
+ rH/mVBV2+1o8ieTgjhhOzKIYOPkFYhs6sAdQ+HG5792lYzobXwq/42kUbTLLTy9ljlvG
+ V09Dl27xz0AVxPGDQETS5UINg9U4+kqdoPS9bW/l9liX6tvs0GwNCpcCqfTwtBJ3zIZ1
+ cv5i1FfvqAHRoBmqujzau8JqibL1DDdqU+MqLcitiV43sHIuAiZxi6FC5ijDJm7O2Nwy
+ QPDQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=TrpotJez
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain: support mismatched merged usr
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,40 +98,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-a10disp will raise the following build failure with a mainline kernel:
+  Hi Norbert,
 
-cp: cannot stat '/home/autobuild/autobuild/instance-0/output-1/build/linux-5.17.15/include/video/sunxi_disp_ioctl.h': No such file or directory
+  Sorry that this has been laying around so long without reaction. The thing is 
+that this external toolchain sysroot stuff is incredibly fragile and even worse, 
+difficult to understand. So there isn't much motivation to accept patches. We 
+probably should have some tests for it...
 
-Fixes:
- - http://autobuild.buildroot.org/results/1f2607d6adece4d5dfe17fbdb032a2d228fc030f
+On 15/02/2022 13:46, Norbert Lange wrote:
+> Look at the case where the source toolchain has non-merged usr,
+> yet the target will have merged usr.
+> 
+> sysroot/lib/ld-musl-x86_64.so.1 -> ../usr/lib/libc.so
+> sysroot/usr/lib/libc.so
+> 
+> What happens is that buildroot copies the ld-*so* symlink
+> into usr/lib, at which point it becomes broken.
+> 
+> We now detect these broken symlinks, then try to find the target
+> binary in the library directories and fix the link.
+> 
+> Fix the case where the lib directory is a symlink, and no ld-*so*
+> is installed by adding -H to find.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- utils/genrandconfig | 2 ++
- 1 file changed, 2 insertions(+)
+  I don't understand what's the issue there. $(STAGING_DIR)/lib is always a 
+symlink in merged usr, and never a symlink in non-merged usr. Also, the -H 
+parameter has no effect on the paths supplied in the command line (i.e. 
+$(STAGING_DIR)/lib itself), only on the symlinks within it. So I don't 
+understand what you're trying to fix here. Maybe you have a tuple->. symlink 
+inside the lib directory? But even that won't be followed by find because it 
+sees that it's a directory it already encountered. Or maybe it's a 
+tuple->../usr/lib/tuple symlink? That also won't be followed by find because 
+it's a broken symlink.
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index e43452d5b7..10a29912d2 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -304,6 +304,8 @@ def fixup_config(sysinfo, configfile):
-     if 'BR2_PACKAGE_AUFS_UTIL=y\n' in configlines and \
-        'BR2_PACKAGE_AUFS_UTIL_VERSION=""\n' in configlines:
-         return False
-+    if 'BR2_PACKAGE_A10DISP=y\n' in configlines:
-+        return False
- 
-     if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines and \
-        'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE=""\n' in configlines and \
--- 
-2.35.1
+  So, can you explain better (in the commit message) in which situation this is 
+needed?
 
+> Also use `cp -t` instead of some rarely used xargs tricks.
+
+  That's pretty much in the eye of the beholder. I regularly use xargs -I, I 
+never used cp -t. We use neither of these constructs anywhere else in Buildroot. 
+So if anything, it should probably be changed into find -exec which we do use 
+elsewhere (though I honestly find it much more annoying to use than xargs -I).
+
+  Anyway, such an unrelated change should be a separate patch, so we can easily 
+skip it if we don't agree (or apply it if we don't agree with the rest).
+
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>   toolchain/helpers.mk | 13 +++++++++++--
+>   1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index ef8e9a5f64..aaf2aecd80 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -135,8 +135,17 @@ copy_toolchain_sysroot = \
+
+  There's a huge comment above copy_toolchain_sysroot that explains in detail 
+what it does. It should really be interspersed with the code itself, but due to 
+make limitations that's not possible. Anyway, that comment should be extended 
+with an explanation of the why and the how of the new block.
+
+>   			$(call simplify_symlink,$$i,$(STAGING_DIR)) ; \
+>   		done ; \
+>   	fi ; \
+> -	if [[ ! $$(find $(STAGING_DIR)/lib -name 'ld*.so.*' -print -quit) ]]; then \
+> -		find $${ARCH_SYSROOT_DIR}/lib -name 'ld*.so.*' -print0 | xargs -0 -I % cp % $(STAGING_DIR)/lib/; \
+> +	for i in $$(find -H $(STAGING_DIR)/lib -name 'ld*.so.*' -xtype l); do \
+
+  Should there ever be more than one? IOW shouldn't there be a -quit?
+
+  Also, we usually use backticks instead of $$()
+
+> +		LINKTARGET=`readlink $$i`; \
+> +		rm $$i; \
+> +		NEWLINKTARGET=$$(find -H $(STAGING_DIR)/$${ARCH_LIB_DIR} $(STAGING_DIR)/lib $(STAGING_DIR)/usr/$${ARCH_LIB_DIR} $(STAGING_DIR)/usr/lib -name "`basename $${LINKTARGET}`" -print -quit); \
+
+  What you actually want here is to take the first one that matches, right? 
+Also, it should always be in one of those directories themselves, and not in one 
+of the subdirectories I think? In that case, I think it's more clear if it's a 
+loop rather than find. So something like:
+
+	for libdir in $(STAGING_DIR)/$${ARCH_LIB_DIR} $(STAGING_DIR)/lib 
+$(STAGING_DIR)/usr/$${ARCH_LIB_DIR} $(STAGING_DIR)/usr/lib; do \
+		NEWLINKTARGET="$${libdir}/`basename $${LINKTARGET}`"; \
+		if [ -n "$${NEWLINKTARGET}" -a -e "$${NEWLINKTARGET}" ]; then \
+			echo "Symlinking $$i -> `readlink $$i`" ; \
+			ln -sr $${NEWLINKTARGET} $$i; \
+			break;
+		fi; \
+	done; \
+
+(this was just some quick coding, I probably missed a lot of things).
+
+> +		if [ -n "$${NEWLINKTARGET}" -a -e "$${NEWLINKTARGET}" ]; then \
+
+  If this is not true, was it a good idea to delete the symlink? Or maybe we 
+should even error out in that case?
+
+> +			ln -sr $${NEWLINKTARGET} $$i; \
+> +			echo "Symlinking $$i -> `readlink $$i`" ; \
+> +		fi; \
+> +	done; \
+> +	if [[ ! $$(find -H $(STAGING_DIR)/lib -name 'ld*.so.*' -print -quit) ]]; then \
+> +		find $${ARCH_SYSROOT_DIR}/lib -name 'ld*.so.*' -print0 | xargs -0 cp -t $(STAGING_DIR)/lib/; \
+
+  I wonder if this bit couldn't be merged with the above (skipping the -xtype in 
+the find of course).
+
+
+  Regards,
+  Arnout
+
+>   	fi ; \
+>   	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+>   		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
