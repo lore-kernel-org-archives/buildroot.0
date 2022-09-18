@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7B62ECAAD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 16:08:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98B69ECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 16:21:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DBAB607B0;
-	Sun, 18 Sep 2022 16:08:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DBAB607B0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VzXQqcM5EGke; Sun, 18 Sep 2022 16:08:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE4A160B08;
-	Sun, 18 Sep 2022 16:08:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE4A160B08
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 30A331BF3FB
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:08:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1644C83F85
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:08:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1644C83F85
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18DF583103;
+	Sun, 18 Sep 2022 16:21:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18DF583103
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bg77UHAlGK5L for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 16:08:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F21083F6D
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 16:08:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F21083F6D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 38A45852B4; Sun, 18 Sep 2022 16:08:09 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id euNvTpM2EsD4; Sun, 18 Sep 2022 16:21:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D30A83046;
+	Sun, 18 Sep 2022 16:21:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D30A83046
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E0041BF5B5
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:20:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5725B40A0D
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 16:20:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5725B40A0D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GBAVOUZKJs0G for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 16:20:58 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A67B40989
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A67B40989
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 16:20:57 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 17AD4E0002;
+ Sun, 18 Sep 2022 16:20:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZx2M-00DWUa-BA; Sun, 18 Sep 2022 18:20:54 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 18:06:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fa538315dc02ad011edf6a2a9e25f8589100f15f
-X-Git-Newrev: b153345beca555164a11dae4f2c77862d4fb76b6
-X-Patchwork-Hint: ignore
-Message-Id: <20220918160809.38A45852B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/busybox: add -O staticroutes
- options to udhcpc
+To: Joel Stanley <joel@jms.id.au>
+References: <20220511114003.162006-1-joel@jms.id.au>
+ <20220511114003.162006-2-joel@jms.id.au>
+Date: Sun, 18 Sep 2022 18:20:54 +0200
+In-Reply-To: <20220511114003.162006-2-joel@jms.id.au> (Joel Stanley's message
+ of "Wed, 11 May 2022 21:10:03 +0930")
+Message-ID: <87sfkofyc9.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 2/2] package/go: Fix link failure on ppc64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,37 +64,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Anisse Astier <anisse@astier.eu>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b153345beca555164a11dae4f2c77862d4fb76b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
 
-udhcpc default script can handle staticroutes but it is missing from the
-default ifupdown options.
+ > The autobuilder has been reporting build failures for golang packages
+ > such as moby, containerd, and docker-cli on powerpc64le:
 
-Signed-off-by: Remi Jouannet <remi.jouannet@outscale.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/busybox/busybox.config | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >  net(.text): relocation target _savegpr0_28 not defined
 
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 137e44c870..e7f628ca6d 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -1022,7 +1022,7 @@ CONFIG_UDHCP_DEBUG=0
- CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
- CONFIG_FEATURE_UDHCP_RFC3397=y
- CONFIG_FEATURE_UDHCP_8021Q=y
--CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-t1 -A3 -b -R -O search"
-+CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-t1 -A3 -b -R -O search -O staticroutes"
- 
- #
- # Print Utilities
+ >  http://autobuild.buildroot.net/results/a4aab952acca33577822daf9541c25ccb8e68e60
+ >  http://autobuild.buildroot.net/results/07dab4c21074d9f2cfba5020eac1d07e630fa3e9
+ >  http://autobuild.buildroot.net/results/e37af28b6ea2293a5a8a3bb1a5c123bd465ff5de
+
+ > Backport the upstream fix for the go compiler, and a dependant patch:
+
+ >  https://github.com/golang/go/commit/9c9090eb1da540c7d757df0c60423319a28759d3
+ >  https://github.com/golang/go/commit/caa46312eeca1275ce22ecf8985ca31ef8de7883
+
+ > Signed-off-by: Joel Stanley <joel@jms.id.au>
+
+Sorry for the slow response. As far as I can see, this was fixed in go
+1.19 and backported to 1.18.4:
+
+https://github.com/golang/go/issues?q=milestone%3AGo1.18.4+label%3ACherryPickApproved
+
+I also haven't seen any autobuilder issues since we bumped go, so I
+believe this is fixed and I have marked the patch as superseeded.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
