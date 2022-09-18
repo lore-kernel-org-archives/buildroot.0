@@ -1,87 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72E30C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 12:52:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39E69C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 12:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EDC47409A6;
-	Sun, 18 Sep 2022 12:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDC47409A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2C0F40359;
+	Sun, 18 Sep 2022 12:53:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2C0F40359
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SU6ISbIFmHq6; Sun, 18 Sep 2022 12:52:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BMA6GN8eLeXf; Sun, 18 Sep 2022 12:53:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C4214097F;
-	Sun, 18 Sep 2022 12:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C4214097F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DA4E4032A;
+	Sun, 18 Sep 2022 12:53:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DA4E4032A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BFF171BF228
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:52:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 72F731BF228
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 912A141C98
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 912A141C98
+ by smtp4.osuosl.org (Postfix) with ESMTP id 489E5402E8
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:53:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 489E5402E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uyPeFcaHUnS0 for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 12:52:37 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49ABC41C91
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 49ABC41C91
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 12:52:37 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- n35-20020a05600c502300b003b4924c6868so2516194wmr.1
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 05:52:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=iktblK2sRfg1LK6JSp2QRecbfuODUXwalkqOHxgG0q8=;
- b=T96S75pbGUQBdQBu6V0HP9lTJYe3ougvC/lQcyltQLvV2o52JFPlTNC1oiYoTRSCvQ
- qUOwpCXNldi8SC3m0SN31/B4KkOGmdbUf2DGCckLdq6OJX/8lqpPk+TavXtZc3J1lD9o
- 6i+9lc+KP5sOMQH/br8Zr/vcNcCa7jFD2xSwKEoKOIj8dE8xZC2tH3qLbl/DW5hepe4j
- zfthV+womG9geP3H3z81knqYbEJ5ooPp4i69GzHg/aWy26Pd8AmRXhkEQQlHjhbhMV+9
- VPlirGpSfwE2zrGuIP4E3wPZsO+fMuwYmTw4bUWwI5DRYvjWxvNtwK4ek0vlMTxWP8VT
- FAZw==
-X-Gm-Message-State: ACrzQf1ODIZYc37y9Qrjcvt9RdT6Pec8NAxTDHtA0apgbWQrEusQkHSA
- OpwYkhBz06S8aE8KxFISeYDHCUgNSYs=
-X-Google-Smtp-Source: AMsMyM49it2FE+R0fQiMlhKZifWH2p6SlwZ3CJRkLUgCeUlX5PIKd6zl9JBEjWBvwBh/8Jn7O1d2Jw==
-X-Received: by 2002:a05:600c:3511:b0:3b4:bb85:f1e3 with SMTP id
- h17-20020a05600c351100b003b4bb85f1e3mr8354660wmq.0.1663505554985; 
- Sun, 18 Sep 2022 05:52:34 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- bi9-20020a05600c3d8900b003a2f2bb72d5sm11347602wmb.45.2022.09.18.05.52.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 18 Sep 2022 05:52:34 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id swCKyWpLQNF9 for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 12:53:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB69540293
+Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB69540293
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 12:53:11 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.46.240])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id ZtnJo3GiKeVWJZtnKoV0i1; Sun, 18 Sep 2022 14:53:10 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 14:52:21 +0200
-Message-Id: <20220918125221.152222-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sun, 18 Sep 2022 14:53:09 +0200
+Message-Id: <20220918125309.1128650-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=iktblK2sRfg1LK6JSp2QRecbfuODUXwalkqOHxgG0q8=;
- b=pxbOX+WW9oKGw3ggkhBrj1jfJ/WFyaAWiP1gyZUrc0ga/5+77ZJomdB9hGr3eXBFsZ
- Ga9Cx/+YBoYOsth7ClAkdt0i4MI+Zs4qMjOoI0FfGdNl0HgfzOD7zcf6aknqVcQUFsFC
- 6CTgJUCfTsPf9a02o6AK8zmnR24O+ZRuKO3JJDRG4HlvXXRO6HiUL1EofKb04f3b4JpE
- LhnCS4N2/SqgVx0mQ0n5PMBrYTUTUrCqbbVuXjv9Hw4bAfxfzmwnXI5jTuPZhLxrRP2P
- JL/+xMkV1YtM06sUCki8cKHWB2kha6spAz1ZyE6dCzQRLHeE9Br8GZ6PZCZSXd0Ru3OL
- XG7w==
+X-CMAE-Envelope: MS4xfIfbI7LqJEgffY5IFzFOSP2BUit1wM1BooRuDbGKAz1/uqlvuOiNd2Yyo32ds8rEVjDJtCkFLxfG75lNzmj4VVA5tKjfDPU8nzSzfY6BWmOG+jn8lS2v
+ wrHNX2/0TQJhzrig+N0PW7gNCNEoOQfp1yy4T2QuSsrDVyaJ1h6OyDfwqCAJTKq2kwMfppjg0y9bP4AiDKAdEnBVbQIJlPgjJsW3k0ib9LO0ogE4uNu4qH5h
+ xlifxVqFf7rmCIo/5RloXYM26ptFIp4B499y+JXeICZU5vFgRQbJeAw3mud0Kmf9rvdti8SZLWu33gKXgbfeOmZxXxe6p5nExaxSJCMdcX8=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1663505590; bh=EK5hpwC2m/tDV8A2Eq73rMYLXFQ774xLXmOw5jmfsSo=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=XPkcWd6qqZ2ZmiCnRQevObqxN8PpIkkE2gVX7GGIpLzZ57yiI5ohPKBBHgECSmOaW
+ 2ux2siKAJ7xFPswmYodLS+QUiYTdWJ9CeWJvjyY7ZmcP8w6FxKbNsaNSpEcjvJy8Pe
+ +W/rGRg3KdUfX91Mpr8ISIx560oSsUT2AndvsoG7jdnb22bhqe/B2piM0nM1xD+YSo
+ qbW4jk2/mgOvLUM8mRE54y4l4MBZehciy4oNz/KIY8HYzrit9mHLbFXdW74GtkZCfi
+ IJYuynBFFXFH2a3z+Ux7g1qSaAHsRrSZuOXn1HglLj2RCuOiSJeVTCSsas307zq/rj
+ 5I7plmztyEuqA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=pxbOX+WW
-Subject: [Buildroot] [PATCH 1/1] package/libidn2: bump to version 2.3.3
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=XPkcWd6q
+Subject: [Buildroot] [PATCH] package/mmc-utils: fix build failure due to a
+ warning and -Werror enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +73,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://gitlab.com/libidn/libidn2/-/blob/v2.3.3/NEWS
+Add patch to fix warning that is treated like error:
+```
+In function '__bswap_32',
+    inlined from 'do_rpmb_write_block' at mmc_cmds.c:2293:27:
+/home/autobuild/autobuild/instance-15/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/bits/byteswap.h:52:10: error: 'cnt' may be used uninitialized [-Werror=maybe-uninitialized]
+   52 |   return __builtin_bswap32 (__bsx);
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+mmc_cmds.c: In function 'do_rpmb_write_block':
+mmc_cmds.c:2270:22: note: 'cnt' was declared here
+ 2270 |         unsigned int cnt;
+      |                      ^~~
+cc1: all warnings being treated as errors
+```
+Patch is pending upstream:
+https://patchwork.kernel.org/project/linux-mmc/patch/20220918124210.1127345-1-giulio.benetti@benettiengineering.com/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/18c4fce5416e5d1ccd95900ccef87d4c045a361e/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libidn2/libidn2.hash | 2 +-
- package/libidn2/libidn2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ds.c-fix-warning-on-uninitialized-cn.patch | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/mmc-utils/0002-mmc-utils-mmc_cmds.c-fix-warning-on-uninitialized-cn.patch
 
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-index bc96d7e15a..919c9b18a5 100644
---- a/package/libidn2/libidn2.hash
-+++ b/package/libidn2/libidn2.hash
-@@ -1,5 +1,5 @@
- # Calculated locally after checking signature
--sha256  76940cd4e778e8093579a9d195b25fff5e936e9dc6242068528b437a76764f91  libidn2-2.3.2.tar.gz
-+sha256  f3ac987522c00d33d44b323cae424e2cffcb4c63c6aa6cd1376edacbf1c36eb0  libidn2-2.3.3.tar.gz
- 
- # Hash for license files:
- sha256  73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76  COPYING
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index 0564692597..2dd27acde5 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIDN2_VERSION = 2.3.2
-+LIBIDN2_VERSION = 2.3.3
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+diff --git a/package/mmc-utils/0002-mmc-utils-mmc_cmds.c-fix-warning-on-uninitialized-cn.patch b/package/mmc-utils/0002-mmc-utils-mmc_cmds.c-fix-warning-on-uninitialized-cn.patch
+new file mode 100644
+index 0000000000..e2f74879a6
+--- /dev/null
++++ b/package/mmc-utils/0002-mmc-utils-mmc_cmds.c-fix-warning-on-uninitialized-cn.patch
+@@ -0,0 +1,27 @@
++From bf783bbc2da0348591dd317ccd53bbfc5a57f2f8 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sun, 18 Sep 2022 14:10:29 +0200
++Subject: [PATCH] mmc-utils: mmc_cmds.c: fix warning on uninitialized 'cnt'
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Upstream status: https://patchwork.kernel.org/project/linux-mmc/patch/20220918124210.1127345-1-giulio.benetti@benettiengineering.com/]
++---
++ mmc_cmds.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mmc_cmds.c b/mmc_cmds.c
++index 12b7802..777d649 100644
++--- a/mmc_cmds.c
+++++ b/mmc_cmds.c
++@@ -2436,7 +2436,7 @@ int do_rpmb_write_block(int nargs, char **argv)
++ 	int ret, dev_fd, key_fd, data_fd;
++ 	unsigned char key[32];
++ 	uint16_t addr;
++-	unsigned int cnt;
+++	unsigned int cnt = 0;
++ 	struct rpmb_frame frame_in = {
++ 		.req_resp    = htobe16(MMC_RPMB_WRITE),
++ 		.block_count = htobe16(1)
++-- 
++2.34.1
++
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
