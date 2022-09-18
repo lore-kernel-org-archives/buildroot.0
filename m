@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC873C32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:49:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C26F1C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8410C6F9F5;
-	Sun, 18 Sep 2022 07:49:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8410C6F9F5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6550341D15;
+	Sun, 18 Sep 2022 07:49:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6550341D15
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WDu8Ucv3pop4; Sun, 18 Sep 2022 07:48:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fejF_sGRyfaz; Sun, 18 Sep 2022 07:49:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B36CF60E16;
-	Sun, 18 Sep 2022 07:48:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B36CF60E16
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1170041D06;
+	Sun, 18 Sep 2022 07:49:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1170041D06
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 54DB81BF3BD
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FB771BF3BD
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE25F408C5
+ by smtp2.osuosl.org (Postfix) with ESMTP id C8123408C3
  for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE25F408C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8123408C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aAiE7vVvNcga for <buildroot@lists.busybox.net>;
+ with ESMTP id Vol0_y3884QF for <buildroot@lists.busybox.net>;
  Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 107A240471
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:48:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 107A240471
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1AA0400E2
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:48:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1AA0400E2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EC601847D2; Sun, 18 Sep 2022 07:48:15 +0000 (UTC)
+ id E1388847C8; Sun, 18 Sep 2022 07:48:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 09:47:32 +0200
+Date: Sun, 18 Sep 2022 09:44:56 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 9d79a10bad1e446c21bcd5ffc6a52418ac00ac56
-X-Git-Newrev: 43ce30dcb91b9150566b9fb3377a7ee248af99b1
+X-Git-Oldrev: 5926b28ea9c13432a5f107a9c8b70b3e2b79a114
+X-Git-Newrev: 9d79a10bad1e446c21bcd5ffc6a52418ac00ac56
 X-Patchwork-Hint: ignore
-Message-Id: <20220918074815.EC601847D2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/python3: security
- bump to 3.10.6
+Message-Id: <20220918074815.E1388847C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/python-paho-mqtt:
+ fix package for python 3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43ce30dcb91b9150566b9fb3377a7ee248af99b1
+commit: https://git.buildroot.net/buildroot/commit/?id=9d79a10bad1e446c21bcd5ffc6a52418ac00ac56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Fixes the following security issues:
+Fixes the following error on calling mqtt.publish():
 
-- gh-92888: Fix memoryview use after free when accessing the backing buffer
-  in certain cases.
+  File "/usr/lib/python3.10/site-packages/paho/mqtt/publish.py", line 222, in single
+    multiple([msg], hostname, port, client_id, keepalive, will, auth, tls,
+  File "/usr/lib/python3.10/site-packages/paho/mqtt/publish.py", line 126, in multiple
+    if not isinstance(msgs, collections.Iterable):
+AttributeError: module 'collections' has no attribute 'Iterable'
 
-- gh-87389: http.server: Fix an open redirection vulnerability in the HTTP
-  server when an URI path starts with //.
+Backported from https://github.com/eclipse/paho.mqtt.python/pull/497/
 
-Release notes:
-https://docs.python.org/release/3.10.6/whatsnew/changelog.html#python-3-10-6-final
+This was deprecated in python 3.9 and stopped working in python 3.10
 
 Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-[Peter: Mark as security bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f4cbf417b59bfdfdfc163a21db71e5e3a75841a0)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 2526a2f51fce00084a645aec0bdae5471c5ab626)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 2 +-
- package/python3/python3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-fix-publish-for-python-3-10.patch         | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 8052e3f6e0..596f3e7c18 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8437efd5b106ef0a75aabfbf23d880625120a73a86a22ade4d2e2e68d7b74486  Python-3.10.5.tar.xz
-+sha256  f795ff87d11d4b0c7c33bc8851b0c28648d8a4583aa2100a98c22b4326b6d3f3  Python-3.10.6.tar.xz
- sha256  f03e17cd594c2085f66a454e695c7ebe5b4d3c0eff534f4f194abc2fd164621b  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 40711dc99c..6dbd33d52c 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.10
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+diff --git a/package/python-paho-mqtt/0001-fix-publish-for-python-3-10.patch b/package/python-paho-mqtt/0001-fix-publish-for-python-3-10.patch
+new file mode 100644
+index 0000000000..aad6b5d723
+--- /dev/null
++++ b/package/python-paho-mqtt/0001-fix-publish-for-python-3-10.patch
+@@ -0,0 +1,37 @@
++From e1c45570f61f9d6b28f8604c8a8cd6dd94f959ed Mon Sep 17 00:00:00 2001
++From: Brishen Hawkins <brishen.hawkins@gmail.com>
++Date: Tue, 9 Jun 2020 00:18:39 -0600
++Subject: [PATCH] Fix for Python 3.9 moving Iterable to collections.abc
++
++Signed-off-by: Brishen Hawkins <brishen.hawkins@gmail.com>
++
++Backported from: e1c45570f61f9d6b28f8604c8a8cd6dd94f959ed
++Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
++---
++ src/paho/mqtt/publish.py | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/src/paho/mqtt/publish.py b/src/paho/mqtt/publish.py
++index f9f1986e..dcb34ff1 100644
++--- a/src/paho/mqtt/publish.py
+++++ b/src/paho/mqtt/publish.py
++@@ -21,6 +21,10 @@
++ from __future__ import absolute_import
++ 
++ import collections
+++try:
+++    from collections.abc import Iterable
+++except ImportError:
+++    from collections import Iterable
++ 
++ from . import client as paho
++ from .. import mqtt
++@@ -124,7 +128,7 @@ def multiple(msgs, hostname="localhost", port=1883, client_id="", keepalive=60,
++     proxy_args: a dictionary that will be given to the client.
++     """
++ 
++-    if not isinstance(msgs, collections.Iterable):
+++    if not isinstance(msgs, Iterable):
++         raise TypeError('msgs must be an iterable')
++ 
++     client = paho.Client(client_id=client_id, userdata=collections.deque(msgs),
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
