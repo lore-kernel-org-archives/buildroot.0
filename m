@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D9C5C32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 09:39:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53AF3C32771
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 09:40:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D541F418BC;
-	Sun, 18 Sep 2022 09:39:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D541F418BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00E25408DB;
+	Sun, 18 Sep 2022 09:40:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00E25408DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ty4LVt7Ycmjp; Sun, 18 Sep 2022 09:39:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T9zFx3bJWqeF; Sun, 18 Sep 2022 09:40:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B099E418B9;
-	Sun, 18 Sep 2022 09:39:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B099E418B9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 207E2408F8;
+	Sun, 18 Sep 2022 09:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 207E2408F8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 149FA1BF97F
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:39:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 32C971BF328
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E510260E2E
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E510260E2E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0CD7860E27
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 09:39:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CD7860E27
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qXv20T0fi4CE for <buildroot@lists.busybox.net>;
+ with ESMTP id O7rMjGChA7mm for <buildroot@lists.busybox.net>;
  Sun, 18 Sep 2022 09:39:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EA3860E27
+ by smtp3.osuosl.org (Postfix) with ESMTP id 275FE60E2B
  for <buildroot@buildroot.org>; Sun, 18 Sep 2022 09:39:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EA3860E27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 275FE60E2B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE85D84BF0; Sun, 18 Sep 2022 09:39:24 +0000 (UTC)
+ id 1038384C02; Sun, 18 Sep 2022 09:39:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 11:34:14 +0200
+Date: Sun, 18 Sep 2022 11:36:23 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 6138dc9857d3f1115c267ca401781010139d119b
-X-Git-Newrev: a3f28c84f5d686d5c5c4dd6abdc3229d81b5000b
+X-Git-Oldrev: fef387dfa9b45bfe637025f209a61c60403f4b3d
+X-Git-Newrev: 18f6e4bf705a56c7039b7563fee546b519775cb8
 X-Patchwork-Hint: ignore
-Message-Id: <20220918093924.EE85D84BF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] arch/xtensa: custom
- configuration requires an overlay
+Message-Id: <20220918093925.1038384C02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] {linux,
+ linux-headers}: bump 4.{9, 14, 19}.x / 5.{4, 10, 15}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3f28c84f5d686d5c5c4dd6abdc3229d81b5000b
+commit: https://git.buildroot.net/buildroot/commit/?id=18f6e4bf705a56c7039b7563fee546b519775cb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Using a custom Xtensa configuration requires an overlay that provides
-that configuration; not providing an overlay is like using the default
-configuration, BR2_xtensa_fsf, so there would be no point in that case
-in requesting a custom configuraiton.
-
-Make providing an overlay mandatory for custom configurations.
-
-Fixes:
-    http://autobuild.buildroot.org/results/f0b/f0ba47d2534aeb3cc2921124aa639ae3aa072b9b
-
-    xtensa-buildroot-linux-uclibc/bin/ld: ldso/ldso/ld-uClibc_so.a(ldso.oS): compiled for a big endian system and target is little endian
-
-[1] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=include/xtensa-config.h;hb=2ee5e4300186a92ad73f1a1a64cb918dc76c8d67#l28
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-[yann.morin.1998@free.fr:
-  - always require an overlay for custom configurations, not just for
-    little endian ones
-]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4cbf7336914f25478aea943456ba7dc3c892c21a)
+(cherry picked from commit 49f661e5484cf5965564f78511d5201a45bb0d24)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/arch.mk.xtensa | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
-index fd410f6bfa..7b6c59cecd 100644
---- a/arch/arch.mk.xtensa
-+++ b/arch/arch.mk.xtensa
-@@ -1,3 +1,9 @@
-+BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
-+
-+ifeq ($(BR_BUILDING)$(BR2_XTENSA_CUSTOM):$(BR_ARCH_XTENSA_OVERLAY_FILE),yy:)
-+$(error No xtensa overlay file provided. Check your BR2_XTENSA_OVERLAY_FILE setting)
-+endif
-+
- ################################################################################
- # This variable can be used by packages that need to extract the overlay.
- #
-@@ -9,7 +15,6 @@
- #       tar xf $(ARCH_XTENSA_OVERLAY_FILE) -C $(@D) --strip-components=1 gcc
- #   endif
- ################################################################################
--BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
- ifneq ($(filter http://% https://% ftp://% scp://%,$(BR_ARCH_XTENSA_OVERLAY_FILE)),)
- ARCH_XTENSA_OVERLAY_URL = $(BR_ARCH_XTENSA_OVERLAY_FILE)
- ARCH_XTENSA_OVERLAY_FILE = $($(PKG)_DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 9c39e15332..a1b7984489 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  4a1c922a490eeabf5b44d4fde36de9ba5b71711b7352c6258716da41160db628  linux-5.17.15.tar.xz
+-sha256  c6a1d38c6fa3798341372d5cf0088ae806ccdc827e31ecbff8988e097ba5de50  linux-5.15.64.tar.xz
+-sha256  a4dfd8bddb94bd35e42002d85f04b51dcfe862228e5a975f12bd59c456ab6803  linux-5.10.140.tar.xz
+-sha256  bfb43241b72cd55797af68bea1cebe630d37664c0f9a99b6e9263a63a67e2dec  linux-5.4.211.tar.xz
++sha256  da47d9a80b694548835ccb553b6eb1a1f3f5d5cddd9e2bd6f4886b99ca14f940  linux-5.15.67.tar.xz
++sha256  3f47ebdb9afe152a0c32c1157336ef13fa5cc08ac6d884dfc1f6ddc2b7dba268  linux-5.10.142.tar.xz
++sha256  09c72e3dd85df773eb52e53e25c556d132958bd775b0ed6985a6b1ac21c9cfc2  linux-5.4.212.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  2bf3c2ddc76f9754112e990b27241282a564a41615fd8cb7964b9569911a887b  linux-4.9.326.tar.xz
+-sha256  ec93b115e4748e4eead83656486f11e35b515cf5fa19d6d01be3d81f10350796  linux-4.14.291.tar.xz
+-sha256  67de95c6080b5730bf14227478cfc3e4db807941d8a881d9824c25059b3ff549  linux-4.19.256.tar.xz
++sha256  2283c1af5373c43e79adca6987174d932989a8b2551405e83e2e39ebe31e06d2  linux-4.9.327.tar.xz
++sha256  70f4df21901a654632ebbb533884ccaf117a29b14e6f2b672f0c36613c3e897d  linux-4.14.292.tar.xz
++sha256  eadd13aa70f37cdf50eef45c5964bd7146d353b61a1fd026d4fa0b2a68a3ea47  linux-4.19.257.tar.xz
+ # Locally computed
+ sha256  f3559be277be9200897022282be18cfc0278d1d8baec8058305b04b9cd72002a  linux-cip-5.10.115-cip7.tar.gz
+ sha256  71fba4ed5cb48fa7869e9fe271b68b77fed26775ce5cf2f50891aa8f71c388b3  linux-cip-5.10.109-cip5-rt4.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 64ab5c4d02..3be9c16f1c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -379,12 +379,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.9.326"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.291"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.256"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.211"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.140"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.64"	if BR2_KERNEL_HEADERS_5_15
++	default "4.9.327"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.292"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.257"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.212"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.142"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.67"	if BR2_KERNEL_HEADERS_5_15
+ 	default "5.17.15"	if BR2_KERNEL_HEADERS_5_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
