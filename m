@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15D5CC6FA82
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:19:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA455ECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2D9083EDD;
-	Sun, 18 Sep 2022 21:19:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2D9083EDD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D46xkJYoFucz; Sun, 18 Sep 2022 21:19:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4AF1B83F1A;
-	Sun, 18 Sep 2022 21:19:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AF1B83F1A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C8DD41BF97F
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:19:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A532C60BE7
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:19:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A532C60BE7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9018060BFA;
+	Sun, 18 Sep 2022 21:20:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9018060BFA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BNkeahS0Hh2a for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hEFF0SPVJhFQ; Sun, 18 Sep 2022 21:20:01 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4C3460AE6;
+	Sun, 18 Sep 2022 21:20:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4C3460AE6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 09A141BF3C4
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:19:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D72B4419FC
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:19:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D72B4419FC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jV3mP8axv_7N for <buildroot@lists.busybox.net>;
  Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C55CA6072A
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC78B419F8
  for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C55CA6072A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC78B419F8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2376855D4; Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
+ id 99610855CE; Sun, 18 Sep 2022 21:19:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 23:16:42 +0200
+Date: Sun, 18 Sep 2022 23:13:39 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: e9ff4ec2dc3ae1677f122ff580fa5c1d9741ae90
-X-Git-Newrev: 297782280c594d9b607e7421f9b551a21ba727c8
+X-Git-Oldrev: a1af9fcd63d3673431d597886e0628362a27cf2f
+X-Git-Newrev: 65b635ef6ae381a7505f987be421257f6b6b5dc8
 X-Patchwork-Hint: ignore
-Message-Id: <20220918211932.B2376855D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/vim: security
- bump to version 9.0.0453
+Message-Id: <20220918211932.99610855CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x]
+ package/qt5/qt5xmlpatterns: fix build failure due to gcc bug 90620
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=297782280c594d9b607e7421f9b551a21ba727c8
+commit: https://git.buildroot.net/buildroot/commit/?id=65b635ef6ae381a7505f987be421257f6b6b5dc8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix CVE-2022-3037, CVE-2022-3099, CVE-2022-3134
+The qt5xmlpatterns package exhibits gcc bug 90620 [0] when built for the
+Microblaze architecture with optimization enabled, which causes a build
+failure.
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 24261a1762a0017cba8128935a37280c7b876468)
+As done for other packages in Buildroot work around this gcc bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_90620=y.
+
+Fixes:
+    http://autobuild.buildroot.net/results/346/346e6d502a8927c8e95eea156f5b2943a85d0a6b/
+
+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ddedf5e785956d37bd971f1f804f8333cd9cc592)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index f06d084cb3..0c6b720dd1 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  7c97f8e8cc56157cad7d461633beb347472e134e96b5545d24d1fe451dfaecc2  vim-9.0.0292.tar.gz
-+sha256  b90063706a2a9ee234275e0dd4b71a11e24867c33203c432fd6e9799fdc3bff9  vim-9.0.0453.tar.gz
- sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
- sha256  4afae7c984ab1a4ccd0b474a695f316e7435ab6ed46537648af925c18835d853  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 5e7c34abbb..3f1985f036 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+index 27818ecb78..08f6d56747 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+@@ -20,4 +20,8 @@ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ QT5XMLPATTERNS_LICENSE += , BSD-3-Clause (examples)
+ endif
  
--VIM_VERSION = 9.0.0292
-+VIM_VERSION = 9.0.0453
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_90620),y)
++QT5XMLPATTERNS_CONF_OPTS += "QMAKE_CXXFLAGS+=-O0"
++endif
++
+ $(eval $(qmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
