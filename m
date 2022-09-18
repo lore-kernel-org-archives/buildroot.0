@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCC25C6FA82
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:12:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1276ECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6721A60BFA;
-	Sun, 18 Sep 2022 21:12:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6721A60BFA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 739C040138;
+	Sun, 18 Sep 2022 21:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 739C040138
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eX4o70PNOATz; Sun, 18 Sep 2022 21:12:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id x3RkhO9VNmO9; Sun, 18 Sep 2022 21:12:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 943A460AE8;
-	Sun, 18 Sep 2022 21:12:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 943A460AE8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7B9CE1BF3C4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30CA6400EF;
+	Sun, 18 Sep 2022 21:12:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30CA6400EF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 819651BF97F
  for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6483D60AE8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6631B40150
  for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:12:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6483D60AE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6631B40150
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8pTYYfiyKYJP for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9XbhrA_3rowO for <buildroot@lists.busybox.net>;
  Sun, 18 Sep 2022 21:12:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 96E8C60AE6
+ by smtp2.osuosl.org (Postfix) with ESMTP id A565D400EF
  for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96E8C60AE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A565D400EF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84DB1854C7; Sun, 18 Sep 2022 21:12:20 +0000 (UTC)
+ id 8EBB7854C8; Sun, 18 Sep 2022 21:12:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 23:09:17 +0200
+Date: Sun, 18 Sep 2022 23:10:54 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: fac58c23fc2aee59cbce4cd4a3b65ee642cf8f18
-X-Git-Newrev: c867e437e2cdc6ddb4f83c66dcae4b4b46881555
+X-Git-Oldrev: c867e437e2cdc6ddb4f83c66dcae4b4b46881555
+X-Git-Newrev: 5dc3ee86c360038e49b50544717f6c5eac44cd45
 X-Patchwork-Hint: ignore
-Message-Id: <20220918211220.84DB1854C7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/qlibc: bump to
- version 2.4.6
+Message-Id: <20220918211220.8EBB7854C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/sox: work around
+ gcc bug 68485
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c867e437e2cdc6ddb4f83c66dcae4b4b46881555
+commit: https://git.buildroot.net/buildroot/commit/?id=5dc3ee86c360038e49b50544717f6c5eac44cd45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-This is a maintenance release that includes improvements and bug fixes.
+sox is impacted by the microblaze-specific gcc bug #68485 [0], which is
+still unfixed as of gcc 12.x.
 
-https://github.com/wolkykim/qlibc/releases/tag/v2.4.6
+As for all other impacted packages, force no optimisation when using a
+toolchain riddled with that bug.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+   http://autobuild.buildroot.net/results/ac4/ac4fbd55529ac7b4e635a11766f842cd25a833a1/
+
+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2de653832029877a7b1d166b86814fcd56e2d329)
+(cherry picked from commit dd8a8cfa9a584934bb2707c197c43073d6c03436)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qlibc/qlibc.hash | 2 +-
- package/qlibc/qlibc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sox/sox.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/qlibc/qlibc.hash b/package/qlibc/qlibc.hash
-index 6abb16b274..5cd6e1860f 100644
---- a/package/qlibc/qlibc.hash
-+++ b/package/qlibc/qlibc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e195c97453c260acea4421146ba992d9a4d89732eac345b3765c43cc3326d2ad  qlibc-2.4.5.tar.gz
-+sha256  bd98c19f96c0d374adb69c99627c80cf967b5e860c8a4f28c13fa1b0d652a06e  qlibc-2.4.6.tar.gz
- sha256  7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
-diff --git a/package/qlibc/qlibc.mk b/package/qlibc/qlibc.mk
-index 6cce8201bd..3996bb3706 100644
---- a/package/qlibc/qlibc.mk
-+++ b/package/qlibc/qlibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 1896437ad4..d0329bf50d 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -26,6 +26,14 @@ SOX_CONF_OPTS = \
+ 	--with-distro="Buildroot" \
+ 	--disable-stack-protector
  
--QLIBC_VERSION = 2.4.5
-+QLIBC_VERSION = 2.4.6
- QLIBC_SITE = $(call github,wolkykim,qlibc,v$(QLIBC_VERSION))
- QLIBC_LICENSE = BSD-2-Clause
- QLIBC_LICENSE_FILES = LICENSE
++SOX_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++SOX_CFLAGS += -O0
++endif
++
++SOX_CONF_ENV += CFLAGS="$(SOX_CFLAGS)"
++
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
+ SOX_DEPENDENCIES += alsa-lib
+ SOX_CONF_OPTS += --enable-alsa
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
