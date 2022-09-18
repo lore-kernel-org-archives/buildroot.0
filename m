@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88599C32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 10:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22D43C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 10:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 001E4419C3;
-	Sun, 18 Sep 2022 10:54:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 001E4419C3
+	by smtp1.osuosl.org (Postfix) with ESMTP id C15708440F;
+	Sun, 18 Sep 2022 10:55:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C15708440F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XEVSjVS0ztS8; Sun, 18 Sep 2022 10:54:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RCrl46PRaOpg; Sun, 18 Sep 2022 10:55:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96C70416E3;
-	Sun, 18 Sep 2022 10:54:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96C70416E3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 379111BF42D
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:54:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63BDE8427D;
+	Sun, 18 Sep 2022 10:55:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63BDE8427D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4933E1BF42D
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E87A416E3
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:54:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E87A416E3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 255258427D
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:55:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 255258427D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y4f4FOLf8Jzx for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 10:54:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B55BF416C4
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 10:54:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B55BF416C4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9DC4F85015; Sun, 18 Sep 2022 10:54:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a_STy4F2zTNY for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 10:55:02 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEE1A84236
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BEE1A84236
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 10:55:01 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EBD69200003;
+ Sun, 18 Sep 2022 10:54:59 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZrww-00BbIh-UW; Sun, 18 Sep 2022 12:54:58 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 12:54:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2e2eefd5ad86b85c312f263b59b9df2d4653aaa9
-X-Git-Newrev: d588b55458f3ac35ee1c054a0e66c2326c40e7c8
-X-Patchwork-Hint: ignore
-Message-Id: <20220918105432.9DC4F85015@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/azure-iot-sdk-c: bump to version
- LTS_07_2022_Ref01
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20220918103019.196327-1-fontaine.fabrice@gmail.com>
+Date: Sun, 18 Sep 2022 12:54:58 +0200
+In-Reply-To: <20220918103019.196327-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 18 Sep 2022 12:30:19 +0200")
+Message-ID: <87a66xgdfh.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/git: security bump to version
+ 2.31.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,142 +63,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Matt Weber <matthew.weber@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d588b55458f3ac35ee1c054a0e66c2326c40e7c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Also drop patch (already in version).
+ > Fix CVE-2022-29187: Git is a distributed revision control system. Git
+ > prior to versions 2.37.1, 2.36.2, 2.35.4, 2.34.4, 2.33.4, 2.32.3,
+ > 2.31.4, and 2.30.5, is vulnerable to privilege escalation in all
+ > platforms. An unsuspecting user could still be affected by the issue
+ > reported in CVE-2022-24765, for example when navigating as root into a
+ > shared tmp directory that is owned by them, but where an attacker could
+ > create a git repository. Versions 2.37.1, 2.36.2, 2.35.4, 2.34.4,
+ > 2.33.4, 2.32.3, 2.31.4, and 2.30.5 contain a patch for this issue. The
+ > simplest way to avoid being affected by the exploit described in the
+ > example is to avoid running git as root (or an Administrator in
+ > Windows), and if needed to reduce its use to a minimum. While a generic
+ > workaround is not possible, a system could be hardened from the exploit
+ > described in the example by removing any such repository if it exists
+ > already and creating one as root to block any future attacks.
 
-See https://github.com/Azure/azure-iot-sdk-c/releases/tag/LTS_07_2022_Ref01
+ > https://github.com/git/git/blob/v2.31.4/Documentation/RelNotes/2.31.4.txt
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...01-adapters-fix-build-with-libressl-2.8.0.patch | 85 ----------------------
- package/azure-iot-sdk-c/azure-iot-sdk-c.hash       |  2 +-
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk         |  2 +-
- 3 files changed, 2 insertions(+), 87 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch b/package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch
-deleted file mode 100644
-index e2a241bffe..0000000000
---- a/package/azure-iot-sdk-c/0001-adapters-fix-build-with-libressl-2.8.0.patch
-+++ /dev/null
-@@ -1,85 +0,0 @@
--From 43b313988d66de144a528e4cf57827df1e8c692d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 12 Apr 2022 20:00:36 +0200
--Subject: [PATCH] adapters: fix build with libressl >= 2.8.0 (#589)
--
--Fix the following build failure with libressl >= 2.8.0 raised since
--https://github.com/libressl-portable/openbsd/commit/703abab3212b397d500bd8c2f5f7ee6b03feb159:
--
--/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c: In function 'add_certificate_to_store':
--/nvmedata/autobuild/instance-20/output-1/build/azure-iot-sdk-c-LTS_01_2022_Ref01/c-utility/adapters/tlsio_openssl.c:961:24: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
--  961 |             bio_method = BIO_s_mem();
--      |                        ^
--cc1: all warnings being treated as errors
--
--Fix #585
--
--Fixes:
-- - http://autobuild.buildroot.org/results/873f86fb2311ed29a791140f2341943475985fcc
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/Azure/azure-c-shared-utility/commit/43b313988d66de144a528e4cf57827df1e8c692d]
-----
-- adapters/tlsio_openssl.c                | 2 +-
-- adapters/x509_openssl.c                 | 4 ++--
-- tests/x509_openssl_ut/x509_openssl_ut.c | 4 ++--
-- 3 files changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/c-utility/adapters/tlsio_openssl.c b/c-utility/adapters/tlsio_openssl.c
--index 4a3df8496..aa48ce52d 100644
----- a/c-utility/adapters/tlsio_openssl.c
--+++ b/c-utility/adapters/tlsio_openssl.c
--@@ -953,7 +953,7 @@ static int add_certificate_to_store(TLS_IO_INSTANCE* tls_io_instance, const char
--         }
--         else
--         {
---#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
--+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
--             const BIO_METHOD* bio_method;
-- #else
--             BIO_METHOD* bio_method;
--diff --git a/c-utility/adapters/x509_openssl.c b/c-utility/adapters/x509_openssl.c
--index 5a9e5ac29..46195b403 100644
----- a/c-utility/adapters/x509_openssl.c
--+++ b/c-utility/adapters/x509_openssl.c
--@@ -75,7 +75,7 @@ static int load_certificate_chain(SSL_CTX* ssl_ctx, const char* certificate)
--                 // certificates.
-- 
--                 /* Codes_SRS_X509_OPENSSL_07_006: [ If successful x509_openssl_add_ecc_credentials shall to import each certificate in the cert chain. ] */
---#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
--+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
--                 SSL_CTX_clear_extra_chain_certs(ssl_ctx);
-- #else
--                 if (ssl_ctx->extra_certs != NULL)
--@@ -345,7 +345,7 @@ int x509_openssl_add_certificates(SSL_CTX* ssl_ctx, const char* certificates)
--         else
--         {
--             /*Codes_SRS_X509_OPENSSL_02_012: [ x509_openssl_add_certificates shall get the memory BIO method function by calling BIO_s_mem. ]*/
---#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
--+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
--             const BIO_METHOD* bio_method;
-- #else
--             BIO_METHOD* bio_method;
--diff --git a/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c b/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c
--index b3349f6b0..f73191e3f 100644
----- a/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c
--+++ b/c-utility/tests/x509_openssl_ut/x509_openssl_ut.c
--@@ -348,7 +348,7 @@ BEGIN_TEST_SUITE(x509_openssl_unittests)
--         STRICT_EXPECTED_CALL(BIO_new_mem_buf((void*)TEST_PUBLIC_CERTIFICATE, -1));
--         STRICT_EXPECTED_CALL(PEM_read_bio_X509_AUX(IGNORED_PTR_ARG, NULL, NULL, NULL));
--         STRICT_EXPECTED_CALL(SSL_CTX_use_certificate(IGNORED_PTR_ARG, IGNORED_PTR_ARG));
---#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
--+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
--         // Actual macro name: SSL_CTX_clear_extra_chain_certs:
--         STRICT_EXPECTED_CALL(SSL_CTX_ctrl(TEST_SSL_CTX_STRUCTURE, SSL_CTRL_CLEAR_EXTRA_CHAIN_CERTS, 0, NULL));
-- #endif
--@@ -537,7 +537,7 @@ BEGIN_TEST_SUITE(x509_openssl_unittests)
-- 
--         umock_c_negative_tests_snapshot();
-- 
---#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L)
--+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && (OPENSSL_VERSION_NUMBER < 0x20000000L) || defined(LIBRESSL_VERSION_NUMBER)
--     #ifdef __APPLE__
--         size_t calls_cannot_fail_rsa[] = { 4, 5, 6, 10, 12, 13, 14 };
--         size_t calls_cannot_fail_ecc[] = { 3, 4, 8, 10, 11, 12} ;
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-index 5dbb530954..187b90a35a 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  082e41f7cdf06fec036b8cfa1793f03e81ba527b55ea13c66be0e4cf9f20ff7b  azure-iot-sdk-c-LTS_01_2022_Ref01-br1.tar.gz
-+sha256  7c23506e5acd6f400982f6f7a053d494c83b8a709c449bb9ded07aff9cfada78  azure-iot-sdk-c-LTS_07_2022_Ref01-br1.tar.gz
- 
- # Hash for license files:
- sha256  be2e9913fad9ff33607287c728f392579e2a6cc83e51b203ef6274c41db02ee7  LICENSE
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index 874646c445..42fdd56b48 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AZURE_IOT_SDK_C_VERSION = LTS_01_2022_Ref01
-+AZURE_IOT_SDK_C_VERSION = LTS_07_2022_Ref01
- AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
- AZURE_IOT_SDK_C_SITE_METHOD = git
- AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
