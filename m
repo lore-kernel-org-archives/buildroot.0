@@ -1,94 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5179ECAAD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 17:08:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A3B1C32771
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 17:09:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E275B41910;
-	Sun, 18 Sep 2022 17:08:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E275B41910
+	by smtp3.osuosl.org (Postfix) with ESMTP id 034FB60F5D;
+	Sun, 18 Sep 2022 17:09:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 034FB60F5D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZyEGWR_45d-Z; Sun, 18 Sep 2022 17:08:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 28Ob97LlwbK0; Sun, 18 Sep 2022 17:09:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A069A418F9;
-	Sun, 18 Sep 2022 17:08:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A069A418F9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C42331BF2CD
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 17:08:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10ED5607A3;
+	Sun, 18 Sep 2022 17:09:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10ED5607A3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 275211BF2CD
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 17:09:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A959C40A38
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 17:08:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A959C40A38
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0307483E8B
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 17:09:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0307483E8B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Aap71fOGpRgC for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 17:08:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55A9D40989
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 55A9D40989
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 17:08:48 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id e17so38112345edc.5
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 10:08:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date;
- bh=a8A8CJMQxFxI9aQN/NlA9/MoFTWiW7O+Gb1nKca6tkw=;
- b=CJNmvuOIRiaydMATE71VW4S51o0EDGR+I1H15zMJxX6xtUAf9ylDgkbL6dxoryxP8h
- HM8ykF0dsDhoyWEDI21Br0O7ZYkzzwQkCkZGwOjtlB5H3c8cccrdcYnaXkd1LbPz6VHs
- VUEH5oVS/ZgNR93VYaxfp1dsNJwcNaeeuOhToUVZFDygDlrcqDGuZhGcWNfkBz2zzB4V
- nyNCkEvq5cNibjG7k5be/UUq9O8W1lMRR4LAijJXkQgMqlOcCZ9M9kjTGY/77ovD9pOG
- VI3l6R+X8EHyrsqQjy6ZfT/wf679CgnQ2GF2JdvKgb1AfjGEMR6GX66J3TeSmnNa3qBq
- qLVw==
-X-Gm-Message-State: ACrzQf2uZUa2b2hvotfPGy3N0LG0P0yMg66pkumzX9iDwzHYe5vnttNC
- jEmBiz0tlTp8tfj0xrjmJZLLybiXX7ff/ZOz
-X-Google-Smtp-Source: AMsMyM76NZnCpC8WzYD+biuC9FPyRCoPiKtVRjPywQnLux7Ik7e28axTcw/vJKWi9qOy+SFCoIQnJQ==
-X-Received: by 2002:a05:6402:2547:b0:450:668c:9d93 with SMTP id
- l7-20020a056402254700b00450668c9d93mr12478967edb.92.1663520926411; 
- Sun, 18 Sep 2022 10:08:46 -0700 (PDT)
-Received: from [192.168.43.18] ([109.139.7.201])
- by smtp.gmail.com with ESMTPSA id
- m22-20020aa7c496000000b0044f1bd0fbd1sm18519016edq.34.2022.09.18.10.08.44
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 18 Sep 2022 10:08:45 -0700 (PDT)
-Message-ID: <40186ef5-cda9-6dcb-13ac-c6b2824374e8@mind.be>
-Date: Sun, 18 Sep 2022 19:08:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Content-Language: en-GB
-To: =?UTF-8?Q?Nuno_Gon=c3=a7alves?= <nunojpg@gmail.com>,
- buildroot@buildroot.org
-References: <CAEXMXLSha38Ybck+-p9Tnx4cQqPJbXfFQ17qFMDTrpvjh_tEeA@mail.gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P25QTwhK8dpe for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 17:08:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE88983E82
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 17:08:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE88983E82
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B9F47852F7; Sun, 18 Sep 2022 17:08:58 +0000 (UTC)
 From: Arnout Vandecappelle <arnout@mind.be>
-In-Reply-To: <CAEXMXLSha38Ybck+-p9Tnx4cQqPJbXfFQ17qFMDTrpvjh_tEeA@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date;
- bh=a8A8CJMQxFxI9aQN/NlA9/MoFTWiW7O+Gb1nKca6tkw=;
- b=HmDKZ44g6SGhtYSl5QbY+RkQ5EYsz7BDmUevwC9SLk+6/X/L4elVg+I9zYneEQys0D
- M6US1XdDzCSY/X8Ql3/PkekMuqck6vY8iSIkBmS9l6HqVBK5gJeB/PU7pouUqigBmbsY
- 3YouWxALJiW7v+Mj42cgNegSE0H+97zenZtLEKKzgju5K5j52PGUwgVrslazFxolid8q
- ZUsasJur+sNqDteQPkdvXiXYaiXqyHo7ho7VxlkdkUZToF0wBib3CCUUg9srbllOf2pG
- wZYHOGv+wAzh3mDy5+aqzL0Zb1pBSyhMJwNuk+YMBazZvd0D25+s6MeRb5XYd7Vq7o2D
- ahag==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=HmDKZ44g
-Subject: Re: [Buildroot] [PATC] package/google-breakpad: add option to build
- target tools
+To: buildroot@buildroot.org
+Date: Sun, 18 Sep 2022 19:06:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b153345beca555164a11dae4f2c77862d4fb76b6
+X-Git-Newrev: 123cb730461a6af6cd30566326624f7422d4bad2
+X-Patchwork-Hint: ignore
+Message-Id: <20220918170858.B9F47852F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/google-breakpad: add option to
+ build target tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,59 +57,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1383940536381726703=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ICBIaSBOdW5vLAoKICBBcHBsaWVkIHRvIG1hc3RlciB3aXRoIHNvbWUgY2hhbmdlcywgc2VlIGJl
-bG93LgoKT24gMDUvMDUvMjAyMiAwMDoyMSwgTnVubyBHb27Dp2FsdmVzIHdyb3RlOgo+IFRoaXMg
-dG9vbHMgYXJlIHJlcXVpcmVkIGZvciBkZWJ1ZyBzY2VuYXJpb3Mgd2hlcmUgdGhlIGRlYnVnCj4g
-aGFwcGVucyBpbi10YXJnZXQuCj4gCj4gU2lnbmVkLW9mZi1ieTogTnVubyBHb27Dp2FsdmVzIDxu
-dW5vanBnQGdtYWlsLmNvbT4KPiAtLS0KPiAgIHBhY2thZ2UvZ29vZ2xlLWJyZWFrcGFkL0NvbmZp
-Zy5pbiAgICAgICAgICB8IDEyICsrKysrKysrKysrKwo+ICAgcGFja2FnZS9nb29nbGUtYnJlYWtw
-YWQvZ29vZ2xlLWJyZWFrcGFkLm1rIHwgIDUgKysrKy0KPiAgIDIgZmlsZXMgY2hhbmdlZCwgMTYg
-aW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2dv
-b2dsZS1icmVha3BhZC9Db25maWcuaW4KPiBiL3BhY2thZ2UvZ29vZ2xlLWJyZWFrcGFkL0NvbmZp
-Zy5pbgo+IGluZGV4IDA3YzQ5OTk2ZGQuLjBjYjg4MWE0YzkgMTAwNjQ0Cj4gLS0tIGEvcGFja2Fn
-ZS9nb29nbGUtYnJlYWtwYWQvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9nb29nbGUtYnJlYWtw
-YWQvQ29uZmlnLmluCj4gQEAgLTM0LDYgKzM0LDE4IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9HT09H
-TEVfQlJFQUtQQUQKPiAKPiAgICAgIGh0dHBzOi8vY2hyb21pdW0uZ29vZ2xlc291cmNlLmNvbS9i
-cmVha3BhZC9icmVha3BhZAo+IAo+ICtpZiBCUjJfUEFDS0FHRV9HT09HTEVfQlJFQUtQQUQKPiAr
-Y29uZmlnIEJSMl9QQUNLQUdFX0dPT0dMRV9CUkVBS1BBRF9UT09MUwo+ICsgYm9vbCAiQnVpbGQg
-dGFyZ2V0IHRvb2xzIgo+ICsgaGVscAo+ICsgICAgQnVpbGQgcHJvY2Vzc29yIGFuZCB0b29scyBm
-b3IgdGFyZ2V0IGFzIGR1bXBfc3ltcywgbWluaWR1bXBfc3RhY2t3YWxrCj4gKyAgICBhbmQgbWlj
-cm9kdW1wX3N0YWNrd2Fsay4KCiAgVGhlIGxpbmUgaXMgdG9vIGxvbmcsIHVzZSB1dGlscy9jaGVj
-ay1wYWNrYWdlIHRvIHZlcmlmeSB5b3VyIHBhdGNoIGJlZm9yZSBzZW5kaW5nLgoKPiArCj4gKyAg
-ICBUaGlzIHRvb2xzIGFyZSBpbnN0YWxsZWQgdG8gdGhlIHN0YWdpbmcgZm9sZGVyIG9ubHksIHNv
-IG5vdCBwYXJ0IG9mCj4gKyAgICB0aGUgdGFyZ2V0IGltYWdlIGJ5IGRlZmF1bHQuCgogIFdoYXQn
-cyBub3QgZ29vZC4gSW4gZmFjdCwgd2UgcHJvYmFibHkgd2FudCB0byBhbHdheXMgYnVpbGQgdGhl
-IHRvb2xzLCBhbmQgb25seSAKaW5zdGFsbCB0aGVtIHRvIHRhcmdldCBpbiBjYXNlIHRoZSBvcHRp
-b24gaXMgc2VsZWN0ZWQuIHNvIHRoYXQncyB3aGF0IEkndmUgZG9uZS4KCj4gKwo+ICtlbmRpZiAj
-IEJSMl9QQUNLQUdFX0dPT0dMRV9CUkVBS1BBRAo+ICsKPiAgIGNvbW1lbnQgImdvb2dsZS1icmVh
-a3BhZCByZXF1aXJlcyBhIGdsaWJjIG9yIHVDbGliYyB0b29sY2hhaW4gdy8KPiB3Y2hhciwgdGhy
-ZWFkLCBDKyssIGdjYyA+PSA0LjgiCj4gICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9HT09HTEVf
-QlJFQUtQQURfQVJDSF9TVVBQT1JUUwo+ICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9TVF9H
-T09HTEVfQlJFQUtQQURfQVJDSF9TVVBQT1JUUwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2dvb2ds
-ZS1icmVha3BhZC9nb29nbGUtYnJlYWtwYWQubWsKPiBiL3BhY2thZ2UvZ29vZ2xlLWJyZWFrcGFk
-L2dvb2dsZS1icmVha3BhZC5tawo+IGluZGV4IGNhZmUxMzU5ZjMuLmRjNDE3ZjQ2MzcgMTAwNjQ0
-Cj4gLS0tIGEvcGFja2FnZS9nb29nbGUtYnJlYWtwYWQvZ29vZ2xlLWJyZWFrcGFkLm1rCj4gKysr
-IGIvcGFja2FnZS9nb29nbGUtYnJlYWtwYWQvZ29vZ2xlLWJyZWFrcGFkLm1rCj4gQEAgLTcsNyAr
-Nyw2IEBACj4gICBHT09HTEVfQlJFQUtQQURfVkVSU0lPTiA9IGM4NWViNGE1OWI2MThmM2JlYWFk
-NTQ0NWNlYjFmODY1ZmZhOGVmZGYKPiAgIEdPT0dMRV9CUkVBS1BBRF9TSVRFID0gaHR0cHM6Ly9j
-aHJvbWl1bS5nb29nbGVzb3VyY2UuY29tL2JyZWFrcGFkL2JyZWFrcGFkCj4gICBHT09HTEVfQlJF
-QUtQQURfU0lURV9NRVRIT0QgPSBnaXQKPiAtR09PR0xFX0JSRUFLUEFEX0NPTkZfT1BUUyA9IC0t
-ZGlzYWJsZS1wcm9jZXNzb3IgLS1kaXNhYmxlLXRvb2xzCgogIFNvIHRoaXMgY2FuIGp1c3QgYmUg
-cmVtb3ZlZCB1bmNvbmRpdGlvbmFsbHkuCgo+ICAgIyBPbmx5IGEgc3RhdGljIGxpYnJhcnkgaXMg
-aW5zdGFsbGVkCj4gICBHT09HTEVfQlJFQUtQQURfSU5TVEFMTF9UQVJHRVQgPSBOTwoKICBJbnN0
-ZWFkLCB0aGlzIHNob3VsZCBiZSBkb25lIGNvbmRpdGlvbmFsbHkuCgoKICBSZWdhcmRzLAogIEFy
-bm91dAoKCj4gICBHT09HTEVfQlJFQUtQQURfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4gQEAgLTM4
-LDUgKzM3LDkgQEAgZGVmaW5lIEdPT0dMRV9CUkVBS1BBRF9FWFRSQUNUX1NZTUJPTFMKPiAgIGVu
-ZGVmCj4gICBHT09HTEVfQlJFQUtQQURfVEFSR0VUX0ZJTkFMSVpFX0hPT0tTICs9IEdPT0dMRV9C
-UkVBS1BBRF9FWFRSQUNUX1NZTUJPTFMKPiAKPiAraWZlcSAoJChCUjJfUEFDS0FHRV9HT09HTEVf
-QlJFQUtQQURfVE9PTFMpLCkKPiArR09PR0xFX0JSRUFLUEFEX0NPTkZfT1BUUyA9IC0tZGlzYWJs
-ZS1wcm9jZXNzb3IgLS1kaXNhYmxlLXRvb2xzCj4gK2VuZGlmCj4gKwo+ICAgJChldmFsICQoYXV0
-b3Rvb2xzLXBhY2thZ2UpKQo+ICAgJChldmFsICQoaG9zdC1hdXRvdG9vbHMtcGFja2FnZSkpCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============1383940536381726703==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=123cb730461a6af6cd30566326624f7422d4bad2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+These tools are required for debug scenarios where the debug
+happens in-target.
+
+Signed-off-by: Nuno Gonçalves <nunojpg@gmail.com>
+[Arnout: install to target in case this option is selected]
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/google-breakpad/Config.in          | 10 ++++++++++
+ package/google-breakpad/google-breakpad.mk |  7 ++++---
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+index 07c49996dd..4320ad64aa 100644
+--- a/package/google-breakpad/Config.in
++++ b/package/google-breakpad/Config.in
+@@ -41,3 +41,13 @@ comment "google-breakpad requires a glibc or uClibc toolchain w/ wchar, thread,
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC) || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++if BR2_PACKAGE_GOOGLE_BREAKPAD
++
++config BR2_PACKAGE_GOOGLE_BREAKPAD_TOOLS
++	bool "Build target tools"
++	help
++	  Build processor and tools for target: dump_syms,
++	  minidump_stackwalk and microdump_stackwalk.
++
++endif
+diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
+index cafe1359f3..132323363b 100644
+--- a/package/google-breakpad/google-breakpad.mk
++++ b/package/google-breakpad/google-breakpad.mk
+@@ -7,9 +7,6 @@
+ GOOGLE_BREAKPAD_VERSION = c85eb4a59b618f3beaad5445ceb1f865ffa8efdf
+ GOOGLE_BREAKPAD_SITE = https://chromium.googlesource.com/breakpad/breakpad
+ GOOGLE_BREAKPAD_SITE_METHOD = git
+-GOOGLE_BREAKPAD_CONF_OPTS = --disable-processor --disable-tools
+-# Only a static library is installed
+-GOOGLE_BREAKPAD_INSTALL_TARGET = NO
+ GOOGLE_BREAKPAD_INSTALL_STAGING = YES
+ GOOGLE_BREAKPAD_LICENSE = BSD-3-Clause, MIT
+ GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
+@@ -17,6 +14,10 @@ GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad linux-syscall-support
+ 
+ HOST_GOOGLE_BREAKPAD_DEPENDENCIES = host-linux-syscall-support
+ 
++ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD_TOOLS),)
++GOOGLE_BREAKPAD_INSTALL_TARGET = NO
++endif
++
+ # Avoid using depot-tools to download this file.
+ define HOST_GOOGLE_BREAKPAD_LSS
+ 	$(INSTALL) -D -m 0644 \
+
+--===============1383940536381726703==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1383940536381726703==--
