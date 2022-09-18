@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6894BECAAD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BA06ECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:13:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C2D383E8B;
-	Sun, 18 Sep 2022 21:12:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C2D383E8B
+	by smtp1.osuosl.org (Postfix) with ESMTP id A8F6783EE4;
+	Sun, 18 Sep 2022 21:13:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8F6783EE4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YfYjiyxKHYhl; Sun, 18 Sep 2022 21:12:50 +0000 (UTC)
+	with ESMTP id NSvvjVe9F96e; Sun, 18 Sep 2022 21:13:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21C9683E94;
-	Sun, 18 Sep 2022 21:12:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21C9683E94
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 376C61BF3C4
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC2D083ED2;
+	Sun, 18 Sep 2022 21:13:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC2D083ED2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 788011BF3C4
  for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:12:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88D83400EF
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:12:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88D83400EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DFD14246D
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:12:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DFD14246D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1tVNfezXB2Az for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 21:12:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ez5434fOu9u5 for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 21:12:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F1F6400DA
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F1F6400DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41BD842468
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:12:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41BD842468
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7AE92854B0; Sun, 18 Sep 2022 21:12:20 +0000 (UTC)
+ id 30FC1854C8; Sun, 18 Sep 2022 21:12:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 23:00:40 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 18f6e4bf705a56c7039b7563fee546b519775cb8
-X-Git-Newrev: fac58c23fc2aee59cbce4cd4a3b65ee642cf8f18
+Date: Sun, 18 Sep 2022 23:11:05 +0200
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 8e606e44d8b2381bad180a70247dae9998a5854c
+X-Git-Newrev: 5913c02656220b6c79207f03ebc7e7c50a8f073d
 X-Patchwork-Hint: ignore
-Message-Id: <20220918211220.7AE92854B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/mariadb: security
- bump to version 10.3.36
+Message-Id: <20220918211221.30FC1854C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/sox: work around
+ gcc bug 68485
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,77 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fac58c23fc2aee59cbce4cd4a3b65ee642cf8f18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5913c02656220b6c79207f03ebc7e7c50a8f073d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-- Fixes for the following security vulnerabilities:
-  - CVE-2018-25032
-  - CVE-2022-32091
-  - CVE-2022-32084
-- Refresh first patch
+sox is impacted by the microblaze-specific gcc bug #68485 [0], which is
+still unfixed as of gcc 12.x.
 
-https://mariadb.com/kb/en/mariadb-10336-release-notes
+As for all other impacted packages, force no optimisation when using a
+toolchain riddled with that bug.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+   http://autobuild.buildroot.net/results/ac4/ac4fbd55529ac7b4e635a11766f842cd25a833a1/
+
+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ac9c077fb832098e38c1b846fb3023253b27d105)
+(cherry picked from commit dd8a8cfa9a584934bb2707c197c43073d6c03436)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/0001-add-extra-check-for-librt.patch | 6 ++++--
- package/mariadb/mariadb.hash                         | 4 ++--
- package/mariadb/mariadb.mk                           | 2 +-
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/sox/sox.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/mariadb/0001-add-extra-check-for-librt.patch b/package/mariadb/0001-add-extra-check-for-librt.patch
-index 0dd4c546fb..6e3fc70276 100644
---- a/package/mariadb/0001-add-extra-check-for-librt.patch
-+++ b/package/mariadb/0001-add-extra-check-for-librt.patch
-@@ -8,6 +8,8 @@ https://jira.mariadb.org/browse/MDEV-10841
- Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
- [Rebased on mariadb-10.3.30]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+[Rebased on mariadb-10.3.36]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  configure.cmake | 3 +++
-  1 file changed, 3 insertions(+)
-@@ -23,9 +25,9 @@ index 1b85c31b..4a1cd847 100644
- +  IF(NOT LIBRT)
- +    MY_SEARCH_LIBS(posix_spawn_file_actions_addclose rt LIBRT)
- +  ENDIF()
--   set(THREADS_PREFER_PTHREAD_FLAG ON)
--   FIND_PACKAGE(Threads)
-+   MY_SEARCH_LIBS(backtrace_symbols_fd execinfo LIBEXECINFO)
-  
-+   set(THREADS_PREFER_PTHREAD_FLAG ON)
- -- 
- 2.32.0
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 1896437ad4..d0329bf50d 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -26,6 +26,14 @@ SOX_CONF_OPTS = \
+ 	--with-distro="Buildroot" \
+ 	--disable-stack-protector
  
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index f7e3c7b744..c4064cff66 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.3.35
--sha512  9355de944eccef4e0bc01b19ffc3c0c72cf88befae7385c6f0ee1ea47dbd98d23f6bb46af9c140acc48d9d9613552870684bc0b7ca1f3cff1dc09c1a2c801573  mariadb-10.3.35.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.36
-+sha512  321b4c48fcea4413eb239c4904c806306de660f2844edfa1d2a2a15213db287070d0f923db976588dfe329559d565bd98bddef3aaf8f14502f8c3db2ee27757a  mariadb-10.3.36.tar.gz
- 
- # Hash for license files
- sha256  084aa0007efac6dda6aafffb3f3ef8b66b105862dad7ee23f6a4b52813f84464  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 4c855985b1..5fb8876278 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.3.35
-+MARIADB_VERSION = 10.3.36
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
++SOX_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++SOX_CFLAGS += -O0
++endif
++
++SOX_CONF_ENV += CFLAGS="$(SOX_CFLAGS)"
++
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
+ SOX_DEPENDENCIES += alsa-lib
+ SOX_CONF_OPTS += --enable-alsa
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
