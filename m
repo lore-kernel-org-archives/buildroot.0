@@ -1,72 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC544C32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 10:03:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0080CC32771
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 10:10:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 679D66FB1F;
-	Sun, 18 Sep 2022 10:03:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 679D66FB1F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id w3vvQU2zx3FS; Sun, 18 Sep 2022 10:03:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BA0C60E25;
-	Sun, 18 Sep 2022 10:03:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BA0C60E25
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D6191BF328
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:03:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 584E681AF4
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:03:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 584E681AF4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9676C84406;
+	Sun, 18 Sep 2022 10:10:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9676C84406
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TSmaTk9BN3nS for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 10:03:41 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KVNsNPfrimct; Sun, 18 Sep 2022 10:10:55 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49825843A6;
+	Sun, 18 Sep 2022 10:10:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49825843A6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6731C1BF42D
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:10:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 428A5405A9
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 10:10:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 428A5405A9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yW3bv9IQ6nTq for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 10:10:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48B1B81491
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 48B1B81491
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 10:03:41 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 439A81C0002;
- Sun, 18 Sep 2022 10:03:39 +0000 (UTC)
-Date: Sun, 18 Sep 2022 12:03:38 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Jesse Van Gavere <jesseevg@gmail.com>
-Message-ID: <20220918120338.3833d283@windsurf>
-In-Reply-To: <20220826135503.20612-13-jesseevg@gmail.com>
-References: <20220826135503.20612-1-jesseevg@gmail.com>
- <20220826135503.20612-13-jesseevg@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B61F4011C
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5B61F4011C
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 10:10:50 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id E5EF5E0002;
+ Sun, 18 Sep 2022 10:10:46 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZrG9-00BXIM-HZ; Sun, 18 Sep 2022 12:10:45 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Angelo Compagnucci <angelo@amarulasolutions.com>
+References: <20220705073206.1442280-1-angelo@amarulasolutions.com>
+ <20220705073206.1442280-6-angelo@amarulasolutions.com>
+Date: Sun, 18 Sep 2022 12:10:45 +0200
+In-Reply-To: <20220705073206.1442280-6-angelo@amarulasolutions.com> (Angelo
+ Compagnucci's message of "Tue, 5 Jul 2022 09:32:06 +0200")
+Message-ID: <87illlgfh6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663495419;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=KXQ8rs29LE/TquIRUNKMIEWPnveFj84KNAh/Tf2jPA0=;
- b=EXjzCAtB1ZyVON81KBh9GQbYSmsnBZuxP3kuUVo5akB8KQA8WmgEIJwEfDXg4fYfNnD3TD
- PFvqqgC5B6rGu8mQwXMnIi+h86kO/TllgWnkxBH2IOVeNe1fTgZBfCoJwDeUwJYIjLDAGK
- MmB5CGwUyRfias0YxPczvOLxaSPXl9cmC3XZQB+nIuCkRYdf5Fq9pVMkBF5ZyPyqzFVWhx
- GoEFqvaRCvOvLRzvLfm5F+QhrUg4G63WC155KXMO8/u5ygmu7as7qCZWqSH+mLuwYqDxTH
- +VShohkFdh8KV3acy1IRM0w51xlsvwhyjv6kxtpiqYEvOLqV8+oFIagakrGsLg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EXjzCAtB
-Subject: Re: [Buildroot] [PATCH v4 12/29] package/qt6/qt6base: add linking
- to libatomic
+Subject: Re: [Buildroot] [PATCH v3 5/5] package/initscripts: add service to
+ load kernel modules at boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,35 +65,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: br015@umbiko.net, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 26 Aug 2022 15:54:46 +0200
-Jesse Van Gavere <jesseevg@gmail.com> wrote:
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
-> This patch might not be necessary for qt6 but I can't find anything
-> indicating so, Yann E. made the original commit for this on qt5 so
-> he might be aware of current necessity
+ > In cases where no hotplug is available (by choice or by the lack of a
+ > proper hotplug method for a device), this service can be used to load
+ > kernel module drivers by reading the /etc/modules file.
+ > The modules files matches the one used by systemd, which in turn has
+ > a builtin mechanism to load a module at boot, therefore making systemv
+ > init on par with systemd features.
 
-I also imagine that linking with libatomic will be necessary, but
-before applying a patch that does this, I would like to have some
-actual evidence. There are currently only two build failures for
-qt6base in the autobuilders, and they are not related to libatomic
-issues.
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > ---
+ > Changes
 
-So for now, I'll mark this patch as Rejected, but we can obviously
-revisit if we get a confirmation that it is indeed needed.
+ > v2:
+ > * Moved script to initscripts (Arnout)
+ > * Moved script to S11modules, after S10[mu]dev (Andreas)
+ > * Use /etc/modules-load.d/ to share the same setup with systemd (me)
 
-Thanks!
+ >  package/initscripts/init.d/S11modules | 59 +++++++++++++++++++++++++++
+ >  1 file changed, 59 insertions(+)
+ >  create mode 100644 package/initscripts/init.d/S11modules
 
-Thomas
+ > diff --git a/package/initscripts/init.d/S11modules b/package/initscripts/init.d/S11modules
+ > new file mode 100644
+ > index 0000000000..3937945596
+ > --- /dev/null
+ > +++ b/package/initscripts/init.d/S11modules
+ > @@ -0,0 +1,59 @@
+ > +#!/bin/sh
+ > +
+ > +MODULES="*.conf"
+ > +MODULES_DIR="/etc/modules-load.d"
+ > +
+ > +[ -z "$(ls -A ${MODULES_DIR}/${MODULES} 2> /dev/null)" ] && exit 0
+
+The commit message talks about /etc/modules, but you are reading from
+/etc/modules-load.d/*.conf?
+
+How about supporting both /etc/modules and this directory instead?
+
+
+ > +
+ > +load_unload() {
+ > +	for module_file in $(ls -1 ${MODULES_DIR}); do
+
+And here you take all files in /etc/modules-load.d, even if they don't
+have a .conf extension?
+
+
+> +			esac
+ > +
+ > +			if [ "$1" = "load" ]; then
+ > +				modprobe -q ${module} ${args} >/dev/null && \
+ > +					printf ' %s success,' "$module" ||
+ > +					printf ' %s failed,' "$module"
+
+success/failed are quite long strings, how about only printing the
+module name on success and a big scary FAIL like we do elsewhere on
+failures?
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
