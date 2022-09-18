@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F91DC32771
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:02:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 731D4C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:02:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9CC084442;
-	Sun, 18 Sep 2022 07:02:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9CC084442
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1904984448;
+	Sun, 18 Sep 2022 07:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1904984448
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zbn-QOqmhiXI; Sun, 18 Sep 2022 07:02:18 +0000 (UTC)
+	with ESMTP id zRxIPW1CwqiB; Sun, 18 Sep 2022 07:02:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B8AE8443F;
-	Sun, 18 Sep 2022 07:02:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B8AE8443F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C95D21BF484
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:02:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F83784441;
+	Sun, 18 Sep 2022 07:02:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F83784441
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D384B1BF484
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFDC38443E
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:02:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFDC38443E
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACBFF42418
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:02:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACBFF42418
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BsleETZr5d81 for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 07:02:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB3328443F
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:02:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB3328443F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B87A8469C; Sun, 18 Sep 2022 07:02:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KkXsK3rLQlVQ for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 07:02:50 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65CD64240B
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 65CD64240B
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:02:50 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A68C9E0002;
+ Sun, 18 Sep 2022 07:02:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oZoKF-00BMXP-Ug; Sun, 18 Sep 2022 09:02:47 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 08:50:40 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 79bf5fb5c608c244992a5c93d26514fd1a4c0e47
-X-Git-Newrev: 31f1414020e5a172960e3de2b0fe4dd52772f579
-X-Patchwork-Hint: ignore
-Message-Id: <20220918070201.9B87A8469C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/memcached: add
- openssl optional dependency
+To: Romain Naour <romain.naour@gmail.com>
+References: <20220827161431.333659-1-romain.naour@gmail.com>
+Date: Sun, 18 Sep 2022 09:02:47 +0200
+In-Reply-To: <20220827161431.333659-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 27 Aug 2022 18:14:30 +0200")
+Message-ID: <871qs9xizs.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [for-master 1/2] package/glibc: glibc on or1k needs
+ a toolchain w/ headers >= 5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,231 +64,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31f1414020e5a172960e3de2b0fe4dd52772f579
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-openssl is an optional dependency since version 1.5.13 and
-https://github.com/memcached/memcached/commit/ee1cfe3bf9384d1a93545fc942e25bed6437d910
-which must be handled through pkg-config to avoid static build failure
+ > Commit [1] enabled glibc on or1k since it's now supported but it
+ > requires a toolchain with linux-headers >= 5.4.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit c72795e3d6d321de82b888a24962061dd5c30353)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ure-ac-use-pkg-config-to-retrieve-openssl.patch | 181 +++++++++++++++++++++
- package/memcached/memcached.mk                     |   7 +
- 2 files changed, 188 insertions(+)
+ > From [2]:
+ > "Here we define the minumum linux kernel version at 5.4.0, as that is the
+ > long term support version where 32-bit architectures start to support
+ > 64-bit time API's.  The OpenRISC kernel had some bugs up until version 5.8
+ > which caused issues with glibc fork/clone, they have been backported to
+ > 5.4 but not previous versions."
 
-diff --git a/package/memcached/0004-configure-ac-use-pkg-config-to-retrieve-openssl.patch b/package/memcached/0004-configure-ac-use-pkg-config-to-retrieve-openssl.patch
-new file mode 100644
-index 0000000000..402fa03b3b
---- /dev/null
-+++ b/package/memcached/0004-configure-ac-use-pkg-config-to-retrieve-openssl.patch
-@@ -0,0 +1,181 @@
-+From 656dedad48c81541060448d008b90290196263c5 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 6 Sep 2020 23:38:19 +0200
-+Subject: [PATCH] configure.ac: use pkg-config to retrieve openssl
-+
-+Use pkg-config to retrieve openssl dependencies such as -latomic or -lz
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/memcached/memcached/commit/656dedad48c81541060448d008b90290196263c5]
-+---
-+ README.md    |   2 +-
-+ configure.ac | 133 ++++++++++++++++++++++++++-------------------------
-+ 2 files changed, 69 insertions(+), 66 deletions(-)
-+
-+diff --git a/README.md b/README.md
-+index 3ce1bc2156..8fe067b767 100644
-+--- a/README.md
-++++ b/README.md
-+@@ -21,7 +21,7 @@ list to ask questions, github issues aren't seen by everyone!
-+ * libseccomp (optional, experimental, linux) - enables process restrictions for
-+   better security. Tested only on x86-64 architectures.
-+ * openssl (optional) - enables TLS support. need relatively up to date
-+-  version.
-++  version. pkg-config is needed to find openssl dependencies (such as -lz).
-+ 
-+ ## Environment
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index a0851f2131..2959a86c89 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -437,80 +437,83 @@ AC_ARG_WITH(libssl,
-+ dnl ----------------------------------------------------------------------------
-+ dnl libssl detection.  swiped from libevent.  modified for openssl detection.
-+ 
-++PKG_PROG_PKG_CONFIG
-+ OPENSSL_URL=https://www.openssl.org/
-+ if test "x$enable_tls" = "xyes"; then
-+-  AC_CACHE_CHECK([for libssl directory], ac_cv_libssl_dir, [
-+-    saved_LIBS="$LIBS"
-+-    saved_LDFLAGS="$LDFLAGS"
-+-    saved_CPPFLAGS="$CPPFLAGS"
-+-    le_found=no
-+-    for ledir in $trylibssldir "" $prefix /usr/local ; do
-++  PKG_CHECK_MODULES(OPENSSL, openssl, [LIBS="$LIBS $OPENSSL_LIBS" CFLAGS="$CFLAGS $OPENSSL_CFLAGS"], [
-++    AC_CACHE_CHECK([for libssl directory], ac_cv_libssl_dir, [
-++      saved_LIBS="$LIBS"
-++      saved_LDFLAGS="$LDFLAGS"
-++      saved_CPPFLAGS="$CPPFLAGS"
-++      le_found=no
-++      for ledir in $trylibssldir "" $prefix /usr/local ; do
-++        LDFLAGS="$saved_LDFLAGS"
-++        LIBS="-lssl -lcrypto $saved_LIBS"
-++
-++        # Skip the directory if it isn't there.
-++        if test ! -z "$ledir" -a ! -d "$ledir" ; then
-++          continue;
-++        fi
-++        if test ! -z "$ledir" ; then
-++          if test -d "$ledir/lib" ; then
-++            LDFLAGS="-L$ledir/lib $LDFLAGS"
-++          else
-++            LDFLAGS="-L$ledir $LDFLAGS"
-++          fi
-++          if test -d "$ledir/include" ; then
-++            CPPFLAGS="-I$ledir/include $CPPFLAGS"
-++          else
-++            CPPFLAGS="-I$ledir $CPPFLAGS"
-++          fi
-++        fi
-++        # Can I compile and link it?
-++        AC_TRY_LINK([#include <sys/time.h>
-++    #include <sys/types.h>
-++    #include <assert.h>
-++    #include <openssl/ssl.h>], [ SSL_CTX* ssl_ctx = SSL_CTX_new(TLS_server_method());
-++                                assert(OPENSSL_VERSION_NUMBER >= 0x10100000L);],
-++           [ libssl_linked=yes ], [ libssl_linked=no ])
-++        if test $libssl_linked = yes; then
-++          if test ! -z "$ledir" ; then
-++            ac_cv_libssl_dir=$ledir
-++            _myos=`echo $target_os | cut -f 1 -d .`
-++            AS_IF(test "$SUNCC" = "yes" -o "x$_myos" = "xsolaris2",
-++                  [saved_LDFLAGS="$saved_LDFLAGS -Wl,-R$ledir/lib"],
-++                  [AS_IF(test "$GCC" = "yes",
-++                        [saved_LDFLAGS="$saved_LDFLAGS -Wl,-rpath,$ledir/lib"])])
-++           else
-++             ac_cv_libssl_dir="(system)"
-++           fi
-++           le_found=yes
-++           break
-++        fi
-++      done
-++      LIBS="$saved_LIBS"
-+       LDFLAGS="$saved_LDFLAGS"
-+-      LIBS="-lssl -lcrypto $saved_LIBS"
-++      CPPFLAGS="$saved_CPPFLAGS"
-++      if test $le_found = no ; then
-++        AC_MSG_ERROR([libssl (at least version 1.1.0) is required.  You can get it from $OPENSSL_URL
-+ 
-+-      # Skip the directory if it isn't there.
-+-      if test ! -z "$ledir" -a ! -d "$ledir" ; then
-+-         continue;
-++          If it's already installed, specify its path using --with-libssl=/dir/
-++    ])
-+       fi
-+-      if test ! -z "$ledir" ; then
-+-        if test -d "$ledir/lib" ; then
-+-          LDFLAGS="-L$ledir/lib $LDFLAGS"
-+-        else
-+-          LDFLAGS="-L$ledir $LDFLAGS"
-+-        fi
-+-        if test -d "$ledir/include" ; then
-+-          CPPFLAGS="-I$ledir/include $CPPFLAGS"
-+-        else
-+-          CPPFLAGS="-I$ledir $CPPFLAGS"
-+-        fi
-++    ])
-++    LIBS="-lssl -lcrypto $LIBS"
-++    if test $ac_cv_libssl_dir != "(system)"; then
-++      if test -d "$ac_cv_libssl_dir/lib" ; then
-++        LDFLAGS="-L$ac_cv_libssl_dir/lib $LDFLAGS"
-++        le_libdir="$ac_cv_libssl_dir/lib"
-++      else
-++        LDFLAGS="-L$ac_cv_libssl_dir $LDFLAGS"
-++        le_libdir="$ac_cv_libssl_dir"
-+       fi
-+-      # Can I compile and link it?
-+-      AC_TRY_LINK([#include <sys/time.h>
-+-  #include <sys/types.h>
-+-  #include <assert.h>
-+-  #include <openssl/ssl.h>], [ SSL_CTX* ssl_ctx = SSL_CTX_new(TLS_server_method());
-+-                              assert(OPENSSL_VERSION_NUMBER >= 0x10100000L);],
-+-         [ libssl_linked=yes ], [ libssl_linked=no ])
-+-      if test $libssl_linked = yes; then
-+-         if test ! -z "$ledir" ; then
-+-           ac_cv_libssl_dir=$ledir
-+-           _myos=`echo $target_os | cut -f 1 -d .`
-+-           AS_IF(test "$SUNCC" = "yes" -o "x$_myos" = "xsolaris2",
-+-                 [saved_LDFLAGS="$saved_LDFLAGS -Wl,-R$ledir/lib"],
-+-                 [AS_IF(test "$GCC" = "yes",
-+-                       [saved_LDFLAGS="$saved_LDFLAGS -Wl,-rpath,$ledir/lib"])])
-+-         else
-+-           ac_cv_libssl_dir="(system)"
-+-         fi
-+-         le_found=yes
-+-         break
-++      if test -d "$ac_cv_libssl_dir/include" ; then
-++        CPPFLAGS="-I$ac_cv_libssl_dir/include $CPPFLAGS"
-++      else
-++        CPPFLAGS="-I$ac_cv_libssl_dir $CPPFLAGS"
-+       fi
-+-    done
-+-    LIBS="$saved_LIBS"
-+-    LDFLAGS="$saved_LDFLAGS"
-+-    CPPFLAGS="$saved_CPPFLAGS"
-+-    if test $le_found = no ; then
-+-      AC_MSG_ERROR([libssl (at least version 1.1.0) is required.  You can get it from $OPENSSL_URL
-+-
-+-        If it's already installed, specify its path using --with-libssl=/dir/
-+-  ])
-+     fi
-+   ])
-+-  LIBS="-lssl -lcrypto $LIBS"
-+-  if test $ac_cv_libssl_dir != "(system)"; then
-+-    if test -d "$ac_cv_libssl_dir/lib" ; then
-+-      LDFLAGS="-L$ac_cv_libssl_dir/lib $LDFLAGS"
-+-      le_libdir="$ac_cv_libssl_dir/lib"
-+-    else
-+-      LDFLAGS="-L$ac_cv_libssl_dir $LDFLAGS"
-+-      le_libdir="$ac_cv_libssl_dir"
-+-    fi
-+-    if test -d "$ac_cv_libssl_dir/include" ; then
-+-      CPPFLAGS="-I$ac_cv_libssl_dir/include $CPPFLAGS"
-+-    else
-+-      CPPFLAGS="-I$ac_cv_libssl_dir $CPPFLAGS"
-+-    fi
-+-  fi
-+ fi
-+ 
-+ if test "x$enable_static" = "xyes"; then
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 842c0b42fa..1fcb8c2afa 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -22,4 +22,11 @@ else
- MEMCACHED_CONF_ENV += ac_cv_c_endian=little
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+MEMCACHED_CONF_OPTS += --enable-tls
-+MEMCACHED_DEPENDENCIES += host-pkgconf openssl
-+else
-+MEMCACHED_CONF_OPTS += --disable-tls
-+endif
-+
- $(eval $(autotools-package))
+ > Fixes:
+
+ >   checking installed Linux kernel header files... 3.2.0 or later
+ >   checking for kernel header at least 5.4.0... too old!
+ >   configure: error: *** The available kernel headers are older than the requested
+
+ > https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/2875256686
+
+ > [1] 68d0aede597d32816c5b2ff32de0ce33cc14eb93
+ > [2] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=0c3c62ca7d9ff3bdacdd13e636bc858101e3e288
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Committed to 2022.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
