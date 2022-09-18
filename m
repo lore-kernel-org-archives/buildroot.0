@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8385C6FA82
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:14:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE2FEECAAD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 21:16:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 74B1B815CC;
-	Sun, 18 Sep 2022 21:14:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74B1B815CC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C1F242470;
+	Sun, 18 Sep 2022 21:16:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C1F242470
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tt_WR1_KVGn4; Sun, 18 Sep 2022 21:14:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j4r_4x-e56Iv; Sun, 18 Sep 2022 21:15:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A79A4813F0;
-	Sun, 18 Sep 2022 21:14:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A79A4813F0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8B84D1BF3C4
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:13:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6464E4246D;
+	Sun, 18 Sep 2022 21:15:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6464E4246D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 042F41BF3C4
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:15:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 682E660AE8
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:13:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 682E660AE8
+ by smtp2.osuosl.org (Postfix) with ESMTP id D408E4013B
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 21:15:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D408E4013B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aJkfrPHSAql8 for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 21:13:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73AA160F5E
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73AA160F5E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6388F85536; Sun, 18 Sep 2022 21:13:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O7pOUg_BI3fF for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 21:15:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8020400DA
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E8020400DA
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 21:15:55 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 0251F200002;
+ Sun, 18 Sep 2022 21:15:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oa1dj-00Ea61-Iq; Sun, 18 Sep 2022 23:15:47 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 18 Sep 2022 23:10:30 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: f3074146401ebe749a6b93492a107780e0314202
-X-Git-Newrev: 84555edc4ecb0e2e8f87bfdd9f0595366646745a
-X-Patchwork-Hint: ignore
-Message-Id: <20220918211332.6388F85536@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/sox: work around
- gcc bug 68485
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20220910135256.1689860-1-giulio.benetti@benettiengineering.com>
+Date: Sun, 18 Sep 2022 23:15:47 +0200
+In-Reply-To: <20220910135256.1689860-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Sat, 10 Sep 2022 15:52:55 +0200")
+Message-ID: <877d20fkos.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain/Config.in: update gcc bug
+ 90620
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +63,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84555edc4ecb0e2e8f87bfdd9f0595366646745a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-sox is impacted by the microblaze-specific gcc bug #68485 [0], which is
-still unfixed as of gcc 12.x.
+ > Gcc bug 90620 reappeared with gcc 11.x so let's update
+ > BR2_TOOLCHAIN_HAS_GCC_BUG_90620 conditions.
 
-As for all other impacted packages, force no optimisation when using a
-toolchain riddled with that bug.
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Fixes:
-   http://autobuild.buildroot.net/results/ac4/ac4fbd55529ac7b4e635a11766f842cd25a833a1/
+Committed to 2022.02.x, 2022.05.x and 2022.08.x, thanks.
 
-[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit dd8a8cfa9a584934bb2707c197c43073d6c03436)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sox/sox.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 1896437ad4..d0329bf50d 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -26,6 +26,14 @@ SOX_CONF_OPTS = \
- 	--with-distro="Buildroot" \
- 	--disable-stack-protector
- 
-+SOX_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+SOX_CFLAGS += -O0
-+endif
-+
-+SOX_CONF_ENV += CFLAGS="$(SOX_CFLAGS)"
-+
- ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
- SOX_DEPENDENCIES += alsa-lib
- SOX_CONF_OPTS += --enable-alsa
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
