@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B0ABC54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 12:43:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B9AFC54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 12:45:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88B6941B75;
-	Sun, 18 Sep 2022 12:43:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88B6941B75
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CF8383F85;
+	Sun, 18 Sep 2022 12:45:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CF8383F85
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rMT-4NaONsUY; Sun, 18 Sep 2022 12:43:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X8ORSHwKq1RD; Sun, 18 Sep 2022 12:45:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AD824097E;
-	Sun, 18 Sep 2022 12:43:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AD824097E
+	by smtp1.osuosl.org (Postfix) with ESMTP id C943083E7E;
+	Sun, 18 Sep 2022 12:45:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C943083E7E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1B9921BF228
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:43:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8E2EB1BF228
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:45:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB58D84036
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:43:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB58D84036
+ by smtp1.osuosl.org (Postfix) with ESMTP id 76EB183E7E
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 12:45:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76EB183E7E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IBav-M4NLzOm for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 12:43:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AB7D8402E
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6AB7D8402E
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 12:43:18 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:2a18:6673:cb9f:3864])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 21EE213F8CC;
- Sun, 18 Sep 2022 14:43:13 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 18 Sep 2022 14:43:12 +0200
-Date: Sun, 18 Sep 2022 14:43:12 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20220918124312.GE1419013@scaer>
-References: <20220918103248.31667-1-arnout@mind.be>
+ with ESMTP id rKW8Sp6COraW for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 12:45:49 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 689D783E42
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 689D783E42
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 12:45:49 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ o20-20020a05600c4fd400b003b4a516c479so2612425wmq.1
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 05:45:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=P9p7RPzyoZGtKicfIXHOQrR9cVw20quGqaeRP/kCby8=;
+ b=wgf1uGmiORRttBJuMS3sI6RfU8Rp1JvW2sQj0Tn10wNJF1Bm8LHonAXL7hrkcSDoG/
+ obcK/M1dHxKHA1YrGALzCte3FxNIBueQ7yx9A740OPL23WKNv6SyWn1v8B11pPTrSS/I
+ z/aBwktKpKQ8BsGvLUIFX2Y66PI1diYvzSJ423oBi8k7qQn1cNwpQ+MZo1uqTOCshn1n
+ L7uAygDywX4+bgEObvzhXAWqMAzhs1Mk1x/bp4YXUb/8uFCvgR4936/vHDlkyGH1nfWr
+ l+qB9/G3gSNl/IDYeNQnikgzM/+kmtt8Sljo+4i1oDnaHrhN5V3ZelipCjWsmwUNB9iq
+ hf9w==
+X-Gm-Message-State: ACgBeo1KbVbcQqWULIk6KPdMgdl5+9wVHoogFrsZ6fZ7Sj80s96OAKcW
+ nb0kY4OKLntwM6RoCOKHksf5Wc9I+ls=
+X-Google-Smtp-Source: AA6agR7AR5kbPnqxFFXf/lXy7vcLfytVST8p+88dHEcoSE1Go22yiYYAaqIVzCO1lKvV8QL4nhRNwg==
+X-Received: by 2002:a05:600c:34c2:b0:3b4:76f2:9c3b with SMTP id
+ d2-20020a05600c34c200b003b476f29c3bmr15662338wmq.179.1663505146980; 
+ Sun, 18 Sep 2022 05:45:46 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ f9-20020a0560001b0900b0022917d58603sm10551360wrz.32.2022.09.18.05.45.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 18 Sep 2022 05:45:46 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 18 Sep 2022 14:45:44 +0200
+Message-Id: <20220918124544.122719-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220918103248.31667-1-arnout@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1663504995;
- bh=rugpPCegvIJVy6i0OD+QXUef+e2RGFIKLOq4dCao3Zw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=HVzbO0XVNdpZUX6ixXGwQgoS15vuWfo6a9F10J+FLVcoskVS+QSrjsk7tE74hStiS
- aGxcoKvMvDzhzoVi/GsQsE95AalX4+95b9QoWufQa0FGnoSjSQX7V8uHZR9WTJks2E
- kXwlT9iHoZGnmZaV4oL+8ySKKBTkYLOxY9tGZ9k7isn+LOxfOaZtxZEDkPl3bcl6Lp
- JFfghDWJHFHznCxJQ72e0FWYKJuIXb8OKjsd6iCL8jitCfqoNmj9zr5+K10nI1Vecm
- 3SEb7RnGTS56iqo6Eyz0ZjRJNXPl4x3AXTFPbWIhArGjBsJ4sqe9mWCbmvmnX1HNix
- Lqq1ldrdGSeog==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=P9p7RPzyoZGtKicfIXHOQrR9cVw20quGqaeRP/kCby8=;
+ b=cE8OwMWx2n4z94HIH59+d/q3UW/iw8z9qP0FLtFnqLYBZVS9hUEoBPIhT153HRRhHk
+ fw0XK1OExWWhMZ7NzgLbcAhBX1r6AdHHkwick8U0fX9YR3KcReTOs+JMXs4WTWDlTSUy
+ b6lf7BqD2VEirmwrGSu/eJsXYm6t8nxJZUaVypFpxzXyuk0x+3ZAdQkcr/qupMVMYX4l
+ gem7ybEdSOyoYiRMzGXCI4mN/RMhH3goiO0R7sTiX9Ij5tuqf5U82bA6dstA/jl8YLy2
+ bEkw7Jqvmto8neYuUaQB4nxZws0qlnGwUunwhoaOisiotSeJ6HkiNBPT/PaZzMN1miPH
+ /nAg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=HVzbO0XV
-Subject: Re: [Buildroot] [PATCH] arch/Config.in.powerpc: change conditions
- to positive logic
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=cE8OwMWx
+Subject: [Buildroot] [PATCH 1/1] package/frr: bump to version 8.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,210 +93,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Vadim Kochan <vadim4j@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, All,
+https://frrouting.org/release/8.3
+https://frrouting.org/release/8.3.1
 
-On 2022-09-18 12:32 +0200, Arnout Vandecappelle spake thusly:
-> The conditions in the target CPU choice mostly use negative logic, i.e.
-> "depends on !<something>". This makes it more difficult to understand
-> exactly on which ARCH variants the CPU _is_ supported. Therefore, change
-> all of the conditions to positive logic.
-> 
-> Since there is no little-endian variant of the 32-bit PowerPC, the
-> conditions are:
-> 
-> !BR2_ARCH_IS_64 <==> BR2_powerpc
-> !BR2_powerpc64le <==> BR2_powerpc || BR2_powerpc64
-> 
-> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/frr/frr.hash | 2 +-
+ package/frr/frr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  arch/Config.in.powerpc | 70 +++++++++++++++++++++---------------------
->  1 file changed, 35 insertions(+), 35 deletions(-)
-> 
-> diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-> index 949995d037..52802f6693 100644
-> --- a/arch/Config.in.powerpc
-> +++ b/arch/Config.in.powerpc
-> @@ -16,118 +16,118 @@ choice
->  config BR2_generic_powerpc
->  	bool "generic"
->  	# No C library supports this variant on ppc64le
-> -	depends on !BR2_powerpc64le
-> +	depends on BR2_powerpc || BR2_powerpc64
->  config BR2_powerpc_401
->  	bool "401"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_403
->  	bool "403"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_405
->  	bool "405"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_405fp
->  	bool "405 with FPU"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_440
->  	bool "440"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_440fp
->  	bool "440 with FPU"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_464
->  	bool "464"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_464fp
->  	bool "464 with FPU"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_476
->  	bool "476"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_476fp
->  	bool "476 with FPU"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_505
->  	bool "505"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_602
->  	bool "602"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_603
->  	bool "603"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_603e
->  	bool "603e"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_604
->  	bool "604"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_604e
->  	bool "604e"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_620
->  	bool "620"
-> -	depends on !BR2_powerpc64le
-> +	depends on BR2_powerpc || BR2_powerpc64
->  config BR2_powerpc_630
->  	bool "630"
-> -	depends on !BR2_powerpc64le
-> +	depends on BR2_powerpc || BR2_powerpc64
->  config BR2_powerpc_740
->  	bool "740"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_7400
->  	bool "7400"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  	select BR2_POWERPC_CPU_HAS_ALTIVEC
->  config BR2_powerpc_7450
->  	bool "7450"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  	select BR2_POWERPC_CPU_HAS_ALTIVEC
->  config BR2_powerpc_750
->  	bool "750"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_821
->  	bool "821"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_823
->  	bool "823"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_860
->  	bool "860"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_970
->  	bool "970"
->  	depends on BR2_powerpc || BR2_powerpc64
->  	select BR2_POWERPC_CPU_HAS_ALTIVEC
->  config BR2_powerpc_8540
->  	bool "8540 / e500v1"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  	select BR2_POWERPC_CPU_HAS_SPE
->  config BR2_powerpc_8548
->  	bool "8548 / e500v2"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  	select BR2_POWERPC_CPU_HAS_SPE
->  config BR2_powerpc_e300c2
->  	bool "e300c2"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_e300c3
->  	bool "e300c3"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_e500mc
->  	bool "e500mc"
-> -	depends on !BR2_ARCH_IS_64
-> +	depends on BR2_powerpc
->  config BR2_powerpc_e5500
->  	bool "e5500"
-> -	depends on !BR2_powerpc64le
-> +	depends on BR2_powerpc || BR2_powerpc64
->  config BR2_powerpc_e6500
->  	bool "e6500"
-> -	depends on !BR2_powerpc64le
-> +	depends on BR2_powerpc || BR2_powerpc64
->  	select BR2_POWERPC_CPU_HAS_ALTIVEC
->  config BR2_powerpc_power4
->  	bool "power4"
-> -	depends on !BR2_powerpc64le
-> +	depends on BR2_powerpc || BR2_powerpc64
->  config BR2_powerpc_power5
->  	bool "power5"
-> -	depends on !BR2_powerpc64le
-> +	depends on BR2_powerpc || BR2_powerpc64
->  config BR2_powerpc_power6
->  	bool "power6"
->  	depends on BR2_powerpc || BR2_powerpc64
-> -- 
-> 2.37.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/frr/frr.hash b/package/frr/frr.hash
+index 9bb2b75b8f..87ade19c16 100644
+--- a/package/frr/frr.hash
++++ b/package/frr/frr.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  33e974e2a622618e139983f65d93e92e7f1a735936ef18b18244403b15be002f  frr-8.2.2.tar.gz
++sha256  9b0430d01f8da2d780ac5e41de2cf4e53abff0ed06a0cc75d745f4b1f29e5b9e  frr-8.3.1.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index aa36387a3a..72c46ba4aa 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FRR_VERSION = 8.2.2
++FRR_VERSION = 8.3.1
+ FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
+ FRR_LICENSE = GPL-2.0
+ FRR_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
