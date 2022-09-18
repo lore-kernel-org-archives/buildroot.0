@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 731D4C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:02:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54F36C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Sep 2022 07:04:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1904984448;
-	Sun, 18 Sep 2022 07:02:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1904984448
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF37D60C18;
+	Sun, 18 Sep 2022 07:04:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF37D60C18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zRxIPW1CwqiB; Sun, 18 Sep 2022 07:02:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e32OwYb3dyfy; Sun, 18 Sep 2022 07:04:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F83784441;
-	Sun, 18 Sep 2022 07:02:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F83784441
+	by smtp3.osuosl.org (Postfix) with ESMTP id 034F060AC1;
+	Sun, 18 Sep 2022 07:04:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 034F060AC1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D384B1BF484
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:02:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 850E21BF484
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:04:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACBFF42418
- for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:02:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACBFF42418
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C25A4240B
+ for <buildroot@lists.busybox.net>; Sun, 18 Sep 2022 07:04:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C25A4240B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KkXsK3rLQlVQ for <buildroot@lists.busybox.net>;
- Sun, 18 Sep 2022 07:02:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65CD64240B
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 65CD64240B
- for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:02:50 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id A68C9E0002;
- Sun, 18 Sep 2022 07:02:48 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oZoKF-00BMXP-Ug; Sun, 18 Sep 2022 09:02:47 +0200
+ with ESMTP id yjOy8yZnWHQB for <buildroot@lists.busybox.net>;
+ Sun, 18 Sep 2022 07:04:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 553574032A
+ for <buildroot@buildroot.org>; Sun, 18 Sep 2022 07:04:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 553574032A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4133984761; Sun, 18 Sep 2022 07:04:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Romain Naour <romain.naour@gmail.com>
-References: <20220827161431.333659-1-romain.naour@gmail.com>
-Date: Sun, 18 Sep 2022 09:02:47 +0200
-In-Reply-To: <20220827161431.333659-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sat, 27 Aug 2022 18:14:30 +0200")
-Message-ID: <871qs9xizs.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [for-master 1/2] package/glibc: glibc on or1k needs
- a toolchain w/ headers >= 5.4
+To: buildroot@buildroot.org
+Date: Sun, 18 Sep 2022 09:02:11 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 31f1414020e5a172960e3de2b0fe4dd52772f579
+X-Git-Newrev: 6c7de82baa1458eb74a14ed5bd4b6d90f5c27cea
+X-Patchwork-Hint: ignore
+Message-Id: <20220918070402.4133984761@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/glibc: glibc on
+ or1k needs a toolchain w/ headers >= 5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +57,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6c7de82baa1458eb74a14ed5bd4b6d90f5c27cea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
- > Commit [1] enabled glibc on or1k since it's now supported but it
- > requires a toolchain with linux-headers >= 5.4.
+Commit [1] enabled glibc on or1k since it's now supported but it
+requires a toolchain with linux-headers >= 5.4.
 
- > From [2]:
- > "Here we define the minumum linux kernel version at 5.4.0, as that is the
- > long term support version where 32-bit architectures start to support
- > 64-bit time API's.  The OpenRISC kernel had some bugs up until version 5.8
- > which caused issues with glibc fork/clone, they have been backported to
- > 5.4 but not previous versions."
+From [2]:
+"Here we define the minumum linux kernel version at 5.4.0, as that is the
+long term support version where 32-bit architectures start to support
+64-bit time API's.  The OpenRISC kernel had some bugs up until version 5.8
+which caused issues with glibc fork/clone, they have been backported to
+5.4 but not previous versions."
 
- > Fixes:
+Fixes:
 
- >   checking installed Linux kernel header files... 3.2.0 or later
- >   checking for kernel header at least 5.4.0... too old!
- >   configure: error: *** The available kernel headers are older than the requested
+  checking installed Linux kernel header files... 3.2.0 or later
+  checking for kernel header at least 5.4.0... too old!
+  configure: error: *** The available kernel headers are older than the requested
 
- > https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/2875256686
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/2875256686
 
- > [1] 68d0aede597d32816c5b2ff32de0ce33cc14eb93
- > [2] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=0c3c62ca7d9ff3bdacdd13e636bc858101e3e288
+[1] 68d0aede597d32816c5b2ff32de0ce33cc14eb93
+[2] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=0c3c62ca7d9ff3bdacdd13e636bc858101e3e288
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 7537419257a1ea1b3bd82a2f72e900d68cbb3645)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/Config.in                 | 1 +
+ toolchain/toolchain-buildroot/Config.in | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-Committed to 2022.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 2c6dc40139..85c25482c7 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -38,6 +38,7 @@ config BR2_PACKAGE_GLIBC_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_RISCV_64
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 || !BR2_arc
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || !BR2_or1k
+ 
+ if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index b58c02aea9..e67e9f406d 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -72,6 +72,10 @@ comment "glibc on ARC needs a toolchain w/ headers >= 5.1"
+ 	depends on BR2_arc
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+ 
++comment "glibc on or1k needs a toolchain w/ headers >= 5.4"
++	depends on BR2_or1k
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl"
+ 	depends on BR2_PACKAGE_MUSL_SUPPORTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
