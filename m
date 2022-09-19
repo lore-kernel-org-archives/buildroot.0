@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8742ECAAA1
-	for <buildroot@archiver.kernel.org>; Mon, 19 Sep 2022 19:38:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 318FAECAAD3
+	for <buildroot@archiver.kernel.org>; Mon, 19 Sep 2022 19:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2382C41710;
-	Mon, 19 Sep 2022 19:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2382C41710
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB8FD4170E;
+	Mon, 19 Sep 2022 19:41:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB8FD4170E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WQ1ExAjacZ7q; Mon, 19 Sep 2022 19:38:49 +0000 (UTC)
+	with ESMTP id 8aqIeEVSctPQ; Mon, 19 Sep 2022 19:41:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E848B41708;
-	Mon, 19 Sep 2022 19:38:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E848B41708
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BEAE21BF59A
- for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 19:38:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BFD0541713;
+	Mon, 19 Sep 2022 19:41:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFD0541713
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 40D8E1BF59A
+ for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 19:41:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A71CC813BA
- for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 19:38:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A71CC813BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C82740125
+ for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 19:41:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C82740125
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T74I6fppQJLp for <buildroot@lists.busybox.net>;
- Mon, 19 Sep 2022 19:38:45 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF12C8138C
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF12C8138C
- for <buildroot@buildroot.org>; Mon, 19 Sep 2022 19:38:45 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:ff43:9597:808d:a748])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 8803A19F55C;
- Mon, 19 Sep 2022 21:38:41 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 19 Sep 2022 21:38:41 +0200
-Date: Mon, 19 Sep 2022 21:38:41 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20220919193841.GO1419013@scaer>
-References: <20220919034622.306672-1-troglobit@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220919034622.306672-1-troglobit@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1663616323;
- bh=4OUr66MHs5iLtLs2MWUe6Ooqqs6vXyFfHMpljuRUC3E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=B7gka7/MUaDEpwE9WWTe8vEfYh7cWmFj5+PX/oaCQyHz1txIs4yXfrV2meFfFx7R5
- JEQtdyZYEgRyOg+ECuU+Pn1+zUB3dKRt3dbtYRA35pf53ew0OXLScPcXOyUKkXZs7J
- dZrIskqjn0livaWjfO5QcEHGY0y8Cb8jMfzfcDDEfiqwbOJdlpwkwbbkLSkYpbfVN1
- yK425jsL4qBNSveiSBcwTNnSAfW+/zTEIlUQ6tlC5n2fgugQrBMRcYVjbQ2KEXg2od
- XA7J/pkxADWZiFjFJm9FfsG6biy/s+okSHiulXKlQbhkUrkg4sMHYu5v7unryiNXNo
- NX/fhLvQJPaMg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=B7gka7/M
-Subject: Re: [Buildroot] [PATCH] Add myself to a few projects where I'm the
- upstream maintiner
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZMVSt7ZO86vJ for <buildroot@lists.busybox.net>;
+ Mon, 19 Sep 2022 19:41:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 53DC040124
+ for <buildroot@buildroot.org>; Mon, 19 Sep 2022 19:41:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53DC040124
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 40D0E85A8B; Mon, 19 Sep 2022 19:41:04 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 19 Sep 2022 21:40:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 48810c229695ef3eae02dab5b5a8d37d5eae41c2
+X-Git-Newrev: ce4b87be82d13d3a042b4e78fe5835f3c8ddc29d
+X-Patchwork-Hint: ignore
+Message-Id: <20220919194104.40D0E85A8B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.38.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,72 +56,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Joachim, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ce4b87be82d13d3a042b4e78fe5835f3c8ddc29d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've fixed the typo in the commit title, and took the opportunity to
-rephrase it slightly.
+Update to a new major release which brings in improvements and a few
+new features. Release notes:
 
-On 2022-09-19 05:46 +0200, Joachim Wiberg spake thusly:
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+  https://webkitgtk.org/2022/09/16/webkitgtk2.38.0-released.html
 
-Thanks for adopting those! :-)
+This release also includes security fixes for CVE-2022-32886,
+CVE-2022-32891, and CVE-2022-32912. Accompanying security advisory:
 
-Applied to master, thanks.
+  https://webkitgtk.org/security/WSA-2022-0009.html
 
-Regards,
-Yann E. MORIN.
+The CMake option to build the documentation has been renamed from
+ENABLE_GTK_DOC to ENABLE_DOCUMENTATION, therefore update the build
+recipe accordingly. Option USE_LIBNOTIFY is no longer available, as
+WebKit now uses the notification portal D-Bus API directly without
+relying on libnotify. Lastly, version 2.38.0 introduces a new WebRTC
+implementation based on GstWebRTC which is left disabled for now to
+keep the existing status quo (WebRTC not available), and adding an
+option to enable it can be done in a follow-up patch.
 
-> ---
->  DEVELOPERS | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 9e8626341e..14b91fca8d 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1481,15 +1481,21 @@ N:	Joachim Wiberg <troglobit@gmail.com>
->  F:	configs/globalscale_espressobin_defconfig
->  F:	board/globalscale/espressobin/
->  F:	package/inadyn/
-> +F:	package/libconfuse/
->  F:	package/libite/
-> +F:	package/libnet/
->  F:	package/libteam/
->  F:	package/libuev/
->  F:	package/mg/
-> +F:	package/mini-snmpd/
->  F:	package/mrouted/
->  F:	package/netcalc/
-> +F:	package/pimd/
-> +F:	package/redir/
->  F:	package/smcroute/
->  F:	package/ssdp-responder/
->  F:	package/sysklogd/
-> +F:	package/uredir/
->  F:	package/watchdogd/
->  
->  N:	Jochen Baltes <jochen.baltes@gmail.com>
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 7c6d7d65b5..c2512be9c6 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.36.7.tar.xz.sums
+-md5  466351cf35e4f742590919380b5dee93  webkitgtk-2.36.7.tar.xz
+-sha1  36078148b6e0ef002f0279b25b1caf173f851ac8  webkitgtk-2.36.7.tar.xz
+-sha256  0c260cf2b32f0481d017670dfed1b61e554967cd067195606c9f9eb5fe731743  webkitgtk-2.36.7.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.38.0.tar.xz.sums
++md5  a69cd8fc05f7299458b4faf1bc99b875  webkitgtk-2.38.0.tar.xz
++sha1  6dcb65b8dc56c52f086bfeecfca7920e9cc78348  webkitgtk-2.38.0.tar.xz
++sha256  f9ce6375a3b6e1329b0b609f46921e2627dc7ad6224b37b967ab2ea643bc0fbd  webkitgtk-2.38.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 014d92bb41..336744954e 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.36.7
++WEBKITGTK_VERSION = 2.38.0
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+@@ -18,12 +18,12 @@ WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf \
+ 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
++	-DENABLE_DOCUMENTATION=OFF \
+ 	-DENABLE_GEOLOCATION=OFF \
+-	-DENABLE_GTKDOC=OFF \
+ 	-DENABLE_MINIBROWSER=ON \
+ 	-DENABLE_SPELLCHECK=ON \
++	-DENABLE_WEB_RTC=OFF \
+ 	-DPORT=GTK \
+-	-DUSE_LIBNOTIFY=OFF \
+ 	-DUSE_LIBHYPHEN=OFF \
+ 	-DUSE_OPENJPEG=ON \
+ 	-DUSE_SOUP2=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
