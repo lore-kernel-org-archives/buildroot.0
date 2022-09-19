@@ -1,52 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41C21C54EE9
-	for <buildroot@archiver.kernel.org>; Mon, 19 Sep 2022 14:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AC7EECAAA1
+	for <buildroot@archiver.kernel.org>; Mon, 19 Sep 2022 19:35:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C478340BB9;
-	Mon, 19 Sep 2022 14:26:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C478340BB9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90AFE416D0;
+	Mon, 19 Sep 2022 19:35:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90AFE416D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GeEzL8V2GqBo; Mon, 19 Sep 2022 14:26:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pDNiNrfmMpD5; Mon, 19 Sep 2022 19:35:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5C4F40B24;
-	Mon, 19 Sep 2022 14:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5C4F40B24
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 73FCD1BF310
- for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 14:26:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 568AD416C0;
+	Mon, 19 Sep 2022 19:35:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 568AD416C0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 163551BF59A
+ for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 19:35:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A53B40B24
- for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 14:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A53B40B24
+ by smtp1.osuosl.org (Postfix) with ESMTP id F35EE81B6D
+ for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 19:35:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F35EE81B6D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wUWGqppnnU30 for <buildroot@lists.busybox.net>;
- Mon, 19 Sep 2022 14:26:13 +0000 (UTC)
-X-Greylist: delayed 01:54:08 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93E21400C4
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 93E21400C4
- for <buildroot@buildroot.org>; Mon, 19 Sep 2022 14:26:12 +0000 (UTC)
-Received: (Authenticated sender: foss@0leil.net)
- by mail.gandi.net (Postfix) with ESMTPSA id 15B071C0003;
- Mon, 19 Sep 2022 14:26:08 +0000 (UTC)
-From: Quentin Schulz <foss+buildroot@0leil.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ISP5CPvXpIK1 for <buildroot@lists.busybox.net>;
+ Mon, 19 Sep 2022 19:35:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0386A81B17
+ for <buildroot@buildroot.org>; Mon, 19 Sep 2022 19:35:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0386A81B17
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DFD80857B1; Mon, 19 Sep 2022 19:35:28 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 19 Sep 2022 16:25:55 +0200
-Message-Id: <20220919142555.1391164-1-foss+buildroot@0leil.net>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2022.02.x] package/freetype: fix CVE-2022-27404,
- CVE-2022-27405, CVE-2022-27406
+Date: Mon, 19 Sep 2022 21:34:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0f42b815323b4d4731bd508550e2b0bcc019a8ce
+X-Git-Newrev: c367b2dc867a99d7f5d3579d4a67112e80197f1d
+X-Patchwork-Hint: ignore
+Message-Id: <20220919193528.DFD80857B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/busybox: fix CVE-2022-30065
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,190 +56,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- Quentin Schulz <foss+buildroot@0leil.net>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=c367b2dc867a99d7f5d3579d4a67112e80197f1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes CVE-2022-27404, CVE-2022-27405, CVE-2022-27406 by backporting
-patches from master branch.
+This fixes CVE-2022-30065 by backporting a patch from the master branch.
 
 Cc: Quentin Schulz <foss+buildroot@0leil.net>
 Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
+ ...003-awk-fix-use-after-free-CVE-2022-30065.patch | 52 ++++++++++++++++++++++
+ package/busybox/busybox.mk                         |  3 ++
+ 2 files changed, 55 insertions(+)
 
-Those commits are part of freetype 2.12 release and later so only
-2022.02.x branch is vulnerable since 2022.05.x and later use 2.12.1 or
-later.
-
- .../0001-sfnt-Avoid-invalid-face-index.patch  | 46 +++++++++++++++++++
- ...c-ft_open_face_internal-Properly-gua.patch | 39 ++++++++++++++++
- ...js.c-FT_Request_Size-Guard-face-size.patch | 30 ++++++++++++
- package/freetype/freetype.mk                  |  7 +++
- 4 files changed, 122 insertions(+)
- create mode 100644 package/freetype/0001-sfnt-Avoid-invalid-face-index.patch
- create mode 100644 package/freetype/0002-src-base-ftobjs.c-ft_open_face_internal-Properly-gua.patch
- create mode 100644 package/freetype/0003-src-base-ftobjs.c-FT_Request_Size-Guard-face-size.patch
-
-diff --git a/package/freetype/0001-sfnt-Avoid-invalid-face-index.patch b/package/freetype/0001-sfnt-Avoid-invalid-face-index.patch
+diff --git a/package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch b/package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch
 new file mode 100644
-index 0000000000..e7410afd30
+index 0000000000..f9bfee328e
 --- /dev/null
-+++ b/package/freetype/0001-sfnt-Avoid-invalid-face-index.patch
-@@ -0,0 +1,46 @@
-+From 818eea8aa682f867e4fbeb9794959a28864e4acc Mon Sep 17 00:00:00 2001
-+From: Werner Lemberg <wl@gnu.org>
-+Date: Thu, 17 Mar 2022 19:24:16 +0100
-+Subject: [PATCH] [sfnt] Avoid invalid face index.
++++ b/package/busybox/0003-awk-fix-use-after-free-CVE-2022-30065.patch
+@@ -0,0 +1,52 @@
++From e06b1f0839972cc3f5b432849d574d14a8f17613 Mon Sep 17 00:00:00 2001
++From: Natanael Copa <ncopa@alpinelinux.org>
++Date: Fri, 17 Jun 2022 17:45:34 +0200
++Subject: [PATCH] awk: fix use after free (CVE-2022-30065)
 +
-+Fixes #1138.
++fixes https://bugs.busybox.net/show_bug.cgi?id=14781
 +
-+* src/sfnt/sfobjs.c (sfnt_init_face), src/sfnt/sfwoff2.c (woff2_open_font):
-+Check `face_index` before decrementing.
++function                                             old     new   delta
++evaluate                                            3343    3357     +14
 +
-+Backport: https://gitlab.freedesktop.org/freetype/freetype/-/commit/53dfdcd8198d2b3201a23c4bad9190519ba918db
++Signed-off-by: Natanael Copa <ncopa@alpinelinux.org>
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Backport: https://git.busybox.net/busybox/commit/?id=e63d7cdfdac78c6fd27e9e63150335767592b85e
++[straightforward conflict resolution in testsuite/awk.tests]
 +Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 +---
-+ src/sfnt/sfobjs.c  | 2 +-
-+ src/sfnt/sfwoff2.c | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
++ editors/awk.c       | 3 +++
++ testsuite/awk.tests | 6 ++++++
++ 2 files changed, 9 insertions(+)
 +
-+diff --git a/src/sfnt/sfobjs.c b/src/sfnt/sfobjs.c
-+index 789102479..ea17ca8f4 100644
-+--- a/src/sfnt/sfobjs.c
-++++ b/src/sfnt/sfobjs.c
-+@@ -566,7 +566,7 @@
-+     face_index = FT_ABS( face_instance_index ) & 0xFFFF;
++diff --git a/editors/awk.c b/editors/awk.c
++index f6314ac72..654cbac33 100644
++--- a/editors/awk.c
+++++ b/editors/awk.c
++@@ -3114,6 +3114,9 @@ static var *evaluate(node *op, var *res)
 + 
-+     /* value -(N+1) requests information on index N */
-+-    if ( face_instance_index < 0 )
-++    if ( face_instance_index < 0 && face_index > 0 )
-+       face_index--;
++ 		case XC( OC_MOVE ):
++ 			debug_printf_eval("MOVE\n");
+++			/* make sure that we never return a temp var */
+++			if (L.v == TMPVAR0)
+++				L.v = res;
++ 			/* if source is a temporary string, jusk relink it to dest */
++ 			if (R.v == TMPVAR1
++ 			 && !(R.v->type & VF_NUMBER)
++diff --git a/testsuite/awk.tests b/testsuite/awk.tests
++index bcaafe8fd..156aa65eb 100755
++--- a/testsuite/awk.tests
+++++ b/testsuite/awk.tests
++@@ -469,4 +469,10 @@ testing 'awk printf %% prints one %' \
++ 	"%\n" \
++ 	'' ''
 + 
-+     if ( face_index >= face->ttc_header.count )
-+diff --git a/src/sfnt/sfwoff2.c b/src/sfnt/sfwoff2.c
-+index 5ee8dea28..2da697d69 100644
-+--- a/src/sfnt/sfwoff2.c
-++++ b/src/sfnt/sfwoff2.c
-+@@ -2086,7 +2086,7 @@
-+     /* Validate requested face index. */
-+     *num_faces = woff2.num_fonts;
-+     /* value -(N+1) requests information on index N */
-+-    if ( *face_instance_index < 0 )
-++    if ( *face_instance_index < 0 && face_index > 0 )
-+       face_index--;
-+ 
-+     if ( face_index >= woff2.num_fonts )
-+-- 
-+2.37.3
-+
-diff --git a/package/freetype/0002-src-base-ftobjs.c-ft_open_face_internal-Properly-gua.patch b/package/freetype/0002-src-base-ftobjs.c-ft_open_face_internal-Properly-gua.patch
-new file mode 100644
-index 0000000000..75a071fc26
---- /dev/null
-+++ b/package/freetype/0002-src-base-ftobjs.c-ft_open_face_internal-Properly-gua.patch
-@@ -0,0 +1,39 @@
-+From edbc2be0ccac0d524de82b5f9737d7f070dbf8cd Mon Sep 17 00:00:00 2001
-+From: Werner Lemberg <wl@gnu.org>
-+Date: Sat, 19 Mar 2022 06:40:17 +0100
-+Subject: [PATCH] * src/base/ftobjs.c (ft_open_face_internal): Properly guard
-+ `face_index`.
-+
-+We must ensure that the cast to `FT_Int` doesn't change the sign.
-+
-+Fixes #1139.
-+
-+Backport: https://gitlab.freedesktop.org/freetype/freetype/-/commit/22a0cccb4d9d002f33c1ba7a4b36812c7d4f46b5
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/base/ftobjs.c | 9 +++++++++
-+ 1 file changed, 9 insertions(+)
-+
-+diff --git a/src/base/ftobjs.c b/src/base/ftobjs.c
-+index 883f1a897..e00dcc57b 100644
-+--- a/src/base/ftobjs.c
-++++ b/src/base/ftobjs.c
-+@@ -2451,6 +2451,15 @@
-+ #endif
-+ 
-+ 
-++    /* only use lower 31 bits together with sign bit */
-++    if ( face_index > 0 )
-++      face_index &= 0x7FFFFFFFL;
-++    else
-++    {
-++      face_index &= 0x7FFFFFFFL;
-++      face_index  = -face_index;
-++    }
+++testing 'awk assign while test' \
+++	"awk '\$1==\$1=\"foo\" {print \$1}'" \
+++	"foo\n" \
+++	"" \
+++	"foo"
 ++
-+ #ifdef FT_DEBUG_LEVEL_TRACE
-+     FT_TRACE3(( "FT_Open_Face: " ));
-+     if ( face_index < 0 )
++ exit $FAILCOUNT
 +-- 
 +2.37.3
 +
-diff --git a/package/freetype/0003-src-base-ftobjs.c-FT_Request_Size-Guard-face-size.patch b/package/freetype/0003-src-base-ftobjs.c-FT_Request_Size-Guard-face-size.patch
-new file mode 100644
-index 0000000000..65d9fb1954
---- /dev/null
-+++ b/package/freetype/0003-src-base-ftobjs.c-FT_Request_Size-Guard-face-size.patch
-@@ -0,0 +1,30 @@
-+From f975217879490247cf8622c65cfef73b5642e787 Mon Sep 17 00:00:00 2001
-+From: Werner Lemberg <wl@gnu.org>
-+Date: Sat, 19 Mar 2022 09:37:28 +0100
-+Subject: [PATCH] * src/base/ftobjs.c (FT_Request_Size): Guard `face->size`.
-+
-+Fixes #1140.
-+
-+Backport: https://gitlab.freedesktop.org/freetype/freetype/-/commit/0c2bdb01a2e1d24a3e592377a6d0822856e10df2
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ src/base/ftobjs.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/src/base/ftobjs.c b/src/base/ftobjs.c
-+index e00dcc57b..46baf5fed 100644
-+--- a/src/base/ftobjs.c
-++++ b/src/base/ftobjs.c
-+@@ -3332,6 +3332,9 @@
-+     if ( !face )
-+       return FT_THROW( Invalid_Face_Handle );
-+ 
-++    if ( !face->size )
-++      return FT_THROW( Invalid_Size_Handle );
-++
-+     if ( !req || req->width < 0 || req->height < 0 ||
-+          req->type >= FT_SIZE_REQUEST_TYPE_MAX )
-+       return FT_THROW( Invalid_Argument );
-+-- 
-+2.37.3
-+
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 912e6c4daa..4d06ae964a 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -15,6 +15,13 @@ FREETYPE_CPE_ID_VENDOR = freetype
- FREETYPE_DEPENDENCIES = host-pkgconf
- FREETYPE_CONFIG_SCRIPTS = freetype-config
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 920f55c7fc..0f887c9734 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -11,6 +11,9 @@ BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
+ BUSYBOX_LICENSE_FILES = LICENSE archival/libarchive/bz/LICENSE
+ BUSYBOX_CPE_ID_VENDOR = busybox
  
-+# 0001-sfnt-Avoid-invalid-face-index.patch
-+FREETYPE_IGNORE_CVES += CVE-2022-27404
-+# 0002-src-base-ftobjs.c-ft_open_face_internal-Properly-gua.patch
-+FREETYPE_IGNORE_CVES += CVE-2022-27405
-+# 0003-src-base-ftobjs.c-FT_Request_Size-Guard-face-size.patch
-+FREETYPE_IGNORE_CVES += CVE-2022-27406
++# 0003-awk-fix-use-after-free-CVE-2022-30065.patch
++BUSYBOX_IGNORE_CVES += CVE-2022-30065
 +
- # harfbuzz already depends on freetype so disable harfbuzz in freetype to avoid
- # a circular dependency
- FREETYPE_CONF_OPTS = --without-harfbuzz
--- 
-2.37.3
-
+ BUSYBOX_CFLAGS = \
+ 	$(TARGET_CFLAGS)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
