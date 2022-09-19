@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 854F6C54EE9
-	for <buildroot@archiver.kernel.org>; Mon, 19 Sep 2022 05:59:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E901C54EE9
+	for <buildroot@archiver.kernel.org>; Mon, 19 Sep 2022 06:21:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1044860B88;
-	Mon, 19 Sep 2022 05:59:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1044860B88
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C24C425A9;
+	Mon, 19 Sep 2022 06:21:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C24C425A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vYfZTj5bi_AA; Mon, 19 Sep 2022 05:59:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pw9cYiF60_gd; Mon, 19 Sep 2022 06:21:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C7F660ADC;
-	Mon, 19 Sep 2022 05:59:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C7F660ADC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B41151BF228
- for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 05:59:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 377AC4259F;
+	Mon, 19 Sep 2022 06:21:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 377AC4259F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 75F811BF393
+ for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 06:21:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8886740562
- for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 05:59:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8886740562
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F02B4259F
+ for <buildroot@lists.busybox.net>; Mon, 19 Sep 2022 06:21:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F02B4259F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iVIYV-DFZvjN for <buildroot@lists.busybox.net>;
- Mon, 19 Sep 2022 05:59:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yyLTg0566Hcl for <buildroot@lists.busybox.net>;
+ Mon, 19 Sep 2022 06:21:01 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AD6140141
-Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2AD6140141
- for <buildroot@buildroot.org>; Mon, 19 Sep 2022 05:59:25 +0000 (UTC)
-Received: by smtpng1.m.smailru.net with esmtpa (envelope-from
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 513FD4259D
+Received: from smtpng3.i.mail.ru (smtpng3.i.mail.ru [94.100.177.149])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 513FD4259D
+ for <buildroot@buildroot.org>; Mon, 19 Sep 2022 06:21:00 +0000 (UTC)
+Received: by smtpng3.m.smailru.net with esmtpa (envelope-from
  <fido_max@inbox.ru>)
- id 1oa9oQ-00044f-C3; Mon, 19 Sep 2022 08:59:22 +0300
+ id 1oaA9J-00006w-7L; Mon, 19 Sep 2022 09:20:57 +0300
+From: Maxim Kochetkov <fido_max@inbox.ru>
 To: buildroot@buildroot.org
-Date: Mon, 19 Sep 2022 08:59:20 +0300
-Message-Id: <20220919055920.1072075-1-fido_max@inbox.ru>
+Date: Mon, 19 Sep 2022 09:20:23 +0300
+Message-Id: <20220919062023.1091771-1-fido_max@inbox.ru>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailru-Src: smtp
 X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD9EBD81B01C038F8F37A3C6F5B007D561670736DF5E326B93F182A05F538085040E40DE9BDC9461D44DC2E1378C9EF4DF7F52D281CD5FAC6DE911316C4207462B0
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7D4A169723F56FEDEEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006374A24022C550661178638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8FAB80EC0DD9EDAC39B0DC530C1A191736F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE749E2213E709ACCBA9FA2833FD35BB23D9E625A9149C048EE26055571C92BF10FF04B652EEC242312D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8BF80095D1E77F4578A471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7CC415C329B279CF9D43847C11F186F3C59DAA53EE0834AAEE
-X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C41E93BD56E7067354307CAA32FF218580205367B2BCC23E5B25E13A71C679B22CE7E65F06B2D3BF1CAD91A466A1DEF99B6ED91DBE5ABE359ADBCB5631A0A9D21FF3F687384632F7D2CE733EDCD873AA8E2A8371E1B60B9E36FF4A85249296E39DB1881A6453793CE9C32612AADDFBE061501E677427FAD4073D58D961240FA4EF6DABF04D5057A81F1E618B5D5F965AFDF9425D8FA97DB43915E2725BA614EAEA1EF972C1F679AE1C
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D341776B9FDE05FBA7A55326A0A0F39C8F8ED99E39DE2117E86CE16487019967BCBF1C32C954DFB54B51D7E09C32AA3244C73DCA41CDC9CFCA4FB2939484BDFE2FF6C24832127668422729B2BEF169E0186
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojYCidGuNEkb4sSUvevnKWLg==
-X-Mailru-Sender: 689FA8AB762F7393CC2E0F076E87284E5BBE3B4DC3B02A13AEDE8885A3F1DBB198CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-77F55803: 4F1203BC0FB41BD9EBD81B01C038F8F37A3C6F5B007D561670736DF5E326B93F182A05F53808504099B462805F40A24F26C82C481438A964B4D53E2CCD6E8C1370790977D09EF8E0
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7F09446BC3D835A58EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006378D8F1FE4E764DFCDEA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38B8859CA687ABA27BA286163D8FA88DF2D00A592F39E19D2CA20879F7C8C5043D14489FFFB0AA5F4BF176DF2183F8FC7C0DEC8C2C8BCD2534D8941B15DA834481FA18204E546F3947C13BDA61BF53F5E1DF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F79006370BDB19F53EE528DD389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC72CEEB2601E22B093A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4930A3850AC1BE2E735B17145F0B7815491C4224003CC83647689D4C264860C145E
+X-C1DE0DAB: C20DE7B7AB408E4181F030C43753B8186998911F362727C41E93BD56E7067354307CAA32FF218580205367B2BCC23E5B60B02BA32D92E101E7E65F06B2D3BF1CAD91A466A1DEF99B6ED91DBE5ABE359A3485EE9140A7D39D7BB222D9AD51FB28574CD456CC796227FB74B39B9C800387D8BA4333CE3E613DB1881A6453793CE9C32612AADDFBE061501E677427FAD4073D58D961240FA4EF6DABF04D5057A81F1E618B5D5F965AFDF9425D8FA97DB43915E2725BA614EAEA1EF972C1F679AE1C
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34EB7BD66E9101C100891E0AAFBDE0B66C543DC3CBFC608447A75A851EBAF89A62032D107570628CA91D7E09C32AA3244C9839FF57F7265F90329F5CA05BADE43124AF4FAF06DA24FD729B2BEF169E0186
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojYCidGuNEkb6u9G/VcuK/Ww==
+X-Mailru-Sender: 689FA8AB762F7393CC2E0F076E87284ECDD0B0EB6C5E406A9426F1FDE34AC90598CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
 X-Mras: Ok
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  c=relaxed/relaxed; d=inbox.ru; s=mail4; 
  h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=jvFFsgmOh4hb2PZphNeUW2JoNR8VUJMGBp71h8swOtc=; 
- t=1663567165;x=1663657165; 
- b=SMaRG6cfTLPQB4m1qWPimiP1Bp/8PYYJlJ+/WoN8f61TXQfgpF8BslWGPl5mrOFKmMxuERERJsU+9aaBnvDQC1x50ymxpYt72QUP6zOtrMaDUDhWKRLjhKzivfULC5qYh7jGsrkBR6pJ1+8FiPiA3UkX/EdGHE7NZZQ1YYR0Oj8asMBP/ssB/j/DsRsn1yNJxObQgx4r9UhNRs2pWkMTTlDYRiaBf6TTs468T6rf3a6KegVwKNT4v7OITm0QpUpQpZ6imNdHkLyJuQD7QQmSNvjp2TF5UaJuYb8Ndn1qF/ldWmnVP67CngFZs4ZlJT3y/jly8V8j6PW3lYRQRaTsbg==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=5Fp0qyOoH6C+OkMtUy7IivAJuQ0HEHm9K8P/s4WZhRE=; 
+ t=1663568460;x=1663658460; 
+ b=lO7EI9lXEFnLdGVdLutBepVS5uYMkCMUcrNSM82rRyru7YHntZaKnD99Z6juQw/YDjOq/HGrMQnMMinUoVq/SV/7a2RhnAw0iEswSos+llffBYxFwwibx4FmdzDwbH+JzxJbP40MdPRicI8gtx6JHVG2QT0JPzaZgSy69SpTr7YwCq242OW4mJs9l958Qcg+Q872OBBsaXf7fkGPzjG4YrTh843CjOQ6nxvoXiyAEtEXU81KDp4rY4A6Dx7lywel7elbsI+qJlo/Z01ovtn+F7Kzb0PJY0xhUNMmi/hsZe5wl8gdAryM79zo5H1FY+SnJgHhGrkwGKRVM1JKlTJzRQ==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
- header.a=rsa-sha256 header.s=mail4 header.b=SMaRG6cf
-X-Mailman-Original-Authentication-Results: smtpng1.m.smailru.net; auth=pass
+ header.a=rsa-sha256 header.s=mail4 header.b=lO7EI9lX
+X-Mailman-Original-Authentication-Results: smtpng3.m.smailru.net; auth=pass
  smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: bump version to 1.7.0
+Subject: [Buildroot] [PATCH 1/1] package/postgis: bump version to 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,44 +76,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release-notes: https://github.com/openstreetmap/osm2pgsql/releases/tag/1.7.0
+Release-notes: https://git.osgeo.org/gitea/postgis/postgis/src/tag/3.3.1/NEWS
 
 Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- package/osm2pgsql/osm2pgsql.hash | 2 +-
- package/osm2pgsql/osm2pgsql.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...kefile.in-do-not-force-static-linkin.patch | 23 ++++++++++---------
+ package/postgis/postgis.hash                  |  2 +-
+ package/postgis/postgis.mk                    |  2 +-
+ 3 files changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
-index 898fcd5500..28679cf08f 100644
---- a/package/osm2pgsql/osm2pgsql.hash
-+++ b/package/osm2pgsql/osm2pgsql.hash
+diff --git a/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch b/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch
+index 756a7c10dd..20a359fadd 100644
+--- a/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch
++++ b/package/postgis/0002-raster-loader-Makefile.in-do-not-force-static-linkin.patch
+@@ -1,6 +1,6 @@
+-From 29c33c483e22a4445d870739187d128df0f11f60 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Wed, 27 Jul 2022 15:12:40 +0200
++From 50af3f4fc2353ba35fd054060e27e034d29b1c78 Mon Sep 17 00:00:00 2001
++From: Maxim Kochetkov <mkochetkov@airspan.com>
++Date: Mon, 19 Sep 2022 09:09:44 +0300
+ Subject: [PATCH] raster/loader/Makefile.in: do not force static linking
+ 
+ This is similar to commit
+@@ -13,23 +13,24 @@ object XYZ".
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Upstream: https://github.com/postgis/postgis/pull/702
++Signed-off-by: Maxim Kochetkov <mkochetkov@airspan.com>
+ ---
+  raster/loader/Makefile.in | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/raster/loader/Makefile.in b/raster/loader/Makefile.in
+-index 3df47a96f..d0a408333 100644
++index b5d2e6709..5fc6b6038 100644
+ --- a/raster/loader/Makefile.in
+ +++ b/raster/loader/Makefile.in
+-@@ -36,7 +36,7 @@ PGSQL_BINDIR=@PGSQL_BINDIR@
++@@ -38,7 +38,7 @@ RASTER2PGSQL=raster2pgsql@EXESUFFIX@
++ # PostgreSQL executable directory
++ PGSQL_BINDIR=@PGSQL_BINDIR@
+  
+- RT_CORE=../rt_core
+- 
+--LIBLWGEOM_LDFLAGS= -static ../../liblwgeom/liblwgeom.la
+-+LIBLWGEOM_LDFLAGS= ../../liblwgeom/liblwgeom.la
+- LIBLWGEOM_CFLAGS=-I../../liblwgeom
++-LIBLWGEOM_LDFLAGS = -static $(top_builddir)/liblwgeom/liblwgeom.la
+++LIBLWGEOM_LDFLAGS = $(top_builddir)/liblwgeom/liblwgeom.la
++ LIBLWGEOM_CFLAGS = -I$(top_builddir)/liblwgeom -I$(top_srcdir)/liblwgeom
+  LIBGDAL_CFLAGS=@LIBGDAL_CFLAGS@
+  LIBGDAL_LDFLAGS=@LIBGDAL_LDFLAGS@
+ -- 
+-2.37.1
++2.34.1
+ 
+diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
+index 9569ca71dd..e25ed152c5 100644
+--- a/package/postgis/postgis.hash
++++ b/package/postgis/postgis.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  0ec8b58ab972ac8356185af4161270c1b625a77299f09e5fb7f45e616ef1a9a5  osm2pgsql-1.6.0.tar.gz
-+sha256  0f722baf0f04eda387d934d86228aae07d848993900db6b9e7ab312c91fd84e5  osm2pgsql-1.7.0.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
-index d389fff590..821d903fd6 100644
---- a/package/osm2pgsql/osm2pgsql.mk
-+++ b/package/osm2pgsql/osm2pgsql.mk
+-sha256  18cf3d013f45b1aa8ed59d78bc707e9e125e250d8f0615396ae9bfe3dd7c3d7c  postgis-3.2.2.tar.gz
++sha256  91be800a72d748c5a3a4a00d82ac1de42023e29da61ece6ebf9c77fe228fcb1a  postgis-3.3.1.tar.gz
+ sha256  55b69f22e1752830dd565852dc7ff242daf289dbd3a6bfede5db43f90d2e28c9  LICENSE.TXT
+diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+index e6ea52bf7a..a853c09bd8 100644
+--- a/package/postgis/postgis.mk
++++ b/package/postgis/postgis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OSM2PGSQL_VERSION = 1.6.0
-+OSM2PGSQL_VERSION = 1.7.0
- OSM2PGSQL_SITE = $(call github,openstreetmap,osm2pgsql,$(OSM2PGSQL_VERSION))
- OSM2PGSQL_LICENSE = GPL-2.0+
- OSM2PGSQL_LICENSE_FILES = COPYING
+-POSTGIS_VERSION = 3.2.2
++POSTGIS_VERSION = 3.3.1
+ POSTGIS_SITE = https://download.osgeo.org/postgis/source
+ # parallel build issues
+ POSTGIS_MAKE = $(MAKE1)
 -- 
 2.34.1
 
