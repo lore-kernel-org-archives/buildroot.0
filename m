@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D8BDC54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 06:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4B1FC54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 06:21:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1788081772;
-	Tue, 20 Sep 2022 06:20:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1788081772
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZTPgTjZYx-1H; Tue, 20 Sep 2022 06:20:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2207981934;
-	Tue, 20 Sep 2022 06:20:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2207981934
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5EA891BF9CB
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:20:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4813460BEC
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4813460BEC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68C2D60BFC;
+	Tue, 20 Sep 2022 06:21:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68C2D60BFC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PfBbXpYmmRcs for <buildroot@lists.busybox.net>;
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4tEUQzPgK2lf; Tue, 20 Sep 2022 06:21:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EA0460BF3;
+	Tue, 20 Sep 2022 06:21:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EA0460BF3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 64A2B1BF33A
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:20:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40FAE40101
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:20:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40FAE40101
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0HSowpEE6UWk for <buildroot@lists.busybox.net>;
  Tue, 20 Sep 2022 06:20:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5208A60B19
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63397404CF
  for <buildroot@buildroot.org>; Tue, 20 Sep 2022 06:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5208A60B19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63397404CF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B79185BA3; Tue, 20 Sep 2022 06:20:25 +0000 (UTC)
+ id 4F7DD85BBE; Tue, 20 Sep 2022 06:20:25 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
 Date: Tue, 20 Sep 2022 08:09:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ce4b87be82d13d3a042b4e78fe5835f3c8ddc29d
-X-Git-Newrev: f446cfc5cd748e2081986f1fdd08e3e5268e331f
+X-Git-Oldrev: f446cfc5cd748e2081986f1fdd08e3e5268e331f
+X-Git-Newrev: 8d8afc7a06abdb54a92768433dd69da5a44a5e7c
 X-Patchwork-Hint: ignore
-Message-Id: <20220920062025.3B79185BA3@busybox.osuosl.org>
+Message-Id: <20220920062025.4F7DD85BBE@busybox.osuosl.org>
 Subject: [Buildroot] [git commit] package/qt6/qt6base: add support for sql
- module w/ mysql
+ module w/ postgresql
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,75 +63,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f446cfc5cd748e2081986f1fdd08e3e5268e331f
+commit: https://git.buildroot.net/buildroot/commit/?id=8d8afc7a06abdb54a92768433dd69da5a44a5e7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/qt6base/Config.in  | 21 +++++++++++++++++++++
- package/qt6/qt6base/qt6base.mk | 16 ++++++++++++++++
- 2 files changed, 37 insertions(+)
+ package/qt6/qt6base/Config.in  | 18 ++++++++++++++++++
+ package/qt6/qt6base/qt6base.mk |  7 +++++++
+ 2 files changed, 25 insertions(+)
 
 diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index f3e56aefa4..c2a08a3b5b 100644
+index c2a08a3b5b..7d1233752c 100644
 --- a/package/qt6/qt6base/Config.in
 +++ b/package/qt6/qt6base/Config.in
-@@ -35,6 +35,27 @@ config BR2_PACKAGE_QT6BASE_NETWORK
- 	help
- 	  This options enables the Qt6Network library.
+@@ -54,6 +54,24 @@ comment "MySQL plugin needs a toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
  
-+config BR2_PACKAGE_QT6BASE_SQL
-+	bool "sql module"
-+	help
-+	  This options enables the Qt6Sql library.
-+
-+if BR2_PACKAGE_QT6BASE_SQL
-+config BR2_PACKAGE_QT6BASE_MYSQL
-+	bool "MySQL Plugin"
-+	depends on BR2_INSTALL_LIBSTDCPP
++config BR2_PACKAGE_QT6BASE_PSQL
++	bool "PostgreSQL Plugin"
 +	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_MYSQL
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_WCHAR
++	depends on !BR2_OPTIMIZE_FAST
++	select BR2_PACKAGE_POSTGRESQL
 +	help
-+	  Build MySQL plugin
++	  Build PostgreSQL plugin
 +
-+comment "MySQL plugin needs a toolchain w/ C++, threads"
++comment "PostgreSQL plugin needs a toolchain w/ wchar, dynamic library"
 +	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
 +
-+endif
++comment "PostgreSQL plugin can't be built with optimize for fast"
++	depends on BR2_USE_MMU
++	depends on BR2_OPTIMIZE_FAST
 +
- config BR2_PACKAGE_QT6BASE_SYSLOG
- 	bool "syslog support"
- 	help
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 084020f935..3d07cefe92 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -153,6 +153,22 @@ else
- QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
  endif
  
-+# Qt6 SQL Plugins
-+ifeq ($(BR2_PACKAGE_QT6BASE_SQL),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_sql=ON
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_db2=OFF -DFEATURE_sql_ibase=OFF -DFEATURE_sql_oci=OFF -DFEATURE_sql_odbc=OFF
-+
-+ifeq ($(BR2_PACKAGE_QT6BASE_MYSQL),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_mysql=ON
-+QT6BASE_DEPENDENCIES += mysql
+ config BR2_PACKAGE_QT6BASE_SYSLOG
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 3d07cefe92..f29a52f543 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -165,6 +165,13 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_sql_mysql=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT6BASE_PSQL),y)
++QT6BASE_CONF_OPTS += -DFEATURE_sql_psql=ON
++QT6BASE_DEPENDENCIES += postgresql
 +else
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_mysql=OFF
++QT6BASE_CONF_OPTS += -DFEATURE_sql_psql=OFF
 +endif
 +
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_sql=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT6BASE_SYSLOG),y)
- QT6BASE_CONF_OPTS += -DFEATURE_syslog=ON
  else
+ QT6BASE_CONF_OPTS += -DFEATURE_sql=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
