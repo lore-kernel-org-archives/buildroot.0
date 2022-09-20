@@ -1,66 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE76AC6FA82
-	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 21:32:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ADACC6FA82
+	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 21:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D501E41916;
-	Tue, 20 Sep 2022 21:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D501E41916
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF11B40C9D;
+	Tue, 20 Sep 2022 21:37:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF11B40C9D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VY4PPk1-A36D; Tue, 20 Sep 2022 21:32:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Fq8OBBnsu1Ej; Tue, 20 Sep 2022 21:37:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA32B41918;
-	Tue, 20 Sep 2022 21:32:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA32B41918
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D43CE1BF2A7
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 21:32:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C69AC401B3;
+	Tue, 20 Sep 2022 21:37:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C69AC401B3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4457C1BF2A7
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 21:37:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF26860FCA
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 21:32:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF26860FCA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B5F1829DC
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 21:37:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B5F1829DC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K7ZWrafiLij2 for <buildroot@lists.busybox.net>;
- Tue, 20 Sep 2022 21:32:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a5BSk9NXU4pR for <buildroot@lists.busybox.net>;
+ Tue, 20 Sep 2022 21:37:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7488960FC6
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7488960FC6
- for <buildroot@buildroot.org>; Tue, 20 Sep 2022 21:32:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94A5182983
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 94A5182983
+ for <buildroot@buildroot.org>; Tue, 20 Sep 2022 21:37:11 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 24C9D240004;
- Tue, 20 Sep 2022 21:31:58 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id 9D474FF804;
+ Tue, 20 Sep 2022 21:37:08 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Sep 2022 23:31:56 +0200
-Message-Id: <20220920213156.740074-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Sep 2022 23:37:06 +0200
+Message-Id: <20220920213707.743295-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663709518;
+ d=bootlin.com; s=gm1; t=1663709828;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=6+AGrBu4YQOpx99WWMCDkvVkNjg97r2DyK3M/kXFfK8=;
- b=gdsGb4MHN4OkYKoZCiit0nofgYvJK/rNIKw4xoP7BdCEtDTN+DmJIx4SQ0ofl4g0cKPLi/
- 1YnxVeyHFk+V+fY/N4HFuW0QWERtnVtHNpz+lfAdPtGWwz0L4H6Y0xMPhif7igIH7dO3ot
- wr3yXp12AXmPocLtYUDj2StJ83e+tzaCL5NhznmCeV3XO3l+QfgQ+cKEteOJjrNA8V10fR
- KJquZBFyK2pikQ5j07QzBoa2Tkbkivjo94UTP6FmOEraHUTdxfBWL6PJenzjEdMzXHrdR2
- 6WKog8Al61VRLlug99kt2cuMxi3yHbpxmr3UoPdCwFiNGvFlzqyNUVcJ2DeuuA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=xo/q8z8A99fQijAPfRCxkMT+l1GHvvdfC70EbOpdrXs=;
+ b=X7Zsp3Zo+p53AB9u1LCZEBBq+JnrnYPcEeavoVS+BcNpfuSl6TcoEWquCi2XH3RhEJVzz3
+ Iseg3xMEvNtOJoaCsfN/bKJ1vm4bU0YoAi+hk8ntcJRzI/Qv4vVswb8jkuD4D1ww0tR2EH
+ /Rd5hrTMXF2mayv7Wqt1UCeb7PPBOA+J1lkqeAVqdPNCkq89AH7ehluYGh9qrLvwZwLdZT
+ o4+Kb+EvI6cXga+F3MF5GXuxDMvCjTZmQwSfU0xZH3cpIU+kijOR/8lSCF/XgN9mXmMdZP
+ MpKO5jTwSvnIHs6WY1MZd2txOmoMSdkEeH0Hqrt5qYOoRKEuDM3Sqzljf26bJw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gdsGb4MH
-Subject: [Buildroot] [PATCH] package/double-conversion: bump to version 3.2.1
+ header.s=gm1 header.b=X7Zsp3Zo
+Subject: [Buildroot] [PATCH] package/gnu-efi: bump to version 3.0.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,54 +72,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes:
+Changes from 3.0.14 to 3.0.15:
 
-    Disable quiet nan test on windows by @floitsch in #174
-    Test on all platforms. by @floitsch in #175
-    Fix warnings on Windows by @floitsch in #176
-    Run ctests first. by @floitsch in #177
-    Give shared-lib option and test install by @floitsch in #179
-    Install Windows debbuger (pdb) files. by @floitsch in #178
-    Add a cast to silence a signedness conversion warning. by @pkasting in #182
-    Issue #184 : Fixed all -Wzero-as-null-pointer-constant warnings by @seanm in #185
+8b018e67212957de176292f95718df48f49a418b Bump revision to VERSION = 3.0.15
+803b49c40bb0b720b90d9c31d372911f1b946aa7 */*.S: add non-executable GNU stack marking on ELF-linux
+2ed6486834634130fe7bc9b8803b0113767fc7c1 lib/Makefile: add .o file dependency on libsubdirs targets
+6b28563584edd08ab9c94a746a8061434c165837 Handle __mips64
 
-See https://github.com/google/double-conversion/releases/tag/v3.2.1
+The patch
+0002-inc-efi-.h-also-support-__mips64-to-recognize-mips64.patch is
+dropped as it is equivalent to upstream commit
+6b28563584edd08ab9c94a746a8061434c165837 ("Handle __mips64")
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/double-conversion/double-conversion.hash | 2 +-
- package/double-conversion/double-conversion.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...support-__mips64-to-recognize-mips64.patch | 60 -------------------
+ package/gnu-efi/gnu-efi.hash                  |  6 +-
+ package/gnu-efi/gnu-efi.mk                    |  2 +-
+ 3 files changed, 4 insertions(+), 64 deletions(-)
+ delete mode 100644 package/gnu-efi/0002-inc-efi-.h-also-support-__mips64-to-recognize-mips64.patch
 
-diff --git a/package/double-conversion/double-conversion.hash b/package/double-conversion/double-conversion.hash
-index 8124ec2f82..a2ecd4422c 100644
---- a/package/double-conversion/double-conversion.hash
-+++ b/package/double-conversion/double-conversion.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  3dbcdf186ad092a8b71228a5962009b5c96abde9a315257a3452eb988414ea3b  double-conversion-3.2.0.tar.gz
-+sha256  e40d236343cad807e83d192265f139481c51fc83a1c49e406ac6ce0a0ba7cd35  double-conversion-3.2.1.tar.gz
- sha256  4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  COPYING
-diff --git a/package/double-conversion/double-conversion.mk b/package/double-conversion/double-conversion.mk
-index ae46fa06fe..af1fbab078 100644
---- a/package/double-conversion/double-conversion.mk
-+++ b/package/double-conversion/double-conversion.mk
+diff --git a/package/gnu-efi/0002-inc-efi-.h-also-support-__mips64-to-recognize-mips64.patch b/package/gnu-efi/0002-inc-efi-.h-also-support-__mips64-to-recognize-mips64.patch
+deleted file mode 100644
+index 818dd1d7f6..0000000000
+--- a/package/gnu-efi/0002-inc-efi-.h-also-support-__mips64-to-recognize-mips64.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From 2c0ad0d7547558be59ef10dd289e619373341704 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Thu, 21 Jul 2022 09:47:49 +0200
+-Subject: [PATCH] inc/efi*.h: also support __mips64 to recognize mips64
+-
+-gcc built-in define for the MIPS64 architecture is __mips64, not
+-__mips64__, so the current condition did not match for gcc. See
+-https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/mips/mips.h;h=47aac9d3d61245c4d3df5dbd0bbcd833190de7c3;hb=2d280e7eafc086e9df85f50ed1a6526d6a3a204d#l431
+-in the gcc source.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream: https://sourceforge.net/p/gnu-efi/mailman/message/37683797/
+----
+- inc/efi.h      | 2 +-
+- inc/efilib.h   | 2 +-
+- inc/efirtlib.h | 2 +-
+- 3 files changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/inc/efi.h b/inc/efi.h
+-index 43c832e..b193932 100644
+---- a/inc/efi.h
+-+++ b/inc/efi.h
+-@@ -48,7 +48,7 @@ Revision History
+- #include "aarch64/efibind.h"
+- #elif defined (_M_ARM) || defined(__arm__)
+- #include "arm/efibind.h"
+--#elif defined (_M_MIPS64) || defined(__mips64__)
+-+#elif defined (_M_MIPS64) || defined(__mips64__) || defined(__mips64)
+- #include "mips64el/efibind.h"
+- #elif defined (__riscv) && __riscv_xlen == 64
+- #include "riscv64/efibind.h"
+-diff --git a/inc/efilib.h b/inc/efilib.h
+-index 9f748ad..a2b39b2 100644
+---- a/inc/efilib.h
+-+++ b/inc/efilib.h
+-@@ -31,7 +31,7 @@ Revision History
+- #include "aarch64/efilibplat.h"
+- #elif defined (_M_ARM) || defined(__arm__)
+- #include "arm/efilibplat.h"
+--#elif defined (_M_MIPS64) || defined(__mips64__)
+-+#elif defined (_M_MIPS64) || defined(__mips64__) || defined(__mips64)
+- #include "mips64el/efilibplat.h"
+- #elif defined (__riscv) && __riscv_xlen == 64
+- #include "riscv64/efilibplat.h"
+-diff --git a/inc/efirtlib.h b/inc/efirtlib.h
+-index 8643061..518859e 100644
+---- a/inc/efirtlib.h
+-+++ b/inc/efirtlib.h
+-@@ -30,7 +30,7 @@ Revision History
+- #include "aarch64/efilibplat.h"
+- #elif defined (_M_ARM) || defined(__arm__)
+- #include "arm/efilibplat.h"
+--#elif defined (_M_MIPS64) || defined(__mips64__)
+-+#elif defined (_M_MIPS64) || defined(__mips64__) || defined(__mips64)
+- #include "mips64el/efilibplat.h"
+- #elif defined (__riscv) && __riscv_xlen == 64
+- #include "riscv64/efilibplat.h"
+--- 
+-2.36.1
+-
+diff --git a/package/gnu-efi/gnu-efi.hash b/package/gnu-efi/gnu-efi.hash
+index 599d234436..251a99e5d7 100644
+--- a/package/gnu-efi/gnu-efi.hash
++++ b/package/gnu-efi/gnu-efi.hash
+@@ -1,6 +1,6 @@
+ # From http://sourceforge.net/projects/gnu-efi/files
+-md5  e2902ad09d53d7a94dc96a449dbb4058  gnu-efi-3.0.14.tar.bz2
+-sha1  e46b3726478838e85d0a79d0a0d3508c4f2995cf  gnu-efi-3.0.14.tar.bz2
++md5  192d94e995ddd4ebdce4903adfd06039  gnu-efi-3.0.15.tar.bz2
++sha1  40c8a4715cf8c409a093c8d2ca9f5d5b24d73058  gnu-efi-3.0.15.tar.bz2
+ # Locally computed
+-sha256  b73b643a0d5697d1f396d7431448e886dd805668789578e3e1a28277c9528435  gnu-efi-3.0.14.tar.bz2
++sha256  931a257b9c5c1ba65ff519f18373c438a26825f2db7866b163e96d1b168f20ea  gnu-efi-3.0.15.tar.bz2
+ sha256  42d352e9c28dd446fd0209cd6f75588c8e41f0934540bb382bbd61c752360265  README.efilib
+diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
+index 13e925302d..93b5888370 100644
+--- a/package/gnu-efi/gnu-efi.mk
++++ b/package/gnu-efi/gnu-efi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOUBLE_CONVERSION_VERSION = 3.2.0
-+DOUBLE_CONVERSION_VERSION = 3.2.1
- DOUBLE_CONVERSION_SITE = $(call github,google,double-conversion,v$(DOUBLE_CONVERSION_VERSION))
- DOUBLE_CONVERSION_LICENSE = BSD-3-Clause
- DOUBLE_CONVERSION_LICENSE_FILES = COPYING
+-GNU_EFI_VERSION = 3.0.14
++GNU_EFI_VERSION = 3.0.15
+ GNU_EFI_SOURCE = gnu-efi-$(GNU_EFI_VERSION).tar.bz2
+ GNU_EFI_SITE = http://downloads.sourceforge.net/project/gnu-efi
+ GNU_EFI_INSTALL_STAGING = YES
 -- 
 2.37.2
 
