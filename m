@@ -1,67 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43175ECAAD8
-	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 13:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D424C54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 14:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BEBEF824DD;
-	Tue, 20 Sep 2022 13:32:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEBEF824DD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 539B0418AA;
+	Tue, 20 Sep 2022 14:44:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 539B0418AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZVcB-LElrl7R; Tue, 20 Sep 2022 13:32:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V-nSbQ_g6mQi; Tue, 20 Sep 2022 14:44:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4C4C8249E;
-	Tue, 20 Sep 2022 13:32:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4C4C8249E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8B6881BF2FE
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 13:32:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24F02408AA;
+	Tue, 20 Sep 2022 14:44:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24F02408AA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 857331BF3A9
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 14:44:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 66C5E8249E
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 13:32:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66C5E8249E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6159160F69
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 14:44:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6159160F69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7FNNXZA8SB4C for <buildroot@lists.busybox.net>;
- Tue, 20 Sep 2022 13:32:29 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 856B381991
-Received: from smtpdh16-1.aruba.it (smtpdh16-1.aruba.it [62.149.155.100])
- by smtp1.osuosl.org (Postfix) with ESMTP id 856B381991
- for <buildroot@buildroot.org>; Tue, 20 Sep 2022 13:32:28 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.95.233])
- by Aruba Outgoing Smtp  with ESMTPSA
- id adMPoHbnhWuL0adMPo1wYj; Tue, 20 Sep 2022 15:32:26 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Tue, 20 Sep 2022 15:32:24 +0200
-Message-Id: <20220920133224.3290270-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xepq9vvtTKZV for <buildroot@lists.busybox.net>;
+ Tue, 20 Sep 2022 14:44:00 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19F7D60F68
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
+ [IPv6:2607:f8b0:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 19F7D60F68
+ for <buildroot@buildroot.org>; Tue, 20 Sep 2022 14:44:00 +0000 (UTC)
+Received: by mail-pf1-x42b.google.com with SMTP id c198so2914246pfc.13
+ for <buildroot@buildroot.org>; Tue, 20 Sep 2022 07:44:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date;
+ bh=dPt+ZxtmycJKUsVsKT4XigSCQn9SSkeCMmJaHYKZ76Y=;
+ b=mYK7Hg6uDPPbn3FrU6hLjKnKhkgvAMCayG37RODXsi0EwCjGq/a0SQJdUmJ2zHKe/U
+ TotmYw7iUOmEoy+pWpHFKa6AKeKKC6sfqezAFDu8QJH+eFDf5Kt6y3WrRmtFPhQtb+1f
+ kzuOSJBio35uSFIRuW7MvQsTSkec9m6PCFIyYXNvBBn9ESc5K0r0a07MsIwBaWID4IjU
+ HZubrhBTFKpCbyH450ewBjRzMuF0IV5zcaaJfoBecwbsZTZV4WFvPHZOTN1/46Bl3S6S
+ hOdI0sG6llYNeKo0ArGSra89Q+UKbj91h81nXt1pR1sTYmnAu2TZTaHOKXWsV6/Q3AEj
+ 7jPg==
+X-Gm-Message-State: ACrzQf2X3PD0/zz3eIsFCPmemhNKU79L8d60OwVv9fDiKgd+8IyZczSo
+ ptkEhDDg0CQnBTkoWxPef28yo1Syq2xfIdtw+jXXe+/E
+X-Google-Smtp-Source: AMsMyM6EKzmbV2xs9A0K5y3GqsU77xG93AvzAVA0lKa6WtRZzYQ7EUeJu1RFNX0xcYH2gL6Jwg89VJgrgo09vtgvq1w=
+X-Received: by 2002:a63:7704:0:b0:439:ae51:3bc1 with SMTP id
+ s4-20020a637704000000b00439ae513bc1mr20504672pgc.558.1663685038899; Tue, 20
+ Sep 2022 07:43:58 -0700 (PDT)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfFyWrSWvMiQoA751jTL1Q7UKTLisbNRdbmM0BrGz6XIMRHjG5xFPx/oGUS/p5LshHI+w5GrUlYWIXIhwmpLwhDtjU60HH/Z6j3/XEQ8BZfPbjOOpMI5p
- COjRrcI3ouRkTz3G+YTY34uSQA72HBzxWU/cCZ2WL7LWjviGWfM8mDgXhPdy57OEZarzmdPkYxLivFrxW7rGyVDiXPqYYsLIXrrYKRqb+I8W6Ey0jvyv5eq5
- fLmurD4oKlup2G2N4KESOJkioKifNCzm2s9pXlUvOdIhHYV2grpH1tZtExAvexW+IDmdg4XLqMgAYrRQ2Hyk7A==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1663680746; bh=77sOpz7uciVSxp18fg1Xy9mnR1p6Jc+kY0Lx7vAdMpo=;
- h=From:To:Subject:Date:MIME-Version;
- b=g4MsJex2MOz9iIFRtSM0qdWciGBDMT4Mp7MzH5+8vr/ddRMzfTRw4VP+errhd6bK5
- itur4Xf/JCmELhqD4r66sV0STtWTHjItpM8RTvYz0tdxQN6D8z/0XpIS/SrmBslZD0
- 6Tbjj82SQktUJp3jODjb4UBIh0R4eqW+P+AkHVHzfyA0cfSJbd3H+bLpN5oMk1ieRZ
- JSRlIZ2wv6syrM7oRWoPsSE+xRP0rwNHVBS7rSeOC04bDaiTrFVkGqwmgml+P9AS5P
- ZQNv5K7ZC+M/FsWVlqacGonkHBYX8WtU9Y33a/taHZc9gWBa+08Yo3itKEr8An0nQT
- k5xXDS/ZERxbg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=g4MsJex2
-Subject: [Buildroot] [PATCH] package/wilc-driver: fix build failure due to
- missing Linux options
+From: Jesse Van Gavere <jesseevg@gmail.com>
+Date: Tue, 20 Sep 2022 16:43:47 +0200
+Message-ID: <CAMdwsN8FyQD4ofHfVgorNvX4kBDArfK6t9dBqgG=3xHrkFOuag@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date;
+ bh=dPt+ZxtmycJKUsVsKT4XigSCQn9SSkeCMmJaHYKZ76Y=;
+ b=qtaIY0B+GTzNtouU4nSQQlZp43fJOv+OqWahBK2GoTogd6TutD5OSlqIjup5FhENoi
+ JqX1E3o3kfoAgtJYRZHU0b5g7zQ5vYvq46geeGnkLuTg4HCUznL5LH4IfGXYOu4PDZfJ
+ 72Fv9qivd2KI6UqwUSf6w1AkI4Ee03JHNAzfstheBoqFxpm1nTsRkqaMVm3v9AloN7Dq
+ cIpYzCRyE/uS7TYYPMRzPxBNEGY17ui5MblHhyJtxyPque93doFpnr4LdQBfphX4w2JN
+ KMmbxqJw4j3I74trYM4pa0mN6eGTLSb13NQL5wL6OFEeCM4AAf7jo/YV27peVbYsZjzU
+ Omig==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=qtaIY0B+
+Subject: [Buildroot] Forcing fresh clone/checkout of custom linux/uboot SVN
+ urls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,74 +87,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Kris Bahnsen <kris@embeddedTS.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable Linux options depending on the bus has been chosen, so:
-1) enable by default common Linux options:
-CONFIG_NET
-CONFIG_WIRELESS
-CONFIG_CFG80211
-CONFIG_CRC_ITU_T
-CONFIG_CRC7
-2) enable for SDIO bus:
-CONFIG_MMC
-3) enable for SPI bus:
-CONFIG_SPI
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/d8c4f0f959dd2ec110db8a75980f13172c3c116c/
+I wanted to gauge for interest (or if I could be given the opportunity
+to) for adding an option to buildroot that would instead of making a
+tarball of a custom version, force a new checkout to be done rather
+than an extraction of an existing tarball. (along with the option of
+making it a checkout rather than an export as it does initially)
+My use case for this is the following:
+We have our own linux/uboot (svn) repositories, however we currently
+have to modify the linux/uboot makefiles because trunk development for
+us is not possible if we point to the trunk url of our linux/uboot
+repository and then use "HEAD" as the custom repo_version. It will do
+an export once, put it in the download folder and extract that later
+on.
+We would have to remove the tarball in the download folder for every
+change in our trunk repos and because it's an export we also can't
+develop on it.
+My idea was to add 2 new config options that are enabled if
+KERNEL_CUSTOM_SVN or UBOOT_COSTOM_SVN is selected, one that would
+override the extract command so it won't look at the download folder,
+and another one that would make it perform a checkout instead of an
+extract.
+Is this something I could add to the main buildroot or do I best just
+keep this inside our own buildroot repo?
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/wilc-driver/wilc-driver.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/package/wilc-driver/wilc-driver.mk b/package/wilc-driver/wilc-driver.mk
-index a89af30e29..a7a902b6db 100644
---- a/package/wilc-driver/wilc-driver.mk
-+++ b/package/wilc-driver/wilc-driver.mk
-@@ -13,11 +13,17 @@ WILC_DRIVER_LICENSE_FILES = LICENSE
- ifeq ($(BR2_PACKAGE_WILC_DRIVER_SPI),y)
- WILC_DRIVER_MODULE_MAKE_OPTS += \
- 	CONFIG_WILC_SPI=m
-+define WILC_DRIVER_SPI_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SPI)
-+endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WILC_DRIVER_SDIO),y)
- WILC_DRIVER_MODULE_MAKE_OPTS += \
- 	CONFIG_WILC_SDIO=m
-+define WILC_DRIVER_SDIO_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MMC)
-+endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WILC_DRIVER_SDIO_OOB),y)
-@@ -25,5 +31,15 @@ WILC_DRIVER_MODULE_MAKE_OPTS += \
- 	CONFIG_WILC_HW_OOB_INTR=y
- endif
- 
-+define WILC_DRIVER_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRC_ITU_T)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRC7)
-+	$(WILC_DRIVER_SPI_LINUX_CONFIG_FIXUPS)
-+	$(WILC_DRIVER_SDIO_LINUX_CONFIG_FIXUPS)
-+endef
-+
- $(eval $(kernel-module))
- $(eval $(generic-package))
--- 
-2.34.1
-
+Regards,
+Jesse
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
