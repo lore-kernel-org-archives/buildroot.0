@@ -1,69 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33CA5C54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 17:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7996BC6FA82
+	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 18:37:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3C7940C60;
-	Tue, 20 Sep 2022 17:20:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3C7940C60
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6726418E7;
+	Tue, 20 Sep 2022 18:37:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6726418E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qK05MP4BA7JF; Tue, 20 Sep 2022 17:20:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oSpNRyNTuSYk; Tue, 20 Sep 2022 18:37:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF8BB40C57;
-	Tue, 20 Sep 2022 17:20:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF8BB40C57
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6831418CA;
+	Tue, 20 Sep 2022 18:37:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6831418CA
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 440B11BF2CE
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 17:20:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DDCD01BF2C6
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 18:37:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F28A60F7D
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 17:20:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F28A60F7D
+ by smtp3.osuosl.org (Postfix) with ESMTP id C6CBC60F71
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 18:37:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6CBC60F71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QJbDjeLzhPQU for <buildroot@lists.busybox.net>;
- Tue, 20 Sep 2022 17:20:34 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42FF860F4B
-Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42FF860F4B
- for <buildroot@buildroot.org>; Tue, 20 Sep 2022 17:20:33 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.95.233])
- by Aruba Outgoing Smtp  with ESMTPA
- id agvAoWOzXUncTagvAoVAa1; Tue, 20 Sep 2022 19:20:32 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Tue, 20 Sep 2022 19:20:31 +0200
-Message-Id: <ACCBCFE4-EC11-441A-A5B3-1351FEB1A1B7@benettiengineering.com>
-References: <1663693308.2395.5.camel@embeddedTS.com>
-In-Reply-To: <1663693308.2395.5.camel@embeddedTS.com>
-To: kris@embeddedts.com
-X-Mailer: iPhone Mail (19G82)
-X-CMAE-Envelope: MS4xfL54dNP7SmaxEHjM8M5GMXzJU2ufZDUJ2HSw7eo0HRxgnBzn1wayLHhg59Ebz+U4OqInV6B0ncGk5qn6o+5LKz3jzsunva2foNYPA3+1yvxNk01ReaFo
- j9cBybV5vI2BhA8Iatu9jYY1pj6mjvWRZzgahMVFLNh2L2z2duSJ/eZHWOJjOytc3MHz4QnISRTrqQjQ05RvS+OpXGrNKWlRtgDOsfT6ScjGBvJK70ZjPEb8
- Cxab4HF/lbTqkqgHoxMBTg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1663694432; bh=T+SoOZxaAw1C5CAWH9/OxDc6fc6aqqvlDyrd4aUk+EA=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=D2fmIO+3qQ3UJBcRDd3+I/bSynSRO2G0q8gFvQoWluyZ3YwZE75P8FVIVZ0YJ34mj
- l+LcyuLorxYute1m25YkXInYa0GDB6HOW1XXd5grBZDnsecvLNo0CASaUBBaoQGsMy
- q4W03JJT/SJpRKm6e5HDnMS8mCHmPmhcYRd0C7ihIp2A/ae4y0LYudD60UyZCRFhqz
- mphOMcPW4+8nDAdYZKUiXz6ei8T1ihMVssluqtTuy6+s8ere7nj+caqk9HOIX5pzGj
- e0xn7OaxxjK5zmQkTG8KJGnwTvINQ2xgvIattjHQW+Z/Dg4YjeaToL5ppFwjprZZjU
- d1XFIQwsV82nw==
+ with ESMTP id weZZz_vNFLHP for <buildroot@lists.busybox.net>;
+ Tue, 20 Sep 2022 18:37:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A061260F2F
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A061260F2F
+ for <buildroot@buildroot.org>; Tue, 20 Sep 2022 18:37:12 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id t7so5827847wrm.10
+ for <buildroot@buildroot.org>; Tue, 20 Sep 2022 11:37:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+ bh=hJyKr0JgP+KJDZLqJl5jV7FYDe6e3dShbq+u9gcLkDU=;
+ b=6LDAsfxFXCZi1kQSXW5tma9gm8NIPDKF3sRb/onbow+k+WglcLaSDpBrJxZF8Sl294
+ 7GW208QRkYzw0WHjFSAn77S6VPGdVd4V8jafpVCcJX0UYr8C5vZ00aTjHWJd+XW9SOrn
+ Na8FWqybAMYXwpNfz6hBnoG6SAOc0uEjOLmw1dnEdlCWhJ90uBMh9cOcj+mLMcINvX2v
+ 7Eibwekkrj1NbTadv9VyxJdDzfb/qLNS+MESIl1+Y63Jf2UvV5KFAGFzVP1mqTub8/pq
+ 37lrXAKHwAanY8gNLTD9bYu86d+ZN/E/b9DpglK0NbvlJfl/rLawMAre/l2macTMOlQN
+ CwGQ==
+X-Gm-Message-State: ACrzQf1CcTdXMNPQr4w6oMohrxbzY1DbLZhTSqMKAdga8aEM2TtrfyBG
+ aG8rBpCrULH1vQEhh6aAL+mrlpN1MBQ=
+X-Google-Smtp-Source: AMsMyM6xZzhqI7EMNV1tQ7uQWmXtoV/dxd4FGRZYAtfBKsr4ITsnrrmTYfSl2ft3jk1O/a4COqmvrg==
+X-Received: by 2002:a05:6000:178e:b0:22b:451:9f63 with SMTP id
+ e14-20020a056000178e00b0022b04519f63mr5961806wrg.521.1663699030781; 
+ Tue, 20 Sep 2022 11:37:10 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8b51:cb00:b795:8a2b:1e98:bedc])
+ by smtp.gmail.com with ESMTPSA id
+ m18-20020a5d56d2000000b0022878c0cc5esm481113wrw.69.2022.09.20.11.37.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 20 Sep 2022 11:37:10 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 20 Sep 2022 20:37:09 +0200
+Message-Id: <cover.1663699017.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date;
+ bh=hJyKr0JgP+KJDZLqJl5jV7FYDe6e3dShbq+u9gcLkDU=;
+ b=LI9lRNWC0sC9NIf78znDzoB7Gul88ehNRbBmyS7gj+9bJFkps+5Q0i9m8M1zmfC3Q0
+ WByVf3eOfumHdslo85m/2cXVYagDE0LZ2Hy5pJS7qN5FRc0Pt3rNMNQ2dashmcohKe1Q
+ rqsCIxCUqTHwQ9XZIIxCCUCoLyqJNN/R1lHsDIW5C6w+yNg4ismu8R2AKUVmVyP+iNV2
+ Y+EYl9Ngjd+LBHbOX9Ia0vyuHOO6oefIuy18byB9x17zadv3hw5Iqugp4WBxV8UX4LLq
+ zr2RDnphhA2rCXY+oVRFXwV790VYSd+gzUB4c6mLzfTaPqKM/6URVANrUfpO9Pw8+q3h
+ jo4g==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=D2fmIO+3
-Subject: Re: [Buildroot] [PATCH] package/wilc-driver: fix build failure due
- to missing Linux options
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=LI9lRNWC
+Subject: [Buildroot] [PATCH 0/2] dracut: extend support and tests (branch
+ yem/dracut)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,56 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thierry Bultel <thierry.bultel@linatsea.fr>,
+ Adam Duskett <aduskett@gmail.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgS3JpcywKCj4gSWwgZ2lvcm5vIDIwIHNldCAyMDIyLCBhbGxlIG9yZSAxOToxMCwgS3JpcyBC
-YWhuc2VuIDxrcmlzQGVtYmVkZGVkdHMuY29tPiBoYSBzY3JpdHRvOgo+IAo+IO+7v09uIFR1ZSwg
-MjAyMi0wOS0yMCBhdCAxNTozMiArMDIwMCwgR2l1bGlvIEJlbmV0dGkgd3JvdGU6Cj4+IEVuYWJs
-ZSBMaW51eCBvcHRpb25zIGRlcGVuZGluZyBvbiB0aGUgYnVzIGhhcyBiZWVuIGNob3Nlbiwgc286
-Cj4+IDEpIGVuYWJsZSBieSBkZWZhdWx0IGNvbW1vbiBMaW51eCBvcHRpb25zOgo+PiBDT05GSUdf
-TkVUCj4+IENPTkZJR19XSVJFTEVTUwo+PiBDT05GSUdfQ0ZHODAyMTEKPj4gQ09ORklHX0NSQ19J
-VFVfVAo+PiBDT05GSUdfQ1JDNwo+PiAyKSBlbmFibGUgZm9yIFNESU8gYnVzOgo+PiBDT05GSUdf
-TU1DCj4+IDMpIGVuYWJsZSBmb3IgU1BJIGJ1czoKPj4gQ09ORklHX1NQSQo+PiAKPj4gRml4ZXM6
-Cj4+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2Q4YzRmMGY5NTlkZDJl
-YzExMGRiOGE3NTk4MGYxMzE3MmMzYzExNmMvCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBHaXVsaW8g
-QmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4KPj4gLS0tCj4+
-IHBhY2thZ2Uvd2lsYy1kcml2ZXIvd2lsYy1kcml2ZXIubWsgfCAxNiArKysrKysrKysrKysrKysr
-Cj4+IDEgZmlsZSBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCspCj4+IAo+PiBkaWZmIC0tZ2l0IGEv
-cGFja2FnZS93aWxjLWRyaXZlci93aWxjLWRyaXZlci5tayBiL3BhY2thZ2Uvd2lsYy1kcml2ZXIv
-d2lsYy1kcml2ZXIubWsKPj4gaW5kZXggYTg5YWYzMGUyOS4uYTdhOTAyYjZkYiAxMDA2NDQKPj4g
-LS0tIGEvcGFja2FnZS93aWxjLWRyaXZlci93aWxjLWRyaXZlci5tawo+PiArKysgYi9wYWNrYWdl
-L3dpbGMtZHJpdmVyL3dpbGMtZHJpdmVyLm1rCj4+IEBAIC0xMywxMSArMTMsMTcgQEAgV0lMQ19E
-UklWRVJfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKPj4gaWZlcSAoJChCUjJfUEFDS0FHRV9XSUxD
-X0RSSVZFUl9TUEkpLHkpCj4+IFdJTENfRFJJVkVSX01PRFVMRV9NQUtFX09QVFMgKz0gXAo+PiAg
-ICBDT05GSUdfV0lMQ19TUEk9bQo+PiArZGVmaW5lIFdJTENfRFJJVkVSX1NQSV9MSU5VWF9DT05G
-SUdfRklYVVBTCj4+ICsgICAgJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfU1BJKQo+
-PiArZW5kZWYKPj4gZW5kaWYKPj4gCj4+IGlmZXEgKCQoQlIyX1BBQ0tBR0VfV0lMQ19EUklWRVJf
-U0RJTykseSkKPj4gV0lMQ19EUklWRVJfTU9EVUxFX01BS0VfT1BUUyArPSBcCj4+ICAgIENPTkZJ
-R19XSUxDX1NESU89bQo+PiArZGVmaW5lIFdJTENfRFJJVkVSX1NESU9fTElOVVhfQ09ORklHX0ZJ
-WFVQUwo+PiArICAgICQoY2FsbCBLQ09ORklHX0VOQUJMRV9PUFQsQ09ORklHX01NQykKPj4gK2Vu
-ZGVmCj4+IGVuZGlmCj4+IAo+PiBpZmVxICgkKEJSMl9QQUNLQUdFX1dJTENfRFJJVkVSX1NESU9f
-T09CKSx5KQo+PiBAQCAtMjUsNSArMzEsMTUgQEAgV0lMQ19EUklWRVJfTU9EVUxFX01BS0VfT1BU
-UyArPSBcCj4+ICAgIENPTkZJR19XSUxDX0hXX09PQl9JTlRSPXkKPj4gZW5kaWYKPj4gCj4+ICtk
-ZWZpbmUgV0lMQ19EUklWRVJfTElOVVhfQ09ORklHX0ZJWFVQUwo+PiArICAgICQoY2FsbCBLQ09O
-RklHX0VOQUJMRV9PUFQsQ09ORklHX05FVCkKPj4gKyAgICAkKGNhbGwgS0NPTkZJR19FTkFCTEVf
-T1BULENPTkZJR19XSVJFTEVTUykKPj4gKyAgICAkKGNhbGwgS0NPTkZJR19FTkFCTEVfT1BULENP
-TkZJR19DRkc4MDIxMSkKPj4gKyAgICAkKGNhbGwgS0NPTkZJR19FTkFCTEVfT1BULENPTkZJR19D
-UkNfSVRVX1QpCj4+ICsgICAgJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfQ1JDNykK
-Pj4gKyAgICAkKFdJTENfRFJJVkVSX1NQSV9MSU5VWF9DT05GSUdfRklYVVBTKQo+PiArICAgICQo
-V0lMQ19EUklWRVJfU0RJT19MSU5VWF9DT05GSUdfRklYVVBTKQo+PiArZW5kZWYKPj4gKwo+PiAk
-KGV2YWwgJChrZXJuZWwtbW9kdWxlKSkKPj4gJChldmFsICQoZ2VuZXJpYy1wYWNrYWdlKSkKPiAK
-PiBSZXZpZXdlZC1ieTogS3JpcyBCYWhuc2VuIDxLcmlzQGVtYmVkZGVkVFMuY29tPgo+IAo+IAo+
-IFRoYW5rcyBmb3IgdGhhdCEKCk5vIHByb2JsZW0hCgo+IEkgd2FzIG5vdCByZWFkaWx5IGF3YXJl
-IG9mIHRoYXQgc3ludGF4IGZvciBrZXJuZWwgY29uZmlnIGZpeHVwcy4KClRoZXkgYXJlIHZlcnkg
-aGVscGZ1bCBhbmQgZWFzeSB0byB1c2UuCgo+IEkndmUgYWxzbyBhZGRlZCBhdXRvLWJ1aWxkcyB0
-byBteSBmaWx0ZXIgZXhjZXB0aW9uIHJ1bGVzIHNvIEkgc2hvdWxkIGJlIGFibGUKPiB0byBtb3Jl
-IHJlYWRpbHkgbG9vayB0aG9zZSBvdmVyIGluIHRoZSBmdXR1cmUuCgpBd2Vzb21lIDotKQoKVGhh
-bmtzIGZvciByZXZpZXdpbmcgYW5kCktpbmQgcmVnYXJkcwrigJQKR2l1bGlvIEJlbmV0dGkKQmVu
-ZXR0aSBFbmdpbmVlcmluZyBzYXMKCj4gCj4gLUtyaXMKCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cg==
+Hello All!
+
+Follow-up to the dracut addition, this two-patch series adds support for
+providing extra dracut modules, and extends the cpio+dracut runtime test
+accordingly.
+
+Regards,
+Yann E. MORIN.
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      fs/cpio: allow users to provide their own dracut modules
+      support/tests/cpio: extend runtime tests for extra dract modules
+
+ fs/cpio/Config.in                                            |  5 +++++
+ fs/cpio/cpio.mk                                              | 12 +++++++++++-
+ support/testing/tests/fs/test_cpio.py                        |  5 ++++-
+ .../tests/fs/test_cpio/modules/99cramfs/module-setup.sh      | 11 +++++++++++
+ 4 files changed, 31 insertions(+), 2 deletions(-)
+ create mode 100755 support/testing/tests/fs/test_cpio/modules/99cramfs/module-setup.sh
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
