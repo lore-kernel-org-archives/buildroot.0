@@ -1,76 +1,133 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99E0C54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 07:46:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34970ECAAD8
+	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 07:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F2AB819D2;
-	Tue, 20 Sep 2022 07:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F2AB819D2
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB1BD40AD1;
+	Tue, 20 Sep 2022 07:52:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB1BD40AD1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yfo_hxvawX8o; Tue, 20 Sep 2022 07:46:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1-j5XX3VOGwe; Tue, 20 Sep 2022 07:52:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC55E81971;
-	Tue, 20 Sep 2022 07:46:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC55E81971
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 39D3D1BF338
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 07:46:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC4044063F;
+	Tue, 20 Sep 2022 07:52:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC4044063F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A13D81BF338
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 07:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EA5B60DFE
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 07:46:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EA5B60DFE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46C724063F
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 07:52:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46C724063F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1NQU_XYBR1W3 for <buildroot@lists.busybox.net>;
- Tue, 20 Sep 2022 07:46:28 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85A8560DCA
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.34])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 85A8560DCA
- for <buildroot@buildroot.org>; Tue, 20 Sep 2022 07:46:28 +0000 (UTC)
-Received: from opfednr07.francetelecom.fr (unknown [xx.xx.xx.71])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfednr26.francetelecom.fr (ESMTP service) with ESMTPS id 4MWtsG1R3Wz10hV; 
- Tue, 20 Sep 2022 09:46:26 +0200 (CEST)
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Tue, 20 Sep 2022 09:46:24 +0200
-Date: Tue, 20 Sep 2022 09:46:24 +0200
-From: <yann.morin@orange.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20330_1663659985_63296FD1_20330_21_1_20220920074624.GC3551@tl-lnx-nyma7486>
-References: <20220920064550.520645-1-thomas.petazzoni@bootlin.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P52NjwAlCr9k for <buildroot@lists.busybox.net>;
+ Tue, 20 Sep 2022 07:52:35 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAD58401AF
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com
+ (mail-db8eur05on2056.outbound.protection.outlook.com [40.107.20.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CAD58401AF
+ for <buildroot@buildroot.org>; Tue, 20 Sep 2022 07:52:34 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S1ji0T3ppd77fCVRvRtprxl68HZr7zYvNnCR2JCUtmfGGigRIxeTO84L1ndec/w9dV62KoeMA/TIAaz4nvA73kwmVK5J9m/3jLD0e8ka0vzuy6ExhZ57XN0VVW8KHX2qaT2kZvJe6QXHOAFgGCw68rSZ56AkDWnyCVjjBH5wMlwz0r36dMjB9hx8R8SLKs8xbKEyUysoalozUhGIFFSwItxyKSwLOnRit+RI2OGa/HA8Zty4XgwEqAMcml3SQ31a6b0sjGmWClZXPsqNs0R0tWIwBcvz/0VPX9kb6Lnl5HFmkN2OdVRJkUCRm2qIJ+kJSrkRk/Qu+F/SwrQaW81wQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bMgDQj+/yYKSOs4j/qgd6TtQ0/3+gv/JA/cTZPcVuro=;
+ b=DIXyxqISIZuL7qErgBZvvfUeNM7PMVY65QghxyerkG8I6Uqs64m67lva9o9WfM2G3NejrjKRzfY+hJqihRUyy7Ms+x2jDgJ/j6CNLAniiWmaqOqh/MLk72UT3gqqdp44mRyVsGqmfj8RAergr2eC7lvzH125E3bNohURnVtPyzRyccGNbFbgtaQ72dwoqva5+uJzpOW2nf7cv7e24oUtj+4dLyxKD8MLFFrAvdGXD4ovVrv56YdAFfEKbgpVc0NbT1N2A40s77yF7xT3yigQdafSPW0Eknw33rX6zCg3JJJUEBX0dhd4QLFY0Y5uZ+8YyoO12MMtOAeIOEfQoiAD2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
+ dkim=pass header.d=abatec.at; arc=none
+Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
+ by DB8P190MB0667.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:12c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Tue, 20 Sep
+ 2022 07:52:30 +0000
+Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+ ([fe80::818c:f70f:e157:b158]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+ ([fe80::818c:f70f:e157:b158%5]) with mapi id 15.20.5632.021; Tue, 20 Sep 2022
+ 07:52:30 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: [PATCH 1/1] package/libubootenv: bump to version 0.3.3
+Thread-Index: AQHYzMW4Z53jdsKyF0+4FxU6BA0mwA==
+Date: Tue, 20 Sep 2022 07:52:29 +0000
+Message-ID: <VI1P190MB049339702A088B8ABC4110729F4C9@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1P190MB0493:EE_|DB8P190MB0667:EE_
+x-ms-office365-filtering-correlation-id: 7d06d982-5f2e-44af-c340-08da9add118d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vxBlMpj8AVSUct/3h1GnPAwrQi0gt88JFXVd1kjoBujrjU7LqOjmcFHv0A7DBnQniGl9PMNz/oh8qJrr1K9TKd5yHdUXACgiMZZGUSBDrCnml7Bd/kFVGJ2Dq0nnA0QOqJhVXxTthc+1ZBdZB6JXvCJc50EpkTuN31fMxIwVOLzLRd62dp8AD8uQd575eb1KnJRPPyIu8pJ27RPMYZR8sLqsE+uhwR9XQEK2CgQyymQzYiMUwtaitgug0aezd7cLe0pEnLvCSnRuOya0Br29SAf1J1RWZg95sMqw/Z8D0jB73xZ2/ZZ/jE6uO3W02oZxEBWXfNJBfk/2NtFi2aSNtoGlqzov5WjrH0KhQ1O57p+Sx0BSDjR1HExKnT+46NLC0XsoObEOE7RQ4HIWs3k8iP9D6WYQgopPmlxu5wmkaVetLRgYUkFIp4WZlRKWMESL2dhQsXwA8C7S8DvCO7LqJUaYS/2Vhirjr7fC5IYDdTN5YaD6CmkTpjJzKoODkM4W4v1YYARz9JIvRjKWZm1LrvqFdo4X1NJgJ6+qc5E1xlDv0HHB0iooMYbR+TsCkcNCesfZBeC2vKTcNkNWTHLkrYO5DXV2QIG6+LazI4raKc6gunNwQkKTffdtabO25+Hrp8Blf/MPDQVfdK6nPc0oO/FDwmMaNimia/8rA9cNHosQbY21y+ogQsasOAiIriyrHCbsKQn2e1JTWi+2rO5Ie/7hWRJZKdslLnc6N9Shgrgz7dm3FN6IZGLo48mgnGsHBkija4gV2FSSo96BgzLvGg==
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230022)(4636009)(346002)(366004)(396003)(39840400004)(376002)(136003)(451199015)(55016003)(2906002)(33656002)(122000001)(316002)(8676002)(38100700002)(4326008)(66476007)(66446008)(76116006)(5660300002)(66556008)(64756008)(66946007)(6916009)(8936002)(86362001)(186003)(478600001)(38070700005)(9686003)(26005)(41300700001)(6506007)(83380400001)(52536014)(71200400001)(7696005);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?2GhghXtfL3BeqIRZW482PiZlvV+mMC48kRFPskQAb/fS4pse4P28Y71YH7?=
+ =?iso-8859-1?Q?vhKKSewRAuf9wM1AgappD7s8BHVNqHLpA8gcy4P41ef1+0teeUyjOR55lu?=
+ =?iso-8859-1?Q?OOdNJBl5ucAz8okesnDVSfdOuwvPJ6zp9ytMeihj0XcqQhi1egbOQlrx8L?=
+ =?iso-8859-1?Q?Ro9sY+sR53143qh8PiNZgU590kxs704I7zIiwVSSDIBEiZezNUdYWYFF3v?=
+ =?iso-8859-1?Q?HBBEjA+hbfqgzlzEs7RYt3t8B0JE1ll2UCH7m8YY7XsD9DYvxtcjMm3kiT?=
+ =?iso-8859-1?Q?rxcFDkmPE6kOf5u9cZD8uU4BdLIRulFTClRUJ8oG65x3fmqcwD3z+4plUZ?=
+ =?iso-8859-1?Q?anncyfflIskg9VWAunkizJSQUNvjupgfXU8z7O1439roNWAf1+S+EVikTx?=
+ =?iso-8859-1?Q?Y932xqsDZLOGHHei5hLOnl55i9jN27GDddHcinYCu2fE9JcJ6KcAXoHgxC?=
+ =?iso-8859-1?Q?h/77TeiKLyoaODMV/BFCFlBDFq6SUaGV5ezmax+oZ/EOJV9CLiEaBEN/Nm?=
+ =?iso-8859-1?Q?3juKqQVFfFDYmeOmPu499xBk+JfXPfOE1uOYZ/rShH73imU+Ckl4nKEN13?=
+ =?iso-8859-1?Q?pa7RJH4ayAnzavNzoE78ZihPHSrlp1LCJGmu/Gb693FsCipXOpOWIo4Xzj?=
+ =?iso-8859-1?Q?+hbY6A6AkmmTG5jlQdy0iO54zeaA56+9vec217IceAn0EOXu/LyIgPZO3T?=
+ =?iso-8859-1?Q?hV0OzMWxyf5ReXCGFkmeQJdZmUCzZjNJyUf5gyqfVCvCMU/d3GxzhaAQgE?=
+ =?iso-8859-1?Q?kIjmrECKTiQe9i2RT7K7Z8MaM1bUZnwg3lfdoVHFKVnyBotiD7nwaCX90e?=
+ =?iso-8859-1?Q?n8OhQMNuQxxl11khWzwJ4rwN5Ncy5G0pCAV3/b8Rb1ssuuSw0YxIweHbgj?=
+ =?iso-8859-1?Q?doaZNAku9TooSfHFhW0SrRiZ8GsGRkgLxnaB7Rzl29Hnj1QuxAeAlrGkzN?=
+ =?iso-8859-1?Q?fF7a36w2w0JdpboR+fXvR9kmKq26mE6TdyXClH9XO5c6k03fGkNArqroac?=
+ =?iso-8859-1?Q?v16G9VZiTf+2siC+9qBGZER93peFsBcdQGABVFOPG7jpA6KY+HlAuzeBDf?=
+ =?iso-8859-1?Q?qritgjhdne+Vipsg+KDSJqKaT/qzTRbHz9CUkVk2nZUa3u0mZVFNtFOr7D?=
+ =?iso-8859-1?Q?UQuMbddfFUq8mVGFYZhVLZPKx2e/5aONvnBwF3DmBIXdADU91N7TOTgweq?=
+ =?iso-8859-1?Q?HxgUM7sERH5KL/xvssfPprvJ03rOBZ2pRnpcXjQABN389sN5ESssX54xAm?=
+ =?iso-8859-1?Q?94zNU9cyusDXJNDenWLLOreOy7fFDLEvfNVhUjL5iXVsTT5NHagw4et4NP?=
+ =?iso-8859-1?Q?oq3Wt5zIT43a/kCWiP9X19eVnUdCKqIAbilEwIiP4TPaMTJQC7xNeUbRIJ?=
+ =?iso-8859-1?Q?E1LMHbQDNL4RgS7j3BbZb53NLhfYRDdIblUFz20DZ56nrKxHgQ00GwmmkA?=
+ =?iso-8859-1?Q?38JZJskWZ+vrNCKMpJmqPbr/MjvcfToK+SYmnd6JG1HJi8aPmKiFmPVi0t?=
+ =?iso-8859-1?Q?mLe9ErqYM8LV0Uk9d4iVF6jwx8DccNR3NJyeZizPHxpWjHPHAZL6YUGE5D?=
+ =?iso-8859-1?Q?NkoOKA6gltalFlfx5rCnKlyMkDtZHRk9RBiH/jULwXQhgQcLzP2qGglB2k?=
+ =?iso-8859-1?Q?nhfgMXDFDQb3o=3D?=
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20220920064550.520645-1-thomas.petazzoni@bootlin.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX104.corporate.adroot.infra.ftgroup (10.115.26.5)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+X-OriginatorOrg: abatec.at
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d06d982-5f2e-44af-c340-08da9add118d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Sep 2022 07:52:29.8674 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0mbYMnpXmC24pCPe7qFPCy1x+Cx0JLFFD31tQM/8MkHZ+JMhHTAdr2/k2273VDowvBBRpNn0dTICFj/Yirewgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P190MB0667
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1663659986;
- bh=GKf85cWH5HbqvKjIpbPvk/h5DfP4S38X/hIzAvgFMPQ=;
- h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
- b=co6J57LfQoWA2UKGwOLb+hGT3Fml+C1idzk+TPixDh1P3B+OPvqsA58BCs/EWI+8D
- 5bRhyg2MAESvuuRsS1Epebl0KVhLHt5FlY4gd9A70Cse4xNxavgthOEk0hvvo9gX7D
- bDKrKuYmCZaOoOSsUSU4kI4Og60zJghQQhFdPnwOVjyfu8zJYrwwqph8jcmNtyEPqw
- vZktZUJp+A9p6wZnm8CiECx0DxvfR16vXGiJ+sGmiXRiXNVy7EBiqdmYcm6Z8720hb
- 4m2sGGgTt75n5CQPnWNpA/w/aYM0V8+T3mYQ6qZkWrPhsUThHWuJMpGLypDQkkWw8/
- qy2kXrN+PROrQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=co6J57Lf
-Subject: Re: [Buildroot] [PATCH] support/scripts/check-host-libs: add new
- check on host binaries/libs
+ d=abatec.at; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bMgDQj+/yYKSOs4j/qgd6TtQ0/3+gv/JA/cTZPcVuro=;
+ b=B8wnGqbqvJdzY6CqTzy9EPaICDqNbLdwk2pOptk9qzNijYsYoC/xiok06JLtRdB+tdSMdbyYLed3Og4mO0QmgxcTqWN4DuVWuIbN8/lHE/4afEEW7p46gd31VMKC5VqwnI6NXqZfAxCMNf/vrohb7VGOJAnZ9FTUf6bxzuQMZDA=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
+ header.s=selector1 header.b=B8wnGqbq
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=abatec.at;
+Subject: [Buildroot] [PATCH 1/1] package/libubootenv: bump to version 0.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,195 +139,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Lang Daniel via buildroot <buildroot@buildroot.org>
+Reply-To: Lang Daniel <d.lang@abatec.at>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+---
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2022-09-20 08:45 +0200, Thomas Petazzoni spake thusly:
-> One frequent issue in Buildroot is that when building host libraries
-> or applications, the build system of the package detects some
-> libraries provided by the system, and happily links to them, without
-> Buildroot knowing. Sometimes this doesn't cause any problem, but
-> sometimes this causes issues, and we're regularly eliminating such
-> mis-detection by forcing those packages to not detect the system
-> libraries that have not been built by Buildroot.
-> 
-> The new script check-host-libs added in this commit, which is executed
-> during the host-finalize step at the end of the build is an attempt at
-> detecting at least some of these situations.
-> 
-> What it does is that at the end of the build, it verifies that all
-> binaries and libraries in $(HOST_DIR) only have shared library
-> dependencies on libraries that are in Buildroot $(HOST_DIR), to the
-> exception of the C library, for which we of course use the system C
-> library.
-> 
-> For example, if the binary output/host/bin/plop is linked against
-> libpng, but libpng was not built and installed by Buildroot, the build
-> will now fail with:
-> 
-> ERROR: in /home/thomas/projets/buildroot/output/host/bin/plop, libpng16.so.16 unknown
-> make: *** [Makefile:715: host-finalize] Error 1
-
-I'm afraid this is going to be too big a hammer, at least if that's a
-hard error.
-
-Indeed, when the build environment is reproducible (like, it is a
-container image), and there are no package in Buildroot, and the host
-directory will not be distributed (i.e. one does not care about doing an
-SDK), then it is usually good-enough to use the system-installed
-libraries, rather than add a Buildroot package.
-
-> The script includes an allowlist of libraries provided by the C
-> library. It is potentially possible that this list might need to be
-> extended to cover all systems/distributions/C libraries, but only
-> wider testing of this script will help detect such cases.
-
-There are at least missing entries already:
-    librt.so.1
-    libutil.so.1
-    libresolv.so.2
-
-Also, there are error messages for some go stuff:
-    ==> HOST_DIR/lib/go/src/debug/elf/testdata/go-relocation-test-gcc930-ranges-no-rela-x86-64
-    readelf: Error: no .dynamic section in the dynamic segment
-
-    ==> HOST_DIR/lib/go/src/debug/elf/testdata/go-relocation-test-gcc930-ranges-with-rela-x86-64
-    readelf: Error: no .dynamic section in the dynamic segment
-
-Finally, this script takes more than a minute to run on our build, about
-a 10% increase from ~12min. This is not nice at all.
-
-    $ find host/*bin host/lib* -type f |wc -l
-    16186
-
-    $ find host/*bin host/lib* -type f |(keep just libs + execs) |wc -l
-    339
-
-That last command, though, is what takes time: there is a huge ton of go
-junk installed in HOST_DIR, and this takes ages to filter-out.
-
-So, although I understand the rationale, this should probably be opt-in.
-
-Or it should only be ran when doing an SDK?
-
-Regards,
-Yann E. MORIN.
-
-> It is worth mentioning that for now this script is executed only once
-> at the end of the build. This means that if a package A gets built,
-> detects and uses a system library libfoo and uses it, and then by
-> chance later Buildroot package B builds and installs libfoo into
-> HOST_DIR/lib, this script will believe that package A is correct, as
-> it finds libfoo in HOST_DIR/lib, even though while package A was being
-> built, the libfoo being detected was the system one. Detecting this
-> would require running check-host-libs at the end of each package
-> build, but that would imply re-checking over and over again all host
-> binaries/libraries, which could have a noticeable impact on the build
-> time. So for now, we simply check at the end of the build, which
-> should already help to detect a lot of interesting bogus situations.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> It would be very useful if a few people could apply this patch to
-> their local tree, run their usual build, and see how it behaves. This
-> way, I can get some feedback to address the most obvious issues before
-> it gets merged and starts causing build failures in the autobuilders.
-> ---
->  Makefile                        |  1 +
->  support/scripts/check-host-libs | 36 +++++++++++++++++++++++++++++++++
->  2 files changed, 37 insertions(+)
->  create mode 100755 support/scripts/check-host-libs
-> 
-> diff --git a/Makefile b/Makefile
-> index ec7c034ac1..7ba8ccd535 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -712,6 +712,7 @@ STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.t
->  host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
->  	@$(call MESSAGE,"Finalizing host directory")
->  	$(call per-package-rsync,$(sort $(PACKAGES)),host,$(HOST_DIR))
-> +	./support/scripts/check-host-libs $(HOST_DIR)
->  
->  .PHONY: staging-finalize
->  staging-finalize: $(STAGING_DIR_SYMLINK)
-> diff --git a/support/scripts/check-host-libs b/support/scripts/check-host-libs
-> new file mode 100755
-> index 0000000000..ef307bb6dd
-> --- /dev/null
-> +++ b/support/scripts/check-host-libs
-> @@ -0,0 +1,36 @@
-> +#!/bin/bash
-> +
-> +HOST_DIR=$1
-> +
-> +if test -z "${HOST_DIR}" ; then
-> +    echo "usage: check-host-libs HOST_DIR"
-> +    exit 1
-> +fi
-> +
-> +bailout="no"
-> +
-> +for f in $(find ${HOST_DIR}/*bin ${HOST_DIR}/lib* -type f); do
-> +    mime=$(file -b --mime-type ${f})
-> +    if test "${mime}" != "application/x-sharedlib" -a \
-> +	    "${mime}" != "application/x-executable" ; then
-> +        continue
-> +    fi
-> +    for lib in $(LC_ALL=C readelf -d ${f} | grep NEEDED | sed 's,.*Shared library: \[\(.*\)\].*,\1,'); do
-> +        case ${lib} in
-> +        libc.so*|libm.so*|libstdc++.so*|libpthread.so*|libgcc_s.so*|libdl.so*|ld-*|libgomp.so*|libcrypt.so*|libcrypto.so*|libatomic.so*)
-> +            continue
-> +            ;;
-> +        *)
-> +            if test -e ${HOST_DIR}/lib/${lib} ; then
-> +                continue
-> +            fi
-> +            echo "ERROR: in ${f}, ${lib} unknown"
-> +            bailout="yes"
-> +            ;;
-> +        esac
-> +    done
-> +done
-> +
-> +if test "${bailout}" = "yes" ; then
-> +    exit 1
-> +fi
-> -- 
-> 2.37.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 5ff7450806..6863b7fcf7 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  760fe53ca20ced93a09dea0f123eb429c820b565c103920afa738873e8cd16b7  libubootenv-7dbfffa4cc0e42ad3febb122a711fe9d1b20e9f7.tar.gz
++sha256  8fc9498b557bbf4ae4d39a2dbd15a2ef44f8ea8de4686cc971c6788a65cd1ec0  libubootenv-0.3.3.tar.gz
+ sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
+ sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSES/MIT.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 51ea02e678..e841e0b843 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBUBOOTENV_VERSION = 7dbfffa4cc0e42ad3febb122a711fe9d1b20e9f7
+-LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
++LIBUBOOTENV_VERSION = 0.3.3
++LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1+, MIT, CC0-1.0
+ LIBUBOOTENV_LICENSE_FILES = LICENSES/CC0-1.0.txt \
+ 	LICENSES/LGPL-2.1-or-later.txt \
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
+2.25.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
