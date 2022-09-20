@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4E0FC54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 23:23:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02E8BC54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 23:23:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1ACD060FD7;
-	Tue, 20 Sep 2022 23:23:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ACD060FD7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FF3160F75;
+	Tue, 20 Sep 2022 23:23:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FF3160F75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z-DXutnjbMJx; Tue, 20 Sep 2022 23:23:16 +0000 (UTC)
+	with ESMTP id W1aBGT_F4-OD; Tue, 20 Sep 2022 23:23:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BDD460FC1;
-	Tue, 20 Sep 2022 23:23:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BDD460FC1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 45EE91BF5A0
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC6EC60FE0;
+	Tue, 20 Sep 2022 23:23:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC6EC60FE0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4815E1BF9D1
  for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 23:23:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20A3D82A83
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2363760FC1
  for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 23:23:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20A3D82A83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2363760FC1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UBTXEFhFB7e0 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DQmH5ZxOgjhr for <buildroot@lists.busybox.net>;
  Tue, 20 Sep 2022 23:23:11 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C52C782983
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8969760F75
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C52C782983
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8969760F75
  for <buildroot@buildroot.org>; Tue, 20 Sep 2022 23:23:10 +0000 (UTC)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
- by mail.sberdevices.ru (Postfix) with ESMTP id 7FB225FD0A;
- Wed, 21 Sep 2022 02:23:07 +0300 (MSK)
+ by mail.sberdevices.ru (Postfix) with ESMTP id 294995FD09;
+ Wed, 21 Sep 2022 02:23:06 +0300 (MSK)
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru
  [172.16.1.4]) by mail.sberdevices.ru (Postfix) with ESMTP;
- Wed, 21 Sep 2022 02:23:07 +0300 (MSK)
+ Wed, 21 Sep 2022 02:23:05 +0300 (MSK)
+From: <KAMenyaev@sberdevices.ru>
 To: <buildroot@buildroot.org>
-Date: Wed, 21 Sep 2022 02:21:54 +0300
-Message-ID: <20220920232154.1219792-2-KAMenyaev@sberdevices.ru>
+Date: Wed, 21 Sep 2022 02:21:53 +0300
+Message-ID: <20220920232154.1219792-1-KAMenyaev@sberdevices.ru>
 X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220920232154.1219792-1-KAMenyaev@sberdevices.ru>
-References: <20220920232154.1219792-1-KAMenyaev@sberdevices.ru>
 MIME-Version: 1.0
 X-Originating-IP: [172.16.1.6]
 X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
@@ -60,19 +59,20 @@ X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30,
  bases: 2022/09/20 19:08:00 #20341110
 X-KSMG-AntiVirus-Status: Clean, skipped
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sberdevices.ru; s=mail; t=1663716187;
- bh=XFOeTUJLb6EmkDKTU35s8LqFO6d+cxSfftyNmIBPXME=;
+ d=sberdevices.ru; s=mail; t=1663716186;
+ bh=1Z3+cdW/JgHhiR525xXK3IccpVYlmDkw1+TKZJ7eGQg=;
  h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
- b=Wipz0fVtO8lutMBceakDGNTad2YgUtRzkdRCi5GjlQzAWDJRAML7lezx+SCc+aayv
- 0QLOCofQ0qlg5doqHI4mVACJt92q+lWrTJIOm1D40D4GhaTVrg7A6fXQm99FfSvEuv
- xSG4woCbWkAeUNSfMa5H6JlcwVGQwrmRPRb8U5kboqr+dbhVElP5cfaYVXHTv2PcwQ
- MA2r7OJHPGcJKRImdTULVk+hfhMGJbkhJysUM+z11K/GlkK28l9wLbtmorMvB5Ubk7
- 0024radppON43NEdWnz+5xJ7gP/XeW+P7tP72EwVaJj6hINbGoZoDwcMVwtM4bwItx
- nrCDD2NTORnfw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=OqRmpXvS3dJbc/vWiR5KssbFW3is9QZzMhS1F9vnIuCqyKlZ+KCyZaRrmrCFW+B6F
+ dJuEJ7Gp6LMxh90b6G+6cp3tOnqDOpC6dZUSDSgQXBchqxS+Q8QRUyAtOvcJC0kuWw
+ kKoY52qDDqC9UGHhe/bnetQuPwnPb7UxC8FCJFx/UKqRcjIZ1AQ/8rE38i3B/gZvlS
+ 1uh3BmjEOc3BScLJ20TBfGLlMjdE3oJIvTahazIL5tzWZQgf0vII10bWCVAwhVEwZD
+ nkbZQylL0bmluLpb+hIcs7tNSf/ylxdvBcMcLgEBitKRWqiG8UI9AIZiJQg9t2tO8C
+ wwMEnaU5dfSEA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=sberdevices.ru header.i=@sberdevices.ru
- header.a=rsa-sha256 header.s=mail header.b=Wipz0fVt
-Subject: [Buildroot] [PATCH 2/2] package/crudini: add host-crudini
+ header.a=rsa-sha256 header.s=mail header.b=OqRmpXvS
+Subject: [Buildroot] [PATCH 1/2] package/python-iniparse: add
+ host-python-iniparse
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,8 +84,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Konstantin Menyaev via buildroot <buildroot@buildroot.org>
-Reply-To: KAMenyaev@sberdevices.ru
 Cc: Konstantin Menyaev <KAMenyaev@sberdevices.ru>,
  Asaf Kahlon <asafka7@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
@@ -97,50 +95,52 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
 
-Make the host variant of crudini package. This can be useful in
-post-{build,image} scripts.
+Make the host variant of python-iniparse
+as host-crudini dependency.
 
 Signed-off-by: Konstantin Menyaev <KAMenyaev@sberdevices.ru>
 ---
- package/Config.in.host         | 1 +
- package/crudini/Config.in.host | 9 +++++++++
- package/crudini/crudini.mk     | 1 +
- 3 files changed, 11 insertions(+)
- create mode 100644 package/crudini/Config.in.host
+ package/Config.in.host                     |  1 +
+ package/python-iniparse/Config.in.host     | 11 +++++++++++
+ package/python-iniparse/python-iniparse.mk |  1 +
+ 3 files changed, 13 insertions(+)
+ create mode 100644 package/python-iniparse/Config.in.host
 
 diff --git a/package/Config.in.host b/package/Config.in.host
-index fb805577d1..055e846e39 100644
+index f437ef680c..fb805577d1 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -12,6 +12,7 @@ menu "Host utilities"
- 	source "package/checksec/Config.in.host"
- 	source "package/cmake/Config.in.host"
- 	source "package/cramfs/Config.in.host"
-+	source "package/crudini/Config.in.host"
- 	source "package/cryptsetup/Config.in.host"
- 	source "package/dbus-python/Config.in.host"
- 	source "package/delve/Config.in.host"
-diff --git a/package/crudini/Config.in.host b/package/crudini/Config.in.host
+@@ -72,6 +72,7 @@ menu "Host utilities"
+ 	source "package/pkgconf/Config.in.host"
+ 	source "package/pru-software-support/Config.in.host"
+ 	source "package/pwgen/Config.in.host"
++	source "package/python-iniparse/Config.in.host
+ 	source "package/python-cython/Config.in.host"
+ 	source "package/python-greenlet/Config.in.host"
+ 	source "package/python-kflash/Config.in.host"
+diff --git a/package/python-iniparse/Config.in.host b/package/python-iniparse/Config.in.host
 new file mode 100644
-index 0000000000..5e0040883f
+index 0000000000..e93022e815
 --- /dev/null
-+++ b/package/crudini/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_CRUDINI
-+	bool "host crudini"
-+	depends on BR2_PACKAGE_HOST_PYTHON3
-+	select BR2_PACKAGE_HOST_PYTHON_INIPARSE # runtime
++++ b/package/python-iniparse/Config.in.host
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_HOST_PYTHON_INIPARSE
++	bool "host python-iniparse"
++	select BR2_PACKAGE_HOST_PYTHON_SIX # runtime
 +	help
-+	  A utility for handling ini files from the command line and
-+	  shell scripts
++	  iniparse is an INI parser for Python which is API compatible
++	  with the standard library's ConfigParser, preserves
++	  structure of INI files (order of sections & options,
++	  indentation, comments, and blank lines are preserved when
++	  data is updated), and is more convenient to use.
 +
-+	  https://pypi.python.org/pypi/crudini
-diff --git a/package/crudini/crudini.mk b/package/crudini/crudini.mk
-index 7141e2b2a0..c376c5f777 100644
---- a/package/crudini/crudini.mk
-+++ b/package/crudini/crudini.mk
-@@ -11,3 +11,4 @@ CRUDINI_LICENSE = GPL-2.0
- CRUDINI_LICENSE_FILES = COPYING
++	  https://pypi.python.org/pypi/iniparse
+diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
+index d31a490bd8..e76987d1e9 100644
+--- a/package/python-iniparse/python-iniparse.mk
++++ b/package/python-iniparse/python-iniparse.mk
+@@ -12,3 +12,4 @@ PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
+ PYTHON_INIPARSE_SETUP_TYPE = setuptools
  
  $(eval $(python-package))
 +$(eval $(host-python-package))
