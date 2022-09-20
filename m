@@ -1,71 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CEDFC54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 15:12:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19D72C6FA82
+	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 17:10:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 402CD40993;
-	Tue, 20 Sep 2022 15:12:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 402CD40993
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61FEF82735;
+	Tue, 20 Sep 2022 17:10:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61FEF82735
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IxxUFT2HYIAm; Tue, 20 Sep 2022 15:11:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ltz3LMOjG8xW; Tue, 20 Sep 2022 17:10:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB3BE40980;
-	Tue, 20 Sep 2022 15:11:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB3BE40980
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8322881985;
+	Tue, 20 Sep 2022 17:10:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8322881985
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AA1531BF350
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 15:11:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 97F7F1BF2CE
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 17:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 85EC681468
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 15:11:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85EC681468
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C4B681985
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 17:10:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C4B681985
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Iv_n4ODiIlBF for <buildroot@lists.busybox.net>;
- Tue, 20 Sep 2022 15:11:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D1048145B
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2D1048145B
- for <buildroot@buildroot.org>; Tue, 20 Sep 2022 15:11:55 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:b795:8a2b:1e98:bedc])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id D5A6F5FFAE;
- Tue, 20 Sep 2022 17:11:49 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 20 Sep 2022 17:11:49 +0200
-Date: Tue, 20 Sep 2022 17:11:49 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Jesse Van Gavere <jesseevg@gmail.com>
-Message-ID: <20220920151149.GE1127102@scaer>
-References: <CAMdwsN8FyQD4ofHfVgorNvX4kBDArfK6t9dBqgG=3xHrkFOuag@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAMdwsN8FyQD4ofHfVgorNvX4kBDArfK6t9dBqgG=3xHrkFOuag@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1663686712;
- bh=RBvwr2Kmg4uO0+X8FQf2NYQA0pa14IG8gnG9wP5D5aQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=OLhTm1uIp2WxpcefUSlJVGXUpI7NSxuKlW/MXKdhGApD5ixCmoRWNlpnhN4T2ZwX2
- PLVbtDFUJhHLt/i/IAiLmhFleroeRNfKWN/C+kVkUn6o9QyAv3w1gFmFxcersLAbFd
- 6d4pHpeDmZ1K33CGSbFnHLs73iWnbSWzikbmb5pow+KUI01n7qHRxOz2cH0eztM9yG
- BePwyZvXwlPWelrfDrQe1lutIHpvD5+lP7biU6mDlp6OzH/QTviGf+R0s+5HHmd1eT
- c9mpwnpiGqrR6frIric7j4PwCm+SmYQaO+h4fLADjkxHtKtRO+bMItKkOfl+/sXS8y
- VpAVmKQ5iPFXQ==
+ with ESMTP id 8QWKtlb4Q0je for <buildroot@lists.busybox.net>;
+ Tue, 20 Sep 2022 17:10:03 +0000 (UTC)
+X-Greylist: delayed 00:07:52 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E406781980
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.181])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E406781980
+ for <buildroot@buildroot.org>; Tue, 20 Sep 2022 17:10:02 +0000 (UTC)
+Received: from 1oagdL-0007BP-V9 by out3c.electric.net with emc1-ok (Exim
+ 4.94.2) (envelope-from <kris@embeddedTS.com>)
+ id 1oagdM-0007DG-Ug; Tue, 20 Sep 2022 10:02:08 -0700
+Received: by emcmailer; Tue, 20 Sep 2022 10:02:08 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+ by out3c.electric.net with esmtps (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2)
+ (envelope-from <kris@embeddedTS.com>)
+ id 1oagdL-0007BP-V9; Tue, 20 Sep 2022 10:02:07 -0700
+Received: from tsdebian (unknown [75.164.57.7])
+ by mail.embeddedts.com (Postfix) with ESMTPSA id 19913B09A;
+ Tue, 20 Sep 2022 10:02:07 -0700 (MST)
+Message-ID: <1663693308.2395.5.camel@embeddedTS.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>, 
+ buildroot@buildroot.org
+Date: Tue, 20 Sep 2022 10:01:48 -0700
+In-Reply-To: <20220920133224.3290270-1-giulio.benetti@benettiengineering.com>
+References: <20220920133224.3290270-1-giulio.benetti@benettiengineering.com>
+Organization: embeddedTS
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS: TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;
+ h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID;
+ bh=Het7FNJ/yu958+PrUzFN9AkgG7BFOMQR2LRoq7EsVPg=;
+ b=SrcPmqjhnTRmq9SsS71a4RPdeKFDBoRF4lnvRpBuJ13aE58Aq67WF2rZRujyuoHfffF8evL0XdOFWpYyqXNi9dAg9rSGc+cDvB/htXM6kHuAjoc8kcdiB2XR8Rb535wVl7IVKtFQSKlPAAnTbEXxgBTFxsb4thTGnxh6O7BGrO4KmipBvvT1o8FH01BeU89z77cpUh3jJMUT+4McbxcJD93cAiuoRFLAV3cmAZwwP2036hb5EZglPqMl/ctRtpZMl2U5JPxy+k4OzyPLrg4DyGgXNYyMS0phreHCZJm8mewmc8mltn6KCCqdM9gGfLbe4xUwuImNrXn2dZzTUTsDzg==;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=OLhTm1uI
-Subject: Re: [Buildroot] Forcing fresh clone/checkout of custom linux/uboot
- SVN urls
+ dkim=pass (2048-bit key) header.d=embeddedTS.com header.i=@embeddedTS.com
+ header.a=rsa-sha256 header.s=mailanyone20220121 header.b=SrcPmqjh
+Subject: Re: [Buildroot] [PATCH] package/wilc-driver: fix build failure due
+ to missing Linux options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,83 +88,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
+Reply-To: kris@embeddedTS.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Jesse, All,
-
-On 2022-09-20 16:43 +0200, Jesse Van Gavere spake thusly:
-> I wanted to gauge for interest (or if I could be given the opportunity
-> to) for adding an option to buildroot that would instead of making a
-> tarball of a custom version, force a new checkout to be done rather
-> than an extraction of an existing tarball. (along with the option of
-> making it a checkout rather than an export as it does initially)
-> My use case for this is the following:
-> We have our own linux/uboot (svn) repositories, however we currently
-> have to modify the linux/uboot makefiles because trunk development for
-> us is not possible if we point to the trunk url of our linux/uboot
-> repository and then use "HEAD" as the custom repo_version. It will do
-> an export once, put it in the download folder and extract that later
-> on.
-
-Please, look at my proposal about the notion of "transient downloads":
-
-    https://lore.kernel.org/buildroot/20200930173030.2461586-1-yann.morin.1998@free.fr/
-
-IIRC, the conclusion was that the implemetation was OK (maybe barring a
-few minor details, I can't remember exactly), but there was no consensus
-on the wording to describe that feature in the manual and in the commit
-log.
-
-Since I did not agree on changing the wording, and since noone picked it
-up to rewrite it, it was not applied.
-
-I ultimately believe this transient stuff was a mis-feature and a bad
-idea to begin with, and would be better served by people providing the
-appropriate FOO_OVERIDE_SRCDIR in their local.mk, and/or have their CI
-setups actually do the checkouts of the appropriate components and
-set corresponding FOO_OVERRIDE_SRCDIR before spawning the build.
-
-I don't think adding new features for which we already have a technical
-superior solution, is a good addition to Buildroot.
-
-Finally, using a branch name in FOO_VERSION is also a very bad idea, as
-this makes the build non-reproducible, and non-predictable. See the
-manual for more explanations, section 18.6.2. generic-package reference
-about LIBFOO_VERSION:
-    https://buildroot.org/downloads/manual/manual.html#generic-package-reference
-
-Regards,
-Yann E. MORIN.
-
-> We would have to remove the tarball in the download folder for every
-> change in our trunk repos and because it's an export we also can't
-> develop on it.
-> My idea was to add 2 new config options that are enabled if
-> KERNEL_CUSTOM_SVN or UBOOT_COSTOM_SVN is selected, one that would
-> override the extract command so it won't look at the download folder,
-> and another one that would make it perform a checkout instead of an
-> extract.
-> Is this something I could add to the main buildroot or do I best just
-> keep this inside our own buildroot repo?
+On Tue, 2022-09-20 at 15:32 +0200, Giulio Benetti wrote:
+> Enable Linux options depending on the bus has been chosen, so:
+> 1) enable by default common Linux options:
+> CONFIG_NET
+> CONFIG_WIRELESS
+> CONFIG_CFG80211
+> CONFIG_CRC_ITU_T
+> CONFIG_CRC7
+> 2) enable for SDIO bus:
+> CONFIG_MMC
+> 3) enable for SPI bus:
+> CONFIG_SPI
 > 
-> Regards,
-> Jesse
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> Fixes:
+> http://autobuild.buildroot.net/results/d8c4f0f959dd2ec110db8a75980f13172c3c116c/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/wilc-driver/wilc-driver.mk | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/package/wilc-driver/wilc-driver.mk b/package/wilc-driver/wilc-driver.mk
+> index a89af30e29..a7a902b6db 100644
+> --- a/package/wilc-driver/wilc-driver.mk
+> +++ b/package/wilc-driver/wilc-driver.mk
+> @@ -13,11 +13,17 @@ WILC_DRIVER_LICENSE_FILES = LICENSE
+>  ifeq ($(BR2_PACKAGE_WILC_DRIVER_SPI),y)
+>  WILC_DRIVER_MODULE_MAKE_OPTS += \
+>  	CONFIG_WILC_SPI=m
+> +define WILC_DRIVER_SPI_LINUX_CONFIG_FIXUPS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_SPI)
+> +endef
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_WILC_DRIVER_SDIO),y)
+>  WILC_DRIVER_MODULE_MAKE_OPTS += \
+>  	CONFIG_WILC_SDIO=m
+> +define WILC_DRIVER_SDIO_LINUX_CONFIG_FIXUPS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MMC)
+> +endef
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_WILC_DRIVER_SDIO_OOB),y)
+> @@ -25,5 +31,15 @@ WILC_DRIVER_MODULE_MAKE_OPTS += \
+>  	CONFIG_WILC_HW_OOB_INTR=y
+>  endif
+>  
+> +define WILC_DRIVER_LINUX_CONFIG_FIXUPS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRC_ITU_T)
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CRC7)
+> +	$(WILC_DRIVER_SPI_LINUX_CONFIG_FIXUPS)
+> +	$(WILC_DRIVER_SDIO_LINUX_CONFIG_FIXUPS)
+> +endef
+> +
+>  $(eval $(kernel-module))
+>  $(eval $(generic-package))
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Reviewed-by: Kris Bahnsen <Kris@embeddedTS.com>
+
+
+Thanks for that! I was not readily aware of that syntax for kernel config fixups.
+I've also added auto-builds to my filter exception rules so I should be able
+to more readily look those over in the future.
+
+-Kris
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
