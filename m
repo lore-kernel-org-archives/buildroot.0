@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49DDFC54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 06:20:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D8BDC54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 06:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A121D818A7;
-	Tue, 20 Sep 2022 06:20:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A121D818A7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1788081772;
+	Tue, 20 Sep 2022 06:20:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1788081772
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LI4L0JAmx_72; Tue, 20 Sep 2022 06:20:28 +0000 (UTC)
+	with ESMTP id ZTPgTjZYx-1H; Tue, 20 Sep 2022 06:20:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D394A81772;
-	Tue, 20 Sep 2022 06:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D394A81772
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5C5C41BF33A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2207981934;
+	Tue, 20 Sep 2022 06:20:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2207981934
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5EA891BF9CB
  for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3828440101
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4813460BEC
  for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:20:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3828440101
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4813460BEC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0PU0NcfDlkKR for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PfBbXpYmmRcs for <buildroot@lists.busybox.net>;
  Tue, 20 Sep 2022 06:20:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75325404DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5208A60B19
  for <buildroot@buildroot.org>; Tue, 20 Sep 2022 06:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75325404DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5208A60B19
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6006E85BBF; Tue, 20 Sep 2022 06:20:25 +0000 (UTC)
+ id 3B79185BA3; Tue, 20 Sep 2022 06:20:25 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Sep 2022 08:09:24 +0200
+Date: Tue, 20 Sep 2022 08:09:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8d8afc7a06abdb54a92768433dd69da5a44a5e7c
-X-Git-Newrev: c84f8742be47141639c32436927a624c1690f6b2
+X-Git-Oldrev: ce4b87be82d13d3a042b4e78fe5835f3c8ddc29d
+X-Git-Newrev: f446cfc5cd748e2081986f1fdd08e3e5268e331f
 X-Patchwork-Hint: ignore
-Message-Id: <20220920062025.6006E85BBF@busybox.osuosl.org>
+Message-Id: <20220920062025.3B79185BA3@busybox.osuosl.org>
 Subject: [Buildroot] [git commit] package/qt6/qt6base: add support for sql
- module w/ sqlite
+ module w/ mysql
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c84f8742be47141639c32436927a624c1690f6b2
+commit: https://git.buildroot.net/buildroot/commit/?id=f446cfc5cd748e2081986f1fdd08e3e5268e331f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Even though Qt6 support using a bundled sqlite, in Buildroot, we
-always prefer to use non-bundled libraries when possible.
 
 Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/qt6base/Config.in  | 7 +++++++
- package/qt6/qt6base/qt6base.mk | 7 +++++++
- 2 files changed, 14 insertions(+)
+ package/qt6/qt6base/Config.in  | 21 +++++++++++++++++++++
+ package/qt6/qt6base/qt6base.mk | 16 ++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
 diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 7d1233752c..e8357a675c 100644
+index f3e56aefa4..c2a08a3b5b 100644
 --- a/package/qt6/qt6base/Config.in
 +++ b/package/qt6/qt6base/Config.in
-@@ -72,6 +72,13 @@ comment "PostgreSQL plugin can't be built with optimize for fast"
- 	depends on BR2_USE_MMU
- 	depends on BR2_OPTIMIZE_FAST
+@@ -35,6 +35,27 @@ config BR2_PACKAGE_QT6BASE_NETWORK
+ 	help
+ 	  This options enables the Qt6Network library.
  
-+config BR2_PACKAGE_QT6BASE_SQLITE
-+	bool "SQLite plugin"
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA
++config BR2_PACKAGE_QT6BASE_SQL
++	bool "sql module"
 +	help
-+	  Build SQLite plugin
++	  This options enables the Qt6Sql library.
 +
- endif
- 
- config BR2_PACKAGE_QT6BASE_SYSLOG
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index f29a52f543..b7ee6037f3 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -172,6 +172,13 @@ else
- QT6BASE_CONF_OPTS += -DFEATURE_sql_psql=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT6BASE_SQLITE),y)
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_sqlite=ON -DFEATURE_system_sqlite=ON
-+QT6BASE_DEPENDENCIES += sqlite
-+else
-+QT6BASE_CONF_OPTS += -DFEATURE_sql_sqlite=OFF
++if BR2_PACKAGE_QT6BASE_SQL
++config BR2_PACKAGE_QT6BASE_MYSQL
++	bool "MySQL Plugin"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_MYSQL
++	help
++	  Build MySQL plugin
++
++comment "MySQL plugin needs a toolchain w/ C++, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++
 +endif
 +
- else
- QT6BASE_CONF_OPTS += -DFEATURE_sql=OFF
+ config BR2_PACKAGE_QT6BASE_SYSLOG
+ 	bool "syslog support"
+ 	help
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 084020f935..3d07cefe92 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -153,6 +153,22 @@ else
+ QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
  endif
+ 
++# Qt6 SQL Plugins
++ifeq ($(BR2_PACKAGE_QT6BASE_SQL),y)
++QT6BASE_CONF_OPTS += -DFEATURE_sql=ON
++QT6BASE_CONF_OPTS += -DFEATURE_sql_db2=OFF -DFEATURE_sql_ibase=OFF -DFEATURE_sql_oci=OFF -DFEATURE_sql_odbc=OFF
++
++ifeq ($(BR2_PACKAGE_QT6BASE_MYSQL),y)
++QT6BASE_CONF_OPTS += -DFEATURE_sql_mysql=ON
++QT6BASE_DEPENDENCIES += mysql
++else
++QT6BASE_CONF_OPTS += -DFEATURE_sql_mysql=OFF
++endif
++
++else
++QT6BASE_CONF_OPTS += -DFEATURE_sql=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_QT6BASE_SYSLOG),y)
+ QT6BASE_CONF_OPTS += -DFEATURE_syslog=ON
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
