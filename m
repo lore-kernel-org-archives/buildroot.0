@@ -1,66 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43FC2C54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 06:44:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD2D8ECAAD8
+	for <buildroot@archiver.kernel.org>; Tue, 20 Sep 2022 06:46:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6CFC40533;
-	Tue, 20 Sep 2022 06:44:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6CFC40533
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B1D5409A2;
+	Tue, 20 Sep 2022 06:46:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B1D5409A2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6F0t0pXHQsPG; Tue, 20 Sep 2022 06:44:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bMnz7kv2vpoj; Tue, 20 Sep 2022 06:46:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5BFF404EB;
-	Tue, 20 Sep 2022 06:44:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5BFF404EB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4689D1BF33A
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:44:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA18A4098C;
+	Tue, 20 Sep 2022 06:46:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA18A4098C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0401E1BF33A
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:46:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 20DF2404ED
- for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:44:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20DF2404ED
+ by smtp1.osuosl.org (Postfix) with ESMTP id DFEFD81B69
+ for <buildroot@lists.busybox.net>; Tue, 20 Sep 2022 06:45:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFEFD81B69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ytcnZbHHx5UK for <buildroot@lists.busybox.net>;
- Tue, 20 Sep 2022 06:44:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id moyszcLBDP53 for <buildroot@lists.busybox.net>;
+ Tue, 20 Sep 2022 06:45:59 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AF9C404EB
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0AF9C404EB
- for <buildroot@buildroot.org>; Tue, 20 Sep 2022 06:44:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C5B681A0D
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6C5B681A0D
+ for <buildroot@buildroot.org>; Tue, 20 Sep 2022 06:45:58 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id CBFD51BF205;
- Tue, 20 Sep 2022 06:44:24 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPA id 4B07DC0005;
+ Tue, 20 Sep 2022 06:45:55 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Buildroot List <buildroot@buildroot.org>
-Date: Tue, 20 Sep 2022 08:44:20 +0200
-Message-Id: <20220920064420.520074-1-thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Tue, 20 Sep 2022 08:45:50 +0200
+Message-Id: <20220920064550.520645-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663656265;
+ d=bootlin.com; s=gm1; t=1663656355;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=Flg64eI1Mo9ZNh9PVKCoPqkcEM6phCGhrkYk/qe4ews=;
- b=FHLemXjSfCskKN/pPBeaO9aUwMTitRmvyH7W4KLmkGQNNghoHg+/PjDOCt9MBT4cJrqTfb
- w/K87MVEY8Hq/O03iwK+kjzk7kZ3hMfPuIILIk94m1U3lR3Q6/4UY6yDU42kM1sriR/JSn
- VT8GhWOAnNm91vaMAH4ibD9LjbtzwkpabSDS/WvVIzSgGuxMvLASXwMTWlZUNU5NlKVFH9
- 6b2Sh/OFg5WngOvOQJhChvIiROtVAzCNfFCxlHrZkXDWSPYPM66rZ35LPnuplgMrtugNGw
- j300An3AFe59ywv7pkNczJEFrD/9L6TSCQQJZo6GHkzKJOrO/rJYm6stoHbfag==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=O05XI8VpuNk6BFx7kslGQcydUMBDwBOzJlXKvudqK88=;
+ b=Dk4jFYMEhMy0kunQIaHgJ6FUf1gd32dWnvEZRq+X+a3rPEnWzh39P/NGLZAd8F45c9j6m9
+ QOh8xPE5lN7z8H6TKqIzIUV0OP3GmfgQMTxmTvDvhJ5ayi58VOLhdl3KhKlgnURavJfo1x
+ fvfK6XNy+D+RP6TZAApmJZ+7XcAkQN21Fktf3tGnFQDVEsIVRDXsOpF1K0qvJ5jEuNBgIw
+ UQ96CLAuEj2xI/jf4+6KlOaFmI5NWfAbhUac4ySb2nGHW1m8lkPdvoE/faRZ4v/fItwjn6
+ LG3/Fim4g2wlzkUtkKXGX2M4vJPhrNCK2HLz7KuheHeuRL0aA4ZqbUMEYThhiw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FHLemXjS
-Subject: [Buildroot] [PATCH] boot/gummiboot: remove package
+ header.s=gm1 header.b=Dk4jFYME
+Subject: [Buildroot] [PATCH] support/scripts/check-host-libs: add new check
+ on host binaries/libs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,295 +73,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Esben Haabendal <esben@haabendal.dk>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The gummiboot package currently fails to build due to incompatibilies
-with recent versions of the gnu-efi code.
+One frequent issue in Buildroot is that when building host libraries
+or applications, the build system of the package detects some
+libraries provided by the system, and happily links to them, without
+Buildroot knowing. Sometimes this doesn't cause any problem, but
+sometimes this causes issues, and we're regularly eliminating such
+mis-detection by forcing those packages to not detect the system
+libraries that have not been built by Buildroot.
 
-It turns out that gummiboot has been marked deprecated/obsolete by its
-maintainer since July 2015:
+The new script check-host-libs added in this commit, which is executed
+during the host-finalize step at the end of the build is an attempt at
+detecting at least some of these situations.
 
-  https://cgit.freedesktop.org/gummiboot/commit/?id=55df1539c9d330732e88bd196afee386db6e4a1d&utm_source=anzwix
+What it does is that at the end of the build, it verifies that all
+binaries and libraries in $(HOST_DIR) only have shared library
+dependencies on libraries that are in Buildroot $(HOST_DIR), to the
+exception of the C library, for which we of course use the system C
+library.
 
-Indeed, gummiboot ended up being integrated as part of systemd as
-systemd-boot. While it made sense for a while to keep it as a separate
-standalone package, it is not possible to maintain it in Buildroot
-without an active upstream, and there are other options for simple EFI
-bootloaders these days.
+For example, if the binary output/host/bin/plop is linked against
+libpng, but libpng was not built and installed by Buildroot, the build
+will now fail with:
 
-Therefore, let's retire this package.
+ERROR: in /home/thomas/projets/buildroot/output/host/bin/plop, libpng16.so.16 unknown
+make: *** [Makefile:715: host-finalize] Error 1
 
-Fixes:
+The script includes an allowlist of libraries provided by the C
+library. It is potentially possible that this list might need to be
+extended to cover all systems/distributions/C libraries, but only
+wider testing of this script will help detect such cases.
 
-  http://autobuild.buildroot.net/results/5929104a868d2f69ec1b71e5e897b6d1ebf347cf/
+It is worth mentioning that for now this script is executed only once
+at the end of the build. This means that if a package A gets built,
+detects and uses a system library libfoo and uses it, and then by
+chance later Buildroot package B builds and installs libfoo into
+HOST_DIR/lib, this script will believe that package A is correct, as
+it finds libfoo in HOST_DIR/lib, even though while package A was being
+built, the libfoo being detected was the system one. Detecting this
+would require running check-host-libs at the end of each package
+build, but that would imply re-checking over and over again all host
+binaries/libraries, which could have a noticeable impact on the build
+time. So for now, we simply check at the end of the build, which
+should already help to detect a lot of interesting bogus situations.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                              |  8 +++
- DEVELOPERS                                    |  2 -
- boot/Config.in                                |  1 -
- ...w-building-with-newer-glibc-versions.patch | 31 -----------
- ...king-for-non-host-compatible-targets.patch | 54 -------------------
- boot/gummiboot/Config.in                      | 24 ---------
- boot/gummiboot/buildroot.conf                 |  4 --
- boot/gummiboot/gummiboot.mk                   | 41 --------------
- boot/gummiboot/loader.conf                    |  2 -
- 9 files changed, 8 insertions(+), 159 deletions(-)
- delete mode 100644 boot/gummiboot/0001-Allow-building-with-newer-glibc-versions.patch
- delete mode 100644 boot/gummiboot/0002-Fix-linking-for-non-host-compatible-targets.patch
- delete mode 100644 boot/gummiboot/Config.in
- delete mode 100644 boot/gummiboot/buildroot.conf
- delete mode 100644 boot/gummiboot/gummiboot.mk
- delete mode 100644 boot/gummiboot/loader.conf
+It would be very useful if a few people could apply this patch to
+their local tree, run their usual build, and see how it behaves. This
+way, I can get some feedback to address the most obvious issues before
+it gets merged and starts causing build failures in the autobuilders.
+---
+ Makefile                        |  1 +
+ support/scripts/check-host-libs | 36 +++++++++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
+ create mode 100755 support/scripts/check-host-libs
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 5f7274e84b..0114236841 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
+diff --git a/Makefile b/Makefile
+index ec7c034ac1..7ba8ccd535 100644
+--- a/Makefile
++++ b/Makefile
+@@ -712,6 +712,7 @@ STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.t
+ host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
+ 	@$(call MESSAGE,"Finalizing host directory")
+ 	$(call per-package-rsync,$(sort $(PACKAGES)),host,$(HOST_DIR))
++	./support/scripts/check-host-libs $(HOST_DIR)
  
- comment "Legacy options removed in 2022.11"
- 
-+config BR2_TARGET_GUMMIBOOT
-+	bool "gummiboot removed"
-+	select BR2_LEGACY
-+	help
-+	  gummiboot has been deprecated since 2015, with no further
-+	  updates. It became integrated into the systemd project as
-+	  systemd-boot.
+ .PHONY: staging-finalize
+ staging-finalize: $(STAGING_DIR_SYMLINK)
+diff --git a/support/scripts/check-host-libs b/support/scripts/check-host-libs
+new file mode 100755
+index 0000000000..ef307bb6dd
+--- /dev/null
++++ b/support/scripts/check-host-libs
+@@ -0,0 +1,36 @@
++#!/bin/bash
 +
- config BR2_PACKAGE_GPSD_OLDSTYLE
- 	bool "gpsd oldstyle removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 14b91fca8d..b9005e6ef7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -835,7 +835,6 @@ N:	Ernesto L. Williams Jr <realcontrols@gmail.com>
- F:	package/szip/
- 
- N:	Esben Haabendal <esben@haabendal.dk>
--F:	boot/gummiboot/
- F:	package/python-kiwisolver/
- 
- N:	Etienne Carriere <etienne.carriere@linaro.org>
-@@ -2884,7 +2883,6 @@ F:	boot/beaglev-ddrinit/
- F:	boot/beaglev-secondboot/
- F:	boot/boot-wrapper-aarch64/
- F:	boot/grub2/
--F:	boot/gummiboot/
- F:	configs/beaglev_defconfig
- F:	configs/stm32mp157c_dk2_defconfig
- F:	package/android-tools/
-diff --git a/boot/Config.in b/boot/Config.in
-index 40472ae07d..f53c8cd7d7 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -12,7 +12,6 @@ source "boot/binaries-marvell/Config.in"
- source "boot/boot-wrapper-aarch64/Config.in"
- source "boot/edk2/Config.in"
- source "boot/grub2/Config.in"
--source "boot/gummiboot/Config.in"
- source "boot/lpc32xxcdl/Config.in"
- source "boot/mv-ddr-marvell/Config.in"
- source "boot/mxs-bootlets/Config.in"
-diff --git a/boot/gummiboot/0001-Allow-building-with-newer-glibc-versions.patch b/boot/gummiboot/0001-Allow-building-with-newer-glibc-versions.patch
-deleted file mode 100644
-index b35cd499bc..0000000000
---- a/boot/gummiboot/0001-Allow-building-with-newer-glibc-versions.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 40ab4167b5a45c772304a879c71b47d54de3b0e3 Mon Sep 17 00:00:00 2001
--From: Esben Haabendal <esben@haabendal.dk>
--Date: Wed, 20 Mar 2019 14:19:40 +0100
--Subject: [PATCH] Allow building with newer glibc versions
--
--Newer glibc versions does not include sys/sysmacros.h from sys/types.h
--anymore.  Including it unconditionally should be safe.
--
--See https://sourceware.org/ml/libc-alpha/2015-11/msg00253.html for why
--this was done.
--
--Signed-off-by: Esben Haabendal <esben@haabendal.dk>
-----
-- src/setup/setup.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/setup/setup.c b/src/setup/setup.c
--index 6a4275a2ae36..53429375a146 100644
----- a/src/setup/setup.c
--+++ b/src/setup/setup.c
--@@ -37,6 +37,7 @@
-- #include <ftw.h>
-- #include <stdbool.h>
-- #include <blkid.h>
--+#include <sys/sysmacros.h>
-- 
-- #include "efivars.h"
-- 
---- 
--2.21.0
--
-diff --git a/boot/gummiboot/0002-Fix-linking-for-non-host-compatible-targets.patch b/boot/gummiboot/0002-Fix-linking-for-non-host-compatible-targets.patch
-deleted file mode 100644
-index 7104a581e2..0000000000
---- a/boot/gummiboot/0002-Fix-linking-for-non-host-compatible-targets.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From fc05ced797b87286b8ec7303fe32bf200a072972 Mon Sep 17 00:00:00 2001
--From: Esben Haabendal <esben@haabendal.dk>
--Date: Mon, 18 Mar 2019 11:14:31 +0100
--Subject: [PATCH] Fix linking for non-host compatible targets
--
--Without this, gummiboot build system will use host 'ld' when linking
--target binary, which is obviously not a good idea.
--
--Signed-off-by: Esben Haabendal <esben@haabendal.dk>
-----
-- Makefile.am  | 4 ++--
-- configure.ac | 4 ++++
-- 2 files changed, 6 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 6568a355ed74..9051dd44edd9 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -142,7 +142,7 @@ $(top_builddir)/src/efi/%.o: $(top_srcdir)/src/efi/%.c $(addprefix $(top_srcdir)
-- 	$(AM_V_CC)$(EFI_CC) $(efi_cppflags) $(efi_cflags) -c $< -o $@
-- 
-- $(gummiboot_solib): $(gummiboot_objects)
---	$(AM_V_CCLD)$(LD) $(efi_ldflags) $(gummiboot_objects) \
--+	$(AM_V_CCLD)$(EFI_LD) $(efi_ldflags) $(gummiboot_objects) \
-- 		-o $@ -lefi -lgnuefi $(shell $(CC) -print-libgcc-file-name); \
-- 	nm -D -u $@ | grep ' U ' && exit 1 || :
-- .DELETE_ON_ERROR: $(gummboot_solib)
--@@ -177,7 +177,7 @@ $(top_builddir)/src/efi/%.o: $(top_srcdir)/src/efi/%.c $(addprefix $(top_srcdir)
-- 	$(AM_V_CC)$(EFI_CC) $(efi_cppflags) $(efi_cflags) -c $< -o $@
-- 
-- $(stub_solib): $(stub_objects)
---	$(AM_V_CCLD)$(LD) $(efi_ldflags) $(stub_objects) \
--+	$(AM_V_CCLD)$(EFI_LD) $(efi_ldflags) $(stub_objects) \
-- 		-o $@ -lefi -lgnuefi $(shell $(CC) -print-libgcc-file-name); \
-- 	nm -D -u $@ | grep ' U ' && exit 1 || :
-- .DELETE_ON_ERROR: $(gummboot_solib)
--diff --git a/configure.ac b/configure.ac
--index 27bbe1d73396..b948696c220b 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -40,6 +40,10 @@ dnl Don't try to use things like -std=c99 for efi compilation
-- EFI_CC=$CC
-- AC_SUBST([EFI_CC])
-- 
--+dnl Allow specifying linker compatible with the compiler
--+EFI_LD=$LD
--+AC_SUBST([EFI_LD])
--+
-- AC_PROG_CC_C99
-- AM_PROG_CC_C_O
-- AC_PROG_GCC_TRADITIONAL
---- 
--2.21.0
--
-diff --git a/boot/gummiboot/Config.in b/boot/gummiboot/Config.in
-deleted file mode 100644
-index 1b5c4279f7..0000000000
---- a/boot/gummiboot/Config.in
-+++ /dev/null
-@@ -1,24 +0,0 @@
--config BR2_TARGET_GUMMIBOOT
--	bool "gummiboot"
--	depends on BR2_i386 || BR2_x86_64
--	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
--	select BR2_PACKAGE_GNU_EFI
--	select BR2_PACKAGE_UTIL_LINUX
--	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
--	help
--	  gummiboot is a simple UEFI boot manager which executes
--	  configured EFI images. The default entry is selected by a
--	  configured pattern (glob) or an on-screen menu.
--
--	  gummiboot operates on the EFI System Partition (ESP)
--	  only. Configuration file fragments, kernels, initrds, other
--	  EFI images need to reside on the ESP. Linux kernels need to
--	  be built with CONFIG_EFI_STUB to be able to be directly
--	  executed as an EFI image.
--
--	  See the Grub2 help text for details on preparing an EFI
--	  capable disk image using Gummiboot: the instructions are
--	  exactly the same, except that the Gummiboot configuration
--	  files will be located in /loader/ inside the EFI partition.
--
--	  http://freedesktop.org/wiki/Software/gummiboot/
-diff --git a/boot/gummiboot/buildroot.conf b/boot/gummiboot/buildroot.conf
-deleted file mode 100644
-index 8a6f02e56a..0000000000
---- a/boot/gummiboot/buildroot.conf
-+++ /dev/null
-@@ -1,4 +0,0 @@
--title	Buildroot
--version	1
--linux	/bzImage
--options	console=ttyS0 root=/dev/sda2
-diff --git a/boot/gummiboot/gummiboot.mk b/boot/gummiboot/gummiboot.mk
-deleted file mode 100644
-index eb1f3da78c..0000000000
---- a/boot/gummiboot/gummiboot.mk
-+++ /dev/null
-@@ -1,41 +0,0 @@
--################################################################################
--#
--# gummiboot
--#
--################################################################################
--
--GUMMIBOOT_SITE = https://gitlab.freedesktop.org/archived-projects/gummiboot.git
--GUMMIBOOT_SITE_METHOD = git
--GUMMIBOOT_VERSION = 2bcd919c681c952eb867ef1bdb458f1bc49c2d55
--GUMMIBOOT_LICENSE = LGPL-2.1+
--GUMMIBOOT_LICENSE_FILES = LICENSE
--
--# The git archive does not have the autoconf/automake stuff generated.
--GUMMIBOOT_AUTORECONF = YES
--GUMMIBOOT_DEPENDENCIES = gnu-efi host-pkgconf util-linux
--GUMMIBOOT_INSTALL_TARGET = NO
--GUMMIBOOT_INSTALL_IMAGES = YES
--
--ifeq ($(BR2_i386),y)
--GUMMIBOOT_IMGARCH = ia32
--else ifeq ($(BR2_x86_64),y)
--GUMMIBOOT_IMGARCH = x64
--endif
--
--GUMMIBOOT_CONF_OPTS = \
--	--host=$(BR2_ARCH) \
--	--with-efi-libdir=$(STAGING_DIR)/usr/lib \
--	--with-efi-ldsdir=$(STAGING_DIR)/usr/lib \
--	--with-efi-includedir=$(STAGING_DIR)/usr/include \
--	--disable-manpages
--
--define GUMMIBOOT_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/gummiboot$(GUMMIBOOT_IMGARCH).efi \
--		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(GUMMIBOOT_IMGARCH).efi
--	$(INSTALL) -D -m 0644 boot/gummiboot/loader.conf \
--		$(BINARIES_DIR)/efi-part/loader/loader.conf
--	$(INSTALL) -D -m 0644 boot/gummiboot/buildroot.conf \
--		$(BINARIES_DIR)/efi-part/loader/entries/buildroot.conf
--endef
--
--$(eval $(autotools-package))
-diff --git a/boot/gummiboot/loader.conf b/boot/gummiboot/loader.conf
-deleted file mode 100644
-index 93b77b8f93..0000000000
---- a/boot/gummiboot/loader.conf
-+++ /dev/null
-@@ -1,2 +0,0 @@
--timeout 3
--default buildroot
++HOST_DIR=$1
++
++if test -z "${HOST_DIR}" ; then
++    echo "usage: check-host-libs HOST_DIR"
++    exit 1
++fi
++
++bailout="no"
++
++for f in $(find ${HOST_DIR}/*bin ${HOST_DIR}/lib* -type f); do
++    mime=$(file -b --mime-type ${f})
++    if test "${mime}" != "application/x-sharedlib" -a \
++	    "${mime}" != "application/x-executable" ; then
++        continue
++    fi
++    for lib in $(LC_ALL=C readelf -d ${f} | grep NEEDED | sed 's,.*Shared library: \[\(.*\)\].*,\1,'); do
++        case ${lib} in
++        libc.so*|libm.so*|libstdc++.so*|libpthread.so*|libgcc_s.so*|libdl.so*|ld-*|libgomp.so*|libcrypt.so*|libcrypto.so*|libatomic.so*)
++            continue
++            ;;
++        *)
++            if test -e ${HOST_DIR}/lib/${lib} ; then
++                continue
++            fi
++            echo "ERROR: in ${f}, ${lib} unknown"
++            bailout="yes"
++            ;;
++        esac
++    done
++done
++
++if test "${bailout}" = "yes" ; then
++    exit 1
++fi
 -- 
 2.37.2
 
