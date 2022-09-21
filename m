@@ -1,86 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 896CDECAAD8
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 21:07:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09888C32771
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 21:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DF266108B;
-	Wed, 21 Sep 2022 21:07:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DF266108B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E7D883065;
+	Wed, 21 Sep 2022 21:10:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E7D883065
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8B8nrahO7KDM; Wed, 21 Sep 2022 21:07:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 930dKYmHkMrL; Wed, 21 Sep 2022 21:10:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D6F861087;
-	Wed, 21 Sep 2022 21:07:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D6F861087
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0FD7A1BF25B
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 21:07:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A41482F6F;
+	Wed, 21 Sep 2022 21:10:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A41482F6F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 488B01BF25B
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 21:10:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43C8141825
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 21:07:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43C8141825
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23D1040497
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 21:10:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23D1040497
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3RZDhaOk1I7m for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 21:07:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wO7CkGkAYiWE for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 21:10:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9F1C417D7
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A9F1C417D7
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 21:07:39 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id bq9so12197712wrb.4
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 14:07:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1F8F400D2
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A1F8F400D2
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 21:10:44 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id x18so6169787wrm.7
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 14:10:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=rJ6o/Cq7obsIxn508JJr13/0x7PmLhMYnmfYMSU4NQU=;
- b=PqbMZqVnPsoi7sd8lUTCd3hFwM4AGTPSQkwxmoQMH0Pd+/rRomJqXU5EKyBGaVZz+I
- n8rYAJ3I+ZO+mULOfu6uAzeXZ0B9srZqHrX70ei6AXWwD7U/jeUZUzQf1LY99SJznnrG
- V6E9rwssjM9WWKEWX7hmByaoAYCSWsb5RQxVx6vOgc6G5byD2Fvie16ttSBV61y/LBmr
- DwkM9DWNpeaElDkLaieBJt1J0nirG+ZTiSgp5F45QHc97z3rFDXrLh1tr9BEfUsPwubJ
- 4x+RNEvt8M1s4dhpGByqxHztZ7H+DsyKHl78mVmieKA88Dj3o0ORji9/+tJBx9Me9nQX
- Z90g==
-X-Gm-Message-State: ACrzQf00Yy+qmv9q18RNxa1DlW17rzqW/UBpzUkWDujdB+iDtILeMMy1
- eue820H/k4isi3JHErc5PDxgAPpkC1A=
-X-Google-Smtp-Source: AMsMyM7Zp+EdG89YEqFDM4fR0Zr/z37sBcisAY9M+jBBsW6yP5Q4Y7x/NpB4sZRFArFy8CFkCpoSyQ==
-X-Received: by 2002:a05:6000:1a8d:b0:228:acb0:e7be with SMTP id
- f13-20020a0560001a8d00b00228acb0e7bemr44468wry.680.1663794457478; 
- Wed, 21 Sep 2022 14:07:37 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- c9-20020a05600c4a0900b003b33de17577sm3558754wmp.13.2022.09.21.14.07.36
+ bh=0O95noyUO2YOT1z675KEkg+VAZpxlQx5ZVkvis44omI=;
+ b=8L+ncbvgx/qNqjK44zaa2Yfa7fb2IvyZ+WWkgXyy91c2qxb5qwNq0MeLvq9bTNsCfC
+ 7LjN9ru0eSLmQ1qkfOjoKf13oI9C7gbGzmBMNgywlVL017IS9RSV2lsb7xxCXgOnEU+/
+ QmYsA1od4uPEJlYs0gnWqTgW7LLdNlwnIGYzeq1+AiJRuIUXxrHF7o5A7oZjgmas2sRk
+ /EdW0Ju4Yg0wlJ6w/AyowbyCdoBVQs8Q9LjCU9MomEXD7u8maVXOTOPgYpRP4bjqhJKt
+ uQ+wMGYa6YObyTbf3NBbkU21/p8zy8e0uHmzvtEQDOA5/4FD/34I2z/pwzha6A6mCSTo
+ vCpQ==
+X-Gm-Message-State: ACrzQf3m0LjM8ufGZvQqUdquBXe7Im72J+rKFT6Ch2zRGxE+Rjpq3aRj
+ BlRZnYuhW81Jt+jwtgRJ34spNaYzJio=
+X-Google-Smtp-Source: AMsMyM6ujq/2rovwMsEDe7G5G+ULvqe9QZDKV3QOced3lbaktsetKAnpeaekcqO0URhvWY0YexLwTw==
+X-Received: by 2002:a5d:584d:0:b0:22b:229:7582 with SMTP id
+ i13-20020a5d584d000000b0022b02297582mr45656wrf.211.1663794642777; 
+ Wed, 21 Sep 2022 14:10:42 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb058f8a18001c97b8d1b477d53f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:8f8a:1800:1c97:b8d1:b477:d53f])
+ by smtp.gmail.com with ESMTPSA id
+ w8-20020a1cf608000000b003a5fa79007fsm3827612wmc.7.2022.09.21.14.10.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 21 Sep 2022 14:07:37 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Wed, 21 Sep 2022 14:10:42 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Sep 2022 23:07:33 +0200
-Message-Id: <20220921210733.21853-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Wed, 21 Sep 2022 23:10:25 +0200
+Message-Id: <20220921211027.25034-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date;
- bh=rJ6o/Cq7obsIxn508JJr13/0x7PmLhMYnmfYMSU4NQU=;
- b=bJ7wphdltpctQSUTwk4oS56VM+1HtLWpU+tBxJP1/a/A4g5UtH9POqtZpXfv+lyeii
- fIl4tohI3Ig8lcTuea+Yc5IhpfxhYFCIqNRXElTZyursGV8Je9rYNWoHaGjXrjAptHkW
- QGdxcSFJT3yYh9uWYvmcHVzrm5zGGTftRxatBlaYvqogx1ruHQONl6/NEA0l1+xyjtpQ
- PMur1rpIzvaX/7G3BKaazk5NlTgy86Oi1d+VAkneCSHEhxxAmoOd8yv8kPxBjyt/gwqK
- l7eid6MvrLdyXOWDcblLWUaEcdIC6E7qaOjIy2zZjQUOGrJEYy/tM5RYd7eyMYBMwKZ2
- dRgg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=0O95noyUO2YOT1z675KEkg+VAZpxlQx5ZVkvis44omI=;
+ b=qkXrU5nh+QYhlOKawBfgCb3EgW6gRTRZySHqcyXi5RUlYovtIUAhujaiIDMFMWsX2J
+ gc4YVsegfhPXgSDjo7olJN4L/H/4ZYXSbIXSBxNV45FxDaQus02mlTVsQ+r4epNvxw80
+ DwVEDrLCZAO/ZqaMPrwwjCxCTuSDJzT571AdXC8XIPRTAMCX3A/3hmOxEacBwVQoWovw
+ hY9rmaRQKQ+1ZKeNYHm4a1TKTLaJHLz4v5Omz8pREEcrUDwBkEr5LmdQGaNeajUHlM8Q
+ L89/2bu7lhqoGX3Q5wGIjT732yJCdTHvmsWhb+l5+lhNCd2R5suEe0xNqhl5a8s2U43Q
+ CBpg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=bJ7wphdl
-Subject: [Buildroot] [PATCH 1/1] package/expat: bump to version 2.4.9
+ header.a=rsa-sha256 header.s=20210112 header.b=qkXrU5nh
+Subject: [Buildroot] [PATCH 1/3] Revert "toolchain/toolchain-external:
+ update Arm ARM32 toolchain 11.2-2022.02"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,128 +95,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patch (akready in version)
-- Update hash of COPYING (year updated with
-  https://github.com/libexpat/libexpat/commit/39b2e99355039626438d48a4eca6aacba2b44d5e)
+As reported to Linaro bug tracker [1] the Arm GNU Toolchain generated
+since 2022.02 doesn't work on all x86_64 host.
 
-https://blog.hartwork.org/posts/expat-2-4-9-released
-https://github.com/libexpat/libexpat/blob/R_2_4_9/expat/Changes
+It still not fixed with 11.3.Rel1 release (2022.08).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes #15006
+
+[1] https://bugs.linaro.org/show_bug.cgi?id=5825#c19
+
+This reverts commit 22d10e294cc9cd30fa8adc3672a337167e6241a3.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...re-safe-exiting-internalEntityParser.patch | 53 -------------------
- package/expat/expat.hash                      | 10 ++--
- package/expat/expat.mk                        |  5 +-
- 3 files changed, 6 insertions(+), 62 deletions(-)
- delete mode 100644 package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
+ .../toolchain-external-arm-arm/Config.in             |  8 ++++----
+ .../toolchain-external-arm-arm.hash                  | 12 +++++++-----
+ .../toolchain-external-arm-arm.mk                    |  6 +++---
+ 3 files changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch b/package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
-deleted file mode 100644
-index ca86e85115..0000000000
---- a/package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 4a32da87e931ba54393d465bb77c40b5c33d343b Mon Sep 17 00:00:00 2001
--From: Rhodri James <rhodri@wildebeest.org.uk>
--Date: Wed, 17 Aug 2022 18:26:18 +0100
--Subject: [PATCH] Ensure raw tagnames are safe exiting internalEntityParser
--
--It is possible to concoct a situation in which parsing is
--suspended while substituting in an internal entity, so that
--XML_ResumeParser directly uses internalEntityProcessor as
--its processor.  If the subsequent parse includes some unclosed
--tags, this will return without calling storeRawNames to ensure
--that the raw versions of the tag names are stored in memory other
--than the parse buffer itself.  If the parse buffer is then changed
--or reallocated (for example if processing a file line by line),
--badness will ensue.
--
--This patch ensures storeRawNames is always called when needed
--after calling doContent.  The earlier call do doContent does
--not need the same protection; it only deals with entity
--substitution, which cannot leave unbalanced tags, and in any
--case the raw names will be pointing into the stored entity
--value not the parse buffer.
--
--[Retrieved from:
--https://github.com/libexpat/libexpat/commit/4a32da87e931ba54393d465bb77c40b5c33d343b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- expat/lib/xmlparse.c | 13 +++++++++----
-- 1 file changed, 9 insertions(+), 4 deletions(-)
--
--diff --git a/lib/xmlparse.c b/lib/xmlparse.c
--index 7bcabf7f4..d73f419cf 100644
----- a/lib/xmlparse.c
--+++ b/lib/xmlparse.c
--@@ -5826,10 +5826,15 @@ internalEntityProcessor(XML_Parser parser, const char *s, const char *end,
--   {
--     parser->m_processor = contentProcessor;
--     /* see externalEntityContentProcessor vs contentProcessor */
---    return doContent(parser, parser->m_parentParser ? 1 : 0, parser->m_encoding,
---                     s, end, nextPtr,
---                     (XML_Bool)! parser->m_parsingStatus.finalBuffer,
---                     XML_ACCOUNT_DIRECT);
--+    result = doContent(parser, parser->m_parentParser ? 1 : 0,
--+                       parser->m_encoding, s, end, nextPtr,
--+                       (XML_Bool)! parser->m_parsingStatus.finalBuffer,
--+                       XML_ACCOUNT_DIRECT);
--+    if (result == XML_ERROR_NONE) {
--+      if (! storeRawNames(parser))
--+        return XML_ERROR_NO_MEMORY;
--+    }
--+    return result;
--   }
-- }
-- 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index b8e7aa27f1..15e64a4dc8 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.4.8/
--md5  0584a7318a4c007f7ec94778799d72fe  expat-2.4.8.tar.xz
--sha1  e30345a20d0cc29a0c307eb3703e7a9bb62afa90  expat-2.4.8.tar.xz
-+# From https://sourceforge.net/projects/expat/files/expat/2.4.9/
-+md5  8d7fcf7d02d08bf79d9ae5c21cc72c03  expat-2.4.9.tar.xz
-+sha1  be91118bc495ce49b04a3fd0f27df2fb5a843e9b  expat-2.4.9.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index c595b1c133..28c6541406 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -3,7 +3,7 @@ comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
+ 	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
  
- # Locally calculated
--sha256  f79b8f904b749e3e0d20afeadecf8249c55b2e32d4ebb089ae378df479dcaf25  expat-2.4.8.tar.xz
--sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
-+sha256  6e8c0728fe5c7cd3f93a6acce43046c5e4736c7b4b68e032e9350daa0efc0354  expat-2.4.9.tar.xz
-+sha256  122f2c27000472a201d337b9b31f7eb2b52d091b02857061a8880371612d9534  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 61735a5fdb..59854d0ee8 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+-	bool "Arm ARM 2022.02"
++	bool "Arm ARM 2021.07"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_ARM_CPU_HAS_NEON
+@@ -13,12 +13,12 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	help
+-	  Arm toolchain for the ARM architecture. It uses GCC 11.2,
+-	  GDB 11, glibc 2.34, Binutils 2.37. It generates code
++	  Arm toolchain for the ARM architecture. It uses GCC 10.3,
++	  GDB 10.2, glibc 2.33, Binutils 2.36.1. It generates code
+ 	  that runs on all Cortex-A profile devices. The code
+ 	  generated uses the hard floating point calling convention,
+ 	  and uses the NEON FPU instructions.
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+index 3c07237e1d..1fc2c5de57 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+@@ -1,5 +1,7 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf.tar.xz.sha256asc
+-sha256  c254f7199261fe76c32ef42187502839bda7efad0a66646cf739d074eff45fad  gcc-arm-11.2-2022.02-x86_64-arm-none-linux-gnueabihf.tar.xz
+-
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-aarch64-arm-none-linux-gnueabihf.tar.xz.sha256asc
+-sha256  c5603772af016008ddacb7e475dc226d0cccdf069925dfded43e452a59774fc3  gcc-arm-11.2-2022.02-aarch64-arm-none-linux-gnueabihf.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz.asc
++md5  87ec580b290df2febc7c476f59484635  gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz.asc
++md5  0f1c5c90f5c62e1d1066f75fb3e51e21  gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz
++# locally calculated
++sha256  aa074fa8371a4f73fecbd16bd62c8b1945f23289e26414794f130d6ccdf8e39c  gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
++sha256  fccd7af76988da2b077f939eb2a78baa9935810918d2bf3f837bc74f52efa825  gcc-arm-10.3-2021.07-aarch64-arm-none-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+index 1bab088830..8731a4f0e5 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--EXPAT_VERSION = 2.4.8
-+EXPAT_VERSION = 2.4.9
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
-@@ -13,9 +13,6 @@ EXPAT_LICENSE_FILES = COPYING
- EXPAT_CPE_ID_VENDOR = libexpat_project
- EXPAT_CPE_ID_PRODUCT = libexpat
+-TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2022.02
+-TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/11.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
++TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2021.07
++TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
  
--# 0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
--EXPAT_IGNORE_CVES += CVE-2022-40674
--
- EXPAT_CONF_OPTS = \
- 	--without-docbook --without-examples --without-tests --without-xmlwf
- HOST_EXPAT_CONF_OPTS = --without-docbook --without-examples --without-tests
+-TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-11.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-$(HOSTARCH)-arm-none-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-10.3-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-$(HOSTARCH)-arm-none-linux-gnueabihf.tar.xz
+ 
+ $(eval $(toolchain-external-package))
 -- 
-2.35.1
+2.34.3
 
 _______________________________________________
 buildroot mailing list
