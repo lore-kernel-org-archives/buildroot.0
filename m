@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EA87C6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A291DC6FA82
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:13:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EE9961062;
-	Wed, 21 Sep 2022 18:10:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EE9961062
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3380D40442;
+	Wed, 21 Sep 2022 18:13:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3380D40442
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NtlDcPS7jHLM; Wed, 21 Sep 2022 18:10:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xjVxb4euEed6; Wed, 21 Sep 2022 18:13:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8181B61033;
-	Wed, 21 Sep 2022 18:10:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8181B61033
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D98C21BF3FC
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:09:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1DCC40340;
+	Wed, 21 Sep 2022 18:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1DCC40340
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 436F41BF3FC
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4A2782EF0
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:09:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4A2782EF0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A6E6401C4
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:13:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A6E6401C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YZc51nK0Nqye for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 18:09:50 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67794823E3
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 67794823E3
- for <buildroot@busybox.net>; Wed, 21 Sep 2022 18:09:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gSWmG9E28jJg for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 18:13:24 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D90F40340
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7D90F40340
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 18:13:23 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 1D325240004;
- Wed, 21 Sep 2022 18:09:46 +0000 (UTC)
-Date: Wed, 21 Sep 2022 20:09:46 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 5D131240007;
+ Wed, 21 Sep 2022 18:13:21 +0000 (UTC)
+Date: Wed, 21 Sep 2022 20:13:20 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Francois Perrad <fperrad@gmail.com>
-Message-ID: <20220921200946.1f76e202@windsurf>
-In-Reply-To: <20220920190345.3688752-1-francois.perrad@gadz.org>
-References: <20220920190345.3688752-1-francois.perrad@gadz.org>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20220921201320.0a7f80c0@windsurf>
+In-Reply-To: <20220920194645.670432-1-yann.morin.1998@free.fr>
+References: <20220920194645.670432-1-yann.morin.1998@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663783787;
+ d=bootlin.com; s=gm1; t=1663784002;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=sMXqEXfkw+T2XxgWfWCqAJYQ5oaAx301/JWnfds3p4Q=;
- b=YdTSwuZEWJxnKXPa89wD8UPfC7KWS4LweyBkbdcgZ0lU28mCZAoT7KT2OaEJiVgHFj5IBN
- FK9lhpj/sxlJxaTTYISLj0rUooMe+KcdbEaTBOw9HZWwfwVXXPz8fQ6qK4OoLy3EW8duww
- 1MtZ0yuLL18DEYXyRQcAHVQ2iXuarA8O6fvXgUWwUVq7kaqXZs79Ry6p6Mo6ZZowSqSIqz
- ZXmJ4TkJhB57IFRFpTZqRsL4aps82FrmhGJc86KrY3lxVzsnes0WdzuoEdNN00oZWI0Ufq
- LPHdJHW3gG1BdpPhLO2w5pMw51Wc0jaUso1MSCfrbgg7XL7KjjBilq30SH/Kpw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=PFEBBv6fsMum05z7tIyTtCkxxS7udHFhCpVUGfSHHoI=;
+ b=jXpbdYaZ6ujgDdi2v/JPZsnk0ZtQoQw/PsQ4ZHts0qR2lK9t64vNrPmKV3u73x7WwRQeVm
+ nPLRPV8q3LVY2oW034CFaXSk7xCXqI3Th57iQmapiDaF+IaTGmUMzzIiF8HMCftO/CbKRk
+ IWCUI7cY0bG51+0ON3pTb1yLugw8R49+JVf2QtdmnayxDzXZ5YHyH4M6AINCtY41UsoT2a
+ HBB5SgayOE1c+wYtnJ9oq0cjGwZdJkM9gK5AGIdIjvZckLxzfS2BY/dGKi3C+wDBG7ZuaN
+ WLNqc6QnBsKrNAZ43zJEKpBo76BQVO5MfspfVJcO4/K5cREebPurxhHFO7/pEQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YdTSwuZE
-Subject: Re: [Buildroot] [PATCH] package/pango: bump to version 1.50.10
+ header.s=gm1 header.b=jXpbdYaZ
+Subject: Re: [Buildroot] [PATCH v3] Makefile: fix use of many br2-external
+ trees
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,27 +76,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: David Lawson <david.lawson1@tx.rr.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 20 Sep 2022 21:03:45 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Tue, 20 Sep 2022 21:46:45 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/pango/pango.hash | 4 ++--
->  package/pango/pango.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> The top level Makefile in buildroot has a recursive rule which causes
+> the appearance of a hang as the number of directories in BR2_EXTERNAL
+> increases. When the number of directories in BR2_EXTERNAL is small, the
+> recursion occurs, but make detects the recursion and determines the
+> target does not have to be remade. This allows make to progress.
+> 
+> This is the failing rule:
+> 
+>     define percent_defconfig
+>     # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+>     %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
+>         @$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
+>                 $$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
+>     endef
+>     $(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
+> 
+> The rule for %defconfig is created for each directory in BR2_EXTERNAL.
+> When the rule is matched, the stem is 'defconfig_name'. The second
+> prerequisite is expanded to $(1)/configs/defconfig_name_defconfig. The
+> rule, and all of the other rules defined by this macro, are invoked
+> again, but the stem is now $(1)/configs/defconfig_name_defconfig. The
+> second prerequisite is now expanded to
+> $(1)/configs/($1)/configs/defconfig_name_defconfig. This expansion
+> continues until make detects the infinite recursion.
+> 
+> With up to 5 br2-external trees, the time is very small, so that it is
+> not noticeable. But starting with 6 br2-external trees, the time is
+> insanely big (so much so that we did not even let it finish after it ran
+> for hours); see timings toward the end of the commit log.
 
-Applied to master, thanks.
+Wow, insane stuff!
+
+> One of the rationale behind this code, is that we want the defconfig
+> files from br2-external trees further down the list, to override
+> defconfig files from those earlier in the list, even overriding the
+> defconfig files from Buildroot itself.
+
+This is the part I would like to challenge. Why do we want to allow
+BR2_EXTERNAL to override defconfigs from the main tree? We do not allow
+this for packages, why should we allow it for defconfigs?
+
+To me, allowing the override of defconfigs is actually a bad idea: when
+you run "make foo_defconfig", it's no longer really clear which
+"foo_defconfig" is really going to be used. Yes, it's well defined, but
+it isn't "obvious".
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
