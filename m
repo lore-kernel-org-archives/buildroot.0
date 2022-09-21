@@ -1,70 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A291DC6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:13:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60533ECAAD8
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3380D40442;
-	Wed, 21 Sep 2022 18:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3380D40442
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07C586105E;
+	Wed, 21 Sep 2022 18:14:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07C586105E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xjVxb4euEed6; Wed, 21 Sep 2022 18:13:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id s7lAj3ihTuZc; Wed, 21 Sep 2022 18:14:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1DCC40340;
-	Wed, 21 Sep 2022 18:13:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1DCC40340
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44D1C60F39;
+	Wed, 21 Sep 2022 18:14:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44D1C60F39
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 436F41BF3FC
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:13:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A622E1BF3FC
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:14:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A6E6401C4
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:13:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A6E6401C4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D29140442
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:14:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D29140442
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gSWmG9E28jJg for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 18:13:24 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D90F40340
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D90F40340
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 18:13:23 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5D131240007;
- Wed, 21 Sep 2022 18:13:21 +0000 (UTC)
-Date: Wed, 21 Sep 2022 20:13:20 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20220921201320.0a7f80c0@windsurf>
-In-Reply-To: <20220920194645.670432-1-yann.morin.1998@free.fr>
-References: <20220920194645.670432-1-yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id tlFVZ0RCjM5Y for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 18:14:06 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E4754049F
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4E4754049F
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 18:14:06 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id y3so15520680ejc.1
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 11:14:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date;
+ bh=vHQ8/nnJrHTUJSy9eRlt4sVkTL7LJgXijxammEYphzQ=;
+ b=cxVcSzO5umrRHrLpCEFmZYsAv4px7CmM20YdVrK500YB+h74VI7l+pwF6p6jTUQ2gP
+ 0d04JfAvjwjTk/INgSkTcx6PvUdLqWw6RD9vkk+iYKLufuwP11eT/5uJvxD44c6Q9jws
+ V+C8wYjltj2AAjfLbmx6nmtcTZhTpAwOIzBGoOn6M8EGypgMINb78aYubXsHMjEExl+8
+ q0WwV7u7w2Ovqtpi/2/cmMm9ZkDhgZT/QnwGQ2zOQhrlsTQ++isJ9z3h/GtCPBzVYxR1
+ TL+OizXG2sPyf+GTVwL6vaFynmKNkiT6WaEtSaVd8k6BWuCTs4slkKHPYyBT4OGPYgAP
+ h2Tg==
+X-Gm-Message-State: ACrzQf38LTy0VR85HtHW0c1ep2PKAL8sXjU1y8+HSH3j0n5qDm09AE9q
+ Ewlv3bYL3eHc4ZEFEENJlXqTZPPlRp0/zw==
+X-Google-Smtp-Source: AMsMyM44gJjTOojrmYgk8Ltd9vVhjW0uDtLOJBt4NVdg3HHcNkcAEZXEwZ+q7luEiDBQzZjdVDfCYg==
+X-Received: by 2002:a17:907:70a:b0:750:bf91:caa3 with SMTP id
+ xb10-20020a170907070a00b00750bf91caa3mr22087373ejb.711.1663784044492; 
+ Wed, 21 Sep 2022 11:14:04 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ w8-20020a50fa88000000b0045256570210sm2307350edr.3.2022.09.21.11.14.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 21 Sep 2022 11:14:03 -0700 (PDT)
+Message-ID: <1e8710d7-21a2-7d8a-15f5-9cff50043965@mind.be>
+Date: Wed, 21 Sep 2022 20:14:01 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-GB
+To: Jiwen Qi <Jiwen.Qi@outlook.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <CWLP265MB07397A088F5452EE7C444892954F9@CWLP265MB0739.GBRP265.PROD.OUTLOOK.COM>
+ <CWLP265MB073949084186060254912CF0954F9@CWLP265MB0739.GBRP265.PROD.OUTLOOK.COM>
+From: Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <CWLP265MB073949084186060254912CF0954F9@CWLP265MB0739.GBRP265.PROD.OUTLOOK.COM>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663784002;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=PFEBBv6fsMum05z7tIyTtCkxxS7udHFhCpVUGfSHHoI=;
- b=jXpbdYaZ6ujgDdi2v/JPZsnk0ZtQoQw/PsQ4ZHts0qR2lK9t64vNrPmKV3u73x7WwRQeVm
- nPLRPV8q3LVY2oW034CFaXSk7xCXqI3Th57iQmapiDaF+IaTGmUMzzIiF8HMCftO/CbKRk
- IWCUI7cY0bG51+0ON3pTb1yLugw8R49+JVf2QtdmnayxDzXZ5YHyH4M6AINCtY41UsoT2a
- HBB5SgayOE1c+wYtnJ9oq0cjGwZdJkM9gK5AGIdIjvZckLxzfS2BY/dGKi3C+wDBG7ZuaN
- WLNqc6QnBsKrNAZ43zJEKpBo76BQVO5MfspfVJcO4/K5cREebPurxhHFO7/pEQ==
+ d=mind.be; s=google;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date;
+ bh=vHQ8/nnJrHTUJSy9eRlt4sVkTL7LJgXijxammEYphzQ=;
+ b=MHrFn1zQkxT0Vpsw1kv5YYpSAP2x6RLuY1BvJw/cNnBT8FFbkqCo7RvyXU7feBRKLf
+ oKFo3UXnm7ec4UmKzMKZ+j+toLEK2j10uQWULRIdQn2q6ePMofUqXuFo/clTejMIi2dt
+ jb4Rxb9n3fEEgiRlI2vLAD3N1d8Rk+O1bUAw0veHOK1EMNHYdNsaDOGeEqi7H8LdvMUa
+ 1d5q7p+fq27dUIhiEo1kfxOM9mIyZCQy7zho3L9FZLq7z848nzpiKzWjGfD7PSLBwxt2
+ 9nwL8pQfyqPGQjGbwtlWfIAJXYUgcpqRt+RGUrFyaW+WDrXwaUTYftRksSuGa7fUzDup
+ nzBw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jXpbdYaZ
-Subject: Re: [Buildroot] [PATCH v3] Makefile: fix use of many br2-external
- trees
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=MHrFn1zQ
+Subject: Re: [Buildroot] Does Buildroot provide a mechanism to patch the
+ files of a package in the package directory?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,67 +103,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David Lawson <david.lawson1@tx.rr.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 20 Sep 2022 21:46:45 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-
-> The top level Makefile in buildroot has a recursive rule which causes
-> the appearance of a hang as the number of directories in BR2_EXTERNAL
-> increases. When the number of directories in BR2_EXTERNAL is small, the
-> recursion occurs, but make detects the recursion and determines the
-> target does not have to be remade. This allows make to progress.
-> 
-> This is the failing rule:
-> 
->     define percent_defconfig
->     # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
->     %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
->         @$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
->                 $$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
->     endef
->     $(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent_defconfig,$(d))$(sep)))
-> 
-> The rule for %defconfig is created for each directory in BR2_EXTERNAL.
-> When the rule is matched, the stem is 'defconfig_name'. The second
-> prerequisite is expanded to $(1)/configs/defconfig_name_defconfig. The
-> rule, and all of the other rules defined by this macro, are invoked
-> again, but the stem is now $(1)/configs/defconfig_name_defconfig. The
-> second prerequisite is now expanded to
-> $(1)/configs/($1)/configs/defconfig_name_defconfig. This expansion
-> continues until make detects the infinite recursion.
-> 
-> With up to 5 br2-external trees, the time is very small, so that it is
-> not noticeable. But starting with 6 br2-external trees, the time is
-> insanely big (so much so that we did not even let it finish after it ran
-> for hours); see timings toward the end of the commit log.
-
-Wow, insane stuff!
-
-> One of the rationale behind this code, is that we want the defconfig
-> files from br2-external trees further down the list, to override
-> defconfig files from those earlier in the list, even overriding the
-> defconfig files from Buildroot itself.
-
-This is the part I would like to challenge. Why do we want to allow
-BR2_EXTERNAL to override defconfigs from the main tree? We do not allow
-this for packages, why should we allow it for defconfigs?
-
-To me, allowing the override of defconfigs is actually a bad idea: when
-you run "make foo_defconfig", it's no longer really clear which
-"foo_defconfig" is really going to be used. Yes, it's well defined, but
-it isn't "obvious".
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyMS8wOS8yMDIyIDE5OjEwLCBKaXdlbiBRaSB3cm90ZToKPiBIaSwKPiAKPiBMZXQncyB0
+YWtlIHRoZSBEaXJlY3RGQiBwYWNrYWdlIGFzIGFuIGV4YW1wbGUuCj4gSG93IGNhbiBJIHBhdGNo
+IHRoZcKgQ29uZmlnLmluIG9ywqBkaXJlY3RmYi5tayBmaWxlIGluIAo+IGJ1aWxkcm9vdC0yMDE4
+LjA4LjQvcGFja2FnZS9kaXJlY3RmYi4gVGhlIGJ1aWxkcm9vdC0yMDE4LjA4LjQgZGlyZWN0b3J5
+IGlzIHRoZSAKPiByb290IGRpcmVjdG9yeSBvZiBCdWlsZHJvb3QuCgogIFRoZXJlIGlzIGN1cnJl
+bnRseSBubyB3YXkgdG8gZG8gdGhhdC4gRm9yIHRoZSB0aW1lIGJlaW5nLCB0aGUgYmVzdCBhcHBy
+b2FjaCBpcyAKdG8gd3JpdGUgYSB3cmFwcGVyIHNjcmlwdCBhcm91bmQgeW91ciBidWlsZHJvb3Qg
+J21ha2UnIGNhbGwgdGhhdCBjaGVja3MgaWYgCnBhdGNoZXMgaGF2ZSBhbHJlYWR5IGJlZW4gYXBw
+bGllZCBhbmQgYXBwbGllcyB0aGVtIGlmIG5vdC4KCiAgSWRlYWxseSB3ZSBzaG91bGQgaW5kZWVk
+IGhhdmUgYSB3YXkgdG8gZG8gdGhpcyBpbiBhIEJSMl9FWFRFUk5BTCwgYnV0IGl0IGdldHMgCmEg
+Yml0IGNvbXBsaWNhdGVkLi4uIE9uZSBpZGVhIEkgaGFkIGlzIHRvIHNjYW4gdGhlIC5tayBmaWxl
+cyBpbiB0aGUgZXh0ZXJuYWwgCmRpcmVjdG9yeSBiZWZvcmUgaW5jbHVkaW5nIHRoZSBpbnRlcm5h
+bCBvbmVzLCBhbmQgY3JlYXRlIGEgbGlzdCBvZiBwYWNrYWdlcyB0aGF0IApzaG91bGQgYmUgc2tp
+cHBlZCBmcm9tIHRoZSBpbnRlcm5hbCBvbmUuIFRoYXQgd2F5LCBpZiB5b3UgY3JlYXRlIGFuIGV4
+dGVybmFsIApwYWNrYWdlIHdpdGggdGhlIHNhbWUgbmFtZSBhcyBhbiBpbnRlcm5hbCBvbmUsIGl0
+IHdpbGwgZ2V0IG92ZXJyaWRkZW4uIFRoZXJlIGFyZSAKYSBidW5jaCBvZiBjb3JuZXIgY2FzZXMg
+dGhvdWdoOiB3aGF0IGhhcHBlbnMgaWYgdGhlIHNhbWUgcGFja2FnZSBnZXRzIGRlZmluZWQgCnR3
+aWNlIGluIHRoZSBleHRlcm5hbD8gV2hhdCBhYm91dCBzdXBwb3J0IGZpbGVzIGxpa2UgLmhhc2gs
+IENvbmZpZy5pbiwgcGF0Y2hlcywgCi4uLj8gV2hhdCB3aXRoIHBhY2thZ2VzIGluIHN1YmRpcmVj
+dG9yaWVzIGUuZy4gcXQ1PwoKICBSZWdhcmRzLAogIEFybm91dAoKPiAKPiBJIGtub3cgQnVpbGRy
+b290IGhhcyBtZWNoYW5pc21zIHRvIHBhdGNoIHRoZSBmaWxlcyAKPiBpbsKgYnVpbGRyb290LTIw
+MTguMDguNC9vdXRwdXQvYnVpbGQvZGlyZWN0ZmItMS43LjcuCj4gCj4gVGhhbmtzIGFuZCByZWdh
+cmRzCj4gCj4gSml3ZW4KPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
