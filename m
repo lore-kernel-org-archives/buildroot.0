@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23AE7C6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 20:17:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8672DECAAD8
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 20:18:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B93D082F84;
-	Wed, 21 Sep 2022 20:17:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B93D082F84
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EDCD6106A;
+	Wed, 21 Sep 2022 20:18:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EDCD6106A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xKvptArkQEvc; Wed, 21 Sep 2022 20:17:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4n8N-1LIUu0b; Wed, 21 Sep 2022 20:18:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9A6A82C7C;
-	Wed, 21 Sep 2022 20:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9A6A82C7C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5176361064;
+	Wed, 21 Sep 2022 20:18:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5176361064
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A93051BF34B
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:17:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 868131BF34B
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 921E561067
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:17:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 921E561067
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61F3461064
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:18:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61F3461064
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RYH3uhkBzpVZ for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 20:17:35 +0000 (UTC)
+ with ESMTP id g4G_bvbxg66M for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 20:18:54 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 341ED61064
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4138361060
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 341ED61064
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 20:17:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4138361060
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 20:18:54 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3336B240002;
- Wed, 21 Sep 2022 20:17:32 +0000 (UTC)
-Date: Wed, 21 Sep 2022 22:17:32 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 3D16B240005;
+ Wed, 21 Sep 2022 20:18:52 +0000 (UTC)
+Date: Wed, 21 Sep 2022 22:18:51 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Maxim Kochetkov <fido_max@inbox.ru>
-Message-ID: <20220921221732.086df4f0@windsurf>
-In-Reply-To: <20220919062700.1095847-1-fido_max@inbox.ru>
-References: <20220919062700.1095847-1-fido_max@inbox.ru>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20220921221851.32ebb6ba@windsurf>
+In-Reply-To: <20220918124544.122719-1-fontaine.fabrice@gmail.com>
+References: <20220918124544.122719-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663791453;
+ d=bootlin.com; s=gm1; t=1663791532;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=OlQXExWzBNyeiWjuCkcnwmFymS7+9p56+WnokQivMlM=;
- b=B9KZopc7ym0Du2zXSxZvJMlhAu37jnyENgAvFafSv32kqzzHLvbfqg/rGVBljFCsxK7Gfm
- a5TQnFIr+e56ztPBtTrdBdsYqCK3VPDHl6lOaNCp4NuOzpL4zUIBsFpgo016Fkd/dSWQiP
- jYranC5PoUweWqbex+QU4VffbNEBHxp2Hmt4O8AjAqhdGaMxj1U3nsA4/tmNoiftXI7SVJ
- aHRiGAOR0AX//6DYHnNwTXKmPWsVURHXz/NmSV3t9NcUh6YTcTY/CfZg/Dk7khLU1ZoyLf
- c6/GEV7FVB51IgEUMW7dIzpn1G9f/XWrbzLnT5ugFol8ETodRiw6gux1HMG3zQ==
+ bh=4tMs2+gegwBLaxcPhBE5cw1/Lecksl1mODpr9VCBXtc=;
+ b=SY4zNfMk5a7R/Am/igzp/JdIjVrA/27VZBJW4h8LXJAFqR3I6R0v2vKU8+0/YLakKsmv6Y
+ HIiVjYU3v4DYako1WkqtSGMwlatw6+uIojHVSH+ch38hEe2Xta0HlHyBZOD9YPlkhT6KZC
+ EwvsrMJJgoxAR09IvFbAnq2sU4RV6MaWTArRqVaa7/JXr25iinO3z8n2iqDQmchf2htHZk
+ OqvkfoVUrDMn3VwpRg409C0LZh+041LP8OohaRUCxmhp8x1cudD+rDyCGECXWrEB6P97Fw
+ zuQSqeLQ3hcesLRwURhXw8N1bqutqbxY4TmiUtTit8bhdGhv1x6AAegwivpntg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=B9KZopc7
-Subject: Re: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to
- 2.8.0
+ header.s=gm1 header.b=SY4zNfMk
+Subject: Re: [Buildroot] [PATCH 1/1] package/frr: bump to version 8.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,21 +76,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Vadim Kochan <vadim4j@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 19 Sep 2022 09:27:00 +0300
-Maxim Kochetkov <fido_max@inbox.ru> wrote:
+On Sun, 18 Sep 2022 14:45:44 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Release notes: https://github.com/timescale/timescaledb/releases/tag/2.8.0
+> https://frrouting.org/release/8.3
+> https://frrouting.org/release/8.3.1
 > 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/timescaledb/timescaledb.hash | 2 +-
->  package/timescaledb/timescaledb.mk   | 2 +-
+>  package/frr/frr.hash | 2 +-
+>  package/frr/frr.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
