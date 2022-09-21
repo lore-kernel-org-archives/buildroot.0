@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 981F5C6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 19:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9249BECAAD8
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 19:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 32CB060B9F;
-	Wed, 21 Sep 2022 19:56:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32CB060B9F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24DD982E19;
+	Wed, 21 Sep 2022 19:57:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24DD982E19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fQTCunaiKiDk; Wed, 21 Sep 2022 19:56:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YQ8VM206xPkc; Wed, 21 Sep 2022 19:57:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F87460ACD;
-	Wed, 21 Sep 2022 19:56:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F87460ACD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F6A7826DF;
+	Wed, 21 Sep 2022 19:57:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F6A7826DF
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 401AC1BF3F0
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 19:55:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 75D2A1BF3F0
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 19:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B9F5826DF
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 19:55:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B9F5826DF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5F55A826DF
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 19:57:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F55A826DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BLWS137uxkCM for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 19:55:46 +0000 (UTC)
+ with ESMTP id hkHNT1q5lOX5 for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 19:56:59 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45781817B5
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 19:55:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45781817B5
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4AD1817B5
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 19:56:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4AD1817B5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3258A85D08; Wed, 21 Sep 2022 19:55:46 +0000 (UTC)
+ id 8A52285D1A; Wed, 21 Sep 2022 19:56:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Sep 2022 21:55:20 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7b1ab29d67b3a3fd8853dac75d7a22c17d27b6e9
-X-Git-Newrev: 04985f4a0f2c594c34d93da1dfec4d7cef14fa02
+Date: Wed, 21 Sep 2022 21:55:13 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 71cf389bd57357060a1613b8bc1119e45e94cf33
+X-Git-Newrev: 2436fea2004866f0f053b4fe1ceb17774819813c
 X-Patchwork-Hint: ignore
-Message-Id: <20220921195546.3258A85D08@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/mosquitto: add
+Message-Id: <20220921195659.8A52285D1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/mosquitto: add
  mosquitto group
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04985f4a0f2c594c34d93da1dfec4d7cef14fa02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2436fea2004866f0f053b4fe1ceb17774819813c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 Since version 2.0.15, and upstream commit 71a90177d7b2 (Systemd: Add
 mosquitto group ownership), mosquitto uses its own group rather than
