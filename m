@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2C67C6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 20:19:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4EEC6FA8B
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 20:19:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63F7C61078;
-	Wed, 21 Sep 2022 20:19:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63F7C61078
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0DB9415E1;
+	Wed, 21 Sep 2022 20:19:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0DB9415E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id He-V7vkMx7EA; Wed, 21 Sep 2022 20:19:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id arOTOuB5AVUA; Wed, 21 Sep 2022 20:19:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B3776106A;
-	Wed, 21 Sep 2022 20:19:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B3776106A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 997A21BF34B
+	by smtp4.osuosl.org (Postfix) with ESMTP id C18BB415D4;
+	Wed, 21 Sep 2022 20:19:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C18BB415D4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CF4B81C1148
  for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 759076106A
+ by smtp4.osuosl.org (Postfix) with ESMTP id A96B1415D4
  for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:19:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 759076106A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A96B1415D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xdU49BznhtSN for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TUx_WPy_-2Hm for <buildroot@lists.busybox.net>;
  Wed, 21 Sep 2022 20:19:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9DCBE61060
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97AE2415CB
  for <buildroot@buildroot.org>; Wed, 21 Sep 2022 20:19:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DCBE61060
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97AE2415CB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C3EC85D46; Wed, 21 Sep 2022 20:19:28 +0000 (UTC)
+ id 8278985D44; Wed, 21 Sep 2022 20:19:28 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 21 Sep 2022 22:19:00 +0200
+Date: Wed, 21 Sep 2022 22:18:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c6c08345809f927aa4b93cdbe1628a5860bdae61
-X-Git-Newrev: f559c25f9843ed286876c51cc69f9963d9e42c11
+X-Git-Oldrev: 6fdef0f8fde7e74529c81bb9795c46f35e4cca77
+X-Git-Newrev: c6c08345809f927aa4b93cdbe1628a5860bdae61
 X-Patchwork-Hint: ignore
-Message-Id: <20220921201928.8C3EC85D46@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libidn2: bump to version 2.3.3
+Message-Id: <20220921201928.8278985D44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/frr: bump to version 8.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f559c25f9843ed286876c51cc69f9963d9e42c11
+commit: https://git.buildroot.net/buildroot/commit/?id=c6c08345809f927aa4b93cdbe1628a5860bdae61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://gitlab.com/libidn/libidn2/-/blob/v2.3.3/NEWS
+https://frrouting.org/release/8.3
+https://frrouting.org/release/8.3.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libidn2/libidn2.hash | 2 +-
- package/libidn2/libidn2.mk   | 2 +-
+ package/frr/frr.hash | 2 +-
+ package/frr/frr.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-index bc96d7e15a..919c9b18a5 100644
---- a/package/libidn2/libidn2.hash
-+++ b/package/libidn2/libidn2.hash
-@@ -1,5 +1,5 @@
- # Calculated locally after checking signature
--sha256  76940cd4e778e8093579a9d195b25fff5e936e9dc6242068528b437a76764f91  libidn2-2.3.2.tar.gz
-+sha256  f3ac987522c00d33d44b323cae424e2cffcb4c63c6aa6cd1376edacbf1c36eb0  libidn2-2.3.3.tar.gz
- 
- # Hash for license files:
- sha256  73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76  COPYING
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index 19fbe4aafd..1652227291 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
+diff --git a/package/frr/frr.hash b/package/frr/frr.hash
+index 9bb2b75b8f..87ade19c16 100644
+--- a/package/frr/frr.hash
++++ b/package/frr/frr.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  33e974e2a622618e139983f65d93e92e7f1a735936ef18b18244403b15be002f  frr-8.2.2.tar.gz
++sha256  9b0430d01f8da2d780ac5e41de2cf4e53abff0ed06a0cc75d745f4b1f29e5b9e  frr-8.3.1.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index aa36387a3a..72c46ba4aa 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIDN2_VERSION = 2.3.2
-+LIBIDN2_VERSION = 2.3.3
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+-FRR_VERSION = 8.2.2
++FRR_VERSION = 8.3.1
+ FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
+ FRR_LICENSE = GPL-2.0
+ FRR_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
