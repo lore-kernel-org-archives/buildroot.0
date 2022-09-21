@@ -1,70 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C217C6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42464C6FA82
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:19:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3422F40FE3;
-	Wed, 21 Sep 2022 18:15:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3422F40FE3
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6fDQkc-EhPVA; Wed, 21 Sep 2022 18:14:59 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B3E8408FB;
-	Wed, 21 Sep 2022 18:14:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B3E8408FB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 679A71BF3FC
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:14:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3655882FAE
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:14:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3655882FAE
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA9D681325;
+	Wed, 21 Sep 2022 18:19:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA9D681325
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b7lRdipnLTri for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 18:14:34 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YiVJ45f6bICu; Wed, 21 Sep 2022 18:19:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02B2B812FA;
+	Wed, 21 Sep 2022 18:19:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02B2B812FA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 543641BF3FC
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:19:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29FE8408AC
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:19:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29FE8408AC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k73o4Gf7ZFrP for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 18:19:00 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC34282F9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BA964023F
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AC34282F9B
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 18:14:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9BA964023F
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 18:18:59 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 95009FF802;
- Wed, 21 Sep 2022 18:14:31 +0000 (UTC)
-Date: Wed, 21 Sep 2022 20:14:30 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id B0957FF804;
+ Wed, 21 Sep 2022 18:18:55 +0000 (UTC)
+Date: Wed, 21 Sep 2022 20:18:54 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20220921201430.2ec80c32@windsurf>
-In-Reply-To: <20220920221934.100111-1-giulio.benetti@benettiengineering.com>
-References: <20220920221934.100111-1-giulio.benetti@benettiengineering.com>
+To: Adrian Perez de Castro <aperez@igalia.com>
+Message-ID: <20220921201854.5b4913b2@windsurf>
+In-Reply-To: <20220920230029.1680134-4-aperez@igalia.com>
+References: <20220920230029.1680134-1-aperez@igalia.com>
+ <20220920230029.1680134-4-aperez@igalia.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663784071;
+ d=bootlin.com; s=gm1; t=1663784337;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=unN0XMUwa566v6hecqcuBTnQ8CIrowlcBjWxhZPCahU=;
- b=QxPnKI/oj0BLtdx96Kje0vJVShCnICayIMEekF8Y7TuHYZInu59P2a2oT80oCq/56AZFk3
- hxc68xmrqV26lQeMdklS6n0IVsaDOnbzxHe4z9UGJMaAIESRORVUvnfD/9ueHEkgh+PzMR
- 5FWMah5UzsNyAWYhqNChy2MZTEqjX5Z2lUACODvnKDsRKzFgyfBTP13VFi6lM4BYOo69t9
- Gg2c7nCxOYwFOOUGEMBf9kaLRGKIVZjkku+cBsf3VZMclzlUV41eT/1RVjuRQAnAGGWcDe
- H0k9Ykjvv4NMW5bu0gb2EEAxB8OMoEtRGYtX9scMOer0uraaM4X4m4jiKcMO3g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=4wFHtLYsFjFDStlIEbesCtPCTdqaI+v+az/28fvNKtE=;
+ b=G/B0ripihnM3k2KyQiePNNYZ7rwsKp+S2pZ1XBo9SjNE3yRZci5aLFXUCtojx7yB+YfPYK
+ X+uUqp+u1xDlAtTV8xDDD7mIWxXFrpv7gPgP6EGDgkN0RbAzPoSYWmFcLpPng+oggfM7gJ
+ eidsG47Hwn4yC4mojt3QN0VGLsZrsEuhfq7TND8YeIhDvmNvGKqm+n2sir+bMFyVJtmu/1
+ LSvQqvKmMtm6Rrjy3LSS4UkN0imjddSQQr//WatXG92qGq0EJI58g6uBsd3y/tf78Ink1d
+ txRg/vajOStcCoxJDHlmNi+/gqVlU2QeCo1BgMRu3noCHfxwqsWCr58bY9YdBg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QxPnKI/o
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti to mmc-utils
+ header.s=gm1 header.b=G/B0ripi
+Subject: Re: [Buildroot] [PATCH 3/3] package/wpewebkit: bump to version
+ 2.38.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,20 +84,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 21 Sep 2022 00:19:34 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Hello Adrian,
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+On Wed, 21 Sep 2022 02:00:29 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-Applied to master, thanks.
+> Update to a new major release which brings in improvements and a few
+> new features. Release notes:
+> 
+>   https://wpewebkit.org/release/wpewebkit-2.38.0.html
+> 
+> This release also includes security fixes for CVE-2022-32886,
+> CVE-2022-32891, and CVE-2022-32912. Accompanying security advisory:
+> 
+>   https://wpewebkit.org/security/WSA-2022-0009.html
+
+According to this page, CVE-2022-32891 only affects versions up 2.36.5,
+and we're using 2.36.7 in Buildroot.
+
+Also according to this page, the two other CVEs have been fixed in
+2.36.8.
+
+So, could you rework this patch series to:
+
+ - Have a first patch "package/wpewebkit: security bump to version
+   2.36.8", which does bump to 2.36.8
+
+ - Has the patches updating libwpe, wpebackend-fdo.
+
+ - Has the patch updating wpewebkit to 2.38.0
+
+Indeed, we will want to backport the 2.36.8 bump to our stable branch,
+as it contains security fixes.
+
+Thanks a lot!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
