@@ -4,77 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C647ECAAD8
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 09:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E4ACC6FA82
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 14:33:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AB996101B;
-	Wed, 21 Sep 2022 09:25:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AB996101B
+	by smtp3.osuosl.org (Postfix) with ESMTP id E35A761040;
+	Wed, 21 Sep 2022 14:33:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E35A761040
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KIRQpbhoxTV8; Wed, 21 Sep 2022 09:25:39 +0000 (UTC)
+	with ESMTP id R2SajR75T7-z; Wed, 21 Sep 2022 14:33:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADC5F6100C;
-	Wed, 21 Sep 2022 09:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADC5F6100C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B6C01BF5DD
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 09:25:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B85F61035;
+	Wed, 21 Sep 2022 14:33:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B85F61035
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F07C1BF239
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 14:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FEF24187E
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 09:25:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FEF24187E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A9CE80E4F
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 14:33:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A9CE80E4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YNb-c1SW7KX3 for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 09:25:35 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37F46403B8
-Received: from eu-smtp-delivery-151.mimecast.com
- (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 37F46403B8
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 09:25:35 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-186-F741UVcPPxCp6z0QDL8gtg-1; Wed, 21 Sep 2022 10:24:21 +0100
-X-MC-Unique: F741UVcPPxCp6z0QDL8gtg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Wed, 21 Sep
- 2022 10:24:19 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Wed, 21 Sep 2022 10:24:19 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Thomas Petazzoni' <thomas.petazzoni@bootlin.com>
-Thread-Topic: [Buildroot] [PATCH] support/scripts/check-host-libs: add new
- check on host binaries/libs
-Thread-Index: AQHYzTEkeyC04pHYkEeFBAyDpmMKza3piujA///8ZgCAABQDUA==
-Date: Wed, 21 Sep 2022 09:24:19 +0000
-Message-ID: <c402c15ae7c14279b16136690c6e349e@AcuMS.aculab.com>
-References: <20220920064550.520645-1-thomas.petazzoni@bootlin.com>
- <20330_1663659985_63296FD1_20330_21_1_20220920074624.GC3551@tl-lnx-nyma7486>
- <20220920103524.41ad225a@windsurf>
- <30931_1663665105_632983D1_30931_112_8_20220920091143.GD3551@tl-lnx-nyma7486>
- <20220920111919.784ffa7e@windsurf>
- <29653_1663666853_63298AA5_29653_380_1_20220920094051.GE3551@tl-lnx-nyma7486>
- <20220920115459.2aca37f7@windsurf>
- <2ec945e7-22ab-36c9-9ccf-ef022bcfb0ef@mind.be>
- <9ce68f90a18642ad96e8010fd87dd15f@AcuMS.aculab.com>
- <20220921110500.5128d0b9@windsurf>
-In-Reply-To: <20220921110500.5128d0b9@windsurf>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H-6MeBWrimk6 for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 14:33:36 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 213EF80DCB
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 213EF80DCB
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 14:33:36 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id s14so8219943wro.0
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 07:33:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=3CDU8juCqQLaHnok5vlFp9KJpA4wyjqk8eCehmkGvLE=;
+ b=BCWMZnnrNF/JDwqWFJBsz2vPaDpboivcpolUtOZIzmKgzl3lLia0e4YeeMmQ2W9EBe
+ fFyJv7l3uDfYGSXn5SY85J6Ty7S6rQ5QlqTy6w/X7hdGT5gtOyBS7ViZhNAgGD8sQh64
+ 9vN9SB4nPqnmj73vSDIEzR5uUGe+RVzvtNBJUIhzShDnZfnnBJY4TStStW8PNlftAvC9
+ 6rH55eg3RLG6mmZ7iUe2HnrquFMNhD3kbSW2GvJ+NZ01fn+thRgCGSQVO0ia3xqIDLfc
+ MHkvfkpAy8ts55TfwmP3e9In2iB9+GfmOF80QLmNTN9xCyIRQo/j242vmTvwYdwMbag/
+ bGzA==
+X-Gm-Message-State: ACrzQf1zZsQhWAvWjDPJFW1XUR27mblYkWFAvGWfj/8VmriRvHACevml
+ 0SC0GlRstEAiJpPsaeKU8u1wBa/hLGY=
+X-Google-Smtp-Source: AMsMyM4/S8uP9WlrFg1NBg5uJg/k/jbU7qrqIxcaizIEVapugfSNjTdxLh3ir+P25AQpkQri46R0jg==
+X-Received: by 2002:a5d:64c4:0:b0:228:e143:ddb8 with SMTP id
+ f4-20020a5d64c4000000b00228e143ddb8mr17029355wri.148.1663770813967; 
+ Wed, 21 Sep 2022 07:33:33 -0700 (PDT)
+Received: from P-NTS-Evian.nantes.intranet
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ bj4-20020a0560001e0400b0022a403954c3sm2904032wrb.42.2022.09.21.07.33.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 21 Sep 2022 07:33:33 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 21 Sep 2022 16:33:28 +0200
+Message-Id: <20220921143328.186633-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.34.3
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Subject: Re: [Buildroot] [PATCH] support/scripts/check-host-libs: add new
- check on host binaries/libs
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=3CDU8juCqQLaHnok5vlFp9KJpA4wyjqk8eCehmkGvLE=;
+ b=kAFTzVbN0neeFar0ZrNh3kojhqm3to2kSQFcfn5ZWNLQASKPPFoRsMGLcagSgZRhtv
+ EmP85c8tJeYV7j5wfri6/wivq8DkkcOl8ozwo1tD1Rb3fKJrBqBjCQm2qAWuCrSBUBvp
+ 5vtkfQkdioUzy1YB+u1SYtt2bx8JzWfMtwFdrhZPZxy9cL+Q8H93/e17SkahXYesXl5L
+ JpD3xnRSo6l5iU+8d5Be6WaS21qCM0v/SqIA9bqM39mvA8tcg8kMLjErdcZ1QKmwLGDQ
+ HpCckariOdbciZ9/t5NzeONBkniCs6YoA/BeTH1QQsDaLUdvoU0yuXB27b+9ncnR4+41
+ 5v4Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=kAFTzVbN
+Subject: [Buildroot] [PATCH] package/gdb: gdb 12.1: enable host-gdb and
+ gdbserver support for or1k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,54 +94,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "yann.morin@orange.com" <yann.morin@orange.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@gmail.com>, Stafford Horne <shorne@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Petazzoni
-> Sent: 21 September 2022 10:05
-> 
-> On Wed, 21 Sep 2022 08:23:54 +0000
-> David Laight <David.Laight@ACULAB.COM> wrote:
-> 
-> > Think a bit further and you can remove the exec of cmp, eg:
-> >
-> > $ time find /usr/lib -type f | (ELF="$(printf '\x7f\x45\x4c\x46')"; while read f; do read l <"$f" &&
-> [ "${l#$ELF}" != "$l" ] && echo $f; done )| wc -l
-> 
-> Thanks for the input and proposal. Isn't read l <"$f" going to read
-> each file entirely in memory?
+The gdbserver support for or1k is available since 12.1 release, since
+commit [1]. Restrict the gdb version choice for or1k to 12.1 for
+simplicity. Also enable host-gdb to connect to the gdbserver on the
+target.
 
-Probably until the first '\n' - which might be quite a lot!
-But usually the fork+exec is what kills shell script performance.
-(Avoiding cmp/expr on a SYSV shell took lateral thought.)
+[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=4933265c3f71b9134363d0c05f09542d5cc677f4
 
-> > That takes a few seconds on my system.
-> 
-> On my system, your command took 19 seconds. When doing this kind of
-> test, make sure to drop the contents of the page cache first by doing:
-> 
-> echo 3 > /proc/sys/vm/drop_caches
-> 
-> Before each experiment. On my machine, with the page cache contents
-> dropped, it takes 19-20 seconds to run your command the first time.
-> Subsequent runs only last 12 seconds.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Stafford Horne <shorne@gmail.com>
+---
+ package/gdb/Config.in      | 3 ---
+ package/gdb/Config.in.host | 9 ++++++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-I suspect that slows down the find as well.
-The file reads may be small compared to the directory traversal.
-
-In any case the 'read -N 4' will stop the shell reading more than one page.
-Which should get the whole thing about as fast as it is ever going to be.
-(Although bash isn't exactly the most spritely shell.)
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 1cad3c4fd8..273b3072ae 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -17,8 +17,6 @@ config BR2_PACKAGE_GDB
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	# no gdbserver on or1k
+-	select BR2_PACKAGE_GDB_DEBUGGER if BR2_or1k
+ 	# When the external toolchain gdbserver is copied to the
+ 	# target, we don't allow building a separate gdbserver. The
+ 	# one from the external toolchain should be used.
+@@ -45,7 +43,6 @@ if BR2_PACKAGE_GDB
+ config BR2_PACKAGE_GDB_SERVER
+ 	bool "gdbserver"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+-	depends on !BR2_or1k
+ 	help
+ 	  Build the gdbserver stub to run on the target.
+ 	  A full gdb is needed to debug the progam.
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 3b8d456f1c..e8a34e0834 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+ 	default y
+ 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
+ 	depends on !BR2_microblaze
+-	depends on !BR2_or1k
+ 
+ comment "Host GDB Options"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+@@ -49,9 +48,13 @@ choice
+ 
+ config BR2_GDB_VERSION_10
+ 	bool "gdb 10.x"
++	# gdbserver support missing
++	depends on !BR2_or1k
+ 
+ config BR2_GDB_VERSION_11
+ 	bool "gdb 11.x"
++	# gdbserver support missing
++	depends on !BR2_or1k
+ 
+ config BR2_GDB_VERSION_12
+ 	bool "gdb 12.x"
+@@ -65,6 +68,6 @@ config BR2_GDB_VERSION
+ 	string
+ 	default "arc-2020.09-release-gdb" if BR2_arc
+ 	default "10.2"	   if BR2_GDB_VERSION_10
+-	default "11.2"     if BR2_GDB_VERSION_11 || !BR2_PACKAGE_HOST_GDB
+-	default "12.1"     if BR2_GDB_VERSION_12
++	default "11.2"     if BR2_GDB_VERSION_11 || (!BR2_PACKAGE_HOST_GDB && !BR2_or1k)
++	default "12.1"     if BR2_GDB_VERSION_12 || (!BR2_PACKAGE_HOST_GDB && BR2_or1k)
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+-- 
+2.34.3
 
 _______________________________________________
 buildroot mailing list
