@@ -1,72 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42464C6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A874C6FA82
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA9D681325;
-	Wed, 21 Sep 2022 18:19:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA9D681325
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YiVJ45f6bICu; Wed, 21 Sep 2022 18:19:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02B2B812FA;
-	Wed, 21 Sep 2022 18:19:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02B2B812FA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 543641BF3FC
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:19:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29FE8408AC
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:19:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29FE8408AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D9E041886;
+	Wed, 21 Sep 2022 18:21:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D9E041886
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k73o4Gf7ZFrP for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 18:19:00 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BA964023F
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9BA964023F
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 18:18:59 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B0957FF804;
- Wed, 21 Sep 2022 18:18:55 +0000 (UTC)
-Date: Wed, 21 Sep 2022 20:18:54 +0200
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mQdhy0gozu4S; Wed, 21 Sep 2022 18:21:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 831E141880;
+	Wed, 21 Sep 2022 18:21:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 831E141880
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 06DCA1BF3FC
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:21:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D67BB812EF
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:21:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D67BB812EF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZF_ciBlXFX1w for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 18:21:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A0229812E9
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 18:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0229812E9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8D41385C54; Wed, 21 Sep 2022 18:21:13 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-Message-ID: <20220921201854.5b4913b2@windsurf>
-In-Reply-To: <20220920230029.1680134-4-aperez@igalia.com>
-References: <20220920230029.1680134-1-aperez@igalia.com>
- <20220920230029.1680134-4-aperez@igalia.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663784337;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=4wFHtLYsFjFDStlIEbesCtPCTdqaI+v+az/28fvNKtE=;
- b=G/B0ripihnM3k2KyQiePNNYZ7rwsKp+S2pZ1XBo9SjNE3yRZci5aLFXUCtojx7yB+YfPYK
- X+uUqp+u1xDlAtTV8xDDD7mIWxXFrpv7gPgP6EGDgkN0RbAzPoSYWmFcLpPng+oggfM7gJ
- eidsG47Hwn4yC4mojt3QN0VGLsZrsEuhfq7TND8YeIhDvmNvGKqm+n2sir+bMFyVJtmu/1
- LSvQqvKmMtm6Rrjy3LSS4UkN0imjddSQQr//WatXG92qGq0EJI58g6uBsd3y/tf78Ink1d
- txRg/vajOStcCoxJDHlmNi+/gqVlU2QeCo1BgMRu3noCHfxwqsWCr58bY9YdBg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=G/B0ripi
-Subject: Re: [Buildroot] [PATCH 3/3] package/wpewebkit: bump to version
- 2.38.0
+To: buildroot@buildroot.org
+Date: Wed, 21 Sep 2022 20:20:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5b6f4728fe1c588200294cd8db411848585e6258
+X-Git-Newrev: c5131e5d9f0ea1ba1830c68b64c964409c44966b
+X-Patchwork-Hint: ignore
+Message-Id: <20220921182113.8D41385C54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uacme: bump version to 1.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,52 +56,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adrian,
+commit: https://git.buildroot.net/buildroot/commit/?id=c5131e5d9f0ea1ba1830c68b64c964409c44966b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 21 Sep 2022 02:00:29 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+This new version includes
+https://github.com/ndilieto/uacme/commit/9f3e5eae05ee4170872807cd2d7736072b04f8e5
+which fixes the build with mbedtls 2.x.
 
-> Update to a new major release which brings in improvements and a few
-> new features. Release notes:
-> 
->   https://wpewebkit.org/release/wpewebkit-2.38.0.html
-> 
-> This release also includes security fixes for CVE-2022-32886,
-> CVE-2022-32891, and CVE-2022-32912. Accompanying security advisory:
-> 
->   https://wpewebkit.org/security/WSA-2022-0009.html
+Fixes:
 
-According to this page, CVE-2022-32891 only affects versions up 2.36.5,
-and we're using 2.36.7 in Buildroot.
+  http://autobuild.buildroot.org/results/8fa4f0d2821796be312b366be2f095be07dd7b1e
 
-Also according to this page, the two other CVEs have been fixed in
-2.36.8.
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-So, could you rework this patch series to:
-
- - Have a first patch "package/wpewebkit: security bump to version
-   2.36.8", which does bump to 2.36.8
-
- - Has the patches updating libwpe, wpebackend-fdo.
-
- - Has the patch updating wpewebkit to 2.38.0
-
-Indeed, we will want to backport the 2.36.8 bump to our stable branch,
-as it contains security fixes.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index f62463029a..6c71f6b94d 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e7598e794f5ec414d993c4f2f7df39e7c72f26e41302b875ddaf040d8103ec5f  uacme-1.7.2.tar.gz
++sha256  0ec8e5bcb8ed2b532572ca4878d30b2a794f607b995348ebc176d566b64d73f9  uacme-1.7.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 2482259411..a70ec3a635 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UACME_VERSION = 1.7.2
++UACME_VERSION = 1.7.3
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
