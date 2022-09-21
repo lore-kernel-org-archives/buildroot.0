@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 153C9C6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C312C6FA82
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:10:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A549141953;
-	Wed, 21 Sep 2022 18:09:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A549141953
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D4F541956;
+	Wed, 21 Sep 2022 18:10:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D4F541956
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0vNqAv4yXsbj; Wed, 21 Sep 2022 18:09:49 +0000 (UTC)
+	with ESMTP id xV1hxURUVARk; Wed, 21 Sep 2022 18:10:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96B2641947;
-	Wed, 21 Sep 2022 18:09:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96B2641947
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 555911BF3FC
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:09:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6DC94198F;
+	Wed, 21 Sep 2022 18:10:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6DC94198F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D7A241BF3FC
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 397D04192F
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:09:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 397D04192F
+ by smtp1.osuosl.org (Postfix) with ESMTP id B27E782F14
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:09:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B27E782F14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qugqo8fMh0BO for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 18:09:08 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F62641852
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 18:09:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F62641852
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C2BA85C43; Wed, 21 Sep 2022 18:09:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h-bBV2HoTxmA for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 18:09:31 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AC7C82EF1
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6AC7C82EF1
+ for <buildroot@busybox.net>; Wed, 21 Sep 2022 18:09:31 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 44273240003;
+ Wed, 21 Sep 2022 18:09:29 +0000 (UTC)
+Date: Wed, 21 Sep 2022 20:09:28 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 21 Sep 2022 20:08:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a7a2b78da930fe445e2daac7782b3ffbc4b6a456
-X-Git-Newrev: 537ea85f03d68091c5914ebbc8820b9c95edf204
-X-Patchwork-Hint: ignore
-Message-Id: <20220921180908.0C2BA85C43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pango: bump to version 1.50.10
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20220921200928.49ce92b0@windsurf>
+In-Reply-To: <20220920190320.3688689-1-francois.perrad@gadz.org>
+References: <20220920190320.3688689-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1663783769;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=l/hkNiO/LJwTTSUfxJu6eS1MiZ8h32cBg80sQqi/jU8=;
+ b=ikDErwdqQ6VQe3WzgoucwWFPDYULcnJhL3qX91PphDbgAk6UGwuK0mPr+GcRDtDTcHLcOl
+ EbNGXjFB7vRlo0ch7mfOedSWsLilKKBoZ0LK7hrPO90qDtNi/92U+SGVTuwA/BifrGR9wu
+ GhVvI6xRCqvPwGTHT5wTPpRNn4L3gP/4K13A47vrk7f4HEz97DK8Q89sRwvV9C0oDpGkXo
+ DRcFfdKuu1/C1+QQypKcYnYLQ9uZcL11YA9JbAzQM8jtBWv7ST3ur12EImNPXY5lF9JiXs
+ SWivbRcuAkoqcDqPHtsnE15+TMvnopWtyV1pwjfWP4wnbapD0QBYYPfGRTD9bw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ikDErwdq
+Subject: Re: [Buildroot] [PATCH] package/libatomic_ops: bump to version
+ 7.6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,47 +76,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=537ea85f03d68091c5914ebbc8820b9c95edf204
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 20 Sep 2022 21:03:20 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/libatomic_ops/libatomic_ops.hash | 4 ++--
+>  package/libatomic_ops/libatomic_ops.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 48d7f4d5a3..cbd391db20 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.9.sha256sum
--sha256  1b636aabf905130d806372136f5e137b6a27f26d47defd9240bf444f6a4fe610  pango-1.50.9.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.10.sha256sum
-+sha256  7e5d2f1e40854d24a9a2c4d093bafe75dcdbeccdf1de43e4437332eabed64966  pango-1.50.10.tar.xz
- 
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 348759092d..649f3398cf 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PANGO_VERSION_MAJOR = 1.50
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).9
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).10
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
