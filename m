@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87055ECAAD8
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 20:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 095CCECAAD8
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 20:20:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2108382F84;
-	Wed, 21 Sep 2022 20:19:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2108382F84
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98E18415CB;
+	Wed, 21 Sep 2022 20:20:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98E18415CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QIGyUh5DQxBL; Wed, 21 Sep 2022 20:19:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vRpkdb522Umh; Wed, 21 Sep 2022 20:20:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AF4F82D45;
-	Wed, 21 Sep 2022 20:19:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AF4F82D45
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D0C6415DB;
+	Wed, 21 Sep 2022 20:20:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D0C6415DB
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 727CA1BF34B
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:19:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F1EC21BF34B
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:20:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C87E415D4
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:19:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C87E415D4
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF2EE415DB
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 20:20:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF2EE415DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xbpRX1ZL53ni for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 20:19:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0583B415CB
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0583B415CB
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 20:19:29 +0000 (UTC)
+ with ESMTP id LkIruByF_4qc for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 20:20:12 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F5C4415CB
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6F5C4415CB
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 20:20:12 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 4CCA0240002;
- Wed, 21 Sep 2022 20:19:28 +0000 (UTC)
-Date: Wed, 21 Sep 2022 22:19:27 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 88911FF805;
+ Wed, 21 Sep 2022 20:20:10 +0000 (UTC)
+Date: Wed, 21 Sep 2022 22:20:09 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220921221927.708812b6@windsurf>
-In-Reply-To: <20220918125221.152222-1-fontaine.fabrice@gmail.com>
-References: <20220918125221.152222-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220921222009.0dd4ff1e@windsurf>
+In-Reply-To: <20220918130735.295874-1-fontaine.fabrice@gmail.com>
+References: <20220918130735.295874-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663791568;
+ d=bootlin.com; s=gm1; t=1663791610;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=Dnk6f6jHzgeKvitclIXz+kDHCgLFkwAvPhr+PfvvGtY=;
- b=DK0nrgyvO7T1FDzwNRzDWjMaez66Sa9nWDOfps2SxgYm4uTeSXcSsVY22aGwJ9Y4cQ+Kj0
- 6gvKOX8ONgQhdshJ+pnExCGygC/Not2lGaloOdG71WIyfCoT1y0EMwixn5c05aQuyzV/Za
- 3WpWCk7e4i93KhQGGCL/ZjYBjOj8sh9I4g+VuAd69qgvC51pJZNTg5IJ6aIi1M0iush+3O
- P4f6o4ANUDpuin6cbPdYawwyUb9muCSjLbm9PzmWzNXZvWz1TxLdIeaF3kmq3FEnc+wFUy
- /N/5IQmCQs1nxNM+PEBeyIRpFsOH5StM1gj3peNP91Vvw9do5FbsB0iY/faodg==
+ bh=F6mBl+BQzZxuy7WKqnJhUgr+ciYnM6l03GlsOIk6IV0=;
+ b=Ulhsf9Sw3lIVNEKhoRj0S51sKdJpwa3U6XCxCBVktxRtJjEXR9eEN9fe3ueZivSMAcQP59
+ nk3HkszuKwKjrbemDPJ7n8WZ0uzmbejRP+LB3/mMmc5Y83EAdJrMc+D/267D0iRE0larKZ
+ cHe08S742vq7GjprqNyXZJ6Ct7vS8M0zZjb+LR3pxEqhd0Vr/XBWN0q2fFfET5Jg0HS5x/
+ NNaB/nThfLXiqlgy02Xdfa0R5hHFVCW0kG/NQFJqnLbQybH2ACBZrdKAelfRaokpfLQHBU
+ iYjUPRmXO5wqbCIzW7jjyKKWrmgaB2mWNy+UiMBtR+gcvkTpIblmeuqDRtC/Vg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DK0nrgyv
-Subject: Re: [Buildroot] [PATCH 1/1] package/libidn2: bump to version 2.3.3
+ header.s=gm1 header.b=Ulhsf9Sw
+Subject: Re: [Buildroot] [PATCH 1/1] package/i2pd: bump to version 2.43.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,16 +82,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 18 Sep 2022 14:52:21 +0200
+On Sun, 18 Sep 2022 15:07:35 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> https://gitlab.com/libidn/libidn2/-/blob/v2.3.3/NEWS
+> Drop patch (already in version)
+> 
+> https://github.com/PurpleI2P/i2pd/releases/tag/2.43.0
+> https://github.com/PurpleI2P/i2pd/releases/tag/2.42.1
+> https://github.com/PurpleI2P/i2pd/releases/tag/2.42.0
+> https://github.com/PurpleI2P/i2pd/releases/tag/2.41.0
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libidn2/libidn2.hash | 2 +-
->  package/libidn2/libidn2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ...pd-Fix-the-build-with-LibreSSL-3-5-2.patch | 27 -------------------
+>  package/i2pd/i2pd.hash                        |  4 +--
+>  package/i2pd/i2pd.mk                          |  2 +-
+>  3 files changed, 3 insertions(+), 30 deletions(-)
+>  delete mode 100644 package/i2pd/0001-libi2pd-Fix-the-build-with-LibreSSL-3-5-2.patch
 
 Applied to master, thanks.
 
