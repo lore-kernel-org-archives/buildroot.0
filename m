@@ -1,84 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C48DAC6FA82
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 17:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EAB6ECAAD8
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 17:44:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C04882C7C;
-	Wed, 21 Sep 2022 17:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C04882C7C
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3F41409EA;
+	Wed, 21 Sep 2022 17:44:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3F41409EA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MZzv4Gi_z9G3; Wed, 21 Sep 2022 17:38:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vQwKegApH1iM; Wed, 21 Sep 2022 17:44:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5885081B9A;
-	Wed, 21 Sep 2022 17:38:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5885081B9A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 19BD31BF4D7
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 17:38:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E520409F1;
+	Wed, 21 Sep 2022 17:44:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E520409F1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3940F1BF4D7
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 17:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E9755607FF
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 17:38:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9755607FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1323E409F1
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 17:44:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1323E409F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4eM5Cw7jaEGv for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 17:38:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB9386006A
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
- [IPv6:2a00:1450:4864:20::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BB9386006A
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 17:38:18 +0000 (UTC)
-Received: by mail-lj1-x229.google.com with SMTP id a14so7905932ljj.8
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 10:38:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date;
- bh=tCpFlb8nG8oLAJkDUXXN7h9fQt6aNDMwtWahmHKNv8E=;
- b=crwpHbBRwyx2KApR0hPLYJdDMfEgqKQaVNKpr83CI6fk/qGFNPHn/D9zFDuU+jdsWi
- fuxWImSxnfihWBTBnxXwc7dGv1/FBwweipFEEkbpgPoZiSATeA7g7WM/Q8F2OBguax4V
- w0ssrkm8Ld+b66DXEhHh1PG6Lc4WH3cRdWOEVncJ0NjAyHmYXhwQ6/iSZ8riPPb3WSvQ
- PJzyaAryFwekOUIJAuPwbxEt7uZKC2wMFpgH10FX97ds1/m45JJgyEZQIUcTI/nmX19p
- zAjOwaOWrVO07q92G9LAQ6uJER7HzupWZeR4k5BzilCrWE6SJn3gLavSQNWS5SC/hff8
- 9d+w==
-X-Gm-Message-State: ACrzQf0DB+kpXjpe/GRIOP+RolPQxOy6kCzEH/dXWNc5myGWRLQ6ZLtw
- QkzMylnsVIjQj7STeHGC0y9bvHM6isPJydEKWiQ=
-X-Google-Smtp-Source: AMsMyM7cY0BNMR9NMUBrZ5wWXjaej/OX+JgIGtPqGxnMPAAfF3Jd13UCA0YNjXIPA3R80kcwY9Tbb3YuldfSKmUULXk=
-X-Received: by 2002:a2e:9ed1:0:b0:26c:252a:91aa with SMTP id
- h17-20020a2e9ed1000000b0026c252a91aamr8947055ljk.349.1663781896261; Wed, 21
- Sep 2022 10:38:16 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ha-HeL9HeKxp for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 17:44:43 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B1AB409EA
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3B1AB409EA
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 17:44:42 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id C44ACFF803;
+ Wed, 21 Sep 2022 17:44:40 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ob3m3-002I8K-J9; Wed, 21 Sep 2022 19:44:39 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Adrian Perez de Castro <aperez@igalia.com>
+References: <20220919142007.1967434-1-aperez@igalia.com>
+Date: Wed, 21 Sep 2022 19:44:39 +0200
+In-Reply-To: <20220919142007.1967434-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Mon, 19 Sep 2022 17:20:07 +0300")
+Message-ID: <878rmcei60.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220812101718.47491-1-fontaine.fabrice@gmail.com>
- <20220814123748.167ebb02@windsurf> <20220820112842.7bcd12f2@windsurf>
-In-Reply-To: <20220820112842.7bcd12f2@windsurf>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 21 Sep 2022 10:38:04 -0700
-Message-ID: <CAFSsvmq9vNbvrORfhtv8HvCtq20xrtZg9a4Autt2XDNGamUKkA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date;
- bh=tCpFlb8nG8oLAJkDUXXN7h9fQt6aNDMwtWahmHKNv8E=;
- b=mo9T5J4s6dTQ8PVkqfkGjwLGGtgMT8SCw2YK+q7DNAhaa8X60XQm9kGZu6RsvG8DRk
- nNd0cq7jz18PQx7g0PCAbcC+ADOV1aCpOU8PN8ggBN0xdr+VhOLXnGi2zQFRYZutjybT
- D+qUfxlkoT94ARjOQslRJMVpIsdpIvLEKZws8Tt6X7IDgAe0Wgy/JgPoGLu30VSZIdW8
- 9C27xSbYRkQpz82jtHhaIrzzX+oeimuHoJNa2oNu5dGpQgNqkbWfOr2DNzTUqHGDcnQg
- uhSxswaHQRJznFsHQIO3gz90DvtoJJhG4YhbIyuHkHHUMhV3tgWcbUw4Yy0sr2zmxVtL
- l0Aw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=mo9T5J4s
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/poppler: fix introspection build
+Subject: Re: [Buildroot] [PATCH] package/webkitgtk: bump to version 2.38.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,92 +63,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello;
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-The above patch (and the existing patch currently in package/poppler)
-are both in the latest version of poppler, so this is probably safe to
-apply.
-However; it may be more advantageous to instead simply bump the
-poppler package instead of applying more patches.
+ > Update to a new major release which brings in improvements and a few
+ > new features. Release notes:
 
-Thoughts?
+ >   https://webkitgtk.org/2022/09/16/webkitgtk2.38.0-released.html
 
-Adam
+ > This release also includes security fixes for CVE-2022-32886,
+ > CVE-2022-32891, and CVE-2022-32912. Accompanying security advisory:
 
-On Sat, Aug 20, 2022 at 2:28 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Fabrice,
->
-> Do you have some feedback? Or perhaps Adam?
->
-> Thanks!
->
-> Thomas
->
-> On Sun, 14 Aug 2022 12:37:48 +0200
-> Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
->
-> > Hello Fabrice,
-> >
-> > +Adam Duskett for GOI expertise.
-> >
-> > On Fri, 12 Aug 2022 12:17:18 +0200
-> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> >
-> > > diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-> > > index b54262e7c4..db6da25d39 100644
-> > > --- a/package/poppler/poppler.mk
-> > > +++ b/package/poppler/poppler.mk
-> > > @@ -47,7 +47,8 @@ POPPLER_DEPENDENCIES += gobject-introspection
-> > >  POPPLER_CONF_OPTS += \
-> > >     -DENABLE_GOBJECT_INTROSPECTION=ON \
-> > >     -DINTROSPECTION_SCANNER=$(STAGING_DIR)/usr/bin/g-ir-scanner \
-> > > -   -DINTROSPECTION_COMPILER=$(STAGING_DIR)/usr/bin/g-ir-compiler
-> > > +   -DINTROSPECTION_COMPILER=$(STAGING_DIR)/usr/bin/g-ir-compiler \
-> > > +   -DINTROSPECTION_COMPILER_ARGS="--includedir=$(STAGING_DIR)/usr/share/gir-1.0"
-> > >  else
-> > >  POPPLER_CONF_OPTS += -DENABLE_GOBJECT_INTROSPECTION=OFF
-> > >  endif
-> >
-> > I am really not familiar with all the gobject-introspection stuff, but
-> > I'm wondering if this is the right solution for this problem.
-> >
-> > In package/gobject-introspection/, I can see that we create and install
-> > a g-ir-scanner wrapper that passes --add-include-path="$(dirname
-> > "$0")"/../share/gir-1.0.
-> >
-> > In this same directory, we also have a g-ir-compiler wrapper, which is
-> > used to execute things in Qemu. If a special path is needed, why don't
-> > we pass it within this wrapper, so that the solution works for all
-> > packages?
-> >
-> > Apparently, according to
-> > package/libglib2/0004-meson.build-add-girdir-to-gio-2.0.pc-and-glib-2.0.pc.patch
-> > there are some packages that set girdir in their .pc file so that other
-> > packages now where to find the GIR files.
-> >
-> > Really not clear in my mind how all of this should work. My only
-> > concern is that I would like us to find and use the same solution
-> > everywhere to solve the same problem, rather than having 10 different
-> > solutions for each package encountering the same issue.
-> >
-> > Thomas
->
->
->
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+ >   https://webkitgtk.org/security/WSA-2022-0009.html
+
+ > The CMake option to build the documentation has been renamed from
+ > ENABLE_GTK_DOC to ENABLE_DOCUMENTATION, therefore update the build
+ > recipe accordingly. Option USE_LIBNOTIFY is no longer available, as
+ > WebKit now uses the notification portal D-Bus API directly without
+ > relying on libnotify. Lastly, version 2.38.0 introduces a new WebRTC
+ > implementation based on GstWebRTC which is left disabled for now to
+ > keep the existing status quo (WebRTC not available), and adding an
+ > option to enable it can be done in a follow-up patch.
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+As mentioned elsewhere, this breaks on systems with cmake 3.18.x /
+3.19.x (E.G. Debian stable, ..) as this version requires cmake 3.20:
+
+CMake Error at Source/cmake/OptionsGTK.cmake:11 (message):
+  Building with Makefiles requires CMake 3.20 or newer.  Either enable Ninja
+  by passing -GNinja, or upgrade CMake.
+
+Given how long it takes to build webkit, perhaps building it with ninja
+makes more sense? Ideally we would extend pkg-cmake.mk so that you can
+define per-package if it should build with ninja or make rather than
+having custom logic in webkitgtk.mk.
+
+Alternatively we will need to bump the minimal cmake version to 3.20,
+but given that E.G. what is is Debian is older than that, this isn't
+really a great option.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
