@@ -4,70 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 035ABECAAD8
-	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 18:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 405C7ECAAD8
+	for <buildroot@archiver.kernel.org>; Wed, 21 Sep 2022 19:08:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62A76409A4;
-	Wed, 21 Sep 2022 18:57:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62A76409A4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9ADBA40510;
+	Wed, 21 Sep 2022 19:08:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ADBA40510
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aM8eyHhkEKCN; Wed, 21 Sep 2022 18:57:27 +0000 (UTC)
+	with ESMTP id cXDV-SyLfel0; Wed, 21 Sep 2022 19:08:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EE3F4098A;
-	Wed, 21 Sep 2022 18:57:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EE3F4098A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 032461BF3FC
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:57:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 578EB404B9;
+	Wed, 21 Sep 2022 19:08:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 578EB404B9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B30FD1BF3F0
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 19:08:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2F0A4014B
- for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 18:57:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2F0A4014B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D88A40492
+ for <buildroot@lists.busybox.net>; Wed, 21 Sep 2022 19:08:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D88A40492
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WrBeqGbTyBLZ for <buildroot@lists.busybox.net>;
- Wed, 21 Sep 2022 18:57:24 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9D61400EA
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D9D61400EA
- for <buildroot@buildroot.org>; Wed, 21 Sep 2022 18:57:23 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:3556:b9e6:5304:8eb5])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 87C2A5FFAC;
- Wed, 21 Sep 2022 20:57:16 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 21 Sep 2022 20:57:16 +0200
-Date: Wed, 21 Sep 2022 20:57:16 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20220921185716.GT1419013@scaer>
-References: <20220920194645.670432-1-yann.morin.1998@free.fr>
- <20220921201320.0a7f80c0@windsurf>
- <2a3ca783-079b-bca6-7fc9-6647b0307eae@mind.be>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8RLViLaVvDOl for <buildroot@lists.busybox.net>;
+ Wed, 21 Sep 2022 19:08:21 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA08C403AC
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CA08C403AC
+ for <buildroot@buildroot.org>; Wed, 21 Sep 2022 19:08:19 +0000 (UTC)
+Received: from 91-152-140-132.elisa-laajakaista.fi ([91.152.140.132]
+ helo=momiji.lan) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
+ id 1ob54z-0005Jh-PT; Wed, 21 Sep 2022 21:08:17 +0200
+Received: from localhost (momiji.lan [local])
+ by momiji.lan (OpenSMTPD) with ESMTPA id 8edfd23a;
+ Wed, 21 Sep 2022 19:08:06 +0000 (UTC)
+Date: Wed, 21 Sep 2022 22:08:02 +0300
+Message-ID: <20220921220802.GB274304@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20220921201854.5b4913b2@windsurf>
+References: <20220920230029.1680134-1-aperez@igalia.com>
+ <20220920230029.1680134-4-aperez@igalia.com>
+ <20220921201854.5b4913b2@windsurf>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <2a3ca783-079b-bca6-7fc9-6647b0307eae@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1663786640;
- bh=V5l3tgSKtuj76jJF6Z6Ep2jc+20bLpjQ/HcLno/8XJM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=jpKHnYa+HHuk2qlhrutXnzLQDnxSJgE9DGYtEGU3TfFLB9sJ4E3RV6LMlpgbOGfia
- z8bUrl32zIeuR3jEbmBRU7PiBQvcNE2O+qolwmBNTawIfoLjtVfbi1qbBiGsxk81C8
- PaKjKF5bniEPFzvWRPk2bXSjUxVA6e+ko31z99kk5SqRkGBFsm6yRvzVMjxev2Z0oX
- YVsznLjZxcwlLiGe+f5DP/UcFdE8HaKDNot9o6NtvvgPsfR9gLxG6NZjb1OAYsIwBc
- yOeQvkl5AboktaSAfvZMFxthyicjnJqxRrHRUhVeF/UFz5XXP6p5F/bDniUXWzHSVW
- D0yo96v0yUxzw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=jpKHnYa+
-Subject: Re: [Buildroot] [PATCH v3] Makefile: fix use of many br2-external
- trees
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=e0lxCEiwnA8mw4Ez18HMNMHm9F5I52JMJ88VZgzrk7o=; b=WeRDawmSCUR73tdDkRo6oXgZ4O
+ 6wLaqx1P+BPy7a/5HmvhVtdPsWBOc8HUaT9QkOiKaTnia7GTJd7mC9YVtStUavCUdAj1a+As9jk8P
+ z1SZSAi+n8h5xOdVgEepdmBatdaM5SLtmHeIdfrfhoSrHCZu2dNHwKy5sLcgbl3RQ4W2HjyqpcgEB
+ SQ/SYolN8b3B+tDofB8SVzGG5lM3aR2Kt/JJ8jn+FpBpd1sceZ7fTcooj/o8zyxVSZkEwzUZtQzkq
+ NEsH/sT2L0SEwzihVLNJ83u9oqKneDpnGs22vOTWGXewmM3UNFRDz+8XIZ3p1pPx4hIhThUEsYjKk
+ zMqF7bfw==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
+ header.a=rsa-sha256 header.s=20170329 header.b=WeRDawmS
+Subject: Re: [Buildroot] [PATCH 3/3] package/wpewebkit: bump to version
+ 2.38.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,62 +80,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: David Lawson <david.lawson1@tx.rr.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============7473981299101398160=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, All,
 
-On 2022-09-21 20:32 +0200, Arnout Vandecappelle spake thusly:
-> On 21/09/2022 20:13, Thomas Petazzoni wrote:
-> >On Tue, 20 Sep 2022 21:46:45 +0200
-> >"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> >>One of the rationale behind this code, is that we want the defconfig
-> >>files from br2-external trees further down the list, to override
-> >>defconfig files from those earlier in the list, even overriding the
-> >>defconfig files from Buildroot itself.
-> >This is the part I would like to challenge. Why do we want to allow
-> >BR2_EXTERNAL to override defconfigs from the main tree? We do not allow
-> >this for packages, why should we allow it for defconfigs?
->  And indeed, this is exactly the reverse of what we would have now. We have
-> two pattern rules that match with the same stem. In this case, according to
-> 'info make': "'make' will choose the first one found in the makefile." Since
-> we put $(TOPDIR) before the externals in the foreach loop, the internal one
-> will be the one that gets used.
+--===============7473981299101398160==
+Content-Type: multipart/signed; boundary="g5t6A5GKC3pD0IbR"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
 
-As discussed on IRC: except we do not put TOPDIR first; we do:
-    $(call reverse,TOPDIR BR2_EXTERNALS)
 
-so the last external does win.
+--g5t6A5GKC3pD0IbR
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-I.e. that patch does not change the current behaviour; it just fixes the
-use of more than 5 br2-extenal trees at once.
+SGVsbG8gVGhvbWFzLCBhbGwsCgpPbiBXZWQsIDIxIFNlcCAyMDIyIDIwOjE4OjU0ICswMjAwIFRo
+b21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+IEhl
+bGxvIEFkcmlhbiwKPiAKPiBPbiBXZWQsIDIxIFNlcCAyMDIyIDAyOjAwOjI5ICswMzAwCj4gQWRy
+aWFuIFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+IHdyb3RlOgo+IAo+ID4gVXBk
+YXRlIHRvIGEgbmV3IG1ham9yIHJlbGVhc2Ugd2hpY2ggYnJpbmdzIGluIGltcHJvdmVtZW50cyBh
+bmQgYSBmZXcKPiA+IG5ldyBmZWF0dXJlcy4gUmVsZWFzZSBub3RlczoKPiA+IAo+ID4gICBodHRw
+czovL3dwZXdlYmtpdC5vcmcvcmVsZWFzZS93cGV3ZWJraXQtMi4zOC4wLmh0bWwKPiA+IAo+ID4g
+VGhpcyByZWxlYXNlIGFsc28gaW5jbHVkZXMgc2VjdXJpdHkgZml4ZXMgZm9yIENWRS0yMDIyLTMy
+ODg2LAo+ID4gQ1ZFLTIwMjItMzI4OTEsIGFuZCBDVkUtMjAyMi0zMjkxMi4gQWNjb21wYW55aW5n
+IHNlY3VyaXR5IGFkdmlzb3J5Ogo+ID4gCj4gPiAgIGh0dHBzOi8vd3Bld2Via2l0Lm9yZy9zZWN1
+cml0eS9XU0EtMjAyMi0wMDA5Lmh0bWwKPiAKPiBBY2NvcmRpbmcgdG8gdGhpcyBwYWdlLCBDVkUt
+MjAyMi0zMjg5MSBvbmx5IGFmZmVjdHMgdmVyc2lvbnMgdXAgMi4zNi41LAo+IGFuZCB3ZSdyZSB1
+c2luZyAyLjM2LjcgaW4gQnVpbGRyb290Lgo+IAo+IEFsc28gYWNjb3JkaW5nIHRvIHRoaXMgcGFn
+ZSwgdGhlIHR3byBvdGhlciBDVkVzIGhhdmUgYmVlbiBmaXhlZCBpbgo+IDIuMzYuOC4KPiAKPiBT
+bywgY291bGQgeW91IHJld29yayB0aGlzIHBhdGNoIHNlcmllcyB0bzoKPiAKPiAgLSBIYXZlIGEg
+Zmlyc3QgcGF0Y2ggInBhY2thZ2Uvd3Bld2Via2l0OiBzZWN1cml0eSBidW1wIHRvIHZlcnNpb24K
+PiAgICAyLjM2LjgiLCB3aGljaCBkb2VzIGJ1bXAgdG8gMi4zNi44Cj4gCj4gIC0gSGFzIHRoZSBw
+YXRjaGVzIHVwZGF0aW5nIGxpYndwZSwgd3BlYmFja2VuZC1mZG8uCj4gCj4gIC0gSGFzIHRoZSBw
+YXRjaCB1cGRhdGluZyB3cGV3ZWJraXQgdG8gMi4zOC4wCgpPZiBjb3Vyc2UsIG5vIHByb2JsZW0u
+IEknbGwgc2VuZCBhbiB1cGRhdGUgaW4gdGhlIG5leHQgZGF5cy4KCj4gSW5kZWVkLCB3ZSB3aWxs
+IHdhbnQgdG8gYmFja3BvcnQgdGhlIDIuMzYuOCBidW1wIHRvIG91ciBzdGFibGUgYnJhbmNoLAo+
+IGFzIGl0IGNvbnRhaW5zIHNlY3VyaXR5IGZpeGVzLgoKTWFrZXMgc2Vuc2UuIEFsbG93aW5nIExU
+Uy9zdGFibGUgZGlzdHJvcyB0byBwaWNrIHRoZSB1cGRhdGUgbW9yZSBlYXNpbHkgaXMKb25lIG9m
+IHRoZSByZWFzb25zIHdoeSBJIG1hZGUgb25lIG1vcmUgMi4zNi54IHdpdGggdGhlIGZpeGVzIDop
+CgoKQ2hlZXJzLArigJRBZHJpw6FuCg==
 
-Sorry, I may not have been clear about the explanations in my commit
-log: the rationale part refers to the current code, not the change I
-did. Whoever applies it can amend as they see fit, or I can respin if
-needed.
+--g5t6A5GKC3pD0IbR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Oh, and by the way, I got that privately, so I'll paste it here so that
-patchwork catches it:
+-----BEGIN PGP SIGNATURE-----
 
-Tested-by: David Lawson <david.lawson1@tx.rr.com>
+iFwEABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCYythEgAKCRCRxVnb5MkS
+O39jAJoCI1R/RjzdUqLXT9eLZT5WOTa86gCY1bVjxs/t546isp2JVw3vkmJNTw==
+=vFL+
+-----END PGP SIGNATURE-----
 
-Regards,
-Yann E. MORIN.
+--g5t6A5GKC3pD0IbR--
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--===============7473981299101398160==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7473981299101398160==--
