@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41BDDC6FA8B
-	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 06:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78389C6FA82
+	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 06:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C07DD83298;
-	Thu, 22 Sep 2022 06:38:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C07DD83298
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1177740913;
+	Thu, 22 Sep 2022 06:38:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1177740913
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rM1w5ANhQZ7p; Thu, 22 Sep 2022 06:38:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZpgJeuJ16lKV; Thu, 22 Sep 2022 06:38:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D827D8328E;
-	Thu, 22 Sep 2022 06:38:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D827D8328E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31D5E408A5;
+	Thu, 22 Sep 2022 06:38:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31D5E408A5
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 35AC21BF957
- for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 06:38:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8BEAA1BF957
+ for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 06:38:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 108F440898
+ by smtp4.osuosl.org (Postfix) with ESMTP id 627444088E
  for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 06:38:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 108F440898
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 627444088E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5-JTgbP_vj5M for <buildroot@lists.busybox.net>;
+ with ESMTP id 0A5414dQtd3j for <buildroot@lists.busybox.net>;
  Thu, 22 Sep 2022 06:38:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 000C34088E
- for <buildroot@buildroot.org>; Thu, 22 Sep 2022 06:38:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 000C34088E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52E6340892
+ for <buildroot@buildroot.org>; Thu, 22 Sep 2022 06:38:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52E6340892
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2FB285E15; Thu, 22 Sep 2022 06:38:15 +0000 (UTC)
+ id 4223B85E15; Thu, 22 Sep 2022 06:38:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 22 Sep 2022 08:11:04 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 86f75a8a3b8086ea99aef6a5a0d745b8cbdfbec1
-X-Git-Newrev: 48215e43944929aa1d4f3ffd2cdfe6a6ad6cd05a
+Date: Thu, 22 Sep 2022 08:11:57 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: b53ae00c7da6a90bbceb506ba7b14278b0f9e3e2
+X-Git-Newrev: 149a643bcc2fbd6b331ee3ff7c3ef177a6920ac5
 X-Patchwork-Hint: ignore
-Message-Id: <20220922063815.E2FB285E15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/rtl8723bu: bump
+Message-Id: <20220922063816.4223B85E15@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/rtl8723bu: bump
  to latest version for kernel 5.17+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48215e43944929aa1d4f3ffd2cdfe6a6ad6cd05a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=149a643bcc2fbd6b331ee3ff7c3ef177a6920ac5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 Fixes:
 http://autobuild.buildroot.net/results/4ba/4baf7b753a16e9cd798eaf51a4cb994a22f437e8/
