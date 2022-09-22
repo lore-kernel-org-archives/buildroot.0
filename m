@@ -1,59 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D013C6FA82
-	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 12:51:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06BAEC6FA82
+	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 12:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4857640C2E;
-	Thu, 22 Sep 2022 12:51:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4857640C2E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 962B161009;
+	Thu, 22 Sep 2022 12:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 962B161009
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oasMinCZsUZw; Thu, 22 Sep 2022 12:51:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4YDgy0NL_CWN; Thu, 22 Sep 2022 12:51:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 81BCA40BCB;
-	Thu, 22 Sep 2022 12:51:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81BCA40BCB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0905A1BF2CE
- for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:51:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6E6261094;
+	Thu, 22 Sep 2022 12:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6E6261094
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A835B1BF2CE
+ for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D92C340C31
- for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:51:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D92C340C31
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9165883455
+ for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:51:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9165883455
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0rFEwiGggcr4 for <buildroot@lists.busybox.net>;
- Thu, 22 Sep 2022 12:51:07 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DE9F40C2E
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2DE9F40C2E
- for <buildroot@buildroot.org>; Thu, 22 Sep 2022 12:51:06 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 89BB6FF803;
- Thu, 22 Sep 2022 12:51:05 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1obLfU-002sH6-Mb; Thu, 22 Sep 2022 14:51:04 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cqkKprAzUoAR for <buildroot@lists.busybox.net>;
+ Thu, 22 Sep 2022 12:51:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C071383163
+ for <buildroot@buildroot.org>; Thu, 22 Sep 2022 12:51:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C071383163
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AB1FD85E38; Thu, 22 Sep 2022 12:51:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: luca.ceresoli@bootlin.com
-References: <20220917123602.961826-1-luca.ceresoli@bootlin.com>
- <20220917123602.961826-3-luca.ceresoli@bootlin.com>
-Date: Thu, 22 Sep 2022 14:51:04 +0200
-In-Reply-To: <20220917123602.961826-3-luca.ceresoli@bootlin.com> (luca
- ceresoli's message of "Sat, 17 Sep 2022 14:36:01 +0200")
-Message-ID: <871qs3d13b.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 3/4] package/snmppp: fix broken URL in help
- text
+To: buildroot@buildroot.org
+Date: Thu, 22 Sep 2022 14:50:06 +0200
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: f5fcd64dfcf0a3133cde0a90909cac1f2ef84d70
+X-Git-Newrev: a6f5c04744a0b6576b5246d55a1a96647e4910a9
+X-Patchwork-Hint: ignore
+Message-Id: <20220922125113.AB1FD85E38@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/snmppp: fix
+ broken URL in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,24 +57,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "luca" == luca ceresoli <luca.ceresoli@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a6f5c04744a0b6576b5246d55a1a96647e4910a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
- > From: Luca Ceresoli <luca.ceresoli@bootlin.com>
- > The curren URL is specific to an old version, and it is not reachable
- > anymore.
+The curren URL is specific to an old version, and it is not reachable
+anymore.
 
- > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1d23e01c3b79ce8cf709671d1aa10e12b8bb4cb5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/snmppp/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2022.02.x, 2022.05.x and 2022.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/snmppp/Config.in b/package/snmppp/Config.in
+index 1f05f53f9f..f3a076714d 100644
+--- a/package/snmppp/Config.in
++++ b/package/snmppp/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_SNMPPP
+ 	help
+ 	  SNMP++v3.x is a C++ API which supports SNMP v1, v2c, and v3.
+ 
+-	  http://www.agentpp.com/snmp_pp3_x/snmp_pp3_x.html
++	  https://www.agentpp.com/api/cpp/snmp_pp.html
+ 
+ if BR2_PACKAGE_SNMPPP
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
