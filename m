@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7039FC6FA82
-	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 12:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D013C6FA82
+	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 12:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1DC4E40C2D;
-	Thu, 22 Sep 2022 12:51:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DC4E40C2D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4857640C2E;
+	Thu, 22 Sep 2022 12:51:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4857640C2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dp4rDG_x25gF; Thu, 22 Sep 2022 12:51:06 +0000 (UTC)
+	with ESMTP id oasMinCZsUZw; Thu, 22 Sep 2022 12:51:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DFDB40BCB;
-	Thu, 22 Sep 2022 12:51:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DFDB40BCB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81BCA40BCB;
+	Thu, 22 Sep 2022 12:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81BCA40BCB
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 15DAE1BF2CE
- for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:51:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0905A1BF2CE
+ for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:51:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5DFB40BCB
- for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:51:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5DFB40BCB
+ by smtp2.osuosl.org (Postfix) with ESMTP id D92C340C31
+ for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:51:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D92C340C31
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pVKMHtYcdVjU for <buildroot@lists.busybox.net>;
- Thu, 22 Sep 2022 12:51:03 +0000 (UTC)
+ with ESMTP id 0rFEwiGggcr4 for <buildroot@lists.busybox.net>;
+ Thu, 22 Sep 2022 12:51:07 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3739F40481
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DE9F40C2E
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
  [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3739F40481
- for <buildroot@buildroot.org>; Thu, 22 Sep 2022 12:51:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2DE9F40C2E
+ for <buildroot@buildroot.org>; Thu, 22 Sep 2022 12:51:06 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7974AFF811;
- Thu, 22 Sep 2022 12:51:01 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 89BB6FF803;
+ Thu, 22 Sep 2022 12:51:05 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1obLfQ-002sGx-GK; Thu, 22 Sep 2022 14:51:00 +0200
+ id 1obLfU-002sH6-Mb; Thu, 22 Sep 2022 14:51:04 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: luca.ceresoli@bootlin.com
 References: <20220917123602.961826-1-luca.ceresoli@bootlin.com>
- <20220917123602.961826-4-luca.ceresoli@bootlin.com>
-Date: Thu, 22 Sep 2022 14:51:00 +0200
-In-Reply-To: <20220917123602.961826-4-luca.ceresoli@bootlin.com> (luca
- ceresoli's message of "Sat, 17 Sep 2022 14:36:02 +0200")
-Message-ID: <875yhfd13f.fsf@dell.be.48ers.dk>
+ <20220917123602.961826-3-luca.ceresoli@bootlin.com>
+Date: Thu, 22 Sep 2022 14:51:04 +0200
+In-Reply-To: <20220917123602.961826-3-luca.ceresoli@bootlin.com> (luca
+ ceresoli's message of "Sat, 17 Sep 2022 14:36:01 +0200")
+Message-ID: <871qs3d13b.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 4/4] package/agentpp: fix broken URL in help
+Subject: Re: [Buildroot] [PATCH 3/4] package/snmppp: fix broken URL in help
  text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -78,9 +78,6 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  > anymore.
 
  > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
-NIT: For backporting it is nice to put such patches earlier in your
-series so it is clear that it doesn't depend on the earlier patches.
 
 Committed to 2022.02.x, 2022.05.x and 2022.08.x, thanks.
 
