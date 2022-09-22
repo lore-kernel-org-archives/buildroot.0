@@ -1,63 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D900FC54EE9
-	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 13:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0855BC6FA82
+	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 13:34:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46D6461105;
-	Thu, 22 Sep 2022 13:34:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46D6461105
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B10E83E74;
+	Thu, 22 Sep 2022 13:34:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B10E83E74
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id u6v6SpzAgsc9; Thu, 22 Sep 2022 13:34:39 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B47B082CD4;
+	Thu, 22 Sep 2022 13:34:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B47B082CD4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AEB611BF2A4
+ for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 13:34:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AB816110B
+ for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 13:34:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AB816110B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zyu-IN0SLehs; Thu, 22 Sep 2022 13:34:20 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E5BF61102;
-	Thu, 22 Sep 2022 13:34:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E5BF61102
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4AD021BF2A4
- for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 13:34:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 248F541A53
- for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 13:34:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 248F541A53
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sflUhMiLaf1h for <buildroot@lists.busybox.net>;
- Thu, 22 Sep 2022 13:34:17 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3o4wjg0p1__z for <buildroot@lists.busybox.net>;
+ Thu, 22 Sep 2022 13:34:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C20EB419BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA57A61102
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C20EB419BA
- for <buildroot@buildroot.org>; Thu, 22 Sep 2022 13:34:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AA57A61102
+ for <buildroot@buildroot.org>; Thu, 22 Sep 2022 13:34:35 +0000 (UTC)
 Received: from mail.qult.net (unknown [78.193.33.39])
- by smtp6-g21.free.fr (Postfix) with ESMTPS id 00409780357
- for <buildroot@buildroot.org>; Thu, 22 Sep 2022 15:34:10 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPS id CFFF5780378
+ for <buildroot@buildroot.org>; Thu, 22 Sep 2022 15:34:30 +0200 (CEST)
 Received: from zenon.in.qult.net ([192.168.64.1])
  by mail.qult.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
  (Exim 4.90_1)
  (envelope-from <ignacy.gawedzki@green-communications.fr>)
- id 1obMLC-0004HY-OC; Thu, 22 Sep 2022 15:34:10 +0200
+ id 1obMLW-0004JK-EG
+ for buildroot@buildroot.org; Thu, 22 Sep 2022 15:34:30 +0200
 Received: from ig by zenon.in.qult.net with local (Exim 4.95)
  (envelope-from <ignacy.gawedzki@green-communications.fr>)
- id 1obMLB-003ZY3-S5; Thu, 22 Sep 2022 15:34:09 +0200
-Date: Thu, 22 Sep 2022 15:34:09 +0200
+ id 1obMLW-003ZYZ-4A for buildroot@buildroot.org;
+ Thu, 22 Sep 2022 15:34:30 +0200
+Date: Thu, 22 Sep 2022 15:34:30 +0200
 From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20220922133409.i3bgl2t7hneye2tb@zenon.in.qult.net>
-References: <20220913093235.wdaiq5lsy3mbcc6u@zenon.in.qult.net>
- <20220917151755.6dfaeb1b@windsurf>
- <20220919091607.a3n36rn44ct3iwuq@zenon.in.qult.net>
- <20220919114617.67d80b53@windsurf>
+To: buildroot@buildroot.org
+Message-ID: <20220922133430.l6graemwo6jg2gf5@zenon.in.qult.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220919114617.67d80b53@windsurf>
-Subject: Re: [Buildroot] [PATCH v3] package/chartjs: bump to version 3.9.1
+Subject: [Buildroot] [PATCH v4] package/chartjs: bump to version 3.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,29 +66,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="iso-8859-2"
 Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Sep 19, 2022 at 11:46:17AM +0200, thus spake Thomas Petazzoni:
-> So for your next revision of the patch, you can switch back to using
-> the pre-generated JS files. Then if you are brave and want to give a
-> try at implementing the two points mentioned above, it would be amazing!
+https://github.com/chartjs/Chart.js/releases/tag/v3.9.1
 
-Then I'll switch back to pre-generated JS files for now.  For the
-moment, I'm too much in a hurry to be brave.
+License file has updated copyright years to 2014-2022.
 
-The v2-as-v4 is coming in the next post.
+Signed-off-by: Ignacy Gaw=EAdzki <ignacy.gawedzki@green-communications.fr>
+---
+ package/chartjs/chartjs.hash | 4 ++--
+ package/chartjs/chartjs.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Ignacy
+diff --git a/package/chartjs/chartjs.hash b/package/chartjs/chartjs.hash
+index f8614ec385..3f8da92715 100644
+--- a/package/chartjs/chartjs.hash
++++ b/package/chartjs/chartjs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  9ef3697e279a585c79730f35dba16ad4e24ddeed49a150adb341c31f191fb78e  =
+chartjs-2.9.4.tar.gz
+-sha256  7b43caae91f31b18dc81fae6e0f7aa1acbecaa6d84e3249905cbe15308307d67  =
+LICENSE.md
++sha256  111e0751796f087a51e94dfed910ccfb1278fd30e584a6e48514dba9ae7e72c6  =
+chart.js-3.9.1.tgz
++sha256  5a0877ad6d818529be4f33009d0942cdf7e2ed7656156f4aba7308459a546030  =
+package/LICENSE.md
+diff --git a/package/chartjs/chartjs.mk b/package/chartjs/chartjs.mk
+index 2748a94d36..585b4be285 100644
+--- a/package/chartjs/chartjs.mk
++++ b/package/chartjs/chartjs.mk
+@@ -4,8 +4,9 @@
+ #
+ ##########################################################################=
+######
+ =
 
+-CHARTJS_VERSION =3D 2.9.4
+-CHARTJS_SITE =3D $(call github,chartjs,Chart.js,v$(CHARTJS_VERSION))
++CHARTJS_VERSION =3D 3.9.1
++CHARTJS_SITE =3D https://registry.npmjs.org/chart.js/-
++CHARTJS_SOURCE =3D chart.js-$(CHARTJS_VERSION).tgz
+ CHARTJS_LICENSE =3D MIT
+ CHARTJS_LICENSE_FILES =3D LICENSE.md
+ CHARTJS_CPE_ID_VENDOR =3D chartjs
 -- =
 
-Ignacy Gaw=EAdzki
-R&D Engineer
-Green Communications
+2.34.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
