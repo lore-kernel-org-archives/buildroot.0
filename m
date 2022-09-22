@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41D08C54EE9
-	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 12:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99F47C54EE9
+	for <buildroot@archiver.kernel.org>; Thu, 22 Sep 2022 12:43:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8649610F3;
-	Thu, 22 Sep 2022 12:42:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8649610F3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45504610FB;
+	Thu, 22 Sep 2022 12:43:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45504610FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e_qtMPxUBdmZ; Thu, 22 Sep 2022 12:42:38 +0000 (UTC)
+	with ESMTP id Uj9sNM2f2wPz; Thu, 22 Sep 2022 12:43:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1123D61009;
-	Thu, 22 Sep 2022 12:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1123D61009
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7FD501BF2CE
- for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:42:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F329610FC;
+	Thu, 22 Sep 2022 12:43:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F329610FC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C9591BF2CE
+ for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B6C683DFC
- for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B6C683DFC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7589840C15
+ for <buildroot@lists.busybox.net>; Thu, 22 Sep 2022 12:43:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7589840C15
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id idbI3gwzG5Xc for <buildroot@lists.busybox.net>;
- Thu, 22 Sep 2022 12:42:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a6RXcw_2p_m7 for <buildroot@lists.busybox.net>;
+ Thu, 22 Sep 2022 12:43:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 826DE83DF9
- for <buildroot@buildroot.org>; Thu, 22 Sep 2022 12:42:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 826DE83DF9
+ by smtp2.osuosl.org (Postfix) with ESMTP id AEAAE40BCB
+ for <buildroot@buildroot.org>; Thu, 22 Sep 2022 12:43:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEAAE40BCB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 71C8D85E2A; Thu, 22 Sep 2022 12:42:34 +0000 (UTC)
+ id 9C89F85E2A; Thu, 22 Sep 2022 12:43:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 22 Sep 2022 14:32:44 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 48215e43944929aa1d4f3ffd2cdfe6a6ad6cd05a
-X-Git-Newrev: c7493cb042b1acc46f0c837f85f15e3425e481b0
+Date: Thu, 22 Sep 2022 14:32:37 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 149a643bcc2fbd6b331ee3ff7c3ef177a6920ac5
+X-Git-Newrev: d6c0d674d9802b7fa3dd4a8543559feb8df52625
 X-Patchwork-Hint: ignore
-Message-Id: <20220922124234.71C8D85E2A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
+Message-Id: <20220922124309.9C89F85E2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x]
  support/config-fragments/autobuild/bootlin-armv7m-uclibc.config: specify
  configuration more precisely
 X-BeenThere: buildroot@buildroot.org
@@ -64,8 +64,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7493cb042b1acc46f0c837f85f15e3425e481b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d6c0d674d9802b7fa3dd4a8543559feb8df52625
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 Due to a bug in the CodeSourcery ARM toolchain packaging, this
 toolchain currently appears as available even for noMMU
