@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21BD3ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 00:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DB30C54EE9
+	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 00:42:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75DC360BB5;
-	Fri, 23 Sep 2022 00:38:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75DC360BB5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DD9160BB5;
+	Fri, 23 Sep 2022 00:42:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DD9160BB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PFu0uNN2wRzf; Fri, 23 Sep 2022 00:38:48 +0000 (UTC)
+	with ESMTP id xgAouLca5g1l; Fri, 23 Sep 2022 00:42:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C1FB60AAE;
-	Fri, 23 Sep 2022 00:38:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C1FB60AAE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7C1AA1BF286
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 00:38:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA43660B9A;
+	Fri, 23 Sep 2022 00:42:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA43660B9A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 182B01BF286
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 00:42:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5112060AAE
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 00:38:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5112060AAE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01132403F7
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 00:42:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01132403F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AtGepKb0cdVR for <buildroot@lists.busybox.net>;
- Fri, 23 Sep 2022 00:38:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wIHSZtTtsnzk for <buildroot@lists.busybox.net>;
+ Fri, 23 Sep 2022 00:42:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5020060625
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com
- [IPv6:2607:f8b0:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5020060625
- for <buildroot@buildroot.org>; Fri, 23 Sep 2022 00:38:45 +0000 (UTC)
-Received: by mail-ot1-x331.google.com with SMTP id
- br15-20020a056830390f00b0061c9d73b8bdso7330848otb.6
- for <buildroot@buildroot.org>; Thu, 22 Sep 2022 17:38:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A29FF4019E
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com
+ [IPv6:2001:4860:4864:20::2e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A29FF4019E
+ for <buildroot@buildroot.org>; Fri, 23 Sep 2022 00:42:15 +0000 (UTC)
+Received: by mail-oa1-x2e.google.com with SMTP id
+ 586e51a60fabf-127d10b4f19so16263958fac.9
+ for <buildroot@buildroot.org>; Thu, 22 Sep 2022 17:42:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=g+y/mteg27DJzDvnPT0wsfegfisiqEqAj3YSRBHCeuk=;
- b=EpWxWaP9PmwqtJBlFT1VSwxJEkf7qVwme9fkCAdmCQum2efPEEg67zefjxtbquIipq
- 6ldPKKed8SkwfEOpokCps9DrSOxs5zWmOTVMEJw2o91rDUYlc4+IhIxNeSwikGpZyNiK
- lyVMtbupueZLhCA9+2vnm6bXEs756+0A07Vb9ZK3hFUouykbZuWLF7SZYs/wYRNC8wsC
- XbAFca/y+U061j6E09lm22Kh9wVkufnbuzKaT1885dx5vd6/q495P6avp1JUdjUWYtJ2
- ulKwKaB+bLtXJC+8XDqZrPpTXsv6F5Qo6uyzNE0P/Kv7lK6AxcqcCHRYmMoykxSeOzZy
- y4lA==
-X-Gm-Message-State: ACrzQf3LVc2mgo1OgiFlcqI88Zv+0+ozaRYJqsCPMj/AmX2zf5mbt1+F
- NrBUD3x8ICcfibVoPgG1nHBWSSkZdLJHAA==
-X-Google-Smtp-Source: AMsMyM67ARJOrLYuJEhnLa71AQqacI73BbUTSUpj95CaH8xGE0zcrj8kU5c/7wYyEOFagXIJDlWYTw==
-X-Received: by 2002:a05:6830:1cc8:b0:618:ebac:c43f with SMTP id
- p8-20020a0568301cc800b00618ebacc43fmr2919699otg.45.1663893524051; 
- Thu, 22 Sep 2022 17:38:44 -0700 (PDT)
+ bh=lgXZQ9l+aYOuOgPuFAQSDnCusHrNeBN41tB214Z39Qw=;
+ b=wdYQUt7HXqK6hIlDolNF1d5d0BcFT7LZhxbsd8JyIuhVX0DF10nYEAUEy3Oogr16AP
+ gh5M8DvZODYvJ6nLSNEle77/KKzF/p5ztmBUHthi5THvRnS+fE7jR1jhxH164XkY9Y6G
+ 2BWgMfzaiQRUIzFG/TV7xiA8+k/k/FLDWi6aOJYGY2Tcr/XUYNZEqYgbDFB1uPbQaefU
+ zEAK9R+9MLTuRLD93bjXF5tfwLWMiq76YPKh7btSHM1V+YGO3iQpehZIOg+QHaIBmUhR
+ Ir852VoI1XofJvW+3KEDq6zaXvCfUZyyuH1XuEqoT0jvwOxR6g/an8FexBcZvEpVzJ1d
+ sAZg==
+X-Gm-Message-State: ACrzQf19qoNUEvpLtRoAoHzehzOqbN7C8ARITfyAMhx6n6BKL+gQQGP7
+ 0k7sqrYX12oMWMj4SSwTCHrCTf6MIFK3EA==
+X-Google-Smtp-Source: AMsMyM66U3EuKeYexduA9Ks3BWtUV1CnlV8OkAoG+yEp+KZ29e892jdNSTDq2Ee7D7DkH4SZwd62OA==
+X-Received: by 2002:a05:6870:58a6:b0:127:86d4:6707 with SMTP id
+ be38-20020a05687058a600b0012786d46707mr3491691oab.88.1663893734291; 
+ Thu, 22 Sep 2022 17:42:14 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- r7-20020aca4407000000b003437e4f2510sm3077546oia.11.2022.09.22.17.38.43
+ o17-20020a4ad491000000b00435a59fba01sm2687258oos.47.2022.09.22.17.42.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Sep 2022 17:38:43 -0700 (PDT)
+ Thu, 22 Sep 2022 17:42:13 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 22 Sep 2022 18:38:41 -0600
-Message-Id: <20220923003841.2976079-1-james.hilliard1@gmail.com>
+Date: Thu, 22 Sep 2022 18:42:11 -0600
+Message-Id: <20220923004211.3190761-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date;
- bh=g+y/mteg27DJzDvnPT0wsfegfisiqEqAj3YSRBHCeuk=;
- b=P2ZFh9+co2+q6bb2rxgztBNPcbbPWnDVVxMXj/eE4VTCTVOOXiWmZe2SWcNAoBCUTl
- JNjxYlOnpcJJSvZoqG/2f/RYR2mQ4xmfRmW6LgrbT6HX6bJrp1e+DGut2oZ7XdB9OxWg
- mlqqTgAN6dLl80lREjFarjHkVohmb8tXXlKIxUzrAz9rZdP0kA8E1f4z1sZYg0i8aTOK
- /GXsi96PiP8txql0LKrCl4NNAqCR3zgUmrWSFQsy2lxM2vGYaWZ1vEZWVJX3EdTgSqDd
- RMHgJ/kHVxkQNtbV4xMyYYt4rNawS2F8ZIGY9Qv06XfUSG7hbNcUOPUzH62+nJqnufIG
- esGA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=lgXZQ9l+aYOuOgPuFAQSDnCusHrNeBN41tB214Z39Qw=;
+ b=ck6wrQNO9b9AprgV/iT1zKWM+G/oTSHZFjDmKB4UF7uau2TeQukMGI2iNgII1AQR9X
+ +bwwNRDKOqJh2uqHsiR191iH0PYi+SNcx+UfJSYOqQqX2bmcRNckm7ciUeZMiINEr/8t
+ FmE7SFvedRBSnW+NcHpaL3Fb+TjdfpzAFm6A6Blr27d6ihQTMm1yL8faSKSSZPLw2U2N
+ pJJchRRQ+r3oDrbf5ppUK2NhX1lMyowftSDcHKPHq9QyIXJNYbAKnc8YHg9TedzlUByv
+ OIhKMMKtm3Nja3hDPpDDAYXU295qWiKkhpyrGj5qa+rLle7PBKOen6k70f8ihDiuSqcI
+ 9EzQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=P2ZFh9+c
-Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to version
- 22.7.1
+ header.a=rsa-sha256 header.s=20210112 header.b=ck6wrQNO
+Subject: [Buildroot] [PATCH 1/1] package/python-certifi: bump to version
+ 2022.9.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,8 +94,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mauro Condarelli <mc5686@mclink.it>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-autobahn/python-autobahn.hash | 4 ++--
- package/python-autobahn/python-autobahn.mk   | 4 ++--
+ package/python-certifi/python-certifi.hash | 4 ++--
+ package/python-certifi/python-certifi.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index 149cb6bb50..4ae158be03 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index e93a228d7e..ac3d0a909b 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5  9087a228146cd58c6fe734540ba1aa79  autobahn-22.6.1.tar.gz
--sha256  fb63e946d5c2dd0df680851e84e65624a494ce87c999f2a4944e4f2d81bf4498  autobahn-22.6.1.tar.gz
-+md5  2921fb2bdea60b4cb36ccec367625995  autobahn-22.7.1.tar.gz
-+sha256  8b462ea2e6aad6b4dc0ed45fb800b6cbfeb0325e7fe6983907f122f2be4a1fe9  autobahn-22.7.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/certifi/json
+-md5  10b6970c3e64d037137f4bd052ef417c  certifi-2022.6.15.1.tar.gz
+-sha256  cffdcd380919da6137f76633531a5817e3a9f268575c128249fb637e4f9e73fb  certifi-2022.6.15.1.tar.gz
++md5  f919a230b999ebae1969088ca68e8367  certifi-2022.9.14.tar.gz
++sha256  36973885b9542e6bd01dea287b2b4b3b21236307c56324fcc3f1160f2d655ed5  certifi-2022.9.14.tar.gz
  # Locally computed sha256 checksums
- sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 6bf71f7a00..fb3a7b84de 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
+ sha256  a02f6c638f9fb84d06f7764c3ab085d8af7eda5b93c166da54312479077c6fb0  LICENSE
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index c03cd6e1e4..2053d5e820 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 22.6.1
-+PYTHON_AUTOBAHN_VERSION = 22.7.1
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/62/af/1ec79d8f1ac2f92554428688986522abb919baa36c64d04174b5588b22c1
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/c5/b5/c92d6640fd55cbbdd97c05800ab534d84197f7b485d89a9df981ab67cce3
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_CPE_ID_VENDOR = crossbar
+-PYTHON_CERTIFI_VERSION = 2022.6.15.1
++PYTHON_CERTIFI_VERSION = 2022.9.14
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/90/c2/4e37394b66e7211ad120f216fc2e8b38d4f43b89c8100dd3917c9da9bfc6
++PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/ca/48/88ec470f8b68319b6782ca3a0570789886ad5ca24c1af2f3771699135baa
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
