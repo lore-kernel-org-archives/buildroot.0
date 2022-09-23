@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63F5AC54EE9
-	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 01:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA7F9C54EE9
+	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 01:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB67060BF0;
-	Fri, 23 Sep 2022 01:20:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB67060BF0
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z8T3LqjzY44H; Fri, 23 Sep 2022 01:20:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DFD860BD6;
-	Fri, 23 Sep 2022 01:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DFD860BD6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 21FE81BF37E
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 01:19:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EDC7982CB7
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 01:19:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDC7982CB7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6941B832C7;
+	Fri, 23 Sep 2022 01:24:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6941B832C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pJH8V-CYJo6e for <buildroot@lists.busybox.net>;
- Fri, 23 Sep 2022 01:19:56 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aOinGfkLgpTs; Fri, 23 Sep 2022 01:24:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B36D82D96;
+	Fri, 23 Sep 2022 01:24:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B36D82D96
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4897A1BF37E
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 01:24:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22940416AF
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 01:24:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22940416AF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EKJvQ9myo5VT for <buildroot@lists.busybox.net>;
+ Fri, 23 Sep 2022 01:24:34 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 099B382C7C
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
- [IPv6:2607:f8b0:4864:20::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 099B382C7C
- for <buildroot@buildroot.org>; Fri, 23 Sep 2022 01:19:55 +0000 (UTC)
-Received: by mail-oi1-x230.google.com with SMTP id j188so14703896oih.0
- for <buildroot@buildroot.org>; Thu, 22 Sep 2022 18:19:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1AB4416A5
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com
+ [IPv6:2607:f8b0:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1AB4416A5
+ for <buildroot@buildroot.org>; Fri, 23 Sep 2022 01:24:33 +0000 (UTC)
+Received: by mail-ot1-x331.google.com with SMTP id
+ f20-20020a9d7b54000000b006574e21f1b6so7390151oto.5
+ for <buildroot@buildroot.org>; Thu, 22 Sep 2022 18:24:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=aZ9lrUtg8Ap7pYF9IMtM5kESfbzCzohEBIDmReJh008=;
- b=RoiUuV05WKneyr+IaZ4UpQtsmO08ImhezR4IWmKNrX1GELpTFMjY4LxfBXdQxEb4Zo
- yn6TFn+BrjhZmYJKaD5FgYSefEFEbD2Q+SuharKPWXYU1B2bNdF4LlUubMXUpl51sI5n
- PxmQ/rJ6sK9EHlH9TpA+0yjjbKq7RdAK+Re13xygE/9aQlrs7/+dbyhq2CKpcmRh3s5A
- wCxMzH/JuwDtI1Muc5IavxSrUW5aRPA2FvznRA/8IMg609M7MY3szj0HISmpbELsBMpC
- 0SFqA0ZhfkvATCV25N+WmTeCdAkjJc8d975uXzEWPhubIqsMlCQXK9y3VnKXcSwsOqMz
- +iaQ==
-X-Gm-Message-State: ACrzQf3N13ymaN6c0oAcXD1ar0qhii88W1R5L2BhHhvzNAnetTyMLDKy
- y78XjWkJiF3Z7RaRBy+7LYLKK0tpNkakpg==
-X-Google-Smtp-Source: AMsMyM6ZaF/nZhOj5oZQziK3a1bK5fDBvTLMfVdaQZYq44MVcF1UxfdAaEyCK3soV89dUDA4lzyKGA==
-X-Received: by 2002:aca:1912:0:b0:350:504b:ee13 with SMTP id
- l18-20020aca1912000000b00350504bee13mr7719154oii.256.1663895994785; 
- Thu, 22 Sep 2022 18:19:54 -0700 (PDT)
+ bh=HSg3tkWYIwp1wDHqFevlH3HDsDDm4qv69wFq06RTenw=;
+ b=stt8OK/+d1hDd1tsOvxpDiOtR/z1dN16ITeqySvs9AMYysA4s1gCbLXGGbBsELIMRV
+ vEDpy5u+LwW/5ftQb00nOfXunJAypRf6YxwsvlFii0Q20KrCoGjQOAzh8Ct6IEDfmTiC
+ qCowpffbM/XTn4LA7XEsQwb9g5jN5o9QTVKBhJe+gjXMZw4RqHO/owEL4q/TdORtXVCU
+ 5geyfgQBlDsGraohxmopnnW3IcMRSh6OKGJgJhFeu5Vhvm1A7XmN6NshooxPUjjAG7Wk
+ tPLb6XCdtvCWUBTjHRkQJhYaOexJYpCqJTJ8R+mw7WySQUgS0JplnO7SrR2Wc+NaEiR0
+ GaPw==
+X-Gm-Message-State: ACrzQf0Cgm6rHinzqcmz6KhMG9Xe6HLjBdI0R9adjCG/2flVdx8Imc2X
+ z4U2bJjc3Y8U8TG4D1LmTflOGGwSgnhKrw==
+X-Google-Smtp-Source: AMsMyM7kpHw+LCDOMamglpxPmW3BS8ZtCWqmD+Wb/3g1xPX/YPmK4dCk6Zow0YLDQ5coBsSRgxdYkg==
+X-Received: by 2002:a05:6830:1bd3:b0:655:cd7e:f2ae with SMTP id
+ v19-20020a0568301bd300b00655cd7ef2aemr2995743ota.324.1663896272449; 
+ Thu, 22 Sep 2022 18:24:32 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- i8-20020a056808030800b00350f17527fesm2174791oie.28.2022.09.22.18.19.53
+ q3-20020a0568080ec300b00342fc99c5cbsm3140491oiv.54.2022.09.22.18.24.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Sep 2022 18:19:53 -0700 (PDT)
+ Thu, 22 Sep 2022 18:24:31 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 22 Sep 2022 19:19:51 -0600
-Message-Id: <20220923011951.2220067-1-james.hilliard1@gmail.com>
+Date: Thu, 22 Sep 2022 19:24:29 -0600
+Message-Id: <20220923012429.2772854-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date;
- bh=aZ9lrUtg8Ap7pYF9IMtM5kESfbzCzohEBIDmReJh008=;
- b=iVtnnbXcgL1brpMJ66hJRcacAW18h67RvgTPIYQtpFrHH0bD2fYUXLNxbM9sJwhA2v
- 9arOB1nK3PXkJb4yTRtP3NohKEFOaEkqNIXAQG+sKPBFJ7xiQiPwxqQzJyJFzCXTA4eq
- ZZ+mwjfB2wFz1G5jmLvEjk8SRlpHlcigfQtwYAW2SGrJRb/zbchXp/cz7zjMU2hBi2v6
- pqYMPbfxjQpyxk4QeJqCTg3a6/v5iGXQPuccYwNDn4Tc8LefwYW8ogr1Gx1+tN2DTr5g
- B3naXNetHfsefdkgdfJdg2+qIu3T5Uk05QPSUVExI8bMe5z+/cwrKc5m7C11IXgDtd3d
- oEaw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=HSg3tkWYIwp1wDHqFevlH3HDsDDm4qv69wFq06RTenw=;
+ b=OFSTV73Lxd9/kmVFDxvgU3PDhzvoJcKw9vbdFZIgOdYwUPB5pANl6KdIlAnENY1WMH
+ w0SVvc+niZ4xPccH4qJafWdFYB+JZyJqSWn+tmA/QcIx3Ol5XmDEfvYdEwH3afbn0zPW
+ xvZ02qTna71OM39fg1lhvqUoM9/V1dVlzA/CbUtfzqiU/fngcR9ZgBPu5/fgLo2faVmM
+ kG7rZutODTs5CWKFYrfPIu8myGVU+5MxGAk3IANV9wJuQ0dXOE9u4VrRjaksuO7tm83A
+ RVBNT+hBk/8Dp+bEWOmZn3HhvbxMypDVPLh/B7GXp9fVAw/MQcd3Iiir4+eUeota8+CR
+ UK6Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=iVtnnbXc
-Subject: [Buildroot] [PATCH 1/1] package/python-fonttools: bump to version
- 4.37.3
+ header.a=rsa-sha256 header.s=20210112 header.b=OFSTV73L
+Subject: [Buildroot] [PATCH 1/1] package/python-idna: bump to version 3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,38 +101,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-fonttools/python-fonttools.hash | 4 ++--
- package/python-fonttools/python-fonttools.mk   | 4 ++--
+ package/python-idna/python-idna.hash | 4 ++--
+ package/python-idna/python-idna.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
-index 4f6536dbfb..58603f79a4 100644
---- a/package/python-fonttools/python-fonttools.hash
-+++ b/package/python-fonttools/python-fonttools.hash
+diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
+index 27c42c8b59..3a758a6eac 100644
+--- a/package/python-idna/python-idna.hash
++++ b/package/python-idna/python-idna.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fonttools/json
--md5  5eb0df388216de4bfd058153d16c75bf  fonttools-4.36.0.zip
--sha256  e637d2fe06bddabbfc488e02ef32d04d561e3c71e9ba11abc7782ea753ceb218  fonttools-4.36.0.zip
-+md5  6cad81799e0491751cda0a98642b00eb  fonttools-4.37.3.zip
-+sha256  f32ef6ec966cf0e7d2aa88601fed2e3a8f2851c26b5db2c80ccc8f82bee4eedc  fonttools-4.37.3.zip
+ # md5, sha256 from https://pypi.org/pypi/idna/json
+-md5  5856306eac5f25db8249e37a4c6ee3e7  idna-3.3.tar.gz
+-sha256  9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d  idna-3.3.tar.gz
++md5  13ea24e076212b6baae1135a116d1e0e  idna-3.4.tar.gz
++sha256  814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4  idna-3.4.tar.gz
  # Locally computed sha256 checksums
- sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
-diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
-index 6281359e86..aad1765899 100644
---- a/package/python-fonttools/python-fonttools.mk
-+++ b/package/python-fonttools/python-fonttools.mk
+ sha256  a2d6e4d940bd24dbe7b9645cde19a9792cc51db7ae0d5acd301ac860caa3e836  LICENSE.md
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index 6f416156d0..4d9994a9c7 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FONTTOOLS_VERSION = 4.36.0
-+PYTHON_FONTTOOLS_VERSION = 4.37.3
- PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).zip
--PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/df/4b/ca51dbaf267decfcc7ca9300cdc703206c1c05f3e2beb5140a71817c2d7e
-+PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/c1/0d/d41b9c2295e1896f4c89e6b213790eee8e8e641b3e9709518f2bddcdeffa
- PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
- PYTHON_FONTTOOLS_LICENSE = MIT
- PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
+-PYTHON_IDNA_VERSION = 3.3
++PYTHON_IDNA_VERSION = 3.4
+ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+-PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/62/08/e3fc7c8161090f742f504f40b1bccbfc544d4a4e09eb774bf40aafce5436
++PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/8b/e1/43beb3d38dba6cb420cefa297822eac205a277ab43e5ba5d5c46faf96438
+ PYTHON_IDNA_LICENSE = BSD-3-Clause
+ PYTHON_IDNA_LICENSE_FILES = LICENSE.md
+ PYTHON_IDNA_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
