@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 070D1C07E9D
-	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 21:39:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86617C04A95
+	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 21:39:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8BD741087;
-	Fri, 23 Sep 2022 21:39:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8BD741087
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30B1D8426D;
+	Fri, 23 Sep 2022 21:39:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30B1D8426D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8f01NOflzLUP; Fri, 23 Sep 2022 21:39:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EY1mKvT6Lic0; Fri, 23 Sep 2022 21:39:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D2944105A;
-	Fri, 23 Sep 2022 21:39:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D2944105A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EB2951BF337
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:37:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4976984261;
+	Fri, 23 Sep 2022 21:39:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4976984261
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A20C21BF337
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:39:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C768541056
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:37:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C768541056
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8AF0F84261
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:39:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AF0F84261
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aKYJvm02-EYo for <buildroot@lists.busybox.net>;
- Fri, 23 Sep 2022 21:37:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PT5YLxs49Ue3 for <buildroot@lists.busybox.net>;
+ Fri, 23 Sep 2022 21:39:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A31CB40220
- for <buildroot@buildroot.org>; Fri, 23 Sep 2022 21:37:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A31CB40220
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE857814B3
+ for <buildroot@buildroot.org>; Fri, 23 Sep 2022 21:39:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE857814B3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 90E4885F20; Fri, 23 Sep 2022 21:37:53 +0000 (UTC)
+ id 9E43485F27; Fri, 23 Sep 2022 21:39:32 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Sep 2022 23:36:19 +0200
+Date: Fri, 23 Sep 2022 23:39:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6e6ccf065de3e78e61a7e49ced9c61de3611077e
-X-Git-Newrev: 5560bc6c161b7e15d37b1beaa57014bb2a987e53
+X-Git-Oldrev: 5560bc6c161b7e15d37b1beaa57014bb2a987e53
+X-Git-Newrev: 003ed345b1c4f1c11feecca68bca37bf871001af
 X-Patchwork-Hint: ignore
-Message-Id: <20220923213753.90E4885F20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/unbound: bump version to 1.16.3
+Message-Id: <20220923213932.9E43485F27@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8812au-aircrack-ng: fix build
+ failure due to double defined endianness
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5560bc6c161b7e15d37b1beaa57014bb2a987e53
+commit: https://git.buildroot.net/buildroot/commit/?id=003ed345b1c4f1c11feecca68bca37bf871001af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Kyle Harding <kyle@balena.io>
+By default package rtl8812au-aircrack-ng uses CONFIG_PLATFORM_I386_PC that
+define -DCONFIG_LITTLE_ENDIAN and this can't be overridden since the
+USER_EXTRA_CFLAGS are assigned to EXTRA_CFLAGS in the beginning of Makefile
+while -DCONFIG_LITTLE_ENDIAN is assigned later.
+Instead of using the default CONFIG_PLATFORM_I386_PC let's set it to 'n'
+and let's use the same defines it uses:
+-DCONFIG_IOCTL_CFG80211
+-DRTW_USE_CFG80211_STA_EVENT
+This way -DCONFIG_BIG_ENDIAN can be define without the conflict of being
+defined with with the default -DCONFIG_LITTLE_ENDIAN.
+Let's also add Linux config FIXUPS to build the module correctly.
+
+Fixes:
+http://autobuild.buildroot.net/results/2e4ee705d0e2b728f102aac4e6729f11ef22be36/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/unbound/unbound.hash | 4 ++--
- package/unbound/unbound.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index 8bfe48df9f..cef8edc4a2 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
-@@ -1,5 +1,5 @@
--# From https://nlnetlabs.nl/downloads/unbound/unbound-1.16.2.tar.gz.sha256
--sha256  2e32f283820c24c51ca1dd8afecfdb747c7385a137abe865c99db4b257403581  unbound-1.16.2.tar.gz
-+# From https://nlnetlabs.nl/downloads/unbound/unbound-1.16.3.tar.gz.sha256
-+sha256  ea0c6665e2c3325b769eac1dfccd60fe1828d5fcf662650039eccb3f67edb28e  unbound-1.16.3.tar.gz
+diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+index 60d81469c2..45a6ce5729 100644
+--- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
++++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+@@ -11,14 +11,25 @@ RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
  
- # Locally calculated
- sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index a3c3ddc8e3..73a460d103 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS = \
+ 	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
++	-DCONFIG_IOCTL_CFG80211 \
++	-DRTW_USE_CFG80211_STA_EVENT \
+ 	-Wno-error=address \
+ 	-Wno-error=array-bounds \
+ 	-Wno-error=cast-function-type
  
--UNBOUND_VERSION = 1.16.2
-+UNBOUND_VERSION = 1.16.3
- UNBOUND_SITE = https://www.unbound.net/downloads
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
- UNBOUND_LICENSE = BSD-3-Clause
+ RTL8812AU_AIRCRACK_NG_MODULE_MAKE_OPTS = \
++	CONFIG_PLATFORM_I386_PC=n \
+ 	CONFIG_88XXAU=m \
+ 	KVER=$(LINUX_VERSION_PROBED) \
+ 	USER_EXTRA_CFLAGS="$(RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS)"
+ 
++define RTL8812AU_AIRCRACK_NG_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
++endef
++
+ $(eval $(kernel-module))
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
