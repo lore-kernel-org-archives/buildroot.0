@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E35A7C04A95
-	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 21:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9B15C07E9D
+	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 21:34:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8481D83E7B;
-	Fri, 23 Sep 2022 21:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8481D83E7B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47C4441A2A;
+	Fri, 23 Sep 2022 21:34:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47C4441A2A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TCpLp5CysyXJ; Fri, 23 Sep 2022 21:34:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KC47QhDryTiQ; Fri, 23 Sep 2022 21:34:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6CFF826B0;
-	Fri, 23 Sep 2022 21:34:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6CFF826B0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B6D9D1BF337
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:34:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 229FB41877;
+	Fri, 23 Sep 2022 21:34:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 229FB41877
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF6CD1BF337
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:34:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 90A6E826B0
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:34:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90A6E826B0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 963D841877
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:34:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 963D841877
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aqRrqLluGe_X for <buildroot@lists.busybox.net>;
- Fri, 23 Sep 2022 21:34:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5249482591
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5249482591
- for <buildroot@busybox.net>; Fri, 23 Sep 2022 21:34:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3F07X3VJy63J for <buildroot@lists.busybox.net>;
+ Fri, 23 Sep 2022 21:34:14 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EAEC4098D
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6EAEC4098D
+ for <buildroot@buildroot.org>; Fri, 23 Sep 2022 21:34:14 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 14C17240002;
- Fri, 23 Sep 2022 21:33:58 +0000 (UTC)
-Date: Fri, 23 Sep 2022 23:33:58 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id A5FC0240002;
+ Fri, 23 Sep 2022 21:34:12 +0000 (UTC)
+Date: Fri, 23 Sep 2022 23:34:11 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Michael Fischer <mf@go-sys.de>
-Message-ID: <20220923233358.43016358@windsurf>
-In-Reply-To: <20220923123223.6582-1-mf@go-sys.de>
-References: <20220923123223.6582-1-mf@go-sys.de>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20220923233411.77ada387@windsurf>
+In-Reply-To: <20220923185057.1627414-1-giulio.benetti@benettiengineering.com>
+References: <20220923185057.1627414-1-giulio.benetti@benettiengineering.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1663968839;
+ d=bootlin.com; s=gm1; t=1663968852;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=q1SZ+tkd5Nznay6FrCj8NlufA3UwrYeXSfhg/CxX0cc=;
- b=GxCLjMY3ln5TIyBH78egUdxaNBsbnrIOdidc4to7RkAejgn176FT3h0gVvjmqyGbLfXC10
- 1ni7iKUqNsxrRDkfKPzsOR1Aox93BGILGJF5qpQyeS8qzHlKWR2fbqLNLNtin+yZirIP7x
- i9qZ51bszi2ki/fwwmmMWawn8BYfJUghB1z2y0NPLI5kGBN51d+DNt/XzqdXfHRwKgfODL
- 4GMfjP+WtrcZ4j4FAQLggv5CpHskBolir19Vno8x7foQGyik5uPRUrhq/n9dAPVlqLNfXe
- BF7ol9Lm0vT7r9zWtLXltssIppQ47fhI9uE1MB9ZqgkQpPy9ChhwPsydbr1cog==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=lmPsa4h9ltxgyeVXohW8abxPmbej7ypKC1TCj0lwx/4=;
+ b=IuGfEnK1gSXM257yw0hShTqgExs/jPjeLYz1o28jp4Z6Bnv6jVguWB0FwMn2tcRLMs8l0h
+ Hr2LOabm3no9QX4XkzvWGKEFAbeKlYEihQrUzUJLU4Hb5T9PggQ3BUXbtVU9WWIw/bfRXL
+ SpmxU3xNROa5QFTt3Ud+ylwl6yVJ9j65WolQ9cuFWbKKZUXS9Oz0pNd+MGK5jODcEsqaxI
+ NizIWv/XZxoXxS2tA9Qdoc9pG1TE2WV7ED3tmLkfQQ9F+kTis8p2CL4/cyEh1UWMJTSkqm
+ r4aigPn/Z0avnMu6FUsT04Y0qC6QwZKLRSIHt4LIEDduiiYcZTFegYDrDIe52w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GxCLjMY3
-Subject: Re: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
- 1.18.12
+ header.s=gm1 header.b=IuGfEnK1
+Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add Giulio Benetti to package
+ qt5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,23 +77,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 23 Sep 2022 14:32:23 +0200
-Michael Fischer <mf@go-sys.de> wrote:
+On Fri, 23 Sep 2022 20:50:57 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> This release fixes a few very critical issues that happpen when using a glib2 newer or equal
-> than 2.73.2 (after the pcre1->pcre2 update)
-> 
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
->  package/modem-manager/modem-manager.hash | 4 ++--
->  package/modem-manager/modem-manager.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
