@@ -1,51 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBC85C6FA82
-	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 12:20:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84C5DECAAD8
+	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 12:20:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 825DE41849;
-	Fri, 23 Sep 2022 12:20:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 825DE41849
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2048E40A99;
+	Fri, 23 Sep 2022 12:20:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2048E40A99
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PcjRXsy14kAU; Fri, 23 Sep 2022 12:20:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 44F9540A8F;
+	Fri, 23 Sep 2022 12:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44F9540A8F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 717F81BF349
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 12:19:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 42513417DE
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 12:19:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42513417DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0NY2UW94zamY; Fri, 23 Sep 2022 12:20:00 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F91441838;
-	Fri, 23 Sep 2022 12:19:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F91441838
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0FCCF1BF349
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 12:17:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 16A4483F2B
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 12:17:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16A4483F2B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 86RW2MM_081R for <buildroot@lists.busybox.net>;
- Fri, 23 Sep 2022 12:17:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D3F4083F29
- for <buildroot@buildroot.org>; Fri, 23 Sep 2022 12:17:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3F4083F29
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C161D85ED6; Fri, 23 Sep 2022 12:17:34 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ql9Mn29_bbOP for <buildroot@lists.busybox.net>;
+ Fri, 23 Sep 2022 12:19:29 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D690E41712
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D690E41712
+ for <buildroot@buildroot.org>; Fri, 23 Sep 2022 12:19:28 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 056EB1BF20A;
+ Fri, 23 Sep 2022 12:19:25 +0000 (UTC)
+Date: Fri, 23 Sep 2022 14:19:25 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Fri, 23 Sep 2022 14:16:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50719080664765e659e6d3722a768778d9330642
-X-Git-Newrev: 757942d345af8321115cdc6f9be05e0243eca45e
-X-Patchwork-Hint: ignore
-Message-Id: <20220923121734.C161D85ED6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-certifi: bump to version
- 2022.9.14
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20220923141925.58ce3654@windsurf>
+In-Reply-To: <20220922200041.4982-1-james.hilliard1@gmail.com>
+References: <20220922200041.4982-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1663935566;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=F/HcfLAjt1A+bvpoEa1HVZ+4pJoaKqewXDN1FDsO5gY=;
+ b=pktuHJpK3JsCp+R6ifGkGdEq/MNrYqWqX6+WbMG0yXzK3Mu6Ww6ycHX2yG5PfNmjVGkR8E
+ r9/FDGV5TxgSgo4UV1pXH3uyuct05+tk0gjtyD6HYMQWGioaPY/bBs6pJ/d8R6oGtAKtgk
+ fBz+1wyPp3ByZlb1gOW7foVw6EK4AKQySBb7xD2Amin0c6HK8GXhFFX+T6K5LkAzb3XzRd
+ x6fNxjbVG5pqLzKt3DRLxW+Iz6q29dnsgOEsnY7jEIGIdwyuPno640dVg4mYYCqLDvkZDm
+ /x/I9dMPR24/LoxJY7TSkPl6SZvJTAJEy61lPXwwLWvyH2++wTrVqDxgWynlog==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=pktuHJpK
+Subject: Re: [Buildroot] [PATCH 1/1] package/wayland-utils: fix build
+ without libdrm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +77,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=757942d345af8321115cdc6f9be05e0243eca45e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 22 Sep 2022 14:00:41 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-certifi/python-certifi.hash | 4 ++--
- package/python-certifi/python-certifi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Add upstream patch fixing build without libdrm.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/a13/a13e5bc4893a2057097aad268152212858c8e966
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  ...ayland-info-Fix-build-without-libdrm.patch | 46 +++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 package/wayland-utils/0001-wayland-info-Fix-build-without-libdrm.patch
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index e93a228d7e..ac3d0a909b 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5  10b6970c3e64d037137f4bd052ef417c  certifi-2022.6.15.1.tar.gz
--sha256  cffdcd380919da6137f76633531a5817e3a9f268575c128249fb637e4f9e73fb  certifi-2022.6.15.1.tar.gz
-+md5  f919a230b999ebae1969088ca68e8367  certifi-2022.9.14.tar.gz
-+sha256  36973885b9542e6bd01dea287b2b4b3b21236307c56324fcc3f1160f2d655ed5  certifi-2022.9.14.tar.gz
- # Locally computed sha256 checksums
- sha256  a02f6c638f9fb84d06f7764c3ab085d8af7eda5b93c166da54312479077c6fb0  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index c03cd6e1e4..2053d5e820 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CERTIFI_VERSION = 2022.6.15.1
-+PYTHON_CERTIFI_VERSION = 2022.9.14
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/90/c2/4e37394b66e7211ad120f216fc2e8b38d4f43b89c8100dd3917c9da9bfc6
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/ca/48/88ec470f8b68319b6782ca3a0570789886ad5ca24c1af2f3771699135baa
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
