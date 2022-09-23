@@ -1,50 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BC6BC07E9D
-	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 21:38:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF232C04A95
+	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 21:38:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3336410BD;
-	Fri, 23 Sep 2022 21:38:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3336410BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8782E80C42;
+	Fri, 23 Sep 2022 21:38:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8782E80C42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZFjskZKwRK9W; Fri, 23 Sep 2022 21:38:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hd75TZB-g-m4; Fri, 23 Sep 2022 21:38:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DF07402BB;
-	Fri, 23 Sep 2022 21:38:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DF07402BB
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA31C82591;
+	Fri, 23 Sep 2022 21:38:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA31C82591
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DEA551BF337
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:36:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 516761BF337
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B46F460E7B
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:36:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B46F460E7B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2D1E160E7B
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 21:36:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D1E160E7B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7UCUnvL_B-AN for <buildroot@lists.busybox.net>;
- Fri, 23 Sep 2022 21:36:17 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63E4160E7E
- for <buildroot@buildroot.org>; Fri, 23 Sep 2022 21:36:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63E4160E7E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4E1DF85F1A; Fri, 23 Sep 2022 21:36:17 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Fri, 23 Sep 2022 23:34:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7547f7e393ec031bea4e114bf9fa9596c9a65ec7
-X-Git-Newrev: f7772a54dbe49f1ee052d7a071113861a410e172
-X-Patchwork-Hint: ignore
-Message-Id: <20220923213617.4E1DF85F1A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/expat: bump to version 2.4.9
+ with ESMTP id 3MPmtubhc23i for <buildroot@lists.busybox.net>;
+ Fri, 23 Sep 2022 21:36:27 +0000 (UTC)
+X-Greylist: delayed 00:40:43 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 355A4608D8
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 355A4608D8
+ for <buildroot@buildroot.org>; Fri, 23 Sep 2022 21:36:27 +0000 (UTC)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+ by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28NKth4l110965;
+ Fri, 23 Sep 2022 15:55:43 -0500
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+ by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28NKtheV015661
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Fri, 23 Sep 2022 15:55:43 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 23
+ Sep 2022 15:55:43 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 23 Sep 2022 15:55:43 -0500
+Received: from uda0393673 (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+ by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28NKthRJ055927;
+ Fri, 23 Sep 2022 15:55:43 -0500
+Received: from a0393673 by uda0393673 with local (Exim 4.95)
+ (envelope-from <gadiyar@ti.com>) id 1obpi3-006N72-2o;
+ Fri, 23 Sep 2022 15:55:43 -0500
+From: Anand Gadiyar <gadiyar@ti.com>
+To: <buildroot@buildroot.org>
+Date: Fri, 23 Sep 2022 15:55:40 -0500
+Message-ID: <20220923205543.1518798-1-gadiyar@ti.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=ti.com; s=ti-com-17Q1; t=1663966543;
+ bh=P8+VBkTkNZPip1qbjB9FgbEXL7OA4bzio5p3oiH2uBI=;
+ h=From:To:CC:Subject:Date;
+ b=ZyNH6lGIFE4f0sgbkuz2Tq6zNd3SstJ1ueQwwPeiW4pGlPZVxYAWCgYGdgwEoaFla
+ 5RlN7yl1taBkRucaSONiVGFbY2NGq0d6q31EGWH+VXHikRU+jzp4KnGBF6pgJekswO
+ xgbxwWQjrdzGIuyLNe70D6YISKsTSxf8NQfQoJQQ=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=ZyNH6lGI
+Subject: [Buildroot] [PATCH v5 0/3] add support for TI's AM64x boards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,129 +85,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Xuanhao Shi <X15000177@gmail.com>, Anand Gadiyar <gadiyar@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7772a54dbe49f1ee052d7a071113861a410e172
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This series introduces support for TI's AM64x SK boards.
 
-- Drop patch (akready in version)
-- Update hash of COPYING (year updated with
-  https://github.com/libexpat/libexpat/commit/39b2e99355039626438d48a4eca6aacba2b44d5e)
+It was previously sent out by Xuanhao in August and reviewed by
+Giulio Benetti (Thanks!).
 
-https://blog.hartwork.org/posts/expat-2-4-9-released
-https://github.com/libexpat/libexpat/blob/R_2_4_9/expat/Changes
+If this looks okay, I'll mark the previous series as superceded
+in patchwork. Let me know if there's anything more to be done to
+get these patches merged, as this is the first time we're engaging
+with the buildroot community and may not be familiar with the
+process.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...mes-are-safe-exiting-internalEntityParser.patch | 53 ----------------------
- package/expat/expat.hash                           | 10 ++--
- package/expat/expat.mk                             |  5 +-
- 3 files changed, 6 insertions(+), 62 deletions(-)
+We would like to add support for the AM62x SK as well, but are
+currently blocked by availability of some firmware. Hopefully that
+will get sorted out soon.
 
-diff --git a/package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch b/package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
-deleted file mode 100644
-index ca86e85115..0000000000
---- a/package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 4a32da87e931ba54393d465bb77c40b5c33d343b Mon Sep 17 00:00:00 2001
--From: Rhodri James <rhodri@wildebeest.org.uk>
--Date: Wed, 17 Aug 2022 18:26:18 +0100
--Subject: [PATCH] Ensure raw tagnames are safe exiting internalEntityParser
--
--It is possible to concoct a situation in which parsing is
--suspended while substituting in an internal entity, so that
--XML_ResumeParser directly uses internalEntityProcessor as
--its processor.  If the subsequent parse includes some unclosed
--tags, this will return without calling storeRawNames to ensure
--that the raw versions of the tag names are stored in memory other
--than the parse buffer itself.  If the parse buffer is then changed
--or reallocated (for example if processing a file line by line),
--badness will ensue.
--
--This patch ensures storeRawNames is always called when needed
--after calling doContent.  The earlier call do doContent does
--not need the same protection; it only deals with entity
--substitution, which cannot leave unbalanced tags, and in any
--case the raw names will be pointing into the stored entity
--value not the parse buffer.
--
--[Retrieved from:
--https://github.com/libexpat/libexpat/commit/4a32da87e931ba54393d465bb77c40b5c33d343b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- expat/lib/xmlparse.c | 13 +++++++++----
-- 1 file changed, 9 insertions(+), 4 deletions(-)
--
--diff --git a/lib/xmlparse.c b/lib/xmlparse.c
--index 7bcabf7f4..d73f419cf 100644
----- a/lib/xmlparse.c
--+++ b/lib/xmlparse.c
--@@ -5826,10 +5826,15 @@ internalEntityProcessor(XML_Parser parser, const char *s, const char *end,
--   {
--     parser->m_processor = contentProcessor;
--     /* see externalEntityContentProcessor vs contentProcessor */
---    return doContent(parser, parser->m_parentParser ? 1 : 0, parser->m_encoding,
---                     s, end, nextPtr,
---                     (XML_Bool)! parser->m_parsingStatus.finalBuffer,
---                     XML_ACCOUNT_DIRECT);
--+    result = doContent(parser, parser->m_parentParser ? 1 : 0,
--+                       parser->m_encoding, s, end, nextPtr,
--+                       (XML_Bool)! parser->m_parsingStatus.finalBuffer,
--+                       XML_ACCOUNT_DIRECT);
--+    if (result == XML_ERROR_NONE) {
--+      if (! storeRawNames(parser))
--+        return XML_ERROR_NO_MEMORY;
--+    }
--+    return result;
--   }
-- }
-- 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index b8e7aa27f1..15e64a4dc8 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.4.8/
--md5  0584a7318a4c007f7ec94778799d72fe  expat-2.4.8.tar.xz
--sha1  e30345a20d0cc29a0c307eb3703e7a9bb62afa90  expat-2.4.8.tar.xz
-+# From https://sourceforge.net/projects/expat/files/expat/2.4.9/
-+md5  8d7fcf7d02d08bf79d9ae5c21cc72c03  expat-2.4.9.tar.xz
-+sha1  be91118bc495ce49b04a3fd0f27df2fb5a843e9b  expat-2.4.9.tar.xz
- 
- # Locally calculated
--sha256  f79b8f904b749e3e0d20afeadecf8249c55b2e32d4ebb089ae378df479dcaf25  expat-2.4.8.tar.xz
--sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
-+sha256  6e8c0728fe5c7cd3f93a6acce43046c5e4736c7b4b68e032e9350daa0efc0354  expat-2.4.9.tar.xz
-+sha256  122f2c27000472a201d337b9b31f7eb2b52d091b02857061a8880371612d9534  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 61735a5fdb..59854d0ee8 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.4.8
-+EXPAT_VERSION = 2.4.9
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
-@@ -13,9 +13,6 @@ EXPAT_LICENSE_FILES = COPYING
- EXPAT_CPE_ID_VENDOR = libexpat_project
- EXPAT_CPE_ID_PRODUCT = libexpat
- 
--# 0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
--EXPAT_IGNORE_CVES += CVE-2022-40674
--
- EXPAT_CONF_OPTS = \
- 	--without-docbook --without-examples --without-tests --without-xmlwf
- HOST_EXPAT_CONF_OPTS = --without-docbook --without-examples --without-tests
+
+Changes in v4:
+- rebased to latest master and retested
+- dropped OPTEE CUSTOM* options as we don't need them.
+
+Changes in v3:
+- Fix boot/ti-k3-r5-loader package's build options and dependencies.
+- Fix boot/ti-k3-image-gen package's config
+- Add more details in board/ti/am64x_sk's readme
+- Trim configs/am64x_sk's toolchain options and 
+  fix uboot and genimage dependencies.
+- Remove board/ti/am62x_sk and configs/am62x_sk for now due to some
+  firmware dependency problems. Will be added back in the future.
+
+Changes in v2:
+- Revert arm-gnu-toolchain back to version 10.x due to a bug.
+  When the pre-packaged GCC was built, it could be targeting
+  a newer x86_64 architecture than the processor being used.
+- Add boot/ti-k3-r5-loader package that builds a separate U-Boot
+  for the R5 cores on TI's K3 devices.
+- Add boot/ti-k3-image-gen package that builds the full boot binary
+  tiboot3.bin from the spl built from ti-k3-r5-loader.
+- Add board/ti directory to include sdcard config and board information
+  for AM64x_sk and AM62x_sk boards.
+- Add the Buildroot defconfigs for AM64x_sk and AM62x_sk.
+- Add to DEVELOPERS list.
+
+Xuanhao Shi (3):
+  boot/ti-k3-r5-loader: add new package
+  boot/ti-k3-image-gen: add new package
+  board/ti/am64x_sk: add new board
+
+ DEVELOPERS                                | 12 ++++++
+ board/ti/am64x_sk/genimage.cfg            | 27 +++++++++++++
+ board/ti/am64x_sk/readme.txt              | 49 +++++++++++++++++++++++
+ boot/Config.in                            |  2 +
+ boot/ti-k3-image-gen/Config.in            | 24 +++++++++++
+ boot/ti-k3-image-gen/ti-k3-image-gen.hash |  2 +
+ boot/ti-k3-image-gen/ti-k3-image-gen.mk   | 33 +++++++++++++++
+ boot/ti-k3-r5-loader/Config.in            | 13 ++++++
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.hash |  2 +
+ boot/ti-k3-r5-loader/ti-k3-r5-loader.mk   | 45 +++++++++++++++++++++
+ configs/am64x_sk_defconfig                | 45 +++++++++++++++++++++
+ 11 files changed, 254 insertions(+)
+ create mode 100644 board/ti/am64x_sk/genimage.cfg
+ create mode 100644 board/ti/am64x_sk/readme.txt
+ create mode 100644 boot/ti-k3-image-gen/Config.in
+ create mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.hash
+ create mode 100644 boot/ti-k3-image-gen/ti-k3-image-gen.mk
+ create mode 100644 boot/ti-k3-r5-loader/Config.in
+ create mode 100644 boot/ti-k3-r5-loader/ti-k3-r5-loader.hash
+ create mode 100644 boot/ti-k3-r5-loader/ti-k3-r5-loader.mk
+ create mode 100644 configs/am64x_sk_defconfig
+
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
