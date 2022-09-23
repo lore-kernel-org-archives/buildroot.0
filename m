@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27A7BECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 12:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5560ECAAD8
+	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 12:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA2E040A38;
-	Fri, 23 Sep 2022 12:18:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA2E040A38
+	by smtp2.osuosl.org (Postfix) with ESMTP id 546C640AAB;
+	Fri, 23 Sep 2022 12:18:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 546C640AAB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9KqKNztxx4Ks; Fri, 23 Sep 2022 12:18:42 +0000 (UTC)
+	with ESMTP id R0g06QDw5gaN; Fri, 23 Sep 2022 12:18:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBFF940A18;
-	Fri, 23 Sep 2022 12:18:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBFF940A18
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 26ABB1C2744
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7224140AAA;
+	Fri, 23 Sep 2022 12:18:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7224140AAA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8094F1BF349
  for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 12:17:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03CDD83F5F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0357E40A38
  for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 12:17:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03CDD83F5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0357E40A38
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2fG4-85wqo2D for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XdryBOX-31ld for <buildroot@lists.busybox.net>;
  Fri, 23 Sep 2022 12:17:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0ED8183F33
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21A1740A1E
  for <buildroot@buildroot.org>; Fri, 23 Sep 2022 12:17:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ED8183F33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21A1740A1E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0AB7E85ED7; Fri, 23 Sep 2022 12:17:35 +0000 (UTC)
+ id 1F26A85ED2; Fri, 23 Sep 2022 12:17:35 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Sep 2022 14:16:14 +0200
+Date: Fri, 23 Sep 2022 14:16:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 76a41d258a8a7509e28da3f4160b08da20759149
-X-Git-Newrev: 1d6db4be811fdd1573bbd5b3f46e6916a80232a0
+X-Git-Oldrev: c9173f4ad876f85ed7d72b29e010c56782c13849
+X-Git-Newrev: 958b112d449fa167315147c768d7a4a19ca6ebea
 X-Patchwork-Hint: ignore
-Message-Id: <20220923121735.0AB7E85ED7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyphen: bump to version
- 0.13.0
+Message-Id: <20220923121735.1F26A85ED2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{python-}protobuf: bump to version
+ 21.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d6db4be811fdd1573bbd5b3f46e6916a80232a0
+commit: https://git.buildroot.net/buildroot/commit/?id=958b112d449fa167315147c768d7a4a19ca6ebea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyphen/python-pyphen.hash | 4 ++--
- package/python-pyphen/python-pyphen.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pyphen/python-pyphen.hash b/package/python-pyphen/python-pyphen.hash
-index 14938de9c4..3a145e0f81 100644
---- a/package/python-pyphen/python-pyphen.hash
-+++ b/package/python-pyphen/python-pyphen.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/Pyphen/json
--md5  99a01a3806cc750c242cae330429a90f  pyphen-0.12.0.tar.gz
--sha256  b7d3dfc24b6f2178cdb2b1757ace0bd5d222de3e62c28d22ac578c5f22a13e9b  pyphen-0.12.0.tar.gz
-+md5  a2d6f69468684bbaa88d004b79c02128  pyphen-0.13.0.tar.gz
-+sha256  06873cebffd65a8fca7c20c0e3dc032655c7ee8de0f552205cad3b574265c293  pyphen-0.13.0.tar.gz
- # Locally computed sha256 checksums
- sha256  9f0bffde4fbbbbc61c46f6577b6f472919dba9fdffabe74e8a7e44ac5dbef7a2  LICENSE
- sha256  2233a3eecf299bc271f1a9f57f0b3198343ad4ab16571d70320133002c51496b  COPYING.GPL
-diff --git a/package/python-pyphen/python-pyphen.mk b/package/python-pyphen/python-pyphen.mk
-index ac0bcf8aab..d83eb79736 100644
---- a/package/python-pyphen/python-pyphen.mk
-+++ b/package/python-pyphen/python-pyphen.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYPHEN_VERSION = 0.12.0
-+PYTHON_PYPHEN_VERSION = 0.13.0
- PYTHON_PYPHEN_SOURCE = pyphen-$(PYTHON_PYPHEN_VERSION).tar.gz
--PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/0e/21/9e0841aa76db69e2d74cd64ea2271151d7332fa627a5f03eb0d9ccf3da87
-+PYTHON_PYPHEN_SITE = https://files.pythonhosted.org/packages/9a/53/e7f212c87f91aab928bbf0de95ebc319c4d935e59bd5ed868f2c2bfc9465
- PYTHON_PYPHEN_SETUP_TYPE = flit
- PYTHON_PYPHEN_LICENSE = LGPL-2.1+, MPL-1.1, GPL-2.0+
- PYTHON_PYPHEN_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LGPL COPYING.MPL
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 8e5ba09c9d..03138a59e7 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  58c8a18b4ec22655535c493155c5465a8903e8249094ceead87e00763bdbc44f  protobuf-cpp-3.21.5.tar.gz
++sha256  a3c4c104b98a21a577ce5ecc0d9b9f43a359b917d0bcf69467b70dc27416dfdc  protobuf-cpp-3.21.6.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 199e423d71..fbc495c438 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 21.5
++PROTOBUF_VERSION = 21.6
+ PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 1b106445a5..b0662124a9 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4b384ad2bc6832ede8703b4567c47498bccf104cb79fd20d2d2e3069066ae245  protobuf-python-4.21.5.tar.gz
++sha256  a014a0108e18c06a0c0308d92cdcae6ee106e4b02dd2ab1ff7073c4c80153aea  protobuf-python-4.21.6.tar.gz
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
