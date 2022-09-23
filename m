@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5560ECAAD8
-	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 12:18:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFE67ECAAD8
+	for <buildroot@archiver.kernel.org>; Fri, 23 Sep 2022 12:19:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 546C640AAB;
-	Fri, 23 Sep 2022 12:18:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 546C640AAB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E9674032A;
+	Fri, 23 Sep 2022 12:19:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E9674032A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R0g06QDw5gaN; Fri, 23 Sep 2022 12:18:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ltnTxZS3Adlo; Fri, 23 Sep 2022 12:19:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7224140AAA;
-	Fri, 23 Sep 2022 12:18:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7224140AAA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8094F1BF349
- for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 12:17:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3311410A1;
+	Fri, 23 Sep 2022 12:19:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3311410A1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 68A1E1BF349
+ for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 12:17:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0357E40A38
+ by smtp1.osuosl.org (Postfix) with ESMTP id D4DFF813FC
  for <buildroot@lists.busybox.net>; Fri, 23 Sep 2022 12:17:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0357E40A38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4DFF813FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XdryBOX-31ld for <buildroot@lists.busybox.net>;
- Fri, 23 Sep 2022 12:17:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WxrwHsRWr8js for <buildroot@lists.busybox.net>;
+ Fri, 23 Sep 2022 12:17:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21A1740A1E
- for <buildroot@buildroot.org>; Fri, 23 Sep 2022 12:17:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21A1740A1E
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5144813B8
+ for <buildroot@buildroot.org>; Fri, 23 Sep 2022 12:17:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5144813B8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F26A85ED2; Fri, 23 Sep 2022 12:17:35 +0000 (UTC)
+ id A08E785ED2; Fri, 23 Sep 2022 12:17:34 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Sep 2022 14:16:16 +0200
+Date: Fri, 23 Sep 2022 14:16:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9173f4ad876f85ed7d72b29e010c56782c13849
-X-Git-Newrev: 958b112d449fa167315147c768d7a4a19ca6ebea
+X-Git-Oldrev: d5649d5afdf4180de0170b627bf3eaa484513b51
+X-Git-Newrev: 246ad6b4e1cda76bb86543c0b5411fe6de069db8
 X-Patchwork-Hint: ignore
-Message-Id: <20220923121735.1F26A85ED2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{python-}protobuf: bump to version
- 21.6
+Message-Id: <20220923121734.A08E785ED2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wayland-utils: fix build without
+ libdrm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=958b112d449fa167315147c768d7a4a19ca6ebea
+commit: https://git.buildroot.net/buildroot/commit/?id=246ad6b4e1cda76bb86543c0b5411fe6de069db8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add upstream patch fixing build without libdrm.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/a13/a13e5bc4893a2057097aad268152212858c8e966
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ ...001-wayland-info-Fix-build-without-libdrm.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 8e5ba09c9d..03138a59e7 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  58c8a18b4ec22655535c493155c5465a8903e8249094ceead87e00763bdbc44f  protobuf-cpp-3.21.5.tar.gz
-+sha256  a3c4c104b98a21a577ce5ecc0d9b9f43a359b917d0bcf69467b70dc27416dfdc  protobuf-cpp-3.21.6.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 199e423d71..fbc495c438 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 21.5
-+PROTOBUF_VERSION = 21.6
- PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 1b106445a5..b0662124a9 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4b384ad2bc6832ede8703b4567c47498bccf104cb79fd20d2d2e3069066ae245  protobuf-python-4.21.5.tar.gz
-+sha256  a014a0108e18c06a0c0308d92cdcae6ee106e4b02dd2ab1ff7073c4c80153aea  protobuf-python-4.21.6.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/wayland-utils/0001-wayland-info-Fix-build-without-libdrm.patch b/package/wayland-utils/0001-wayland-info-Fix-build-without-libdrm.patch
+new file mode 100644
+index 0000000000..2d4591f785
+--- /dev/null
++++ b/package/wayland-utils/0001-wayland-info-Fix-build-without-libdrm.patch
+@@ -0,0 +1,46 @@
++From 3657a11d45f133776b50c716d99f37965eb07ed1 Mon Sep 17 00:00:00 2001
++From: Olivier Fourdan <ofourdan@redhat.com>
++Date: Wed, 14 Sep 2022 09:07:10 +0200
++Subject: [PATCH] wayland-info: Fix build without libdrm
++
++wayland-info can optionally use libdrm to provide a description of the
++dmabuf format modifiers.
++
++When not using libdrm however, the build fails because "dev_t" is not
++defined.
++
++The definition of "dev_t" comes from <sys/types.h> which is included
++from <libdrm.h>, which is not included without libdrm support, hence the
++build failure.
++
++Simply include <sys/types.h> unconditionally to make sure "dev_t" is
++defined regardless of libdrm support, to fix the build failure.
++
++Closes: https://gitlab.freedesktop.org/wayland/wayland-utils/-/issues/6
++Signed-off-by: Olivier Fourdan <ofourdan@redhat.com>
++Fixes: 240cb739 - "Add support for linux_dmabuf version 4"
++Reviewed-by: Simon Ser <contact@emersion.fr>
++Reviewed-by: Pekka Paalanen <pekka.paalanen@collabora.com>
++(cherry picked from commit baa65ba9f62e6a05c32b9202b524158a21f24245)
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++3657a11d45f133776b50c716d99f37965eb07ed1]
++---
++ wayland-info/wayland-info.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/wayland-info/wayland-info.c b/wayland-info/wayland-info.c
++index 53cd04b..98ff205 100644
++--- a/wayland-info/wayland-info.c
+++++ b/wayland-info/wayland-info.c
++@@ -34,6 +34,7 @@
++ #include <ctype.h>
++ #include <unistd.h>
++ #include <sys/mman.h>
+++#include <sys/types.h>
++ 
++ #include <wayland-client.h>
++ #if HAVE_HUMAN_FORMAT_MODIFIER
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
