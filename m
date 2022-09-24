@@ -4,47 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F397C6FA83
-	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 08:34:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2C82C32771
+	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 08:35:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BEB360AC0;
-	Sat, 24 Sep 2022 08:34:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BEB360AC0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 777BC60ABA;
+	Sat, 24 Sep 2022 08:35:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 777BC60ABA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kXsWfc4KRZFS; Sat, 24 Sep 2022 08:34:51 +0000 (UTC)
+	with ESMTP id OKrlICa-NU1m; Sat, 24 Sep 2022 08:35:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B56FD60A4F;
-	Sat, 24 Sep 2022 08:34:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B56FD60A4F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0B1251BF861
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 08:34:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CBBA60A4F;
+	Sat, 24 Sep 2022 08:35:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CBBA60A4F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 96E9D1BF861
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 08:35:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DAA1B83EE5
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 08:34:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAA1B83EE5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 630E041871
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 08:35:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 630E041871
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3N112acuHHKS for <buildroot@lists.busybox.net>;
- Sat, 24 Sep 2022 08:34:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D6DDE83EE4
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 08:34:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6DDE83EE4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BCA7A85F9C; Sat, 24 Sep 2022 08:34:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 24 Sep 2022 10:34:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68c32ce33806c5e9ffc89851e28e6a817d7e9706
-X-Git-Newrev: a54a7bf805424dacb02a17b7de5a5ebacec7356e
-X-Patchwork-Hint: ignore
-Message-Id: <20220924083447.BCA7A85F9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/size-stats: count compiled
- python (.pyc) files
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q3p9r_gRcpz5 for <buildroot@lists.busybox.net>;
+ Sat, 24 Sep 2022 08:35:49 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 212F941860
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 212F941860
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 08:35:48 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id D7B8BE0006;
+ Sat, 24 Sep 2022 08:35:46 +0000 (UTC)
+Date: Sat, 24 Sep 2022 10:35:46 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Michael Klein via buildroot <buildroot@buildroot.org>
+Message-ID: <20220924103546.00681d4f@windsurf>
+In-Reply-To: <YxCaF6FKRqXSPeWS@LLGMVZLB-0037>
+References: <YxCaF6FKRqXSPeWS@LLGMVZLB-0037>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1664008547;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Svw/hQTtnxWjGWEopiBIvOsLV7KMar93VcdKkgHkozs=;
+ b=AgP6iyOzqky0C7w3h6Rvj9QWSDB0yVOdRPoAAYkuXdiiVR87kzaxvVcDCEC4C4cuidMURk
+ RofuHNy5pNSMVE6v+XtBoPQpXxvs/5KUxC+ivQpVnip7HTkNE+PmMacwEedsRlAsygwhzk
+ 8GzfdDHBTYqPrpJ8NfPa8qiwEjfNfiB0Gag8Gv5VXUNrROxTnPQLrt1n8AEKj1b8kM1Vl9
+ V2KqTvgAYYB6EWUKZdEIIFrWmqAxMrOSLvGNN3QngXfJ8GmXGqs2iuXETnhLmbuGPAcve6
+ yziuxxFi5Z1NUwSNFDMhHxYfNGBZZslnOKhwvVf8JTjZsTkFuhM676OPgtDvLQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AgP6iyOz
+Subject: Re: [Buildroot] [PATCH 1/1] size-stats: count compiled python
+ (.pyc) files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,44 +77,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Michael Klein <m.klein@mvz-labor-lb.de>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a54a7bf805424dacb02a17b7de5a5ebacec7356e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 1 Sep 2022 13:40:07 +0200
+Michael Klein via buildroot <buildroot@buildroot.org> wrote:
 
-Any .pyc files generated by the pycompile script during target
-finalization are currently counted in the "Unknown" package,
-because packages-file-list.txt only contains the source .py file.
+> Any .pyc files generated by the pycompile script during target
+> finalization are currently counted in the "Unknown" package,
+> because packages-file-list.txt only contains the source .py file.
+> 
+> If a .py file is added to filesdict, add the corresponding .pyc
+> file as well.
+> 
+> Signed-off-by: Michael Klein <m.klein@mvz-labor-lb.de>
+> ---
+>  support/scripts/size-stats | 3 +++
+>  1 file changed, 3 insertions(+)
 
-If a .py file is added to filesdict, add the corresponding .pyc
-file as well.
+We indeed don't have a very good mechanism to "connect" files generated
+during the target-finalize step with their original package in a
+generic way, so for now what you did is I believe good enough to solve
+this very common case of .pyc files, and therefore I've applied to
+master. Thanks!
 
-Signed-off-by: Michael Klein <m.klein@mvz-labor-lb.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/size-stats | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index e4389e99b5..79c0dc571e 100755
---- a/support/scripts/size-stats
-+++ b/support/scripts/size-stats
-@@ -54,6 +54,9 @@ class Config:
- # pkg: package to which the file belongs
- #
- def add_file(filesdict, relpath, abspath, pkg):
-+    if relpath.endswith(".py"):
-+        # also check for compiled .pyc file
-+        add_file(filesdict, relpath + "c", abspath + "c", pkg)
-     if not os.path.exists(abspath):
-         return
-     if os.path.islink(abspath):
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
