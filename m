@@ -4,64 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7501CC07E9D
-	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 21:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F952C32771
+	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 21:06:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E84460BD0;
-	Sat, 24 Sep 2022 21:02:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E84460BD0
+	by smtp3.osuosl.org (Postfix) with ESMTP id E47E360BD0;
+	Sat, 24 Sep 2022 21:06:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E47E360BD0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8Pm5qhh1Kqkw; Sat, 24 Sep 2022 21:02:32 +0000 (UTC)
+	with ESMTP id FpP4zSVY7jh3; Sat, 24 Sep 2022 21:06:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD373607C9;
-	Sat, 24 Sep 2022 21:02:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD373607C9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C29F11BF28D
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:02:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1849B607F7;
+	Sat, 24 Sep 2022 21:06:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1849B607F7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 31FED1BF95D
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:06:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DB4840136
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:02:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DB4840136
+ by smtp3.osuosl.org (Postfix) with ESMTP id 177DD607F7
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:06:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 177DD607F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ernv2YySxYWL for <buildroot@lists.busybox.net>;
- Sat, 24 Sep 2022 21:02:29 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C201B40123
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C201B40123
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 21:02:28 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 3AB2B1BF205;
- Sat, 24 Sep 2022 21:02:24 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4ExPvbrdXMLV for <buildroot@lists.busybox.net>;
+ Sat, 24 Sep 2022 21:06:26 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9485607C9
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D9485607C9
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 21:06:25 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id n12so4817154wrx.9
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 14:06:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=8Uy2bpqByz/guex5ixtfK+25ebwfhC68F3R8hLCZsoU=;
+ b=Xis7ZmCyb3LSZxQiAiC1eHkfDPIBNJ6FKnb4s8CxY9LY+2PSz71TwgfsgqHUNVUH61
+ qiOg1cNFx+dJsGsFX3nQ4dATloTbeB77ls1slaR3yZC2Uy+etkZ3FgcOBjoI5z3JAW5c
+ QGJ7Wl8VJRJyhumTGxavjMIH2+0CT1M2BbjoL6ddV1OffJPg7M3B7saUq1OEeJHQNNn6
+ 1cyi+q042L3QPpgpKiHBHwxA8/sk74OwJjgd1T9uAPHhPIx/OGPAdjrOq9KgaI4k4qCt
+ HRsohRgC1dq0fadVDK7X6jUB3u8yPj8WhYW1YEqUIgGFuM5uhnQlM1jB5KvHjsK/rFZL
+ wNRg==
+X-Gm-Message-State: ACrzQf3JpX3sCZS236kLjKl0xGJhbbe8FyzQC/E5tNmXpjl4xzyBrmf1
+ CD0AM8W+WJqyYg2CbeQYOvGZnxLz0No=
+X-Google-Smtp-Source: AMsMyM6aWYmj5ClCW7MKjAlGbeuzVT9SysRYXJE3We+MWtlSfDxLCNo+VUKzPjLXnv450bY+hgh/rQ==
+X-Received: by 2002:a5d:61c7:0:b0:22a:fa77:1cef with SMTP id
+ q7-20020a5d61c7000000b0022afa771cefmr9601853wrv.50.1664053583723; 
+ Sat, 24 Sep 2022 14:06:23 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ bj1-20020a0560001e0100b0022b0214cfa6sm12797412wrb.45.2022.09.24.14.06.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 24 Sep 2022 14:06:23 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Sep 2022 23:02:20 +0200
-Message-Id: <20220924210221.1490924-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.37.3
+Date: Sat, 24 Sep 2022 23:06:21 +0200
+Message-Id: <20220924210621.106813-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664053347;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=gzU/SPSAiQukgFA6Kwoqw0a2FovLeWcqlta+YINmWaQ=;
- b=TLC1NbjJr5iOFqjmH4zu9eYOOI8f5Y04FPuKytEiMbGvDXaNJ2GkytWmcIwnKcdHdJtbP+
- VnMKjlOTaATIQgXCfrgaQEifcfBo9vH1Nue5JIq30pC+4IGksk0s6mnZUCyh4t0LNzNqN9
- 41bGBxAWZZto106oeS0Tdt2CSq0ZPnI0+WM44UER3xYeBebwd7CirsbYpdGkFNgAToerDB
- 52qxKymRO6fD3b164MiXbkns+9FkHirELR2Gq2lqUoCBjggeKUsmbxIJOUsjWFQ7A2vHHv
- 8GQ7NgctuoPLOpT4xSpEW8THUWm44gp+rz1hFyWYe8cYcl4DnmI4SScvc/lZMQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TLC1NbjJ
-Subject: [Buildroot] [PATCH v2] package/opengl/libegl: remove
- BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=8Uy2bpqByz/guex5ixtfK+25ebwfhC68F3R8hLCZsoU=;
+ b=YkSdpD5aqWWcGsqht12Cs7tssUifMzTKUbheJI8Oi9vq6CBjSy3kE3bwm8wm6lg6JK
+ ue7D2Wyax5wej6kA0KpJ72cUyNMYCQF1raR/8qziwUTtESWMqa4nuYRXeUzPKKmsci50
+ R4u3GrW9PuVa9gTtYVukEXreXy/Dwr4ima00CKnKBkC2GEMctNWsivWEciHKwKFP1yIF
+ 0uuWGn42QUXjcq98g2DuQUuheWxriS58OkHsJllDRFIy6mixUitlOx/36g68PzVZHEjD
+ 1TSBFmB4pp3F79lq7DQM9y5U8oprMhQzeMP3Yoj0aoXThHLwXn4Z/U5J7A+InRaHjdbS
+ iUbg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=YkSdpD5a
+Subject: [Buildroot] [PATCH 1/1] package/daq3: fix build without C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,352 +92,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Gary Bisson <bisson.gary@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Refik Tuzakli <tuzakli.refik@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Adrian Perez de Castro <aperez@igalia.com>,
- Romain Naour <romain.naour@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since wayland 1.15 (upstream commit
-549a5ea710f4da1a5749587176d39fef1ded4077), libwayland-egl.so is
-provided by the wayland package, so there is no longer a question of
-whether libwayland-egl.so is provided by the particular EGL
-implementation. See the Wayland commit log:
+Fix the following build failure without C++ raised since bump to
+version 3.0.9 in commit c05fe1d621c7c5147f687b39f61988918efec566 and
+https://github.com/snort3/libdaq/commit/c2ae4668fb4c8f53523a47f93a120c62364f3d02:
 
-    wayland-egl: import libwayland-egl.so frontend library from Mesa
+libtool: compile:  no -DHAVE_CONFIG_H -I. -I.. -fvisibility=hidden -Wall -Wmissing-declarations -Wpointer-arith -Wcast-align -Wcast-qual -Wformat -Wformat-nonliteral -Wformat-security -Wundef -Wwrite-strings -Wextra -Wsign-compare -Wno-unused-parameter -fno-strict-aliasing -fdiagnostics-show-option -I../api -DBUILDING_SO -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -c gwlb/daq_gwlb.cc  -o gwlb/.libs/daq_gwlb_la-daq_gwlb.o
+../libtool: line 1763: no: command not found
 
-    Currently the client-facing libwayland-egl API is defined by a header
-    file shipped by Wayland, but the implementation is left to each vendor.
+Fixes:
+ - http://autobuild.buildroot.org/results/48b4673f46c9065e97e95872f9aa947c4f3fc21b
 
-    This can cause collisions when multiple implementations are installed on
-    the same system. Importing the implementation into Wayland with a stable
-    and versioned driver-facing ABI allows multiple drivers to coexist on
-    the same system.
-
-    Pull the sample implementation from Mesa commit 677edff5cfd
-    ("wayland-egl: rework and simplify wl_egl_window initialization")
-    It has been used by the Mesa open source drivers, NVIDIA and others[1].
-
-    v2: Reword commit message, rebase on top of newer Mesa.
-
-    [1] https://github.com/thayama/wayland-egl
-
-Consequently, we remove the BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-option. Packages that rely on BR2_PACKAGE_HAS_LIBGLES and
-BR2_PACKAGE_WAYLAND are guaranteed to have libwayland-egl.so.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes since v1:
-- Fix Wayland 15 -> wayland 1.15 in commit log
-- Re-add BR2_PACKAGE_HAS_LIBEGL dependency in weston.mk
----
- package/cage/Config.in                      | 4 +---
- package/freescale-imx/imx-gpu-viv/Config.in | 1 -
- package/kodi/Config.in                      | 1 -
- package/libgtk3/Config.in                   | 8 ++++----
- package/mesa3d/Config.in                    | 1 -
- package/nvidia-driver/Config.in             | 1 -
- package/opengl/libegl/Config.in             | 4 ----
- package/vte/Config.in                       | 6 +++---
- package/waffle/Config.in                    | 2 +-
- package/waylandpp/Config.in                 | 6 +++---
- package/weston/Config.in                    | 6 +++---
- package/weston/weston.mk                    | 2 +-
- package/wlroots/Config.in                   | 5 ++---
- package/wpebackend-fdo/Config.in            | 6 +++---
- package/wpewebkit/Config.in                 | 4 +---
- 15 files changed, 22 insertions(+), 35 deletions(-)
+ package/daq3/daq3.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/cage/Config.in b/package/cage/Config.in
-index 0844d6ff62..4f823c768c 100644
---- a/package/cage/Config.in
-+++ b/package/cage/Config.in
-@@ -1,6 +1,5 @@
--comment "cage needs udev, EGL w/ Wayland backend and OpenGL ES support"
-+comment "cage needs udev, EGL and OpenGL ES support"
- 	depends on !BR2_PACKAGE_HAS_LIBEGL || \
--		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
- 		!BR2_PACKAGE_HAS_LIBGLES || \
- 		!BR2_PACKAGE_HAS_UDEV
+diff --git a/package/daq3/daq3.mk b/package/daq3/daq3.mk
+index 6ecd1134c7..bab957e052 100644
+--- a/package/daq3/daq3.mk
++++ b/package/daq3/daq3.mk
+@@ -13,6 +13,12 @@ DAQ3_DEPENDENCIES = host-pkgconf
+ # From git
+ DAQ3_AUTORECONF = YES
  
-@@ -13,7 +12,6 @@ config BR2_PACKAGE_CAGE
- 	depends on !BR2_STATIC_LIBS # wlroots
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
- 	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wlroots
- 	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
- 	depends on BR2_PACKAGE_HAS_UDEV # wlroots
- 	select BR2_PACKAGE_WLROOTS
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index 9ba3d0428e..fc59d9a548 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -64,7 +64,6 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
- 	bool "Wayland"
- 	select BR2_PACKAGE_WAYLAND
--	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 
- endchoice
- 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 90710683db..1b1f39895e 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -31,7 +31,6 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
- 	depends on BR2_INSTALL_LIBSTDCPP # waylandpp
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index bc8cacd9f5..41fe3dd64c 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -6,10 +6,10 @@ comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
- 
--comment "libgtk3 needs an OpenGL or an OpenGL-EGL/wayland backend"
-+comment "libgtk3 needs an OpenGL or an OpenGL-EGL backend"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND && \
-+	depends on !BR2_PACKAGE_HAS_LIBEGL && \
- 		!BR2_PACKAGE_HAS_LIBGL
- 
- config BR2_PACKAGE_LIBGTK3
-@@ -21,7 +21,7 @@ config BR2_PACKAGE_LIBGTK3
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+	depends on BR2_PACKAGE_HAS_LIBEGL || \
- 		BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_ATK
- 	select BR2_PACKAGE_CAIRO
-@@ -69,7 +69,7 @@ comment "Wayland GDK backend needs an OpenGL EGL backend provided by mesa3d w/ h
- config BR2_PACKAGE_LIBGTK3_WAYLAND
- 	bool "Wayland GDK backend"
- 	default y
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 	select BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 40f7009492..e379255a01 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -378,7 +378,6 @@ config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_HAS_LIBEGL if !BR2_PACKAGE_LIBGLVND
- 	select BR2_PACKAGE_LIBGLVND_DISPATCH_EGL if BR2_PACKAGE_LIBGLVND
--	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	select BR2_PACKAGE_MESA3D_GBM
- 	help
- 	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL
-diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
-index a8617a939b..e4a9dde0a0 100644
---- a/package/nvidia-driver/Config.in
-+++ b/package/nvidia-driver/Config.in
-@@ -26,7 +26,6 @@ config BR2_PACKAGE_NVIDIA_DRIVER_XORG
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_HAS_LIBEGL
--	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	select BR2_PACKAGE_HAS_LIBGLES
- 
- if BR2_PACKAGE_NVIDIA_DRIVER_XORG
-diff --git a/package/opengl/libegl/Config.in b/package/opengl/libegl/Config.in
-index a236998947..f46d09ed71 100644
---- a/package/opengl/libegl/Config.in
-+++ b/package/opengl/libegl/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_HAS_LIBEGL
- 	bool
- 
--config BR2_PACKAGE_HAS_LIBEGL_WAYLAND
--	bool
--	depends on BR2_PACKAGE_HAS_LIBEGL
--
- config BR2_PACKAGE_PROVIDES_LIBEGL
- 	string
- 	depends on BR2_PACKAGE_HAS_LIBEGL
-diff --git a/package/vte/Config.in b/package/vte/Config.in
-index 45d627885f..8a231a21af 100644
---- a/package/vte/Config.in
-+++ b/package/vte/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_VTE
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+	depends on BR2_PACKAGE_HAS_LIBEGL || \
- 		BR2_PACKAGE_HAS_LIBGL
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBGTK3
-@@ -31,9 +31,9 @@ comment "vte needs a uClibc or glibc toolchain w/ wchar, threads, C++, gcc >= 10
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
- 		BR2_TOOLCHAIN_USES_MUSL
- 
--comment "vte needs an OpenGL or an OpenGL-EGL/wayland backend"
-+comment "vte needs an OpenGL or an OpenGL-EGL backend"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND && \
-+	depends on !BR2_PACKAGE_HAS_LIBEGL && \
- 		!BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/waffle/Config.in b/package/waffle/Config.in
-index ad622e9582..79cb4ca2ed 100644
---- a/package/waffle/Config.in
-+++ b/package/waffle/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_WAFFLE_SUPPORTS_GLX
- 
- config BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND
- 	bool
--	default y if BR2_PACKAGE_WAYLAND && BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	default y if BR2_PACKAGE_WAYLAND && BR2_PACKAGE_HAS_LIBEGL
- 
- config BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL
- 	bool
-diff --git a/package/waylandpp/Config.in b/package/waylandpp/Config.in
-index 86ca965056..0713884d3e 100644
---- a/package/waylandpp/Config.in
-+++ b/package/waylandpp/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_WAYLANDPP
- 	bool "waylandpp"
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -10,9 +10,9 @@ config BR2_PACKAGE_WAYLANDPP
- 
- 	  https://github.com/NilsBrause/waylandpp
- 
--comment "waylandpp needs an OpenGL-EGL/wayland backend, a toolchain w/ gcc >= 4.9, host gcc >= 4.9, C++ support"
-+comment "waylandpp needs an OpenGL-EGL backend, a toolchain w/ gcc >= 4.9, host gcc >= 4.9, C++ support"
- 	depends on BR2_PACKAGE_WAYLAND
--	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || \
- 		!BR2_HOST_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_INSTALL_LIBSTDCPP
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 3b4e932b7d..cba0469d16 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -152,16 +152,16 @@ config BR2_PACKAGE_WESTON_DEMO_CLIENTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
- 	depends on BR2_USE_WCHAR # pango
- 	depends on BR2_PACKAGE_HAS_LIBGLES
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_PANGO
- 	help
- 	  This enables the installation of Weston's demo clients.
- 
--comment "demo clients needs an OpenGL ES provider, an OpenEGL-capable Wayland backend and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
-+comment "demo clients needs an OpenGL ES/EGL provider and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR || !BR2_PACKAGE_HAS_LIBGLES || \
--		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		!BR2_PACKAGE_HAS_LIBEGL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- endif
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 5e71473640..b0c4061836 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -71,7 +71,7 @@ else
- WESTON_CONF_OPTS += -Ddeprecated-weston-launch=false
- endif
- 
--ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGLES),yy)
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
- WESTON_CONF_OPTS += -Drenderer-gl=true
- WESTON_DEPENDENCIES += libegl libgles
- ifeq ($(BR2_PACKAGE_PIPEWIRE)$(BR2_PACKAGE_WESTON_DRM),yy)
-diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
-index 84a4ef846e..de45c0c583 100644
---- a/package/wlroots/Config.in
-+++ b/package/wlroots/Config.in
-@@ -1,6 +1,6 @@
--comment "wlroots needs udev, EGL w/ Wayland backend and OpenGL ES support"
-+comment "wlroots needs udev, EGL and OpenGL ES support"
- 	depends on !BR2_PACKAGE_HAS_LIBEGL || \
--		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+		!BR2_PACKAGE_HAS_LIBEGL || \
- 		!BR2_PACKAGE_HAS_LIBGLES || \
- 		!BR2_PACKAGE_HAS_UDEV
- 
-@@ -14,7 +14,6 @@ config BR2_PACKAGE_WLROOTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	depends on BR2_PACKAGE_HAS_LIBEGL
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	depends on BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBINPUT
-diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
-index 8a8c820c9b..9b4dd28741 100644
---- a/package/wpebackend-fdo/Config.in
-+++ b/package/wpebackend-fdo/Config.in
-@@ -1,5 +1,5 @@
--comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
--	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-+comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and EGL support"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_WPEBACKEND_FDO
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_USE_MMU # libglib2
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_LIBEPOXY
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBWPE
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 04ed40bd92..2a5905a30a 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -27,8 +27,7 @@ comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gc
- comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
--	depends on !BR2_PACKAGE_HAS_LIBGLES || !BR2_PACKAGE_HAS_LIBEGL \
--		|| !BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on !BR2_PACKAGE_HAS_LIBGLES || !BR2_PACKAGE_HAS_LIBEGL
- 
- config BR2_PACKAGE_WPEWEBKIT
- 	bool "wpewebkit"
-@@ -41,7 +40,6 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_USE_WCHAR # icu, libsoup
- 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
--	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wpebackend-fdo
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++DAQ3_CONF_OPTS += --enable-gwlb-module
++else
++DAQ3_CONF_OPTS += --disable-gwlb-module
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
+ DAQ3_DEPENDENCIES += libnetfilter_queue
+ DAQ3_CONF_OPTS += --enable-nfq-module
 -- 
-2.37.3
+2.35.1
 
 _______________________________________________
 buildroot mailing list
