@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C61FC32771
-	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 21:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5078EC32771
+	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 21:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB62C60E0F;
-	Sat, 24 Sep 2022 21:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB62C60E0F
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE93161125;
+	Sat, 24 Sep 2022 21:42:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE93161125
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mDUP9W7ZdAaJ; Sat, 24 Sep 2022 21:42:28 +0000 (UTC)
+	with ESMTP id SfVfx6nbIeJQ; Sat, 24 Sep 2022 21:42:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 244CC60C04;
-	Sat, 24 Sep 2022 21:42:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 244CC60C04
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 57E901BF95D
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:42:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9696860C04;
+	Sat, 24 Sep 2022 21:42:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9696860C04
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 212921BF95D
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EFEAC40155
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:42:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFEAC40155
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6474A41D32
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:42:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6474A41D32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jkmIEMZ3RdR4 for <buildroot@lists.busybox.net>;
- Sat, 24 Sep 2022 21:42:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PuPhw-y8MM-8 for <buildroot@lists.busybox.net>;
+ Sat, 24 Sep 2022 21:42:18 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA06D4014D
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DA06D4014D
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 21:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBD17415E6
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DBD17415E6
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 21:42:17 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3A2FB240002;
- Sat, 24 Sep 2022 21:42:09 +0000 (UTC)
-Date: Sat, 24 Sep 2022 23:42:08 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id 33FBAC0002;
+ Sat, 24 Sep 2022 21:42:16 +0000 (UTC)
+Date: Sat, 24 Sep 2022 23:42:15 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220924234208.40b41dea@windsurf>
-In-Reply-To: <20220924210621.106813-1-fontaine.fabrice@gmail.com>
-References: <20220924210621.106813-1-fontaine.fabrice@gmail.com>
+Message-ID: <20220924234215.78ffe271@windsurf>
+In-Reply-To: <20220924213217.183647-1-fontaine.fabrice@gmail.com>
+References: <20220924213217.183647-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664055729;
+ d=bootlin.com; s=gm1; t=1664055736;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=yE8bLAPS93LRXIQUSLu8cYw+eYNGI2WZbX3pLRPDI7Y=;
- b=RPxiQe9mA1hapbvwZBGzVeZ49lHe5NIfa+q2HIxmzBrnComWdei/tzCjc79MQjyT/m4Ooq
- JyszpbhXPydgd1DPwCoq5afckujOeruA7hP0nM6Xwt0yAi9ms4pygxNRdNtUV4fRj80SIo
- +orRJHz9IzhmG9Dvxh9aVZk5Cs2GLL3siF6+Nx5mhJodK2hKtmfHQL7Nm3d2Jy+LTDNFj0
- i2v/gqbH/evM4wr0JA+hCtQlAOgkrYvDWe1zwualB09Si7c/gZVXp5hw70wLJrsWO5VUKc
- F1A7QC/gXop7MJwoxwYaBl+AtR+t75Ssxu7xdHnUC2KBSGfr1PKTL2ok0IYXSg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=WLGs5rtlWJdJhljXtLpJQ8x8GRzqu0S7PBYKmjScQts=;
+ b=bc5/WmyK2ujD2ueFaDGg5Km+PoNz+fMeA/h4PnsGTdYpteVNtC8vTxWuxyK9LZWiZwoFVM
+ mpJBA6eXscx+oUHs2xpADlO75fJtf0e5oGCh2V0UXaZpGwJOiWznoDe+pMu8mDps6ViacR
+ NtPk3NkF4y3ShoGfg9G13JaXscv4BUE/iN0XHDTaJhdE883i+V99W6u8wL/eXS/bEvbM7b
+ zYvtvke3YkxnJtfFvX6dT3CGEz1iy/uGwyggk+GE+gP3HGa1B86CqwS0HK/EjHUEWcZlJ/
+ 6h9eSTRhQ9GYb3rDyM+U0tfY9cyaTG8909Kz4Sh0tNDOk6ReUcskgGylQQ9p4A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RPxiQe9m
-Subject: Re: [Buildroot] [PATCH 1/1] package/daq3: fix build without C++
+ header.s=gm1 header.b=bc5/WmyK
+Subject: Re: [Buildroot] [PATCH 1/1] package/sane-backends: bump to version
+ 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,23 +83,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 24 Sep 2022 23:06:21 +0200
+On Sat, 24 Sep 2022 23:32:17 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix the following build failure without C++ raised since bump to
-> version 3.0.9 in commit c05fe1d621c7c5147f687b39f61988918efec566 and
-> https://github.com/snort3/libdaq/commit/c2ae4668fb4c8f53523a47f93a120c62364f3d02:
+> Drop second to fifth patches (already in version)
 > 
-> libtool: compile:  no -DHAVE_CONFIG_H -I. -I.. -fvisibility=hidden -Wall -Wmissing-declarations -Wpointer-arith -Wcast-align -Wcast-qual -Wformat -Wformat-nonliteral -Wformat-security -Wundef -Wwrite-strings -Wextra -Wsign-compare -Wno-unused-parameter -fno-strict-aliasing -fdiagnostics-show-option -I../api -DBUILDING_SO -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -c gwlb/daq_gwlb.cc  -o gwlb/.libs/daq_gwlb_la-daq_gwlb.o
-> ../libtool: line 1763: no: command not found
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/48b4673f46c9065e97e95872f9aa947c4f3fc21b
+> https://gitlab.com/sane-project/backends/-/releases/1.1.1
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/daq3/daq3.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  .../0002-genesys-fix-gcc-4.8-compile.patch    | 50 ----------------
+>  ...ep-instead-of-std-this_thread-sleep_.patch | 46 ---------------
+>  ...-fix-uclibc-compile-include-stdarg.h.patch | 58 ------------------
+>  ...canutil-fix-uclibc-compile-include-s.patch | 59 -------------------
+>  package/sane-backends/sane-backends.hash      |  4 +-
+>  package/sane-backends/sane-backends.mk        |  4 +-
+>  6 files changed, 4 insertions(+), 217 deletions(-)
+>  delete mode 100644 package/sane-backends/0002-genesys-fix-gcc-4.8-compile.patch
+>  delete mode 100644 package/sane-backends/0003-genesys-use-usleep-instead-of-std-this_thread-sleep_.patch
+>  delete mode 100644 package/sane-backends/0004-backend-microtek-fix-uclibc-compile-include-stdarg.h.patch
+>  delete mode 100644 package/sane-backends/0005-backend-sm3600-scanutil-fix-uclibc-compile-include-s.patch
 
 Applied to master, thanks.
 
