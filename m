@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46B14C07E9D
-	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 18:02:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FFDAC32771
+	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 20:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAF4260B8E;
-	Sat, 24 Sep 2022 18:02:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAF4260B8E
+	by smtp3.osuosl.org (Postfix) with ESMTP id A77F360BDA;
+	Sat, 24 Sep 2022 20:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A77F360BDA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ilpzxd4-aVSy; Sat, 24 Sep 2022 18:02:57 +0000 (UTC)
+	with ESMTP id nldXJ8E7zo_n; Sat, 24 Sep 2022 20:52:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19D7960A4F;
-	Sat, 24 Sep 2022 18:02:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19D7960A4F
+	by smtp3.osuosl.org (Postfix) with ESMTP id A53A6607D1;
+	Sat, 24 Sep 2022 20:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A53A6607D1
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 87C911BF215
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 18:02:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E93B71BF28D
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 20:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7065F4012F
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 18:02:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7065F4012F
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDB4440136
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 20:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDB4440136
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XoIFtOqOvUy9 for <buildroot@lists.busybox.net>;
- Sat, 24 Sep 2022 18:02:53 +0000 (UTC)
+ with ESMTP id 7cMPmMRrNpAK for <buildroot@lists.busybox.net>;
+ Sat, 24 Sep 2022 20:52:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A035400CC
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
- [IPv6:2607:f8b0:4864:20::d2a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2A035400CC
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 18:02:53 +0000 (UTC)
-Received: by mail-io1-xd2a.google.com with SMTP id p202so2257601iod.6
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 11:02:53 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F71340123
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9F71340123
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 20:52:00 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ r3-20020a05600c35c300b003b4b5f6c6bdso1676133wmq.2
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 13:52:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=yFq/FptGpl6cFGtqRUeDopPb/9d8dkP1qqE6vlEZ/aU=;
- b=bCRHj/Zh/xooFwJr/C6IOHVe2by8SzeBLN3pyTlr9lNq8O4rA8yuKEY4BnBud98x0N
- 62DHCF5UbWJ8rYXLm4iLFZKVywnvL3vH2PRk1Cy/50UBhDYiQUdkVvRXIFMuqtRBWwgU
- tlo8Omkg/CXqS7ILrg2Qw0FwWO9Pb6pOWD1Bt+VOh6xtMQBwQiZajx5kWttd+RuHfRa7
- 1u/u4OGnTG+q6snY7sAxiz3SoohvTlWqDtS9CR9cAtcW2IUC7kk/36Yhzc1H6KydgmeX
- YR83F8WJdp1buU1GEhOr/pdOGkNvpgGy63ouhCTixoiMdwwNwmyqNGADTvTWgkWnFupY
- tGyQ==
-X-Gm-Message-State: ACrzQf3U6R61/oy5jfWCGCRmAta5/L249lNbJ3qi6XNnc3gAHuR4yI+1
- GNJSQTffTNEN8uQ3VqRL8kg/WKnQTGogsA==
-X-Google-Smtp-Source: AMsMyM6u5m2oErkel0muTw4bz7RnRI42mAoO+Ozdy1YQay5oHA0EL2GtGd2Pf7ypHn4sq8xxPPG1Iw==
-X-Received: by 2002:a05:6638:3a1a:b0:35a:26bc:8856 with SMTP id
- cn26-20020a0566383a1a00b0035a26bc8856mr7595404jab.47.1664042571837; 
- Sat, 24 Sep 2022 11:02:51 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- l5-20020a023905000000b00342cb39de68sm4727938jaa.130.2022.09.24.11.02.50
+ bh=eWn0jScurp6TmWzJMVVefJTSheFUo5cZj36emLlZfjk=;
+ b=VE/PXpXCzP3aPb1CKiBBXEKMRbxWBIgjFoMIWEue8QS0iJ6hm2TxqvGBWX4LThrZ5F
+ SEIIusWDPF96RZFD2ldogui1VvNuFGaEdTag8xjgeXB1QNYArsu/w/L1aZHUHr4l/5Vq
+ N/F2WkrZvovlpeS6KwL5/BzqG0FKapO+g9PQRaH0jEhQW6rvh8A+2UDCFY71uJynmLoh
+ WD/TrmuBf8AkCu6IS8OIRcTuKF6wjs017VcxMCG/x4pjEEVJiP8V9jvTvHBPtTFqXdNc
+ tZJmaJIrk/8zbw4kgBxEy90GaA+dIwAtSwdAW0in7dh2IGoVbNmZnlnSqUZFI74DUzXP
+ Saqg==
+X-Gm-Message-State: ACrzQf3G3CdtkGfNbHvJQil6R5Sr0UUztUhKgfL7mPdvJ108yuH0P0F7
+ pStf9i272PEyXiq51KZ+huxwKaCjxLg=
+X-Google-Smtp-Source: AMsMyM6nI93E0Hgh+qn9f4NubeCLEAdcdqxhFor/mUcrZrBjjCgWroHTwjqkUl0ddBZxYoFhxm4YuA==
+X-Received: by 2002:a05:600c:4793:b0:3b4:7276:1c5e with SMTP id
+ k19-20020a05600c479300b003b472761c5emr17245906wmo.118.1664052718271; 
+ Sat, 24 Sep 2022 13:51:58 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ n39-20020a05600c3ba700b003a540fef440sm6715091wms.1.2022.09.24.13.51.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Sep 2022 11:02:51 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sat, 24 Sep 2022 13:51:57 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Sep 2022 12:02:48 -0600
-Message-Id: <20220924180248.61154-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat, 24 Sep 2022 22:51:48 +0200
+Message-Id: <20220924205148.20621-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date;
- bh=yFq/FptGpl6cFGtqRUeDopPb/9d8dkP1qqE6vlEZ/aU=;
- b=d/seaLFNILt6iNUPOAVq/GnExPjhb57kemKbZhPsg5PgVkrG109kSHWltP0giZ6mnP
- 9KvBvtsNlBtiITY8SQ/IMOyjtmB6aN7QMTVF6vqCQuCGqP6MWh/QgYqLCvBNfBC874lG
- crhxN0YxLiBuTzgiyNjOQ3oBM4/abQ4LQpyPUxyySqiEfH2/Nld8gprmWGqGkvpuV1yZ
- WzVIk9KjG+VRS4cZ18+8nqLIPs+DXHogbgSyDyoWpksE3kmaHyhnOvTN9IHKEzak5fiN
- EVoNgBdknC7zIfFl/qhUp77cJXbkpOOs7a0Mm/C1Mgp9e1f6cQL+feMchak0W0yk7qze
- tfFg==
+ bh=eWn0jScurp6TmWzJMVVefJTSheFUo5cZj36emLlZfjk=;
+ b=EYVQkudgNlFUAA8mK8yfRTroL+v6ZgBnbjd2oILvgSHYclQsGLZM/gWJvemdgIv1Os
+ 1opR6/yMVrXhKZ50USpsDnYek3KqLSDbj8APGSR/j5A1LSovOU15y8WdjLicaeHmosO/
+ gWHhxDKn4SOoDCiSPGMhU4IDJriynO4bD1W3lPVopXMJmN6P40ICY9S/NWNqfHsTJ5lk
+ xkm7jqQQlptA2/0NgLvtWGYOtW+VcCP+uE1T90eGH6gfRh277sfkrzEx9zIkKzStSqq3
+ 5NKWpxcW3fYlbcDSIoJ3bp1EIMwU++5pGfbL+91t4d+y11YaSPuQt0M9FUDa/9jGMvMG
+ q30Q==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=d/seaLFN
-Subject: [Buildroot] [PATCH 1/1] package/python-setuptools-rust: bump to
- version 1.5.2
+ header.a=rsa-sha256 header.s=20210112 header.b=EYVQkudg
+Subject: [Buildroot] [PATCH 1/1] package/forge: add FORGE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,48 +93,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Johan Oudinet <johan.oudinet@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-setuptools-rust/python-setuptools-rust.hash | 4 ++--
- package/python-setuptools-rust/python-setuptools-rust.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+cpe:2.3:a:digitalbazaar:forge is a valid CPE identifier for this package:
 
-diff --git a/package/python-setuptools-rust/python-setuptools-rust.hash b/package/python-setuptools-rust/python-setuptools-rust.hash
-index e503e7ef18..ff1b9a127f 100644
---- a/package/python-setuptools-rust/python-setuptools-rust.hash
-+++ b/package/python-setuptools-rust/python-setuptools-rust.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools-rust/json
--md5  deb0db6178d296876564d0bcbda8d212  setuptools-rust-1.5.1.tar.gz
--sha256  0e05e456645d59429cb1021370aede73c0760e9360bbfdaaefb5bced530eb9d7  setuptools-rust-1.5.1.tar.gz
-+md5  fd3412ca77ffd6e06e2e83d0e9636084  setuptools-rust-1.5.2.tar.gz
-+sha256  d8daccb14dc0eae1b6b6eb3ecef79675bd37b4065369f79c35393dd5c55652c7  setuptools-rust-1.5.2.tar.gz
- # Locally computed sha256 checksums
- sha256  b20668c1590582b3882854050ccfbdb7aee1f71a1ffe9eacc4c5aeb08a14161b  LICENSE
-diff --git a/package/python-setuptools-rust/python-setuptools-rust.mk b/package/python-setuptools-rust/python-setuptools-rust.mk
-index 44fce8f843..7f19ece1a3 100644
---- a/package/python-setuptools-rust/python-setuptools-rust.mk
-+++ b/package/python-setuptools-rust/python-setuptools-rust.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adigitalbazaar%3Aforge
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/forge/forge.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/forge/forge.mk b/package/forge/forge.mk
+index 9a811b4929..0b81295a15 100644
+--- a/package/forge/forge.mk
++++ b/package/forge/forge.mk
+@@ -9,6 +9,7 @@ FORGE_SITE = https://registry.npmjs.org/node-forge/-
+ FORGE_SOURCE = node-forge-$(FORGE_VERSION).tgz
+ FORGE_LICENSE = BSD-3-Clause, GPL-2.0, vendored dependencies licenses probably not listed
+ FORGE_LICENSE_FILES = LICENSE
++FORGE_CPE_ID_VENDOR = digitalbazaar
  
--PYTHON_SETUPTOOLS_RUST_VERSION = 1.5.1
-+PYTHON_SETUPTOOLS_RUST_VERSION = 1.5.2
- PYTHON_SETUPTOOLS_RUST_SOURCE = setuptools-rust-$(PYTHON_SETUPTOOLS_RUST_VERSION).tar.gz
--PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/dc/20/0b16eb0dd28c3ec6fccef77230b11e4b9ec94aa7ade1c99b1ab66d237fbe
-+PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/99/db/e4ecb483ffa194d632ed44bda32cb740e564789fed7e56c2be8e2a0e2aa6
- PYTHON_SETUPTOOLS_RUST_SETUP_TYPE = setuptools
- PYTHON_SETUPTOOLS_RUST_LICENSE = MIT
- PYTHON_SETUPTOOLS_RUST_LICENSE_FILES = LICENSE
+ # Install .min.js as .js
+ define FORGE_INSTALL_TARGET_CMDS
 -- 
-2.34.1
+2.35.1
 
 _______________________________________________
 buildroot mailing list
