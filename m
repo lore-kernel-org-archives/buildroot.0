@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 434C2C6FA83
-	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 08:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F397C6FA83
+	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 08:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5B7560B3A;
-	Sat, 24 Sep 2022 08:31:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5B7560B3A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BEB360AC0;
+	Sat, 24 Sep 2022 08:34:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BEB360AC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AZAewh10PXQ2; Sat, 24 Sep 2022 08:31:37 +0000 (UTC)
+	with ESMTP id kXsWfc4KRZFS; Sat, 24 Sep 2022 08:34:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2413E60AD2;
-	Sat, 24 Sep 2022 08:31:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2413E60AD2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 48CCC1BF861
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 08:31:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B56FD60A4F;
+	Sat, 24 Sep 2022 08:34:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B56FD60A4F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B1251BF861
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 08:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FEA6401B3
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 08:31:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FEA6401B3
+ by smtp1.osuosl.org (Postfix) with ESMTP id DAA1B83EE5
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 08:34:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAA1B83EE5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E0HVtr_nrDQL for <buildroot@lists.busybox.net>;
- Sat, 24 Sep 2022 08:31:26 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7B9F40067
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A7B9F40067
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 08:31:25 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8B775C0006;
- Sat, 24 Sep 2022 08:31:22 +0000 (UTC)
-Date: Sat, 24 Sep 2022 10:31:21 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Petr Vorel <pevik@seznam.cz>
-Message-ID: <20220924103121.6c8747c3@windsurf>
-In-Reply-To: <20220902221936.969471-1-pevik@seznam.cz>
-References: <20220902221936.969471-1-pevik@seznam.cz>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664008282;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=4imgujQZGGNFMOUuobL/o++KESj7wG60bYQmPJl0vX4=;
- b=jsQBeNGof+m2/czKN7pJIA6suKo7HV5sKZ7fqZIpXArF6VjfeZXKYP0oEF5R59Yt52sLa3
- mSJbrK6ZF6qezhXhgzoQ/iEdw697fMgVhYM6pRnIx1l8qr6p1BTkOredo1vNPodOjof2gM
- vqI6F2F4fg7WHFXb5VZerGrR0NVgrX864V54VwLDrdFfzgWX6XFNPDmOPmDSOQfq8/EXpq
- /Hl68RmJRdr1Yy/4UraeYAEk/bidNEXNUTWY2ZmDQVrqTjXlU8nH7930r8EfK+8619RmHl
- boX3SLUJt4O9puGdSSSPI1lSt6/F8TEfFy2xOxLWjiag4COA6W1OJ4S9SKHaVA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jsQBeNGo
-Subject: Re: [Buildroot] [PATCH 1/1] package/ltp-testsuite: build
- getcontext01.c on musl
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3N112acuHHKS for <buildroot@lists.busybox.net>;
+ Sat, 24 Sep 2022 08:34:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6DDE83EE4
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 08:34:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6DDE83EE4
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BCA7A85F9C; Sat, 24 Sep 2022 08:34:47 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 24 Sep 2022 10:34:30 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 68c32ce33806c5e9ffc89851e28e6a817d7e9706
+X-Git-Newrev: a54a7bf805424dacb02a17b7de5a5ebacec7356e
+X-Patchwork-Hint: ignore
+Message-Id: <20220924083447.BCA7A85F9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/size-stats: count compiled
+ python (.pyc) files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,32 +56,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  3 Sep 2022 00:19:36 +0200
-Petr Vorel <pevik@seznam.cz> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a54a7bf805424dacb02a17b7de5a5ebacec7356e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Petr Vorel <petr.vorel@gmail.com>
-> 
-> It was fixed for musl during conversion to the new API in 0f519d0da
-> (released in 20220527).
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/ltp-testsuite/ltp-testsuite.mk | 1 -
->  1 file changed, 1 deletion(-)
+Any .pyc files generated by the pycompile script during target
+finalization are currently counted in the "Unknown" package,
+because packages-file-list.txt only contains the source .py file.
 
-Applied to master, thanks.
+If a .py file is added to filesdict, add the corresponding .pyc
+file as well.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Michael Klein <m.klein@mvz-labor-lb.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/size-stats | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/support/scripts/size-stats b/support/scripts/size-stats
+index e4389e99b5..79c0dc571e 100755
+--- a/support/scripts/size-stats
++++ b/support/scripts/size-stats
+@@ -54,6 +54,9 @@ class Config:
+ # pkg: package to which the file belongs
+ #
+ def add_file(filesdict, relpath, abspath, pkg):
++    if relpath.endswith(".py"):
++        # also check for compiled .pyc file
++        add_file(filesdict, relpath + "c", abspath + "c", pkg)
+     if not os.path.exists(abspath):
+         return
+     if os.path.islink(abspath):
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
