@@ -1,86 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18B49C07E9D
-	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 17:34:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46B14C07E9D
+	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 18:02:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61D7A41D19;
-	Sat, 24 Sep 2022 17:34:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61D7A41D19
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAF4260B8E;
+	Sat, 24 Sep 2022 18:02:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAF4260B8E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vqy9WhK3-ImH; Sat, 24 Sep 2022 17:34:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ilpzxd4-aVSy; Sat, 24 Sep 2022 18:02:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3570F417AA;
-	Sat, 24 Sep 2022 17:34:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3570F417AA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D98B1BF215
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 17:34:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19D7960A4F;
+	Sat, 24 Sep 2022 18:02:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19D7960A4F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 87C911BF215
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 18:02:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 54C54417AA
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 17:34:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54C54417AA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7065F4012F
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 18:02:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7065F4012F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 22VEv5ZTtGE3 for <buildroot@lists.busybox.net>;
- Sat, 24 Sep 2022 17:34:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XoIFtOqOvUy9 for <buildroot@lists.busybox.net>;
+ Sat, 24 Sep 2022 18:02:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D954A41758
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D954A41758
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 17:34:20 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id g3so4348969wrq.13
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 10:34:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A035400CC
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2A035400CC
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 18:02:53 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id p202so2257601iod.6
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 11:02:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=mNNW8arXhbNJbZS5ziJE4BK/u0oFSJceWpaGuu90XuU=;
- b=Fd6wUKALPiIlV3lsRcPe25Ql3qIARlrugUnisJaSW6RWpaV7I73XX4owQSqy98vM0u
- B07ZXmnrkRpWy1gRn69ZhO3khcPRgtaFxdbrFDm/W2VTgjxAP6CwXdwAQSFfvnV82ij6
- 2/KZYmCC5lhiV8Hua+/FWM8gML4CiM0D6Eszn4D29+9GQZKtPlB1RuKbu7AH29fKsDLb
- 0Z/Nq6qUtwD3sqsnYRFIuCUHGYkFo28qCM2LZOsDdhwAFkMeHrVVXmck3GZDFwBnvaUM
- kyl+CIpqHZYib8WEe/azOyEVlXlwmSYB1yt93spvTwQCRN6SgSVpODsWET++GuzEJVVl
- GA5A==
-X-Gm-Message-State: ACrzQf33g7C9vew3YxsKr/WDxbmlL9holVF2LTCyP9Fwa+H+zUgWrfbC
- GFChqMR3oHuxVr7J7IYTj8OgkPDP8Nk=
-X-Google-Smtp-Source: AMsMyM5/9rr4oQZREAfhdF1igSe43/QMYu/L07lEBLN1RsRRZLfhkhW+D8XFtO87oGbuCaouPZ+0RQ==
-X-Received: by 2002:adf:d1ec:0:b0:228:d9ea:cbd2 with SMTP id
- g12-20020adfd1ec000000b00228d9eacbd2mr8679109wrd.609.1664040858612; 
- Sat, 24 Sep 2022 10:34:18 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- j6-20020a05600c190600b003a5f3f5883dsm6217059wmq.17.2022.09.24.10.34.17
+ bh=yFq/FptGpl6cFGtqRUeDopPb/9d8dkP1qqE6vlEZ/aU=;
+ b=bCRHj/Zh/xooFwJr/C6IOHVe2by8SzeBLN3pyTlr9lNq8O4rA8yuKEY4BnBud98x0N
+ 62DHCF5UbWJ8rYXLm4iLFZKVywnvL3vH2PRk1Cy/50UBhDYiQUdkVvRXIFMuqtRBWwgU
+ tlo8Omkg/CXqS7ILrg2Qw0FwWO9Pb6pOWD1Bt+VOh6xtMQBwQiZajx5kWttd+RuHfRa7
+ 1u/u4OGnTG+q6snY7sAxiz3SoohvTlWqDtS9CR9cAtcW2IUC7kk/36Yhzc1H6KydgmeX
+ YR83F8WJdp1buU1GEhOr/pdOGkNvpgGy63ouhCTixoiMdwwNwmyqNGADTvTWgkWnFupY
+ tGyQ==
+X-Gm-Message-State: ACrzQf3U6R61/oy5jfWCGCRmAta5/L249lNbJ3qi6XNnc3gAHuR4yI+1
+ GNJSQTffTNEN8uQ3VqRL8kg/WKnQTGogsA==
+X-Google-Smtp-Source: AMsMyM6u5m2oErkel0muTw4bz7RnRI42mAoO+Ozdy1YQay5oHA0EL2GtGd2Pf7ypHn4sq8xxPPG1Iw==
+X-Received: by 2002:a05:6638:3a1a:b0:35a:26bc:8856 with SMTP id
+ cn26-20020a0566383a1a00b0035a26bc8856mr7595404jab.47.1664042571837; 
+ Sat, 24 Sep 2022 11:02:51 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ l5-20020a023905000000b00342cb39de68sm4727938jaa.130.2022.09.24.11.02.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Sep 2022 10:34:18 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Sat, 24 Sep 2022 11:02:51 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Sep 2022 19:34:14 +0200
-Message-Id: <20220924173414.5970-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Sat, 24 Sep 2022 12:02:48 -0600
+Message-Id: <20220924180248.61154-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date;
- bh=mNNW8arXhbNJbZS5ziJE4BK/u0oFSJceWpaGuu90XuU=;
- b=TQeWPgFZw91eJTjalPRcrWHuqfsGIxgzc423sFAijXwHT5A1ZCMdhTyUkVNeYlIbQD
- 5UGTMQEhz0omYtfquboDfVlxl1dC9P4cH0AQlkKoIELcEO4BrFGAqWkMmKHLIEPzVYr8
- gujz1QVgGX9BRaj/D6PXcSmD9VgZ2PFoaDBRCyK//dTjqVs5SUDM24ZYb93Nf4hZbwYZ
- EG9V5Ijwmn4+5gltY7KTf0nnH9jSlqADMP9m/y80xW1YrFkInOO75C7GSC6bMDTH78Dm
- g8J81IKP3sRNNp8uqwymXyp57Lc6vNvyDXVuJLUkVrHVBAk9mESrxLdGPy58YW462n87
- FqtQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=yFq/FptGpl6cFGtqRUeDopPb/9d8dkP1qqE6vlEZ/aU=;
+ b=d/seaLFNILt6iNUPOAVq/GnExPjhb57kemKbZhPsg5PgVkrG109kSHWltP0giZ6mnP
+ 9KvBvtsNlBtiITY8SQ/IMOyjtmB6aN7QMTVF6vqCQuCGqP6MWh/QgYqLCvBNfBC874lG
+ crhxN0YxLiBuTzgiyNjOQ3oBM4/abQ4LQpyPUxyySqiEfH2/Nld8gprmWGqGkvpuV1yZ
+ WzVIk9KjG+VRS4cZ18+8nqLIPs+DXHogbgSyDyoWpksE3kmaHyhnOvTN9IHKEzak5fiN
+ EVoNgBdknC7zIfFl/qhUp77cJXbkpOOs7a0Mm/C1Mgp9e1f6cQL+feMchak0W0yk7qze
+ tfFg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=TQeWPgFZ
-Subject: [Buildroot] [PATCH 1/1] package/tinyproxy: fix CVE-2022-40468
+ header.a=rsa-sha256 header.s=20210112 header.b=d/seaLFN
+Subject: [Buildroot] [PATCH 1/1] package/python-setuptools-rust: bump to
+ version 1.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,77 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Mukhin <alexander.i.mukhin@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Tinyproxy commit 84f203f and earlier does not process HTTP request lines
-in the process_request() function and is using uninitialized buffers.
-This vulnerability allows attackers to access sensitive information at
-system runtime.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...up-in-error-page-in-invalid-requests.patch | 32 +++++++++++++++++++
- package/tinyproxy/tinyproxy.mk                |  3 ++
- 2 files changed, 35 insertions(+)
- create mode 100644 package/tinyproxy/0001-prevent-junk-from-showing-up-in-error-page-in-invalid-requests.patch
+ package/python-setuptools-rust/python-setuptools-rust.hash | 4 ++--
+ package/python-setuptools-rust/python-setuptools-rust.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tinyproxy/0001-prevent-junk-from-showing-up-in-error-page-in-invalid-requests.patch b/package/tinyproxy/0001-prevent-junk-from-showing-up-in-error-page-in-invalid-requests.patch
-new file mode 100644
-index 0000000000..da9c21a41a
---- /dev/null
-+++ b/package/tinyproxy/0001-prevent-junk-from-showing-up-in-error-page-in-invalid-requests.patch
-@@ -0,0 +1,32 @@
-+From 3764b8551463b900b5b4e3ec0cd9bb9182191cb7 Mon Sep 17 00:00:00 2001
-+From: rofl0r <rofl0r@users.noreply.github.com>
-+Date: Thu, 8 Sep 2022 15:18:04 +0000
-+Subject: [PATCH] prevent junk from showing up in error page in invalid
-+ requests
-+
-+fixes #457
-+
-+[Retrieved from:
-+https://github.com/tinyproxy/tinyproxy/commit/3764b8551463b900b5b4e3ec0cd9bb9182191cb7]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/reqs.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/reqs.c b/src/reqs.c
-+index bce69819..45db118d 100644
-+--- a/src/reqs.c
-++++ b/src/reqs.c
-+@@ -343,8 +343,12 @@ static struct request_s *process_request (struct conn_s *connptr,
-+                 goto fail;
-+         }
-+ 
-++        /* zero-terminate the strings so they don't contain junk in error page */
-++        request->method[0] = url[0] = request->protocol[0] = 0;
-++
-+         ret = sscanf (connptr->request_line, "%[^ ] %[^ ] %[^ ]",
-+                       request->method, url, request->protocol);
-++
-+         if (ret == 2 && !strcasecmp (request->method, "GET")) {
-+                 request->protocol[0] = 0;
-+ 
-diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
-index 6b5a3f9625..e91a886888 100644
---- a/package/tinyproxy/tinyproxy.mk
-+++ b/package/tinyproxy/tinyproxy.mk
-@@ -11,4 +11,7 @@ TINYPROXY_LICENSE = GPL-2.0+
- TINYPROXY_LICENSE_FILES = COPYING
- TINYPROXY_CPE_ID_VENDOR = tinyproxy_project
+diff --git a/package/python-setuptools-rust/python-setuptools-rust.hash b/package/python-setuptools-rust/python-setuptools-rust.hash
+index e503e7ef18..ff1b9a127f 100644
+--- a/package/python-setuptools-rust/python-setuptools-rust.hash
++++ b/package/python-setuptools-rust/python-setuptools-rust.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/setuptools-rust/json
+-md5  deb0db6178d296876564d0bcbda8d212  setuptools-rust-1.5.1.tar.gz
+-sha256  0e05e456645d59429cb1021370aede73c0760e9360bbfdaaefb5bced530eb9d7  setuptools-rust-1.5.1.tar.gz
++md5  fd3412ca77ffd6e06e2e83d0e9636084  setuptools-rust-1.5.2.tar.gz
++sha256  d8daccb14dc0eae1b6b6eb3ecef79675bd37b4065369f79c35393dd5c55652c7  setuptools-rust-1.5.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b20668c1590582b3882854050ccfbdb7aee1f71a1ffe9eacc4c5aeb08a14161b  LICENSE
+diff --git a/package/python-setuptools-rust/python-setuptools-rust.mk b/package/python-setuptools-rust/python-setuptools-rust.mk
+index 44fce8f843..7f19ece1a3 100644
+--- a/package/python-setuptools-rust/python-setuptools-rust.mk
++++ b/package/python-setuptools-rust/python-setuptools-rust.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+# 0001-prevent-junk-from-showing-up-in-error-page-in-invalid-requests.patch
-+TINYPROXY_IGNORE_CVES += CVE-2022-40468
-+
- $(eval $(autotools-package))
+-PYTHON_SETUPTOOLS_RUST_VERSION = 1.5.1
++PYTHON_SETUPTOOLS_RUST_VERSION = 1.5.2
+ PYTHON_SETUPTOOLS_RUST_SOURCE = setuptools-rust-$(PYTHON_SETUPTOOLS_RUST_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/dc/20/0b16eb0dd28c3ec6fccef77230b11e4b9ec94aa7ade1c99b1ab66d237fbe
++PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/99/db/e4ecb483ffa194d632ed44bda32cb740e564789fed7e56c2be8e2a0e2aa6
+ PYTHON_SETUPTOOLS_RUST_SETUP_TYPE = setuptools
+ PYTHON_SETUPTOOLS_RUST_LICENSE = MIT
+ PYTHON_SETUPTOOLS_RUST_LICENSE_FILES = LICENSE
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
