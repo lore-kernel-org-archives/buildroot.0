@@ -1,87 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FFDAC32771
-	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 20:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 735FEC32771
+	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 20:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A77F360BDA;
-	Sat, 24 Sep 2022 20:52:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A77F360BDA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 020FD409C3;
+	Sat, 24 Sep 2022 20:53:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 020FD409C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nldXJ8E7zo_n; Sat, 24 Sep 2022 20:52:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JmoKW2Zpt1Hq; Sat, 24 Sep 2022 20:53:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A53A6607D1;
-	Sat, 24 Sep 2022 20:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A53A6607D1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E93B71BF28D
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 20:52:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 574104093D;
+	Sat, 24 Sep 2022 20:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 574104093D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BF4A51BF28D
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 20:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDB4440136
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 20:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDB4440136
+ by smtp4.osuosl.org (Postfix) with ESMTP id 971D24093D
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 20:53:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 971D24093D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7cMPmMRrNpAK for <buildroot@lists.busybox.net>;
- Sat, 24 Sep 2022 20:52:00 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F71340123
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9F71340123
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 20:52:00 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- r3-20020a05600c35c300b003b4b5f6c6bdso1676133wmq.2
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 13:52:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=eWn0jScurp6TmWzJMVVefJTSheFUo5cZj36emLlZfjk=;
- b=VE/PXpXCzP3aPb1CKiBBXEKMRbxWBIgjFoMIWEue8QS0iJ6hm2TxqvGBWX4LThrZ5F
- SEIIusWDPF96RZFD2ldogui1VvNuFGaEdTag8xjgeXB1QNYArsu/w/L1aZHUHr4l/5Vq
- N/F2WkrZvovlpeS6KwL5/BzqG0FKapO+g9PQRaH0jEhQW6rvh8A+2UDCFY71uJynmLoh
- WD/TrmuBf8AkCu6IS8OIRcTuKF6wjs017VcxMCG/x4pjEEVJiP8V9jvTvHBPtTFqXdNc
- tZJmaJIrk/8zbw4kgBxEy90GaA+dIwAtSwdAW0in7dh2IGoVbNmZnlnSqUZFI74DUzXP
- Saqg==
-X-Gm-Message-State: ACrzQf3G3CdtkGfNbHvJQil6R5Sr0UUztUhKgfL7mPdvJ108yuH0P0F7
- pStf9i272PEyXiq51KZ+huxwKaCjxLg=
-X-Google-Smtp-Source: AMsMyM6nI93E0Hgh+qn9f4NubeCLEAdcdqxhFor/mUcrZrBjjCgWroHTwjqkUl0ddBZxYoFhxm4YuA==
-X-Received: by 2002:a05:600c:4793:b0:3b4:7276:1c5e with SMTP id
- k19-20020a05600c479300b003b472761c5emr17245906wmo.118.1664052718271; 
- Sat, 24 Sep 2022 13:51:58 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- n39-20020a05600c3ba700b003a540fef440sm6715091wms.1.2022.09.24.13.51.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Sep 2022 13:51:57 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 24 Sep 2022 22:51:48 +0200
-Message-Id: <20220924205148.20621-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W4QWCC1xbfLK for <buildroot@lists.busybox.net>;
+ Sat, 24 Sep 2022 20:53:44 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED16B408E9
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ED16B408E9
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 20:53:43 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id 239DBE0002;
+ Sat, 24 Sep 2022 20:53:41 +0000 (UTC)
+To: Romain Naour <romain.naour@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>, Max Filippov <jcmvbkbc@gmail.com>
+Date: Sat, 24 Sep 2022 22:53:23 +0200
+Message-Id: <20220924205327.1489102-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=eWn0jScurp6TmWzJMVVefJTSheFUo5cZj36emLlZfjk=;
- b=EYVQkudgNlFUAA8mK8yfRTroL+v6ZgBnbjd2oILvgSHYclQsGLZM/gWJvemdgIv1Os
- 1opR6/yMVrXhKZ50USpsDnYek3KqLSDbj8APGSR/j5A1LSovOU15y8WdjLicaeHmosO/
- gWHhxDKn4SOoDCiSPGMhU4IDJriynO4bD1W3lPVopXMJmN6P40ICY9S/NWNqfHsTJ5lk
- xkm7jqQQlptA2/0NgLvtWGYOtW+VcCP+uE1T90eGH6gfRh277sfkrzEx9zIkKzStSqq3
- 5NKWpxcW3fYlbcDSIoJ3bp1EIMwU++5pGfbL+91t4d+y11YaSPuQt0M9FUDa/9jGMvMG
- q30Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=EYVQkudg
-Subject: [Buildroot] [PATCH 1/1] package/forge: add FORGE_CPE_ID_VENDOR
+ d=bootlin.com; s=gm1; t=1664052822;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=VtFtWaWxH6FsEe2aa1Ba/mCwkRQS36XOpvlQwSZUVK0=;
+ b=nNvVd7KzzEqqbSyTKA4oY7FyTjcIts475HAE4pTfzPp9ZkR10iE6vgVFHWdsFyJ3vbcVjL
+ GmmR+yAiQ5J1N78MVxGxPZlBtzh3P+lKaV2WHlSWDdys5/bLQL+0oO9ibHHlTQOkeKljnl
+ a7zDjGhiNHYHskzD78CUWRIOpy9Y4qwXY6r28E10K3SC4j5dlGE8eLg9Xj9KoEcUj3bx1Q
+ zxNTvxUUzfgEzOAsm9D+IvypJjsemyfB6ZAn+y5qI24qEB4ip6OmiTkI6NCxofb3CITBaX
+ iwP45XITVV40HBQWj/ZfFZhHwewlyGCmLRhvKWEtDtNgP51kVZtkbJptTwbyNg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=nNvVd7Kz
+Subject: [Buildroot] [PATCH 1/4] arch/Config.in.xtensa: adjust endianness
+ logic to avoid bogus configurations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,36 +73,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Johan Oudinet <johan.oudinet@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Jonathan Ben Avraham <yba@tkos.co.il>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:digitalbazaar:forge is a valid CPE identifier for this package:
+The Xtensa architecture supports both LE and BE configurations. When
+BR2_XTENSA_CUSTOM is chosen, a choice in menuconfig to choose between
+LE and BE.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adigitalbazaar%3Aforge
+However, if using the internal toolchain backend, when the
+BR2_XTENSA_OVERLAY_FILE is empty, in practice, the configuration will
+always be big endian. But the choice being present, random
+configuration testing ends up testing configurations where
+BR2_XTENSA_OVERLAY_FILE is empty, but the endianness selected is LE,
+which is incorrect.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This commit fixes this by:
+
+ (1) Showing the overlay file option only when building an internal
+     toolchain. For external toolchain configurations, it does not
+     make sense to show it as it will have no effect.
+
+ (2) Showing the endianness choice either for internal toolchain
+     configurations with non-empty BR2_XTENSA_OVERLAY_FILE, or for
+     external toolchain configurations.
+
+ (2) Defaulting to BE when BR2_XTENSA_OVERLAY_FILE is empty.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/702e2886156f291466375dfcf412c20f1aa5857d/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/forge/forge.mk | 1 +
- 1 file changed, 1 insertion(+)
+ arch/Config.in.xtensa | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/forge/forge.mk b/package/forge/forge.mk
-index 9a811b4929..0b81295a15 100644
---- a/package/forge/forge.mk
-+++ b/package/forge/forge.mk
-@@ -9,6 +9,7 @@ FORGE_SITE = https://registry.npmjs.org/node-forge/-
- FORGE_SOURCE = node-forge-$(FORGE_VERSION).tgz
- FORGE_LICENSE = BSD-3-Clause, GPL-2.0, vendored dependencies licenses probably not listed
- FORGE_LICENSE_FILES = LICENSE
-+FORGE_CPE_ID_VENDOR = digitalbazaar
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index f9d5adb4c9..e9263f888e 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -14,7 +14,7 @@ endchoice
  
- # Install .min.js as .js
- define FORGE_INSTALL_TARGET_CMDS
+ config BR2_XTENSA_OVERLAY_FILE
+ 	string "Overlay file for custom configuration"
+-	depends on BR2_XTENSA_CUSTOM
++	depends on BR2_XTENSA_CUSTOM && BR2_TOOLCHAIN_BUILDROOT
+ 	help
+ 	  Enter the path to the overlay tarball for a custom processor
+ 	  configuration.
+@@ -31,6 +31,7 @@ choice
+ 	prompt "Target Architecture Endianness"
+ 	default BR2_XTENSA_LITTLE_ENDIAN
+ 	depends on BR2_XTENSA_CUSTOM
++	depends on BR2_XTENSA_OVERLAY_FILE != "" || BR2_TOOLCHAIN_EXTERNAL
+ 
+ config BR2_XTENSA_LITTLE_ENDIAN
+ 	bool "Little endian"
+@@ -51,7 +52,9 @@ config BR2_XTENSA_USE_MMU
+ 
+ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_XTENSA_LITTLE_ENDIAN
+-	default "BIG"		if BR2_xtensa_fsf || BR2_XTENSA_BIG_ENDIAN
++	default "BIG"		if BR2_XTENSA_BIG_ENDIAN
++	default "BIG"		if BR2_xtensa_fsf
++	default "BIG"		if BR2_XTENSA_CUSTOM && BR2_XTENSA_OVERLAY_FILE = ""
+ 
+ config BR2_ARCH
+ 	default "xtensa"	if BR2_xtensa
 -- 
-2.35.1
+2.37.3
 
 _______________________________________________
 buildroot mailing list
