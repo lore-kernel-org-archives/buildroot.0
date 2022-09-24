@@ -1,71 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5078EC32771
-	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 21:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4184C32771
+	for <buildroot@archiver.kernel.org>; Sat, 24 Sep 2022 21:47:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE93161125;
-	Sat, 24 Sep 2022 21:42:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE93161125
+	by smtp1.osuosl.org (Postfix) with ESMTP id 654D483FC8;
+	Sat, 24 Sep 2022 21:47:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 654D483FC8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SfVfx6nbIeJQ; Sat, 24 Sep 2022 21:42:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YxB0y26dWGYm; Sat, 24 Sep 2022 21:47:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9696860C04;
-	Sat, 24 Sep 2022 21:42:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9696860C04
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F42983F98;
+	Sat, 24 Sep 2022 21:47:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F42983F98
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 212921BF95D
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:42:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ED81D1BF95D
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6474A41D32
- for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:42:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6474A41D32
+ by smtp4.osuosl.org (Postfix) with ESMTP id C555B41A0E
+ for <buildroot@lists.busybox.net>; Sat, 24 Sep 2022 21:47:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C555B41A0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PuPhw-y8MM-8 for <buildroot@lists.busybox.net>;
- Sat, 24 Sep 2022 21:42:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBD17415E6
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DBD17415E6
- for <buildroot@buildroot.org>; Sat, 24 Sep 2022 21:42:17 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 33FBAC0002;
- Sat, 24 Sep 2022 21:42:16 +0000 (UTC)
-Date: Sat, 24 Sep 2022 23:42:15 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20220924234215.78ffe271@windsurf>
-In-Reply-To: <20220924213217.183647-1-fontaine.fabrice@gmail.com>
-References: <20220924213217.183647-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+ with ESMTP id XQVHHxGnlX0i for <buildroot@lists.busybox.net>;
+ Sat, 24 Sep 2022 21:47:38 +0000 (UTC)
+X-Greylist: delayed 00:06:19 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 180A8419E4
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 180A8419E4
+ for <buildroot@buildroot.org>; Sat, 24 Sep 2022 21:47:37 +0000 (UTC)
+Received: from gandalf.ozlabs.org (mail.ozlabs.org
+ [IPv6:2404:9400:2221:ea00::3])
+ by gandalf.ozlabs.org (Postfix) with ESMTP id 4MZjBj4vWBz4xG7;
+ Sun, 25 Sep 2022 07:41:17 +1000 (AEST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mail.ozlabs.org (Postfix) with ESMTPSA id 4MZjBh0gMCz4x3w;
+ Sun, 25 Sep 2022 07:41:15 +1000 (AEST)
+From: =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+To: buildroot@buildroot.org
+Date: Sat, 24 Sep 2022 23:41:10 +0200
+Message-Id: <20220924214110.3490682-1-clg@kaod.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664055736;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=WLGs5rtlWJdJhljXtLpJQ8x8GRzqu0S7PBYKmjScQts=;
- b=bc5/WmyK2ujD2ueFaDGg5Km+PoNz+fMeA/h4PnsGTdYpteVNtC8vTxWuxyK9LZWiZwoFVM
- mpJBA6eXscx+oUHs2xpADlO75fJtf0e5oGCh2V0UXaZpGwJOiWznoDe+pMu8mDps6ViacR
- NtPk3NkF4y3ShoGfg9G13JaXscv4BUE/iN0XHDTaJhdE883i+V99W6u8wL/eXS/bEvbM7b
- zYvtvke3YkxnJtfFvX6dT3CGEz1iy/uGwyggk+GE+gP3HGa1B86CqwS0HK/EjHUEWcZlJ/
- 6h9eSTRhQ9GYb3rDyM+U0tfY9cyaTG8909Kz4Sh0tNDOk6ReUcskgGylQQ9p4A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bc5/WmyK
-Subject: Re: [Buildroot] [PATCH 1/1] package/sane-backends: bump to version
- 1.1.1
+Subject: [Buildroot] [PATCH] Revert "configs/qemu_ppc64*: downgrade binutils
+ to 2.36.1"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,41 +64,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Joel Stanley <joel@jms.id.au>,
+ =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 24 Sep 2022 23:32:17 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Drop second to fifth patches (already in version)
-> 
-> https://gitlab.com/sane-project/backends/-/releases/1.1.1
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0002-genesys-fix-gcc-4.8-compile.patch    | 50 ----------------
->  ...ep-instead-of-std-this_thread-sleep_.patch | 46 ---------------
->  ...-fix-uclibc-compile-include-stdarg.h.patch | 58 ------------------
->  ...canutil-fix-uclibc-compile-include-s.patch | 59 -------------------
->  package/sane-backends/sane-backends.hash      |  4 +-
->  package/sane-backends/sane-backends.mk        |  4 +-
->  6 files changed, 4 insertions(+), 217 deletions(-)
->  delete mode 100644 package/sane-backends/0002-genesys-fix-gcc-4.8-compile.patch
->  delete mode 100644 package/sane-backends/0003-genesys-use-usleep-instead-of-std-this_thread-sleep_.patch
->  delete mode 100644 package/sane-backends/0004-backend-microtek-fix-uclibc-compile-include-stdarg.h.patch
->  delete mode 100644 package/sane-backends/0005-backend-sm3600-scanutil-fix-uclibc-compile-include-s.patch
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyByZXZlcnRzIGNvbW1pdCAxZTJmZTg2MGYzYTI2MWZjODc3NTkxYzA1NjgwOGQ2ZmIzMGUy
+NWQ0LgoKVGhlIGRlZmF1bHQgMi4zOC54IGhhcyB0aGUgcmVxdWlyZWQgZml4ZXMuCgpTaWduZWQt
+b2ZmLWJ5OiBDw6lkcmljIExlIEdvYXRlciA8Y2xnQGthb2Qub3JnPgotLS0KCiBodHRwczovL2dp
+dGxhYi5jb20vbGVnb2F0ZXIvYnVpbGRyb290Ly0vcGlwZWxpbmVzLzY0OTcyMzU5OAogCiBjb25m
+aWdzL3FlbXVfcHBjNjRfZTU1MDBfZGVmY29uZmlnICAgICAgfCAxIC0KIGNvbmZpZ3MvcWVtdV9w
+cGM2NF9wc2VyaWVzX2RlZmNvbmZpZyAgICB8IDEgLQogY29uZmlncy9xZW11X3BwYzY0bGVfcG93
+ZXJudjhfZGVmY29uZmlnIHwgMSAtCiBjb25maWdzL3FlbXVfcHBjNjRsZV9wc2VyaWVzX2RlZmNv
+bmZpZyAgfCAxIC0KIDQgZmlsZXMgY2hhbmdlZCwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQg
+YS9jb25maWdzL3FlbXVfcHBjNjRfZTU1MDBfZGVmY29uZmlnIGIvY29uZmlncy9xZW11X3BwYzY0
+X2U1NTAwX2RlZmNvbmZpZwppbmRleCA4NDU4ZjI3MzlhNjYuLjA4MjVkMGFiOWIzMCAxMDA2NDQK
+LS0tIGEvY29uZmlncy9xZW11X3BwYzY0X2U1NTAwX2RlZmNvbmZpZworKysgYi9jb25maWdzL3Fl
+bXVfcHBjNjRfZTU1MDBfZGVmY29uZmlnCkBAIC0zLDcgKzMsNiBAQCBCUjJfcG93ZXJwYzY0PXkK
+IEJSMl9wb3dlcnBjX2U1NTAwPXkKIAogIyBTeXN0ZW0KLUJSMl9CSU5VVElMU19WRVJTSU9OXzJf
+MzZfWD15CiBCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCiBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlf
+UE9SVD0idHR5UzAiCiAKZGlmZiAtLWdpdCBhL2NvbmZpZ3MvcWVtdV9wcGM2NF9wc2VyaWVzX2Rl
+ZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV9wcGM2NF9wc2VyaWVzX2RlZmNvbmZpZwppbmRleCA0ODBl
+YmVhMjlkNzAuLmM0NTAxNGYyYWMzZiAxMDA2NDQKLS0tIGEvY29uZmlncy9xZW11X3BwYzY0X3Bz
+ZXJpZXNfZGVmY29uZmlnCisrKyBiL2NvbmZpZ3MvcWVtdV9wcGM2NF9wc2VyaWVzX2RlZmNvbmZp
+ZwpAQCAtMyw3ICszLDYgQEAgQlIyX3Bvd2VycGM2ND15CiBCUjJfcG93ZXJwY19wb3dlcjc9eQog
+CiAjIFN5c3RlbQotQlIyX0JJTlVUSUxTX1ZFUlNJT05fMl8zNl9YPXkKIEJSMl9TWVNURU1fREhD
+UD0iZXRoMCIKIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9QT1JUPSJodmMwIgogCmRpZmYgLS1n
+aXQgYS9jb25maWdzL3FlbXVfcHBjNjRsZV9wb3dlcm52OF9kZWZjb25maWcgYi9jb25maWdzL3Fl
+bXVfcHBjNjRsZV9wb3dlcm52OF9kZWZjb25maWcKaW5kZXggOGRlNGNmNTE4OWI1Li44MjIxNDVl
+OTI3YTEgMTAwNjQ0Ci0tLSBhL2NvbmZpZ3MvcWVtdV9wcGM2NGxlX3Bvd2VybnY4X2RlZmNvbmZp
+ZworKysgYi9jb25maWdzL3FlbXVfcHBjNjRsZV9wb3dlcm52OF9kZWZjb25maWcKQEAgLTMsNyAr
+Myw2IEBAIEJSMl9wb3dlcnBjNjRsZT15CiBCUjJfcG93ZXJwY19wb3dlcjg9eQogCiAjIFN5c3Rl
+bQotQlIyX0JJTlVUSUxTX1ZFUlNJT05fMl8zNl9YPXkKIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRU
+WV9QT1JUPSJodmMwIgogQlIyX1NZU1RFTV9ESENQPSJldGgwIgogCmRpZmYgLS1naXQgYS9jb25m
+aWdzL3FlbXVfcHBjNjRsZV9wc2VyaWVzX2RlZmNvbmZpZyBiL2NvbmZpZ3MvcWVtdV9wcGM2NGxl
+X3BzZXJpZXNfZGVmY29uZmlnCmluZGV4IDk4YzZhZmRmOTM5OS4uNWVhYTNlOTUzZjc4IDEwMDY0
+NAotLS0gYS9jb25maWdzL3FlbXVfcHBjNjRsZV9wc2VyaWVzX2RlZmNvbmZpZworKysgYi9jb25m
+aWdzL3FlbXVfcHBjNjRsZV9wc2VyaWVzX2RlZmNvbmZpZwpAQCAtMyw3ICszLDYgQEAgQlIyX3Bv
+d2VycGM2NGxlPXkKIEJSMl9wb3dlcnBjX3Bvd2VyOD15CiAKICMgU3lzdGVtCi1CUjJfQklOVVRJ
+TFNfVkVSU0lPTl8yXzM2X1g9eQogQlIyX1RBUkdFVF9HRU5FUklDX0dFVFRZX1BPUlQ9Imh2YzAi
+CiBCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCiAKLS0gCjIuMzcuMwoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
