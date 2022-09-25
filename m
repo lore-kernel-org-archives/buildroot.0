@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42CC1C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 18:16:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D550C04A95
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 18:16:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D1A89405D7;
-	Sun, 25 Sep 2022 18:16:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1A89405D7
+	by smtp4.osuosl.org (Postfix) with ESMTP id E692840936;
+	Sun, 25 Sep 2022 18:16:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E692840936
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EaJGirHT3ECG; Sun, 25 Sep 2022 18:16:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id NsUsvYJ9AFlL; Sun, 25 Sep 2022 18:16:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0619840558;
-	Sun, 25 Sep 2022 18:16:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0619840558
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B76B4097B;
+	Sun, 25 Sep 2022 18:16:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B76B4097B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A5E8F1BF32E
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 18:16:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 236FA1BF32E
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 18:16:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 80F8B60BD2
+ by smtp3.osuosl.org (Postfix) with ESMTP id A605660615
  for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 18:16:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80F8B60BD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A605660615
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5ZIoupBkR_rZ for <buildroot@lists.busybox.net>;
+ with ESMTP id vCDSMujmH8aH for <buildroot@lists.busybox.net>;
  Sun, 25 Sep 2022 18:16:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9FD0760615
+ by smtp3.osuosl.org (Postfix) with ESMTP id A7EBE60B12
  for <buildroot@buildroot.org>; Sun, 25 Sep 2022 18:16:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FD0760615
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7EBE60B12
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8839A86000; Sun, 25 Sep 2022 18:16:27 +0000 (UTC)
+ id 92F9286002; Sun, 25 Sep 2022 18:16:27 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 25 Sep 2022 19:36:49 +0200
+Date: Sun, 25 Sep 2022 19:37:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 447b5baf30609736206b9280c49f9f512903dcff
-X-Git-Newrev: a88ba1548a50d5599e0156d66063dd71545f910b
+X-Git-Oldrev: a88ba1548a50d5599e0156d66063dd71545f910b
+X-Git-Newrev: a8a65d0951e4c93fbba8041ce8e7db1ba8809edc
 X-Patchwork-Hint: ignore
-Message-Id: <20220925181627.8839A86000@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: fixup qemu dependencies
+Message-Id: <20220925181627.92F9286002@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nodejs: bump to v16.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,86 +62,168 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a88ba1548a50d5599e0156d66063dd71545f910b
+commit: https://git.buildroot.net/buildroot/commit/?id=a8a65d0951e4c93fbba8041ce8e7db1ba8809edc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 1facb09b94bf806b301868539185c0ff9ddffee2 ("package/nodejs:
-build host-nodejs only if we're installing modules with NPM") forgot
-to account for the dependency on Qemu. Now that nodejs no longer
-depends on host-nodejs, but needs host-qemu, we need to make sure that
-nodejs selects the relevant BR2_PACKAGE_HOST_QEMU options.
+This is currently the latest version in the v16.x branch.
 
-So this patch:
+Patch 0001-add-qemu-wrapper-support.patch needs some minor adaptations
+to resolve conflicts with other unrelated upstream changes. The other
+patches are simply refreshed.
 
- - Drops the dependency of BR2_PACKAGE_NODEJS_ARCH_SUPPORTS on
-   BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET, which was incorrect: we
-   don't care about running Qemu on the target. We care about
-   host-qemu supporting the emulation of the target architecture,
-   which is what BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS is for.
+The license file is updates due to:
 
- - Adds the dependency to the relevant BR2_PACKAGE_HOST_QEMU options
-   to BR2_PACKAGE_NODEJS, so that host-qemu is built with the
-   appropriate features needed to build the target nodejs.
+ - Reformatting changes
 
- - Removes the qemu related dependencies from host-nodejs, which does
-   not need Qemu at all.
+ - Addition of the mention of some files being under GPLv3, but it's
+   only the autoconf machinery: aclocal.m4 and config.guess, so it's
+   not relevant to add in our LICENSE variable.
 
-Without this change the build of nodejs without npm enabled is broken
-as the host-qemu that gets built does not have all the features that
-are needed. There are no autobuild failures at this point, however.
+ - Addition of the mention of another file being under the MIT
+   license (install-sh), and MIT is already listed, and this file is
+   anyway only part of the autoconf machinery.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/nodejs/Config.in      | 4 +++-
- package/nodejs/Config.in.host | 4 ----
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/nodejs/0001-add-qemu-wrapper-support.patch | 28 +++++++++++-----------
+ ...002-check-if-uclibc-has-backtrace-support.patch |  6 ++---
+ ...3-include-obj-name-in-shared-intermediate.patch |  4 ++--
+ package/nodejs/nodejs.hash                         |  6 ++---
+ package/nodejs/nodejs.mk                           |  2 +-
+ 5 files changed, 23 insertions(+), 23 deletions(-)
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 8d0bd8fd60..5375dfeacd 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
- 	default y if BR2_aarch64 || BR2_i386 || BR2_x86_64
- 	# libuv
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
-+	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
+diff --git a/package/nodejs/0001-add-qemu-wrapper-support.patch b/package/nodejs/0001-add-qemu-wrapper-support.patch
+index 8d09601158..184f3d19b7 100644
+--- a/package/nodejs/0001-add-qemu-wrapper-support.patch
++++ b/package/nodejs/0001-add-qemu-wrapper-support.patch
+@@ -1,4 +1,4 @@
+-From c6103ceab64b73c1a25ece3315ea8f52507c2bfe Mon Sep 17 00:00:00 2001
++From 1f6c55d7318e7075169004b4314708f4766ec193 Mon Sep 17 00:00:00 2001
+ From: Adam Duskett <aduskett@gmail.com>
+ Date: Mon, 27 Sep 2021 12:55:09 -0700
+ Subject: [PATCH] add qemu-wrapper support
+@@ -22,10 +22,10 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+  2 files changed, 7 insertions(+), 7 deletions(-)
  
- comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 7, wchar, host gcc >= 8"
- 	depends on BR2_USE_MMU
-@@ -31,6 +31,8 @@ config BR2_PACKAGE_NODEJS
- 	select BR2_PACKAGE_HOST_PYTHON3
- 	select BR2_PACKAGE_HOST_PYTHON3_BZIP2
- 	select BR2_PACKAGE_HOST_PYTHON3_SSL
-+	select BR2_PACKAGE_HOST_QEMU
-+	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
- 	select BR2_PACKAGE_C_ARES
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/nodejs/Config.in.host b/package/nodejs/Config.in.host
-index 4ceaf0c73e..f7f2b80a9b 100644
---- a/package/nodejs/Config.in.host
-+++ b/package/nodejs/Config.in.host
-@@ -1,12 +1,9 @@
- config BR2_PACKAGE_HOST_NODEJS
- 	bool "host nodejs"
--	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 	depends on BR2_HOST_GCC_AT_LEAST_8
- 	select BR2_PACKAGE_HOST_PYTHON3
- 	select BR2_PACKAGE_HOST_PYTHON3_BZIP2
- 	select BR2_PACKAGE_HOST_PYTHON3_SSL
--	select BR2_PACKAGE_HOST_QEMU
--	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
- 	help
- 	  Event-driven I/O server-side JavaScript environment based on
- 	  V8.
-@@ -14,5 +11,4 @@ config BR2_PACKAGE_HOST_NODEJS
- 	  http://nodejs.org/
+ diff --git a/node.gyp b/node.gyp
+-index 74e9f9cc2e..c3eaab6c92 100644
++index 97cdbb531d..db5cf51ce6 100644
+ --- a/node.gyp
+ +++ b/node.gyp
+-@@ -295,7 +295,7 @@
++@@ -319,7 +319,7 @@
+                'action_name': 'run_mkcodecache',
+                'process_outputs_as_sources': 1,
+                'inputs': [
+@@ -34,17 +34,17 @@ index 74e9f9cc2e..c3eaab6c92 100644
+                ],
+                'outputs': [
+                  '<(SHARED_INTERMEDIATE_DIR)/node_code_cache.cc',
+-@@ -320,7 +320,7 @@
+-               'action_name': 'node_mksnapshot',
+-               'process_outputs_as_sources': 1,
+-               'inputs': [
+--                '<(node_mksnapshot_exec)',
+-+                @MAYBE_WRAPPER@ '<(node_mksnapshot_exec)',
+-               ],
+-               'outputs': [
+-                 '<(SHARED_INTERMEDIATE_DIR)/node_snapshot.cc',
++@@ -346,7 +346,7 @@
++                   'action_name': 'node_mksnapshot',
++                   'process_outputs_as_sources': 1,
++                   'inputs': [
++-                    '<(node_mksnapshot_exec)',
+++                    @MAYBE_WRAPPER@ '<(node_mksnapshot_exec)',
++                     '<(node_snapshot_main)',
++                   ],
++                   'outputs': [
+ diff --git a/tools/v8_gypfiles/v8.gyp b/tools/v8_gypfiles/v8.gyp
+-index 39b96803c7..9321982ea4 100644
++index 73099a03e4..88ca91efb4 100644
+ --- a/tools/v8_gypfiles/v8.gyp
+ +++ b/tools/v8_gypfiles/v8.gyp
+ @@ -68,7 +68,7 @@
+@@ -83,7 +83,7 @@ index 39b96803c7..9321982ea4 100644
+            ],
+            'outputs': [
+              '<(INTERMEDIATE_DIR)/snapshot.cc',
+-@@ -1503,7 +1503,7 @@
++@@ -1505,7 +1505,7 @@
+          {
+            'action_name': 'run_gen-regexp-special-case_action',
+            'inputs': [
+diff --git a/package/nodejs/0002-check-if-uclibc-has-backtrace-support.patch b/package/nodejs/0002-check-if-uclibc-has-backtrace-support.patch
+index 079bbb4366..367b9fb8d5 100644
+--- a/package/nodejs/0002-check-if-uclibc-has-backtrace-support.patch
++++ b/package/nodejs/0002-check-if-uclibc-has-backtrace-support.patch
+@@ -1,4 +1,4 @@
+-From 7c69553d7275bbcaa88fada8ccd0d2d9f787e1ad Mon Sep 17 00:00:00 2001
++From f1a15cea9a47d0a9b0ae78fb22fef3a268e355ad Mon Sep 17 00:00:00 2001
+ From: Martin Bark <martin@barkynet.com>
+ Date: Sat, 4 Mar 2017 20:41:40 +0000
+ Subject: [PATCH] check if uclibc has backtrace support
+@@ -9,7 +9,7 @@ Signed-off-by: Martin Bark <martin@barkynet.com>
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
- comment "host nodejs needs a host gcc >= 8"
--	depends on BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 	depends on !BR2_HOST_GCC_AT_LEAST_8
+ diff --git a/deps/v8/src/base/debug/stack_trace_posix.cc b/deps/v8/src/base/debug/stack_trace_posix.cc
+-index 87c0a73..d2c182a 100644
++index 270f1ca4e0..5227e88671 100644
+ --- a/deps/v8/src/base/debug/stack_trace_posix.cc
+ +++ b/deps/v8/src/base/debug/stack_trace_posix.cc
+ @@ -25,7 +25,7 @@
+@@ -22,5 +22,5 @@ index 87c0a73..d2c182a 100644
+  #endif
+  
+ -- 
+-2.7.4
++2.37.3
+ 
+diff --git a/package/nodejs/0003-include-obj-name-in-shared-intermediate.patch b/package/nodejs/0003-include-obj-name-in-shared-intermediate.patch
+index b439c66a0c..5b44e6c400 100644
+--- a/package/nodejs/0003-include-obj-name-in-shared-intermediate.patch
++++ b/package/nodejs/0003-include-obj-name-in-shared-intermediate.patch
+@@ -1,4 +1,4 @@
+-From e6e691d093de440e0f408d48971e2b7332a07d58 Mon Sep 17 00:00:00 2001
++From af47d317e5ae12978c1cdc40627008ada144f98b Mon Sep 17 00:00:00 2001
+ From: Min RK <benjaminrk@gmail.com>
+ Date: Fri, 19 Feb 2021 11:57:04 +0100
+ Subject: [PATCH] include obj name in shared intermediate
+@@ -12,7 +12,7 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  1 file changed, 7 insertions(+), 1 deletion(-)
+ 
+ diff --git a/tools/gyp/pylib/gyp/generator/ninja.py b/tools/gyp/pylib/gyp/generator/ninja.py
+-index d173bf2299..efaeee53ef 100644
++index 3db3771ac9..2e0a021703 100644
+ --- a/tools/gyp/pylib/gyp/generator/ninja.py
+ +++ b/tools/gyp/pylib/gyp/generator/ninja.py
+ @@ -42,7 +42,7 @@ generator_default_variables = {
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 12ae449ab4..83e4c271ce 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v16.16.0/SHASUMS256.txt
+-sha256  145151eff3b2aa5ebe73384009c52271a83740ae687a93c98c628cd7d52736eb  node-v16.16.0.tar.xz
++# From https://nodejs.org/dist/v16.17.1/SHASUMS256.txt
++sha256  6721feb4152d56d2c6b358ce397abd5a7f1daf09ee2e25c5021b9b4d3f86a330  node-v16.17.1.tar.xz
+ 
+ # Hash for license file
+-sha256  6211cc77f9ceaf365db12faf050775b3a1e6da7a1eff3577ba006c4918103c33  LICENSE
++sha256  69090e865afa7c62715b97f0712632d2923bd7a5faba91f94e4e75a2f9219d5e  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index e9fe96812f..05456e3443 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 16.16.0
++NODEJS_VERSION = 16.17.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
