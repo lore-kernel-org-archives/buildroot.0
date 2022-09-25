@@ -1,62 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 377FFC04A95
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 07:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0F0EC54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 07:09:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1BA160B2E;
-	Sun, 25 Sep 2022 07:08:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1BA160B2E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D43940283;
+	Sun, 25 Sep 2022 07:09:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D43940283
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7P7ZfCO1BgC1; Sun, 25 Sep 2022 07:08:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BXvSAh_o0bKJ; Sun, 25 Sep 2022 07:09:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 049A9607BC;
-	Sun, 25 Sep 2022 07:08:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 049A9607BC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B057C1BF97F
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 07:08:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 540474026A;
+	Sun, 25 Sep 2022 07:09:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 540474026A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BD5C1BF5DC
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 07:08:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8AC5D415D3
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 07:08:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AC5D415D3
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC25A812D3
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 07:08:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC25A812D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5d9vmkjphZEj for <buildroot@lists.busybox.net>;
- Sun, 25 Sep 2022 07:08:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Qk1IqFuEgpSM for <buildroot@lists.busybox.net>;
+ Sun, 25 Sep 2022 07:08:31 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 492DD415B5
-Received: from mailout04.t-online.de (mailout04.t-online.de [194.25.134.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 492DD415B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBDFB812B8
+Received: from mailout07.t-online.de (mailout07.t-online.de [194.25.134.83])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CBDFB812B8
  for <buildroot@buildroot.org>; Sun, 25 Sep 2022 07:08:30 +0000 (UTC)
-Received: from fwd75.dcpf.telekom.de (fwd75.aul.t-online.de [10.223.144.101])
- by mailout04.t-online.de (Postfix) with SMTP id 3CE1A953
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 09:08:27 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.201.33]) by fwd75.t-online.de
+Received: from fwd76.dcpf.telekom.de (fwd76.aul.t-online.de [10.223.144.102])
+ by mailout07.t-online.de (Postfix) with SMTP id 7423DFF6A
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 09:08:28 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.201.33]) by fwd76.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1ocLkY-22vzjH0; Sun, 25 Sep 2022 09:08:26 +0200
+ esmtp id 1ocLkY-498eVG0; Sun, 25 Sep 2022 09:08:26 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:54486)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1ocLkY-0007JT-0u;
+ (envelope-from <bernd.kuhls@t-online.de>) id 1ocLkY-0007JT-1E;
  Sun, 25 Sep 2022 09:08:26 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 25 Sep 2022 09:08:23 +0200
-Message-Id: <20220925070826.11210-4-bernd.kuhls@t-online.de>
+Date: Sun, 25 Sep 2022 09:08:25 +0200
+Message-Id: <20220925070826.11210-6-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220925070826.11210-1-bernd.kuhls@t-online.de>
 References: <20220925070826.11210-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1664089706-3D081535-662C5E59/0/0 CLEAN NORMAL
-X-TOI-MSGID: ac1fd074-ec81-421a-8596-a1e5d5c7f214
-Subject: [Buildroot] [PATCH 4/7] package/kodi-pvr-waipu: bump version to
- 19.3.1-Matrix
+X-TOI-EXPURGATEID: 150726::1664089706-EF7F5A26-D1F129B6/0/0 CLEAN NORMAL
+X-TOI-MSGID: c6577eaf-e626-4086-95a1-a72950f4dfd3
+Subject: [Buildroot] [PATCH 6/7] package/kodi-visualisation-spectrum: bump
+ version to 19.0.2-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,32 +76,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+ .../kodi-visualisation-spectrum.hash                            | 2 +-
+ .../kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk  | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-index 1f290b9331..b80ca10ae5 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+index 26cb7e3c77..1198dd1eab 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  61779eaac29930cfd7f2c23da44a27fdecb695252fbab9598c49c57ce8be7291  kodi-pvr-waipu-19.2.1-Matrix.tar.gz
-+sha256  67ae49e516dfe4328587ea36439b3f48b099d1784dd57acebe1e49e137d75b56  kodi-pvr-waipu-19.3.1-Matrix.tar.gz
- sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-index 19c750945e..b20f1c6414 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+-sha256  37cea1b82e4b70ab60494b6fe31a5dfd56d7e4feff16347d661f5d14c2f28724  kodi-visualisation-spectrum-19.0.1-Matrix.tar.gz
++sha256  524a740db973673c0038bcc9f73fbae9af497c6699dd3c34527683f29824a5c9  kodi-visualisation-spectrum-19.0.2-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+index 09aefd63fa..0da5f22bae 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_WAIPU_VERSION = 19.2.1-Matrix
-+KODI_PVR_WAIPU_VERSION = 19.3.1-Matrix
- KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
- KODI_PVR_WAIPU_LICENSE = GPL-2.0+
- KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
+-KODI_VISUALISATION_SPECTRUM_VERSION = 19.0.1-Matrix
++KODI_VISUALISATION_SPECTRUM_VERSION = 19.0.2-Matrix
+ KODI_VISUALISATION_SPECTRUM_SITE = $(call github,xbmc,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
+ KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = LICENSE.md
 -- 
 2.30.2
 
