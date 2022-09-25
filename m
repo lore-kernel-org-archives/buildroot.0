@@ -1,70 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DFA4C6FA82
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 08:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16AD3C04A95
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 08:30:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CF7C41781;
-	Sun, 25 Sep 2022 08:27:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CF7C41781
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9668082A56;
+	Sun, 25 Sep 2022 08:30:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9668082A56
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XcTJ50jBvNqB; Sun, 25 Sep 2022 08:30:28 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFCDB8146B;
+	Sun, 25 Sep 2022 08:30:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFCDB8146B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 834ED1BF4DD
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 08:30:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F4F3400BB
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 08:30:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F4F3400BB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aPa9U9yqARU5; Sun, 25 Sep 2022 08:27:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 491504177A;
-	Sun, 25 Sep 2022 08:27:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 491504177A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 584371BF4DD
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 08:27:20 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 16C4F60A80
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 08:27:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16C4F60A80
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sDBWS1YmWAei for <buildroot@lists.busybox.net>;
- Sun, 25 Sep 2022 08:27:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 668D260773
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 668D260773
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 08:27:18 +0000 (UTC)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a8Om98yd9iWa for <buildroot@lists.busybox.net>;
+ Sun, 25 Sep 2022 08:30:24 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D094400A8
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7D094400A8
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 08:30:23 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 5FB3424000B;
- Sun, 25 Sep 2022 08:27:15 +0000 (UTC)
-Date: Sun, 25 Sep 2022 10:27:14 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id EF5D2FF80D;
+ Sun, 25 Sep 2022 08:30:19 +0000 (UTC)
+Date: Sun, 25 Sep 2022 10:30:19 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Alexandru Ardelean <ardeleanalex@gmail.com>
-Message-ID: <20220925102714.163869b8@windsurf>
-In-Reply-To: <20220809075704.86472-1-ardeleanalex@gmail.com>
-References: <20220809075704.86472-1-ardeleanalex@gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20220925103019.1febbac3@windsurf>
+In-Reply-To: <20220925072502.GU1419013@scaer>
+References: <20220924205327.1489102-1-thomas.petazzoni@bootlin.com>
+ <20220925072502.GU1419013@scaer>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664094435;
+ d=bootlin.com; s=gm1; t=1664094621;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=JBhW0wgAO0r5tl8G2rgWDzRuePJnTgDZ23PXNyn+m6A=;
- b=X20RaoW3tfdqHUYR/DqIMb8QBBy6Qd9K0vfN7rUZZbKJTvk7L4R9IiBtAPstsOy1Jmjzz7
- KwOuBrD1nrHye3lmIUmaR/ZoTBey/4cvg41bzwHsoGv6AuhpAmKE2vp1NQhpLMj9uEx+uo
- km0oJeUJpfAZQGrZ67r6oBeaEbvVStZSYs74kZABJmRCYGPIYBBbLQhlQywlYhbIxb/UNT
- Ki2OgpLrJJEfII1ZSew1tRP0vmsDNLLca/Pl/184nG69wEt4anOF8DwppEtoyD2vpUWD7v
- VMRObQKu4x3CW83EdXG/KaXOJmX9ewJdzaoaMjSToo19dvPeewaeszl7f5htow==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=nf1knjcc+UNSKkNmhbmoON4JSMSkg+1StivmAbBdYQ0=;
+ b=CW4czHYuPMjLYqMxOCDeodaCgkVd382ezgkytzJWSg+CNxiUmIX7gCV5/p0n1TMOY6nbZ7
+ 7f5kchNRSG4D0GTfO5V2vDYqZqymPw3iYLbWHO2k9e/zFNSx4eFz0zeGJ3yUwD7hLz1CJ0
+ x48kcKz4yPf8kddYeCcPtOv5ULBgVzhv8zgqoh2lqQoey3wIyORQR+pzx+jdiQk3M/no9l
+ 6XvPbC9oT69S2DZfMYm6tsd3oZh99OW5eLD3XAclZvo6cXIO3kjEZyzm+IdbajHh8rCAi8
+ PtFYFYk8HiiYE6fTrGM9rWJJ+zJxJGTvpFXrA3jmx9HjdTqux3jgKCzQ50uHeA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=X20RaoW3
-Subject: Re: [Buildroot] [PATCH 00/13] package/nodejs: rework cross-building
+ header.s=gm1 header.b=CW4czHYu
+Subject: Re: [Buildroot] [PATCH 1/4] arch/Config.in.xtensa: adjust
+ endianness logic to avoid bogus configurations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,74 +78,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: fontaine.fabrice@gmail.com, aduskett@gmail.com, buildroot@buildroot.org
+Cc: Jonathan Ben Avraham <yba@tkos.co.il>,
+ Romain Naour <romain.naour@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexandru,
+Hello,
 
-On Tue,  9 Aug 2022 10:56:51 +0300
-Alexandru Ardelean <ardeleanalex@gmail.com> wrote:
+On Sun, 25 Sep 2022 09:25:02 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Alexandru Ardelean (13):
->   package/libuv: add host-build
->   package/nghttp2: add host-build
->   nodejs: remove v8-qemu-wrapper stuff
->   nodejs: fix 'Duplicate v8 target errors when cross-compiling' error
->   package/nodejs: add host-{c-ares,libuv,nghttp2} to deps
->   package/nodejs: provide {CC,CXX,CFLAGS,CXXFLAGS,LDFLAGS}_host env vars
->     to target-build
->   package/nodejs: don't install nodejs host-tools
->   package/nodejs: rename LDFLAGS.host -> LDFLAGS opt
->   package/nodejs: impose dep on ia32 libs/compiler if target arch not 64
->     bits
->   package/nodejs: add host-zlib depedency to target package
->   package/nodejs: fix ARM build with VFP3 instruction
->   package/nodejs: add a hack to cross-compile 32-bit targets on x64
->     hosts
->   package/nodejs: build host-nodejs only if we're installing modules
->     with NPM
+> >  (1) Showing the overlay file option only when building an internal
+> >      toolchain. For external toolchain configurations, it does not
+> >      make sense to show it as it will have no effect.  
+> 
+> This should be a separate patch.
 
-So I finally took some time to look into this, and managed to get
-NodeJS to build, but keeping the Qemu logic. Here is what I have pushed
-to the Buildroot Git repo:
+ACK.
 
-  https://gitlab.com/buildroot.org/buildroot/-/commit/f85e2cfc6e587d50b86f49b28469eae58a2ea2c7
+> >  (2) Showing the endianness choice either for internal toolchain
+> >      configurations with non-empty BR2_XTENSA_OVERLAY_FILE, or for
+> >      external toolchain configurations.  
+> 
+> As an empty BR2_XTENSA_OVERLAY_FILE is not accepted anymore (see below),
 
-  Just renumbering an existing patch
+See my patch 2/4. Not accepting an empty BR2_XTENSA_OVERLAY_FILE is
+totally wrong, as it breaks the build with external toolchains.
+External toolchains can target a custom Xtensa core, but specifying a
+overlay file with an external toolchain does not make any sense.
 
-  https://gitlab.com/buildroot.org/buildroot/-/commit/5708c5b04f09f49a99c2c9d7a1894d24bce6a3e7
+My patch 2/4 therefore reverts 4cbf7336914f, which is wrong.
 
-  Your patch to fix the duplicate v8 target error, just slightly
-  improved by me.
+> this can be simplified to "sharing the endianness chice for internal and
+> external toolchains".
+> 
+> >  (2) Defaulting to BE when BR2_XTENSA_OVERLAY_FILE is empty.  
+> 
+> An empty BR2_XTENSA_OVERLAY_FILE is now no longer accepted, after commit
+> 4cbf7336914f (arch/xtensa: custom configuration requires an overlay).
 
-  https://gitlab.com/buildroot.org/buildroot/-/commit/cf0ddc89705af989393b1601bbf57d567a9a1b13
+Right, but this commit is incorrect, and needs to be reverted.
 
-  A patch from me which is fixing the issue with the Qemu approach.
-  Basically, since the bump from 14.x to 16.x, one call to a tool that
-  should be run under Qemu was not done through the wrapper, causing
-  the build failure. With this fixed, NodeJS builds just fine with the
-  current approach.
+> > Fixes:
+> >   http://autobuild.buildroot.net/results/702e2886156f291466375dfcf412c20f1aa5857d/  
+> 
+> This commit if from August the 15th; I could not find any such failure
+> since 4cbf7336914f was applied; the last occured 2022-09-08, on commit
+> d2141f65e449, which is the parent of 4cbf7336914f (there are build
+> failures on older branches, of course, but not on master).
 
-  Even though I dislike having to build Qemu, it is what OpenEmbedded
-  is also doing to build NodeJS, and we don't have much choice as we
-  need those tools to have the same bitness as the target.
+See above: 4cbf7336914f is incorrect. It breaks for example the test
+case for the Bootlin Xtensa LX60 external toolchain. An empty overlay
+file is perfectly valid for a custom Xtensa core, when using an
+external toolchain.
 
-  https://gitlab.com/buildroot.org/buildroot/-/commit/ec5589611ad79664bc5bf238cc786a65458f3c93
-
-  Your patch to not install the extra tools of host-nodejs, as they are
-  no longer needed: we use the target tools, and run them under Qemu.
-
-  https://gitlab.com/buildroot.org/buildroot/-/commit/1facb09b94bf806b301868539185c0ff9ddffee2
-
-  Your patch to no longer build host-nodejs as a dependency of nodejs,
-  unless some extra NPM modules need to be installed, in which case npm
-  is needed.
-
-So here, NodeJS now builds/runs fine. Could you check on your side if
-that also solves your problems?
+And I am precisely doing the revert *after* this patch 1/4 so that the
+series is bisectable. I.e introduce the correct fix, and then remove
+the incorrect fix.
 
 Best regards,
 
