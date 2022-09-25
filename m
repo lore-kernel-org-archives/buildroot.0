@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CDE2C04A95
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 07:19:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9952EC54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 07:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2A0340298;
-	Sun, 25 Sep 2022 07:19:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A0340298
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B9D3403A7;
+	Sun, 25 Sep 2022 07:19:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B9D3403A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wxH61VPduo5n; Sun, 25 Sep 2022 07:19:14 +0000 (UTC)
+	with ESMTP id uZdS49kamk3q; Sun, 25 Sep 2022 07:19:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED68140283;
-	Sun, 25 Sep 2022 07:19:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED68140283
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5B9451BF5DC
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 07:19:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4DE63403BE;
+	Sun, 25 Sep 2022 07:19:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DE63403BE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BDF71BF5DC
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 07:19:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 371E1607BC
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 07:19:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 371E1607BC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 751F140292
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 07:19:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 751F140292
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ahN4ytkcZjLI for <buildroot@lists.busybox.net>;
- Sun, 25 Sep 2022 07:19:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p8i4z1UXkzgT for <buildroot@lists.busybox.net>;
+ Sun, 25 Sep 2022 07:19:23 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F94860774
-Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1F94860774
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 07:19:10 +0000 (UTC)
-Received: from fwd78.dcpf.telekom.de (fwd78.aul.t-online.de [10.223.144.104])
- by mailout05.t-online.de (Postfix) with SMTP id 36A6D127F8;
- Sun, 25 Sep 2022 09:19:07 +0200 (CEST)
-Received: from fli4l.lan.fli4l ([79.214.201.33]) by fwd78.t-online.de
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C4A140377
+Received: from mailout12.t-online.de (mailout12.t-online.de [194.25.134.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5C4A140377
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 07:19:23 +0000 (UTC)
+Received: from fwd73.dcpf.telekom.de (fwd73.aul.t-online.de [10.223.144.99])
+ by mailout12.t-online.de (Postfix) with SMTP id B4A5014FF6;
+ Sun, 25 Sep 2022 09:19:20 +0200 (CEST)
+Received: from fli4l.lan.fli4l ([79.214.201.33]) by fwd73.t-online.de
  with (TLSv1:ECDHE-RSA-AES256-SHA encrypted)
- esmtp id 1ocLus-0jqlbV0; Sun, 25 Sep 2022 09:19:06 +0200
+ esmtp id 1ocLus-0JNfiz0; Sun, 25 Sep 2022 09:19:06 +0200
 Received: from bruckner.lan.fli4l ([192.168.1.1]:33260)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd.kuhls@t-online.de>) id 1ocLus-0000iQ-1f;
+ (envelope-from <bernd.kuhls@t-online.de>) id 1ocLus-0000iQ-1U;
  Sun, 25 Sep 2022 09:19:06 +0200
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 To: buildroot@buildroot.org
-Date: Sun, 25 Sep 2022 09:19:06 +0200
-Message-Id: <20220925071906.95926-3-bernd.kuhls@t-online.de>
+Date: Sun, 25 Sep 2022 09:19:05 +0200
+Message-Id: <20220925071906.95926-2-bernd.kuhls@t-online.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220925071906.95926-1-bernd.kuhls@t-online.de>
 References: <20220925071906.95926-1-bernd.kuhls@t-online.de>
 MIME-Version: 1.0
-X-TOI-EXPURGATEID: 150726::1664090346-793AD9DD-0F1A8904/0/0 CLEAN NORMAL
-X-TOI-MSGID: 18000c57-2880-4622-8d6f-6313b69a04e4
-Subject: [Buildroot] [PATCH 3/3] package/intel-mediasdk: bump version to
+X-TOI-EXPURGATEID: 150726::1664090346-2588998D-9BE7BF93/0/0 CLEAN NORMAL
+X-TOI-MSGID: c18da140-7e92-41fd-b648-325df714b62d
+Subject: [Buildroot] [PATCH 2/3] package/intel-mediadriver: bump version to
  22.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -76,32 +76,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/intel-mediasdk/intel-mediasdk.hash | 2 +-
- package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
-index c6e74a86ed..a770551875 100644
---- a/package/intel-mediasdk/intel-mediasdk.hash
-+++ b/package/intel-mediasdk/intel-mediasdk.hash
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index 74870f54de..949c9d5f66 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  d316834a5672e392cb7c1fb95533d5f914cb62d66573a70ed9d18d959d4b5694  intel-mediasdk-22.5.2.tar.gz
-+sha256  078fc882d97273754cee9bf9cab6b4d4fb3bb087765867a76f2f2b2817e3d747  intel-mediasdk-22.5.3.tar.gz
- sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
-diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-index 06980f38f3..aea0cac014 100644
---- a/package/intel-mediasdk/intel-mediasdk.mk
-+++ b/package/intel-mediasdk/intel-mediasdk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256  3b53bb6fb7793ef6c498ff086327ceefeef0a72d1f41b1fcaeae552a694fbcd8  intel-media-22.5.2.tar.gz
++sha256  65652b365d48be3c9f0b3c561502952b92ee5fcc587520b88d0d752cf2a6a3b5  intel-media-22.5.3.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 96dff0a0c9..d6bb8bc9a6 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
--INTEL_MEDIASDK_VERSION = 22.5.2
-+INTEL_MEDIASDK_VERSION = 22.5.3
- INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
- INTEL_MEDIASDK_LICENSE = MIT
- INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 22.5.2
++INTEL_MEDIADRIVER_VERSION = 22.5.3
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 -- 
 2.30.2
 
