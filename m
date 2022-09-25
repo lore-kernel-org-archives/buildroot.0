@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97DF6C54EE9
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 20:49:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96A57C04A95
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 20:50:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C6BD60E22;
-	Sun, 25 Sep 2022 20:49:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C6BD60E22
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2577F4174B;
+	Sun, 25 Sep 2022 20:50:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2577F4174B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TgA-FJdL0MSD; Sun, 25 Sep 2022 20:49:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id clrg7zsr64ui; Sun, 25 Sep 2022 20:50:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33D2F60E13;
-	Sun, 25 Sep 2022 20:49:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33D2F60E13
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9BA1A1BF321
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 20:49:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C78AB416E7;
+	Sun, 25 Sep 2022 20:50:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C78AB416E7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E23F31BF321
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 20:50:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 778834058F
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 20:49:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 778834058F
+ by smtp4.osuosl.org (Postfix) with ESMTP id C9C75416E7
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 20:50:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9C75416E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z3cj1iQ2OGpw for <buildroot@lists.busybox.net>;
- Sun, 25 Sep 2022 20:49:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HAoNEZ3t9i7V for <buildroot@lists.busybox.net>;
+ Sun, 25 Sep 2022 20:50:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E8D040517
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 20:49:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E8D040517
+ by smtp4.osuosl.org (Postfix) with ESMTP id 96D24416C2
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 20:50:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96D24416C2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EA3986021; Sun, 25 Sep 2022 20:49:23 +0000 (UTC)
+ id 8595C86024; Sun, 25 Sep 2022 20:50:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Sep 2022 22:48:09 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 2efa57cc0e0ecfaa18b482a6e40c220ee2d75069
-X-Git-Newrev: 3c3356e6709f3195b2b39105dc94cda9608a3198
+Date: Sun, 25 Sep 2022 22:47:53 +0200
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 3d69820a6d2517ab8dab8cb4edcbc3f04948f364
+X-Git-Newrev: 1431b822c3bd728ce834db2d080e0dcebe44f042
 X-Patchwork-Hint: ignore
-Message-Id: <20220925204923.7EA3986021@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/icu: clear TARGET
+Message-Id: <20220925205027.8595C86024@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/icu: clear TARGET
  env variable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c3356e6709f3195b2b39105dc94cda9608a3198
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1431b822c3bd728ce834db2d080e0dcebe44f042
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
 If the TARGET env variable is set icu may try to use it.
 
