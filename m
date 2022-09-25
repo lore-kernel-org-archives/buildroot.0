@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE302C04A95
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 20:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E57C04A95
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 20:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50D1A408D7;
-	Sun, 25 Sep 2022 20:47:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50D1A408D7
+	by smtp4.osuosl.org (Postfix) with ESMTP id F1BF14174B;
+	Sun, 25 Sep 2022 20:48:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1BF14174B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZZxYFyXMLDe5; Sun, 25 Sep 2022 20:47:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C9aZLRS8fXEn; Sun, 25 Sep 2022 20:48:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E17C4058F;
-	Sun, 25 Sep 2022 20:47:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E17C4058F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E406A1BF321
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB0A9416EA;
+	Sun, 25 Sep 2022 20:47:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB0A9416EA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E66F91BF97E
  for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 20:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CCBB081D7C
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE88A41737
  for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 20:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCBB081D7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE88A41737
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2KQXYNCJvgVa for <buildroot@lists.busybox.net>;
- Sun, 25 Sep 2022 20:47:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JCO1MDMjEKjy for <buildroot@lists.busybox.net>;
+ Sun, 25 Sep 2022 20:47:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B10D81D34
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 20:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B10D81D34
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE829416EA
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 20:47:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE829416EA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF95F86019; Sun, 25 Sep 2022 20:47:44 +0000 (UTC)
+ id 9D46E86019; Sun, 25 Sep 2022 20:47:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Sep 2022 22:45:10 +0200
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: c6664f51a9a766110f8e6c60afb768b56fec1c67
-X-Git-Newrev: 3d69820a6d2517ab8dab8cb4edcbc3f04948f364
+Date: Sun, 25 Sep 2022 22:45:18 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: f6fe74025c39e43ee6c17391a533f975ef4ce97b
+X-Git-Newrev: 2efa57cc0e0ecfaa18b482a6e40c220ee2d75069
 X-Patchwork-Hint: ignore
-Message-Id: <20220925204744.EF95F86019@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/rtl8189es: fix
+Message-Id: <20220925204744.9D46E86019@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/rtl8189es: fix
  build failure due to missing Linux options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d69820a6d2517ab8dab8cb4edcbc3f04948f364
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2efa57cc0e0ecfaa18b482a6e40c220ee2d75069
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 This driver requires:
 CONFIG_NET
