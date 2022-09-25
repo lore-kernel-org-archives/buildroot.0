@@ -1,73 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C233C04A95
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 13:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA834C04A95
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 13:46:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB027404DD;
-	Sun, 25 Sep 2022 13:38:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB027404DD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qQE6CSyJzQtI; Sun, 25 Sep 2022 13:38:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8C7C404C1;
-	Sun, 25 Sep 2022 13:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8C7C404C1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EED891BF2AA
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 13:38:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C808581000
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 13:38:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C808581000
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7085682B51;
+	Sun, 25 Sep 2022 13:46:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7085682B51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hSbHymzMPTBv for <buildroot@lists.busybox.net>;
- Sun, 25 Sep 2022 13:38:35 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9CkGVSTzftxQ; Sun, 25 Sep 2022 13:46:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 433F082B08;
+	Sun, 25 Sep 2022 13:46:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 433F082B08
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5BFE71BF2AA
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 13:46:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 33706606CB
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 13:46:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33706606CB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JQwECtkgM56B for <buildroot@lists.busybox.net>;
+ Sun, 25 Sep 2022 13:46:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 971C380EE3
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 971C380EE3
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 13:38:35 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:139f:51c2:7bd0:4f35])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3F4E413F87C;
- Sun, 25 Sep 2022 15:38:29 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 25 Sep 2022 15:38:28 +0200
-Date: Sun, 25 Sep 2022 15:38:28 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
-Message-ID: <20220925133828.GZ1419013@scaer>
-References: <20220924214110.3490682-1-clg@kaod.org>
- <20220925124055.GY1419013@scaer>
- <eec913f5-2209-546e-5956-1cafd73bea7e@kaod.org>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C02C0605EC
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C02C0605EC
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 13:46:52 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ z13-20020a7bc7cd000000b003b5054c6f9bso5438296wmk.2
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 06:46:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=z90FLdBXyahUlcyhpCMExmnSsufi0gWuAzbJ8N1PnQk=;
+ b=Z5pdoIRLmQ2lhoYB+InUUXdjYr4+akmCO/WfXibBXAxUvi+ucQ+ZE+tO2hP/hWTJRf
+ kYjzWqhHS4b1GPg/MWJeLrv12gbMK+D7RW8r1uvb71EN6BUzJrOz6uKO/1UK/pmMV2X3
+ C/8hq/gUw/5VArkGJlH5qCUjUZUivSahzxTTmWZZFzT2yaUGGn6Lft4xczwHLJ9XCFGy
+ kFeJeWLl/uRXWOiqYtnhZ2kEqZeJ6qiVzeYyumDznyt48uJTbK4nhOdJ7axNbZHJ3cbd
+ jLeh34XqqaOAy5CKEiLqhTBW4HME+S0lJfMQafHS1t0UvfabEaaOU7GsXgLGbpD5zd68
+ 7/0A==
+X-Gm-Message-State: ACrzQf2ms4tVlP3n6F/ykxc2fqL4kygI+80MY15JWwONzE2pVWPEdLLe
+ MQwXFd/3jNTAQ0TDjD3FoYCsQE4Xvkw=
+X-Google-Smtp-Source: AMsMyM7/KRXfRFeQmarNX8Wb3OymxFdYZLJnYPGbxogTvQcXBHOR66krHMVAjHMeHyLYjLR0pgNmUQ==
+X-Received: by 2002:a05:600c:46c6:b0:3b4:d069:913f with SMTP id
+ q6-20020a05600c46c600b003b4d069913fmr11983389wmo.27.1664113610470; 
+ Sun, 25 Sep 2022 06:46:50 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ k22-20020a05600c1c9600b003b340f00f10sm8540126wms.31.2022.09.25.06.46.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 25 Sep 2022 06:46:49 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 25 Sep 2022 15:46:47 +0200
+Message-Id: <20220925134647.577936-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <eec913f5-2209-546e-5956-1cafd73bea7e@kaod.org>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1664113112;
- bh=qSRL3f8dVcZbmmNJuy/xu2Izz9Xva+9KDmeubyHJGLg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nlr8pOScyusTUg/72UJ7BSobGVqrL8eHfI5SNFJ9PS/DqAWfbFgdktDUP4NZBYMoq
- njIVQad6EnH5rhzRD6NPkdFrZW1K7dIscOBtGor75TWLLZ1izN63PFoebANMyueGTd
- iTpSzAgEJmytXSsj+o2sFw95kd/+PMylWdUiwk2ilgr+6ibfzPDov1wKhs5ZLRPFen
- AzJYOJvjC/pZZRHtLvxQk+1z1X0Hq87bAIisl1irXDsK29I+KWuVuWaKkKikDe/eVT
- N2T3COawsxb+E4Kj8lYrITmkaV2N6PClDSBhF1ejhEw7fIJmYBG4eHYgpMt9JjdqFM
- mY5Q2rmh3ok7A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nlr8pOSc
-Subject: Re: [Buildroot] [PATCH] Revert "configs/qemu_ppc64*: downgrade
- binutils to 2.36.1"
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=z90FLdBXyahUlcyhpCMExmnSsufi0gWuAzbJ8N1PnQk=;
+ b=Fih17JouEv3d9NMZjJla9kK7uzf8PnhRM2lxMl5iNqPPiHdP4B3YcMbGMq/aXQnyaz
+ NmFAYAscWM8MrN0ouKnT8dvghV+Oe99W5AGtkdPFmmmNOJQfeCYkoW6t2k+G4zY2Ai3A
+ w7d23PiZS/PZAfHzLrRAsfPQNhmHmI67WMUOwptNjPwJdTtVDzitseiPe0LeYL9jW3GE
+ NbQZ+WZo6Ri2GRBoOHNYt7eXRq6JsDJbLTT9YCdH6YljUlfVhT7kbOPP20zbpSTTDZI2
+ lVvwU6ooATQy2Ul1ZGow6CcrsSwD4pzAhYLsujTpHmQtjcUM/49xplg+BF/PemJrVQur
+ tWfg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Fih17Jou
+Subject: [Buildroot] [PATCH v2,1/1] package/libiio: fix sparc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,51 +93,147 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Paul Cercueil <paul@crapouillou.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q8OpZHJpYywgQWxsLAoKT24gMjAyMi0wOS0yNSAxNToyMCArMDIwMCwgQ8OpZHJpYyBMZSBHb2F0
-ZXIgc3Bha2UgdGh1c2x5Ogo+IE9uIDkvMjUvMjIgMTQ6NDAsIFlhbm4gRS4gTU9SSU4gd3JvdGU6
-Cj4gPk9uIDIwMjItMDktMjQgMjM6NDEgKzAyMDAsIEPDqWRyaWMgTGUgR29hdGVyIHNwYWtlIHRo
-dXNseToKPiA+PlRoaXMgcmV2ZXJ0cyBjb21taXQgMWUyZmU4NjBmM2EyNjFmYzg3NzU5MWMwNTY4
-MDhkNmZiMzBlMjVkNC4KPiA+VGhpcyBpcyBub3QgcmVhbGx5IGEgcmV2ZXJ0LAo+IFRoaXMgaXMg
-dGhlIHJlc3VsdCBvZiB0aGUgY29tbWFuZCA6Cj4gICBnaXQgcmV2ZXJ0IC1zIDFlMmZlODYwZjNh
-Mgo+IFNvIGl0IGlzICJyZWFsbHkiIGEgcmV2ZXJ0IDopCgpZZXMsIGl0IGlzIGEgZ2l0LXJldmVy
-dCwgaS5lLiBpdHkgaXMgYSB0Y2huaWNhbCByZXZlcnQuCgpIb3dldmVyLCBhIGdpdC1yZXZlcnQg
-cmVhbGx5IG1lYW5zICJ0aGF0IGNvbW1pdCB3YXMgd3JvbmcgYmFjayBhdCB0aGUKdGltZSwgdW5k
-byBpdCIuIEJ1dCBpbiB0aGlzIGNhc2UsIHRoZSBjb21taXQgd2FzIGNvcnJlY3QsIHNvIHdlIGRv
-IG5vdAp3YW50IHRvIGdpdC1yZXZlcnQgaXQ7IGF0IGxlYXN0LCB3ZSBkbyBub3Qgd2FudCB0byBp
-bnNjcmliZSBpbiBvdXIgZ2l0CmxvZyB0aGF0IHRoaXMgaXMgYSByZXZlcnQuCgpJbnN0ZWFkLCB0
-aGUgY29uZGl0aW9ucyBhcm91bmQgaGF2ZSBjaGFuZ2VkLCB3aGljaCBhbGxvd3MgdXNpbmcgdGhl
-IG9sZAoiY29kZSIgKGRlZmNvbmZpZyB2YWx1ZXMgaW4gdGhpcyBjYXNlKSBhZ2Fpbi4KCj4gPnNv
-IEkgZGlkIHNvbWUgY2hhbmdlczoKPiA+ICAgLSBleHBsaWN0aWx5IGZvcmNlIGJpbnV0aWxzIDIu
-MzgKPiBJIGd1ZXNzIHRoaXMgaXMgdG8gbWFrZSBzdXJlIHRoYXQgMi4zNyBpcyBub3Qgc2VsZWN0
-ZWQgYnV0IHdoZW4KPiB0aGUgY3VycmVudCAyLjM4IGlzIGRlcHJlY2F0ZWQsIGFsbCBkZWZjb25m
-aWdzIHdpbGwgcmVxdWlyZSBhbgo+IHVwZGF0ZS4gU2luY2UgdGhlIGRlZmF1bHQgd29ya3MgZmlu
-ZSwgSSBkb24ndCB0aGluayBpdCBpcyB3b3J0aAo+IGFkZGluZyBhbiBleHRyYSBkZXBlbmRlbmN5
-ICh1bnRpbCBuZXh0IGJyZWFrYWdlKSBvciB3ZSBjb3VsZCB1c2UKPiBhICEyLjM3IGRlcGVuZGVu
-Y3kgaW5zdGVhZC4gSSBhbSBub3Qgc3VyZSBpZiB0aGlzIGlzIHBvc3NpYmxlCj4gdGhvdWdoLgoK
-V2hlbiB3ZSBkcm9wIDIuMzgsIGhhdmluZyBpdCByZWZlcmVuY2VkIGluIHRoZSBkZWZjb25maWcg
-d2lsbCBoZWxwIHVzCm5vdGljZSB0aGF0IHNvbWV0aGluZyBtdXN0IGJlIHRha2VuIGNhcmUgb2Ys
-IGFuZCBsb29raW5nIGF0IHRoZSBnaXQgbG9nCndpbGwgaGVscCB1cyB0YWtlIGEgZGVjaXNpb24g
-KGtlZXAgdGhlIHZlcnNpb24gYXJvdW5kLCBidW1wIHRoZQpkZWZjb25maWcsIGV0Yy4uKQoKSW4g
-dGhlIGRlZmNvbmZpZ3MsIHdlIGRvIG5vdCB3YW50IHRvIHVzZSB0aGUgZGVmYXVsdHM7IHdlIHdh
-bnQgdG8gdXNlCmV4cGxpY2l0IHZlcnNpb25zLgoKR3JhbnRlZCwgdGhpcyBpcyBub3QgYWx3YXlz
-IGVuZm9yY2VkLCBhbmQgdGhlIGRlZmNvbmZpZ3Mgd2UgaGF2ZSBhcmUgb2YKdmFyaWFibGUgbGV2
-ZWwgb2YgdXNpbmcgZXhwbGljaXQgdmVyc2lvbnMgZXZlbiBpZiB0aGUgZGVmYXVsdDsgdGhpcyBp
-cwptb3N0bHkgdGhlIGNhc2UgZm9yIHRoZSBrZXJuZWwgaGVhZGVycywgdGhvdWdoLgoKUmVnYXJk
-cywKWWFubiBFLiBNT1JJTi4KCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0t
-LS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUu
-IE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycg
-Y29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwg
-LyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBg
-LS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBu
-byAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1B
-SUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Fix the following sparc build failure raised since bump to version 0.24
+in commit 9b5caa2ab45d7ec01e1657b10f94c2f60c7afe8e and
+https://github.com/analogdevicesinc/libiio/commit/2d3cae005f364742b3a9e7234d15b2fd2cbac664:
+
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c: In function 'serial_configure':
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B2500000' undeclared (first use in this function); did you mean 'B1500000'?
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
+  127 |         CASE_BPS(2500000, &tty_attrs);
+      |         ^~~~~~~~
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: note: each undeclared identifier is reported only once for each function it appears in
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
+  127 |         CASE_BPS(2500000, &tty_attrs);
+      |         ^~~~~~~~
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3000000' undeclared (first use in this function); did you mean 'B1000000'?
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:128:9: note: in expansion of macro 'CASE_BPS'
+  128 |         CASE_BPS(3000000, &tty_attrs);
+      |         ^~~~~~~~
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3500000' undeclared (first use in this function); did you mean 'B1500000'?
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:129:9: note: in expansion of macro 'CASE_BPS'
+  129 |         CASE_BPS(3500000, &tty_attrs);
+      |         ^~~~~~~~
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B4000000' undeclared (first use in this function); did you mean 'B1000000'?
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:130:9: note: in expansion of macro 'CASE_BPS'
+  130 |         CASE_BPS(4000000, &tty_attrs);
+      |         ^~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8a9902f6eddaab812ebce3506ed6de686f647e02
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Don't define values as they are explicitly not defined by kernel:
+   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/sparc/include/uapi/asm/termbits.h#n157
+
+ .../0001-iiod-serial.c-fix-sparc-build.patch  | 75 +++++++++++++++++++
+ 1 file changed, 75 insertions(+)
+ create mode 100644 package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
+
+diff --git a/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch b/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
+new file mode 100644
+index 0000000000..47a86cab48
+--- /dev/null
++++ b/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
+@@ -0,0 +1,75 @@
++From 0a325ceea8db7d57537dbdbe0c33a142b29ec5d7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 25 Sep 2022 11:19:18 +0200
++Subject: [PATCH] iiod/serial.c: fix sparc build
++
++Fix the following sparc build failure raised since version 0.24 and
++https://github.com/analogdevicesinc/libiio/commit/2d3cae005f364742b3a9e7234d15b2fd2cbac664:
++
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c: In function 'serial_configure':
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B2500000' undeclared (first use in this function); did you mean 'B1500000'?
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
++  127 |         CASE_BPS(2500000, &tty_attrs);
++      |         ^~~~~~~~
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: note: each undeclared identifier is reported only once for each function it appears in
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
++  127 |         CASE_BPS(2500000, &tty_attrs);
++      |         ^~~~~~~~
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3000000' undeclared (first use in this function); did you mean 'B1000000'?
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:128:9: note: in expansion of macro 'CASE_BPS'
++  128 |         CASE_BPS(3000000, &tty_attrs);
++      |         ^~~~~~~~
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3500000' undeclared (first use in this function); did you mean 'B1500000'?
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:129:9: note: in expansion of macro 'CASE_BPS'
++  129 |         CASE_BPS(3500000, &tty_attrs);
++      |         ^~~~~~~~
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B4000000' undeclared (first use in this function); did you mean 'B1000000'?
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:130:9: note: in expansion of macro 'CASE_BPS'
++  130 |         CASE_BPS(4000000, &tty_attrs);
++      |         ^~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8a9902f6eddaab812ebce3506ed6de686f647e02
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/analogdevicesinc/libiio/pull/908]
++---
++ iiod/serial.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/iiod/serial.c b/iiod/serial.c
++index f829361..b140d05 100644
++--- a/iiod/serial.c
+++++ b/iiod/serial.c
++@@ -124,10 +124,18 @@ static int serial_configure(int fd, unsigned int uart_bps,
++ 	CASE_BPS(1152000, &tty_attrs);
++ 	CASE_BPS(1500000, &tty_attrs);
++ 	CASE_BPS(2000000, &tty_attrs);
+++#ifdef B2500000 /* Not available on all architectures, i.e. sparc */
++ 	CASE_BPS(2500000, &tty_attrs);
+++#endif
+++#ifdef B3000000 /* Not available on all architectures, i.e. sparc */
++ 	CASE_BPS(3000000, &tty_attrs);
+++#endif
+++#ifdef B3500000 /* Not available on all architectures, i.e. sparc */
++ 	CASE_BPS(3500000, &tty_attrs);
+++#endif
+++#ifdef B4000000 /* Not available on all architectures, i.e. sparc */
++ 	CASE_BPS(4000000, &tty_attrs);
+++#endif
++ 	default:
++ 		IIO_ERROR("Invalid baud rate\n");
++ 		return -EINVAL;
++-- 
++2.35.1
++
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
