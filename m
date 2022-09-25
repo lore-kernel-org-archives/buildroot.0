@@ -1,68 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17578C04A95
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 17:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52BC1C54EE9
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 17:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC96D8321B;
-	Sun, 25 Sep 2022 17:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC96D8321B
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4C4960C14;
+	Sun, 25 Sep 2022 17:21:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4C4960C14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VBv9cXuUoMP5; Sun, 25 Sep 2022 17:20:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8-tGLl3NQvVd; Sun, 25 Sep 2022 17:21:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5115831A5;
-	Sun, 25 Sep 2022 17:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5115831A5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 662A11BF48B
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 17:19:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C98E260C09;
+	Sun, 25 Sep 2022 17:21:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C98E260C09
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CA64A1BF48B
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 17:21:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40C6241626
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 17:19:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40C6241626
+ by smtp2.osuosl.org (Postfix) with ESMTP id B066C4052A
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 17:21:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B066C4052A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vkTElDZVqWKw for <buildroot@lists.busybox.net>;
- Sun, 25 Sep 2022 17:19:47 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C41C04088F
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C41C04088F
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 17:19:46 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPA id 0458C200008;
- Sun, 25 Sep 2022 17:19:44 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Buildroot List <buildroot@buildroot.org>
-Date: Sun, 25 Sep 2022 19:19:32 +0200
-Message-Id: <20220925171932.1630739-4-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220925171932.1630739-1-thomas.petazzoni@bootlin.com>
-References: <20220925171932.1630739-1-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664126385;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=X6Ok0szclO5VksJCVi7bQ6THboChftqoxE3LbAioktg=;
- b=Gb/fPMkbym+HX9g05V7EQI6rcCMmP35JPnPUgv6TROtY0mp2wH3wo1u7soK2Ke7pXFdOO0
- 73chk3bwa39s5rphl4McGfEnE/KNxUWeqz8pKWTuGx9Zl0BoFpMcCZf/rL0eqtZJw53kw+
- 4y0DIkdsbGD7nuAfT344LOSRKBvAg1nD+Nz8jw0aoMVo6bVPeVRzM24Lt3T+LQKsowSzOW
- fxiOdfA0Gs0/rF6dg4ATevqfurTiGuPpc6gqkBQDXahbnd8RhMEF/NQFDV9BXU89y/MHdi
- 0sQybATfnZp1NqGHh7WFJfMazLw47m/MeqqgiPLO67ckoRw4PlhfZ1yXKA0yGg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Gb/fPMkb
-Subject: [Buildroot] [PATCH 4/4] support/testing/tests: add NodeJS tests
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1yxQwoZoECZW for <buildroot@lists.busybox.net>;
+ Sun, 25 Sep 2022 17:21:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8AAF340528
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 17:21:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AAF340528
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6FBEA85FE8; Sun, 25 Sep 2022 17:21:34 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 25 Sep 2022 19:21:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e461c9adc82a889deb6e259ce811193cb8d00f36
+X-Git-Newrev: 447b5baf30609736206b9280c49f9f512903dcff
+X-Patchwork-Hint: ignore
+Message-Id: <20220925172134.6FBEA85FE8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libiio: fix sparc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,142 +56,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexandru Ardelean <ardeleanalex@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit adds two new test cases:
+commit: https://git.buildroot.net/buildroot/commit/?id=447b5baf30609736206b9280c49f9f512903dcff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- - TestNodeJSBasic which builds a target configuration with just
-   NodeJS enabled, and which runs a very simple NodeJS script on the
-   target.
+Fix the following sparc build failure raised since bump to version 0.24
+in commit 9b5caa2ab45d7ec01e1657b10f94c2f60c7afe8e and
+https://github.com/analogdevicesinc/libiio/commit/2d3cae005f364742b3a9e7234d15b2fd2cbac664:
 
- - TestNodeJSModule, which builds a target configuration with NodeJS
-   enabled + the installation of one extra module, which means npm on
-   the host (from host-nodejs) is used, and which runs a very simple
-   NodeJS script on the target that uses this extra module.
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c: In function 'serial_configure':
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B2500000' undeclared (first use in this function); did you mean 'B1500000'?
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
+  127 |         CASE_BPS(2500000, &tty_attrs);
+      |         ^~~~~~~~
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: note: each undeclared identifier is reported only once for each function it appears in
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
+  127 |         CASE_BPS(2500000, &tty_attrs);
+      |         ^~~~~~~~
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3000000' undeclared (first use in this function); did you mean 'B1000000'?
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:128:9: note: in expansion of macro 'CASE_BPS'
+  128 |         CASE_BPS(3000000, &tty_attrs);
+      |         ^~~~~~~~
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3500000' undeclared (first use in this function); did you mean 'B1500000'?
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:129:9: note: in expansion of macro 'CASE_BPS'
+  129 |         CASE_BPS(3500000, &tty_attrs);
+      |         ^~~~~~~~
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B4000000' undeclared (first use in this function); did you mean 'B1000000'?
+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+      |                                                          ^
+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:130:9: note: in expansion of macro 'CASE_BPS'
+  130 |         CASE_BPS(4000000, &tty_attrs);
+      |         ^~~~~~~~
 
-Having both tests separately allows to validate that both nodejs-only
-and nodejs+host-nodejs configurations behave correctly, at least in
-minimal scenarios.
+Fixes:
+ - http://autobuild.buildroot.org/results/8a9902f6eddaab812ebce3506ed6de686f647e02
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                    |  3 ++
- .../tests/package/sample_nodejs_basic.js      |  3 ++
- .../tests/package/sample_nodejs_module.js     |  7 +++
- support/testing/tests/package/test_nodejs.py  | 52 +++++++++++++++++++
- 4 files changed, 65 insertions(+)
- create mode 100644 support/testing/tests/package/sample_nodejs_basic.js
- create mode 100644 support/testing/tests/package/sample_nodejs_module.js
- create mode 100644 support/testing/tests/package/test_nodejs.py
+ .../0001-iiod-serial.c-fix-sparc-build.patch       | 76 ++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 51d025173a..564149de0f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2927,11 +2927,14 @@ F:	package/weston/
- F:	support/testing/tests/boot/test_grub.py
- F:	support/testing/tests/boot/test_grub/
- F:	support/testing/tests/boot/test_syslinux.py
-+F:	support/testing/tests/package/sample_nodejs_basic.js
-+F:	support/testing/tests/package/sample_nodejs_module.js
- F:	support/testing/tests/package/sample_python_augeas.py
- F:	support/testing/tests/package/sample_python_flask.py
- F:	support/testing/tests/package/sample_python_flask_expects_json.py
- F:	support/testing/tests/package/sample_python_git.py
- F:	support/testing/tests/package/sample_python_unittest_xml_reporting.py
-+F:	support/testing/tests/package/test_nodejs.py
- F:	support/testing/tests/package/test_python_augeas.py
- F:	support/testing/tests/package/test_python_flask.py
- F:	support/testing/tests/package/test_python_flask_expects_json.py
-diff --git a/support/testing/tests/package/sample_nodejs_basic.js b/support/testing/tests/package/sample_nodejs_basic.js
+diff --git a/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch b/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
 new file mode 100644
-index 0000000000..7633173c64
+index 0000000000..1c2d606e63
 --- /dev/null
-+++ b/support/testing/tests/package/sample_nodejs_basic.js
-@@ -0,0 +1,3 @@
-+var assert = require('assert');
-+assert.strictEqual(1, 1);
-+console.log("Hello World");
-diff --git a/support/testing/tests/package/sample_nodejs_module.js b/support/testing/tests/package/sample_nodejs_module.js
-new file mode 100644
-index 0000000000..57aee73408
---- /dev/null
-+++ b/support/testing/tests/package/sample_nodejs_module.js
-@@ -0,0 +1,7 @@
-+var assert = require('assert');
-+var lodash = require('lodash');
-+result = lodash.chunk(['a', 'b', 'c', 'd'], 2);
-+expected = [ [ 'a', 'b' ], [ 'c', 'd' ] ];
-+assert.deepStrictEqual(result, expected)
++++ b/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
+@@ -0,0 +1,76 @@
++From 40ffc5d9b8f6e47866292bf1365ac3a5d22cf123 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 25 Sep 2022 11:19:18 +0200
++Subject: [PATCH] iiod/serial.c: fix sparc build
 +
++Fix the following sparc build failure raised since version 0.24 and
++https://github.com/analogdevicesinc/libiio/commit/2d3cae005f364742b3a9e7234d15b2fd2cbac664:
 +
-diff --git a/support/testing/tests/package/test_nodejs.py b/support/testing/tests/package/test_nodejs.py
-new file mode 100644
-index 0000000000..9463c76b72
---- /dev/null
-+++ b/support/testing/tests/package/test_nodejs.py
-@@ -0,0 +1,52 @@
-+import os
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c: In function 'serial_configure':
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B2500000' undeclared (first use in this function); did you mean 'B1500000'?
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
++  127 |         CASE_BPS(2500000, &tty_attrs);
++      |         ^~~~~~~~
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: note: each undeclared identifier is reported only once for each function it appears in
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
++  127 |         CASE_BPS(2500000, &tty_attrs);
++      |         ^~~~~~~~
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3000000' undeclared (first use in this function); did you mean 'B1000000'?
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:128:9: note: in expansion of macro 'CASE_BPS'
++  128 |         CASE_BPS(3000000, &tty_attrs);
++      |         ^~~~~~~~
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3500000' undeclared (first use in this function); did you mean 'B1500000'?
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:129:9: note: in expansion of macro 'CASE_BPS'
++  129 |         CASE_BPS(3500000, &tty_attrs);
++      |         ^~~~~~~~
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B4000000' undeclared (first use in this function); did you mean 'B1000000'?
++   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
++      |                                                          ^
++/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:130:9: note: in expansion of macro 'CASE_BPS'
++  130 |         CASE_BPS(4000000, &tty_attrs);
++      |         ^~~~~~~~
 +
-+import infra.basetest
++Fixes:
++ - http://autobuild.buildroot.org/results/8a9902f6eddaab812ebce3506ed6de686f647e02
 +
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[yann.morin.1998@free.fr: actual backport now that upstream accepted it]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ iiod/serial.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
 +
-+class TestNodeJSBasic(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_PACKAGE_NODEJS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-+        """.format(infra.filepath("tests/package/copy-sample-script-to-target.sh"),
-+                   infra.filepath("tests/package/sample_nodejs_basic.js"))
++diff --git a/iiod/serial.c b/iiod/serial.c
++index f829361d..b140d051 100644
++--- a/iiod/serial.c
+++++ b/iiod/serial.c
++@@ -124,10 +124,18 @@ static int serial_configure(int fd, unsigned int uart_bps,
++ 	CASE_BPS(1152000, &tty_attrs);
++ 	CASE_BPS(1500000, &tty_attrs);
++ 	CASE_BPS(2000000, &tty_attrs);
+++#ifdef B2500000 /* Not available on all architectures, i.e. sparc */
++ 	CASE_BPS(2500000, &tty_attrs);
+++#endif
+++#ifdef B3000000 /* Not available on all architectures, i.e. sparc */
++ 	CASE_BPS(3000000, &tty_attrs);
+++#endif
+++#ifdef B3500000 /* Not available on all architectures, i.e. sparc */
++ 	CASE_BPS(3500000, &tty_attrs);
+++#endif
+++#ifdef B4000000 /* Not available on all architectures, i.e. sparc */
++ 	CASE_BPS(4000000, &tty_attrs);
+++#endif
++ 	default:
++ 		IIO_ERROR("Invalid baud rate\n");
++ 		return -EINVAL;
++-- 
++2.25.1
 +
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+        self.assertRunOk("node sample_nodejs_basic.js")
-+
-+
-+class TestNodeJSModule(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_PACKAGE_NODEJS=y
-+        BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="lodash"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-+        """.format(infra.filepath("tests/package/copy-sample-script-to-target.sh"),
-+                   infra.filepath("tests/package/sample_nodejs_module.js"))
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+        self.assertRunOk("node sample_nodejs_module.js")
--- 
-2.37.3
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
