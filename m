@@ -4,84 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF57DC6FA82
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 09:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F740C04A95
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 10:04:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5920560773;
-	Sun, 25 Sep 2022 09:50:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5920560773
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCA2060B1A;
+	Sun, 25 Sep 2022 10:04:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCA2060B1A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tPNWavrG6si0; Sun, 25 Sep 2022 09:50:37 +0000 (UTC)
+	with ESMTP id 0VwlnfuqM9zx; Sun, 25 Sep 2022 10:04:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4023B60AEA;
-	Sun, 25 Sep 2022 09:50:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4023B60AEA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1257E1BF5A9
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 09:50:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D202360AEB;
+	Sun, 25 Sep 2022 10:04:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D202360AEB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EE9731BF5A9
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 10:04:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E14F28301D
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 09:50:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E14F28301D
+ by smtp4.osuosl.org (Postfix) with ESMTP id C831E41603
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 10:04:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C831E41603
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KoEmR6Fym5-b for <buildroot@lists.busybox.net>;
- Sun, 25 Sep 2022 09:50:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Pp3GbtoflcTB for <buildroot@lists.busybox.net>;
+ Sun, 25 Sep 2022 10:04:02 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A91CF82A56
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A91CF82A56
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 09:50:31 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- z13-20020a7bc7cd000000b003b5054c6f9bso5239795wmk.2
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 02:50:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=rMHEIJAMueXmX9s3XBrckEnKpJ1+kgQcuyPbBILxoEc=;
- b=NaBQzcdTbE+rG6MuXNHQObsEwJtt28e2SY5ncWC71orCt5CGd2kVnrpDa9mzyr/jki
- KoKR8r9Z0Ielmm/oWPLwPXX8hJejTDr2g32jixybjaQBfJCJZsbcbh51KyJLtsnkhQde
- D85EdOxutVazdvV3WhL2phW/VRqBZ+43UU6NeFPbDZd0LkY12vw63lpbYqz+YSgcbjii
- hn8p052clGcK5hfGVH3TKCMrcKbjX6HkqLsOgqt9cLDJLmMAq+ALOkVrhVpTURFbESyj
- el3ATM5ryAg6QtCE5oCwbWBTIEK2apnv7Rb12EJq/Hj3qUXAzYo9uCDw4Be5kL5QHQ4O
- chsA==
-X-Gm-Message-State: ACrzQf26v0cJPrkNA+M7cYwk7/TNw6UZfsCNQy/mYE+hPv9bSYWCX59u
- KjbFIK/kliAie28Li+Yj7mERXliIzH4=
-X-Google-Smtp-Source: AMsMyM7Swc8HnRh0MnRhtwrO9LmOcg+WgRMfkCSqNGOyUCK7MOiBb0fS6g8olhbzWiF7Qd3LB/+pSw==
-X-Received: by 2002:a05:600c:4fcb:b0:3b4:a4dd:6154 with SMTP id
- o11-20020a05600c4fcb00b003b4a4dd6154mr17887628wmq.60.1664099429059; 
- Sun, 25 Sep 2022 02:50:29 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- v11-20020a05600c444b00b003b4c979e6bcsm7936292wmn.10.2022.09.25.02.50.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 25 Sep 2022 02:50:28 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 25 Sep 2022 11:50:24 +0200
-Message-Id: <20220925095024.306230-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45E4D415AE
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 45E4D415AE
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 10:04:02 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:139f:51c2:7bd0:4f35])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id DF77C13F854;
+ Sun, 25 Sep 2022 12:03:55 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 25 Sep 2022 12:03:55 +0200
+Date: Sun, 25 Sep 2022 12:03:55 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20220925100355.GG1127102@scaer>
+References: <20220925090920.1585682-1-thomas.petazzoni@bootlin.com>
+ <20220925090920.1585682-3-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=rMHEIJAMueXmX9s3XBrckEnKpJ1+kgQcuyPbBILxoEc=;
- b=KZEAjMgHnIm5+HmL9gjZwmocifPEYdBqm8OxFGh6RUqZxluM51d44AJi3Cuaws8cOc
- 9MFKV6GDZ16k18egitpbZP8c8+aftBOWUn9jtQ3dM4HGxt3IJofcoIJo4xuUrRytCQU8
- sFTvWY3mf22ieh10mMh9iK4yj4VIWl1Fe/WbSApdmWVVloEtA0zhk6uQPQJgowchQl3e
- KT3VKOYA2/lIeBt3XdwZPd0yF2oATOp9K/s3xBasK4iYwrShwzBl/FwPqAqIfvh2B2Hc
- jtdnpvuAOAY1goaP8ftk1DpBgJ1oYZWfxpzjlMwLyYcY/8HKvmZ9RKvWzmz7KrLB4gCV
- 3Uxg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=KZEAjMgH
-Subject: [Buildroot] [PATCH 1/1] package/libiio: fix sparc build
+Content-Disposition: inline
+In-Reply-To: <20220925090920.1585682-3-thomas.petazzoni@bootlin.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1664100239;
+ bh=RjYAQyeGlhsHTJnXF+Sk9rTy6wqHHwjNLGD/ThmguCk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=hctkxASQ9fB0DDVkasrhyQoc4mk6uQGodr3Ay11f6GvRzPfQz+L3lQziB3VfhIhFE
+ OFYB0yJfZn6JHoIAF7R+0Qo7zguTzs+7TYM3ehOhkS3iyNXHphL08RXwUjb4bLJXym
+ Urld/1y9x1s02T8c819vqwKmhW1OeAuJ8ddH4hhRTWIMEi3P3y44pdcaSTRJhl0zdt
+ fWanm+C8RkEEbGwVmzsdi8TPyTTErV201WGfGMOHWydo2JtSdJVVTMGUV6waoWo7Au
+ rCjqf3Yw6CV1VVpGkX6GgOysrBnjBtMwaAIvQ9EY7VdIXV4ilIQu+hBXrRGpx/moPY
+ ncsbnD0XFD3Kw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=hctkxASQ
+Subject: Re: [Buildroot] [PATCH v2 2/5] Revert "arch/xtensa: custom
+ configuration requires an overlay"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,146 +78,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Paul Cercueil <paul@crapouillou.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following sparc build failure raised since bump to version 0.24
-in commit 9b5caa2ab45d7ec01e1657b10f94c2f60c7afe8e and
-https://github.com/analogdevicesinc/libiio/commit/2d3cae005f364742b3a9e7234d15b2fd2cbac664:
+Thomas, All,
 
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c: In function 'serial_configure':
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B2500000' undeclared (first use in this function); did you mean 'B1500000'?
-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-      |                                                          ^
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
-  127 |         CASE_BPS(2500000, &tty_attrs);
-      |         ^~~~~~~~
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: note: each undeclared identifier is reported only once for each function it appears in
-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-      |                                                          ^
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
-  127 |         CASE_BPS(2500000, &tty_attrs);
-      |         ^~~~~~~~
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3000000' undeclared (first use in this function); did you mean 'B1000000'?
-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-      |                                                          ^
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:128:9: note: in expansion of macro 'CASE_BPS'
-  128 |         CASE_BPS(3000000, &tty_attrs);
-      |         ^~~~~~~~
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3500000' undeclared (first use in this function); did you mean 'B1500000'?
-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-      |                                                          ^
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:129:9: note: in expansion of macro 'CASE_BPS'
-  129 |         CASE_BPS(3500000, &tty_attrs);
-      |         ^~~~~~~~
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B4000000' undeclared (first use in this function); did you mean 'B1000000'?
-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-      |                                                          ^
-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:130:9: note: in expansion of macro 'CASE_BPS'
-  130 |         CASE_BPS(4000000, &tty_attrs);
-      |         ^~~~~~~~
+On 2022-09-25 11:09 +0200, Thomas Petazzoni spake thusly:
+> This reverts commit 4cbf7336914f25478aea943456ba7dc3c892c21a.
+> 
+> This commit breaks the build of BR2_XTENSA_CUSTOM=y configurations
+> that use an external toolchain. In such configurations, having an
+> empty overlay is perfectly fine.
 
-Fixes:
- - http://autobuild.buildroot.org/results/8a9902f6eddaab812ebce3506ed6de686f647e02
+As 4cbf7336914f explained, an empty overlay is equivalent to using the
+fsf variant, so in that case, there would be no point in asking for a
+custom core to begin with, and Max Filipov seemed to agree:
+    https://lore.kernel.org/buildroot/CAMo8BfKHKuVC86uOwP0z8CzE425q7u0B_q6jdeU0Rw9upaiY=Q@mail.gmail.com/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-iiod-serial.c-fix-sparc-build.patch  | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
+So, I think we are maybe taking the issue from the wrong side here. We
+should forbid an empty overlay only when using our internal toolchain
+for a custom xtensa core. I.e.:
 
-diff --git a/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch b/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
-new file mode 100644
-index 0000000000..b1cdb767eb
---- /dev/null
-+++ b/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
-@@ -0,0 +1,79 @@
-+From 8ee3fd8487b84dda11651bcdddfe3f83105c42b6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 25 Sep 2022 11:19:18 +0200
-+Subject: [PATCH] iiod/serial.c: fix sparc build
-+
-+Fix the following sparc build failure raised since version 0.24 and
-+https://github.com/analogdevicesinc/libiio/commit/2d3cae005f364742b3a9e7234d15b2fd2cbac664:
-+
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c: In function 'serial_configure':
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B2500000' undeclared (first use in this function); did you mean 'B1500000'?
-+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-+      |                                                          ^
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
-+  127 |         CASE_BPS(2500000, &tty_attrs);
-+      |         ^~~~~~~~
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: note: each undeclared identifier is reported only once for each function it appears in
-+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-+      |                                                          ^
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
-+  127 |         CASE_BPS(2500000, &tty_attrs);
-+      |         ^~~~~~~~
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3000000' undeclared (first use in this function); did you mean 'B1000000'?
-+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-+      |                                                          ^
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:128:9: note: in expansion of macro 'CASE_BPS'
-+  128 |         CASE_BPS(3000000, &tty_attrs);
-+      |         ^~~~~~~~
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3500000' undeclared (first use in this function); did you mean 'B1500000'?
-+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-+      |                                                          ^
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:129:9: note: in expansion of macro 'CASE_BPS'
-+  129 |         CASE_BPS(3500000, &tty_attrs);
-+      |         ^~~~~~~~
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B4000000' undeclared (first use in this function); did you mean 'B1000000'?
-+   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
-+      |                                                          ^
-+/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:130:9: note: in expansion of macro 'CASE_BPS'
-+  130 |         CASE_BPS(4000000, &tty_attrs);
-+      |         ^~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/8a9902f6eddaab812ebce3506ed6de686f647e02
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/analogdevicesinc/libiio/pull/908]
-+---
-+ iiod/serial.c | 16 ++++++++++++++++
-+ 1 file changed, 16 insertions(+)
-+
-+diff --git a/iiod/serial.c b/iiod/serial.c
-+index f829361..58b5c31 100644
-+--- a/iiod/serial.c
-++++ b/iiod/serial.c
-+@@ -19,6 +19,22 @@
-+ #include <sys/ioctl.h>
-+ #include <termios.h>
-+ 
-++#ifndef B2500000
-++#define B2500000 2500000
-++#endif
-++
-++#ifndef B3000000
-++#define B3000000 3000000
-++#endif
-++
-++#ifndef B3500000
-++#define B3500000 3500000
-++#endif
-++
-++#ifndef B4000000
-++#define B4000000 4000000
-++#endif
-++
-+ struct serial_pdata {
-+ 	struct iio_context *ctx;
-+ 	bool debug;
-+-- 
-+2.35.1
-+
+    diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
+    index 7b6c59cecd..1799528a93 100644
+    --- a/arch/arch.mk.xtensa
+    +++ b/arch/arch.mk.xtensa
+    @@ -1,8 +1,10 @@
+     BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
+     
+    -ifeq ($(BR_BUILDING)$(BR2_XTENSA_CUSTOM):$(BR_ARCH_XTENSA_OVERLAY_FILE),yy:)
+    +ifeq ($(BR_BUILDING)$(BR2_TOOLCHAIN_BUILDROOT),yy)
+    +ifeq ($(BR_ARCH_XTENSA_OVERLAY_FILE),)
+     $(error No xtensa overlay file provided. Check your BR2_XTENSA_OVERLAY_FILE setting)
+     endif
+    +endif
+     
+     ################################################################################
+     # This variable can be used by packages that need to extract the
+     # overlay.
+
+Regards,
+Yann E. MORIN.
+
+> For example, this commit broke the
+> following two runtime tests:
+> 
+>   tests.toolchain.test_external_bootlin.TestExternalToolchainBootlinXtensalx60UclibcBleedingEdge
+>   tests.toolchain.test_external_bootlin.TestExternalToolchainBootlinXtensalx60UclibcStable
+> 
+> And in fact, having an empty overlay is even correct when building an
+> internal toolchain. The endianness issue that
+> 4cbf7336914f25478aea943456ba7dc3c892c21a was attempting to fix has
+> been fixed in a better way by the previous commit.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  arch/arch.mk.xtensa | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/arch/arch.mk.xtensa b/arch/arch.mk.xtensa
+> index 7b6c59cecd..fd410f6bfa 100644
+> --- a/arch/arch.mk.xtensa
+> +++ b/arch/arch.mk.xtensa
+> @@ -1,9 +1,3 @@
+> -BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
+> -
+> -ifeq ($(BR_BUILDING)$(BR2_XTENSA_CUSTOM):$(BR_ARCH_XTENSA_OVERLAY_FILE),yy:)
+> -$(error No xtensa overlay file provided. Check your BR2_XTENSA_OVERLAY_FILE setting)
+> -endif
+> -
+>  ################################################################################
+>  # This variable can be used by packages that need to extract the overlay.
+>  #
+> @@ -15,6 +9,7 @@ endif
+>  #       tar xf $(ARCH_XTENSA_OVERLAY_FILE) -C $(@D) --strip-components=1 gcc
+>  #   endif
+>  ################################################################################
+> +BR_ARCH_XTENSA_OVERLAY_FILE = $(call qstrip,$(BR2_XTENSA_OVERLAY_FILE))
+>  ifneq ($(filter http://% https://% ftp://% scp://%,$(BR_ARCH_XTENSA_OVERLAY_FILE)),)
+>  ARCH_XTENSA_OVERLAY_URL = $(BR_ARCH_XTENSA_OVERLAY_FILE)
+>  ARCH_XTENSA_OVERLAY_FILE = $($(PKG)_DL_DIR)/$(notdir $(BR_ARCH_XTENSA_OVERLAY_FILE))
+> -- 
+> 2.37.3
+> 
+
 -- 
-2.35.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
