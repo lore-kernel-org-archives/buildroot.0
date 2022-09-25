@@ -1,87 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B6CDC04A95
-	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 12:39:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD856C04A95
+	for <buildroot@archiver.kernel.org>; Sun, 25 Sep 2022 12:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B65A41756;
-	Sun, 25 Sep 2022 12:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B65A41756
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5257D404C4;
+	Sun, 25 Sep 2022 12:40:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5257D404C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rYqnk7wavepY; Sun, 25 Sep 2022 12:39:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PdXY8FkhPSgx; Sun, 25 Sep 2022 12:40:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04F45416F6;
-	Sun, 25 Sep 2022 12:39:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04F45416F6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F3BB21BF5A1
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 12:39:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CAC6404B0;
+	Sun, 25 Sep 2022 12:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CAC6404B0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 00E411BF5A1
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 12:40:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCEE6416F6
- for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 12:39:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCEE6416F6
+ by smtp1.osuosl.org (Postfix) with ESMTP id D11D68248F
+ for <buildroot@lists.busybox.net>; Sun, 25 Sep 2022 12:40:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D11D68248F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nuC51tLhddZW for <buildroot@lists.busybox.net>;
- Sun, 25 Sep 2022 12:39:55 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE67F416ED
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DE67F416ED
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 12:39:54 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- i203-20020a1c3bd4000000b003b3df9a5ecbso5911220wma.1
- for <buildroot@buildroot.org>; Sun, 25 Sep 2022 05:39:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=/Tz9Ta84EMnxSb/yyQhF5zFKoVEDzIjsDP5KdvBY6xo=;
- b=PaFcJ2IwifQEwHtuqwrP5XM/dlkhzdMcoQnZbZSyAsmUXg1xsRvKgf1LT3E8jGbRMY
- f9sUn1FlrtKmKYn3D2ErZHUshEAk1BXLOr9jB2UoBQRbZdHeCvDBHe/yVFvpzukOZYWq
- kUPb7WkrNfbt/PMU7wlT99albKSKv9H2JcrhOZH0gV17TK8xMy+wczJ9E3igGh5HZM+4
- P61qemGJasqMfyFKSDAxphGPO442v3QyP2C/7PgLOIYvmtKwFJfxL2L34rEEH7fp1Xus
- eOlpESd9KK3qhWOSjGFEXY3MoEjdAijege1WfYXJNt3J8XhJOmkP/3+gCe5U9qpCplOM
- CwVA==
-X-Gm-Message-State: ACrzQf3MJcEcIcQsVC9IqFB6U26M2mSZhjcm4OTw208LxEMUJuyPQOKa
- RIjWzgs0ez6IGsShRcgZ2A4oot3dVnw=
-X-Google-Smtp-Source: AMsMyM4lFMIxZzTJ87Q1LBmU9JoIA7u7h5XAFHITECFZUpJbsx02EtU/B6ZrL43mpBpGI382527oqg==
-X-Received: by 2002:a05:600c:4e15:b0:3b4:a621:b54e with SMTP id
- b21-20020a05600c4e1500b003b4a621b54emr11639930wmq.47.1664109592508; 
- Sun, 25 Sep 2022 05:39:52 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- y17-20020a1c4b11000000b003b476bb2624sm8011805wma.6.2022.09.25.05.39.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 25 Sep 2022 05:39:52 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n5a0-OXtqt26 for <buildroot@lists.busybox.net>;
+ Sun, 25 Sep 2022 12:40:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1248681DCA
+ for <buildroot@buildroot.org>; Sun, 25 Sep 2022 12:40:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1248681DCA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F186885FE0; Sun, 25 Sep 2022 12:40:08 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 25 Sep 2022 14:39:48 +0200
-Message-Id: <20220925123948.264951-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=/Tz9Ta84EMnxSb/yyQhF5zFKoVEDzIjsDP5KdvBY6xo=;
- b=AC2N8PP2oSoCvh3KNHIJc7cw8vSR9sc6UzeV7w/ORqkiZV1LXwFwrnn3WZqapRr91P
- vsrgItAL+/GvV/bG50kGm9UDk1ooOlTeQ+N9HEczvKEF8Yxb9Fh/L05CpzNgen+v1ymN
- U6nMM0jinnG1+WR8SDhe8wqoDR+vSkhuU5h8gD9mo59om38FXzHAGEBYmfEqk+phflIx
- Ea1t879L4kO1rgEsoPgT8RU6vEEiwTGzv5TuUcizOkUk+ppbx/xZHajEXGaKQPwiuIKk
- 38srx40cV0beU95FqMQoXPEmmPSE/y7xuGjD8MOY74kQWfcREvktJNrIMOXC7eAr6BGM
- acGA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=AC2N8PP2
-Subject: [Buildroot] [PATCH 1/1] package/uhd: drop have_mfpu_neon
+Date: Sun, 25 Sep 2022 14:26:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6211c9e38112c611b61f00787fd790a8612328a1
+X-Git-Newrev: e461c9adc82a889deb6e259ce811193cb8d00f36
+X-Patchwork-Hint: ignore
+Message-Id: <20220925124008.F186885FE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_ppc64*: bump to binutils-2.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,50 +56,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6712513377632945787=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop have_mfpu_neon which has been added by commit
-b07de37540ee34e4e5fa8586ecc40da1586cd940 but is not recognized:
+--===============6712513377632945787==
+Content-Type: text/plain
 
-CMake Warning:
-  Manually-specified variables were not used by the project:
+commit: https://git.buildroot.net/buildroot/commit/?id=e461c9adc82a889deb6e259ce811193cb8d00f36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-    BUILD_DOC
-    BUILD_DOCS
-    BUILD_EXAMPLE
-    BUILD_EXAMPLES
-    BUILD_TEST
-    BUILD_TESTING
-    BUILD_TESTS
-    CMAKE_INSTALL_RUNSTATEDIR
-    have_mfpu_neon
+Commit 1e2fe860f3a2 (configs/qemu_ppc64*: downgrade binutils to 2.36.1).
+Since then, we've dropped support for binutios 2.36, and hte default is
+2.38.x, which has the required changes to fix:
+    https://github.com/linuxppc/issues/issues/388
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Pin the qemu-ppc64 defconfig to explicitly use binutils 2.38.x
+
+Signed-off-by: Cédric Le Goater <clg@kaod.org>
+[yann.morin.1998@free.fr:
+  - explictily force binutils 2.38
+  - reword commit log to explain why
+  - reword commit log: it's not really a revert
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/uhd/uhd.mk | 1 -
- 1 file changed, 1 deletion(-)
+ configs/qemu_ppc64_e5500_defconfig      | 2 +-
+ configs/qemu_ppc64_pseries_defconfig    | 2 +-
+ configs/qemu_ppc64le_powernv8_defconfig | 2 +-
+ configs/qemu_ppc64le_pseries_defconfig  | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
-index e8f197f9dd..2a5b69cefb 100644
---- a/package/uhd/uhd.mk
-+++ b/package/uhd/uhd.mk
-@@ -36,7 +36,6 @@ ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
- UHD_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -mfpu=neon"
- UHD_CONF_OPTS += -DNEON_SIMD_ENABLE=ON
- else
--UHD_CONF_OPTS += -Dhave_mfpu_neon=0
- UHD_CONF_OPTS += -DNEON_SIMD_ENABLE=OFF
- endif
+diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
+index 8458f2739a..6ad03c4c87 100644
+--- a/configs/qemu_ppc64_e5500_defconfig
++++ b/configs/qemu_ppc64_e5500_defconfig
+@@ -3,7 +3,7 @@ BR2_powerpc64=y
+ BR2_powerpc_e5500=y
  
--- 
-2.35.1
+ # System
+-BR2_BINUTILS_VERSION_2_36_X=y
++BR2_BINUTILS_VERSION_2_38_X=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ 
+diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
+index 480ebea29d..50844dc93b 100644
+--- a/configs/qemu_ppc64_pseries_defconfig
++++ b/configs/qemu_ppc64_pseries_defconfig
+@@ -3,7 +3,7 @@ BR2_powerpc64=y
+ BR2_powerpc_power7=y
+ 
+ # System
+-BR2_BINUTILS_VERSION_2_36_X=y
++BR2_BINUTILS_VERSION_2_38_X=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
+ 
+diff --git a/configs/qemu_ppc64le_powernv8_defconfig b/configs/qemu_ppc64le_powernv8_defconfig
+index 8de4cf5189..f6a5c3d409 100644
+--- a/configs/qemu_ppc64le_powernv8_defconfig
++++ b/configs/qemu_ppc64le_powernv8_defconfig
+@@ -3,7 +3,7 @@ BR2_powerpc64le=y
+ BR2_powerpc_power8=y
+ 
+ # System
+-BR2_BINUTILS_VERSION_2_36_X=y
++BR2_BINUTILS_VERSION_2_38_X=y
+ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
+ BR2_SYSTEM_DHCP="eth0"
+ 
+diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
+index 98c6afdf93..7ce5a9d310 100644
+--- a/configs/qemu_ppc64le_pseries_defconfig
++++ b/configs/qemu_ppc64le_pseries_defconfig
+@@ -3,7 +3,7 @@ BR2_powerpc64le=y
+ BR2_powerpc_power8=y
+ 
+ # System
+-BR2_BINUTILS_VERSION_2_36_X=y
++BR2_BINUTILS_VERSION_2_38_X=y
+ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
+ BR2_SYSTEM_DHCP="eth0"
+ 
+
+--===============6712513377632945787==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6712513377632945787==--
