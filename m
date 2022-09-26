@@ -4,79 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11907C32771
-	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 16:35:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7DC7C32771
+	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 18:46:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A488581DCA;
-	Mon, 26 Sep 2022 16:35:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A488581DCA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 699FC82E95;
+	Mon, 26 Sep 2022 18:46:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 699FC82E95
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VIdHPNmnoj_H; Mon, 26 Sep 2022 16:35:36 +0000 (UTC)
+	with ESMTP id Um2C76K2hGnV; Mon, 26 Sep 2022 18:46:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C36F381BD6;
-	Mon, 26 Sep 2022 16:35:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C36F381BD6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6044682B93;
+	Mon, 26 Sep 2022 18:46:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6044682B93
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2A3CB1BF2BA
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 16:35:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BBD8E1BF2F5
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 18:46:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 049B781BD6
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 16:35:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 049B781BD6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95F0D82B93
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 18:46:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95F0D82B93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bJapksA9fUhs for <buildroot@lists.busybox.net>;
- Mon, 26 Sep 2022 16:35:33 +0000 (UTC)
+ with ESMTP id gxTpqPs8tNdK for <buildroot@lists.busybox.net>;
+ Mon, 26 Sep 2022 18:46:37 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06C3C81B84
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.39])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 06C3C81B84
- for <buildroot@buildroot.org>; Mon, 26 Sep 2022 16:35:32 +0000 (UTC)
-Received: from opfedar02.francetelecom.fr (unknown [xx.xx.xx.4])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfedar23.francetelecom.fr (ESMTP service) with ESMTPS id 4MbpJz0z3rzBsdH; 
- Mon, 26 Sep 2022 18:35:31 +0200 (CEST)
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Mon, 26 Sep 2022 18:35:28 +0200
-Date: Mon, 26 Sep 2022 18:35:28 +0200
-From: <yann.morin@orange.com>
-To: Stafford Horne <shorne@gmail.com>
-Message-ID: <9674_1664210131_6331D4D2_9674_496_1_20220926163528.GF3010@tl-lnx-nyma7486>
-References: <20220923053057.9373660C2A@smtp3.osuosl.org>
- <20220923121334.GC2981@tl-lnx-nyma7486>
- <10091_1663942719_632DC03F_10091_295_1_20220923141837.GD2981@tl-lnx-nyma7486>
- <Yy3PX2eJUrQWvxw+@waldemar-brodkorb.de> <Yy3e9fTSv19Zxq9T@oscomms1>
- <20220926070545.GA3010@tl-lnx-nyma7486>
- <4286_1664185876_63317614_4286_458_1_20220926095113.GB3010@tl-lnx-nyma7486>
- <YzGJEib+tB/Vxea4@oscomms1> <YzG67nkiklO1Fzmp@oscomms1>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 300F78291A
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 300F78291A
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 18:46:36 +0000 (UTC)
+Received: from submission (posteo.de [185.67.36.169]) 
+ by mout01.posteo.de (Postfix) with ESMTPS id 06FA5240026
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 20:46:34 +0200 (CEST)
+Received: from customer (localhost [127.0.0.1])
+ by submission (posteo.de) with ESMTPSA id 4MbsD84Ngqz6tmK;
+ Mon, 26 Sep 2022 20:46:32 +0200 (CEST)
+From: Dominik Michael Rauh <dmrauh@posteo.de>
+To: buildroot@buildroot.org
+Date: Mon, 26 Sep 2022 18:46:21 +0000
+Message-Id: <20220926184621.300230-1-dmrauh@posteo.de>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <YzG67nkiklO1Fzmp@oscomms1>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX203.corporate.adroot.infra.ftgroup (10.115.26.8)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1664210131;
- bh=GEjuRgPRRWtvrpUYJb7HveBAnOCTKKItXPs6BgP10M8=;
- h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
- b=kNjIOZNCQQ8seHWtCjM3Oa0bWytCCWbuqKJDtDCmiA2LoY7Ev+l7PyIgU3qRrc2yx
- 4+XxlqHc45OUzC6TQRd1vwkVc9gFfwk65iDo869A/S9hmhKy2048kgy4iFRhBm+Tnf
- k7+fgj7MiKUusoS8uqohhpjzbIphwf8v5QlDo07pDhL9AB2G3NgmZf9k8PLXU6l+qS
- glIKxOYca2tFr0Mu2MDBk6A0jK3xHU5UqBifo4Yy4/H3gAb1C1oIOD7P8mdRqzTzSl
- E9JFZJXN28NjJ5HlvKxDHgbklobhv9G0b6SjKcWHOiiUx6VccSi0uFQX9CY3JQmzgs
- 98aGBFIBq+d6A==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=posteo.de; s=2017; 
+ t=1664217994; bh=vfvCLVan5HPYSD2BynBG6J2yILA5RGpcfX/rTgF90I8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=PVqqXZt8jA8TZNBC4vIVY+E6QQfXFb8rYTaqnQq+YetApzinM77F+WauGkbZVmPV0
+ ygZ6s6La7qLhl8/KASR2qBcg0MQQwjOyXl4dKO+0bwJhcZGcupwS1j1pWjEJScS0SM
+ C9hDc/EoKJ5rfQFH0ppuvSHCZDENbH4rnVbLh3ezQ04N151V5/CZzcLQsdPBIVh2Kg
+ I5Z6whUtEq26s2L44NItakMWD+QrnzFTOL5f+IRrmx4eyzfFwXzkXVI5Nr60lHaYzo
+ kvAmkDx6IUT0dIlDeM9oaTbwxFd9OiJGT1Eud1A1o6aWhIXfw4Pk9/9HNadfo6QRcQ
+ pw3V2QIgAJ0ZQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=kNjIOZNC
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2022-09-22
+ dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de
+ header.a=rsa-sha256 header.s=2017 header.b=PVqqXZt8
+Subject: [Buildroot] [PATCH v1] package/gdal: bump version to 5.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,78 +71,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Dominik Michael Rauh <dmrauh@posteo.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Stafford, All,
+Signed-off-by: Dominik Michael Rauh <dmrauh@posteo.de>
+---
+ package/gdal/gdal.hash | 6 +++---
+ package/gdal/gdal.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2022-09-26 14:45 +0000, Stafford Horne spake thusly:
-[--SNIP--]
-> OK, it seems this is the fix.  The --enable/disable-tls flag seems to only
-> control a HAVE_AS_TLS macro in the gcc build.  OpenRISC was missing the below
-> ifdef.  Adding it seems to fix the build for me.
-> 
-> Thanks Yann for the investigation that pointed right to the issue.
-> 
-> If you all can confirm this, I will post a gcc patch shortly and get it
-> upstream.
-> 
-> -Stafford
-> 
-> --
-> 
-> diff --git a/gcc/config/or1k/or1k.cc b/gcc/config/or1k/or1k.cc
-> index da2f59062ba..0ce7b234417 100644
-> --- a/gcc/config/or1k/or1k.cc
-> +++ b/gcc/config/or1k/or1k.cc
-> @@ -2206,8 +2206,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
->  #undef  TARGET_LEGITIMATE_ADDRESS_P
->  #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
->  
-> +#ifdef HAVE_AS_TLS
->  #undef  TARGET_HAVE_TLS
->  #define TARGET_HAVE_TLS true
-> +#endif
->  
->  #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
->  #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
-
-I've verified that this indeed fixes the build issues I noticed
-(woohoo #1!), and gpsd does not crash when linked to libusb
-(woohoo #2!).
-
-You may add my:
-
-Tested-by: Yann E. MORIN <yann.morin@orange.com>
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gdal/gdal.hash b/package/gdal/gdal.hash
+index 826a7f0b45..ab77d7840d 100644
+--- a/package/gdal/gdal.hash
++++ b/package/gdal/gdal.hash
+@@ -1,6 +1,6 @@
+-# md5 from: https://download.osgeo.org/gdal/3.5.1/gdal-3.5.1.tar.xz.md5, sha256 locally computed:
+-md5  4b7981efbeed69c06c79fb65d0a60d83  gdal-3.5.1.tar.xz
+-sha256  d12c30a9eacdeaab493c0d1c9f88eb337c9cbb5bb40744c751bdd5a5af166ab6  gdal-3.5.1.tar.xz
++# md5 from: https://download.osgeo.org/gdal/3.5.2/gdal-3.5.2.tar.xz.md5, sha256 locally computed:
++md5  821b3b0637ebada5d20dbefb2e3ec964  gdal-3.5.2.tar.xz
++sha256  0874dfdeb9ac42e53c37be4184b19350be76f0530e1f4fa8004361635b9030c2  gdal-3.5.2.tar.xz
+ 
+ # Hashes of license files:
+ sha256  fac0116e799ca4de79b076ee04863b5e2b69541ea3664b9bb108c81a5355f16a  LICENSE.TXT
+diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
+index 33e7ba724a..04632e51e1 100644
+--- a/package/gdal/gdal.mk
++++ b/package/gdal/gdal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GDAL_VERSION = 3.5.1
++GDAL_VERSION = 3.5.2
+ GDAL_SITE = https://download.osgeo.org/gdal/$(GDAL_VERSION)
+ GDAL_SOURCE = gdal-$(GDAL_VERSION).tar.xz
+ GDAL_LICENSE = MIT, many others
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.37.2
 
 _______________________________________________
 buildroot mailing list
