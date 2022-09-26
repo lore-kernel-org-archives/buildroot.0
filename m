@@ -1,69 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84695C32771
-	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 16:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11907C32771
+	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 16:35:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2F7160FBF;
-	Mon, 26 Sep 2022 16:27:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2F7160FBF
+	by smtp1.osuosl.org (Postfix) with ESMTP id A488581DCA;
+	Mon, 26 Sep 2022 16:35:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A488581DCA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sS-QBIFbk53M; Mon, 26 Sep 2022 16:27:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VIdHPNmnoj_H; Mon, 26 Sep 2022 16:35:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05E2760FB6;
-	Mon, 26 Sep 2022 16:27:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05E2760FB6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D5A761BF2BA
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 16:27:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C36F381BD6;
+	Mon, 26 Sep 2022 16:35:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C36F381BD6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A3CB1BF2BA
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 16:35:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 991E940BB3
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 16:27:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 991E940BB3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 049B781BD6
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 16:35:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 049B781BD6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QIKp41KhOuoh for <buildroot@lists.busybox.net>;
- Mon, 26 Sep 2022 16:27:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bJapksA9fUhs for <buildroot@lists.busybox.net>;
+ Mon, 26 Sep 2022 16:35:33 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3E3640B9A
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C3E3640B9A
- for <buildroot@buildroot.org>; Mon, 26 Sep 2022 16:27:06 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9FBD61BF208;
- Mon, 26 Sep 2022 16:27:03 +0000 (UTC)
-Date: Mon, 26 Sep 2022 18:27:02 +0200
-To: TIAN Yuanhao <tianyuanhao3@163.com>
-Message-ID: <20220926182702.3f4d6df8@windsurf>
-In-Reply-To: <20220926154320.35494-1-tianyuanhao3@163.com>
-References: <20220926154320.35494-1-tianyuanhao3@163.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06C3C81B84
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.39])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 06C3C81B84
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 16:35:32 +0000 (UTC)
+Received: from opfedar02.francetelecom.fr (unknown [xx.xx.xx.4])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by opfedar23.francetelecom.fr (ESMTP service) with ESMTPS id 4MbpJz0z3rzBsdH; 
+ Mon, 26 Sep 2022 18:35:31 +0200 (CEST)
+Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
+ Mon, 26 Sep 2022 18:35:28 +0200
+Date: Mon, 26 Sep 2022 18:35:28 +0200
+From: <yann.morin@orange.com>
+To: Stafford Horne <shorne@gmail.com>
+Message-ID: <9674_1664210131_6331D4D2_9674_496_1_20220926163528.GF3010@tl-lnx-nyma7486>
+References: <20220923053057.9373660C2A@smtp3.osuosl.org>
+ <20220923121334.GC2981@tl-lnx-nyma7486>
+ <10091_1663942719_632DC03F_10091_295_1_20220923141837.GD2981@tl-lnx-nyma7486>
+ <Yy3PX2eJUrQWvxw+@waldemar-brodkorb.de> <Yy3e9fTSv19Zxq9T@oscomms1>
+ <20220926070545.GA3010@tl-lnx-nyma7486>
+ <4286_1664185876_63317614_4286_458_1_20220926095113.GB3010@tl-lnx-nyma7486>
+ <YzGJEib+tB/Vxea4@oscomms1> <YzG67nkiklO1Fzmp@oscomms1>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <YzG67nkiklO1Fzmp@oscomms1>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Originating-IP: [10.115.26.50]
+X-ClientProxiedBy: OPE16NORMBX203.corporate.adroot.infra.ftgroup (10.115.26.8)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664209624;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=lfAg1Zq9KrNxqfWMm2cknpJwaXUDS5BdjKcPt+M7YYo=;
- b=B3xpbfU9TiGK1pv2JwN0lmq0ZyC0Wv6v4L+vq8xJvAjASHJRoRI+sveA4cdNHqGSgwE7cK
- yujEi+5iSHHWiBKECU0zwx0CheTzz8G8YwuB3e0h71vuJM4GnLJsKsW0mIKJa+qniii7lc
- mHkwBIzeaIFC27TH3VrqX/Jem+AlalGlOcyOlXC4/Nw5V9jtCGO+MMappKOPnUoEfCOEpz
- j1U1yDmqbjd/WLKOKDkGXeZM1yAmIxtELt+nHNYe7VZKMG0xejfknzztZYP0q9XklgbvBN
- AokM1s3UiiHsSN0PTM1fI3oAhte5Z1OFBrOv3b3wkVD6egDWG1SBr+w7Q3/9KQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=B3xpbfU9
-Subject: Re: [Buildroot] [PATCH 1/1] package/open-iscsi: new package
+ d=orange.com; s=ORANGE001; t=1664210131;
+ bh=GEjuRgPRRWtvrpUYJb7HveBAnOCTKKItXPs6BgP10M8=;
+ h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+ b=kNjIOZNCQQ8seHWtCjM3Oa0bWytCCWbuqKJDtDCmiA2LoY7Ev+l7PyIgU3qRrc2yx
+ 4+XxlqHc45OUzC6TQRd1vwkVc9gFfwk65iDo869A/S9hmhKy2048kgy4iFRhBm+Tnf
+ k7+fgj7MiKUusoS8uqohhpjzbIphwf8v5QlDo07pDhL9AB2G3NgmZf9k8PLXU6l+qS
+ glIKxOYca2tFr0Mu2MDBk6A0jK3xHU5UqBifo4Yy4/H3gAb1C1oIOD7P8mdRqzTzSl
+ E9JFZJXN28NjJ5HlvKxDHgbklobhv9G0b6SjKcWHOiiUx6VccSi0uFQX9CY3JQmzgs
+ 98aGBFIBq+d6A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=kNjIOZNC
+Subject: Re: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2022-09-22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,98 +88,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Stafford, All,
 
-On Mon, 26 Sep 2022 08:43:20 -0700
-TIAN Yuanhao <tianyuanhao3@163.com> wrote:
+On 2022-09-26 14:45 +0000, Stafford Horne spake thusly:
+[--SNIP--]
+> OK, it seems this is the fix.  The --enable/disable-tls flag seems to only
+> control a HAVE_AS_TLS macro in the gcc build.  OpenRISC was missing the below
+> ifdef.  Adding it seems to fix the build for me.
+> 
+> Thanks Yann for the investigation that pointed right to the issue.
+> 
+> If you all can confirm this, I will post a gcc patch shortly and get it
+> upstream.
+> 
+> -Stafford
+> 
+> --
+> 
+> diff --git a/gcc/config/or1k/or1k.cc b/gcc/config/or1k/or1k.cc
+> index da2f59062ba..0ce7b234417 100644
+> --- a/gcc/config/or1k/or1k.cc
+> +++ b/gcc/config/or1k/or1k.cc
+> @@ -2206,8 +2206,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
+>  #undef  TARGET_LEGITIMATE_ADDRESS_P
+>  #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
+>  
+> +#ifdef HAVE_AS_TLS
+>  #undef  TARGET_HAVE_TLS
+>  #define TARGET_HAVE_TLS true
+> +#endif
+>  
+>  #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
+>  #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
 
-> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+I've verified that this indeed fixes the build issues I noticed
+(woohoo #1!), and gpsd does not crash when linked to libusb
+(woohoo #2!).
 
-Thanks for this new patch! See comments below.
+You may add my:
 
+Tested-by: Yann E. MORIN <yann.morin@orange.com>
 
-> +OPEN_ISCSI_CONF_OPTS = -Ddbroot=/var/lib/iscsi
-> +
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +OPEN_ISCSI_DEPENDENCIES += systemd
-> +OPEN_ISCSI_CONF_OPTS += -Dno_systemd=false
-> +else
-> +OPEN_ISCSI_CONF_OPTS += -Dno_systemd=true
-> +endif
+Regards,
+Yann E. MORIN.
 
-Weird option "no_systemd". Why didn't they make that positive logic?
-
-> +
-> +ifeq ($(BR2_PACKAGE_OPEN_ISNS),)
-> +define OPEN_ISCSI_DISABLE_ISNS
-> +	$(SED) "/'isns'/s/^/#/" $(@D)/meson.build
-> +	$(SED) "/'iscsid'/s/^/#/" $(@D)/usr/meson.build
-> +	$(SED) "/'iscsiadm'/s/^/#/" $(@D)/usr/meson.build
-> +endef
-
-Isn't a bit annoying to have this kind of mess. Could you instead add
-an option in meson.build to enable/disable isns support, and contribute
-this improvement upstream?
-
-> +OPEN_ISCSI_PRE_CONFIGURE_HOOKS += OPEN_ISCSI_DISABLE_ISNS
-> +else
-> +OPEN_ISCSI_DEPENDENCIES += open-isns
-> +endif
-> +
-> +define OPEN_ISCSI_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib
-> +	cp -dpf $(@D)/build/libopeniscsiusr.so{,.0,.0.2.0} \
-> +		$(TARGET_DIR)/usr/lib/
-> +	$(OPEN_ISCSI_INSTALL_ISCSID)
-> +	$(OPEN_ISCSI_INSTALL_ISCSISTART)
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_OPEN_ISCSI_ISCSID),y)
-> +define OPEN_ISCSI_INSTALL_ISCSID
-> +	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/sbin
-> +	$(INSTALL) -m 755 -t $(TARGET_DIR)/usr/sbin \
-> +		$(@D)/build/{iscsi-iname,iscsiadm,iscsid}
-> +	$(INSTALL) -D -m 644 {$(@D)/etc,$(TARGET_DIR)/etc/iscsi}/iscsid.conf
-> +endef
-> +
-> +define OPEN_ISCSI_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib/systemd/system
-> +	$(INSTALL) -m 644 -t $(TARGET_DIR)/usr/lib/systemd/system \
-> +		$(@D)/build/{iscsi,iscsi-init,iscsid}.service \
-> +		$(@D)/etc/systemd/iscsid.socket
-
-Why isn't that installed automatically by the meson build system when
-systemd support is enabled?
-
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPEN_ISCSI_ISCSISTART),y)
-> +define OPEN_ISCSI_INSTALL_ISCSISTART
-> +	$(INSTALL) -D -m 755 {$(@D)/build,$(TARGET_DIR)/usr/sbin}/iscsistart
-> +endef
-> +endif
-
-It's also a bit annoying that you have to reimplement all the
-installation logic. What about improving the meson.build with
-additional options, and contribute these improvements upstream?
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
