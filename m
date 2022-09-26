@@ -4,72 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7998C07E9D
-	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 10:25:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E57CAC07E9D
+	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 10:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3866940B3A;
-	Mon, 26 Sep 2022 10:25:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3866940B3A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 825EA40B4D;
+	Mon, 26 Sep 2022 10:27:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 825EA40B4D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rdNUzTBXmjtS; Mon, 26 Sep 2022 10:25:05 +0000 (UTC)
+	with ESMTP id LPHmmK4IKiTj; Mon, 26 Sep 2022 10:27:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB8E7408EF;
-	Mon, 26 Sep 2022 10:25:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB8E7408EF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 02E2C1BF3EC
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 10:25:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 82FFB408EF;
+	Mon, 26 Sep 2022 10:27:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82FFB408EF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AAC21BF3EC
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 10:27:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D496C41714
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 10:25:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D496C41714
+ by smtp3.osuosl.org (Postfix) with ESMTP id 55D6E60F69
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 10:27:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55D6E60F69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9eYxUFL6W6w9 for <buildroot@lists.busybox.net>;
- Mon, 26 Sep 2022 10:25:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37E4B415DC
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 37E4B415DC
- for <buildroot@buildroot.org>; Mon, 26 Sep 2022 10:25:00 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B7915E0005;
- Mon, 26 Sep 2022 10:24:58 +0000 (UTC)
-Date: Mon, 26 Sep 2022 12:24:57 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Johan Oudinet <johan.oudinet@gmail.com>
-Message-ID: <20220926122457.1ae898b3@windsurf>
-In-Reply-To: <CAJtjsKbXry53n6HTcvV9jPyxJ4fcCbryAn7Vtk_8i=Q9qfed5g@mail.gmail.com>
-References: <20220913174039.182887-1-thomas.claveirole@green-communications.fr>
- <20220925214700.5e222e95@windsurf>
- <20220925215340.43f64019@windsurf> <3124822.5fSG56mABF@harderbit>
- <20220926120059.1c0c677b@windsurf>
- <CAJtjsKbXry53n6HTcvV9jPyxJ4fcCbryAn7Vtk_8i=Q9qfed5g@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GyfMOctdNZgB for <buildroot@lists.busybox.net>;
+ Mon, 26 Sep 2022 10:27:23 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48B8260F74
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 48B8260F74
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 10:27:23 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ ay7-20020a05600c1e0700b003b49861bf48so7961547wmb.0
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 03:27:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=H7ACIX9NN+CgBTatIPOQsd8SfZ5sDi6SFXHvmaLRMNY=;
+ b=2FtWDPrU/LE6E59ZKuD+Ft07CtGdIosHNFhzSCBSRK1DbLs3tWCzsihl8BvCko6Z45
+ 7xnvnLZLrJMle8IHhZTs3M+xlaQ8k7hul6I9tVaoXwSMwsoNaWbq3A97jC/E9IpiC11o
+ t8/sqba87gMKkhZ9YybQL9ezdU2mQWB81SKaoY0eJIliE2RGdpeIHwvMrwShTjat/XNt
+ jDGfPjIRoFZe/EUN+3f94cJUwIf7UgGcANBzX0ykjDgTCiPWzcIP2/erEvH7xC+9J/E9
+ R29tSimkyBe3bLyc/X6+Av/8rxljBxYn82gK03mZIiSrEhPeXe/WfLpqhxoXMgtU+8xM
+ 8ZcQ==
+X-Gm-Message-State: ACrzQf3hrhRlKF1k536f8w0JcDe1ZwzaMYJRQtEPDYJh/ZPZ52weE5vg
+ W48GrEVHERAxncGDB2nVeQ3gBL8e3JhG0w==
+X-Google-Smtp-Source: AMsMyM4+VDGwq7OJceuYquWvnk5vahC57sDzFKwZcUb152/sgBxxQ9hbXvSkgSOg6NNWQrIHECn6Ng==
+X-Received: by 2002:a05:600c:3591:b0:3b4:bf48:9f10 with SMTP id
+ p17-20020a05600c359100b003b4bf489f10mr22494753wmq.76.1664188041388; 
+ Mon, 26 Sep 2022 03:27:21 -0700 (PDT)
+Received: from localhost.localdomain
+ (amontsouris-559-1-16-245.w90-24.abo.wanadoo.fr. [90.24.143.245])
+ by smtp.gmail.com with ESMTPSA id
+ f12-20020adffccc000000b0022afddab5dfsm14413568wrs.7.2022.09.26.03.27.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 26 Sep 2022 03:27:21 -0700 (PDT)
+From: Titouan Christophe <titouanchristophe@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 26 Sep 2022 12:27:07 +0200
+Message-Id: <20220926102707.1993827-1-titouanchristophe@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664187899;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=3tUDbDJ5n9PpAKCvbBfd7eYvMj/2C9j4hn45Zb9Oyl4=;
- b=TwcQVd141iIn9mePfbAdqr1Xnf++mksDxjkcDGlDoPGSG2uKo5H0ZcGNZyLQrzdAWAU451
- yHF+zcN1wekzW9I4w46Hg56ny/sYyC4EEHeJPPuwAA2AZ+iDBnp4iTVPcNvOwVs4zKwVkk
- 3UWcDTeBGGbg0UyCp5azOZ6jxSVoVHWv48qJC/sSPStROmeho4+O1mNjhI6f+8yuSJOMgf
- r2O3+btx6pGd6w1pXnbaHW+FyMyYdVn7KCUhFKXR427fX9XMJWnwIFsIR6ApI0RiiRUjhy
- V++heTXbrfYzFT1LPlD5Ifp2xXVxNaeGYf33eQf3xpgXyUbPkUzShwXchzDcvQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=H7ACIX9NN+CgBTatIPOQsd8SfZ5sDi6SFXHvmaLRMNY=;
+ b=E+TODbTqUIxPwDwi3DoT+DQu/N9HnfCVwgInlOniERgSLEDSnz7s4g+mv36u3hHOLN
+ RjWeI1pWRnzHhBGA4P3P5mcMnPl2H5pGu7yfljACUQT9v2fOoRj9trNU2UvraVFt/IoT
+ 4T7i5Y90Fkfu6U49QMjyJlzz2kIaXP7IeJcMVENROPtV2/OVmnRj0jBJ7+TGPbotfae3
+ quUc6/e27xh4HzV31hkqZgLGGyiLo4r4MrZFxbg2t+TBfCXNlVTKX49KWVYC03T3CufU
+ Z+B55XSoJpuXrBO8Te4uHl937SvnJ4o751dVb6/RXyXEZp4MyJtxLMdozel0yDhMs9si
+ BDsA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TwcQVd14
-Subject: Re: [Buildroot] [PATCH 1/2] package/nodejs: introduce
- BR2_PACKAGE_HOST_NODEJS_COREPACK
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20210112 header.b=E+TODbTq
+Subject: [Buildroot] [PATCH 1/1] package/waf: Bump to v2.0.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,29 +95,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Price <daniel.price@gmail.com>,
- Thomas Claveirole <thomas.claveirole@green-communications.fr>,
- Martin Bark <martin@barkynet.com>, buildroot@buildroot.org
+Cc: Titouan Christophe <titouanchristophe@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 26 Sep 2022 12:17:04 +0200
-Johan Oudinet <johan.oudinet@gmail.com> wrote:
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+---
+ package/waf/waf.hash | 6 +++---
+ package/waf/waf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> That's a good point. I'll report this issue to forge developers. Every
-> npm packages should have a package-lock.json file in their repository.
-
-See https://github.com/digitalbazaar/forge/issues/1005.
-
-Best regards,
-
-Thomas
+diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+index 21f47f76d8..c8d464ebfb 100644
+--- a/package/waf/waf.hash
++++ b/package/waf/waf.hash
+@@ -1,7 +1,7 @@
+ # Locally computed
+-sha1  89b24f9c19328339c2c8103796755474b66f3a8d  waf-2.0.23
+-sha256  28a2e4583314a162cfcbffefb8a9202c1d7869040d30b5852da479b76d9c0491  waf-2.0.23
++sha1  9cc6db88ecda57067024f368722ecbf48a3bba1a  waf-2.0.24
++sha256  93909bca823a675f9f40af7c65b24887c3a3c0efdf411ff1978ba827194bdeb0  waf-2.0.24
+ 
+ # The waf script also contains its license, but is renamed `waf` in the extract
+ # step, so this is a synonym for the above, to check WAF_LICENSE
+-sha256  28a2e4583314a162cfcbffefb8a9202c1d7869040d30b5852da479b76d9c0491  waf
++sha256  93909bca823a675f9f40af7c65b24887c3a3c0efdf411ff1978ba827194bdeb0  waf
+diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+index 2b1808ace4..d98ab489ca 100644
+--- a/package/waf/waf.mk
++++ b/package/waf/waf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAF_VERSION = 2.0.23
++WAF_VERSION = 2.0.24
+ WAF_SOURCE = waf-$(WAF_VERSION)
+ WAF_SITE = https://waf.io
+ WAF_LICENSE = BSD-3-Clause
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.37.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
