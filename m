@@ -1,81 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0FE3C07E9D
-	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 15:51:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3B35C07E9D
+	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 15:59:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 51AE182D0F;
-	Mon, 26 Sep 2022 15:51:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51AE182D0F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 85C1A40BC2;
+	Mon, 26 Sep 2022 15:59:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85C1A40BC2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k9fr00ozUjCp; Mon, 26 Sep 2022 15:51:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1XHDjQnuaOKg; Mon, 26 Sep 2022 15:59:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B62682CE4;
-	Mon, 26 Sep 2022 15:51:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B62682CE4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 51A9F1BF3A6
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 15:51:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 72448408A3;
+	Mon, 26 Sep 2022 15:59:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72448408A3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D76E1BF25F
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 15:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 13C3460FB1
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 15:51:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13C3460FB1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05897416F1
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 15:59:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05897416F1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eOmTuEF45El8 for <buildroot@lists.busybox.net>;
- Mon, 26 Sep 2022 15:51:19 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86FC860681
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 86FC860681
- for <buildroot@buildroot.org>; Mon, 26 Sep 2022 15:51:19 +0000 (UTC)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
- by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 28QFopUg068779;
- Mon, 26 Sep 2022 10:50:51 -0500
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
- by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 28QFopJT128658
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Mon, 26 Sep 2022 10:50:51 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 26
- Sep 2022 10:50:51 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 26 Sep 2022 10:50:51 -0500
-Received: from [10.250.33.43] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
- by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 28QFookZ014653;
- Mon, 26 Sep 2022 10:50:51 -0500
-Message-ID: <e274882b-626b-eb08-15a0-c7b6ac68eb7a@ti.com>
-Date: Mon, 26 Sep 2022 10:50:50 -0500
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QdJgZ0GdXU9W for <buildroot@lists.busybox.net>;
+ Mon, 26 Sep 2022 15:59:14 +0000 (UTC)
+X-Greylist: delayed 00:15:08 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46D3A4097D
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46D3A4097D
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 15:59:12 +0000 (UTC)
+Received: from localhost.localdomain (unknown [123.185.16.28])
+ by smtp7 (Coremail) with SMTP id C8CowABHxm65yDFjefvIHQ--.19219S2;
+ Mon, 26 Sep 2022 23:43:55 +0800 (CST)
+From: TIAN Yuanhao <tianyuanhao3@163.com>
+To: buildroot@buildroot.org
+Date: Mon, 26 Sep 2022 08:43:20 -0700
+Message-Id: <20220926154320.35494-1-tianyuanhao3@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To: Anand Gadiyar <gadiyar@ti.com>, <buildroot@buildroot.org>
-References: <20220923205543.1518798-1-gadiyar@ti.com>
- <20220923205543.1518798-3-gadiyar@ti.com>
-In-Reply-To: <20220923205543.1518798-3-gadiyar@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-CM-TRANSID: C8CowABHxm65yDFjefvIHQ--.19219S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKF4Utry3Kw47Gw4kJrykuFg_yoW7uF4kpF
+ 47Ww15Gw48Kr1fKrWfKF9Fgr4a9rs8u3yUGasrXw18try5JryIqryDta1IkrZrAw4DAw4U
+ Xrs5W3yjg3yxt3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUkcTkUUUUU=
+X-Originating-IP: [123.185.16.28]
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/1tbiGhuIjVaEC8OwfQAAsT
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1664207451;
- bh=yzJRtk664j4LJEU38W4ZKwA/e0Z3o91vcQqqL1sBrRE=;
- h=Date:Subject:To:CC:References:From:In-Reply-To;
- b=oq1t9PPOzOEEoGFjycJdsCz6udaMa4Ij/+nk5Cch9obWH59COuJjcjpsTwEKHLdQA
- +rpJbLK3rWLR/ePvQOA5nArF/0zh7QYTS/P+j/9SLNpAWsmRMXiUdAi5htXYzwcPmj
- kZzX6QrouJiKcZizsQu2t7lnxtSXbn1MhXDVVbKc=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=oq1t9PPO
-Subject: Re: [Buildroot] [PATCH v5 2/3] boot/ti-k3-image-gen: add new package
+ d=163.com; 
+ s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QWa2B
+ JUExLEF59cn46Y5pLqWGVR84yyg0XNb/CFUkXA=; b=JgcJ6jZk9vU23PMEPVnfP
+ 1rHCpchr7ejQsD7qqZG0pNTvJrccJLY12iDLpNsEuA0tov3S4++/RZrWgWvl1T61
+ NZd8tEAgy1+AvKfdppoajjVPrGXcB2dRvzNzJtMxt7IN50utlX3hMx+bzoAQp786
+ pExCRCpI6brDuiBDcdhpD8=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=163.com header.i=@163.com
+ header.a=rsa-sha256 header.s=s110527 header.b=JgcJ6jZk
+Subject: [Buildroot] [PATCH 1/1] package/open-iscsi: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,112 +73,181 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Andrew Davis via buildroot <buildroot@buildroot.org>
-Reply-To: Andrew Davis <afd@ti.com>
-Cc: Xuanhao Shi <X15000177@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gOS8yMy8yMiAzOjU1IFBNLCBBbmFuZCBHYWRpeWFyIHdyb3RlOgo+IEZyb206IFh1YW5oYW8g
-U2hpIDx4LXNoaUB0aS5jb20+Cj4gCj4gVGhpcyBpcyB0aGUgaW1hZ2UgZ2VuZXJhdG9yIHRoYXQg
-YnVpbGRzIHRoZSBmdWxsIGJvb3QgYmluYXJ5LAo+IHRpYm9vdDMuYmluLCBmb3IgdGhlIFI1IGNv
-cmUgb24gVEkncyBrMyBkZXZpY2VzLgo+IFRoaXMgcmVxdWlyZXMgdGhlIFI1IHNwbCBvdXRwdXQg
-ZnJvbSB0aGUgdGktazMtcjUtbG9hZGVyIHBhY2thZ2UuCj4gCj4gaHR0cHM6Ly9naXQudGkuY29t
-L2NnaXQvazMtaW1hZ2UtZ2VuL2szLWltYWdlLWdlbgo+IAo+IFNpZ25lZC1vZmYtYnk6IFh1YW5o
-YW8gU2hpIDx4LXNoaUB0aS5jb20+Cj4gU2lnbmVkLW9mZi1ieTogQW5hbmQgR2FkaXlhciA8Z2Fk
-aXlhckB0aS5jb20+Cj4gUmV2aWV3ZWQtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0
-aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+IC0tLQo+ICAgREVWRUxPUEVSUyAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgfCAgMiArKwo+ICAgYm9vdC9Db25maWcuaW4gICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgfCAgMSArCj4gICBib290L3RpLWszLWltYWdlLWdlbi9Db25maWcu
-aW4gICAgICAgICAgICB8IDI0ICsrKysrKysrKysrKysrKysrCj4gICBib290L3RpLWszLWltYWdl
-LWdlbi90aS1rMy1pbWFnZS1nZW4uaGFzaCB8ICAyICsrCj4gICBib290L3RpLWszLWltYWdlLWdl
-bi90aS1rMy1pbWFnZS1nZW4ubWsgICB8IDMzICsrKysrKysrKysrKysrKysrKysrKysrCj4gICA1
-IGZpbGVzIGNoYW5nZWQsIDYyIGluc2VydGlvbnMoKykKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBi
-b290L3RpLWszLWltYWdlLWdlbi9Db25maWcuaW4KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBib290
-L3RpLWszLWltYWdlLWdlbi90aS1rMy1pbWFnZS1nZW4uaGFzaAo+ICAgY3JlYXRlIG1vZGUgMTAw
-NjQ0IGJvb3QvdGktazMtaW1hZ2UtZ2VuL3RpLWszLWltYWdlLWdlbi5tawo+IAo+IGRpZmYgLS1n
-aXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IDVmMzZjYmY1MzUuLjgxZjA5NWY3
-OTkgMTAwNjQ0Cj4gLS0tIGEvREVWRUxPUEVSUwo+ICsrKyBiL0RFVkVMT1BFUlMKPiBAQCAtMTI5
-LDYgKzEyOSw3IEBAIEY6CXBhY2thZ2UvbGlieG1scnBjLwo+ICAgRjoJcGFja2FnZS9weXRob24t
-ZG9jb3B0Lwo+ICAgCj4gICBOOglBbmFuZCBHYWRpeWFyIDxnYWRpeWFyQHRpLmNvbT4KPiArRjoJ
-Ym9vdC90aS1rMy1pbWFnZS1nZW4vCj4gICBGOglib290L3RpLWszLXI1LWxvYWRlci8KPiAgIAo+
-ICAgTjoJQW5kcsOpIFp3aW5nIDxuZXJ2QGRhd25jcm93LmRlPgo+IEBAIC0zMDY3LDYgKzMwNjgs
-NyBAQCBOOglXb2pjaWVjaCBOaXppxYRza2kgPG5pemlha0BzcG94Lm9yZz4KPiAgIEY6CXBhY2th
-Z2UvZnd1cC8KPiAgIAo+ICAgTjoJWHVhbmhhbyBTaGkgPFgxNTAwMDE3N0BnbWFpbC5jb20+Cj4g
-K0Y6CWJvb3QvdGktazMtaW1hZ2UtZ2VuLwo+ICAgRjoJYm9vdC90aS1rMy1yNS1sb2FkZXIvCj4g
-ICAKPiAgIE46CVlhaXIgQmVuIEF2cmFoYW0gPHlhaXJiYUBwcm90b25tYWlsLmNvbT4KPiBkaWZm
-IC0tZ2l0IGEvYm9vdC9Db25maWcuaW4gYi9ib290L0NvbmZpZy5pbgo+IGluZGV4IGNlMTdiMmRm
-NmIuLjFiMjViYWNmZWUgMTAwNjQ0Cj4gLS0tIGEvYm9vdC9Db25maWcuaW4KPiArKysgYi9ib290
-L0NvbmZpZy5pbgo+IEBAIC0yMiw2ICsyMiw3IEBAIHNvdXJjZSAiYm9vdC9zNTAwLWJvb3Rsb2Fk
-ZXIvQ29uZmlnLmluIgo+ICAgc291cmNlICJib290L3NoaW0vQ29uZmlnLmluIgo+ICAgc291cmNl
-ICJib290L3N1bjIwaS1kMS1zcGwvQ29uZmlnLmluIgo+ICAgc291cmNlICJib290L3N5c2xpbnV4
-L0NvbmZpZy5pbiIKPiArc291cmNlICJib290L3RpLWszLWltYWdlLWdlbi9Db25maWcuaW4iCj4g
-ICBzb3VyY2UgImJvb3QvdGktazMtcjUtbG9hZGVyL0NvbmZpZy5pbiIKPiAgIHNvdXJjZSAiYm9v
-dC91Ym9vdC9Db25maWcuaW4iCj4gICBzb3VyY2UgImJvb3QvdmV4cHJlc3MtZmlybXdhcmUvQ29u
-ZmlnLmluIgo+IGRpZmYgLS1naXQgYS9ib290L3RpLWszLWltYWdlLWdlbi9Db25maWcuaW4gYi9i
-b290L3RpLWszLWltYWdlLWdlbi9Db25maWcuaW4KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
-ZGV4IDAwMDAwMDAwMDAuLjAwNDE2ZGNlZmMKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9vdC90
-aS1rMy1pbWFnZS1nZW4vQ29uZmlnLmluCj4gQEAgLTAsMCArMSwyNCBAQAo+ICtjb25maWcgQlIy
-X1RBUkdFVF9USV9LM19JTUFHRV9HRU4KPiArCWJvb2wgInRpLWszLWltYWdlLWdlbiIKPiArCXNl
-bGVjdCBCUjJfVEFSR0VUX1RJX0szX1I1X0xPQURFUgo+ICsJaGVscAo+ICsJICBVc2UgVEkncyBr
-My1pbWFnZS1nZW4gdG8gYnVpbGQgYSBzZXBhcmF0ZSBiYXJlIG1ldGFsCj4gKwkgIGJvb3QgYmlu
-YXJ5IGZyb20gYSBzZXBhcmF0ZSBzcGwuIEN1cnJlbnRseSBzdXBwb3J0cwo+ICsJICB2ZXJzaW9u
-IDA4LjA0LjAwLjAwNSBhcyBkZWZhdWx0Lgo+ICsKPiArCSAgaHR0cHM6Ly9naXQudGkuY29tL2Nn
-aXQvazMtaW1hZ2UtZ2VuL2szLWltYWdlLWdlbi8KPiArCj4gK2NvbmZpZyBCUjJfVEFSR0VUX1RJ
-X0szX0lNQUdFX0dFTl9TT0MKPiArCXN0cmluZyAiU09DIHR5cGUgZm9yIGltYWdlIGdlbiIKPiAr
-CWRlcGVuZHMgb24gQlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU4KPiArCWhlbHAKPiArCSAgVGhl
-IHRhcmdldCBTb0Mgb3B0aW9uIGZvciBpbWFnZSBnZW4uCj4gKwkgIEZvciBleGFtcGxlLCAiYW02
-NHgiIGZvciBBTTY0WCBib2FyZHMuCj4gKwoKCkkgY2FuIGFkZCB0aGlzIGluIGFuIGFkZC1vbiBw
-YXRjaCBsYXRlciwgYnV0IGlmIHRoaXMgcGF0Y2ggbmVlZHMgcmUtc3B1bgpmb3Igc29tZSBvdGhl
-ciByZWFzb24sIGZlZWwgZnJlZSB0byBhZGQgaXQgaGVyZS4KCldlIG5lZWQgb25lIG1vcmUgb3B0
-aW9uIGZvciAidHlwZSIKCj5jb25maWcgQlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fVFlQRQo+
-CXN0cmluZyAiU09DIHNlY3VyaXR5IHR5cGUgZm9yIGltYWdlIGdlbiIKPglkZXBlbmRzIG9uIEJS
-Ml9UQVJHRVRfVElfSzNfSU1BR0VfR0VOCj4JaGVscAo+CSAgVGhlIHNlY3VyaXR5IHR5cGUgb3B0
-aW9uIGZvciBpbWFnZSBnZW4uCj4JICBPcHRpb25zIGFyZSAiZ3AiLCAiaHMtZnMiLCBvciAiaHMt
-c2UiLgoKYW5kIHVzZWQgYXMgYW5vdGhlciBtYWtlIHNldHRpbmcgYmVsb3cgYXMKCj5TT0NfVFlQ
-RT0kKGNhbGwgcXN0cmlwLCQoQlIyX1RBUkdFVF9USV9LM19JTUFHRV9HRU5fVFlQRSkpIFwKCm90
-aGVyd2lzZSBMR1RNLAoKQWNrZWQtYnk6IEFuZHJldyBEYXZpcyA8YWZkQHRpLmNvbT4KCkFuZHJl
-dwoKCj4gK2NvbmZpZyBCUjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9DT05GSUcKPiArCXN0cmlu
-ZyAiQ09ORklHIHR5cGUgZm9yIGltYWdlIGdlbiIKPiArCWRlcGVuZHMgb24gQlIyX1RBUkdFVF9U
-SV9LM19JTUFHRV9HRU4KPiArCWhlbHAKPiArCSAgVGhlIGJvYXJkIGNvbmZpZyBvcHRpb24gZm9y
-IGltYWdlIGdlbi4KPiArCSAgVXN1YWxseSAic2siIG9yICJldm0iLgo+ICsKPiBkaWZmIC0tZ2l0
-IGEvYm9vdC90aS1rMy1pbWFnZS1nZW4vdGktazMtaW1hZ2UtZ2VuLmhhc2ggYi9ib290L3RpLWsz
-LWltYWdlLWdlbi90aS1rMy1pbWFnZS1nZW4uaGFzaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4g
-aW5kZXggMDAwMDAwMDAwMC4uZTMwN2EwMmE2Nwo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib290
-L3RpLWszLWltYWdlLWdlbi90aS1rMy1pbWFnZS1nZW4uaGFzaAo+IEBAIC0wLDAgKzEsMiBAQAo+
-ICsjIExvY2FsbHkgY2FsY3VsYXRlZAo+ICtzaGEyNTYgIGU1ODVkYzg2OGFkYTIxZWYzMzg5MTU5
-NTQxZDY2OWI4OGJjNDA2YjQ1MzQ3MGU5MmRhODVkOTIyMmQyNzFjOTYgIGszLWltYWdlLWdlbi0w
-OC4wNC4wMC4wMDUudGFyLmd6Cj4gZGlmZiAtLWdpdCBhL2Jvb3QvdGktazMtaW1hZ2UtZ2VuL3Rp
-LWszLWltYWdlLWdlbi5tayBiL2Jvb3QvdGktazMtaW1hZ2UtZ2VuL3RpLWszLWltYWdlLWdlbi5t
-awo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uMWY5NzQ5MDM5Mgo+
-IC0tLSAvZGV2L251bGwKPiArKysgYi9ib290L3RpLWszLWltYWdlLWdlbi90aS1rMy1pbWFnZS1n
-ZW4ubWsKPiBAQCAtMCwwICsxLDMzIEBACj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKyMK
-PiArIyB0aS1rMy1pbWFnZS1nZW4KPiArIwo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsK
-PiArVElfSzNfSU1BR0VfR0VOX1ZFUlNJT04gPSAwOC4wNC4wMC4wMDUKPiArVElfSzNfSU1BR0Vf
-R0VOX1NJVEUgPSBodHRwczovL2dpdC50aS5jb20vY2dpdC9rMy1pbWFnZS1nZW4vazMtaW1hZ2Ut
-Z2VuL3NuYXBzaG90Cj4gK1RJX0szX0lNQUdFX0dFTl9TT1VSQ0UgPSBrMy1pbWFnZS1nZW4tJChU
-SV9LM19JTUFHRV9HRU5fVkVSU0lPTikudGFyLmd6Cj4gK1RJX0szX0lNQUdFX0dFTl9MSUNFTlNF
-ID0gQlNELTMtQ2xhdXNlCj4gK1RJX0szX0lNQUdFX0dFTl9MSUNFTlNFX0ZJTEVTID0gc3lzdGVt
-LWZpcm13YXJlLWltYWdlLWdlbi0xLjAtbWFuaWZlc3QuaHRtbAo+ICtUSV9LM19JTUFHRV9HRU5f
-SU5TVEFMTF9JTUFHRVMgPSBZRVMKPiArVElfSzNfSU1BR0VfR0VOX0RFUEVOREVOQ0lFUyA9IGhv
-c3QtYXJtLWdudS10b29sY2hhaW4gdGktazMtcjUtbG9hZGVyCj4gK1RJX0szX0lNQUdFX0dFTl9N
-QUtFID0gJChCUjJfTUFLRSkKPiArVElfSzNfSU1BR0VfR0VOX1NPQyA9ICQoY2FsbCBxc3RyaXAs
-JChCUjJfVEFSR0VUX1RJX0szX0lNQUdFX0dFTl9TT0MpKQo+ICtUSV9LM19JTUFHRV9HRU5fQ09O
-RklHID0gJChjYWxsIHFzdHJpcCwkKEJSMl9UQVJHRVRfVElfSzNfSU1BR0VfR0VOX0NPTkZJRykp
-Cj4gK1RJX0szX0lNQUdFX0dFTl9NQUtFX09QVFMgPSBcCj4gKwlTT0M9JChUSV9LM19JTUFHRV9H
-RU5fU09DKSBcCj4gKwlDT05GSUc9JChUSV9LM19JTUFHRV9HRU5fQ09ORklHKSBcCj4gKwlDUk9T
-U19DT01QSUxFPSQoSE9TVF9BUk1fR05VX1RPT0xDSEFJTl9JTlNUQUxMX0RJUikvYmluL2FybS1u
-b25lLWVhYmktIFwKPiArCVNCTD0kKEJJTkFSSUVTX0RJUikvcjUtdS1ib290LXNwbC5iaW4gXAo+
-ICsJTz0kKEJJTkFSSUVTX0RJUikgXAo+ICsJQklOX0RJUj0kKEJJTkFSSUVTX0RJUikKPiArCj4g
-K2RlZmluZSBUSV9LM19JTUFHRV9HRU5fQlVJTERfQ01EUwo+ICsJJChUSV9LM19JTUFHRV9HRU5f
-TUFLRSkgLUMgJChARCkgJChUSV9LM19JTUFHRV9HRU5fTUFLRV9PUFRTKQo+ICtlbmRlZgo+ICsK
-PiArZGVmaW5lIFRJX0szX0lNQUdFX0dFTl9JTlNUQUxMX0lNQUdFU19DTURTCj4gKwljcCAkKEBE
-KS90aWJvb3QzLmJpbiAkKEJJTkFSSUVTX0RJUikKPiArZW5kZWYKPiArCj4gKyQoZXZhbCAkKGdl
-bmVyaWMtcGFja2FnZSkpCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/open-iscsi/Config.in       | 38 +++++++++++++++++
+ package/open-iscsi/open-iscsi.hash |  3 ++
+ package/open-iscsi/open-iscsi.mk   | 68 ++++++++++++++++++++++++++++++
+ 5 files changed, 111 insertions(+)
+ create mode 100644 package/open-iscsi/Config.in
+ create mode 100644 package/open-iscsi/open-iscsi.hash
+ create mode 100644 package/open-iscsi/open-iscsi.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 54216450f4..7a698c31c0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2791,6 +2791,7 @@ N:	Sven Oliver Moll <svolli@svolli.de>
+ F:	package/most/
+ 
+ N:	TIAN Yuanhao <tianyuanhao3@163.com>
++F:	package/open-iscsi/
+ F:	package/open-isns/
+ 
+ N:	Theo Debrouwere <t.debrouwere@televic.com>
+diff --git a/package/Config.in b/package/Config.in
+index de51be400b..dacc317132 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2357,6 +2357,7 @@ endif
+ 	source "package/odhcp6c/Config.in"
+ 	source "package/odhcploc/Config.in"
+ 	source "package/olsr/Config.in"
++	source "package/open-iscsi/Config.in"
+ 	source "package/open-lldp/Config.in"
+ 	source "package/open-plc-utils/Config.in"
+ 	source "package/openntpd/Config.in"
+diff --git a/package/open-iscsi/Config.in b/package/open-iscsi/Config.in
+new file mode 100644
+index 0000000000..b13c518439
+--- /dev/null
++++ b/package/open-iscsi/Config.in
+@@ -0,0 +1,38 @@
++config BR2_PACKAGE_OPEN_ISCSI
++	bool "open-iscsi"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
++	depends on !BR2_STATIC_LIBS # kmod
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPEN_ISCSI_ISCSISTART \
++		if !BR2_PACKAGE_OPEN_ISCSI_ISCSID
++	select BR2_PACKAGE_KMOD
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBS
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	help
++	  iSCSI tools for Linux.
++
++	  https://www.open-iscsi.com
++
++if BR2_PACKAGE_OPEN_ISCSI
++
++config BR2_PACKAGE_OPEN_ISCSI_ISCSID
++	bool "iscsid"
++	default y
++	select BR2_PACKAGE_OPEN_ISNS
++	help
++	  iscsid implements the control path of iSCSI protocol, plus
++	  some management facilities.
++
++config BR2_PACKAGE_OPEN_ISCSI_ISCSISTART
++	bool "iscsistart"
++	help
++	  iscsistart is used for attaching to iSCSI targets during
++	  bootup.
++
++endif
++
++comment "open-iscsi needs a toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/open-iscsi/open-iscsi.hash b/package/open-iscsi/open-iscsi.hash
+new file mode 100644
+index 0000000000..ee6b0d41ce
+--- /dev/null
++++ b/package/open-iscsi/open-iscsi.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  f5d038583657030345711d50b6d8095a0f2da5076bfe7035d64a2beba53405e8  open-iscsi-f633c09a7a2976069b1dfd98d9979349e92c38b5.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/open-iscsi/open-iscsi.mk b/package/open-iscsi/open-iscsi.mk
+new file mode 100644
+index 0000000000..d777101824
+--- /dev/null
++++ b/package/open-iscsi/open-iscsi.mk
+@@ -0,0 +1,68 @@
++################################################################################
++#
++# open-iscsi
++#
++################################################################################
++
++OPEN_ISCSI_VERSION = f633c09a7a2976069b1dfd98d9979349e92c38b5
++OPEN_ISCSI_SITE = $(call github,open-iscsi,open-iscsi,$(OPEN_ISCSI_VERSION))
++OPEN_ISCSI_LICENSE = GPL-2.0+
++OPEN_ISCSI_LICENSE_FILES = COPYING
++OPEN_ISCSI_DEPENDENCIES = kmod openssl util-linux-libs
++
++OPEN_ISCSI_CONF_OPTS = -Ddbroot=/var/lib/iscsi
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++OPEN_ISCSI_DEPENDENCIES += systemd
++OPEN_ISCSI_CONF_OPTS += -Dno_systemd=false
++else
++OPEN_ISCSI_CONF_OPTS += -Dno_systemd=true
++endif
++
++ifeq ($(BR2_PACKAGE_OPEN_ISNS),)
++define OPEN_ISCSI_DISABLE_ISNS
++	$(SED) "/'isns'/s/^/#/" $(@D)/meson.build
++	$(SED) "/'iscsid'/s/^/#/" $(@D)/usr/meson.build
++	$(SED) "/'iscsiadm'/s/^/#/" $(@D)/usr/meson.build
++endef
++OPEN_ISCSI_PRE_CONFIGURE_HOOKS += OPEN_ISCSI_DISABLE_ISNS
++else
++OPEN_ISCSI_DEPENDENCIES += open-isns
++endif
++
++define OPEN_ISCSI_INSTALL_TARGET_CMDS
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib
++	cp -dpf $(@D)/build/libopeniscsiusr.so{,.0,.0.2.0} \
++		$(TARGET_DIR)/usr/lib/
++	$(OPEN_ISCSI_INSTALL_ISCSID)
++	$(OPEN_ISCSI_INSTALL_ISCSISTART)
++endef
++
++ifeq ($(BR2_PACKAGE_OPEN_ISCSI_ISCSID),y)
++define OPEN_ISCSI_INSTALL_ISCSID
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/sbin
++	$(INSTALL) -m 755 -t $(TARGET_DIR)/usr/sbin \
++		$(@D)/build/{iscsi-iname,iscsiadm,iscsid}
++	$(INSTALL) -D -m 644 {$(@D)/etc,$(TARGET_DIR)/etc/iscsi}/iscsid.conf
++endef
++
++define OPEN_ISCSI_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib/systemd/system
++	$(INSTALL) -m 644 -t $(TARGET_DIR)/usr/lib/systemd/system \
++		$(@D)/build/{iscsi,iscsi-init,iscsid}.service \
++		$(@D)/etc/systemd/iscsid.socket
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_OPEN_ISCSI_ISCSISTART),y)
++define OPEN_ISCSI_INSTALL_ISCSISTART
++	$(INSTALL) -D -m 755 {$(@D)/build,$(TARGET_DIR)/usr/sbin}/iscsistart
++endef
++endif
++
++define OPEN_ISCSI_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SCSI_LOWLEVEL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_ISCSI_TCP)
++endef
++
++$(eval $(meson-package))
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
