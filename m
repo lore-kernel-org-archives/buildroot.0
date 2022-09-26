@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15175C32771
-	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 12:03:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD7EAC32771
+	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 12:03:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4E9D40C0B;
-	Mon, 26 Sep 2022 12:03:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4E9D40C0B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A61D40904;
+	Mon, 26 Sep 2022 12:03:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A61D40904
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hLX7gMcFE0k7; Mon, 26 Sep 2022 12:03:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id aB2uaWLeT0cT; Mon, 26 Sep 2022 12:03:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3D4840BFF;
-	Mon, 26 Sep 2022 12:03:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3D4840BFF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 500C74028E;
+	Mon, 26 Sep 2022 12:03:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 500C74028E
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2BCC31BF3F7
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 12:02:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD3951BF3F7
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 12:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA17C60F71
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 12:02:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA17C60F71
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88DF160F6F
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 12:02:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88DF160F6F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sAVPKxNhIyJz for <buildroot@lists.busybox.net>;
- Mon, 26 Sep 2022 12:02:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0EF4C60F6F
- for <buildroot@buildroot.org>; Mon, 26 Sep 2022 12:02:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EF4C60F6F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEE7486023; Mon, 26 Sep 2022 12:02:53 +0000 (UTC)
+ with ESMTP id SEBCkUJn1uZ0 for <buildroot@lists.busybox.net>;
+ Mon, 26 Sep 2022 12:02:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E01160DC6
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9E01160DC6
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 12:02:55 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7D9FD240014;
+ Mon, 26 Sep 2022 12:02:53 +0000 (UTC)
+Date: Mon, 26 Sep 2022 14:02:52 +0200
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Mon, 26 Sep 2022 14:02:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: af56cfe372a064a3de2e3baf446cdc59f81cdfd7
-X-Git-Newrev: 5195770cc8b46a9d51caab8d02bb086e4a0b249f
-X-Patchwork-Hint: ignore
-Message-Id: <20220926120253.EEE7486023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/waf: bump to v2.0.24
+To: Titouan Christophe <titouanchristophe@gmail.com>
+Message-ID: <20220926140252.2f775240@windsurf>
+In-Reply-To: <20220926101724.1989377-1-titouanchristophe@gmail.com>
+References: <20220926101724.1989377-1-titouanchristophe@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1664193773;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=cvW0xsZ+/CC0j8LRGlsnGK9cTnAy8HyMxtcr964xk/k=;
+ b=hGOktyuuD0G/aqSoRGfong/btHAIrJaNyXw8IuORDKiJW06bfARg9AuEW9tbMdoLiIJPR6
+ UXN7KXLbGiflxc5amfiQvBRco9kF/GXDk18uITLRMHKf9jZY4oLa3St9X2Szq5H9yK0wl/
+ PKRkjV8ssBeSSOG2xZ0gGJDtX2DPmqRC0YERj/nDA0rERtQKXx/WGV5b0YR5j1C4jhJr7i
+ 5Iavs1O8ryxSC4J0w5t8qK5BFOAlkguL5ANtnDsoPe9nOyN67JBnjhI56DzEvrIgjgYCW1
+ YjUj3tizzvaVYJCPRfDafBl3TdeZoqreFcV5FvS6xyyArF1jK/Rt2RYAR/teJw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hGOktyuu
+Subject: Re: [Buildroot] [PATCH 1/1] package/redis: security bump to v7.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,50 +76,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Daniel Price <daniel.price@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5195770cc8b46a9d51caab8d02bb086e4a0b249f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 26 Sep 2022 12:17:24 +0200
+Titouan Christophe <titouanchristophe@gmail.com> wrote:
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/waf/waf.hash | 6 +++---
- package/waf/waf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> From the release notes:
+> (https://github.com/redis/redis/blob/7.0.5/00-RELEASENOTES)
+> 
+> ================================================================================
+> Redis 7.0.5 Released Wed Sep 21 20:00:00 IST 2022
+> ================================================================================
+> 
+> Upgrade urgency: SECURITY, contains fixes to security issues.
+> 
+> Security Fixes:
+> * (CVE-2022-35951) Executing a XAUTOCLAIM command on a stream key in a specific
+>   state, with a specially crafted COUNT argument, may cause an integer overflow,
+>   a subsequent heap overflow, and potentially lead to remote code execution.
+>   The problem affects Redis versions 7.0.0 or newer
+>   [reported by Xion (SeungHyun Lee) of KAIST GoN].
+> 
+> Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+> ---
+>  package/redis/redis.hash | 2 +-
+>  package/redis/redis.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-index 21f47f76d8..c8d464ebfb 100644
---- a/package/waf/waf.hash
-+++ b/package/waf/waf.hash
-@@ -1,7 +1,7 @@
- # Locally computed
--sha1  89b24f9c19328339c2c8103796755474b66f3a8d  waf-2.0.23
--sha256  28a2e4583314a162cfcbffefb8a9202c1d7869040d30b5852da479b76d9c0491  waf-2.0.23
-+sha1  9cc6db88ecda57067024f368722ecbf48a3bba1a  waf-2.0.24
-+sha256  93909bca823a675f9f40af7c65b24887c3a3c0efdf411ff1978ba827194bdeb0  waf-2.0.24
- 
- # The waf script also contains its license, but is renamed `waf` in the extract
- # step, so this is a synonym for the above, to check WAF_LICENSE
--sha256  28a2e4583314a162cfcbffefb8a9202c1d7869040d30b5852da479b76d9c0491  waf
-+sha256  93909bca823a675f9f40af7c65b24887c3a3c0efdf411ff1978ba827194bdeb0  waf
-diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-index 2b1808ace4..d98ab489ca 100644
---- a/package/waf/waf.mk
-+++ b/package/waf/waf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAF_VERSION = 2.0.23
-+WAF_VERSION = 2.0.24
- WAF_SOURCE = waf-$(WAF_VERSION)
- WAF_SITE = https://waf.io
- WAF_LICENSE = BSD-3-Clause
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
