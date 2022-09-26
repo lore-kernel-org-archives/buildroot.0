@@ -1,65 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7DC7C32771
-	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 18:46:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D28DCC07E9D
+	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 18:51:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 699FC82E95;
-	Mon, 26 Sep 2022 18:46:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 699FC82E95
+	by smtp2.osuosl.org (Postfix) with ESMTP id 580EF40C5D;
+	Mon, 26 Sep 2022 18:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 580EF40C5D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Um2C76K2hGnV; Mon, 26 Sep 2022 18:46:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8fzCRkn3WaNS; Mon, 26 Sep 2022 18:50:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6044682B93;
-	Mon, 26 Sep 2022 18:46:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6044682B93
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F280403E5;
+	Mon, 26 Sep 2022 18:50:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F280403E5
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BBD8E1BF2F5
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 18:46:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B5D9A1BF2F5
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 18:50:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 95F0D82B93
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 18:46:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95F0D82B93
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FB7981CD0
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 18:50:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FB7981CD0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gxTpqPs8tNdK for <buildroot@lists.busybox.net>;
- Mon, 26 Sep 2022 18:46:37 +0000 (UTC)
+ with ESMTP id XC1v0idY-KED for <buildroot@lists.busybox.net>;
+ Mon, 26 Sep 2022 18:50:55 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 300F78291A
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 300F78291A
- for <buildroot@buildroot.org>; Mon, 26 Sep 2022 18:46:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 954B381B04
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 954B381B04
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 18:50:55 +0000 (UTC)
 Received: from submission (posteo.de [185.67.36.169]) 
- by mout01.posteo.de (Postfix) with ESMTPS id 06FA5240026
- for <buildroot@buildroot.org>; Mon, 26 Sep 2022 20:46:34 +0200 (CEST)
+ by mout02.posteo.de (Postfix) with ESMTPS id 13260240104
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 20:50:52 +0200 (CEST)
 Received: from customer (localhost [127.0.0.1])
- by submission (posteo.de) with ESMTPSA id 4MbsD84Ngqz6tmK;
- Mon, 26 Sep 2022 20:46:32 +0200 (CEST)
+ by submission (posteo.de) with ESMTPSA id 4MbsK75S44z9rxP;
+ Mon, 26 Sep 2022 20:50:51 +0200 (CEST)
 From: Dominik Michael Rauh <dmrauh@posteo.de>
 To: buildroot@buildroot.org
-Date: Mon, 26 Sep 2022 18:46:21 +0000
-Message-Id: <20220926184621.300230-1-dmrauh@posteo.de>
+Date: Mon, 26 Sep 2022 18:50:47 +0000
+Message-Id: <20220926185047.301080-1-dmrauh@posteo.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=posteo.de; s=2017; 
- t=1664217994; bh=vfvCLVan5HPYSD2BynBG6J2yILA5RGpcfX/rTgF90I8=;
+ t=1664218253; bh=XesgasoIbnzqQnw7Ey3j0CyIfhIq6C2H+AnFzDGDkuM=;
  h=From:To:Cc:Subject:Date:From;
- b=PVqqXZt8jA8TZNBC4vIVY+E6QQfXFb8rYTaqnQq+YetApzinM77F+WauGkbZVmPV0
- ygZ6s6La7qLhl8/KASR2qBcg0MQQwjOyXl4dKO+0bwJhcZGcupwS1j1pWjEJScS0SM
- C9hDc/EoKJ5rfQFH0ppuvSHCZDENbH4rnVbLh3ezQ04N151V5/CZzcLQsdPBIVh2Kg
- I5Z6whUtEq26s2L44NItakMWD+QrnzFTOL5f+IRrmx4eyzfFwXzkXVI5Nr60lHaYzo
- kvAmkDx6IUT0dIlDeM9oaTbwxFd9OiJGT1Eud1A1o6aWhIXfw4Pk9/9HNadfo6QRcQ
- pw3V2QIgAJ0ZQ==
+ b=qupIlaSwpq5wxzJ31ExZengxY+o5hEeVr8f+DnfiEz1aG9OM/DSa/KoJ7Y7APAxNL
+ Q2QwAy8JKQvhodn8A2XYfPc3S7U+I4N6gK0GdCu4LdzBC9AvRqCyCVVa5ChspDb/OL
+ tgmxPE/w5i3llKeOXdYi6ghamyDFHOmC5fVpo7EBERYR6U13+Ygs3kwSLZORDkimLh
+ euk2Ea2ieDAtnASxtTQx52nm3h9sUFOaHO2U9y25uSm4HRgAHzO3tqNQ3mWkQTWw2B
+ I4bt8Xar573Fz9bZ70HpI2KEfVxKtPYj9+f2mVEWOnHmIck6z7oV3TJ0IpdMkRVa/q
+ tMexfV7nMyBVQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de
- header.a=rsa-sha256 header.s=2017 header.b=PVqqXZt8
-Subject: [Buildroot] [PATCH v1] package/gdal: bump version to 5.1.2
+ header.a=rsa-sha256 header.s=2017 header.b=qupIlaSw
+Subject: [Buildroot] [PATCH v2] package/gdal: bump version to 3.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,6 +79,9 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Dominik Michael Rauh <dmrauh@posteo.de>
 ---
+Changes v1 -> v2:
+- Fix commmit message
+
  package/gdal/gdal.hash | 6 +++---
  package/gdal/gdal.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
