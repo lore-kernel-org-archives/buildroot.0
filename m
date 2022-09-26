@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 878A7C32771
-	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 12:04:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2951C07E9D
+	for <buildroot@archiver.kernel.org>; Mon, 26 Sep 2022 12:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3703A60F79;
-	Mon, 26 Sep 2022 12:04:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3703A60F79
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5936A40BF1;
+	Mon, 26 Sep 2022 12:05:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5936A40BF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c8IfLVeLlqji; Mon, 26 Sep 2022 12:04:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 78narNWkDama; Mon, 26 Sep 2022 12:05:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6109F60F6F;
-	Mon, 26 Sep 2022 12:04:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6109F60F6F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9ADD31BF9A4
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 12:04:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1BD8740BEA;
+	Mon, 26 Sep 2022 12:05:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BD8740BEA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 549351BF3B0
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 12:05:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 766DE60F6F
- for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 12:04:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 766DE60F6F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3DF9540BF1
+ for <buildroot@lists.busybox.net>; Mon, 26 Sep 2022 12:05:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DF9540BF1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ShJKG9-3aYN6 for <buildroot@lists.busybox.net>;
- Mon, 26 Sep 2022 12:04:20 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23157605D6
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 23157605D6
- for <buildroot@buildroot.org>; Mon, 26 Sep 2022 12:04:19 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 69C43FF814;
- Mon, 26 Sep 2022 12:04:12 +0000 (UTC)
-Date: Mon, 26 Sep 2022 14:04:11 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ae6ozkIc_OlS for <buildroot@lists.busybox.net>;
+ Mon, 26 Sep 2022 12:05:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89DB640BEA
+ for <buildroot@buildroot.org>; Mon, 26 Sep 2022 12:05:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89DB640BEA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 797208634F; Mon, 26 Sep 2022 12:05:42 +0000 (UTC)
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20220926140411.48cbc132@windsurf>
-In-Reply-To: <20220925054525.1841072-1-james.hilliard1@gmail.com>
-References: <20220925054525.1841072-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664193857;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=gA6OeuFmelDOs+PRW/JcgNS7PurV1wrq0YqD52/75Pw=;
- b=kgxpeCDeWrs6epnKgFUOS5dmgyA1QjegvplvIMlIGx8YPDTJ4MbwvP95KjxPJCTwgPVW45
- +ydiyOWLzGMibBSxa31TVUZcjCy9rZl0rTB2sgcldz50L/jHu7EhZO+jKBoj0+vaFxIoee
- FdhM+dBq+1K5t13KgFthIS0qxG0dkebRhM+JbkgubWM+6WGf4iI+Sqwev7aZBv7Af/0Ht6
- LoyyJ90cEy1s3qU2qwIrSaK3JbW1fXKtlYZMFVwEoPUozoFhg+7kQhcS61nzfPYk5GUMax
- 0WvfblHbjst0A7HTxtw/XcFINx7buqBYyMm7Rl8rqNO93xmSc5Lhp/7RKikcjw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kgxpeCDe
-Subject: Re: [Buildroot] [PATCH 1/1] package/{rust,
- rust-bin}: bump to version 1.64.0
+To: buildroot@buildroot.org
+Date: Mon, 26 Sep 2022 14:04:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e213543fd0dc94205c9b25a08df42eb02128dc99
+X-Git-Newrev: 01c2a049b10b2e56b61f5a40814bfe0256fe20eb
+X-Patchwork-Hint: ignore
+Message-Id: <20220926120542.797208634F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-visualisation-waveform: bump
+ version to 19.0.3-Matrix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,60 +57,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 24 Sep 2022 23:45:25 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=01c2a049b10b2e56b61f5a40814bfe0256fe20eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Link to Rust 1.64.0 annoucement: https://blog.rust-lang.org/2022/09/22/Rust-1.64.0.html
-> 
-> Newest version of the source archives have been retrieved with their hash values,
-> and the signature of the .asc files have been verified as follows:
-> $ curl -fsSL https://static.rust-lang.org/rust-key.gpg.ascii | gpg --import
-> $ gpg --verify <filename.asc> <filename>
-> 
-> There is no typographical error in the packages according to the check-pakage utility:
-> $ ./utils/check-package package/rust-bin/*
-> $ ./utils/check-package package/rust/*
-> 
-> The testsuite tool were successfully run for rust and rust-bin packages to test
-> the Rust toolchain under 1.64.0:
-> $ ./support/testing/run-tests -k -d dl/ -o testsuite tests.package.test_rust.TestRustBin
-> $ ./support/testing/run-tests -k -d dl/ -o testsuite tests.package.test_rust.TestRust
-> 
-> In order to verify the compatibility of packages depending on Rust 1.64.0,
-> tests using `./utils/test-pkg` were run.
-> You may want to execute the test-pkg command after creating a `.config` file
-> enabling the corresponding BR2_PACKAGE, for example:
-> Create a file `buildroot/ripgrep.config` containing "BR2_PACKAGE_RIPGREP=y"
-> Then execute:
-> $ ./utils/test-pkg -d test-pkg -c ripgrep.config -p ripgrep
-> 
-> Results:
-> librsvg OK
-> ripgrep OK
-> suricata OK
-> bat OK
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/rust-bin/rust-bin.hash | 252 ++++++++++++++++-----------------
->  package/rust-bin/rust-bin.mk   |   2 +-
->  package/rust/rust.hash         |   6 +-
->  package/rust/rust.mk           |   2 +-
->  4 files changed, 131 insertions(+), 131 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash | 2 +-
+ package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+index efd8eddc66..3265477050 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a6180038f43d9344678952d29b6479e24194e6038518f9064e80781bf303ae70  kodi-visualisation-waveform-19.0.2-Matrix.tar.gz
++sha256  a89b7d82afaa3bb279ecf32a2c04e6c7653f536b0df6fee2b7389c15340a01c7  kodi-visualisation-waveform-19.0.3-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+index 71acd733a0..9d75f79a87 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_WAVEFORM_VERSION = 19.0.2-Matrix
++KODI_VISUALISATION_WAVEFORM_VERSION = 19.0.3-Matrix
+ KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
+ KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
