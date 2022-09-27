@@ -1,87 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0352AC6FA82
-	for <buildroot@archiver.kernel.org>; Tue, 27 Sep 2022 10:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2A56C54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 27 Sep 2022 11:17:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBB1D40632;
-	Tue, 27 Sep 2022 10:59:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBB1D40632
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78CEC82F57;
+	Tue, 27 Sep 2022 11:17:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78CEC82F57
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NlRVtAzCWfPp; Tue, 27 Sep 2022 10:59:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2OVEG__V3snb; Tue, 27 Sep 2022 11:17:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 606B141719;
-	Tue, 27 Sep 2022 10:59:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 606B141719
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 273B11BF297
- for <buildroot@lists.busybox.net>; Tue, 27 Sep 2022 10:58:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA7D382F40;
+	Tue, 27 Sep 2022 11:17:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA7D382F40
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3574A1BF860
+ for <buildroot@lists.busybox.net>; Tue, 27 Sep 2022 11:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0082B40632
- for <buildroot@lists.busybox.net>; Tue, 27 Sep 2022 10:58:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0082B40632
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A44582F40
+ for <buildroot@lists.busybox.net>; Tue, 27 Sep 2022 11:17:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A44582F40
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FWkNhdn7tLVW for <buildroot@lists.busybox.net>;
- Tue, 27 Sep 2022 10:58:41 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88C834056A
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88C834056A
- for <buildroot@buildroot.org>; Tue, 27 Sep 2022 10:58:41 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- u16-20020a05600c211000b003b5152ebf09so6633420wml.5
- for <buildroot@buildroot.org>; Tue, 27 Sep 2022 03:58:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=/CbFLxsbO7SgKbItpPOZogQpk/8KSa1YiU9QQthaDOA=;
- b=5c5bLre3bmJgIqZQfUrdgm7qPk6ZoHDbl5CAoN/hFeAQpJ75Wil8lXqW+d8uIyCmi6
- s3YnuGnmkkKUB7WH4jYVPFIS1ji05ML09Mllrk2pzxvgG4Ohgs+j1c/XmcZpKm9qgULe
- VOfSb0cq9bFVOwwTtwWrhe7e5E/9NDKbWqKUhf9u0ci8/SjXJ6J9zCcHpFhG8y+3gAnx
- B9I6iFNKiHR00F7Th2ezcoa5k5Yx+jtrmVB2wUo+Y8tmqMX0hEt0t/DYOVW1s14ro6St
- RjPlbR2cE/tVqqGdID+ujen0pygtcmw69OZ+a9SVRcyF6J5o09s9z4GK3i4Q4bQfEhrd
- U4jQ==
-X-Gm-Message-State: ACrzQf1k7iJ4qRsefsmKNONbv2u0+DeudpHtcIQWb+TMo28AvX5+MCYO
- TUTtt3Bw+aEL5J+mizQBnXELFCVIQsHDPw==
-X-Google-Smtp-Source: AMsMyM7xZL1nCSbOIH18G4wHAe5U5cf8XRBI74ZbjfCVCROsDPxV/rwgczc+s/DrHzfJfA1+3dYE8g==
-X-Received: by 2002:a05:600c:1e87:b0:3b5:1e2:3c3c with SMTP id
- be7-20020a05600c1e8700b003b501e23c3cmr2160812wmb.130.1664276319748; 
- Tue, 27 Sep 2022 03:58:39 -0700 (PDT)
-Received: from centennial.enunes.eu (ip-78-45-66-209.bb.vodafone.cz.
- [78.45.66.209]) by smtp.gmail.com with ESMTPSA id
- j30-20020a05600c1c1e00b003a6125562e1sm1272597wms.46.2022.09.27.03.58.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Sep 2022 03:58:39 -0700 (PDT)
-From: Erico Nunes <nunes.erico@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 27 Sep 2022 12:58:35 +0200
-Message-Id: <20220927105835.760768-1-nunes.erico@gmail.com>
-X-Mailer: git-send-email 2.37.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RQrWCZFk78OV for <buildroot@lists.busybox.net>;
+ Tue, 27 Sep 2022 11:17:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82C3B82F31
+Received: from mail.aibs.ru (aibs.ru [176.107.241.33])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 82C3B82F31
+ for <buildroot@buildroot.org>; Tue, 27 Sep 2022 11:17:30 +0000 (UTC)
+Received: from mail.aibs.ru (localhost.localdomain [127.0.0.1])
+ by mail.aibs.ru (Postfix) with ESMTPA id C7FBC340069
+ for <buildroot@buildroot.org>; Tue, 27 Sep 2022 11:17:27 +0000 (UTC)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=/CbFLxsbO7SgKbItpPOZogQpk/8KSa1YiU9QQthaDOA=;
- b=eJuli0NGXlrXVUOxiBCuIS/9K3szCo1To59HUW53n2wkfslhDMCs786nqKt1hf9pQC
- XrUmPbAsQlC8joBm9I6qRpQRdYBXGNlxek11OlxZisHTYo6uG2NJ6HqO/rqsyydoji8j
- +rDCKyMxzwIgC4g/UtYjwPu5mof8mb0NlZsR0RRqsxMd/Fz1U2nzsgHc3+ZqTpunZnAM
- C74UVEuX5MA4A6f4z8toWXV6K46DvcRhIck/EWI8uYyo0AAix2Om1aOB2keEhSE/5l6O
- 17hkSmx+xVKYwl8O28GJcpNzxq7xWozO9vU93Fawg3k9hAJXKf3uR84gNqQomH83mJ7H
- NNcA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=eJuli0NG
-Subject: [Buildroot] [PATCH] package/efibootmgr: bump to version 18
+Content-Type: multipart/mixed;
+ boundary="=_061757a53af42b845b3304cb54b35584"
+Date: Tue, 27 Sep 2022 14:17:27 +0300
+From: kk <kk@aibs.ru>
+To: buildroot@buildroot.org
+Message-ID: <ff6b01776879d74878e8e1733e2a8e07@aibs.ru>
+X-Sender: kk@aibs.ru
+User-Agent: Roundcube Webmail/1.3.6
+Subject: [Buildroot] [1/1] package/sleef: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,129 +59,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patches which are already applied upstream.
+--=_061757a53af42b845b3304cb54b35584
+Content-Transfer-Encoding: base64
+Content-Type: text/x-diff;
+ name=0001-Add-sleef-library.patch
+Content-Disposition: attachment;
+ filename=0001-Add-sleef-library.patch;
+ size=4220
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
----
- .../0001-Allow-build-with-uClibc.patch        | 40 -------------------
- .../efibootmgr/0002-remove-extra-decl.patch   | 28 -------------
- package/efibootmgr/efibootmgr.hash            |  2 +-
- package/efibootmgr/efibootmgr.mk              |  2 +-
- 4 files changed, 2 insertions(+), 70 deletions(-)
- delete mode 100644 package/efibootmgr/0001-Allow-build-with-uClibc.patch
- delete mode 100644 package/efibootmgr/0002-remove-extra-decl.patch
-
-diff --git a/package/efibootmgr/0001-Allow-build-with-uClibc.patch b/package/efibootmgr/0001-Allow-build-with-uClibc.patch
-deleted file mode 100644
-index fd29233dc3..0000000000
---- a/package/efibootmgr/0001-Allow-build-with-uClibc.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From bbfcc60497c326576bb23cb01d90115ef3cf6947 Mon Sep 17 00:00:00 2001
--From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
--Date: Fri, 25 Nov 2016 20:26:52 +0200
--Subject: [PATCH] Remove unneeded <uchar.h> include
--
--This fixes the build with uClibc.
--
--Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-----
-- src/efibootdump.c | 1 -
-- src/eficonman.c   | 1 -
-- 2 files changed, 2 deletions(-)
--
--diff --git a/src/efibootdump.c b/src/efibootdump.c
--index 6ff8360..7c5a1c5 100644
----- a/src/efibootdump.c
--+++ b/src/efibootdump.c
--@@ -19,7 +19,6 @@
-- #include <stdint.h>
-- #include <stdio.h>
-- #include <stdlib.h>
---#include <uchar.h>
-- #include <unistd.h>
-- 
-- #include "error.h"
--diff --git a/src/eficonman.c b/src/eficonman.c
--index 2c2be38..9bfae79 100644
----- a/src/eficonman.c
--+++ b/src/eficonman.c
--@@ -17,7 +17,6 @@
-- #include <stdint.h>
-- #include <stdio.h>
-- #include <stdlib.h>
---#include <uchar.h>
-- #include <unistd.h>
-- 
-- #define  _(String) gettext (String)
---- 
--2.10.2
--
-diff --git a/package/efibootmgr/0002-remove-extra-decl.patch b/package/efibootmgr/0002-remove-extra-decl.patch
-deleted file mode 100644
-index f838d50a20..0000000000
---- a/package/efibootmgr/0002-remove-extra-decl.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 99b578501643377e0b1994b2a068b790d189d5ad Mon Sep 17 00:00:00 2001
--From: Peter Jones <pjones@redhat.com>
--Date: Wed, 13 Jun 2018 09:41:01 -0400
--Subject: [PATCH] remove extra decl
--
--Downloaded from upstream commit
--https://github.com/rhboot/efibootmgr/commit/99b578501643377e0b1994b2a068b790d189d5ad
--
--Signed-off-by: Peter Jones <pjones@redhat.com>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/efibootmgr.c | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/src/efibootmgr.c b/src/efibootmgr.c
--index de38f01..4e1a680 100644
----- a/src/efibootmgr.c
--+++ b/src/efibootmgr.c
--@@ -1536,9 +1536,6 @@ parse_opts(int argc, char **argv)
-- 					       "invalid numeric value %s\n",
-- 					       optarg);
-- 			}
---                        /* XXX efivar-36 accidentally doesn't have a public
---                         * header for this */
---			extern int efi_set_verbose(int verbosity, FILE *errlog);
-- 			efi_set_verbose(opts.verbose - 2, stderr);
-- 			break;
-- 		case 'V':
-diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
-index fdbc9a2732..71a9826331 100644
---- a/package/efibootmgr/efibootmgr.hash
-+++ b/package/efibootmgr/efibootmgr.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  22a95ebe0d5c9fb2915b3a100450f8f37484d1dbb8b296f55b343cc84f10397d  efibootmgr-17.tar.gz
-+sha256  442867d12f8525034a404fc8af3036dba8e1fc970998af2486c3b940dfad0874  efibootmgr-18.tar.gz
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-index 7e09b5f659..672a93c282 100644
---- a/package/efibootmgr/efibootmgr.mk
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EFIBOOTMGR_VERSION = 17
-+EFIBOOTMGR_VERSION = 18
- EFIBOOTMGR_SITE = $(call github,rhboot,efibootmgr,$(EFIBOOTMGR_VERSION))
- EFIBOOTMGR_LICENSE = GPL-2.0+
- EFIBOOTMGR_LICENSE_FILES = COPYING
--- 
-2.37.3
+cGFja2FnZS9zbGVlZjogYWRkIG5ldyBwYWNrYWdlCgpTTEVFRiBpcyBhIGxpYnJhcnkgdGhhdCBp
+bXBsZW1lbnRzIHZlY3Rvcml6ZWQgdmVyc2lvbnMKb2YgQyBzdGFuZGFyZCBtYXRoIGZ1bmN0aW9u
+cy4gVGhpcyBsaWJyYXJ5IGFsc28KaW5jbHVkZXMgREZUIHN1YnJvdXRpbmVzLgoKaHR0cHM6Ly9z
+bGVlZi5vcmcvCgpTaWduZWQtb2ZmLWJ5OiBLaXJpbGwgS3JhbmtlIDxra0BhaWJzLnJ1PgoKLS0t
+CiBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgfCAgMSArCiBwYWNrYWdlL3NsZWVmL0NvbmZpZy5p
+biAgfCA1MCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCiBwYWNrYWdl
+L3NsZWVmL3NsZWVmLmhhc2ggfCAgMyArKysKIHBhY2thZ2Uvc2xlZWYvc2xlZWYubWsgICB8IDQ5
+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogNCBmaWxlcyBjaGFuZ2Vk
+LCAxMDMgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uvc2xlZWYvQ29u
+ZmlnLmluCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zbGVlZi9zbGVlZi5oYXNoCiBjcmVh
+dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zbGVlZi9zbGVlZi5tawoKZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25maWcuaW4KaW5kZXggYjkxMWM1OWE5Mi4uYWY5YjBi
+NzM5OCAxMDA2NDQKLS0tIGEvcGFja2FnZS9Db25maWcuaW4KKysrIGIvcGFja2FnZS9Db25maWcu
+aW4KQEAgLTIwNDEsNiArMjA0MSw3IEBAIGVuZGlmCiAJc291cmNlICJwYWNrYWdlL3JpZW1hbm4t
+Yy1jbGllbnQvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS9zaGFwZWxpYi9Db25maWcuaW4i
+CiAJc291cmNlICJwYWNrYWdlL3NrYWxpYnMvQ29uZmlnLmluIgorCXNvdXJjZSAicGFja2FnZS9z
+bGVlZi9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3NwaGlueGJhc2UvQ29uZmlnLmluIgog
+CXNvdXJjZSAicGFja2FnZS9zdGFydHVwLW5vdGlmaWNhdGlvbi9Db25maWcuaW4iCiAJc291cmNl
+ICJwYWNrYWdlL3RpbnljYm9yL0NvbmZpZy5pbiIKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2xlZWYv
+Q29uZmlnLmluIGIvcGFja2FnZS9zbGVlZi9Db25maWcuaW4KbmV3IGZpbGUgbW9kZSAxMDA2NDQK
+aW5kZXggMDAwMDAwMDAwMC4uODVmOTNkMzg0ZQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2Uv
+c2xlZWYvQ29uZmlnLmluCkBAIC0wLDAgKzEsNTAgQEAKK2NvbmZpZyBCUjJfUEFDS0FHRV9TTEVF
+Rl9BUkNIX1NVUFBPUlRTCisJYm9vbAorCWRlZmF1bHQgeSBpZiBCUjJfYXJtCisJZGVmYXVsdCB5
+IGlmIEJSMl9hYXJjaDY0CisJZGVmYXVsdCB5IGlmIEJSMl9pMzg2CisJZGVmYXVsdCB5IGlmIEJS
+Ml94ODZfNjQKKwlkZWZhdWx0IHkgaWYgQlIyX3Bvd2VycGM2NAorCitjb25maWcgQlIyX1BBQ0tB
+R0VfU0xFRUYKKwlib29sICJzbGVlZiIKKwloZWxwCisgICAgICAgICAgU0xFRUYgaXMgYSBsaWJy
+YXJ5IHRoYXQgaW1wbGVtZW50cyB2ZWN0b3JpemVkIHZlcnNpb25zCisgICAgICAgICAgb2YgQyBz
+dGFuZGFyZCBtYXRoIGZ1bmN0aW9ucy4gVGhpcyBsaWJyYXJ5IGFsc28KKyAgICAgICAgICBpbmNs
+dWRlcyBERlQgc3Vicm91dGluZXMuCisKKyAgICAgICAgICBodHRwczovL3NsZWVmLm9yZy8KKwor
+aWYgQlIyX1BBQ0tBR0VfU0xFRUYKKworY29uZmlnIEJSMl9QQUNLQUdFX1NMRUVGX0RGVAorICAg
+ICAgICBib29sICJjb21waWxlIGRmdCIKKyAgICAgICAgZGVmYXVsdCBuCisgICAgICAgIGhlbHAK
+KyAgICAgICAgICBsaWJzbGVlZmRmdCB3aWxsIGJlIGJ1aWx0CisKK2NvbmZpZyBCUjJfUEFDS0FH
+RV9TTEVFRl9RVUFECisgICAgICAgIGJvb2wgImNvbXBpbGUgcXVhZCIKKyAgICAgICAgZGVmYXVs
+dCBuCisgICAgICAgIGhlbHAKKyAgICAgICAgICBsaWJzbGVlZnF1YWQgd2lsbCBiZSBidWlsdAor
+Citjb25maWcgQlIyX1BBQ0tBR0VfU0xFRUZfR05VQUJJX0xJQlMKKyAgICAgICAgYm9vbCAiY29t
+cGlsZSBnbnVhYmkiCisgICAgICAgIGRlZmF1bHQgeQorICAgICAgICBoZWxwCisgICAgICAgICAg
+bGlic2xlZWZnbnVhYmkgd2lsbCBiZSBidWlsdAorCitjb25maWcgQlIyX1BBQ0tBR0VfU0xFRUZf
+U0NBTEFSX0xJQgorICAgICAgICBib29sICJjb21waWxlIHNjYWxhciIKKyAgICAgICAgZGVmYXVs
+dCBuCisgICAgICAgIGhlbHAKKyAgICAgICAgICBsaWJzbGVlZnNjYWxhciB3aWxsIGJlIGJ1aWx0
+CisKK2NvbmZpZyBCUjJfUEFDS0FHRV9TTEVFRl9URVNUUworICAgICAgICBib29sICJjb21waWxl
+IHRlc3RzIgorICAgICAgICBkZWZhdWx0IG4KKyAgICAgICAgaGVscAorICAgICAgICAgIFRlc3Rz
+IHdpbGwgYmUgYnVpbHQKKworZW5kaWYKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2xlZWYvc2xlZWYu
+aGFzaCBiL3BhY2thZ2Uvc2xlZWYvc2xlZWYuaGFzaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRl
+eCAwMDAwMDAwMDAwLi41MTU3MGE1MTc2Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9zbGVl
+Zi9zbGVlZi5oYXNoCkBAIC0wLDAgKzEsMyBAQAorIyBMb2NhbGx5IGNhbGN1bGF0ZWQKK3NoYTI1
+NiAgYzliZmY3NTczODkyMjE5M2U2N2ZhNzI2ZmEyMjU1MzU4NzBkMmFhMTA1OWY5MTQ1MmM0MTE3
+MzYyODRhZDU2NiAgTElDRU5TRS50eHQKK3NoYTI1NiAgNDE1ZWU5YjFiY2M1ODE2OTg5ZDNkNGQ5
+MmFmZDBjZDNmOWVlODljYmQ1YTMzZWIwMDhlNjk3NTFlNDA0MzhhYiAgc2xlZWYtMy41LjEudGFy
+Lmd6CmRpZmYgLS1naXQgYS9wYWNrYWdlL3NsZWVmL3NsZWVmLm1rIGIvcGFja2FnZS9zbGVlZi9z
+bGVlZi5tawpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi40NmJlZjY5ZjVm
+Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9zbGVlZi9zbGVlZi5tawpAQCAtMCwwICsxLDQ5
+IEBACisjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIworIworIyBzbGVlZgorIworIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMKKworU0xFRUZfVkVSU0lPTiA9IDMuNS4xCitTTEVFRl9TSVRFID0gJChjYWxs
+IGdpdGh1YixzaGliYXRjaCxzbGVlZiwkKFNMRUVGX1ZFUlNJT04pKQorU0xFRUZfTElDRU5TRSA9
+IEJTTC0xLjAKK1NMRUVGX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLnR4dAorU0xFRUZfU1VQUE9S
+VFNfSU5fU09VUkNFX0JVSUxEID0gTk8KK1NMRUVGX0lOU1RBTExfU1RBR0lORyA9IFlFUworCisj
+IE4uQi4gTmVlZCB0byB1c2UgaG9zdCBzbGVlZiBkdXJpbmcgY3Jvc3MgY29tcGlsYXRpb24uCitT
+TEVFRl9ERVBFTkRFTkNJRVMgPSBob3N0LXNsZWVmCitTTEVFRl9DT05GX09QVFMgKz0gLUROQVRJ
+VkVfQlVJTERfRElSPSQoQlVJTERfRElSKS9ob3N0LXNsZWVmLSQoU0xFRUZfVkVSU0lPTikvYnVp
+bGRyb290LWJ1aWxkCisKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfU0xFRUZfREZUKSx5KQorU0xFRUZf
+Q09ORl9PUFRTICs9IC1EQlVJTERfREZUPU9OCitlbHNlCitTTEVFRl9DT05GX09QVFMgKz0gLURC
+VUlMRF9ERlQ9T0ZGCitlbmRpZgorCitpZmVxICgkKEJSMl9QQUNLQUdFX1NMRUVGX1FVQUQpLHkp
+CitTTEVFRl9DT05GX09QVFMgKz0gLURCVUlMRF9RVUFEPU9OCitlbHNlCitTTEVFRl9DT05GX09Q
+VFMgKz0gLURCVUlMRF9RVUFEPU9GRgorZW5kaWYKKworaWZlcSAoJChCUjJfUEFDS0FHRV9TTEVF
+Rl9HTlVBQklfTElCUykseSkKK1NMRUVGX0NPTkZfT1BUUyArPSAtREJVSUxEX0dOVUFCSV9MSUJT
+PU9OCitlbHNlCitTTEVFRl9DT05GX09QVFMgKz0gLURCVUlMRF9HTlVBQklfTElCUz1PRkYKK2Vu
+ZGlmCisKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfU0xFRUZfU0NBTEFSX0xJQikseSkKK1NMRUVGX0NP
+TkZfT1BUUyArPSAtREJVSUxEX1NDQUxBUl9MSUI9T04KK2Vsc2UKK1NMRUVGX0NPTkZfT1BUUyAr
+PSAtREJVSUxEX1NDQUxBUl9MSUI9T0ZGCitlbmRpZgorCitpZmVxICgkKEJSMl9QQUNLQUdFX1NM
+RUVGX1RFU1RTKSx5KQorU0xFRUZfQ09ORl9PUFRTICs9IC1EQlVJTERfVEVTVFM9T04KK2Vsc2UK
+K1NMRUVGX0NPTkZfT1BUUyArPSAtREJVSUxEX1RFU1RTPU9GRgorZW5kaWYKKworJChldmFsICQo
+Y21ha2UtcGFja2FnZSkpCiskKGV2YWwgJChob3N0LWNtYWtlLXBhY2thZ2UpKQotLSAKMi4yMC4x
+Cgo=
+--=_061757a53af42b845b3304cb54b35584
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--=_061757a53af42b845b3304cb54b35584--
