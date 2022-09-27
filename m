@@ -1,53 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2A56C54EE9
-	for <buildroot@archiver.kernel.org>; Tue, 27 Sep 2022 11:17:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C004C54EE9
+	for <buildroot@archiver.kernel.org>; Tue, 27 Sep 2022 12:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78CEC82F57;
-	Tue, 27 Sep 2022 11:17:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78CEC82F57
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF0B2404B9;
+	Tue, 27 Sep 2022 12:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF0B2404B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2OVEG__V3snb; Tue, 27 Sep 2022 11:17:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cvELBrTKT7eq; Tue, 27 Sep 2022 12:12:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA7D382F40;
-	Tue, 27 Sep 2022 11:17:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA7D382F40
+	by smtp2.osuosl.org (Postfix) with ESMTP id B92AD404A3;
+	Tue, 27 Sep 2022 12:12:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B92AD404A3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3574A1BF860
- for <buildroot@lists.busybox.net>; Tue, 27 Sep 2022 11:17:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F3F5B1BF352
+ for <buildroot@lists.busybox.net>; Tue, 27 Sep 2022 12:12:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A44582F40
- for <buildroot@lists.busybox.net>; Tue, 27 Sep 2022 11:17:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A44582F40
+ by smtp1.osuosl.org (Postfix) with ESMTP id DCC0782EF1
+ for <buildroot@lists.busybox.net>; Tue, 27 Sep 2022 12:12:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCC0782EF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RQrWCZFk78OV for <buildroot@lists.busybox.net>;
- Tue, 27 Sep 2022 11:17:30 +0000 (UTC)
+ with ESMTP id PpPxL7sAuLHF for <buildroot@lists.busybox.net>;
+ Tue, 27 Sep 2022 12:12:11 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82C3B82F31
-Received: from mail.aibs.ru (aibs.ru [176.107.241.33])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 82C3B82F31
- for <buildroot@buildroot.org>; Tue, 27 Sep 2022 11:17:30 +0000 (UTC)
-Received: from mail.aibs.ru (localhost.localdomain [127.0.0.1])
- by mail.aibs.ru (Postfix) with ESMTPA id C7FBC340069
- for <buildroot@buildroot.org>; Tue, 27 Sep 2022 11:17:27 +0000 (UTC)
-MIME-Version: 1.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60E7682F37
+Received: from smtpdh18-1.aruba.it (smtpdh18-1.aruba.it [62.149.155.132])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 60E7682F37
+ for <buildroot@buildroot.org>; Tue, 27 Sep 2022 12:12:10 +0000 (UTC)
+Received: from smtpclient.apple ([146.241.20.153])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id d9RYo2s1zIAT1d9RYofk4R; Tue, 27 Sep 2022 14:12:08 +0200
 Content-Type: multipart/mixed;
- boundary="=_061757a53af42b845b3304cb54b35584"
-Date: Tue, 27 Sep 2022 14:17:27 +0300
-From: kk <kk@aibs.ru>
-To: buildroot@buildroot.org
-Message-ID: <ff6b01776879d74878e8e1733e2a8e07@aibs.ru>
-X-Sender: kk@aibs.ru
-User-Agent: Roundcube Webmail/1.3.6
-Subject: [Buildroot] [1/1] package/sleef: add new package
+ boundary=Apple-Mail-8EAE8805-A6FB-4B67-9440-DF4A36D12074
+Content-Transfer-Encoding: 7bit
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Tue, 27 Sep 2022 14:12:08 +0200
+Message-Id: <94563288-00A1-4ED7-B5FF-64E90E2B8D4D@benettiengineering.com>
+References: <ff6b01776879d74878e8e1733e2a8e07@aibs.ru>
+In-Reply-To: <ff6b01776879d74878e8e1733e2a8e07@aibs.ru>
+To: kk <kk@aibs.ru>
+X-Mailer: iPhone Mail (19G82)
+X-CMAE-Envelope: MS4xfBfo18vGGTSi1V0FhAvQv8UCoqpc85rHrF7Kp8J3agRb7P0ankNBkwX2TW56Tez46uhTUa97LY+OqZ7Ob01rT18gpv+H6JYVxhrD5/c0o0sKhTrNS5EZ
+ lrX/af19yU70mmyGAeExzCfzfA16rV3K2kfG+fS4ChPXIJBGgLQkC2Kh/YwFFL6QC9nGwESjNzG7uFwG1BzwX6DyHPj6v1Czl9IWXnUQ5a/aI6Wd6rg+igtu
+ QQJIk520IrsrihvzYZN4GA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1664280728; bh=BoI2CMCGr8bWxjo1WB4Y+rpq7O1gDGaYEo9glUpsB70=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=T82SPHF/ifUfe/3aZD/VZRABDWpat87Cby20/DuoTUbs2oPKimz1mB2G582wNcXuL
+ M8VUmRsDoqjNYnUfNxlCcwMdUrVbi6zHoCP5anTHOLH3zUHXy4wW23e9sxC2RYmQqL
+ 5ECOGIGHMPapuWBd6eXfl0G5YE237IEIqutQqk+cd6DRxc9sLfC0kD8jXHxWNVLDU2
+ L7HA57Oymstx+oiHuBruvoEVw9pE1B0NkNt2COLHFOgwKs9RHjQz9vl/AfwhWBSq5m
+ 45LzhRD/FYai2x3A4DRHjrHQnltKYkqBlHSVA1QHcHrohbTnLAhegBC+nzqLr/HaS5
+ /XnhqO/3mw01g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=T82SPHF/
+Subject: Re: [Buildroot] [1/1] package/sleef: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,93 +77,211 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---=_061757a53af42b845b3304cb54b35584
-Content-Transfer-Encoding: base64
-Content-Type: text/x-diff;
- name=0001-Add-sleef-library.patch
-Content-Disposition: attachment;
- filename=0001-Add-sleef-library.patch;
- size=4220
 
-cGFja2FnZS9zbGVlZjogYWRkIG5ldyBwYWNrYWdlCgpTTEVFRiBpcyBhIGxpYnJhcnkgdGhhdCBp
-bXBsZW1lbnRzIHZlY3Rvcml6ZWQgdmVyc2lvbnMKb2YgQyBzdGFuZGFyZCBtYXRoIGZ1bmN0aW9u
-cy4gVGhpcyBsaWJyYXJ5IGFsc28KaW5jbHVkZXMgREZUIHN1YnJvdXRpbmVzLgoKaHR0cHM6Ly9z
-bGVlZi5vcmcvCgpTaWduZWQtb2ZmLWJ5OiBLaXJpbGwgS3JhbmtlIDxra0BhaWJzLnJ1PgoKLS0t
-CiBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgfCAgMSArCiBwYWNrYWdlL3NsZWVmL0NvbmZpZy5p
-biAgfCA1MCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCiBwYWNrYWdl
-L3NsZWVmL3NsZWVmLmhhc2ggfCAgMyArKysKIHBhY2thZ2Uvc2xlZWYvc2xlZWYubWsgICB8IDQ5
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogNCBmaWxlcyBjaGFuZ2Vk
-LCAxMDMgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uvc2xlZWYvQ29u
-ZmlnLmluCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zbGVlZi9zbGVlZi5oYXNoCiBjcmVh
-dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zbGVlZi9zbGVlZi5tawoKZGlmZiAtLWdpdCBhL3BhY2th
-Z2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25maWcuaW4KaW5kZXggYjkxMWM1OWE5Mi4uYWY5YjBi
-NzM5OCAxMDA2NDQKLS0tIGEvcGFja2FnZS9Db25maWcuaW4KKysrIGIvcGFja2FnZS9Db25maWcu
-aW4KQEAgLTIwNDEsNiArMjA0MSw3IEBAIGVuZGlmCiAJc291cmNlICJwYWNrYWdlL3JpZW1hbm4t
-Yy1jbGllbnQvQ29uZmlnLmluIgogCXNvdXJjZSAicGFja2FnZS9zaGFwZWxpYi9Db25maWcuaW4i
-CiAJc291cmNlICJwYWNrYWdlL3NrYWxpYnMvQ29uZmlnLmluIgorCXNvdXJjZSAicGFja2FnZS9z
-bGVlZi9Db25maWcuaW4iCiAJc291cmNlICJwYWNrYWdlL3NwaGlueGJhc2UvQ29uZmlnLmluIgog
-CXNvdXJjZSAicGFja2FnZS9zdGFydHVwLW5vdGlmaWNhdGlvbi9Db25maWcuaW4iCiAJc291cmNl
-ICJwYWNrYWdlL3RpbnljYm9yL0NvbmZpZy5pbiIKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2xlZWYv
-Q29uZmlnLmluIGIvcGFja2FnZS9zbGVlZi9Db25maWcuaW4KbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-aW5kZXggMDAwMDAwMDAwMC4uODVmOTNkMzg0ZQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2Uv
-c2xlZWYvQ29uZmlnLmluCkBAIC0wLDAgKzEsNTAgQEAKK2NvbmZpZyBCUjJfUEFDS0FHRV9TTEVF
-Rl9BUkNIX1NVUFBPUlRTCisJYm9vbAorCWRlZmF1bHQgeSBpZiBCUjJfYXJtCisJZGVmYXVsdCB5
-IGlmIEJSMl9hYXJjaDY0CisJZGVmYXVsdCB5IGlmIEJSMl9pMzg2CisJZGVmYXVsdCB5IGlmIEJS
-Ml94ODZfNjQKKwlkZWZhdWx0IHkgaWYgQlIyX3Bvd2VycGM2NAorCitjb25maWcgQlIyX1BBQ0tB
-R0VfU0xFRUYKKwlib29sICJzbGVlZiIKKwloZWxwCisgICAgICAgICAgU0xFRUYgaXMgYSBsaWJy
-YXJ5IHRoYXQgaW1wbGVtZW50cyB2ZWN0b3JpemVkIHZlcnNpb25zCisgICAgICAgICAgb2YgQyBz
-dGFuZGFyZCBtYXRoIGZ1bmN0aW9ucy4gVGhpcyBsaWJyYXJ5IGFsc28KKyAgICAgICAgICBpbmNs
-dWRlcyBERlQgc3Vicm91dGluZXMuCisKKyAgICAgICAgICBodHRwczovL3NsZWVmLm9yZy8KKwor
-aWYgQlIyX1BBQ0tBR0VfU0xFRUYKKworY29uZmlnIEJSMl9QQUNLQUdFX1NMRUVGX0RGVAorICAg
-ICAgICBib29sICJjb21waWxlIGRmdCIKKyAgICAgICAgZGVmYXVsdCBuCisgICAgICAgIGhlbHAK
-KyAgICAgICAgICBsaWJzbGVlZmRmdCB3aWxsIGJlIGJ1aWx0CisKK2NvbmZpZyBCUjJfUEFDS0FH
-RV9TTEVFRl9RVUFECisgICAgICAgIGJvb2wgImNvbXBpbGUgcXVhZCIKKyAgICAgICAgZGVmYXVs
-dCBuCisgICAgICAgIGhlbHAKKyAgICAgICAgICBsaWJzbGVlZnF1YWQgd2lsbCBiZSBidWlsdAor
-Citjb25maWcgQlIyX1BBQ0tBR0VfU0xFRUZfR05VQUJJX0xJQlMKKyAgICAgICAgYm9vbCAiY29t
-cGlsZSBnbnVhYmkiCisgICAgICAgIGRlZmF1bHQgeQorICAgICAgICBoZWxwCisgICAgICAgICAg
-bGlic2xlZWZnbnVhYmkgd2lsbCBiZSBidWlsdAorCitjb25maWcgQlIyX1BBQ0tBR0VfU0xFRUZf
-U0NBTEFSX0xJQgorICAgICAgICBib29sICJjb21waWxlIHNjYWxhciIKKyAgICAgICAgZGVmYXVs
-dCBuCisgICAgICAgIGhlbHAKKyAgICAgICAgICBsaWJzbGVlZnNjYWxhciB3aWxsIGJlIGJ1aWx0
-CisKK2NvbmZpZyBCUjJfUEFDS0FHRV9TTEVFRl9URVNUUworICAgICAgICBib29sICJjb21waWxl
-IHRlc3RzIgorICAgICAgICBkZWZhdWx0IG4KKyAgICAgICAgaGVscAorICAgICAgICAgIFRlc3Rz
-IHdpbGwgYmUgYnVpbHQKKworZW5kaWYKZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2xlZWYvc2xlZWYu
-aGFzaCBiL3BhY2thZ2Uvc2xlZWYvc2xlZWYuaGFzaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRl
-eCAwMDAwMDAwMDAwLi41MTU3MGE1MTc2Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9zbGVl
-Zi9zbGVlZi5oYXNoCkBAIC0wLDAgKzEsMyBAQAorIyBMb2NhbGx5IGNhbGN1bGF0ZWQKK3NoYTI1
-NiAgYzliZmY3NTczODkyMjE5M2U2N2ZhNzI2ZmEyMjU1MzU4NzBkMmFhMTA1OWY5MTQ1MmM0MTE3
-MzYyODRhZDU2NiAgTElDRU5TRS50eHQKK3NoYTI1NiAgNDE1ZWU5YjFiY2M1ODE2OTg5ZDNkNGQ5
-MmFmZDBjZDNmOWVlODljYmQ1YTMzZWIwMDhlNjk3NTFlNDA0MzhhYiAgc2xlZWYtMy41LjEudGFy
-Lmd6CmRpZmYgLS1naXQgYS9wYWNrYWdlL3NsZWVmL3NsZWVmLm1rIGIvcGFja2FnZS9zbGVlZi9z
-bGVlZi5tawpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi40NmJlZjY5ZjVm
-Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9zbGVlZi9zbGVlZi5tawpAQCAtMCwwICsxLDQ5
-IEBACisjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIworIworIyBzbGVlZgorIworIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMKKworU0xFRUZfVkVSU0lPTiA9IDMuNS4xCitTTEVFRl9TSVRFID0gJChjYWxs
-IGdpdGh1YixzaGliYXRjaCxzbGVlZiwkKFNMRUVGX1ZFUlNJT04pKQorU0xFRUZfTElDRU5TRSA9
-IEJTTC0xLjAKK1NMRUVGX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLnR4dAorU0xFRUZfU1VQUE9S
-VFNfSU5fU09VUkNFX0JVSUxEID0gTk8KK1NMRUVGX0lOU1RBTExfU1RBR0lORyA9IFlFUworCisj
-IE4uQi4gTmVlZCB0byB1c2UgaG9zdCBzbGVlZiBkdXJpbmcgY3Jvc3MgY29tcGlsYXRpb24uCitT
-TEVFRl9ERVBFTkRFTkNJRVMgPSBob3N0LXNsZWVmCitTTEVFRl9DT05GX09QVFMgKz0gLUROQVRJ
-VkVfQlVJTERfRElSPSQoQlVJTERfRElSKS9ob3N0LXNsZWVmLSQoU0xFRUZfVkVSU0lPTikvYnVp
-bGRyb290LWJ1aWxkCisKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfU0xFRUZfREZUKSx5KQorU0xFRUZf
-Q09ORl9PUFRTICs9IC1EQlVJTERfREZUPU9OCitlbHNlCitTTEVFRl9DT05GX09QVFMgKz0gLURC
-VUlMRF9ERlQ9T0ZGCitlbmRpZgorCitpZmVxICgkKEJSMl9QQUNLQUdFX1NMRUVGX1FVQUQpLHkp
-CitTTEVFRl9DT05GX09QVFMgKz0gLURCVUlMRF9RVUFEPU9OCitlbHNlCitTTEVFRl9DT05GX09Q
-VFMgKz0gLURCVUlMRF9RVUFEPU9GRgorZW5kaWYKKworaWZlcSAoJChCUjJfUEFDS0FHRV9TTEVF
-Rl9HTlVBQklfTElCUykseSkKK1NMRUVGX0NPTkZfT1BUUyArPSAtREJVSUxEX0dOVUFCSV9MSUJT
-PU9OCitlbHNlCitTTEVFRl9DT05GX09QVFMgKz0gLURCVUlMRF9HTlVBQklfTElCUz1PRkYKK2Vu
-ZGlmCisKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfU0xFRUZfU0NBTEFSX0xJQikseSkKK1NMRUVGX0NP
-TkZfT1BUUyArPSAtREJVSUxEX1NDQUxBUl9MSUI9T04KK2Vsc2UKK1NMRUVGX0NPTkZfT1BUUyAr
-PSAtREJVSUxEX1NDQUxBUl9MSUI9T0ZGCitlbmRpZgorCitpZmVxICgkKEJSMl9QQUNLQUdFX1NM
-RUVGX1RFU1RTKSx5KQorU0xFRUZfQ09ORl9PUFRTICs9IC1EQlVJTERfVEVTVFM9T04KK2Vsc2UK
-K1NMRUVGX0NPTkZfT1BUUyArPSAtREJVSUxEX1RFU1RTPU9GRgorZW5kaWYKKworJChldmFsICQo
-Y21ha2UtcGFja2FnZSkpCiskKGV2YWwgJChob3N0LWNtYWtlLXBhY2thZ2UpKQotLSAKMi4yMC4x
-Cgo=
---=_061757a53af42b845b3304cb54b35584
+--Apple-Mail-8EAE8805-A6FB-4B67-9440-DF4A36D12074
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hello Kirill,
+
+please use following command to send the patch:
+$ git send-email =E2=80=A6
+
+You can obtain the entire command by using a helper script in Buildroot:
+$ cd buildroot
+$ git format-patch -s -M -o . -1
+$ ./utils/get-developers 0001-your-patch.patch
+
+Then copy and paste the output of this ^^^ script and append the patch name.=
+
+
+Best regards
+Giulio Benetti
+
+> Il giorno 27 set 2022, alle ore 13:17, kk <kk@aibs.ru> ha scritto:
+>=20
+> =EF=BB=BF=
+
+--Apple-Mail-8EAE8805-A6FB-4B67-9440-DF4A36D12074
+Content-Type: application/octet-stream;
+	name=0001-Add-sleef-library.patch;
+	x-apple-part-url=94460108-A788-4950-9CCD-DC8C340A9FE9
+Content-Disposition: attachment;
+	filename=0001-Add-sleef-library.patch
+Content-Transfer-Encoding: 7bit
+
+package/sleef: add new package
+
+SLEEF is a library that implements vectorized versions
+of C standard math functions. This library also
+includes DFT subroutines.
+
+https://sleef.org/
+
+Signed-off-by: Kirill Kranke <kk@aibs.ru>
+
+---
+ package/Config.in        |  1 +
+ package/sleef/Config.in  | 50 ++++++++++++++++++++++++++++++++++++++++
+ package/sleef/sleef.hash |  3 +++
+ package/sleef/sleef.mk   | 49 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 103 insertions(+)
+ create mode 100644 package/sleef/Config.in
+ create mode 100644 package/sleef/sleef.hash
+ create mode 100644 package/sleef/sleef.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index b911c59a92..af9b0b7398 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2041,6 +2041,7 @@ endif
+ 	source "package/riemann-c-client/Config.in"
+ 	source "package/shapelib/Config.in"
+ 	source "package/skalibs/Config.in"
++	source "package/sleef/Config.in"
+ 	source "package/sphinxbase/Config.in"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tinycbor/Config.in"
+diff --git a/package/sleef/Config.in b/package/sleef/Config.in
+new file mode 100644
+index 0000000000..85f93d384e
+--- /dev/null
++++ b/package/sleef/Config.in
+@@ -0,0 +1,50 @@
++config BR2_PACKAGE_SLEEF_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm
++	default y if BR2_aarch64
++	default y if BR2_i386
++	default y if BR2_x86_64
++	default y if BR2_powerpc64
++
++config BR2_PACKAGE_SLEEF
++	bool "sleef"
++	help
++          SLEEF is a library that implements vectorized versions
++          of C standard math functions. This library also
++          includes DFT subroutines.
++
++          https://sleef.org/
++
++if BR2_PACKAGE_SLEEF
++
++config BR2_PACKAGE_SLEEF_DFT
++        bool "compile dft"
++        default n
++        help
++          libsleefdft will be built
++
++config BR2_PACKAGE_SLEEF_QUAD
++        bool "compile quad"
++        default n
++        help
++          libsleefquad will be built
++
++config BR2_PACKAGE_SLEEF_GNUABI_LIBS
++        bool "compile gnuabi"
++        default y
++        help
++          libsleefgnuabi will be built
++
++config BR2_PACKAGE_SLEEF_SCALAR_LIB
++        bool "compile scalar"
++        default n
++        help
++          libsleefscalar will be built
++
++config BR2_PACKAGE_SLEEF_TESTS
++        bool "compile tests"
++        default n
++        help
++          Tests will be built
++
++endif
+diff --git a/package/sleef/sleef.hash b/package/sleef/sleef.hash
+new file mode 100644
+index 0000000000..51570a5176
+--- /dev/null
++++ b/package/sleef/sleef.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
++sha256  415ee9b1bcc5816989d3d4d92afd0cd3f9ee89cbd5a33eb008e69751e40438ab  sleef-3.5.1.tar.gz
+diff --git a/package/sleef/sleef.mk b/package/sleef/sleef.mk
+new file mode 100644
+index 0000000000..46bef69f5f
+--- /dev/null
++++ b/package/sleef/sleef.mk
+@@ -0,0 +1,49 @@
++################################################################################
++#
++# sleef
++#
++################################################################################
++
++SLEEF_VERSION = 3.5.1
++SLEEF_SITE = $(call github,shibatch,sleef,$(SLEEF_VERSION))
++SLEEF_LICENSE = BSL-1.0
++SLEEF_LICENSE_FILES = LICENSE.txt
++SLEEF_SUPPORTS_IN_SOURCE_BUILD = NO
++SLEEF_INSTALL_STAGING = YES
++
++# N.B. Need to use host sleef during cross compilation.
++SLEEF_DEPENDENCIES = host-sleef
++SLEEF_CONF_OPTS += -DNATIVE_BUILD_DIR=$(BUILD_DIR)/host-sleef-$(SLEEF_VERSION)/buildroot-build
++
++ifeq ($(BR2_PACKAGE_SLEEF_DFT),y)
++SLEEF_CONF_OPTS += -DBUILD_DFT=ON
++else
++SLEEF_CONF_OPTS += -DBUILD_DFT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_SLEEF_QUAD),y)
++SLEEF_CONF_OPTS += -DBUILD_QUAD=ON
++else
++SLEEF_CONF_OPTS += -DBUILD_QUAD=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_SLEEF_GNUABI_LIBS),y)
++SLEEF_CONF_OPTS += -DBUILD_GNUABI_LIBS=ON
++else
++SLEEF_CONF_OPTS += -DBUILD_GNUABI_LIBS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_SLEEF_SCALAR_LIB),y)
++SLEEF_CONF_OPTS += -DBUILD_SCALAR_LIB=ON
++else
++SLEEF_CONF_OPTS += -DBUILD_SCALAR_LIB=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_SLEEF_TESTS),y)
++SLEEF_CONF_OPTS += -DBUILD_TESTS=ON
++else
++SLEEF_CONF_OPTS += -DBUILD_TESTS=OFF
++endif
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+-- 
+2.20.1
+
+
+--Apple-Mail-8EAE8805-A6FB-4B67-9440-DF4A36D12074
+Content-Type: text/plain;
+	charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--Apple-Mail-8EAE8805-A6FB-4B67-9440-DF4A36D12074
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -156,4 +292,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---=_061757a53af42b845b3304cb54b35584--
+--Apple-Mail-8EAE8805-A6FB-4B67-9440-DF4A36D12074--
