@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE5CDC04A95
-	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 21:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F12D1C04A95
+	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 21:23:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61F8540902;
-	Wed, 28 Sep 2022 21:23:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61F8540902
+	by smtp2.osuosl.org (Postfix) with ESMTP id 913FB40154;
+	Wed, 28 Sep 2022 21:23:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 913FB40154
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vixXcxr2-jqv; Wed, 28 Sep 2022 21:23:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LLsfokr9j-y2; Wed, 28 Sep 2022 21:23:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 456C340895;
-	Wed, 28 Sep 2022 21:23:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 456C340895
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7D1D91BF3DB
+	by smtp2.osuosl.org (Postfix) with ESMTP id C105640C9B;
+	Wed, 28 Sep 2022 21:23:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C105640C9B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AA6C1BF9D1
  for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 21:23:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58AE760E8A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6341F40C9B
  for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 21:23:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58AE760E8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6341F40C9B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q51gFDPFcpkp for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IaYYPKlBJRbm for <buildroot@lists.busybox.net>;
  Wed, 28 Sep 2022 21:23:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8322960E2E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C596400C4
  for <buildroot@buildroot.org>; Wed, 28 Sep 2022 21:23:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8322960E2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C596400C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72AAA86439; Wed, 28 Sep 2022 21:23:28 +0000 (UTC)
+ id 7C3CA8643C; Wed, 28 Sep 2022 21:23:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Sep 2022 22:23:59 +0200
+Date: Wed, 28 Sep 2022 22:54:43 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: ce7550db525a5370398e0bf550a37f132c13b8d6
-X-Git-Newrev: 48b12430fef3f0e15e8ae5c445cb756e31fc54ed
+X-Git-Oldrev: 48b12430fef3f0e15e8ae5c445cb756e31fc54ed
+X-Git-Newrev: 95ea81d644d21cce5a75f6fa1b40c9fff5f0a19c
 X-Patchwork-Hint: ignore
-Message-Id: <20220928212328.72AAA86439@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] utils/test-pkg: show
- default build dir in help test
+Message-Id: <20220928212328.7C3CA8643C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libmdbx: drop
+ explicit _REDISTRIBUTE = YES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +63,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48b12430fef3f0e15e8ae5c445cb756e31fc54ed
+commit: https://git.buildroot.net/buildroot/commit/?id=95ea81d644d21cce5a75f6fa1b40c9fff5f0a19c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Avoid the "Where did it put my builds?" step.
+<pkg>_REDISTRIBUTE defaults to YES, so no need to explicitly set it.
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ca9fbfd5eeab5ecd63b9e2a0ee882723105ba706)
+(cherry picked from commit fbb3dcfc9dadecfba023ef3004a77470bfff61a3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/test-pkg | 1 +
- 1 file changed, 1 insertion(+)
+ package/libmdbx/libmdbx.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/utils/test-pkg b/utils/test-pkg
-index ce6e43b965..4ebfd9af66 100755
---- a/utils/test-pkg
-+++ b/utils/test-pkg
-@@ -257,6 +257,7 @@ Options:
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index 018c0db840..357b1bac9e 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -10,7 +10,6 @@ LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
+ LIBMDBX_LICENSE = OLDAP-2.8
+ LIBMDBX_LICENSE_FILES = LICENSE
+-LIBMDBX_REDISTRIBUTE = YES
+ LIBMDBX_STRIP_COMPONENTS = 0
+ LIBMDBX_INSTALL_STAGING = YES
  
-     -d DIR, --build-dir DIR
-         Do the builds in directory DIR, one sub-dir per toolchain.
-+        If not specified, defaults to \${HOME}/br-test-pkg
- 
-     -p PKG, --package PKG
-         Test-build the package PKG, by running 'make PKG'; if not specified,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
