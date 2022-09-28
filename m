@@ -1,48 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 340A9C32771
-	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 14:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4635EC32771
+	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 14:29:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE99560E31;
-	Wed, 28 Sep 2022 14:28:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE99560E31
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OoFaO5LO8oix; Wed, 28 Sep 2022 14:28:59 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 050B360E15;
-	Wed, 28 Sep 2022 14:28:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 050B360E15
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 978141BF368
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 14:28:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 72A768136E
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 14:28:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72A768136E
+	by smtp1.osuosl.org (Postfix) with ESMTP id C66F182EB4;
+	Wed, 28 Sep 2022 14:29:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C66F182EB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Eq357KHyYCgn for <buildroot@lists.busybox.net>;
- Wed, 28 Sep 2022 14:28:55 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O1YTmo3tSMsn; Wed, 28 Sep 2022 14:29:17 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C638F81399;
+	Wed, 28 Sep 2022 14:29:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C638F81399
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B5BE1BF368
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 14:29:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 231B341738
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 14:29:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 231B341738
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2HHxUUAPkGZq for <buildroot@lists.busybox.net>;
+ Wed, 28 Sep 2022 14:29:13 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C195813FD
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
- (mail-eopbgr70045.outbound.protection.outlook.com [40.107.7.45])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6C195813FD
- for <buildroot@buildroot.org>; Wed, 28 Sep 2022 14:28:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA0B9409A8
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com
+ (mail-am7eur03on2073.outbound.protection.outlook.com [40.107.105.73])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BA0B9409A8
+ for <buildroot@buildroot.org>; Wed, 28 Sep 2022 14:29:13 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nb0ieazswqgY4oaJgJC3kl6d38KeCsyMXdvPIxcofmgi8XcqBhB7t0XxZxKd1j+MSDACdrMowa/jO0eX1jWA5X1XqBlJ6mfxCFfflgJW0cS7NzByGNGwoOAvu7V5DSCNHlxbe68A1/WU5RT8sSyMPmHAU6q11JOwFs/hNcVlJ9PX7gV8bCU5PFEMlrP14fD2qLKj4uzV/jx4oC8E73KyYikHXeTgZ8j7ByZ1qGS8bZsq1oFcJ6FZMYRq0SsKVlOb4NMQS5FhZnFVCLX+/Dc1ckwu1GiNn15bbDjG5YwU3ZDha+eb46eUYybw1Lv+HCX9yIDWNeTwZ7QO/esfJuXGPQ==
+ b=i+dJi/Dw7GEucCkVDUNp+BTdSFRq6Z29FVvcV6TV95TNPVKl2WZiJNsdSxIY1Whj0S4W1DjWQFv4P0x3OoKqwduGyQ4isdMcliwuKWJ8Y3NppGNB+zs6nLYoyzqT7ckzFV+KXQ8DuGpjNSJvqM7+mcfUP7LkIRdRU2C3MA9+1jSNdr5ihnPzA7Sce8mRO1jsC4fBPJUdYDhVhCOD7LhxCtRZNTuhQqhPmlFVNJDTOIJwtuAjT44x0Ct8eK+C4pFwL5UOBOj9Lobf+tGeyBKJ7IHVA0SlrWRffMkD5fE+m5c2Sx/wZJe5vdrFQOOJNmYauDbsMS1St4CY0XJ47nPx/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pOcKiLSuYGiemPwdimwUTZ8CWASXfFph3oPVYX/WR58=;
- b=ANvYg6iAovi4CYKC6LC2Jb65Dg/jqe7HdLuDRiEBnkVdg8z5prDrR8tm+gPljCFNsv/qxLUTAptq++G8Lr2Q+quHt6SQMTw/ZolyZIiK07tz4XJcGxoMSeHgO/9yMp9p1bk4tzVqoOmILt5vutI1PweWpXX2Vtmt01f2RlaQIxjmqJbPaxKUZl+tAbsqpKa62mNBlwl1wS6CU9rR3ljus4l7uhqZn5+PJVVMsFKfOQILpYbKJY+cK3lbI2l40FRSSbmPTBKfjAkDS5nmqvPGK0wUGzjSVkglFwfYWgdf7C6vZNgXwMX5M7BO+XKSEhiromWpUJ2dqnmWFyRCJBUyXA==
+ bh=7aX5B4J1TeZFOzcN9g4A7PYn1paHzeKF9Chm2yE664U=;
+ b=aNdxIhzbq8cWWf2S6pmIPq6bfH8AuzeKyNiLQOcAyHTV70+NKB8ccBYVkOLEfR26vQCzpC4rSpXxt0aDYqSI86MGgxy1cqQlDZzNEM7wpNTvXE0EtDZj2Yd2ucQ8IzCb3g6SGTFyWWwnf8RVCVodUK3ZQNs4X6mW1xkTrcsPy4Y/xoWz0saulq8MX0T4RKQL2xFzthmZ5eYi2v5NsVL21fizR1O5bVxoqF5XHg4W7qq8sGPsQePWbkiR/XsKhFQM/XATXCIbRXcHPnibm2vA7r6jHbVdHT6d3o65LKTan9MglZ9LCYFx3QIYi38TX78LvQ/4qj9R6M8w29xIAPiafA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
  dkim=pass header.d=abatec.at; arc=none
@@ -50,16 +50,16 @@ Received: from DB6P190MB0488.EURP190.PROD.OUTLOOK.COM (2603:10a6:6:32::11) by
  AM7P190MB0776.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:119::21) with
  Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17; Wed, 28 Sep 2022 14:28:50 +0000
+ 15.20.5676.17; Wed, 28 Sep 2022 14:29:10 +0000
 Received: from DB6P190MB0488.EURP190.PROD.OUTLOOK.COM
  ([fe80::b4f:d4c7:8621:7e5b]) by DB6P190MB0488.EURP190.PROD.OUTLOOK.COM
  ([fe80::b4f:d4c7:8621:7e5b%5]) with mapi id 15.20.5676.017; Wed, 28 Sep 2022
- 14:28:50 +0000
+ 14:29:10 +0000
 To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 01/11] package/llvm-project: new group for llvm packages
-Thread-Index: AQHY00V+dI/nNy8edEucNMLkuEobrQ==
-Date: Wed, 28 Sep 2022 14:28:49 +0000
-Message-ID: <DB6P190MB04888B252BBB257A4468CCF19F549@DB6P190MB0488.EURP190.PROD.OUTLOOK.COM>
+Thread-Topic: [PATCH 02/11] package/llvm: move to llvm-project folder
+Thread-Index: AQHY00WkdYCyLkNlgkKRe+cwuVK2NQ==
+Date: Wed, 28 Sep 2022 14:29:10 +0000
+Message-ID: <DB6P190MB0488F4943166CE4A4DA3D25F9F549@DB6P190MB0488.EURP190.PROD.OUTLOOK.COM>
 Accept-Language: en-GB, en-US
 Content-Language: en-GB
 X-MS-Has-Attach: 
@@ -67,68 +67,67 @@ X-MS-TNEF-Correlator:
 msip_labels: 
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: DB6P190MB0488:EE_|AM7P190MB0776:EE_
-x-ms-office365-filtering-correlation-id: 9afe9aa1-9f6f-46f7-7f15-08daa15dc301
+x-ms-office365-filtering-correlation-id: a6f63961-fabc-4195-bafb-08daa15dcede
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pU/53vUe+v3eX355g0ZkFq86o31YSEqBjov6lABmGlhBFnid1D+KuNOpJwvrFZtFQWYWO20+d2xb5hVcaQTXFbnwyc891sAI5d3c5KUSFam0Rkp5S66CgbnkyvsrIxlnP3p1Dd2nyxpRu0c88t8lk8JQ6Rj5zY7Jm6RJAFOXf3njIL/m0wV4Y0wy9y9U5Qr6nKSWazMUvGAnH6FYX6dMno/phqLzSPeDxKvVyFpV+pJp92CNuocNzR0iXpAnRksuotoDKjZnWvnSsglQRfek4GhKQofQy+0ZOtDEIuO0KsqdYYG2+nSdZGAi763ktwivCYiH50LbOFYCDvxOmbFNJVKeGEQXyXmdat4ENpdeGKgrU44f+onW8KKZ/64qn0DR+IVWxdouvWsgVdusBlSG8Zha+6NulmUaaRVuigNcVWAqTUsn0yBovBFrtiU/MAnxFIawuZeM5QxzsZbNkbwyEl6/6FZcXc0erJYZuQ6F3CC6W5qUjObpff39dGsCEdXMWuVEEpuAFAHWj3yU3ED4pOXYDwZz1BRTOcPtp4ss8x/60b0J5xsRnEuc9Njr7ygAsqMCer68Y/vwklYKAw7V3ShzeUnw/xlQ+HrnZ3xamlyFd882UdkaUFq/WKd/rH/yusz75e/siWXT2Hncaqb/fbzrLWj2BUIhuQuT3s9vbajMmUQcOdqEMT+gPE2Dr6aLB9/uN25gKz88GtYqat6JalpdGeW4WbsaD3Kdct6010XHHmTb71fKf+8PS6HAV8IdHZDVinImipbcVNY+6YtELCrr2lphch698x8/9d3Mt1Y=
+x-microsoft-antispam-message-info: NThaelw75P/H2RYbF798+mZKlTIG0UIOVtnhPa/9bSlz218AL2BGFdqLqUl995BFjseRItayr9SQQWhLm8Sj7S1jTBv7pqNbT/lcPgNGCW/DRcdUALTQxSrBvik51iSB9HlStLqKoKObYAfu0H7iICg8wMJwsGMO0cDDst6xp1WUFHo6lTe5mVgyZg8ZYRQKlK2W9soh8INB4/TOTbBQHYFj9Fp7iGKedOKNkyIUZW37yc1tgi86uCLPN5e81PZYo1BE0bswcKYGfPnFJ4FEi28EBo6bZ1jBmFDvNYFjpi+uAW8ageEg6n8a1uzZYp8vLo1PXiMn2nEyHNoKo9sAeoyuY3saqXQzh+C9IoxJA9T4/oUd+bSqbq4ZIsnJQU1cihXn/Qk2571IqexUZOOcb1DHKyWyqgORsCRJ+pMGWHikppgL7nuF60HZX2HhZgnz4AM4BSVb2kh/Rj09go2IO9F9n4f6HHuMPTdFLGXQcoNYeGKKYy7hb+iiB8xgyDrhGA/ge5uPjEb+NLqdZXhXvOpTnJZnLvecAghyZESHbo7gR/c+XeVIN4MudkA/dJIOmIwpZDp+AaxsFcONhavF7Tu/s863pWXhHMFzQxx3qX1zyTG+UI+Wp8gcpYWeuB953PunaDem8ONVjZFJYFJZRivtbeaIuJrznegzVKtQbpA06ystpcNB/h0ZqfMH2UBRsEzAyiEoFvpW2fovSm8hfko0FYkfF9RwWhawIZrExlQpbkt1CoSFUKtNBkevqg3pwe9rjvdtuKFL26s1LQYGbYCV9uDOCk8kAXOhszgBu9U=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DB6P190MB0488.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(396003)(376002)(366004)(39840400004)(136003)(346002)(451199015)(64756008)(4326008)(8676002)(33656002)(2906002)(316002)(66446008)(66476007)(41300700001)(54906003)(6916009)(66556008)(66946007)(76116006)(91956017)(86362001)(7696005)(6506007)(26005)(9686003)(186003)(966005)(83380400001)(71200400001)(55016003)(478600001)(38070700005)(122000001)(38100700002)(5660300002)(8936002)(4744005)(52536014);
+ SFS:(13230022)(4636009)(396003)(376002)(366004)(39840400004)(136003)(346002)(451199015)(64756008)(4326008)(8676002)(33656002)(2906002)(316002)(66446008)(66476007)(41300700001)(54906003)(6916009)(66556008)(66946007)(76116006)(91956017)(86362001)(7696005)(6506007)(26005)(9686003)(186003)(966005)(83380400001)(71200400001)(55016003)(478600001)(38070700005)(122000001)(38100700002)(5660300002)(8936002)(52536014);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?iSF/EDh/fyEd5n5xPrw7l2O4EhXH3FXy6flILFfE0fyulee+n6yDvmr6zA?=
- =?iso-8859-1?Q?v2G6kJ/O1YYaYaB1f4ezb+91mwKxr/WUQL1sTWPFxAKKM2YT1NfPCQLU3F?=
- =?iso-8859-1?Q?JA2DRlLVBCopWqFMTWnpHDVvMq59GCXA5URdscqFuIGwiC9hhqQOwrBVt3?=
- =?iso-8859-1?Q?iymykOxdDP7gm796vuuJo0wDoMpXV7vmNlXFU2FoAgDdepWErf5fbvqjrx?=
- =?iso-8859-1?Q?xM8eaDafEOUu9Ydlrc8/iYXj1RDDgm3mMsV4xpA6oJlGU4qdBfTtG2tcsE?=
- =?iso-8859-1?Q?AmRq2DfcwACQR12XRwWf1Z96KymlVZjK0Mqw1MhJvpXt5p1TZ8ifNR00jO?=
- =?iso-8859-1?Q?1CcrDjAC5CL/FO8YGbgcSYOVsBYuzll3Mi6voiUUAumPP9M05WWH3UyGT2?=
- =?iso-8859-1?Q?SDefanJF9khQLZqiLjb5JJpV3ceUjPBcUsZx7dZakjE9cw335+znROqWUI?=
- =?iso-8859-1?Q?I/UeYubFJkIGr0spIN81E4JTDawAromcSCKArIguvYSMP2/ZKSVmy6ilrL?=
- =?iso-8859-1?Q?WWdm9N+ony7q+XtUW+JcVA9qZ7hdNO9QyddWETnpUiLfMBJWDXbVqQb57k?=
- =?iso-8859-1?Q?x+vi629sUlPT342eP3iK9LytwIekUN4hVWZphj4szXYre/YrI0SNniQO57?=
- =?iso-8859-1?Q?7uzhy533+8VLyX7SwpL/zVC8kVAeqn31OdeoqzC/iZ3xJfYyTn9CVPfwC1?=
- =?iso-8859-1?Q?S7xC/rME0O9zCqS69JyLrEjMA25uTwLnvFsuXQy9+77WhcJzQoERLzX2KU?=
- =?iso-8859-1?Q?FcUtL+3g5WI6x0HgRgWh/u0EPUj9OW9raDXqSY28nlDWn2VDX8p74MjShW?=
- =?iso-8859-1?Q?D7oOXDZoSOWtAm9owCeBkKOjxd1QLIDluzdBwvBX8DBYVd8dEy4svSJjRU?=
- =?iso-8859-1?Q?MuKMR9OTqcOPLb0DnqlCPcbG3fUJmoS6xi9q9MVCLSNtxsMARNmeo0DDvJ?=
- =?iso-8859-1?Q?yAws9YnGgFqMwVgBfiedv9oXN/MCPRYha2cw+V1sRjoZKgww/91Q4wQDOO?=
- =?iso-8859-1?Q?9TK2wwIcjUFZFT0EYy3yAkX1uQCTEck/DDpQfI5JYNjXMNE7uYnYPcTUhl?=
- =?iso-8859-1?Q?OlmTY7qa7/Y8ogG6CO4VSs4oOZ8MObtYBcsyFaMuDPpc73w9PewT17VcBu?=
- =?iso-8859-1?Q?lm63TmAxqjB3GroFyI2zFsMzaqdhfJ9HSAmi8kZoyg2F0ttrtaTbxr4aux?=
- =?iso-8859-1?Q?THipwIyh7+L0sVHfgjJSAUxSM5IXdSZhaBR5UUQiH+NdhE2OBWYN80WGpi?=
- =?iso-8859-1?Q?gGL7k7m3cKyVd6brqAQzoiATeRzZu4PvHxNxlgTX9VMATQVTyXDOCBKN9e?=
- =?iso-8859-1?Q?mRO2m8RhCLNt7StdkA0UR9DCKV/bYuxMw/uCtZFEYpNUgti6HZCdomnxnW?=
- =?iso-8859-1?Q?kqGVsUed4lPjoOIgl6sPcVfE4qmGja2y5HFzL67eTT1WSbjH8qjeRaietB?=
- =?iso-8859-1?Q?l5kF+zAo86kbjF2bRdWcEftgARVqT2UFhNQzpFcSPVxTBp+S9I/39SDnLl?=
- =?iso-8859-1?Q?Sayf5aIryr99Wbu0Y34G/93ffSk7+icy/CrHf3kmj9sWHDvJulg037esRz?=
- =?iso-8859-1?Q?TM3Vl8J9irV5P4nh8QN9L0ygwWVRXzG0ZuwJ7RjLPXFhf2loME43PZ8oV5?=
- =?iso-8859-1?Q?SPGwcWTFx3sC8=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?A2bvY8CFRia+MilLJBlbE127Iku71aY3LWnCa0lhCTmpvxVSaLA5NelnX/?=
+ =?iso-8859-1?Q?llkcSx67Zk6zUeFTooPSrXW6lL+wJ6QFpexorDjZYBu6/W9ehm1ZK30f5U?=
+ =?iso-8859-1?Q?nLPGfmtjIHGZvEdqD449GHLBtV4jRF7K3FKHHkY8hTqZS3/pZXCkagdM0G?=
+ =?iso-8859-1?Q?wtBIDMdnn8Or0jC8qFCdFzvc9t/SXVecnk8EBcm+aPrsBJvxKlGfML5e52?=
+ =?iso-8859-1?Q?meMPG4631Q39pZdD01RpcMXcgVRVKwu9VhKSAq5NoStopXDgdtSHxcd7/5?=
+ =?iso-8859-1?Q?E481qw6k8urRbH2EslSXVyPD7KgEQTFJBLlr/u8mn2rBf3r7z4FQIH0hfZ?=
+ =?iso-8859-1?Q?KoGdv/YZxLONH0FtgWdLvOpM/hsPbV3rHabvtTvR90uHL10pm9GfRUfY7m?=
+ =?iso-8859-1?Q?V7WKISePxYEU2ZwJI7ZylCTm1InHgIRVvG+7lxAoMmU6h7e1X2eeUWOUoW?=
+ =?iso-8859-1?Q?s0nYwF1DQFVrK5RomWHoLtsmaLbavfqeftvLKFfQd4XZyJDEEhdsyyOfz+?=
+ =?iso-8859-1?Q?pRYazugGM6UbcDSs8H1ypK1kyEteI9m+3/kUU+oEBvTBVZii68GEqAVgk4?=
+ =?iso-8859-1?Q?Ws5YAhIUSPJwv2sJkeM+C/riYlITieffsmZbBB+sOuViaeDYgnJPTk9Mil?=
+ =?iso-8859-1?Q?rm6wbHllYWW+gvDtZ91t189ostpR+PRnF/iqB7bs7AnHaQgh4mLs2Ys3y8?=
+ =?iso-8859-1?Q?DSSi6OIo+v4JCdpNpdlIuQ2DWgQFzvcRHU/uDkGu4GjIuJKq61ZooludB6?=
+ =?iso-8859-1?Q?014cKOz6pNIpaQ8zm0hWMTrpHEhoaaMk1OK0oUkORZ2+zAhKLT+Tfg9Nwt?=
+ =?iso-8859-1?Q?9in5uMOIPMkx/UJBmeG83VTNuYtiKOH0DgKjY1zO1sFsUhs1enih9Sz12m?=
+ =?iso-8859-1?Q?6VQyFlVZx/nElZeMQIUHtDL19SyEyA+mBcVfXAzV4QxKLeIxBZGlAuNqbq?=
+ =?iso-8859-1?Q?0qIRfha3c03MXvwqRYKGiV/1+ikoYIrPJpkhYDuqYGKF2LQXgciXFK9+20?=
+ =?iso-8859-1?Q?V8gK2T9b3/GVcIvHYnd3KMYF1KnQfAwVx+Sd6Ojk9PH6yYGJmcIhG4vV6Y?=
+ =?iso-8859-1?Q?/3MJeLKmuB0fgyc5AylH9nWEBJW/NqsD3X7k6u2ll1VKJYVrSijYUcXGSz?=
+ =?iso-8859-1?Q?bnq/X45Ev7gjttwk1s2F42LVU3+261qcyJ7SXhEEk1xHjz08AMPj9Q9hcF?=
+ =?iso-8859-1?Q?KebBiwvrr5t0NeD5dgW8+LOOUyX4IN3HA7W5Py2DPn/cY3eN1iawcmlT0Z?=
+ =?iso-8859-1?Q?ncwdqAz0ElZsRgmVTIiGYRb7uzeUWFbPqVmZ48t8TbJ7N7ZVqEvleLmjSE?=
+ =?iso-8859-1?Q?hiM82QkP65DnhHwNyooCMMBet6dWEhUEYRsZ/LQ4PGSxPNae5GsHoFnslZ?=
+ =?iso-8859-1?Q?EPHgeY8WIWEnafS8JqEiVvox3Ak4lfM8B36/vYAvegLu4k5bUJfC7JELso?=
+ =?iso-8859-1?Q?p4gHR8/9Z1tXu76SKdUyE+JTgxDTSuFkbQ5IfOXJDTMtTsMvNOu2zlakE/?=
+ =?iso-8859-1?Q?Ltab36vDnYyvJR/79bk6bv6iLszfhz276WO0M2KDg51MzApTN+yH6aw9qF?=
+ =?iso-8859-1?Q?1Zrct1HqN1asaqkZA22d2e8PnGfdvYOXsE52h6MvhbgarFeKrXqii8W31O?=
+ =?iso-8859-1?Q?DvZV12MHGH+A8=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: abatec.at
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DB6P190MB0488.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9afe9aa1-9f6f-46f7-7f15-08daa15dc301
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 14:28:49.8594 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6f63961-fabc-4195-bafb-08daa15dcede
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 14:29:10.0767 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9PHyT41OFrkayxYoCoZjFxMAEDLm30W7zX4xt7ta2kU5T/hYcFjHIQ4xzWLsES2EZueDiqiE0Goxckd65xeehQ==
+X-MS-Exchange-CrossTenant-userprincipalname: xQB6SJ6xu6EPbDV8WQeWAv6lRMNWzevcH8AdDoQpYDNEwIM17/1OwgHGhRMpyoHc148Wm0uWN6bCknDAddoSQg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7P190MB0776
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=abatec.at; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pOcKiLSuYGiemPwdimwUTZ8CWASXfFph3oPVYX/WR58=;
- b=4nDk0wcgLJU0Upm/8nsLY0tqK9MTwJPbWNK3fW/6DxJbZNXpJtItyPQNv5fY1Z5oFAGy6gzAq7WGxNmlKMyggK0TtU4evArqi2ppxCLlspqshOdTg5rCygmu4Zt6K0r1WbdySKXx/jzfUfaP7ug5pjB+hFDq0hQiQOHauwX3A4A=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=7aX5B4J1TeZFOzcN9g4A7PYn1paHzeKF9Chm2yE664U=;
+ b=OyAybANWyo5cORdFm8sU/jvpoVk+9OoFL6MkuiqdjBOHZ58YyEy52C47bO3NntduUA7VEBud64XLO6h77P7QZCIxfMMCQDsyDc63MqgZKuhfNWfxTfqfT1/HXZmT3ZN7DeIsvhrdK5IPSDON9dRLg7QM5gY5TG6gF+HFSBPf2vs=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=4nDk0wcg
+ header.s=selector1 header.b=OyAybANW
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH 01/11] package/llvm-project: new group for llvm
- packages
+Subject: [Buildroot] [PATCH 02/11] package/llvm: move to llvm-project folder
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -151,31 +150,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-To make updating easier in the future, group all llvm projects in
-one subfolder and define some variables for all of them.
+To make updating easier, move llvm into the llvm-project folder
+and use the defined information.
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
 ---
- package/llvm-project/llvm-project.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
- create mode 100644 package/llvm-project/llvm-project.mk
+ DEVELOPERS                                                  | 6 +++---
+ package/Config.in                                           | 2 +-
+ .../llvm/0001-nfc-Fix-missing-include.patch                 | 0
+ package/{ => llvm-project}/llvm/Config.in                   | 0
+ package/{ => llvm-project}/llvm/llvm.hash                   | 0
+ package/{ => llvm-project}/llvm/llvm.mk                     | 5 ++---
+ 6 files changed, 6 insertions(+), 7 deletions(-)
+ rename package/{ => llvm-project}/llvm/0001-nfc-Fix-missing-include.patch (100%)
+ rename package/{ => llvm-project}/llvm/Config.in (100%)
+ rename package/{ => llvm-project}/llvm/llvm.hash (100%)
+ rename package/{ => llvm-project}/llvm/llvm.mk (98%)
 
-diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
-new file mode 100644
-index 0000000000..7ba89bb605
---- /dev/null
-+++ b/package/llvm-project/llvm-project.mk
-@@ -0,0 +1,10 @@
-+################################################################################
-+#
-+# llvm-project
-+#
-+################################################################################
-+
-+LLVM_PROJECT_VERSION = 11.1.0
-+LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
-+
-+include $(sort $(wildcard package/llvm-project/*/*.mk))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 59121c6a54..8fe8ca6997 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1610,7 +1610,7 @@ F:	package/earlyoom/
+ F:	package/gconf/
+ F:	package/libnss/
+ F:	package/lld/
+-F:	package/llvm/
++F:	package/llvm-project/llvm/
+ F:	package/python-cython/
+ F:	package/python-pycups/
+ F:	package/python-raven/
+@@ -2541,7 +2541,7 @@ F:	package/libgta/
+ F:	package/libiec61850/
+ F:	package/libspatialindex/
+ F:	package/linux-syscall-support/
+-F:	package/llvm/
++F:	package/llvm-project/llvm/
+ F:	package/lugaru/
+ F:	package/mcelog/
+ F:	package/mesa3d/
+@@ -2950,7 +2950,7 @@ N:	Valentin Korenblit <valentinkorenblit@gmail.com>
+ F:	package/clang/
+ F:	package/clinfo/
+ F:	package/libclc/
+-F:	package/llvm/
++F:	package/llvm-project/llvm/
+ 
+ N:	Vanya Sergeev <vsergeev@gmail.com>
+ F:	package/lua-periphery/
+diff --git a/package/Config.in b/package/Config.in
+index e3a34d6e97..3b7d4a9448 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2069,7 +2069,7 @@ comment "linux-pam plugins"
+ 	source "package/libpam-tacplus/Config.in"
+ endif
+ 	source "package/liquid-dsp/Config.in"
+-	source "package/llvm/Config.in"
++	source "package/llvm-project/llvm/Config.in"
+ 	source "package/lttng-libust/Config.in"
+ 	source "package/matio/Config.in"
+ 	source "package/mpc/Config.in"
+diff --git a/package/llvm/0001-nfc-Fix-missing-include.patch b/package/llvm-project/llvm/0001-nfc-Fix-missing-include.patch
+similarity index 100%
+rename from package/llvm/0001-nfc-Fix-missing-include.patch
+rename to package/llvm-project/llvm/0001-nfc-Fix-missing-include.patch
+diff --git a/package/llvm/Config.in b/package/llvm-project/llvm/Config.in
+similarity index 100%
+rename from package/llvm/Config.in
+rename to package/llvm-project/llvm/Config.in
+diff --git a/package/llvm/llvm.hash b/package/llvm-project/llvm/llvm.hash
+similarity index 100%
+rename from package/llvm/llvm.hash
+rename to package/llvm-project/llvm/llvm.hash
+diff --git a/package/llvm/llvm.mk b/package/llvm-project/llvm/llvm.mk
+similarity index 98%
+rename from package/llvm/llvm.mk
+rename to package/llvm-project/llvm/llvm.mk
+index 977c0a08c2..1adad17b16 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm-project/llvm/llvm.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-# LLVM, Clang and lld should be version bumped together
+-LLVM_VERSION = 11.1.0
+-LLVM_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_VERSION)
++LLVM_VERSION = $(LLVM_PROJECT_VERSION)
++LLVM_SITE = $(LLVM_PROJECT_SITE)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = Apache-2.0 with exceptions
+ LLVM_LICENSE_FILES = LICENSE.TXT
 -- 
 2.25.1
 _______________________________________________
