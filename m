@@ -4,68 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CFFFC04A95
-	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 21:35:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C086C32771
+	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 21:36:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15C2340CF8;
-	Wed, 28 Sep 2022 21:35:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15C2340CF8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9E1F640CC7;
+	Wed, 28 Sep 2022 21:36:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E1F640CC7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dijA0oCHYv2w; Wed, 28 Sep 2022 21:35:20 +0000 (UTC)
+	with ESMTP id BusvAD_hDDNv; Wed, 28 Sep 2022 21:36:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F26840CD7;
-	Wed, 28 Sep 2022 21:35:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F26840CD7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AC3CB1BF3DB
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 21:35:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C57FF40C6C;
+	Wed, 28 Sep 2022 21:36:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C57FF40C6C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D4F091BF3DB
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 21:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 87AFF819D2
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 21:35:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87AFF819D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id ACD6240C6C
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 21:36:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACD6240C6C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AsX64zrRRBvD for <buildroot@lists.busybox.net>;
- Wed, 28 Sep 2022 21:35:11 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4346F80A81
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4346F80A81
- for <buildroot@busybox.net>; Wed, 28 Sep 2022 21:35:11 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CA63A20005;
- Wed, 28 Sep 2022 21:35:07 +0000 (UTC)
-Date: Wed, 28 Sep 2022 23:35:06 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-Message-ID: <20220928233506.0939e6aa@windsurf>
-In-Reply-To: <20220928193149.12466-1-guillaume.bressaix@gmail.com>
-References: <20220928193149.12466-1-guillaume.bressaix@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SkWaihkYAZXf for <buildroot@lists.busybox.net>;
+ Wed, 28 Sep 2022 21:36:38 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99C2B40154
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 99C2B40154
+ for <buildroot@buildroot.org>; Wed, 28 Sep 2022 21:36:38 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id cc5so21723999wrb.6
+ for <buildroot@buildroot.org>; Wed, 28 Sep 2022 14:36:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=cg6/J8xfW5YDXLv6zxni/CUccfbsQtyGwhhzrpu8NYg=;
+ b=qzR5entJxgr5ACzEaER2D5AkW0Fo13GUqcv2CmGPfaspebNfF6mVC6IlfcpMhcDk5v
+ nv9tWqwtOmi15vZFcEWdoUzScH8AEH/QyhWk9/a7o51t6N6xYeaNUSobiEwc7OSf/vNi
+ UcxO6GpkkULvkJeA15+hyvzqQ/S+QDC5vCiasQbZZ+ElNd4xCTVdo52JMzb2ge97Exh+
+ ythvhSAwrv4lHNq6JKdGPGRyWAjt152nMgLT7I65LQMbZYO8pQ1To7eDNOOQR8iPbLZD
+ 4JmCI5T3Wr4k/hSWEnWVhijXIawJQQV8ZFVsam+8HOvguuUdoKU40H97DSmVn7VSA5Vo
+ nf6A==
+X-Gm-Message-State: ACrzQf3iNTUUFk+MUJ7v0nrrA2N/6lowYk8fIaOmuFIUeXVZe1VIUZnY
+ vD/0eVYcm3naOwk3bepYH4rnvAe4H3U=
+X-Google-Smtp-Source: AMsMyM7kQiNOUXZn2Scb+YWI1gs/+9gGA5Ew7HN98AeR1mxFxwQxCsmm6xUg9T5bJ/gz75UUWYOx7w==
+X-Received: by 2002:a05:6000:cf:b0:228:e37b:361b with SMTP id
+ q15-20020a05600000cf00b00228e37b361bmr22472411wrx.374.1664400996314; 
+ Wed, 28 Sep 2022 14:36:36 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ a3-20020a5d4d43000000b0022762b0e2a2sm5095545wru.6.2022.09.28.14.36.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 28 Sep 2022 14:36:35 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 28 Sep 2022 23:36:31 +0200
+Message-Id: <20220928213631.14450-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664400908;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Kd2PSuTDIRpOAyEG3tjWMwbebsxIjZI9vtau9MkE/lI=;
- b=GoY3jhS184+pRr9NL2oY+LagjTCqN2HLG6djfpFO1JDmWl3y2XR9KEDvFyU+ErCS9US0/g
- mmN3ovgoDkV+ZZ/Id9Qw3PgU4UqAvwCuwUrh581lmVF3O87qBh5tAfZkaeAWV76Qp1n7ac
- 0HTHzPvGDPCCJ+0zc4juWCklfewPeu93YAtJ/oUYdp5K2BoR37B0MpW95NwOmFDjqAFGxO
- Hfkz3KMKytJtFPALySMt8sQKjvoEbwE8cKLVGIK0xgRhSknJy3+7LxLF3O97KMwYo6zi6F
- 6qc38I73kO6h3nyEDokoJyB7zifhQyGJSVnQXLLm46o+zbZQ4Fs2zsfBPq6dLQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=cg6/J8xfW5YDXLv6zxni/CUccfbsQtyGwhhzrpu8NYg=;
+ b=XatFXSmeZuQa/rJNnbz7s1KUVwcb9oGQfycH9U3OoEW2sxK+U3WE1hLpK6KNA2WmFG
+ 9j7gB6ZMlZGOsGjtk523J9ZqcA3l9yQ9oVmWB3e3xfYjsUeGJmdm/YRXC02iMmsYLHLF
+ 7GCDlGgUy057hkn5mlCKdPWz8OPGSchHaPUIqYfNQbEYSwSlMj9PSZM8ZN0DoGRBqK2x
+ lQe4ZzukqlIo7uY1EA5UQ2dHK0ASzyH4V/cFy4n/9cimryQgBHhjReo69nrpj8z7b24R
+ YQxTXwpWTwpzrD5/7TpQWrxN9ryYCbOYfWsy8f0OsxVvGqOL15CJ5azEXQj5YjChZ2ai
+ KCUQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GoY3jhS1
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pythran: bump to version
- 0.12.0
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20210112 header.b=XatFXSme
+Subject: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to version
+ 5.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,28 +94,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+Cc: Sergio Prado <sergio.prado@e-labworks.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 28 Sep 2022 21:31:49 +0200
-"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
+Denial of service attack and buffer overflow against TLS 1.3
+servers using session ticket resumption. When built with
+--enable-session-ticket and making use of TLS 1.3 server code in
+wolfSSL, there is the possibility of a malicious client to craft a
+malformed second ClientHello packet that causes the server to crash.
+This issue is limited to when using both --enable-session-ticket and TLS
+1.3 on the server side. Users with TLS 1.3 servers, and having
+--enable-session-ticket, should update to the latest version of wolfSSL.
 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
->  package/python-pythran/python-pythran.hash | 4 ++--
->  package/python-pythran/python-pythran.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+https://github.com/wolfSSL/wolfssl/releases/tag/v5.5.1-stable
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index f1401e4cda..3849ffb9fc 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  c34b74b5f689fac7becb05583b044e84d3b10d39f38709f0095dd5d423ded67f  wolfssl-5.5.0.tar.gz
++sha256  97339e6956c90e7c881ba5c748dd04f7c30e5dbe0c06da765418c51375a6dee3  wolfssl-5.5.1.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index ca360312c9..95d4f47952 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WOLFSSL_VERSION = 5.5.0
++WOLFSSL_VERSION = 5.5.1
+ WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
+ WOLFSSL_INSTALL_STAGING = YES
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
