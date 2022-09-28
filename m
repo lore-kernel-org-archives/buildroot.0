@@ -4,131 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F27CC04A95
-	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 14:34:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6368C32771
+	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 19:23:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE22840A9C;
-	Wed, 28 Sep 2022 14:34:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE22840A9C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B25540C33;
+	Wed, 28 Sep 2022 19:23:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B25540C33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aH9f8-yTVZ2y; Wed, 28 Sep 2022 14:34:35 +0000 (UTC)
+	with ESMTP id TCwwOyBhHvca; Wed, 28 Sep 2022 19:23:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1EED24097E;
-	Wed, 28 Sep 2022 14:34:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EED24097E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9F8D61BF368
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 14:34:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D49340989;
+	Wed, 28 Sep 2022 19:23:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D49340989
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A2FD01BF2F8
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 19:23:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7984640A20
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 14:34:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7984640A20
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77C8E40298
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 19:23:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77C8E40298
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AEPnJIzqith3 for <buildroot@lists.busybox.net>;
- Wed, 28 Sep 2022 14:34:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4VsRrFLgJI8l for <buildroot@lists.busybox.net>;
+ Wed, 28 Sep 2022 19:23:29 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FBD34097E
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
- (mail-eopbgr70054.outbound.protection.outlook.com [40.107.7.54])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2FBD34097E
- for <buildroot@buildroot.org>; Wed, 28 Sep 2022 14:34:31 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G+ussLh0rvU4erEF4Jc9jybC91G9wNFvVbJYt4PjFLcAjmgvEOrUH3q+DeGpxjalbMZK5zy8yInS8+2o0H+WTqib+6t4d7Aws807hVQEoKRBDFY5KNf/FP0ThZTN14c65xKgJ5FCGLVc1vLp7oFNR6YvDx3Sfxcs2y9EXNBEjTVmv5fUzAWuu+3dJ2RNSN1st02pNTnA6na/s2/4N3Rb3D7ZYZ+C5XAASdkDLEF4SVebyJu9jdYz9FlYg3NOzM7rcdIVJrtr4q5Xt12Q74/ykN6t2PaACZZY8+Nqn+9iBBJHtLNZyQI6ZnYQv3mgRc6GNOa/DKOWnncpDlQNArPWCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N3u0ZZS+S+vx5fRJNNkqCKh1Bkqg/zd9xy7aUJxJx5E=;
- b=a+1udylEPJyiggBPkId+FyQgmZ4L+lI9VZmfjZC6AgTCOfNY3ziZnIdC6OQ8C2fpL+GiJ5Fz3ftfz4XPiTpUJG02DwD1KZWey9F40WDtIQo+5LRxbZ9pGj9ZxSpcA/3fg1J7rsMNiGx/rAIQjheSANkDrTJLEz2e7pSzVBRvsGt7ZJQO44cPXrCCJg4oelhcRd/AgdpkPPYL7Hg/2tOOpu6eZihtYTo5xKhmJ0QPegXJIZzG4XCxJMQiPqPqTKwCSnFV6h/H6wSqXEm7ygpf2cqjzy627SVPF+sCvD9vC52+eyvmETOV7+2hf0uRXUlC50SxWRBnsV5U7fP15G4bNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
- dkim=pass header.d=abatec.at; arc=none
-Received: from DB6P190MB0488.EURP190.PROD.OUTLOOK.COM (2603:10a6:6:32::11) by
- AM0P190MB0673.EURP190.PROD.OUTLOOK.COM (2603:10a6:208:197::19) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17; Wed, 28 Sep 2022 14:34:28 +0000
-Received: from DB6P190MB0488.EURP190.PROD.OUTLOOK.COM
- ([fe80::b4f:d4c7:8621:7e5b]) by DB6P190MB0488.EURP190.PROD.OUTLOOK.COM
- ([fe80::b4f:d4c7:8621:7e5b%5]) with mapi id 15.20.5676.017; Wed, 28 Sep 2022
- 14:34:28 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 11/11] DEVELOPERS: add Daniel Lang for llvm-project
-Thread-Index: AQHY00Zw2jv8wzY7wEGdDdCG1yyShw==
-Date: Wed, 28 Sep 2022 14:34:28 +0000
-Message-ID: <DB6P190MB0488023BF0D01612874A11709F549@DB6P190MB0488.EURP190.PROD.OUTLOOK.COM>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB6P190MB0488:EE_|AM0P190MB0673:EE_
-x-ms-office365-filtering-correlation-id: 7c594787-6f23-4de9-2dc5-08daa15e8c66
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VboZyewJu2WpGiULZQPZPD//RNhcBxO3mjwcUEZ2bSAZA7yKV9vkOPBFGFXqMKt6xohJ+y/ECsbAO/lz2r0vtCItytth8bwduuC2QRt8MWdUT0gchxKQ67yxoIfcJTI/LIgTMaugFIru9BwIguI26ap0UYuLvmuBraa79f1OaWrEhpFyNz2PSi9RUJ51LPRm9/yUIobYLACVUxr3FMeMbcgR4K+c9ZyEITaPMNVyT25c3x32M+MAxqvAKKFXXf6b+QigQlIAnva+i37IgPbSYnXQ8uqX3DIlkiwSpRPyRcCh2ViqY7iUeInAyxIU7qH0P08KLoLCAg7bfVMuu+Pf89FspdHhC5NCyR6s1qffcpCJ5Gdq/M2VYlboVMX39bUHlUrPuMBRSXCpwQHCBifzHkIuy1mWMmeZ3zymMSNw1XaH272nu5886SbqV+MDxeb9gPKlc2nZfWhuQQjkDj5XtA4jP/6Q5ruUGtj457xP6hMSgxN5G1XEgPxwF8UCsaY6myixxJWVxzUr5GG6tF+UvOui8V1nndTAmiooKKc/81jO/gYjKE5P7pYD+yEfm5f3OU1NG7Fjx3755bIM3M0y/P55a0NjIkFlfuI3zl727Vm/cN0YiETJ2dklT5+7ccdwjK2geU92lPHB+7341b6jyPWbDkT97+hxFbyIFWKktQEHQU0/5F3igaoploP9VOoBpReRe5viFcWZCMaGq480RqpoJHVHS9AjsyXpTF0rIEi0/byu7S7MxHdB9KhMLP8tEJn1DnQgKFel1CXqMTy6FQ==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DB6P190MB0488.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(39840400004)(136003)(376002)(346002)(366004)(396003)(451199015)(33656002)(54906003)(6916009)(86362001)(122000001)(5660300002)(4744005)(9686003)(38070700005)(38100700002)(186003)(478600001)(91956017)(26005)(52536014)(6506007)(7696005)(66946007)(4326008)(71200400001)(76116006)(8676002)(55016003)(66446008)(64756008)(66556008)(316002)(8936002)(66476007)(2906002)(41300700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?zlMv1ThZ+Ar6G71GqN+TN3QDoNkpwdtfcke+Fz6uaXtHE+wk0B0Lu0pw2d?=
- =?iso-8859-1?Q?1HV3yz9QU2hBig13Q61kiUXwX/WKj/Tzq3AMWetEtM7YkOcHsdpRRP7C1o?=
- =?iso-8859-1?Q?1TtLTv6zmDNr0LRcohlVTIVAuYX+orbixwoe7qXwd8jCCHf0hRMaA9Eg61?=
- =?iso-8859-1?Q?uQtUKhd8dJTy/yhmE8LKK91nxVONG7psNmt87Ogg6IA2pMg7ZFXKRBv9AP?=
- =?iso-8859-1?Q?bzj/JcQ2/McFtmQOh6ncC+/2wlN2QEHiWZ4QJg3O36oT46n9/6H/lo3yx2?=
- =?iso-8859-1?Q?mPPEeQpZF/ERWWuRVG0QncJIuD49vrbHG2YsAR8ByG9ioCfp4P7Dq9s9on?=
- =?iso-8859-1?Q?qOjLepl8aN3tGnTo5u0jK/LeF7NcinaHa2+V1viTQ7/EEm/GfYY9Cz+biS?=
- =?iso-8859-1?Q?YymywXUS63PCPPmf8k72DRzrCS+baijnVowj4OygpTV0UlRIkDK2MGdUMr?=
- =?iso-8859-1?Q?J5yCn6w+3tbs5Rk8E7S73/Y4ksCTU21moELsFWlUxUfWZYnbv/J6/Le0kR?=
- =?iso-8859-1?Q?lVl8WWMxBaeDzJzuqovR7gySMj9k7FzuUu+xiwwzZNjy/4+J/IBJutyhQz?=
- =?iso-8859-1?Q?ThOS802qS5g+NTw22Lkt0xQdImAFo6DRfyrgEUCDnVuNqo1efhEOJEgq1m?=
- =?iso-8859-1?Q?tKzDHqzXwcwV+OigICzcNaBYRPSa+l7kXCXZmm+RTYpHaV9KMA6ZTPCGAC?=
- =?iso-8859-1?Q?hqn0CcZJQX4xIhI2ZzMKhuTrZtB2RjyQu5xCPcSa4NnJhag0GD7ufHwaWO?=
- =?iso-8859-1?Q?7tE4F6Acg+Kn/67KCdhCDIntRsp/lTJpmgGnsxXYYLamlg6u4LxXQFgerA?=
- =?iso-8859-1?Q?v7iNVXwXbTbk5C/htMNuHHP37Ku9/ZGR6AgMXqN279jVcFLxF7FBvw0ofy?=
- =?iso-8859-1?Q?ImT4SVgPhlQTt0GHXknfGbC3TIghrpBSbyLoNS1hD+2/xIV6QhVwco3ieY?=
- =?iso-8859-1?Q?mMXSnKGcRa0MZW3UiftYkvf/O85OaFNcc3kUzmH7xJH3xRxlESVrbPkJqq?=
- =?iso-8859-1?Q?MLJNrVULXYrbN60tZklWOal8MUTdIRP4az5deKyvTUc/M65TVjGYX/o87i?=
- =?iso-8859-1?Q?GsqUOnXcUA5eJrmCPnuixYyczR1rp15OEX2lW8+8P2Sd22KywuQTmb6p9B?=
- =?iso-8859-1?Q?HwLCx6mmYnjFzHvuODcrkupbxAXZsNdeI+uP0SXg5kFMS0cJPtB1cnxIXy?=
- =?iso-8859-1?Q?ShmEeO6i2JeaoVG3Wvwh/kYev8iTe4Igf4BfucZTv9Ajbqqmr5j4fNQ4ju?=
- =?iso-8859-1?Q?G9wgyfmUEJlAwbkLIjSDSvZzIDLXJaaFB6HAJk03f3BYSttIGCgmFY9wf2?=
- =?iso-8859-1?Q?Ybx5xGrjK/gWiWkErbrgPlejIdHsdbt1QUayFf2wdv1C1M+VzrQbIF3dsA?=
- =?iso-8859-1?Q?wdrIQBFYr+yCGsw89RacSse0KkKAAQnJBkOpocLPxG+iZm7TmpsScBLzbO?=
- =?iso-8859-1?Q?nKlRcQ9NlbPapiYo1tZ9QrqvEzMHq+2ihfg5EYmIPgqxD9qykH8vvlCkq9?=
- =?iso-8859-1?Q?I3+Dyd+IlT+qb23WAKYQy4iAniYkxwYgB/jKoMobguK/JEN1Saq9j1ccQr?=
- =?iso-8859-1?Q?vwm1BuSOCz+jQbqzYyRyVfExdjBgR9ohOq5HqT8JjKtIM8xA3WntHjB9Vl?=
- =?iso-8859-1?Q?zlsbpAAtpaWnY=3D?=
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1336440286
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1336440286
+ for <buildroot@buildroot.org>; Wed, 28 Sep 2022 19:23:28 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id e18so18599286edj.3
+ for <buildroot@buildroot.org>; Wed, 28 Sep 2022 12:23:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=UWLXwj1mB5643AeD+xcJSsrH/YGMzCHkMpGRNSCG1wM=;
+ b=SKdvLdXiBOemHnC5JU15BB3LRg+jmdLSFikeC8dESNh9+FIgcBoMmhF+unBQlPyEo9
+ Jq5AChwxftGA3ltMr1s2wdqjDdPspuuFqUO4TILXVqAW7Npwn1Ka8PVt7sEIRPMLHbx+
+ mG81svjCKbfRJtkhIcKFwmh3G1IqUbRUfwE55vZOh/m/ZLRHTh53SfBV4lBKx3xFJqyp
+ aHypydgm9baNWOd1U/itrzl7Wx/TYq0vCdkVfCD8D/ufkL50Nwx/R7UaS26IgIfnwMPJ
+ mwPC72oKC+iS6bNxeF3pFtZZ4DDKTmqrDkTvAAjRZrxicE71jJKruwSXmlZAhEUIO0UQ
+ l88A==
+X-Gm-Message-State: ACrzQf1SMhgQZfzV9/96JVl7C+eUTks+FqW93FlwtSdq6iZcKVQRCDq0
+ GyEEYP4hDXsy+ove9b7u1goMB8SA5Vg=
+X-Google-Smtp-Source: AMsMyM5Jn8waigTZcGLeKBTMGDfetmZOvsOAr+oOOUeVugYvYps9coKjlvZL7er5Nm4PWJHQ37mDug==
+X-Received: by 2002:a05:6402:42c5:b0:44e:b640:16fb with SMTP id
+ i5-20020a05640242c500b0044eb64016fbmr35769139edc.29.1664393006649; 
+ Wed, 28 Sep 2022 12:23:26 -0700 (PDT)
+Received: from fedora.. (dh207-96-59.xnet.hr. [88.207.96.59])
+ by smtp.googlemail.com with ESMTPSA id
+ d7-20020aa7c1c7000000b0045726e8a22bsm3918698edp.46.2022.09.28.12.23.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 28 Sep 2022 12:23:26 -0700 (PDT)
+From: Robert Marko <robimarko@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 28 Sep 2022 21:23:24 +0200
+Message-Id: <20220928192324.1279960-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-OriginatorOrg: abatec.at
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6P190MB0488.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c594787-6f23-4de9-2dc5-08daa15e8c66
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 14:34:28.0538 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3nFfUp9P8Ns9g+pSyb/4NaMJs+HBvkkRok5B2PKl1NXuMuVdNAc7l1tEtSYcDVGme96sUY50qpjUUeCXjlcb0w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0P190MB0673
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=abatec.at; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N3u0ZZS+S+vx5fRJNNkqCKh1Bkqg/zd9xy7aUJxJx5E=;
- b=GjW/8sH8HKocZK8pTKyT0LOZhT9jb/tg9orooah5xsSigj7r/sQjey9sJYH80hty7CJP+X9Dlr16tXSYfmSFoez0CZrQFMdc7FpZclP1vZ7AiPNGKa0YZXZos0KnBMXbuE1JquvYmpw19r3MqgDAslOMeTN0tUjHr+7VB66pDzw=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=GjW/8sH8
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH 11/11] DEVELOPERS: add Daniel Lang for
- llvm-project
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=UWLXwj1mB5643AeD+xcJSsrH/YGMzCHkMpGRNSCG1wM=;
+ b=N1ciZgMDRCvdJkPDJX60wVb4S31hJU9P0JrlsK/HxS9TupDdUc1Z4g8/Ji7Z0XSKIl
+ 3Pqj6MCoHhdH5AxTElbCk83RlKSUyE3J5cvcSKKqwO81N23/hGuZXAAGuTXB7cjGtZad
+ TLO7VcBY4BflyzbYcJNPwp6FCyFxFd7/te6mEcoQIWeNhnSIeYwSEHQPp4B+EiyRCw2G
+ g2lR8sX/RV2aN4h9U8f8xLs8ypVcIocswm30Go+PgwKJRPEzNTQx9sw+sVpJxI+4LwAN
+ /dQmjzaXdr+TL0fCCo/o9B+q4eUGgTSJe6WgtgOfZoX+B3ZCbA3icplYHDkaaGIoec38
+ j4Fw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20210112 header.b=N1ciZgMD
+Subject: [Buildroot] [PATCH] package/mdio-tools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -140,36 +93,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Lang Daniel via buildroot <buildroot@buildroot.org>
-Reply-To: Lang Daniel <d.lang@abatec.at>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>, Matt Weber <matthew.weber@collins.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
+Cc: Robert Marko <robimarko@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+mdio-tools are kernel module and accompanying tools for low-level
+debugging of devices attached on MDIO bus like PHY-s, switches etc.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index facb8ce58b..418f439bda 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -633,6 +633,7 @@ F:	package/dacapo/
- N:	Daniel Lang <d.lang@abatec.at>
- F:	package/dbus-cxx/
- F:	package/paho-mqtt-cpp/
-+F:	package/llvm-project/
- 
- N:	Damien Lanson <damien@kal-host.com>
- F:	package/libvdpau/
+Userspace tools provide C22 or C45 reads and writes, benchmarking
+and even dedicated Marvell Link Street tools via the included
+kernel module.
+
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ package/Config.in                  |  1 +
+ package/mdio-tools/Config.in       |  9 +++++++++
+ package/mdio-tools/mdio-tools.hash |  3 +++
+ package/mdio-tools/mdio-tools.mk   | 16 ++++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/mdio-tools/Config.in
+ create mode 100644 package/mdio-tools/mdio-tools.hash
+ create mode 100644 package/mdio-tools/mdio-tools.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index e3a34d6e97..ed41e8bdd4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -536,6 +536,7 @@ endmenu
+ 	source "package/mbpfan/Config.in"
+ 	source "package/mdadm/Config.in"
+ 	source "package/mdevd/Config.in"
++	source "package/mdio-tools/Config.in"
+ 	source "package/memtest86/Config.in"
+ 	source "package/memtester/Config.in"
+ 	source "package/memtool/Config.in"
+diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
+new file mode 100644
+index 0000000000..feb1e825ac
+--- /dev/null
++++ b/package/mdio-tools/Config.in
+@@ -0,0 +1,9 @@
++comment "mdio-tools needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_MDIO_TOOLS
++	bool "mdio-tools"
++	depends on BR2_LINUX_KERNEL
++	select BR2_PACKAGE_LIBMNL
++	help
++	  Low-level debug tools for MDIO devices
+diff --git a/package/mdio-tools/mdio-tools.hash b/package/mdio-tools/mdio-tools.hash
+new file mode 100644
+index 0000000000..0111165f27
+--- /dev/null
++++ b/package/mdio-tools/mdio-tools.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  c5e17431c62392f6c1da1ba4fb0a6f5918521509a377af74485851f93ff2a106  mdio-tools-1.2.0.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/mdio-tools/mdio-tools.mk b/package/mdio-tools/mdio-tools.mk
+new file mode 100644
+index 0000000000..e4ea6f8224
+--- /dev/null
++++ b/package/mdio-tools/mdio-tools.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# mdio-tools
++#
++################################################################################
++
++MDIO_TOOLS_VERSION = 1.2.0
++MDIO_TOOLS_SITE = https://github.com/wkz/mdio-tools/releases/download/$(MDIO_TOOLS_VERSION)
++MDIO_TOOLS_LICENSE = GPL-2.0-only
++MDIO_TOOLS_LICENSE_FILES = COPYING
++MDIO_TOOLS_DEPENDENCIES = libmnl
++
++MDIO_TOOLS_MODULE_SUBDIRS = kernel
++
++$(eval $(kernel-module))
++$(eval $(autotools-package))
 -- 
-2.25.1
+2.37.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
