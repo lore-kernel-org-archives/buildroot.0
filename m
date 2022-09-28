@@ -1,58 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4861AC32771
-	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 20:24:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06532C6FA82
+	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 20:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CAA7B82EA4;
-	Wed, 28 Sep 2022 20:24:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAA7B82EA4
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fXwAKyXgVkjX; Wed, 28 Sep 2022 20:24:29 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4232B82D57;
-	Wed, 28 Sep 2022 20:24:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4232B82D57
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 45EE21BF2F8
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 20:24:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 211D960E64
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 20:24:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 211D960E64
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EEC4610B4;
+	Wed, 28 Sep 2022 20:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EEC4610B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D2vqQMER5ybx for <buildroot@lists.busybox.net>;
- Wed, 28 Sep 2022 20:24:25 +0000 (UTC)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PPB_7P8CUcND; Wed, 28 Sep 2022 20:25:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6853610CB;
+	Wed, 28 Sep 2022 20:25:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6853610CB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 92DAF1BF2F8
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 20:24:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C8FF418C9
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 20:24:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C8FF418C9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YjR8yK964gup for <buildroot@lists.busybox.net>;
+ Wed, 28 Sep 2022 20:24:35 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1ACE60B45
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F1ACE60B45
- for <buildroot@buildroot.org>; Wed, 28 Sep 2022 20:24:24 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B9A7B200003;
- Wed, 28 Sep 2022 20:24:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oddbQ-008sk9-MX; Wed, 28 Sep 2022 22:24:20 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: luca.ceresoli@bootlin.com
-References: <20220917123256.960765-1-luca.ceresoli@bootlin.com>
-Date: Wed, 28 Sep 2022 22:24:20 +0200
-In-Reply-To: <20220917123256.960765-1-luca.ceresoli@bootlin.com> (luca
- ceresoli's message of "Sat, 17 Sep 2022 14:32:56 +0200")
-Message-ID: <87h70r9rij.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2FBB418AF
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2FBB418AF
+ for <buildroot@buildroot.org>; Wed, 28 Sep 2022 20:24:33 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.15.171])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id ddbaoJcSLRFZ1ddbao845Y; Wed, 28 Sep 2022 22:24:32 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Wed, 28 Sep 2022 22:24:29 +0200
+Message-Id: <20220928202429.461673-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] utils/test-pkg: show default build dir in
- help test
+X-CMAE-Envelope: MS4xfDo7UWNeNppeshIQ6JhqZbHitluNt9K1mQgomy/z+XHAOHL4iYwsgg/Hq3ATxZze03URTGi4AScJnq4frnyoK0cOva8atirXim5I21u/cEZSLGQkPOHJ
+ YBiHNEb6DQZ6HtoyIbEX/If3O04LhxG8xjD3BU0TFfhqHOKvESOT1ipJ5V1KX+IaQEGrvEzmXt1zd+8VXW2dzhXoQZeBXYy4AQ/UvRYOo+12lgs02Ws6b0SB
+ s+0EY/1flgiqIMxd+9x0xFF54D1MJwUGwBa+sTWubFRQHMi8zLgSXbZexzhsHeOSDmevcPJe+h3pYZU0ZNdi+Q==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1664396672; bh=vyt7ysBQVXuNQnGpantIvkbDCg86frf93nA4aTG46ao=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=mmdOl9QKbmi05jtfTCAbWNHNYZmcX5fW/uwIXKtgmg5Vu7qDRxqoy5TmAhh9pRWGW
+ 5Ows1onVc2iufPz4rr+pdnlaVTkTwuc0Ef1IPxkO5H8gDZnS8GJWHFvSUve4vOOqMr
+ yVFV5r9y63PIh5rLXZ47pBbwgqhL4b+06GZB6bJmLLw/ac8HJ1mfJppHvP55T78K4s
+ sh9+s+24HxQNzkdOoOkz/tJSTVEmoBYu4QBBVpBhxlyvMb0HMMfrVIJcHJ1IIhsIsm
+ TR9DAbFzcMGCsNMUOLL0S4+DwF9QwL1nDeFPFnAoa/TlTYChh2z4XMDmLe8BahUWMv
+ TzgMZIRI2Fphg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=mmdOl9QK
+Subject: [Buildroot] [PATCH] package/qt5: fix build failure due to libressl
+ use
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,23 +73,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Julien Corjon <corjon.j@ecagroup.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "luca" == luca ceresoli <luca.ceresoli@bootlin.com> writes:
+Qt5 only supports openssl, check [0] and [1]. So in qt5base.mk let's check
+if BR2_PACKAGE_LIBOPENSSL is enabled instead of BR2_PACKAGE_OPENSSL(that
+could be openssl or libressl) and for qt5enginio and qt5webkit let's select
+specifically BR2_PACKAGE_LIBOPENSSL instead of only BR2_PACKAGE_OPENSSL.
+This way we make sure that only openssl is selected and not libressl or
+other future openssl-like implementations.
 
- > From: Luca Ceresoli <luca.ceresoli@bootlin.com>
- > Avoid the "Where did it put my builds?" step.
+Fixes:
+http://autobuild.buildroot.net/results/a956b48b782dbaa055d7146360465e2493a809d9/
 
- > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+[0]: https://doc.qt.io/qt-5/ssl.html#enabling-and-disabling-ssl-support
+[1]: https://bugreports.qt.io/browse/QTBUG-68374
 
-Committed to 2022.02.x, 2022.05.x and 2022.08.x, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/qt5/qt5base/qt5base.mk   | 4 ++--
+ package/qt5/qt5enginio/Config.in | 1 +
+ package/qt5/qt5webkit/Config.in  | 1 +
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index a81892422c..efa0e16e9a 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -229,8 +229,8 @@ else
+ QT5BASE_CONFIGURE_OPTS += -no-eglfs
+ endif
+ 
+-QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_OPENSSL),-openssl,-no-openssl)
+-QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_OPENSSL),openssl)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBOPENSSL),-openssl,-no-openssl)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBOPENSSL),openssl)
+ 
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),-fontconfig,-no-fontconfig)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),fontconfig)
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index b738f0db7c..d421972392 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_QT5ENGINIO
+ 	bool "qt5enginio"
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL # Only openssl is supported by qt5
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
+ 	help
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index 26c3897d1d..035e8b19b8 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	select BR2_PACKAGE_LEVELDB
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL # Only openssl is supported by qt5
+ 	select BR2_PACKAGE_QT5BASE_ICU
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
 -- 
-Bye, Peter Korsgaard
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
