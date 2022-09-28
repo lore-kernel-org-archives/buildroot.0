@@ -4,84 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6368C32771
-	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 19:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55D9FC04A95
+	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 19:28:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B25540C33;
-	Wed, 28 Sep 2022 19:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B25540C33
+	by smtp2.osuosl.org (Postfix) with ESMTP id D224E40C33;
+	Wed, 28 Sep 2022 19:28:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D224E40C33
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TCwwOyBhHvca; Wed, 28 Sep 2022 19:23:33 +0000 (UTC)
+	with ESMTP id eNq-ywM9WaDV; Wed, 28 Sep 2022 19:28:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D49340989;
-	Wed, 28 Sep 2022 19:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D49340989
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A2FD01BF2F8
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 19:23:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81FF940C1C;
+	Wed, 28 Sep 2022 19:28:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81FF940C1C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 000161BF3E0
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 19:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 77C8E40298
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 19:23:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77C8E40298
+ by smtp3.osuosl.org (Postfix) with ESMTP id CEB66610BB
+ for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 19:28:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEB66610BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4VsRrFLgJI8l for <buildroot@lists.busybox.net>;
- Wed, 28 Sep 2022 19:23:29 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1336440286
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1336440286
- for <buildroot@buildroot.org>; Wed, 28 Sep 2022 19:23:28 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id e18so18599286edj.3
- for <buildroot@buildroot.org>; Wed, 28 Sep 2022 12:23:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=UWLXwj1mB5643AeD+xcJSsrH/YGMzCHkMpGRNSCG1wM=;
- b=SKdvLdXiBOemHnC5JU15BB3LRg+jmdLSFikeC8dESNh9+FIgcBoMmhF+unBQlPyEo9
- Jq5AChwxftGA3ltMr1s2wdqjDdPspuuFqUO4TILXVqAW7Npwn1Ka8PVt7sEIRPMLHbx+
- mG81svjCKbfRJtkhIcKFwmh3G1IqUbRUfwE55vZOh/m/ZLRHTh53SfBV4lBKx3xFJqyp
- aHypydgm9baNWOd1U/itrzl7Wx/TYq0vCdkVfCD8D/ufkL50Nwx/R7UaS26IgIfnwMPJ
- mwPC72oKC+iS6bNxeF3pFtZZ4DDKTmqrDkTvAAjRZrxicE71jJKruwSXmlZAhEUIO0UQ
- l88A==
-X-Gm-Message-State: ACrzQf1SMhgQZfzV9/96JVl7C+eUTks+FqW93FlwtSdq6iZcKVQRCDq0
- GyEEYP4hDXsy+ove9b7u1goMB8SA5Vg=
-X-Google-Smtp-Source: AMsMyM5Jn8waigTZcGLeKBTMGDfetmZOvsOAr+oOOUeVugYvYps9coKjlvZL7er5Nm4PWJHQ37mDug==
-X-Received: by 2002:a05:6402:42c5:b0:44e:b640:16fb with SMTP id
- i5-20020a05640242c500b0044eb64016fbmr35769139edc.29.1664393006649; 
- Wed, 28 Sep 2022 12:23:26 -0700 (PDT)
-Received: from fedora.. (dh207-96-59.xnet.hr. [88.207.96.59])
- by smtp.googlemail.com with ESMTPSA id
- d7-20020aa7c1c7000000b0045726e8a22bsm3918698edp.46.2022.09.28.12.23.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 28 Sep 2022 12:23:26 -0700 (PDT)
-From: Robert Marko <robimarko@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jIRk7gpHXBTb for <buildroot@lists.busybox.net>;
+ Wed, 28 Sep 2022 19:28:05 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E95E2610CB
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E95E2610CB
+ for <buildroot@buildroot.org>; Wed, 28 Sep 2022 19:28:04 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.15.171])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id dcixoHwuLRFZ1dcixo7hyt; Wed, 28 Sep 2022 21:28:03 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Sep 2022 21:23:24 +0200
-Message-Id: <20220928192324.1279960-1-robimarko@gmail.com>
-X-Mailer: git-send-email 2.37.3
+Date: Wed, 28 Sep 2022 21:28:02 +0200
+Message-Id: <20220928192802.437811-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=UWLXwj1mB5643AeD+xcJSsrH/YGMzCHkMpGRNSCG1wM=;
- b=N1ciZgMDRCvdJkPDJX60wVb4S31hJU9P0JrlsK/HxS9TupDdUc1Z4g8/Ji7Z0XSKIl
- 3Pqj6MCoHhdH5AxTElbCk83RlKSUyE3J5cvcSKKqwO81N23/hGuZXAAGuTXB7cjGtZad
- TLO7VcBY4BflyzbYcJNPwp6FCyFxFd7/te6mEcoQIWeNhnSIeYwSEHQPp4B+EiyRCw2G
- g2lR8sX/RV2aN4h9U8f8xLs8ypVcIocswm30Go+PgwKJRPEzNTQx9sw+sVpJxI+4LwAN
- /dQmjzaXdr+TL0fCCo/o9B+q4eUGgTSJe6WgtgOfZoX+B3ZCbA3icplYHDkaaGIoec38
- j4Fw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20210112 header.b=N1ciZgMD
-Subject: [Buildroot] [PATCH] package/mdio-tools: new package
+X-CMAE-Envelope: MS4xfOheTQ7m8wH7JI3bIEVViHWyGi1cTKuiICDmpjXAAI62i6Huiwu8YEXqlB8o+uyL2AjrWXaFrqYbBYQex0swapcGr+sVR94/txnI39CXMUPv2ED2ypoZ
+ lgXHNiyt59VCv6/UnojnFaT7XuGa7EGRSu4tTaLrNjgjRH7vXGF3QZs+bg7qXkW6UvlX5Lgo4UdMWM4lwKpl36hJX4XIfm+CTTD1WRqo0atH/nipviv4Go85
+ orlZ8mSwwn2BBFZgWm1khkFgilPb9sqRvXqQ1kGJF8m6I7Tonw8Ga+7rYxNBWdb0WwMxjvgwJDMa6Ry/mn0JzQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1664393283; bh=I3T9t60S/9kD6GQPYSMzW/XwU9zbXW7A5eenAJiwLo8=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=FMzRAFBZM7QAhW/VSwC/3NQhOrooUJrPY6rhr36MD78GL/OG1RcuoWfQKh4mD4DuA
+ lW28ZgcjMhN9DoIUSyUBtp1naC9n2bb3OlF3YXyQWVMQmUy5SpZTLBc0Kz/6vDVde3
+ iOcg++lNdq0Pi/9ljn9T9UA/tWLOM/1cmEITlyCygDyUMHEMOqxuN0fxpyc7G3Lln+
+ Dn8FaihTQFcwkihHjnS4eaCeTYdOjQdC1HjPL3b7+Ovzm9KlsEMYp3k2ddmcr3tDnM
+ GLzi6g751wOa9zmssbDgK/smOb7gKLfmCyK2Jm/VUUgXZZGQ6mEzEXTQE62MjfagBq
+ EcQB9qtr5dunA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=FMzRAFBZ
+Subject: [Buildroot] [PATCH] package/rtl8189es: fix build failure due to
+ wrong endianness
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,91 +73,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Robert Marko <robimarko@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-mdio-tools are kernel module and accompanying tools for low-level
-debugging of devices attached on MDIO bus like PHY-s, switches etc.
+At the moment rtl8189es module has -DCONFIG_LITTLE_ENDIAN hardcoded and
+there is no way to override it. So to do this let's add a patch that is
+pending upstream[1] to allow to override CFLAGS and then let's undefine
+CONFIG_LITTLE_ENDIAN and define the correct endianness in rtl8189es.mk
 
-Userspace tools provide C22 or C45 reads and writes, benchmarking
-and even dedicated Marvell Link Street tools via the included
-kernel module.
+Fixes:
+http://autobuild.buildroot.net/results/3bcad5e88876c86a2a3338961ed20f28b5953779/
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
+[1]: https://github.com/jwrdegoede/rtl8189ES_linux/pull/83
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/Config.in                  |  1 +
- package/mdio-tools/Config.in       |  9 +++++++++
- package/mdio-tools/mdio-tools.hash |  3 +++
- package/mdio-tools/mdio-tools.mk   | 16 ++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/mdio-tools/Config.in
- create mode 100644 package/mdio-tools/mdio-tools.hash
- create mode 100644 package/mdio-tools/mdio-tools.mk
+ ...TRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 40 +++++++++++++++++++
+ package/rtl8189es/rtl8189es.mk                |  8 +++-
+ 2 files changed, 47 insertions(+), 1 deletion(-)
+ create mode 100644 package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index e3a34d6e97..ed41e8bdd4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -536,6 +536,7 @@ endmenu
- 	source "package/mbpfan/Config.in"
- 	source "package/mdadm/Config.in"
- 	source "package/mdevd/Config.in"
-+	source "package/mdio-tools/Config.in"
- 	source "package/memtest86/Config.in"
- 	source "package/memtester/Config.in"
- 	source "package/memtool/Config.in"
-diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
+diff --git a/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
 new file mode 100644
-index 0000000000..feb1e825ac
+index 0000000000..dc4deff9f1
 --- /dev/null
-+++ b/package/mdio-tools/Config.in
-@@ -0,0 +1,9 @@
-+comment "mdio-tools needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
++++ b/package/rtl8189es/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
+@@ -0,0 +1,40 @@
++From 4a555ffb77a5947814b6c7f330968318e265c496 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 28 Sep 2022 21:17:17 +0200
++Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
++ end of EXTRA_FLAGS assignment
 +
-+config BR2_PACKAGE_MDIO_TOOLS
-+	bool "mdio-tools"
-+	depends on BR2_LINUX_KERNEL
-+	select BR2_PACKAGE_LIBMNL
-+	help
-+	  Low-level debug tools for MDIO devices
-diff --git a/package/mdio-tools/mdio-tools.hash b/package/mdio-tools/mdio-tools.hash
-new file mode 100644
-index 0000000000..0111165f27
---- /dev/null
-+++ b/package/mdio-tools/mdio-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  c5e17431c62392f6c1da1ba4fb0a6f5918521509a377af74485851f93ff2a106  mdio-tools-1.2.0.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mdio-tools/mdio-tools.mk b/package/mdio-tools/mdio-tools.mk
-new file mode 100644
-index 0000000000..e4ea6f8224
---- /dev/null
-+++ b/package/mdio-tools/mdio-tools.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# mdio-tools
-+#
-+################################################################################
++At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
++since it's assigned at the beginning of the Makefile. For example it's not
++possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
++allow to build these modules for big endian architectures. So let's move
++the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
++EXTRA_CFLAGS assignment.
 +
-+MDIO_TOOLS_VERSION = 1.2.0
-+MDIO_TOOLS_SITE = https://github.com/wkz/mdio-tools/releases/download/$(MDIO_TOOLS_VERSION)
-+MDIO_TOOLS_LICENSE = GPL-2.0-only
-+MDIO_TOOLS_LICENSE_FILES = COPYING
-+MDIO_TOOLS_DEPENDENCIES = libmnl
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[Upstream status: https://github.com/jwrdegoede/rtl8189ES_linux/pull/83]
++---
++ Makefile | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+MDIO_TOOLS_MODULE_SUBDIRS = kernel
++diff --git a/Makefile b/Makefile
++index 8fcb7bd..e4664e9 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -1,4 +1,3 @@
++-EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
++ EXTRA_CFLAGS += -O1
++ #EXTRA_CFLAGS += -O3
++ #EXTRA_CFLAGS += -Wall
++@@ -2239,6 +2238,8 @@ ifneq ($(USER_MODULE_NAME),)
++ MODULE_NAME := $(USER_MODULE_NAME)
++ endif
++ 
+++EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
+++
++ ifneq ($(KERNELRELEASE),)
++ 
++ ########### this part for *.mk ############################
++-- 
++2.34.1
 +
-+$(eval $(kernel-module))
-+$(eval $(autotools-package))
+diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
+index 2fa6a3a483..cddcb195f9 100644
+--- a/package/rtl8189es/rtl8189es.mk
++++ b/package/rtl8189es/rtl8189es.mk
+@@ -8,10 +8,16 @@ RTL8189ES_VERSION = 39c17661136da48f8e9c644194dce6a7f5076896
+ RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
+ RTL8189ES_LICENSE = GPL-2.0
+ 
++# Undefine the hardcoded CONFIG_LITTLE_ENDIAN
++RTL8189ES_USER_EXTRA_CLAGS = -UCONFIG_LITTLE_ENDIAN
++# Set endianness
++RTL8189ES_USER_EXTRA_CLAGS += -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
++
+ RTL8189ES_MODULE_MAKE_OPTS = \
+ 	CONFIG_RTL8189ES=m \
+ 	KVER=$(LINUX_VERSION_PROBED) \
+-	KSRC=$(LINUX_DIR)
++	KSRC=$(LINUX_DIR) \
++	USER_EXTRA_CFLAGS="$(RTL8189ES_USER_EXTRA_CLAGS)"
+ 
+ define RTL8189ES_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
 -- 
-2.37.3
+2.34.1
 
 _______________________________________________
 buildroot mailing list
