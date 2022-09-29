@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91521C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 13:53:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B8A0C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 13:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1695983F8D;
-	Thu, 29 Sep 2022 13:53:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1695983F8D
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1E9761116;
+	Thu, 29 Sep 2022 13:53:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1E9761116
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c5AgPAJreXeJ; Thu, 29 Sep 2022 13:53:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G_WTWXhtLb9I; Thu, 29 Sep 2022 13:53:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20EA481A3B;
-	Thu, 29 Sep 2022 13:53:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20EA481A3B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D13111C1190
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 13:52:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B478360BAB;
+	Thu, 29 Sep 2022 13:53:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B478360BAB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8FD521BF2B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 13:52:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD02281A3B
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 13:52:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD02281A3B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2701741A6A
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 13:52:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2701741A6A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BYARDAqPHxMY for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lEsQZeK1llDl for <buildroot@lists.busybox.net>;
  Thu, 29 Sep 2022 13:52:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 74E9F8176D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A4F341B34
  for <buildroot@buildroot.org>; Thu, 29 Sep 2022 13:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74E9F8176D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A4F341B34
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5FBDA864B8; Thu, 29 Sep 2022 13:52:47 +0000 (UTC)
+ id 78138864BA; Thu, 29 Sep 2022 13:52:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 15:48:51 +0200
+Date: Thu, 29 Sep 2022 15:52:05 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: b0e5bdd4a34d7586336340d93883252f690b6520
-X-Git-Newrev: beb98993cbd7b0ba2aa025a15a0ce9f07480d182
+X-Git-Oldrev: 48b2ea9a5ec4aaaa097c99627c7a1fa501056fe1
+X-Git-Newrev: 77b66fd574175406c3ef205fbf819808964a916e
 X-Patchwork-Hint: ignore
-Message-Id: <20220929135247.5FBDA864B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/git: security
- bump to version 2.31.4
+Message-Id: <20220929135247.78138864BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/expat: fix
+ CVE-2022-40674
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,59 +63,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beb98993cbd7b0ba2aa025a15a0ce9f07480d182
+commit: https://git.buildroot.net/buildroot/commit/?id=77b66fd574175406c3ef205fbf819808964a916e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Fix CVE-2022-29187: Git is a distributed revision control system. Git
-prior to versions 2.37.1, 2.36.2, 2.35.4, 2.34.4, 2.33.4, 2.32.3,
-2.31.4, and 2.30.5, is vulnerable to privilege escalation in all
-platforms. An unsuspecting user could still be affected by the issue
-reported in CVE-2022-24765, for example when navigating as root into a
-shared tmp directory that is owned by them, but where an attacker could
-create a git repository. Versions 2.37.1, 2.36.2, 2.35.4, 2.34.4,
-2.33.4, 2.32.3, 2.31.4, and 2.30.5 contain a patch for this issue. The
-simplest way to avoid being affected by the exploit described in the
-example is to avoid running git as root (or an Administrator in
-Windows), and if needed to reduce its use to a minimum. While a generic
-workaround is not possible, a system could be hardened from the exploit
-described in the example by removing any such repository if it exists
-already and creating one as root to block any future attacks.
-
-https://github.com/git/git/blob/v2.31.4/Documentation/RelNotes/2.31.4.txt
+libexpat before 2.4.9 (which is still not released) has a use-after-free
+in the doContent function in xmlparse.c.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 15293e0360cffc8a5e33f57ef1b01a45f17b08d3)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit d8c044f58438ba49e95dae8734d3ace6683c976a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...mes-are-safe-exiting-internalEntityParser.patch | 53 ++++++++++++++++++++++
+ package/expat/expat.mk                             |  3 ++
+ 2 files changed, 56 insertions(+)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 5868fbffda..41afa83f86 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  d9167d801cf4aa2abca6e8f43d5d1b383e02e4d257ac1dc071802bb773ed0e2a  git-2.31.2.tar.xz
-+sha256  84fc20acf8fbea5cad7d5d7be0dfeb32494f1dac8e6c61675c904d1fd3d8c016  git-2.31.4.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 981a238acb..dc587170e8 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch b/package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
+new file mode 100644
+index 0000000000..ca86e85115
+--- /dev/null
++++ b/package/expat/0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
+@@ -0,0 +1,53 @@
++From 4a32da87e931ba54393d465bb77c40b5c33d343b Mon Sep 17 00:00:00 2001
++From: Rhodri James <rhodri@wildebeest.org.uk>
++Date: Wed, 17 Aug 2022 18:26:18 +0100
++Subject: [PATCH] Ensure raw tagnames are safe exiting internalEntityParser
++
++It is possible to concoct a situation in which parsing is
++suspended while substituting in an internal entity, so that
++XML_ResumeParser directly uses internalEntityProcessor as
++its processor.  If the subsequent parse includes some unclosed
++tags, this will return without calling storeRawNames to ensure
++that the raw versions of the tag names are stored in memory other
++than the parse buffer itself.  If the parse buffer is then changed
++or reallocated (for example if processing a file line by line),
++badness will ensue.
++
++This patch ensures storeRawNames is always called when needed
++after calling doContent.  The earlier call do doContent does
++not need the same protection; it only deals with entity
++substitution, which cannot leave unbalanced tags, and in any
++case the raw names will be pointing into the stored entity
++value not the parse buffer.
++
++[Retrieved from:
++https://github.com/libexpat/libexpat/commit/4a32da87e931ba54393d465bb77c40b5c33d343b]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ expat/lib/xmlparse.c | 13 +++++++++----
++ 1 file changed, 9 insertions(+), 4 deletions(-)
++
++diff --git a/lib/xmlparse.c b/lib/xmlparse.c
++index 7bcabf7f4..d73f419cf 100644
++--- a/lib/xmlparse.c
+++++ b/lib/xmlparse.c
++@@ -5826,10 +5826,15 @@ internalEntityProcessor(XML_Parser parser, const char *s, const char *end,
++   {
++     parser->m_processor = contentProcessor;
++     /* see externalEntityContentProcessor vs contentProcessor */
++-    return doContent(parser, parser->m_parentParser ? 1 : 0, parser->m_encoding,
++-                     s, end, nextPtr,
++-                     (XML_Bool)! parser->m_parsingStatus.finalBuffer,
++-                     XML_ACCOUNT_DIRECT);
+++    result = doContent(parser, parser->m_parentParser ? 1 : 0,
+++                       parser->m_encoding, s, end, nextPtr,
+++                       (XML_Bool)! parser->m_parsingStatus.finalBuffer,
+++                       XML_ACCOUNT_DIRECT);
+++    if (result == XML_ERROR_NONE) {
+++      if (! storeRawNames(parser))
+++        return XML_ERROR_NO_MEMORY;
+++    }
+++    return result;
++   }
++ }
++ 
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index e89de81da7..61735a5fdb 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -13,6 +13,9 @@ EXPAT_LICENSE_FILES = COPYING
+ EXPAT_CPE_ID_VENDOR = libexpat_project
+ EXPAT_CPE_ID_PRODUCT = libexpat
  
--GIT_VERSION = 2.31.2
-+GIT_VERSION = 2.31.4
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
++# 0001-Ensure-raw-tagnames-are-safe-exiting-internalEntityParser.patch
++EXPAT_IGNORE_CVES += CVE-2022-40674
++
+ EXPAT_CONF_OPTS = \
+ 	--without-docbook --without-examples --without-tests --without-xmlwf
+ HOST_EXPAT_CONF_OPTS = --without-docbook --without-examples --without-tests
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
