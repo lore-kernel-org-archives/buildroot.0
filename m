@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A465EC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE549C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:28:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 59B2840BF8;
-	Thu, 29 Sep 2022 21:28:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59B2840BF8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7039540A01;
+	Thu, 29 Sep 2022 21:28:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7039540A01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nySLyE9H_res; Thu, 29 Sep 2022 21:28:00 +0000 (UTC)
+	with ESMTP id yPYr1cVGFchj; Thu, 29 Sep 2022 21:28:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 80D3340594;
-	Thu, 29 Sep 2022 21:27:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80D3340594
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7CA9C1C11A5
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8158141142;
+	Thu, 29 Sep 2022 21:28:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8158141142
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E1001BF3D1
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB7AD4112C
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB7AD4112C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6FA3F41C33
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FA3F41C33
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3gaUgZ5eUSCl for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kqnRqH2a8KRz for <buildroot@lists.busybox.net>;
  Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15575410E7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1655D41C40
  for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15575410E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1655D41C40
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 121DE86615; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
+ id 06D6486618; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 22:54:24 +0200
+Date: Thu, 29 Sep 2022 22:50:23 +0200
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: f78fdcc4d7b289cd5e5ce43bc61e5e9c735c71a6
-X-Git-Newrev: a4c125179f9a07e17475da6b7c0f2da3b92f76d3
+X-Git-Oldrev: 8b6b57b60bb9db1bfc4b18897c009e1575317675
+X-Git-Newrev: f78fdcc4d7b289cd5e5ce43bc61e5e9c735c71a6
 X-Patchwork-Hint: ignore
-Message-Id: <20220929212137.121DE86615@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/libupnp: bump to
- version 1.14.13
+Message-Id: <20220929212137.06D6486618@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/meson: bump to
+ version 0.63.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4c125179f9a07e17475da6b7c0f2da3b92f76d3
+commit: https://git.buildroot.net/buildroot/commit/?id=f78fdcc4d7b289cd5e5ce43bc61e5e9c735c71a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-https://github.com/pupnp/pupnp/blob/release-1.14.13/ChangeLog
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a9ee25b01b741ad4f68575974c89c65146ab87f2)
+(cherry picked from commit 0de119a137a4f97ba12db917cef7583f2c633fd9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index aebde064b8..fcb231cff6 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  091c80aada1e939c2294245c122be2f5e337cc932af7f7d40504751680b5b5ac  libupnp-1.14.12.tar.bz2
-+sha256  025d7aee1ac5ca8f0bd99cb58b83fcfca0efab0c5c9c1d48f72667fe40788a4e  libupnp-1.14.13.tar.bz2
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index a754ca76fc..8c6ae005a0 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index d22b21cdea..df6a92d1f2 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.63.1/meson-0.63.1.tar.gz.asc
+-sha256  06fe13297213d6ff0121c5d5aab25a56ef938ffec57414ed6086fda272cb65e9  meson-0.63.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.63.2/meson-0.63.2.tar.gz.asc
++sha256  16222f17ef76be0542c91c07994f9676ae879f46fc21c0c786a21ef2cb518bbf  meson-0.63.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 1e431f426a..f9b3f95bb7 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUPNP_VERSION = 1.14.12
-+LIBUPNP_VERSION = 1.14.13
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = \
- 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
+-MESON_VERSION = 0.63.1
++MESON_VERSION = 0.63.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
