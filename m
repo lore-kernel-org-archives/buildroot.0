@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB9B7C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80611C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59427611CB;
-	Thu, 29 Sep 2022 21:22:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59427611CB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C3FD41C48;
+	Thu, 29 Sep 2022 21:22:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C3FD41C48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bGndWCAgwDxB; Thu, 29 Sep 2022 21:22:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xSmseUBDBPlt; Thu, 29 Sep 2022 21:22:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8AF10611C1;
-	Thu, 29 Sep 2022 21:22:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AF10611C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7ABE41C3C;
+	Thu, 29 Sep 2022 21:22:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7ABE41C3C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9EC1A1BF3D1
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:20:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F0491BF3D1
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:20:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7CD9B40C18
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8F5FA40BA7
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:20:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CD9B40C18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F5FA40BA7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BYU6qQl1JRz6 for <buildroot@lists.busybox.net>;
+ with ESMTP id 05RVWteEBhXV for <buildroot@lists.busybox.net>;
  Thu, 29 Sep 2022 21:20:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD1F540594
+ by smtp2.osuosl.org (Postfix) with ESMTP id C13D540A01
  for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD1F540594
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C13D540A01
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB37B86573; Thu, 29 Sep 2022 21:20:27 +0000 (UTC)
+ id B12498657C; Thu, 29 Sep 2022 21:20:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 22:54:31 +0200
+Date: Thu, 29 Sep 2022 22:41:23 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: b14010ae50856a80283dec0a3f8ee6f4bcc2ac5b
-X-Git-Newrev: 06f8ea51c237d6ebf2a564fa31210441eb4a0485
+X-Git-Oldrev: 9e000d2cac495709e4ac844a7503aabc3748aba1
+X-Git-Newrev: b14010ae50856a80283dec0a3f8ee6f4bcc2ac5b
 X-Patchwork-Hint: ignore
-Message-Id: <20220929212027.BB37B86573@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/libupnp: bump to
- version 1.14.13
+Message-Id: <20220929212027.B12498657C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/uacme: bump
+ version to 1.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06f8ea51c237d6ebf2a564fa31210441eb4a0485
+commit: https://git.buildroot.net/buildroot/commit/?id=b14010ae50856a80283dec0a3f8ee6f4bcc2ac5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-https://github.com/pupnp/pupnp/blob/release-1.14.13/ChangeLog
+This new version includes
+https://github.com/ndilieto/uacme/commit/9f3e5eae05ee4170872807cd2d7736072b04f8e5
+which fixes the build with mbedtls 2.x.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+  http://autobuild.buildroot.org/results/8fa4f0d2821796be312b366be2f095be07dd7b1e
+
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a9ee25b01b741ad4f68575974c89c65146ab87f2)
+(cherry picked from commit c5131e5d9f0ea1ba1830c68b64c964409c44966b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index aebde064b8..fcb231cff6 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index f62463029a..6c71f6b94d 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256  091c80aada1e939c2294245c122be2f5e337cc932af7f7d40504751680b5b5ac  libupnp-1.14.12.tar.bz2
-+sha256  025d7aee1ac5ca8f0bd99cb58b83fcfca0efab0c5c9c1d48f72667fe40788a4e  libupnp-1.14.13.tar.bz2
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index a754ca76fc..8c6ae005a0 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
+-sha256  e7598e794f5ec414d993c4f2f7df39e7c72f26e41302b875ddaf040d8103ec5f  uacme-1.7.2.tar.gz
++sha256  0ec8e5bcb8ed2b532572ca4878d30b2a794f607b995348ebc176d566b64d73f9  uacme-1.7.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 2482259411..a70ec3a635 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUPNP_VERSION = 1.14.12
-+LIBUPNP_VERSION = 1.14.13
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = \
- 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
+-UACME_VERSION = 1.7.2
++UACME_VERSION = 1.7.3
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
