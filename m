@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB8F8C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:25:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B59DC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:26:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E95741C46;
-	Thu, 29 Sep 2022 21:25:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E95741C46
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cwm98980UH2U; Thu, 29 Sep 2022 21:25:52 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64C1B41972;
-	Thu, 29 Sep 2022 21:25:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64C1B41972
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 316511C11A0
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85CC240C18
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85CC240C18
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2507410D5;
+	Thu, 29 Sep 2022 21:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2507410D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W6-y778L4arH for <buildroot@lists.busybox.net>;
- Thu, 29 Sep 2022 21:21:35 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Uu_E213UeAg2; Thu, 29 Sep 2022 21:26:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0399440BF8;
+	Thu, 29 Sep 2022 21:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0399440BF8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CD5B11BF3D1
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94AC78402E
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94AC78402E
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ByIC-dsucbjc for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44963410E7
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44963410E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF7D78402A
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF7D78402A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33F8C86616; Thu, 29 Sep 2022 21:21:35 +0000 (UTC)
+ id CDAA186616; Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 23:07:26 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: d5a7b1d837660c865e17f2569e688c0371ceef3e
-X-Git-Newrev: 11966cd500fff6fc1052f21fd63838ca0b81a681
+Date: Thu, 29 Sep 2022 22:36:07 +0200
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: d86da759029a40532766e82322f321e738110014
+X-Git-Newrev: 5045f1bc5157d897f85d9536ee1414c6964da578
 X-Patchwork-Hint: ignore
-Message-Id: <20220929212135.33F8C86616@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] DEVELOPERS: add Giulio
- Benetti to package qt5
+Message-Id: <20220929212136.CDAA186616@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] DEVELOPERS: add Giulio
+ Benetti to mmc-utils
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +63,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11966cd500fff6fc1052f21fd63838ca0b81a681
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5045f1bc5157d897f85d9536ee1414c6964da578
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e385856f4312078c418bbc071865592bf3df44ae)
+(cherry picked from commit 5b6f4728fe1c588200294cd8db411848585e6258)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  DEVELOPERS | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 10c63822ad..55e81be072 100644
+index 2c035eecf5..f0f76c7a69 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1099,6 +1099,7 @@ F:	package/minicom/
- F:	package/mmc-utils/
+@@ -1141,6 +1141,7 @@ F:	package/libnspr/
+ F:	package/libnss/
+ F:	package/mali-driver/
+ F:	package/minicom/
++F:	package/mmc-utils/
  F:	package/nfs-utils/
  F:	package/python-uvloop/
-+F:	package/qt5/
  F:	package/rockchip-mali/
- F:	package/rtl8189es/
- F:	package/rtl8723bu/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
