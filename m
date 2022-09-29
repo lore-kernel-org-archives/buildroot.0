@@ -4,70 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C2B7C04A95
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 06:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E06C07E9D
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 07:01:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ADF5640B1D;
-	Thu, 29 Sep 2022 06:40:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADF5640B1D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A2C141010;
+	Thu, 29 Sep 2022 07:01:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A2C141010
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mhyFJJknDh-s; Thu, 29 Sep 2022 06:40:15 +0000 (UTC)
+	with ESMTP id BzkNjkZnm2ij; Thu, 29 Sep 2022 07:01:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D08C4402B1;
-	Thu, 29 Sep 2022 06:40:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D08C4402B1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1622C1BF3E1
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 06:40:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C5DA40FBF;
+	Thu, 29 Sep 2022 07:01:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C5DA40FBF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B08571BF3E1
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 07:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC24160E63
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 06:40:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC24160E63
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A31F419DA
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 07:01:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A31F419DA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aFot6fZyZA9K for <buildroot@lists.busybox.net>;
- Thu, 29 Sep 2022 06:40:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O7TuNVcfo_AZ for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 07:01:34 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A6C760E2E
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1A6C760E2E
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 06:40:10 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id E02F3FF809;
- Thu, 29 Sep 2022 06:40:07 +0000 (UTC)
-Date: Thu, 29 Sep 2022 08:40:06 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <20220929084006.64c0a629@windsurf>
-In-Reply-To: <dda7b7d2-4846-6623-5ca7-39799015a138@gmail.com>
-References: <20220927221133.594071-1-f.fainelli@gmail.com>
- <20220928233856.77bb191c@windsurf>
- <dda7b7d2-4846-6623-5ca7-39799015a138@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B07D7419CD
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B07D7419CD
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 07:01:34 +0000 (UTC)
+Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
+ by serv15.avernis.de (Postfix) with ESMTPSA id 6DFE1BDE015B;
+ Thu, 29 Sep 2022 08:54:40 +0200 (CEST)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1664433608;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=jALRbm7yknOhX9Rrr0nj7bygFxfR3QugrV9vx3ZKTDs=;
- b=RPJ75q9/7bARAi8c+YsKP6yAjsmXAepC0tj3knedQ7q1fBgpvFppYO/6XaocWqyNODNfQ0
- WhJL+oLeAK5FnSdpq6icy959x4UkTQ8Gb9BuUzeeXvGLh2npK5pQxUpxj2yse/8yvYIO+N
- 53cUOCbms5rEufnACpdNu5CJIBXxlgLC8XNhDOdjZIDDUgjqsFXg/MyPovRB9lJu3H8xNP
- 6ug2mE9HIsZCW3LJOJGm52o6km/fzx66Rba8oSwqIBLTd942uICrh24ygE+WrY9v/DWdyK
- ltna9LMWU5lXumskA8Xasm62l7NE3pBLyj6pmVTA7rOJEajZZs4JY26BX0RU/w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RPJ75q9/
-Subject: Re: [Buildroot] [PATCH] package/linux-tools: Exclude checking PE
- binaries from perf test
+Date: Thu, 29 Sep 2022 06:54:40 +0000
+From: Andreas Ziegler <br015@umbiko.net>
+To: Debananda Pal <debananda.pal@gmail.com>
+In-Reply-To: <mailman.24588.1664375477.204281.buildroot@buildroot.org>
+References: <mailman.24588.1664375477.204281.buildroot@buildroot.org>
+Message-ID: <2600a9f572a4747ad50603a985e850b6@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 0.103.7 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: Re: [Buildroot] help needed to upgrade libglib2 on Buildroot
+ 2012.02-rc2-00001
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,39 +61,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 28 Sep 2022 15:28:58 -0700
-Florian Fainelli <f.fainelli@gmail.com> wrote:
+Hi Debananda,
 
-> ./host/bin/aarch64-linux-readelf -h 
-> build/linux-custom/tools/perf/tests/pe-file.exe | sed -r -e '/^ 
-> Machine: +(.+)/!d; s//\1/;' | head -1
-> IMAGE_FILE_MACHINE_AMD64 (0x8664)
+On 2022-09-28 14:13, Debananda Pal wrote:
 
-Could you provide the full output? In other words, I'm interested to
-see if it's really readelf showing the same "Machine:" field as for
-regular ELF files, or if it's something somewhat different that we
-could distinguish.
+> Hi Buildroot Team,
+> 
+> I am new in buildroot compilation.
+> We are trying to upgrade openvmtools to latest version and found there 
+> is a
+> dependency to update libglib2 and libffi.
 
-> I should mention that the readelf binary in this case is the LLVM Object 
-> Reader and it does support PE/COFF which is probably why it even 
-> remotely attempts to parse the file.
+You might consider migrating your Buildroot environment. Maybe not to 
+the latest version, but to the last that satisfies most of your 
+requirements regarding compiler /kernel headers /software package 
+versions. 2019.02 might be a starting point.
 
-How come your readelf is from LLVM? Are you using an external toolchain
-that isn't based on the standard GNU Binutils?
+Stick to the minimum requirements, and do not try to upgrade libglib2 
+and libffi to the latest versions.
 
-Thanks!
+> I am trying to build openvmtools 12.1.0-20219665 source.
+> While upgrading openvmtools, I found that libglib2 version should be 
+> more
+> than 2.34.0.
+>   Now I have changed the version of glib2 to 2.72.4 and libffi to 3.4.3
+> version.
+> But while compiling, I am getting below error message :
+> --------------------------------------------------------------
+> make: *** No rule to make target 'host-libffi'
+> --------------------------------------------------------------
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Keep your existing .mk file(s) and just change the version info 
+initially. If the build (or later, the binary) breaks, look at changes 
+in dependencies and build flags.
+
+> In libffi.mk, earlier it was used below way to call for compilation :
+> $(eval $(call AUTOTARGETS))
+> $(eval $(call AUTOTARGETS,host))
+> ------------------------------------------------------------------
+> 
+> Now latest libffi.mk (as mentioned in opensource libffi.mk), it is 
+> using
+> below way to start configure and compilation :
+> -------------------------------------------------------------
+> $(eval $(autotools-package))
+> $(eval $(host-autotools-package))
+> -------------------------------------------------------------
+
+The github repository reports that this change was made late in 2011 [1] 
+-- You need to use the logic from your environment, otherwise the build 
+will fail.
+
+Kind regards,
+Andreas
+
+> Please give your suggestion to go forward.
+> 
+> Thanks,
+> D Pal
+
+[1] 
+https://github.com/buildroot/buildroot/commit/76d9b3e8d7ac5bb5e1b6efd30be339e03c144597
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
