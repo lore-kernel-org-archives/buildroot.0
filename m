@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE549C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:28:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79A2CC433FE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:28:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7039540A01;
-	Thu, 29 Sep 2022 21:28:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7039540A01
+	by smtp3.osuosl.org (Postfix) with ESMTP id 24B7860B43;
+	Thu, 29 Sep 2022 21:28:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24B7860B43
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yPYr1cVGFchj; Thu, 29 Sep 2022 21:28:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WXKLJWn57gxk; Thu, 29 Sep 2022 21:28:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8158141142;
-	Thu, 29 Sep 2022 21:28:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8158141142
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E1001BF3D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F49760A71;
+	Thu, 29 Sep 2022 21:28:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F49760A71
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 76A5D1C11A0
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6FA3F41C33
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FA3F41C33
+ by smtp1.osuosl.org (Postfix) with ESMTP id 985B884024
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 985B884024
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kqnRqH2a8KRz for <buildroot@lists.busybox.net>;
- Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4gtxhBxfyrVu for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1655D41C40
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1655D41C40
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB05384026
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB05384026
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06D6486618; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
+ id AB51986617; Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 22:50:23 +0200
+Date: Thu, 29 Sep 2022 22:27:57 +0200
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 8b6b57b60bb9db1bfc4b18897c009e1575317675
-X-Git-Newrev: f78fdcc4d7b289cd5e5ce43bc61e5e9c735c71a6
+X-Git-Oldrev: 2c030725571eb83ef7fb9daca1558c2c4ba60f05
+X-Git-Newrev: 7d5d40879c76b6e13360581eb5d428b2cda12e56
 X-Patchwork-Hint: ignore
-Message-Id: <20220929212137.06D6486618@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/meson: bump to
- version 0.63.2
+Message-Id: <20220929212136.AB51986617@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/pango: bump to
+ version 1.50.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f78fdcc4d7b289cd5e5ce43bc61e5e9c735c71a6
+commit: https://git.buildroot.net/buildroot/commit/?id=7d5d40879c76b6e13360581eb5d428b2cda12e56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0de119a137a4f97ba12db917cef7583f2c633fd9)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit cbddb02f8ae98770b9f8c067e54effdc5dc0ddaf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index d22b21cdea..df6a92d1f2 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.63.1/meson-0.63.1.tar.gz.asc
--sha256  06fe13297213d6ff0121c5d5aab25a56ef938ffec57414ed6086fda272cb65e9  meson-0.63.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.63.2/meson-0.63.2.tar.gz.asc
-+sha256  16222f17ef76be0542c91c07994f9676ae879f46fc21c0c786a21ef2cb518bbf  meson-0.63.2.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 1e431f426a..f9b3f95bb7 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 9a73001c9f..48d7f4d5a3 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.8.sha256sum
+-sha256  cf626f59dd146c023174c4034920e9667f1d25ac2c1569516d63136c311255fa  pango-1.50.8.tar.xz
++# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.50/pango-1.50.9.sha256sum
++sha256  1b636aabf905130d806372136f5e137b6a27f26d47defd9240bf444f6a4fe610  pango-1.50.9.tar.xz
+ 
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 30b1de9d23..348759092d 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MESON_VERSION = 0.63.1
-+MESON_VERSION = 0.63.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+ PANGO_VERSION_MAJOR = 1.50
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).8
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).9
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
