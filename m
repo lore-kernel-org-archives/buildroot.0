@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57093C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61A97C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:27:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0CB8584033;
-	Thu, 29 Sep 2022 21:27:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CB8584033
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E0DD611CB;
+	Thu, 29 Sep 2022 21:27:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E0DD611CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iAhkBYfc4pJk; Thu, 29 Sep 2022 21:27:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id T9XMp3hzu5vy; Thu, 29 Sep 2022 21:27:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 362A784026;
-	Thu, 29 Sep 2022 21:27:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 362A784026
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8D0411BF3D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B962611C7;
+	Thu, 29 Sep 2022 21:27:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B962611C7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CBB291BF3D1
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E72541C3C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A2F48402A
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E72541C3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A2F48402A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EfEIwmcykc3c for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tFzCmfcyz4fH for <buildroot@lists.busybox.net>;
  Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 354D041C4E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 303478401F
  for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 354D041C4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 303478401F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FFB386615; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
+ id 2061886616; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 23:04:31 +0200
+Date: Thu, 29 Sep 2022 22:55:55 +0200
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: e834c8c54b7927d438749913df719d8a57118d79
-X-Git-Newrev: 8fda20d964c1bbb0bedbdbdf238ce2617897b08a
+X-Git-Oldrev: a4c125179f9a07e17475da6b7c0f2da3b92f76d3
+X-Git-Newrev: e834c8c54b7927d438749913df719d8a57118d79
 X-Patchwork-Hint: ignore
-Message-Id: <20220929212137.2FFB386615@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] DEVELOPERS: remove Peter
- Seiderer
+Message-Id: <20220929212137.2061886616@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/haproxy: bump to
+ version 2.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,66 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fda20d964c1bbb0bedbdbdf238ce2617897b08a
+commit: https://git.buildroot.net/buildroot/commit/?id=e834c8c54b7927d438749913df719d8a57118d79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-No review/patches from my side the last few months, so drop my
-DEVELOPERS entry.
+http://git.haproxy.org/?p=haproxy-2.6.git;a=blob;f=CHANGELOG;h=5e4ca2c913fa117587652a6a08844e3e2e3b62eb;hb=987a4e248bbccf4bffe955b27ccfbcbb626348c2
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 094e87c805e37c3981d3ef0b4e7431a25181a6c2)
+(cherry picked from commit ac70f179f6d1e703ebd51df086a0c33c3d2883dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 35 -----------------------------------
- 1 file changed, 35 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f0f76c7a69..1b6d7de85f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2366,41 +2366,6 @@ F:	package/wireguard-linux-compat/
- F:	package/wireguard-tools/
- F:	support/testing/tests/package/test_docker_compose.py
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 7a870d7c0c..2cd8ff1806 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.1.tar.gz.sha256
+-sha256  915b351e6450d183342c4cdcda7771eac4f0f72bf90582adcd15a01c700d29b1  haproxy-2.6.1.tar.gz
++# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.5.tar.gz.sha256
++sha256  ce9e19ebfcdd43e51af8a6090f1df8d512d972ddf742fa648a643bbb19056605  haproxy-2.6.5.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 1000c1fea8..c37508f63b 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--N:	Peter Seiderer <ps.report@gmx.net>
--F:	board/raspberrypi/
--F:	configs/raspberrypi*_defconfig
--F:	package/assimp/
--F:	package/bcm2835/
--F:	package/ddrescue/
--F:	package/dejavu/
--F:	package/dillo/
--F:	package/double-conversion/
--F:	package/edid-decode/
--F:	package/ell/
--F:	package/ghostscript-fonts/
--F:	package/gstreamer1/gst1-devtools/
--F:	package/gstreamer1/gst1-interpipe/
--F:	package/gstreamer1/gstreamer1-editing-services/
--F:	package/iwd/
--F:	package/libb2/
--F:	package/libcamera-apps/
--F:	package/libevdev/
--F:	package/libuev/
--F:	package/log4cplus/
--F:	package/ntpsec/
--F:	package/postgresql/
--F:	package/python-colorzero/
--F:	package/python-flask-wtf/
--F:	package/python-gpiozero/
--F:	package/qt5/
--F:	package/quotatool/
--F:	package/racehound/
--F:	package/redir/
--F:	package/rtl8812au-aircrack-ng/
--F:	package/uredir/
--F:	package/uqmi/
--F:	package/wayland-utils/
--
- N:	Peter Thompson <peter.macleod.thompson@gmail.com>
- F:	package/sdl2_gfx/
- F:	package/sdl2_image/
+ HAPROXY_VERSION_MAJOR = 2.6
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).1
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
