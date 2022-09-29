@@ -4,69 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01FF9C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 10:43:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0615EC433FE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 10:46:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CCC0812A8;
-	Thu, 29 Sep 2022 10:43:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CCC0812A8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E93183689;
+	Thu, 29 Sep 2022 10:46:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E93183689
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uP9J7zRJrmwh; Thu, 29 Sep 2022 10:43:31 +0000 (UTC)
+	with ESMTP id xncxn8XWGhGB; Thu, 29 Sep 2022 10:46:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50B2B80F59;
-	Thu, 29 Sep 2022 10:43:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50B2B80F59
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7577832D9;
+	Thu, 29 Sep 2022 10:46:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7577832D9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 69D781BF5A2
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 10:43:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C7D581BF5A2
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 10:46:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4390E4195B
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 10:43:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4390E4195B
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE8FF419F6
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 10:46:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE8FF419F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AYShvfuv3NDe for <buildroot@lists.busybox.net>;
- Thu, 29 Sep 2022 10:43:26 +0000 (UTC)
+ with ESMTP id 59YqiTLbC-9d for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 10:46:53 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B07984181D
-Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
- by smtp4.osuosl.org (Postfix) with ESMTP id B07984181D
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 10:43:25 +0000 (UTC)
-Received: from [192.168.50.220] ([146.241.15.171])
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E17D419DE
+Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E17D419DE
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 10:46:52 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.15.171])
  by Aruba Outgoing Smtp  with ESMTPSA
- id dr0konI5fSmRKdr0kou3HI; Thu, 29 Sep 2022 12:43:22 +0200
-Message-ID: <ec9bdbc9-3958-21f1-bfc0-82c29138f17f@benettiengineering.com>
-Date: Thu, 29 Sep 2022 12:43:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-To: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>,
- buildroot@buildroot.org
-References: <20220922214512.2098221-1-thomas.ballasi@savoirfairelinux.com>
-Content-Language: en-US
+ id dr46onOUNeEtAdr46oe4aq; Thu, 29 Sep 2022 12:46:51 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20220922214512.2098221-1-thomas.ballasi@savoirfairelinux.com>
-X-CMAE-Envelope: MS4xfPlFPqzirRjfJ5p2Pqty6n/RidIIP8XebRv6n0CIAyo7E4+B2P+AGt16GVC2+unmaaFzRgrP9govNfKOB3rK3pG+ytB2EyV9BFX65FF1AbqdRn9+/CGS
- fm+XwUlD9O+LedRJZvApbHWbngR4peLDSS+rQZB0sH+2zpofiGSeA/fGPy+vjiUqVRrgpRIV4AB/By4uFp5dJ8ByKu1dNXi8RFvXgbs4Ns+yzXvdZzQzFdlu
- PcseIB8HTWkP9kwbLHvO95XNnbxei/CAALz9l3BCzuogfM1b++Dhho2shiz3hi9Z9Ac7/5l1Ka7bqHxnKDtg7MKFxdXQE0KmdYPyWoO5iTk=
+To: buildroot@buildroot.org
+Date: Thu, 29 Sep 2022 12:46:48 +0200
+Message-Id: <20220929104648.324977-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220928205527.GH1419013@scaer>
+References: <20220928205527.GH1419013@scaer>
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfMDqaZSGHZGzs9/JRsl3KNvAIQLN1IrLmiCpMtxgssnakR+0B4l65vU0IpiLCDdlF5xRFitmRQ3yN9MFRc3yQMn+xEC3lmk2cNHTrtk6uTfWTW/YjEFc
+ nlk9MvtDonakkn4imOyYQ3btsdCHlKVuxfoWvBfTmeDytjxonIQcyDElhpE6glkwW6x+Gzo0+iBtF+FmB99++rT+7IaSryZ6tJAHs11HlekY0NtxBrHp4MRj
+ 5Ei5QAUEHCpBYwLTQWhFLhqEvYk08+7EqG8Y9US5BqaiKse9uX7kYoDcBVDSRavjK5g3hZyH39mrmg+dlW+/rU7U69FzYlGhdt/YbZexkseCVc7vMsoGnfQq
+ W3hDC2nq
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1664448202; bh=usJRVnSEbdWm0qqaCNdjiyd41LGzu0Q8kxWmCtmGCB8=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=F80HwTWf+1EzkyjyglCatx6NJYVM2sQHpE/DTtXmBLB5MkZceiXGTqnJehp3ixl4e
- dp68vG52iRqnQAJ4MNPb/SvTcIissWB3hOntx2pNzG/j6LQ76OFAy+F5Yh0rFmBmmw
- qv0c+xnuvRXiO2k6IIwhbqwWvgPbJAOeTzyig+dWUkXC7QXgShCWqy9f86YkCkDWaw
- RYjpyzd8tX+ew0A7CP0TJITQ1TL96ezaf7/AWynrMo/yE/olGyKtWqx4nr28nTtHbd
- BuLkdKxjJQQAZJkqZulkyl/l72CeQa4irgW4yJKWaGyTjGfyEqZU9i1iU+i58iqUQg
- wP0FtSz7rKuwA==
+ t=1664448411; bh=SdI+Q1xyR7fgI1Dlar2uXMwoS4ThQFsciFylDq8iIoQ=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=YItLZ0RU8DGstyU+fMmpaQB/JCU4uLCdB97H3GaVmL0GTZmiYuQeXOzbavdSdJ/iN
+ ZZgIfoBE4DLduD57lNmKxNY7gn4Vlv1E1plDMKonESBo8M+cTJx4qOGIYMV3xMZrAS
+ mblNqPl0x3byvNKUd621//5fCl/bIAkgko3ohHgYw5JrTXsJfc8rENvIlao35SOM+e
+ Jex0g/OKuyaZUoD3RfNdI6kJUOJYDKzsB9QkyCzFsV8/eUlHzX6t1FofxkIKwVSFhA
+ M7eTjLgtwCJj8hoqKFkQhhZZIX3Bb0iqpNo/2xXEu4w4ngPXAqTKmdvUZzY02cZLm9
+ 53a39Ljy7ZXxw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=F80HwTWf
-Subject: Re: [Buildroot] [PATCH] package/qt5/qt5webkit: fix generated
- artifacts
+ header.a=rsa-sha256 header.s=a1 header.b=YItLZ0RU
+Subject: [Buildroot] [PATCH v2] package/qt5: fix build failure due to
+ libressl use
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,144 +76,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Julien Corjon <corjon.j@ecagroup.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Qt5 only supports openssl, check [0] and [1]. So in qt5base.mk let's check
+if BR2_PACKAGE_LIBOPENSSL is enabled instead of BR2_PACKAGE_OPENSSL(that
+could be openssl or libressl) and for qt5enginio and qt5webkit let's select
+BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL instead of only BR2_PACKAGE_OPENSSL.
+This way we make sure that only openssl is selected and not libressl or
+other future openssl-like implementations.
 
-On 22/09/22 23:45, Thomas Ballasi wrote:
-> Generated artifacts of the installation process were wrongly located,
-> causing packages using qt5webkit (qt-webkit-kiosk and python-pyqt5) to
-> fail at build time. The changes aims at fixing this issue.
-
-"The changes aims at fixing this issue." should be:
-"Let's add a patch that:"
-
-and then you list the points below using the present verb
-
-> There were three main issues occuring during the build:
-> 
-> 1. *.pri files were wrongly located in the host's and target's sysroot
->     directores while buildroot implements its own mkspecs directory.
->     By setting KDE_INSTALL_USE_QT_SYS_PATHS on, mkspecs modules are now
->     being installed in host's data dir (ECM_MKSPECS_INSTALL_DIR is set
->     accordingly @ line 102 in Source/cmake/ECMGeneratePriFile.cmake).
->     This also required to prevent using the CMake package's default
->     DATADIR variable as it enforces to install under the sysroot
->     directory.
-> 
-> 2. *.pri files' content had hardcoded include and library paths which
->     has been corrected by setting on KDE_INSTALL_USE_QT_SYS_PATHS as
->     their content is written according to this value (see line 514 and
->     739 in file Source/WebKit/PlatformQt.cmake).
-> 
-> 3. *.h files were located a directory below where supposed (inside qt5/
->     directory). This was caused by using DATADIR which assumed include
->     files were to be located in sysroot/usr/include/.
->     Disabling this variable by removing it from build options leads to a
->     correct behavior.
-> 
-> Regression happened when qt5webkit started using cmake-package at commit
-> df0b0fe6919c0d0f3750f439a3cfa765232bd569.
-
-What is the upstream status of this patch? Can you point here the URL
-of the pending patch?
-
-> More info @ https://bugs.buildroot.org/show_bug.cgi?id=14606
-
-Here ^^^ it should be:
 Fixes:
-https://bugs.buildroot.org/show_bug.cgi?id=14606
+http://autobuild.buildroot.net/results/a956b48b782dbaa055d7146360465e2493a809d9/
 
-> Signed-off-by: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
-> ---
->   ...-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch | 42 +++++++++++++++++++
->   package/qt5/qt5webkit/qt5webkit.mk            |  7 ++++
->   2 files changed, 49 insertions(+)
->   create mode 100644 package/qt5/qt5webkit/0007-cmake-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch
-> 
-> diff --git a/package/qt5/qt5webkit/0007-cmake-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch b/package/qt5/qt5webkit/0007-cmake-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch
-> new file mode 100644
-> index 0000000000..b65eb305b4
-> --- /dev/null
-> +++ b/package/qt5/qt5webkit/0007-cmake-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch
-> @@ -0,0 +1,42 @@
-> +From f4950219005b487c18d41ce4e6bc11c4b0e3a20d Mon Sep 17 00:00:00 2001
-> +From: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
-> +Date: Wed, 21 Sep 2022 14:46:40 -0400
-> +Subject: [PATCH] cmake: set KDE_INSTALL_USE_QT_SYS_PATHS on
-> +
-> +This variable is used to save .pri files to directories relative to the
-> +host (output/host/mkspecs/modules/) rather than relative to the target
-> +itself, which is unwanted behavior.
-> +
-> +The changes also enables .pri files not to hardcode include and library
-> +paths and to use $$QT_MODULE_INCLUDE_BASE and $$QT_MODULE_LIB_BASE.
-> +
-> +Signed-off-by: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
+[0]: https://doc.qt.io/qt-5/ssl.html#enabling-and-disabling-ssl-support
+[1]: https://bugreports.qt.io/browse/QTBUG-68374
 
-Also here please add:
-'[Upstream status: URL of this pending patch]
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+V1->V2:
+* select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL instead of BR2_PACKAGE_LIBOPENSSL
+---
+ package/qt5/qt5base/qt5base.mk   | 4 ++--
+ package/qt5/qt5enginio/Config.in | 1 +
+ package/qt5/qt5webkit/Config.in  | 1 +
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-> +---
-> + Source/cmake/OptionsQt.cmake | 8 +-------
-> + 1 file changed, 1 insertion(+), 7 deletions(-)
-> +
-> +diff --git a/Source/cmake/OptionsQt.cmake b/Source/cmake/OptionsQt.cmake
-> +index 1ee60b777106..607c69bd38fe 100644
-> +--- a/Source/cmake/OptionsQt.cmake
-> ++++ b/Source/cmake/OptionsQt.cmake
-> +@@ -998,16 +998,10 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-> + include(ECMQueryQmake)
-> +
-> + query_qmake(qt_install_prefix_dir QT_INSTALL_PREFIX)
-> +-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-> +-    set(CMAKE_INSTALL_PREFIX "${qt_install_prefix_dir}" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
-> +-endif ()
-> ++set(CMAKE_INSTALL_PREFIX "${qt_install_prefix_dir}")
-> +
-> + include(KDEInstallDirs)
-> +
-> +-if (NOT qt_install_prefix_dir STREQUAL "${CMAKE_INSTALL_PREFIX}")
-> +-    set(KDE_INSTALL_USE_QT_SYS_PATHS OFF)
-> +-endif ()
-> +-
-> + # We split all installed files into 2 components: Code and Data. This is different from
-> + # traditional approach with Runtime and Devel, but we need it to fix concurrent installation of
-> + # debug and release builds in qmake-based build
-> +--
-> +2.25.1
-> +
-> diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-> index 6912359674..607c022568 100644
-> --- a/package/qt5/qt5webkit/qt5webkit.mk
-> +++ b/package/qt5/qt5webkit/qt5webkit.mk
-> @@ -57,4 +57,11 @@ QT5WEBKIT_CONF_OPTS += \
->   	-DSHARED_CORE=ON \
->   	-DUSE_LIBHYPHEN=OFF
->   
-> +QT5WEBKIT_INSTALL_STAGING_OPTS = install/fast
-> +
-> +define QT5WEBKIT_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT5WEBKIT_BUILDDIR) \
-> +		--prefix $(TARGET_DIR)/usr
-> +endef
-> +
->   $(eval $(cmake-package))
-
-The patch works correctly, so with commit log improve and the local 
-patch with Upstream status pointed:
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Thanks for contributing!
-
-Best regards
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index a81892422c..efa0e16e9a 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -229,8 +229,8 @@ else
+ QT5BASE_CONFIGURE_OPTS += -no-eglfs
+ endif
+ 
+-QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_OPENSSL),-openssl,-no-openssl)
+-QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_OPENSSL),openssl)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_LIBOPENSSL),-openssl,-no-openssl)
++QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBOPENSSL),openssl)
+ 
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),-fontconfig,-no-fontconfig)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_FONTCONFIG),fontconfig)
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index b738f0db7c..f758548eb5 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_QT5ENGINIO
+ 	bool "qt5enginio"
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL # Only openssl is supported by qt5
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
+ 	help
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index 26c3897d1d..e52374550c 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -16,6 +16,7 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	select BR2_PACKAGE_LEVELDB
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL # Only openssl is supported by qt5
+ 	select BR2_PACKAGE_QT5BASE_ICU
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
 -- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
