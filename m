@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D6EC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:26:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EBEDC433FE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4738E4112D;
-	Thu, 29 Sep 2022 21:26:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4738E4112D
+	by smtp1.osuosl.org (Postfix) with ESMTP id F15CE8402F;
+	Thu, 29 Sep 2022 21:26:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F15CE8402F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QfFt8LPjEY4u; Thu, 29 Sep 2022 21:26:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9YeT2dU6neEd; Thu, 29 Sep 2022 21:26:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4FE640BF8;
-	Thu, 29 Sep 2022 21:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4FE640BF8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 231AB1BF3D1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2576484026;
+	Thu, 29 Sep 2022 21:26:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2576484026
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CD851BF3D1
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4842F41129
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1A5941C4D
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4842F41129
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1A5941C4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cKcei6jIh39X for <buildroot@lists.busybox.net>;
- Thu, 29 Sep 2022 21:21:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O8Eb0xMyihKP for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6D9540018
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6D9540018
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5F9741C3C
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5F9741C3C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C414086615; Thu, 29 Sep 2022 21:21:34 +0000 (UTC)
+ id E3E8086615; Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 22:06:40 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: fb4a390b2d80ef726df9adfe88ecb46bee89d0e6
-X-Git-Newrev: cb419c8b3cf2b09db4bfc0dfcaae4f89590dfcd5
+Date: Thu, 29 Sep 2022 22:40:50 +0200
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 71d77cda325780c1b95cb27601400587eb35ea67
+X-Git-Newrev: 8725ddd8b15bd8d0bc44245f749cb8d88924aaa7
 X-Patchwork-Hint: ignore
-Message-Id: <20220929212134.C414086615@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/busybox: fix
- CVE-2022-28391
+Message-Id: <20220929212136.E3E8086615@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/uacme: bump
+ version to 1.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,170 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb419c8b3cf2b09db4bfc0dfcaae4f89590dfcd5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8725ddd8b15bd8d0bc44245f749cb8d88924aaa7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-The patches have been used by Alpine for 5 months now and they were
-posted on the Busybox mailing list mid-July with no review or comment.
+This new version includes
+https://github.com/ndilieto/uacme/commit/9f3e5eae05ee4170872807cd2d7736072b04f8e5
+which fixes the build with mbedtls 2.x.
 
-According to Ariadne Conill[1] - though NVD CVSS 3.x Base Score seems to
-disagree - this has a low security impact so we could probably just wait
-for upstream to merge the patches or implement it the way they want.
+Fixes:
 
-Considering those patches have been public for 5 months and upstream
-hasn't acted until now, let's take the patches from the mailing list
-anyway as there's no indication the CVEs will be fixed upstream soon.
+  http://autobuild.buildroot.org/results/8fa4f0d2821796be312b366be2f095be07dd7b1e
 
-[1] https://gitlab.alpinelinux.org/alpine/aports/-/issues/13661
-
-Cc: Quentin Schulz <foss+buildroot@0leil.net>
-Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4a03d17172a53d4039f3ebd023dbbbf954c41244)
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c5131e5d9f0ea1ba1830c68b64c964409c44966b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ddr2str-ensure-only-printable-characters-.patch | 42 +++++++++++++
- ...nitize-all-printed-strings-with-printable.patch | 69 ++++++++++++++++++++++
- package/busybox/busybox.mk                         |  3 +
- 3 files changed, 114 insertions(+)
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/0004-libbb-sockaddr2str-ensure-only-printable-characters-.patch b/package/busybox/0004-libbb-sockaddr2str-ensure-only-printable-characters-.patch
-new file mode 100644
-index 0000000000..623b2597a2
---- /dev/null
-+++ b/package/busybox/0004-libbb-sockaddr2str-ensure-only-printable-characters-.patch
-@@ -0,0 +1,42 @@
-+From 9d825e854ef53ebbe0aea2f1a69f52b763104daf Mon Sep 17 00:00:00 2001
-+From: Ariadne Conill <ariadne@dereferenced.org>
-+Date: Mon, 19 Sep 2022 14:15:12 +0200
-+Subject: [PATCH] libbb: sockaddr2str: ensure only printable characters are
-+ returned for the hostname part
-+
-+CVE: CVE-2022-28391
-+Signed-off-by: Ariadne Conill <ariadne@dereferenced.org>
-+Tested-by: Radoslav Kolev <radoslav.kolev@suse.com>
-+Backport from ML: http://lists.busybox.net/pipermail/busybox/2022-July/089796.html
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ libbb/xconnect.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/libbb/xconnect.c b/libbb/xconnect.c
-+index 0e0b247b8..02c061e67 100644
-+--- a/libbb/xconnect.c
-++++ b/libbb/xconnect.c
-+@@ -497,8 +497,9 @@ static char* FAST_FUNC sockaddr2str(const struct sockaddr *sa, int flags)
-+ 	);
-+ 	if (rc)
-+ 		return NULL;
-++	/* ensure host contains only printable characters */
-+ 	if (flags & IGNORE_PORT)
-+-		return xstrdup(host);
-++		return xstrdup(printable_string(host));
-+ #if ENABLE_FEATURE_IPV6
-+ 	if (sa->sa_family == AF_INET6) {
-+ 		if (strchr(host, ':')) /* heh, it's not a resolved hostname */
-+@@ -509,7 +510,7 @@ static char* FAST_FUNC sockaddr2str(const struct sockaddr *sa, int flags)
-+ #endif
-+ 	/* For now we don't support anything else, so it has to be INET */
-+ 	/*if (sa->sa_family == AF_INET)*/
-+-		return xasprintf("%s:%s", host, serv);
-++		return xasprintf("%s:%s", printable_string(host), serv);
-+ 	/*return xstrdup(host);*/
-+ }
-+ 
-+-- 
-+2.37.3
-+
-diff --git a/package/busybox/0005-nslookup-sanitize-all-printed-strings-with-printable.patch b/package/busybox/0005-nslookup-sanitize-all-printed-strings-with-printable.patch
-new file mode 100644
-index 0000000000..bfa58465e7
---- /dev/null
-+++ b/package/busybox/0005-nslookup-sanitize-all-printed-strings-with-printable.patch
-@@ -0,0 +1,69 @@
-+From bd463a5564a2c0618317448c3f965d389534c3df Mon Sep 17 00:00:00 2001
-+From: Ariadne Conill <ariadne@dereferenced.org>
-+Date: Mon, 19 Sep 2022 14:15:12 +0200
-+Subject: [PATCH] nslookup: sanitize all printed strings with printable_string
-+
-+Otherwise, terminal sequences can be injected, which enables various terminal injection
-+attacks from DNS results.
-+
-+CVE: CVE-2022-28391
-+Signed-off-by: Ariadne Conill <ariadne@dereferenced.org>
-+Tested-by: Radoslav Kolev <radoslav.kolev@suse.com>
-+Backport from ML: http://lists.busybox.net/pipermail/busybox/2022-July/089795.html
-+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-+---
-+ networking/nslookup.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/networking/nslookup.c b/networking/nslookup.c
-+index 6da97baf4..4bdcde1b8 100644
-+--- a/networking/nslookup.c
-++++ b/networking/nslookup.c
-+@@ -407,7 +407,7 @@ static NOINLINE int parse_reply(const unsigned char *msg, size_t len)
-+ 				//printf("Unable to uncompress domain: %s\n", strerror(errno));
-+ 				return -1;
-+ 			}
-+-			printf(format, ns_rr_name(rr), dname);
-++			printf(format, ns_rr_name(rr), printable_string(dname));
-+ 			break;
-+ 
-+ 		case ns_t_mx:
-+@@ -422,7 +422,7 @@ static NOINLINE int parse_reply(const unsigned char *msg, size_t len)
-+ 				//printf("Cannot uncompress MX domain: %s\n", strerror(errno));
-+ 				return -1;
-+ 			}
-+-			printf("%s\tmail exchanger = %d %s\n", ns_rr_name(rr), n, dname);
-++			printf("%s\tmail exchanger = %d %s\n", ns_rr_name(rr), n, printable_string(dname));
-+ 			break;
-+ 
-+ 		case ns_t_txt:
-+@@ -434,7 +434,7 @@ static NOINLINE int parse_reply(const unsigned char *msg, size_t len)
-+ 			if (n > 0) {
-+ 				memset(dname, 0, sizeof(dname));
-+ 				memcpy(dname, ns_rr_rdata(rr) + 1, n);
-+-				printf("%s\ttext = \"%s\"\n", ns_rr_name(rr), dname);
-++				printf("%s\ttext = \"%s\"\n", ns_rr_name(rr), printable_string(dname));
-+ 			}
-+ 			break;
-+ 
-+@@ -454,7 +454,7 @@ static NOINLINE int parse_reply(const unsigned char *msg, size_t len)
-+ 			}
-+ 
-+ 			printf("%s\tservice = %u %u %u %s\n", ns_rr_name(rr),
-+-				ns_get16(cp), ns_get16(cp + 2), ns_get16(cp + 4), dname);
-++				ns_get16(cp), ns_get16(cp + 2), ns_get16(cp + 4), printable_string(dname));
-+ 			break;
-+ 
-+ 		case ns_t_soa:
-+@@ -483,7 +483,7 @@ static NOINLINE int parse_reply(const unsigned char *msg, size_t len)
-+ 				return -1;
-+ 			}
-+ 
-+-			printf("\tmail addr = %s\n", dname);
-++			printf("\tmail addr = %s\n", printable_string(dname));
-+ 			cp += n;
-+ 
-+ 			printf("\tserial = %lu\n", ns_get32(cp));
-+-- 
-+2.37.3
-+
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 0f887c9734..ef628e90e9 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -13,6 +13,9 @@ BUSYBOX_CPE_ID_VENDOR = busybox
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index f62463029a..6c71f6b94d 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e7598e794f5ec414d993c4f2f7df39e7c72f26e41302b875ddaf040d8103ec5f  uacme-1.7.2.tar.gz
++sha256  0ec8e5bcb8ed2b532572ca4878d30b2a794f607b995348ebc176d566b64d73f9  uacme-1.7.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 2482259411..a70ec3a635 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # 0003-awk-fix-use-after-free-CVE-2022-30065.patch
- BUSYBOX_IGNORE_CVES += CVE-2022-30065
-+# 0004-libbb-sockaddr2str-ensure-only-printable-characters-.patch
-+# 0005-nslookup-sanitize-all-printed-strings-with-printable.patch
-+BUSYBOX_IGNORE_CVES += CVE-2022-28391
- 
- BUSYBOX_CFLAGS = \
- 	$(TARGET_CFLAGS)
+-UACME_VERSION = 1.7.2
++UACME_VERSION = 1.7.3
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
