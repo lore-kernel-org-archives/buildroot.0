@@ -4,84 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21BBEC07E9D
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 08:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01FF9C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 10:43:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D96C81916;
-	Thu, 29 Sep 2022 08:33:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D96C81916
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CCC0812A8;
+	Thu, 29 Sep 2022 10:43:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CCC0812A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VEJ8py1iZWhL; Thu, 29 Sep 2022 08:33:48 +0000 (UTC)
+	with ESMTP id uP9J7zRJrmwh; Thu, 29 Sep 2022 10:43:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C8CF6818D0;
-	Thu, 29 Sep 2022 08:33:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8CF6818D0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8B9231BF2FA
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 08:33:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50B2B80F59;
+	Thu, 29 Sep 2022 10:43:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50B2B80F59
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 69D781BF5A2
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 10:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F83241021
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 08:33:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F83241021
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4390E4195B
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 10:43:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4390E4195B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TokBqgfvfo_F for <buildroot@lists.busybox.net>;
- Thu, 29 Sep 2022 08:33:45 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5998B40338
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
- [IPv6:2607:f8b0:4864:20::12d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5998B40338
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 08:33:45 +0000 (UTC)
-Received: by mail-il1-x12d.google.com with SMTP id v1so375272ilq.1
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 01:33:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=0Rm6een0GvMUw1MnSjxQynWtBXKf//CTvQ4HOTKN6ew=;
- b=rs61TW4F++Kz5xc1spmIB01KlmKMnfskX1pxcRv5qyq2l495Iuxjspo9mQ90uXrVd1
- Gt5C7TthT7Q+FUJ95aKWFfgaYzNx1OIZTuHIUwq5vsKQnxAHJl00s+FaRcX4WUv3KnxE
- cWw2nsGTGEjkvfleVZSzeF/CeGPsNUBh/n5euaLFvLupLNP9kZhSv6e3DglzIab5F4Lu
- GkrcBsBoPZ/Jzwxk1K+cLorxphiUcM0tMISOpAii8nGKYMflnV7r2UMcN3Pwc0vs1ClG
- 4qIXrkwmrmI9ndG+92TmviXnz+DjuI2522KQOG2CkNaj9jnHJPsHCTg/eOcdOesMG0pW
- 6pIQ==
-X-Gm-Message-State: ACrzQf1k7tQi2PdOYhKFKPYFM5zU8jfYLFX5siJPBdQdXkyZAvbMknkY
- /iQAdJI2Hv6ndH8WlFJwv6+yy2YgoVyypg==
-X-Google-Smtp-Source: AMsMyM7RnZBX51vFyHiqXRPSBJq80j6/zD4PaTyNKGz15Rkzs3c1l19y76KXKLO8jJ7cAhyk3Bkigw==
-X-Received: by 2002:a92:2802:0:b0:2f8:eb02:5c96 with SMTP id
- l2-20020a922802000000b002f8eb025c96mr986290ilf.225.1664440423956; 
- Thu, 29 Sep 2022 01:33:43 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- o7-20020a056e02092700b002e8ea827aafsm1583382ilt.74.2022.09.29.01.33.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 29 Sep 2022 01:33:43 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 02:33:41 -0600
-Message-Id: <20220929083341.2485242-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AYShvfuv3NDe for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 10:43:26 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B07984181D
+Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B07984181D
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 10:43:25 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.15.171])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id dr0konI5fSmRKdr0kou3HI; Thu, 29 Sep 2022 12:43:22 +0200
+Message-ID: <ec9bdbc9-3958-21f1-bfc0-82c29138f17f@benettiengineering.com>
+Date: Thu, 29 Sep 2022 12:43:22 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=0Rm6een0GvMUw1MnSjxQynWtBXKf//CTvQ4HOTKN6ew=;
- b=ITdgEcWlLTM8Q62Nbzh4EZsTgHU7WZOreAhR3l9UMW1Nx45u9NmrVDuB/JmqT6yLyi
- TNtQ2uPZjUwo3ki+RXt7O1hw8hAWZcGCEtv+Rnwwz2WEJMPxsHwNT0F2wNuZpiNhdDYl
- fgrKsLoKRDNuo4CWnrNDzE1Pf6Ocx1cE+TzbdDs01eK2SoP2xRaBWyprJ3kvLoBgDIAX
- 2ZuCEduVD7g163kvaOPF91HDJHkAx+1FrbNMZS7D6qvqBADdMnKXoFuCegUBgVxNAf+N
- lD3O73B52HwCyGD6mvJscdH2tZuAM86IuOwCyjXGaXIDlAgFFdjCqbMF7Pmmi7OJeabF
- 6Fpg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20210112 header.b=ITdgEcWl
-Subject: [Buildroot] [PATCH 1/1] package/ser2net: bump to version 4.3.8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+To: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>,
+ buildroot@buildroot.org
+References: <20220922214512.2098221-1-thomas.ballasi@savoirfairelinux.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220922214512.2098221-1-thomas.ballasi@savoirfairelinux.com>
+X-CMAE-Envelope: MS4xfPlFPqzirRjfJ5p2Pqty6n/RidIIP8XebRv6n0CIAyo7E4+B2P+AGt16GVC2+unmaaFzRgrP9govNfKOB3rK3pG+ytB2EyV9BFX65FF1AbqdRn9+/CGS
+ fm+XwUlD9O+LedRJZvApbHWbngR4peLDSS+rQZB0sH+2zpofiGSeA/fGPy+vjiUqVRrgpRIV4AB/By4uFp5dJ8ByKu1dNXi8RFvXgbs4Ns+yzXvdZzQzFdlu
+ PcseIB8HTWkP9kwbLHvO95XNnbxei/CAALz9l3BCzuogfM1b++Dhho2shiz3hi9Z9Ac7/5l1Ka7bqHxnKDtg7MKFxdXQE0KmdYPyWoO5iTk=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1664448202; bh=usJRVnSEbdWm0qqaCNdjiyd41LGzu0Q8kxWmCtmGCB8=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=F80HwTWf+1EzkyjyglCatx6NJYVM2sQHpE/DTtXmBLB5MkZceiXGTqnJehp3ixl4e
+ dp68vG52iRqnQAJ4MNPb/SvTcIissWB3hOntx2pNzG/j6LQ76OFAy+F5Yh0rFmBmmw
+ qv0c+xnuvRXiO2k6IIwhbqwWvgPbJAOeTzyig+dWUkXC7QXgShCWqy9f86YkCkDWaw
+ RYjpyzd8tX+ew0A7CP0TJITQ1TL96ezaf7/AWynrMo/yE/olGyKtWqx4nr28nTtHbd
+ BuLkdKxjJQQAZJkqZulkyl/l72CeQa4irgW4yJKWaGyTjGfyEqZU9i1iU+i58iqUQg
+ wP0FtSz7rKuwA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=F80HwTWf
+Subject: Re: [Buildroot] [PATCH] package/qt5/qt5webkit: fix generated
+ artifacts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,49 +78,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Francisco Gonzalez <gzmorell@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/ser2net/ser2net.hash | 6 +++---
- package/ser2net/ser2net.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Thomas,
 
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index db493b28cb..50a2efdee8 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  3323783668b20016d79458e82327cff8  ser2net-4.3.7.tar.gz
--sha1  88c0542b3b5e8ce03bc99ace00b2e163382e726e  ser2net-4.3.7.tar.gz
-+md5  73b4ccc7e9d89034f1a1a20a780b9da9  ser2net-4.3.8.tar.gz
-+sha1  d1597d88d154489cb08bac69bb1772712d30cbcd  ser2net-4.3.8.tar.gz
- # Locally computed:
--sha256  542915e240ae8b5c7dcec8d1589e6067818532900d45cfef226cea9f0e671d13  ser2net-4.3.7.tar.gz
-+sha256  e5620975523059a38709bb53c0567600adbbcb8011066a2d2fe1b4db9efe0ba3  ser2net-4.3.8.tar.gz
- sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 393d358033..679aaec29a 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SER2NET_VERSION = 4.3.7
-+SER2NET_VERSION = 4.3.8
- SER2NET_SITE = https://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
+On 22/09/22 23:45, Thomas Ballasi wrote:
+> Generated artifacts of the installation process were wrongly located,
+> causing packages using qt5webkit (qt-webkit-kiosk and python-pyqt5) to
+> fail at build time. The changes aims at fixing this issue.
+
+"The changes aims at fixing this issue." should be:
+"Let's add a patch that:"
+
+and then you list the points below using the present verb
+
+> There were three main issues occuring during the build:
+> 
+> 1. *.pri files were wrongly located in the host's and target's sysroot
+>     directores while buildroot implements its own mkspecs directory.
+>     By setting KDE_INSTALL_USE_QT_SYS_PATHS on, mkspecs modules are now
+>     being installed in host's data dir (ECM_MKSPECS_INSTALL_DIR is set
+>     accordingly @ line 102 in Source/cmake/ECMGeneratePriFile.cmake).
+>     This also required to prevent using the CMake package's default
+>     DATADIR variable as it enforces to install under the sysroot
+>     directory.
+> 
+> 2. *.pri files' content had hardcoded include and library paths which
+>     has been corrected by setting on KDE_INSTALL_USE_QT_SYS_PATHS as
+>     their content is written according to this value (see line 514 and
+>     739 in file Source/WebKit/PlatformQt.cmake).
+> 
+> 3. *.h files were located a directory below where supposed (inside qt5/
+>     directory). This was caused by using DATADIR which assumed include
+>     files were to be located in sysroot/usr/include/.
+>     Disabling this variable by removing it from build options leads to a
+>     correct behavior.
+> 
+> Regression happened when qt5webkit started using cmake-package at commit
+> df0b0fe6919c0d0f3750f439a3cfa765232bd569.
+
+What is the upstream status of this patch? Can you point here the URL
+of the pending patch?
+
+> More info @ https://bugs.buildroot.org/show_bug.cgi?id=14606
+
+Here ^^^ it should be:
+Fixes:
+https://bugs.buildroot.org/show_bug.cgi?id=14606
+
+> Signed-off-by: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
+> ---
+>   ...-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch | 42 +++++++++++++++++++
+>   package/qt5/qt5webkit/qt5webkit.mk            |  7 ++++
+>   2 files changed, 49 insertions(+)
+>   create mode 100644 package/qt5/qt5webkit/0007-cmake-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch
+> 
+> diff --git a/package/qt5/qt5webkit/0007-cmake-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch b/package/qt5/qt5webkit/0007-cmake-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch
+> new file mode 100644
+> index 0000000000..b65eb305b4
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit/0007-cmake-set-KDE_INSTALL_USE_QT_SYS_PATHS-on.patch
+> @@ -0,0 +1,42 @@
+> +From f4950219005b487c18d41ce4e6bc11c4b0e3a20d Mon Sep 17 00:00:00 2001
+> +From: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
+> +Date: Wed, 21 Sep 2022 14:46:40 -0400
+> +Subject: [PATCH] cmake: set KDE_INSTALL_USE_QT_SYS_PATHS on
+> +
+> +This variable is used to save .pri files to directories relative to the
+> +host (output/host/mkspecs/modules/) rather than relative to the target
+> +itself, which is unwanted behavior.
+> +
+> +The changes also enables .pri files not to hardcode include and library
+> +paths and to use $$QT_MODULE_INCLUDE_BASE and $$QT_MODULE_LIB_BASE.
+> +
+> +Signed-off-by: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
+
+Also here please add:
+'[Upstream status: URL of this pending patch]
+
+> +---
+> + Source/cmake/OptionsQt.cmake | 8 +-------
+> + 1 file changed, 1 insertion(+), 7 deletions(-)
+> +
+> +diff --git a/Source/cmake/OptionsQt.cmake b/Source/cmake/OptionsQt.cmake
+> +index 1ee60b777106..607c69bd38fe 100644
+> +--- a/Source/cmake/OptionsQt.cmake
+> ++++ b/Source/cmake/OptionsQt.cmake
+> +@@ -998,16 +998,10 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+> + include(ECMQueryQmake)
+> +
+> + query_qmake(qt_install_prefix_dir QT_INSTALL_PREFIX)
+> +-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+> +-    set(CMAKE_INSTALL_PREFIX "${qt_install_prefix_dir}" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
+> +-endif ()
+> ++set(CMAKE_INSTALL_PREFIX "${qt_install_prefix_dir}")
+> +
+> + include(KDEInstallDirs)
+> +
+> +-if (NOT qt_install_prefix_dir STREQUAL "${CMAKE_INSTALL_PREFIX}")
+> +-    set(KDE_INSTALL_USE_QT_SYS_PATHS OFF)
+> +-endif ()
+> +-
+> + # We split all installed files into 2 components: Code and Data. This is different from
+> + # traditional approach with Runtime and Devel, but we need it to fix concurrent installation of
+> + # debug and release builds in qmake-based build
+> +--
+> +2.25.1
+> +
+> diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+> index 6912359674..607c022568 100644
+> --- a/package/qt5/qt5webkit/qt5webkit.mk
+> +++ b/package/qt5/qt5webkit/qt5webkit.mk
+> @@ -57,4 +57,11 @@ QT5WEBKIT_CONF_OPTS += \
+>   	-DSHARED_CORE=ON \
+>   	-DUSE_LIBHYPHEN=OFF
+>   
+> +QT5WEBKIT_INSTALL_STAGING_OPTS = install/fast
+> +
+> +define QT5WEBKIT_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT5WEBKIT_BUILDDIR) \
+> +		--prefix $(TARGET_DIR)/usr
+> +endef
+> +
+>   $(eval $(cmake-package))
+
+The patch works correctly, so with commit log improve and the local 
+patch with Upstream status pointed:
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Thanks for contributing!
+
+Best regards
 -- 
-2.34.1
-
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
