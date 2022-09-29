@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 353AAC433F5
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A465EC433F5
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:28:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D823A84033;
-	Thu, 29 Sep 2022 21:27:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D823A84033
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59B2840BF8;
+	Thu, 29 Sep 2022 21:28:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59B2840BF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4hh8Hka30xUz; Thu, 29 Sep 2022 21:27:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nySLyE9H_res; Thu, 29 Sep 2022 21:28:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1713984023;
-	Thu, 29 Sep 2022 21:27:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1713984023
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6AD671C11A0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 80D3340594;
+	Thu, 29 Sep 2022 21:27:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80D3340594
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7CA9C1C11A5
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AA9C41C49
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AA9C41C49
+ by smtp2.osuosl.org (Postfix) with ESMTP id CB7AD4112C
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB7AD4112C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W8dEsGzySSjV for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3gaUgZ5eUSCl for <buildroot@lists.busybox.net>;
  Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5709941C4F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 15575410E7
  for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5709941C4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15575410E7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 54CE286615; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
+ id 121DE86615; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 23:15:00 +0200
+Date: Thu, 29 Sep 2022 22:54:24 +0200
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 155388fde927993d2a0573d29dc35250b12e5cb8
-X-Git-Newrev: be394fbcd84f33fb7ad0fa8aa54def6f99b76f93
+X-Git-Oldrev: f78fdcc4d7b289cd5e5ce43bc61e5e9c735c71a6
+X-Git-Newrev: a4c125179f9a07e17475da6b7c0f2da3b92f76d3
 X-Patchwork-Hint: ignore
-Message-Id: <20220929212137.54CE286615@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/unbound: security
- bump version to 1.16.3
+Message-Id: <20220929212137.121DE86615@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/libupnp: bump to
+ version 1.14.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be394fbcd84f33fb7ad0fa8aa54def6f99b76f93
+commit: https://git.buildroot.net/buildroot/commit/?id=a4c125179f9a07e17475da6b7c0f2da3b92f76d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Fixes the following security issue:
+https://github.com/pupnp/pupnp/blob/release-1.14.13/ChangeLog
 
-CVE-2022-3204: The NRDelegation Attack can exploit resolvers by having a
-malicious delegation with a considerable number of non responsive
-nameservers.  It can trigger high CPU usage in some resolver implementations
-that continually look in the cache for resolved NS records in that
-delegation.  This can lead to degraded performance and eventually denial of
-service in orchestrated attacks.
-
-Unbound does not suffer from high CPU usage, but resources are still needed
-for resolving the malicious delegation.  Unbound 1.16.3 includes fixes for
-better performance when under load.
-
-https://www.nlnetlabs.nl/downloads/unbound/CVE-2022-3204.txt
-
-Signed-off-by: Kyle Harding <kyle@balena.io>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5560bc6c161b7e15d37b1beaa57014bb2a987e53)
+(cherry picked from commit a9ee25b01b741ad4f68575974c89c65146ab87f2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/unbound/unbound.hash | 4 ++--
- package/unbound/unbound.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libupnp/libupnp.hash | 2 +-
+ package/libupnp/libupnp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index 8bfe48df9f..cef8edc4a2 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
-@@ -1,5 +1,5 @@
--# From https://nlnetlabs.nl/downloads/unbound/unbound-1.16.2.tar.gz.sha256
--sha256  2e32f283820c24c51ca1dd8afecfdb747c7385a137abe865c99db4b257403581  unbound-1.16.2.tar.gz
-+# From https://nlnetlabs.nl/downloads/unbound/unbound-1.16.3.tar.gz.sha256
-+sha256  ea0c6665e2c3325b769eac1dfccd60fe1828d5fcf662650039eccb3f67edb28e  unbound-1.16.3.tar.gz
- 
- # Locally calculated
- sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index a3c3ddc8e3..73a460d103 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
+diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
+index aebde064b8..fcb231cff6 100644
+--- a/package/libupnp/libupnp.hash
++++ b/package/libupnp/libupnp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  091c80aada1e939c2294245c122be2f5e337cc932af7f7d40504751680b5b5ac  libupnp-1.14.12.tar.bz2
++sha256  025d7aee1ac5ca8f0bd99cb58b83fcfca0efab0c5c9c1d48f72667fe40788a4e  libupnp-1.14.13.tar.bz2
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index a754ca76fc..8c6ae005a0 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UNBOUND_VERSION = 1.16.2
-+UNBOUND_VERSION = 1.16.3
- UNBOUND_SITE = https://www.unbound.net/downloads
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
- UNBOUND_LICENSE = BSD-3-Clause
+-LIBUPNP_VERSION = 1.14.12
++LIBUPNP_VERSION = 1.14.13
+ LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
+ LIBUPNP_SITE = \
+ 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
