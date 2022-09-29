@@ -1,94 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DAFEC04A95
-	for <buildroot@archiver.kernel.org>; Wed, 28 Sep 2022 22:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93F00C32771
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 01:28:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 309CA60E9D;
-	Wed, 28 Sep 2022 22:29:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 309CA60E9D
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0543418B3;
+	Thu, 29 Sep 2022 01:28:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0543418B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xMXDivzPShWp; Wed, 28 Sep 2022 22:29:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MIfarVs95p2F; Thu, 29 Sep 2022 01:28:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCA7960B77;
-	Wed, 28 Sep 2022 22:29:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCA7960B77
+	by smtp4.osuosl.org (Postfix) with ESMTP id 193D441886;
+	Thu, 29 Sep 2022 01:28:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 193D441886
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 800EC1BF2B5
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 22:29:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id CE7F41BF28C
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 01:28:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55B1440CD8
- for <buildroot@lists.busybox.net>; Wed, 28 Sep 2022 22:29:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55B1440CD8
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1B7C40D35
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 01:28:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1B7C40D35
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OisuWGfQ2xJK for <buildroot@lists.busybox.net>;
- Wed, 28 Sep 2022 22:29:02 +0000 (UTC)
+ with ESMTP id lmhb9OV0V5KX for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 01:28:47 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 000A240AD9
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
- [IPv6:2607:f8b0:4864:20::832])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 000A240AD9
- for <buildroot@buildroot.org>; Wed, 28 Sep 2022 22:29:01 +0000 (UTC)
-Received: by mail-qt1-x832.google.com with SMTP id s18so8867215qtx.6
- for <buildroot@buildroot.org>; Wed, 28 Sep 2022 15:29:01 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCD6E4023B
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
+ [IPv6:2607:f8b0:4864:20::22e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BCD6E4023B
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 01:28:46 +0000 (UTC)
+Received: by mail-oi1-x22e.google.com with SMTP id o64so127022oib.12
+ for <buildroot@buildroot.org>; Wed, 28 Sep 2022 18:28:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date;
- bh=1qqA9CWuMBJvnfbiPLSnOIThqEzQrKPEYHIFzNi+qwM=;
- b=jTOjx4ZRXySiMlcl012hRaSTJW/+a9yjb9hgAyVRE8xT4cESKwyQ3Unsppk+u3eQHj
- xqs/0DaSEPiR0qunOLBAJjNXv6f9uZlyYoUcSQB67zq/3KdmPb2uhCPq1E1KyJpXmfxx
- R9K0IVrFMBRLwcWzrEFYf3MDOHMKfwrcOEIYmx0v4bzs0bwIaMGUWMl9BEZWbiC0KooI
- oM2MtQVdQO2xtX+cIEayTfMRan1L2m+reJlSfPVluwTh349bW5CTrpN5ekNBgKaitPI/
- lpkFPiXcEeVMQSc1gNtDsj22rqrGcKslosYMRzfJ7WCRCajgDeEe+3d9H4e3UOYwTVUd
- 5G2w==
-X-Gm-Message-State: ACrzQf1u3/qURtL8Bf7TBABebJ6ZAyehSP5jPkMedXj4jWZJIge2W0hO
- FXyWWxd2opqziL48tHN7cwnsSe8+khM=
-X-Google-Smtp-Source: AMsMyM4hIhI/U5cH0lFYC+le6rcYTGbSToNPvdoGTktrtImxClvtVMsLSkPJmzj/B7VRyPUs+OeS0g==
-X-Received: by 2002:ac8:5b0d:0:b0:35d:115d:50fa with SMTP id
- m13-20020ac85b0d000000b0035d115d50famr12100qtw.447.1664404140817; 
- Wed, 28 Sep 2022 15:29:00 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
- by smtp.googlemail.com with ESMTPSA id
- q17-20020a05620a2a5100b006bc192d277csm4139847qkp.10.2022.09.28.15.28.59
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 28 Sep 2022 15:29:00 -0700 (PDT)
-Message-ID: <dda7b7d2-4846-6623-5ca7-39799015a138@gmail.com>
-Date: Wed, 28 Sep 2022 15:28:58 -0700
+ h=content-language:thread-index:mime-version:message-id:date:subject
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=wEnkJ9yj3av4N5vq4mkwsA91I5usNR7mGQPEtfVEVP4=;
+ b=R/2ka3pXFe/IlC+XGaZUS4Xt2IhUak0AGAFeK6jmSsYbyYDAecBxy+jax1+x3iyE6l
+ dLoeAllDSeC2+T1a08r4yyUIkrVqAwdOHk3OtfbPDZ/ngVOlhYE3Msg2BFWJghgL+eoA
+ iyL/UOm+esINcm6M2p7ZQOfnxIUYtm6O9HLeaXbDlSja6/kGTbM0wyFJf9y97+lCDZbr
+ qDKUOgfX6+fSqmwP8UInMxnyg0BnVAjUolF4TvQswKTDx+cJZVClgPapWiCvgwt6+q+o
+ 2JPIggu2H5bqyT2ftUAVOBoL4ZFUIFjXAIJkiutdSWaUCcbaeSo7RxbeUaN+RD0bPdZX
+ PlIw==
+X-Gm-Message-State: ACrzQf19AUN0+dxtIE+hkS30VqeE9unA2IrB0BrZSY/tj/IKCUhyganI
+ vcjmvoaHRMK6l47d+6NblFnwePAVaZUFtw==
+X-Google-Smtp-Source: AMsMyM6sdj/F1/IzojH9+MLWkmF7cZy0ao+c/XbKkuVEgpodhNC1EvRtoSZzkKuScdAAZdO/Xcxrpw==
+X-Received: by 2002:a54:4182:0:b0:34f:f1b4:5421 with SMTP id
+ 2-20020a544182000000b0034ff1b45421mr5572432oiy.146.1664414925107; 
+ Wed, 28 Sep 2022 18:28:45 -0700 (PDT)
+Received: from DESKTOP6P277K1 (072-190-192-161.res.spectrum.com.
+ [72.190.192.161]) by smtp.gmail.com with ESMTPSA id
+ u4-20020a4aae84000000b0044b24273f55sm2602685oon.6.2022.09.28.18.28.42
+ for <buildroot@buildroot.org>
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Wed, 28 Sep 2022 18:28:44 -0700 (PDT)
+From: <jautry@tekvox.com>
+To: <buildroot@buildroot.org>
+Date: Wed, 28 Sep 2022 20:28:43 -0500
+Message-ID: <022201d8d3a2$d0b8e310$722aa930$@tekvox.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220927221133.594071-1-f.fainelli@gmail.com>
- <20220928233856.77bb191c@windsurf>
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220928233856.77bb191c@windsurf>
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AdjTonSYn6kH98FbRGKCaBCPkSIHyw==
+Content-Language: en-us
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date;
- bh=1qqA9CWuMBJvnfbiPLSnOIThqEzQrKPEYHIFzNi+qwM=;
- b=n+IZgljNWxBadQsYpxZMlNchIQJxOz0hGYl+YQVB5Z5hJsy/hXBuzg9GNQtgNJWYKJ
- nCA9oubW7+p5RtuQSCgYr+WZEF049I/RCwoL62rLvhqWVwtuR8WtEr6MqKc46VVD3trE
- APD5vk0G6kVT30XNls0jqn9D1IMTfVnIxX/rXx2Pbm/srXgB7mT3fBn1OLw7rX1/qc2D
- yXwQbZI5681inArZlJcsg/DfTJ7kBDEPx9pqNUdCrhi2a4AwZFnUBzupmJ0tnnYSl+5i
- bTWkIg5Fj6zW20nIugPuwP9VmVH6ty8nTog5lhN6UR4PYtgFI7P+OKG8D6tD+UKpIQQM
- E72w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=n+IZgljN
-Subject: Re: [Buildroot] [PATCH] package/linux-tools: Exclude checking PE
- binaries from perf test
+ d=tekvox.com; s=google;
+ h=content-language:thread-index:mime-version:message-id:date:subject
+ :to:from:from:to:cc:subject:date;
+ bh=wEnkJ9yj3av4N5vq4mkwsA91I5usNR7mGQPEtfVEVP4=;
+ b=JyCVrQyo/ri8TuMA37CPflEr75e/8z2SuDlz4lzOd75VFA7ANtAzAD752Ym+385nNr
+ wweOdmkNNlx6ApoI6W5fGbhp1EKKvSt551+LrK2ilkSc9AdBPW8BR/aVYDSEEV4EtXTq
+ 1/Gws0xuFNqPK3h+sCgqtAKcnAl2acGdkYfSM=
+Subject: [Buildroot] i.MXRT10xx support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,63 +89,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============1025944299387408797=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 9/28/22 14:38, Thomas Petazzoni wrote:
-> Hello Florian,
-> 
-> On Tue, 27 Sep 2022 15:11:33 -0700
-> Florian Fainelli <f.fainelli@gmail.com> wrote:
-> 
->> Since upstream Linux commit ed21d6d7c48e6e96c2d617e304a7ebfbd17b1807
->> ("perf tests: Add test for PE binary format support") present in >=
->> v5.10 there is an unconditional installation of PE binaries which will
->> be rejected by the check-bin-arch script.
->>
->> Make sure that these binaries are excluded from being checked to allow
->> the installation of the perf tests.
->>
->> Fixes: 6fcdaa4c5096 ("package/linux-tools: Allow installation of perf scripts")
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
-> Thanks for the patch! Before merging it, I'd like to understand a
-> little bit more how readelf behaves for these PE files. Indeed in
-> check-bin-arch, we are doing:
-> 
->          arch=$(LC_ALL=C ${readelf} -h "${TARGET_DIR}/${f}" 2>&1 | \
->                         sed -r -e '/^  Machine: +(.+)/!d; s//\1/;' | head -1)
-> 
->          # If no architecture found, assume it was not an ELF file
->          if test "${arch}" = "" ; then
->                  continue
->          fi
-> 
-> for a PE file, I would expect readelf to badly fail, and therefore
-> ${arch} to be empty, and the file simply ignored.
-> 
-> What is the behavior/output of readelf on these PE files?
+This is a multipart message in MIME format.
 
-If I use my host system readelf which is packaged from 
-binutils-x86-64-linux-gnu, I get no output and all is well, however when 
-check-bin-arch is called and it uses $(TARGET_READELF), I do get:
+--===============1025944299387408797==
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0223_01D8D378.E7E32930"
+Content-Language: en-us
 
-./host/bin/aarch64-linux-readelf -h 
-build/linux-custom/tools/perf/tests/pe-file.exe | sed -r -e '/^ 
-Machine: +(.+)/!d; s//\1/;' | head -1
-IMAGE_FILE_MACHINE_AMD64 (0x8664)
+This is a multipart message in MIME format.
 
-which is what prompted me to issue this patch in the first place.
+------=_NextPart_000_0223_01D8D378.E7E32930
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 
-I should mention that the readelf binary in this case is the LLVM Object 
-Reader and it does support PE/COFF which is probably why it even 
-remotely attempts to parse the file.
--- 
-Florian
+I noted on a site utilizing buildroot that there was i.MXRT10xx support.  In
+downloading buildroot, I did not notice the MXRT1060 EVK board included in
+any of the defconfigs.  I was just curious if this does exist?
+
+ 
+
+thx
+
+
+------=_NextPart_000_0223_01D8D378.E7E32930
+Content-Type: text/html;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" =
+xmlns:o=3D"urn:schemas-microsoft-com:office:office" =
+xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" =
+xmlns=3D"http://www.w3.org/TR/REC-html40"><head><META =
+HTTP-EQUIV=3D"Content-Type" CONTENT=3D"text/html; =
+charset=3Dus-ascii"><meta name=3DGenerator content=3D"Microsoft Word 15 =
+(filtered medium)"><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]--></head><body lang=3DEN-US =
+link=3D"#0563C1" vlink=3D"#954F72" style=3D'word-wrap:break-word'><div =
+class=3DWordSection1><p class=3DMsoNormal>I noted on a site utilizing =
+buildroot that there was i.MXRT10xx support.&nbsp; In downloading =
+buildroot, I did not notice the MXRT1060 EVK board included in any of =
+the defconfigs.&nbsp; I was just curious if this does =
+exist?<o:p></o:p></p><p class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
+class=3DMsoNormal>thx<o:p></o:p></p></div></body></html>
+------=_NextPart_000_0223_01D8D378.E7E32930--
+
+
+--===============1025944299387408797==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1025944299387408797==--
+
