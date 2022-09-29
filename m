@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E523FC433FE
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 15:15:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60973C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 15:15:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89A156118B;
-	Thu, 29 Sep 2022 15:15:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89A156118B
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3E6161193;
+	Thu, 29 Sep 2022 15:15:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3E6161193
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WDwwoo_YI-7n; Thu, 29 Sep 2022 15:15:21 +0000 (UTC)
+	with ESMTP id g_FicOzcTYFf; Thu, 29 Sep 2022 15:15:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB85B60BA6;
-	Thu, 29 Sep 2022 15:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB85B60BA6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F2E66118C;
+	Thu, 29 Sep 2022 15:15:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F2E66118C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A50CA1BF476
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 15:14:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 937B01BF476
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 15:15:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E7626118D
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 15:14:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E7626118D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C88C61196
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 15:15:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C88C61196
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0c5vxGdh1Blg for <buildroot@lists.busybox.net>;
- Thu, 29 Sep 2022 15:14:08 +0000 (UTC)
+ with ESMTP id BvNKXo73ywI1 for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 15:15:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D14CF60BA6
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 15:14:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D14CF60BA6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 784AE6118D
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 15:15:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 784AE6118D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD37D864F2; Thu, 29 Sep 2022 15:14:08 +0000 (UTC)
+ id 67CAF864F9; Thu, 29 Sep 2022 15:15:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 17:13:25 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 29ece48056d58da7f1a4bc733123c401e217a563
-X-Git-Newrev: 63ada426271b2c0228e13287989cd72478289ac3
+Date: Thu, 29 Sep 2022 17:13:18 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 6254f28f665d701a8b5683087dc564a24d1cc47c
+X-Git-Newrev: ef6101b71db28d540249520a20892e2966d2c2ff
 X-Patchwork-Hint: ignore
-Message-Id: <20220929151408.BD37D864F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libconfuse: fix
+Message-Id: <20220929151530.67CAF864F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/libconfuse: fix
  CVE-2022-40320
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63ada426271b2c0228e13287989cd72478289ac3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ef6101b71db28d540249520a20892e2966d2c2ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 cfg_tilde_expand in confuse.c in libConfuse 3.3 has a heap-based buffer
 over-read.
