@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E160C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:20:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAFA2C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:20:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA63984029;
-	Thu, 29 Sep 2022 21:20:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA63984029
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B90A41C4D;
+	Thu, 29 Sep 2022 21:20:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B90A41C4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TqIxSjjRtG10; Thu, 29 Sep 2022 21:20:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CF1SwYRyzqDF; Thu, 29 Sep 2022 21:20:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D68A84026;
-	Thu, 29 Sep 2022 21:20:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D68A84026
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 158401C11A0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4507C41C3C;
+	Thu, 29 Sep 2022 21:20:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4507C41C3C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 194C11C11A5
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:20:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4F5B84029
+ by smtp2.osuosl.org (Postfix) with ESMTP id E82FA40C18
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:20:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4F5B84029
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E82FA40C18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mv_9gS5DdKFM for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WyOT0RgEjP3N for <buildroot@lists.busybox.net>;
  Thu, 29 Sep 2022 21:20:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A808284025
+ by smtp2.osuosl.org (Postfix) with ESMTP id A10794011A
  for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:20:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A808284025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A10794011A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9826A86577; Thu, 29 Sep 2022 21:20:27 +0000 (UTC)
+ id 8D36B86573; Thu, 29 Sep 2022 21:20:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 22:36:03 +0200
+Date: Thu, 29 Sep 2022 22:35:05 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 49505c445c52cf2e3777ee5ab82951a7acc9428d
-X-Git-Newrev: 816d298778736b57fb1a02d0ca315cb60e93f0cb
+X-Git-Oldrev: de3122cf6f73135e317ac0f2e8256fcf88e3dfbf
+X-Git-Newrev: 49505c445c52cf2e3777ee5ab82951a7acc9428d
 X-Patchwork-Hint: ignore
-Message-Id: <20220929212027.9826A86577@busybox.osuosl.org>
+Message-Id: <20220929212027.8D36B86573@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2022.05.x] DEVELOPERS: add Giulio
- Benetti to mmc-utils
+ Benetti to rtl8189es, rtl8723bu/ds, rtl8812au-aircrack-ng, wilc-driver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +63,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=816d298778736b57fb1a02d0ca315cb60e93f0cb
+commit: https://git.buildroot.net/buildroot/commit/?id=49505c445c52cf2e3777ee5ab82951a7acc9428d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5b6f4728fe1c588200294cd8db411848585e6258)
+(cherry picked from commit 4dc0b17fdac6c777ffa65be42b4180f3a9bfe15a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 5db03bc73e..2f71961921 100644
+index ff5e4c0412..5db03bc73e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1099,6 +1099,7 @@ F:	package/libnspr/
- F:	package/libnss/
- F:	package/mali-driver/
- F:	package/minicom/
-+F:	package/mmc-utils/
+@@ -1102,11 +1102,15 @@ F:	package/minicom/
  F:	package/nfs-utils/
  F:	package/python-uvloop/
  F:	package/rockchip-mali/
++F:	package/rtl8189es/
++F:	package/rtl8723bu/
++F:	package/rtl8812au-aircrack-ng/
+ F:	package/sunxi-mali-utgard/
+ F:	package/sunxi-mali-utgard-driver/
+ F:	package/sunxi-tools/
+ F:	package/trace-cmd/
+ F:	package/udisks/
++F:	package/wilc-driver/
+ F:	toolchain/
+ 
+ N:	Graeme Smecher <gsmecher@threespeedlogic.com>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
