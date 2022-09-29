@@ -1,84 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CCA5C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 18:04:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E8E6C433FE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 18:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B8FB41A3B;
-	Thu, 29 Sep 2022 18:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B8FB41A3B
+	by smtp3.osuosl.org (Postfix) with ESMTP id B89F56118D;
+	Thu, 29 Sep 2022 18:14:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B89F56118D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1uEOGjFLG8Mr; Thu, 29 Sep 2022 18:04:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Lo6fJwg7c6iZ; Thu, 29 Sep 2022 18:14:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1981841A08;
-	Thu, 29 Sep 2022 18:04:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1981841A08
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 13C1B1BF3F3
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 18:04:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE30E60BEE;
+	Thu, 29 Sep 2022 18:14:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE30E60BEE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A6071BF3F3
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 18:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E175741A08
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 18:04:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E175741A08
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9F0183F28
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 18:14:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9F0183F28
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8Ud-Ym_rDVuc for <buildroot@lists.busybox.net>;
- Thu, 29 Sep 2022 18:04:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w1KadkaIexIM for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 18:14:10 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BF0D41A05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB3B483F1A
 Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com
  [208.88.110.44])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5BF0D41A05
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 18:04:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AB3B483F1A
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 18:14:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by mail.savoirfairelinux.com (Postfix) with ESMTP id 9DDA39C0BB9;
- Thu, 29 Sep 2022 14:04:35 -0400 (EDT)
+ by mail.savoirfairelinux.com (Postfix) with ESMTP id DD6519C0BD3;
+ Thu, 29 Sep 2022 14:14:08 -0400 (EDT)
 Received: from mail.savoirfairelinux.com ([127.0.0.1])
  by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id QxKxqXeWOBVJ; Thu, 29 Sep 2022 14:04:35 -0400 (EDT)
+ with ESMTP id d920ujUAbqFl; Thu, 29 Sep 2022 14:14:08 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.savoirfairelinux.com (Postfix) with ESMTP id F1AFB9C0BC4;
- Thu, 29 Sep 2022 14:04:34 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com F1AFB9C0BC4
+ by mail.savoirfairelinux.com (Postfix) with ESMTP id 42B999C0BD4;
+ Thu, 29 Sep 2022 14:14:08 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 42B999C0BD4
 X-Virus-Scanned: amavisd-new at mail.savoirfairelinux.com
 Received: from mail.savoirfairelinux.com ([127.0.0.1])
  by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id JXsd3TFcoVoA; Thu, 29 Sep 2022 14:04:34 -0400 (EDT)
-Received: from j1-slave-ryzen-3900-indu.sfl.team (unknown [192.168.51.254])
- by mail.savoirfairelinux.com (Postfix) with ESMTPSA id CED9E9C0BB9;
- Thu, 29 Sep 2022 14:04:34 -0400 (EDT)
-Date: Thu, 29 Sep 2022 14:04:27 -0400
+ with ESMTP id g-jfc1XLYOjl; Thu, 29 Sep 2022 14:14:08 -0400 (EDT)
+Received: from j1-slave-ryzen-3900-indu.mtl.sfl (unknown [192.168.51.254])
+ by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 24D599C0BD3;
+ Thu, 29 Sep 2022 14:14:08 -0400 (EDT)
 From: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-Message-ID: <20220929140427.2aa8978c@j1-slave-ryzen-3900-indu.sfl.team>
-In-Reply-To: <ec9bdbc9-3958-21f1-bfc0-82c29138f17f@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Thu, 29 Sep 2022 14:13:50 -0400
+Message-Id: <20220929181350.1026033-1-thomas.ballasi@savoirfairelinux.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220922214512.2098221-1-thomas.ballasi@savoirfairelinux.com>
 References: <20220922214512.2098221-1-thomas.ballasi@savoirfairelinux.com>
- <ec9bdbc9-3958-21f1-bfc0-82c29138f17f@benettiengineering.com>
-Organization: SFL
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
- t=1664474675; bh=6stRZrgfhIp0mvQMQAUUJbKUXglKWPsoK0Ev3KfF5CI=;
- h=Date:From:To:Message-ID:MIME-Version;
- b=DY8alLojTM8VWpcf4Vbe9uh6TWFDZ04QCXz69G4yQfuKr8tuzVOEtjXONjLZLmZYM
- w/ipKXIDfcG6TSfCvj7YoSvhGmfjAAx4xsRMDC31OEezkdqQhsq3Y5C+BksPiwW2uy
- i6CeCKcFuqVvOdT4prQIhOajsxxuJVhFRhsdaGTFcHOCMx1bLgVgyFgYRgnp3iK2+G
- E7eLTr3YhGpV8adDVVGM5jPCHKEYGVqYmq9DQTFe1OMVramScRkWQxMaIBKm6dHEwH
- IdmoPqeHials4hqX5IDkCy6govGsiJ24kFm7VmnK+pS5ddmAL4kqx50+F9HeFTCWDF
- pgyppiHvO9lTw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1664475248; bh=Z5R5V5QtNK6sviOlfLZkbcEDRPadonWfXrOdDQtXdkU=;
+ h=From:To:Date:Message-Id:MIME-Version;
+ b=MPoTWfxZF0+JB4Sql7jh4pEYH7f3ZqByhCd9Mjc+w1z7SMKEmXJf/lYd7GT8EJvNQ
+ InfAB2bNtlKOeOOnQvMW3ySRL+2dUVsUZqM3mV2jnHTY4X6+ou7SYKIHPbLyTLM++G
+ OH8LA3fNEj8hkntfXrPqmZsNBGU07vm+k57JVdlTuZmlFNacx4Y7aWOhUK0r+TSmv4
+ FnJ8FyxvA1bHaV4ghstSsdNoG3hDWR1/Vs2TDUuue6XWLt6irFwYlKtkJ8HVlpYP13
+ LmzIsa0crXNeWmb/Q4YfTxWZwfrKfRVVWgHd3iBPUcPRCkw+UBTr1Z2HBTFyDkyUN/
+ VczJ40yJapBrQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=savoirfairelinux.com
  header.i=@savoirfairelinux.com header.a=rsa-sha256
- header.s=DFC430D2-D198-11EC-948E-34200CB392D2 header.b=DY8alLoj
-Subject: [Buildroot] [PATCH] package/qt5/qt5webkit: fix generated artifacts
+ header.s=DFC430D2-D198-11EC-948E-34200CB392D2 header.b=MPoTWfxZ
+Subject: [Buildroot] [PATCH v2] package/qt5/qt5webkit: fix generated
+ artifacts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,76 +88,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>
+Cc: Peter Seiderer <ps.report@gmx.net>,
+ Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>,
+ Julien Corjon <corjon.j@ecagroup.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio,
+Generated artifacts of the installation process were wrongly located,
+causing packages using qt5webkit (qt-webkit-kiosk and python-pyqt5) to
+fail at build time.
 
-On Thu, 29 Sep 2022 12:43:22 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> > Generated artifacts of the installation process were wrongly
-> > located, causing packages using qt5webkit (qt-webkit-kiosk and
-> > python-pyqt5) to fail at build time. The changes aims at fixing
-> > this issue.
-> 
-> "The changes aims at fixing this issue." should be:
-> "Let's add a patch that:"
+Firstly, *.h files are wrongly located a directory below where supposed
+(inside qt5/ directory). This is caused by using DATADIR which assumed
+include files were to be located in sysroot/usr/include/. Disabling this
+variable by removing it from build options leads to a correct behavior.
 
-This isn't necessarily true. While the patch answers points 1 and 2,
-the third one isn't really affected by it. I will try to rephrase the
-message for more clarification as the way I phrased it is ambiguous,
-thanks.
+Secondly, in order to locate *.pri artifacts correctly, we set the conf
+option CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT on, which in turn
+sets the variable KDE_INSTALL_USE_QT_SYS_PATHS on, for the following
+reasons:
 
-> What is the upstream status of this patch? Can you point here the URL
-> of the pending patch?
+1. *.pri files are wrongly located in the host's and target's sysroot
+   directores while buildroot implements its own mkspecs directory.
+   By setting KDE_INSTALL_USE_QT_SYS_PATHS on, mkspecs modules are now
+   being installed in host's data dir (ECM_MKSPECS_INSTALL_DIR is set
+   accordingly @ line 102 in Source/cmake/ECMGeneratePriFile.cmake).
+   This also required to prevent using the CMake package's default
+   DATADIR variable, as done previously, as it enforced to install
+   artifacts under the sysroot directory.
 
-This patch isn't pending for merge in the qt5webkit repository for the
-reason that it may break other projects. At first, I made this patch to
-counter the use of CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT, which
-CMake's documentation seems to imply that it cannot be set by the user
-but is set automatically by CMake, which leads to the unwanted
-behavior. The patch makes it as if it was ON specifically for buildroot.
+2. *.pri files' content have hardcoded include and library paths. This
+   has been corrected by setting on KDE_INSTALL_USE_QT_SYS_PATHS as
+   their content is written according to this value (see line 514 and
+   739 in file Source/WebKit/PlatformQt.cmake).
 
-I reckon that it may be bad practice to create such patches, so I just
-checked whether or not this variable can be set via CONF_OPTS and it
-seems it can, leading to the same working behavior (it also doesn't seem
-to be set in CMakeCache by CMake if not manually added).
+Regression happened when qt5webkit started using cmake-package at commit
+df0b0fe6919c0d0f3750f439a3cfa765232bd569.
 
-I also made sure setting this variable doesn't have any potential side
-effects as it is only used once in the case inside the patch.
+Fixes:
+https://bugs.buildroot.org/show_bug.cgi?id=14606
 
-Therefore, it seems to be a better fit to set INITIALIZED_TO_DEFAULT's
-value in CONF_OPTS rather than bypassing its usage inside a patch. This
-has been replaced.
+Signed-off-by: Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>
+---
+ package/qt5/qt5webkit/qt5webkit.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> > More info @ https://bugs.buildroot.org/show_bug.cgi?id=14606
-> 
-> Here ^^^ it should be:
-> Fixes:
-> https://bugs.buildroot.org/show_bug.cgi?id=14606
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 6912359674..8310ef20c8 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -51,10 +51,18 @@ QT5WEBKIT_CONF_OPTS += -DENABLE_SAMPLING_PROFILER=OFF
+ endif
+ 
+ QT5WEBKIT_CONF_OPTS += \
++	-DCMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT=ON \
+ 	-DENABLE_TOOLS=OFF \
+ 	-DPORT=Qt \
+ 	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
+ 	-DSHARED_CORE=ON \
+ 	-DUSE_LIBHYPHEN=OFF
+ 
++QT5WEBKIT_INSTALL_STAGING_OPTS = install/fast
++
++define QT5WEBKIT_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --install $(QT5WEBKIT_BUILDDIR) \
++		--prefix $(TARGET_DIR)/usr
++endef
++
+ $(eval $(cmake-package))
+-- 
+2.25.1
 
-Done!
-
-> Also here please add:
-> '[Upstream status: URL of this pending patch]
-
-Patch is replaced, ignoring.
-
-> The patch works correctly, so with commit log improve and the local 
-> patch with Upstream status pointed:
-> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> 
-> Thanks for contributing!
-> 
-> Best regards
-
-Thanks a lot for the constructive review! I will send a v2 asap.
-
-Kind regards,
-Thomas Ballasi
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
