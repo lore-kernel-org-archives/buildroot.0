@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67B49C433F5
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:24:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB3C7C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 21:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 154C7611CC;
-	Thu, 29 Sep 2022 21:24:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 154C7611CC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88EEC410D5;
+	Thu, 29 Sep 2022 21:24:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88EEC410D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HO0PZ2giTvqJ; Thu, 29 Sep 2022 21:24:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id afVKCzb7loYG; Thu, 29 Sep 2022 21:24:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 479CF611C2;
-	Thu, 29 Sep 2022 21:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 479CF611C2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 194001C11A0
+	by smtp2.osuosl.org (Postfix) with ESMTP id ABCF940BA7;
+	Thu, 29 Sep 2022 21:24:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABCF940BA7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1ADF91C11A5
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C16B84024
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C3964110A
  for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 21:21:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C16B84024
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C3964110A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7qUSZUirNXTH for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LijNFGbOdaVH for <buildroot@lists.busybox.net>;
  Thu, 29 Sep 2022 21:21:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 385D284026
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28140410DA
  for <buildroot@buildroot.org>; Thu, 29 Sep 2022 21:21:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 385D284026
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28140410DA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29AB886615; Thu, 29 Sep 2022 21:21:35 +0000 (UTC)
+ id 15E0986617; Thu, 29 Sep 2022 21:21:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 23:05:45 +0200
+Date: Thu, 29 Sep 2022 22:41:41 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 503921125f610f39b79168abeb83de2eefb27bbd
-X-Git-Newrev: d5a7b1d837660c865e17f2569e688c0371ceef3e
+X-Git-Oldrev: 827f7f4b968b38c018f87818281b0dcfe230c5c9
+X-Git-Newrev: e028485cbe675484167a3688928c172a330a79af
 X-Patchwork-Hint: ignore
-Message-Id: <20220929212135.29AB886615@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] DEVELOPERS: remove Peter
- Seiderer
+Message-Id: <20220929212135.15E0986617@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/uacme: bump
+ version to 1.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,63 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5a7b1d837660c865e17f2569e688c0371ceef3e
+commit: https://git.buildroot.net/buildroot/commit/?id=e028485cbe675484167a3688928c172a330a79af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-No review/patches from my side the last few months, so drop my
-DEVELOPERS entry.
+This new version includes
+https://github.com/ndilieto/uacme/commit/9f3e5eae05ee4170872807cd2d7736072b04f8e5
+which fixes the build with mbedtls 2.x.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Fixes:
+
+  http://autobuild.buildroot.org/results/8fa4f0d2821796be312b366be2f095be07dd7b1e
+
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 094e87c805e37c3981d3ef0b4e7431a25181a6c2)
+(cherry picked from commit c5131e5d9f0ea1ba1830c68b64c964409c44966b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 32 --------------------------------
- 1 file changed, 32 deletions(-)
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 52f3aed3fd..10c63822ad 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2263,38 +2263,6 @@ F:	package/wireguard-linux-compat/
- F:	package/wireguard-tools/
- F:	support/testing/tests/package/test_docker_compose.py
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index f62463029a..6c71f6b94d 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e7598e794f5ec414d993c4f2f7df39e7c72f26e41302b875ddaf040d8103ec5f  uacme-1.7.2.tar.gz
++sha256  0ec8e5bcb8ed2b532572ca4878d30b2a794f607b995348ebc176d566b64d73f9  uacme-1.7.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 2482259411..a70ec3a635 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Peter Seiderer <ps.report@gmx.net>
--F:	board/raspberrypi/
--F:	configs/raspberrypi*_defconfig
--F:	package/assimp/
--F:	package/bcm2835/
--F:	package/ddrescue/
--F:	package/dejavu/
--F:	package/dillo/
--F:	package/edid-decode/
--F:	package/ell/
--F:	package/ghostscript-fonts/
--F:	package/gstreamer1/gst1-devtools/
--F:	package/gstreamer1/gst1-interpipe/
--F:	package/gstreamer1/gstreamer1-editing-services/
--F:	package/iwd/
--F:	package/libcamera-apps/
--F:	package/libevdev/
--F:	package/libuev/
--F:	package/log4cplus/
--F:	package/postgresql/
--F:	package/python-colorzero/
--F:	package/python-flask-wtf/
--F:	package/python-gpiozero/
--F:	package/qt5/
--F:	package/quotatool/
--F:	package/racehound/
--F:	package/redir/
--F:	package/rtl8812au-aircrack-ng/
--F:	package/uredir/
--F:	package/uqmi/
--F:	package/wayland-utils/
--
- N:	Peter Thompson <peter.macleod.thompson@gmail.com>
- F:	package/sdl2_gfx/
- F:	package/sdl2_image/
+-UACME_VERSION = 1.7.2
++UACME_VERSION = 1.7.3
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
