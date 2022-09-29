@@ -1,69 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B58FC433FE
-	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 11:18:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A839C433F5
+	for <buildroot@archiver.kernel.org>; Thu, 29 Sep 2022 11:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC00A60B8C;
-	Thu, 29 Sep 2022 11:18:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC00A60B8C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 30D78408C9;
+	Thu, 29 Sep 2022 11:20:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30D78408C9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 15pnEEh5dCE6; Thu, 29 Sep 2022 11:20:18 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6BA4440222;
+	Thu, 29 Sep 2022 11:20:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6BA4440222
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B6881BF584
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 11:20:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53C2F60B8C
+ for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 11:20:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53C2F60B8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l6GsXysnw0El; Thu, 29 Sep 2022 11:18:24 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07EFA60B92;
-	Thu, 29 Sep 2022 11:18:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07EFA60B92
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6671F1BF584
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 11:18:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DE714195D
- for <buildroot@lists.busybox.net>; Thu, 29 Sep 2022 11:18:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DE714195D
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EhquyjP_ebM7 for <buildroot@lists.busybox.net>;
- Thu, 29 Sep 2022 11:18:20 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5NnlLv-2MsTq for <buildroot@lists.busybox.net>;
+ Thu, 29 Sep 2022 11:20:14 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3041241923
-Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3041241923
- for <buildroot@buildroot.org>; Thu, 29 Sep 2022 11:18:18 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.15.171])
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4469A6059D
+Received: from smtpdh19-2.aruba.it (smtpdh19-2.aruba.it [62.149.155.149])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4469A6059D
+ for <buildroot@buildroot.org>; Thu, 29 Sep 2022 11:20:14 +0000 (UTC)
+Received: from [192.168.50.220] ([146.241.15.171])
  by Aruba Outgoing Smtp  with ESMTPSA
- id drYWoo8rGeEtAdrYWoeXia; Thu, 29 Sep 2022 13:18:17 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Thu, 29 Sep 2022 13:18:16 +0200
-Message-Id: <20220929111816.497911-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220928205527.GH1419013@scaer>
-References: <20220928205527.GH1419013@scaer>
+ id draOonbrbSmRKdraOouJNH; Thu, 29 Sep 2022 13:20:12 +0200
+Message-ID: <ca88cebe-45fb-8ba3-f37d-f223c7a94a5f@benettiengineering.com>
+Date: Thu, 29 Sep 2022 13:20:12 +0200
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfEC7wuaIwZT0TGaJCNhh8q/eUrh6Q/IP6tXiwM+2x232kmDqC0ZxSYkwuloDGaj5drUTQNM7TLCKgqyvyzVvNjuMUKi2Lw4A6IM+VhgEJkujI9w/XWRv
- 2iWFNWBL4zVOmh4Z9c078edl9PmRBmK2X5SYI5qiPDjcZMnYeHE31Z6/3auO2MHYGIz+lll8s2txbFYnXZJenMSkWKs4v/6Nba4Poux+QDdiNU0yEwXKIjFu
- oa9u9Knml/TRjqthlLd3c7NQj3FkKtD9V3hGCTQV97wcIPqySmSKEsthEI9jm497de8suiEZgrXUCCWeTTnxoo4r57EBlaAhd+iRU3YEEfr7mq/IOG5zg6Gs
- NbmO6I7yiJmBFEXSFecdjFzJ0KkwbVkfE/dpaOijDJItH4ShMx0=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US
+To: buildroot@buildroot.org
+References: <20220928205527.GH1419013@scaer>
+ <20220929111816.497911-1-giulio.benetti@benettiengineering.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220929111816.497911-1-giulio.benetti@benettiengineering.com>
+X-CMAE-Envelope: MS4xfLQrRpaMHO4bofH9dt/r/Lz1PY0ivnURABAp4oldra4/sNDld2OQoDaCYiQReWCfYRpNApzI9qUlkyY/9mXkaxmpoFDPLfHdPbSIFN9XyLoXvpu/J6a5
+ ShjLTEbrvb/dlDY1sne6ibD1/2U50RRMRqqlkwVO2VvoxwX5vZuHe/qg2I7hBuowxmalrmALaYUzyjMTTj8ExD5AU8YyJaV3GyYuD5n2Utm6AQo+a8fNnEZJ
+ LNfsBjgj5J7+s4cKxa28D1p4joTNHGE9mCCjH894yS8z9w4DNDvuLqlMnzyn2++jDMC/BfbAdYSqseo4E8mXcyXnvyABm3+HAeZn77A0hzQ=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1664450297; bh=XA4zp02FqUITXAhsOfyJf0l1sSltLe8fZWPRN5yhtQo=;
- h=From:To:Subject:Date:MIME-Version;
- b=G4f5dSGzW2abSuXNC0Nwpfgfh9llpBcsoQ0ozP9eNSrLaJygWTvD7OPoHI3sEYSZV
- bvEiCoCkL0IgqoDXRdB4qh5ppMlTa2pEYprZqTvKBImH22Szi/Ak7Cq1NNG5uX9Pkx
- 38hrSeDkCb+6dkNCa6Oi81E5MYeOzH21uQNbfjmDtmuivIRh96QHlnLK/hIsi9FwH5
- i2KxYhFEwDv2RYj11JJbSbq+nY8hLKsXVud9sreUtQVT7LxCdciwnw0+r0zvUaX8v2
- SU/GK8XjkquKLu52dPxKAcNyzfhX0CBRqe9UPGyHVG9ybgQkU+RXrj1zsWH1eSu8kQ
- kOH/BCCUzXRjQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1664450412; bh=2xmjUbxAiBprcNw5AzScAGFqsupaay4Q9pgrEVuTlZ8=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=DSTUdC9Nsv+XqFkVMoOyBjES8sIyEO0/dooj1ZNLtemIdn1L3FzqqDdgfGUaSl5hf
+ xbK2KD19ap5ACU4KgOHPmtoHo2P5B+a5DvXeCe+U39BIvGAV3obx4nKljGAEOgGsmk
+ SfWoPtvhGYw5m4uJj2RZsveSvDrpyA09lSJtqPnTgGPVUecSbehBAfjwhy7BlzSQGj
+ 96jtZlmOBycvDNwdiFrSCztYDxSlFGweHhTvsKb4GcJwArGSRLYkEQA4J8jr2Hw8h9
+ f1jdSoVzz3vmjZytGMyC6EX9VA1XwjDbEa4EvtSnGl3MsoI6okDsEYlZbMFa72zxEd
+ m99cHZPrgvcpQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=G4f5dSGz
-Subject: [Buildroot] [PATCH] package/gitlab-runner: fix forcing openssl
+ header.a=rsa-sha256 header.s=a1 header.b=DSTUdC9N
+Subject: Re: [Buildroot] [PATCH] package/gitlab-runner: fix forcing openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,39 +77,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
+Cc: Romain Naour <romain.naour@gmail.com>,
  Marcin Niestroj <m.niestroj@grinn-global.com>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-BR2_PACKAGE_LIBOPENSSL doesn't force selecting libopenssl, to achieve this
-we need to use BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL. So let's modify
-accordingly and improve a bit the comment.
+Forgotten,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/gitlab-runner/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 29/09/22 13:18, Giulio Benetti wrote:
+> BR2_PACKAGE_LIBOPENSSL doesn't force selecting libopenssl, to achieve this
+> we need to use BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL. So let's modify
+> accordingly and improve a bit the comment.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-diff --git a/package/gitlab-runner/Config.in b/package/gitlab-runner/Config.in
-index 72c2742562..bfa79ac80e 100644
---- a/package/gitlab-runner/Config.in
-+++ b/package/gitlab-runner/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_GITLAB_RUNNER
- 	select BR2_PACKAGE_LIBCURL_CURL # runtime
- 	select BR2_PACKAGE_LIBCURL_OPENSSL # runtime, for ca-certificates.
- 	select BR2_PACKAGE_OPENSSL # runtime
--	select BR2_PACKAGE_LIBOPENSSL # runtime
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL # runtime, force using libopenssl
- 	select BR2_PACKAGE_LIBOPENSSL_BIN # runtime
- 	select BR2_PACKAGE_TAR # runtime
- 	help
+Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
 -- 
-2.34.1
+Giulio Benetti
+CEO/CTO@Benetti Engineering sas
+
+> ---
+>   package/gitlab-runner/Config.in | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/gitlab-runner/Config.in b/package/gitlab-runner/Config.in
+> index 72c2742562..bfa79ac80e 100644
+> --- a/package/gitlab-runner/Config.in
+> +++ b/package/gitlab-runner/Config.in
+> @@ -13,7 +13,7 @@ config BR2_PACKAGE_GITLAB_RUNNER
+>   	select BR2_PACKAGE_LIBCURL_CURL # runtime
+>   	select BR2_PACKAGE_LIBCURL_OPENSSL # runtime, for ca-certificates.
+>   	select BR2_PACKAGE_OPENSSL # runtime
+> -	select BR2_PACKAGE_LIBOPENSSL # runtime
+> +	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL # runtime, force using libopenssl
+>   	select BR2_PACKAGE_LIBOPENSSL_BIN # runtime
+>   	select BR2_PACKAGE_TAR # runtime
+>   	help
 
 _______________________________________________
 buildroot mailing list
