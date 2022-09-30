@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8B25C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:17:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEC31C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:18:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E7F761118;
-	Fri, 30 Sep 2022 15:17:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E7F761118
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZIEwP8Jhqyu8; Fri, 30 Sep 2022 15:17:05 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B13E5610B2;
-	Fri, 30 Sep 2022 15:17:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B13E5610B2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D3DA81BF2F7
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:16:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 350F3842AE
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 350F3842AE
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1E4D842CC;
+	Fri, 30 Sep 2022 15:18:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1E4D842CC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ytS6i7yNSUOR for <buildroot@lists.busybox.net>;
- Fri, 30 Sep 2022 15:16:09 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id URLGQ5r5B-lF; Fri, 30 Sep 2022 15:18:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D04C1842D3;
+	Fri, 30 Sep 2022 15:18:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D04C1842D3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E1EE1BF2F7
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:18:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 19DA140C31
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:18:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19DA140C31
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eVAWbZFcqX1X for <buildroot@lists.busybox.net>;
+ Fri, 30 Sep 2022 15:18:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 47FB4842CB
- for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47FB4842CB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5746740157
+ for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:18:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5746740157
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 30CA986664; Fri, 30 Sep 2022 15:16:09 +0000 (UTC)
+ id 447D386697; Fri, 30 Sep 2022 15:18:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Sep 2022 17:11:21 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 675ca6577cd80b22acb157f447a0dc73f39faa12
-X-Git-Newrev: 37b32debef9d3517ffc3b2e1bf19dd7d9d56f7ff
+Date: Fri, 30 Sep 2022 17:11:17 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 66a6465ac67110558ec396f77adb0c51f77c2d1e
+X-Git-Newrev: adf8a8dcde0cc06432df7e4324bd7daf81528551
 X-Patchwork-Hint: ignore
-Message-Id: <20220930151609.30CA986664@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
+Message-Id: <20220930151818.447D386697@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x]
  support/scripts/size-stats: count compiled python (.pyc) files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37b32debef9d3517ffc3b2e1bf19dd7d9d56f7ff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=adf8a8dcde0cc06432df7e4324bd7daf81528551
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 Any .pyc files generated by the pycompile script during target
 finalization are currently counted in the "Unknown" package,
