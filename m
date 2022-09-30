@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18B32C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 14:04:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4696EC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 14:14:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E05F842C5;
-	Fri, 30 Sep 2022 14:04:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E05F842C5
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8D1583E20;
+	Fri, 30 Sep 2022 14:14:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8D1583E20
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vHPrm1X5iepE; Fri, 30 Sep 2022 14:04:06 +0000 (UTC)
+	with ESMTP id fA78YHHFYVSW; Fri, 30 Sep 2022 14:14:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3CF184149;
-	Fri, 30 Sep 2022 14:04:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3CF184149
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ECD821C2745
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 14:03:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E15AA83E2B;
+	Fri, 30 Sep 2022 14:14:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E15AA83E2B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AEBE61BF291
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 14:14:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A786641BF0
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 14:03:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A786641BF0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8EDE440A8A
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 14:14:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EDE440A8A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5B83Kx-LKB7E for <buildroot@lists.busybox.net>;
- Fri, 30 Sep 2022 14:03:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 122BC4059D
- for <buildroot@buildroot.org>; Fri, 30 Sep 2022 14:03:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 122BC4059D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF19F86635; Fri, 30 Sep 2022 14:03:33 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hCx4PfCfE9Hl for <buildroot@lists.busybox.net>;
+ Fri, 30 Sep 2022 14:14:01 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6CFF409F8
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E6CFF409F8
+ for <buildroot@buildroot.org>; Fri, 30 Sep 2022 14:14:00 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 461E113D5;
+ Fri, 30 Sep 2022 07:14:06 -0700 (PDT)
+Received: from localhost.localdomain (X72Y076X74.nice.arm.com [10.34.129.34])
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id
+ 0C0363F792; Fri, 30 Sep 2022 07:13:58 -0700 (PDT)
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Sep 2022 16:02:30 +0200
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: be394fbcd84f33fb7ad0fa8aa54def6f99b76f93
-X-Git-Newrev: 2c106bcaeb503c93b0bb7f2499716b9118aaba01
-X-Patchwork-Hint: ignore
-Message-Id: <20220930140333.EF19F86635@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x]
- package/rtl8812au-aircrack-ng: fix build failure due to double defined
- endianness
+Date: Fri, 30 Sep 2022 16:13:50 +0200
+Message-Id: <20220930141350.15305-1-vincent.stehle@arm.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH] package/fwts: enable for arm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,69 +59,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c106bcaeb503c93b0bb7f2499716b9118aaba01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
-
-By default package rtl8812au-aircrack-ng uses CONFIG_PLATFORM_I386_PC that
-define -DCONFIG_LITTLE_ENDIAN and this can't be overridden since the
-USER_EXTRA_CFLAGS are assigned to EXTRA_CFLAGS in the beginning of Makefile
-while -DCONFIG_LITTLE_ENDIAN is assigned later.
-Instead of using the default CONFIG_PLATFORM_I386_PC let's set it to 'n'
-and let's use the same defines it uses:
--DCONFIG_IOCTL_CFG80211
--DRTW_USE_CFG80211_STA_EVENT
-This way -DCONFIG_BIG_ENDIAN can be define without the conflict of being
-defined with with the default -DCONFIG_LITTLE_ENDIAN.
-Let's also add Linux config FIXUPS to build the module correctly.
-
-Fixes:
-http://autobuild.buildroot.net/results/2e4ee705d0e2b728f102aac4e6729f11ef22be36/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 003ed345b1c4f1c11feecca68bca37bf871001af)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-index 111fd520a4..621a832023 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-@@ -11,14 +11,25 @@ RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
- 
- RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS = \
- 	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
-+	-DCONFIG_IOCTL_CFG80211 \
-+	-DRTW_USE_CFG80211_STA_EVENT \
- 	-Wno-error=address \
- 	-Wno-error=array-bounds \
- 	-Wno-error=cast-function-type
- 
- RTL8812AU_AIRCRACK_NG_MODULE_MAKE_OPTS = \
-+	CONFIG_PLATFORM_I386_PC=n \
- 	CONFIG_88XXAU=m \
- 	KVER=$(LINUX_VERSION_PROBED) \
- 	USER_EXTRA_CFLAGS="$(RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS)"
- 
-+define RTL8812AU_AIRCRACK_NG_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
-+endef
-+
- $(eval $(kernel-module))
- $(eval $(generic-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIEZXVFMgYXBwbGljYXRpb24gYW5kIGl0cyBhc3NvY2lhdGVkIGtlcm5lbCBtb2R1bGVzIGRv
+IGJ1aWxkIG9uIGFybTsKZW5hYmxlIGl0LgoKU2lnbmVkLW9mZi1ieTogVmluY2VudCBTdGVobMOp
+IDx2aW5jZW50LnN0ZWhsZUBhcm0uY29tPgpDYzogRXJpY28gTnVuZXMgPG51bmVzLmVyaWNvQGdt
+YWlsLmNvbT4KLS0tCiBwYWNrYWdlL2Z3dHMvQ29uZmlnLmluIHwgNCArKy0tCiAxIGZpbGUgY2hh
+bmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvZnd0cy9Db25maWcuaW4gYi9wYWNrYWdlL2Z3dHMvQ29uZmlnLmluCmluZGV4IGFjOWEyZTM5
+MDk4Li42YmUxYWNhYzRlZCAxMDA2NDQKLS0tIGEvcGFja2FnZS9md3RzL0NvbmZpZy5pbgorKysg
+Yi9wYWNrYWdlL2Z3dHMvQ29uZmlnLmluCkBAIC0xLDYgKzEsNiBAQAogY29uZmlnIEJSMl9QQUNL
+QUdFX0ZXVFMKIAlib29sICJmd3RzIgotCWRlcGVuZHMgb24gQlIyX2kzODYgfHwgQlIyX3g4Nl82
+NCB8fCBCUjJfYWFyY2g2NAorCWRlcGVuZHMgb24gQlIyX2kzODYgfHwgQlIyX3g4Nl82NCB8fCBC
+UjJfYWFyY2g2NCB8fCBCUjJfYXJtCiAJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9MSUJCU0RfQVJD
+SF9TVVBQT1JUUyAjIGxpYmJzZAogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUgIyBsaWJnbGliMgog
+CWRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUiAjIGxpYmdsaWIyLCBsaWJic2QKQEAgLTMzLDcgKzMz
+LDcgQEAgY29tbWVudCAiZWZpX3J1bnRpbWUgbW9kdWxlIG5lZWRzIGEgTGludXgga2VybmVsIHRv
+IGJlIGJ1aWx0IgogZW5kaWYKIAogY29tbWVudCAiZnd0cyBuZWVkcyBhIGdsaWJjIHRvb2xjaGFp
+biB3LyB3Y2hhciwgdGhyZWFkcywgZHluYW1pYyBsaWJyYXJ5IgotCWRlcGVuZHMgb24gQlIyX2kz
+ODYgfHwgQlIyX3g4Nl82NCB8fCBCUjJfYWFyY2g2NAorCWRlcGVuZHMgb24gQlIyX2kzODYgfHwg
+QlIyX3g4Nl82NCB8fCBCUjJfYWFyY2g2NCB8fCBCUjJfYXJtCiAJZGVwZW5kcyBvbiBCUjJfUEFD
+S0FHRV9MSUJCU0RfQVJDSF9TVVBQT1JUUyAjIGxpYmJzZAogCWRlcGVuZHMgb24gQlIyX1VTRV9N
+TVUKIAlkZXBlbmRzIG9uICFCUjJfVVNFX1dDSEFSIHx8ICFCUjJfVE9PTENIQUlOX0hBU19USFJF
+QURTIHx8IFwKLS0gCjIuMzUuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
