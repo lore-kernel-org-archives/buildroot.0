@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 466D9C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:23:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 979D0C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:24:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C7B4F41043;
-	Fri, 30 Sep 2022 15:23:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7B4F41043
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A3AC41081;
+	Fri, 30 Sep 2022 15:24:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A3AC41081
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nDypcB6OEUqc; Fri, 30 Sep 2022 15:23:14 +0000 (UTC)
+	with ESMTP id JysPEUM_ycEJ; Fri, 30 Sep 2022 15:24:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C869640B9D;
-	Fri, 30 Sep 2022 15:23:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C869640B9D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DEBEB1BF3DE
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:22:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 487C540B9D;
+	Fri, 30 Sep 2022 15:24:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 487C540B9D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E97D1BF3DE
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:24:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C5D4941D9A
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:22:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5D4941D9A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 272B6610FC
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:24:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 272B6610FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r6Qakb_Hbnn5 for <buildroot@lists.busybox.net>;
- Fri, 30 Sep 2022 15:22:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id N6t7A2n2OY4Y for <buildroot@lists.busybox.net>;
+ Fri, 30 Sep 2022 15:24:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A3FE41D8E
- for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:22:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A3FE41D8E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F8A860BE8
+ for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:24:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F8A860BE8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85A918669D; Fri, 30 Sep 2022 15:22:51 +0000 (UTC)
+ id 1ED46866A3; Fri, 30 Sep 2022 15:24:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Sep 2022 17:18:33 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 80cc55933b3d64d84d625fc0dbe8d32bb4e96fd4
-X-Git-Newrev: 5ffccb1ec51c20a4abadd06795dc66334580be63
+Date: Fri, 30 Sep 2022 17:18:22 +0200
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: dfe497af960ca5f9ff0e5325147ff04c7ad1a84f
+X-Git-Newrev: 69c50f1f26966434c0aff5a873f7f950ac639831
 X-Patchwork-Hint: ignore
-Message-Id: <20220930152251.85A918669D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/pkg-generic:
+Message-Id: <20220930152400.1ED46866A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/pkg-generic:
  don't exclude virtual packages from packages list
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ffccb1ec51c20a4abadd06795dc66334580be63
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=69c50f1f26966434c0aff5a873f7f950ac639831
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
 Currently, with a configuration with an internal toolchain, and no other
 package is selected [0], especially when one wants to generate an SDK or
