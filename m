@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2284C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5FC5C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:11:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4554441D9A;
-	Fri, 30 Sep 2022 15:10:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4554441D9A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 320E8842B3;
+	Fri, 30 Sep 2022 15:11:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 320E8842B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OoOCTgnSbhB3; Fri, 30 Sep 2022 15:10:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mx08afxJHk6r; Fri, 30 Sep 2022 15:11:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BE0241D87;
-	Fri, 30 Sep 2022 15:10:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BE0241D87
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7238B1BF2F7
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:10:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77895842AE;
+	Fri, 30 Sep 2022 15:11:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77895842AE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 408D81BF2F7
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:11:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B29D4101B
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:10:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B29D4101B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C4E2610C7
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:11:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C4E2610C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2CHGVvrqs8r1 for <buildroot@lists.busybox.net>;
- Fri, 30 Sep 2022 15:10:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jjNwapyESN5P for <buildroot@lists.busybox.net>;
+ Fri, 30 Sep 2022 15:11:50 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59D1540157
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 59D1540157
- for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:10:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22CA760FD4
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 22CA760FD4
+ for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:11:49 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id ECBC1FF803;
- Fri, 30 Sep 2022 15:10:18 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id A580D24000A;
+ Fri, 30 Sep 2022 15:11:46 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oeHeb-00BcOQ-QM; Fri, 30 Sep 2022 17:10:17 +0200
+ id 1oeHg1-00BcUh-B9; Fri, 30 Sep 2022 17:11:45 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Petr Vorel <pevik@seznam.cz>
-References: <20220902221936.969471-1-pevik@seznam.cz>
-Date: Fri, 30 Sep 2022 17:10:17 +0200
-In-Reply-To: <20220902221936.969471-1-pevik@seznam.cz> (Petr Vorel's message
- of "Sat, 3 Sep 2022 00:19:36 +0200")
-Message-ID: <87sfk8525i.fsf@dell.be.48ers.dk>
+To: Michael Klein via buildroot <buildroot@buildroot.org>
+References: <YxCaF6FKRqXSPeWS@LLGMVZLB-0037>
+Date: Fri, 30 Sep 2022 17:11:45 +0200
+In-Reply-To: <YxCaF6FKRqXSPeWS@LLGMVZLB-0037> (Michael Klein via buildroot's
+ message of "Thu, 1 Sep 2022 13:40:07 +0200")
+Message-ID: <87o7uw5232.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/ltp-testsuite: build
- getcontext01.c on musl
+Subject: Re: [Buildroot] [PATCH 1/1] size-stats: count compiled python
+ (.pyc) files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,21 +64,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Michael Klein <m.klein@mvz-labor-lb.de>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Petr" == Petr Vorel <pevik@seznam.cz> writes:
+>>>>> "Michael" == Michael Klein via buildroot <buildroot@buildroot.org> writes:
 
- > From: Petr Vorel <petr.vorel@gmail.com>
- > It was fixed for musl during conversion to the new API in 0f519d0da
- > (released in 20220527).
+ > Any .pyc files generated by the pycompile script during target
+ > finalization are currently counted in the "Unknown" package,
+ > because packages-file-list.txt only contains the source .py file.
 
- > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ > If a .py file is added to filesdict, add the corresponding .pyc
+ > file as well.
 
-Committed to 2022.08.x, thanks.
+ > Signed-off-by: Michael Klein <m.klein@mvz-labor-lb.de>
+
+Committed to 2022.02.x, 2022.05.x and 2022.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
