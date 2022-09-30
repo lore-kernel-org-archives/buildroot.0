@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CACBBC433F5
-	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:18:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65BB1C433FE
+	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:18:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75F4E8134E;
-	Fri, 30 Sep 2022 15:18:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75F4E8134E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B6D040C36;
+	Fri, 30 Sep 2022 15:18:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B6D040C36
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a9ZB7XKY3Cu5; Fri, 30 Sep 2022 15:18:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id m6rkbeJ869sG; Fri, 30 Sep 2022 15:18:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78A9281337;
-	Fri, 30 Sep 2022 15:18:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78A9281337
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 484EE1C2745
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1E2D040C31;
+	Fri, 30 Sep 2022 15:18:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E2D040C31
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6185B1C2747
  for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 212DF842CA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C06240996
  for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:18:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 212DF842CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C06240996
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GoBMmN3mz0K8 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jmBhtmrLc0DQ for <buildroot@lists.busybox.net>;
  Fri, 30 Sep 2022 15:18:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42377842B9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4CB9340984
  for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:18:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42377842B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CB9340984
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D31E86692; Fri, 30 Sep 2022 15:18:18 +0000 (UTC)
+ id 388F786694; Fri, 30 Sep 2022 15:18:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Sep 2022 17:00:03 +0200
+Date: Fri, 30 Sep 2022 17:02:28 +0200
 X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: 6eeb91ef27ceeefb2c109b746fd854dba841e480
-X-Git-Newrev: 369aefe055180b15c31ec80d229a31d56aaadb88
+X-Git-Oldrev: 369aefe055180b15c31ec80d229a31d56aaadb88
+X-Git-Newrev: 66a6465ac67110558ec396f77adb0c51f77c2d1e
 X-Patchwork-Hint: ignore
-Message-Id: <20220930151818.2D31E86692@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/ncurses: drop our
- custom host build commands
+Message-Id: <20220930151818.388F786694@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x] package/m4: remove
+ --disable-static for host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,74 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=369aefe055180b15c31ec80d229a31d56aaadb88
+commit: https://git.buildroot.net/buildroot/commit/?id=66a6465ac67110558ec396f77adb0c51f77c2d1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
-Commit bf446513e7e7 (ncurses: fix hanging installation due to old
-version of tic) introduced the build of the host tic, to be used by the
-target ncurses. That commit purportedly built a static tic, but that is
-(at least now) wrong: there is nothing that makes the build of tic
-static.
+This issue was reported by Firas Khalil Khana on a Github pull request
+at https://github.com/buildroot/buildroot/pull/113/.
 
-Initially, host-ncurses was configured with --without-shared, but that
-only drives whether to generate shared libs or not, it does not drive
-whether to do a shared or static link of executables.
+There is no --disable-static in m4. Research in the dark corners of
+the Git history has shown that it was apparently added by Peter
+Korsgaard back in 2009, in commit
+3467cf73051d2b8d28d48dfdd694f66315f3b8ca ("m4: cleanup"). At this
+time, the version of m4 used was 1.4.9, but even looking at the
+tarball of this old release shows that the ./configure did not support
+--disable-static.
 
-And in any case, in af23d762e51b (ncurses: enable shared library build
-on the host) we explicitly stopped requesting the build of a static
-library, to instead require the build of a shared library.
+So let's drop this option.
 
-So, we never had a statically linked tic ever.
-
-Furthermore, we override the _BUKLLD_CMDS, but we do not provide any
-_INSTALL_CMDS. As a consequence, the full ncurses is installed, not just
-tic. And since we override the _BUILD_CMDS, the libraries are not built,
-so they get built during the install step.
-
-And we do indeed need the libraries (host-gettext needs them), and not
-just tic.
-
-So, just drop our custom _BUILD_CMDS and just build the whole package
-with the default settings. We keep the explicit use of --with-shared,
-as this is not the standard flag (--enable-shared) and it is not obvious
-what the default is.
-
-The set of files installed before and after this change is exactly the
-same, and tic still is an "ELF 64-bit LSB shared object" with a RUNPATH
-that still correctly points to $(HOST_DIR)/lib
-
-To be noted: there is no regressin in build time either, since we were
-already building everything anyway.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8b15de20a07b31ca3c4954a1f1ce035e00161934)
+(cherry picked from commit bddc64e866186356297240240c69be7b17ff6d40)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/ncurses.mk | 10 ----------
- 1 file changed, 10 deletions(-)
+ package/m4/m4.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 5d9c6bb0dd..2881ca1308 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -184,16 +184,6 @@ define NCURSES_TARGET_CLEANUP_TERMINFO
- endef
- NCURSES_POST_INSTALL_TARGET_HOOKS += NCURSES_TARGET_CLEANUP_TERMINFO
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 3a12092971..39ad898b10 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -9,6 +9,5 @@ M4_SOURCE = m4-$(M4_VERSION).tar.xz
+ M4_SITE = $(BR2_GNU_MIRROR)/m4
+ M4_LICENSE = GPL-3.0+
+ M4_LICENSE_FILES = COPYING
+-HOST_M4_CONF_OPTS = --disable-static
  
--#
--# On systems with an older version of tic, the installation of ncurses hangs
--# forever. To resolve the problem, build a static version of tic on host
--# ourselves, and use that during installation.
--#
--define HOST_NCURSES_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) sources
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/progs tic
--endef
--
- HOST_NCURSES_CONF_ENV = \
- 	ac_cv_path_LDCONFIG=""
- 
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
