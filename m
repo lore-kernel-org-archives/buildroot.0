@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 476B0C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86191C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DFA2A842CC;
-	Fri, 30 Sep 2022 15:16:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFA2A842CC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11E66842CD;
+	Fri, 30 Sep 2022 15:16:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11E66842CD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RVy3NRG1NrFM; Fri, 30 Sep 2022 15:16:26 +0000 (UTC)
+	with ESMTP id KANUaRwQkQRc; Fri, 30 Sep 2022 15:16:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29451842BC;
-	Fri, 30 Sep 2022 15:16:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29451842BC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2EEC01C2745
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:16:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2233F842CB;
+	Fri, 30 Sep 2022 15:16:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2233F842CB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 58C6E1BF2F7
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1604861121
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EC6D842CA
  for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1604861121
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EC6D842CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cBWnZsndIjA4 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cNhwCq_XYmmO for <buildroot@lists.busybox.net>;
  Fri, 30 Sep 2022 15:16:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D5006110E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32975842AE
  for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D5006110E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32975842AE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 39EA986665; Fri, 30 Sep 2022 15:16:09 +0000 (UTC)
+ id 1776586662; Fri, 30 Sep 2022 15:16:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Sep 2022 17:12:42 +0200
+Date: Fri, 30 Sep 2022 17:00:08 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 37b32debef9d3517ffc3b2e1bf19dd7d9d56f7ff
-X-Git-Newrev: fdd9d39c5e5c2d78aeae290ec77e059db4ae39b6
+X-Git-Oldrev: 0b3dcd00fec321d38f5618313a053bd75686df56
+X-Git-Newrev: 6a202ef4864c5e14408c2e38083d2424c11be2f8
 X-Patchwork-Hint: ignore
-Message-Id: <20220930151609.39EA986665@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
- board/solidrun/macchiatobin: update BSP components version in documentation
+Message-Id: <20220930151609.1776586662@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/ncurses: drop our
+ custom host build commands
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdd9d39c5e5c2d78aeae290ec77e059db4ae39b6
+commit: https://git.buildroot.net/buildroot/commit/?id=6a202ef4864c5e14408c2e38083d2424c11be2f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Update the listed versions to match current status since commit
-b4d9b515088d ("configs/solidrun_macchiatobin: bump BSP components").
+Commit bf446513e7e7 (ncurses: fix hanging installation due to old
+version of tic) introduced the build of the host tic, to be used by the
+target ncurses. That commit purportedly built a static tic, but that is
+(at least now) wrong: there is nothing that makes the build of tic
+static.
 
-All components are now from upstream so no need to state that for each
-one.
+Initially, host-ncurses was configured with --without-shared, but that
+only drives whether to generate shared libs or not, it does not drive
+whether to do a shared or static link of executables.
 
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+And in any case, in af23d762e51b (ncurses: enable shared library build
+on the host) we explicitly stopped requesting the build of a static
+library, to instead require the build of a shared library.
+
+So, we never had a statically linked tic ever.
+
+Furthermore, we override the _BUKLLD_CMDS, but we do not provide any
+_INSTALL_CMDS. As a consequence, the full ncurses is installed, not just
+tic. And since we override the _BUILD_CMDS, the libraries are not built,
+so they get built during the install step.
+
+And we do indeed need the libraries (host-gettext needs them), and not
+just tic.
+
+So, just drop our custom _BUILD_CMDS and just build the whole package
+with the default settings. We keep the explicit use of --with-shared,
+as this is not the standard flag (--enable-shared) and it is not obvious
+what the default is.
+
+The set of files installed before and after this change is exactly the
+same, and tic still is an "ELF 64-bit LSB shared object" with a RUNPATH
+that still correctly points to $(HOST_DIR)/lib
+
+To be noted: there is no regressin in build time either, since we were
+already building everything anyway.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3f0ee529083e972be9893676fab00ac50c2816c3)
+(cherry picked from commit 8b15de20a07b31ca3c4954a1f1ce035e00161934)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/solidrun/macchiatobin/readme.txt | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/ncurses/ncurses.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/board/solidrun/macchiatobin/readme.txt b/board/solidrun/macchiatobin/readme.txt
-index 7412951aab..ef5a6cba6b 100644
---- a/board/solidrun/macchiatobin/readme.txt
-+++ b/board/solidrun/macchiatobin/readme.txt
-@@ -13,9 +13,9 @@ How to build
- ============
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 5d9c6bb0dd..2881ca1308 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -184,16 +184,6 @@ define NCURSES_TARGET_CLEANUP_TERMINFO
+ endef
+ NCURSES_POST_INSTALL_TARGET_HOOKS += NCURSES_TARGET_CLEANUP_TERMINFO
  
- Default configuration provides the following BSP versions:
-- - Linux v5.6.3 (mainline)
-- - U-Boot v2020.01 (mainline)
-- - ATF v1.5-18.12.2 (Marvell)
-+ - Linux v5.10.5
-+ - U-Boot v2020.10
-+ - ATF v2.4
- 
- To build images run the following commands:
+-#
+-# On systems with an older version of tic, the installation of ncurses hangs
+-# forever. To resolve the problem, build a static version of tic on host
+-# ourselves, and use that during installation.
+-#
+-define HOST_NCURSES_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) sources
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/progs tic
+-endef
+-
+ HOST_NCURSES_CONF_ENV = \
+ 	ac_cv_path_LDCONFIG=""
  
 _______________________________________________
 buildroot mailing list
