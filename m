@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 979D0C433F5
-	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1D05C433F5
+	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:24:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4A3AC41081;
-	Fri, 30 Sep 2022 15:24:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A3AC41081
+	by smtp4.osuosl.org (Postfix) with ESMTP id 79D9B41DAA;
+	Fri, 30 Sep 2022 15:24:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79D9B41DAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JysPEUM_ycEJ; Fri, 30 Sep 2022 15:24:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 05bDczFGwxpZ; Fri, 30 Sep 2022 15:24:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 487C540B9D;
-	Fri, 30 Sep 2022 15:24:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 487C540B9D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39DA141DA3;
+	Fri, 30 Sep 2022 15:24:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39DA141DA3
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3E97D1BF3DE
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:24:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 88A611BF3DE
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 272B6610FC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FF9960BE8
  for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:24:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 272B6610FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FF9960BE8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N6t7A2n2OY4Y for <buildroot@lists.busybox.net>;
+ with ESMTP id bDIRF87g4ar0 for <buildroot@lists.busybox.net>;
  Fri, 30 Sep 2022 15:24:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F8A860BE8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 93BF860E80
  for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:24:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F8A860BE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93BF860E80
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1ED46866A3; Fri, 30 Sep 2022 15:24:00 +0000 (UTC)
+ id 28693866A4; Fri, 30 Sep 2022 15:24:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Sep 2022 17:18:22 +0200
+Date: Fri, 30 Sep 2022 17:22:03 +0200
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: dfe497af960ca5f9ff0e5325147ff04c7ad1a84f
-X-Git-Newrev: 69c50f1f26966434c0aff5a873f7f950ac639831
+X-Git-Oldrev: 69c50f1f26966434c0aff5a873f7f950ac639831
+X-Git-Newrev: 838b6fd5081844b27d2fbe6b47660b306fedd59b
 X-Patchwork-Hint: ignore
-Message-Id: <20220930152400.1ED46866A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/pkg-generic:
- don't exclude virtual packages from packages list
+Message-Id: <20220930152400.28693866A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x]
+ board/powerpc/ppc64le-pseries: set x-vof on qemu command line
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,94 +58,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4276409827411252178=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69c50f1f26966434c0aff5a873f7f950ac639831
+--===============4276409827411252178==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=838b6fd5081844b27d2fbe6b47660b306fedd59b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Currently, with a configuration with an internal toolchain, and no other
-package is selected [0], especially when one wants to generate an SDK or
-a pre-built, pre-installed toolchain, running 'make' will only build
-glibc (and its dependencies), and not the full toolchain, as one would
-have expected, so there would be no host-final-gcc.
+This uses a newer firmware implementation that is much faster at
+booting. It is supported as of Qemu 7.0.
 
-The reason is that 'toolchain' is a virtual package, so it is excluded
-from PACKAGES, the list of packages enabled in the configuration. so it
-is not a dependency of target-finalize, and so nothing pulls it in the
-build.
-
-The reason for excluding virtual packages from that list is not obvious.
-
-When virtual packages were introduced in 743982441201 (packages: add
-infrastructure for virtual packages), there was no BR2_PACKAGE_FOO
-symbol for virtual packages (but there was BR2_PACKAGE_HAS_FOO), so
-there was no telling that the virtual package was enabled, like we had
-for the other kinds of packages (normal, bootloader, toolchain, or linux
-kernel).
-
-That caused issues, so in f674c428c2ef (core/pkg-virtual: do not check
-they are neabled [sic]), and then 3e1b33a5349b (pkg-generic: improve
-incorrectly used package detection), we explicitly excluded the virtual
-packages from causing a build failure when something depended on them,
-as we could not yet now whether a virtual package was actually enabled
-or not.
-
-Then, in 842ba7eceffb (pkg-generic: fix rdepends and phony targets of
-virtual packages), we eventually associated a virtual package to is
-BR2_PACKAGE_HAS_FOO, which allows treating virtual packages like the
-other kinds of packages. There, we explicitly kept virtual packages out
-of the list, though (the reasoning was that virtual packages install
-nothing in host/ or target/, so they do not directly contribute to the
-final content, so we do not need to rsync them, so this was an
-optimisation).
-
-However, virtual packages are in fact actual generic packages, and it is
-possible for virtual packages to actually provide content for the final
-image. Even though we do not have any virtual package that has actual
-_INSTALL_CMDS, we still have udev that provides a user for example;
-virtual packages in br2-external trees may also very well provide
-install commands (e.g. to install files common to their various
-implementations).
-
-So, there is currently no technical reason to exclude virtual packages
-from PACKAGES, the list of packages enabled in the configuration.
-
-Drop the excluding condition, and always add enabled package, whatever
-their kind, to the list of enabled packages.
-
-[0] defconfig to reproduce the issue:
-    BR2_INIT_NONE=y
-    BR2_SYSTEM_BIN_SH_NONE=y
-    # BR2_PACKAGE_BUSYBOX is not set
-    # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-    # BR2_TARGET_ROOTFS_TAR is not set
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Reviewed-by: Cédric Le Goater <clg@kaod.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 02fe7c747bfff95c0e4da215980a0dfc25699fde)
+(cherry picked from commit 1fca098295bcae0c277a2a89873afdedb1145026)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 2 --
- 1 file changed, 2 deletions(-)
+ board/qemu/ppc64le-pseries/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b233b07548..f24e03a325 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1207,9 +1207,7 @@ $(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
- $(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
- $(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
+diff --git a/board/qemu/ppc64le-pseries/readme.txt b/board/qemu/ppc64le-pseries/readme.txt
+index 8ee72ea6cf..3d5577aa32 100644
+--- a/board/qemu/ppc64le-pseries/readme.txt
++++ b/board/qemu/ppc64le-pseries/readme.txt
+@@ -1,5 +1,5 @@
+ Run the emulation with:
  
--ifneq ($$($(2)_IS_VIRTUAL),YES)
- PACKAGES += $(1)
--endif
+-qemu-system-ppc64 -M pseries -cpu POWER8 -m 256 -kernel output/images/vmlinux -append "console=hvc0 rootwait root=/dev/sda" -drive file=output/images/rootfs.ext2,if=scsi,index=0,format=raw -serial stdio -display curses # qemu_ppc64le_pseries_defconfig
++qemu-system-ppc64 -M pseries,x-vof=on -cpu POWER8 -m 256 -kernel output/images/vmlinux -append "console=hvc0 rootwait root=/dev/sda" -drive file=output/images/rootfs.ext2,if=scsi,index=0,format=raw -serial stdio -display curses # qemu_ppc64le_pseries_defconfig
  
- ifneq ($$($(2)_PERMISSIONS),)
- PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
+ The login prompt will appear in the terminal window.
+
+--===============4276409827411252178==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4276409827411252178==--
