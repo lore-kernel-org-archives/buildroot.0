@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2C28C433FE
-	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:01:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73902C433FE
+	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:07:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B13A41D5F;
-	Fri, 30 Sep 2022 15:01:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B13A41D5F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0646B610D6;
+	Fri, 30 Sep 2022 15:07:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0646B610D6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vw8tVcD90jxE; Fri, 30 Sep 2022 15:01:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QV2HLm_t5Zlv; Fri, 30 Sep 2022 15:07:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E717941D5D;
-	Fri, 30 Sep 2022 15:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E717941D5D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 410011BF291
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:01:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26D4560B4C;
+	Fri, 30 Sep 2022 15:07:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26D4560B4C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B0771BF2F7
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:07:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C2A040C31
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:01:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C2A040C31
+ by smtp3.osuosl.org (Postfix) with ESMTP id 662BA60B4C
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:07:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 662BA60B4C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UoRFF89j9iYg for <buildroot@lists.busybox.net>;
- Fri, 30 Sep 2022 15:01:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XmG3NuluGyJE for <buildroot@lists.busybox.net>;
+ Fri, 30 Sep 2022 15:07:38 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93695404D1
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 93695404D1
- for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:01:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1C63610D4
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D1C63610D4
+ for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:07:37 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8FAD820000E;
- Fri, 30 Sep 2022 15:01:06 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 6C5BCE0009;
+ Fri, 30 Sep 2022 15:07:35 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oeHVh-00Bbki-4Z; Fri, 30 Sep 2022 17:01:05 +0200
+ id 1oeHby-00Bc9g-AJ; Fri, 30 Sep 2022 17:07:34 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20220830124423.164957-1-yann.morin.1998@free.fr>
-Date: Fri, 30 Sep 2022 17:01:05 +0200
-In-Reply-To: <20220830124423.164957-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Tue, 30 Aug 2022 14:44:23 +0200")
-Message-ID: <871qrs6h5a.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220924071932.1205B85C6E@busybox.osuosl.org>
+Date: Fri, 30 Sep 2022 17:07:34 +0200
+In-Reply-To: <20220924071932.1205B85C6E@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 24 Sep 2022 09:16:45 +0200")
+Message-ID: <87wn9k52a1.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/ncurses: drop our custom host build
- commands
+Subject: Re: [Buildroot] [git commit] package/m4: remove --disable-static
+ for host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,45 +70,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Commit bf446513e7e7 (ncurses: fix hanging installation due to old
- > version of tic) introduced the build of the host tic, to be used by the
- > target ncurses. That commit purportedly built a static tic, but that is
- > (at least now) wrong: there is nothing that makes the build of tic
- > static.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=bddc64e866186356297240240c69be7b17ff6d40
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Initially, host-ncurses was configured with --without-shared, but that
- > only drives whether to generate shared libs or not, it does not drive
- > whether to do a shared or static link of executables.
+ > This issue was reported by Firas Khalil Khana on a Github pull request
+ > at https://github.com/buildroot/buildroot/pull/113/.
 
- > And in any case, in af23d762e51b (ncurses: enable shared library build
- > on the host) we explicitly stopped requesting the build of a static
- > library, to instead require the build of a shared library.
+ > There is no --disable-static in m4. Research in the dark corners of
+ > the Git history has shown that it was apparently added by Peter
+ > Korsgaard back in 2009, in commit
+ > 3467cf73051d2b8d28d48dfdd694f66315f3b8ca ("m4: cleanup"). At this
+ > time, the version of m4 used was 1.4.9, but even looking at the
+ > tarball of this old release shows that the ./configure did not support
+ > --disable-static.
 
- > So, we never had a statically linked tic ever.
+ > So let's drop this option.
 
- > Furthermore, we override the _BUKLLD_CMDS, but we do not provide any
- > _INSTALL_CMDS. As a consequence, the full ncurses is installed, not just
- > tic. And since we override the _BUILD_CMDS, the libraries are not built,
- > so they get built during the install step.
-
- > And we do indeed need the libraries (host-gettext needs them), and not
- > just tic.
-
- > So, just drop our custom _BUILD_CMDS and just build the whole package
- > with the default settings. We keep the explicit use of --with-shared,
- > as this is not the standard flag (--enable-shared) and it is not obvious
- > what the default is.
-
- > The set of files installed before and after this change is exactly the
- > same, and tic still is an "ELF 64-bit LSB shared object" with a RUNPATH
- > that still correctly points to $(HOST_DIR)/lib
-
- > To be noted: there is no regressin in build time either, since we were
- > already building everything anyway.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Blast from the past! I also don't recall why I added it.
 
 Committed to 2022.02.x, 2022.05.x and 2022.08.x, thanks.
 
