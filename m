@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9830BC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBEABC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 30 Sep 2022 15:43:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2F5614103C;
-	Fri, 30 Sep 2022 15:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F5614103C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 697BE4103C;
+	Fri, 30 Sep 2022 15:43:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 697BE4103C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EK9j07YDmrlL; Fri, 30 Sep 2022 15:42:13 +0000 (UTC)
+	with ESMTP id KHMh5qAZ_mp1; Fri, 30 Sep 2022 15:43:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DE8540B9D;
-	Fri, 30 Sep 2022 15:42:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DE8540B9D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B83F01C2745
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:41:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0996B41150;
+	Fri, 30 Sep 2022 15:43:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0996B41150
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A7DFC1BF3DE
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:43:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 93FF161133
- for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:41:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93FF161133
+ by smtp1.osuosl.org (Postfix) with ESMTP id 833C5842F8
+ for <buildroot@lists.busybox.net>; Fri, 30 Sep 2022 15:43:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 833C5842F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Dn6y4Baw1Pk for <buildroot@lists.busybox.net>;
- Fri, 30 Sep 2022 15:41:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S5NQ95gIzs9V for <buildroot@lists.busybox.net>;
+ Fri, 30 Sep 2022 15:43:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AAD566110C
- for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:41:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAD566110C
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD09D842F7
+ for <buildroot@buildroot.org>; Fri, 30 Sep 2022 15:43:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD09D842F7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92D0F866BA; Fri, 30 Sep 2022 15:41:55 +0000 (UTC)
+ id BB552866CC; Fri, 30 Sep 2022 15:43:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Sep 2022 17:33:40 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 99c0ba167efef8422408679a6c2b18f38b7a4020
-X-Git-Newrev: fc11e80f8fcf3677d7921956b1907dfc94c1979b
+Date: Fri, 30 Sep 2022 17:33:35 +0200
+X-Git-Refname: refs/heads/2022.05.x
+X-Git-Oldrev: 95ed78ab7d26f45af09485b57a8ec0e33d70a4cb
+X-Git-Newrev: 07306350b723a8c918eff3976ba3f53593ba2ba9
 X-Patchwork-Hint: ignore
-Message-Id: <20220930154155.92D0F866BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x]
+Message-Id: <20220930154304.BB552866CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.05.x]
  package/freescale-imx/imx-gpu-viv: fix gbm.pc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc11e80f8fcf3677d7921956b1907dfc94c1979b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=07306350b723a8c918eff3976ba3f53593ba2ba9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
 
 libgbm isn't output/target specific, only one version is included
 in gpu-core/usr/lib/libgbm.so.
