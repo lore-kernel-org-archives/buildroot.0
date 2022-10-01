@@ -4,86 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D55FBC433FE
-	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 11:36:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70CDEC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 15:56:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17E644197E;
-	Sat,  1 Oct 2022 11:36:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17E644197E
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3081416E3;
+	Sat,  1 Oct 2022 15:56:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3081416E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jnlgSiaW6Ojr; Sat,  1 Oct 2022 11:36:02 +0000 (UTC)
+	with ESMTP id HmBpY7DlVA1I; Sat,  1 Oct 2022 15:56:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F83041939;
-	Sat,  1 Oct 2022 11:36:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F83041939
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 418741BF5AA
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 11:36:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42D35415EF;
+	Sat,  1 Oct 2022 15:56:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42D35415EF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 68BE21BF355
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 15:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CBE8402E7
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 11:36:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CBE8402E7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 442F883F76
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 15:56:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 442F883F76
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pR6SlVy7jXz7 for <buildroot@lists.busybox.net>;
- Sat,  1 Oct 2022 11:35:59 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 575DA40159
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 575DA40159
- for <buildroot@buildroot.org>; Sat,  1 Oct 2022 11:35:59 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id bk15so10445066wrb.13
- for <buildroot@buildroot.org>; Sat, 01 Oct 2022 04:35:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
- bh=Wz4RRJY0pM1puy7PZmICr4TLt1AVOsJhnHvwVxqEGlE=;
- b=l8AjzEj/j/HJYVOcHtgOKZ3FxzlcPv6QDXRnLmXlK7AjmSORGx3yfgmX1wUkZLHBUz
- cmxXuRtmbiT3FvdpVtEWPWtpnd4ABDy9HVs5MHK3hfQUovV9rosHD2w+bp0ZoEsyTuqH
- /Tmz5rTec7IM5JQxwADTeZFDi8ZwDXQP30ylZqOd0r/L7+PcJ41KMysFaCvJj3PIgTjx
- zezpGgsvxsll4MQGfRcRc9sy1WZUexnr2aRyf6HK1OuSCMrQ02SnwsjfF2gAvX/+3SDY
- 0B7NvOchQY54Ok58ksXpDuTrYjug9VwBby3KVKzMgdCM0Qpplg0Lld6d/B/2UaEsJvQ6
- btWA==
-X-Gm-Message-State: ACrzQf1Swb2wkd9d0EDfZwyhocveD5wDiPS/2w0f02rCSjGtbQ8Z2XqU
- cHmXOmFjahQteRii+5koK8c=
-X-Google-Smtp-Source: AMsMyM64ctalizvFuDs0j3MfeBVVnHO15wJ2mtaQ322AH2hi2ofx1qwPGU/2g5WATQNwR2fqsGHjrw==
-X-Received: by 2002:a5d:47a1:0:b0:22a:2979:4899 with SMTP id
- 1-20020a5d47a1000000b0022a29794899mr7961356wrb.349.1664624157165; 
- Sat, 01 Oct 2022 04:35:57 -0700 (PDT)
-Received: from localhost ([2a03:b0c0:1:d0::dee:c001])
- by smtp.gmail.com with ESMTPSA id
- w7-20020adfde87000000b0022afedf3c87sm4780898wrl.105.2022.10.01.04.35.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Oct 2022 04:35:56 -0700 (PDT)
-Date: Sat, 1 Oct 2022 11:35:55 +0000
-From: Stafford Horne <shorne@gmail.com>
-To: gcc-patches@gcc.gnu.org
-Message-ID: <YzgmG9Ihqt6xC7CA@oscomms1>
-References: <20220929145740.4846-1-shorne@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9JzUhuJZWZk3 for <buildroot@lists.busybox.net>;
+ Sat,  1 Oct 2022 15:56:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEE2583F0C
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AEE2583F0C
+ for <buildroot@buildroot.org>; Sat,  1 Oct 2022 15:56:24 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9961:1217:61e8:73cc])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 76583780306;
+ Sat,  1 Oct 2022 17:56:15 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 01 Oct 2022 17:56:15 +0200
+Date: Sat, 1 Oct 2022 17:56:15 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Athaariq Ardhiansyah <buildroot@athaariq.my.id>
+Message-ID: <20221001155615.GA30794@scaer>
+References: <20221001020445.1458953-1-buildroot@athaariq.my.id>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220929145740.4846-1-shorne@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:from:to:cc:subject:date;
- bh=Wz4RRJY0pM1puy7PZmICr4TLt1AVOsJhnHvwVxqEGlE=;
- b=ZphsxuD8lHIQHZ/fKsTPvEWxQnO3Qrkv8GkN0g5jk+nULFzLG9mKHZN2BXZHTKukVr
- MXUZ2+c3XwFoJPWfXCm3iRsOIz0mJeVnPm4eOpkzeeMPU0ByBYQxtXsy3XtFIiZ97MkK
- TAac6gEW2xBGZtx5CNvd1zvHHgU1ameGIaGf4eg/PO6FjpE7CQAlehV60vElgM4W8J8i
- huL6wP/yunllXQE42rA6pQTvlvAdpm3ZyZkc9adSSHp/HtjbMo+CdBVY8k7lLM8SZYIZ
- LVfsaOy2gWVgL7PX8Yfp8Pclw8NBMy6Bcv3koa2gePsb9045rOLsL6VY8ZuIxYTdpGNB
- 4pSA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZphsxuD8
-Subject: Re: [Buildroot] [PATCH] or1k: Only define TARGET_HAVE_TLS when
- HAVE_AS_TLS
+In-Reply-To: <20221001020445.1458953-1-buildroot@athaariq.my.id>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1664639780;
+ bh=zm2R3GXwBm7ccaNj375MZogZyBX+kcb7UksCzH5a854=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=OCICYfaADO6otlqcqp1Zr1WWVW8ScwluwLjA7aHAYmjoln5Aum0auD4U+87AbOAcD
+ 3kcVP0RRDCrLih8SS0UIbuUnne3Ax+hMZmqlnDR70DP0ymKivFB6rEGQCEYDI1CvXe
+ nosZUMfQFP3fZb567UQj3fkBZB1/chjN3cYKH733oX9wuuMv5Fty4IDiQAyJUkUozZ
+ Q+oZgn2YXsJltUWCz8ZJIe19OsZzeztbfXb8HHJteql8ekZ9aCLRW/4tZpLsj2+PXI
+ f0h6kvb0EHWxMJgOq6gFXXHRt3pRey4dq4RFfeBz7SgeLIRBKU/DaCRNGJZi36PWFQ
+ CvvJw1PNeNo8A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=OCICYfaA
+Subject: Re: [Buildroot] [PATCH 1/1] package/glibc: fix fsconfig_command
+ redeclaration bug
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,36 +77,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: openrisc@lists.librecores.org, Yann Morin <yann.morin@orange.com>,
- buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, Sep 29, 2022 at 03:57:40PM +0100, Stafford Horne wrote:
-> This was found when testing buildroot with linuxthreads enabled.  In
-> this case, the build passes --disable-tls to the toolchain during
-> configuration.  After building the OpenRISC toolchain it was still
-> generating TLS code sequences and causing linker failures such as:
-> 
->  ..../or1k-buildroot-linux-uclibc-gcc -o gpsd-3.24/gpsctl .... -lusb-1.0 -lm -lrt -lnsl
->  ..../ld: ..../sysroot/usr/lib/libusb-1.0.so: undefined reference to `__tls_get_addr'
-> 
-> This patch fixes this by disabling tls for the OpenRISC target when requested
-> via --disable-tls.
-> 
-> Tested-by: Yann E. MORIN <yann.morin@orange.com>
-> 
-> gcc/ChangeLog:
-> 
-> 	* config/or1k/or1k.cc (TARGET_HAVE_TLS): Only define if
-> 	HAVE_AS_TLS is defined.
+Athaariq, All,
 
-I have pushed this upstream now.  Adding buildroot patches should be easy to do
-now.
+On 2022-10-01 02:05 +0000, Athaariq Ardhiansyah spake thusly:
+> Temporary fix for buildroot-specific bug.
 
--Stafford
+How is this a buildroot-specific bug? Can you elaborate on that part? If
+it is really a buildroot-related bug, then we want to understand it, and
+fix it, not work around it.
+
+> Ideally, we should install linux-headers first then glibc. Is this actually possible on Buildroot?
+
+This is exactly what we are doing already, and for as long as Buildroot
+has supported building a glibc-ased toolchain, as the kernel headers are
+required to build glibc; see package/glibc/glibc.mk@28:
+
+   26 # Before glibc is configured, we must have the first stage
+   27 # cross-compiler and the kernel headers
+   28 GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
+
+> If yes, then we can also fix bug #15021 simultaneously if linux-headers being installed first as possible.
+
+This part does not apply (or makes sense), as linux headers *are*
+installed before glibc is even configured.
+
+This issue is really weird, because the glibc commit we are using is
+supposed to contain the related fixes:
+
+    $ git los --oneline 2.36-44-g2628500f5dff1dd99c49a09b418b3b1ea3a6b5d3
+    2628500f5d m68k: Enforce 4-byte alignment on internal locks (BZ #29537)
+    [...]
+    3bd3c612e9 Linux: Fix enum fsconfig_command detection in <sys/mount.h>
+    bb1e8b0ca9 linux: Fix sys/mount.h usage with kernel headers
+    d48813227b linux: Use compile_c_snippet to check linux/mount.h availability
+
+(There are two new commits on the release/2.36/master branch, but they
+seem unrelated to the issue:
+    76e05613ee (origin/release/2.36/master) stdlib: Fix __getrandom_nocancel type and arc4random usage (BZ #29638)
+    227c903587 get_nscd_addresses: Fix subscript typos [BZ #29605]
+)
+
+To be noted, and as Thomas noticed, OpenEmbeded is also using a glibc
+2.36 commit, and even one older than ours, but they do not seem to have
+issues.
+
+So, we'd like to understand why this is causing an issue for us. Hence,
+if you could elaborate on the firt part of your message, above, that
+would be extermely useful!
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Athaariq Ardhiansyah <buildroot@athaariq.my.id>
+> ---
+>  .../0002-fsconfig_command-workaround.patch      | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>  create mode 100644 package/glibc/0002-fsconfig_command-workaround.patch
+> 
+> diff --git a/package/glibc/0002-fsconfig_command-workaround.patch b/package/glibc/0002-fsconfig_command-workaround.patch
+> new file mode 100644
+> index 0000000000..27dd25b244
+> --- /dev/null
+> +++ b/package/glibc/0002-fsconfig_command-workaround.patch
+> @@ -0,0 +1,17 @@
+> +diff --git a/sysdeps/unix/sysv/linux/sys/mount.h b/sysdeps/unix/sysv/linux/sys/mount.h
+> +index 19841d0738..43a681d097 100644
+> +--- a/sysdeps/unix/sysv/linux/sys/mount.h
+> ++++ b/sysdeps/unix/sysv/linux/sys/mount.h
+> +@@ -27,11 +27,7 @@
+> + #include <stddef.h>
+> + #include <sys/ioctl.h>
+> + 
+> +-#ifdef __has_include
+> +-# if __has_include ("linux/mount.h")
+> +-#  include "linux/mount.h"
+> +-# endif
+> +-#endif
+> ++#include "linux/mount.h"
+> + 
+> + 
+> + #define BLOCK_SIZE_BITS	10
+> -- 
+> 2.37.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
