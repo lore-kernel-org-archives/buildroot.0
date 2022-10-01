@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77344C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 19:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64494C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 19:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D12C4056E;
-	Sat,  1 Oct 2022 19:34:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D12C4056E
+	by smtp2.osuosl.org (Postfix) with ESMTP id C93C440179;
+	Sat,  1 Oct 2022 19:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C93C440179
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I9q37wNaofiX; Sat,  1 Oct 2022 19:34:24 +0000 (UTC)
+	with ESMTP id H21bzyyEwWFS; Sat,  1 Oct 2022 19:53:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E80724023F;
-	Sat,  1 Oct 2022 19:34:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E80724023F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6D6601BF3BA
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 19:34:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0C0B4023F;
+	Sat,  1 Oct 2022 19:53:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0C0B4023F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 26AC71BF3BA
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 19:53:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 472B041604
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 19:34:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 472B041604
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F0A16077D
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 19:53:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F0A16077D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LIlJ3p3f7FZS for <buildroot@lists.busybox.net>;
- Sat,  1 Oct 2022 19:34:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vR9OHzXTFbUh for <buildroot@lists.busybox.net>;
+ Sat,  1 Oct 2022 19:53:47 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 696B8415F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F188606EB
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 696B8415F6
- for <buildroot@buildroot.org>; Sat,  1 Oct 2022 19:34:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F188606EB
+ for <buildroot@buildroot.org>; Sat,  1 Oct 2022 19:53:46 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b51:cb00:9961:1217:61e8:73cc])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 8322378034D;
- Sat,  1 Oct 2022 21:34:14 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id E671F780306;
+ Sat,  1 Oct 2022 21:53:40 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 01 Oct 2022 21:34:14 +0200
-Date: Sat, 1 Oct 2022 21:34:14 +0200
+ Sat, 01 Oct 2022 21:53:40 +0200
+Date: Sat, 1 Oct 2022 21:53:40 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Kirill Kranke <kk@aibs.ru>
-Message-ID: <20221001193414.GS30794@scaer>
-References: <20220927142604.17035-1-kk@aibs.ru>
+To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Message-ID: <20221001195340.GT30794@scaer>
+References: <1664283942-24229-1-git-send-email-gwenj@trabucayre.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20220927142604.17035-1-kk@aibs.ru>
+In-Reply-To: <1664283942-24229-1-git-send-email-gwenj@trabucayre.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1664652857;
- bh=lTC6I0B/rC0t7wXXZeTmgQKB/42iuAJsSbFpkvzV5/0=;
+ d=free.fr; s=smtp-20201208; t=1664654024;
+ bh=tB1wIwr8h8gFh7grdPz5eYv9zYKRI4n4xqpbfiAMY0c=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=E/plGdp9Ad9Q1xj3x0gC8+pTBwd8HfJzkhdZOkSEH+cjN644XHUleZSQ7N8IXDdxz
- kaWtRdh0qbEtE9n0CkA1cPhXNTy9jN2GkfC9F/w8HYwqhMWpFQt+dLmC/yiKA8y+ru
- KYP763N5460Gf86e+F8KBTLxXIkjzO+pbIVcNwoEawXs/wseoNogLtbydtyojDgZy/
- LvYiNdbrkEAK+UdYhVc7LtjgsfbyjCRGJX23tyZto2wuWhY+3zEjkSVbsJobVkhyEY
- eWJTiZjpDWn0HkOZ2twfYSOsWbj3cnkvp06hpHEYf3WFFeL+MFDHYcqQrNSE8K+mEJ
- P38DTiuysdxtw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=mkm3+WbjT4CspOPnXdT2Vp8pdLuEcrlPeF0Bt0Zf3rPwDl9/20m8gcEj5poYHQ7GL
+ 2ER7iu/R/Ir0H0ZXJSoGIKkgCOJvD52XPo6Y1SHgGlCgPVF+VtH3A0xJrLWPUOxZfR
+ Glhfz5uUWRVT3h+EGbbvgd7uYgdlLnTcFKPmSbSlS3M2mQRmUCCdb7wD3BnjXGhVk6
+ g3RAfg6lafSsv3dg45SnoZRLduSil/2ee60kOocGAf4tGgDMkTY4RGRO/DM+IdImN2
+ hFP8oZpz1EyTVJo+O5Cmp6TvXCPncPWlKAPGdySeZ9ufjGxWqWU5xKJvl+i5c6LWqo
+ FSkoUHGF0bLuw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=E/plGdp9
-Subject: Re: [Buildroot] [PATCH] package/sleef: add new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mkm3+Wbj
+Subject: Re: [Buildroot] [PATCH] package/python-remi: bump version to
+ 2022.7.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,191 +77,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Kirill, All,
+Gwenhael, All,
 
-On 2022-09-27 17:26 +0300, Kirill Kranke spake thusly:
-> SLEEF is a library that implements vectorized versions
-> of C standard math functions. This library also
-> includes DFT subroutines.
+On 2022-09-27 15:05 +0200, Gwenhael Goavec-Merou spake thusly:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> https://sleef.org/
-> Signed-off-by: Kirill Kranke <kk@aibs.ru>
-> ---
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+
+Applied to master, thanks.
+
+But see below...
+
 [--SNIP--]
-> diff --git a/package/sleef/Config.in b/package/sleef/Config.in
-> new file mode 100644
-> index 0000000000..85f93d384e
-> --- /dev/null
-> +++ b/package/sleef/Config.in
-> @@ -0,0 +1,50 @@
-> +config BR2_PACKAGE_SLEEF_ARCH_SUPPORTS
-> +	bool
-> +	default y if BR2_arm
-> +	default y if BR2_aarch64
-> +	default y if BR2_i386
-> +	default y if BR2_x86_64
-> +	default y if BR2_powerpc64
-> +
-> +config BR2_PACKAGE_SLEEF
-> +	bool "sleef"
+>  PYTHON_REMI_LICENSE = Apache-2.0
 
-You forgot to add the actual dependency on BR2_PACKAGE_SLEEF_ARCH_SUPPORTS
-here.
-
-> +	help
-> +          SLEEF is a library that implements vectorized versions
-> +          of C standard math functions. This library also
-> +          includes DFT subroutines.
-> +
-> +          https://sleef.org/
-
-If I understand correctly, by default, only the libm is built. This
-should probably be specified in the help text for the main symbol.
-
-> +if BR2_PACKAGE_SLEEF
-> +
-> +config BR2_PACKAGE_SLEEF_DFT
-> +        bool "compile dft"
-> +        default n
-
-default n is the default, so it should npt be specified.
-
-> +        help
-> +          libsleefdft will be built
-
-The helpe text does not provide much more information that the prompt,
-so there is no need for the help text, unless we can come up with a
-better help (see below)
-
-So:
-
-    config BR2_PACKAGE_SLEEF_LIBDFT
-        bool "libsleefdft"
-        help
-          libsleefdft contains functions to perform DFT (discreet
-          Fourrier transform).
-
-Adapt as you see fit.
-
-And so on for the other options.
-
-> +config BR2_PACKAGE_SLEEF_QUAD
-> +        bool "compile quad"
-> +        default n
-> +        help
-> +          libsleefquad will be built
-> +
-> +config BR2_PACKAGE_SLEEF_GNUABI_LIBS
-> +        bool "compile gnuabi"
-> +        default y
-> +        help
-> +          libsleefgnuabi will be built
-> +
-> +config BR2_PACKAGE_SLEEF_SCALAR_LIB
-> +        bool "compile scalar"
-> +        default n
-> +        help
-> +          libsleefscalar will be built
-> +
-> +config BR2_PACKAGE_SLEEF_TESTS
-> +        bool "compile tests"
-> +        default n
-> +        help
-> +          Tests will be built
-> +
-> +endif
-> diff --git a/package/sleef/sleef.hash b/package/sleef/sleef.hash
-> new file mode 100644
-> index 0000000000..51570a5176
-> --- /dev/null
-> +++ b/package/sleef/sleef.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
-> +sha256  415ee9b1bcc5816989d3d4d92afd0cd3f9ee89cbd5a33eb008e69751e40438ab  sleef-3.5.1.tar.gz
-> diff --git a/package/sleef/sleef.mk b/package/sleef/sleef.mk
-> new file mode 100644
-> index 0000000000..46bef69f5f
-> --- /dev/null
-> +++ b/package/sleef/sleef.mk
-> @@ -0,0 +1,49 @@
-> +################################################################################
-> +#
-> +# sleef
-> +#
-> +################################################################################
-> +
-> +SLEEF_VERSION = 3.5.1
-> +SLEEF_SITE = $(call github,shibatch,sleef,$(SLEEF_VERSION))
-> +SLEEF_LICENSE = BSL-1.0
-> +SLEEF_LICENSE_FILES = LICENSE.txt
-> +SLEEF_SUPPORTS_IN_SOURCE_BUILD = NO
-> +SLEEF_INSTALL_STAGING = YES
-> +
-> +# N.B. Need to use host sleef during cross compilation.
-> +SLEEF_DEPENDENCIES = host-sleef
-> +SLEEF_CONF_OPTS += -DNATIVE_BUILD_DIR=$(BUILD_DIR)/host-sleef-$(SLEEF_VERSION)/buildroot-build
-
-You will have to explain in the commit log why you need to point to the
-host-sleef build directory, and why you can't use the installed one, in
-$(HOST_DIR).
-
-Also, a package build directory is accessed with $(HOST_SLEEF_BUILDDIR)
-and for cmake based packages, it already includes the /buildroot-build
-sub-directory component:
-
-    make show-vars |jq .HOST_SLEEF_BUILDDIR
-
-Otherwise, it looks good. Except forthe missing explanations about the
-use of the build directory of the host packag, I could have fixed the
-rest when applying.
-
-Can you elaborate on that part, fix the other minor issues and respin,
-please?
+There is a file named LICENSE in the tree. Could you update our
+packaging to use that file, and add a hash for it, please?
 
 Regards,
 Yann E. MORIN.
 
-> +ifeq ($(BR2_PACKAGE_SLEEF_DFT),y)
-> +SLEEF_CONF_OPTS += -DBUILD_DFT=ON
-> +else
-> +SLEEF_CONF_OPTS += -DBUILD_DFT=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SLEEF_QUAD),y)
-> +SLEEF_CONF_OPTS += -DBUILD_QUAD=ON
-> +else
-> +SLEEF_CONF_OPTS += -DBUILD_QUAD=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SLEEF_GNUABI_LIBS),y)
-> +SLEEF_CONF_OPTS += -DBUILD_GNUABI_LIBS=ON
-> +else
-> +SLEEF_CONF_OPTS += -DBUILD_GNUABI_LIBS=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SLEEF_SCALAR_LIB),y)
-> +SLEEF_CONF_OPTS += -DBUILD_SCALAR_LIB=ON
-> +else
-> +SLEEF_CONF_OPTS += -DBUILD_SCALAR_LIB=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SLEEF_TESTS),y)
-> +SLEEF_CONF_OPTS += -DBUILD_TESTS=ON
-> +else
-> +SLEEF_CONF_OPTS += -DBUILD_TESTS=OFF
-> +endif
-> +
-> +$(eval $(cmake-package))
-> +$(eval $(host-cmake-package))
+>  PYTHON_REMI_SETUP_TYPE = setuptools
+>  
 > -- 
-> 2.20.1
+> 2.30.2
 > 
 > _______________________________________________
 > buildroot mailing list
