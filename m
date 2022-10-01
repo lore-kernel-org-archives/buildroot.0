@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B69EAC433FE
-	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 16:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D0FBC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 16:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57C3284027;
-	Sat,  1 Oct 2022 16:33:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57C3284027
+	by smtp1.osuosl.org (Postfix) with ESMTP id 765EB82C84;
+	Sat,  1 Oct 2022 16:47:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 765EB82C84
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HLpQhXcqEI_L; Sat,  1 Oct 2022 16:33:22 +0000 (UTC)
+	with ESMTP id FVrLj_8Fgclg; Sat,  1 Oct 2022 16:47:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6222784006;
-	Sat,  1 Oct 2022 16:33:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6222784006
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E6AF71BF59C
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 16:33:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC4D283EDC;
+	Sat,  1 Oct 2022 16:47:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC4D283EDC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 564361BF59C
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 16:47:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1804402FD
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 16:33:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1804402FD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31C26408E8
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 16:47:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31C26408E8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7DPUJ6GwHK2d for <buildroot@lists.busybox.net>;
- Sat,  1 Oct 2022 16:33:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8KB9rI_-HpYm for <buildroot@lists.busybox.net>;
+ Sat,  1 Oct 2022 16:47:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6D91402D2
- for <buildroot@buildroot.org>; Sat,  1 Oct 2022 16:33:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6D91402D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D95E40BAC
+ for <buildroot@buildroot.org>; Sat,  1 Oct 2022 16:47:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D95E40BAC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B1E418648E; Sat,  1 Oct 2022 16:33:10 +0000 (UTC)
+ id 58A49864FD; Sat,  1 Oct 2022 16:47:05 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 1 Oct 2022 18:32:29 +0200
+Date: Sat, 1 Oct 2022 18:46:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e65d768dbc41912451eaebf7f111541a672ba98c
-X-Git-Newrev: cc7bbbeac82eac9fdc9a752cd8ca10a263f8349d
+X-Git-Oldrev: cc7bbbeac82eac9fdc9a752cd8ca10a263f8349d
+X-Git-Newrev: d0c1e5131de893427f9e04147bfcac507a02073d
 X-Patchwork-Hint: ignore
-Message-Id: <20221001163310.B1E418648E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/spirv-llvm-translator: bump to
- version 11.0.0-297
+Message-Id: <20221001164705.58A49864FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbpf: bump to version 1.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc7bbbeac82eac9fdc9a752cd8ca10a263f8349d
+commit: https://git.buildroot.net/buildroot/commit/?id=d0c1e5131de893427f9e04147bfcac507a02073d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/spirv-llvm-translator/spirv-llvm-translator.hash | 2 +-
- package/spirv-llvm-translator/spirv-llvm-translator.mk   | 2 +-
+ package/libbpf/libbpf.hash | 2 +-
+ package/libbpf/libbpf.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.hash b/package/spirv-llvm-translator/spirv-llvm-translator.hash
-index 6133b1326a..edfca1ea02 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.hash
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  bcb0e5ae2d15f9876551fda46b222f911ed5afd626dfbcc66ddea9d36563ac9c  spirv-llvm-translator-v11.0.0-269-g13c76c4b275ae990d23883f7f15eec1a9adddc18.tar.gz
-+sha256  bdd7cb677b9fcaaff1cce2153de9d69298f136edecaef3631915614bb5db09a1  spirv-llvm-translator-v11.0.0-297-ga619b34bce55360d79fea9058a93ded04919f2b2.tar.gz
- sha256  e3bc36440fc927c62d5cc24efeefe225a14d4e34ffeb0c92e430625cce9ee444  LICENSE.TXT
-diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-index 73f7fe02de..159f7d3b52 100644
---- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
-+++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/libbpf/libbpf.hash b/package/libbpf/libbpf.hash
+index 23908ded7c..4305872d9f 100644
+--- a/package/libbpf/libbpf.hash
++++ b/package/libbpf/libbpf.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  f4480242651a93c101ece320030f6b2b9b437f622f807719c13cb32569a6d65a  libbpf-0.8.0.tar.gz
++sha256  3d6afde67682c909e341bf194678a8969f17628705af25f900d5f68bd299cb03  libbpf-1.0.1.tar.gz
+ sha256  847f4addbd56e2d5be20c4ea0845e972672fc07b755fadaae5f7abd35d71e349  LICENSE
+ sha256  e1638b9a0c68ca90fad3df1d6b4e430804d2fbdc15e58d02cffddfae38953bbf  LICENSE.BSD-2-Clause
+ sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSE.LGPL-2.1
+diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
+index 987d1145f1..820f1dc4bf 100644
+--- a/package/libbpf/libbpf.mk
++++ b/package/libbpf/libbpf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Generate version string using:
- #   git describe --tags --match 'v11*' --abbrev=40 origin/llvm_release_110
--SPIRV_LLVM_TRANSLATOR_VERSION = v11.0.0-269-g13c76c4b275ae990d23883f7f15eec1a9adddc18
-+SPIRV_LLVM_TRANSLATOR_VERSION = v11.0.0-297-ga619b34bce55360d79fea9058a93ded04919f2b2
- SPIRV_LLVM_TRANSLATOR_SITE = $(call github,KhronosGroup,SPIRV-LLVM-Translator,$(SPIRV_LLVM_TRANSLATOR_VERSION))
- SPIRV_LLVM_TRANSLATOR_LICENSE = NCSA
- SPIRV_LLVM_TRANSLATOR_LICENSE_FILES = LICENSE.TXT
+-LIBBPF_VERSION = 0.8.0
++LIBBPF_VERSION = 1.0.1
+ LIBBPF_SITE = $(call github,libbpf,libbpf,v$(LIBBPF_VERSION))
+ LIBBPF_LICENSE = GPL-2.0, LGPL-2.1, BSD-2-Clause
+ LIBBPF_LICENSE_FILES = LICENSE LICENSE.BSD-2-Clause LICENSE.LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
