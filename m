@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 136D2C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 16:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08A86C433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 16:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8441B41809;
-	Sat,  1 Oct 2022 16:47:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8441B41809
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TJl4y-QKuHby; Sat,  1 Oct 2022 16:47:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13095417E5;
-	Sat,  1 Oct 2022 16:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13095417E5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5F37C1BF59C
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 16:47:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B1A0408E8
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 16:47:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B1A0408E8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9ACA640BBC;
+	Sat,  1 Oct 2022 16:47:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9ACA640BBC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DZVmm_z97P9E for <buildroot@lists.busybox.net>;
- Sat,  1 Oct 2022 16:47:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 799BE40BBB
- for <buildroot@buildroot.org>; Sat,  1 Oct 2022 16:47:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 799BE40BBB
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 637A58650D; Sat,  1 Oct 2022 16:47:05 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 1 Oct 2022 18:46:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0c1e5131de893427f9e04147bfcac507a02073d
-X-Git-Newrev: e7b6d5c66e9ba7dce940b0587e5729fac491504d
-X-Patchwork-Hint: ignore
-Message-Id: <20221001164705.637A58650D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bpftool: bump to version 7.0.0
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MTmhTtlRcQD0; Sat,  1 Oct 2022 16:47:34 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B1C5E40B64;
+	Sat,  1 Oct 2022 16:47:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1C5E40B64
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AB10A1BF59C
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 16:47:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85388417E5
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 16:47:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85388417E5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zAtE4jRSHuFu for <buildroot@lists.busybox.net>;
+ Sat,  1 Oct 2022 16:47:25 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23494417E0
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 23494417E0
+ for <buildroot@buildroot.org>; Sat,  1 Oct 2022 16:47:25 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b51:cb00:9961:1217:61e8:73cc])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 403517802D6;
+ Sat,  1 Oct 2022 18:47:20 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 01 Oct 2022 18:47:20 +0200
+Date: Sat, 1 Oct 2022 18:47:20 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221001164720.GH30794@scaer>
+References: <20220929233443.3353813-1-james.hilliard1@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20220929233443.3353813-1-james.hilliard1@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1664642843;
+ bh=W8L2E5TFHB1tYuAD4UxgsmDzOT3YiH2u239r04JUPlo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Gt60bvlHKBnAPsc0RenLKU7GvntasFBTIBWQI4kHC2fzW3lnWN5lde3ZPcT9hKH+c
+ HWqOsz+hwfCwi4Oz7o2dIzj76hJFqbZopLdbs032yGuUIAGrEkT5cH6mnnpqJFSjx4
+ viJb/cQ/tZ0GHyYVlAFHYSTqgPcdOOVz1VDVqSg1yGascNtrNLyghyr+iqCTuEw+A8
+ r3Qfn2TIPmAx24s4q3gV/pfErS/aVkgoyoDovMmRgktmIuEyLi392E3JYsi0bHeJ5j
+ cK94ESTF9IybIj6H+55ivEuZIVdNJVDSlzKoM/kz90EyLYsTK/8d7i/7u6gR19Yokv
+ QGhmQ0hZuL5Fg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Gt60bvlH
+Subject: Re: [Buildroot] [PATCH 1/1] package/libbpf: bump to version 1.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,151 +76,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7b6d5c66e9ba7dce940b0587e5729fac491504d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+James, All,
 
-Drop patch which is now upstream.
+On 2022-09-29 17:34 -0600, James Hilliard spake thusly:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...-bootstrapping-during-a-cross-compilation.patch | 96 ----------------------
- package/bpftool/bpftool.hash                       |  2 +-
- package/bpftool/bpftool.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 98 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/bpftool/0001-bpftool-Fix-bootstrapping-during-a-cross-compilation.patch b/package/bpftool/0001-bpftool-Fix-bootstrapping-during-a-cross-compilation.patch
-deleted file mode 100644
-index fc192681e3..0000000000
---- a/package/bpftool/0001-bpftool-Fix-bootstrapping-during-a-cross-compilation.patch
-+++ /dev/null
-@@ -1,96 +0,0 @@
--From 189f777ea4829bede0bf92f572c22fe1f2c37522 Mon Sep 17 00:00:00 2001
--From: Shahab Vahedi <Shahab.Vahedi@synopsys.com>
--Date: Wed, 8 Jun 2022 14:29:28 +0000
--Subject: [PATCH] bpftool: Fix bootstrapping during a cross compilation
--
--This change adjusts the Makefile to use "HOSTAR" as the archive tool
--to keep the sanity of the build process for the bootstrap part in
--check. For the rationale, please continue reading.
--
--When cross compiling bpftool with buildroot, it leads to an invocation
--like:
--
--$ AR="/path/to/buildroot/host/bin/arc-linux-gcc-ar" \
--  CC="/path/to/buildroot/host/bin/arc-linux-gcc"    \
--  ...
--  make
--
--Which in return fails while building the bootstrap section:
--
------------------------------------8<----------------------------------
--
--  make: Entering directory '/src/bpftool-v6.7.0/src'
--  ...                        libbfd: [ on  ]
--  ...        disassembler-four-args: [ on  ]
--  ...                          zlib: [ on  ]
--  ...                        libcap: [ OFF ]
--  ...               clang-bpf-co-re: [ on  ] <-- triggers bootstrap
--
--  .
--  .
--  .
--
--    LINK     /src/bpftool-v6.7.0/src/bootstrap/bpftool
--  /usr/bin/ld: /src/bpftool-v6.7.0/src/bootstrap/libbpf/libbpf.a:
--               error adding symbols: archive has no index; run ranlib
--               to add one
--  collect2: error: ld returned 1 exit status
--  make: *** [Makefile:211: /src/bpftool-v6.7.0/src/bootstrap/bpftool]
--            Error 1
--  make: *** Waiting for unfinished jobs....
--    AR       /src/bpftool-v6.7.0/src/libbpf/libbpf.a
--    make[1]: Leaving directory '/src/bpftool-v6.7.0/libbpf/src'
--    make: Leaving directory '/src/bpftool-v6.7.0/src'
--
------------------------------------>8----------------------------------
--
--This occurs because setting "AR" confuses the build process for the
--bootstrap section and it calls "arc-linux-gcc-ar" to create and index
--"libbpf.a" instead of the host "ar".
--
--Signed-off-by: Shahab Vahedi <shahab@synopsys.com>
--Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
--Reviewed-by: Quentin Monnet <quentin@isovalent.com>
--Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>
--Link: https://lore.kernel.org/bpf/8d297f0c-cfd0-ef6f-3970-6dddb3d9a87a@synopsys.com
--Upstream: https://github.com/libbpf/bpftool/commit/189f777ea4829bede0bf92f572c22fe1f2c37522
--
--This is an adapted version, else it won't be possible to cross compile
--bpftool if "clang-bpf-co-re" feature is enabled.
-----
-- src/Makefile | 2 +-
-- src/Makefile.include       | 2 ++
-- 2 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/src/Makefile b/src/Makefile
--index b657502..b8b0808 100644
----- a/src/Makefile
--+++ b/src/Makefile
--@@ -51,7 +51,7 @@ $(LIBBPF_INTERNAL_HDRS): $(LIBBPF_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_HDRS_
-- $(LIBBPF_BOOTSTRAP): $(wildcard $(BPF_DIR)/*.[ch] $(BPF_DIR)/Makefile) | $(LIBBPF_BOOTSTRAP_OUTPUT)
-- 	$(Q)$(MAKE) -C $(BPF_DIR) OBJDIR=$(patsubst %/,%,$(LIBBPF_BOOTSTRAP_OUTPUT)) \
-- 		PREFIX=$(LIBBPF_BOOTSTRAP_DESTDIR:/=) \
---		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) $@ install_headers
--+		ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) AR=$(HOSTAR) $@ install_headers
-- 
-- $(LIBBPF_BOOTSTRAP_INTERNAL_HDRS): $(LIBBPF_BOOTSTRAP_HDRS_DIR)/%.h: $(BPF_DIR)/%.h | $(LIBBPF_BOOTSTRAP_HDRS_DIR)
-- 	$(call QUIET_INSTALL, $@)
----- a/src/Makefile.include
--+++ b/src/Makefile.include
--@@ -12,11 +12,13 @@
-- ifneq ($(LLVM),)
--   $(if $(findstring default,$(origin CC)),$(eval CC := clang$(LLVM_VERSION)))
--   $(if $(findstring default,$(origin LD)),$(eval LD := ld.lld$(LLVM_VERSION)))
--+  HOSTAR ?= llvm-ar
--   HOSTCC ?= clang
--   HOSTLD ?= ld.lld
-- else
--   $(if $(findstring default,$(origin CC)),$(eval CC = $(CROSS_COMPILE)$(CC)))
--   $(if $(findstring default,$(origin LD)),$(eval LD = $(CROSS_COMPILE)$(LD)))
--+  HOSTAR ?= ar
--   HOSTCC ?= gcc
--   HOSTLD ?= ld
-- endif
----
--2.35.3
--
-diff --git a/package/bpftool/bpftool.hash b/package/bpftool/bpftool.hash
-index 5fbc25adb7..92b9359fe3 100644
---- a/package/bpftool/bpftool.hash
-+++ b/package/bpftool/bpftool.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  f8f8cabc001823d270898ea3a635d1eb88e067bc24eed06f74e58d2650b32312  bpftool-v6.8.0-br1.tar.gz
-+sha256  465a50fea4afbacd326f2209d81ae0dcff637fbb2c9d1a315e94f79a788ce960  bpftool-v7.0.0-br1.tar.gz
- sha256  7c588754d5e81e92e2a12e47cf78949d485c9c22b4850f12d21b3835c85947d1  LICENSE
- sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0
-diff --git a/package/bpftool/bpftool.mk b/package/bpftool/bpftool.mk
-index bb1e4ccdff..3b27698130 100644
---- a/package/bpftool/bpftool.mk
-+++ b/package/bpftool/bpftool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BPFTOOL_VERSION = v6.8.0
-+BPFTOOL_VERSION = v7.0.0
- BPFTOOL_SITE = https://github.com/libbpf/bpftool
- BPFTOOL_SITE_METHOD = git
- BPFTOOL_GIT_SUBMODULES = YES
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libbpf/libbpf.hash | 2 +-
+>  package/libbpf/libbpf.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libbpf/libbpf.hash b/package/libbpf/libbpf.hash
+> index 23908ded7c..4305872d9f 100644
+> --- a/package/libbpf/libbpf.hash
+> +++ b/package/libbpf/libbpf.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated
+> -sha256  f4480242651a93c101ece320030f6b2b9b437f622f807719c13cb32569a6d65a  libbpf-0.8.0.tar.gz
+> +sha256  3d6afde67682c909e341bf194678a8969f17628705af25f900d5f68bd299cb03  libbpf-1.0.1.tar.gz
+>  sha256  847f4addbd56e2d5be20c4ea0845e972672fc07b755fadaae5f7abd35d71e349  LICENSE
+>  sha256  e1638b9a0c68ca90fad3df1d6b4e430804d2fbdc15e58d02cffddfae38953bbf  LICENSE.BSD-2-Clause
+>  sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSE.LGPL-2.1
+> diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
+> index 987d1145f1..820f1dc4bf 100644
+> --- a/package/libbpf/libbpf.mk
+> +++ b/package/libbpf/libbpf.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBBPF_VERSION = 0.8.0
+> +LIBBPF_VERSION = 1.0.1
+>  LIBBPF_SITE = $(call github,libbpf,libbpf,v$(LIBBPF_VERSION))
+>  LIBBPF_LICENSE = GPL-2.0, LGPL-2.1, BSD-2-Clause
+>  LIBBPF_LICENSE_FILES = LICENSE LICENSE.BSD-2-Clause LICENSE.LGPL-2.1
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
