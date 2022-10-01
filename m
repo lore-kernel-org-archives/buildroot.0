@@ -1,84 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F17EBC433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 21:06:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73FF8C433FE
+	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 21:21:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56BB78336F;
-	Sat,  1 Oct 2022 21:06:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56BB78336F
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF4094162C;
+	Sat,  1 Oct 2022 21:21:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF4094162C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gx_P1wyJv2Ti; Sat,  1 Oct 2022 21:06:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gLldQoq3-y3C; Sat,  1 Oct 2022 21:21:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4355C83386;
-	Sat,  1 Oct 2022 21:06:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4355C83386
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 165891BF4E6
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 21:06:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76AB741583;
+	Sat,  1 Oct 2022 21:21:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76AB741583
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1763C1BF4E6
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 21:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E590383386
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 21:06:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E590383386
+ by smtp3.osuosl.org (Postfix) with ESMTP id E72F260F53
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 21:21:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E72F260F53
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gGuFi2PxjxUQ for <buildroot@lists.busybox.net>;
- Sat,  1 Oct 2022 21:06:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6N-iVLcyHvBl for <buildroot@lists.busybox.net>;
+ Sat,  1 Oct 2022 21:21:38 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CB8B8336F
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
- [IPv6:2a00:1450:4864:20::131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5CB8B8336F
- for <buildroot@buildroot.org>; Sat,  1 Oct 2022 21:06:29 +0000 (UTC)
-Received: by mail-lf1-x131.google.com with SMTP id d42so11698313lfv.0
- for <buildroot@buildroot.org>; Sat, 01 Oct 2022 14:06:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75E48606DC
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 75E48606DC
+ for <buildroot@buildroot.org>; Sat,  1 Oct 2022 21:21:38 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id bk15so11670328wrb.13
+ for <buildroot@buildroot.org>; Sat, 01 Oct 2022 14:21:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date;
- bh=4g4s3HH1UEzhjeYFnoZUjFA8PsyfogpLypVJq8Ta5FM=;
- b=Re37QTU4sGtEc9i0vT8Dfk0ytaQUiVNI1nc9ujDvWg9qaf/8IO9ns6kUfsmwXPlWwA
- HLkz+b7CTSQ4DBNglcylJZvfie13n+CnAwup5LMx9ANyccRHdZ4doSjVGlxz/FC8PX+d
- NrmXoJ4AAuTeJdB7DzwZFDp03QB5Yz7sXUagRHlvUWGEKtZgY5ZXQTq2iELrxAXpEfuN
- U1IWFHhJGdu1/Pu75jA3tWr7/Ho3U61g0dQJRp+e3t1RgqhiIP2/Irh859lxBxQRIk5d
- fjLTBD0i54IbMvO12RXadqNjQG8lS/T90c4JoSFq5qW1gHzo8ylMGR0z8OG+qV9CtGD+
- fnWw==
-X-Gm-Message-State: ACrzQf1iKbVIuIzOZqFPTxcRMP3aacnzR9moJ3EEluOFWzIBLFb6Ju/u
- G03056DqAqjRa11FpKt/yPefI8UAhJAbJh8yM0fekPLB
-X-Google-Smtp-Source: AMsMyM71YkyoTfKDS09n1C3X/I/2km52ClAh+VN9NVfV/8G9qVAM9UdUcn7GTKnWcO1ZWr5mcaMOkuts7VYae83X4Lg=
-X-Received: by 2002:a19:f805:0:b0:498:df1f:858e with SMTP id
- a5-20020a19f805000000b00498df1f858emr5779691lff.610.1664658387160; Sat, 01
- Oct 2022 14:06:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220928213631.14450-1-fontaine.fabrice@gmail.com>
- <20221001165241.GM30794@scaer>
-In-Reply-To: <20221001165241.GM30794@scaer>
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=2PZ9uuXLb2IvZX6okYV9TcZ8SzIsIkh44pon/n6k04c=;
+ b=DL0OdYBP9oEduNw+5uMf7aWjn98ilc+EK/y6BOIu5n3qTGTLdjqgyxRd6Bu70h1pld
+ sIeuJxLGRmzEMeQDkrFSZsJua0h33JdKYqBKa4X9RESDJZMjJu2Y/LtQSe81lFyPZJgs
+ dPAeK8j+dP5exU73aONujA/uYzs17oNKjW0/+mlDDp/G5cR+lKo8+IS55qt+/2U4iy5u
+ h24yIRojQ/rFVqFA6MWpjM93/5+0qvqM4uxwQf9eiUpsuo+dBcfPPXxKU6FUar32MpeX
+ 3cDSlG8eKX8pk4WkZRrgbqbEQzL4iL/lr11ICPrgYljg0Zs002QwqpHXZMXhn67MQI9s
+ v3kA==
+X-Gm-Message-State: ACrzQf2473JcnVjlUYbterK0V6at65ftu3OYYEEjLPXO0bhXmiQZzAgz
+ Hc+2VwpEaCOMB+0zvZ1uobJ+3TCM/5o=
+X-Google-Smtp-Source: AMsMyM7OhccMSj9h2ZpEfi8PynYRfnxD/m5LvGhzOEh75yidV0xdZ1gqhg+gUQHNHs8/gJNcq3LzzQ==
+X-Received: by 2002:a05:6000:1887:b0:22a:3c3d:75ea with SMTP id
+ a7-20020a056000188700b0022a3c3d75eamr8723327wri.669.1664659296115; 
+ Sat, 01 Oct 2022 14:21:36 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ x16-20020adfec10000000b0022a2dbc80fdsm6127688wrn.10.2022.10.01.14.21.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 01 Oct 2022 14:21:35 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 1 Oct 2022 23:06:15 +0200
-Message-ID: <CAPi7W80PoLx4zqankep5Sv7vgB=t71xLg__BnqzpW-wm40WXdw@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat,  1 Oct 2022 23:21:14 +0200
+Message-Id: <20221001212114.11912-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date;
- bh=4g4s3HH1UEzhjeYFnoZUjFA8PsyfogpLypVJq8Ta5FM=;
- b=OvqghKia/n92xWLHEJLqCRDerYSv0Re1NMUrr9fqOCO21mSHscR3y57aFdIm9Kbckh
- pZwM0n6QT4Scr9b6K4w6t2yqgisp4+Al0d/NBh/C6PKZKxNCa1f+Ux/Pctf/C69EnVsA
- 1fW01DArPZEsyTI/mF2sQ/CQt4ynPR5YSdDaa/Q7zxIZmIgJnBgATeHJxWYvI0ZvL+4T
- tp34+l8BGOqjUjvEN/dt8IyVsUPdIhbLxiCG7Hh82zv3x7kxtmicjtNCjYl842aO2Q2p
- Jw3SPfpPBo+1O7rzkvN0Sse3713ui/bxW3jwNyfyo2yCMsLjfooojDvOCGXIfux/dc5W
- gdGw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=2PZ9uuXLb2IvZX6okYV9TcZ8SzIsIkh44pon/n6k04c=;
+ b=VDYYDKdK5t5Jk/TE6dawFDFr4kHEOFtbY7N76sJjPMia3UDEaCYm2Abs/ouCIr81jc
+ f5i4dH/rSB+nzs5eHR1ZWR7vLLGxiCGm3s4DfTfYguhSm+yuXDwVwXsYshSCNGuS4pMX
+ 4aBaCTBpMnpWK45Aj5wPhxI1MyTo0lY8Rk7M0qnfANUTNBYW55bUeA8XR6rIvI/upnbF
+ XkiWBel7srDiLpekuJith4loiO5z9HwT9BukWvp+YZEVe6ulJ3cpiDKzT8hxISW1V1gq
+ SPZeD20JVmcpaj5ue702Ro4B35gnXariI6iLE461XYJOagfTTosJC4Ag8kt++UTkzkil
+ Tg6g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=OvqghKia
-Subject: Re: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to
- version 5.5.1
+ header.a=rsa-sha256 header.s=20210112 header.b=VDYYDKdK
+Subject: [Buildroot] [PATCH 1/1] package/bind: security bump to version
+ 9.16.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,266 +93,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============5841140722092993377=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5841140722092993377==
-Content-Type: multipart/alternative; boundary="000000000000d6d04205e9ff7b12"
+- Fix memory leak in EdDSA verify processing. (CVE-2022-38178)
+- Fix memory leak in ECDSA verify processing. (CVE-2022-38177)
+- Fix serve-stale crash that could happen when
+  stale-answer-client-timeout was set to 0 and there was a stale CNAME
+  in the cache for an incoming query. (CVE-2022-3080)
+- Prevent excessive resource use while processing large delegations.
+  (CVE-2022-2795)
 
---000000000000d6d04205e9ff7b12
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+https://gitlab.isc.org/isc-projects/bind9/-/blob/v9_16_33/CHANGES
 
-Hi,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Le sam. 1 oct. 2022 =C3=A0 18:52, Yann E. MORIN <yann.morin.1998@free.fr> a
-=C3=A9crit :
-
-> Fabrice, All,
->
-> On 2022-09-28 23:36 +0200, Fabrice Fontaine spake thusly:
-> > Denial of service attack and buffer overflow against TLS 1.3
-> > servers using session ticket resumption. When built with
-> > --enable-session-ticket and making use of TLS 1.3 server code in
-> > wolfSSL, there is the possibility of a malicious client to craft a
-> > malformed second ClientHello packet that causes the server to crash.
-> > This issue is limited to when using both --enable-session-ticket and TL=
-S
-> > 1.3 on the server side. Users with TLS 1.3 servers, and having
-> > --enable-session-ticket, should update to the latest version of wolfSSL=
-.
->
-> I see that we are not explicitly using either --enable or
-> --disable-session-ticket, so what is the default, and were we impacted?
->
-
-session-ticket is disabled by default.
-Moreover, session-ticket is enabled if nginx, wpas, haproxy or lighty is
-enabled (but all of them are disabled).
-
-So, we were not impacted except if the user has explicitly enabled this
-option in its own tree.
-
->
-> Also, we should have an explicit setting for that, rather than leave it
-> to chance.
->
-
-Why not, but wolfssl has a ton of options, should we also explicitly set
-them to false even if they are disabled by default?
-
-
->
-> > https://github.com/wolfSSL/wolfssl/releases/tag/v5.5.1-stable
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Applied to master, thanks.
->
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  package/wolfssl/wolfssl.hash | 2 +-
-> >  package/wolfssl/wolfssl.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.has=
-h
-> > index f1401e4cda..3849ffb9fc 100644
-> > --- a/package/wolfssl/wolfssl.hash
-> > +++ b/package/wolfssl/wolfssl.hash
-> > @@ -1,5 +1,5 @@
-> >  # Locally computed:
-> > -sha256
-> c34b74b5f689fac7becb05583b044e84d3b10d39f38709f0095dd5d423ded67f
-> wolfssl-5.5.0.tar.gz
-> > +sha256
-> 97339e6956c90e7c881ba5c748dd04f7c30e5dbe0c06da765418c51375a6dee3
-> wolfssl-5.5.1.tar.gz
-> >
-> >  # Hash for license files:
-> >  sha256
-> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> > diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-> > index ca360312c9..95d4f47952 100644
-> > --- a/package/wolfssl/wolfssl.mk
-> > +++ b/package/wolfssl/wolfssl.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >
-> #########################################################################=
-#######
-> >
-> > -WOLFSSL_VERSION =3D 5.5.0
-> > +WOLFSSL_VERSION =3D 5.5.1
-> >  WOLFSSL_SITE =3D $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-sta=
-ble)
-> >  WOLFSSL_INSTALL_STAGING =3D YES
-> >
-> > --
-> > 2.35.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------=
-------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There i=
-s
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------=
-------'
->
-
-Best Regards,
-
-Fabrice
-
---000000000000d6d04205e9ff7b12
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi,<br></div><br><div class=3D"gmail_quot=
-e"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 1 oct. 2022 =C3=A0=C2=
-=A018:52, Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr">yann=
-.morin.1998@free.fr</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=
-=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
-b(204,204,204);padding-left:1ex">Fabrice, All,<br>
-<br>
-On 2022-09-28 23:36 +0200, Fabrice Fontaine spake thusly:<br>
-&gt; Denial of service attack and buffer overflow against TLS 1.3<br>
-&gt; servers using session ticket resumption. When built with<br>
-&gt; --enable-session-ticket and making use of TLS 1.3 server code in<br>
-&gt; wolfSSL, there is the possibility of a malicious client to craft a<br>
-&gt; malformed second ClientHello packet that causes the server to crash.<b=
-r>
-&gt; This issue is limited to when using both --enable-session-ticket and T=
-LS<br>
-&gt; 1.3 on the server side. Users with TLS 1.3 servers, and having<br>
-&gt; --enable-session-ticket, should update to the latest version of wolfSS=
-L.<br>
-<br>
-I see that we are not explicitly using either --enable or<br>
---disable-session-ticket, so what is the default, and were we impacted?<br>=
-</blockquote><div><br></div><div>session-ticket is disabled by default.</di=
-v><div>Moreover, session-ticket is enabled if nginx, wpas, haproxy or light=
-y is enabled (but all of them are disabled).<br></div><div>=C2=A0</div><div=
->So, we were not impacted except if the user has explicitly enabled this op=
-tion in its own tree.<br></div><blockquote class=3D"gmail_quote" style=3D"m=
-argin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left=
-:1ex">
-<br>
-Also, we should have an explicit setting for that, rather than leave it<br>
-to chance.<br></blockquote><div><br></div><div>Why not, but wolfssl has a t=
-on of options, should we also explicitly set them to false even if they are=
- disabled by default?<br></div><div>=C2=A0</div><blockquote class=3D"gmail_=
-quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,=
-204);padding-left:1ex">
-<br>
-&gt; <a href=3D"https://github.com/wolfSSL/wolfssl/releases/tag/v5.5.1-stab=
-le" rel=3D"noreferrer" target=3D"_blank">https://github.com/wolfSSL/wolfssl=
-/releases/tag/v5.5.1-stable</a><br>
-&gt; <br>
-&gt; Signed-off-by: Fabrice Fontaine &lt;<a href=3D"mailto:fontaine.fabrice=
-@gmail.com" target=3D"_blank">fontaine.fabrice@gmail.com</a>&gt;<br>
-<br>
-Applied to master, thanks.<br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
-&gt; ---<br>
-&gt;=C2=A0 package/wolfssl/wolfssl.hash | 2 +-<br>
-&gt;=C2=A0 package/wolfssl/<a href=3D"http://wolfssl.mk" rel=3D"noreferrer"=
- target=3D"_blank">wolfssl.mk</a>=C2=A0 =C2=A0| 2 +-<br>
-&gt;=C2=A0 2 files changed, 2 insertions(+), 2 deletions(-)<br>
-&gt; <br>
-&gt; diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.ha=
-sh<br>
-&gt; index f1401e4cda..3849ffb9fc 100644<br>
-&gt; --- a/package/wolfssl/wolfssl.hash<br>
-&gt; +++ b/package/wolfssl/wolfssl.hash<br>
-&gt; @@ -1,5 +1,5 @@<br>
-&gt;=C2=A0 # Locally computed:<br>
-&gt; -sha256=C2=A0 c34b74b5f689fac7becb05583b044e84d3b10d39f38709f0095dd5d4=
-23ded67f=C2=A0 wolfssl-5.5.0.tar.gz<br>
-&gt; +sha256=C2=A0 97339e6956c90e7c881ba5c748dd04f7c30e5dbe0c06da765418c513=
-75a6dee3=C2=A0 wolfssl-5.5.1.tar.gz<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 # Hash for license files:<br>
-&gt;=C2=A0 sha256=C2=A0 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404=
-010521b880643=C2=A0 COPYING<br>
-&gt; diff --git a/package/wolfssl/<a href=3D"http://wolfssl.mk" rel=3D"nore=
-ferrer" target=3D"_blank">wolfssl.mk</a> b/package/wolfssl/<a href=3D"http:=
-//wolfssl.mk" rel=3D"noreferrer" target=3D"_blank">wolfssl.mk</a><br>
-&gt; index ca360312c9..95d4f47952 100644<br>
-&gt; --- a/package/wolfssl/<a href=3D"http://wolfssl.mk" rel=3D"noreferrer"=
- target=3D"_blank">wolfssl.mk</a><br>
-&gt; +++ b/package/wolfssl/<a href=3D"http://wolfssl.mk" rel=3D"noreferrer"=
- target=3D"_blank">wolfssl.mk</a><br>
-&gt; @@ -4,7 +4,7 @@<br>
-&gt;=C2=A0 #<br>
-&gt;=C2=A0 ################################################################=
-################<br>
-&gt;=C2=A0 <br>
-&gt; -WOLFSSL_VERSION =3D 5.5.0<br>
-&gt; +WOLFSSL_VERSION =3D 5.5.1<br>
-&gt;=C2=A0 WOLFSSL_SITE =3D $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSIO=
-N)-stable)<br>
-&gt;=C2=A0 WOLFSSL_INSTALL_STAGING =3D YES<br>
-&gt;=C2=A0 <br>
-&gt; -- <br>
-&gt; 2.35.1<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot=
-@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listi=
-nfo/buildroot</a><br>
-<br>
--- <br>
-.-----------------.--------------------.------------------.----------------=
-----.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
-Erics&#39; conspiracy: |<br>
-| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
-=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
-| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
- =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
-| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer" target=3D"_bl=
-ank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=A0 =C2=A0 =
-|=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
-&#39;------------------------------^-------^------------------^------------=
---------&#39;<br></blockquote><div><br></div><div>Best Regards,</div><div><=
-br></div><div>Fabrice <br></div></div></div>
-
---000000000000d6d04205e9ff7b12--
-
---===============5841140722092993377==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 171edc8806..d41a9bbc5e 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.16.31/bind-9.16.31.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.16.33/bind-9.16.33.tar.xz.asc
+ # with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
+-sha256  8ca2cb6c37b605c70f7a25f0cf8a94d2040e025824db2341b92625efd96e7cfb  bind-9.16.31.tar.xz
++sha256  ec4fbea4b2e368d1824971509e33fa159224ad14b436034c6bcd46104c328d91  bind-9.16.33.tar.xz
+ sha256  daf6f1eddf5983ed664a2d125b619e56e2e93917c19d0d41c7586ea153ba2155  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index b1494d7596..abc3100e6d 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.16.31
++BIND_VERSION = 9.16.33
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5841140722092993377==--
