@@ -1,73 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F7E4C433FE
-	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 19:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D66DC433FE
+	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 19:15:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A10BB83339;
-	Sat,  1 Oct 2022 19:07:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A10BB83339
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEE794161A;
+	Sat,  1 Oct 2022 19:15:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEE794161A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X79SRK1I6yoH; Sat,  1 Oct 2022 19:07:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LJngNa7EB2hu; Sat,  1 Oct 2022 19:15:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B06E2832E6;
-	Sat,  1 Oct 2022 19:07:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B06E2832E6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4280B4161F;
+	Sat,  1 Oct 2022 19:15:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4280B4161F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E04761BF3BA
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 19:07:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7DEC91BF3BA
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 19:15:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA3A2415FB
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 19:07:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA3A2415FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 586264161C
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 19:15:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 586264161C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id enaUKF08FbpC for <buildroot@lists.busybox.net>;
- Sat,  1 Oct 2022 19:07:08 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05B9F415FA
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 05B9F415FA
- for <buildroot@buildroot.org>; Sat,  1 Oct 2022 19:07:07 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9961:1217:61e8:73cc])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 36934780306;
- Sat,  1 Oct 2022 21:07:03 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 01 Oct 2022 21:07:02 +0200
-Date: Sat, 1 Oct 2022 21:07:02 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <20221001190702.GQ30794@scaer>
-References: <20220927221133.594071-1-f.fainelli@gmail.com>
- <20220928233856.77bb191c@windsurf>
- <dda7b7d2-4846-6623-5ca7-39799015a138@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <dda7b7d2-4846-6623-5ca7-39799015a138@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1664651226;
- bh=OJkzcDdKQD6BwdB3RMAicCbQNerrvDvOLqSCuO3aJbI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MybMtBlRevOFVqO0QXPC3r9sqSvNLLkvQJCG0jiK4TVuucM5Q1z8wWUubgSGzEy2l
- YkbBlyDq3DjaRTwVYMWtPgEEsAlNukuwlIEYkNlO/uIFS4rwX0B7VcaXvxxerd7PrQ
- fb+0tRYEJMEzWZZ2RJfcFQtKpAJFNrB9+kno10TqqfVO8eQNat/EVLx8dtrVDmkaoj
- nWp8zFGFT0XGs4hZeGXl37IwRIOo843ycFxlr1cfV45UF2Fh63MrXdxg9ifSeIPv0s
- x5PPlHyYFeMXFyW0H87cEuvaMn0IBmoZcMV7JtYohR+fSNfHQ8XvPt11hoLvkRzelS
- ggNMgJjeCtsXg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MybMtBlR
-Subject: Re: [Buildroot] [PATCH] package/linux-tools: Exclude checking PE
- binaries from perf test
+ with ESMTP id zCLxzDa21mvN for <buildroot@lists.busybox.net>;
+ Sat,  1 Oct 2022 19:15:32 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F8644161A
+ for <buildroot@buildroot.org>; Sat,  1 Oct 2022 19:15:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F8644161A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8339286703; Sat,  1 Oct 2022 19:15:32 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 1 Oct 2022 21:15:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: db3a039e27f65f6cb5a24019741c21e6f741b6dd
+X-Git-Newrev: 22d6788619b17ebbe90eeccf7d754a45ab10c05a
+X-Patchwork-Hint: ignore
+Message-Id: <20221001191532.8339286703@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dnsmasq: security bump to version
+ 2.87
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,97 +57,264 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Florian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=22d6788619b17ebbe90eeccf7d754a45ab10c05a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2022-09-28 15:28 -0700, Florian Fainelli spake thusly:
-> On 9/28/22 14:38, Thomas Petazzoni wrote:
-> >On Tue, 27 Sep 2022 15:11:33 -0700
-> >Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >>Since upstream Linux commit ed21d6d7c48e6e96c2d617e304a7ebfbd17b1807
-> >>("perf tests: Add test for PE binary format support") present in >=
-> >>v5.10 there is an unconditional installation of PE binaries which will
-> >>be rejected by the check-bin-arch script.
-> >>
-> >>Make sure that these binaries are excluded from being checked to allow
-> >>the installation of the perf tests.
-> >>
-> >>Fixes: 6fcdaa4c5096 ("package/linux-tools: Allow installation of perf scripts")
-> >>Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >
-> >Thanks for the patch! Before merging it, I'd like to understand a
-> >little bit more how readelf behaves for these PE files. Indeed in
-> >check-bin-arch, we are doing:
-> >
-> >         arch=$(LC_ALL=C ${readelf} -h "${TARGET_DIR}/${f}" 2>&1 | \
-> >                        sed -r -e '/^  Machine: +(.+)/!d; s//\1/;' | head -1)
-> >
-> >         # If no architecture found, assume it was not an ELF file
-> >         if test "${arch}" = "" ; then
-> >                 continue
-> >         fi
-> >
-> >for a PE file, I would expect readelf to badly fail, and therefore
-> >${arch} to be empty, and the file simply ignored.
-> >
-> >What is the behavior/output of readelf on these PE files?
-> 
-> If I use my host system readelf which is packaged from
-> binutils-x86-64-linux-gnu, I get no output and all is well, however when
-> check-bin-arch is called and it uses $(TARGET_READELF), I do get:
-> 
-> ./host/bin/aarch64-linux-readelf -h
-> build/linux-custom/tools/perf/tests/pe-file.exe | sed -r -e '/^ Machine:
-> +(.+)/!d; s//\1/;' | head -1
-> IMAGE_FILE_MACHINE_AMD64 (0x8664)
-> 
-> which is what prompted me to issue this patch in the first place.
-> 
-> I should mention that the readelf binary in this case is the LLVM Object
-> Reader and it does support PE/COFF which is probably why it even remotely
-> attempts to parse the file.
+- Fix CVE-2022-0934:
+  https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2022q1/016274.html
+- Drop patches (already in version)
+- Update hash of COPYING, slight updates:
+  https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=commitdiff;h=858bfcf261e12a0baf4de6dbbf3b8858bab7cc53
 
-OK, but isn't that flawed? It is named 'readelf', so I would expect it
-to not report on non-ELF files, at least by default (i.e. unless a
-specific option flag is passed).
+https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2022q3/016560.html
 
-If a readelf tool does not behave like a readelf tool should behave,
-isn't that a bug in that specific readelf tool to begin with?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-src-option.c-fix-build-with-gcc-4.8.patch | 52 --------------------
+ ...2909d9080ff8743133fbd52427b4b2213171-typo.patch | 36 --------------
+ ...S-but-not-DNSSEC-compile-options-selected.patch | 34 -------------
+ ...0004-src-pattern.c-fix-build-with-gcc-4.8.patch | 57 ----------------------
+ package/dnsmasq/dnsmasq.hash                       |  6 +--
+ package/dnsmasq/dnsmasq.mk                         |  2 +-
+ 6 files changed, 4 insertions(+), 183 deletions(-)
 
-Otherwise, it is very intriguing how you managed to have a toolchain
-without gcc et al, be usable for Buildroot that only knows about the GNU
-ecosystem.
-
-Is that a publicly available toolchain? Can you share the recipe how
-that toolchain was generated? Do you have special, local changes in
-Buildroot to accomodate that toolchain? Will you submit those changes?
-
-That would allow adding more testing to avoid such issue in the future.
-Otherwise, I am not fan of adding such exclusion for private cases that
-we can not (easily) reproduce, as those cases are not supported.
-
-Regards,
-Yann E. MORIN.
-
-> -- 
-> Florian
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch b/package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 50ecf2f18a..0000000000
+--- a/package/dnsmasq/0001-src-option.c-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 46312909d9080ff8743133fbd52427b4b2213171 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 31 Dec 2021 17:29:44 +0100
+-Subject: [PATCH] src/option.c: fix build with gcc 4.8
+-
+-Fix the following build failure with gcc 4.8 raised since version 2.86:
+-
+-option.c: In function 'one_opt':
+-option.c:2445:11: error: 'for' loop initial declarations are only allowed in C99 mode
+-           for (char *p = arg; *p; p++) {
+-           ^
+-option.c:2445:11: note: use option -std=c99 or -std=gnu99 to compile your code
+-option.c:2453:11: error: 'for' loop initial declarations are only allowed in C99 mode
+-           for (u8 i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
+-           ^
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/39b34a4e69fc10f4bd9d4ddb0ed8c0aae5741c84
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream commit 46312909d9080ff8743133fbd52427b4b2213171]
+----
+- src/option.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/option.c b/src/option.c
+-index ff54def..c57f6d8 100644
+---- a/src/option.c
+-+++ b/src/option.c
+-@@ -2525,7 +2525,8 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
+-           arg += 9;
+-           if (strlen(arg) != 16)
+-               ret_err(gen_err);
+--          for (char *p = arg; *p; p++) {
+-+          char *p;
+-+          for (*p = arg; *p; p++) {
+-             if (!isxdigit((int)*p))
+-               ret_err(gen_err);
+-           }
+-@@ -2533,7 +2534,8 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
+- 
+-           u8 *u = daemon->umbrella_device;
+-           char word[3];
+--          for (u8 i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
+-+          u8 i;
+-+          for (i = 0; i < sizeof(daemon->umbrella_device); i++, arg+=2) {
+-             memcpy(word, &(arg[0]), 2);
+-             *u++ = strtoul(word, NULL, 16);
+-           }
+--- 
+-2.33.0
+-
+diff --git a/package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch b/package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch
+deleted file mode 100644
+index 8cdf5b3f1b..0000000000
+--- a/package/dnsmasq/0002-Fix-46312909d9080ff8743133fbd52427b4b2213171-typo.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 2748fb81e23b71e2c44956e99321816aca91905d Mon Sep 17 00:00:00 2001
+-From: Simon Kelley <simon@thekelleys.org.uk>
+-Date: Sat, 1 Jan 2022 23:03:26 +0000
+-Subject: [PATCH] Fix 46312909d9080ff8743133fbd52427b4b2213171 typo.
+-
+-[Upstream commit 2748fb81e23b71e2c44956e99321816aca91905d]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com> 
+----
+- src/option.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/option.c b/src/option.c
+-index c57f6d8..6f56ce8 100644
+---- a/src/option.c
+-+++ b/src/option.c
+-@@ -357,7 +357,7 @@ static const struct myoption opts[] =
+-     { "dhcp-ignore-clid", 0, 0,  LOPT_IGNORE_CLID },
+-     { "dynamic-host", 1, 0, LOPT_DYNHOST },
+-     { "log-debug", 0, 0, LOPT_LOG_DEBUG },
+--	{ "umbrella", 2, 0, LOPT_UMBRELLA },
+-+    { "umbrella", 2, 0, LOPT_UMBRELLA },
+-     { "quiet-tftp", 0, 0, LOPT_QUIET_TFTP },
+-     { NULL, 0, 0, 0 }
+-   };
+-@@ -2526,7 +2526,7 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
+-           if (strlen(arg) != 16)
+-               ret_err(gen_err);
+-           char *p;
+--          for (*p = arg; *p; p++) {
+-+          for (p = arg; *p; p++) {
+-             if (!isxdigit((int)*p))
+-               ret_err(gen_err);
+-           }
+--- 
+-2.33.0
+-
+diff --git a/package/dnsmasq/0003-Fix-FTBFS-when-CONNTRACK-and-UBUS-but-not-DNSSEC-compile-options-selected.patch b/package/dnsmasq/0003-Fix-FTBFS-when-CONNTRACK-and-UBUS-but-not-DNSSEC-compile-options-selected.patch
+deleted file mode 100644
+index 9c98af2be5..0000000000
+--- a/package/dnsmasq/0003-Fix-FTBFS-when-CONNTRACK-and-UBUS-but-not-DNSSEC-compile-options-selected.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 2c60441239e1c10c4987cb586653b1ea08f703c0 Mon Sep 17 00:00:00 2001
+-From: Simon Kelley <simon@thekelleys.org.uk>
+-Date: Tue, 28 Sep 2021 23:42:15 +0100
+-Subject: [PATCH] Fix FTBFS when CONNTRACK and UBUS but not DNSSEC compile
+- options selected.
+-
+-[Retrieved from:
+-https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=commit;h=2c60441239e1c10c4987cb586653b1ea08f703c0]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/dnsmasq.h | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/dnsmasq.h b/src/dnsmasq.h
+-index c8a918a..3fdc1b0 100644
+---- a/src/dnsmasq.h
+-+++ b/src/dnsmasq.h
+-@@ -1173,9 +1173,12 @@ extern struct daemon {
+-   char *packet; /* packet buffer */
+-   int packet_buff_sz; /* size of above */
+-   char *namebuff; /* MAXDNAME size buffer */
+-+#if (defined(HAVE_CONNTRACK) && defined(HAVE_UBUS)) || defined(HAVE_DNSSEC)
+-+  /* CONNTRACK UBUS code uses this buffer, as well as DNSSEC code. */
+-+  char *workspacename;
+-+#endif
+- #ifdef HAVE_DNSSEC
+-   char *keyname; /* MAXDNAME size buffer */
+--  char *workspacename; /* ditto */
+-   unsigned long *rr_status; /* ceiling in TTL from DNSSEC or zero for insecure */
+-   int rr_status_sz;
+-   int dnssec_no_time_check;
+--- 
+-2.20.1
+-
+diff --git a/package/dnsmasq/0004-src-pattern.c-fix-build-with-gcc-4.8.patch b/package/dnsmasq/0004-src-pattern.c-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 90bb02b23a..0000000000
+--- a/package/dnsmasq/0004-src-pattern.c-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From 0c89dd2fa0fe50b00bca638dbbacfbd361526e0a Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 2 Jan 2022 21:57:52 +0100
+-Subject: [PATCH] src/pattern.c: fix build with gcc 4.8
+-
+-Fix the following build failure:
+-
+-pattern.c: In function 'is_valid_dns_name':
+-pattern.c:134:3: error: 'for' loop initial declarations are only allowed in C99 mode
+-   for (const char *c = value;; c++)
+-   ^
+-pattern.c:134:3: note: use option -std=c99 or -std=gnu99 to compile your code
+-pattern.c: In function 'is_valid_dns_name_pattern':
+-pattern.c:249:3: error: 'for' loop initial declarations are only allowed in C99 mode
+-   for (const char *c = value;; c++)
+-   ^
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=commit;h=b2690415bfa1bc105e61b75f642fb5c1aaf0fae8]
+----
+- src/pattern.c | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/pattern.c b/src/pattern.c
+-index 03e23b9..928d259 100644
+---- a/src/pattern.c
+-+++ b/src/pattern.c
+-@@ -129,9 +129,9 @@ int is_valid_dns_name(const char *value)
+-   
+-   size_t num_bytes = 0;
+-   size_t num_labels = 0;
+--  const char *label = NULL;
+-+  const char *c, *label = NULL;
+-   int is_label_numeric = 1;
+--  for (const char *c = value;; c++)
+-+  for (c = value;; c++)
+-     {
+-       if (*c &&
+- 	  *c != '-' && *c != '.' &&
+-@@ -242,11 +242,11 @@ int is_valid_dns_name_pattern(const char *value)
+-   
+-   size_t num_bytes = 0;
+-   size_t num_labels = 0;
+--  const char *label = NULL;
+-+  const char *c, *label = NULL;
+-   int is_label_numeric = 1;
+-   size_t num_wildcards = 0;
+-   int previous_label_has_wildcard = 1;
+--  for (const char *c = value;; c++)
+-+  for (c = value;; c++)
+-     {
+-       if (*c &&
+- 	  *c != '*' && /* Wildcard. */
+--- 
+-2.20.1
+-
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 804012821e..78127ca714 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.86.tar.xz.asc
+-sha256  28d52cfc9e2004ac4f85274f52b32e1647b4dbc9761b82e7de1e41c49907eb08  dnsmasq-2.86.tar.xz
++# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.87.tar.xz.asc
++sha256  0228c0364a7f2356fd7e7f1549937cbf3099a78d3b2eb1ba5bb0c31e2b89de7a  dnsmasq-2.87.tar.xz
+ # Locally calculated
+-sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 230e4a8116..46a40c4bbb 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.86
++DNSMASQ_VERSION = 2.87
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
