@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1042C433F5
-	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 07:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5FDDC433F5
+	for <buildroot@archiver.kernel.org>; Sat,  1 Oct 2022 07:50:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 552B440C23;
-	Sat,  1 Oct 2022 07:49:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 552B440C23
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5328341A4F;
+	Sat,  1 Oct 2022 07:50:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5328341A4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EFszOsH-itLz; Sat,  1 Oct 2022 07:49:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yRAx-3OYkSGK; Sat,  1 Oct 2022 07:50:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7AA5340C0E;
-	Sat,  1 Oct 2022 07:49:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7AA5340C0E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DEDAF1BF488
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 07:49:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17766419FD;
+	Sat,  1 Oct 2022 07:50:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17766419FD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D4931BF488
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 07:50:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA7AA60E5B
- for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 07:49:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA7AA60E5B
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED61083F41
+ for <buildroot@lists.busybox.net>; Sat,  1 Oct 2022 07:50:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED61083F41
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v-oR9OlTWx1X for <buildroot@lists.busybox.net>;
- Sat,  1 Oct 2022 07:49:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dJ7b5PGNv5ZR for <buildroot@lists.busybox.net>;
+ Sat,  1 Oct 2022 07:50:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B18C60B55
- for <buildroot@buildroot.org>; Sat,  1 Oct 2022 07:49:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B18C60B55
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3AC0A83EAB
+ for <buildroot@buildroot.org>; Sat,  1 Oct 2022 07:50:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AC0A83EAB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 55B1D847A4; Sat,  1 Oct 2022 07:49:02 +0000 (UTC)
+ id 2A15E85CBF; Sat,  1 Oct 2022 07:50:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 1 Oct 2022 09:48:31 +0200
-X-Git-Refname: refs/heads/2022.05.x
-X-Git-Oldrev: d2f3ab0e5ddc4478333f0654f7340f8c69c329ea
-X-Git-Newrev: 3b1cef1c0b6a6b1b2da0892bb8469d12cc403ee1
+Date: Sat, 1 Oct 2022 09:48:38 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 10932e5fca6c9eb0b48d41fc849a30d50bad325e
+X-Git-Newrev: 92938648df013e5990812ff1462a70eddf762f5c
 X-Patchwork-Hint: ignore
-Message-Id: <20221001074902.55B1D847A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.05.x] package/graphicsmagick:
+Message-Id: <20221001075010.2A15E85CBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/graphicsmagick:
  bump to version 1.3.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b1cef1c0b6a6b1b2da0892bb8469d12cc403ee1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=92938648df013e5990812ff1462a70eddf762f5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 License file hash is changed, due to a copyright year change:
 
