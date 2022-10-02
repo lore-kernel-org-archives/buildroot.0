@@ -1,50 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9895C433FE
-	for <buildroot@archiver.kernel.org>; Sun,  2 Oct 2022 19:37:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D40CBC433FE
+	for <buildroot@archiver.kernel.org>; Sun,  2 Oct 2022 20:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 389B281438;
-	Sun,  2 Oct 2022 19:37:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 389B281438
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3EDD940126;
+	Sun,  2 Oct 2022 20:45:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EDD940126
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SHb8dNBbUR5I; Sun,  2 Oct 2022 19:37:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Xatlb2loUY2u; Sun,  2 Oct 2022 20:45:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E97B81401;
-	Sun,  2 Oct 2022 19:37:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E97B81401
+	by smtp2.osuosl.org (Postfix) with ESMTP id 518C4400C7;
+	Sun,  2 Oct 2022 20:45:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 518C4400C7
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AD4E41BF2FB
- for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 19:37:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10DC31BF3EF
+ for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 20:45:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88F5F81401
- for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 19:37:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88F5F81401
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC587824A4
+ for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 20:45:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC587824A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lxddMzxBWqZ0 for <buildroot@lists.busybox.net>;
- Sun,  2 Oct 2022 19:37:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78B4081400
- for <buildroot@buildroot.org>; Sun,  2 Oct 2022 19:37:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78B4081400
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 64875867A0; Sun,  2 Oct 2022 19:37:39 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 2 Oct 2022 21:37:02 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 92938648df013e5990812ff1462a70eddf762f5c
-X-Git-Newrev: 374f83630bafe7371ecd751cf07e3e7c0ce1c71e
-X-Patchwork-Hint: ignore
-Message-Id: <20221002193739.64875867A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] Update for 2022.02.6
+ with ESMTP id YEqIqrG33h6A for <buildroot@lists.busybox.net>;
+ Sun,  2 Oct 2022 20:45:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 619788249E
+Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 619788249E
+ for <buildroot@buildroot.org>; Sun,  2 Oct 2022 20:45:39 +0000 (UTC)
+Received: from [192.168.50.173] ([146.241.15.171])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id f5qCo1TlORFZ1f5qDonkOV; Sun, 02 Oct 2022 22:45:37 +0200
+Message-ID: <bd00292c-2b79-4bf4-18ed-b6f4a8e23e43@benettiengineering.com>
+Date: Sun, 2 Oct 2022 22:45:36 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+To: Ankit Panchal <ankitpanchal202@gmail.com>, buildroot@buildroot.org
+References: <20220615065406.2856780-1-ankit.panchal@einfochips.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20220615065406.2856780-1-ankit.panchal@einfochips.com>
+X-CMAE-Envelope: MS4xfOmmzH8vd7vDvLwkpNKGHII6jlwKXPOvnIyaWSXuIQyH6kyxC78Gby0Oi3AYNAOW5VOYcHHyfK0Cuss4y6ol6fvpRXMDCzK2Y0wMSw5TcNf6xVFJgnSb
+ 0u7+cbzMo0iYKUqBafIStLUWjJM+yHcpj+ew02syDN+FC9nERjWZWJqjThvEPubXmALDEEiunPSda3jgyTOhM70CS1HkEK1JjXfjSUsJwjtihEjziDHULyjZ
+ gXATVrGvWGLijYbSWnbppNMPirOEIzG6hiSQ0VA60M4ppw+Muj4QUQoKxbtzNWW8MdqzDmLmAlyTxf10o7a2/5sBy3PLY3i/jMIuDR2TX++0nVtTaBzWlgS5
+ V688BSL7iPJ+27gnHqVECGXHgovmAkKN1JwRNRjd9Ewpdza1AVw=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1664743537; bh=0D9Aw3htKeLH90i7wyvrAH7PnQSdFkDGKD2ASssiZ2I=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=L6eY/do2MYpkqZYhV8CUZVZMPpnfcCtnIEYjPfyEKVDd+Blk+xWkUttrD5cTojTcr
+ 8pdw6ea2JmMw/TMJCd1EBpmzSFxcsA19YZBNjV8pvmTcLqvJyOoPaaQyXdUgSfvpj+
+ oQWBmXmEatdmvu6SOGI/VQvXRwIa1ncgEM1Qh+0A1LXtppJ7DEKl2QGaBR7JOUaRRB
+ EcmtdF0t7qQBywT8HjL1PuP4zbrHD3QNHpeuoXqAkeBw3xdDZmOo1kX9vbF1oHR17g
+ avsijQb8hbEIJUKyiuiHcoLYZ0Ai6w6FxiRlqnJ+0F7/bhNfIBZwxXqIdKx+JieqvW
+ bc4rlbDxhefdw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=L6eY/do2
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt5webkit: fix qt-webkit-kisok
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,107 +77,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Julien Corjon <corjon.j@ecagroup.com>, Peter Seiderer <ps.report@gmx.net>,
+ Ankit Panchal <ankit.panchal@einfochips.com>,
+ =?UTF-8?Q?Ga=c3=abl_Portay?= <gael.portay@collabora.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=374f83630bafe7371ecd751cf07e3e7c0ce1c71e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+Hi Ankit,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                  | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 51 insertions(+), 3 deletions(-)
+sorry for the late reply,
 
-diff --git a/CHANGES b/CHANGES
-index 4d7076e908..055b262d7a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,51 @@
-+2022.02.6, released October 2nd, 2022
-+
-+	Important / security related fixes.
-+
-+	Fixed compatibility issue with make 4.3 and the 'printvars' /
-+	'show-vars' commands.
-+
-+	Dependencies: Ensure 'find' and 'xargs' are available on the
-+	build host.
-+
-+	A large number of typo fixes.
-+
-+	Defconfigs: Galileo: Fix defconfig syntax, Licheepi zero: Fix
-+	U-Boot dependencies, Bananapi m1, Olimx a20 olinuxino lime
-+	1+2, a33 olinuxino: Use standard FPU configuration, Pine 64
-+	sopine, Rockpro 64: Change to mainline ATF to fix build issue.
-+
-+	Updated/fixed packages: ace, arm-trusted-firmware,
-+	babeltrace2, boost, botan, busybox, clamav, cog, connman,
-+	containerd, cups, dhcpcd, directfb, docker-cli, docker-engine,
-+	edk2, edk2-platforms, elf2flt, expat, ffmpeg, ficl,
-+	freeswitch, freetype, gcc, gdb, git, gnutls, go,
-+	graphicsmagic, grub2, gst1-plugins-bad, gst1-plugins-good,
-+	heirloom-mailx, icu, igh-ethercat, imagemagick, imx-gpu-viv,
-+	jose, jpeg, jquery-ui-themes, kodi, libconfuse, libfreeimage,
-+	libglvnd, libgpg-error, libinput, libmdbx, libsepol, libtirpc,
-+	libupnp, libvirt, libvncserver, libwpe, libxml2, libzlib,
-+	linux, linux-tools, lshw, m4, makedevs, makedumpfile,
-+	mali-driver, mariadb, memcached, mesa3d, minidlna, mosquitto,
-+	mutt, mv-ddr-marvell, ncurses, ne10, netsniff-ng,
-+	networkd-dispatcher, ocrad, opencv4, openocd, openssh, pango,
-+	pcsc-lite, polkit, postgis, postgresql, python-paho-mqtt,
-+	python-pygame, python3, qemu, qlibc,
-+	qoriq-cadence-dp-firmware, qt5xmlpatterns, ranger, rng-tools,
-+	rsync, rsyslog, rtl8189es, rtl8723be, runc, rustc,
-+	sconeserver, sdl2, snort, sox, sqlite, squid, stress-ng,
-+	strongswan, sunxi-mali-utgard-driver, syslinux, syslog-ng,
-+	tcf-agent, tcpreplay, tesseract-ocr, tinyproxy, uacme,
-+	uboot-tools, uclibc, unzip, usbguard, v4l2loopback, vim,
-+	webkitgtk, wolfssl, wpewebkit, xfsprogs, xserver_xorg-server,
-+	xtables-addons, zziplib
-+
-+	Issues resolved:
-+
-+	#13216: [Documentation] 2020.02.6 requires GNU find utils
-+	#14796: 64 bit time and seccomp conflict (OpenSSH server crash)
-+	#14951: boost compile error when running make silently
-+
- 2022.02.5, released August 31st, 2022
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 51de2066d7..93125e16a6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2022.02.5
-+export BR2_VERSION := 2022.02.6
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1661977000
-+BR2_VERSION_EPOCH = 1664739000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index cf6192a9d6..8ff587100c 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2022.02.5'
-+RELEASE='2022.02.6'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+On 15/06/22 08:54, Ankit Panchal wrote:
+> From: Ankit Panchal <ankitpanchal202@gmail.com>
+> 
+> While compilation of qt-webkit-kiosk package we get following error:
+> ERROR: Unknown module(s) in QT: webkit webkitwidgets
+> 
+> more detail about the bug is provided at:
+> https://bugs.buildroot.org/show_bug.cgi?id=14606
+> 
+> Following are the changes done:
+> 1. The installation paths of the qt5webkit modules in the .pri files
+> has been modified.
+> 2. And softlinks of the webkit and webkitwidgets packages has been
+> created at the expected paths.
+> 
+> Signed-off-by: Ankit Panchal <ankit.panchal@einfochips.com>
+> ---
+>   package/qt5/qt5webkit/qt5webkit.mk | 17 +++++++++++++++++
+>   1 file changed, 17 insertions(+)
+> 
+> diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+> index 6912359674..a850a03ca9 100644
+> --- a/package/qt5/qt5webkit/qt5webkit.mk
+> +++ b/package/qt5/qt5webkit/qt5webkit.mk
+> @@ -50,6 +50,23 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+>   QT5WEBKIT_CONF_OPTS += -DENABLE_SAMPLING_PROFILER=OFF
+>   endif
+>   
+> +define QT5WEBKIT_CONF_PRI
+> +	$(SED) 's/QT.webkit.includes =.*/QT.webkit.includes = \$$\$$QT_MODULE_INCLUDE_BASE \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKit/g' -e 's/QT.webkit.libs =.*/QT.webkit.libs = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkit.rpath =.*/QT.webkit.rpath = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkit.bins =.*/QT.webkit.bins = \$$\$$QT_MODULE_BIN_BASE/g' -e 's/QMAKE_RPATHDIR +=.*/QMAKE_RPATHDIR += \$$\$$QT_MODULE_LIB_BASE/g' $(@D)/Source/WebKit/qt_lib_webkit.pri
+> +
+> +	$(SED) 's/QT.webkit_private.includes =.*/QT.webkit_private.includes = \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKit\/5.212.0 \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKit\/5.212.0\/QtWebKit/g' -e 's/QT.webkit_private.libs =.*/QT.webkit_private.libs = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkit_private.bins =.*/QT.webkit_private.bins = \$$\$$QT_MODULE_BIN_BASE/g' $(@D)/Source/WebKit/qt_lib_webkit_private.pri
+> +
+> +	$(SED) 's/QT.webkitwidgets.includes =.*/QT.webkitwidgets.includes = \$$\$$QT_MODULE_INCLUDE_BASE \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKitWidgets/g' -e 's/QT.webkitwidgets.libs =.*/QT.webkitwidgets.libs = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkitwidgets.rpath =.*/QT.webkitwidgets.rpath = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkitwidgets.bins =.*/QT.webkitwidgets.bins = \$$\$$QT_MODULE_BIN_BASE/g' -e 's/QMAKE_RPATHDIR +=.*/QMAKE_RPATHDIR += \$$\$$QT_MODULE_LIB_BASE/g' $(@D)/Source/WebKit/qt_lib_webkitwidgets.pri
+> +
+> +	$(SED) 's/QT.webkitwidgets_private.includes =.*/QT.webkitwidgets_private.includes = \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKitWidgets\/5.212.0 \$$\$$QT_MODULE_INCLUDE_BASE\/QtWebKitWidgets\/5.212.0\/QtWebKitWidgets/g' -e 's/QT.webkitwidgets_private.libs =.*/QT.webkitwidgets_private.libs = \$$\$$QT_MODULE_LIB_BASE/g' -e 's/QT.webkitwidgets_private.bins =.*/QT.webkitwidgets_private.bins = \$$\$$QT_MODULE_BIN_BASE/g' $(@D)/Source/WebKit/qt_lib_webkitwidgets_private.pri
+> +endef
+
+Generally we prefer having a local patch instead of SED tweaks since
+they are difficult to understand.
+
+I've become only 1 week ago qt5 package maintainer so I haven't seen
+your patch, but I've seen this patch:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220929181350.1026033-1-thomas.ballasi@savoirfairelinux.com/
+that I've reviewed.
+
+Feel free to check it and comment it since you've faced the same problem.
+
+All future patches are welcome.
+
+Thank you!
+
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+> +QT5WEBKIT_POST_CONFIGURE_HOOKS += QT5WEBKIT_CONF_PRI
+> +
+> +define QT5WEBKIT_CREATE_SYMLINK
+> +	ln -sf $(HOST_DIR)/arm-buildroot-linux-gnueabihf/sysroot/usr/mkspecs/modules/*.pri $(HOST_DIR)/mkspecs/modules/
+> +	ln -sf $(HOST_DIR)/arm-buildroot-linux-gnueabihf/sysroot/usr/include/QtWebKit* $(HOST_DIR)/arm-buildroot-linux-gnueabihf/sysroot/usr/include/qt5/
+> +endef
+> +QT5WEBKIT_POST_INSTALL_STAGING_HOOKS += QT5WEBKIT_CREATE_SYMLINK
+> +
+>   QT5WEBKIT_CONF_OPTS += \
+>   	-DENABLE_TOOLS=OFF \
+>   	-DPORT=Qt \
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
