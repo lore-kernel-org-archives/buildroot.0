@@ -1,89 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4B86C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  2 Oct 2022 00:50:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8234EC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  2 Oct 2022 03:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BA2641522;
-	Sun,  2 Oct 2022 00:50:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BA2641522
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8_LfjVHu3CIm; Sun,  2 Oct 2022 00:50:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B488A41523;
-	Sun,  2 Oct 2022 00:50:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B488A41523
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B809D1BF977
- for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 00:49:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 937324013C
- for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 00:49:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 937324013C
+	by smtp2.osuosl.org (Postfix) with ESMTP id CE555400D2;
+	Sun,  2 Oct 2022 03:38:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE555400D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o0Ga7YdwPzrM for <buildroot@lists.busybox.net>;
- Sun,  2 Oct 2022 00:49:49 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD0F440139
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
- [IPv6:2607:f8b0:4864:20::62b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DD0F440139
- for <buildroot@buildroot.org>; Sun,  2 Oct 2022 00:49:49 +0000 (UTC)
-Received: by mail-pl1-x62b.google.com with SMTP id f23so6951038plr.6
- for <buildroot@buildroot.org>; Sat, 01 Oct 2022 17:49:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date;
- bh=c1TGncDDnOwjcha4HgiWrBe/V12ldh7QJnyX+oI/blA=;
- b=xHUPKdtIRzHazarXojMOMBq7RWRaAnCsTvH+/pw8VpB10jucr19G2vtyFfzTPI6CoL
- FvbzXQ/ByNVRBG1WCt6Xkw6on7BO4p6YQxIml5LH/HjhzxiYzOIgjqg+GPFpvQwrVVZF
- T1fLBtMLGJAAYkkYJnlggWzSJ/I+vRjz/TYJIbBwSlD5F2w2pJJgS5btrkJNzSXWsPZx
- P0inDWVLLaBcN21XrZ1hqoSszZm5tjGK6rBvixQjFMLkJvHmF332vp5ve5DLbLA2/Oys
- v+sIbbAmVjb2PGwid4jrb3qlOKI41ACx2dZIn1RPGILzCxcsGhb8ZzWSawxVC61ptB0r
- Z2yA==
-X-Gm-Message-State: ACrzQf3ZFhgWmJixfKF/o2ORTbrYLMLkoGN+oKTLymYJQQSWj4E7Jnig
- 7m89zKk/hvtxJqQCg6ViT5sXQ/cQ9kf1WA==
-X-Google-Smtp-Source: AMsMyM77PtehboYie/r6bbGIUr7cXynSMq2j2IRFLGXhJ1gCW2713eu7CKhcceyvJtT2ZPomfkhvWQ==
-X-Received: by 2002:a17:90b:180a:b0:202:ae1f:328a with SMTP id
- lw10-20020a17090b180a00b00202ae1f328amr5481290pjb.78.1664671788621; 
- Sat, 01 Oct 2022 17:49:48 -0700 (PDT)
-Received: from chrisp-dl.atlnz.lc ([2001:df5:b000:22:f3f6:75b8:5739:f03d])
- by smtp.gmail.com with ESMTPSA id
- x2-20020aa79562000000b0053dec787698sm1031611pfq.175.2022.10.01.17.49.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Oct 2022 17:49:47 -0700 (PDT)
-From: Chris Packham <judge.packham@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun,  2 Oct 2022 13:49:31 +1300
-Message-Id: <20221002004931.1805825-2-judge.packham@gmail.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221002004931.1805825-1-judge.packham@gmail.com>
-References: <20221002004931.1805825-1-judge.packham@gmail.com>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M4RCHQ8ZubnF; Sun,  2 Oct 2022 03:38:23 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E804040106;
+	Sun,  2 Oct 2022 03:38:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E804040106
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7FED01BF2B4
+ for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 03:38:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B05960AF2
+ for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 03:38:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B05960AF2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W8dao7EcEo7T for <buildroot@lists.busybox.net>;
+ Sun,  2 Oct 2022 03:38:19 +0000 (UTC)
+X-Greylist: delayed 00:05:07 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C63AD606A0
+Received: from wrqvxttq.outbound-mail.sendgrid.net
+ (wrqvxttq.outbound-mail.sendgrid.net [149.72.167.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C63AD606A0
+ for <buildroot@buildroot.org>; Sun,  2 Oct 2022 03:38:18 +0000 (UTC)
+Received: by filterdrecv-canary-57bf98f445-wwgvq with SMTP id
+ filterdrecv-canary-57bf98f445-wwgvq-1-63390675-F
+ 2022-10-02 03:33:09.734703586 +0000 UTC m=+366307.402410453
+Received: from athaariq.my.id (unknown) by geopod-ismtpd-2-1 (SG) with ESMTP
+ id KIOt9LuJS1qKzXxAm8Awfg Sun, 02 Oct 2022 03:33:09.217 +0000 (UTC)
+Received: from mail.athaariq.my.id (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by athaariq.my.id (Postfix) with ESMTPSA id 51D0B10568B;
+ Sun,  2 Oct 2022 10:26:42 +0700 (WIB)
 MIME-Version: 1.0
+Date: Sun, 02 Oct 2022 03:33:09 +0000 (UTC)
+From: buildroot@athaariq.my.id
+In-Reply-To: <84f6447a658a7c5c46852dc84fe5cb1a@athaariq.my.id>
+References: <20221001020445.1458953-1-buildroot@athaariq.my.id>
+ <20221001155615.GA30794@scaer>
+ <84f6447a658a7c5c46852dc84fe5cb1a@athaariq.my.id>
+Message-ID: <8c42038a335a0122dee3365ce1940920@athaariq.my.id>
+X-Sender: buildroot@athaariq.my.id
+X-SG-EID: =?us-ascii?Q?cuHA57UmN3h37Du2RZTUuZwgCKztG1NrS6GYeDL2RtYN3aQvhxKzyA29y8QJ=2FO?=
+ =?us-ascii?Q?eL0oLlcy9TF68JPLTaNYrKXUgXT742bEYqEeADg?=
+ =?us-ascii?Q?hzijod6y1UkQm4oGmHvCWvChRPbEtTURNjOBTze?=
+ =?us-ascii?Q?XdpmFwoyqygouLa463h8+AKbsk=2FRcZoktfhCwkh?=
+ =?us-ascii?Q?48FgAXry3HwMomJW5=2FXKODNjqaN3uFFZ6c72n6W?=
+ =?us-ascii?Q?brctoI2LvC=2F3tAcRc=3D?=
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Entity-ID: 8hTT1BSDhM31GKM3tJ7/LQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
- bh=c1TGncDDnOwjcha4HgiWrBe/V12ldh7QJnyX+oI/blA=;
- b=kNT84wnieOkkXRdM2RAjsc6LEDmg+RQuBPiCOqYKPAOPbkkjhsGoMa0/ocoMPcm6ZZ
- 4sFMUiAlMZSGrnAeyj5rEr12JuOusIf6lIUwKpEXVJ1fVZ/NjruQNLOkqtJZN0FPU7cc
- I5pLLwW+87JXbf43lRrXvQ22JKQVP0Q9pIftdlaC8UmGCqlRCE3FlN+nb4V/1tnxEce/
- H5x2fddyfKWlB5y8ZxTBHT06PWvveOuH8fS+QBZtXbjBnpVtfyA7Vwl7HPA4FcDcVkm0
- Ehdn71+87pus6ndqomEXZdy+gfo4liusfIhdiziIMuoSUQkw4XpY4Q7JvNSwsVr/1XzV
- aB3g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=kNT84wni
-Subject: [Buildroot] [PATCH 2/2] package/syslog-ng: Bump version to 3.38.1
+ d=athaariq.my.id; 
+ h=mime-version:from:subject:in-reply-to:references:to:cc:content-type:
+ content-transfer-encoding;
+ s=s1; bh=dJp8bixw5WbAwwyNP5h5Rp7eCc2MQ0HuYpzwMRfPMcU=;
+ b=ZonSI8jEqDHdacRIBt0YZ4u627XguYf5xXzoDtKYu9t3JWR2Qj6F86IRGnzo7HGbNSx/
+ WdWVjfjiZh/GF18qFpNpEFg+TiKzkLDWbMu7IDffUU/cOX3FLHEJFivOh7mNsB54vSGKzK
+ ms7H06qXeuY55IpyMIC3WHgxCGNYcF7kPMs8VjcGqtvXckiG+YpxsnXFQcUsyNQgRuqlXc
+ J/wjwnCJQUa2qPT/h2wxlc0Z+hbsRXNLa9hiuagJOHnM7HCdiR77VYR+GBmxzU6xmpN2By
+ 6kFxkrBYsRtEP9ttYASF4LawByV4WHWbSbLY1BgmNc5BaYk2rzGaf2FCLGP8WFdg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=athaariq.my.id header.i=@athaariq.my.id
+ header.a=rsa-sha256 header.s=s1 header.b=ZonSI8jE
+Subject: Re: [Buildroot] [PATCH 1/1] package/glibc: fix fsconfig_command
+ redeclaration bug
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,144 +91,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Chris Packham <judge.packham@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new version. Remove patch that has been applied upstream. Update
-hash for COPYING as it's text has changed to clarify some details but
-the license remains LGP-2.0+L/GPL-2.0+.
-
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- ...-lib-tlscontext.c-fix-libressl-build.patch | 85 -------------------
- package/syslog-ng/syslog-ng.hash              |  4 +-
- package/syslog-ng/syslog-ng.mk                |  2 +-
- 3 files changed, 3 insertions(+), 88 deletions(-)
- delete mode 100644 package/syslog-ng/0002-lib-tlscontext.c-fix-libressl-build.patch
-
-diff --git a/package/syslog-ng/0002-lib-tlscontext.c-fix-libressl-build.patch b/package/syslog-ng/0002-lib-tlscontext.c-fix-libressl-build.patch
-deleted file mode 100644
-index 2c438627a4..0000000000
---- a/package/syslog-ng/0002-lib-tlscontext.c-fix-libressl-build.patch
-+++ /dev/null
-@@ -1,85 +0,0 @@
--From 6f93484cea81ff8d45df213d5d2b4cffc4eadcad Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 16 Jul 2022 18:09:25 +0200
--Subject: [PATCH] lib/tlscontext.c: fix libressl build
--
--Fix the following build failure with libressl raised since version
--3.37.1 and
--https://github.com/syslog-ng/syslog-ng/commit/c7ba645918480da06b9e065c62ebd630312b0c7f:
--
--/nvmedata/autobuild/instance-5/output-1/host/lib/gcc/nios2-buildroot-linux-gnu/10.3.0/../../../../nios2-buildroot-linux-gnu/bin/ld: ./lib/.libs/libsyslog-ng.so: undefined reference to `SSL_CTX_set1_client_sigalgs_list'
--/nvmedata/autobuild/instance-5/output-1/host/lib/gcc/nios2-buildroot-linux-gnu/10.3.0/../../../../nios2-buildroot-linux-gnu/bin/ld: ./lib/.libs/libsyslog-ng.so: undefined reference to `SSL_CTX_set1_sigalgs_list'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/84cf9f6a0f6de831a685b73c42eab868952c8b15
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/syslog-ng/syslog-ng/pull/4081]
-----
-- cmake/openssl_functions.cmake | 4 +++-
-- configure.ac                  | 2 ++
-- lib/tlscontext.c              | 4 ++++
-- syslog-ng-config.h.in         | 2 ++
-- 4 files changed, 11 insertions(+), 1 deletion(-)
--
--diff --git a/cmake/openssl_functions.cmake b/cmake/openssl_functions.cmake
--index afd7b96bfe..319dcc2e23 100644
----- a/cmake/openssl_functions.cmake
--+++ b/cmake/openssl_functions.cmake
--@@ -42,7 +42,9 @@ function (openssl_set_defines)
--     DH_set0_pqg
--     BN_get_rfc3526_prime_2048
--     SSL_CTX_set_num_tickets
---    SSL_CTX_set_ciphersuites)
--+    SSL_CTX_set_ciphersuites
--+    SSL_CTX_set1_sigalgs_list
--+    SSL_CTX_set1_client_sigalgs_list)
-- 
--   foreach (symbol ${symbol_list})
--     string(TOUPPER ${symbol} SYMBOL_UPPERCASE)
--diff --git a/configure.ac b/configure.ac
--index 8cfab2251e..ecffb84f06 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1055,6 +1055,8 @@ AC_CHECK_DECLS([ASN1_STRING_get0_data], [], [], [[#include <openssl/asn1.h>]])
-- AC_CHECK_DECLS([DH_set0_pqg], [], [], [[#include <openssl/dh.h>]])
-- AC_CHECK_DECLS([BN_get_rfc3526_prime_2048], [], [], [[#include <openssl/bn.h>]])
-- AC_CHECK_DECLS([SSL_CTX_set_num_tickets],[], [], [[#include <openssl/ssl.h>]])
--+AC_CHECK_DECLS([SSL_CTX_set1_sigalgs_list],[], [], [[#include <openssl/ssl.h>]])
--+AC_CHECK_DECLS([SSL_CTX_set1_client_sigalgs_list],[], [], [[#include <openssl/ssl.h>]])
-- 
-- CPPFLAGS="$CPPFLAGS_SAVE"
-- 
--diff --git a/lib/tlscontext.c b/lib/tlscontext.c
--index ddde21dcaf..dedcf1ce5a 100644
----- a/lib/tlscontext.c
--+++ b/lib/tlscontext.c
--@@ -598,11 +598,15 @@ tls_context_setup_cipher_suite(TLSContext *self)
-- static gboolean
-- tls_context_setup_sigalgs(TLSContext *self)
-- {
--+#if SYSLOG_NG_HAVE_DECL_SSL_CTX_SET1_SIGALGS_LIST
--   if (self->sigalgs && !SSL_CTX_set1_sigalgs_list(self->ssl_ctx, self->sigalgs))
--     return FALSE;
--+#endif
-- 
--+#if SYSLOG_NG_HAVE_DECL_SSL_CTX_SET1_CLIENT_SIGALGS_LIST
--   if (self->client_sigalgs && !SSL_CTX_set1_client_sigalgs_list(self->ssl_ctx, self->client_sigalgs))
--     return FALSE;
--+#endif
-- 
--   return TRUE;
-- }
--diff --git a/syslog-ng-config.h.in b/syslog-ng-config.h.in
--index 1817deea50..004b0a7be6 100644
----- a/syslog-ng-config.h.in
--+++ b/syslog-ng-config.h.in
--@@ -57,6 +57,8 @@
-- #cmakedefine01 SYSLOG_NG_HAVE_DECL_ASN1_STRING_GET0_DATA
-- #cmakedefine01 SYSLOG_NG_HAVE_DECL_SSL_CTX_GET0_PARAM
-- #cmakedefine01 SYSLOG_NG_HAVE_DECL_SSL_CTX_SET_CIPHERSUITES
--+#cmakedefine01 SYSLOG_NG_HAVE_DECL_SSL_CTX_SET1_SIGALGS_LIST
--+#cmakedefine01 SYSLOG_NG_HAVE_DECL_SSL_CTX_SET1_CLIENT_SIGALGS_LIST
-- #cmakedefine01 SYSLOG_NG_HAVE_DECL_X509_STORE_CTX_GET0_CERT
-- #cmakedefine01 SYSLOG_NG_HAVE_DECL_X509_GET_EXTENSION_FLAGS
-- #cmakedefine01 SYSLOG_NG_HAVE_DECL_DH_SET0_PQG
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index 764ff45733..6fce7be996 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  d67a320cb896cd5d62f24d9e1bec138847fa4618ae13a3946cae2b75c528ee14  syslog-ng-3.37.1.tar.gz
--sha256  e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
-+sha256  5491f686d0b829b69b2e0fc0d66a62f51991aafaee005475bfa38fab399441f7  syslog-ng-3.38.1.tar.gz
-+sha256  c75dcbfc17ccf742f12042a370f825a40951085d2352dfc9d07e715dae3ca9bd  COPYING
- sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 64b3b24498..a7176ad129 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please check at runtime if the version in
- # syslog-ng.conf header needs to be updated
--SYSLOG_NG_VERSION = 3.37.1
-+SYSLOG_NG_VERSION = 3.38.1
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
--- 
-2.37.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gTXIuIE1vcnJpbiwKCj4gVGhpcyBpc3N1ZSBpcyByZWFsbHkgd2VpcmQsIGJlY2F1c2Ug
+dGhlIGdsaWJjIGNvbW1pdCB3ZSBhcmUgdXNpbmcgaXMKPiBzdXBwb3NlZCB0byBjb250YWluIHRo
+ZSByZWxhdGVkIGZpeGVzCgpQYXJkb24gbWUgZm9yIGJlaW5nIHNvIHdlaXJkLiBXaGF0IEknbSB0
+cnlpbmcgdG8gZml4IGlzIHRoaXMgZXJyb3I6CgpgYGAKL2J1aWxkcy9idWlsZHJvb3Qub3JnL2J1
+aWxkcm9vdC9vdXRwdXQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290
+L3Vzci9pbmNsdWRlL2xpbnV4L21vdW50Lmg6OTI6NjogCmVycm9yOiBtdWx0aXBsZSBkZWZpbml0
+aW9uIG9mIOKAmGVudW0gZnNjb25maWdfY29tbWFuZOKAmQogICAgOTIgfCBlbnVtIGZzY29uZmln
+X2NvbW1hbmQgewogICAgICAgfCAgICAgIF5+fn5+fn5+fn5+fn5+fn4KSW4gZmlsZSBpbmNsdWRl
+ZCBmcm9tIAouLi8uLi8uLi8uLi9saWJzYW5pdGl6ZXIvc2FuaXRpemVyX2NvbW1vbi9zYW5pdGl6
+ZXJfcGxhdGZvcm1fbGltaXRzX3Bvc2l4LmNwcDo2MjoKL2J1aWxkcy9idWlsZHJvb3Qub3JnL2J1
+aWxkcm9vdC9vdXRwdXQvYnVpbGQvaG9zdC1nY2MtZmluYWwtMTEuMy4wL2J1aWxkL2djYy9pbmNs
+dWRlLWZpeGVkL3N5cy9tb3VudC5oOjI0OTo2OiAKbm90ZTogcHJldmlvdXMgZGVmaW5pdGlvbiBo
+ZXJlCiAgIDI0OSB8IGVudW0gZnNjb25maWdfY29tbWFuZAogICAgICAgfCAgICAgIF5+fn5+fn5+
+fn5+fn5+fn4KYGBgCgpJIGRpZCBzcGVudCBlbnRpcmUgbW9ybmluZyBsYXN0IHR3byBkYXlzIGFn
+byBhbmQgSSBmaWd1cmVkIG91dCB0aGF0IG5vIAptYXR0ZXIgaG93IGRvIEkgZGV0ZWN0IGxpbnV4
+L21vdW50LmggcHJlc2VuY2UgaW4gInN5cy9tb3VudC5oIiwgKiplbnVtIApmc2NvbmZpZ19jb21t
+YW5kKiogc3RpbGwgaW4gY2xhc2ggYmV0d2VlbiBsaW51eC1oZWFkZXJzIGFuZCBnbGliYy4gCkhv
+d2V2ZXIsIHRoZSBwcm9ibGVtIG9ubHkgZXhpc3QgaW4gZ2xpYmMgdjIuMzYgd2hlcmVhcyBubyBl
+ZmZlY3Qgd2hlbiBJIApjaGFuZ2VkIGxpbnV4IHZlcnNpb24uIFRodXMsIGxpbnV4LWhlYWRlcnMg
+c2VlbXMgdG8gYmUgZGVjbGFyZWQgYWZ0ZXIgCmdsaWJjLgoKPiBIb3cgaXMgdGhpcyBhIGJ1aWxk
+cm9vdC1zcGVjaWZpYyBidWc/IENhbiB5b3UgZWxhYm9yYXRlIG9uIHRoYXQgcGFydD8gCj4gSWYK
+PiBpdCBpcyByZWFsbHkgYSBidWlsZHJvb3QtcmVsYXRlZCBidWcsIHRoZW4gd2Ugd2FudCB0byB1
+bmRlcnN0YW5kIGl0LCAKPiBhbmQKPiBmaXggaXQsIG5vdCB3b3JrIGFyb3VuZCBpdC4KCkJlY2F1
+c2UgaXQgc3VjY2Vzc2Z1bGx5IGNvbXBpbGVkIGluIEdlbnRvbyBidXQgZmFpbGVkIHdoZW4gY29t
+cGlsZSAKQnVpbGRyb290IGZvciBSYXNwYmVycnkgUGkgNCBhbmQgUmFzcGJlcnJ5IFBpIDMsIHdp
+dGggZGVmYXVsdCAKY29uZmlndXJhdGlvbi4gVGhlIHJlYXNvbiB3aHkgSSBhc2tlZCAiSXMgdGhp
+cyBwb3NzaWJsZSBvbiBCdWlsZHJvb3Q/IiAKaXMgdG8gZ2l2ZSB5b3UgdHdvIG9wdGlvbnM6CjEu
+IElmIHBvc3NpYmxlLCBsZXQncyBtYWtlIHN1cmUgbGludXgtaGVhZGVycyBpbnN0YWxsZWQgYmVm
+b3JlIGdsaWJjCjIuIElmIG5vdCwgbGV0J3Mgd29ya2Fyb3VuZCBmb3IgYSB3aGlsZSB1bnRpbCB0
+aGVyZSdzIGEgcmV2ZWxhdGlvbiBmcm9tIAp1cHN0cmVhbQoKPiBUaGlzIGlzIGV4YWN0bHkgd2hh
+dCB3ZSBhcmUgZG9pbmcgYWxyZWFkeSwgYW5kIGZvciBhcyBsb25nIGFzIEJ1aWxkcm9vdAo+IGhh
+cyBzdXBwb3J0ZWQgYnVpbGRpbmcgYSBnbGliYy1hc2VkIHRvb2xjaGFpbiwgYXMgdGhlIGtlcm5l
+bCBoZWFkZXJzIAo+IGFyZQo+IHJlcXVpcmVkIHRvIGJ1aWxkIGdsaWJjOyBzZWUgcGFja2FnZS9n
+bGliYy9nbGliYy5ta0AyODoKCldlbGwgdGhhdCdzIGludGVyZXN0aW5nLiBXb25kZXIgd2h5IHRo
+YXQgZW51bSByZWRlY2xhcmF0aW9uIGVycm9yIGV4aXN0IAphbmQgbXkgbGFzdCBwYXRjaCBhY3R1
+YWxseSB3b3Jrcy4KCj4gVG8gYmUgbm90ZWQsIGFuZCBhcyBUaG9tYXMgbm90aWNlZCwgT3BlbkVt
+YmVkZWQgaXMgYWxzbyB1c2luZyBhIGdsaWJjCj4gMi4zNiBjb21taXQsIGFuZCBldmVuIG9uZSBv
+bGRlciB0aGFuIG91cnMsIGJ1dCB0aGV5IGRvIG5vdCBzZWVtIHRvIGhhdmUKPiBpc3N1ZXMuCgpI
+b25lc3RseSwgSSBvbmx5IHRlc3RlZCBpdCBvbiBteSBSYXNwYmVycnkgUGkgNCBhbmQgbXkgZnJp
+ZW5kJ3MgClJhc3BiZXJyeSBQaSAzIHdpdGggbGF0ZXN0IG9yaWdpbi9tYXN0ZXIgYW5kIGRlZmF1
+bHQgY29uZmlndXJhdGlvbi4gClllc3RlcmRheSwgSSByZWFsaXplZCB0aGF0IGFsbCByYXNwYmVy
+cnkgYm9hcmRzIGFyZSBzeW1saW5rZWQgaW50byBvbmUgCmRpcmVjdG9yeSBhZnRlciBjaGVja2Vk
+IGF1dG9idWlsZC4gUGVyaGFwcywgYm9hcmQgc3BlY2lmaWMgaXNzdWU/IElmIApjb3JyZWN0LCBJ
+J20gZ29pbmcgdG8gcGF0Y2ggdGhlIGN1c3RvbSBrZXJuZWwgaW5zdGVhZCwgcGx1cyBidW1wIGl0
+LgoKSSBhbHNvIG5vdGljZWQgUmFzcGJlcnJ5IFBpIGJvYXJkcyBhcmUgbWFya2VkIE9SUEggYXQg
+YXV0b2J1aWxkLiBJcyB0aGF0IAptZWFucyBvcnBoYW4/IElmIHllcywgSSB3b3VsZCBnbGFkbHkg
+Y29udHJpYnV0ZSBhcyBib2FyZCBtYWludGFpbmVyLiAKVGhhbmsgeW91IGZvciB5b3VyIGNvb3Bl
+cmF0aW9uLgoKUmVnYXJkcywKQXRoYWFyaXEgQXJkaGlhbnN5YWgKCk5COiBNeSBuaWNrbmFtZSBp
+cyBFcmljCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
+aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
+cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
