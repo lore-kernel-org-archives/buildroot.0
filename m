@@ -1,74 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19999C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  2 Oct 2022 07:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 494CFC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  2 Oct 2022 08:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A14D0404AE;
-	Sun,  2 Oct 2022 07:40:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A14D0404AE
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE4E982AB6;
+	Sun,  2 Oct 2022 08:27:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE4E982AB6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hfgGZFpoF35B; Sun,  2 Oct 2022 07:40:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id oVfiLdzsnYp0; Sun,  2 Oct 2022 08:27:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A49E6400CB;
-	Sun,  2 Oct 2022 07:40:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A49E6400CB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 470451BF403
- for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 07:40:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C955182A72;
+	Sun,  2 Oct 2022 08:27:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C955182A72
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 210961BF371
+ for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 08:27:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 20606410B5
- for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 07:40:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20606410B5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0947082A72
+ for <buildroot@lists.busybox.net>; Sun,  2 Oct 2022 08:27:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0947082A72
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7PG3JRsO2BE4 for <buildroot@lists.busybox.net>;
- Sun,  2 Oct 2022 07:40:36 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2ECF408BA
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2ECF408BA
- for <buildroot@buildroot.org>; Sun,  2 Oct 2022 07:40:36 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:9961:1217:61e8:73cc])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 2F19978032A;
- Sun,  2 Oct 2022 09:40:29 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 02 Oct 2022 09:40:28 +0200
-Date: Sun, 2 Oct 2022 09:40:28 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@athaariq.my.id
-Message-ID: <20221002074028.GB30794@scaer>
-References: <20221001020445.1458953-1-buildroot@athaariq.my.id>
- <20221001155615.GA30794@scaer>
- <84f6447a658a7c5c46852dc84fe5cb1a@athaariq.my.id>
- <8c42038a335a0122dee3365ce1940920@athaariq.my.id>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hQDkPy1OOnrB for <buildroot@lists.busybox.net>;
+ Sun,  2 Oct 2022 08:27:06 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC51F82A5D
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC51F82A5D
+ for <buildroot@busybox.net>; Sun,  2 Oct 2022 08:27:05 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id u10so12604908wrq.2
+ for <buildroot@busybox.net>; Sun, 02 Oct 2022 01:27:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=/HeSJunFsovD6XM6cqmjPwKvEk29Pu68ldaqjZ8W4cg=;
+ b=d6OEPPc9tOa47etNmdYOXyiUpJg5x+3gGObbH9BoBVemTvXi3mlt3lpxphO8b6lCQh
+ SIYOevN5LSM2ElXh3FDBX5v2DRtt8uhxuoiLbjJFycvgTTytjLikck1vzF+Uk5hnW4cw
+ viMe9HiRCJgxe6uSFDxWb27BuDJvQp1DdtBHqhnubIjWWP+JbfLGTz0Fjc3h31W7VsqI
+ P3Ez0C09FI0O6Rqr/w+dFPls1gNyJcfyNgp3vvoNPbwXSsoi2DtLwbcd1a0H2Utppfe3
+ y5edTGf1Q/aNeM3T9L420Dnoec4w8IYgscb29EM7bJxRAYcWT2gVKXSF51701l62alV3
+ 3N9A==
+X-Gm-Message-State: ACrzQf0XPFB3prheF/O/qnpnsj29XpjmCMZBhSmp1ldZyujJhzl6ZZzX
+ liu/CptuYTFC9f9sv0ixtH7Da9FksM0=
+X-Google-Smtp-Source: AMsMyM5DjC2M1+LjAczrgzPl93sJ+LbvRwOLVLytcCzLeo3s/Xqo4RBfN3VzqPbrA1ePLc7ezp0lFQ==
+X-Received: by 2002:a5d:5887:0:b0:22b:1255:42e5 with SMTP id
+ n7-20020a5d5887000000b0022b125542e5mr10402876wrf.114.1664699223702; 
+ Sun, 02 Oct 2022 01:27:03 -0700 (PDT)
+Received: from pc-140.home ([2a01:cb15:8043:4b00:ed03:af64:3498:bc20])
+ by smtp.gmail.com with ESMTPSA id
+ m21-20020a05600c4f5500b003a5f54e3bbbsm14066620wmq.38.2022.10.02.01.27.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 02 Oct 2022 01:27:03 -0700 (PDT)
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+To: buildroot@busybox.net
+Date: Sun,  2 Oct 2022 10:26:51 +0200
+Message-Id: <20221002082651.29673-1-guillaume.bressaix@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <8c42038a335a0122dee3365ce1940920@athaariq.my.id>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1664696433;
- bh=1/wyUXNWkTkd3KAM77TT9BU8obG5pyII16YLqrqxkLs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=CeVLMbj9/2KfrTOVV0oITrCn7k/KnRcm4t/OtvFDv6ELbu+BGcZwDOTXEwcVO1LDo
- ywl7wNpwfpypfAVBvo9i2Wh/BrWlN+JyoObO++Dn7Dw0AC/JR/hfMaPvVr1LAPgoWu
- IgxabPaoheTP18wPIX7MYCvCgELzKvaDCo+R0kTd1Id7aHQP1Sg7ETF9cM6DvqbUPS
- Bu4i01tnSBEEOmTQgM+AgnXMETpXzuC45n0rophmz7VqwJzYiZOYDaR/OYGU5mex+X
- 7otltvAPyKfKCVkF158No1rhi8J4BRK/uKxrWl6EeoElGnQoNK6ErtSRwvIg9qQUtD
- 6wju+XBjVooqA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CeVLMbj9
-Subject: Re: [Buildroot] [PATCH 1/1] package/glibc: fix fsconfig_command
- redeclaration bug
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=/HeSJunFsovD6XM6cqmjPwKvEk29Pu68ldaqjZ8W4cg=;
+ b=B2f8ECUEr2mnXvbntxyIx2y0p96XWmfYPeX9bpo9g6GRQ+xbXARaTEj15p7kpxJtGU
+ plrckgKGJ0m2gFQwxPBl94sTfUITZL/scLhK3XkB/ryTYCJCiu0PrPMbIteWrgye3LXp
+ sllqkuTOC5U+sxfbTmYY4R5j3J1+MaxMAMyaxWvnGnNDCbukU7MGQ//UnYO1xGRGZK4M
+ YgnmJ1lcT9ugjyHJvpXieKBNY25rLNktGkzbXs3nLuwyvGmdVl9vOSIMb7jwazGq+RoO
+ DH60EShCO/tJffu2SFZBFfQVwoSUfFpG7sfa9vXa3IpLVd3bytg0f0xWOKid+Lu9Z21m
+ bwig==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=B2f8ECUE
+Subject: [Buildroot] [PATCH v2 1/1] package/python-scipy: bump version to
+ 1.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,88 +93,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QXRoYWFyaXEsIEFsLAoKT24gMjAyMi0xMC0wMiAwMzozMyArMDAwMCwgYnVpbGRyb290QGF0aGFh
-cmlxLm15LmlkIHNwYWtlIHRodXNseToKPiA+VGhpcyBpc3N1ZSBpcyByZWFsbHkgd2VpcmQsIGJl
-Y2F1c2UgdGhlIGdsaWJjIGNvbW1pdCB3ZSBhcmUgdXNpbmcgaXMKPiA+c3VwcG9zZWQgdG8gY29u
-dGFpbiB0aGUgcmVsYXRlZCBmaXhlcwo+IFBhcmRvbiBtZSBmb3IgYmVpbmcgc28gd2VpcmQuCgpZ
-b3UgYXJlIG5vdCBiZWluZyB3ZWlyZCwgbm8gd29ycmllcy4KCj4gV2hhdCBJJ20gdHJ5aW5nIHRv
-IGZpeCBpcyB0aGlzIGVycm9yOgo+IGVycm9yOiBtdWx0aXBsZSBkZWZpbml0aW9uIG9mIOKAmGVu
-dW0gZnNjb25maWdfY29tbWFuZOKAmQoKWWVzLCB3ZSBhcmUgYXdhcmUgb2YgdGhhdCBpc3N1ZS4K
-Cj4gSSBkaWQgc3BlbnQgZW50aXJlIG1vcm5pbmcgbGFzdCB0d28gZGF5cyBhZ28gYW5kIEkgZmln
-dXJlZCBvdXQgdGhhdCBubwo+IG1hdHRlciBob3cgZG8gSSBkZXRlY3QgbGludXgvbW91bnQuaCBw
-cmVzZW5jZSBpbiAic3lzL21vdW50LmgiLCAqKmVudW0KPiBmc2NvbmZpZ19jb21tYW5kKiogc3Rp
-bGwgaW4gY2xhc2ggYmV0d2VlbiBsaW51eC1oZWFkZXJzIGFuZCBnbGliYy4gSG93ZXZlciwKPiB0
-aGUgcHJvYmxlbSBvbmx5IGV4aXN0IGluIGdsaWJjIHYyLjM2IHdoZXJlYXMgbm8gZWZmZWN0IHdo
-ZW4gSSBjaGFuZ2VkIGxpbnV4Cj4gdmVyc2lvbi4gVGh1cywgbGludXgtaGVhZGVycyBzZWVtcyB0
-byBiZSBkZWNsYXJlZCBhZnRlciBnbGliYy4KCldoZW4geW91IGNoYW5nZSB0aGUgbGludXggaGVh
-ZGVycyB2ZXJzaW9uIGluIEJ1aWxkcm9vdCwgeW91IG5lZWQgdG8KcmVzdGFydCBmcm9tIGEgY2xl
-YW4gc3RhdGUsIGkuZS4gcnVuICJtYWtlIGNsZWFuIiBiZWZvcmUgcmVzdW1pbmcgdGhlCmJ1aWxk
-LCBzZWUgdGhlIGZ1bGwgZXhwbGFuYXRpb25zIGluIHRoZSBtYW51YWw6CiAgICBodHRwczovL2J1
-aWxkcm9vdC5vcmcvZG93bmxvYWRzL21hbnVhbC9tYW51YWwuaHRtbCNmdWxsLXJlYnVpbGQKCj4g
-PkhvdyBpcyB0aGlzIGEgYnVpbGRyb290LXNwZWNpZmljIGJ1Zz8gQ2FuIHlvdSBlbGFib3JhdGUg
-b24gdGhhdCBwYXJ0PyBJZgo+ID5pdCBpcyByZWFsbHkgYSBidWlsZHJvb3QtcmVsYXRlZCBidWcs
-IHRoZW4gd2Ugd2FudCB0byB1bmRlcnN0YW5kIGl0LCBhbmQKPiA+Zml4IGl0LCBub3Qgd29yayBh
-cm91bmQgaXQuCj4gCj4gQmVjYXVzZSBpdCBzdWNjZXNzZnVsbHkgY29tcGlsZWQgaW4gR2VudG9v
-IGJ1dCBmYWlsZWQgd2hlbiBjb21waWxlIEJ1aWxkcm9vdAo+IGZvciBSYXNwYmVycnkgUGkgNCBh
-bmQgUmFzcGJlcnJ5IFBpIDMsIHdpdGggZGVmYXVsdCBjb25maWd1cmF0aW9uLiBUaGUKPiByZWFz
-b24gd2h5IEkgYXNrZWQgIklzIHRoaXMgcG9zc2libGUgb24gQnVpbGRyb290PyIgaXMgdG8gZ2l2
-ZSB5b3UgdHdvCj4gb3B0aW9uczoKPiAxLiBJZiBwb3NzaWJsZSwgbGV0J3MgbWFrZSBzdXJlIGxp
-bnV4LWhlYWRlcnMgaW5zdGFsbGVkIGJlZm9yZSBnbGliYwo+IDIuIElmIG5vdCwgbGV0J3Mgd29y
-a2Fyb3VuZCBmb3IgYSB3aGlsZSB1bnRpbCB0aGVyZSdzIGEgcmV2ZWxhdGlvbiBmcm9tCj4gdXBz
-dHJlYW0KPiAKPiA+VGhpcyBpcyBleGFjdGx5IHdoYXQgd2UgYXJlIGRvaW5nIGFscmVhZHksIGFu
-ZCBmb3IgYXMgbG9uZyBhcyBCdWlsZHJvb3QKPiA+aGFzIHN1cHBvcnRlZCBidWlsZGluZyBhIGds
-aWJjLWFzZWQgdG9vbGNoYWluLCBhcyB0aGUga2VybmVsIGhlYWRlcnMgYXJlCj4gPnJlcXVpcmVk
-IHRvIGJ1aWxkIGdsaWJjOyBzZWUgcGFja2FnZS9nbGliYy9nbGliYy5ta0AyODoKPiAKPiBXZWxs
-IHRoYXQncyBpbnRlcmVzdGluZy4gV29uZGVyIHdoeSB0aGF0IGVudW0gcmVkZWNsYXJhdGlvbiBl
-cnJvciBleGlzdCBhbmQKPiBteSBsYXN0IHBhdGNoIGFjdHVhbGx5IHdvcmtzLgoKWWVzLCB3ZSBy
-ZWFsbHkgbmVlZCB0byB1bmRlcnN0YW5kIHdoeSBpdCBpcyBicm9rZW4gaW4gdGhlIGZpcnN0IHBs
-YWNlLAp0byBldmFsdWF0ZSB3aGV0aGVyIHlvdXIgcGF0Y2ggaXMgY29ycmVjdCwgb3Igd2hldGhl
-ciB3ZSBzaG91bGQgY2hhbmdlCnRoZSB3YXkgd2UgZG8gdGhpbmdzIGluIEJ1aWxkcm9vdC4gSGlu
-dDogSSB0aGluayB3ZSBkbyBzb21ldGhpbmcgaW4KQnVpbGRyb290IHRoYXQgaXMgd3JvbmcgKG9y
-IGhhcyBiZWNvbWUgd3JvbmcgYXMgdGltZSBwYXNzZWQpLCBidXQgd2UKY291bGQgbm90IHBpbnBv
-aW50IGl0IHlldC4uLgoKPiA+VG8gYmUgbm90ZWQsIGFuZCBhcyBUaG9tYXMgbm90aWNlZCwgT3Bl
-bkVtYmVkZWQgaXMgYWxzbyB1c2luZyBhIGdsaWJjCj4gPjIuMzYgY29tbWl0LCBhbmQgZXZlbiBv
-bmUgb2xkZXIgdGhhbiBvdXJzLCBidXQgdGhleSBkbyBub3Qgc2VlbSB0byBoYXZlCj4gPmlzc3Vl
-cy4KPiAKPiBIb25lc3RseSwgSSBvbmx5IHRlc3RlZCBpdCBvbiBteSBSYXNwYmVycnkgUGkgNCBh
-bmQgbXkgZnJpZW5kJ3MgUmFzcGJlcnJ5IFBpCj4gMyB3aXRoIGxhdGVzdCBvcmlnaW4vbWFzdGVy
-IGFuZCBkZWZhdWx0IGNvbmZpZ3VyYXRpb24uIFllc3RlcmRheSwgSSByZWFsaXplZAo+IHRoYXQg
-YWxsIHJhc3BiZXJyeSBib2FyZHMgYXJlIHN5bWxpbmtlZCBpbnRvIG9uZSBkaXJlY3RvcnkgYWZ0
-ZXIgY2hlY2tlZAo+IGF1dG9idWlsZC4gUGVyaGFwcywgYm9hcmQgc3BlY2lmaWMgaXNzdWU/IElm
-IGNvcnJlY3QsIEknbSBnb2luZyB0byBwYXRjaCB0aGUKPiBjdXN0b20ga2VybmVsIGluc3RlYWQs
-IHBsdXMgYnVtcCBpdC4KCkl0IGlzIG5vdCBzcGVjaWZpYyB0byB0aGUgcmFzcGJlcnJ5cGksIHdl
-IGhhdmUgdG9ucyBvZiBidWlsZHMgZmFpbGluZyBvbgp2YXJpb3VzIGFyY2hpdGVjdHVyZXM6CiAg
-ICBodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvP3JlYXNvbj1nbGliYy0yLjM2LSUKCj4g
-SSBhbHNvIG5vdGljZWQgUmFzcGJlcnJ5IFBpIGJvYXJkcyBhcmUgbWFya2VkIE9SUEggYXQgYXV0
-b2J1aWxkLiBJcyB0aGF0Cj4gbWVhbnMgb3JwaGFuPyBJZiB5ZXMsIEkgd291bGQgZ2xhZGx5IGNv
-bnRyaWJ1dGUgYXMgYm9hcmQgbWFpbnRhaW5lci4gVGhhbmsKPiB5b3UgZm9yIHlvdXIgY29vcGVy
-YXRpb24uCgpXZWlyZCwgYXMgd2UgYWxyZWFkeSBoYXZlIHR3byBwZXJzb25zIHJlZ2lzdGVyZWQg
-Zm9yIHRoZSBycGkgc2VyaWVzOgoKICAgICQgLi91dGlscy9nZXQtZGV2ZWxvcGVycyAtZiBjb25m
-aWdzL3Jhc3BiZXJyeXBpKiBib2FyZC9yYXNwYmVycnlwaS8KICAgIEp1bGllbiBHcm9zc2hvbHR6
-IDxqdWxpZW4uZ3Jvc3Nob2x0ekBvcGVuZXN0LmlvPgogICAgTWFydGluIEJhcmsgPG1hcnRpbkBi
-YXJreW5ldC5jb20+CgpCdXQgaWYgeW91IHdhbnQgdG8gYmUgYWRkZWQgdG8gdGhhdCBsaXN0LCBk
-byBub3QgaGVzaXRhdGUgdG8gc2VuZCBhCnBhdGNoIGFnYWluc3QgdGhlIERFVkVMT1BFUlMgZmls
-ZSB0byBhZGQgeW91cnNlbGYuCgo+IE5COiBNeSBuaWNrbmFtZSBpcyBFcmljCgpFcmljcyBhcmUg
-ZXZlcnl3aGVyZSEgOi0pCgpJcyB0aGF0IHdoYXQgeW91IHdhbnQgdG8gYmUgYWRyZXNzZWQgYnks
-IG9yIHNob3VsZCB3ZSBnbyB3aXRoIEF0aGFhcmlxPwoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4K
-Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWls
-ZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0tLS0t
-LS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
-LS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8
-IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1
-NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAg
-ICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJ
-TlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVr
-Lm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAon
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0t
-Xi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+scipy.tar.xz is no longer released.
+
+A new "python.h" missing header build time failure arised,
+it is fixed with a new -I cflag.
+
+New runtime/linking errors appeared on architectures that need
+libatomic, an -latomic linker flag solves them
+
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+
+---
+Scipy is expected to move to a meson build infrastructure
+by the next release
+Once 1.9.2 is out, we know we already have my V3-1.9.1 patch
+serie that builds "fine" with meson, it involved a minor tweak
+(hopefuly solved by this time). The test script no longer did pass though,
+this serie is not 100% ready to go
+---
+ package/python-scipy/python-scipy.hash |  2 +-
+ package/python-scipy/python-scipy.mk   | 13 +++++++++++--
+ 2 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
+index 0274679c43..1ba239aabf 100644
+--- a/package/python-scipy/python-scipy.hash
++++ b/package/python-scipy/python-scipy.hash
+@@ -1,5 +1,5 @@
+ # Locally generated
+-sha256  0140dd24d14ce194fdb3df496c2190f0896ca84ac98bf5d69c3b3fb7bde1a1e9  scipy-1.8.1.tar.xz
++sha256  26d28c468900e6d5fdb37d2812ab46db0ccd22c63baa095057871faa3a498bc9  scipy-1.9.1.tar.gz
+ sha256  96599f8ec69a2cc609265eed13fc75090aacb28742260e55ce623788a33da19c  LICENSE.txt
+ sha256  37e64a498894ac7c3b070023e3689e954a8ecf8a23b90968d09a455f1b4f7b35  scipy/linalg/src/lapack_deprecations/LICENSE
+ sha256  606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
+diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
+index a8c23c6c88..d45b14c4fa 100644
+--- a/package/python-scipy/python-scipy.mk
++++ b/package/python-scipy/python-scipy.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SCIPY_VERSION = 1.8.1
+-PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.xz
++PYTHON_SCIPY_VERSION = 1.9.1
++PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
+ PYTHON_SCIPY_SITE = https://github.com/scipy/scipy/releases/download/v$(PYTHON_SCIPY_VERSION)
+ PYTHON_SCIPY_LICENSE = \
+ 	BSD-3-Clause, \
+@@ -36,14 +36,23 @@ PYTHON_SCIPY_INSTALL_STAGING = YES
+ PYTHON_SCIPY_SETUP_TYPE = setuptools
+ PYTHON_SCIPY_BUILD_OPTS = config_fc --fcompiler=gnu95
+ 
++PYTHON_SCIPY_CFLAGS = \
++	-I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
+ PYTHON_SCIPY_LDFLAGS = $(TARGET_LDFLAGS) -shared \
+ 	-L$(PYTHON3_PATH)/site-packages/numpy/core/lib
+ # -lnpyrandom localization
+ PYTHON_SCIPY_LDFLAGS += \
+ 	-L$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/random/lib
+ 
++# scipy can use C++11 atomics when available, so we need to link with
++# libatomic for the architectures that need libatomic.
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++PYTHON_SCIPY_LDFLAGS += -latomic
++endif
++
+ PYTHON_SCIPY_ENV = \
+ 	F90=$(TARGET_FC) \
++	CFLAGS="$(PYTHON_SCIPY_CFLAGS)" \
+ 	LDFLAGS="$(PYTHON_SCIPY_LDFLAGS)"
+ 
+ # Provide system configuration options to numpy distutils extensions, telling
+-- 
+2.20.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
