@@ -1,83 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 664C6C433FE
-	for <buildroot@archiver.kernel.org>; Mon,  3 Oct 2022 15:43:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C6F1C433FE
+	for <buildroot@archiver.kernel.org>; Mon,  3 Oct 2022 15:45:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7541408CA;
-	Mon,  3 Oct 2022 15:43:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7541408CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1E4F60D59;
+	Mon,  3 Oct 2022 15:45:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1E4F60D59
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 82c794gF2zYb; Mon,  3 Oct 2022 15:43:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HwQU3KVk52m1; Mon,  3 Oct 2022 15:45:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D132A408C4;
-	Mon,  3 Oct 2022 15:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D132A408C4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 859C81BF398
- for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:43:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4DC660D52;
+	Mon,  3 Oct 2022 15:45:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4DC660D52
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E9671BF398
+ for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:45:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 57FC840226
- for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:43:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57FC840226
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1647A60D52
+ for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:45:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1647A60D52
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id igez-tRNPomT for <buildroot@lists.busybox.net>;
- Mon,  3 Oct 2022 15:43:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0mfBi8bXdM-o for <buildroot@lists.busybox.net>;
+ Mon,  3 Oct 2022 15:45:01 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B76C44030A
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
- [IPv6:2a00:1450:4864:20::235])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B76C44030A
- for <buildroot@buildroot.org>; Mon,  3 Oct 2022 15:43:10 +0000 (UTC)
-Received: by mail-lj1-x235.google.com with SMTP id bs18so10647586ljb.1
- for <buildroot@buildroot.org>; Mon, 03 Oct 2022 08:43:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCF2060C26
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com
+ [IPv6:2a00:1450:4864:20::22a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DCF2060C26
+ for <buildroot@buildroot.org>; Mon,  3 Oct 2022 15:45:00 +0000 (UTC)
+Received: by mail-lj1-x22a.google.com with SMTP id t16so12260701ljh.3
+ for <buildroot@buildroot.org>; Mon, 03 Oct 2022 08:45:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date;
- bh=amYddvMfaH/LPRdhJiw/WR7YCHKLMUO/kXTFpx6gR5E=;
- b=Xrr5SFMNPmCHPfKnxj6mt6X/5TZ8AeMpAx7BBOJMupvSoPFyaEUHcMnZ8vXnQZQYLS
- BpjBM2QfIlyxoRd6QbwqNX+BsYG3MDDwjk3TJbpQFdJSWPn5KG//YkbcK+c7FO9sg1uU
- ci9V/AjyYlLVo0a2KSlauhWIM+nImjinpwnv3trPwyg/49FppdmZLNqNmyQk+lt82p+n
- Pnsaw9gRWqbppsgUhE7D7uRPdBBG57X4OUKhKtJleunefcMTDX0oAOIRFkdnI0W5fyTk
- tb/eiClzzLbQ6kjMA7IdgHvXkvEgeD+vTMWt4ehjt+6rPIGAkdup/+/0hMwT64A4XSzL
- 7Ytg==
-X-Gm-Message-State: ACrzQf1/Vg82cH61CcllcOukZ5kD4NUvr+lrouH9hG+eS1bzqYBlML5B
- kOfRKeZNzo7iZv7+lmwYhHMLp+FtjQD4dFUe5LeolUMEuGiXhg==
-X-Google-Smtp-Source: AMsMyM6ibmueFwaL0ZNal9CypP/e1O7NjyHvFzzYx1pog6DYkZUOJ4h30kvOwXEAzfjXRq/G1kCAOV/0mLUrbB7YT0A=
-X-Received: by 2002:a2e:9d9a:0:b0:26d:d0d2:2ed1 with SMTP id
- c26-20020a2e9d9a000000b0026dd0d22ed1mr2660916ljj.515.1664811788617; Mon, 03
- Oct 2022 08:43:08 -0700 (PDT)
+ bh=j5aK4+keAjmS9jj6dEiNAOfWv+7gGtlWWFNgLDKzy54=;
+ b=2FLUYyfe+a3y8zr1GNubjTxcWxQh5kKsMW25Dl6Z+wF1g+5dGuwcJneY2KyXk9ACw9
+ E/UBfGEArBtQihW4z/0J4jFahkameqsDxaKJq43Re3vXVsKxtGWtbp7hqzZ8cdBPrqNa
+ U73TwRc+1Cg0t1rV6losgm+BQpTXrTenIrKD6ff2iOeMsVGNWcUkMgEYMjEm4JJccKDl
+ kTbogIevpnT03emzs+5UUoh1ZCiB0085ShmZUh3C1trsnCTvqKZMTwRD9yPKYXvMQEg7
+ z77VtSjZh6I4UsdfTmWDxi6vGM3UK+GkA6766Qwn+boURO/rn/mhLWRXYd/GiOBA1KmM
+ OQvg==
+X-Gm-Message-State: ACrzQf02Ssi68l2HblXC9qaQrucpLRV3p9cGYkMllRn+A343RVOufsBT
+ vHJZ/m5XxNuLYjWTBjx7dHM7FKlxMJuAur00PRpAVg==
+X-Google-Smtp-Source: AMsMyM4fmtmiQIQUBENDjylXWApAxPluc8g8UF3KDsJ3r1O74qg4Jd47cBXrX1yvg83jG4pPW/kO7XJuv1BhTWjooLk=
+X-Received: by 2002:a05:651c:110c:b0:26d:a099:8715 with SMTP id
+ e12-20020a05651c110c00b0026da0998715mr7022219ljo.44.1664811898908; Mon, 03
+ Oct 2022 08:44:58 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220705073206.1442280-1-angelo@amarulasolutions.com>
- <20220705073206.1442280-2-angelo@amarulasolutions.com>
- <87v8plgg3p.fsf@dell.be.48ers.dk>
-In-Reply-To: <87v8plgg3p.fsf@dell.be.48ers.dk>
+ <20220705073206.1442280-4-angelo@amarulasolutions.com>
+ <87r109gfyi.fsf@dell.be.48ers.dk>
+In-Reply-To: <87r109gfyi.fsf@dell.be.48ers.dk>
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 3 Oct 2022 17:42:31 +0200
-Message-ID: <CA+_SqVYEAQa8hRCJGTM0iE7jbuq5td5zhUci3+KP0jdLPS218w@mail.gmail.com>
+Date: Mon, 3 Oct 2022 17:44:21 +0200
+Message-ID: <CA+_SqVZmXGNY4PZP3bpr-wc=-Wzk8jWsWMGhhNYgVLJeQrdDSA@mail.gmail.com>
 To: Peter Korsgaard <peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date;
- bh=amYddvMfaH/LPRdhJiw/WR7YCHKLMUO/kXTFpx6gR5E=;
- b=Av/bzLFXzDp/nuA1i6VTdI1TIW0Gkx6DnOVIq0uOWfc0esbbqrhNZz6xbHYTVxu3aJ
- iOkHxOKAUSlJ2l4ThuPha6iHCJMHhVTf/ezYuYGyBU2lENUiyrrT6pA8VlEQnCHKG83/
- DFPunFvLsTGPLIxBCKdP0qtVYDATQz8NaG+4c=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Av/bzLFX
-Subject: Re: [Buildroot] [PATCH v3 1/5] system: adding options for
- configuring wifi
+ bh=j5aK4+keAjmS9jj6dEiNAOfWv+7gGtlWWFNgLDKzy54=;
+ b=bujNeCkalb0gP4+oqXeO+SqQ/XsiywjTffsxW4bbhebIsD3S/P+8oNVETqzv0CYco+
+ WbXXenmo235OGSesmArQOpAx/QSf4B6pXbEghZVc/X+86BRPXxmJsh1L2sPc43BOAra/
+ qbDrPWska5jz4lK0ucbMgmIpWSJaq16UcIhtA=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=bujNeCka
+Subject: Re: [Buildroot] [PATCH v3 3/5] package/wpa_supplicant: configure
+ wifi on systemd when enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,86 +90,51 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: br015@umbiko.net, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2651847887386201741=="
+Content-Type: multipart/mixed; boundary="===============5281394651131829424=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2651847887386201741==
-Content-Type: multipart/alternative; boundary="0000000000004764ba05ea2333bb"
+--===============5281394651131829424==
+Content-Type: multipart/alternative; boundary="000000000000da4e2e05ea23390e"
 
---0000000000004764ba05ea2333bb
+--000000000000da4e2e05ea23390e
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Sep 18, 2022 at 11:57 AM Peter Korsgaard <peter@korsgaard.com>
+On Sun, Sep 18, 2022 at 12:00 PM Peter Korsgaard <peter@korsgaard.com>
 wrote:
 
 > >>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 >
->  > These options can be used by packages to configure a wifi card
->  > to connect at boot.
+>  > Configure a default basic wifi setup able to automatically connect
+>  > to the selected access point.
 >
 >  > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 >  > ---
->  >  system/Config.in | 15 +++++++++++++++
->  >  1 file changed, 15 insertions(+)
+>  >  package/wpa_supplicant/wpa_supplicant.mk | 10 ++++++++++
+>  >  system/Config.in                         |  1 +
+>  >  2 files changed, 11 insertions(+)
 >
->  > diff --git a/system/Config.in b/system/Config.in
->  > index 888c24ce81..9a5bdb2932 100644
->  > --- a/system/Config.in
->  > +++ b/system/Config.in
->  > @@ -418,6 +418,21 @@ comment "automatic network configuration via DHCP
-> needs ifupdown or busybox or n
->  >      depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || \
->  >              BR2_PACKAGE_SYSTEMD_NETWORKD || BR2_PACKAGE_NETIFRC)
+>  > diff --git a/package/wpa_supplicant/wpa_supplicant.mk
+> b/package/wpa_supplicant/wpa_supplicant.mk
+>  > index 09971654fe..157d45ee7f 100644
+>  > --- a/package/wpa_supplicant/wpa_supplicant.mk
+>  > +++ b/package/wpa_supplicant/wpa_supplicant.mk
+>  > @@ -275,6 +275,15 @@ define WPA_SUPPLICANT_ENABLE_WIFI
+>  >              echo "}"; \
+>  >      ) >> $(TARGET_DIR)/etc/wpa_supplicant.conf
+>  >  endef
+>  > +define WPA_SUPPLICANT_WIFI_INSTALL_INIT_SYSTEMD
+>  > +    $(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/wpa_supplicant/
+>  > +    ln -sf ../wpa_supplicant.conf \
+>  > +
+> $(TARGET_DIR)/etc/wpa_supplicant/wpa_supplicant-$(BR2_SYSTEM_DHCP).conf
 >
->  > +config BR2_SYSTEM_CONNECT_WIFI
->  > +    bool "Connect to a default wifi access point"
->  > +    default n
->
-> 'n' is default, so drop that.
-
-
-Right.
-
-
-> This doesn't really do anything unless the
-> user also configures BR2_SYSTEM_DHCP="wlan0", right?
+> How do you know BR2_SYSTEM_DHCP is set to something sensible here?
 >
 
-Right.
-
-
->
-> I must say I am not really convinced. This is only useful for quite
-> specific setups (E.G. a lot more specific than BR2_SYSTEM_DHCP which we
-> use in a number of defconfigs) and hard codes a number of things (like
-> WPA-PSK that may or may not make sense in the future).
->
-
-This is what we have now on several readme.txt on how to connect to a wifi
-
-WiFi
-====
-
- # wpa_passphrase ACCESSPOINTNAME >> /etc/wpa_supplicant.conf
-   (type password and enter)
- # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
- # udhcpc -i wlan0
-
-I don't think this is nice.
-
-I'd like to see something like that:
-
-WiFi
-====
-
-# Enable BR2_SYSTEM_CONNECT_WIFI configure option
-# Set the Wifi SSID with the option BR2_SYSTEM_CONNECT_WIFI_SSID
-# Set the password with the option BR2_SYSTEM_CONNECT_WIFI_PASSWORD
-
-Nicer and easier. I know that the wpa-psk could change in the feature, but
-then we can change to whatever default mechanism will be in place at that
-moment.
+Not enforced, but if a user put a nonexistent interface, that file simply
+won't work. It is up to the user knowing which interface he wants to enable
+dhcp onto.
 
 
 >
@@ -196,12 +161,12 @@ info@amarulasolutions.com
 www.amarulasolutions.com
 [`as] https://www.amarulasolutions.com|
 
---0000000000004764ba05ea2333bb
+--000000000000da4e2e05ea23390e
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Sep 18, 2022 at 11:57 AM Pete=
+<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Sep 18, 2022 at 12:00 PM Pete=
 r Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com">peter@korsgaard.com<=
 /a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
 px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">&=
@@ -209,61 +174,49 @@ gt;&gt;&gt;&gt;&gt; &quot;Angelo&quot; =3D=3D Angelo Compagnucci &lt;<a hre=
 f=3D"mailto:angelo@amarulasolutions.com" target=3D"_blank">angelo@amarulaso=
 lutions.com</a>&gt; writes:<br>
 <br>
-=C2=A0&gt; These options can be used by packages to configure a wifi card<b=
-r>
-=C2=A0&gt; to connect at boot.<br>
+=C2=A0&gt; Configure a default basic wifi setup able to automatically conne=
+ct<br>
+=C2=A0&gt; to the selected access point.<br>
 <br>
 =C2=A0&gt; Signed-off-by: Angelo Compagnucci &lt;<a href=3D"mailto:angelo@a=
 marulasolutions.com" target=3D"_blank">angelo@amarulasolutions.com</a>&gt;<=
 br>
 =C2=A0&gt; ---<br>
-=C2=A0&gt;=C2=A0 system/Config.in | 15 +++++++++++++++<br>
-=C2=A0&gt;=C2=A0 1 file changed, 15 insertions(+)<br>
+=C2=A0&gt;=C2=A0 package/wpa_supplicant/<a href=3D"http://wpa_supplicant.mk=
+" rel=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a> | 10 +++++++++=
++<br>
+=C2=A0&gt;=C2=A0 system/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
+=C2=A0&gt;=C2=A0 2 files changed, 11 insertions(+)<br>
 <br>
-=C2=A0&gt; diff --git a/system/Config.in b/system/Config.in<br>
-=C2=A0&gt; index 888c24ce81..9a5bdb2932 100644<br>
-=C2=A0&gt; --- a/system/Config.in<br>
-=C2=A0&gt; +++ b/system/Config.in<br>
-=C2=A0&gt; @@ -418,6 +418,21 @@ comment &quot;automatic network configurati=
-on via DHCP needs ifupdown or busybox or n<br>
-=C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACK=
-AGE_IFUPDOWN || \<br>
-=C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 BR2_PACKAGE_SYST=
-EMD_NETWORKD || BR2_PACKAGE_NETIFRC)<br>
+=C2=A0&gt; diff --git a/package/wpa_supplicant/<a href=3D"http://wpa_suppli=
+cant.mk" rel=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a> b/packa=
+ge/wpa_supplicant/<a href=3D"http://wpa_supplicant.mk" rel=3D"noreferrer" t=
+arget=3D"_blank">wpa_supplicant.mk</a><br>
+=C2=A0&gt; index 09971654fe..157d45ee7f 100644<br>
+=C2=A0&gt; --- a/package/wpa_supplicant/<a href=3D"http://wpa_supplicant.mk=
+" rel=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a><br>
+=C2=A0&gt; +++ b/package/wpa_supplicant/<a href=3D"http://wpa_supplicant.mk=
+" rel=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a><br>
+=C2=A0&gt; @@ -275,6 +275,15 @@ define WPA_SUPPLICANT_ENABLE_WIFI<br>
+=C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 echo &quot;}&quo=
+t;; \<br>
+=C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 ) &gt;&gt; $(TARGET_DIR)/etc/wpa_supplicant.=
+conf<br>
+=C2=A0&gt;=C2=A0 endef<br>
+=C2=A0&gt; +define WPA_SUPPLICANT_WIFI_INSTALL_INIT_SYSTEMD<br>
+=C2=A0&gt; +=C2=A0 =C2=A0 $(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/wpa_suppl=
+icant/<br>
+=C2=A0&gt; +=C2=A0 =C2=A0 ln -sf ../wpa_supplicant.conf \<br>
+=C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 $(TARGET_DIR)/etc/wpa=
+_supplicant/wpa_supplicant-$(BR2_SYSTEM_DHCP).conf<br>
 <br>
-=C2=A0&gt; +config BR2_SYSTEM_CONNECT_WIFI<br>
-=C2=A0&gt; +=C2=A0 =C2=A0 bool &quot;Connect to a default wifi access point=
-&quot;<br>
-=C2=A0&gt; +=C2=A0 =C2=A0 default n<br>
-<br>
-&#39;n&#39; is default, so drop that. </blockquote><div><br></div><div>Righ=
-t. <br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"ma=
-rgin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:=
-1ex">This doesn&#39;t really do anything unless the<br>
-user also configures BR2_SYSTEM_DHCP=3D&quot;wlan0&quot;, right?<br></block=
-quote><div><br></div><div>Right.<br></div><div>=C2=A0</div><blockquote clas=
-s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
-gb(204,204,204);padding-left:1ex">
-<br>
-I must say I am not really convinced. This is only useful for quite<br>
-specific setups (E.G. a lot more specific than BR2_SYSTEM_DHCP which we<br>
-use in a number of defconfigs) and hard codes a number of things (like<br>
-WPA-PSK that may or may not make sense in the future).<br></blockquote><div=
-><br></div><div>This is what we have now on several readme.txt on how to co=
-nnect to a wifi</div><div><br></div><div>WiFi<br>=3D=3D=3D=3D<br><br>=C2=A0=
-# wpa_passphrase ACCESSPOINTNAME &gt;&gt; /etc/wpa_supplicant.conf<br>=C2=
-=A0 =C2=A0(type password and enter)<br>=C2=A0# wpa_supplicant -i wlan0 -c /=
-etc/wpa_supplicant.conf -B<br>=C2=A0# udhcpc -i wlan0</div><div><br></div><=
-div>I don&#39;t think this is nice.</div><div><br></div><div>I&#39;d like t=
-o see something like that:</div><div><br></div><div>WiFi<br>=3D=3D=3D=3D</d=
-iv><div><br></div><div># Enable BR2_SYSTEM_CONNECT_WIFI configure option</d=
-iv><div># Set the Wifi SSID with the option BR2_SYSTEM_CONNECT_WIFI_SSID</d=
-iv><div># Set the password with the option BR2_SYSTEM_CONNECT_WIFI_PASSWORD=
-</div><div><br></div><div>Nicer and easier. I know that the wpa-psk could c=
-hange in the feature, but then we can change to whatever default mechanism =
-will be in place at that moment.<br></div><div>=C2=A0</div><blockquote clas=
-s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
-gb(204,204,204);padding-left:1ex">
+How do you know BR2_SYSTEM_DHCP is set to something sensible here?<br></blo=
+ckquote><div><br></div><div>Not enforced, but if a user put a nonexistent i=
+nterface, that file simply won&#39;t work. It is up to the user knowing whi=
+ch interface he wants to enable dhcp onto.<br></div><div>=C2=A0</div><block=
+quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
+px solid rgb(204,204,204);padding-left:1ex">
 <br>
 -- <br>
 Bye, Peter Korsgaard<br>
@@ -324,9 +277,9 @@ amarulasolutions.com</span></a></p><div>[`as] <a href=3D"https://www.amarul=
 asolutions.com" target=3D"_blank">https://www.amarulasolutions.com</a>|</di=
 v></div></div></div>
 
---0000000000004764ba05ea2333bb--
+--000000000000da4e2e05ea23390e--
 
---===============2651847887386201741==
+--===============5281394651131829424==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -337,4 +290,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2651847887386201741==--
+--===============5281394651131829424==--
