@@ -1,82 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF616C433FE
-	for <buildroot@archiver.kernel.org>; Mon,  3 Oct 2022 15:26:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 664C6C433FE
+	for <buildroot@archiver.kernel.org>; Mon,  3 Oct 2022 15:43:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3892260D50;
-	Mon,  3 Oct 2022 15:26:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3892260D50
+	by smtp2.osuosl.org (Postfix) with ESMTP id E7541408CA;
+	Mon,  3 Oct 2022 15:43:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7541408CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zhvXT4zVIz8U; Mon,  3 Oct 2022 15:26:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 82c794gF2zYb; Mon,  3 Oct 2022 15:43:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A9D660D4D;
-	Mon,  3 Oct 2022 15:26:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A9D660D4D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1C8981BF398
- for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:25:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D132A408C4;
+	Mon,  3 Oct 2022 15:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D132A408C4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 859C81BF398
+ for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:43:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 02E3E82F77
- for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:25:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02E3E82F77
+ by smtp4.osuosl.org (Postfix) with ESMTP id 57FC840226
+ for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:43:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57FC840226
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dkjmQKcKrbrK for <buildroot@lists.busybox.net>;
- Mon,  3 Oct 2022 15:25:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id igez-tRNPomT for <buildroot@lists.busybox.net>;
+ Mon,  3 Oct 2022 15:43:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8B8482C99
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
- [IPv6:2a00:1450:4864:20::12d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D8B8482C99
- for <buildroot@buildroot.org>; Mon,  3 Oct 2022 15:25:57 +0000 (UTC)
-Received: by mail-lf1-x12d.google.com with SMTP id 10so17128044lfy.5
- for <buildroot@buildroot.org>; Mon, 03 Oct 2022 08:25:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B76C44030A
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com
+ [IPv6:2a00:1450:4864:20::235])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B76C44030A
+ for <buildroot@buildroot.org>; Mon,  3 Oct 2022 15:43:10 +0000 (UTC)
+Received: by mail-lj1-x235.google.com with SMTP id bs18so10647586ljb.1
+ for <buildroot@buildroot.org>; Mon, 03 Oct 2022 08:43:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date;
- bh=7icAkVzj6fCb1mB6uBkpV/3EEP9o4GrwHGW559qBDU0=;
- b=pw4ZqMpPvcv/NcifWZbQSWbhQgjCeybbCMdMXb6J3rzGLrXly1YKlaNVIdGljW1Lnz
- eRjhgPpEi3RoZuZBmDqovl9na9aEBbasqgZ2v31vqGc3gPB0ozQXH+YJki4yq698WzCO
- zevwCzFI48RE3ssIUQMSaZ2eJZVqdiF5GqdbZt+C/yb1iNlrSdyrDruYOsxyPX1HxUoA
- TVLq6fupgZL8Yztv4gW5vXvvtUSmoXJYxg1NXv86YUHKv6RiITK/n54/+wVdIXcFDKVE
- vla0LCjOtZRrWKwmNTEh5VWyvR340Hxo03U0YrWAz5qImahwuP1KJ3usSoUSpdSEjLlo
- BE2A==
-X-Gm-Message-State: ACrzQf0Gzs8OkDEr3zAO97xkZsTAb+15GMWBKxJttUM57FSptDQ8NqZi
- UFcj1GI3vPEGKkzwIDV2YlqwlpxnZg8tq5VhVUGMoQ==
-X-Google-Smtp-Source: AMsMyM5v5dFyhPt6Leh5Z1C6s3LgedOS0z66lxVWssxj95ZaI2ZlfHVgjyEmZ4DUnxTnAVfQf8e5QX9rH7IK14Bszi8=
-X-Received: by 2002:a19:f701:0:b0:4a2:29fd:7a9d with SMTP id
- z1-20020a19f701000000b004a229fd7a9dmr3160813lfe.500.1664810755732; Mon, 03
- Oct 2022 08:25:55 -0700 (PDT)
+ bh=amYddvMfaH/LPRdhJiw/WR7YCHKLMUO/kXTFpx6gR5E=;
+ b=Xrr5SFMNPmCHPfKnxj6mt6X/5TZ8AeMpAx7BBOJMupvSoPFyaEUHcMnZ8vXnQZQYLS
+ BpjBM2QfIlyxoRd6QbwqNX+BsYG3MDDwjk3TJbpQFdJSWPn5KG//YkbcK+c7FO9sg1uU
+ ci9V/AjyYlLVo0a2KSlauhWIM+nImjinpwnv3trPwyg/49FppdmZLNqNmyQk+lt82p+n
+ Pnsaw9gRWqbppsgUhE7D7uRPdBBG57X4OUKhKtJleunefcMTDX0oAOIRFkdnI0W5fyTk
+ tb/eiClzzLbQ6kjMA7IdgHvXkvEgeD+vTMWt4ehjt+6rPIGAkdup/+/0hMwT64A4XSzL
+ 7Ytg==
+X-Gm-Message-State: ACrzQf1/Vg82cH61CcllcOukZ5kD4NUvr+lrouH9hG+eS1bzqYBlML5B
+ kOfRKeZNzo7iZv7+lmwYhHMLp+FtjQD4dFUe5LeolUMEuGiXhg==
+X-Google-Smtp-Source: AMsMyM6ibmueFwaL0ZNal9CypP/e1O7NjyHvFzzYx1pog6DYkZUOJ4h30kvOwXEAzfjXRq/G1kCAOV/0mLUrbB7YT0A=
+X-Received: by 2002:a2e:9d9a:0:b0:26d:d0d2:2ed1 with SMTP id
+ c26-20020a2e9d9a000000b0026dd0d22ed1mr2660916ljj.515.1664811788617; Mon, 03
+ Oct 2022 08:43:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220925160320.80027-1-angelo@amarulasolutions.com>
- <20220925214143.05ba673a@windsurf>
-In-Reply-To: <20220925214143.05ba673a@windsurf>
+References: <20220705073206.1442280-1-angelo@amarulasolutions.com>
+ <20220705073206.1442280-2-angelo@amarulasolutions.com>
+ <87v8plgg3p.fsf@dell.be.48ers.dk>
+In-Reply-To: <87v8plgg3p.fsf@dell.be.48ers.dk>
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 3 Oct 2022 17:25:18 +0200
-Message-ID: <CA+_SqVbs4_tPr4y9kMCP0f9dsjxO5bX48zvz45ABynfpbVzaEA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Oct 2022 17:42:31 +0200
+Message-ID: <CA+_SqVYEAQa8hRCJGTM0iE7jbuq5td5zhUci3+KP0jdLPS218w@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date;
- bh=7icAkVzj6fCb1mB6uBkpV/3EEP9o4GrwHGW559qBDU0=;
- b=qQ4Kp8LUOFn2bWxWWH9nVbIwohibxiCuPP3dekQ9Mn3gEIhh6xEPK/Hr4oIM6uVDTP
- +Atzl/bGRIbqToP5YOUm8zsqkpsEJGJISVpzywhKWAARjv/1ev5TYxH0dAnasoLdKh0y
- OLvjkmqgMMFY/x+XKaHtl1rD54JHJL7dp3eN8=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=amYddvMfaH/LPRdhJiw/WR7YCHKLMUO/kXTFpx6gR5E=;
+ b=Av/bzLFXzDp/nuA1i6VTdI1TIW0Gkx6DnOVIq0uOWfc0esbbqrhNZz6xbHYTVxu3aJ
+ iOkHxOKAUSlJ2l4ThuPha6iHCJMHhVTf/ezYuYGyBU2lENUiyrrT6pA8VlEQnCHKG83/
+ DFPunFvLsTGPLIxBCKdP0qtVYDATQz8NaG+4c=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=qQ4Kp8LU
-Subject: Re: [Buildroot] [PATCH] docs/website: fixing js for the new feed
- source
+ header.b=Av/bzLFX
+Subject: Re: [Buildroot] [PATCH v3 1/5] system: adding options for
+ configuring wifi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,51 +89,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============6722438883441947182=="
+Cc: br015@umbiko.net, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============2651847887386201741=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6722438883441947182==
-Content-Type: multipart/alternative; boundary="000000000000b6d47105ea22f528"
+--===============2651847887386201741==
+Content-Type: multipart/alternative; boundary="0000000000004764ba05ea2333bb"
 
---000000000000b6d47105ea22f528
+--0000000000004764ba05ea2333bb
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Sep 25, 2022 at 9:41 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+On Sun, Sep 18, 2022 at 11:57 AM Peter Korsgaard <peter@korsgaard.com>
+wrote:
 
-> Hello Angelo,
+> >>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 >
-> On Sun, 25 Sep 2022 18:03:20 +0200
-> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+>  > These options can be used by packages to configure a wifi card
+>  > to connect at boot.
 >
-> > Feed source is moved to a local atom file available on the web server to
-> > remove further problems with unreliable feed sources.
-> > Moving the feed required a bit of refactor of the load_activity function
-> > so it won't download two times te same url.
-> >
-> > This change requires a cron job like this enabled on the website:
-> > * * * * * wget -O new.atom https://lore.kernel.org/buildroot/new.atom
+>  > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+>  > ---
+>  >  system/Config.in | 15 +++++++++++++++
+>  >  1 file changed, 15 insertions(+)
 >
-> Thanks a lot for working on this. Based on the cron job like that you
-> propose, I can see how this can fix the list of last e-mails on the
-> mailing list, but how can that fix the other box visible on the web
-> site, which lists the latest commits ?
+>  > diff --git a/system/Config.in b/system/Config.in
+>  > index 888c24ce81..9a5bdb2932 100644
+>  > --- a/system/Config.in
+>  > +++ b/system/Config.in
+>  > @@ -418,6 +418,21 @@ comment "automatic network configuration via DHCP
+> needs ifupdown or busybox or n
+>  >      depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || \
+>  >              BR2_PACKAGE_SYSTEMD_NETWORKD || BR2_PACKAGE_NETIFRC)
+>
+>  > +config BR2_SYSTEM_CONNECT_WIFI
+>  > +    bool "Connect to a default wifi access point"
+>  > +    default n
+>
+> 'n' is default, so drop that.
+
+
+Right.
+
+
+> This doesn't really do anything unless the
+> user also configures BR2_SYSTEM_DHCP="wlan0", right?
 >
 
-This feed mixes commit/non commit entries, so the choice on which box fill
-up is in the js code.
+Right.
 
 
 >
-> Thanks!
+> I must say I am not really convinced. This is only useful for quite
+> specific setups (E.G. a lot more specific than BR2_SYSTEM_DHCP which we
+> use in a number of defconfigs) and hard codes a number of things (like
+> WPA-PSK that may or may not make sense in the future).
 >
-> Thomas
+
+This is what we have now on several readme.txt on how to connect to a wifi
+
+WiFi
+====
+
+ # wpa_passphrase ACCESSPOINTNAME >> /etc/wpa_supplicant.conf
+   (type password and enter)
+ # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
+ # udhcpc -i wlan0
+
+I don't think this is nice.
+
+I'd like to see something like that:
+
+WiFi
+====
+
+# Enable BR2_SYSTEM_CONNECT_WIFI configure option
+# Set the Wifi SSID with the option BR2_SYSTEM_CONNECT_WIFI_SSID
+# Set the password with the option BR2_SYSTEM_CONNECT_WIFI_PASSWORD
+
+Nicer and easier. I know that the wpa-psk could change in the feature, but
+then we can change to whatever default mechanism will be in place at that
+moment.
+
+
+>
 > --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+> Bye, Peter Korsgaard
 >
 
 
@@ -154,50 +196,77 @@ info@amarulasolutions.com
 www.amarulasolutions.com
 [`as] https://www.amarulasolutions.com|
 
---000000000000b6d47105ea22f528
+--0000000000004764ba05ea2333bb
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Sep 25, 2022 at 9:41 PM Thoma=
-s Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.peta=
-zzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote"=
- style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
-adding-left:1ex">Hello Angelo,<br>
+<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Sep 18, 2022 at 11:57 AM Pete=
+r Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com">peter@korsgaard.com<=
+/a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
+px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">&=
+gt;&gt;&gt;&gt;&gt; &quot;Angelo&quot; =3D=3D Angelo Compagnucci &lt;<a hre=
+f=3D"mailto:angelo@amarulasolutions.com" target=3D"_blank">angelo@amarulaso=
+lutions.com</a>&gt; writes:<br>
 <br>
-On Sun, 25 Sep 2022 18:03:20 +0200<br>
-Angelo Compagnucci &lt;<a href=3D"mailto:angelo@amarulasolutions.com" targe=
-t=3D"_blank">angelo@amarulasolutions.com</a>&gt; wrote:<br>
+=C2=A0&gt; These options can be used by packages to configure a wifi card<b=
+r>
+=C2=A0&gt; to connect at boot.<br>
 <br>
-&gt; Feed source is moved to a local atom file available on the web server =
-to<br>
-&gt; remove further problems with unreliable feed sources.<br>
-&gt; Moving the feed required a bit of refactor of the load_activity functi=
-on<br>
-&gt; so it won&#39;t download two times te same url.<br>
-&gt; <br>
-&gt; This change requires a cron job like this enabled on the website:<br>
-&gt; * * * * * wget -O new.atom <a href=3D"https://lore.kernel.org/buildroo=
-t/new.atom" rel=3D"noreferrer" target=3D"_blank">https://lore.kernel.org/bu=
-ildroot/new.atom</a><br>
+=C2=A0&gt; Signed-off-by: Angelo Compagnucci &lt;<a href=3D"mailto:angelo@a=
+marulasolutions.com" target=3D"_blank">angelo@amarulasolutions.com</a>&gt;<=
+br>
+=C2=A0&gt; ---<br>
+=C2=A0&gt;=C2=A0 system/Config.in | 15 +++++++++++++++<br>
+=C2=A0&gt;=C2=A0 1 file changed, 15 insertions(+)<br>
 <br>
-Thanks a lot for working on this. Based on the cron job like that you<br>
-propose, I can see how this can fix the list of last e-mails on the<br>
-mailing list, but how can that fix the other box visible on the web<br>
-site, which lists the latest commits ?<br></blockquote><div><br></div><div>=
-This feed mixes commit/non commit entries, so the choice on which box fill =
-up is in the js code.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_=
-quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,=
-204);padding-left:1ex">
+=C2=A0&gt; diff --git a/system/Config.in b/system/Config.in<br>
+=C2=A0&gt; index 888c24ce81..9a5bdb2932 100644<br>
+=C2=A0&gt; --- a/system/Config.in<br>
+=C2=A0&gt; +++ b/system/Config.in<br>
+=C2=A0&gt; @@ -418,6 +418,21 @@ comment &quot;automatic network configurati=
+on via DHCP needs ifupdown or busybox or n<br>
+=C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACK=
+AGE_IFUPDOWN || \<br>
+=C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 BR2_PACKAGE_SYST=
+EMD_NETWORKD || BR2_PACKAGE_NETIFRC)<br>
 <br>
-Thanks!<br>
+=C2=A0&gt; +config BR2_SYSTEM_CONNECT_WIFI<br>
+=C2=A0&gt; +=C2=A0 =C2=A0 bool &quot;Connect to a default wifi access point=
+&quot;<br>
+=C2=A0&gt; +=C2=A0 =C2=A0 default n<br>
 <br>
-Thomas<br>
+&#39;n&#39; is default, so drop that. </blockquote><div><br></div><div>Righ=
+t. <br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"ma=
+rgin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:=
+1ex">This doesn&#39;t really do anything unless the<br>
+user also configures BR2_SYSTEM_DHCP=3D&quot;wlan0&quot;, right?<br></block=
+quote><div><br></div><div>Right.<br></div><div>=C2=A0</div><blockquote clas=
+s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
+gb(204,204,204);padding-left:1ex">
+<br>
+I must say I am not really convinced. This is only useful for quite<br>
+specific setups (E.G. a lot more specific than BR2_SYSTEM_DHCP which we<br>
+use in a number of defconfigs) and hard codes a number of things (like<br>
+WPA-PSK that may or may not make sense in the future).<br></blockquote><div=
+><br></div><div>This is what we have now on several readme.txt on how to co=
+nnect to a wifi</div><div><br></div><div>WiFi<br>=3D=3D=3D=3D<br><br>=C2=A0=
+# wpa_passphrase ACCESSPOINTNAME &gt;&gt; /etc/wpa_supplicant.conf<br>=C2=
+=A0 =C2=A0(type password and enter)<br>=C2=A0# wpa_supplicant -i wlan0 -c /=
+etc/wpa_supplicant.conf -B<br>=C2=A0# udhcpc -i wlan0</div><div><br></div><=
+div>I don&#39;t think this is nice.</div><div><br></div><div>I&#39;d like t=
+o see something like that:</div><div><br></div><div>WiFi<br>=3D=3D=3D=3D</d=
+iv><div><br></div><div># Enable BR2_SYSTEM_CONNECT_WIFI configure option</d=
+iv><div># Set the Wifi SSID with the option BR2_SYSTEM_CONNECT_WIFI_SSID</d=
+iv><div># Set the password with the option BR2_SYSTEM_CONNECT_WIFI_PASSWORD=
+</div><div><br></div><div>Nicer and easier. I know that the wpa-psk could c=
+hange in the feature, but then we can change to whatever default mechanism =
+will be in place at that moment.<br></div><div>=C2=A0</div><blockquote clas=
+s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
+gb(204,204,204);padding-left:1ex">
+<br>
 -- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
+Bye, Peter Korsgaard<br>
 </blockquote></div><br clear=3D"all"><br>-- <br><div dir=3D"ltr" class=3D"g=
 mail_signature"><div dir=3D"ltr"><p dir=3D"ltr" style=3D"line-height:1.38;m=
 argin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:11pt;font-family:=
@@ -255,9 +324,9 @@ amarulasolutions.com</span></a></p><div>[`as] <a href=3D"https://www.amarul=
 asolutions.com" target=3D"_blank">https://www.amarulasolutions.com</a>|</di=
 v></div></div></div>
 
---000000000000b6d47105ea22f528--
+--0000000000004764ba05ea2333bb--
 
---===============6722438883441947182==
+--===============2651847887386201741==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -268,4 +337,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6722438883441947182==--
+--===============2651847887386201741==--
