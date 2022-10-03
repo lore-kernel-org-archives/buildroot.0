@@ -4,80 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E3EAC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  3 Oct 2022 15:54:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1A75C433FE
+	for <buildroot@archiver.kernel.org>; Mon,  3 Oct 2022 17:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 954B8408D1;
-	Mon,  3 Oct 2022 15:54:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 954B8408D1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 094FE409FC;
+	Mon,  3 Oct 2022 17:22:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 094FE409FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WLagf_TPPDWn; Mon,  3 Oct 2022 15:54:01 +0000 (UTC)
+	with ESMTP id 0Xeyqlqf_GFG; Mon,  3 Oct 2022 17:22:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 899EE408C8;
-	Mon,  3 Oct 2022 15:54:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 899EE408C8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BFA271BF9AF
- for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:53:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0BE7D409E0;
+	Mon,  3 Oct 2022 17:21:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BE7D409E0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 572D51BF2B9
+ for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 17:21:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B26B813EE
- for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 15:53:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B26B813EE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 326B0408F5
+ for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 17:21:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 326B0408F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lwhEN05zS2VF for <buildroot@lists.busybox.net>;
- Mon,  3 Oct 2022 15:53:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eB1wMf4rHpiz for <buildroot@lists.busybox.net>;
+ Mon,  3 Oct 2022 17:21:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A8158136C
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
- [IPv6:2a00:1450:4864:20::22d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A8158136C
- for <buildroot@buildroot.org>; Mon,  3 Oct 2022 15:53:57 +0000 (UTC)
-Received: by mail-lj1-x22d.google.com with SMTP id a12so2272256ljr.7
- for <buildroot@buildroot.org>; Mon, 03 Oct 2022 08:53:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5436408CA
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com
+ [IPv6:2607:f8b0:4864:20::82c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D5436408CA
+ for <buildroot@buildroot.org>; Mon,  3 Oct 2022 17:21:55 +0000 (UTC)
+Received: by mail-qt1-x82c.google.com with SMTP id c11so6737694qtw.8
+ for <buildroot@buildroot.org>; Mon, 03 Oct 2022 10:21:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date;
- bh=lFdAodM2NxJt8F3x7WAYHPxLjl9BM4TaAL/FfiwToj0=;
- b=XZHNe5CNCGnknLATbtJMGT+u4Qu+Jxf9bKYTE8mzQWmkGUy+wSgb5Psxjx6UwCSbbw
- gXbrGnaHx7aGqfkr4aWdCRf2gofhwyGxjoyvNzYyh5G4un3ZsbkvxXBRtise+hBUd7gb
- 1/EWIY906tWwOFQP00V9GKzCA/XG6PUe1uRoc9qwaiR+VoCvDwpxJPjg7/AQ3ShDcsQq
- tfe2SYyY22HaXrr1nGZ7o8DXXOqoWBHyEZyzIrh0puh2svjWXuUFUZBx90te6ogOQPXZ
- 7kmwhlx2VHXBGZmU/xMsJA1HIi1tHwUeBBwoXPIYpJKJB17BtdoJkgCXnsxcxqW/MQka
- EI3g==
-X-Gm-Message-State: ACrzQf2Zsp25TvHEy7WW/cIFVzY1kK741zUkSLqG6a0mFWJ7hV1HGJEL
- w/LALD6xajczS478/AmtSy70+zHAhgD55paTsM1EZGn4h+/yqQ==
-X-Google-Smtp-Source: AMsMyM5rB+zEx8eHo/W574SSfe3hyxK31H9w1Ac8FiJGReOGtUfQLXN2b+Z5xEnq1rrFD88msh2I+1LBflzJKh5v4RU=
-X-Received: by 2002:a2e:988c:0:b0:26d:e542:5e49 with SMTP id
- b12-20020a2e988c000000b0026de5425e49mr761403ljj.138.1664812435328; Mon, 03
- Oct 2022 08:53:55 -0700 (PDT)
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date;
+ bh=uWTNVaZpn+qWWmNJPIgkofOmRLAAG3u68SpMAVhTB7Q=;
+ b=epu1WYcWrLhk8LBmeU4jaCkngXOoR0f6Vr1DVpAldOKV8bPpIMHdHwe5nMwVGvFQ/M
+ 9+Zn7KB5WyVOt7DJ3IyEV8aEgePkjzi60TWliJZ+6qngMqfTZll9/T5FVAKlli7PZ91Y
+ Oz5DJWFBFAyDaoM/Al0HQNEohoZ9wTgXODW62KMZT3QI81IczODFWZIHdPvx1J3dNhjD
+ m8La51hyJ5v59ZHFLrHQ4BoWKJY1dokr9GhyXAO00OPSnFj8gIlQaLKzyp9t2Sx7TdaJ
+ Iwa3lvp8UXvWfgQi7Mzh8eu4aEUt0fkUkA7XKj0PYWXVHwo6Mq4z5EpkTEAQZFilBt6b
+ 4gjQ==
+X-Gm-Message-State: ACrzQf0wE/SFB/WQewWTDn/UUGhiOaBm2jB7in1Tus3m0QHwOs51Al+2
+ 8RytkrLgpQcRfrkyffGlxygayFD23aI=
+X-Google-Smtp-Source: AMsMyM5HQxUMVeE5C4mNYLz8ECxkxr2ktIwzvt3YSd48PVO4D90f4Tx6CfFyt//dzyFNhqZ+8x1dPA==
+X-Received: by 2002:a05:622a:58a:b0:35d:451a:39f8 with SMTP id
+ c10-20020a05622a058a00b0035d451a39f8mr16477888qtb.321.1664817714483; 
+ Mon, 03 Oct 2022 10:21:54 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+ by smtp.googlemail.com with ESMTPSA id
+ b8-20020ac844c8000000b0035d57445127sm9843191qto.47.2022.10.03.10.21.52
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 03 Oct 2022 10:21:53 -0700 (PDT)
+Message-ID: <ee93a0b3-3743-3fbc-f34e-995178d429d8@gmail.com>
+Date: Mon, 3 Oct 2022 10:21:50 -0700
 MIME-Version: 1.0
-References: <20220705073206.1442280-1-angelo@amarulasolutions.com>
- <20220705073206.1442280-6-angelo@amarulasolutions.com>
- <87illlgfh6.fsf@dell.be.48ers.dk>
-In-Reply-To: <87illlgfh6.fsf@dell.be.48ers.dk>
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 3 Oct 2022 17:53:18 +0200
-Message-ID: <CA+_SqVYX1s0n7SSCtS23gTuRb0vyh63fG-TtVjx+iEJuKT9-4g@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20220927221133.594071-1-f.fainelli@gmail.com>
+ <20220928233856.77bb191c@windsurf>
+ <dda7b7d2-4846-6623-5ca7-39799015a138@gmail.com>
+ <20221001190702.GQ30794@scaer>
+From: Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221001190702.GQ30794@scaer>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date;
- bh=lFdAodM2NxJt8F3x7WAYHPxLjl9BM4TaAL/FfiwToj0=;
- b=lIaRDkEu7L7HbSUQckP7V6YEOw9t6D9gmHx0ufgoIF6HIWQJfAgmVjvqVoDpWn6Zij
- jjnMU5npTD3byIdlo+vI50bzeHhZnso3m1tnv7gchNAoVC1Q9FKJ+iam9n6n43erQoMN
- WK0nuz/7PtHGplHzLGhpBztlQ8jvk3AZmzOaI=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=lIaRDkEu
-Subject: Re: [Buildroot] [PATCH v3 5/5] package/initscripts: add service to
- load kernel modules at boot
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date;
+ bh=uWTNVaZpn+qWWmNJPIgkofOmRLAAG3u68SpMAVhTB7Q=;
+ b=Gh+EuDq5yFn6pRCmeAKqOoYG3aFWVFra6aTuIKRHAGL7AXmR7pznsHv4cJYzaSfjlR
+ nAs7aekwGRs41wjvqi6jpKmXKj/l8Uc0rq32cfw3xXB8XYYfcPRO9McoayH6lXU6nh4j
+ EjQOLmIL9M9HOt5GlpMnxd5RbDqHFcHINJkm8JEivue7T5es8Lmcbn/IQRHoCGT5iUDq
+ +2IVcE8dTFpOQ4c/jSynlcUJ8Rh6Z42NCAzX87bviS1fG5v3FlLJz40oLB/5CH/yrVlA
+ 9ETk4V5ZdewFtuQZEPl64me9rqfXMB4ZWJKrNoQpFDsVVF7uY9aTCszhwPPfaNRwPc5D
+ nf0Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Gh+EuDq5
+Subject: Re: [Buildroot] [PATCH] package/linux-tools: Exclude checking PE
+ binaries from perf test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,297 +102,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: br015@umbiko.net, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1256102706006275722=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1256102706006275722==
-Content-Type: multipart/alternative; boundary="000000000000d36ec905ea235963"
+On 10/1/22 12:07, Yann E. MORIN wrote:
+> Florian, All,
+> 
+> On 2022-09-28 15:28 -0700, Florian Fainelli spake thusly:
+>> On 9/28/22 14:38, Thomas Petazzoni wrote:
+>>> On Tue, 27 Sep 2022 15:11:33 -0700
+>>> Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>>> Since upstream Linux commit ed21d6d7c48e6e96c2d617e304a7ebfbd17b1807
+>>>> ("perf tests: Add test for PE binary format support") present in >=
+>>>> v5.10 there is an unconditional installation of PE binaries which will
+>>>> be rejected by the check-bin-arch script.
+>>>>
+>>>> Make sure that these binaries are excluded from being checked to allow
+>>>> the installation of the perf tests.
+>>>>
+>>>> Fixes: 6fcdaa4c5096 ("package/linux-tools: Allow installation of perf scripts")
+>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>
+>>> Thanks for the patch! Before merging it, I'd like to understand a
+>>> little bit more how readelf behaves for these PE files. Indeed in
+>>> check-bin-arch, we are doing:
+>>>
+>>>          arch=$(LC_ALL=C ${readelf} -h "${TARGET_DIR}/${f}" 2>&1 | \
+>>>                         sed -r -e '/^  Machine: +(.+)/!d; s//\1/;' | head -1)
+>>>
+>>>          # If no architecture found, assume it was not an ELF file
+>>>          if test "${arch}" = "" ; then
+>>>                  continue
+>>>          fi
+>>>
+>>> for a PE file, I would expect readelf to badly fail, and therefore
+>>> ${arch} to be empty, and the file simply ignored.
+>>>
+>>> What is the behavior/output of readelf on these PE files?
+>>
+>> If I use my host system readelf which is packaged from
+>> binutils-x86-64-linux-gnu, I get no output and all is well, however when
+>> check-bin-arch is called and it uses $(TARGET_READELF), I do get:
+>>
+>> ./host/bin/aarch64-linux-readelf -h
+>> build/linux-custom/tools/perf/tests/pe-file.exe | sed -r -e '/^ Machine:
+>> +(.+)/!d; s//\1/;' | head -1
+>> IMAGE_FILE_MACHINE_AMD64 (0x8664)
+>>
+>> which is what prompted me to issue this patch in the first place.
+>>
+>> I should mention that the readelf binary in this case is the LLVM Object
+>> Reader and it does support PE/COFF which is probably why it even remotely
+>> attempts to parse the file.
+> 
+> OK, but isn't that flawed? It is named 'readelf', so I would expect it
+> to not report on non-ELF files, at least by default (i.e. unless a
+> specific option flag is passed).
+> 
+> If a readelf tool does not behave like a readelf tool should behave,
+> isn't that a bug in that specific readelf tool to begin with?
 
---000000000000d36ec905ea235963
-Content-Type: text/plain; charset="UTF-8"
+Markus can correct me but it seems to me llvm-readelf is LLVM's own 
+doing and aliases to llvm-readobj, given that PE executable support was 
+built into the toolchain, it happily went into parsing the PE files. I 
+suppose that in premise llvm-readelf should retrict itself to parsing 
+ELF files, clearly LLVM developers thought differently.
 
-On Sun, Sep 18, 2022 at 12:10 PM Peter Korsgaard <peter@korsgaard.com>
-wrote:
+> 
+> Otherwise, it is very intriguing how you managed to have a toolchain
+> without gcc et al, be usable for Buildroot that only knows about the GNU
+> ecosystem.
+> 
+> Is that a publicly available toolchain? 
 
-> >>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
->
->  > In cases where no hotplug is available (by choice or by the lack of a
->  > proper hotplug method for a device), this service can be used to load
->  > kernel module drivers by reading the /etc/modules file.
->  > The modules files matches the one used by systemd, which in turn has
->  > a builtin mechanism to load a module at boot, therefore making systemv
->  > init on par with systemd features.
->
->  > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
->  > ---
->  > Changes
->
->  > v2:
->  > * Moved script to initscripts (Arnout)
->  > * Moved script to S11modules, after S10[mu]dev (Andreas)
->  > * Use /etc/modules-load.d/ to share the same setup with systemd (me)
->
->  >  package/initscripts/init.d/S11modules | 59 +++++++++++++++++++++++++++
->  >  1 file changed, 59 insertions(+)
->  >  create mode 100644 package/initscripts/init.d/S11modules
->
->  > diff --git a/package/initscripts/init.d/S11modules
-> b/package/initscripts/init.d/S11modules
->  > new file mode 100644
->  > index 0000000000..3937945596
->  > --- /dev/null
->  > +++ b/package/initscripts/init.d/S11modules
->  > @@ -0,0 +1,59 @@
->  > +#!/bin/sh
->  > +
->  > +MODULES="*.conf"
->  > +MODULES_DIR="/etc/modules-load.d"
->  > +
->  > +[ -z "$(ls -A ${MODULES_DIR}/${MODULES} 2> /dev/null)" ] && exit 0
->
-> The commit message talks about /etc/modules, but you are reading from
-> /etc/modules-load.d/*.conf?
->
+Not yet, but soon.
 
-Yes, right, commit message must be fixed.
+> Can you share the recipe how that toolchain was generated?
 
+Yes that will be done.
 
-> How about supporting both /etc/modules and this directory instead?
->
+> Do you have special, local changes in Buildroot to accomodate that toolchain? Will you submit those changes?
 
-It is doable, but if we are on par with systemd I cannot see why adding
-/etc/modules. The same goal can be obtained easily dropping a file in
-/etc/modules-load.d/ .
+Yes a few and yes we will, provided there is interest from the buildroot 
+community to have support for a GNU-free and musl-libc based toolchain. 
+The approach we took for now is that we provide a GNU-compatible wrapper 
+and set of executable names such that you build with clang/LLVM but you 
+don't really need to know about it, except where it matters.
 
+> 
+> That would allow adding more testing to avoid such issue in the future.
+> Otherwise, I am not fan of adding such exclusion for private cases that
+> we can not (easily) reproduce, as those cases are not supported.
 
->
->
->  > +
->  > +load_unload() {
->  > +    for module_file in $(ls -1 ${MODULES_DIR}); do
->
-> And here you take all files in /etc/modules-load.d, even if they don't
-> have a .conf extension?
->
-
-Nice catch.
-
-
->
-> > +                     esac
->  > +
->  > +                    if [ "$1" = "load" ]; then
->  > +                            modprobe -q ${module} ${args} >/dev/null
-> && \
->  > +                                    printf ' %s success,' "$module" ||
->  > +                                    printf ' %s failed,' "$module"
->
-> success/failed are quite long strings, how about only printing the
-> module name on success and a big scary FAIL like we do elsewhere on
-> failures?
->
-
-Nice suggestion.
-
-
->
-> --
-> Bye, Peter Korsgaard
->
-
-
+Fair enough, how about we make sure the toolchain is available, can be 
+re-created by anyone who desires so and then we submit the changes to 
+buildroot that we have so you see the full picture?
 -- 
-
-Angelo Compagnucci
-
-Software Engineer
-
-angelo@amarulasolutions.com
-__________________________________
-Amarula Solutions SRL
-
-Via le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 (0)42 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
-[`as] https://www.amarulasolutions.com|
-
---000000000000d36ec905ea235963
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Sep 18, 2022 at 12:10 PM Pete=
-r Korsgaard &lt;<a href=3D"mailto:peter@korsgaard.com">peter@korsgaard.com<=
-/a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
-px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">&=
-gt;&gt;&gt;&gt;&gt; &quot;Angelo&quot; =3D=3D Angelo Compagnucci &lt;<a hre=
-f=3D"mailto:angelo@amarulasolutions.com" target=3D"_blank">angelo@amarulaso=
-lutions.com</a>&gt; writes:<br>
-<br>
-=C2=A0&gt; In cases where no hotplug is available (by choice or by the lack=
- of a<br>
-=C2=A0&gt; proper hotplug method for a device), this service can be used to=
- load<br>
-=C2=A0&gt; kernel module drivers by reading the /etc/modules file.<br>
-=C2=A0&gt; The modules files matches the one used by systemd, which in turn=
- has<br>
-=C2=A0&gt; a builtin mechanism to load a module at boot, therefore making s=
-ystemv<br>
-=C2=A0&gt; init on par with systemd features.<br>
-<br>
-=C2=A0&gt; Signed-off-by: Angelo Compagnucci &lt;<a href=3D"mailto:angelo@a=
-marulasolutions.com" target=3D"_blank">angelo@amarulasolutions.com</a>&gt;<=
-br>
-=C2=A0&gt; ---<br>
-=C2=A0&gt; Changes<br>
-<br>
-=C2=A0&gt; v2:<br>
-=C2=A0&gt; * Moved script to initscripts (Arnout)<br>
-=C2=A0&gt; * Moved script to S11modules, after S10[mu]dev (Andreas)<br>
-=C2=A0&gt; * Use /etc/modules-load.d/ to share the same setup with systemd =
-(me)<br>
-<br>
-=C2=A0&gt;=C2=A0 package/initscripts/init.d/S11modules | 59 +++++++++++++++=
-++++++++++++<br>
-=C2=A0&gt;=C2=A0 1 file changed, 59 insertions(+)<br>
-=C2=A0&gt;=C2=A0 create mode 100644 package/initscripts/init.d/S11modules<b=
-r>
-<br>
-=C2=A0&gt; diff --git a/package/initscripts/init.d/S11modules b/package/ini=
-tscripts/init.d/S11modules<br>
-=C2=A0&gt; new file mode 100644<br>
-=C2=A0&gt; index 0000000000..3937945596<br>
-=C2=A0&gt; --- /dev/null<br>
-=C2=A0&gt; +++ b/package/initscripts/init.d/S11modules<br>
-=C2=A0&gt; @@ -0,0 +1,59 @@<br>
-=C2=A0&gt; +#!/bin/sh<br>
-=C2=A0&gt; +<br>
-=C2=A0&gt; +MODULES=3D&quot;*.conf&quot;<br>
-=C2=A0&gt; +MODULES_DIR=3D&quot;/etc/modules-load.d&quot;<br>
-=C2=A0&gt; +<br>
-=C2=A0&gt; +[ -z &quot;$(ls -A ${MODULES_DIR}/${MODULES} 2&gt; /dev/null)&q=
-uot; ] &amp;&amp; exit 0<br>
-<br>
-The commit message talks about /etc/modules, but you are reading from<br>
-/etc/modules-load.d/*.conf?<br></blockquote><div><br></div><div>Yes, right,=
- commit message must be fixed. <br></div><div>=C2=A0</div><blockquote class=
-=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
-b(204,204,204);padding-left:1ex">
-How about supporting both /etc/modules and this directory instead?<br></blo=
-ckquote><div><br></div><div>It is doable, but if we are on par with systemd=
- I cannot see why adding /etc/modules. The same goal can be obtained easily=
- dropping a file in /etc/modules-load.d/ .<br></div><div>=C2=A0</div><block=
-quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
-px solid rgb(204,204,204);padding-left:1ex">
-<br>
-<br>
-=C2=A0&gt; +<br>
-=C2=A0&gt; +load_unload() {<br>
-=C2=A0&gt; +=C2=A0 =C2=A0 for module_file in $(ls -1 ${MODULES_DIR}); do<br=
->
-<br>
-And here you take all files in /etc/modules-load.d, even if they don&#39;t<=
-br>
-have a .conf extension?<br></blockquote><div><br></div><div>Nice catch.</di=
-v><div>=C2=A0<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0p=
-x 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0esac<br>
-=C2=A0&gt; +<br>
-=C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 if [ &quot;$1&quot; =3D &quot;load&quot; ]; then<br>
-=C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modprobe -q ${module} ${args} &gt;/dev/n=
-ull &amp;&amp; \<br>
-=C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 printf &#39;=
- %s success,&#39; &quot;$module&quot; ||<br>
-=C2=A0&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 printf &#39;=
- %s failed,&#39; &quot;$module&quot;<br>
-<br>
-success/failed are quite long strings, how about only printing the<br>
-module name on success and a big scary FAIL like we do elsewhere on<br>
-failures?<br></blockquote><div><br></div><div>Nice suggestion.</div><div>=
-=C2=A0<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
-px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
--- <br>
-Bye, Peter Korsgaard<br>
-</blockquote></div><br clear=3D"all"><br>-- <br><div dir=3D"ltr" class=3D"g=
-mail_signature"><div dir=3D"ltr"><p dir=3D"ltr" style=3D"line-height:1.38;m=
-argin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:11pt;font-family:=
-Arial;color:rgb(0,0,0);background-color:transparent;font-weight:400;font-st=
-yle:normal;font-variant:normal;text-decoration:none;vertical-align:baseline=
-;white-space:pre-wrap"></span><span style=3D"font-size:10pt;font-family:Ubu=
-ntu,sans-serif;color:rgb(0,0,0);background-color:transparent;font-weight:50=
-0;font-style:normal;font-variant:normal;text-decoration:none;vertical-align=
-:baseline;white-space:pre-wrap">Angelo Compagnucci</span></p><p dir=3D"ltr"=
- style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=3D"=
-font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,=
-0);background-color:transparent;font-weight:400;font-style:normal;font-vari=
-ant:normal;text-decoration:none;vertical-align:baseline;white-space:pre-wra=
-p">Software Engineer</span></p><p dir=3D"ltr" style=3D"line-height:1.8;marg=
-in-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&qu=
-ot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparen=
-t;font-weight:400;font-style:normal;font-variant:normal;text-decoration:non=
-e;vertical-align:baseline;white-space:pre-wrap"><a href=3D"mailto:angelo@am=
-arulasolutions.com" target=3D"_blank">angelo@amarulasolutions.com</a>=C2=A0=
-<br></span><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot=
-;,monospace;color:rgb(241,194,50);background-color:transparent;font-weight:=
-400;font-style:normal;font-variant:normal;text-decoration:none;vertical-ali=
-gn:baseline;white-space:pre-wrap">__________________________________</span>=
-<span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace=
-;color:rgb(0,0,0);background-color:transparent;font-weight:400;font-style:n=
-ormal;font-variant:normal;text-decoration:none;vertical-align:baseline;whit=
-e-space:pre-wrap"><br></span><span style=3D"font-size:10pt;font-family:Ubun=
-tu,sans-serif;color:rgb(0,0,0);background-color:transparent;font-weight:500=
-;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:=
-baseline;white-space:pre-wrap">Amarula Solutions SRL</span></p><p dir=3D"lt=
-r" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=
-=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
-0,0,0);background-color:transparent;font-weight:400;font-style:normal;font-=
-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre=
--wrap">Via le Canevare 30, 31100 Treviso, Veneto, IT</span></p><p dir=3D"lt=
-r" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=
-=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
-0,0,0);background-color:transparent;font-weight:400;font-style:normal;font-=
-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre=
--wrap">T. +39 (0)42 243 5310</span><span style=3D"font-size:10pt;font-famil=
-y:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:trans=
-parent;font-weight:400;font-style:normal;font-variant:normal;text-decoratio=
-n:none;vertical-align:baseline;white-space:pre-wrap"><br></span><span style=
-=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
-0,0,0);background-color:transparent;font-weight:400;font-style:normal;font-=
-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre=
--wrap"><a href=3D"mailto:info@amarulasolutions.com" target=3D"_blank">info@=
-amarulasolutions.com</a></span></p><p dir=3D"ltr" style=3D"line-height:1.8;=
-margin-top:0pt;margin-bottom:0pt"><a href=3D"http://www.amarulasolutions.co=
-m/" style=3D"text-decoration:none" target=3D"_blank"><span style=3D"font-si=
-ze:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);back=
-ground-color:transparent;font-weight:400;font-style:normal;font-variant:nor=
-mal;text-decoration:none;vertical-align:baseline;white-space:pre-wrap">www.=
-amarulasolutions.com</span></a></p><div>[`as] <a href=3D"https://www.amarul=
-asolutions.com" target=3D"_blank">https://www.amarulasolutions.com</a>|</di=
-v></div></div></div>
-
---000000000000d36ec905ea235963--
-
---===============1256102706006275722==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Florian
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1256102706006275722==--
