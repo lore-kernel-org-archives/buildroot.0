@@ -1,85 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71B7EC433F5
-	for <buildroot@archiver.kernel.org>; Mon,  3 Oct 2022 12:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 632D2C433F5
+	for <buildroot@archiver.kernel.org>; Mon,  3 Oct 2022 12:24:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B94BF410C7;
-	Mon,  3 Oct 2022 12:04:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B94BF410C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB0E7405D3;
+	Mon,  3 Oct 2022 12:24:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB0E7405D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U9UtxXVt08pF; Mon,  3 Oct 2022 12:04:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id RSWS2sgchjai; Mon,  3 Oct 2022 12:24:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 752D3410C2;
-	Mon,  3 Oct 2022 12:04:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 752D3410C2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 008BC1BF29A
- for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 12:04:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9DEE7404B2;
+	Mon,  3 Oct 2022 12:24:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DEE7404B2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 100141BF3C2
+ for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 12:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C80D0410C2
- for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 12:04:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C80D0410C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id ECD6F60BCF
+ for <buildroot@lists.busybox.net>; Mon,  3 Oct 2022 12:24:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECD6F60BCF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WvRRQ_3cGU0R for <buildroot@lists.busybox.net>;
- Mon,  3 Oct 2022 12:04:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kW2WLcHtFVir for <buildroot@lists.busybox.net>;
+ Mon,  3 Oct 2022 12:24:33 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 617FB410BE
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 617FB410BE
- for <buildroot@buildroot.org>; Mon,  3 Oct 2022 12:04:09 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id lc7so21675239ejb.0
- for <buildroot@buildroot.org>; Mon, 03 Oct 2022 05:04:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18CC3605A5
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 18CC3605A5
+ for <buildroot@buildroot.org>; Mon,  3 Oct 2022 12:24:32 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id u10so16351243wrq.2
+ for <buildroot@buildroot.org>; Mon, 03 Oct 2022 05:24:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=5NS1Y2297I6w+dMEHcdMwNG8uFGNbv6sYr6Ug/Uo8mA=;
- b=VyFJ3AFuAFZcl9xCrA1S3Pj7UQa1nqpYcQ2w4SpCLrEqJbmDLWlsUiV8F8dCDpR0WK
- /tBdj5qcIiFFbduVT+v46i+mYYEfqzHyCq4I0nI6fKT0tpiZmt7DFGah9FLDZ4HAgAFV
- t3GP2Hj2OKABniYLF0AxAb0c7A2iHiqH5ow/k+a0CSBVDzf2iaSV063zQcIvJTLoRnsW
- pbZYs4b55nwClf0bB/09OI5Tld0amMjHgD3gNYpbshnKqfDH+5Xin6WEdfqqN+kJE5L5
- Yb0rucCdpLs3AqoU9qb+RPDMT4cFSIiIr2vwsgDrrPZdacPHSTeBVQvU6IYAO+0D6cEf
- mzFw==
-X-Gm-Message-State: ACrzQf0QMrEEPe44+/j9pMpfhpofyZAZrWuBYP+aWoVaK4c0Ehbe3cPH
- 66bmUzQfIWGijaUSBfugGI564jPDkRZOlA==
-X-Google-Smtp-Source: AMsMyM7dxp7fQdVEDS84tu/sVp/WJdeSXI+xct/w744Kcgfwobs4npql2wYi0eGiSCcIi8d16uQbuA==
-X-Received: by 2002:a17:907:7629:b0:776:a147:8524 with SMTP id
- jy9-20020a170907762900b00776a1478524mr14932923ejc.632.1664798647414; 
- Mon, 03 Oct 2022 05:04:07 -0700 (PDT)
-Received: from angeloc.amarulasolutions.com
- (host085115199111.static.fidoka.tech. [85.115.199.111])
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=apVh/CeB3e2DCQtNCNn9+4zqYJRM6GNS9++QUtWftjQ=;
+ b=szuBsAlFsM3TTgruw6oEu/XrcOHetUQKrsh3w8zv19HBSb/QKDdGRjHAZ/ubQIA2+t
+ 2jo054bmQLC37/mIMPDQITHxewyM+zwJrkwAWOQIueE3LFbTC0LhuTSBeAm9T5vyNr8N
+ a13ta+A9JBS9W6zbBVfHzRVI2wGLE379Q26AGOw5I52wIW6h1tE0JV4JPSKjGu++9Dsp
+ B+BolQeRPLUSCoSotKnlbBFCPUQmmQUX5Zbb0Z5XGC3QrX8YHLOdlZnbhW90Fp634ZAq
+ HEU88De1/hDVMofFN6zO9VgcNMtKxC00AORzmZvWibS0Sb7I4FMZr3/+I7u0Dlj9xLhK
+ BpmQ==
+X-Gm-Message-State: ACrzQf2v6xOiQQPtyDZo3P4Va278nBUIfQaQmE6tA7eLs+n4IapFQr7e
+ F9rHk/jqhEzefXOAUunNm0fzVs1k34w=
+X-Google-Smtp-Source: AMsMyM4AUl65rONmo3l3YxtUn8APF2sJp4r+/IShZKtVZ2CbS3FCE35yPC3f6zHQqz4348/GYJ65EA==
+X-Received: by 2002:a5d:5963:0:b0:22a:47ed:f98f with SMTP id
+ e35-20020a5d5963000000b0022a47edf98fmr12623698wri.155.1664799870986; 
+ Mon, 03 Oct 2022 05:24:30 -0700 (PDT)
+Received: from p19180.home ([2a01:cb1c:e35:9600:4170:2ec:443b:608d])
  by smtp.gmail.com with ESMTPSA id
- ku8-20020a170907788800b0078bfe57fc7bsm1190010ejc.47.2022.10.03.05.04.06
+ a22-20020a05600c349600b003b33de17577sm11602141wmq.13.2022.10.03.05.24.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 03 Oct 2022 05:04:06 -0700 (PDT)
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ Mon, 03 Oct 2022 05:24:30 -0700 (PDT)
+From: Victor Dumas <dumasv.dev@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  3 Oct 2022 14:04:02 +0200
-Message-Id: <20221003120402.2503418-1-angelo@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+Date: Mon,  3 Oct 2022 14:24:21 +0200
+Message-Id: <20221003122421.39868-1-dumasv.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
+ d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date;
- bh=5NS1Y2297I6w+dMEHcdMwNG8uFGNbv6sYr6Ug/Uo8mA=;
- b=r2avI0RzAuGKIC8u6kaR4SRx0M9LS3FXp2ocPsv+uN/A3/9zDpsV2LQ8BBs/YmTegp
- Y9ecOQJefsMs5cwToEVx/+wfZwQFJk8QXZfdUmrEytluxbB65gRZV34tc9TDghzkIZ4p
- UC0fwHJYIOHhAB//A2M291k9UpnVB9AFZImdo=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=r2avI0Rz
-Subject: [Buildroot] [PATCH] package/apparmor: bump to version 3.1.1
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=apVh/CeB3e2DCQtNCNn9+4zqYJRM6GNS9++QUtWftjQ=;
+ b=SMlpvn56ju37Uzg42Jb32QFa/keIlv67pCxAreI7q8MRfZBQ+5agYxpKZymDJPKncZ
+ q0d5m3ngjzXVP/QIWl1Ypdz+AWTcjnFC+UoX8WkamNTBl3MK61uHY/SPefR6v9m5+O2b
+ c3QwoCc6devwNfe0n6moDmIqWfcbxut7Uo5I5DfwYufMkTjH+CIQkluLl96Mzha0zZ1L
+ ulDPrddb/LV06sy5Hg40g3xGluj1GpoEmVi8un+/ytwXUCidKXvAbiSLouVoSLrLscEk
+ Adqfz/dopYjSxvi8T7VjlfFzALs416yjAH0x9aKvcC+PDhuKHRRTxCkmSG796MvC7WE9
+ bPUg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=SMlpvn56
+Subject: [Buildroot] [PATCH] support/scripts/fix-rpath: parallelize patch
+ files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,68 +94,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
+Cc: vdumas <dumasv.dev@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump also the corresponding library. Updating the hash location because
-the sha256 sum was not updated anymore on the wiki and there is an
-available md5 on the project page.
+From: vdumas <dumasv.dev@gmail.com>
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Using "xargs" instead of "while read" loop allows for the patching of files to be parallelized, significantly reducing the amount of time it takes to fix all the paths. On a larger RFS(~300MB) this script was taking 5 minutes, it now only takes about 30s on a 12 core machine
+
+Signed-off-by: Victor Dumas <dumasv.dev@gmail.com>
 ---
- package/apparmor/apparmor.hash       | 6 ++++--
- package/apparmor/apparmor.mk         | 4 ++--
- package/libapparmor/libapparmor.hash | 6 ++++--
- 3 files changed, 10 insertions(+), 6 deletions(-)
+ support/scripts/fix-rpath | 60 ++++++++++++++++++++++-----------------
+ 1 file changed, 34 insertions(+), 26 deletions(-)
 
-diff --git a/package/apparmor/apparmor.hash b/package/apparmor/apparmor.hash
-index 497491b6c9..1cc531a8a4 100644
---- a/package/apparmor/apparmor.hash
-+++ b/package/apparmor/apparmor.hash
-@@ -1,5 +1,7 @@
--# From: https://gitlab.com/apparmor/apparmor/-/wikis/home#userspace
--sha256  09bf48d7a171f9790c39a1404bad105a788934cfe77b7490c7f5c63c2576b725  apparmor-3.0.4.tar.gz
-+# locally computed
-+sha256  cd52a5643c115b223c199e96ab03d6d5d7d72c266ac23cf74a08f32f003af9d7  apparmor-3.1.1.tar.gz
-+# From: https://launchpad.net/apparmor/3.1/3.1.1/+download/apparmor-3.1.1.tar.gz/+md5
-+md5  28e438d2ca947260ccbb50f7ecb47cfe  apparmor-3.1.1.tar.gz
+diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+index 3e67e770e5..c842da7013 100755
+--- a/support/scripts/fix-rpath
++++ b/support/scripts/fix-rpath
+@@ -58,6 +58,38 @@ HOST_EXCLUDEPATHS="/share/terminfo"
+ STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
+ TARGET_EXCLUDEPATHS="/lib/firmware"
  
- # locally computed
- sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index 76c9f2cafe..cf7be888f8 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -5,8 +5,8 @@
- ################################################################################
++patch_file() {
++    PATCHELF="${1}"
++    rootdir="${2}"
++    sanitize_extra_args="${3}"
++    file="${4}"
++
++    # check if it's an ELF file
++    rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
++    if test $? -ne 0 ; then
++        return 0
++    fi
++
++    # make files writable if necessary
++    changed=$(chmod -c u+w "${file}")
++
++    # With per-package directory support, most RPATH of host
++    # binaries will point to per-package directories. This won't
++    # work with the --make-rpath-relative ${rootdir} invocation as
++    # the per-package host directory is not within ${rootdir}. So,
++    # we rewrite all RPATHs pointing to per-package directories so
++    # that they point to the global host directry.
++    changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
++    if test "${rpath}" != "${changed_rpath}" ; then
++        ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
++    fi
++
++    # call patchelf to sanitize the rpath
++    ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
++    # restore the original permission
++    test "${changed}" != "" && chmod u-w "${file}"
++}
++
+ main() {
+     local rootdir
+     local tree="${1}"
+@@ -125,32 +157,8 @@ main() {
  
- # When updating the version here, please also update the libapparmor package
--APPARMOR_VERSION_MAJOR = 3.0
--APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).4
-+APPARMOR_VERSION_MAJOR = 3.1
-+APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).1
- APPARMOR_SITE = https://launchpad.net/apparmor/$(APPARMOR_VERSION_MAJOR)/$(APPARMOR_VERSION)/+download
- APPARMOR_DL_SUBDIR = libapparmor
- APPARMOR_LICENSE = GPL-2.0
-diff --git a/package/libapparmor/libapparmor.hash b/package/libapparmor/libapparmor.hash
-index 9fbfe3b92e..a411d53eb4 100644
---- a/package/libapparmor/libapparmor.hash
-+++ b/package/libapparmor/libapparmor.hash
-@@ -1,5 +1,7 @@
--# From: https://gitlab.com/apparmor/apparmor/-/wikis/home#userspace
--sha256  09bf48d7a171f9790c39a1404bad105a788934cfe77b7490c7f5c63c2576b725  apparmor-3.0.4.tar.gz
-+# locally computed
-+sha256  cd52a5643c115b223c199e96ab03d6d5d7d72c266ac23cf74a08f32f003af9d7  apparmor-3.1.1.tar.gz
-+# From: https://launchpad.net/apparmor/3.1/3.1.1/+download/apparmor-3.1.1.tar.gz/+md5
-+md5  28e438d2ca947260ccbb50f7ecb47cfe  apparmor-3.1.1.tar.gz
+     find_args+=( "-type" "f" "-print" )
  
- # locally computed
- sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
+-    while read file ; do
+-        # check if it's an ELF file
+-        rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
+-        if test $? -ne 0 ; then
+-            continue
+-        fi
+-
+-        # make files writable if necessary
+-        changed=$(chmod -c u+w "${file}")
+-
+-        # With per-package directory support, most RPATH of host
+-        # binaries will point to per-package directories. This won't
+-        # work with the --make-rpath-relative ${rootdir} invocation as
+-        # the per-package host directory is not within ${rootdir}. So,
+-        # we rewrite all RPATHs pointing to per-package directories so
+-        # that they point to the global host directry.
+-        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
+-        if test "${rpath}" != "${changed_rpath}" ; then
+-            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
+-        fi
+-
+-        # call patchelf to sanitize the rpath
+-        ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
+-        # restore the original permission
+-        test "${changed}" != "" && chmod u-w "${file}"
+-    done < <(find "${rootdir}" ${find_args[@]})
++    export -f patch_file
++    xargs -d '\n' -P $(nproc) -I {} bash -c "patch_file '${PATCHELF}' '${rootdir}' '${sanitize_extra_args}' $@" _ {} < <(find "${rootdir}" ${find_args[@]})
+ 
+     # Restore patched patchelf utility
+     test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
 -- 
-2.25.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
