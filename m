@@ -1,86 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 737F0C433F5
-	for <buildroot@archiver.kernel.org>; Tue,  4 Oct 2022 15:31:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4E8DC433F5
+	for <buildroot@archiver.kernel.org>; Tue,  4 Oct 2022 19:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE38640BEC;
-	Tue,  4 Oct 2022 15:31:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE38640BEC
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id shpIgQpBLx1K; Tue,  4 Oct 2022 15:31:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB84540BD2;
-	Tue,  4 Oct 2022 15:31:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB84540BD2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C57711BF82D
- for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 15:31:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AAD90827A9
- for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 15:31:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAD90827A9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04096823AB;
+	Tue,  4 Oct 2022 19:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04096823AB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OBMUaaqIAdm3 for <buildroot@lists.busybox.net>;
- Tue,  4 Oct 2022 15:31:04 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rOu6yClbTisJ; Tue,  4 Oct 2022 19:29:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0085481D5F;
+	Tue,  4 Oct 2022 19:29:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0085481D5F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4ABC31BF405
+ for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 19:29:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3263E608A5
+ for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 19:29:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3263E608A5
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id H1EHjMjwHWS9 for <buildroot@lists.busybox.net>;
+ Tue,  4 Oct 2022 19:29:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24712817C3
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 24712817C3
- for <buildroot@buildroot.org>; Tue,  4 Oct 2022 15:31:04 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id sd10so29718049ejc.2
- for <buildroot@buildroot.org>; Tue, 04 Oct 2022 08:31:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE19C605A4
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
+ [IPv6:2607:f8b0:4864:20::832])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EE19C605A4
+ for <buildroot@buildroot.org>; Tue,  4 Oct 2022 19:29:40 +0000 (UTC)
+Received: by mail-qt1-x832.google.com with SMTP id d15so1472033qtw.8
+ for <buildroot@buildroot.org>; Tue, 04 Oct 2022 12:29:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date;
- bh=yY0574qrf93Sd68j0F5oU75iEdycYYNqXoAmlhIgw+U=;
- b=ZD9tggv/jQ0UxurA8zmAPj8WCzWEm0TEDkRg8tBrpBTpZdDmgIK0cmTm9PLBoSDsVC
- qALqcHupm/pgkkkEzfEt8pWN+JsDCPGDOGc6q7dE1F77a4cb7Ra31Ed2GyrONB4WdDeA
- 49NSSUXZlKqpw55RTpFOwG5W4uDK7Gqmssn/4wcQnaSqqXq7hWnt9mTmfbEdP/iq2K3C
- iA7vW2KqWjO/dx+ab2tC0TVpxeK5DrP/EfPWgT/6i93zNoVNFS8Q3epC/zVesIq+nErk
- HBN4X4ivBLfRaXdqlk9rPWbIwYhwqL8tFa99Erkp90jW9EhjQMiy/mH9ra0uQ1yubyVV
- j6pg==
-X-Gm-Message-State: ACrzQf3M9OUx/jwiIjcBHUDiMkggOhWNSHmukaX7vHqs0z/MpRmMERL5
- DRKVqp1f7YRv+d6aGIsYFbsjjr1VFvPM6w==
-X-Google-Smtp-Source: AMsMyM5UoEjqsi6/Tz768y8QW5llaKB0dpktwiXfJLzDVVtLy6KES0HO7mpu0O9b+ceWcciWXTncLQ==
-X-Received: by 2002:a17:907:744:b0:741:36b9:d2cc with SMTP id
- xc4-20020a170907074400b0074136b9d2ccmr19125882ejb.613.1664897461910; 
- Tue, 04 Oct 2022 08:31:01 -0700 (PDT)
-Received: from angeloc.amarulasolutions.com
- (host085115199111.static.fidoka.tech. [85.115.199.111])
- by smtp.gmail.com with ESMTPSA id
- 18-20020a170906211200b0077077b59085sm7237486ejt.184.2022.10.04.08.31.00
+ bh=oce3lhIe8GXKHIC4l+lx1/2K0Xssd7TvThTG6+t5B/8=;
+ b=ezLnQ4smzNei79fibW7azAjoV9o//xHS44vif6EVvswjyNCrRvh0msQSltLsDSkC1E
+ 298hKq9dyJfx97x09W3gmc1LXVtTccJZLmoYIC23XnJLoWWJdZ4BC7qxK1T3NKi+/Ik0
+ fOl62jxa/v3Urx7bbI0jV/sx57vPF0B4YbZDPRaha4Avpws9FfJkf5ACopyKHgB2thaY
+ TGobSSiv/LKPLA9Wk77Ovuw2XtZ5U0uGzbSg6ol1EOXBcV4O1vBLz1kffsfm0ORYMrdw
+ qAhytBblxBKPe20hA2K2oGH3b+AVtdaXAzxohJAXIpPo2seIx7cFakZ4wJV0Om3HaObw
+ kbMw==
+X-Gm-Message-State: ACrzQf0wb95FgMa949YRxiu0r026BEJk6IG6a+SFBWLppHxZBBLVj5bU
+ TyPfzirWd4TnZ/Yb2d2uQ1sBx+9/E90+F/IJ
+X-Google-Smtp-Source: AMsMyM7heA/QyyYaRJaXa5IITXyDp06gf9uwJBSQkU8VPlHN43d96VXEKZZ7Ad4eBZQdJSgZyaxdRA==
+X-Received: by 2002:a05:622a:1015:b0:35a:de14:45b1 with SMTP id
+ d21-20020a05622a101500b0035ade1445b1mr21266384qte.348.1664911779595; 
+ Tue, 04 Oct 2022 12:29:39 -0700 (PDT)
+Received: from jesse-desktop.jtp-bos.lab
+ (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com.
+ [146.115.144.188]) by smtp.gmail.com with ESMTPSA id
+ bp42-20020a05620a45aa00b006cea2984c9bsm15212804qkb.100.2022.10.04.12.29.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 04 Oct 2022 08:31:01 -0700 (PDT)
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ Tue, 04 Oct 2022 12:29:39 -0700 (PDT)
+From: Jesse Taube <mr.bossman075@gmail.com>
+X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  4 Oct 2022 17:30:56 +0200
-Message-Id: <20221004153056.486957-1-angelo@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+Date: Tue,  4 Oct 2022 15:29:38 -0400
+Message-Id: <20221004192938.1314412-1-Mr.Bossman075@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
+ d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date;
- bh=yY0574qrf93Sd68j0F5oU75iEdycYYNqXoAmlhIgw+U=;
- b=oCgCtzQvckSFhtY/El1UuxFx7oD5fJVO/l6u4iein1wmh42yjhbhk4gttokhwdvMPt
- doRHAqPt/HFiEUHAZz2v4vtBsW9fOxWxQnCIkobb4x88jl2vcC41MCmu2Dhu6mROKcPP
- FQHC4GGeSTZj89kgUHS6kfIWD+tek/jKV9+T4=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=oCgCtzQv
-Subject: [Buildroot] [PATCH] linux: update cip/cip-rt kernels to version
- 5.10.145-cip17
+ bh=oce3lhIe8GXKHIC4l+lx1/2K0Xssd7TvThTG6+t5B/8=;
+ b=HDVhaNicwa4xRw1MX1lUNm5He/lTMrt7+n89dEvcy7IxToXsWxC2W3gKAggOFLe4ph
+ OGnVuo9yXUI2hc4bKbMJQ2VIUxw3fJ6ckYQywj9ZGJDkM6/3UE0RX4IrR9nwGtErPoIa
+ j6sH9qnpCkv5OPGMLf9qlpY0IpZy5DZicyU7FEofh3yQujCFPEyPLfMYK6792Iql7Quv
+ sHbAQZruMwufA/d0IdrtRA2VgGvcn9w+zeaGYIyAe3KkCW8aqgHvY0nAnTbgIfVMkfrC
+ N+qa1MBGO2aU3h7+FWncgXAufAGNNBL6fPGtl3TTTaLCP8bt1sss0AN3B3BOo1zNsly2
+ Epqg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=HDVhaNic
+Subject: [Buildroot] [PATCH v3] configs/imxrt1050-evk: New defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,68 +94,224 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
+Cc: festevam@gmail.com, Jesse Taube <Mr.Bossman075@gmail.com>,
+ James Autry <jautry@tekvox.com>, stephane.viau@oss.nxp.com,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ maeva.manuel@oss.nxp.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- linux/Config.in  | 8 ++++----
- linux/linux.hash | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Add defconfig for imxrt1050-evk is a development board from NXP.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index de9bf0ad7a..30e117a6af 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -32,7 +32,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_17 if BR2_KERNEL_HEADERS_AS_KERNEL
+Giulio and I worked on Linux and U-boot for this board. And now I'm
+adding support for the new board in Buildroot.
+
+The i.MXRTxxxx family spreads from i.MXRT1020 to i.MXRT1170 with the
+first one supporting 1 USB OTG & 100M ethernet with a cortex-M7@500Mhz
+up to the latter with i.MXRT1170 with cortex-M7@1Ghz and
+cortex-M4@400Mhz, 2MB of internal SRAM, 2D GPU, 2x 1Gb and
+1x 100Mb ENET. The i.MXRT family is NXP's answer to STM32F7xx, as it
+uses only simple SDRAM, it gives the chance of a 4 or less layer PCBs.
+Seeing that these chips are comparable to the STM32F7xxs which have
+buildroot ported to them it seems reasonable to add support for them.
+
+https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/i-mx-rt1050-evaluation-kit:MIMXRT1050-EVK
+
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ DEVELOPERS                                  |  6 +++
+ board/freescale/imxrt1050evk/genimage.cfg   | 40 +++++++++++++++++++
+ board/freescale/imxrt1050evk/post-build.sh  |  3 ++
+ board/freescale/imxrt1050evk/readme.txt     | 30 ++++++++++++++
+ board/freescale/imxrt1050evk/uboot.fragment |  2 +
+ configs/imxrt1050-evk_defconfig             | 43 +++++++++++++++++++++
+ 6 files changed, 124 insertions(+)
+ create mode 100644 board/freescale/imxrt1050evk/genimage.cfg
+ create mode 100755 board/freescale/imxrt1050evk/post-build.sh
+ create mode 100644 board/freescale/imxrt1050evk/readme.txt
+ create mode 100644 board/freescale/imxrt1050evk/uboot.fragment
+ create mode 100644 configs/imxrt1050-evk_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 59121c6a54..ee33c65fd4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1132,9 +1132,11 @@ F:	package/webp/
+ F:	package/xapian/
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (5.10.115-cip7)"
-+	bool "Latest CIP SLTS version (5.10.145-cip17)"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
-@@ -52,7 +52,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	  https://www.cip-project.org
+ N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
++F:	board/freescale/imxrt1050evk/*
+ F:	board/olimex/a*
+ F:	configs/amarula_vyasa_rk3288_defconfig
+ F:	configs/asus_tinker_rk3288_defconfig
++F:	configs/imxrt1050-evk_defconfig
+ F:	configs/olimex_a*
+ F:	package/at/
+ F:	package/binutils/
+@@ -1477,6 +1479,10 @@ F:	package/wmctrl/
+ F:	package/x11r7/xdriver_xf86-video-imx/
+ F:	package/x11r7/xdriver_xf86-video-imx-viv/
  
- config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
--	bool "Latest CIP RT SLTS version (5.10.109-cip5-rt4)"
-+	bool "Latest CIP RT SLTS version (5.10.145-cip17-rt7)"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
- 	help
- 	  Same as the CIP version, but this is the PREEMPT_RT realtime
-@@ -129,8 +129,8 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.17.15" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "5.10.115-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	default "5.10.109-cip5-rt4" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-+	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-diff --git a/linux/linux.hash b/linux/linux.hash
-index a1b7984489..0bfe9652b1 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -8,8 +8,8 @@ sha256  2283c1af5373c43e79adca6987174d932989a8b2551405e83e2e39ebe31e06d2  linux-
- sha256  70f4df21901a654632ebbb533884ccaf117a29b14e6f2b672f0c36613c3e897d  linux-4.14.292.tar.xz
- sha256  eadd13aa70f37cdf50eef45c5964bd7146d353b61a1fd026d4fa0b2a68a3ea47  linux-4.19.257.tar.xz
- # Locally computed
--sha256  f3559be277be9200897022282be18cfc0278d1d8baec8058305b04b9cd72002a  linux-cip-5.10.115-cip7.tar.gz
--sha256  71fba4ed5cb48fa7869e9fe271b68b77fed26775ce5cf2f50891aa8f71c388b3  linux-cip-5.10.109-cip5-rt4.tar.gz
-+sha256  4594c147bdc493c7c286688542bbe65e550fb7bd58e0649ec587a2fe893ec0ee  linux-cip-5.10.145-cip17.tar.gz
-+sha256  a5598f7f673b3ef819d6ed24f08d539eecb6febd11673a1d4752a1c05d4ee289  linux-cip-5.10.145-cip17-rt7.tar.gz
++N:	Jesse Taube <Mr.Bossman075@gmail.com>
++F:	board/freescale/imxrt1050evk/*
++F:	configs/imxrt1050-evk_defconfig
++
+ N:	Jesse Van Gavere <jesseevg@gmail.com>
+ F:	package/qt6/qt6serialport/
  
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/board/freescale/imxrt1050evk/genimage.cfg b/board/freescale/imxrt1050evk/genimage.cfg
+new file mode 100644
+index 0000000000..7e1e932d37
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/genimage.cfg
+@@ -0,0 +1,40 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"uImage",
++			"imxrt1050-evk.dtb",
++		}
++	}
++
++	size = 6M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition SPL {
++		in-partition-table = "no"
++		image = "SPL"
++		offset = 1K
++		size = 127K
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot.img"
++		offset = 128K
++		size = 512K
++	}
++
++	partition boot {
++		partition-type = 0xc
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/freescale/imxrt1050evk/post-build.sh b/board/freescale/imxrt1050evk/post-build.sh
+new file mode 100755
+index 0000000000..a13789f231
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/post-build.sh
+@@ -0,0 +1,3 @@
++#!/bin/sh
++MKIMAGE=$HOST_DIR/bin/mkimage
++$MKIMAGE -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 -n "Linux kernel" -d $BINARIES_DIR/Image $BINARIES_DIR/uImage
+diff --git a/board/freescale/imxrt1050evk/readme.txt b/board/freescale/imxrt1050evk/readme.txt
+new file mode 100644
+index 0000000000..1fc4edd88b
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/readme.txt
+@@ -0,0 +1,30 @@
++NXP i.MXRT1050 EVK board
++------------------------
++
++i.MX RT1050 are NXP's crossover MCUs. They combine the high performance and high
++level of integration of an applications processors with the ease-of-use and
++real-time functionality of a microcontroller. The i.MX RT1050 MCU runs on the Arm
++Cortex-M7 core at 600 MHz.
++https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/i-mx-rt1050-evaluation-kit:MIMXRT1050-EVK
++
++To build a minimal support for this board:
++
++$ make imxrt1050-evk_defconfig
++$ make
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be flashed into the SD card:
++
++$ dd if=output/images/sdcard.img of=/dev/sdX
++Where 'sdX' is the device node of the uSD.
++
++Jumper settings:
++
++   SW7: 1 0 1 0
++
++Where 0 means bottom position and 1 means top position (from the
++switch label numbers reference).
++
++Connect the USB cable between the EVK and the PC for the console.
++
++Insert the micro SD card in the board, power it up and U-Boot messages should come up.
+diff --git a/board/freescale/imxrt1050evk/uboot.fragment b/board/freescale/imxrt1050evk/uboot.fragment
+new file mode 100644
+index 0000000000..1c5bb6af35
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/uboot.fragment
+@@ -0,0 +1,2 @@
++CONFIG_USE_BOOTCOMMAND=y
++CONFIG_BOOTCOMMAND="setenv bootargs console=ttyLP0 root=/dev/mmcblk0p2 rw earlycon rootwait;load mmc 0:1 0x80800000 imxrt1050-evk.dtb;load mmc 0:1 0x80000000 uImage;bootm 0x80000000 - 0x80800000"
+diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
+new file mode 100644
+index 0000000000..098a1bfc02
+--- /dev/null
++++ b/configs/imxrt1050-evk_defconfig
+@@ -0,0 +1,43 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_m7=y
++
++# Image
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/imxrt1050evk/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.19"
++BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
++BR2_LINUX_KERNEL_IMAGE_NAME="Image"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imxrt1050-evk"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="3M"
++
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="imxrt1050-evk"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="SPL"
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++
++# Required tools to create the SD card image
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MKPASSWD=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
-2.25.1
+2.37.2
 
 _______________________________________________
 buildroot mailing list
