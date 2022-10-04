@@ -4,84 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D113C433FE
-	for <buildroot@archiver.kernel.org>; Tue,  4 Oct 2022 10:41:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1307C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  4 Oct 2022 11:04:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9750F40B83;
-	Tue,  4 Oct 2022 10:41:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9750F40B83
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3375140B60;
+	Tue,  4 Oct 2022 11:04:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3375140B60
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cYypfjumctmZ; Tue,  4 Oct 2022 10:41:13 +0000 (UTC)
+	with ESMTP id JUnVTwiRsGSm; Tue,  4 Oct 2022 11:04:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC307400D8;
-	Tue,  4 Oct 2022 10:41:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC307400D8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D3B891BF27A
- for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 10:41:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B1A9400D8;
+	Tue,  4 Oct 2022 11:04:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B1A9400D8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 834751BF863
+ for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 11:04:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABE1E60D5A
- for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 10:41:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABE1E60D5A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5CC19408A5
+ for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 11:04:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CC19408A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8mE5dp8LNx2J for <buildroot@lists.busybox.net>;
- Tue,  4 Oct 2022 10:41:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id shGdKw9emkfK for <buildroot@lists.busybox.net>;
+ Tue,  4 Oct 2022 11:04:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B424060881
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B424060881
- for <buildroot@buildroot.org>; Tue,  4 Oct 2022 10:41:10 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id j16so8729068wrh.5
- for <buildroot@buildroot.org>; Tue, 04 Oct 2022 03:41:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2220408A1
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D2220408A1
+ for <buildroot@buildroot.org>; Tue,  4 Oct 2022 11:04:31 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id z23so11312588ejw.12
+ for <buildroot@buildroot.org>; Tue, 04 Oct 2022 04:04:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ywXJ1Kin659Ao7cPg5n6dDVTnGTigiOWK11ejNp0jwA=;
- b=7woYaY2DNVVklgi2q4m890Ie+/ir312zJAtHXKgyUJSErrID6sVCpeCZBNqqP/u14m
- dfq84AfUDS1dy5htauXpyI+7HEcuwCEOeCeSKYFs2WdrJ8ZkjgM2mGq9ffhVih6El7O7
- keKfHFJZHOA9VR+U4su6aZzQc3zG2ewv3I+iNglsehCiM8id589wrOpG5nh2QIZglh+N
- nv23Yda7moN8mBZkWrIUrpKv75gvUbCtdoqRavActEL52OzZVyh8aQKc9xuTWRvcVn3B
- nf9oUHt1SXv8PlPr6MP6p4mWO/6SLtqwKrJg4LCaO7CkyeZnKMx+1WRT1FCnlC8PC0MY
- E00g==
-X-Gm-Message-State: ACrzQf3Lt00NYd8WKiYdqfd3+PyChbCLGDjAFnZUrGYFlnHsBGYJARV3
- siUk6i6VLo4Y4I19tFoQU5YWn9/T56qrJQ==
-X-Google-Smtp-Source: AMsMyM4acetKnpchUJ3ZPrK70pWy1hpf0JZXZ7GpfxeHteyTcmvm3uslfSSULUOvQfFjRpyaz9jr/A==
-X-Received: by 2002:a5d:65c6:0:b0:22e:36aa:65be with SMTP id
- e6-20020a5d65c6000000b0022e36aa65bemr6807500wrw.531.1664880068876; 
- Tue, 04 Oct 2022 03:41:08 -0700 (PDT)
-Received: from centennial.enunes.eu.com (ip-78-45-66-209.bb.vodafone.cz.
- [78.45.66.209]) by smtp.gmail.com with ESMTPSA id
- b1-20020a05600003c100b0022762b0e2a2sm12884574wrg.6.2022.10.04.03.41.07
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=/rYj5N3ngUWAY8fXIxQ8zyz0rU78A4X4C8zqmLOfe5M=;
+ b=Bc26BzlgB/mcZI+wiFUNW0PO1Rs3hZaIRyzzOdbNHoEhoiABtUwF8KIiKo0DEnau0p
+ EeMU3fA6Afz3t+AjivkzW090aM/zi2i++D3bgZhVJmw7vNhLNVGH50XrErO3n+e2tEza
+ Ok5bCUfHHKAZusPITAlS2tbLcBrCaoNdI0Uh7VHOrCLSAy0+qNf2N+nowk8ZjyVmE/qm
+ bQPmWEpOf6bOBs2Kau+5qyUxAOeisd8Uouv7hWzbMdUBfbHzAAKPoxr2sCXE2w66ON9t
+ aIaEGLQbcs8Rhw4eBTMv5TYwGRW5UbuSnu7J+imppACm4QyivMkIf+y1fGJP+H67hBxn
+ BTCA==
+X-Gm-Message-State: ACrzQf31+aFFg2EylluYEyBvLOLCzPWCveI9EAsbrrRHwumMuU1QeSG/
+ bR8COy5og09Sib4j1aaH1SN2qjdA9LmYsQ==
+X-Google-Smtp-Source: AMsMyM63rFNo0v2k5wtH/xUCobTd6sqwBsC6dviGxvUumrFTcfkdnkHhXIDlUththLTHD/OfC6MG5w==
+X-Received: by 2002:a17:906:b08d:b0:782:d526:3e36 with SMTP id
+ x13-20020a170906b08d00b00782d5263e36mr18874516ejy.358.1664881469713; 
+ Tue, 04 Oct 2022 04:04:29 -0700 (PDT)
+Received: from angeloc.amarulasolutions.com
+ (host085115199111.static.fidoka.tech. [85.115.199.111])
+ by smtp.gmail.com with ESMTPSA id
+ p24-20020aa7cc98000000b00456d2721d93sm1427714edt.64.2022.10.04.04.04.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 04 Oct 2022 03:41:08 -0700 (PDT)
-From: Erico Nunes <nunes.erico@gmail.com>
+ Tue, 04 Oct 2022 04:04:28 -0700 (PDT)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue,  4 Oct 2022 12:40:56 +0200
-Message-Id: <20221004104056.1429815-1-nunes.erico@gmail.com>
-X-Mailer: git-send-email 2.37.3
+Date: Tue,  4 Oct 2022 13:04:16 +0200
+Message-Id: <20221004110421.137795-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
+ d=amarulasolutions.com; s=google;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ywXJ1Kin659Ao7cPg5n6dDVTnGTigiOWK11ejNp0jwA=;
- b=fBRIOl5GKozAl3we4ycYKL+lW08ZJwAxxNrXgQ354V9zj7bn8ugojmd8PBBOduWEJ9
- I0ujvAyYUbghwie/j2ak7vLnXf6ncoq0qqPzzncUjiMIWUVLpcKzADt1NTDcum3bQI2F
- 3R3ZaBPn4nPETj4u8hw0NP8wqbrO8hmCglH7Kja0tMzXrdtpwOs1BR+VHNXmyn4ktODg
- NGOI32KPM/f9bbI4zAeCcEiATsnahOJzo+rHdlcwACxaxj09Q7Udgz2ZIXgLCP4k6NZB
- ygmy6XjokmYnqMRJYUaYgyes6qLYZAQT7aG1/0iimYrXYmLGBFNKhznQNL6anod3z7zt
- nXKg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=fBRIOl5G
-Subject: [Buildroot] [PATCH] package/acpica: fix legal-info
+ :to:from:from:to:cc:subject:date;
+ bh=/rYj5N3ngUWAY8fXIxQ8zyz0rU78A4X4C8zqmLOfe5M=;
+ b=d9ajLk7UkmcR/Xq82cR//0zed0fafFifYZP4XLv+GWt9FruJTIGAeF4uIg218DPDSH
+ csODIdKTkzZ61hC3tspAlnteNgjldTPUNLkV5rrtQSO5VYIY5dwxS4w/nmh6MraL21Tg
+ 0ThvVNE771RLaS8jJ2sax2Dj8AVSu+cRSJUT8=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=d9ajLk7U
+Subject: [Buildroot] [PATCH v4 0/5] Configure default wifi through kconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,33 +91,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the recent version bump, the license file is changed as it was
-updated to the new release year.
+This series was born while adding support for a board and feeling the
+necessity to have the networking options available in .config.
+I understand that something like that could be done by adding an
+overlay, but it requires a lot of boilerplate only to be able to connect
+to a wifi network.
 
-Fixes:
-http://autobuild.buildroot.net/results/93ad774a7f69e761952a3a6c92a24de7506e6312/
+Angelo Compagnucci (5):
+  system: adding options for configuring wifi
+  package/wpa_supplicant: configure wifi on systemv when enabled
+  package/wpa_supplicant: configure wifi on systemd when enabled
+  package/ifupdown-scripts: add wifi configuration when enabled
+  package/initscripts: add service to load kernel modules at boot
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
----
- package/acpica/acpica.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ifupdown-scripts/ifupdown-scripts.mk |  2 +
+ package/initscripts/init.d/S11modules        | 59 ++++++++++++++++++++
+ package/wpa_supplicant/wpa_supplicant.mk     | 24 ++++++++
+ system/Config.in                             | 15 +++++
+ 4 files changed, 100 insertions(+)
+ create mode 100644 package/initscripts/init.d/S11modules
 
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 4b6981c602..564e393cb4 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
- sha256  1ccda5c6a08a90b145777df635eb09f995b3472b3128f375009c5a6b01a04c7a  acpica-unix2-20220331.tar.gz
--sha256  c7c5facde0edec64ce403043082a4b288543b9a120d86a23bba3be7585e021aa  source/include/acpi.h
-+sha256  40d8e351f8dfdf5340ec76ac28f0c201b825077d7060bb3686ca1112cb26985d  source/include/acpi.h
 -- 
-2.37.3
+2.25.1
 
 _______________________________________________
 buildroot mailing list
