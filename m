@@ -1,81 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57D95C4332F
-	for <buildroot@archiver.kernel.org>; Tue,  4 Oct 2022 09:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAE21C433F5
+	for <buildroot@archiver.kernel.org>; Tue,  4 Oct 2022 09:25:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEDE14090E;
-	Tue,  4 Oct 2022 09:19:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEDE14090E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F5D460F0F;
+	Tue,  4 Oct 2022 09:25:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F5D460F0F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JT3nXWeeK3GP; Tue,  4 Oct 2022 09:19:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id X6foTfuzV4O0; Tue,  4 Oct 2022 09:25:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD912404F8;
-	Tue,  4 Oct 2022 09:19:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD912404F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 618D960EF2;
+	Tue,  4 Oct 2022 09:25:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 618D960EF2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AC7051BF27C
- for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 09:18:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B31BE1BF27C
+ for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 09:25:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8308F40321
- for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 09:18:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8308F40321
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D022410C2
+ for <buildroot@lists.busybox.net>; Tue,  4 Oct 2022 09:25:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D022410C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QlbwAlJ1yInP for <buildroot@lists.busybox.net>;
- Tue,  4 Oct 2022 09:18:54 +0000 (UTC)
+ with ESMTP id 4LOrrICGaG4w for <buildroot@lists.busybox.net>;
+ Tue,  4 Oct 2022 09:25:37 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB6D240304
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com
- [IPv6:2607:f8b0:4864:20::52b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BB6D240304
- for <buildroot@buildroot.org>; Tue,  4 Oct 2022 09:18:54 +0000 (UTC)
-Received: by mail-pg1-x52b.google.com with SMTP id j71so6072189pge.2
- for <buildroot@buildroot.org>; Tue, 04 Oct 2022 02:18:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DF354090E
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4DF354090E
+ for <buildroot@buildroot.org>; Tue,  4 Oct 2022 09:25:37 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id 13so27563634ejn.3
+ for <buildroot@buildroot.org>; Tue, 04 Oct 2022 02:25:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date;
- bh=fva48tmKqnmKs6FzCKJrXLBX9eEXCABID66kGekSxCg=;
- b=xSdixmh9+FCNkbPJeq/rMEeLcUfucWre2EUGOzbHd9KPIViAd1OLcC4qBsN7RUGPxu
- yyF1HKKt9pnD680e0cV9VAewuT2NRrLKNASTO7M02rxzIhasPFcquKGALb4abC8S5/7A
- OSnjXCi+xg6HIZTNfnGur747ECW081VbK6Kh8Nx9aRQnXza4j40ek7saEqm4EXDJm8uK
- f4CZucInL2XLT40JMDumQt3IbeHT63VXyJu3eu+vwl5kXSxhsadBdIDTy3KF0/gEcBJo
- HNN8LG+xB3B5CDu4nTleREBpoM+GzZ6CdLaJ+RAgcl66mIfpRE8jhcVOQHZv4T8xC3mt
- yTgQ==
-X-Gm-Message-State: ACrzQf1qL6h7awwFqgMF6uojqOhmnj1EewBOFBPnvvzK6dIBTXitkJoW
- CuuxHvnygbSWPvcxf7ZzLKqVlcSc27IEtzekBT43RXQElA==
-X-Google-Smtp-Source: AMsMyM61Io3wUN2OyuYgc47+A5bWcydQlS31pNR9FV/VuIwg9C07/FqUaAIBYydHahTWvWjVpKmm9dYzcnfKvC+Vklk=
-X-Received: by 2002:a05:6a00:248b:b0:542:6ae2:24d5 with SMTP id
- c11-20020a056a00248b00b005426ae224d5mr27234979pfv.65.1664875134023; Tue, 04
- Oct 2022 02:18:54 -0700 (PDT)
-MIME-Version: 1.0
-From: Ryota Kinukawa <pojiro.jp@gmail.com>
-Date: Tue, 4 Oct 2022 18:18:38 +0900
-Message-ID: <CAALxPJ341BXmFBRE5DBTMd0CJU-ScxD3D1LCS_Avvg0RMRTpug@mail.gmail.com>
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date;
+ bh=2Rt+7LOXnvz3l8L0JzfnDH0l8vCS8HAikrtQbXr39QI=;
+ b=MNffWai1r4COalcLWWUi9xQs9IZrAmh77fvzbXSOUX4vtT+A85viMdJ2frdo6agLDo
+ yj4DGS6fmhSi1pSBJg+1WowKEcjMcNexSn7uIkhh38T5mKeFTDRdK6OeroYGbgg08ULJ
+ d1NQWtQXz7N4KhDOHV07dx4XdMA6c0b0GfLqOJ5bx6k/eRKCqEaBHZ2M/XbAGzk+NUXG
+ t4zJdo82zdS2afcuJxVv1gxxeZ1Z2Ac27hJJKAzAH4gyybToDL68/plR0iajNCWlTk4O
+ UshAagoiz6/PghP02/o/MXcfFnZqsumT8VCg8t2khDES3mpPDfPcRpMQNQzpy9OwC+LT
+ YUvw==
+X-Gm-Message-State: ACrzQf00gYfma2ZYeVnsK9+d7QnRIucVBW7z3B7pWIo/3MkaMtqhJ01i
+ dRoCCdunlBWrX5lJ+tgKUYHhI2g8SMmTxA==
+X-Google-Smtp-Source: AMsMyM6lzlTvkLyHn43GEpzZGmReSx6xZvqIE9JIwBtZIiRS9LnCpiom1V5bmUvY62erM/uHZFlMbw==
+X-Received: by 2002:a17:906:ef8c:b0:77c:8f77:330 with SMTP id
+ ze12-20020a170906ef8c00b0077c8f770330mr18416389ejb.604.1664875535175; 
+ Tue, 04 Oct 2022 02:25:35 -0700 (PDT)
+Received: from angeloc.amarulasolutions.com
+ (host085115199111.static.fidoka.tech. [85.115.199.111])
+ by smtp.gmail.com with ESMTPSA id
+ c9-20020a17090618a900b0077b2b0563f4sm6841652ejf.173.2022.10.04.02.25.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 04 Oct 2022 02:25:34 -0700 (PDT)
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 To: buildroot@buildroot.org
+Date: Tue,  4 Oct 2022 11:25:32 +0200
+Message-Id: <20221004092532.12501-1-angelo@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date;
- bh=fva48tmKqnmKs6FzCKJrXLBX9eEXCABID66kGekSxCg=;
- b=R+UDTeHxmkNark8LHYFr5udM7H+/d+dp5Cs+cMQwzx4Nfc2jYIBX9MtCcCe+y7vFNz
- sJxg2FmyUXsCEhrT0dlfljX/rS+8KxBoKXERl6l0BAS1Dfy7+ORIv3gbxHaQzy+SPlxy
- lE0hXO9LCkSRPgZj0IKDuxUc1BZ/p5UK0C+SVuzs4jUezEY3onz1n6I3TXmspLhBzpJO
- DHNzhg97IGTo4fDp9V3vxGtPnQxl9mHc7bKKJJRAlYjO2TRGhmgy8xWuub2ggSEporg9
- 1VM06KLOqHe3nIOY1Rc3kvKFKJqtL/hZewn9bTJo7Ybyuq/2aRwU4C2TANfMuw23iJLK
- GT3A==
+ d=amarulasolutions.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date;
+ bh=2Rt+7LOXnvz3l8L0JzfnDH0l8vCS8HAikrtQbXr39QI=;
+ b=RUCM0hADGjg9rIIUAE6ls0ujNDD1pOOOK1qGIl0YHwPT9ZAX+SROILjQ6qyDxkbMPt
+ 1qP+BhjlDYFmBKUfIKQN8sfvSSJd7uuepHYVuBF91bRRkalvXKGYBOrOGdscjvSfuoTp
+ wwgo7dzw44NLCpZ9PKIxxJVyHa0aaI6f8NsuY=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20210112 header.b=R+UDTeHx
-Subject: [Buildroot] How to compile Cairo with EGL_NO_X11
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=RUCM0hAD
+Subject: [Buildroot] [PATCH] configs/lichee_rv_dock: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,72 +91,198 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2574338057546075598=="
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2574338057546075598==
-Content-Type: multipart/alternative; boundary="000000000000f57df905ea31f238"
+Lichee RV Dock is a RISC-V Linux development kits with high integration,
+small size and affordable price designed for opensource developer.
 
---000000000000f57df905ea31f238
-Content-Type: text/plain; charset="UTF-8"
+https://wiki.sipeed.com/hardware/en/lichee/RV/Dock.html
 
-Hi. Thank you for your great work, Buildroot team.
-I'm writing this email to ask how to compile Cairo with EGL_NO_X11.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ .../overlay_dock/etc/network/interfaces       |  7 +++
+ .../overlay_dock/etc/wpa_supplicant.conf      |  8 +++
+ ...t-building-u-boot.toc1-for-lichee-rv.patch | 54 +++++++++++++++++++
+ board/lichee_rv/readme.txt                    | 23 ++++++++
+ configs/lichee_rv_dock_defconfig              | 37 +++++++++++++
+ 5 files changed, 129 insertions(+)
+ create mode 100644 board/lichee_rv/overlay_dock/etc/network/interfaces
+ create mode 100644 board/lichee_rv/overlay_dock/etc/wpa_supplicant.conf
+ create mode 100644 board/lichee_rv/patches_rv_dock/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-lichee-rv.patch
+ create mode 100644 configs/lichee_rv_dock_defconfig
 
-Currently I am trying to use Weston on Rpi4 with Buildroot.
-I got an error which was caused by Cairo trying to include X11.
-
-This error is caused by <EGL/eglplatform.h>, which Cairo includes, has
-following conditional include
-
-```
-#elif defined(__unix__) && defined(EGL_NO_X11)
-...
-#elif defined(__unix__) || defined(USE_X11)
-/* X11 (tentative)  */
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-...
-```
-
-So, this error can be avoided by passing -DEGL_NO_X11, but I don't know how
-to do that in Buildroot.
-If this requires a change in the package, please let me know for a
-contribution. (I don't know if I can do it with my capabilities
-
-Thank you for reading.
-
---000000000000f57df905ea31f238
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi. Thank you for your great work, Buildroot team.<br>I&#3=
-9;m writing this email to ask how to compile Cairo with EGL_NO_X11.<div><br=
-></div><div>Currently I am trying to use Weston on Rpi4 with Buildroot.</di=
-v><div>I got an=C2=A0error which was caused by Cairo trying to include X11.=
-<br></div><div><br></div><div>This error is caused by &lt;EGL/eglplatform.h=
-&gt;, which Cairo includes, has following conditional include</div><div><br=
-></div><div>```</div><div>#elif defined(__unix__) &amp;&amp; defined(EGL_NO=
-_X11)<br>...<br>#elif defined(__unix__) || defined(USE_X11)<br>/* X11 (tent=
-ative) =C2=A0*/<br>#include &lt;X11/Xlib.h&gt;<br>#include &lt;X11/Xutil.h&=
-gt;<br>...<br></div><div>```<br></div><div><br></div><div>So, this error ca=
-n be avoided by passing -DEGL_NO_X11, but I don&#39;t know how to do that i=
-n Buildroot.<br></div><div>If this requires a change in the package, please=
- let me know for a contribution. (I don&#39;t know if I can do it with my c=
-apabilities</div><div><br></div><div>Thank you for reading.</div></div>
-
---000000000000f57df905ea31f238--
-
---===============2574338057546075598==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/board/lichee_rv/overlay_dock/etc/network/interfaces b/board/lichee_rv/overlay_dock/etc/network/interfaces
+new file mode 100644
+index 0000000000..62153aabd1
+--- /dev/null
++++ b/board/lichee_rv/overlay_dock/etc/network/interfaces
+@@ -0,0 +1,7 @@
++auto lo
++iface lo inet loopback
++
++auto wlan0
++iface wlan0 inet dhcp
++pre-up modprobe 8723ds
++wpa-conf /etc/wpa_supplicant.conf
+diff --git a/board/lichee_rv/overlay_dock/etc/wpa_supplicant.conf b/board/lichee_rv/overlay_dock/etc/wpa_supplicant.conf
+new file mode 100644
+index 0000000000..b43292b0a7
+--- /dev/null
++++ b/board/lichee_rv/overlay_dock/etc/wpa_supplicant.conf
+@@ -0,0 +1,8 @@
++ap_scan=1
++
++network={
++        ssid="YOURSSID"
++        scan_ssid=1
++        key_mgmt=WPA-PSK
++        psk="YOURPASSWD"
++}
+diff --git a/board/lichee_rv/patches_rv_dock/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-lichee-rv.patch b/board/lichee_rv/patches_rv_dock/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-lichee-rv.patch
+new file mode 100644
+index 0000000000..396d928b85
+--- /dev/null
++++ b/board/lichee_rv/patches_rv_dock/uboot/0002-Makefile-HACK-Support-building-u-boot.toc1-for-lichee-rv.patch
+@@ -0,0 +1,54 @@
++From 4a923e0e4ef6d2b41cb89d658e269adada847573 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Thu, 4 Nov 2021 22:32:04 +0100
++Subject: [PATCH] Makefile: HACK: Support building u-boot.toc1 for nezda board
++
++For easier integration into Buildroot.  The boot0 / toc1 logic is WIP until
++U-Boot gains SPL support for the D1, so add a hack to make it easier to
++integrate in Buildroot as-is.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Makefile  | 9 +++++++++
++ nezha.cfg | 9 +++++++++
++ 2 files changed, 18 insertions(+)
++ create mode 100644 nezha.cfg
++
++diff --git a/Makefile b/Makefile
++index f911f70344..259d93bf80 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -1084,6 +1084,15 @@ endif
++ .binman_stamp: FORCE
++ 	@touch $@
++ 
+++fw_dynamic.bin: $(OPENSBI)
+++	$(call if_changed,copy)
+++
+++MKIMAGEFLAGS_u-boot.toc1 = -T sunxi_toc1
+++u-boot.toc1: lichee-rv-dock.cfg fw_dynamic.bin inputs
+++	$(call if_changed,mkimage)
+++
+++all: u-boot.toc1
+++
++ ifeq ($(CONFIG_DEPRECATED),y)
++ 	$(warning "You have deprecated configuration options enabled in your .config! Please check your configuration.")
++ endif
++diff --git a/lichee-rv-dock.cfg b/lichee-rv-dock.cfg
++new file mode 100644
++index 0000000000..2d23b9b388
++--- /dev/null
+++++ b/lichee-rv-dock.cfg
++@@ -0,0 +1,9 @@
+++[opensbi]
+++file = fw_dynamic.bin
+++addr = 0x40000000
+++[dtb]
+++file = arch/riscv/dts/sun20i-d1-lichee-rv-dock.dtb
+++addr = 0x44000000
+++[u-boot]
+++file = u-boot-nodtb.bin
+++addr = 0x4a000000
++-- 
++2.20.1
++
+diff --git a/board/lichee_rv/readme.txt b/board/lichee_rv/readme.txt
+index 008be3a3bc..0baf874745 100644
+--- a/board/lichee_rv/readme.txt
++++ b/board/lichee_rv/readme.txt
+@@ -12,6 +12,29 @@ How to build
+ $ make lichee_rv_defconfig
+ $ make
+ 
++Lichee RV dock
++===============
++
++Lichee RV Dock is a RISC-V Linux development kits with high integration, small
++size and affordable price designed for opensource developer. It's equipped with
++HDMI interface and it supports many screen by its screen convert board. It's
++also equipped with many peripherals, including a UAB-A port, 2.4G Wifi-BT module,
++an analog microphone and a speaker jack interface.
++
++How to build
++============
++
++$ make lichee_rv_dock_defconfig
++$ make
++
++Wifi
++==========
++
++Edit board/lichee_rv/overlay_dock/etc/wpa_supplicant.conf
++
++* Replace YOURSSID with your AP ssid
++* Replace YOURPASSWD with your AP password
++
+ How to write the SD card
+ ========================
+ 
+diff --git a/configs/lichee_rv_dock_defconfig b/configs/lichee_rv_dock_defconfig
+new file mode 100644
+index 0000000000..ba11ac867b
+--- /dev/null
++++ b/configs/lichee_rv_dock_defconfig
+@@ -0,0 +1,37 @@
++BR2_riscv=y
++BR2_GLOBAL_PATCH_DIR="board/lichee_rv/patches_rv_dock"
++BR2_ROOTFS_OVERLAY="board/nezha/overlay board/lichee_rv/overlay_dock"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/lichee_rv/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,f4bce410a6b47606557cb0d291572afc4c240c85)/linux-f4bce410a6b47606557cb0d291572afc4c240c85.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="nezha"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1-lichee-rv-dock"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_PACKAGE_RTL8723DS=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_CUSTOM_TARBALL=y
++BR2_TARGET_OPENSBI_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,opensbi,4bcaf9aa1dbc69ccb68998c7d462ef895163d493)/opensbi-4bcaf9aa1dbc69ccb68998c7d462ef895163d493.tar.gz"
++BR2_TARGET_OPENSBI_PLAT="generic"
++# BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
++BR2_TARGET_SUN20I_D1_SPL=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,u-boot,7446a47204fd8923b99ced0091667979c4fd27fa)/uboot-7446a47204fd8923b99ced0091667979c4fd27fa.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="lichee_rv"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.toc1"
++BR2_PACKAGE_HOST_GENIMAGE=y
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2574338057546075598==--
