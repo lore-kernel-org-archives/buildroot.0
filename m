@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52CB9C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  5 Oct 2022 09:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D7E5C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  5 Oct 2022 09:11:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBB0240CDA;
-	Wed,  5 Oct 2022 09:11:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBB0240CDA
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA8D940CD0;
+	Wed,  5 Oct 2022 09:11:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA8D940CD0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RvQLz8hCESSw; Wed,  5 Oct 2022 09:11:42 +0000 (UTC)
+	with ESMTP id YVbXuHLpoLJa; Wed,  5 Oct 2022 09:11:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D5F0D40CB4;
-	Wed,  5 Oct 2022 09:11:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5F0D40CB4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7F1071BF95D
- for <buildroot@lists.busybox.net>; Wed,  5 Oct 2022 09:11:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E40F740CD9;
+	Wed,  5 Oct 2022 09:11:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E40F740CD9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 09AFC1BF95D
+ for <buildroot@lists.busybox.net>; Wed,  5 Oct 2022 09:11:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43FAD4182D
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF8A740C58
  for <buildroot@lists.busybox.net>; Wed,  5 Oct 2022 09:11:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43FAD4182D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF8A740C58
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n9yPFdTv3unt for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n5WRLiZHT0Aw for <buildroot@lists.busybox.net>;
  Wed,  5 Oct 2022 09:11:19 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78E4F41835
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC58740C7B
 Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 78E4F41835
- for <buildroot@buildroot.org>; Wed,  5 Oct 2022 09:11:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BC58740C7B
+ for <buildroot@buildroot.org>; Wed,  5 Oct 2022 09:11:14 +0000 (UTC)
 Received: from iago.. (unknown [151.19.224.153])
- by serv15.avernis.de (Postfix) with ESMTPSA id F3BDDBDE2F83;
- Wed,  5 Oct 2022 11:11:12 +0200 (CEST)
+ by serv15.avernis.de (Postfix) with ESMTPSA id 5462EBDE2FB0;
+ Wed,  5 Oct 2022 11:11:11 +0200 (CEST)
 From: Andreas Ziegler <br015@umbiko.net>
 To: buildroot@buildroot.org
-Date: Wed,  5 Oct 2022 11:10:30 +0200
-Message-Id: <20221005091032.3014-3-br015@umbiko.net>
+Date: Wed,  5 Oct 2022 11:10:29 +0200
+Message-Id: <20221005091032.3014-2-br015@umbiko.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220409160921.GA3547512@scaer>
 References: <20220409160921.GA3547512@scaer>
 MIME-Version: 1.0
 X-Virus-Scanned: clamav-milter 0.103.7 at serv15.avernis.de
 X-Virus-Status: Clean
-Subject: [Buildroot] [PATCH v2 2/4] package/mpd: add/enhance (kconfig +
- code) comments
+Subject: [Buildroot] [PATCH v2 1/4] package/mpd: fix reversed logic in tcp
+ disable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,73 +68,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Align kconfig comments with descriptions in the mpd manual.
-Add a kconfig comment to highlight the impact of ogg/vorbis selection.
-Add comments to makefile to explain remaining multiple dependency creation.
-
 Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 ---
 Changes v1 -> v2:
  - make this a separate patch 
 
- package/mpd/Config.in | 9 ++++++---
- package/mpd/mpd.mk    | 2 ++
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/mpd/mpd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 8f0af7b2d3..2606008e90 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -33,7 +33,7 @@ config BR2_PACKAGE_MPD_SQLITE
- 	select BR2_PACKAGE_SQLITE
- 	help
- 	  Enable sqlite database support.
--	  If you don't use sqlite it will use an ASCII database.
-+	  This is mandatory for the sticker database.
- 
- config BR2_PACKAGE_MPD_ZZIP
- 	bool "zzip"
-@@ -81,8 +81,8 @@ comment "Decoder plugins"
- config BR2_PACKAGE_MPD_DSD
- 	bool "dsd"
- 	help
--	  Enable Digital Speech Decoder (DSD) support to play audio
--	  files encoded in a digital speech format.
-+	  Direct Stream Digital (DSD) support to play audio
-+	  files encoded in single bit format.
- 
- config BR2_PACKAGE_MPD_FAAD2
- 	bool "faad2"
-@@ -210,6 +210,9 @@ config BR2_PACKAGE_MPD_TWOLAME
- 	help
- 	  Enable TwoLAME mp2 encoding.
- 
-+comment "for ogg/vorbis encoding enable vorbis decoder"
-+	depends on !BR2_PACKAGE_MPD_VORBIS
-+
- comment "Input plugins"
- 
- config BR2_PACKAGE_MPD_CDIO_PARANOIA
 diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 4d73e6de03..feab894f0f 100644
+index 5c15953984..4d73e6de03 100644
 --- a/package/mpd/mpd.mk
 +++ b/package/mpd/mpd.mk
-@@ -230,6 +230,7 @@ else
- MPD_CONF_OPTS += -Dopenal=disabled
+@@ -285,8 +285,9 @@ else
+ MPD_CONF_OPTS += -Dsqlite=disabled
  endif
  
-+# opus needs to be encapsulated in a container format, here ogg
- ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
- MPD_DEPENDENCIES += opus libogg
- MPD_CONF_OPTS += -Dopus=enabled
-@@ -317,6 +318,7 @@ else ifeq ($(BR2_PACKAGE_MPD_UPNP_DISABLED),y)
- MPD_CONF_OPTS += -Dupnp=disabled
++# default setting is 'true'
+ ifneq ($(BR2_PACKAGE_MPD_TCP),y)
+-MPD_CONF_OPTS += -Dtcp=true
++MPD_CONF_OPTS += -Dtcp=false
  endif
  
-+# handle decoder and encoder simultaneously
- ifeq ($(BR2_PACKAGE_MPD_VORBIS),y)
- MPD_DEPENDENCIES += libvorbis
- MPD_CONF_OPTS += -Dvorbis=enabled -Dvorbisenc=enabled
+ ifeq ($(BR2_PACKAGE_MPD_TREMOR),y)
 -- 
 2.34.1
 
