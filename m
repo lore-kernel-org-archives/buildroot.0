@@ -1,67 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6FF4C433FE
-	for <buildroot@archiver.kernel.org>; Wed,  5 Oct 2022 13:38:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F266C433F5
+	for <buildroot@archiver.kernel.org>; Wed,  5 Oct 2022 15:50:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1977160F9C;
-	Wed,  5 Oct 2022 13:38:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1977160F9C
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7495401DF;
+	Wed,  5 Oct 2022 15:50:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7495401DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bwn_ykzhQ2Fn; Wed,  5 Oct 2022 13:38:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vrLtugtDCIJ8; Wed,  5 Oct 2022 15:50:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56CBE60591;
-	Wed,  5 Oct 2022 13:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56CBE60591
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8637D1BF3BD
- for <buildroot@lists.busybox.net>; Wed,  5 Oct 2022 13:38:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 087A640187;
+	Wed,  5 Oct 2022 15:50:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 087A640187
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B58F1BF328
+ for <buildroot@lists.busybox.net>; Wed,  5 Oct 2022 15:50:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 626FE60F58
- for <buildroot@lists.busybox.net>; Wed,  5 Oct 2022 13:38:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 626FE60F58
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7616F8145E
+ for <buildroot@lists.busybox.net>; Wed,  5 Oct 2022 15:50:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7616F8145E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n9Dr3LyGKcK6 for <buildroot@lists.busybox.net>;
- Wed,  5 Oct 2022 13:38:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6Igto3Xjy-8W for <buildroot@lists.busybox.net>;
+ Wed,  5 Oct 2022 15:50:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A08C3606A9
- for <buildroot@uclibc.org>; Wed,  5 Oct 2022 13:38:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A08C3606A9
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA32A80BD8
+ for <buildroot@uclibc.org>; Wed,  5 Oct 2022 15:50:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA32A80BD8
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 8D55286811; Wed,  5 Oct 2022 13:38:20 +0000 (UTC)
+ id 97B2284D67; Wed,  5 Oct 2022 15:50:46 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Wed, 05 Oct 2022 13:38:20 +0000
+Date: Wed, 05 Oct 2022 15:50:46 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
 X-Bugzilla-Version: 2022.08
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: wg@grandegger.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Who: yann.morin.1998@free.fr
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: FIXED
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone attachments.created
-Message-ID: <bug-15026-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution cc bug_status
+Message-ID: <bug-15026-163-y1x228Lz5S@https.bugs.busybox.net/>
+In-Reply-To: <bug-15026-163@https.bugs.busybox.net/>
+References: <bug-15026-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15026] New: package/udisks: install to staging
+Subject: [Buildroot] [Bug 15026] package/udisks: install to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,26 +80,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15026
 
-            Bug ID: 15026
-           Summary: package/udisks: install to staging
-           Product: buildroot
-           Version: 2022.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: wg@grandegger.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Created attachment 9371
-  --> https://bugs.busybox.net/attachment.cgi?id=9371&action=edit
-patch to fix this issue/bug
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+                 CC|                            |yann.morin.1998@free.fr
+             Status|NEW                         |RESOLVED
 
-For development, install to staging as well!
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Hello,
+
+Thanks for your patch. As explained in the manual [0], we do not take patches
+from the bug tracker; instead can you submit it to the mailing list, please?
+
+[0] https://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+Regards,
+Yann E. MORIN.
 
 -- 
 You are receiving this mail because:
