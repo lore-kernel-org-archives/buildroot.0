@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AED27C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 19:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4038BC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 19:42:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67E4583FF4;
-	Thu,  6 Oct 2022 19:42:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67E4583FF4
+	by smtp2.osuosl.org (Postfix) with ESMTP id DACB540FF2;
+	Thu,  6 Oct 2022 19:42:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DACB540FF2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v0JEQtbQukhc; Thu,  6 Oct 2022 19:42:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gftMTbw6okhl; Thu,  6 Oct 2022 19:42:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7321683FF0;
-	Thu,  6 Oct 2022 19:42:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7321683FF0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 93D121BF3C8
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 19:41:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1ED2040A9C;
+	Thu,  6 Oct 2022 19:42:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1ED2040A9C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D7341BF3C8
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 19:41:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E7A2419FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id DCE5740FCB
  for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 19:41:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E7A2419FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCE5740FCB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id viqlFev2ufBb for <buildroot@lists.busybox.net>;
- Thu,  6 Oct 2022 19:41:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99979419F9
- for <buildroot@buildroot.org>; Thu,  6 Oct 2022 19:41:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99979419F9
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84A5A86A22; Thu,  6 Oct 2022 19:41:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 6 Oct 2022 21:05:10 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d1ed333dfe9c859645a44a5d9c909a8692bb8015
-X-Git-Newrev: 76853089d561c6d2517bfe87d81f7f1ff4b4b7c6
-X-Patchwork-Hint: ignore
-Message-Id: <20221006194115.84A5A86A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fail2ban: bump to version 1.0.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qMqdzUc64oMO for <buildroot@lists.busybox.net>;
+ Thu,  6 Oct 2022 19:41:17 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5276403FF
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B5276403FF
+ for <buildroot@buildroot.org>; Thu,  6 Oct 2022 19:41:16 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id ECBF01BF206;
+ Thu,  6 Oct 2022 19:41:14 +0000 (UTC)
+Date: Thu, 6 Oct 2022 21:41:14 +0200
+To: Adam Duskett <aduskett@gmail.com>
+Message-ID: <20221006214114.003cd90f@windsurf>
+In-Reply-To: <20221005212150.1384370-1-aduskett@gmail.com>
+References: <20221005212150.1384370-1-aduskett@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1665085275;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=uSISsH2/WGge6qhqaxICsA9MQfLfvUQN4gBH4sd4LTU=;
+ b=HMBU+7mcVBIgpOAFouBNLO7Xp4mns8TJt9h1A5Wmmd6kk5w94Woy6aZh6cCjJz+GrFtwlf
+ B2iUv6Vu0gWs8FPN9qf2usRK915xmJ4pYW7kGUvJJfILA+W1b27j0kacycyvNtatEFRkzI
+ Q0CB/JkGYZejJ2Pc/mgtGiG064mwJN1JvFp2sAd7tWZ8mekWRn4eB+WpfpsRrjEl3B4vJ0
+ 5JPNy8UQ6zcAXPrYOFQgsZ+8rHLBg0dk4JycmW31PbBaJvgBehE2FFqFboVHtZNoG1vrvI
+ IgZqEoICYBi4EDwBixdwCSwmPR2Ug/s9EShymBNXqKyesnTQccvmP6Ll/QLHLA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HMBU+7mc
+Subject: Re: [Buildroot] [PATCH 1/4] package/mender: bump version to 3.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,285 +77,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76853089d561c6d2517bfe87d81f7f1ff4b4b7c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  5 Oct 2022 14:21:47 -0700
+Adam Duskett <aduskett@gmail.com> wrote:
 
-Removing also upstreamed patches.
+> Updated vendor/github.com/mendersoftware/mender-artifact/LICENSE hash due to a
+> year change.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  package/mender/mender.hash | 6 +++---
+>  package/mender/mender.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...e-RCE-vulnerability-unset-escape-variable.patch | 158 ---------------------
- ...ails-with-error-in-fail2ban-setup-command.patch |  67 ---------
- package/fail2ban/fail2ban.hash                     |   2 +-
- package/fail2ban/fail2ban.mk                       |   2 +-
- 4 files changed, 2 insertions(+), 227 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/fail2ban/0001-fixed-possible-RCE-vulnerability-unset-escape-variable.patch b/package/fail2ban/0001-fixed-possible-RCE-vulnerability-unset-escape-variable.patch
-deleted file mode 100644
-index 6d44f41d85..0000000000
---- a/package/fail2ban/0001-fixed-possible-RCE-vulnerability-unset-escape-variable.patch
-+++ /dev/null
-@@ -1,158 +0,0 @@
--From 410a6ce5c80dd981c22752da034f2529b5eee844 Mon Sep 17 00:00:00 2001
--From: sebres <serg.brester@sebres.de>
--Date: Mon, 21 Jun 2021 17:12:53 +0200
--Subject: [PATCH] fixed possible RCE vulnerability, unset escape variable
-- (default tilde) stops consider "~" char after new-line as composing escape
-- sequence
--
--[Retrieved from:
--https://github.com/fail2ban/fail2ban/commit/410a6ce5c80dd981c22752da034f2529b5eee844]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- config/action.d/complain.conf         | 2 +-
-- config/action.d/dshield.conf          | 2 +-
-- config/action.d/mail-buffered.conf    | 8 ++++----
-- config/action.d/mail-whois-lines.conf | 2 +-
-- config/action.d/mail-whois.conf       | 6 +++---
-- config/action.d/mail.conf             | 6 +++---
-- 6 files changed, 13 insertions(+), 13 deletions(-)
--
--diff --git a/config/action.d/complain.conf b/config/action.d/complain.conf
--index 3a5f882c9f..4d73b05859 100644
----- a/config/action.d/complain.conf
--+++ b/config/action.d/complain.conf
--@@ -102,7 +102,7 @@ logpath = /dev/null
-- # Notes.:  Your system mail command. Is passed 2 args: subject and recipient
-- # Values:  CMD
-- #
---mailcmd = mail -s
--+mailcmd = mail -E 'set escape' -s
-- 
-- # Option:  mailargs
-- # Notes.:  Additional arguments to mail command. e.g. for standard Unix mail:
--diff --git a/config/action.d/dshield.conf b/config/action.d/dshield.conf
--index c128bef348..3d5a7a53a9 100644
----- a/config/action.d/dshield.conf
--+++ b/config/action.d/dshield.conf
--@@ -179,7 +179,7 @@ tcpflags =
-- # Notes.:  Your system mail command. Is passed 2 args: subject and recipient
-- # Values:  CMD
-- #
---mailcmd = mail -s
--+mailcmd = mail -E 'set escape' -s
-- 
-- # Option:  mailargs
-- # Notes.:  Additional arguments to mail command. e.g. for standard Unix mail:
--diff --git a/config/action.d/mail-buffered.conf b/config/action.d/mail-buffered.conf
--index 325f185b2f..79b841049c 100644
----- a/config/action.d/mail-buffered.conf
--+++ b/config/action.d/mail-buffered.conf
--@@ -17,7 +17,7 @@ actionstart = printf %%b "Hi,\n
--               The jail <name> has been started successfully.\n
--               Output will be buffered until <lines> lines are available.\n
--               Regards,\n
---              Fail2Ban"|mail -s "[Fail2Ban] <name>: started on <fq-hostname>" <dest>
--+              Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: started on <fq-hostname>" <dest>
-- 
-- # Option:  actionstop
-- # Notes.:  command executed at the stop of jail (or at the end of Fail2Ban)
--@@ -28,13 +28,13 @@ actionstop = if [ -f <tmpfile> ]; then
--                  These hosts have been banned by Fail2Ban.\n
--                  `cat <tmpfile>`
--                  Regards,\n
---                 Fail2Ban"|mail -s "[Fail2Ban] <name>: Summary from <fq-hostname>" <dest>
--+                 Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: Summary from <fq-hostname>" <dest>
--                  rm <tmpfile>
--              fi
--              printf %%b "Hi,\n
--              The jail <name> has been stopped.\n
--              Regards,\n
---             Fail2Ban"|mail -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
--+             Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
-- 
-- # Option:  actioncheck
-- # Notes.:  command executed once before each actionban command
--@@ -55,7 +55,7 @@ actionban = printf %%b "`date`: <ip> (<failures> failures)\n" >> <tmpfile>
--                 These hosts have been banned by Fail2Ban.\n
--                 `cat <tmpfile>`
--                 \nRegards,\n
---                Fail2Ban"|mail -s "[Fail2Ban] <name>: Summary" <dest>
--+                Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: Summary" <dest>
--                 rm <tmpfile>
--             fi
-- 
--diff --git a/config/action.d/mail-whois-lines.conf b/config/action.d/mail-whois-lines.conf
--index 3a3e56b2c7..d2818cb9b9 100644
----- a/config/action.d/mail-whois-lines.conf
--+++ b/config/action.d/mail-whois-lines.conf
--@@ -72,7 +72,7 @@ actionunban =
-- # Notes.:  Your system mail command. Is passed 2 args: subject and recipient
-- # Values:  CMD
-- #
---mailcmd = mail -s
--+mailcmd = mail -E 'set escape' -s
-- 
-- # Default name of the chain
-- #
--diff --git a/config/action.d/mail-whois.conf b/config/action.d/mail-whois.conf
--index 7fea34c40d..ab33b616dc 100644
----- a/config/action.d/mail-whois.conf
--+++ b/config/action.d/mail-whois.conf
--@@ -20,7 +20,7 @@ norestored = 1
-- actionstart = printf %%b "Hi,\n
--               The jail <name> has been started successfully.\n
--               Regards,\n
---              Fail2Ban"|mail -s "[Fail2Ban] <name>: started on <fq-hostname>" <dest>
--+              Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: started on <fq-hostname>" <dest>
-- 
-- # Option:  actionstop
-- # Notes.:  command executed at the stop of jail (or at the end of Fail2Ban)
--@@ -29,7 +29,7 @@ actionstart = printf %%b "Hi,\n
-- actionstop = printf %%b "Hi,\n
--              The jail <name> has been stopped.\n
--              Regards,\n
---             Fail2Ban"|mail -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
--+             Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
-- 
-- # Option:  actioncheck
-- # Notes.:  command executed once before each actionban command
--@@ -49,7 +49,7 @@ actionban = printf %%b "Hi,\n
--             Here is more information about <ip> :\n
--             `%(_whois_command)s`\n
--             Regards,\n
---            Fail2Ban"|mail -s "[Fail2Ban] <name>: banned <ip> from <fq-hostname>" <dest>
--+            Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: banned <ip> from <fq-hostname>" <dest>
-- 
-- # Option:  actionunban
-- # Notes.:  command executed when unbanning an IP. Take care that the
--diff --git a/config/action.d/mail.conf b/config/action.d/mail.conf
--index 5d8c0e154c..f4838ddcb6 100644
----- a/config/action.d/mail.conf
--+++ b/config/action.d/mail.conf
--@@ -16,7 +16,7 @@ norestored = 1
-- actionstart = printf %%b "Hi,\n
--               The jail <name> has been started successfully.\n
--               Regards,\n
---              Fail2Ban"|mail -s "[Fail2Ban] <name>: started  on <fq-hostname>" <dest>
--+              Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: started  on <fq-hostname>" <dest>
-- 
-- # Option:  actionstop
-- # Notes.:  command executed at the stop of jail (or at the end of Fail2Ban)
--@@ -25,7 +25,7 @@ actionstart = printf %%b "Hi,\n
-- actionstop = printf %%b "Hi,\n
--              The jail <name> has been stopped.\n
--              Regards,\n
---             Fail2Ban"|mail -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
--+             Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: stopped on <fq-hostname>" <dest>
-- 
-- # Option:  actioncheck
-- # Notes.:  command executed once before each actionban command
--@@ -43,7 +43,7 @@ actionban = printf %%b "Hi,\n
--             The IP <ip> has just been banned by Fail2Ban after
--             <failures> attempts against <name>.\n
--             Regards,\n
---            Fail2Ban"|mail -s "[Fail2Ban] <name>: banned <ip> from <fq-hostname>" <dest>
--+            Fail2Ban"|mail -E 'set escape' -s "[Fail2Ban] <name>: banned <ip> from <fq-hostname>" <dest>
-- 
-- # Option:  actionunban
-- # Notes.:  command executed when unbanning an IP. Take care that the
-diff --git a/package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch b/package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch
-deleted file mode 100644
-index 8cb097dc38..0000000000
---- a/package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From 5ac303df8a171f748330d4c645ccbf1c2c7f3497 Mon Sep 17 00:00:00 2001
--From: sebres <info@sebres.de>
--Date: Sun, 19 Sep 2021 18:49:18 +0200
--Subject: [PATCH] fix gh-3098: build fails with error in fail2ban setup
-- command: use_2to3 is invalid (setuptools 58+)
--
--[Retrieved from:
--https://github.com/fail2ban/fail2ban/commit/5ac303df8a171f748330d4c645ccbf1c2c7f3497]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- setup.py | 16 +---------------
-- 1 file changed, 1 insertion(+), 15 deletions(-)
--
--diff --git a/setup.py b/setup.py
--index f4c2550f6..98413273c 100755
----- a/setup.py
--+++ b/setup.py
--@@ -48,7 +48,7 @@
-- from glob import glob
-- 
-- from fail2ban.setup import updatePyExec
---
--+from fail2ban.version import version
-- 
-- source_dir = os.path.realpath(os.path.dirname(
-- 	# __file__ seems to be overwritten sometimes on some python versions (e.g. bug of 2.6 by running under cProfile, etc.):
--@@ -112,22 +112,12 @@ def update_scripts(self, dry_run=False):
-- # Wrapper to specify fail2ban own options:
-- class install_command_f2b(install):
-- 	user_options = install.user_options + [
---		('disable-2to3', None, 'Specify to deactivate 2to3, e.g. if the install runs from fail2ban test-cases.'),
-- 		('without-tests', None, 'without tests files installation'),
-- 	]
-- 	def initialize_options(self):
---		self.disable_2to3 = None
-- 		self.without_tests = not with_tests
-- 		install.initialize_options(self)
-- 	def finalize_options(self):
---		global _2to3
---		## in the test cases 2to3 should be already done (fail2ban-2to3):
---		if self.disable_2to3:
---			_2to3 = False
---		if _2to3:
---			cmdclass = self.distribution.cmdclass
---			cmdclass['build_py'] = build_py_2to3
---			cmdclass['build_scripts'] = build_scripts_2to3
-- 		if self.without_tests:
-- 			self.distribution.scripts.remove('bin/fail2ban-testcases')
-- 
--@@ -178,7 +168,6 @@ def run(self):
-- if setuptools:
-- 	setup_extra = {
-- 		'test_suite': "fail2ban.tests.utils.gatherTests",
---		'use_2to3': True,
-- 	}
-- else:
-- 	setup_extra = {}
--@@ -202,9 +191,6 @@ def run(self):
-- 		('/usr/share/doc/fail2ban', doc_files)
-- 	)
-- 
---# Get version number, avoiding importing fail2ban.
---# This is due to tests not functioning for python3 as 2to3 takes place later
---exec(open(join("fail2ban", "version.py")).read())
-- 
-- setup(
-- 	name = "fail2ban",
-diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
-index 072f0ef961..4073efe4c7 100644
---- a/package/fail2ban/fail2ban.hash
-+++ b/package/fail2ban/fail2ban.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  383108e5f8644cefb288537950923b7520f642e7e114efb843f6e7ea9268b1e0  fail2ban-0.11.2.tar.gz
-+sha256  62b54679ebae81ac57f32c5e27aba9f2494ec5bafd45a0fd68e7a27fd448e5ac  fail2ban-1.0.1.tar.gz
- sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index 4a08981a97..288266c2c7 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FAIL2BAN_VERSION = 0.11.2
-+FAIL2BAN_VERSION = 1.0.1
- FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
- FAIL2BAN_LICENSE = GPL-2.0+
- FAIL2BAN_LICENSE_FILES = COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
