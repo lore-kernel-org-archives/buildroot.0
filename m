@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB8CC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 18:45:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86A7BC433FE
+	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 18:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D58DA83F82;
-	Thu,  6 Oct 2022 18:45:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D58DA83F82
+	by smtp2.osuosl.org (Postfix) with ESMTP id 232DE40D33;
+	Thu,  6 Oct 2022 18:46:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 232DE40D33
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wUsKUq5yy4Va; Thu,  6 Oct 2022 18:45:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nQPDporNPkyP; Thu,  6 Oct 2022 18:46:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1028083F66;
-	Thu,  6 Oct 2022 18:45:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1028083F66
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A9E9E1BF3D2
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:45:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5AF6B40BA5;
+	Thu,  6 Oct 2022 18:46:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AF6B40BA5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 10B601BF3D2
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:46:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 82FA3419E8
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:45:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82FA3419E8
+ by smtp2.osuosl.org (Postfix) with ESMTP id E08F940BE3
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:46:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E08F940BE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BL9Yk9-mV5Dg for <buildroot@lists.busybox.net>;
- Thu,  6 Oct 2022 18:45:30 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1CA6419E5
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B1CA6419E5
- for <buildroot@buildroot.org>; Thu,  6 Oct 2022 18:45:29 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id DEFA21BF204;
- Thu,  6 Oct 2022 18:45:26 +0000 (UTC)
-Date: Thu, 6 Oct 2022 20:45:25 +0200
-To: Jesse Van Gavere <jesseevg@gmail.com>
-Message-ID: <20221006204525.68e10713@windsurf>
-In-Reply-To: <20221004093649.31017-1-jesseevg@gmail.com>
-References: <20221004093649.31017-1-jesseevg@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1665081927;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=n04OLBkLlAkLVRKikw4QsN5cbWmQj3yD/lshRRQOlpM=;
- b=plK5TfEBLtKjw66L/IdY0Y6hyYxNEvNYdk10kc39eREbfuI75jD0SDu1T12jA9nP0zBHpC
- ps3OWKgasSWjYuHyk+Y2AJRsp+cLtsESclLgbRGInEFc8bKz+qgTBz0TRLR+GV8K7ErRHT
- TZwtoZe18dc39CyJSE57DbJqDzsMvx2S4CSm5FfSGW8a5hAq7rVMIkVNixk+umL/eAYqC7
- iGQn6K53ZcRgncwCRSIsR63gCDfVWyR0fMAgzAM80FD+KoHUZdB931RHBXU9RXd3Kbt8SD
- b4yxKu69q+zHQgJfVd/kyl9kPkRqWZh73pbUSJQ1rpUPWnKD77daUJSc4Z+/KA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=plK5TfEB
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt6: bump to version 6.4.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m9TE43Z_NRBc for <buildroot@lists.busybox.net>;
+ Thu,  6 Oct 2022 18:46:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23AE440146
+ for <buildroot@buildroot.org>; Thu,  6 Oct 2022 18:46:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23AE440146
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 034EE869A8; Thu,  6 Oct 2022 18:46:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 6 Oct 2022 20:46:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a9a0a0843e419a2842c1377217d7e2ac9c47d416
+X-Git-Newrev: 1b77c2170d052e0b66ea132365c4c6747ca1cf7a
+X-Patchwork-Hint: ignore
+Message-Id: <20221006184636.034EE869A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/tests/package/test_zfs:
+ increase timeout for the ZFS tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,34 +58,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8555565606295064678=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  4 Oct 2022 11:36:49 +0200
-Jesse Van Gavere <jesseevg@gmail.com> wrote:
+--===============8555565606295064678==
+Content-Type: text/plain
 
-> Drop the qsimd_p.h fix, this has been fixed upstream since 6.3.2/6.4.0
-> 
-> Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
-> ---
->  package/qt6/qt6.mk                            |  4 +-
->  ...al-qsimd_p.h-fix-build-on-ARM-v7-due.patch | 49 -------------------
->  package/qt6/qt6base/qt6base.hash              |  4 +-
->  package/qt6/qt6serialport/qt6serialport.hash  |  4 +-
->  4 files changed, 6 insertions(+), 55 deletions(-)
->  delete mode 100644 package/qt6/qt6base/0001-src-corelib-global-qsimd_p.h-fix-build-on-ARM-v7-due.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=1b77c2170d052e0b66ea132365c4c6747ca1cf7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Newest versions requires a bit more time to finish.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/package/test_zfs.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
+index 688b60d7c4..1f01ddd768 100644
+--- a/support/testing/tests/package/test_zfs.py
++++ b/support/testing/tests/package/test_zfs.py
+@@ -4,6 +4,7 @@ import infra.basetest
+ 
+ 
+ class TestZfsBase(infra.basetest.BRTest):
++    timeout = 60 * 3
+     config = \
+         """
+         BR2_x86_64=y
+@@ -57,7 +58,7 @@ class TestZfsBase(infra.basetest.BRTest):
+             "arc_summary",
+         ]
+         for cmd in cmds:
+-            self.assertRunOk(cmd)
++            self.assertRunOk(cmd, timeout=self.timeout)
+ 
+ 
+ class TestZfsGlibc(TestZfsBase):
+
+--===============8555565606295064678==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8555565606295064678==--
