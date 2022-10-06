@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFD37C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 18:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ACCDC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 18:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77691610C1;
-	Thu,  6 Oct 2022 18:03:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77691610C1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A794610DB;
+	Thu,  6 Oct 2022 18:03:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A794610DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IvslC_LzCuX3; Thu,  6 Oct 2022 18:03:37 +0000 (UTC)
+	with ESMTP id AVYJjP4Q-aet; Thu,  6 Oct 2022 18:03:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A17A60F57;
-	Thu,  6 Oct 2022 18:03:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A17A60F57
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EE0691BF3FB
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:01:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20209610C4;
+	Thu,  6 Oct 2022 18:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20209610C4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 588361BF3FB
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:01:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C93DB60F7A
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:01:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C93DB60F7A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 331B7419DB
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:01:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 331B7419DB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NnfnFGDB5I2H for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pTd3rcHeIl9y for <buildroot@lists.busybox.net>;
  Thu,  6 Oct 2022 18:01:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 021FF610B4
- for <buildroot@buildroot.org>; Thu,  6 Oct 2022 18:01:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 021FF610B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09470419DA
+ for <buildroot@buildroot.org>; Thu,  6 Oct 2022 18:01:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09470419DA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E21EA86948; Thu,  6 Oct 2022 18:01:42 +0000 (UTC)
+ id EB3ED8694A; Thu,  6 Oct 2022 18:01:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Oct 2022 19:59:57 +0200
+Date: Thu, 6 Oct 2022 20:00:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a2baba96255f73c1c87e2d59cfbb13d3203ee5c
-X-Git-Newrev: ee62626e161298854e5cbebb02e07a59abee379a
+X-Git-Oldrev: ee62626e161298854e5cbebb02e07a59abee379a
+X-Git-Newrev: daa5ff9658055a38ee5e224d312d8be17ff82606
 X-Patchwork-Hint: ignore
-Message-Id: <20221006180142.E21EA86948@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/meson: bump to version 0.63.3
+Message-Id: <20221006180142.EB3ED8694A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-markdown: bump version to
+ 3.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee62626e161298854e5cbebb02e07a59abee379a
+commit: https://git.buildroot.net/buildroot/commit/?id=daa5ff9658055a38ee5e224d312d8be17ff82606
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-markdown/python-markdown.hash | 4 ++--
+ package/python-markdown/python-markdown.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index df6a92d1f2..60d9ae9436 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.63.2/meson-0.63.2.tar.gz.asc
--sha256  16222f17ef76be0542c91c07994f9676ae879f46fc21c0c786a21ef2cb518bbf  meson-0.63.2.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.63.3/meson-0.63.3.tar.gz.asc
-+sha256  519c0932e1a8b208741f0fdce90aa5c0b528dd297cf337009bf63539846ac056  meson-0.63.3.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index f9b3f95bb7..3ca483c289 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
+index b64ac77be0..66208067cc 100644
+--- a/package/python-markdown/python-markdown.hash
++++ b/package/python-markdown/python-markdown.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/markdown/json
+-md5  b6833c6326e9164ee0c662218a75e7f0  Markdown-3.3.4.tar.gz
+-sha256  31b5b491868dcc87d6c24b7e3d19a0d730d59d3e46f4eea6430a321bed387a49  Markdown-3.3.4.tar.gz
++md5  597656cf4feadf1998b0511201620202  Markdown-3.4.1.tar.gz
++sha256  3b809086bb6efad416156e00a0da66fe47618a5d6918dd688f53f40c8e4cfeff  Markdown-3.4.1.tar.gz
+ # Locally computed sha256
+ sha256  6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index 801360d778..1b9b556201 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.63.2
-+MESON_VERSION = 0.63.3
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-PYTHON_MARKDOWN_VERSION = 3.3.4
++PYTHON_MARKDOWN_VERSION = 3.4.1
+ PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+-PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/49/02/37bd82ae255bb4dfef97a4b32d95906187b7a7a74970761fca1360c4ba22
++PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/85/7e/133e943e97a943d2f1d8bae0c5060f8ac50e6691754eb9dbe036b047a9bb
+ PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
+ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+ PYTHON_MARKDOWN_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
