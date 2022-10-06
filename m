@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76BE9C433FE
-	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 20:03:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9181FC433FE
+	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 20:03:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DBD28401B;
-	Thu,  6 Oct 2022 20:03:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DBD28401B
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nJ5JX1MDrPD9; Thu,  6 Oct 2022 20:03:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 221CE84015;
-	Thu,  6 Oct 2022 20:03:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 221CE84015
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DE5B31BF3C8
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 20:02:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B8AE8419D5
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 20:02:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8AE8419D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28DCB419A9;
+	Thu,  6 Oct 2022 20:03:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28DCB419A9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dqzwAe3cjXx9 for <buildroot@lists.busybox.net>;
- Thu,  6 Oct 2022 20:02:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B05E0419A9
- for <buildroot@buildroot.org>; Thu,  6 Oct 2022 20:02:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B05E0419A9
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9991086A62; Thu,  6 Oct 2022 20:02:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 6 Oct 2022 22:02:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8f088e6841d2b338037d25e50aaf8fc28b8fb384
-X-Git-Newrev: 04ae71b567587977be9d07ade764159b31f1f403
-X-Patchwork-Hint: ignore
-Message-Id: <20221006200251.9991086A62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/octavo_osd32mp1_brk: update BSP
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y0qcBsfzitYy; Thu,  6 Oct 2022 20:03:43 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1473B4193E;
+	Thu,  6 Oct 2022 20:03:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1473B4193E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B2E531BF3C8
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 20:03:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C8F6813E7
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 20:03:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C8F6813E7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rZeSR99pg1f8 for <buildroot@lists.busybox.net>;
+ Thu,  6 Oct 2022 20:03:39 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A122813E4
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5A122813E4
+ for <buildroot@buildroot.org>; Thu,  6 Oct 2022 20:03:39 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 70F9D60002;
+ Thu,  6 Oct 2022 20:03:36 +0000 (UTC)
+Date: Thu, 6 Oct 2022 22:03:35 +0200
+To: =?UTF-8?B?S8O2cnk=?= Maincent via buildroot <buildroot@buildroot.org>
+Message-ID: <20221006220335.22132976@windsurf>
+In-Reply-To: <20221005075815.305236-1-kory.maincent@bootlin.com>
+References: <20221005075815.305236-1-kory.maincent@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1665086616;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+oqSQ5sV20EzpFcq9ZG7U//UiWo12lA5l8KzFrpu2Jg=;
+ b=j3S3Iybc7LebqkqToYtvCNcehVctf28RPAjjpLXXfXRrSyJXzlkliA54SDRxVzgephP8Hy
+ z2M+ASql8HUwYmLQiD0MTafd5VM9DHZh9pUn1Ajv3ptDMJj+ommnyMQJDKq+rBa+cAfQ4l
+ xWU6x0GRxJwkOIS2KqdIPJvj7WfqOuROrS2hdfgEVhhXy+vt4S/2mxouCE8hM4Xl6bsX+Y
+ x1fDZiHp+4v4KkngZ/vJ9EoBlNAbp9CVOZf9xw7qOh+CoWML8Qgvf/ntFo/wFB3UCaN+9B
+ mXZ/PrJudU928q/XjKUWf2Ol0Bsy4hDMz2mr6v99o6/wUE7qW2zEpFuE2MFMwA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=j3S3Iybc
+Subject: Re: [Buildroot] [PATCH 1/2] board/octavo/osd32mp1-red: update BSP
  components
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,46 +78,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04ae71b567587977be9d07ade764159b31f1f403
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Update description:
-  TF-A to v2.4-stm32mp-r1
-  U-boot to version v2020.10-stm32mp-r2.1
-  Linux to v5.10-stm32mp-r2.1
-
-This patch also updates U-boot to to use FIP image.
-
-Reference:
-
-  https://octavosystems.com/octavo_products/osd32mp1-brk/
-
-The device tree blobs, and the U-boot patches come from Octavo System:
-
-  https://github.com/octavosystems/meta-octavo-osd32mp1
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/octavo/osd32mp1-brk/genimage.cfg             |    4 +-
- .../linux-dts/stm32mp157c-osd32mp1-brk.dts         |  809 ++++---
- ...0001-Add-OSD32MP1-BRK-device-tree-support.patch | 1509 +++++++++++++
- .../uboot/0001-osd32mp1-BRK-board-added.patch      | 2349 --------------------
- .../uboot/0002-Add-OSD32MP1-BRK-build-config.patch |  881 ++++++++
- .../{osd32mp1_ddr.dtsi => osd32mp1_ddr_1x4Gb.dtsi} |    2 +
- .../tfa-dts/stm32mp157c-osd32mp1-brk-fw-config.dts |    6 +
- .../tfa-dts/stm32mp157c-osd32mp1-brk.dts           |  502 ++---
- configs/octavo_osd32mp1_brk_defconfig              |   20 +-
- 9 files changed, 3027 insertions(+), 3055 deletions(-)
-
-Patch is too large, so refusing to show it
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gV2VkLCAgNSBPY3QgMjAyMiAwOTo1ODoxMyArMDIwMApLw7ZyeSBNYWluY2VudCB2aWEgYnVp
+bGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IEZyb206IEtvcnkgTWFp
+bmNlbnQgPGtvcnkubWFpbmNlbnRAYm9vdGxpbi5jb20+Cj4gCj4gVXBkYXRlIGRlc2NyaXB0aW9u
+Ogo+ICAgVEYtQSB0byB2Mi40LXN0bTMybXAtcjEKPiAgIFUtYm9vdCB0byB2ZXJzaW9uIHYyMDIw
+LjEwLXN0bTMybXAtcjIuMQo+ICAgTGludXggdG8gdjUuMTAtc3RtMzJtcC1yMi4xCj4gCj4gVGhp
+cyBwYXRjaCBhbHNvIHVwZGF0ZXMgVS1ib290IHRvIHRvIHVzZSBGSVAgaW1hZ2UuCj4gCj4gUmVm
+ZXJlbmNlOgo+IAo+ICAgaHR0cHM6Ly9vY3Rhdm9zeXN0ZW1zLmNvbS9vY3Rhdm9fcHJvZHVjdHMv
+b3NkMzJtcDEtcmVkLwo+IAo+IFRoZSBkZXZpY2UgdHJlZSBibG9icywgYW5kIHRoZSBVLWJvb3Qg
+cGF0Y2hlcyBjb21lIGZyb20gT2N0YXZvIFN5c3RlbToKPiAKPiAgIGh0dHBzOi8vZ2l0aHViLmNv
+bS9vY3Rhdm9zeXN0ZW1zL21ldGEtb2N0YXZvLW9zZDMybXAxCj4gCj4gU2lnbmVkLW9mZi1ieTog
+S29yeSBNYWluY2VudCA8a29yeS5tYWluY2VudEBib290bGluLmNvbT4KCkkndmUgYXBwbGllZCBi
+b3RoIHBhdGNoZXMsIGJ1dCB0byBiZSBob25lc3QsIEkgaGF0ZSBoYXZpbmcgdGhlc2UgaHVnZQpE
+ZXZpY2UgVHJlZSBmaWxlcyBpbiBCdWlsZHJvb3QuLi4KClRob21hcwotLSAKVGhvbWFzIFBldGF6
+em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcK
+aHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
