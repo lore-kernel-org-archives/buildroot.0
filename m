@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24E76C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 18:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E66C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 18:02:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0F5683FBF;
-	Thu,  6 Oct 2022 18:02:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0F5683FBF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F6BE83FC1;
+	Thu,  6 Oct 2022 18:02:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F6BE83FC1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IS58WdQ_YAfK; Thu,  6 Oct 2022 18:02:37 +0000 (UTC)
+	with ESMTP id DyIajfBM--o9; Thu,  6 Oct 2022 18:02:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBDBD83FBC;
-	Thu,  6 Oct 2022 18:02:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBDBD83FBC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 96E731BF3FB
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 17:59:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DF8783FBD;
+	Thu,  6 Oct 2022 18:02:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DF8783FBD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 27AFD1BF23C
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 17:59:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44E7D83FBA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C2FA419E5
  for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 17:59:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44E7D83FBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C2FA419E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mw3LvZxf2HfG for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DBJzamFg4PGx for <buildroot@lists.busybox.net>;
  Thu,  6 Oct 2022 17:59:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4426883FB5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56BB9419DE
  for <buildroot@buildroot.org>; Thu,  6 Oct 2022 17:59:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4426883FB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56BB9419DE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 331908693A; Thu,  6 Oct 2022 17:59:49 +0000 (UTC)
+ id 4FEE086938; Thu,  6 Oct 2022 17:59:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 6 Oct 2022 19:53:49 +0200
+Date: Thu, 6 Oct 2022 19:54:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 374e39b6344246b94d58750bcf20f3f61f8e9078
-X-Git-Newrev: 9647bf80a9375f508cdc0f32307e64071b9e0b74
+X-Git-Oldrev: b35597decbef4a26dcb662028357d2ac51b0978f
+X-Git-Newrev: 1bd8e718a683a4af5db7f3aedb66717b45cdf2fc
 X-Patchwork-Hint: ignore
-Message-Id: <20221006175949.331908693A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-headers: drop 5.17.x option
+Message-Id: <20221006175949.4FEE086938@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/{canaan,
+ sipeed_maix}*: specify kernel headers version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,59 +63,153 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9647bf80a9375f508cdc0f32307e64071b9e0b74
+commit: https://git.buildroot.net/buildroot/commit/?id=1bd8e718a683a4af5db7f3aedb66717b45cdf2fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 5.17.x series is now EOL upstream, so drop the linux-headers option and
-add legacy handling for it.
+The defconfigs use a 5.19 kernel, so specify 5.19 kernel headers now that is
+available.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                     | 7 +++++++
- package/linux-headers/Config.in.host | 5 -----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ configs/canaan_kd233_defconfig            | 3 +++
+ configs/sipeed_maix_bit_defconfig         | 3 +++
+ configs/sipeed_maix_bit_sdcard_defconfig  | 3 +++
+ configs/sipeed_maix_dock_defconfig        | 3 +++
+ configs/sipeed_maix_dock_sdcard_defconfig | 3 +++
+ configs/sipeed_maix_go_defconfig          | 3 +++
+ configs/sipeed_maix_go_sdcard_defconfig   | 3 +++
+ configs/sipeed_maixduino_defconfig        | 3 +++
+ configs/sipeed_maixduino_sdcard_defconfig | 3 +++
+ 9 files changed, 27 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 93d921160a..0e63d59a98 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/configs/canaan_kd233_defconfig b/configs/canaan_kd233_defconfig
+index 3aa5dccf08..77b8abf531 100644
+--- a/configs/canaan_kd233_defconfig
++++ b/configs/canaan_kd233_defconfig
+@@ -10,6 +10,9 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
+ # BR2_RISCV_USE_MMU is not set
+ BR2_RISCV_ABI_LP64D=y
  
- comment "Legacy options removed in 2022.11"
- 
-+config BR2_KERNEL_HEADERS_5_17
-+	bool "kernel headers version 5.17.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 5.17.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
++# Linux headers same as kernel, a 5.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
 +
- config BR2_iwmmxt
- 	bool "ARM iwmmxt variant removed"
- 	select BR2_LEGACY
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4847cd4c87..7aee67de56 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -53,10 +53,6 @@ config BR2_KERNEL_HEADERS_5_15
- 	bool "Linux 5.15.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
+ # Binary format
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+diff --git a/configs/sipeed_maix_bit_defconfig b/configs/sipeed_maix_bit_defconfig
+index d2bac9e0b8..d73ba0266a 100644
+--- a/configs/sipeed_maix_bit_defconfig
++++ b/configs/sipeed_maix_bit_defconfig
+@@ -10,6 +10,9 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
+ # BR2_RISCV_USE_MMU is not set
+ BR2_RISCV_ABI_LP64D=y
  
--config BR2_KERNEL_HEADERS_5_17
--	bool "Linux 5.17.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_17
--
- config BR2_KERNEL_HEADERS_5_19
- 	bool "Linux 5.19.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_19
-@@ -402,7 +398,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.212"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.142"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.67"	if BR2_KERNEL_HEADERS_5_15
--	default "5.17.15"	if BR2_KERNEL_HEADERS_5_17
- 	default "5.19.13"	if BR2_KERNEL_HEADERS_5_19
- 	default "6.0"		if BR2_KERNEL_HEADERS_6_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
++# Linux headers same as kernel, a 5.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++
+ # Binary format
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
+index e1c9dc417e..8a19996090 100644
+--- a/configs/sipeed_maix_bit_sdcard_defconfig
++++ b/configs/sipeed_maix_bit_sdcard_defconfig
+@@ -10,6 +10,9 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
+ # BR2_RISCV_USE_MMU is not set
+ BR2_RISCV_ABI_LP64D=y
+ 
++# Linux headers same as kernel, a 5.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++
+ # System
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+diff --git a/configs/sipeed_maix_dock_defconfig b/configs/sipeed_maix_dock_defconfig
+index a7f0441e53..ccb563310e 100644
+--- a/configs/sipeed_maix_dock_defconfig
++++ b/configs/sipeed_maix_dock_defconfig
+@@ -10,6 +10,9 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
+ # BR2_RISCV_USE_MMU is not set
+ BR2_RISCV_ABI_LP64D=y
+ 
++# Linux headers same as kernel, a 5.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++
+ # Binary format
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
+index 6b7f8d9c68..d3d0f405e1 100644
+--- a/configs/sipeed_maix_dock_sdcard_defconfig
++++ b/configs/sipeed_maix_dock_sdcard_defconfig
+@@ -10,6 +10,9 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
+ # BR2_RISCV_USE_MMU is not set
+ BR2_RISCV_ABI_LP64D=y
+ 
++# Linux headers same as kernel, a 5.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++
+ # System
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+diff --git a/configs/sipeed_maix_go_defconfig b/configs/sipeed_maix_go_defconfig
+index a68f9d3b72..c3bcf98f81 100644
+--- a/configs/sipeed_maix_go_defconfig
++++ b/configs/sipeed_maix_go_defconfig
+@@ -10,6 +10,9 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
+ # BR2_RISCV_USE_MMU is not set
+ BR2_RISCV_ABI_LP64D=y
+ 
++# Linux headers same as kernel, a 5.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++
+ # Binary format
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+diff --git a/configs/sipeed_maix_go_sdcard_defconfig b/configs/sipeed_maix_go_sdcard_defconfig
+index a127872cd8..75300997b8 100644
+--- a/configs/sipeed_maix_go_sdcard_defconfig
++++ b/configs/sipeed_maix_go_sdcard_defconfig
+@@ -10,6 +10,9 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
+ # BR2_RISCV_USE_MMU is not set
+ BR2_RISCV_ABI_LP64D=y
+ 
++# Linux headers same as kernel, a 5.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++
+ # System
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+diff --git a/configs/sipeed_maixduino_defconfig b/configs/sipeed_maixduino_defconfig
+index c52adb5db7..a30596af92 100644
+--- a/configs/sipeed_maixduino_defconfig
++++ b/configs/sipeed_maixduino_defconfig
+@@ -10,6 +10,9 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
+ # BR2_RISCV_USE_MMU is not set
+ BR2_RISCV_ABI_LP64D=y
+ 
++# Linux headers same as kernel, a 5.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++
+ # Binary format
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+diff --git a/configs/sipeed_maixduino_sdcard_defconfig b/configs/sipeed_maixduino_sdcard_defconfig
+index baaa2bc7bb..add9369747 100644
+--- a/configs/sipeed_maixduino_sdcard_defconfig
++++ b/configs/sipeed_maixduino_sdcard_defconfig
+@@ -10,6 +10,9 @@ BR2_RISCV_ISA_CUSTOM_RVC=y
+ # BR2_RISCV_USE_MMU is not set
+ BR2_RISCV_ABI_LP64D=y
+ 
++# Linux headers same as kernel, a 5.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
++
+ # System
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
