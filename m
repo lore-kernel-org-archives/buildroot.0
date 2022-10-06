@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2E1DC433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 09:59:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F2B6C433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 10:00:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E8AD83E37;
-	Thu,  6 Oct 2022 09:59:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E8AD83E37
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00CDA40447;
+	Thu,  6 Oct 2022 10:00:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00CDA40447
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oqA8775yNfhU; Thu,  6 Oct 2022 09:59:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id utovdf6MQDgs; Thu,  6 Oct 2022 10:00:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5936283155;
-	Thu,  6 Oct 2022 09:59:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5936283155
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 28EAD1BF957
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 09:59:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1E9840223;
+	Thu,  6 Oct 2022 09:59:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1E9840223
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 981B91BF957
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 09:59:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 115E66102C
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 09:59:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 115E66102C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73AEE40223
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 09:59:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73AEE40223
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eW-2IASB85o0 for <buildroot@lists.busybox.net>;
- Thu,  6 Oct 2022 09:58:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p1fiF0omKzrI for <buildroot@lists.busybox.net>;
+ Thu,  6 Oct 2022 09:59:00 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D01FF61012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53A9640204
 Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D01FF61012
- for <buildroot@buildroot.org>; Thu,  6 Oct 2022 09:58:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 53A9640204
+ for <buildroot@buildroot.org>; Thu,  6 Oct 2022 09:58:59 +0000 (UTC)
 Received: from 91-153-34-120.elisa-laajakaista.fi ([91.153.34.120] helo=kodama)
  by fanzine2.igalia.com with esmtpsa 
  (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA512__AES_256_GCM:256) (Exim)
- id 1ogNeY-00BGwD-EM; Thu, 06 Oct 2022 11:58:54 +0200
+ id 1ogNeZ-00BGvz-0E; Thu, 06 Oct 2022 11:58:55 +0200
 Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id ccb4e6d3;
+ by kodama (OpenSMTPD) with ESMTPA id fcaf972c;
  Thu, 6 Oct 2022 09:58:34 +0000 (UTC)
 From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Thu,  6 Oct 2022 12:58:32 +0300
-Message-Id: <20221006095833.1116173-5-aperez@igalia.com>
+Date: Thu,  6 Oct 2022 12:58:33 +0300
+Message-Id: <20221006095833.1116173-6-aperez@igalia.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221006095833.1116173-1-aperez@igalia.com>
 References: <20221004133057.2003750-1-aperez@igalia.com>
@@ -58,16 +58,16 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
  Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
  :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
  List-Post:List-Owner:List-Archive;
- bh=3RK5f7ISH+i1ymTijggEi/TmrQc+Z+6C+RB1JtwmCKs=; b=lMHExh3AAg1EVlVKsHpiZx1X16
- ZXHXsIGV8nmHbZXbOyN/QayMAN99wYBHwV8xIGO7m7HCNzI/jqnHYTy03QIOXxiLIpdbQ0m+EVlI7
- bE4WJzMueCvBOAa5jAjmxOOauGDbbPKewKi+S3S+Wbwj7fjoFYhmyZMcT7X3st+Iva5afJarA/odg
- x5TYjqKH0xCGEegm3edLCPIwe8br++oBqp8VOkTwfIpZOubJenaIKxg8qHuTThj8yg+TIZF0vRSrC
- +SgYebEFGMP50uQDlo0yXzRBSzyPZwypwChND/wxo3v0BIasVwTK6AUy77qQ4iatJlNrYh+71w6im
- wKbZkNSw==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=jbJXy1/oA3baXMTP0Suhy2GsH7qeG6/whYEZ1zejM2Q=; b=f7UY3xpqoX5+FE9e6Hfh0RW/Z7
+ 60Vl9jyJk14aJeq606oKf+ZFtiU+3Zrksb8gv1FsCdA9SRKGr4TfyRTxbZIDPN1MBMx+YPMhPKF6B
+ QlabkAzdwY9VZJVVMwfs+AGacVbcxm8U+Jf3CMbt1+QHG456TBHTx3VGOTE8uK1ghb1fz5sy3qHz8
+ lgvqycqeAwcOAKu2Up92x+I6Lf3OooLxCxqS5CrFjTV1c6h6R97n6MvBEKISTYtwGag5iOBqGv/6M
+ lPiSA3wylUgLJlcAUuU8hTORvYjXKAFuV7npT5WLaxGvZ1WjZsULnZaXeSJHbWDk1o1IQSdbyC2rq
+ D0j/qknA==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com
- header.a=rsa-sha256 header.s=20170329 header.b=lMHExh3A
-Subject: [Buildroot] [PATCH v3 4/5] package/wpewebkit: bump to version 2.38.0
+ header.a=rsa-sha256 header.s=20170329 header.b=f7UY3xpq
+Subject: [Buildroot] [PATCH v3 5/5] package/cog: bump to version 0.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,165 +86,150 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update to a new major release which brings in improvements and a few
-new features. Release notes:
+This new version includes support for setting proxy options and gamepad
+support. Release notes:
 
-  https://wpewebkit.org/release/wpewebkit-2.38.0.html
+  https://wpewebkit.org/release/cog-0.16.0.html
 
-This release also includes security fixes for CVE-2022-32886,
-CVE-2022-32891, and CVE-2022-32912. Accompanying security advisory:
-
-  https://wpewebkit.org/security/WSA-2022-0009.html
-
-Both building documentation and support for gobject-introspection have
-been added in this release. Version 2.38.0 also introduces a new WebRTC
-implementation based on GstWebRTC. Options for them are explicitly left
-disabled to keep the configuration as it was, and may be enabled in
-follow-up patches. Lastly, the SILENCE_CROSS_COMPILATION_NOTICES option
-removed because it no longer exists.
-
-The patch that fixes the build on 32-bit ARM targets is also updated
-for the 2.38 release series.
+This imports a small patch to properly pick libdrm compiler flags,
+fetched from the upstream repository.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- ...cpp-fails-to-build-NEON-fast-path-se.patch | 30 ++++++++++++++-----
- package/wpewebkit/wpewebkit.hash              |  8 ++---
- package/wpewebkit/wpewebkit.mk                |  8 +++--
- 3 files changed, 31 insertions(+), 15 deletions(-)
+ ...m-dependency-when-protocols-are-used.patch | 36 ++++++++++++++++++
+ package/cog/cog.hash                          |  8 ++--
+ package/cog/cog.mk                            | 37 ++++++++++---------
+ 3 files changed, 60 insertions(+), 21 deletions(-)
+ create mode 100644 package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
 
-diff --git a/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch b/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-index b61909b2ac..ea1676abb6 100644
---- a/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-+++ b/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-@@ -1,4 +1,4 @@
--From 59c9e3a4aeb4753be97b3817d106816d9a4ebe73 Mon Sep 17 00:00:00 2001
-+From da159b0150cba0e5e5251e4cc6a090440f73cb7c Mon Sep 17 00:00:00 2001
- From: Adrian Perez de Castro <aperez@igalia.com>
- Date: Thu, 2 Jun 2022 11:19:06 +0300
- Subject: [PATCH] FELightningNEON.cpp fails to build, NEON fast path seems
-@@ -35,15 +35,28 @@ left for a follow-up fix.
- Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
- [Upstream status: https://bugs.webkit.org/show_bug.cgi?id=241182]
- ---
-+ Source/WebCore/Sources.txt                    |  1 +
-  .../cpu/arm/filters/FELightingNEON.cpp        |  4 +-
-- .../graphics/cpu/arm/filters/FELightingNEON.h | 52 +++++++++----------
-+ .../graphics/cpu/arm/filters/FELightingNEON.h | 54 +++++++++----------
-  .../graphics/filters/DistantLightSource.h     |  4 ++
-  .../platform/graphics/filters/FELighting.h    |  7 ---
-  .../graphics/filters/PointLightSource.h       |  4 ++
-  .../graphics/filters/SpotLightSource.h        |  4 ++
-  .../software/FELightingSoftwareApplier.h      | 16 ++++++
-- 7 files changed, 56 insertions(+), 35 deletions(-)
-+ 8 files changed, 58 insertions(+), 36 deletions(-)
- 
-+diff --git a/Source/WebCore/Sources.txt b/Source/WebCore/Sources.txt
-+index 8ce3510fe1a8..efd56bcb8746 100644
-+--- a/Source/WebCore/Sources.txt
-++++ b/Source/WebCore/Sources.txt
-+@@ -2136,6 +2136,7 @@ platform/graphics/WebMResourceClient.cpp
-+ platform/graphics/WOFFFileFormat.cpp
-+ platform/graphics/WidthIterator.cpp
-+ platform/graphics/cpu/arm/filters/FEBlendNeonApplier.cpp
-++platform/graphics/cpu/arm/filters/FELightingNEON.cpp
-+ platform/graphics/displaylists/DisplayList.cpp
-+ platform/graphics/displaylists/DisplayListDrawingContext.cpp
-+ platform/graphics/displaylists/DisplayListItems.cpp
- diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
- index f6ff8c20a5a8..42a97ffc5372 100644
- --- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
-@@ -67,7 +80,7 @@ index f6ff8c20a5a8..42a97ffc5372 100644
-      // Calling a powf function from the assembly code would require to save
-      // and reload a lot of NEON registers. Since the base is in range [0..1]
- diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
--index b17c603d40d3..e4629cda0b7c 100644
-+index b17c603d40d3..c6d17f573eca 100644
- --- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
- +++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
- @@ -24,14 +24,15 @@
-@@ -98,9 +111,10 @@ index b17c603d40d3..e4629cda0b7c 100644
-  {
- -    alignas(16) FELightingFloatArgumentsForNeon floatArguments;
- -    FELightingPaintingDataForNeon neonData = {
-+-        data.pixels->data(),
- +    WebCore::FELightingFloatArgumentsForNeon alignas(16) floatArguments;
- +    WebCore::FELightingPaintingDataForNeon neonData = {
--         data.pixels->data(),
-++        data.pixels->bytes(),
-          1,
- -        data.widthDecreasedByOne - 1,
- -        data.heightDecreasedByOne - 1,
-@@ -244,7 +258,7 @@ index 0c073bc13f8c..e0db00545c17 100644
-      float m_surfaceScale;
-      float m_diffuseConstant;
- diff --git a/Source/WebCore/platform/graphics/filters/PointLightSource.h b/Source/WebCore/platform/graphics/filters/PointLightSource.h
--index 5c9c7fb783e6..e53aa012ac1c 100644
-+index 126b3b2350f6..d906db21aa9c 100644
- --- a/Source/WebCore/platform/graphics/filters/PointLightSource.h
- +++ b/Source/WebCore/platform/graphics/filters/PointLightSource.h
- @@ -26,6 +26,10 @@
-@@ -259,7 +273,7 @@ index 5c9c7fb783e6..e53aa012ac1c 100644
-  
-  class PointLightSource : public LightSource {
- diff --git a/Source/WebCore/platform/graphics/filters/SpotLightSource.h b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
--index 04e331ec4ec0..763c8d400b00 100644
-+index 641b205f986d..64380d9b6eb8 100644
- --- a/Source/WebCore/platform/graphics/filters/SpotLightSource.h
- +++ b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
- @@ -26,6 +26,10 @@
-@@ -274,7 +288,7 @@ index 04e331ec4ec0..763c8d400b00 100644
-  
-  class SpotLightSource : public LightSource {
- diff --git a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
--index 3875b0a4b5de..6d3864aafb9a 100644
-+index c974d92115ff..e2896660cfbd 100644
- --- a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
- +++ b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
- @@ -36,6 +36,7 @@
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 9c8beecf2e..5dd64b34b7 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
+diff --git a/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch b/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
+new file mode 100644
+index 0000000000..44e555c121
+--- /dev/null
++++ b/package/cog/0001-wl-Fix-libdrm-dependency-when-protocols-are-used.patch
+@@ -0,0 +1,36 @@
++From 9a1982c563e218b7695e6a174c8230d3b063eb27 Mon Sep 17 00:00:00 2001
++From: Gary Bisson <gary.bisson@boundarydevices.com>
++Date: Thu, 6 Oct 2022 09:04:22 +0200
++Subject: [PATCH] wl: Fix libdrm dependency when protocols are used
++
++As the comment says, cog-platform-wl.c needs drm_fourcc.h to build
++properly when wayland_weston_direct_display is enabled.
++
++However, libdrm.pc doesn't specify "include/libdrm" as part of its
++includedir but whether in its cflags. So use the compile_args dep
++instead of includes to fix the build failure.
++
++Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
++(cherry picked from commit 32c1d9533bcdc22cbc01d02bf2e6ac0d4bda2dc2)
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++[Upstream status: https://github.com/Igalia/cog/pull/501]
++---
++ platform/wayland/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/platform/wayland/meson.build b/platform/wayland/meson.build
++index f1e18ec..31e4460 100644
++--- a/platform/wayland/meson.build
+++++ b/platform/wayland/meson.build
++@@ -67,7 +67,7 @@ if wayland_platform_weston_protocols.length() > 0
++ 
++     # The code uses definitions from the drm_fourcc.h header, but does not
++     # need to link the library; libdrm here is only a build-time dependency.
++-    wayland_platform_dependencies += [dependency('libdrm').partial_dependency(includes: true)]
+++    wayland_platform_dependencies += [dependency('libdrm').partial_dependency(compile_args: true)]
++ endif
++ 
++ 
++-- 
++2.38.0
++
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index aa128d73d8..a2c55c4b94 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
 @@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.36.8.tar.xz.sums
--md5  939dc646bb6652fde9a5b6512c17fc58  wpewebkit-2.36.8.tar.xz
--sha1  f45936c578f7dcfbb6064e87da6c098efe093e68  wpewebkit-2.36.8.tar.xz
--sha256  8d42a349c910b2d0961b8d34fecef29cec3d21e3af5977346c90026692dc75eb  wpewebkit-2.36.8.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.38.0.tar.xz.sums
-+md5  e0e6b98c86351c39e41da475afc50780  wpewebkit-2.38.0.tar.xz
-+sha1  66e6dd1c285a21ce50370fb4d60332838d801663  wpewebkit-2.38.0.tar.xz
-+sha256  e653e12eca63e6371c06d4cd9efcd5492db67f7d9ef324fd5d8668b1151e72b2  wpewebkit-2.38.0.tar.xz
+-# From https://wpewebkit.org/releases/cog-0.14.1.tar.xz.sums
+-md5  69d72ac046a0fc485ea7b61b96e7e7fc  cog-0.14.1.tar.xz
+-sha1  6236972b0ae0bce38a0a017610f161b349723862  cog-0.14.1.tar.xz
+-sha256  fb91104e25e1dde27189c91c70acc356e387f47acebaa8997e01ce5879c3a600  cog-0.14.1.tar.xz
++# From https://wpewebkit.org/releases/cog-0.16.0.tar.xz.sums
++md5  2705472ea4f333290973722c0862b21d  cog-0.16.0.tar.xz
++sha1  ef16e5e3d91d0da056fe5e4f596c211af7453b4e  cog-0.16.0.tar.xz
++sha256  2956f719d36c9a6368f63901a0d1ceaf4d27f529f7df441b3748c36d72906fc6  cog-0.16.0.tar.xz
  
  # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 0ff8204519..001c701ee9 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+ sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 1f24bebee4..241c4e309c 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.36.8
-+WPEWEBKIT_VERSION = 2.38.0
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
-@@ -22,9 +22,11 @@ WPEWEBKIT_CONF_OPTS = \
- 	-DPORT=WPE \
- 	-DENABLE_ACCESSIBILITY=OFF \
- 	-DENABLE_API_TESTS=OFF \
-+	-DENABLE_DOCUMENTATION=OFF \
-+	-DENABLE_INTROSPECTION=OFF \
- 	-DENABLE_MINIBROWSER=OFF \
--	-DUSE_SOUP2=ON \
--	-DSILENCE_CROSS_COMPILATION_NOTICES=ON
-+	-DENABLE_WEB_RTC=OFF \
-+	-DUSE_SOUP2=ON
+-COG_VERSION = 0.14.1
++COG_VERSION = 0.16.0
+ COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
+@@ -12,37 +12,40 @@ COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland
+ COG_LICENSE = MIT
+ COG_LICENSE_FILES = COPYING
+ COG_CONF_OPTS = \
+-	-DCOG_BUILD_PROGRAMS=ON \
+-	-DCOG_PLATFORM_HEADLESS=ON \
+-	-DINSTALL_MAN_PAGES=OFF \
+-	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
+-	-DUSE_SOUP2=ON
++	-Ddocumentation=false \
++	-Dmanpages=false \
++	-Dprograms=true \
++	-Dsoup2=enabled \
++	-Dcog_home_uri='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
++	-Dplatforms='$(subst $(space),$(comma),$(strip $(COG_PLATFORMS_LIST)))'
++
++COG_PLATFORMS_LIST = headless
  
- ifeq ($(BR2_PACKAGE_WPEWEBKIT_SANDBOX),y)
- WPEWEBKIT_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_WESTON),y)
+-COG_CONF_OPTS += -DCOG_WESTON_DIRECT_DISPLAY=ON
++COG_CONF_OPTS += -Dwayland_weston_direct_display=true
+ COG_DEPENDENCIES += weston
+ else
+-COG_CONF_OPTS += -DCOG_WESTON_DIRECT_DISPLAY=OFF
++COG_CONF_OPTS += -Dwayland_weston_direct_display=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
+-COG_CONF_OPTS += -DCOG_PLATFORM_WL=ON
++COG_PLATFORMS_LIST += wayland
+ COG_DEPENDENCIES += libxkbcommon wayland-protocols
+-else
+-COG_CONF_OPTS += -DCOG_PLATFORM_WL=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+-COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
++COG_PLATFORMS_LIST += drm
+ COG_DEPENDENCIES += libdrm libinput libgbm libegl udev
+-else
+-COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_COG_USE_SYSTEM_DBUS),y)
+-COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=ON
++COG_CONF_OPTS += -Dcog_dbus_control=system
+ else
+-COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=OFF
++COG_CONF_OPTS += -Dcog_dbus_control=user
+ endif
+ 
+-$(eval $(cmake-package))
++ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
++COG_DEPENDENCIES += libmanette
++endif
++
++$(eval $(meson-package))
 -- 
 2.38.0
 
