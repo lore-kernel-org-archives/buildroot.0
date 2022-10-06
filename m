@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABFE5C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 19:37:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60496C433FE
+	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 19:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E30EB419F7;
-	Thu,  6 Oct 2022 19:37:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E30EB419F7
+	by smtp1.osuosl.org (Postfix) with ESMTP id D171183FED;
+	Thu,  6 Oct 2022 19:37:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D171183FED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mzIW7mbItlUr; Thu,  6 Oct 2022 19:37:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sRBAtmeTlxqD; Thu,  6 Oct 2022 19:37:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C605941928;
-	Thu,  6 Oct 2022 19:37:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C605941928
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10F0983FEC;
+	Thu,  6 Oct 2022 19:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10F0983FEC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8A2D91BF3C8
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 19:37:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1EF581BF3C8
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 19:37:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65881610BE
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 19:37:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65881610BE
+ by smtp3.osuosl.org (Postfix) with ESMTP id EEA1B610BE
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 19:37:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEA1B610BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mwhQkgdfjhaN for <buildroot@lists.busybox.net>;
- Thu,  6 Oct 2022 19:36:58 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A792610A0
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A792610A0
- for <buildroot@buildroot.org>; Thu,  6 Oct 2022 19:36:58 +0000 (UTC)
+ with ESMTP id 59jXNKcjwvuj for <buildroot@lists.busybox.net>;
+ Thu,  6 Oct 2022 19:37:20 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF3EC610A0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DF3EC610A0
+ for <buildroot@buildroot.org>; Thu,  6 Oct 2022 19:37:19 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id D107040003;
- Thu,  6 Oct 2022 19:36:56 +0000 (UTC)
-Date: Thu, 6 Oct 2022 21:36:56 +0200
+ by mail.gandi.net (Postfix) with ESMTPSA id BC342FF804;
+ Thu,  6 Oct 2022 19:37:17 +0000 (UTC)
+Date: Thu, 6 Oct 2022 21:37:16 +0200
 To: Angelo Compagnucci <angelo@amarulasolutions.com>
-Message-ID: <20221006213656.105db88e@windsurf>
-In-Reply-To: <20221003144455.3173974-1-angelo@amarulasolutions.com>
-References: <20221003144455.3173974-1-angelo@amarulasolutions.com>
+Message-ID: <20221006213716.2748d834@windsurf>
+In-Reply-To: <20221003130331.3074242-1-angelo@amarulasolutions.com>
+References: <20221003130331.3074242-1-angelo@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1665085017;
+ d=bootlin.com; s=gm1; t=1665085038;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=19rbQgJvqwtpP8tPFcUUdDon3FoB9z/ER+e7okqTu0U=;
- b=W7qU+HMBdwPuoARRJqPefOnUc04QqQ3DXzUN/w69wE7Yjqyt34cxB+h4A5mBZRQgH60Spb
- NtCsKUTERZQpq+2AfhgAa3ixvS8MqVb0vSsXaTflhwEVaVS6s+lBJUuWY62CsctdlJGkEI
- GTBrFGQI1s9H9p2hVPlR58L7EMjq9PqQ/NCEqPo6GDGGqG/Y3fgpfIYWWFq3FGufbO2yNW
- IQzGuBkEgaxltEyGaNlTJ2oaD5ny99wociD/S7QHm4Rl3d+3ga2ndkQPr2wHlZqc6a1/hA
- s6LEF8kRQ9kTIG+yCZbrdsq5DGzCWMuNvLY3H8OTOdb+pVqjgnCRe8QFNKUADA==
+ bh=hVj4lznKO0hzLFfNDySeKkFUtGZGxdlHePBydrW70Iw=;
+ b=D9hHzXFhF4u7Jk6RwQj9w9/6cKo6+iG6zJ+LXx+VB/jBjHulg5evehQfbRGRmv2A7hywV3
+ jnFhOkrft3svbWqYPy/SAgJdYut3PzQFdJpwmuo3Df6NJM8M9WN0ryPBJT7hTPla7jjUUO
+ 9cZmWF1wc33h2wz8wOroBt7nPgxKCYoHsXHoc9W1j065+TEudO4MHJOvSGFYXurMTfcGFc
+ jooH0ght1/KeCrHEQQWPDuCazhN/EpBIdo9xMRzCQiIO6pyc9Awl5J3O8k9qHCYGPPQ5ff
+ xU3PPmpVtZMiuNZ4WctMZv1sgnCEsbksTyNxNiqh9fN6H+Iay/UZJW+mjOaNBA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=W7qU+HMB
-Subject: Re: [Buildroot] [PATCH] package/fail2ban: bump to version 1.0.1
+ header.s=gm1 header.b=D9hHzXFh
+Subject: Re: [Buildroot] [PATCH] package/cups-filters: bump to version
+ 1.28.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,20 +84,16 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  3 Oct 2022 16:44:55 +0200
+On Mon,  3 Oct 2022 15:03:31 +0200
 Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-> Removing also upstreamed patches.
+> Handling the newly added libexif configure option.
 > 
 > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 > ---
->  ...-vulnerability-unset-escape-variable.patch | 158 ------------------
->  ...with-error-in-fail2ban-setup-command.patch |  67 --------
->  package/fail2ban/fail2ban.hash                |   2 +-
->  package/fail2ban/fail2ban.mk                  |   2 +-
->  4 files changed, 2 insertions(+), 227 deletions(-)
->  delete mode 100644 package/fail2ban/0001-fixed-possible-RCE-vulnerability-unset-escape-variable.patch
->  delete mode 100644 package/fail2ban/0002-fix-gh-3098-build-fails-with-error-in-fail2ban-setup-command.patch
+>  package/cups-filters/cups-filters.hash |  2 +-
+>  package/cups-filters/cups-filters.mk   | 10 +++++++++-
+>  2 files changed, 10 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
