@@ -1,51 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 374C9C433F5
-	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 18:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EB8CC433F5
+	for <buildroot@archiver.kernel.org>; Thu,  6 Oct 2022 18:45:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB310610F1;
-	Thu,  6 Oct 2022 18:04:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB310610F1
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F_GlwNP3nUas; Thu,  6 Oct 2022 18:04:15 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CCAE610EB;
-	Thu,  6 Oct 2022 18:04:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CCAE610EB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F2CC1BF3FB
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:03:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 188EB83FBA
- for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:03:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 188EB83FBA
+	by smtp1.osuosl.org (Postfix) with ESMTP id D58DA83F82;
+	Thu,  6 Oct 2022 18:45:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D58DA83F82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bxg-_DSSaq91 for <buildroot@lists.busybox.net>;
- Thu,  6 Oct 2022 18:03:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8396383FC7
- for <buildroot@buildroot.org>; Thu,  6 Oct 2022 18:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8396383FC7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 722C986955; Thu,  6 Oct 2022 18:03:23 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 6 Oct 2022 20:00:58 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: daa5ff9658055a38ee5e224d312d8be17ff82606
-X-Git-Newrev: fc523deaf9e2e83a69ef54a2eee965e3b618a758
-X-Patchwork-Hint: ignore
-Message-Id: <20221006180323.722C986955@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.36.8
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wUsKUq5yy4Va; Thu,  6 Oct 2022 18:45:35 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1028083F66;
+	Thu,  6 Oct 2022 18:45:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1028083F66
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A9E9E1BF3D2
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:45:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82FA3419E8
+ for <buildroot@lists.busybox.net>; Thu,  6 Oct 2022 18:45:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82FA3419E8
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BL9Yk9-mV5Dg for <buildroot@lists.busybox.net>;
+ Thu,  6 Oct 2022 18:45:30 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1CA6419E5
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B1CA6419E5
+ for <buildroot@buildroot.org>; Thu,  6 Oct 2022 18:45:29 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id DEFA21BF204;
+ Thu,  6 Oct 2022 18:45:26 +0000 (UTC)
+Date: Thu, 6 Oct 2022 20:45:25 +0200
+To: Jesse Van Gavere <jesseevg@gmail.com>
+Message-ID: <20221006204525.68e10713@windsurf>
+In-Reply-To: <20221004093649.31017-1-jesseevg@gmail.com>
+References: <20221004093649.31017-1-jesseevg@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1665081927;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=n04OLBkLlAkLVRKikw4QsN5cbWmQj3yD/lshRRQOlpM=;
+ b=plK5TfEBLtKjw66L/IdY0Y6hyYxNEvNYdk10kc39eREbfuI75jD0SDu1T12jA9nP0zBHpC
+ ps3OWKgasSWjYuHyk+Y2AJRsp+cLtsESclLgbRGInEFc8bKz+qgTBz0TRLR+GV8K7ErRHT
+ TZwtoZe18dc39CyJSE57DbJqDzsMvx2S4CSm5FfSGW8a5hAq7rVMIkVNixk+umL/eAYqC7
+ iGQn6K53ZcRgncwCRSIsR63gCDfVWyR0fMAgzAM80FD+KoHUZdB931RHBXU9RXd3Kbt8SD
+ b4yxKu69q+zHQgJfVd/kyl9kPkRqWZh73pbUSJQ1rpUPWnKD77daUJSc4Z+/KA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=plK5TfEB
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt6: bump to version 6.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,383 +75,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc523deaf9e2e83a69ef54a2eee965e3b618a758
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  4 Oct 2022 11:36:49 +0200
+Jesse Van Gavere <jesseevg@gmail.com> wrote:
 
-Bugfix release, with security fixes for CVE-2022-32886 and CVE-2022-32912.
-Release notes:
+> Drop the qsimd_p.h fix, this has been fixed upstream since 6.3.2/6.4.0
+> 
+> Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
+> ---
+>  package/qt6/qt6.mk                            |  4 +-
+>  ...al-qsimd_p.h-fix-build-on-ARM-v7-due.patch | 49 -------------------
+>  package/qt6/qt6base/qt6base.hash              |  4 +-
+>  package/qt6/qt6serialport/qt6serialport.hash  |  4 +-
+>  4 files changed, 6 insertions(+), 55 deletions(-)
+>  delete mode 100644 package/qt6/qt6base/0001-src-corelib-global-qsimd_p.h-fix-build-on-ARM-v7-due.patch
 
-  https://wpewebkit.org/release/wpewebkit-2.36.8.html
+Applied to master, thanks.
 
-Accompanying security advisory:
-
-  https://wpewebkit.org/security/WSA-2022-0009.html
-
-This also imports a build fix for ARM NEON targets.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...NEON.cpp-fails-to-build-NEON-fast-path-se.patch | 314 +++++++++++++++++++++
- package/wpewebkit/wpewebkit.hash                   |   8 +-
- package/wpewebkit/wpewebkit.mk                     |   2 +-
- 3 files changed, 319 insertions(+), 5 deletions(-)
-
-diff --git a/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch b/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-new file mode 100644
-index 0000000000..b61909b2ac
---- /dev/null
-+++ b/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-@@ -0,0 +1,314 @@
-+From 59c9e3a4aeb4753be97b3817d106816d9a4ebe73 Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Thu, 2 Jun 2022 11:19:06 +0300
-+Subject: [PATCH] FELightningNEON.cpp fails to build, NEON fast path seems
-+ unused https://bugs.webkit.org/show_bug.cgi?id=241182
-+
-+Reviewed by NOBODY (OOPS!).
-+
-+Move the NEON fast path for the SVG lighting filter effects into
-+FELightingSoftwareApplier, and arrange to actually use them by
-+forwarding calls to applyPlatformGeneric() into applyPlatformNeon().
-+
-+Some changes were needed to adapt platformApplyNeon() to the current
-+state of filters after r286140. This was not detected because the code
-+bitrotted due to it being guarded with CPU(ARM_TRADITIONAL), which does
-+not get used much these days: CPU(ARM_THUMB2) is more common. It should
-+be possible to use the NEON fast paths also in Thumb mode, but that is
-+left for a follow-up fix.
-+
-+* Source/WebCore/Sources.txt:
-+* Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp:
-+(WebCore::FELightingSoftwareApplier::platformApplyNeonWorker):
-+(WebCore::FELightingSoftwareApplier::getPowerCoefficients):
-+(WebCore::FELighting::platformApplyNeonWorker): Deleted.
-+(WebCore::FELighting::getPowerCoefficients): Deleted.
-+* Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h:
-+(WebCore::FELightingSoftwareApplier::applyPlatformNeon):
-+(WebCore::FELighting::platformApplyNeon): Deleted.
-+* Source/WebCore/platform/graphics/filters/DistantLightSource.h:
-+* Source/WebCore/platform/graphics/filters/FELighting.h:
-+* Source/WebCore/platform/graphics/filters/PointLightSource.h:
-+* Source/WebCore/platform/graphics/filters/SpotLightSource.h:
-+* Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h:
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+[Upstream status: https://bugs.webkit.org/show_bug.cgi?id=241182]
-+---
-+ .../cpu/arm/filters/FELightingNEON.cpp        |  4 +-
-+ .../graphics/cpu/arm/filters/FELightingNEON.h | 52 +++++++++----------
-+ .../graphics/filters/DistantLightSource.h     |  4 ++
-+ .../platform/graphics/filters/FELighting.h    |  7 ---
-+ .../graphics/filters/PointLightSource.h       |  4 ++
-+ .../graphics/filters/SpotLightSource.h        |  4 ++
-+ .../software/FELightingSoftwareApplier.h      | 16 ++++++
-+ 7 files changed, 56 insertions(+), 35 deletions(-)
-+
-+diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
-+index f6ff8c20a5a8..42a97ffc5372 100644
-+--- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
-++++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
-+@@ -49,7 +49,7 @@ short* feLightingConstantsForNeon()
-+     return s_FELightingConstantsForNeon;
-+ }
-+ 
-+-void FELighting::platformApplyNeonWorker(FELightingPaintingDataForNeon* parameters)
-++void FELightingSoftwareApplier::platformApplyNeonWorker(FELightingPaintingDataForNeon* parameters)
-+ {
-+     neonDrawLighting(parameters);
-+ }
-+@@ -464,7 +464,7 @@ TOSTRING(neonDrawLighting) ":" NL
-+     "b .lightStrengthCalculated" NL
-+ ); // NOLINT
-+ 
-+-int FELighting::getPowerCoefficients(float exponent)
-++int FELightingSoftwareApplier::getPowerCoefficients(float exponent)
-+ {
-+     // Calling a powf function from the assembly code would require to save
-+     // and reload a lot of NEON registers. Since the base is in range [0..1]
-+diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
-+index b17c603d40d3..e4629cda0b7c 100644
-+--- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
-++++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
-+@@ -24,14 +24,15 @@
-+  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+  */
-+ 
-+-#ifndef FELightingNEON_h
-+-#define FELightingNEON_h
-++#pragma once
-+ 
-+ #if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
-+ 
-+-#include "FELighting.h"
-++#include "FELightingSoftwareApplier.h"
-++#include "ImageBuffer.h"
-+ #include "PointLightSource.h"
-+ #include "SpotLightSource.h"
-++#include <wtf/ObjectIdentifier.h>
-+ #include <wtf/ParallelJobs.h>
-+ 
-+ namespace WebCore {
-+@@ -93,14 +94,14 @@ extern "C" {
-+ void neonDrawLighting(FELightingPaintingDataForNeon*);
-+ }
-+ 
-+-inline void FELighting::platformApplyNeon(const LightingData& data, const LightSource::PaintingData& paintingData)
-++inline void FELightingSoftwareApplier::applyPlatformNeon(const FELightingSoftwareApplier::LightingData& data, const LightSource::PaintingData& paintingData)
-+ {
-+-    alignas(16) FELightingFloatArgumentsForNeon floatArguments;
-+-    FELightingPaintingDataForNeon neonData = {
-++    WebCore::FELightingFloatArgumentsForNeon alignas(16) floatArguments;
-++    WebCore::FELightingPaintingDataForNeon neonData = {
-+         data.pixels->data(),
-+         1,
-+-        data.widthDecreasedByOne - 1,
-+-        data.heightDecreasedByOne - 1,
-++        data.width - 2,
-++        data.height - 2,
-+         0,
-+         0,
-+         0,
-+@@ -111,23 +112,23 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
-+     // Set light source arguments.
-+     floatArguments.constOne = 1;
-+ 
-+-    auto color = m_lightingColor.toColorTypeLossy<SRGBA<uint8_t>>().resolved();
-++    auto color = data.lightingColor.toColorTypeLossy<SRGBA<uint8_t>>().resolved();
-+ 
-+     floatArguments.colorRed = color.red;
-+     floatArguments.colorGreen = color.green;
-+     floatArguments.colorBlue = color.blue;
-+     floatArguments.padding4 = 0;
-+ 
-+-    if (m_lightSource->type() == LS_POINT) {
-++    if (data.lightSource->type() == LS_POINT) {
-+         neonData.flags |= FLAG_POINT_LIGHT;
-+-        PointLightSource& pointLightSource = static_cast<PointLightSource&>(m_lightSource.get());
-++        const auto& pointLightSource = *static_cast<const PointLightSource*>(data.lightSource);
-+         floatArguments.lightX = pointLightSource.position().x();
-+         floatArguments.lightY = pointLightSource.position().y();
-+         floatArguments.lightZ = pointLightSource.position().z();
-+         floatArguments.padding2 = 0;
-+-    } else if (m_lightSource->type() == LS_SPOT) {
-++    } else if (data.lightSource->type() == LS_SPOT) {
-+         neonData.flags |= FLAG_SPOT_LIGHT;
-+-        SpotLightSource& spotLightSource = static_cast<SpotLightSource&>(m_lightSource.get());
-++        const auto& spotLightSource = *static_cast<const SpotLightSource*>(data.lightSource);
-+         floatArguments.lightX = spotLightSource.position().x();
-+         floatArguments.lightY = spotLightSource.position().y();
-+         floatArguments.lightZ = spotLightSource.position().z();
-+@@ -145,7 +146,7 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
-+         if (spotLightSource.specularExponent() == 1)
-+             neonData.flags |= FLAG_CONE_EXPONENT_IS_1;
-+     } else {
-+-        ASSERT(m_lightSource->type() == LS_DISTANT);
-++        ASSERT(data.lightSource->type() == LS_DISTANT);
-+         floatArguments.lightX = paintingData.initialLightingData.lightVector.x();
-+         floatArguments.lightY = paintingData.initialLightingData.lightVector.y();
-+         floatArguments.lightZ = paintingData.initialLightingData.lightVector.z();
-+@@ -155,38 +156,39 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
-+     // Set lighting arguments.
-+     floatArguments.surfaceScale = data.surfaceScale;
-+     floatArguments.minusSurfaceScaleDividedByFour = -data.surfaceScale / 4;
-+-    if (m_lightingType == FELighting::DiffuseLighting)
-+-        floatArguments.diffuseConstant = m_diffuseConstant;
-++    if (data.filterType == FilterEffect::Type::FEDiffuseLighting)
-++        floatArguments.diffuseConstant = data.diffuseConstant;
-+     else {
-+         neonData.flags |= FLAG_SPECULAR_LIGHT;
-+-        floatArguments.diffuseConstant = m_specularConstant;
-+-        neonData.specularExponent = getPowerCoefficients(m_specularExponent);
-+-        if (m_specularExponent == 1)
-++        floatArguments.diffuseConstant = data.specularConstant;
-++        neonData.specularExponent = getPowerCoefficients(data.specularExponent);
-++        if (data.specularExponent == 1)
-+             neonData.flags |= FLAG_SPECULAR_EXPONENT_IS_1;
-+     }
-+     if (floatArguments.diffuseConstant == 1)
-+         neonData.flags |= FLAG_DIFFUSE_CONST_IS_1;
-+ 
-+-    int optimalThreadNumber = ((data.widthDecreasedByOne - 1) * (data.heightDecreasedByOne - 1)) / s_minimalRectDimension;
-++    static constexpr int minimalRectDimension = 100 * 100; // Empirical data limit for parallel jobs
-++    int optimalThreadNumber = ((data.width - 2) * (data.height - 2)) / minimalRectDimension;
-+     if (optimalThreadNumber > 1) {
-+         // Initialize parallel jobs
-+-        ParallelJobs<FELightingPaintingDataForNeon> parallelJobs(&WebCore::FELighting::platformApplyNeonWorker, optimalThreadNumber);
-++        ParallelJobs<FELightingPaintingDataForNeon> parallelJobs(&FELightingSoftwareApplier::platformApplyNeonWorker, optimalThreadNumber);
-+ 
-+         // Fill the parameter array
-+         int job = parallelJobs.numberOfJobs();
-+         if (job > 1) {
-+             int yStart = 1;
-+-            int yStep = (data.heightDecreasedByOne - 1) / job;
-++            int yStep = (data.height - 2) / job;
-+             for (--job; job >= 0; --job) {
-+                 FELightingPaintingDataForNeon& params = parallelJobs.parameter(job);
-+                 params = neonData;
-+                 params.yStart = yStart;
-+-                params.pixels += (yStart - 1) * (data.widthDecreasedByOne + 1) * 4;
-++                params.pixels += (yStart - 1) * data.width * 4;
-+                 if (job > 0) {
-+                     params.absoluteHeight = yStep;
-+                     yStart += yStep;
-+                 } else
-+-                    params.absoluteHeight = data.heightDecreasedByOne - yStart;
-++                    params.absoluteHeight = (data.height - 1) - yStart;
-+             }
-+             parallelJobs.execute();
-+             return;
-+@@ -199,5 +201,3 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
-+ } // namespace WebCore
-+ 
-+ #endif // CPU(ARM_NEON) && COMPILER(GCC_COMPATIBLE)
-+-
-+-#endif // FELightingNEON_h
-+diff --git a/Source/WebCore/platform/graphics/filters/DistantLightSource.h b/Source/WebCore/platform/graphics/filters/DistantLightSource.h
-+index 0660143fc1cf..2b1e86d99fa4 100644
-+--- a/Source/WebCore/platform/graphics/filters/DistantLightSource.h
-++++ b/Source/WebCore/platform/graphics/filters/DistantLightSource.h
-+@@ -25,6 +25,10 @@
-+ #include "LightSource.h"
-+ #include <wtf/Ref.h>
-+ 
-++namespace WTF {
-++class TextStream;
-++} // namespace WTF
-++
-+ namespace WebCore {
-+ 
-+ class DistantLightSource : public LightSource {
-+diff --git a/Source/WebCore/platform/graphics/filters/FELighting.h b/Source/WebCore/platform/graphics/filters/FELighting.h
-+index 0c073bc13f8c..e0db00545c17 100644
-+--- a/Source/WebCore/platform/graphics/filters/FELighting.h
-++++ b/Source/WebCore/platform/graphics/filters/FELighting.h
-+@@ -35,8 +35,6 @@
-+ 
-+ namespace WebCore {
-+ 
-+-struct FELightingPaintingDataForNeon;
-+-
-+ class FELighting : public FilterEffect {
-+ public:
-+     const Color& lightingColor() const { return m_lightingColor; }
-+@@ -67,11 +65,6 @@ protected:
-+ 
-+     std::unique_ptr<FilterEffectApplier> createSoftwareApplier() const override;
-+ 
-+-#if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
-+-    static int getPowerCoefficients(float exponent);
-+-    inline void platformApplyNeon(const LightingData&, const LightSource::PaintingData&);
-+-#endif
-+-
-+     Color m_lightingColor;
-+     float m_surfaceScale;
-+     float m_diffuseConstant;
-+diff --git a/Source/WebCore/platform/graphics/filters/PointLightSource.h b/Source/WebCore/platform/graphics/filters/PointLightSource.h
-+index 5c9c7fb783e6..e53aa012ac1c 100644
-+--- a/Source/WebCore/platform/graphics/filters/PointLightSource.h
-++++ b/Source/WebCore/platform/graphics/filters/PointLightSource.h
-+@@ -26,6 +26,10 @@
-+ #include "LightSource.h"
-+ #include <wtf/Ref.h>
-+ 
-++namespace WTF {
-++class TextStream;
-++} // namespace WTF
-++
-+ namespace WebCore {
-+ 
-+ class PointLightSource : public LightSource {
-+diff --git a/Source/WebCore/platform/graphics/filters/SpotLightSource.h b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
-+index 04e331ec4ec0..763c8d400b00 100644
-+--- a/Source/WebCore/platform/graphics/filters/SpotLightSource.h
-++++ b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
-+@@ -26,6 +26,10 @@
-+ #include "LightSource.h"
-+ #include <wtf/Ref.h>
-+ 
-++namespace WTF {
-++class TextStream;
-++} // namespace WTF
-++
-+ namespace WebCore {
-+ 
-+ class SpotLightSource : public LightSource {
-+diff --git a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
-+index 3875b0a4b5de..6d3864aafb9a 100644
-+--- a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
-++++ b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
-+@@ -36,6 +36,7 @@
-+ namespace WebCore {
-+ 
-+ class FELighting;
-++struct FELightingPaintingDataForNeon;
-+ 
-+ class FELightingSoftwareApplier final : public FilterEffectConcreteApplier<FELighting> {
-+     WTF_MAKE_FAST_ALLOCATED;
-+@@ -132,8 +133,23 @@ private:
-+ 
-+     static void applyPlatformGenericPaint(const LightingData&, const LightSource::PaintingData&, int startY, int endY);
-+     static void applyPlatformGenericWorker(ApplyParameters*);
-++
-++#if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
-++    static int getPowerCoefficients(float exponent);
-++    static void platformApplyNeonWorker(FELightingPaintingDataForNeon*);
-++    inline static void applyPlatformNeon(const LightingData&, const LightSource::PaintingData&);
-++
-++    inline static void applyPlatformGeneric(const LightingData& data, const LightSource::PaintingData& paintingData)
-++    {
-++        applyPlatformNeon(data, paintingData);
-++    }
-++#else
-+     static void applyPlatformGeneric(const LightingData&, const LightSource::PaintingData&);
-++#endif
-++
-+     static void applyPlatform(const LightingData&);
-+ };
-+ 
-+ } // namespace WebCore
-++
-++#include "FELightingNEON.h"
-+-- 
-+2.37.3
-+
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 6881deb8fc..9c8beecf2e 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.36.7.tar.xz.sums
--md5  a9f8d521d8171292aab842d3e8ba227e  wpewebkit-2.36.7.tar.xz
--sha1  e9255b3592bbaac8b20af03cafa31cedfb0b4898  wpewebkit-2.36.7.tar.xz
--sha256  f3747d72ffc562ad0cfb6218fdf6d897c78c4bdbf5618e0fa26906fba52b95c9  wpewebkit-2.36.7.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.36.8.tar.xz.sums
-+md5  939dc646bb6652fde9a5b6512c17fc58  wpewebkit-2.36.8.tar.xz
-+sha1  f45936c578f7dcfbb6064e87da6c098efe093e68  wpewebkit-2.36.8.tar.xz
-+sha256  8d42a349c910b2d0961b8d34fecef29cec3d21e3af5977346c90026692dc75eb  wpewebkit-2.36.8.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index b9758083b7..0ff8204519 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.36.7
-+WPEWEBKIT_VERSION = 2.36.8
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
