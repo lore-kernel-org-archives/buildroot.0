@@ -1,73 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 828D8C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Oct 2022 12:40:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF2F4C433FE
+	for <buildroot@archiver.kernel.org>; Fri,  7 Oct 2022 12:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FB7F60BA8;
-	Fri,  7 Oct 2022 12:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FB7F60BA8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4608B417D7;
+	Fri,  7 Oct 2022 12:47:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4608B417D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fymf9tnhBOm0; Fri,  7 Oct 2022 12:40:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LOCXeyiIQm5y; Fri,  7 Oct 2022 12:47:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D7DB60B9D;
-	Fri,  7 Oct 2022 12:40:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D7DB60B9D
+	by smtp4.osuosl.org (Postfix) with ESMTP id F339F41568;
+	Fri,  7 Oct 2022 12:47:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F339F41568
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9E3BE1BF338
- for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:40:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9DE801BF338
+ for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:47:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 79D6F401CC
- for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:40:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79D6F401CC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79A4740359
+ for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:47:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79A4740359
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZtQo-Mm2lznI for <buildroot@lists.busybox.net>;
- Fri,  7 Oct 2022 12:40:48 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB46E400AF
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.41])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EB46E400AF
- for <buildroot@buildroot.org>; Fri,  7 Oct 2022 12:40:47 +0000 (UTC)
-Received: from opfedar04.francetelecom.fr (unknown [xx.xx.xx.6])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfedar22.francetelecom.fr (ESMTP service) with ESMTPS id 4MkSb13wZVz2xQW; 
- Fri,  7 Oct 2022 14:40:45 +0200 (CEST)
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Fri, 07 Oct 2022 14:40:43 +0200
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-Date: Fri, 7 Oct 2022 14:40:43 +0200
-Message-ID: <22269_1665146445_63401E4D_22269_436_1_6b44a0c69cdefac160c38dfa526662d35a77ec0e.1665146097.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.25.1
+ with ESMTP id 6qPYyN7AY8Ar for <buildroot@lists.busybox.net>;
+ Fri,  7 Oct 2022 12:47:07 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 902D8404EB
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 902D8404EB
+ for <buildroot@buildroot.org>; Fri,  7 Oct 2022 12:47:07 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id h19so3547483iof.0
+ for <buildroot@buildroot.org>; Fri, 07 Oct 2022 05:47:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8EVHkFLW8z2veTMXbwyQqtxOnPDoeDzyCQYDWMsp/vw=;
+ b=C0jp+WNEFbIYtPMOQbPBxymKxsWUchLvA+q8lMb0cmHsU/UcIV2kyLh7kdGvcQuJGy
+ zopoHm6Vr3k6uFxD0Yfo4ReNQZtXgXVRqVRJHmZtWGEuCJBCrepFJ8yU0QnFDwoleAsS
+ VPmowyqTf5P/fQnHzqYwzbe6uiPrukvr96fHQoziTyzCMj8cYFx2N5owrjdpqNJ5xsJv
+ 8afF6yQi/cK3pRmBrF/CdMwPg5z/IOh6PXVN+UFxiLZ6JqEBPbfDZqh5dBgmks8kiM+m
+ 2EQmyz7Mbaaj+Sb6AuiA+Yh3yKxDJeaaBYIBDV4Yw1t56LAqNFN23BmBv7IXo9gUOiOH
+ +TyA==
+X-Gm-Message-State: ACrzQf19VO7QxBvdmctOaaxf98fGG2Z7NMcZEAsYm9r1XltnWrqZM1ES
+ ZhJvdUFXjjQJi0JyRlAWgnJSc0r+bI4TOQ==
+X-Google-Smtp-Source: AMsMyM6r9S4rxFI2Dhx+vDny6MaIPfd/r2byqT8qy56BoyfdXBwI5bUvTiOCmvtVJcSumWl2CakYJA==
+X-Received: by 2002:a05:6638:2686:b0:35a:40db:95ea with SMTP id
+ o6-20020a056638268600b0035a40db95eamr2470807jat.303.1665146826361; 
+ Fri, 07 Oct 2022 05:47:06 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ n20-20020a027154000000b0034e0cdeecc2sm830159jaf.98.2022.10.07.05.47.05
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 07 Oct 2022 05:47:05 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  7 Oct 2022 06:47:03 -0600
+Message-Id: <20221007124703.2733559-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX106.corporate.adroot.infra.ftgroup (10.115.27.3)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1665146445;
- bh=pGyl4k80RyGCfia8eNHkuA1wdGxgjfDAVEy0dLng6wY=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:
- Content-Transfer-Encoding:Content-Type;
- b=F+wj2qjCYepk8ekXaVZINLTk4o3MEm+GDE1gwnpL2FSxULijzUmyKM0RmjaSm/R7k
- YESxYiIVNwaWFANkmwcEoTV5fqx0pKadkrd/x+tCqxpa3qcEnJw37ccECbvTRbrfRt
- 1iNJqxWnzp1OjBzQ+BiUQV1wxQAxTrO/K0dkQPvNoX9MgyGOfdPwDPOXLm+0qw/mon
- Va225dY8brtvNcFOYhrivjBM0d8tNKL+PDAzFS8tSLPBACpBfBZGqk6hXz4360Owyv
- 4kYMF5diCaikobvhJdXkZzkOqtHOqIc3msDLqd9ipnA5b9RC3Kj5ZOxNuAMotnkzbX
- mzpl7/wnNEFrQ==
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8EVHkFLW8z2veTMXbwyQqtxOnPDoeDzyCQYDWMsp/vw=;
+ b=JcP1EkSSGRgx+WQ2FBKS4d2OI7tzUY3Hj3GwCMToxfcDpDnoFOSQJXwX3B/aYhwm/r
+ ZGKJx8jAOV/A+Jjg1CgBpnjyCW51FvO+q8fOfOSe2izpZnnVFUIbfILCNooDQ0k/6Se0
+ oPn2gV4jjVP+TWwMEEDnT4q/Jzy8nm4Uujy0btcCEwzYVb42ImRRcuQ5C5xzfDbKM633
+ K1nIL/vQ2zvsUgslTJAIcHZqE55zatgAiQUWNoNVxAs1iBh0S36fXPuUHIyDrXVmf1OE
+ BFqBDDdvK+OtMlpI7hJpquRKSEKuu0MpsnZ2/aXm9bJkVcIci+bEv8zsx9p6pDE2m+WS
+ w0AA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=F+wj2qjC
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: add host variant
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=JcP1EkSS
+Subject: [Buildroot] [PATCH 1/1] package/assimp: bump to version 5.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,118 +93,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-mosquitto can be configured to use password files. Those have a very
-trivial layout, with one "username:password" tuple per line, not unlike
-Apache's htpasswd file format, but unlike htpasswd files, the password
-can be either in clear (boo!), or encrypted (by calling into openssl's
-libcrypto).
-
-Encryption of passwords is done with an ad-hoc tool, mosquitto_passwd,
-again very like Apache's htpasswd, but the encrypted form is different
-(of course). This encryption is handled by mosquitto_passwd, which can
-create, update, or delete users, all while storing their encrypted
-password, or it can also convert a password file with clear-text
-passwords into a password file with encrypted passwords, e.g. it turns
-each "foo:bar" entry to their corresponding encrypted form, like
-"foo:$7$101$yLPgk5fn46d....==".
-
-It can be very interesting to maintain a clear-text DB of
-users:passwords in configuration management [0], and only convert it to
-encrypted passwords when embedded on the target.
-
-Add a host variant for mosquitto, which only installs mosquitto_passwd.
-
-[0] ensuring safety, confidentiality, and integrity of that DB is left
-as an exercise to the user, and is clearly out of scope for Buildroot,
-like storing the root password in the .config is.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in.host           |  1 +
- package/mosquitto/Config.in.host |  4 ++++
- package/mosquitto/mosquitto.mk   | 20 ++++++++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/mosquitto/Config.in.host
-
-diff --git a/package/Config.in.host b/package/Config.in.host
-index f437ef680c..84517787cc 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -57,6 +57,7 @@ menu "Host utilities"
- 	source "package/mfgtools/Config.in.host"
- 	source "package/mkpasswd/Config.in.host"
- 	source "package/moby-buildkit/Config.in.host"
-+	source "package/mosquitto/Config.in.host"
- 	source "package/mtd/Config.in.host"
- 	source "package/mtools/Config.in.host"
- 	source "package/mxsldr/Config.in.host"
-diff --git a/package/mosquitto/Config.in.host b/package/mosquitto/Config.in.host
-new file mode 100644
-index 0000000000..39e287ee89
---- /dev/null
-+++ b/package/mosquitto/Config.in.host
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_HOST_MOSQUITTO
-+	bool "host mosquitto (mosquitto_passwd)"
-+	help
-+	  Only installs mosquitto_passwd.
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 12de2946b7..a95a2cac4d 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -128,4 +128,24 @@ define MOSQUITTO_USERS
- endef
- endif
- 
-+HOST_MOSQUITTO_DEPENDENCIES = host-pkgconf host-openssl
-+
-+HOST_MOSQUITTO_MAKE_OPTS = \
-+	$(HOST_CONFIGURE_OPTS) \
-+	UNAME=Linux \
-+	STRIP=true \
-+	prefix=$(HOST_DIR) \
-+	WITH_WRAP=no \
-+	WITH_DOCS=no \
-+	WITH_TLS=yes
-+
-+define HOST_MOSQUITTO_BUILD_CMDS
-+	$(MAKE) -C $(@D)/apps/mosquitto_passwd $(HOST_MOSQUITTO_MAKE_OPTS)
-+endef
-+
-+define HOST_MOSQUITTO_INSTALL_CMDS
-+	$(MAKE) -C $(@D)/apps/mosquitto_passwd $(HOST_MOSQUITTO_MAKE_OPTS) install
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
--- 
-2.25.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+UmVwbGFjZSBkaXNhYmxlIC1XZXJyb3IgcGF0Y2ggd2l0aCBuZXcgY21ha2Ugb3B0aW9uOgotREFT
+U0lNUF9XQVJOSU5HU19BU19FUlJPUlM9T0ZGCgpTaWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFy
+ZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4KLS0tCiBwYWNrYWdlL2Fzc2ltcC8wMDAxLWNv
+ZGUtZGlzYWJsZS1XZXJyb3IucGF0Y2ggfCAzOSAtLS0tLS0tLS0tLS0tLS0tLS0tCiBwYWNrYWdl
+L2Fzc2ltcC9hc3NpbXAuaGFzaCAgICAgICAgICAgICAgICAgICAgfCAgMiArLQogcGFja2FnZS9h
+c3NpbXAvYXNzaW1wLm1rICAgICAgICAgICAgICAgICAgICAgIHwgIDMgKy0KIDMgZmlsZXMgY2hh
+bmdlZCwgMyBpbnNlcnRpb25zKCspLCA0MSBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0
+NCBwYWNrYWdlL2Fzc2ltcC8wMDAxLWNvZGUtZGlzYWJsZS1XZXJyb3IucGF0Y2gKCmRpZmYgLS1n
+aXQgYS9wYWNrYWdlL2Fzc2ltcC8wMDAxLWNvZGUtZGlzYWJsZS1XZXJyb3IucGF0Y2ggYi9wYWNr
+YWdlL2Fzc2ltcC8wMDAxLWNvZGUtZGlzYWJsZS1XZXJyb3IucGF0Y2gKZGVsZXRlZCBmaWxlIG1v
+ZGUgMTAwNjQ0CmluZGV4IDMzODY3ZTYxYzMuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9hc3Np
+bXAvMDAwMS1jb2RlLWRpc2FibGUtV2Vycm9yLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsMzkg
+KzAsMCBAQAotRnJvbSA1MTQ2ZTFjNGQ1ODE3NGUzMDJkYmRjZjJhODVjMjAyM2JlMWNmZmM2IE1v
+biBTZXAgMTcgMDA6MDA6MDAgMjAwMQotRnJvbTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBn
+bXgubmV0PgotRGF0ZTogRnJpLCAxMCBEZWMgMjAyMSAxNToxNTozMCArMDEwMAotU3ViamVjdDog
+W1BBVENIXSBjb2RlOiBkaXNhYmxlIC1XZXJyb3IKLU1JTUUtVmVyc2lvbjogMS4wCi1Db250ZW50
+LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKLUNvbnRlbnQtVHJhbnNmZXItRW5jb2Rp
+bmc6IDhiaXQKLQotRml4ZXM6Ci0KLSAgLi4uL2J1aWxkL2Fzc2ltcC01LjEuMy9jb2RlL1Bvc3RQ
+cm9jZXNzaW5nL1RyaWFuZ3VsYXRlUHJvY2Vzcy5jcHA6Mjg1OjUwOiBlcnJvcjogYXJndW1lbnQg
+MSB2YWx1ZSDigJg0Mjk0OTY3Mjk04oCZIGV4Y2VlZHMgbWF4aW11bSBvYmplY3Qgc2l6ZSAyMTQ3
+NDgzNjQ3IFstV2Vycm9yPWFsbG9jLXNpemUtbGFyZ2VyLXRoYW49XQotICAgIDI4NSB8ICAgICBz
+dGQ6OnVuaXF1ZV9wdHI8Ym9vbFtdPiBkb25lKG5ldyBib29sW21heF9vdXRdKTsKLSAgICAgICAg
+fCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXgotICBb
+Li4uXQotICAuLi4vaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9wb3dlcnBjLWJ1aWxkcm9vdC1saW51
+eC11Y2xpYmMvaW5jbHVkZS9jKysvOS4zLjAvbmV3OjEyNzoyNjogbm90ZTogaW4gYSBjYWxsIHRv
+IGFsbG9jYXRpb24gZnVuY3Rpb24g4oCYdm9pZCogb3BlcmF0b3IgbmV3IFtdKHN0ZDo6c2l6ZV90
+KeKAmSBkZWNsYXJlZCBoZXJlCi0gICAgMTI3IHwgX0dMSUJDWFhfTk9ESVNDQVJEIHZvaWQqIG9w
+ZXJhdG9yIG5ld1tdKHN0ZDo6c2l6ZV90KSBfR0xJQkNYWF9USFJPVyAoc3RkOjpiYWRfYWxsb2Mp
+Ci0gICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+Ci0KLVNpZ25lZC1v
+ZmYtYnk6IFBldGVyIFNlaWRlcmVyIDxwcy5yZXBvcnRAZ214Lm5ldD4KLS0tLQotIGNvZGUvQ01h
+a2VMaXN0cy50eHQgfCAyIC0tCi0gMSBmaWxlIGNoYW5nZWQsIDIgZGVsZXRpb25zKC0pCi0KLWRp
+ZmYgLS1naXQgYS9jb2RlL0NNYWtlTGlzdHMudHh0IGIvY29kZS9DTWFrZUxpc3RzLnR4dAotaW5k
+ZXggZTQ1YmY4YTJhLi5mNzFiNjU4M2QgMTAwNjQ0Ci0tLS0gYS9jb2RlL0NNYWtlTGlzdHMudHh0
+Ci0rKysgYi9jb2RlL0NNYWtlTGlzdHMudHh0Ci1AQCAtMTE2Nyw4ICsxMTY3LDYgQEAgVEFSR0VU
+X1VTRV9DT01NT05fT1VUUFVUX0RJUkVDVE9SWShhc3NpbXApCi0gIyBlbmFibGUgd2FybmluZ3Mg
+YXMgZXJyb3JzICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKLSBJRiAo
+TVNWQykKLSAgIFRBUkdFVF9DT01QSUxFX09QVElPTlMoYXNzaW1wIFBSSVZBVEUgL1dYKQotLUVM
+U0UoKQotLSAgVEFSR0VUX0NPTVBJTEVfT1BUSU9OUyhhc3NpbXAgUFJJVkFURSAtV2Vycm9yKQot
+IEVORElGKCkKLSAKLSAjIGFkZHMgQ19GTEFHUyByZXF1aXJlZCB0byBjb21waWxlIHppcC5jIG9u
+IG9sZCBHQ0MgNC54IGNvbXBpbGVyCi0tLSAKLTIuMzQuMQotCmRpZmYgLS1naXQgYS9wYWNrYWdl
+L2Fzc2ltcC9hc3NpbXAuaGFzaCBiL3BhY2thZ2UvYXNzaW1wL2Fzc2ltcC5oYXNoCmluZGV4IGE3
+NzhiNzkxMzIuLjg2YTkwOTI3ZWQgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvYXNzaW1wL2Fzc2ltcC5o
+YXNoCisrKyBiL3BhY2thZ2UvYXNzaW1wL2Fzc2ltcC5oYXNoCkBAIC0xLDMgKzEsMyBAQAogIyBM
+b2NhbGx5IGNhbGN1bGF0ZWQKLXNoYTI1NiAgYzljYmJjODU4OTYzOWNkOGMxM2Y2NWU5NGE5MDQy
+MmE3MDQ1NGU4ZmExNTBjZjg5OWI2MDM4YmE4NmU5ZWNmZiAgYXNzaW1wLTUuMi4xLnRhci5negor
+c2hhMjU2ICBiNTIxOWU2M2FlMzFkODk1ZDYwZDk4MDAxZWU1YmI4MDlmYjJjN2IyZGUxZTdmNzhj
+ZWViNjAwMDYzNjQxZTFhICBhc3NpbXAtNS4yLjUudGFyLmd6CiBzaGEyNTYgIDE0Nzg3NDQ0M2Qy
+NDJiNGUyYmFlOTcwMzZlMjZlYzlkNmIzN2Y3MDYxNzRjMWJkNWVjZmNjOGMxMjk0Y2VmNTEgIExJ
+Q0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXNzaW1wL2Fzc2ltcC5tayBiL3BhY2thZ2UvYXNz
+aW1wL2Fzc2ltcC5tawppbmRleCA3OTg2NTY3M2FjLi4wYjYwMzRmYjhlIDEwMDY0NAotLS0gYS9w
+YWNrYWdlL2Fzc2ltcC9hc3NpbXAubWsKKysrIGIvcGFja2FnZS9hc3NpbXAvYXNzaW1wLm1rCkBA
+IC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotQVNTSU1QX1ZFUlNJ
+T04gPSA1LjIuMQorQVNTSU1QX1ZFUlNJT04gPSA1LjIuNQogQVNTSU1QX1NJVEUgPSAkKGNhbGwg
+Z2l0aHViLGFzc2ltcCxhc3NpbXAsdiQoQVNTSU1QX1ZFUlNJT04pKQogQVNTSU1QX0xJQ0VOU0Ug
+PSBCU0QtMy1DbGF1c2UKIEFTU0lNUF9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQpAQCAtMzksNiAr
+MzksNyBAQCBBU1NJTVBfQ1hYRkxBR1MgKz0gLU8wCiBlbmRpZgogCiBBU1NJTVBfQ09ORl9PUFRT
+ICs9IC1EQVNTSU1QX0JVSUxEX1RFU1RTPU9GRiBcCisJLURBU1NJTVBfV0FSTklOR1NfQVNfRVJS
+T1JTPU9GRiBcCiAJLURDTUFLRV9DWFhfRkxBR1M9IiQoVEFSR0VUX0NYWEZMQUdTKSAkKEFTU0lN
+UF9DWFhGTEFHUykiCiAKICQoZXZhbCAkKGNtYWtlLXBhY2thZ2UpKQotLSAKMi4zNC4xCgpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
