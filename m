@@ -1,65 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6AA2C433FE
-	for <buildroot@archiver.kernel.org>; Fri,  7 Oct 2022 09:35:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7247C433F5
+	for <buildroot@archiver.kernel.org>; Fri,  7 Oct 2022 12:05:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 080E260C34;
-	Fri,  7 Oct 2022 09:35:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 080E260C34
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08E8441C0F;
+	Fri,  7 Oct 2022 12:05:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08E8441C0F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wcm_TsQe5cyc; Fri,  7 Oct 2022 09:35:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ou1ZqDhT8kdC; Fri,  7 Oct 2022 12:05:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F38660AD7;
-	Fri,  7 Oct 2022 09:35:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F38660AD7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 069161BF391
- for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 09:35:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3C2341BF2;
+	Fri,  7 Oct 2022 12:05:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3C2341BF2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CA371BF338
+ for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D5F8A83E16
- for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 09:35:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5F8A83E16
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15EC941BF2
+ for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:05:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15EC941BF2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XiWQMmPO1dQI for <buildroot@lists.busybox.net>;
- Fri,  7 Oct 2022 09:35:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t2P1m14nANl1 for <buildroot@lists.busybox.net>;
+ Fri,  7 Oct 2022 12:05:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17B768338B
-Received: from 17.mo550.mail-out.ovh.net (17.mo550.mail-out.ovh.net
- [87.98.179.142])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 17B768338B
- for <buildroot@buildroot.org>; Fri,  7 Oct 2022 09:35:44 +0000 (UTC)
-Received: from player739.ha.ovh.net (unknown [10.108.4.60])
- by mo550.mail-out.ovh.net (Postfix) with ESMTP id 7714A21D7A
- for <buildroot@buildroot.org>; Fri,  7 Oct 2022 09:25:54 +0000 (UTC)
-Received: from armadeus.com (lfbn-str-1-84-188.w92-140.abo.wanadoo.fr
- [92.140.211.188])
- (Authenticated sender: sebastien.szymanski@armadeus.com)
- by player739.ha.ovh.net (Postfix) with ESMTPSA id 9FC352B653C3D;
- Fri,  7 Oct 2022 09:25:51 +0000 (UTC)
-X-OVh-ClientIp: 92.140.211.188
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-To: buildroot@buildroot.org
-Date: Fri,  7 Oct 2022 11:23:00 +0200
-Message-Id: <20221007092300.1003-1-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.35.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E263041895
+Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E263041895
+ for <buildroot@buildroot.org>; Fri,  7 Oct 2022 12:05:48 +0000 (UTC)
+Received: from [192.168.50.173] ([146.241.87.206])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id gm6goB5WlSNi8gm6jovW7T; Fri, 07 Oct 2022 14:05:44 +0200
+Message-ID: <7dce1c6a-176b-d97a-47b3-cc74a16ad2a6@benettiengineering.com>
+Date: Fri, 7 Oct 2022 14:05:33 +0200
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 17339140043528661995
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeijedgudeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeeujefhkeetleeuleffhfelveejueeutdeiteeltedvvdehvdejieevffeghfettdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedtrddtrddtrddtpdelvddrudegtddrvdduuddrudekkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeefledrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehhedt
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-105G0069becc4f8-4615-4b4b-9253-de338a33c5e0,
- E6B47EF5AD39DED0BB771E11788A8042248574CF)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: [Buildroot] [PATCH 1/1] package/rt-tests: bump version to 2.4
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+To: Wolfgang Grandegger <wg@grandegger.com>, buildroot@buildroot.org
+References: <41db705a-2c63-47bc-3f03-d4c52d2a4b14@grandegger.com>
+ <e6ddbdfb-7f8b-4eb2-e25d-24fe0c82e981@benettiengineering.com>
+ <1d22bd7b-1136-6911-7181-81f2b24c5b00@grandegger.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <1d22bd7b-1136-6911-7181-81f2b24c5b00@grandegger.com>
+X-CMAE-Envelope: MS4xfB1EtIO4Ywf1Gv8TDqmSJqkiDn15mu8ubtAXLgoC+kVz9lvb5lpOzBhY9nsn4FEb8kN8H5FamBLBD+8N6/lEl2+pBZ512x1+4AQBS0CIvIyFOUnTIj1c
+ pcckIESCyhY/QZ9CRQ06hDHwdpRLU9ygGR7TvosxRCCHXsMhSL9hSQohZMe8SaMr8T+dnWknF6MzLmm7Gt1KB21H80EtbklDEysH/34pLXAUEQy/YAYzF992
+ jUx3uMMfIp0MOQDWnN30XONNXeJ38IvNIOwRPbRiYQJhNH7wektOPHTBhDWuVHua
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1665144345; bh=AJXr95Oj8TXbFJ5+QYAKhwVXFJFDAy6PlR8IS61Sn48=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=SfKr+cdUv2qcCBos2P8RxbTtQ2juNzt52ATQFbnlg0aJEZfjub1jAsxrUxbQWJd9X
+ bn6xsCPeHTWMD2/RUbdvRkF0EIfzzQcqiG2CGaqHCAiuGO03jfLB2SG/pe+xodhx0X
+ 38A31D7PhkM/tg4iISuK5hg1Tgp6/++Q/6XjoxWw4AIv87H3qMUSIoZZW7rCLbMiAX
+ lzs6sUU60/s8zND1oTyQv6745gXaXArKdxp55wl7ZM7e6RMyoMZjH1eilDPoQETlam
+ on28uQnVEFheYDdHRABQPdZcNlHRKXu1+ulqdAM56X16xoZrKTZqfDRWe8sjKHH5Zb
+ FfiP2HsqYhW6A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=SfKr+cdU
+Subject: Re: [Buildroot] [PATCH] package/udisks: install to staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,33 +79,62 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogU8OpYmFzdGllbiBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lA
-YXJtYWRldXMuY29tPgotLS0KIHBhY2thZ2UvcnQtdGVzdHMvcnQtdGVzdHMuaGFzaCB8IDIgKy0K
-IHBhY2thZ2UvcnQtdGVzdHMvcnQtdGVzdHMubWsgICB8IDIgKy0KIDIgZmlsZXMgY2hhbmdlZCwg
-MiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcnQt
-dGVzdHMvcnQtdGVzdHMuaGFzaCBiL3BhY2thZ2UvcnQtdGVzdHMvcnQtdGVzdHMuaGFzaAppbmRl
-eCAzYWRkYTYwZjQyLi40OWRmODMxM2Y5IDEwMDY0NAotLS0gYS9wYWNrYWdlL3J0LXRlc3RzL3J0
-LXRlc3RzLmhhc2gKKysrIGIvcGFja2FnZS9ydC10ZXN0cy9ydC10ZXN0cy5oYXNoCkBAIC0xLDQg
-KzEsNCBAQAogIyBGcm9tIGh0dHBzOi8vbWlycm9ycy5lZGdlLmtlcm5lbC5vcmcvcHViL2xpbnV4
-L3V0aWxzL3J0LXRlc3RzL3NoYTI1NnN1bXMuYXNjCi1zaGEyNTYgIGI1ZTc5NTliY2I1YzcwM2Iy
-NzQzMDMwNzUxYWY5NzVlYTRlMDQ5NjJlMjlmYzExMThmNGI2MDU5ODc1ODU3MzUgIHJ0LXRlc3Rz
-LTIuMy50YXIueHoKK3NoYTI1NiAgMzkzNDU3ZjBjOTFjY2U1N2U4MmI4NzZlY2I5YjY3Mjg3MWY4
-OThlNmNlY2FmYzc1MTU0ODA3OTUxMmJjYzgwOCAgcnQtdGVzdHMtMi40LnRhci54egogIyBsb2Nh
-bGx5IGNvbXB1dGVkIGhhc2gKIHNoYTI1NiAgYWIxNWZkNTI2YmQ4ZGQxOGE5ZTc3ZWJjMTM5NjU2
-YmY0ZDMzZTk3ZmM3MjM4Y2QxMWJmNjBlMmI5Yjg2NjZjNiAgQ09QWUlORwpkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9ydC10ZXN0cy9ydC10ZXN0cy5tayBiL3BhY2thZ2UvcnQtdGVzdHMvcnQtdGVzdHMu
-bWsKaW5kZXggMDU2YTRhNjcyMy4uNzQyOTAyMTFjZSAxMDA2NDQKLS0tIGEvcGFja2FnZS9ydC10
-ZXN0cy9ydC10ZXN0cy5taworKysgYi9wYWNrYWdlL3J0LXRlc3RzL3J0LXRlc3RzLm1rCkBAIC02
-LDcgKzYsNyBAQAogCiBSVF9URVNUU19TSVRFID0gJChCUjJfS0VSTkVMX01JUlJPUikvbGludXgv
-dXRpbHMvcnQtdGVzdHMKIFJUX1RFU1RTX1NPVVJDRSA9IHJ0LXRlc3RzLSQoUlRfVEVTVFNfVkVS
-U0lPTikudGFyLnh6Ci1SVF9URVNUU19WRVJTSU9OID0gMi4zCitSVF9URVNUU19WRVJTSU9OID0g
-Mi40CiBSVF9URVNUU19MSUNFTlNFID0gR1BMLTIuMCsKIFJUX1RFU1RTX0xJQ0VOU0VfRklMRVMg
-PSBDT1BZSU5HCiAKLS0gCjIuMzUuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+Hi Wolfgang,
+
+On 07/10/22 09:35, Wolfgang Grandegger wrote:
+> Hello Giulio,
+> 
+> I send trivial patches directly via email. Without "git send-email..." 
+> and I also didn't use "buildroot/get-developers". I just sent v2, hope 
+> it's fine now!?
+
+Yes, now it looks ok. I ask you please to register to patchwork and set
+v1 patch to superseded:
+https://patchwork.ozlabs.org/project/buildroot/list/
+
+Thank you!
+Best regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+>  From my point of few it's a bug... but well, it doesn't really matter.
+> 
+> Wolfgang
+> 
+> On 06.10.22 22:14, Giulio Benetti wrote:
+>> Hi Wolgang,
+>>
+>> thanks for contributing!
+>>
+>> Something to deal with.
+>> Before 'git send-email...' do you use buildroot/get-developers script?
+>>
+>> I ask this because I'm not in Cc but I maintain this package as well as
+>> other 2 people.
+>>
+>> Il 06/10/2022 21:52, Wolfgang Grandegger ha scritto:
+>>> UDisks2 provides an Library API [1] for accessing the UDisks2 service 
+>>> via
+>>> "libudisks2.so". For development of UDisks2 clients, install to staging
+>>> as well! This issue has been reported as bug [2] as well.
+>>
+>> It doesn't make sense that this has been reported as a bug since it's
+>> not a bug but an adding. So please remove last sentence.
+>>
+>>> [1] http://storaged.org/doc/udisks2-api/2.9.4/ref-library.html[1]
+>>> [2] https://bugs.busybox.net/show_bug.cgi?id=15026
+>>
+>> And this line ^^^ too.
+>>
+>> Best regards
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
