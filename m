@@ -1,72 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7247C433F5
-	for <buildroot@archiver.kernel.org>; Fri,  7 Oct 2022 12:05:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B413BC433FE
+	for <buildroot@archiver.kernel.org>; Fri,  7 Oct 2022 12:25:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08E8441C0F;
-	Fri,  7 Oct 2022 12:05:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08E8441C0F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2019C401CC;
+	Fri,  7 Oct 2022 12:25:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2019C401CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ou1ZqDhT8kdC; Fri,  7 Oct 2022 12:05:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hCvqQuLTWJDu; Fri,  7 Oct 2022 12:25:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3C2341BF2;
-	Fri,  7 Oct 2022 12:05:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3C2341BF2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3CA371BF338
- for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:05:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9537401D8;
+	Fri,  7 Oct 2022 12:24:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9537401D8
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C766D1BF338
+ for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:24:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15EC941BF2
- for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:05:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15EC941BF2
+ by smtp2.osuosl.org (Postfix) with ESMTP id B04F4401D8
+ for <buildroot@lists.busybox.net>; Fri,  7 Oct 2022 12:24:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B04F4401D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t2P1m14nANl1 for <buildroot@lists.busybox.net>;
- Fri,  7 Oct 2022 12:05:49 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E263041895
-Received: from smtpcmd15177.aruba.it (smtpcmd15177.aruba.it [62.149.156.177])
- by smtp4.osuosl.org (Postfix) with ESMTP id E263041895
- for <buildroot@buildroot.org>; Fri,  7 Oct 2022 12:05:48 +0000 (UTC)
-Received: from [192.168.50.173] ([146.241.87.206])
- by Aruba Outgoing Smtp  with ESMTPSA
- id gm6goB5WlSNi8gm6jovW7T; Fri, 07 Oct 2022 14:05:44 +0200
-Message-ID: <7dce1c6a-176b-d97a-47b3-cc74a16ad2a6@benettiengineering.com>
-Date: Fri, 7 Oct 2022 14:05:33 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mUmA-_DzFGNm for <buildroot@lists.busybox.net>;
+ Fri,  7 Oct 2022 12:24:55 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B9ED401B2
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6B9ED401B2
+ for <buildroot@buildroot.org>; Fri,  7 Oct 2022 12:24:55 +0000 (UTC)
+Received: by mail-io1-xd34.google.com with SMTP id n198so3474512iod.3
+ for <buildroot@buildroot.org>; Fri, 07 Oct 2022 05:24:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ZFBJgCGAVXNEFhXrmY748SHRdcnW6M3PT2OYkbAY/Oo=;
+ b=3aarmuXSE+10xd/5UprmGpoQNigAftAwYBId772zINEzE90Hg+I1Var9ZIifCXVotT
+ P1L84YGbO+vb7qXZGtifRLma7TRm6OCDTe4/s+olLTBn/KFc0KCU1KSlB6d1c6FY0odx
+ jEbb6BQw6CQNvhh9ajPWOLXVtUhE8dhUh7oU75k8ys+0FubZq5Cx4V//Zwx4IVGrI4uR
+ 2hUb56HAIyXFPi2GuhwjBeUeF/DU2Ii7IhRU3bdwIM8/kXLURWzYTKQO86aaQqZ4bOpD
+ Tn9hHiIzaeRGiN8odQjd7Rz9kGJzvL2JtOCPkcXnVD1bAEo2U8YQxZ1tpVyaAtTSsyPe
+ 3dBg==
+X-Gm-Message-State: ACrzQf2oQ3FsOEwzrg5YsA3i2I6zLt5GAnn3bGp6IolNdlJiWkSptCts
+ sRsnKvFhFwL3Dw9VYtpPRY6zpTNntuo=
+X-Google-Smtp-Source: AMsMyM7HBIjq9YbWR4CSX+QaKyZjzdWhve8VQKO4f242PTouvLf2TERMyVcrpkGPlqnAmUc30BB48w==
+X-Received: by 2002:a05:6602:164b:b0:6a2:83c0:d3f5 with SMTP id
+ y11-20020a056602164b00b006a283c0d3f5mr2091334iow.77.1665145493809; 
+ Fri, 07 Oct 2022 05:24:53 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ n15-20020a92260f000000b002fa7b6e9cf5sm847690ile.31.2022.10.07.05.24.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 07 Oct 2022 05:24:53 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  7 Oct 2022 06:24:47 -0600
+Message-Id: <20221007122447.1048167-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-To: Wolfgang Grandegger <wg@grandegger.com>, buildroot@buildroot.org
-References: <41db705a-2c63-47bc-3f03-d4c52d2a4b14@grandegger.com>
- <e6ddbdfb-7f8b-4eb2-e25d-24fe0c82e981@benettiengineering.com>
- <1d22bd7b-1136-6911-7181-81f2b24c5b00@grandegger.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <1d22bd7b-1136-6911-7181-81f2b24c5b00@grandegger.com>
-X-CMAE-Envelope: MS4xfB1EtIO4Ywf1Gv8TDqmSJqkiDn15mu8ubtAXLgoC+kVz9lvb5lpOzBhY9nsn4FEb8kN8H5FamBLBD+8N6/lEl2+pBZ512x1+4AQBS0CIvIyFOUnTIj1c
- pcckIESCyhY/QZ9CRQ06hDHwdpRLU9ygGR7TvosxRCCHXsMhSL9hSQohZMe8SaMr8T+dnWknF6MzLmm7Gt1KB21H80EtbklDEysH/34pLXAUEQy/YAYzF992
- jUx3uMMfIp0MOQDWnN30XONNXeJ38IvNIOwRPbRiYQJhNH7wektOPHTBhDWuVHua
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1665144345; bh=AJXr95Oj8TXbFJ5+QYAKhwVXFJFDAy6PlR8IS61Sn48=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=SfKr+cdUv2qcCBos2P8RxbTtQ2juNzt52ATQFbnlg0aJEZfjub1jAsxrUxbQWJd9X
- bn6xsCPeHTWMD2/RUbdvRkF0EIfzzQcqiG2CGaqHCAiuGO03jfLB2SG/pe+xodhx0X
- 38A31D7PhkM/tg4iISuK5hg1Tgp6/++Q/6XjoxWw4AIv87H3qMUSIoZZW7rCLbMiAX
- lzs6sUU60/s8zND1oTyQv6745gXaXArKdxp55wl7ZM7e6RMyoMZjH1eilDPoQETlam
- on28uQnVEFheYDdHRABQPdZcNlHRKXu1+ulqdAM56X16xoZrKTZqfDRWe8sjKHH5Zb
- FfiP2HsqYhW6A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=SfKr+cdU
-Subject: Re: [Buildroot] [PATCH] package/udisks: install to staging
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ZFBJgCGAVXNEFhXrmY748SHRdcnW6M3PT2OYkbAY/Oo=;
+ b=NVHflwwZWlLGfwkbzMy6plyI0WNus+6GIM5K7pUmTH789vfF1uMWWatWKLB/THFAVg
+ pdC4YSZz4YsFUQ4CtGyHe4u+H7ktF7nT5sMbL0770vAdvr5DlU92Rl8JfggT29RuIUKT
+ pfOL1ijdtb59KMoCRqYKdJlm0MxM6q0nTLhEnxUhPXQiQJz9I0sk5+eaySH66VpFjAtc
+ Bh7G4jCw48GExm4o5yJve3/XJlWkobA2ui08e55YqY4KhxbEDoNkiaXW7gWoKExv575H
+ uSD5dmSnTTdi1mqE4u976buVI5FFynZR+aSGHLDo+K0Fm7P5GkGk5FCSApMgcgPSQbKG
+ b5aA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=NVHflwwZ
+Subject: [Buildroot] [PATCH 1/1] package/ocf-linux: bump to version 20171122
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,61 +93,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Wolfgang,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/ocf-linux/ocf-linux.hash | 2 +-
+ package/ocf-linux/ocf-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 07/10/22 09:35, Wolfgang Grandegger wrote:
-> Hello Giulio,
-> 
-> I send trivial patches directly via email. Without "git send-email..." 
-> and I also didn't use "buildroot/get-developers". I just sent v2, hope 
-> it's fine now!?
-
-Yes, now it looks ok. I ask you please to register to patchwork and set
-v1 patch to superseded:
-https://patchwork.ozlabs.org/project/buildroot/list/
-
-Thank you!
-Best regards
+diff --git a/package/ocf-linux/ocf-linux.hash b/package/ocf-linux/ocf-linux.hash
+index 0bd0ea19df..747bbcab56 100644
+--- a/package/ocf-linux/ocf-linux.hash
++++ b/package/ocf-linux/ocf-linux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  5113609d2c2c43fde962bec1238fe5a81211a751ebb0337b54a9804d40cfef53  ocf-linux-20120127.tar.gz
++sha256  3d7984754d58ced5695889744caf1e18a53f5d2e35ed40cc04d3595e59b7431f  ocf-linux-20171122.tar.gz
+diff --git a/package/ocf-linux/ocf-linux.mk b/package/ocf-linux/ocf-linux.mk
+index 01854fa73a..52169eda4f 100644
+--- a/package/ocf-linux/ocf-linux.mk
++++ b/package/ocf-linux/ocf-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OCF_LINUX_VERSION = 20120127
++OCF_LINUX_VERSION = 20171122
+ OCF_LINUX_SITE = http://downloads.sourceforge.net/project/ocf-linux/ocf-linux/$(OCF_LINUX_VERSION)
+ OCF_LINUX_INSTALL_STAGING = YES
+ 
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
->  From my point of few it's a bug... but well, it doesn't really matter.
-> 
-> Wolfgang
-> 
-> On 06.10.22 22:14, Giulio Benetti wrote:
->> Hi Wolgang,
->>
->> thanks for contributing!
->>
->> Something to deal with.
->> Before 'git send-email...' do you use buildroot/get-developers script?
->>
->> I ask this because I'm not in Cc but I maintain this package as well as
->> other 2 people.
->>
->> Il 06/10/2022 21:52, Wolfgang Grandegger ha scritto:
->>> UDisks2 provides an Library API [1] for accessing the UDisks2 service 
->>> via
->>> "libudisks2.so". For development of UDisks2 clients, install to staging
->>> as well! This issue has been reported as bug [2] as well.
->>
->> It doesn't make sense that this has been reported as a bug since it's
->> not a bug but an adding. So please remove last sentence.
->>
->>> [1] http://storaged.org/doc/udisks2-api/2.9.4/ref-library.html[1]
->>> [2] https://bugs.busybox.net/show_bug.cgi?id=15026
->>
->> And this line ^^^ too.
->>
->> Best regards
+2.34.1
 
 _______________________________________________
 buildroot mailing list
