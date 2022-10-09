@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 664FFC433FE
-	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 18:08:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA1C9C433FE
+	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 18:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDBEA606F5;
-	Sun,  9 Oct 2022 18:08:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDBEA606F5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6939F81438;
+	Sun,  9 Oct 2022 18:09:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6939F81438
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VTKVS9R4m2kH; Sun,  9 Oct 2022 18:08:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9OIy__1mJ1LW; Sun,  9 Oct 2022 18:09:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B7CE60687;
-	Sun,  9 Oct 2022 18:08:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B7CE60687
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 603EA1BF2A4
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 18:08:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A30DD8142C;
+	Sun,  9 Oct 2022 18:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A30DD8142C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DB9F21BF2A4
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 18:09:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B3B4408EF
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 18:08:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B3B4408EF
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3A9B81432
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 18:09:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3A9B81432
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N2Wrc5qmlTmR for <buildroot@lists.busybox.net>;
- Sun,  9 Oct 2022 18:08:02 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E5BF408D0
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5E5BF408D0
- for <buildroot@buildroot.org>; Sun,  9 Oct 2022 18:08:02 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3387210000A;
- Sun,  9 Oct 2022 18:07:59 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1ohaiV-00ABEr-AT; Sun, 09 Oct 2022 20:07:59 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kcFYJvtHg0an for <buildroot@lists.busybox.net>;
+ Sun,  9 Oct 2022 18:09:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 050F981414
+ for <buildroot@buildroot.org>; Sun,  9 Oct 2022 18:09:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 050F981414
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E57C886ADC; Sun,  9 Oct 2022 18:09:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?S=C3=A9bastien?= Szymanski <sebastien.szymanski@armadeus.com>
-References: <20221007092300.1003-1-sebastien.szymanski@armadeus.com>
-Date: Sun, 09 Oct 2022 20:07:59 +0200
-In-Reply-To: <20221007092300.1003-1-sebastien.szymanski@armadeus.com>
- (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Fri, 7 Oct 2022
- 11:23:00 +0200")
-Message-ID: <87wn98q39c.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/rt-tests: bump version to 2.4
+To: buildroot@buildroot.org
+Date: Sun, 9 Oct 2022 20:05:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4f00b909b9ee637c255a882fdda580fb1a66a014
+X-Git-Newrev: d95faeea442796d0f79cae2bc666824955a668fe
+X-Patchwork-Hint: ignore
+Message-Id: <20221009180918.E57C886ADC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qdecoder: add
+ QDECODER_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,16 +57,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlPDqWJhc3RpZW4iID09IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5
-bWFuc2tpQGFybWFkZXVzLmNvbT4gd3JpdGVzOgoKID4gU2lnbmVkLW9mZi1ieTogU8OpYmFzdGll
-biBTenltYW5za2kgPHNlYmFzdGllbi5zenltYW5za2lAYXJtYWRldXMuY29tPgoKQ29tbWl0dGVk
-LCB0aGFua3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=d95faeea442796d0f79cae2bc666824955a668fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+cpe:2.3:a:qdecoder_project:qdecoder is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aqdecoder_project%3Aqdecoder
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qdecoder/qdecoder.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
+index 05ee657131..c465617e26 100644
+--- a/package/qdecoder/qdecoder.mk
++++ b/package/qdecoder/qdecoder.mk
+@@ -8,6 +8,7 @@ QDECODER_VERSION = 12.1.0
+ QDECODER_SITE = $(call github,wolkykim,qdecoder,v$(QDECODER_VERSION))
+ QDECODER_LICENSE = BSD-2-Clause
+ QDECODER_LICENSE_FILES = COPYING
++QDECODER_CPE_ID_VENDOR = qdecoder_project
+ QDECODER_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ 
+ QDECODER_INSTALL_STAGING = YES
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
