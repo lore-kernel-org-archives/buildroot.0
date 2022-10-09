@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF0CC433FE
-	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 21:58:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6DDAC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 22:03:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F333B8127F;
-	Sun,  9 Oct 2022 21:58:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F333B8127F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4871582BE7;
+	Sun,  9 Oct 2022 22:03:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4871582BE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id diVV8UnlYH8p; Sun,  9 Oct 2022 21:58:28 +0000 (UTC)
+	with ESMTP id vNf9KmM134tn; Sun,  9 Oct 2022 22:03:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 312A080850;
-	Sun,  9 Oct 2022 21:58:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 312A080850
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4BF891BF376
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 21:58:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5920282BC4;
+	Sun,  9 Oct 2022 22:02:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5920282BC4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 89C291BF376
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 22:02:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30BCB403D6
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 21:58:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30BCB403D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63917416FD
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 22:02:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63917416FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TeIgnEveD2Jt for <buildroot@lists.busybox.net>;
- Sun,  9 Oct 2022 21:58:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IYj6JcNI2F3j for <buildroot@lists.busybox.net>;
+ Sun,  9 Oct 2022 22:02:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08D6F403AA
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 08D6F403AA
- for <buildroot@buildroot.org>; Sun,  9 Oct 2022 21:58:05 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id j7so14557216wrr.3
- for <buildroot@buildroot.org>; Sun, 09 Oct 2022 14:58:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6738416FA
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D6738416FA
+ for <buildroot@buildroot.org>; Sun,  9 Oct 2022 22:02:55 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id b4so14582581wrs.1
+ for <buildroot@buildroot.org>; Sun, 09 Oct 2022 15:02:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=x1bEurBppDIckUA7z2owEgllKuFXzobbgwF4pprh/Fo=;
- b=du90cxO+BbXF++3B9aa4oMJzUutckh4hDi0PAZ2DaV6ixYzJkSou6AU1lYk3MauH1c
- Ugq7mYvmotjebxS/fRai+USmjDW6bX+HiYi195SyMBWYOUnApC5f/FV954wKgXypn2Pe
- d6xGHeEXlmNjVdc0+XkkHs4BP7El73zJ6NpGvEywkl1yixUVaOxe6IKVyKduqR46w7VY
- 5dxsPTECHqa2aBvA8FAL+obNu/EVwVYgmp6CLQfDzjKlSFnDWK5w5QG6QeDefd1/QnIc
- d0PbcwRd0tGJdiVXz8PK1Gb0oBMYnnx+DnbzZuOBArlsN8eKzWgGr5GwWQuBTdCffOUq
- TuYA==
-X-Gm-Message-State: ACrzQf3AAlYUbSvGPpfQHu1xyxI028GnDY0ld2+WZZeZYWARKbs3oOwI
- 0KCV/VboFCc4sM88scfqyS8sc9XOKMs=
-X-Google-Smtp-Source: AMsMyM4BTa9l9tzVbs4jFugzzo2eHN/n7sbB7CoWrhOedwH45Y+6cqq4U63NGLd+cMnp1invMLffWQ==
-X-Received: by 2002:adf:fac7:0:b0:22e:4773:23a9 with SMTP id
- a7-20020adffac7000000b0022e477323a9mr9786358wrs.537.1665352683807; 
- Sun, 09 Oct 2022 14:58:03 -0700 (PDT)
+ bh=k8AdEuLTiHrN/AErv39foSqUKo9ECgmSgsqUNOb/DAw=;
+ b=5McUNZm946doLiutYC/HcdyR8p6h1xaZ29zZAaG4OYgikQFJuMbJHc6LrU4sLYaxSm
+ 0V+thq6xzyr4GDVOScJeDP68h3LO5MQFCi9Egt8I2X0W7gIeb1NGG+01a3OMxNAY74ZG
+ vfNDzkQfjSiNmT4F8pbOSeEzLTRk1Y0Txbsw/3X/xDUMjKbjvILB+wH4oW0TOnDVwh/k
+ NhPWH1O5Ps6gki6BPv+/ei77akp71lS3I888Bi4RFJIIJ31DsWc2fFsV/ZB5JTutqDPe
+ arjUws91SAS3BUsGNysByjlGB1mHzq5lui9yuu5UN7kJ2/d+VmBm8T36n8r3oxZt1dOx
+ bWTA==
+X-Gm-Message-State: ACrzQf3oy7sHxxl+I82dnOtliBhPwpIY7cNe4fITAP9ZF/YpjnOIcYWc
+ iL6NEpArr/nHtmE4fbhJrcGyG1pGfj0=
+X-Google-Smtp-Source: AMsMyM5g/cfYsnGdqpELSnWfigUEowoRvJYpn1nsA+XHwNFaTlPKCEiV77gniFnc56m9KJQbUMXoag==
+X-Received: by 2002:a5d:64a2:0:b0:230:c757:e3db with SMTP id
+ m2-20020a5d64a2000000b00230c757e3dbmr120602wrp.495.1665352973709; 
+ Sun, 09 Oct 2022 15:02:53 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- g10-20020a5d46ca000000b0022eafed36ebsm6763396wrs.73.2022.10.09.14.58.03
+ ay34-20020a05600c1e2200b003b4de550e34sm2234503wmb.40.2022.10.09.15.02.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 09 Oct 2022 14:58:03 -0700 (PDT)
+ Sun, 09 Oct 2022 15:02:53 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  9 Oct 2022 23:58:01 +0200
-Message-Id: <20221009215801.227838-1-fontaine.fabrice@gmail.com>
+Date: Mon, 10 Oct 2022 00:02:50 +0200
+Message-Id: <20221009220250.310026-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=x1bEurBppDIckUA7z2owEgllKuFXzobbgwF4pprh/Fo=;
- b=Dm/ZDEeqk3IWnRb+IRh1ffdxVjxAs4LNDoFdixUn2v5tBRlWjjqiaD1JZonHntjMLf
- 5Ef+043rZ+bo17fRzxuwKCvAWrhwSRM53vilKwcILePTDT+drlWn/sijtcJy3Yd5vFzi
- ErIW+xk8E5uQpjY0O60+bmFuhlRwEnBbew1K9Tg9AIfPHNCAXEIkmzAqveKRomkRREjV
- ILzsMeOfBuOdvwLIN0iW0d8HkcWfS5bQ6GYUtKBlDg5AwgvWGxwWlppH9kIAmuu5i7S9
- Mf789VA95Gqm2PR177GO/fb7TFiHWwnILD9W/VmJHHQj2iCvmsokUGlpVCAiXTougEct
- YdVA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=k8AdEuLTiHrN/AErv39foSqUKo9ECgmSgsqUNOb/DAw=;
+ b=YhXNjAxjVk6xN7ufY4hj1x60X6Qg9bltY2EHZx2a3wc1eJxPwK96Sww/SSsaop78kv
+ 1rk9Hdg49oe3xCSZy2Vi1ycgmL1Un8jhPFXAatusFyk1FY0ZQ+fZoPNRrycwFz00TuMq
+ +QAa0+neP46YEy4ssUGLMV9N33rfB0pEE4gswhqPzqzme0BrrK3nnGYL1vAwUQMTuJ+8
+ 3eQZiKQNYcIlzXKTPla19I3APy/iNMWOTPGwDbWF3V//WvreRNmDjA0nzkm5LPj/JjHy
+ kSo9WM/RYNi3FIQeASvxehBJmWFOjF0ntH4kv6dxF8x+JQ+2mrQHBv5EMIGBPe89nji2
+ QhEg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Dm/ZDEeq
-Subject: [Buildroot] [PATCH 1/1] package/gmrender-resurrect: bump to version
- 0.1
+ header.a=rsa-sha256 header.s=20210112 header.b=YhXNjAxj
+Subject: [Buildroot] [PATCH 1/1] package/gnutls: bump to version 3.7.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,60 +93,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>,
+Cc: Matt Weber <matthew.weber@collins.com>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-gmrender-resurrect uses threads since
-https://github.com/hzeller/gmrender-resurrect/commit/8871dfd2490f04e319ce6465fd2a7a8b2c78a6de
+This is a bug fix and enhancement release on the 3.7.x branch.
 
-https://github.com/hzeller/gmrender-resurrect/compare/v0.0.9...v0.1
+https://lists.gnupg.org/pipermail/gnutls-help/2022-September/004765.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gmrender-resurrect/Config.in               | 2 +-
- package/gmrender-resurrect/gmrender-resurrect.hash | 2 +-
- package/gmrender-resurrect/gmrender-resurrect.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
-index db655ad7f4..de52410a73 100644
---- a/package/gmrender-resurrect/Config.in
-+++ b/package/gmrender-resurrect/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_GMRENDER_RESURRECT
- 	bool "gmrender-resurrect"
- 	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2, libupnp
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # gstreamer1
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
-diff --git a/package/gmrender-resurrect/gmrender-resurrect.hash b/package/gmrender-resurrect/gmrender-resurrect.hash
-index 526b2b6c34..f14abffc3b 100644
---- a/package/gmrender-resurrect/gmrender-resurrect.hash
-+++ b/package/gmrender-resurrect/gmrender-resurrect.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 46dd99291c..303f1351e0 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.7.tar.xz.sig
+-sha256  be9143d0d58eab64dba9b77114aaafac529b6c0d7e81de6bdf1c9b59027d2106  gnutls-3.7.7.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz.sig
++sha256  c58ad39af0670efe6a8aee5e3a8b2331a1200418b64b7c51977fb396d4617114  gnutls-3.7.8.tar.xz
  # Locally calculated
--sha256  c3a9c80c7058a9a1f32175da25a564fb3021a7055c2df3941e8da8860a509009  gmrender-resurrect-0.0.9.tar.gz
-+sha256  550b07bc6a073176ad7de0efd603663c9875311dfb81ae1075263e3fd6974335  gmrender-resurrect-0.1.tar.gz
- sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
-diff --git a/package/gmrender-resurrect/gmrender-resurrect.mk b/package/gmrender-resurrect/gmrender-resurrect.mk
-index 4a7efd71ab..77ac83ca41 100644
---- a/package/gmrender-resurrect/gmrender-resurrect.mk
-+++ b/package/gmrender-resurrect/gmrender-resurrect.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 56dae4c6b7..6e2cc501ef 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
  
--GMRENDER_RESURRECT_VERSION = 0.0.9
-+GMRENDER_RESURRECT_VERSION = 0.1
- GMRENDER_RESURRECT_SITE = $(call github,hzeller,gmrender-resurrect,v$(GMRENDER_RESURRECT_VERSION))
- # Original distribution does not have default configure,
- # so we need to autoreconf:
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.7
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 -- 
 2.35.1
 
