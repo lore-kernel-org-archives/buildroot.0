@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FFC2C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 15:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A6BCC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 16:00:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8D1B408D5;
-	Sun,  9 Oct 2022 15:59:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8D1B408D5
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA8E440643;
+	Sun,  9 Oct 2022 16:00:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA8E440643
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H_4TAZCgx54w; Sun,  9 Oct 2022 15:59:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id i6sFadBemVio; Sun,  9 Oct 2022 16:00:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 775C4408B6;
-	Sun,  9 Oct 2022 15:59:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 775C4408B6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BA5621BF239
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 15:59:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D565D4063F;
+	Sun,  9 Oct 2022 16:00:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D565D4063F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 422121BF239
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 15:59:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 956FC60615
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 15:59:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 956FC60615
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1D4C8813FC
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 15:59:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D4C8813FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VAWD_xNaTYAV for <buildroot@lists.busybox.net>;
- Sun,  9 Oct 2022 15:59:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cUup_C2buHi7 for <buildroot@lists.busybox.net>;
+ Sun,  9 Oct 2022 15:59:48 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56EE3605EC
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 56EE3605EC
- for <buildroot@buildroot.org>; Sun,  9 Oct 2022 15:59:46 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id s10so10844902ljp.5
- for <buildroot@buildroot.org>; Sun, 09 Oct 2022 08:59:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA061813F4
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com
+ [IPv6:2a00:1450:4864:20::22a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA061813F4
+ for <buildroot@buildroot.org>; Sun,  9 Oct 2022 15:59:47 +0000 (UTC)
+Received: by mail-lj1-x22a.google.com with SMTP id bn8so10843603ljb.6
+ for <buildroot@buildroot.org>; Sun, 09 Oct 2022 08:59:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=m+DPmkfcjsvwpQqaxtgxPwWcikKTUktOFrun3DQ4iR4=;
- b=v9mjSYx+kplqHz82W04MhjtvwIrHXNORETEilw+tuk3fSa4TD76fYq6oXjFgQVWxUE
- qFaBG6WFNCFlY50sE55X2RZFuZ88E3lUYXVGJR9jBPn5dHXpQFmXxMg3RYCARYPqD058
- WYXX3NLSXnnN+k2CRwibUclr1bA0ZnZTTqwUWz1jGdxthm+22USmUGei4fpbjVyk75ZJ
- A05LSJZWdaBdGonFW5I+AdvUyJnthc2mMUGK++u5mvEpWCv29bJFkJVDAjkxVVqQDAmc
- 2vc689iJwvpCOUw4EXn3m3W7IL+FRTZJZq2dmD5Gp2oyX2yE1UiYq8HhY1QdS+VX+GO9
- /vOQ==
-X-Gm-Message-State: ACrzQf3jyw8a4KNj4eIEBuTLPc46Z4KoYyJCfSORPbCFs3tDApaoseEO
- wS+tCmIIq9AOun4cxLM2UspVvcInc6I=
-X-Google-Smtp-Source: AMsMyM7zvsqUvhZkOrl2NssQx06SxyQkNjkw8xcm3R0jrLsZgUY4z1feWOf/1BnbIUiVQGgoFsJTRg==
-X-Received: by 2002:a2e:9d05:0:b0:26d:cef7:bced with SMTP id
- t5-20020a2e9d05000000b0026dcef7bcedmr5478783lji.41.1665331183127; 
- Sun, 09 Oct 2022 08:59:43 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=xQc0j3S+WPa12p38AigAxgpHfvezrEbKAcJVBnsMgIE=;
+ b=RSosYwsXZ2Cq/nmwRVjwAn2S9gYiEOWR+z9NtxChcequ5BrPcymwGGH/Y/kOBrZeWw
+ uogU2eq7ycCC7jUsIhsBSlnOCbxxqjFLbMu4iuKgdUSmqTbNKwAXnTv87sJxrFsKbpPN
+ WjkFAq5COCSXJJ0wOZsS+TdSqY2UIMhH9Dytpb+5KZkkF5E/PdNPFbzDfziOgN5TU2oe
+ CZ9E/4ucrHroBRJHB/qE40RHzmjjiXqzkrk0vVtbgW61KclQWOZ7cX13wG0jQe+RQy/f
+ LZFWDT3SOjspN5JTCeVLMWMzbN3/dwmBSqKGkPHcIjihaVieYB2XQpOtjUnWrwEi04x4
+ wwAQ==
+X-Gm-Message-State: ACrzQf1JLazR1+pTqK9TJVKXHu1gGRybGHy3BBeLfYr633315odAA3if
+ HPymLkViG68jQoJn/E+vmIMwF9kPvd4=
+X-Google-Smtp-Source: AMsMyM7hmFhhzLuLnSCY4JzoAICdYhOvgrH9LwEJ2Kcvku1AsMr2jf2sE5cjZjLvHGZQz1D3t1vp2Q==
+X-Received: by 2002:a2e:978e:0:b0:26e:8ad6:6d5b with SMTP id
+ y14-20020a2e978e000000b0026e8ad66d5bmr3302054lji.363.1665331184998; 
+ Sun, 09 Oct 2022 08:59:44 -0700 (PDT)
 Received: from luthien.lan ([98.128.186.104]) by smtp.gmail.com with ESMTPSA id
- k11-20020a05651210cb00b004947a12232bsm1057918lfg.275.2022.10.09.08.59.42
+ k11-20020a05651210cb00b004947a12232bsm1057918lfg.275.2022.10.09.08.59.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 09 Oct 2022 08:59:42 -0700 (PDT)
+ Sun, 09 Oct 2022 08:59:44 -0700 (PDT)
 From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  9 Oct 2022 17:59:28 +0200
-Message-Id: <20221009155938.2041695-1-troglobit@gmail.com>
+Date: Sun,  9 Oct 2022 17:59:29 +0200
+Message-Id: <20221009155938.2041695-2-troglobit@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221009155938.2041695-1-troglobit@gmail.com>
+References: <20221009155938.2041695-1-troglobit@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=m+DPmkfcjsvwpQqaxtgxPwWcikKTUktOFrun3DQ4iR4=;
- b=WbQwxzjQy8oh3WoMztKHwPc6F8SaqVUVnDaEPjGlhXZdatnKb6rnKHde+qUKm+3hiE
- xiZ9XVvtcwKfRzRn8WhkyNq02R1zS/YxbjCl0M1IdSK66UzNy+xpC3TKy8CVAd61xyOY
- 9/QxC3Uro+kelGIsQAqjWtJo2su0fxphZGG5ifC5Rop5Ys2AbI1u0ajEtvn1kFGyFlAc
- Zl6SB6CLVvV91/RPluqAVMy9c/MnzV57NFnzsZxN1rdDY3SRkglbvvKbkSsH8asiQrgc
- se3i0rgBECJP7c/qO1EwUJd+C/NLGif2XT+kR1UjsRvpJ6s33+JIyHDvcPI5aq1/Hy8t
- w89A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=xQc0j3S+WPa12p38AigAxgpHfvezrEbKAcJVBnsMgIE=;
+ b=cUZuVFcqAuW9vrjNxofX57sm1JBc5D2t9fvLbhO9xdMZ2zHB9qgJS7C1UhnY6uDdfr
+ JY3XZrKxxpsLHVz2L1pxDZCmI0o+i8s8gXea+FW1cS2QJC1/WiB5OozziTdMkhpV18jc
+ bn/y//sDTN4Z3DgIbXK3HvWjKJFNR1cUn/q6yc/O+f0XVqT4b3m1NGQfVFIBWvq+E60J
+ dfiQmxFYKUQ8KPux1sE3bSsB7gVH1V+kQBlcu1X+zu4TbjrWU/bLC8yLGu7iDVK5ErXp
+ IoxN4imfo4GfzTRwcjXKaD39bDMSrxLCE3Uqmf1SZP6NqCwsDigxgPkTaa/r4ABGWRf2
+ drCQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=WbQwxzjQ
-Subject: [Buildroot] [PATCH 0/9] bump skarnet software: s6, execline, mdevd,
- etc.
+ header.a=rsa-sha256 header.s=20210112 header.b=cUZuVFcq
+Subject: [Buildroot] [PATCH 1/9] package/skalibs: bump to v2.12.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,67 +102,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch series bumps the version of several of Laurent Bercot's
-packages.  The idea was to upgrade mdevd, which depends on skalibs,
-but it in turn is a dependency for the other packages upgraded here.
+Summary of changes:
 
-Please note, I've only tested mdevd, the orther packages have only been
-test built using test-pkg.  The following skarnet.config was used:
+New:
+ - New djbunix functions: waitn_posix(), waitn_reap_posix()
+ - New unix-transactional.h function: opendir_at.
+ - New skalibs/posixplz.h function: munmap_void().
+ - random functions now have an early version, to use when randomness is
+   required before the generator can be seeded (i.e. in programs running in
+   the very early boot).
+ - envdir_internal() now has a SKALIBS_ENVDIR_NOCLAMP option allowing
+   reading of unlimited-size variables.
+ - fd_close() now chooses to adapt to Linux's close() behaviour (closing
+   the fd on EINTR) over the HP-UX one (not closing it). Destructors like
+   close() being allowed to fail has always been a mistake in the
+   specification and a programming nightmare, making it impossible to
+   behave correctly on all systems, but apparently standardization efforts
+   are on the way and the Linux behaviour seems to be the chosen one.
 
-    BR2_PACKAGE_SKALIBS=y
-    BR2_PACKAGE_EXECLINE=y
-    BR2_PACKAGE_S6_DNS=y
-    BR2_PACKAGE_S6_LINUX_UTILS=y
-    BR2_PACKAGE_S6_PORTABLE_UTILS=y
-    BR2_PACKAGE_S6=y
-    BR2_PACKAGE_S6_RC=y
-    BR2_PACKAGE_S6_NETWORKING=y
-    BR2_PACKAGE_MDEVD=y
+Removed:
+ - libbiguint removed.
+ - Obsolete skalibs/environ.h and skalibs/getpeereid.h headers removed.
+ - rc4 and md5 functions removed.
+ - iobuffer removed. fd_cat() and fd_catn() changed signatures.
+ - All signal functions entirely reworked; cruft removed.
+ - The unsafe cdb_successor() API has been removed.
+ - random_init() and random_finish() removed, as well as random_char().
 
-$ ./utils/test-pkg -c skarnet.config -p mdevd
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Renamed APIs and type:
+ - random_string() renamed to random_buf().
+ - All *_t types renamed without the _t suffix, to preserve POSIX namespace.
+ - subgetopt() renamed to lgetopt().
+ - skalibs/cdb_make.h renamed to skalibs/cdbmake.h;
+   cdbmake functions now return 1 on success and 0 on failure.
+ - skalibs/cdb.h redesigned to remove reader state from the cdb structure.
 
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ package/skalibs/skalibs.hash | 4 ++--
+ package/skalibs/skalibs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Best regards
- /Joachim
-
-Joachim Wiberg (9):
-  package/skalibs: bump to v2.12.0.1
-  package/mdevd: bump to v0.1.6.0
-  package/execline: bump to v2.9.0.1
-  package/s6: bump to v2.11.1.2
-  package/s6-linux-utils: bump to v2.6.0.0
-  package/s6-portable-utils: bump to v2.2.5.0
-  package/s6-dns: bump to v2.3.5.4
-  package/s6-networking: bump to v2.5.1.1
-  package/s6-rc: bump to v0.5.3.2
-
- package/execline/execline.hash                   | 4 ++--
- package/execline/execline.mk                     | 2 +-
- package/mdevd/mdevd.hash                         | 4 ++--
- package/mdevd/mdevd.mk                           | 2 +-
- package/s6-dns/s6-dns.hash                       | 4 ++--
- package/s6-dns/s6-dns.mk                         | 2 +-
- package/s6-linux-utils/s6-linux-utils.hash       | 4 ++--
- package/s6-linux-utils/s6-linux-utils.mk         | 2 +-
- package/s6-networking/s6-networking.hash         | 4 ++--
- package/s6-networking/s6-networking.mk           | 2 +-
- package/s6-portable-utils/s6-portable-utils.hash | 4 ++--
- package/s6-portable-utils/s6-portable-utils.mk   | 2 +-
- package/s6-rc/s6-rc.hash                         | 4 ++--
- package/s6-rc/s6-rc.mk                           | 2 +-
- package/s6/s6.hash                               | 4 ++--
- package/s6/s6.mk                                 | 2 +-
- package/skalibs/skalibs.hash                     | 4 ++--
- package/skalibs/skalibs.mk                       | 2 +-
- 18 files changed, 27 insertions(+), 27 deletions(-)
-
+diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
+index 48e4028edc..dd202b97fb 100644
+--- a/package/skalibs/skalibs.hash
++++ b/package/skalibs/skalibs.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  b780b0ae650dda0c3ec5f8975174998af2d24c2a2e2be669b1bab46e73b1464d  skalibs-2.10.0.3.tar.gz
+-sha256  adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
++sha256  3e228f72f18d88c17f6c4e0a66881d6d3779427b7e7e889f3142b6f26da30285  skalibs-2.12.0.1.tar.gz
++sha256  35126cb8f2ff2a6e359f7bfec46c49004ead6304d8248ba67dcdebcc7d377754  COPYING
+diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
+index 77db57de96..0ff449a5ba 100644
+--- a/package/skalibs/skalibs.mk
++++ b/package/skalibs/skalibs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SKALIBS_VERSION = 2.10.0.3
++SKALIBS_VERSION = 2.12.0.1
+ SKALIBS_SITE = http://skarnet.org/software/skalibs
+ SKALIBS_LICENSE = ISC
+ SKALIBS_LICENSE_FILES = COPYING
 -- 
 2.34.1
 
