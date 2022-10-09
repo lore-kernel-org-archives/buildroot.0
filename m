@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6951DC433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 16:00:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE5BC433FE
+	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 16:00:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 022FA40996;
-	Sun,  9 Oct 2022 16:00:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 022FA40996
+	by smtp4.osuosl.org (Postfix) with ESMTP id A336840898;
+	Sun,  9 Oct 2022 16:00:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A336840898
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qZjUx_L2xNVg; Sun,  9 Oct 2022 16:00:30 +0000 (UTC)
+	with ESMTP id OEkg_oHWVZXl; Sun,  9 Oct 2022 16:00:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1FE0408C4;
-	Sun,  9 Oct 2022 16:00:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1FE0408C4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 043451BF239
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 15:59:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64A64408C4;
+	Sun,  9 Oct 2022 16:00:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64A64408C4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 068191BF239
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 15:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0FC64063F
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 15:59:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0FC64063F
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5D0E60615
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 15:59:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5D0E60615
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IDD0d93xqG4y for <buildroot@lists.busybox.net>;
- Sun,  9 Oct 2022 15:59:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zy_uKdWHUPXP for <buildroot@lists.busybox.net>;
+ Sun,  9 Oct 2022 15:59:50 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D38CB400D8
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D38CB400D8
- for <buildroot@buildroot.org>; Sun,  9 Oct 2022 15:59:51 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id by36so10843760ljb.4
- for <buildroot@buildroot.org>; Sun, 09 Oct 2022 08:59:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6ACC6605EC
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
+ [IPv6:2a00:1450:4864:20::12a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6ACC6605EC
+ for <buildroot@buildroot.org>; Sun,  9 Oct 2022 15:59:50 +0000 (UTC)
+Received: by mail-lf1-x12a.google.com with SMTP id y5so13504713lfl.4
+ for <buildroot@buildroot.org>; Sun, 09 Oct 2022 08:59:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=7hCTjk7ZWNmVsq7D9Gys+UxGI6t4hD8997KmivBaT9E=;
- b=lU+FdYaOx3xGgtoI003zQSDVxYRuU6C4k/G/8Fo3RAkx9YhjVNYlZUmBjaYzHFhpO2
- /NmrdEW7lFTyvutJjYk3Jah7jpOpi6E6bA95lUXvNLWsF9D+0FcbHD5yNiXMPhIuyHNd
- NwzNg1hPNkcE5EyqnEeaSIzV3HIChfHfaEVgRPhzpT4lcqORLbwAfmsxvSSsdSr7kKJj
- K/3MjbaiCI+Mtwh3eiqgYo0Qx2eJnKOQNGzS78kuyjOGc+UKLMdzB/eXFbRuCuG5Kz0t
- pTNBBn6hyP06hvNHCyNS1qRpOjbxx221uZRKMQgH6+eXdXth6ADEEQ8AhKQUVmXc5Qx3
- nD9Q==
-X-Gm-Message-State: ACrzQf03/OmFxALYU2Bqm6ckou//YUQLdjN5woPpg9+jPUfvJfj5KGEc
- kzUCP9TCEkl/blCeAnSFq5iFkbAlR0s=
-X-Google-Smtp-Source: AMsMyM6lmB0IWpLAObQy9U5F1Yo6Cu6LCuE14jFJ5rlUOd7UhYkyCftNwuc3eKARfKpLDJBhBA118A==
-X-Received: by 2002:a2e:950:0:b0:26e:9991:31f6 with SMTP id
- 77-20020a2e0950000000b0026e999131f6mr1671069ljj.133.1665331189412; 
- Sun, 09 Oct 2022 08:59:49 -0700 (PDT)
+ bh=a59czhMXyJr1Y9kV+Qwd9lj8rIsbnQVzlsH87WPHvLo=;
+ b=rCOgxuXf2AlybzGkUs9DXG6g3fHnqpb15DF/P4GH9Cz7lK+pSkudnZ9pMYNa3xLQgq
+ 3+FwYvzm7ftwSYmBfnEhmcMLanEm6cTdwhAuB7qvEK+rtNi17+LYNmy3b2M2z4sA+1IS
+ jqoK2B6PdlJi64B1WN60zYgU8t3JWy0a67j5kgZgfVvur3kddhpjuvOHK3UD0umK1nBi
+ ND49YE+IJv+11GBl76ubuNUp7p2xiyzaonNkGi3ZmiWEk04no8SbPDfhVMZWrrf5xpJf
+ b+2Oy5hMfZ7EarRzFh5PFI17OeEXBy6ECzCVksy3RZJdfCJHC2fFsiiGP3QOQexhSB4q
+ KQuQ==
+X-Gm-Message-State: ACrzQf34EVu3kISCwz9vW6f/pJNiPUYLGj80sofshq+8nspF1n+hQd7W
+ 9puxN1G6x2pVGjq6NZqY6F4pqPym9MU=
+X-Google-Smtp-Source: AMsMyM4IklnKV+UuF2OE9/t/o/+Vj09zxmOQ35aXpfVY1lWMQkpdhqrPeVQ8nW9K++zANVQtTlzfQw==
+X-Received: by 2002:a05:6512:6d4:b0:4a2:5045:db6a with SMTP id
+ u20-20020a05651206d400b004a25045db6amr5555775lff.199.1665331188192; 
+ Sun, 09 Oct 2022 08:59:48 -0700 (PDT)
 Received: from luthien.lan ([98.128.186.104]) by smtp.gmail.com with ESMTPSA id
- k11-20020a05651210cb00b004947a12232bsm1057918lfg.275.2022.10.09.08.59.48
+ k11-20020a05651210cb00b004947a12232bsm1057918lfg.275.2022.10.09.08.59.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 09 Oct 2022 08:59:49 -0700 (PDT)
+ Sun, 09 Oct 2022 08:59:47 -0700 (PDT)
 From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  9 Oct 2022 17:59:32 +0200
-Message-Id: <20221009155938.2041695-5-troglobit@gmail.com>
+Date: Sun,  9 Oct 2022 17:59:31 +0200
+Message-Id: <20221009155938.2041695-4-troglobit@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221009155938.2041695-1-troglobit@gmail.com>
 References: <20221009155938.2041695-1-troglobit@gmail.com>
@@ -73,17 +73,17 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=7hCTjk7ZWNmVsq7D9Gys+UxGI6t4hD8997KmivBaT9E=;
- b=b5Y90cheGwqTk6LIfU81nXWY6AOUmEE8B0vRWVP7/njVwTFfwolwOzAQmvDHXj9DuQ
- pB2qhfmtG+V1T0fgQWiM6MG5KHu2fLqzfArBgcJzWnM2ldGaFAvhMegGZZB9CAD2R8SK
- AviIS4S2r72Yrn8SmCum8vOA3HRq/eVsjJ+41WWwIkTPecNIxV34xOlPDz0V8XZMZSRo
- mY2tD1guBY+MCnunw9EEjyWu4hxYFh8rjJJmm1NgK4OtGEw0VeBXDW2pPjl2/RMWqdOE
- c4Re64etd4EdK95j3U7ImabzakgI4U95gcaybdG3yx7d7jFUko5fn5jxpU/9osG1Pu4m
- RZZg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=a59czhMXyJr1Y9kV+Qwd9lj8rIsbnQVzlsH87WPHvLo=;
+ b=ICLO23+EKrcYo7shN8ye6uVgLWQnMFcKnkKeg/uecuE5g38LuUv9fzjl6cCoZ+HSyF
+ IBwhSJXf5hPwRs2eGiwi7yPWsqbVYZRmpyjO+bwNQR8z29E8wsWBiNzaExP8zAEaLDcs
+ HpgGvnYiVa87IuBFhc5rmOZJLymFBCJQQoWnY0n/BPcJwA7O3KqiVGdIY7SyRi3rPPXi
+ C9vhDDEdM/jweEbRNIjIoemTA9upBnTlPHZhtrPMEIm0/bHf1xbRkj9k+yqn7rVknwNp
+ QHsondmNI2az72DajkCDHHjueNZmCXNrWAQ6bRxBkddYBz4kvidUMBsthTrXVa+rj00i
+ xOew==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=b5Y90che
-Subject: [Buildroot] [PATCH 4/9] package/s6: bump to v2.11.1.2
+ header.a=rsa-sha256 header.s=20210112 header.b=ICLO23+E
+Subject: [Buildroot] [PATCH 3/9] package/execline: bump to v2.9.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,43 +104,40 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Summary of changes:
 
- - execline optional dependency bumped to 2.9.0.1.
  - skalibs dependency bumped to 2.12.0.0.
- - nsss optional dependency bumped to 0.2.0.1.
- - s6-svwait now supports the -r and -R options, to wait for service restarts.
- - The s6/lock.h, s6/supervise.h and s6/fdholder.h headers replace their
-   previous versions that had an extra s6 prefix.
- - New binaries: s6-svlink, s6-svunlink, and s6-socklog.
+ - New options to wait: -o to wait for one of the listed processes,
+   and -a to get the default behaviour.
+ - wait now exits 99 on timeout.
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- package/s6/s6.hash | 4 ++--
- package/s6/s6.mk   | 2 +-
+ package/execline/execline.hash | 4 ++--
+ package/execline/execline.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/s6/s6.hash b/package/s6/s6.hash
-index a829700d97..3c5ce4265a 100644
---- a/package/s6/s6.hash
-+++ b/package/s6/s6.hash
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+index 706b131afd..1d72e2cb49 100644
+--- a/package/execline/execline.hash
++++ b/package/execline/execline.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256  1d21373151704150df0e8ed199f097f6ee5d2befb9a68aca4f20f3862e5d8757  s6-2.10.0.3.tar.gz
+-sha256  a373f497d2335905d750e2f3be2ba47a028c11c4a7d5595dca9965c161e53aed  execline-2.8.0.1.tar.gz
 -sha256  adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
-+sha256  6c1474be3e889dac392cee307abe015cd4be0c85c725c84ea7f184f0e34503a2  s6-2.11.1.2.tar.gz
++sha256  01260fcaf80ffbca2a94aa55ea474dfb9e39b3033b55c8af88126791879531f6  execline-2.9.0.1.tar.gz
 +sha256  35126cb8f2ff2a6e359f7bfec46c49004ead6304d8248ba67dcdebcc7d377754  COPYING
-diff --git a/package/s6/s6.mk b/package/s6/s6.mk
-index ead82d7eaf..78962ed159 100644
---- a/package/s6/s6.mk
-+++ b/package/s6/s6.mk
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+index c348d924b7..38f4570ba4 100644
+--- a/package/execline/execline.mk
++++ b/package/execline/execline.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_VERSION = 2.10.0.3
-+S6_VERSION = 2.11.1.2
- S6_SITE = http://skarnet.org/software/s6
- S6_LICENSE = ISC
- S6_LICENSE_FILES = COPYING
+-EXECLINE_VERSION = 2.8.0.1
++EXECLINE_VERSION = 2.9.0.1
+ EXECLINE_SITE = http://skarnet.org/software/execline
+ EXECLINE_LICENSE = ISC
+ EXECLINE_LICENSE_FILES = COPYING
 -- 
 2.34.1
 
