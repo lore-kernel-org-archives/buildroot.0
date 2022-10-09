@@ -1,87 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81286C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 22:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 022E3C433FE
+	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 23:38:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 107CD82BE7;
-	Sun,  9 Oct 2022 22:06:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 107CD82BE7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48082409E0;
+	Sun,  9 Oct 2022 23:38:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48082409E0
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hgknNOfCxr9a; Sun,  9 Oct 2022 23:38:04 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B67C4011A;
+	Sun,  9 Oct 2022 23:38:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B67C4011A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E97F1BF342
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 23:38:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 299CE828B3
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 23:38:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 299CE828B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hFS9FQPH3JGY; Sun,  9 Oct 2022 22:06:47 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 373A782BC4;
-	Sun,  9 Oct 2022 22:06:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 373A782BC4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BD6751BF47E
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 22:06:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97490414CD
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 22:06:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97490414CD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 62hpCxheNV0q for <buildroot@lists.busybox.net>;
- Sun,  9 Oct 2022 22:06:43 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id odiO1GjYZzGN for <buildroot@lists.busybox.net>;
+ Sun,  9 Oct 2022 23:38:00 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68CEA4136B
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 68CEA4136B
- for <buildroot@buildroot.org>; Sun,  9 Oct 2022 22:06:43 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id n12so14538536wrp.10
- for <buildroot@buildroot.org>; Sun, 09 Oct 2022 15:06:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2936582865
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
+ [IPv6:2607:f8b0:4864:20::634])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2936582865
+ for <buildroot@buildroot.org>; Sun,  9 Oct 2022 23:38:00 +0000 (UTC)
+Received: by mail-pl1-x634.google.com with SMTP id i6so3926531pli.12
+ for <buildroot@buildroot.org>; Sun, 09 Oct 2022 16:38:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=9Ar0c9TDKVYuGTdWUFvuHSW1hB4RnKXnnNJWLwlZR3Q=;
- b=cuJbi67S2nTb2qWsLVXMjRezVStJRFd4AZW6vCSQSjSm43m7fpl/6MgAgt19BGp1g+
- /4BuN52Bd6TTukubakqsByqGAPm3PUiOTBv4JqEQF5pYM21vll0jtAuIS/kRiBR79/u7
- Ejrx4FCyxSiBkH8t/nBMkgv/46cdkVaT8WuLsrqosavqALFubv4a7LvUzc5SMgs5DHSW
- aBHFO8qwiFfN8jfhgXCTHTXpX6ir5tOeQ3MpYpoJo2AGjwyyE3eDtiyAQtqiRZwsoaJA
- WUVZgv/zRzlirUXBz2xEM3qLVRSdvhjp32sgjGhjuwEVVju8NjF/8FNuerY0dXY33IQH
- OT7g==
-X-Gm-Message-State: ACrzQf2IY2cp/516eeeRdHW/qNAdhLWtIi+L4mMPSUfrNhHtSCbes7V1
- nmGkO37zkxSGc9Jc4x6JX9l8bakaq0Y=
-X-Google-Smtp-Source: AMsMyM5L1F98Ze1C4jaieauXX3GJXSEvnUKT1zY+PMfbU8Ub7WHcQkvCBo3UBGP+4IqBnCp1YDBqGA==
-X-Received: by 2002:a5d:6d0b:0:b0:22a:ca5b:a37e with SMTP id
- e11-20020a5d6d0b000000b0022aca5ba37emr9542049wrq.383.1665353201234; 
- Sun, 09 Oct 2022 15:06:41 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- fc19-20020a05600c525300b003a342933727sm14866921wmb.3.2022.10.09.15.06.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 09 Oct 2022 15:06:40 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 10 Oct 2022 00:06:38 +0200
-Message-Id: <20221009220638.319188-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+ bh=VSNGk44tnOQDoKqCuuP/bo6xwumH/ILpnB6xBuTDgVI=;
+ b=CyMXD6S5EiwBrgTwWbNf+pLqYp3yzOSQZiowzLEWiqtjzFl0XmPOrERAK+/E/qLsr7
+ mAd8iB6S/AcXFV8sA1TiswRK6pt9Xoe1OeihdRGpUJqQA/flwesj7jl2qM1VlqfLoh7o
+ E4pGxFAD0Pbdv05MNIf7S6Q345KnU4mhqQ69InnVYopaN2dw7yGxTl69M12TBl8llkmx
+ KXRVf2G3PxBuZqDLxREHWU/Q9Hag4OUaQLrD5/+xqQPr+7zfBk8wyHmk1co5TdUAD3+4
+ Rc5ga+nF0LO0XTzoDqJEQ/Eqx2Ry09AOQ/3M66oB9BxPgQPj+mdu3A5nn7YmJj7391hF
+ /PRg==
+X-Gm-Message-State: ACrzQf2o4LKrkBSObFgQwue0oeNLCjDG0lRDAHCpqv3s83yQcdcd/LPB
+ +MFhoP1jnZL+i3LmhSokQhj2ZrpItbuPJG/8v39Ujzv9pCWtAQ==
+X-Google-Smtp-Source: AMsMyM7I2R9iJliYlzVrjj+Y94H8zHcMTlol4b5Oj/ip3GK2AFaZv45nFjHyVsy+ASg8YwcxxDkxLajSZIli6c41LOI=
+X-Received: by 2002:a17:902:d894:b0:179:e82d:a0a2 with SMTP id
+ b20-20020a170902d89400b00179e82da0a2mr16622908plz.16.1665358679404; Sun, 09
+ Oct 2022 16:37:59 -0700 (PDT)
 MIME-Version: 1.0
+References: <20221009153521.12444-1-romain.naour@gmail.com>
+In-Reply-To: <20221009153521.12444-1-romain.naour@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 9 Oct 2022 19:37:47 -0400
+Message-ID: <CADvTj4rNt5UFLkYpSvSPTiZHKgD0DB9LFp0yo-f_635mZrYE+Q@mail.gmail.com>
+To: Romain Naour <romain.naour@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=9Ar0c9TDKVYuGTdWUFvuHSW1hB4RnKXnnNJWLwlZR3Q=;
- b=h5vC57D54Nm7x3jIBmtvbPtJcSNchfC1YVBVy0tJ0vB5zqI2dD8bm1Ybw525AMJX/j
- DFprmJC/J7U2Ne40UlDS+EQGkeu66jfGUEJLO8YLVody9Bi1RJHWVVp3T9wgrg72VbQW
- Eb0m0HZPT1sZpR6++izeYTi/8fM1SsJunqKOrNagqL3zL4GVt3agAvTubg3Cn0IMvg8a
- x6xIHc7hlvz0cbuW8NPnA5PXTl2gy3vINHlTUqjVaUqF3jJC10v77Kb2u0bi4xPVDyvw
- dJt0z2o/pTHoU6W8hEnK2wYPQBAJtRb+lJ+5+64CqCwr2CnfjXcVpiQiNKsFWop0sSnb
- 6KoQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=VSNGk44tnOQDoKqCuuP/bo6xwumH/ILpnB6xBuTDgVI=;
+ b=ZaxXEGbfIZKf8zEs+tJpM60wVbtEzJ1IRhbZpsnXONZy58r9b+lqmCXHucs50IJLUU
+ kbNDr5W2M/UyfGXHXgb60/5RfN/zcz87ehgLKNDHHs7SmjpW+0uvTAx8xLvcqF4lXFQl
+ GZsUc54JbAVHjidlMVwAFn9zbJHe5IaU/lF/rJsO3LSjvPNE5wD19GpOrtpoB66mFRBl
+ +jt1dxVVNJs/E0fnmVdOE0Ym9eLy9S1Ns3KZ3G/+sPSt8Jy79eBs013oMmyFWbgSFVwf
+ s+AFHHRFRZ39BAs4YdUWVrnIXezZgW7+5eEjgd/eaYvpuWsWw4wHZ0h8bUJFtmB2Lyhf
+ rJ2A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=h5vC57D5
-Subject: [Buildroot] [PATCH 1/1] package/isl: bump to version 0.25
+ header.a=rsa-sha256 header.s=20210112 header.b=ZaxXEGbf
+Subject: Re: [Buildroot] [PATCH] package/glibc: Fix x86_64 builds with -Os
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,45 +89,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://groups.google.com/g/isl-announce/c/GkHKH-nVWw8
+On Sun, Oct 9, 2022 at 11:35 AM Romain Naour <romain.naour@gmail.com> wrote:
+>
+> Backport upstream commit for x86_64 builds with -Os reported by [1].
+>
+> [1] https://sourceware.org/bugzilla/show_bug.cgi?id=29576
+>
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/3134229902
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/3134229956
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/isl/isl.hash | 2 +-
- package/isl/isl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I think this also fixes an issue in autobuilders, see:
+https://patchwork.ozlabs.org/project/buildroot/patch/20220927031702.2918414-1-james.hilliard1@gmail.com/
 
-diff --git a/package/isl/isl.hash b/package/isl/isl.hash
-index 001fc9d115..46d8e920f3 100644
---- a/package/isl/isl.hash
-+++ b/package/isl/isl.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  043105cc544f416b48736fff8caf077fb0663a717d06b1113f16e391ac99ebad  isl-0.24.tar.xz
-+sha256  be7b210647ccadf90a2f0b000fca11a4d40546374a850db67adb32fad4b230d9  isl-0.25.tar.xz
- sha256  3a2c398103f6bca0f50a9a9465deca9230b370b0212af5fdf31ed88a36215c30  LICENSE
-diff --git a/package/isl/isl.mk b/package/isl/isl.mk
-index 51e608b304..ce9aaecebc 100644
---- a/package/isl/isl.mk
-+++ b/package/isl/isl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ISL_VERSION = 0.24
-+ISL_VERSION = 0.25
- ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
- ISL_SITE = https://libisl.sourceforge.io
- ISL_LICENSE = MIT
--- 
-2.35.1
+http://autobuild.buildroot.net/results/5b4/5b442f95587ddc65a995bbd9e310c88a66c55b1f
 
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
+
+> ---
+>  .../0002-x86-Fix-Os-build-BZ-29576.patch      | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 package/glibc/0002-x86-Fix-Os-build-BZ-29576.patch
+>
+> diff --git a/package/glibc/0002-x86-Fix-Os-build-BZ-29576.patch b/package/glibc/0002-x86-Fix-Os-build-BZ-29576.patch
+> new file mode 100644
+> index 0000000000..4470324f1c
+> --- /dev/null
+> +++ b/package/glibc/0002-x86-Fix-Os-build-BZ-29576.patch
+> @@ -0,0 +1,48 @@
+> +From 3935b543adcb9a46ab79f8931bc489068b049378 Mon Sep 17 00:00:00 2001
+> +From: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
+> +Date: Wed, 21 Sep 2022 10:51:08 -0300
+> +Subject: [PATCH] x86: Fix -Os build (BZ #29576)
+> +
+> +The compiler might transform __stpcpy calls (which are routed to
+> +__builtin_stpcpy as an optimization) to strcpy and x86_64 strcpy
+> +multiarch implementation does not build any working symbol due
+> +ISA_SHOULD_BUILD not being evaluated for IS_IN(rtld).
+> +
+> +Checked on x86_64-linux-gnu.
+> +Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+> +Tested-by: Carlos O'Donell <carlos@redhat.com>
+> +
+> +(cherry picked from commit 9dc4e29f630c6ef8299120b275e503321dc0c8c7)
+
+This is probably better than mine since I had applied from patchwork before
+it was applied upstream.
+
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> +---
+> + sysdeps/x86_64/multiarch/rtld-strcpy.S | 18 ++++++++++++++++++
+> + 1 file changed, 18 insertions(+)
+> + create mode 100644 sysdeps/x86_64/multiarch/rtld-strcpy.S
+> +
+> +diff --git a/sysdeps/x86_64/multiarch/rtld-strcpy.S b/sysdeps/x86_64/multiarch/rtld-strcpy.S
+> +new file mode 100644
+> +index 0000000000..19439c553d
+> +--- /dev/null
+> ++++ b/sysdeps/x86_64/multiarch/rtld-strcpy.S
+> +@@ -0,0 +1,18 @@
+> ++/* Copyright (C) 2022 Free Software Foundation, Inc.
+> ++   This file is part of the GNU C Library.
+> ++
+> ++   The GNU C Library is free software; you can redistribute it and/or
+> ++   modify it under the terms of the GNU Lesser General Public
+> ++   License as published by the Free Software Foundation; either
+> ++   version 2.1 of the License, or (at your option) any later version.
+> ++
+> ++   The GNU C Library is distributed in the hope that it will be useful,
+> ++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> ++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> ++   Lesser General Public License for more details.
+> ++
+> ++   You should have received a copy of the GNU Lesser General Public
+> ++   License along with the GNU C Library; if not, see
+> ++   <https://www.gnu.org/licenses/>.  */
+> ++
+> ++#include "../strcpy.S"
+> +--
+> +2.34.3
+> +
+> --
+> 2.34.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
