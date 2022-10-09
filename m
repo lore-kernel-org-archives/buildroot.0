@@ -1,87 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 432E7C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 21:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF0CC433FE
+	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 21:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6FF02416F7;
-	Sun,  9 Oct 2022 21:49:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FF02416F7
+	by smtp1.osuosl.org (Postfix) with ESMTP id F333B8127F;
+	Sun,  9 Oct 2022 21:58:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F333B8127F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NooYTNRPDQqc; Sun,  9 Oct 2022 21:49:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id diVV8UnlYH8p; Sun,  9 Oct 2022 21:58:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1302B41695;
-	Sun,  9 Oct 2022 21:49:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1302B41695
+	by smtp1.osuosl.org (Postfix) with ESMTP id 312A080850;
+	Sun,  9 Oct 2022 21:58:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 312A080850
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 868621BF376
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 21:49:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4BF891BF376
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 21:58:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 616B1403D6
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 21:49:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 616B1403D6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30BCB403D6
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 21:58:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30BCB403D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XcfHiandc-_o for <buildroot@lists.busybox.net>;
- Sun,  9 Oct 2022 21:49:50 +0000 (UTC)
+ with ESMTP id TeIgnEveD2Jt for <buildroot@lists.busybox.net>;
+ Sun,  9 Oct 2022 21:58:06 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CDA1403AA
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4CDA1403AA
- for <buildroot@buildroot.org>; Sun,  9 Oct 2022 21:49:50 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id w18so14535467wro.7
- for <buildroot@buildroot.org>; Sun, 09 Oct 2022 14:49:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08D6F403AA
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 08D6F403AA
+ for <buildroot@buildroot.org>; Sun,  9 Oct 2022 21:58:05 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id j7so14557216wrr.3
+ for <buildroot@buildroot.org>; Sun, 09 Oct 2022 14:58:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=lltofmP0WJrjoCDKxD+OEX0U7lpw2QCb/PbtkgN+i1I=;
- b=yXBu62StYwgpPraML5dw/ifpXdlPIlQYDE0V3zKsJUh8HlC04CrNJf+fS7FKtgi5WS
- gsF1HGNMFDHMqDdHXsqX4AHa6tMfaXn8cylpiPAaUjVpNnth56YdkRTiZqpgr9+26CZ8
- TcJpfYLaA4wBH/0aY/Ni7NzfiUVfsL2IwrV64Ps29A7YF4qbyDM05gDRPywIMj+lOJLy
- JdAq+/x41bVRraRv1qvB4Da+RwYbT65bgHSdh+7+K96ajqTKTh6LfUC7DsXywRkVe9ux
- ujHpjRfpRVG5yoqGpJHKBRUrKsV2JMopVfh7CQVx1SAiaDaWDNltu38pgwXRs8T3gxRV
- Czbw==
-X-Gm-Message-State: ACrzQf07EfnhMjFXSqMqHAu67o/r16D1ZLQVBXjE4iVEvUKnCgYM1dWX
- y+sZy+4WaFrb0VRhiqAMQ6Jx8XCmnS0=
-X-Google-Smtp-Source: AMsMyM5ICW90OBEWjzFbYldMIHKM5qSo+7p6+A+nAEE6dkZLwqjdhPr/iZZK9otQ7yceCHZYXBaujg==
-X-Received: by 2002:adf:fa10:0:b0:22e:4b8d:81f8 with SMTP id
- m16-20020adffa10000000b0022e4b8d81f8mr9646132wrr.135.1665352187929; 
- Sun, 09 Oct 2022 14:49:47 -0700 (PDT)
+ bh=x1bEurBppDIckUA7z2owEgllKuFXzobbgwF4pprh/Fo=;
+ b=du90cxO+BbXF++3B9aa4oMJzUutckh4hDi0PAZ2DaV6ixYzJkSou6AU1lYk3MauH1c
+ Ugq7mYvmotjebxS/fRai+USmjDW6bX+HiYi195SyMBWYOUnApC5f/FV954wKgXypn2Pe
+ d6xGHeEXlmNjVdc0+XkkHs4BP7El73zJ6NpGvEywkl1yixUVaOxe6IKVyKduqR46w7VY
+ 5dxsPTECHqa2aBvA8FAL+obNu/EVwVYgmp6CLQfDzjKlSFnDWK5w5QG6QeDefd1/QnIc
+ d0PbcwRd0tGJdiVXz8PK1Gb0oBMYnnx+DnbzZuOBArlsN8eKzWgGr5GwWQuBTdCffOUq
+ TuYA==
+X-Gm-Message-State: ACrzQf3AAlYUbSvGPpfQHu1xyxI028GnDY0ld2+WZZeZYWARKbs3oOwI
+ 0KCV/VboFCc4sM88scfqyS8sc9XOKMs=
+X-Google-Smtp-Source: AMsMyM4BTa9l9tzVbs4jFugzzo2eHN/n7sbB7CoWrhOedwH45Y+6cqq4U63NGLd+cMnp1invMLffWQ==
+X-Received: by 2002:adf:fac7:0:b0:22e:4773:23a9 with SMTP id
+ a7-20020adffac7000000b0022e477323a9mr9786358wrs.537.1665352683807; 
+ Sun, 09 Oct 2022 14:58:03 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- ay34-20020a05600c1e2200b003b4de550e34sm2213192wmb.40.2022.10.09.14.49.47
+ g10-20020a5d46ca000000b0022eafed36ebsm6763396wrs.73.2022.10.09.14.58.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 09 Oct 2022 14:49:47 -0700 (PDT)
+ Sun, 09 Oct 2022 14:58:03 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  9 Oct 2022 23:49:45 +0200
-Message-Id: <20221009214945.128155-1-fontaine.fabrice@gmail.com>
+Date: Sun,  9 Oct 2022 23:58:01 +0200
+Message-Id: <20221009215801.227838-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=lltofmP0WJrjoCDKxD+OEX0U7lpw2QCb/PbtkgN+i1I=;
- b=cmKet/22s7r3BPUVkdGzIYKJkXHo0q+ERZZqW/Mpo4LBvkl/mcRCjxgSkZ8f0GLRGq
- wlj7vPQN4maITzSu5bC+Swgs5XMXCTOULQjbnSlm8amdlGmwsBl9EkseE4ETumXBjoJM
- dePUs0SzO2yvTnvimdQJ22mfIZ7uFAmPFv16SwjUyS00XwG9CPwXrGAV9dyQez69yKLF
- yHkRNyoMCnrII6OaEtZgr+KtNKAY/fWC801y5r3kpatNPhxynvLCYCer2t2iGndfkKQX
- R4/SXlQDJc+aQa30Sn8uGC8OjG5oZq/1HMaQLowNCRnTw+nMBCKTHEwIIaMwmEoKYK/z
- 7LqQ==
+ bh=x1bEurBppDIckUA7z2owEgllKuFXzobbgwF4pprh/Fo=;
+ b=Dm/ZDEeqk3IWnRb+IRh1ffdxVjxAs4LNDoFdixUn2v5tBRlWjjqiaD1JZonHntjMLf
+ 5Ef+043rZ+bo17fRzxuwKCvAWrhwSRM53vilKwcILePTDT+drlWn/sijtcJy3Yd5vFzi
+ ErIW+xk8E5uQpjY0O60+bmFuhlRwEnBbew1K9Tg9AIfPHNCAXEIkmzAqveKRomkRREjV
+ ILzsMeOfBuOdvwLIN0iW0d8HkcWfS5bQ6GYUtKBlDg5AwgvWGxwWlppH9kIAmuu5i7S9
+ Mf789VA95Gqm2PR177GO/fb7TFiHWwnILD9W/VmJHHQj2iCvmsokUGlpVCAiXTougEct
+ YdVA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=cmKet/22
-Subject: [Buildroot] [PATCH 1/1] package/gesftpserver: bump to version 2
+ header.a=rsa-sha256 header.s=20210112 header.b=Dm/ZDEeq
+Subject: [Buildroot] [PATCH 1/1] package/gmrender-resurrect: bump to version
+ 0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,94 +94,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patch (already in version)
-- Replace rjk_cv_python24 by rjk_cv_python3 due to
-  https://github.com/ewxrjk/sftpserver/commit/6c0b4852a3654747e88f457a37b20530c5e426ca
+gmrender-resurrect uses threads since
+https://github.com/hzeller/gmrender-resurrect/commit/8871dfd2490f04e319ce6465fd2a7a8b2c78a6de
 
-http://www.chiark.greenend.org.uk/pipermail/sgo-software-announce/2022/000070.html
-https://github.com/ewxrjk/sftpserver/blob/2/CHANGES.md
+https://github.com/hzeller/gmrender-resurrect/compare/v0.0.9...v0.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...v3-attributes-according-to-draft-iet.patch | 30 -------------------
- package/gesftpserver/gesftpserver.hash        |  2 +-
- package/gesftpserver/gesftpserver.mk          |  4 +--
- 3 files changed, 3 insertions(+), 33 deletions(-)
- delete mode 100644 package/gesftpserver/0001-Change-order-of-v3-attributes-according-to-draft-iet.patch
+ package/gmrender-resurrect/Config.in               | 2 +-
+ package/gmrender-resurrect/gmrender-resurrect.hash | 2 +-
+ package/gmrender-resurrect/gmrender-resurrect.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gesftpserver/0001-Change-order-of-v3-attributes-according-to-draft-iet.patch b/package/gesftpserver/0001-Change-order-of-v3-attributes-according-to-draft-iet.patch
-deleted file mode 100644
-index 3697d0e525..0000000000
---- a/package/gesftpserver/0001-Change-order-of-v3-attributes-according-to-draft-iet.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 4b5c7eb63894bd2b1fedeb2a8e9bd16bf3c8c555 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Bernd=20Holzm=C3=BCller?=
-- <bernd.holzmueller@tiggerswelt.net>
--Date: Mon, 11 Feb 2019 23:57:01 +0100
--Subject: [PATCH] Change order of v3-attributes according to
-- draft-ietf-secsh-filexfer-00/02
--
--[yann.morin.1998@free.fr: backport from upstream]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
-- v3.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/v3.c b/v3.c
--index 57cc31e..1fd86ad 100644
----- a/v3.c
--+++ b/v3.c
--@@ -121,8 +121,8 @@ static void v3_sendattrs(struct sftpjob *job, const struct sftpattr *attrs) {
--       fatal("sending out-of-range mtime");
--     if(a != attrs->atime.seconds)
--       fatal("sending out-of-range mtime");
---    sftp_send_uint32(job->worker, m);
--     sftp_send_uint32(job->worker, a);
--+    sftp_send_uint32(job->worker, m);
--   }
--   /* Note that we just discard unknown bits rather than reporting errors. */
-- }
---- 
--2.14.1
--
-diff --git a/package/gesftpserver/gesftpserver.hash b/package/gesftpserver/gesftpserver.hash
-index 790cbe97c2..6d910a84dd 100644
---- a/package/gesftpserver/gesftpserver.hash
-+++ b/package/gesftpserver/gesftpserver.hash
+diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
+index db655ad7f4..de52410a73 100644
+--- a/package/gmrender-resurrect/Config.in
++++ b/package/gmrender-resurrect/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_GMRENDER_RESURRECT
+ 	bool "gmrender-resurrect"
+ 	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2, libupnp
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # gstreamer1
+ 	select BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
+diff --git a/package/gmrender-resurrect/gmrender-resurrect.hash b/package/gmrender-resurrect/gmrender-resurrect.hash
+index 526b2b6c34..f14abffc3b 100644
+--- a/package/gmrender-resurrect/gmrender-resurrect.hash
++++ b/package/gmrender-resurrect/gmrender-resurrect.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  4963b85787de3485085a5356c671c58b8b33125f528ff1b2fe8b534ed8a0c1bd  sftpserver-1.tar.gz
-+sha256  b18b10405ef2b05c45450aafd6803f69efb4d2138e4e07fd186c1618027ee169  sftpserver-2.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/gesftpserver/gesftpserver.mk b/package/gesftpserver/gesftpserver.mk
-index 20ad92d25a..b47ec1c5d3 100644
---- a/package/gesftpserver/gesftpserver.mk
-+++ b/package/gesftpserver/gesftpserver.mk
+-sha256  c3a9c80c7058a9a1f32175da25a564fb3021a7055c2df3941e8da8860a509009  gmrender-resurrect-0.0.9.tar.gz
++sha256  550b07bc6a073176ad7de0efd603663c9875311dfb81ae1075263e3fd6974335  gmrender-resurrect-0.1.tar.gz
+ sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
+diff --git a/package/gmrender-resurrect/gmrender-resurrect.mk b/package/gmrender-resurrect/gmrender-resurrect.mk
+index 4a7efd71ab..77ac83ca41 100644
+--- a/package/gmrender-resurrect/gmrender-resurrect.mk
++++ b/package/gmrender-resurrect/gmrender-resurrect.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GESFTPSERVER_VERSION = 1
-+GESFTPSERVER_VERSION = 2
- GESFTPSERVER_SOURCE = sftpserver-$(GESFTPSERVER_VERSION).tar.gz
- GESFTPSERVER_SITE = http://www.greenend.org.uk/rjk/sftpserver
- GESFTPSERVER_LICENSE = GPL-2.0+
-@@ -25,7 +25,7 @@ GESFTPSERVER_DEPENDENCIES += \
- 
- # Python on the host is only used for tests, which we don't use in
- # Buildroot
--GESFTPSERVER_CONF_ENV += rjk_cv_python24=false
-+GESFTPSERVER_CONF_ENV += rjk_cv_python3=false
- 
- # openssh/dropbear looks here
- define GESFTPSERVER_ADD_SYMLINK
+-GMRENDER_RESURRECT_VERSION = 0.0.9
++GMRENDER_RESURRECT_VERSION = 0.1
+ GMRENDER_RESURRECT_SITE = $(call github,hzeller,gmrender-resurrect,v$(GMRENDER_RESURRECT_VERSION))
+ # Original distribution does not have default configure,
+ # so we need to autoreconf:
 -- 
 2.35.1
 
