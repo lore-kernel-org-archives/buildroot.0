@@ -1,50 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89E52C433F5
-	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 18:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15BFC433F5
+	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 20:14:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 30A7C410A0;
-	Sun,  9 Oct 2022 18:10:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30A7C410A0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C67040992;
+	Sun,  9 Oct 2022 20:14:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C67040992
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mrsq4-y-Aouh; Sun,  9 Oct 2022 18:10:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 8RB8HhbB3PSj; Sun,  9 Oct 2022 20:14:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1334B40925;
-	Sun,  9 Oct 2022 18:10:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1334B40925
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5BACF1BF2A4
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 18:09:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 785474097E;
+	Sun,  9 Oct 2022 20:14:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 785474097E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B9F31BF359
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 20:14:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E800E81424
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 18:09:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E800E81424
+ by smtp3.osuosl.org (Postfix) with ESMTP id 504C5608A5
+ for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 20:14:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 504C5608A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bSXkTiTOR9wA for <buildroot@lists.busybox.net>;
- Sun,  9 Oct 2022 18:09:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 312C48142C
- for <buildroot@buildroot.org>; Sun,  9 Oct 2022 18:09:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 312C48142C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2071786ADC; Sun,  9 Oct 2022 18:09:19 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fqosNc_SCr9S for <buildroot@lists.busybox.net>;
+ Sun,  9 Oct 2022 20:14:43 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D628607AA
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2D628607AA
+ for <buildroot@buildroot.org>; Sun,  9 Oct 2022 20:14:43 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id ay36so5773295wmb.0
+ for <buildroot@buildroot.org>; Sun, 09 Oct 2022 13:14:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PIdtPMxdQgV2nju+p4JSN+5O0W8SV0vXRJtTUkC92GU=;
+ b=P/0BzMZqgSnaexMSYG2EcwlDNYHwe3m2FUR2jmGHtR6JtZCowiKGAz3qIgRqoMvXNN
+ SYGyi6DUZqyZm0MEXqNG7EI5vnvzmyRfd1Lw8Zc6IIcJJcpT1nVytdtBwe9lJlZaqhSv
+ kkJBH2MoNxdxi+X5t+HuVB4dO3MWXoJoZltF4CtsrmuLONUAHCcgcmuDKPdop0RA9yVB
+ GTqNUKBynruicf91YDP9tMouEno5Kezwn4hFmVWg/y83BcqPeh8UFpuwArqT1hW0H5y1
+ PlFgGWxdYqueUrtl6JW12JTUQ1PFSuv/vI6uJ+BAe3corCKCrS6IREUgID9s2tz5unI+
+ anyg==
+X-Gm-Message-State: ACrzQf2l3Bt5qbXjhA2yIygmhNbOEG2B4O8zEBzedY2iFOsph8mnnecv
+ 0Cef/msx4nuGlP5pn4lRCxQgXrOCmvo=
+X-Google-Smtp-Source: AMsMyM4DOb7MrRvD0bBOVCUfD+bWXwUxo+Ez5Pdoc3eOxZ6eWo0yVUqyDjySIgmBRzr9VDV4M8o3ZQ==
+X-Received: by 2002:a05:600c:6007:b0:3c1:81b9:9bcb with SMTP id
+ az7-20020a05600c600700b003c181b99bcbmr10476111wmb.10.1665346480749; 
+ Sun, 09 Oct 2022 13:14:40 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ q8-20020adffec8000000b0022afce9ea93sm7195980wrs.40.2022.10.09.13.14.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 09 Oct 2022 13:14:40 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Oct 2022 20:07:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 197489d89284e6d4e469f823e822c8e75a9b40b0
-X-Git-Newrev: e381fa9cf21f4384ffd6b305829417e9d2dd4d94
-X-Patchwork-Hint: ignore
-Message-Id: <20221009180919.2071786ADC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rt-tests: bump version to 2.4
+Date: Sun,  9 Oct 2022 22:14:32 +0200
+Message-Id: <20221009201432.16067-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PIdtPMxdQgV2nju+p4JSN+5O0W8SV0vXRJtTUkC92GU=;
+ b=G9Cqw+BOzBZ5oRR/nQuBrGByEUTAr5ivGhxzR5Vs5qcPViZDnmX9MatiorzqarZ3VC
+ S7Q7FPqdHuSjKrR4ONRBOuqV40ao7rnHxRb5aM5a47BpjPv9FdvCDzbqHLm5Q9TNHpeo
+ mDAPTmwP9wlOPVVsXkIjDkohohbSUZ0dN/aHF1yGEQuNH5SNV1psbMocJ8XXmuzt/MNH
+ 3WGK5rHfPEAl3nCxHQwYaYnY4+3g3qzNgOJZnc1kTHI4ABnBOBIH3xZ5eR7YXqOCIu6P
+ 8Cj04vm2/zF0cULi/ThrjwR8FQbKABjcttBS8wewbVTHCEXz89HfFg2RcPD0b+XjYgVY
+ EBjw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=G9Cqw+BO
+Subject: [Buildroot] [PATCH 1/1] package/libmaxminddb: bump to version 1.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,57 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1595882596271224341=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1595882596271224341==
-Content-Type: text/plain
+https://github.com/maxmind/libmaxminddb/blob/1.7.1/Changes.md
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e381fa9cf21f4384ffd6b305829417e9d2dd4d94
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rt-tests/rt-tests.hash | 2 +-
- package/rt-tests/rt-tests.mk   | 2 +-
+ package/libmaxminddb/libmaxminddb.hash | 2 +-
+ package/libmaxminddb/libmaxminddb.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
-index 3adda60f42..49df8313f9 100644
---- a/package/rt-tests/rt-tests.hash
-+++ b/package/rt-tests/rt-tests.hash
-@@ -1,4 +1,4 @@
- # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
--sha256  b5e7959bcb5c703b2743030751af975ea4e04962e29fc1118f4b605987585735  rt-tests-2.3.tar.xz
-+sha256  393457f0c91cce57e82b876ecb9b672871f898e6cecafc751548079512bcc808  rt-tests-2.4.tar.xz
- # locally computed hash
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index 056a4a6723..74290211ce 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
+index cfe838f7e5..7e56351c0f 100644
+--- a/package/libmaxminddb/libmaxminddb.hash
++++ b/package/libmaxminddb/libmaxminddb.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  7620ac187c591ce21bcd7bf352376a3c56a933e684558a1f6bef4bd4f3f98267  libmaxminddb-1.6.0.tar.gz
++sha256  e8414f0dedcecbc1f6c31cb65cd81650952ab0677a4d8c49cab603b3b8fb083e  libmaxminddb-1.7.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+index 4037f89a15..993b4aec9d 100644
+--- a/package/libmaxminddb/libmaxminddb.mk
++++ b/package/libmaxminddb/libmaxminddb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
- RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
--RT_TESTS_VERSION = 2.3
-+RT_TESTS_VERSION = 2.4
- RT_TESTS_LICENSE = GPL-2.0+
- RT_TESTS_LICENSE_FILES = COPYING
- 
-
---===============1595882596271224341==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-LIBMAXMINDDB_VERSION = 1.6.0
++LIBMAXMINDDB_VERSION = 1.7.1
+ LIBMAXMINDDB_SITE = \
+ 	https://github.com/maxmind/libmaxminddb/releases/download/$(LIBMAXMINDDB_VERSION)
+ LIBMAXMINDDB_INSTALL_STAGING = YES
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1595882596271224341==--
