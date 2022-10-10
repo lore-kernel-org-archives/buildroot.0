@@ -1,64 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58A07C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 10 Oct 2022 07:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DA40C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 10 Oct 2022 08:49:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E278F82B08;
-	Mon, 10 Oct 2022 07:56:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E278F82B08
+	by smtp2.osuosl.org (Postfix) with ESMTP id 29988409D9;
+	Mon, 10 Oct 2022 08:49:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29988409D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RzDRu1GGdISy; Mon, 10 Oct 2022 07:56:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XoBuO_AzT9Ko; Mon, 10 Oct 2022 08:49:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22ADA82AEF;
-	Mon, 10 Oct 2022 07:56:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22ADA82AEF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6041C1BF318
- for <buildroot@lists.busybox.net>; Mon, 10 Oct 2022 07:56:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6123F405D8;
+	Mon, 10 Oct 2022 08:49:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6123F405D8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D10B01BF40B
+ for <buildroot@lists.busybox.net>; Mon, 10 Oct 2022 08:49:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41D7882AEF
- for <buildroot@lists.busybox.net>; Mon, 10 Oct 2022 07:56:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41D7882AEF
+ by smtp4.osuosl.org (Postfix) with ESMTP id AAC2141606
+ for <buildroot@lists.busybox.net>; Mon, 10 Oct 2022 08:49:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAC2141606
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wNzHqK5XOGww for <buildroot@lists.busybox.net>;
- Mon, 10 Oct 2022 07:56:47 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16B6882AC6
-Received: from smtprelay06.ispgateway.de (smtprelay06.ispgateway.de
- [80.67.18.29])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 16B6882AC6
- for <buildroot@busybox.net>; Mon, 10 Oct 2022 07:56:46 +0000 (UTC)
-Received: from [91.21.124.120] (helo=exchange.go-sys.de)
- by smtprelay06.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384 (Exim 4.94.2)
- (envelope-from <mf@go-sys.de>) id 1ohnek-0001Q2-DC
- for buildroot@busybox.net; Mon, 10 Oct 2022 09:56:58 +0200
-Received: from exchange.go-sys.local (192.168.1.17) by exchange.go-sys.local
- (192.168.1.17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2507.12; Mon, 10
- Oct 2022 09:56:42 +0200
-Received: from go-sys.de (192.168.1.106) by exchange.go-sys.de (192.168.1.17)
- with Microsoft SMTP Server id 15.1.2507.12 via Frontend Transport;
- Mon, 10 Oct 2022 09:56:42 +0200
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Mon, 10 Oct 2022 09:56:24 +0200
-Message-ID: <20221010075624.8662-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bkr2M7v-F3sQ for <buildroot@lists.busybox.net>;
+ Mon, 10 Oct 2022 08:49:49 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 995AF41601
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 995AF41601
+ for <buildroot@buildroot.org>; Mon, 10 Oct 2022 08:49:49 +0000 (UTC)
+Received: by mail-io1-xd2b.google.com with SMTP id r142so3784395iod.11
+ for <buildroot@buildroot.org>; Mon, 10 Oct 2022 01:49:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=opRv3vbjfO61hKXPTnXrFmHJmuebN2Ra867574EgqJU=;
+ b=a22NUIDL/MuEGU6TXOqTIlVn37iTKFcqc2hUqc40jC4pYS3k3YUeXtx8xNzAlyAJZ4
+ qaISsJFbE+4gigLWPG1p/rpXoDo9ylQo3DPPc9waA1NgcN+rO3Sq2SmXbInfJR02Jva0
+ IqVeczjtAzGAKiRMymMJKW+dvK2XmytyMTs+9TXhkr0jvyqwu6I6nDd27n6J6RjERnxt
+ F/i1vV7Aul+7/xsuYhgw0AfPmNLEnJaUsnGpjbWL4vGTH0Kq9LJOw9Y8GYvS6n0D/XmM
+ OHgBVq9NHtQMOuTyhF67kJS5x4Orq220TsyDU+2dmCykYKbcQ/h+Fabn9GuHeCh/Mn5o
+ KBWg==
+X-Gm-Message-State: ACrzQf0WbWZ+NGNoD41lfNRLBOYxuXOn+aqIjNBbFdNNXmSVvRuxL8vI
+ 5L3nebHf1RuatobZ7nbkNeSWMDPRH4dpmg==
+X-Google-Smtp-Source: AMsMyM5FmWDXJT3SkiGA5ROMdG82V6JgbNv4VBKEezlQVU5ypF3vSVdXeD/WgJ9zExI5i7TJpw6IEg==
+X-Received: by 2002:a05:6638:35a1:b0:35a:27ec:b00b with SMTP id
+ v33-20020a05663835a100b0035a27ecb00bmr9255427jal.245.1665391788008; 
+ Mon, 10 Oct 2022 01:49:48 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ f4-20020a056e020c6400b002fadf9505b4sm2886311ilj.16.2022.10.10.01.49.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 10 Oct 2022 01:49:47 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 10 Oct 2022 02:49:43 -0600
+Message-Id: <20221010084944.685684-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-C2ProcessedOrg: 77b28032-c882-4527-ad15-de6c89cb71cd
-X-CrossPremisesHeadersFilteredBySendConnector: exchange.go-sys.local
-X-OrganizationHeadersPreserved: exchange.go-sys.local
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: bump version to 2.24.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=opRv3vbjfO61hKXPTnXrFmHJmuebN2Ra867574EgqJU=;
+ b=K1NyZI71lvpIOPlFjOvoQaqdPpsWoBEXqz2juKcuE+1y/Z1RTtmIrjeprBeYLiM0/H
+ 7dHZrP5a4g7nSKztzRKU9EIa5SvtNPPvF1PBBLDQXYSNkz4uDuhTdcfvay91AY9YeYC0
+ fUL2oIGXLXep+0OsJl68IGI4FAvK7tjUUOr+NvmNhO0yI8QbwsI95PBcptqkdGnhmt7t
+ HClDYVyCdbvjilZQDSxXU3q8ie/Hv8g14ug8vUR1Vorm2DHQYpOia4/dREKPDxSvMnEA
+ jMF9Pei0Pstjaiddl8sr2R3G0afavq/vsbXvjOvklCeFoplWGOs4+CCEzI96eDhNAWOr
+ iszw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=K1NyZI71
+Subject: [Buildroot] [PATCH 1/2] package/ell: bump to version 0.53
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,44 +93,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 981c98531e..782c552c52 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.0.tar.gz.sig
--sha256  91e4c34b1768f92d399b078e171448c6af18cafda743987ed2064a28954d6d97  SDL2-2.24.0.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.1.tar.gz.sig
-+sha256  bc121588b1105065598ce38078026a414c28ea95e66ed2adab4c44d80b309e1b  SDL2-2.24.1.tar.gz
- # Locally calculated
- sha256  fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 4585c33c9b..28e2c5cb36 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index 9affa390b8..68832c3201 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
+-sha256  a7ff8ecbc76b187d942dd22b61cb489711400897c790319ffb7e944791687c3f  ell-0.49.tar.xz
++sha256  a7d0df846af839bbea1b80f292166371070328854b3fa785b5c607fe600552ad  ell-0.53.tar.xz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 9735865eae..b27d6feb65 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SDL2_VERSION = 2.24.0
-+SDL2_VERSION = 2.24.1
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+-ELL_VERSION = 0.49
++ELL_VERSION = 0.53
+ ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
+ ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+ ELL_LICENSE = LGPL-2.1+
 -- 
-2.20.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
