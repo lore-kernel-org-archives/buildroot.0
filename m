@@ -1,83 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 022E3C433FE
-	for <buildroot@archiver.kernel.org>; Sun,  9 Oct 2022 23:38:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52B0EC433F5
+	for <buildroot@archiver.kernel.org>; Mon, 10 Oct 2022 00:35:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 48082409E0;
-	Sun,  9 Oct 2022 23:38:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48082409E0
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD5D482A28;
+	Mon, 10 Oct 2022 00:35:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD5D482A28
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hgknNOfCxr9a; Sun,  9 Oct 2022 23:38:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 52Xw4K6oZUyl; Mon, 10 Oct 2022 00:35:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2B67C4011A;
-	Sun,  9 Oct 2022 23:38:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B67C4011A
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7ECC82B93;
+	Mon, 10 Oct 2022 00:35:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7ECC82B93
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4E97F1BF342
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 23:38:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4AB971BF995
+ for <buildroot@lists.busybox.net>; Mon, 10 Oct 2022 00:35:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 299CE828B3
- for <buildroot@lists.busybox.net>; Sun,  9 Oct 2022 23:38:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 299CE828B3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F8EB82B93
+ for <buildroot@lists.busybox.net>; Mon, 10 Oct 2022 00:35:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F8EB82B93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id odiO1GjYZzGN for <buildroot@lists.busybox.net>;
- Sun,  9 Oct 2022 23:38:00 +0000 (UTC)
+ with ESMTP id cZItSuem5OBE for <buildroot@lists.busybox.net>;
+ Mon, 10 Oct 2022 00:35:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2936582865
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
- [IPv6:2607:f8b0:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2936582865
- for <buildroot@buildroot.org>; Sun,  9 Oct 2022 23:38:00 +0000 (UTC)
-Received: by mail-pl1-x634.google.com with SMTP id i6so3926531pli.12
- for <buildroot@buildroot.org>; Sun, 09 Oct 2022 16:38:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9865827D2
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D9865827D2
+ for <buildroot@buildroot.org>; Mon, 10 Oct 2022 00:35:31 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id q196so1151672iod.8
+ for <buildroot@buildroot.org>; Sun, 09 Oct 2022 17:35:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=VSNGk44tnOQDoKqCuuP/bo6xwumH/ILpnB6xBuTDgVI=;
- b=CyMXD6S5EiwBrgTwWbNf+pLqYp3yzOSQZiowzLEWiqtjzFl0XmPOrERAK+/E/qLsr7
- mAd8iB6S/AcXFV8sA1TiswRK6pt9Xoe1OeihdRGpUJqQA/flwesj7jl2qM1VlqfLoh7o
- E4pGxFAD0Pbdv05MNIf7S6Q345KnU4mhqQ69InnVYopaN2dw7yGxTl69M12TBl8llkmx
- KXRVf2G3PxBuZqDLxREHWU/Q9Hag4OUaQLrD5/+xqQPr+7zfBk8wyHmk1co5TdUAD3+4
- Rc5ga+nF0LO0XTzoDqJEQ/Eqx2Ry09AOQ/3M66oB9BxPgQPj+mdu3A5nn7YmJj7391hF
- /PRg==
-X-Gm-Message-State: ACrzQf2o4LKrkBSObFgQwue0oeNLCjDG0lRDAHCpqv3s83yQcdcd/LPB
- +MFhoP1jnZL+i3LmhSokQhj2ZrpItbuPJG/8v39Ujzv9pCWtAQ==
-X-Google-Smtp-Source: AMsMyM7I2R9iJliYlzVrjj+Y94H8zHcMTlol4b5Oj/ip3GK2AFaZv45nFjHyVsy+ASg8YwcxxDkxLajSZIli6c41LOI=
-X-Received: by 2002:a17:902:d894:b0:179:e82d:a0a2 with SMTP id
- b20-20020a170902d89400b00179e82da0a2mr16622908plz.16.1665358679404; Sun, 09
- Oct 2022 16:37:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221009153521.12444-1-romain.naour@gmail.com>
-In-Reply-To: <20221009153521.12444-1-romain.naour@gmail.com>
+ bh=z8ACfU3ugw7q/ECZDw9ytsV3RNmvxrtaGgi4PqaVvmU=;
+ b=jW2yH+MTxmZrC1l65uIaNi4YsJqujmHC/RCNJCSbFRqs1kbNtmXMz/DUYC1RXeb7fO
+ XmOQ9naKnef7b+aEgUQQXHTrt+7muM3Ku07rGV/9Yd5d//XescBSzh1okgrndS44k2Ad
+ WPdJWxMfOK6+AnYBQHOdHdGnOzTxOa8VJJMhqb182EW4LOeX0UjVdu5Y2MI6mA/XZbuy
+ PypbjFeHVXjG80Ce24ZHH8gWa1nvwBi+4d/GNNInn7eeVNHiRPjyktQvs6kV4/l1pl/i
+ XwVtC4dzIsP+oXF0FFxK3U5nkZ5xWGcZ3bps/J0J9qu7OoLaS49GQyvm8n2ED5v5I5Cm
+ neJA==
+X-Gm-Message-State: ACrzQf02InJqsWOvN/IFsmQiiqWOpWCAEGPr0SmyROZGb+Oxeel8j1OQ
+ 3AUtFhGMqSEdDkOeSOKZSKAV7BnNWqiiPQ==
+X-Google-Smtp-Source: AMsMyM50UP0t1fBjFS9YvpWqdquJ4qdCY8ss0WGStosUPGi4moD4yZw0dOgzHPgAMthNWbnQGoZDng==
+X-Received: by 2002:a05:6602:1601:b0:6a1:d963:4fc with SMTP id
+ x1-20020a056602160100b006a1d96304fcmr7220319iow.67.1665362130429; 
+ Sun, 09 Oct 2022 17:35:30 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ g7-20020a056602150700b0067ba7abc4cesm3707567iow.50.2022.10.09.17.35.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 09 Oct 2022 17:35:29 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 9 Oct 2022 19:37:47 -0400
-Message-ID: <CADvTj4rNt5UFLkYpSvSPTiZHKgD0DB9LFp0yo-f_635mZrYE+Q@mail.gmail.com>
-To: Romain Naour <romain.naour@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun,  9 Oct 2022 18:35:15 -0600
+Message-Id: <20221010003515.796446-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=VSNGk44tnOQDoKqCuuP/bo6xwumH/ILpnB6xBuTDgVI=;
- b=ZaxXEGbfIZKf8zEs+tJpM60wVbtEzJ1IRhbZpsnXONZy58r9b+lqmCXHucs50IJLUU
- kbNDr5W2M/UyfGXHXgb60/5RfN/zcz87ehgLKNDHHs7SmjpW+0uvTAx8xLvcqF4lXFQl
- GZsUc54JbAVHjidlMVwAFn9zbJHe5IaU/lF/rJsO3LSjvPNE5wD19GpOrtpoB66mFRBl
- +jt1dxVVNJs/E0fnmVdOE0Ym9eLy9S1Ns3KZ3G/+sPSt8Jy79eBs013oMmyFWbgSFVwf
- s+AFHHRFRZ39BAs4YdUWVrnIXezZgW7+5eEjgd/eaYvpuWsWw4wHZ0h8bUJFtmB2Lyhf
- rJ2A==
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=z8ACfU3ugw7q/ECZDw9ytsV3RNmvxrtaGgi4PqaVvmU=;
+ b=ibAZs3VXStp+A+BInEmeXVe1nqcWCu09p+V05zzxCHWw8aX6vWyZmtHrwZriiJpIlK
+ mHaFPSUbOo5hH44A440kuI11OF02dzUkn8w2NGVbOJEb7uPSY2eBfWQnULWdaR9mY3HN
+ wB8sT0Y5DIByWJkPtEqm1+3shrlDSnYWMyWo1mhdtDBB+WLDz0NNkS50OJ0UOQb0x2iR
+ szNGc1iLoTGNGtpyyHzS3LjKEd2GubgUEaH4JL+avvWzsUzJFmw37DprXiRw6gJK8Kxt
+ 3QQVvTUz4M/xguddknQUcnIIIoqY/iNGJOXAitkLvD6gYD6zc6hO9wcr26mHrLrwfCp9
+ FajQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=ZaxXEGbf
-Subject: Re: [Buildroot] [PATCH] package/glibc: Fix x86_64 builds with -Os
+ header.a=rsa-sha256 header.s=20210112 header.b=ibAZs3VX
+Subject: [Buildroot] [PATCH 1/1] package/glibc: fix make-4.4 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,102 +93,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Oct 9, 2022 at 11:35 AM Romain Naour <romain.naour@gmail.com> wrote:
->
-> Backport upstream commit for x86_64 builds with -Os reported by [1].
->
-> [1] https://sourceware.org/bugzilla/show_bug.cgi?id=29576
->
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/3134229902
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/3134229956
+Backport a patch fixing compatibility with upcoming make 4.4.
 
-I think this also fixes an issue in autobuilders, see:
-https://patchwork.ozlabs.org/project/buildroot/patch/20220927031702.2918414-1-james.hilliard1@gmail.com/
+Fixes:
+ - http://autobuild.buildroot.net/results/5a3/5a3f6414d75fbc8a272258bf3bdb6f4fe7e6da34
+ - http://autobuild.buildroot.net/results/481/481c4617813da031beddaf00b97440071f646809
+ - http://autobuild.buildroot.net/results/cf1/cf152e7a95bec3b6ebd0209dd716cbec56f9d477
 
-http://autobuild.buildroot.net/results/5b4/5b442f95587ddc65a995bbd9e310c88a66c55b1f
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ ...KEFLAGS-assignment-for-upcoming-make.patch | 117 ++++++++++++++++++
+ 1 file changed, 117 insertions(+)
+ create mode 100644 package/glibc/0002-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch
 
->
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+diff --git a/package/glibc/0002-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch b/package/glibc/0002-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch
+new file mode 100644
+index 0000000000..0c82d7abbe
+--- /dev/null
++++ b/package/glibc/0002-Makerules-fix-MAKEFLAGS-assignment-for-upcoming-make.patch
+@@ -0,0 +1,117 @@
++From 2d7ed98add14f75041499ac189696c9bd3d757fe Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyich@gmail.com>
++Date: Tue, 13 Sep 2022 13:39:13 -0400
++Subject: [PATCH] Makerules: fix MAKEFLAGS assignment for upcoming make-4.4
++ [BZ# 29564]
++
++make-4.4 will add long flags to MAKEFLAGS variable:
++
++    * WARNING: Backward-incompatibility!
++      Previously only simple (one-letter) options were added to the MAKEFLAGS
++      variable that was visible while parsing makefiles.  Now, all options
++      are available in MAKEFLAGS.
++
++This causes locale builds to fail when long options are used:
++
++    $ make --shuffle
++    ...
++    make  -C localedata install-locales
++    make: invalid shuffle mode: '1662724426r'
++
++The change fixes it by passing eash option via whitespace and dashes.
++That way option is appended to both single-word form and whitespace
++separated form.
++
++While at it fixed --silent mode detection in $(MAKEFLAGS) by filtering
++out --long-options. Otherwise options like --shuffle flag enable silent
++mode unintentionally. $(silent-make) variable consolidates the checks.
++
++Resolves: BZ# 29564
++
++CC: Paul Smith <psmith@gnu.org>
++CC: Siddhesh Poyarekar <siddhesh@gotplt.org>
++Signed-off-by: Sergei Trofimovich <slyich@gmail.com>
++Reviewed-by: Siddhesh Poyarekar <siddhesh@sourceware.org>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1@gmail.com: backport from upstream commit
++2d7ed98add14f75041499ac189696c9bd3d757fe]
++---
++ Makeconfig     | 18 +++++++++++++++++-
++ Makerules      |  4 ++--
++ elf/rtld-Rules |  2 +-
++ 3 files changed, 20 insertions(+), 4 deletions(-)
++
++diff --git a/Makeconfig b/Makeconfig
++index f8164a0025..842f49eb58 100644
++--- a/Makeconfig
+++++ b/Makeconfig
++@@ -43,6 +43,22 @@ else
++ $(error objdir must be defined by the build-directory Makefile)
++ endif
++ 
+++# Did we request 'make -s' run? "yes" or "no".
+++# Starting from make-4.4 MAKEFLAGS now contains long
+++# options like '--shuffle'. To detect presence of 's'
+++# we pick first word with short options. Long options
+++# are guaranteed to come after whitespace. We use '-'
+++# prefix to always have a word before long options
+++# even if no short options were passed.
+++# Typical MAKEFLAGS values to watch for:
+++#   "rs --shuffle=42" (silent)
+++#   " --shuffle" (not silent)
+++ifeq ($(findstring s, $(firstword -$(MAKEFLAGS))),)
+++silent-make := no
+++else
+++silent-make := yes
+++endif
+++
++ # Root of the sysdeps tree.
++ sysdep_dir := $(..)sysdeps
++ export sysdep_dir := $(sysdep_dir)
++@@ -917,7 +933,7 @@ endif
++ # umpteen zillion filenames along with it (we use `...' instead)
++ # but we don't want this echoing done when the user has said
++ # he doesn't want to see commands echoed by using -s.
++-ifneq	"$(findstring s,$(MAKEFLAGS))" ""	# if -s
+++ifeq ($(silent-make),yes)			# if -s
++ +cmdecho	:= echo >/dev/null
++ else						# not -s
++ +cmdecho	:= echo
++diff --git a/Makerules b/Makerules
++index d1e139d03c..09c0cf8357 100644
++--- a/Makerules
+++++ b/Makerules
++@@ -794,7 +794,7 @@ endif
++ # Maximize efficiency by minimizing the number of rules.
++ .SUFFIXES:	# Clear the suffix list.  We don't use suffix rules.
++ # Don't define any builtin rules.
++-MAKEFLAGS := $(MAKEFLAGS)r
+++MAKEFLAGS := $(MAKEFLAGS) -r
++ 
++ # Generic rule for making directories.
++ %/:
++@@ -811,7 +811,7 @@ MAKEFLAGS := $(MAKEFLAGS)r
++ .PRECIOUS: $(foreach l,$(libtypes),$(patsubst %,$(common-objpfx)$l,c))
++ 
++ # Use the verbose option of ar and tar when not running silently.
++-ifeq	"$(findstring s,$(MAKEFLAGS))" ""	# if not -s
+++ifeq ($(silent-make),no)			# if not -s
++ verbose := v
++ else	   					# -s
++ verbose	:=
++diff --git a/elf/rtld-Rules b/elf/rtld-Rules
++index ca00dd1fe2..3c5e273f2b 100644
++--- a/elf/rtld-Rules
+++++ b/elf/rtld-Rules
++@@ -52,7 +52,7 @@ $(objpfx)rtld-libc.a: $(foreach dir,$(rtld-subdirs),\
++ 	mv -f $@T $@
++ 
++ # Use the verbose option of ar and tar when not running silently.
++-ifeq	"$(findstring s,$(MAKEFLAGS))" ""	# if not -s
+++ifeq ($(silent-make),no)			# if not -s
++ verbose := v
++ else						# -s
++ verbose	:=
++-- 
++2.34.1
++
+-- 
+2.34.1
 
-Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
-
-> ---
->  .../0002-x86-Fix-Os-build-BZ-29576.patch      | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/glibc/0002-x86-Fix-Os-build-BZ-29576.patch
->
-> diff --git a/package/glibc/0002-x86-Fix-Os-build-BZ-29576.patch b/package/glibc/0002-x86-Fix-Os-build-BZ-29576.patch
-> new file mode 100644
-> index 0000000000..4470324f1c
-> --- /dev/null
-> +++ b/package/glibc/0002-x86-Fix-Os-build-BZ-29576.patch
-> @@ -0,0 +1,48 @@
-> +From 3935b543adcb9a46ab79f8931bc489068b049378 Mon Sep 17 00:00:00 2001
-> +From: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
-> +Date: Wed, 21 Sep 2022 10:51:08 -0300
-> +Subject: [PATCH] x86: Fix -Os build (BZ #29576)
-> +
-> +The compiler might transform __stpcpy calls (which are routed to
-> +__builtin_stpcpy as an optimization) to strcpy and x86_64 strcpy
-> +multiarch implementation does not build any working symbol due
-> +ISA_SHOULD_BUILD not being evaluated for IS_IN(rtld).
-> +
-> +Checked on x86_64-linux-gnu.
-> +Reviewed-by: Carlos O'Donell <carlos@redhat.com>
-> +Tested-by: Carlos O'Donell <carlos@redhat.com>
-> +
-> +(cherry picked from commit 9dc4e29f630c6ef8299120b275e503321dc0c8c7)
-
-This is probably better than mine since I had applied from patchwork before
-it was applied upstream.
-
-> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> +---
-> + sysdeps/x86_64/multiarch/rtld-strcpy.S | 18 ++++++++++++++++++
-> + 1 file changed, 18 insertions(+)
-> + create mode 100644 sysdeps/x86_64/multiarch/rtld-strcpy.S
-> +
-> +diff --git a/sysdeps/x86_64/multiarch/rtld-strcpy.S b/sysdeps/x86_64/multiarch/rtld-strcpy.S
-> +new file mode 100644
-> +index 0000000000..19439c553d
-> +--- /dev/null
-> ++++ b/sysdeps/x86_64/multiarch/rtld-strcpy.S
-> +@@ -0,0 +1,18 @@
-> ++/* Copyright (C) 2022 Free Software Foundation, Inc.
-> ++   This file is part of the GNU C Library.
-> ++
-> ++   The GNU C Library is free software; you can redistribute it and/or
-> ++   modify it under the terms of the GNU Lesser General Public
-> ++   License as published by the Free Software Foundation; either
-> ++   version 2.1 of the License, or (at your option) any later version.
-> ++
-> ++   The GNU C Library is distributed in the hope that it will be useful,
-> ++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-> ++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> ++   Lesser General Public License for more details.
-> ++
-> ++   You should have received a copy of the GNU Lesser General Public
-> ++   License along with the GNU C Library; if not, see
-> ++   <https://www.gnu.org/licenses/>.  */
-> ++
-> ++#include "../strcpy.S"
-> +--
-> +2.34.3
-> +
-> --
-> 2.34.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
