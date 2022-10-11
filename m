@@ -4,68 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B46E1C433F5
-	for <buildroot@archiver.kernel.org>; Tue, 11 Oct 2022 11:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57D97C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 11 Oct 2022 14:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 414E3816F5;
-	Tue, 11 Oct 2022 11:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 414E3816F5
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC05B8140D;
+	Tue, 11 Oct 2022 14:02:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC05B8140D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xY-vyJ6kIuPW; Tue, 11 Oct 2022 11:27:17 +0000 (UTC)
+	with ESMTP id CE9x1auu7ank; Tue, 11 Oct 2022 14:02:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B78981521;
-	Tue, 11 Oct 2022 11:27:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B78981521
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F14521BF296
- for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 11:27:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E827E81490;
+	Tue, 11 Oct 2022 14:02:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E827E81490
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 366A41BF9CB
+ for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 14:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 21D3360E90
- for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 11:27:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21D3360E90
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1045B81490
+ for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 14:02:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1045B81490
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pJKloMpTjVD9 for <buildroot@lists.busybox.net>;
- Tue, 11 Oct 2022 11:27:10 +0000 (UTC)
-X-Greylist: delayed 00:08:08 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62EB4605D8
-Received: from forward500j.mail.yandex.net (forward500j.mail.yandex.net
- [IPv6:2a02:6b8:0:801:2::110])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 62EB4605D8
- for <buildroot@buildroot.org>; Tue, 11 Oct 2022 11:27:10 +0000 (UTC)
-Received: from myt6-870ea81e6a0f.qloud-c.yandex.net
- (myt6-870ea81e6a0f.qloud-c.yandex.net
- [IPv6:2a02:6b8:c12:2229:0:640:870e:a81e])
- by forward500j.mail.yandex.net (Yandex) with ESMTP id 6E5816CB68CE;
- Tue, 11 Oct 2022 14:11:12 +0300 (MSK)
-Received: by myt6-870ea81e6a0f.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA
- id yGssLufW24-BBhWe8dN; Tue, 11 Oct 2022 14:11:11 +0300
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client certificate not present)
-X-Yandex-Fwd: 1
-Message-ID: <14ff4a72-41f4-256c-aaa9-b1948391ba6d@yuriev.ru>
-Date: Tue, 11 Oct 2022 14:11:10 +0300
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DEI_W0O0oKas for <buildroot@lists.busybox.net>;
+ Tue, 11 Oct 2022 14:02:30 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA888813EC
+Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DA888813EC
+ for <buildroot@busybox.net>; Tue, 11 Oct 2022 14:02:29 +0000 (UTC)
+Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 46E86440537;
+ Tue, 11 Oct 2022 17:00:30 +0300 (IDT)
+To: buildroot@busybox.net
+Date: Tue, 11 Oct 2022 17:02:10 +0300
+Message-Id: <662b275967464a67a9d63efdfb0257094b16c111.1665496931.git.baruch@tkos.co.il>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <96728725434424ecdff6a4087126c9d665c877ec.1665496931.git.baruch@tkos.co.il>
+References: <96728725434424ecdff6a4087126c9d665c877ec.1665496931.git.baruch@tkos.co.il>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US, ru-RU
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-References: <20221011084540.jebe33uW@myt6-3efb34da3dd5.qloud-c.yandex.net>
-From: Leonid Yuriev <leo@yuriev.ru>
-In-Reply-To: <20221011084540.jebe33uW@myt6-3efb34da3dd5.qloud-c.yandex.net>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yuriev.ru; s=mail; t=1665486672; 
- bh=bM7Fbtut4lzy4+yG2qWeUA+PkD+zvBVeOy4gFOyk6EQ=;
- h=In-Reply-To:From:Date:References:To:Subject:Message-ID;
- b=D8lDWf5HfaA9ezHhmmCd9TPA0iHq4m0udRcrhxFWj/o4EXmk8sZEQGHKcXJLUaYX6
- aa4b1IgaYq/71Pn0NEiwox2FD2UT7lB0zONQPOCP56mUGXJClm5jgrD2pAGQTtinoP
- NFlHJXw48Wodx4WJ1858Xosc4I+bdKl7dpMsdrwk=
-X-Mailman-Original-Authentication-Results: myt6-870ea81e6a0f.qloud-c.yandex.net; dkim=pass header.i=@yuriev.ru
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-10-10
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1665496830;
+ bh=f2XZchwCMvqXHcbBIl6NJ1Zzvsw9GD3AJag90euHzvI=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=ZmAcNBCrQzhjq10j664LbzxQCzXiiTpVHEa6h/0MWNkkYdmrYFJP6W/8jErOKyomY
+ /4NY9un+O2aH1aPknZYUhFLG5t+Xa/XstQ6Y94NhKr5eahOh4HqgS6UEaTIlFB6gLH
+ qLwVNoo1jCkEqzuiKWwz7SwluaqTCv2q+MYg6EjxgbIAvizEcbN7TlRVvp03pWoOVh
+ M7CxU3pqAwkEzG9OD5IpH4yTo/HFSu2SL1GTCvY9+BTdo84GQYbgzAmq6V530SyaFU
+ WOUXAJcSpqj0FfmJHDt+p6NbsCPErI9KCR4ZfVAtQ1B8mOXpaCc84iEVDScItm7o26
+ JKLxV5iUSRB/w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
+ header.a=rsa-sha256 header.s=default header.b=ZmAcNBCr
+Subject: [Buildroot] [PATCH 2/3] configs/solidrun_{macchiatobin,
+ clearfog_gt_8k}: disable SSP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,51 +73,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpQbGVhc2UgZml4IHRoZSBjb25maWd1cmF0aW9uIGVycm9yIG9mIHRvb2xjaGFpbiBmb3Ig
-bWljcm9ibGF6ZSBhcmNoLgoKSSBhbHJlYWR5IHdyb3RlIGFib3V0IHRoaXMgcHJvYmxlbSBhdCB0
-aGUgYmVnaW5uaW5nIG9mIHRoZSBzdW1tZXIsIGFuZCAKdGhlbiBjaGFuZ2VkIHRoZSBkaWFnbm9z
-dGljIG1lc3NhZ2UgdG8gbWFrZSB0aGUgZXJyb3IgbW9yZSBvYnZpb3VzLgoKQmFzaWNhbGx5LCB0
-aGUgZmFpbGVkIGFzc2VydGlvbiAoc2VlIGJlbG93KSBjaGVja3MgdGhhdCB0aGUgd2lkdGggb2Yg
-Cmxfc3RhcnQgZW5kIGxfbGVuIGZpZWxkcyBvZiB0aGUgc3RydWN0IGZsb2NrIGFyZSBlbm91Z2gg
-dG8gaG9sZCB2YWx1ZXMgCm9mIG9mZl90IHR5cGUuClNvLCB0aGUgbGliYyBpbiB0aGUgdG9vbGNo
-YWluIGlzIG1pc2NvbmZpZ3VyZWQgb3IvYW5kIGhhcyB3cm9uZyBsYXlvdXQgCm9mIGhlYWRlcnMs
-IGV0Yy4KCkluIGZpbGUgaW5jbHVkZWQgZnJvbSAKL2hvbWUvYnVpbGRyb290L2F1dG9idWlsZC9p
-bnN0YW5jZS0xL291dHB1dC0xL2J1aWxkL2xpYm1kYngtMC4xMS4xMS9tZGJ4LmM6MTgxOgovaG9t
-ZS9idWlsZHJvb3QvYXV0b2J1aWxkL2luc3RhbmNlLTEvb3V0cHV0LTEvYnVpbGQvbGlibWRieC0w
-LjExLjExL21kYnguYzogCkluIGZ1bmN0aW9uICdsY2tfb3AnOgovaG9tZS9idWlsZHJvb3QvYXV0
-b2J1aWxkL2luc3RhbmNlLTEvb3V0cHV0LTEvYnVpbGQvbGlibWRieC0wLjExLjExL21kYnguYzo4
-MTg6Mzg6IAplcnJvcjogc3RhdGljIGFzc2VydGlvbiBmYWlsZWQ6ICJTdXBwb3J0IGZvciBsYXJn
-ZS82NC1iaXQtc2l6ZWQgZmlsZXMgaXMgCm1pc2NvbmZpZ3VyZWQgZm9yIHRoZSB0YXJnZXQgc3lz
-dGVtIGFuZC9vciB0b29sY2hhaW4uIFBsZWFzZSBmaXggaXQgb3IgCmF0IGxlYXN0IGRpc2FibGUg
-aXQgY29tcGxldGVseS4iCiDCoCA4MTggfCAjZGVmaW5lIFNUQVRJQ19BU1NFUlRfTVNHKGV4cHIs
-IG1zZykgc3RhdGljX2Fzc2VydChleHByLCBtc2cpCiDCoMKgwqDCoMKgIHzCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBefn5+fn5+fn5+fn5+Ci9ob21lL2J1aWxkcm9vdC9hdXRvYnVpbGQvaW5zdGFuY2UtMS9v
-dXRwdXQtMS9idWlsZC9saWJtZGJ4LTAuMTEuMTEvbWRieC5jOjMwNDgyOjU6IApub3RlOiBpbiBl
-eHBhbnNpb24gb2YgbWFjcm8gJ1NUQVRJQ19BU1NFUlRfTVNHJwozMDQ4MiB8wqDCoMKgwqAgU1RB
-VElDX0FTU0VSVF9NU0coc2l6ZW9mKG9mZl90KSA8PSBzaXplb2YobG9ja19vcC5sX3N0YXJ0KSAm
-JgogwqDCoMKgwqDCoCB8wqDCoMKgwqAgXn5+fn5+fn5+fn5+fn5+fn4KClJlZ2FyZHMuCkxlb25p
-ZC4KCjExLjEwLjIwMjIgMDg6NDUsIFRob21hcyBQZXRhenpvbmkg0L/QuNGI0LXRgjoKPiBIZWxs
-bywKPgo+IEF1dG9idWlsZGVyIGZhaWx1cmVzCj4gPT09PT09PT09PT09PT09PT09PT0KPgo+IEJl
-bG93IGlzIGEgbGlzdCBvZiBidWlsZCBmYWlsdXJlcyByZXBvcnRlZCBieSB0aGUgQnVpbGRyb290
-IGF1dG9idWlsZGVycwo+IGluIHJlbGF0aW9uIHRvIHBhY2thZ2VzIG9yIENQVSBhcmNoaXRlY3R1
-cmVzIHlvdSBhcmUgaW4gY2hhcmdlIG9mLgo+IFBsZWFzZSBoZWxwIHVzIGltcHJvdmluZyB0aGUg
-cXVhbGl0eSBvZiBCdWlsZHJvb3QgYnkgaW52ZXN0aWdhdGluZyB0aG9zZQo+IGJ1aWxkIGZhaWx1
-cmVzIGFuZCBzZW5kaW5nIHBhdGNoZXMgdG8gZml4IHRoZW0uCj4KPiBSZXN1bHRzIGZvciB0aGUg
-J21hc3RlcicgYnJhbmNoCj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+Cj4gQnVp
-bGQgZmFpbHVyZXMgcmVsYXRlZCB0byB5b3VyIHBhY2thZ2VzOgo+Cj4gICAgICBhcmNoICAgICB8
-ICAgICAgICAgICAgIHJlYXNvbiAgICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgdXJsCj4gLS0tLS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLSstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAgIG1pY3JvYmxhemUgIHwgICAg
-ICAgIGxpYm1kYngtMC4xMS4xMSAgICAgICAgIHwgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qu
-bmV0L3Jlc3VsdHMvNzI1OWViN2VmOWVhZTU3MDJlYjE3ZWMyMjhmNDMxMmM1MzQ5ODFhNwo+Cj4K
-PiBUaGFua3MgZm9yIHlvdXIgY29udHJpYnV0aW9uIHRvIEJ1aWxkcm9vdCEKPgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+The Armada target does not provide platform level support for SSP.
+
+Fixes link failure:
+
+(.text.asm.update_stack_protector_canary+0x4): undefined reference to `plat_get_stack_protector_canary'
+
+This error does not should up on CI jobs because SSP was effectively
+always disabled until the previous commit.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ configs/solidrun_clearfog_gt_8k_defconfig | 1 +
+ configs/solidrun_macchiatobin_defconfig   | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/configs/solidrun_clearfog_gt_8k_defconfig b/configs/solidrun_clearfog_gt_8k_defconfig
+index bec4a7daccc6..30b1e17925d6 100644
+--- a/configs/solidrun_clearfog_gt_8k_defconfig
++++ b/configs/solidrun_clearfog_gt_8k_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="mrvl_flash"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
++# BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is not set
+ BR2_TARGET_BINARIES_MARVELL=y
+ BR2_TARGET_MV_DDR_MARVELL=y
+ 
+diff --git a/configs/solidrun_macchiatobin_defconfig b/configs/solidrun_macchiatobin_defconfig
+index 7d06313b03db..f388e37163aa 100644
+--- a/configs/solidrun_macchiatobin_defconfig
++++ b/configs/solidrun_macchiatobin_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="mrvl_flash"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
++# BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is not set
+ BR2_TARGET_BINARIES_MARVELL=y
+ BR2_TARGET_MV_DDR_MARVELL=y
+ 
+-- 
+2.35.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
