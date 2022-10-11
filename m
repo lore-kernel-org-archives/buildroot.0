@@ -1,58 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59267C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 11 Oct 2022 19:20:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 472F0C433F5
+	for <buildroot@archiver.kernel.org>; Tue, 11 Oct 2022 19:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED55F61053;
-	Tue, 11 Oct 2022 19:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED55F61053
+	by smtp2.osuosl.org (Postfix) with ESMTP id C0E5940C03;
+	Tue, 11 Oct 2022 19:23:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0E5940C03
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UNOTshN9ttwi; Tue, 11 Oct 2022 19:20:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KgMg0L4Ie61c; Tue, 11 Oct 2022 19:23:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EEEF61023;
-	Tue, 11 Oct 2022 19:20:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EEEF61023
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F07191BF855
- for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 19:19:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09A3D40BFD;
+	Tue, 11 Oct 2022 19:23:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09A3D40BFD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 544E61BF855
+ for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 19:23:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CC44961023
- for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 19:19:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC44961023
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2AC2641911
+ for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 19:23:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AC2641911
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YMW9ICGLjLkB for <buildroot@lists.busybox.net>;
- Tue, 11 Oct 2022 19:19:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m__jSX7DmD_E for <buildroot@lists.busybox.net>;
+ Tue, 11 Oct 2022 19:23:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBBB560F91
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CBBB560F91
- for <buildroot@buildroot.org>; Tue, 11 Oct 2022 19:19:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9C85417BD
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C9C85417BD
+ for <buildroot@buildroot.org>; Tue, 11 Oct 2022 19:23:11 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 49D59240005;
- Tue, 11 Oct 2022 19:19:53 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 42713FF809;
+ Tue, 11 Oct 2022 19:23:08 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oiKnB-00CAlS-8C; Tue, 11 Oct 2022 21:19:53 +0200
+ id 1oiKqJ-00CAxX-8h; Tue, 11 Oct 2022 21:23:07 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20220925171932.1630739-1-thomas.petazzoni@bootlin.com>
- <20220925171932.1630739-2-thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Oct 2022 21:19:53 +0200
-In-Reply-To: <20220925171932.1630739-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Sun, 25 Sep 2022 19:19:30
- +0200")
-Message-ID: <8735bup3qe.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20220926101724.1989377-1-titouanchristophe@gmail.com>
+ <20220926140252.2f775240@windsurf>
+Date: Tue, 11 Oct 2022 21:23:07 +0200
+In-Reply-To: <20220926140252.2f775240@windsurf> (Thomas Petazzoni's message of
+ "Mon, 26 Sep 2022 14:02:52 +0200")
+Message-ID: <87y1tmnp0k.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/4] package/nodejs: bump to v16.17.1
+Subject: Re: [Buildroot] [PATCH 1/1] package/redis: security bump to v7.0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,36 +64,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexandru Ardelean <ardeleanalex@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Daniel Price <daniel.price@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Martin Bark <martin@barkynet.com>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ Daniel Price <daniel.price@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > This is currently the latest version in the v16.x branch.
- > Patch 0001-add-qemu-wrapper-support.patch needs some minor adaptations
- > to resolve conflicts with other unrelated upstream changes. The other
- > patches are simply refreshed.
+ > On Mon, 26 Sep 2022 12:17:24 +0200
+ > Titouan Christophe <titouanchristophe@gmail.com> wrote:
 
- > The license file is updates due to:
+ >> From the release notes:
+ >> (https://github.com/redis/redis/blob/7.0.5/00-RELEASENOTES)
+ >> 
+ >> ================================================================================
+ >> Redis 7.0.5 Released Wed Sep 21 20:00:00 IST 2022
+ >> ================================================================================
+ >> 
+ >> Upgrade urgency: SECURITY, contains fixes to security issues.
+ >> 
+ >> Security Fixes:
+ >> * (CVE-2022-35951) Executing a XAUTOCLAIM command on a stream key in a specific
+ >> state, with a specially crafted COUNT argument, may cause an integer overflow,
+ >> a subsequent heap overflow, and potentially lead to remote code execution.
+ >> The problem affects Redis versions 7.0.0 or newer
+ >> [reported by Xion (SeungHyun Lee) of KAIST GoN].
+ >> 
+ >> Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+ >> ---
+ >> package/redis/redis.hash | 2 +-
+ >> package/redis/redis.mk   | 2 +-
+ >> 2 files changed, 2 insertions(+), 2 deletions(-)
 
- >  - Reformatting changes
-
- >  - Addition of the mention of some files being under GPLv3, but it's
- >    only the autoconf machinery: aclocal.m4 and config.guess, so it's
- >    not relevant to add in our LICENSE variable.
-
- >  - Addition of the mention of another file being under the MIT
- >    license (install-sh), and MIT is already listed, and this file is
- >    anyway only part of the autoconf machinery.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Applied to master, thanks.
 
 Committed to 2022.08.x, thanks.
 
