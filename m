@@ -1,66 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CEE4C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 12 Oct 2022 18:22:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9680C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 12 Oct 2022 18:39:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2AC0418E3;
-	Wed, 12 Oct 2022 18:22:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2AC0418E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10ABA60B2E;
+	Wed, 12 Oct 2022 18:39:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10ABA60B2E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XcV8Jx5RqZIT; Wed, 12 Oct 2022 18:22:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PgIynS1OEuhZ; Wed, 12 Oct 2022 18:39:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD0A2418CD;
-	Wed, 12 Oct 2022 18:22:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD0A2418CD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A78F61BF5A8
- for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 18:22:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2307860A79;
+	Wed, 12 Oct 2022 18:39:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2307860A79
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BA3391BF5A8
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 18:39:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 904B5400DC
- for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 18:22:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 904B5400DC
+ by smtp1.osuosl.org (Postfix) with ESMTP id A212E8141F
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 18:39:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A212E8141F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gJVSTTBqoDRm for <buildroot@lists.busybox.net>;
- Wed, 12 Oct 2022 18:22:51 +0000 (UTC)
-X-Greylist: delayed 02:20:00 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 280FF400BF
-Received: from 11.mo583.mail-out.ovh.net (11.mo583.mail-out.ovh.net
- [46.105.47.167])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 280FF400BF
- for <buildroot@buildroot.org>; Wed, 12 Oct 2022 18:22:51 +0000 (UTC)
-Received: from player739.ha.ovh.net (unknown [10.110.171.125])
- by mo583.mail-out.ovh.net (Postfix) with ESMTP id 5B13B25183
- for <buildroot@buildroot.org>; Wed, 12 Oct 2022 14:46:02 +0000 (UTC)
-Received: from armadeus.com (lfbn-str-1-84-188.w92-140.abo.wanadoo.fr
- [92.140.211.188])
- (Authenticated sender: sebastien.szymanski@armadeus.com)
- by player739.ha.ovh.net (Postfix) with ESMTPSA id 663962B95216F;
- Wed, 12 Oct 2022 14:45:59 +0000 (UTC)
-X-OVh-ClientIp: 92.140.211.188
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ACeF4yH4x5mO for <buildroot@lists.busybox.net>;
+ Wed, 12 Oct 2022 18:39:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8860E81391
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8860E81391
+ for <buildroot@buildroot.org>; Wed, 12 Oct 2022 18:39:12 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id y80so4416946iof.3
+ for <buildroot@buildroot.org>; Wed, 12 Oct 2022 11:39:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wPfNa9/99UN9tV1q2j/gEudEeQ2H5/qoisxrGSII+Po=;
+ b=m9i+Yhqc32D4tzy/3YOUlteAf/Qi5sfTwQNIKFrd88qaZZrUQ2yU7QKzLrLhFJ5kdN
+ yMjKyjHI5rkh4MFF3BCblmLm2D33iv6yUEj+9lNAXpDFezMp8Yjn+WFxEl2AWC0kTotV
+ eCjZaB2c1ULcFpsc/G/UpNDLYGCODB/zQ0Gm0A/t53FA9CC9enOXbINefDWMMH1f95Zr
+ 3iAnpsRbpxcu/Ca+BpihlBk71ZP0SzFeJP4lFu1KwtY1qFoh1Iyq741NCG08oNdNvIXc
+ rimKbMwJELpDATDgeVYZNIQ2vJBwJdi1lA3sA8CJeZJS7Q8tZNJox/XL4oqxZwjUxfuK
+ +60g==
+X-Gm-Message-State: ACrzQf0RmVqJ9J2a3TlKr3SEfVUALV+RgQuOLXPRRsJ97JAMkCIvMBI1
+ qKrzRO47gBp1eQyBlbEIsfalSdpp2r4upQ==
+X-Google-Smtp-Source: AMsMyM6swltiNPCM0Znc0gGrOZaQQduadMWvVtr5PJfG18eLwkc2FXJ8c6Ev1mkOrlXYR6dLy3fQRg==
+X-Received: by 2002:a05:6638:3452:b0:363:69f8:549f with SMTP id
+ q18-20020a056638345200b0036369f8549fmr17027422jav.190.1665599951188; 
+ Wed, 12 Oct 2022 11:39:11 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ y4-20020a056602178400b006bc48537658sm3197739iox.0.2022.10.12.11.39.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 12 Oct 2022 11:39:10 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 12 Oct 2022 16:43:10 +0200
-Message-Id: <20221012144310.28145-1-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.37.3
+Date: Wed, 12 Oct 2022 12:39:07 -0600
+Message-Id: <20221012183907.1651460-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 15215692816699157267
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedgkeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeehvdfhtdehudekieeihfekjedvudevfedugfeuhffgjedufedtffeileffgedufeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsuhhilhgurhhoohhtrdhnvghtpdgsuhhilhgurhhoohhtrdhorhhgnecukfhppeduvdejrddtrddtrddupdelvddrudegtddrvdduuddrudekkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheekfedpmhhouggvpehsmhhtphhouhht
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-95G001fdfd87a2-ee11-4824-9634-b4103772822d,
- FE9F4EF6251822EA91E95D070B5353786FA8A9F2)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: [Buildroot] [PATCH 1/1] package/mmc-utils: bump to version
- dfc3b6ecda84d21418fb4408b39c5c71db4c6458
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wPfNa9/99UN9tV1q2j/gEudEeQ2H5/qoisxrGSII+Po=;
+ b=qVWHXE7Qot3Cee3Hbe5BR5HYEgWDcrgh3qfa0mClOL+IO5jB0lI8v6i7JZCsuwIY0h
+ XToNNILugAZKDX1ZpmOIhPhGZMq3EDpTmDLexvsfzM+n4R6ICbKo0N1CLEcMrsWsZT1M
+ eBlhyg8s5Q0geFeaorsGcInUMzhiovUqoWANdRLey0h3K4uB2D44qKZHHdK9IIJErw7U
+ EO/l/DWE7QvszjR63Qh5lcxiEUiGM+47lz5Zfj7oS6CI7bR5GyUSg7UEjJwpklJ4cYSm
+ GNzTS3xTGP2O4BPWuAuN7HH8Q/ECx2HYLFHSg4yAbT7OgZrTL5OG1ZDzFHhke3Gs8hE0
+ s+jg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=qVWHXE7Q
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: bump to version
+ 20221012
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,70 +94,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RHJvcCBmaXJzdCBwYXRjaCwgdXBzdHJlYW1lZDoKaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIv
-c2NtL3V0aWxzL21tYy9tbWMtdXRpbHMuZ2l0L2NvbW1pdC8/aWQ9NTIwZjU0ZWI5NDg0NWU1OTc4
-MzdhZTkwOGEwM2I5MWFlOGM4NzU4ZgoKRml4ZXM6IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290
-Lm5ldC9yZXN1bHRzLzAxZjc4MDgxYTUwNzQzZDFmYWE1MGEwOTBjMDBiN2U5MGExN2ZhMzkKClNp
-Z25lZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFy
-bWFkZXVzLmNvbT4KLS0tCiAuLi4wMS1tbWNfY21kcy5jLWZpeC1idWlsZC13aXRoLWdjYy00Ljku
-cGF0Y2ggfCAzNyAtLS0tLS0tLS0tLS0tLS0tLS0tCiBwYWNrYWdlL21tYy11dGlscy9tbWMtdXRp
-bHMuaGFzaCAgICAgICAgICAgICAgfCAgNCArLQogcGFja2FnZS9tbWMtdXRpbHMvbW1jLXV0aWxz
-Lm1rICAgICAgICAgICAgICAgIHwgIDIgKy0KIDMgZmlsZXMgY2hhbmdlZCwgMyBpbnNlcnRpb25z
-KCspLCA0MCBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL21tYy11dGls
-cy8wMDAxLW1tY19jbWRzLmMtZml4LWJ1aWxkLXdpdGgtZ2NjLTQuOS5wYXRjaAoKZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvbW1jLXV0aWxzLzAwMDEtbW1jX2NtZHMuYy1maXgtYnVpbGQtd2l0aC1nY2Mt
-NC45LnBhdGNoIGIvcGFja2FnZS9tbWMtdXRpbHMvMDAwMS1tbWNfY21kcy5jLWZpeC1idWlsZC13
-aXRoLWdjYy00LjkucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDc3MjVmOWNh
-NWUuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9tbWMtdXRpbHMvMDAwMS1tbWNfY21kcy5jLWZp
-eC1idWlsZC13aXRoLWdjYy00LjkucGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSwzNyArMCwwIEBA
-Ci1Gcm9tIDYyMDhjYzc4ZjZlZmQxZmFmYzRmNWJjNmE0ODcyNDdhMzgzZGY4MGYgTW9uIFNlcCAx
-NyAwMDowMDowMCAyMDAxCi1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNl
-QGdtYWlsLmNvbT4KLURhdGU6IFNhdCwgMjggU2VwIDIwMTkgMjA6NDQ6NTIgKzAyMDAKLVN1Ympl
-Y3Q6IFtQQVRDSF0gbW1jX2NtZHMuYzogZml4IGJ1aWxkIHdpdGggZ2NjIDQuOQotCi1GaXggZm9s
-bG93aW5nIGVycm9yIHdpdGggZ2NjIDQuOToKLQotbW1jX2NtZHMuYzoxOTE4Ojk6IGVycm9yOiBt
-aXNzaW5nIGJyYWNlcyBhcm91bmQgaW5pdGlhbGl6ZXIgWy1XZXJyb3I9bWlzc2luZy1icmFjZXNd
-Ci0gIHN0cnVjdCBycG1iX2ZyYW1lIGZyYW1lX3N0YXR1cyA9IHswfTsKLQotRml4ZXM6Ci0gLSBo
-dHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9iZjNiNmY5ZjZlZjM5Yjk5ODQy
-YjNjOTI0OTViN2JmMzU5YzY4MTU4Ci0KLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUg
-PGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgotW1Vwc3RyZWFtIHN0YXR1czogc2VudCB0byBs
-aW51eC1tbWNAdmdlci5rZXJuZWwub3JnXQotLS0tCi0gbW1jX2NtZHMuYyB8IDQgKysrLQotIDEg
-ZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKLQotZGlmZiAtLWdp
-dCBhL21tY19jbWRzLmMgYi9tbWNfY21kcy5jCi1pbmRleCBmYjM3MTg5Li42YjA5ZjI2IDEwMDY0
-NAotLS0tIGEvbW1jX2NtZHMuYwotKysrIGIvbW1jX2NtZHMuYwotQEAgLTE5MTUsNyArMTkxNSw5
-IEBAIHN0YXRpYyBpbnQgZG9fcnBtYl9vcChpbnQgZmQsCi0gCXVfaW50MTZfdCBycG1iX3R5cGU7
-Ci0gCXN0cnVjdCBtbWNfaW9jX211bHRpX2NtZCAqbWlvYzsKLSAJc3RydWN0IG1tY19pb2NfY21k
-ICppb2M7Ci0tCXN0cnVjdCBycG1iX2ZyYW1lIGZyYW1lX3N0YXR1cyA9IHswfTsKLSsJc3RydWN0
-IHJwbWJfZnJhbWUgZnJhbWVfc3RhdHVzOwotKwotKwltZW1zZXQoJmZyYW1lX3N0YXR1cywgMCwg
-c2l6ZW9mKGZyYW1lX3N0YXR1cykpOwotIAotIAlpZiAoIWZyYW1lX2luIHx8ICFmcmFtZV9vdXQg
-fHwgIW91dF9jbnQpCi0gCQlyZXR1cm4gLUVJTlZBTDsKLS0tIAotMi4yMy4wCi0KZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvbW1jLXV0aWxzL21tYy11dGlscy5oYXNoIGIvcGFja2FnZS9tbWMtdXRpbHMv
-bW1jLXV0aWxzLmhhc2gKaW5kZXggZThiMjgyNjYxMi4uMTI1NmY2MzQ4NyAxMDA2NDQKLS0tIGEv
-cGFja2FnZS9tbWMtdXRpbHMvbW1jLXV0aWxzLmhhc2gKKysrIGIvcGFja2FnZS9tbWMtdXRpbHMv
-bW1jLXV0aWxzLmhhc2gKQEAgLTEsMyArMSwzIEBACiAjIExvY2FsbHkgY29tcHV0ZWQKLXNoYTI1
-NiAgZmZjOGY3NzIzM2QxYmQzOWNlNGVjNjg4MzVhZDk0YWE2NzYyNjI0ZTRlOTZmYjYwMTAyZTg3
-YmE4MmRiMDgzZSAgbW1jLXV0aWxzLWQ0MGVjNTM1YjlkNGU0Yzk3NGU4YzJmYmZiNDIyY2QwMzQ4
-Y2M1ZTgtYnIxLnRhci5negotc2hhMjU2ICBjMzE2NTM5M2JjZDcxMDYyNGUyOTA5MzI3YTZmYmVi
-NzM2YzQ3YmRiZTY2ZGUxYzFhMzY0YWM3MzI0ZDNlNGQ2ICBtbWMuaAorc2hhMjU2ICBmNmVkMWNi
-MmYwMmQ0OWRmNDI0NGY4ODcyYjQ3YjIyNzgwZGQ2MzRmYTE5ZDg1NzI5OGNlMWI3OTM3NTI3NzZm
-ICBtbWMtdXRpbHMtZGZjM2I2ZWNkYTg0ZDIxNDE4ZmI0NDA4YjM5YzVjNzFkYjRjNjQ1OC1icjEu
-dGFyLmd6CitzaGEyNTYgIGY1N2UzYzYxNjkxMTZhYTlmZjA2ZWVjOTU3MzRjYTAwMGU0ZDAxOTY0
-NjdiYjIyMWU4MGU1MDUzMGM3NjgwODEgIG1tYy5oCmRpZmYgLS1naXQgYS9wYWNrYWdlL21tYy11
-dGlscy9tbWMtdXRpbHMubWsgYi9wYWNrYWdlL21tYy11dGlscy9tbWMtdXRpbHMubWsKaW5kZXgg
-Yzg0NzM3ODY5Mi4uYmY5NDA5NjdlZiAxMDA2NDQKLS0tIGEvcGFja2FnZS9tbWMtdXRpbHMvbW1j
-LXV0aWxzLm1rCisrKyBiL3BhY2thZ2UvbW1jLXV0aWxzL21tYy11dGlscy5tawpAQCAtNCw3ICs0
-LDcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLU1NQ19VVElMU19WRVJTSU9OID0g
-ZDQwZWM1MzViOWQ0ZTRjOTc0ZThjMmZiZmI0MjJjZDAzNDhjYzVlOAorTU1DX1VUSUxTX1ZFUlNJ
-T04gPSBkZmMzYjZlY2RhODRkMjE0MThmYjQ0MDhiMzljNWM3MWRiNGM2NDU4CiBNTUNfVVRJTFNf
-U0lURSA9IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2Nq
-Yi9tbWMtdXRpbHMuZ2l0CiBNTUNfVVRJTFNfU0lURV9NRVRIT0QgPSBnaXQKIE1NQ19VVElMU19M
-SUNFTlNFID0gR1BMLTIuMAotLSAKMi4zNy4zCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+Update brcmfmac4356-sdio.vamrs,rock960.txt filename to
+brcmfmac4356-sdio.AP6356S.txt due to rename:
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/brcm?id=4ffcf980a535c1f26aa994ecf64a1b9d1ed6216e
+
+Update WHENCE file hash due to date/firmware file updates.
+
+Add missing LICENSE.ice_enhanced and LICENCE.moxa hashes.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/linux-firmware/linux-firmware.hash | 6 ++++--
+ package/linux-firmware/linux-firmware.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 382e9cb2ba..d81223e311 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  5938ee717b2023b48f6bfcf344b40ddc947e3e22c0bc36d4c3418f90fea68182  linux-firmware-20220310.tar.xz
++sha256  e9d174af729511c8cccb60ec4e0b223b3c44b67d813b42d1ab9813acfa667fa5  linux-firmware-20221012.tar.xz
+ 
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+@@ -14,9 +14,11 @@ sha256  a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061  LICENC
+ sha256  ae0db6cc4db33941148df0f67de53e76a77b1b5a46b3165edb7040aa2750015f  LICENCE.cypress
+ sha256  60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83  LICENCE.fw_sst_0f28
+ sha256  5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4  LICENCE.ibt_firmware
++sha256  8c45a83562a69f7ac4207e4cb5c0063af2e545791b3947bc81dc82305481c15c  LICENSE.ice_enhanced
+ sha256  0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d  LICENCE.it913x
+ sha256  16d5040c7cf851fc693b7542e20870935b99802533ea1bfd231c377a2305e5c5  LICENCE.iwlwifi_firmware
+ sha256  0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3  LICENCE.microchip
++sha256  59ae206c89108905ebdc9ad4c9336526bd2c0d50fbf988c21e8c2a82719d42a4  LICENCE.moxa
+ sha256  2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c  LICENCE.qat_firmware
+ sha256  4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822  LICENCE.qla2xxx
+ sha256  d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd  LICENCE.ralink-firmware.txt
+@@ -33,6 +35,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+-sha256  75afdb5d45a21ff95ff7aa82d67bc42a83830f2def98ea937c01d6e7603d76f9  WHENCE
++sha256  6857749e23d6a2853e5d33f6d6012a60d5baa2b4d51b5f8c6799d00d68733841  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 64d096df14..ea97166d93 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 20220310
++LINUX_FIRMWARE_VERSION = 20221012
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
+@@ -643,7 +643,7 @@ LINUX_FIRMWARE_FILES += \
+ 	brcm/brcmfmac4373.bin \
+ 	brcm/brcmfmac4330-sdio.Prowise-PT301.txt \
+ 	brcm/brcmfmac4356-pcie.gpd-win-pocket.txt \
+-	brcm/brcmfmac4356-sdio.vamrs,rock960.txt
++	brcm/brcmfmac4356-sdio.AP6356S.txt
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+ endif
+ 
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
