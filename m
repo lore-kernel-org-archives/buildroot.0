@@ -1,51 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10B6EC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 12 Oct 2022 15:41:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 819E1C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 12 Oct 2022 15:44:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 863D741965;
-	Wed, 12 Oct 2022 15:41:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 863D741965
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1761C83408;
+	Wed, 12 Oct 2022 15:44:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1761C83408
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0qXiaqDiABgm; Wed, 12 Oct 2022 15:41:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id npD_AYl2U1FF; Wed, 12 Oct 2022 15:44:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62B7841937;
-	Wed, 12 Oct 2022 15:41:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62B7841937
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E72B1BF4DD
- for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 15:41:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45C86831D6;
+	Wed, 12 Oct 2022 15:44:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45C86831D6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F2751BF4DD
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 15:44:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A23640587
- for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 15:41:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A23640587
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A57760F93
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 15:44:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A57760F93
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2-ocF1C6aE9J for <buildroot@lists.busybox.net>;
- Wed, 12 Oct 2022 15:41:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58A9040579
- for <buildroot@buildroot.org>; Wed, 12 Oct 2022 15:41:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58A9040579
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 423B186BE5; Wed, 12 Oct 2022 15:41:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w5dSReMIYLOo for <buildroot@lists.busybox.net>;
+ Wed, 12 Oct 2022 15:44:31 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2E2860BCB
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C2E2860BCB
+ for <buildroot@buildroot.org>; Wed, 12 Oct 2022 15:44:30 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 7E7F11C0002;
+ Wed, 12 Oct 2022 15:44:27 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oiduE-00D55R-Kk; Wed, 12 Oct 2022 17:44:26 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 12 Oct 2022 17:40:21 +0200
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: e665d20f7afaf531d9de1334884879caaa84a76b
-X-Git-Newrev: 23fbc414296c27f5200d21ce5a9ff53f80e5af0c
-X-Patchwork-Hint: ignore
-Message-Id: <20221012154141.423B186BE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x]
- configs/aspeed_ast2600evb: set BR2_ARM_FPU_VFPV4D16
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20220924230826.283565-1-giulio.benetti@benettiengineering.com>
+Date: Wed, 12 Oct 2022 17:44:26 +0200
+In-Reply-To: <20220924230826.283565-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Sun, 25 Sep 2022 01:08:26 +0200")
+Message-ID: <87leplnj1h.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/collectd: work around gcc bug 68485
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,57 +63,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2405166552729678727=="
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2405166552729678727==
-Content-Type: text/plain
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23fbc414296c27f5200d21ce5a9ff53f80e5af0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+ > collectd is impacted by the microblaze-specific gcc bug #68485 [0].
+ > As for all other impacted packages, force no optimisation when using a
+ > toolchain riddled with that bug.
 
-The features of the Cortex A7 CPU on the Aspeed AST2600 A3 SoC are :
+ > Fixes:
+ >    http://autobuild.buildroot.net/results/6a8/6a87bbe17e6f606a97097800dc484a7b17bffa7d/
 
-  half thumb fastmult vfp edsp vfpv3 vfpv3d16 tls vfpv4 idiva idivt lpae evtstrm
+ > [0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
 
-the vfpv3d16 feature bit is common to both vfpv3 and vfpv4.
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Drop BR2_ARM_FPU_VFPV4 which activates the use of vpfd32 (and breaks
-user space). Set BR2_ARM_FPU_VFPV4D16 instead.
+Committed to 2022.02.x and 2022.08.x, thanks.
 
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7ccb318d80f0d09e22f944ac9fc618f9abedbe43)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/aspeed_ast2600evb_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/configs/aspeed_ast2600evb_defconfig b/configs/aspeed_ast2600evb_defconfig
-index cd058ad0ac..04239566c8 100644
---- a/configs/aspeed_ast2600evb_defconfig
-+++ b/configs/aspeed_ast2600evb_defconfig
-@@ -1,7 +1,7 @@
- # Architecture
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_ARM_FPU_VFPV4=y
-+BR2_ARM_FPU_VFPV4D16=y
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="aspeed-evb"
-
---===============2405166552729678727==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2405166552729678727==--
