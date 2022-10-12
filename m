@@ -4,68 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CEBCC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 12 Oct 2022 20:50:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA0AC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 12 Oct 2022 21:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06F7640926;
-	Wed, 12 Oct 2022 20:50:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06F7640926
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EAAE4071E;
+	Wed, 12 Oct 2022 21:50:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EAAE4071E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fGFQ3RokAxZO; Wed, 12 Oct 2022 20:50:50 +0000 (UTC)
+	with ESMTP id p4YbVb744x9o; Wed, 12 Oct 2022 21:50:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E43BF4092A;
-	Wed, 12 Oct 2022 20:50:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E43BF4092A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 36D971BF2AA
- for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 20:50:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DD8C40340;
+	Wed, 12 Oct 2022 21:50:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DD8C40340
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ECAEA1BF3D5
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 21:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A79354035D
- for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 20:50:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A79354035D
+ by smtp4.osuosl.org (Postfix) with ESMTP id C675D40340
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 21:50:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C675D40340
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hpurEDqVy9O9 for <buildroot@lists.busybox.net>;
- Wed, 12 Oct 2022 20:50:44 +0000 (UTC)
-X-Greylist: delayed 00:07:41 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB781402F2
-Received: from forward100p.mail.yandex.net (forward100p.mail.yandex.net
- [77.88.28.100])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EB781402F2
- for <buildroot@buildroot.org>; Wed, 12 Oct 2022 20:50:43 +0000 (UTC)
-Received: from forward102q.mail.yandex.net (forward102q.mail.yandex.net
- [IPv6:2a02:6b8:c0e:1ba:0:640:516:4e7d])
- by forward100p.mail.yandex.net (Yandex) with ESMTP id EDDF24F0BA7D
- for <buildroot@buildroot.org>; Wed, 12 Oct 2022 23:42:59 +0300 (MSK)
-Received: from vla1-ef285479e348.qloud-c.yandex.net
- (vla1-ef285479e348.qloud-c.yandex.net
- [IPv6:2a02:6b8:c0d:35a1:0:640:ef28:5479])
- by forward102q.mail.yandex.net (Yandex) with ESMTP id E9751BF00002
- for <buildroot@buildroot.org>; Wed, 12 Oct 2022 23:42:59 +0300 (MSK)
-Received: by vla1-ef285479e348.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA
- id rH9MYrwD9k-gxhSKJwe; Wed, 12 Oct 2022 23:42:59 +0300
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client certificate not present)
-X-Yandex-Fwd: 1
-From: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?=
- <leo@yuriev.ru>
-To: buildroot@buildroot.org
-Date: Wed, 12 Oct 2022 23:42:46 +0300
-Message-Id: <20221012204246.904703-1-leo@yuriev.ru>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8CUyzmICOruR for <buildroot@lists.busybox.net>;
+ Wed, 12 Oct 2022 21:50:17 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10F104032A
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 10F104032A
+ for <buildroot@buildroot.org>; Wed, 12 Oct 2022 21:50:16 +0000 (UTC)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPA id A07EAE0005;
+ Wed, 12 Oct 2022 21:50:13 +0000 (UTC)
+To: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>,
+ Peter Korsgaard <peter@korsgaard.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Buildroot List <buildroot@buildroot.org>
+Date: Wed, 12 Oct 2022 23:50:08 +0200
+Message-Id: <20221012215008.2918444-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=yuriev.ru; s=mail; t=1665607379; 
- bh=5WRai1/Yv3Z5ZgBXxs8rPdZdR6x/yNW7qt8qWxaiO84=;
- h=Message-Id:Date:Cc:Subject:To:From;
- b=gVf5rSEaKYo3xbzInkggbWXEa9MsRY6aQVXJBN/hR5WmpTxwgouqCIsgfAMU3shCk
- vbjnkV/Dx8ubUFevx72OA7FoAeyFwIvt8fQU1RnIhp177GV5zB1xe5zHGNzyzhsY9i
- YRu5AxStZpuoaXhocDtFkJBTLOTfRv8+MyWWqQF0=
-X-Mailman-Original-Authentication-Results: vla1-ef285479e348.qloud-c.yandex.net; dkim=pass header.i=@yuriev.ru
-Subject: [Buildroot] [PATCH] package/libmdbx: bump version to 0.11.12
+ d=bootlin.com; s=gm1; t=1665611414;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=rYk20LF4GKQH5TJYfqqQ0+f76HVsqNXZGNwpAJ/2D1s=;
+ b=Uas4a1DStVDfSIFDxtOmRarwIkR7Ge7ClzhZMBXT5+iRti7bv/HGvoJ9xW8DNi1W6hhGUK
+ SOowi2va75U2/vVjpjNcFvVNA1ALvFm9ppM4/LFCjGDjdFW9DKR9v5QZX7Qr90HQZlg1Kr
+ XZy2ulHK3gXclKa4QYLHu2dJ89OXYCKQuvwtKeGAMJo3ehvXPOd+bH/ThR34+Gu6zmL77W
+ n1Ei75w7zgmY71ZPG/poYWWDwBsVCeLawLySQE6Rs3oZ/2hr0pJJ775xM4oaasF41WApv+
+ XV1VEPXzbLAgNksAsnilfJ+Fi9dAqejlRqWpW65tlxjLf00IT6htH6g+PytpYg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Uas4a1DS
+Subject: [Buildroot] [PATCH] Config.in: introduce BR2_TIME_BITS_64 option
+ for Y2038 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,49 +75,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4=20=D0=AE=D1=80=D1=8C?=
- =?UTF-8?q?=D0=B5=D0=B2=20=28Leonid=20Yuriev=29?= <leo@yuriev.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBpcyBzdGFibGUgYnVnZml4IHJlbGVhc2Ugb2YgbGlibWRieC4gU28gaXQgaXMgcmVhc29u
-YWJsZSB0byBiYWNrcG9ydAp0aGlzIHBhdGNoIHRvIGFsbCBhcHBsaWNhYmxlIHJlbGVhc2VzL2Jy
-YW5jaGVzIG9mIEJ1aWxkcm9vdC4KClJlbGVhc2Ugbm90ZXMgZm9yIHYwLjExLjEyCi0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tCgpGaXhlczoKCiAgLSBGaXhlZCBzdGF0aWMgYXNzZXJ0aW9uIGZh
-aWx1cmUgb24gcGxhdGZvcm1zIHdoZXJlIHRoZSBgb2ZmX3RgIHR5cGUgaXMgd2lkZXIKICAgIHRo
-YW4gY29ycmVzcG9uZGluZyBmaWVsZHMgb2YgYHN0cnVjdCBmbG9ja2AgdXNlZCBmb3IgZmlsZSBs
-b2NraW5nIChiYWNrcG9ydCkuCiAgICBOb3cgX2xpYm1kYnhfIHdpbGwgdXNlIGBmY250bDY0KEZf
-R0VUTEs2NC9GX1NFVExLNjQvRl9TRVRMS1c2NClgIGlmIGF2YWlsYWJsZS4KICAtIEZpeGVkIGFz
-c2VydGlvbiBjaGVjayBpbnNpZGUgYHBhZ2VfcmV0aXJlX2V4KClgIChiYWNrcG9ydCkuCgpNaW5v
-cnM6CgogIC0gRml4ZWQgYC1XaW50LXRvLXBvaW50ZXItY2FzdGAgd2FybmluZ3Mgd2hpbGUgY2Fz
-dGluZyB0byBgbWRieF90aWRfdGAgKGJhY2twb3J0KS4KICAtIFJlbW92ZWQgbmVlZGxlc3MgYExv
-Y2tGaWxlRXgoKWAgaW5zaWRlIGBtZGJ4X2Vudl9jb3B5KClgIChiYWNrcG9ydCkuCgpUaGUgY29t
-cGxldGUgQ2hhbmdlTG9nOiBodHRwczovL2dpdGZsaWMucnUvcHJvamVjdC9lcnRoaW5rL2xpYm1k
-YngvYmxvYj9maWxlPUNoYW5nZUxvZy5tZAoKU2lnbmVkLW9mZi1ieTog0JvQtdC+0L3QuNC0INCu
-0YDRjNC10LIgKExlb25pZCBZdXJpZXYpIDxsZW9AeXVyaWV2LnJ1PgotLS0KIHBhY2thZ2UvbGli
-bWRieC9saWJtZGJ4Lmhhc2ggfCAyICstCiBwYWNrYWdlL2xpYm1kYngvbGlibWRieC5tayAgIHwg
-MiArLQogMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpk
-aWZmIC0tZ2l0IGEvcGFja2FnZS9saWJtZGJ4L2xpYm1kYnguaGFzaCBiL3BhY2thZ2UvbGlibWRi
-eC9saWJtZGJ4Lmhhc2gKaW5kZXggYzRkOWM4ZDhjZS4uNzlhZjE4OTYzMyAxMDA2NDQKLS0tIGEv
-cGFja2FnZS9saWJtZGJ4L2xpYm1kYnguaGFzaAorKysgYi9wYWNrYWdlL2xpYm1kYngvbGlibWRi
-eC5oYXNoCkBAIC0xLDUgKzEsNSBAQAogIyBIYXNoZXMgZnJvbTogaHR0cHM6Ly9saWJtZGJ4LmRx
-ZGtmYS5ydS9yZWxlYXNlL1NIQTI1NlNVTVMKLXNoYTI1NiAgZDJjODFkYjcxNmEzM2QwMDdjYzc1
-NzAyZWNmM2M0NWNmYjdjMzNhMjI2MWZiYWNjZWQ2OTQ1MjA0ZWNlMWI2NyAgbGlibWRieC1hbWFs
-Z2FtYXRlZC0wLjExLjExLnRhci54egorc2hhMjU2ICBkZGU4ZjM2MjY1MDliYjc2NGIxN2M5M2Zl
-MDYyOTM4OTYyNWNiNTAzNjI1MDJlYjFjMjdjYTIwODM0MmYzODk0ICBsaWJtZGJ4LWFtYWxnYW1h
-dGVkLTAuMTEuMTIudGFyLnh6CiAKICMgTG9jYWxseSBjYWxjdWxhdGVkCiBzaGEyNTYgIDMxMGZl
-MjVjODU4YTk1MTVmYzhjOGQ3ZDFmMjRhNjdjOTQ5NmY4NGE5MWUwYTBlNDFlYTk5NzViMTM3MWU1
-NjkgIExJQ0VOU0UKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlibWRieC9saWJtZGJ4Lm1rIGIvcGFj
-a2FnZS9saWJtZGJ4L2xpYm1kYngubWsKaW5kZXggMzU3YjFiYWM5ZS4uYWMxYTNhMGQ2ZiAxMDA2
-NDQKLS0tIGEvcGFja2FnZS9saWJtZGJ4L2xpYm1kYngubWsKKysrIGIvcGFja2FnZS9saWJtZGJ4
-L2xpYm1kYngubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwog
-Ci1MSUJNREJYX1ZFUlNJT04gPSAwLjExLjExCitMSUJNREJYX1ZFUlNJT04gPSAwLjExLjEyCiBM
-SUJNREJYX1NPVVJDRSA9IGxpYm1kYngtYW1hbGdhbWF0ZWQtJChMSUJNREJYX1ZFUlNJT04pLnRh
-ci54egogTElCTURCWF9TSVRFID0gaHR0cHM6Ly9saWJtZGJ4LmRxZGtmYS5ydS9yZWxlYXNlCiBM
-SUJNREJYX1NVUFBPUlRTX0lOX1NPVVJDRV9CVUlMRCA9IE5PCi0tIAoyLjM0LjEKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Y2038 is now almost only 15 years away, and embedded systems built
+today are potentially going to still be operational in 15 years, and
+even though they are supposed to receive updates by then, we all know
+how things go, and potentially some of these embedded systems will not
+receive any update.
+
+In 2038, the signed 32-bit representation of time_t used on 32-bit
+architectures will overflow, causing all time-related functions to go
+back in time in a surprising way.
+
+The Linux kernel has already been modified to support a 64-bit
+representation of time_t on 32-bit architectures, but from a C library
+perspective, the situation varies:
+
+ - glibc uses this 64-bit time_t representation on 32-bit systems
+   since glibc 2.34, but only if -D_TIME_BITS=64 is
+   specified. Therefore, this commit adds an option to add this flag
+   globally to the build, when glibc is the C library and the
+   architecture is not 64-bit.
+
+ - musl uses unconditionally a 64-bit time_t representation on 32-bit
+   systems since musl 1.2.0. So there is nothing to do here since
+   Buildroot has been using a musl >= 1.2.0, used since Buildroot
+   2020.05. No Buildroot option is needed here.
+
+ - uClibc-ng does not support a 64-bit time_t representation on 32-bit
+   systems, so systems using uClibc-ng will not be Y2038 compliant, at
+   least for now. No Buildroot option is needed here.
+
+It should be noted that being Y2038-compliant will only work if all
+application/library code is correct. For example if an
+application/library stores a timestamp in an "int" instead of using
+the proper time_t type, then the mechanisms described above will not
+fix this, and the application/library will continue to be broken in
+terms of Y2038 support.
+
+Possible discussions points about this patch:
+
+ - Should we have an option at all, or should we unconditionally pass
+   -D_TIME_BITS=64, like we have been doing for _FILE_OFFSET_BITS=64
+   for quite some time. The reasoning for having an option is that
+   the mechanism is itself opt-in in glibc, and generally relatively
+   new, so it seemed logical for now to make it optional as well in
+   Buildroot.
+
+ - Should we show something (a Config.in comment?) in the musl and
+   uClibc-ng case to let the user know that the code is Y2038
+   compliant (musl) or not Y2038 compliant (uClibc-ng). Or should this
+   discussion be part of the Buildroot documentation?
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in           | 16 ++++++++++++++++
+ package/Makefile.in |  3 +++
+ 2 files changed, 19 insertions(+)
+
+diff --git a/Config.in b/Config.in
+index 3c57c591a8..46c80fe2f0 100644
+--- a/Config.in
++++ b/Config.in
+@@ -753,6 +753,22 @@ config BR2_PER_PACKAGE_DIRECTORIES
+ 
+ endmenu
+ 
++config BR2_TIME_BITS_64
++	bool "Build Y2038-ready code"
++	depends on BR2_TOOLCHAIN_USES_GLIBC && !BR2_ARCH_IS_64
++	help
++	  This option will pass -D_TIME_BITS=64 in the compiler flags
++	  to ensure the glibc C library uses a 64-bit representation
++	  for time_t and other time types, which ensures that
++	  programs/libraries will correctly handle time past year
++	  2038.
++
++	  Notes:
++	    - This option only has an effect with glibc >= 2.34.
++	    - The musl C library since its version 1.20 is
++	      unconditionally Y2038 compliant.
++	    - The uClibc-ng library is not Y2038 compliant.
++
+ comment "Security Hardening Options"
+ 
+ config BR2_PIC_PIE_ARCH_SUPPORTS
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 43d214bcbe..59d88bb97e 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -163,6 +163,9 @@ TARGET_HARDENED += -D_FORTIFY_SOURCE=2
+ endif
+ 
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
++ifeq ($(BR2_TIME_BITS_64),y)
++TARGET_CPPFLAGS += -D_TIME_BITS=64
++endif
+ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)
+ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+-- 
+2.37.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
