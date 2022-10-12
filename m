@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F019C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 12 Oct 2022 15:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E36DC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 12 Oct 2022 15:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E952741872;
-	Wed, 12 Oct 2022 15:44:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E952741872
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1923C40577;
+	Wed, 12 Oct 2022 15:45:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1923C40577
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nnHwMwGMEiv5; Wed, 12 Oct 2022 15:44:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kpBS-uGGeKTP; Wed, 12 Oct 2022 15:45:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6CF7416CA;
-	Wed, 12 Oct 2022 15:44:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6CF7416CA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A99E1BF4DD
- for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 15:44:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4412A40567;
+	Wed, 12 Oct 2022 15:45:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4412A40567
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A56851BF4DD
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 15:45:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3651283294
- for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 15:44:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3651283294
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8108360E65
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 15:45:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8108360E65
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id COOtoxSBuN2t for <buildroot@lists.busybox.net>;
- Wed, 12 Oct 2022 15:44:39 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TWO7DCfQDPPm for <buildroot@lists.busybox.net>;
+ Wed, 12 Oct 2022 15:45:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C6A6831D6
- for <buildroot@buildroot.org>; Wed, 12 Oct 2022 15:44:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C6A6831D6
+ by smtp3.osuosl.org (Postfix) with ESMTP id A62C060BCB
+ for <buildroot@buildroot.org>; Wed, 12 Oct 2022 15:45:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A62C060BCB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6636A86BF5; Wed, 12 Oct 2022 15:44:39 +0000 (UTC)
+ id 95AD086BF8; Wed, 12 Oct 2022 15:45:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 12 Oct 2022 17:44:07 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0172690bcd7213624b639c5d7f6e1faeb7c76bbc
-X-Git-Newrev: aa47ae19ed5c763fb74c1d5787e868756ece6dd8
+Date: Wed, 12 Oct 2022 17:43:43 +0200
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 23fbc414296c27f5200d21ce5a9ff53f80e5af0c
+X-Git-Newrev: c52157f6aabd1cc92026610efa48aae4fe1053dc
 X-Patchwork-Hint: ignore
-Message-Id: <20221012154439.6636A86BF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/collectd: work
+Message-Id: <20221012154543.95AD086BF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/collectd: work
  around gcc bug 68485
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa47ae19ed5c763fb74c1d5787e868756ece6dd8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c52157f6aabd1cc92026610efa48aae4fe1053dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
 collectd is impacted by the microblaze-specific gcc bug #68485 [0].
 
