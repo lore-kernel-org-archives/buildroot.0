@@ -4,97 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71644C4332F
-	for <buildroot@archiver.kernel.org>; Tue, 11 Oct 2022 22:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73C07C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 12 Oct 2022 01:35:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6A0F607F2;
-	Tue, 11 Oct 2022 22:31:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6A0F607F2
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4EFC60B36;
+	Wed, 12 Oct 2022 01:35:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4EFC60B36
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sC4cpcUIM5xN; Tue, 11 Oct 2022 22:31:00 +0000 (UTC)
+	with ESMTP id lcgt_Oq5aKjA; Wed, 12 Oct 2022 01:35:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2519607D1;
-	Tue, 11 Oct 2022 22:30:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2519607D1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A82F41BF852
- for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 22:30:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E02660AF4;
+	Wed, 12 Oct 2022 01:35:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E02660AF4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4ECA91BF59E
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 01:35:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52BCE400FF
- for <buildroot@lists.busybox.net>; Tue, 11 Oct 2022 22:30:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52BCE400FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 27C1A416D9
+ for <buildroot@lists.busybox.net>; Wed, 12 Oct 2022 01:35:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27C1A416D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SchFf2Sw2XOy for <buildroot@lists.busybox.net>;
- Tue, 11 Oct 2022 22:30:57 +0000 (UTC)
-X-Greylist: delayed 00:09:47 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FCA3400C4
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com
- [66.111.4.27])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2FCA3400C4
- for <buildroot@buildroot.org>; Tue, 11 Oct 2022 22:30:56 +0000 (UTC)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
- by mailout.nyi.internal (Postfix) with ESMTP id 60DFC5C00B1
- for <buildroot@buildroot.org>; Tue, 11 Oct 2022 18:21:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
- by compute4.internal (MEProxy); Tue, 11 Oct 2022 18:21:07 -0400
-X-ME-Sender: <xms:UuxFY1hP2ArVJZj4BeVMbzFZzoVEMMI9tXpjB_oi6IvDiSMQu3jCrw>
- <xme:UuxFY6D0eLKlTeAT52YcnuKX-YaEgh0vf2N1kwV5JmaGyz1QEGdp0MXajBQYUQjJ3
- KDvtMc5FHoq4rrg>
-X-ME-Received: <xmr:UuxFY1FAKOSHIWjbFJ5e7L_eCUIjTiXcGNhC7oI-g8lXqUdYWGRxH_v8ZY_duUtUZ61TAIOx5kZH_5u1Rya1Iw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejjedgtdelucetufdoteggodetrfdotf
- fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
- uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkofggtgfgsehtjeertd
- ertddvnecuhfhrohhmpeffrghnihhlohcuuegrrhhgvghnuceomhgrihhlsegusghrghhn
- rdgthheqnecuggftrfgrthhtvghrnhepueffuddtudfgtdduhedtjeeikeefgfektefhue
- efveefuedtffehveeujeefkeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
- pehmrghilhhfrhhomhepmhgrihhlsegusghrghhnrdgthh
-X-ME-Proxy: <xmx:UuxFY6SUexzR74acGVvgYWhadY9GOI9WmOCIWwLAiAltVN4toHMC6Q>
- <xmx:UuxFYyxmnaNtz9YnHFQSMVSe0zgLFhNwws7bCP1qOI180KKshTgL9w>
- <xmx:UuxFYw6lRu3twIpPHiuUSoTSi-5hfY06ekXFkqiFVol5agmB69kAtQ>
- <xmx:U-xFY3oQS-Bec4N9nIqZAYCa7AkHz-u4TFOtK-nO31YMll1-e1BZtw>
-Feedback-ID: i1d444086:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA for
- <buildroot@buildroot.org>; Tue, 11 Oct 2022 18:21:06 -0400 (EDT)
-Date: Wed, 12 Oct 2022 00:21:01 +0200
-From: Danilo Bargen <mail@dbrgn.ch>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Dm70JvPaACkR for <buildroot@lists.busybox.net>;
+ Wed, 12 Oct 2022 01:34:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F51641677
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com
+ [136.143.188.14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0F51641677
+ for <buildroot@buildroot.org>; Wed, 12 Oct 2022 01:34:58 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1665538497; cv=none; 
+ d=zohomail.com; s=zohoarc; 
+ b=A3ImMA9g5WQ8mmHcbWToTWyU8JCHzsRe8H/dq5+tlmhZCgMV1638EcDBkPWTo4nroLz7H5ZU3WAH0WbrCB2Zvboykgu+35BZFRNtCtShxhZIXUFa/FCTAGX5prac/dgQGSNd0JwpUIkAW2dQSmZHcfnrT7GdOC0e9xkLT9GVRLg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
+ s=zohoarc; 
+ t=1665538497; h=Content-Type:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+ bh=qE418LSC8YrbHrY6yPJee3xGoqgwPB+oLGOTGfOxTpA=; 
+ b=FyRUXp67bkl8ePznQKA8lVh2f6sHhtoYoDmtzmUgRk6FzO5rFfGFEUYwNluiE089yd0vWLHidCOuNPgbTc86lK+fdLxY8B8CXh9v4IhGrIUYyIKpOSrXu6jWgeEEa4I/FOpZV4HaMm5TsL6NMzfgGA8g//sq2qQQx2TNdLGlMZ8=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+ dkim=pass  header.i=linux.beauty;
+ spf=pass  smtp.mailfrom=me@linux.beauty;
+ dmarc=pass header.from=<me@linux.beauty>
+Received: from sh-lchen.linux.beauty (180.169.129.130 [180.169.129.130]) by
+ mx.zohomail.com with SMTPS id 1665538494405741.3268576452001;
+ Tue, 11 Oct 2022 18:34:54 -0700 (PDT)
+Date: Wed, 12 Oct 2022 09:34:39 +0800
+Message-ID: <87edvdeseo.wl-me@linux.beauty>
+From: Li Chen<me@linux.beauty>
 To: buildroot@buildroot.org
-Message-ID: <20221012002101.02c1f4bf@c3po>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=dbrgn.ch; h=cc
- :content-transfer-encoding:content-type:date:date:from:from
- :in-reply-to:message-id:mime-version:reply-to:sender:subject
- :subject:to:to; s=fm1; t=1665526867; x=1665613267; bh=uloGzkeid0
- wDsYONCDHWAzrpWd63VZ3Alq1IsJDUq3o=; b=StI2u+qmbmK42TvufOZKyjBMFD
- Y1QMV1Pr6YgrBjqrc4vFHkWCpgAMbj4ftiPa2M4lYo9CcfNCSbAnWwm9QfTmQZx/
- v56btPzJUW27Jhbk8hLEFUmcaRs0qtEhpJCNdo3o/8elvmGKK5RLkqdGgwDxtn5v
- XOlB9hTWhNvvEd1UKp5jWwJBoyT+ySbKV9dckVEKNUgnsvotVl1xs5nhEO2SmoUQ
- 2i6tpuCEF/eHkUoeksS5pNcNfHvdnov30G6Q7jOx4EOb4dfQjzX05InhR3Oewj3P
- shKAPJCP9zU68gAktq9HfgUibNApNGRQwwsZB/7T4l9VWJLVh27bfdsYNHQw==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=cc:content-transfer-encoding:content-type
- :date:date:feedback-id:feedback-id:from:from:in-reply-to
- :message-id:mime-version:reply-to:sender:subject:subject:to:to
- :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
- fm3; t=1665526867; x=1665613267; bh=uloGzkeid0wDsYONCDHWAzrpWd63
- VZ3Alq1IsJDUq3o=; b=pQKcBOiZt1+ZpbFHD2oryWaYMtM+6Mt+OaewSzV+oOJZ
- IC8nwf08uqkABjUL6vTurx91q2Zor9vA5PE5CuaBotTx4RngyT9oLYTzr9qXVQxC
- dS8GUtYR1MJjrvJPkaoQdHetTyktUAfogUbKk07Dy39JVl6/jR7ZG8l+pjjU1f5d
- TJm0jELRqq24xSdJmhL9EpVY5ZsnbYpdEhSE3OI1K4VMoiNJ4FN/vQlk/mm9EaSn
- M8u4sRFzHi7JxFsmiaugQQdFCHZdXDbPlIIBThKt9sypVp57TZQmRUFhx1iYKbm9
- s12HgwKjs3lUZB2aVrKqCp8rpI3v29y6eJC+pl/bNw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=dbrgn.ch header.i=@dbrgn.ch
- header.a=rsa-sha256 header.s=fm1 header.b=StI2u+qm; 
- dkim=pass (2048-bit key,
- unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm3 header.b=pQKcBOiZ
-Subject: [Buildroot] [PATCH 1/1] package/tealdeer: bump version to 1.6.0
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/29.0.50 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+X-ZohoMailClient: External
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; t=1665538497; 
+ s=zmail; d=linux.beauty; i=me@linux.beauty;
+ h=Date:Date:Message-ID:From:From:To:To:Cc:Cc:Subject:Subject:MIME-Version:Content-Type:Message-Id:Reply-To;
+ bh=qE418LSC8YrbHrY6yPJee3xGoqgwPB+oLGOTGfOxTpA=;
+ b=dYR+ViFcPd0ldMkBpfRzqlO//LJobzrf0ixSyV1wKvjXlmNFEWQl23QNlRzVfJjW
+ EvTNlo4lVMIs35sEwjTKzZvl+v8opySYhPHaD0ilZZk5j2UaIFaedLR8WfgqVNqVhtb
+ APm07oDLRpyE3kGjphHfz/5hmbg0jeqqgK63mPxo=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty
+ header.a=rsa-sha256 header.s=zmail header.b=dYR+ViFc
+Subject: [Buildroot] [PATCH] package/kmod: use the correct path for kmod
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,43 +83,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Li Chen <me@linux.beauty>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Danilo Bargen <mail@dbrgn.ch>
+Content-Transfer-Encoding: 8bit
+
+kmod install path is always /usr/bin/kmod instead
+of /bin/kmod.
+
+So if we link modprobe/lsmod/... to /bin/kmod
+
+We will get error like:
+> # modprobe
+> -sh: modprobe: not found
+
+because it points to:
+> # ls -liah /sbin/modprobe
+>   2551 lrwxrwxrwx    1 root     root          11 Sep 25 10:05 /sbin/modprobe -> ../bin/kmod
+
+and kmod is under /usr/bin/kmod instead of /bin/kmod.
+
+Signed-off-by: Li Chen <me@linux.beauty>
 ---
- package/tealdeer/tealdeer.hash | 2 +-
- package/tealdeer/tealdeer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kmod/kmod.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/tealdeer/tealdeer.hash b/package/tealdeer/tealdeer.hash
-index 0e53174841..b8c9278405 100644
---- a/package/tealdeer/tealdeer.hash
-+++ b/package/tealdeer/tealdeer.hash
-@@ -1,4 +1,4 @@
- # Locally generated
--sha256  42febf9ee84721b9230077d62e2fc51201fd59624d3c776ccc1a634788768a60  tealdeer-1.5.0.tar.gz
-+sha256  9b2e9c2d8cbdcf50b3b7865b27a535815874c8d6066f9b7e1ca4d88941065401  tealdeer-1.6.0.tar.gz
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
- sha256  a313b5e62b80a08f3aae0fa62ff3de8482ef55247299eb352ab44f87ef456b1b  LICENSE-MIT
-diff --git a/package/tealdeer/tealdeer.mk b/package/tealdeer/tealdeer.mk
-index c396225098..18b5c35351 100644
---- a/package/tealdeer/tealdeer.mk
-+++ b/package/tealdeer/tealdeer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
-
--TEALDEER_VERSION = 1.5.0
-+TEALDEER_VERSION = 1.6.0
- TEALDEER_SITE = $(call github,dbrgn,tealdeer,v$(TEALDEER_VERSION))
- TEALDEER_LICENSE = Apache-2.0 or MIT
- TEALDEER_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
---
-2.38.0
-
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 82e8597759..cfb4a27cf3 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -73,12 +73,7 @@ ifeq ($(BR2_PACKAGE_KMOD_TOOLS),y)
+ KMOD_LICENSE += , GPL-2.0+ (tools)
+ KMOD_LICENSE_FILES += COPYING
+ 
+-# /sbin is really /usr/sbin with merged /usr, so adjust relative symlink
+-ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+-KMOD_BIN_PATH = ../bin/kmod
+-else
+ KMOD_BIN_PATH = ../usr/bin/kmod
+-endif
+ 
+ define KMOD_INSTALL_TOOLS
+ 	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
+-- 
+2.37.2
 
 _______________________________________________
 buildroot mailing list
