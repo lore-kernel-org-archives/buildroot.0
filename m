@@ -4,134 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21DD4C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 06:41:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AE33C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 06:49:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BC7FD4031F;
-	Thu, 13 Oct 2022 06:41:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC7FD4031F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E58340C3A;
+	Thu, 13 Oct 2022 06:49:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E58340C3A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QR7IdvAcGX-Z; Thu, 13 Oct 2022 06:41:56 +0000 (UTC)
+	with ESMTP id 5q2BZ-i0w0DX; Thu, 13 Oct 2022 06:49:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9D1D40283;
-	Thu, 13 Oct 2022 06:41:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9D1D40283
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 729151BF86D
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 06:41:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A785140283;
+	Thu, 13 Oct 2022 06:49:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A785140283
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C03E31BF86D
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 06:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A138419A5
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 06:41:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A138419A5
+ by smtp3.osuosl.org (Postfix) with ESMTP id A83896111B
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 06:49:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A83896111B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0XQmIzGynscy for <buildroot@lists.busybox.net>;
- Thu, 13 Oct 2022 06:41:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T5Rv_lVWjP0V for <buildroot@lists.busybox.net>;
+ Thu, 13 Oct 2022 06:49:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9531408DD
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com
- (mail-bn7nam10on2069.outbound.protection.outlook.com [40.107.92.69])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C9531408DD
- for <buildroot@buildroot.org>; Thu, 13 Oct 2022 06:41:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E10461118
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on2089.outbound.protection.outlook.com [40.107.223.89])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9E10461118
+ for <buildroot@buildroot.org>; Thu, 13 Oct 2022 06:49:39 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rzc5uZxKWSsIfWQ1JCmmOrPPqS2V0GpCYtc3O/MrUb/R//bkPRgdKUKykhBBDV422Hy3FP67dstOqaRnCTHtgNvJblSZQN8tdbzwIlmEHgJxP5lAjS6sLwpiSIQ8eDGZL9PdK2JDgt/b0WNJHNZQ1DOoI8q/PtRFGMdyiZulY0zs9H9I7ImTVkRxe8s904hMq1Wx8yk7O7E8rqEY/HxOHzYX/OvyBW583QKCbhYh96sQZzRCKfITAYyH1rdakzAGPcofOyxWFm+94mqY1y6f6gF6mkBvdviYpcR1bLNrT6xmCDpPhg5L4r2AkV7tvrcuAW5hd6cMouqLRYmpQPasvw==
+ b=XRBxbszPMNsq4Ud7RzVDtezU3LOP30OMUgcIAhMihM4W7vxgklS4GUutArBXaQePOu70LU68/YOd173vaXXOqP6CojnBj21XDE7biNmh+QAnPUoqAcmLwrkmEv+alvkgCvv2MPZJGX0McrErG0/r+f+iseo2jnvPd+H/Ror4z252qMIfmTlxkk7MfPqYt7HZLUjVCDeiSyDByv7zKiv4B8KlCDDGn25+VDta+BMGjzRU//ZWqyolBK99oILsLfVajxj9bORwNfz7TugrQRbh9IUXtifOJZ4i/KzNlBusjy0RuY8ZV8ZMwd7SfRvqWqxn7JYCJK9Pkh7l1MreDN43jA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sZceLQoXAfi7kWmDvt49wz6UNkKXaJjbHynnN1aOibA=;
- b=QBHF+fhg2EZkcbmwurTgGriK5mea9F6EaNwbEQLGbXA9U07sQeEVXEAENPm342M7ZPO+/QfdTuK477ZyWnQj5/7l1Pso48ACtYgdL9rpf/C9NcQ99AdkQX5/yihWemJEcOrTcPqbX+uL954DK0QKvscdYEuVEI0gYL5++3MnNAbBKA2YNmvXyKmgIKBph2pcJkRo3g7XM2acumn2xQ5g+Y9be3DReGcJJqcH85nHQKTf/oucdR8gzCW83iQftZMN91AWH0k/MM9QtFUtV5WqbxCrlAX6+Walkf21YZGzZckC4REJzisbHq0B2h9NNuJWs/3l5++3aIHdvt5Xr2sbGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by PH8PR12MB7447.namprd12.prod.outlook.com (2603:10b6:510:215::7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Thu, 13 Oct
- 2022 06:41:46 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::eda2:578d:ad49:a8df]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::eda2:578d:ad49:a8df%4]) with mapi id 15.20.5723.026; Thu, 13 Oct 2022
- 06:41:44 +0000
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Thread-Topic: [Buildroot] [PATCH v2 1/1] boot/uboot/uboot.mk: add pmufw.elf
- support
-Thread-Index: AQHY3mO/5f6jErhqgU2i36HVqPyNE64LNu6AgACcO6CAAAz+AIAAAKWg
-Date: Thu, 13 Oct 2022 06:41:44 +0000
-Message-ID: <CH2PR12MB50048D0E5A45520ABCFA4678F0259@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20221012175426.32367-1-neal.frager@amd.com>
- <20221012223315.68f43720@windsurf>
- <DM6PR12MB50075AD3D83E1AF519324C86F0259@DM6PR12MB5007.namprd12.prod.outlook.com>
- <20221013083856.4624e7c6@windsurf>
-In-Reply-To: <20221013083856.4624e7c6@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|PH8PR12MB7447:EE_
-x-ms-office365-filtering-correlation-id: 228da7b1-07de-49c3-6a82-08daace5fe67
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Va5MDf9l0ThfbT28k5mgZELT5qoGDPf1yx77ryeiRbotxvPGJhJHr3x/oCVuWuyQ4z+nLydjPGFb2m2nFO1DGpqBC/0G5kMxTzGNwI7ypn/joZa/GXJIvLXuNWobzfO7x5IBCexzxSYHZD5QQ2rvYzsjZJW/DNNYQpgV4q2LJ8TmqEx40DNGVqHHET8Gg+oiWQ8a3O1GdufIIWsuzpTqM0eG3XJ1lrQ+hNBbsyUQMU9dbgcicdQfwutSzwIINIqYG/qakkNVMck79XiFDRcYni/c+/hKzaabppBkDG7NlpyQmMoMRSEmWnAiUNHXOu2dMUvdG88iGfk9TGEnAypaWzcHXYRHqdKAXyEN45p7dqJDbw/jWbzrtFxisxyH6gEKhU9rszqD+0MQb3wTV+vLB6G1OVw9IQXblZhWcNmwniXFw3A7bOh+ESsplh2C1WLt+V9MAQd7FoPFO8BxL+TYoc1kwx/FRCr9Qvs9A8SDPc3ctQZrx//CKhT3gAPgw04p892xfg+lRC10ppvCGO2OucaeddMxRSqLA6KQqQ11AVY1lpNcpLhvNMMmvFzpo9KoYPRTXjE/WyS1yXimJ6Zug5z8IOlInsZrjTKX+dWeb4fT49kraqWHrDRDCx3cy523R+LyWgpFj7ydE1yEzagDPpKm0TFFlKvwSzmfSoNpJVBa3fVD8Qjh0+uxGi5Q2IXJJCCeONxCBH/runhKuZnFIl2YqM0A6603rCGrsgw57qhog0p+m2PYJFr50xgDX97gwHUAUIjzQXw72t12g2DTuoLhGM190YTV0ZXGNF4Gmow=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(346002)(376002)(366004)(136003)(39860400002)(396003)(451199015)(54906003)(71200400001)(76116006)(66946007)(38070700005)(38100700002)(4744005)(2906002)(5660300002)(66476007)(64756008)(41300700001)(8936002)(122000001)(66556008)(66446008)(8676002)(4326008)(52536014)(26005)(9686003)(186003)(6506007)(478600001)(7696005)(316002)(6916009)(33656002)(55016003)(86362001)(41080700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JNMqsOU64JYMur+5TMMwbpOVG3SdRDHVEEiIZKb9xDOUHRBA83Q/PVQnr/XD?=
- =?us-ascii?Q?AddlYt9DmFd9Cy95s/64MAfK/9joLEWUCooCKjCZ2jGdaOKLMA7oS1EyrEhP?=
- =?us-ascii?Q?UkxqiykondWxCwuOx777wYttiPInVqfy83E3qmUZvArH918xxlx2yw8pw6PB?=
- =?us-ascii?Q?Vzi2MM9NJSL512+lz80qDVwI9d+42RkRFqyzP/JileUeXJzceeKO5+1JG4vb?=
- =?us-ascii?Q?t4X6xsXtgZQw5ClE8+myu7xWuACJ6/DhPEO2i5e1eHiIcLrLUOv3AlJYibgq?=
- =?us-ascii?Q?t6BP8bEhbKCGVx4rxIW21opsZFv7xqm+G0YLJcC8/2ZJl5TqaU1gVMQan2V6?=
- =?us-ascii?Q?MK84tVgPKMPI2MhUAsotKyEKIOGO8ML0bdEoCeSspgMJg6mNZ/b0L89hIG0E?=
- =?us-ascii?Q?H/7VqIhsBmX3Fm8AS9hXL+Ai1A5CbxMsGGXD5XmwA+umQ7Zh1laInWDyTUAl?=
- =?us-ascii?Q?rdRrIg3uQOpFNPW5EO86ypEweiESTcMf+yTBDBgWHivb2F5KnqC/aNhonD3l?=
- =?us-ascii?Q?cYpANlNTA113CcrWAmHrqXcW8svzPp29uM/FOyuQ4xN0XWqIALgmpKQeNGC6?=
- =?us-ascii?Q?dO6//zZGmEaWfQiN66JCCG3AdVK2C+Eo1IHT9I649/zsY0K5l3wus12MJ3Z1?=
- =?us-ascii?Q?QArgzRw6Y7o09SqlgVEb7R8cixZarwJlxSdBL+MyqWYS7I9DeRrEAjXROGwD?=
- =?us-ascii?Q?5UPxF6L4QWqVcF0v6pWW6HuF2wWiUOCoU4I3jdhbzrhGr+fZ3uZrbkcO+JL2?=
- =?us-ascii?Q?A7chaX/DsbndAIhQdP+vpJm0Yi3eVsH0sDrCovikN9mfu4RQNbakWT7nNay4?=
- =?us-ascii?Q?VvfFJ3DVfrtdrJIwWFItXhDIWpV3vbqm7RVyyTai2kRGZ+SWDqPWhP2SlyCw?=
- =?us-ascii?Q?pbxvDf3eI9FY2u8B4vRUYO/FvdVuI2GtL4dzb7rvLMZQUvigrVMSiSTik9JQ?=
- =?us-ascii?Q?0pAe6RcY266Fqzv+LZ0nfOBTqzJNU6qf7SgqIma3Xr+9k+PfrMvNx46MDw1F?=
- =?us-ascii?Q?bVqCNCuoltAR12cfR6rPNw6MM/KIMX2yHqQqX1m43ECfcY8+bQsgYXSMO5W+?=
- =?us-ascii?Q?s2eugmRfo8yFMMa22oXUxYvpRcYHacpCjt/Z6W7knhlSBALg0i8LfQi0A1dj?=
- =?us-ascii?Q?7bGhPQvPOVgvFeXzQPUYl7PObw1i+wvySmhB1LCg7XeJZkwul1uSBHSRDuwQ?=
- =?us-ascii?Q?t9iYLEDATMr03MSyUIB0kn5PqYEXHUmu0W7+qcs82VKfr68fnoxn3l2GtxNN?=
- =?us-ascii?Q?euqrr/yLvykH6CqoIG1fOSTUDayUL35/VP4culhbkT3TVndK2geNER0YhT6V?=
- =?us-ascii?Q?wpYggZw63TA4234VENSwNsyESqPmRbfoc5Z/HnWOXMCvNfbQle+ftxoyjNKp?=
- =?us-ascii?Q?iwEBQNLv6IYydWp++OHez23C7SFN3xv2kS7mupTCYtpP3jySr5OMlfuAJfJ0?=
- =?us-ascii?Q?pI3fc+pwLREkM5vNUsYovUj2IpzJJxispHqQI8TYmiILrXXhTRnqvB1IK+Lr?=
- =?us-ascii?Q?hFn6EFGGdp/G9memVJikVlCBjI0u6HkNRAihDyVAxRi/f/Okp36Ku2yhcahX?=
- =?us-ascii?Q?cidrr+otXg+xz9RqpJs=3D?=
+ bh=A3HR1qpJsik18pENcmFdrxDdy3/a1Ymcl73Ky41+ADk=;
+ b=VwtxQLZ9cfT9ZOohYX2Gk6soUIogB15jvgNyMa5L4+MlIuH5Xu5UDmbs4POBH6kjIYlqmZ22ufo+v5HoX1QSB9dnb/U+1XsB7O2kQwH8RaKCeJQmUhwLc1oSLMk+K/cFnOX669csIqQix4lOEeokr7WpIG2ba2VRUapIUZxyu0zUuHSe5crtR5wktyTC8mntrheR7rr6NGiAJh5c+XZ/Wd7LJbourXL10RgE3YD+WZzfiW+FADK3ILAMRxzqLVdRBYacI46uaxieZ2E+7hYK2bFta1weB8uIFyQyhaxD3XRE//h9IKPwscozd8ilmk9ejb0yAbzePnrHW7y684BnQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+Received: from DM6PR21CA0026.namprd21.prod.outlook.com (2603:10b6:5:174::36)
+ by DM4PR12MB5312.namprd12.prod.outlook.com (2603:10b6:5:39d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Thu, 13 Oct
+ 2022 06:49:36 +0000
+Received: from DM6NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:174:cafe::f1) by DM6PR21CA0026.outlook.office365.com
+ (2603:10b6:5:174::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.8 via Frontend
+ Transport; Thu, 13 Oct 2022 06:49:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT016.mail.protection.outlook.com (10.13.173.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5723.20 via Frontend Transport; Thu, 13 Oct 2022 06:49:35 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 13 Oct
+ 2022 01:49:34 -0500
+Received: from xcoapps68.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
+ Transport; Thu, 13 Oct 2022 01:49:34 -0500
+To: <buildroot@buildroot.org>
+Date: Thu, 13 Oct 2022 00:49:31 -0600
+Message-ID: <20221013064931.60174-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT016:EE_|DM4PR12MB5312:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a2e8a08-1669-4d5d-99c2-08daace71763
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ujSKb3FfMowiLaF/kZUq8AYZV12mjXY8gVc96rUmSONPkBN6/89M5/x1mw1qQMy+deOl8TLbvv7xodLal4NUrKyRNZkzemRACvkHDWbnmFW9DAtSy02owov1+cvEYldWjdC/jVL0Wq+SpJPWq9grjuMMHScfcL/DpA6f/PCCVuxrVZ8TNBEaykRzEL0nXh+PtN4aYiyl7z+WI3CxtP9xpFt+RmCDEd5CcS+jr1ELYW9Dy07ADhWDudH+iVDKuprOzopNIQC7K2OUw27BUGSJRZDTAzW1NJNK8b+gU2FKe2RI0JkTmeIUFXyNFrYnMfnlib2oAHX0rNqc19AoZzYkVx1Cr3rmpLtUI8uSqSATTxheOKsV1KKSALGB24waxAK7l2gNkua8WhPw8mUP2mVJxL4ONRFPRizDFViN4/qBLVbyC7liFBkr7DYEQntHqc0+jpRrOlKbYp0M8WZz5EbG5ciMpfGQK695/8p8SJu/sPLhGIvK6RH3iVI2g2x8mam/V4xU98WBZzrwIEQZW65yovLmwqu/o453YDqo3IivQechRkqtD1NFZvs7aPR0Il+8Fs4Pe2uNLEUxF6MTQdTy2D2ogO7JlrzX8x6lAZVt7snARGkF0OPsXUES2VZSWan27hN0JDCbblCxhUUTqajWpFE59KmL+QzoG4/860q1O9AoWYG7zHadKErfFbAIE8f7Kqv3nQMe2zoZStcb1oKvLj3MbNoenPeIix4I9HCI4ualTtDczpnWH4A/MJNTBtIfIb5mxWcBO351Xw6WDeZzNq/Fe9r4jROq0nW+Mi8NCxD6Zdtha8AqVojL9nUic1dpyeJCsJxM9haewniYV1cqVjv181Zhw/s4FZGRcCjbYI0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230022)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199015)(46966006)(36840700001)(40470700004)(36756003)(40480700001)(2616005)(186003)(1076003)(336012)(26005)(2906002)(82740400003)(316002)(8936002)(6916009)(54906003)(41300700001)(8676002)(4326008)(70586007)(70206006)(86362001)(6666004)(81166007)(356005)(82310400005)(478600001)(5660300002)(44832011)(40460700003)(966005)(36860700001)(47076005)(426003)(83380400001)(41080700001)(36900700001);
+ DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 228da7b1-07de-49c3-6a82-08daace5fe67
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Oct 2022 06:41:44.1712 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KllnjS+C6r0dP7Q+GDCbtFleaCq7duMIvSG2wmb09DDtuNt6clxgnklZLBKrag4Z
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7447
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 06:49:35.5235 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a2e8a08-1669-4d5d-99c2-08daace71763
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5312
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sZceLQoXAfi7kWmDvt49wz6UNkKXaJjbHynnN1aOibA=;
- b=ZEMfu+iwnwbww01xOFuO2+IFbp8+yYbM7Qb09LHfHmjuXtN4xCqQtHNGIihOUfNqvFTPj0i0gQA+3GxoJ3/3k9SJFyAjvEuW3WmOkGFMDOLKdCSvMQQ4YWa0phtgpif03uwsrTvFp2o8GZR57TX08yToa4quP5cWObwpnnPmEcw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=A3HR1qpJsik18pENcmFdrxDdy3/a1Ymcl73Ky41+ADk=;
+ b=4s9S69ftXFB7aZlGRb0b9jTln/OC4ZymylF16FRWJLW57kcHSN9dchSFq6wgyQRnPhJW9fCKkCeYaBiJp+NVtmnWAIRc5KlJ8yL7BkSIrUvEixdqMvr6+A+PBINJchpFTb/ktYxplMFFlQlNe3JRiz7f3R2YsSUDRNFQBMk7vOM=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=ZEMfu+iw
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v2 1/1] boot/uboot/uboot.mk: add pmufw.elf
+ header.s=selector1 header.b=4s9S69ft
+Subject: [Buildroot] [PATCH v4 1/1] boot/uboot/uboot.mk: add pmufw.elf
  support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -144,36 +123,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
- Neal Frager via buildroot <buildroot@buildroot.org>, "Chaplin,
- Kris" <Kris.Chaplin@amd.com>, "wesley@sonifex.co.uk" <wesley@sonifex.co.uk>,
- "giulio.benetti@benettiengineering.com"
- <giulio.benetti@benettiengineering.com>, "Simek,
- Michal" <michal.simek@amd.com>,
- "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: luca.ceresoli@bootlin.com, Neal Frager <neal.frager@amd.com>,
+ kris.chaplin@amd.com, wesley@sonifex.co.uk,
+ giulio.benetti@benettiengineering.com, michal.simek@amd.com,
+ yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+This patch adds support for zynqmp pmufw.elf files.
+It will allow buildroot to use pmufw.elf binaries directly
+from the Xilinx git repository built by petalinux in
+addition to still supporting pmufw.bin binaries built
+by the zynqmp-pmufw-builder.
 
-> > +UBOOT_ZYNQMP_PMUFW_BASENAME=$(basename $(UBOOT_ZYNQMP_PMUFW_PATH)) 
-> > +UBOOT_ZYNQMP_PMUFW_SUFFIX=$(suffix $(UBOOT_ZYNQMP_PMUFW_PATH))
-> 
-> > Spaces around = sign.  
-> 
-> I will take out the unnecessary spaces.
+https://github.com/Xilinx/ubuntu-firmware/tree/v2022.1_22.04_1/xlnx-firmware
 
-> It is the opposite: you need to add spaces around the = signs.
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+V1->V2:
+  - corrected objcopy instruction for converting elf to bin
+V2->V3:
+  - removed unnecessary spaces
+  - simplified if statement to check for a pmufw.elf file
+V3->V4:
+  - added spaces around = sign of UBOOT_ZYNQMP_PMUFW_BASENAME definition
+---
+ boot/uboot/uboot.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thank you for clarifying.  I will fix that.
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a9f9b1bf16..0439ec5e4b 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -391,9 +391,12 @@ UBOOT_ZYNQMP_PMUFW_PATH = $(UBOOT_DL_DIR)/$(notdir $(UBOOT_ZYNQMP_PMUFW))
+ else ifneq ($(UBOOT_ZYNQMP_PMUFW),)
+ UBOOT_ZYNQMP_PMUFW_PATH = $(shell readlink -f $(UBOOT_ZYNQMP_PMUFW))
+ endif
++UBOOT_ZYNQMP_PMUFW_BASENAME = $(basename $(UBOOT_ZYNQMP_PMUFW_PATH))
+ 
+ define UBOOT_ZYNQMP_KCONFIG_PMUFW
+-	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)")
++	$(if $(filter %.elf,$(UBOOT_ZYNQMP_PMUFW_PATH)),
++		objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_BASENAME).elf $(UBOOT_ZYNQMP_PMUFW_BASENAME).bin)
++	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_BASENAME).bin")
+ endef
+ 
+ UBOOT_ZYNQMP_PM_CFG = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PM_CFG))
+-- 
+2.17.1
 
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
