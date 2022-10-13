@@ -1,87 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F643C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 12:10:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01916C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 12:17:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E09F611B7;
-	Thu, 13 Oct 2022 12:10:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E09F611B7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FB4B83E88;
+	Thu, 13 Oct 2022 12:17:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FB4B83E88
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VY7sDZRXNcAA; Thu, 13 Oct 2022 12:10:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f68R60Upb2Ly; Thu, 13 Oct 2022 12:17:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14D3660A81;
-	Thu, 13 Oct 2022 12:10:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14D3660A81
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2D2341BF473
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 12:10:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87D5083A47;
+	Thu, 13 Oct 2022 12:17:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87D5083A47
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 59CBB1BF473
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 12:17:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 072BC418AF
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 12:10:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 072BC418AF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3554083A47
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 12:17:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3554083A47
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dCJwSReV-wZo for <buildroot@lists.busybox.net>;
- Thu, 13 Oct 2022 12:10:48 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 619AB417FB
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 619AB417FB
- for <buildroot@buildroot.org>; Thu, 13 Oct 2022 12:10:48 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id a13so2375923edj.0
- for <buildroot@buildroot.org>; Thu, 13 Oct 2022 05:10:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=HueCmfrnMjim11haLeNLf1HBz9pWbnkH2niTRPNZ2TU=;
- b=KtM90XKWGEkNLluH9dznYm6bfyMJLkSek9iYaABS/76PBXAvjrvqReA6N2xV7N8woQ
- jFy5BEGIBfKtRiMP+svMp0Z32yhZNqt5PaYiO7eRFztRBihU7IZWU7SpJ6HJiWhsfLAm
- DZv/OgB6zx5NYKb2ODOBpv1ji5kr3x0PVhmeYtUlxU/W13+bbuWQ9iSafRRTDl9RCHfB
- Sn4ZhqknYZptFrX1l6QycJ+hiGlqF+slZXRe1CTQxErrVcwQCxdhtDq5qmSkeQDEeZLJ
- BehXnmHaax/4mMYBGMlkXHO2xBd2Ol8euARIHhjBTaUMfhq/Bg2hry7GwUw1j3Diio6d
- 3ntA==
-X-Gm-Message-State: ACrzQf13X0awPFlsmny3yg0nI2jqLIntyOyJP7CuzWhwJ3SFVMwgf3uR
- MI1BwRFix2X9xg8KN81pxurX3fXgH0U/gw==
-X-Google-Smtp-Source: AMsMyM6HEidd+0S5VtZrH/EF1wDI1kCvcmLqvr3O+6McyVaYDuBIS4ZO/gVCQAj8c62V0rKO1s7aXg==
-X-Received: by 2002:a05:6402:26c2:b0:45c:1fef:ee1d with SMTP id
- x2-20020a05640226c200b0045c1fefee1dmr18444252edd.13.1665663045967; 
- Thu, 13 Oct 2022 05:10:45 -0700 (PDT)
-Received: from jesse-ubuntu22.display.esterline.net ([91.183.156.252])
- by smtp.gmail.com with ESMTPSA id
- l22-20020aa7d956000000b0045b910b0542sm11082697eds.15.2022.10.13.05.10.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 13 Oct 2022 05:10:45 -0700 (PDT)
-From: Jesse Van Gavere <jesseevg@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 13 Oct 2022 14:10:40 +0200
-Message-Id: <20221013121041.1398841-1-jesseevg@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ejJZ5N56b5cj for <buildroot@lists.busybox.net>;
+ Thu, 13 Oct 2022 12:17:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1217082B1B
+Received: from delivery19.mailspamprotection.com
+ (delivery19.mailspamprotection.com [185.56.85.137])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1217082B1B
+ for <buildroot@buildroot.org>; Thu, 13 Oct 2022 12:17:31 +0000 (UTC)
+Received: from 6.247.214.35.bc.googleusercontent.com ([35.214.247.6]
+ helo=es87.siteground.eu)
+ by se19.mailspamprotection.com with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
+ (Exim 4.92) (envelope-from <dimi@tpm.dev>)
+ id 1oix9T-000ByA-MJ; Thu, 13 Oct 2022 07:17:30 -0500
+Received: from [127.0.0.1] (port=34106 helo=es87.siteground.eu)
+ by es87.siteground.eu with esmtpa (Exim 4.96)
+ (envelope-from <dimi@tpm.dev>) id 1oix9R-000BlR-0t;
+ Thu, 13 Oct 2022 12:17:25 +0000
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HueCmfrnMjim11haLeNLf1HBz9pWbnkH2niTRPNZ2TU=;
- b=YqE4XqILfGSS2VIEeX6lUVGhW6opY4I9dumUMdCn5oqENVclWcM9Qsf3Irsry4k0vc
- aWQnQtlkCJBZmHwa0uka9HbIdTjihEhLOQ6NeSWUUcigHLq5Q5umxRczfY7sB7rJTAOF
- BAUU7ofZCht2hV7fvo0fIxbrMq4zd10rxqwMlOfI3X++lqPvNO/sywdjMLhWCDNU1kDU
- AscbD1Q865TOPvBAocO1Nkrm7JdyZQsaXbSizb5suPjtDxrifsSoe5PbhEE7ZnW0nqa2
- asY9dnnjG59m3skX1wIwUti1j6kdj8wXqEmrvAAkAyc7faqKGjyxwBMCbnOYJH70D0JH
- TJAw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=YqE4XqIL
-Subject: [Buildroot] [PATCH v2 1/1] package/qt6: Change license hashes
+Date: Thu, 13 Oct 2022 15:17:25 +0300
+From: Dimi Tomov <dimi@tpm.dev>
+To: buildroot@buildroot.org, Arnout Vandecappelle <arnout@mind.be>
+In-Reply-To: <20221012075423.14729-1-dimi@tpm.dev>
+References: <20221012075423.14729-1-dimi@tpm.dev>
+Message-ID: <e73bd6d54b78f5c25a78edc765ef0488@tpm.dev>
+X-Sender: dimi@tpm.dev
+Organization: TPM.dev
+X-Originating-IP: 35.214.247.6
+X-SpamExperts-Domain: es87.siteground.eu
+X-SpamExperts-Username: 35.214.247.6
+X-SpamExperts-Outgoing-Class: ham
+X-SpamExperts-Outgoing-Evidence: Combined (0.07)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9wIuSk2rt2hZzasoEGvUVRPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5xKipkaFeQDP2JiLCjsOSqCBHoJjdDPbdunZvlh+03gEw5s
+ aSMGpTXAKBoFGAg4ZiMVbcDKoUfza6pSNgfpWY7yGJEAH+S4JNeGeFOXMCdpqk1/gzQfM88V/+BY
+ 6rSZm+Qj51mqR68zkucIUlh/H2o6Ac0uXzxyDVCcVc2YNWS6fVs4f1eHeuisgbW+ciS9BiAwXXOy
+ eRCHfL/TfRkEbd0PjeOe89qqAPYB8KkaTUmkvIWS+2paz83GAkd5r3LUGD/gZm53zFmbMRgWQtfn
+ IzQri+B4to/hiwa93rrwDLzDIxEwFSVmN4kUqROYRGFsPbMlg3oKuH0NdQMS1ZayOw1R9KGJrphS
+ cNVjzoI0AFJgyaJFOBQd/+3TJrLDB1JgixqAd9sXdiOHyQc5jb5UsXBPtIMjc0HvrCoIShx9Egj+
+ 5dyvq1d/fG4ctwESmKna9KeaCMJrxDTPjXUK0HVTvhRvhJsTWXSMJKrCqIRucviVPtyr9Rglsxco
+ ZOkyzL3iNNINimWHGM3ULAME6TarHH9wNLb6DTt4pOBdwCGfoyTJlbwqyT5p50x81ZKcmzCu2U2N
+ EDLVYhQQkFJTbAzgn6pzs0BoW+zAoj3wlYkyQAvqJSmf9yNhxcrJR4bgfS2wGtjq3Xht9OeQCftb
+ pWUle2yeR2XWF6vZ2wfWC27hHZWRh+cQtGmoJkZh7BLMXqoNJQEi99LkB2wJoejiNdTxxBHZtnDd
+ Hw4EmQt77dULwOAayfiQ+inKmIZo/0XvFx1qM0d5DU1UWt0RFwR6QVEZyzVn08XQHNkzQoNenSkH
+ w/YLso9y7ZZuUeOGm+4qk1nHR1YRFZ4oobg8BBg3Jq+ntzj0ApyAYrPiC/ntzrd2sdDl6UQ4A9yd
+ qlBYa841NbfIhIrGMfqrMrNbKmCpgaycLOCigNgnZc+jgPIsBzAL4JbJSnPBpjU5XTnf1Milkk0C
+ QoVRXxKF5tPxTxfD0dMN+t5ZDrmwI6Sz3pudVUlAr8ihlUzyN54lLK0b9Z/zyvaQG5ufTxQvtzPo
+ sXK1HymJtQBeVoeLoyUqu6s0FY/zOXyKIk5q2/3SfzNUUfbZYhEz20ELxN0Dm6+b5joKnx+pjyIF
+ BAJYVhaheNMwoI2NwAlGP4YQNDSIrDrcq8g4ZnZOtnop7EnsAWjAzC/T+LOhKV9CMS+4ayUpOtEh
+ dxekWDmK9g==
+X-Report-Abuse-To: spam@quarantine2.mailspamprotection.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=tpm.dev; 
+ s=default; h=Subject:Cc:To:From:Date:list-help:list-unsubscribe:
+ list-subscribe:list-post:list-owner:list-archive;
+ bh=yyJujQX8kjW20p8A+SKc3WPjHP+m6xOxmuBcHRj+5yU=; b=qVRDIXeMKztcNFg+7Cx92Ju6wZ
+ F4c/BKo6ngGv49iomXn+pvNjZ02NKY3Jce4pPWpXgFgc22ralmD8isk1AtliZDiMbUL9BCbfNkXpB
+ czjiu2wHrM5l+vvb1RKPpdqlW3lpbMFK+GL54WOkmJTTcOqC+tDcAt2CSisTokdjHbjwxroCpzFUK
+ znNIVXEMiRLTjjxpqFkOmL9fwKwoQWc2uWCoC4YjEKxOzZAjfUGiB7ra4lsIbgtlnS3v2nJosbGgZ
+ grQlgKV+t6pk5FE5wJSSaSSiULCITLDEkHEov1SXqlZmDmMX65Nw8qVOt+SFWbxRNh9cpIfSOjCRy
+ uPvthQ9g==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tpm.dev header.i=@tpm.dev
+ header.a=rsa-sha256 header.s=default header.b=qVRDIXeM
+X-Mailman-Original-Authentication-Results: mailspamprotection.com; auth=pass
+ smtp.auth=35.214.247.6@es87.siteground.eu
+Subject: Re: [Buildroot] [PATCH 1/2] package/wolftpm: Update version to
+ v2.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,119 +107,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There was a major rework of how licenses are used in the Qt codebase
-along with a new location for all licenses, so change the hash file to
-reflect these changes
-https://github.com/qt/qtserialport/commit/bb05a26d52c834cc7f3c549f3e5d66f76baf42a2
+Hi Arnout,
 
-Changes for v2:
- - Also adjust the makefiles to refer to these new license file names
- - Added myself to the developers for the qt6 package for good measure
+Please review this version bump.
 
-Signed-off-by: Jesse Van Gavere <jesseevg@gmail.com>
----
- DEVELOPERS                                   |  1 +
- package/qt6/qt6base/qt6base.hash             | 15 ++++++++++-----
- package/qt6/qt6base/qt6base.mk               |  4 ++--
- package/qt6/qt6serialport/qt6serialport.hash | 12 +++++++-----
- package/qt6/qt6serialport/qt6serialport.mk   |  4 ++--
- 5 files changed, 22 insertions(+), 14 deletions(-)
+Thanks,
+Dimi
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 59121c6a54..6cb8d0fc54 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1478,6 +1478,7 @@ F:	package/x11r7/xdriver_xf86-video-imx/
- F:	package/x11r7/xdriver_xf86-video-imx-viv/
- 
- N:	Jesse Van Gavere <jesseevg@gmail.com>
-+F:	package/qt6/
- F:	package/qt6/qt6serialport/
- 
- N:	Jianhui Zhao <zhaojh329@gmail.com>
-diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
-index 5dd26973fa..b004347a5a 100644
---- a/package/qt6/qt6base/qt6base.hash
-+++ b/package/qt6/qt6base/qt6base.hash
-@@ -2,8 +2,13 @@
- sha256  cb6475a0bd8567c49f7ffbb072a05516ee6671171bed55db75b22b94ead9b37d  qtbase-everywhere-src-6.4.0.tar.xz
- 
- # Hashes for license files
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
--sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
--sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
--sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSE.FDL
-+sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  3abd6471b9a9a08d65ce771143f8e278bb4c1aeb10c1c2d476935a6b049653f5  LICENSES/BSL-1.0.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
-+sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
-+sha256  d040359701c01996a017d5c515678929cd1b0625e64cb86db44025fbb6cdf1fc  LICENSES/MIT.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index b7ee6037f3..b53d53c653 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -7,8 +7,8 @@
- QT6BASE_VERSION = $(QT6_VERSION)
- QT6BASE_SITE = $(QT6_SITE)
- QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
--QT6BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception (tools), GFDL-1.3 (docs)
--QT6BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-+QT6BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception (tools), GFDL-1.3 no invariants (docs)
-+QT6BASE_LICENSE_FILES = LICENSES/GPL-2.0-only.txt LICENSES/GPL-3.0-only.txt LICENSES/Qt-GPL-exception-1.0.txt LICENSES/LGPL-3.0-only.txt LICENSES/GFDL-1.3-no-invariants-only.txt
- QT6BASE_DEPENDENCIES = \
- 	host-ninja \
- 	host-qt6base \
-diff --git a/package/qt6/qt6serialport/qt6serialport.hash b/package/qt6/qt6serialport/qt6serialport.hash
-index fb1b3dcf6b..887f67b2ae 100644
---- a/package/qt6/qt6serialport/qt6serialport.hash
-+++ b/package/qt6/qt6serialport/qt6serialport.hash
-@@ -2,8 +2,10 @@
- sha256  f148cc9e87ce2228e82bff7a64d9521339ece66c4c66aa43b91bac614f4a4483  qtserialport-everywhere-src-6.4.0.tar.xz
- 
- # Hashes for license files:
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
--sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
--sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
--sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
-+sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6serialport/qt6serialport.mk b/package/qt6/qt6serialport/qt6serialport.mk
-index 01763657b8..03197fd60d 100644
---- a/package/qt6/qt6serialport/qt6serialport.mk
-+++ b/package/qt6/qt6serialport/qt6serialport.mk
-@@ -9,8 +9,8 @@ QT6SERIALPORT_SITE = $(QT6_SITE)
- QT6SERIALPORT_SOURCE = qtserialport-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALPORT_VERSION).tar.xz
- QT6SERIALPORT_INSTALL_STAGING = YES
- QT6SERIALPORT_SUPPORTS_IN_SOURCE_BUILD = NO
--QT6SERIALPORT_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception (tools), GFDL-1.3 (docs)
--QT6SERIALPORT_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-+QT6SERIALPORT_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception (tools), GFDL-1.3 no invariants (docs)
-+QT6SERIALPORT_LICENSE_FILES = LICENSES/GPL-2.0-only.txt LICENSES/GPL-3.0-only.txt LICENSES/Qt-GPL-exception-1.0.txt LICENSES/LGPL-3.0-only.txt LICENSES/GFDL-1.3-no-invariants-only.txt
- QT6SERIALPORT_CONF_OPTS = \
- 	-GNinja \
- 	-DQT_HOST_PATH=$(HOST_DIR) \
+On 2022-10-12 10:54 AM, Dimi Tomov wrote:
+> From: Dimitar Tomov <dimi@tpm.dev>
+> 
+> This patch series bumps the wolftpm version to the latest available and
+> adds one new config option for controlling debug messages in wolftpm.
+> 
+> Signed-off-by: Dimitar Tomov <dimi@tpm.dev>
+> ---
+>  package/wolftpm/wolftpm.hash | 2 +-
+>  package/wolftpm/wolftpm.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/wolftpm/wolftpm.hash 
+> b/package/wolftpm/wolftpm.hash
+> index d24df58eaa..e256967a01 100644
+> --- a/package/wolftpm/wolftpm.hash
+> +++ b/package/wolftpm/wolftpm.hash
+> @@ -1,4 +1,4 @@
+>  # Hash from 
+> https://github.com/wolfSSL/wolfTPM/archive/refs/tags/v2.4.0.tar.gz
+> -sha256
+> 31d1a5f5d60af14c4d07e14a9b0667404d4801fed32afd3fc0649749020ad17b
+> wolftpm-2.4.0.tar.gz
+> +sha256
+> 78331cc2d98339247857f5ceb3e7cd3c4f5773e3d81bf1d73e8df9446e37472b
+> wolfTPM-2.6.0.tar.gz
+>  # Locally calculated
+>  sha256
+> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
+> LICENSE
+> diff --git a/package/wolftpm/wolftpm.mk b/package/wolftpm/wolftpm.mk
+> index 7e8a108585..f217322545 100644
+> --- a/package/wolftpm/wolftpm.mk
+> +++ b/package/wolftpm/wolftpm.mk
+> @@ -4,7 +4,7 @@
+>  #
+> 
+> ################################################################################
+> 
+> -WOLFTPM_VERSION = 2.4.0
+> +WOLFTPM_VERSION = 2.6.0
+>  WOLFTPM_SITE = $(call github,wolfSSL,wolfTPM,v$(WOLFTPM_VERSION))
+>  WOLFTPM_INSTALL_STAGING = YES
+>  WOLFTPM_LICENSE = GPL-2.0+
+
 -- 
-2.34.1
-
+Founder of TPM.dev
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
