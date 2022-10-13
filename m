@@ -1,133 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 588FFC433FE
-	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 15:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BCF7C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 16:35:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D25DA41D09;
-	Thu, 13 Oct 2022 15:03:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D25DA41D09
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m1JD-iPRIXtX; Thu, 13 Oct 2022 15:03:17 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACD1941BE5;
-	Thu, 13 Oct 2022 15:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACD1941BE5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2ADAC1BF387
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 15:03:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0310E4023F
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 15:03:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0310E4023F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9163C40CC5;
+	Thu, 13 Oct 2022 16:35:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9163C40CC5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id woPicCFO0HF5 for <buildroot@lists.busybox.net>;
- Thu, 13 Oct 2022 15:03:12 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id EOMnrtZFr0Ve; Thu, 13 Oct 2022 16:35:37 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5DEF4404BF;
+	Thu, 13 Oct 2022 16:35:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DEF4404BF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DA2FB1BF28B
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 16:35:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C274160B13
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 16:35:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C274160B13
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yD9os7Ol0dwV for <buildroot@lists.busybox.net>;
+ Thu, 13 Oct 2022 16:35:32 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE87D4010E
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com
- (mail-db8eur05on2047.outbound.protection.outlook.com [40.107.20.47])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CE87D4010E
- for <buildroot@buildroot.org>; Thu, 13 Oct 2022 15:03:11 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O1dYZ28v/lauDdgjmC2uk91dk1zozfXU2JUBndutLWNnwvJd+7HwTlDNNoPfC1eZQdHsWT/H0tbS9kCPBURARDBO18fDenjZKDMF3j74hFjVnQjHOfHLVVFpcIpvyhazQiNEJzrE+/lFkE5hwPNxVJsb1gIs4PZgYFYialxTeOoTlO2Rm1CSA5bsg2rUEicL9SXSa/B5YidWAEp3MfOFygHTNB8fyODojvz7BM3nsgb92ZdjWSa1BcMmsigIiBgUJpOHYRqsQQ7xcNmonr183PwSzycjYHR1xK1B0cQxKifwgMIRjT02cQ/v9j1B6kZ8nvY5qB9SAKrz+G9YZ7GGpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iAn1u3zJ3rrfEE2rG/nErbIrWr5fswTFuiXbRKDUCOk=;
- b=DVb3gUef6T4FgsNmZCesv4ci4r4dHzg6cCisaeIacoxIy8AWT9oq1VtnWc6iIak3OyG10p8Q3/ADo60eJqXf9v+Rx3sujIAlgJkvAfDNw1neMam5417XbRjn03oS4774A5r/G7m3By7BGmtGeI320JDyMEUPSchSN3QLDheHZMCk2I1W6bchl0KAOoWiPrb9gxpEHJcm/IaHwGfIJYtsCcDRoXhd4zJbc73Fqj+WMRnwPI6e6c3WgR9Hl1CR3p2KKPhOGwmF8xhYhFL3qN91eFG+Mnx/OJsuXxQ3Qe/WriH9esstmdpdKRgUQ0VBEVlUUBtnf6JjLY/Woe6h2B704g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=abatec.at; dmarc=pass action=none header.from=abatec.at;
- dkim=pass header.d=abatec.at; arc=none
-Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:39::26)
- by DB8P190MB0682.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:125::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Thu, 13 Oct
- 2022 15:03:09 +0000
-Received: from VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
- ([fe80::818c:f70f:e157:b158]) by VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
- ([fe80::818c:f70f:e157:b158%5]) with mapi id 15.20.5723.026; Thu, 13 Oct 2022
- 15:03:08 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 2/2] package/iwd: no autoreconfigure
-Thread-Index: AQHY3xTBbLa0exWFOEyRk3c+tLdLSQ==
-Date: Thu, 13 Oct 2022 15:03:08 +0000
-Message-ID: <VI1P190MB0493D844A699B7C2DACF6FFB9F259@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1P190MB0493:EE_|DB8P190MB0682:EE_
-x-ms-office365-filtering-correlation-id: 7d2f203a-b969-4da7-b616-08daad2c0a51
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YlIiSCGbIPkFWIb906gdVSpUQlQLz1fRCj7K0MazciYbEtervEh8p5EFbv1gK7eBWzgdd01J7iehWAUu1JKm69cASo+I54yIGhWV4ncTIDKxQ/xZip4jgd2VNjdRW8cGQCGyatEE6g6o2AUn7WM1AATU35FD9ro1bmLBqAXpoa8boO8oxdxn304werLP9wCGGXxX4Rns5DBjO5mVOEsin+4lsVC5+3dYlEzj+UPnHhPlWXbGsHfQG3I5GY97vq+5/VKveMQogtWOnw/74wNVU2Hsh45xjwBkBQ2ZQ7Jx44ROCrgogp3DRqGIVn72e5LWK8rEMcupwwM5GyMBUEt0fs4p7ZJN6zE2V8dkCldvTFo5Z4D8kiyMow2h1AlNrWhEXeTgZCnU7hZSn/2z7DlswmFsCHg5IR3SA0WnQ8WQmN4vMkN0cm0kjb/F4gW4PoWhKLd0vKNTbFqfTN0ZnUnFoToL2G2DkqsN10QSzgdEZX/Wv5HXDN1cOaB3y8LiHTiKs2rfzJjhmaZ67bSzvTftILulAqO/ldUiaZybUsJXF7a1FB99wJuLUfPVAr7gHzI7IzbxRvYVmpEAFOJeUfCNYpqDKRUA53+CcJ/y8F4BYv+sDSVSUVh9lBHY/HuuJM/mOAt+THHFaRs9UsUYHcUVU0wLBlQkciSsdxP9o06u8bPGc1EPUIPJdf5v5Op6K/XchjQqHUydnUqp+iSAEnfmWIyyM6s6Jc10qx2KY2oqJqiNzlcovOFs5YN3+NqsxJmWlVjVBht/9stDHiJaD7YDyQ==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:VI1P190MB0493.EURP190.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(366004)(39840400004)(451199015)(186003)(9686003)(26005)(55016003)(2906002)(122000001)(52536014)(316002)(33656002)(66446008)(6916009)(86362001)(41300700001)(66476007)(66946007)(66556008)(8936002)(8676002)(64756008)(76116006)(38100700002)(7696005)(478600001)(6506007)(71200400001)(5660300002)(38070700005)(4744005)(83380400001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?0Ia6glgiAEb67VBRX34B9vZw2MoCBLRkYxeIeA6AtUiycXEictUCqv2m5q?=
- =?iso-8859-1?Q?jQKyyUcrrZGAeCH4k/x1WpCmg9fEi+znPKuBb/ezpPBWYkP7lRTcOsZVwo?=
- =?iso-8859-1?Q?MA0VXCtuPEUOrjQHJF3BuFPfnoh+pw4fhCK7u4j2AIVYMDL6MoTTkpHvy5?=
- =?iso-8859-1?Q?Sc1EBDNNYMGxA7yrkenFw0BTTn7PUSVoN2swE0KB6/v+zVjxRUDW6MJrl2?=
- =?iso-8859-1?Q?RZmSM3K0TPU+Cg99WQ7F7nF6IPsUpHBVyGoi8KkRNRhsrcO7KGoDfggrsn?=
- =?iso-8859-1?Q?KvnkjmqyI7LPrm7uaNoqxkE3eZIPkuz9VVJ9cOV0JiMOeUGyYl3WrEJS9w?=
- =?iso-8859-1?Q?QkXF8dzCzlfh0ctMjPn2LZOjg8PJWqO8ceIn9HGAhQ8Vs9XC3cV+4AQV+n?=
- =?iso-8859-1?Q?6SKne2DMwqV+Dernb6HMKqaf1vlVDye2b2JTAwp6aVwdDSaABFnj7Gn1c4?=
- =?iso-8859-1?Q?WNnZ+XyJHo5eHLAvhl5mBz9Ezi2RQqUFlyN32dImA4DSO1+muZ9XNhA63B?=
- =?iso-8859-1?Q?ejojCg7l2QW+rz3mRQ4UBaT13fTF1g0r7N1qtHGLOdB0JYg/fgvzqvqX+Q?=
- =?iso-8859-1?Q?6gE+7BpepnjYEmRXJw07qW6kWUMiYYj0aPUNFi4mHHuIWcqWBBwGd1pxQz?=
- =?iso-8859-1?Q?UsLVEYF7y85uNKwXxfg9EP4HuYxLyReqTz/ip3J432PBICBCFqccU40Hmi?=
- =?iso-8859-1?Q?qaeSQucG5ch16R22MzkPujY4/uR7560swLV9cLyZbo6BvaajndJiWBM0JZ?=
- =?iso-8859-1?Q?quX8v7fgDGqUX/g+GtrnsMQGhzXW85903mIY3v3oxxN3SjTHLR2CwU/vNK?=
- =?iso-8859-1?Q?og7RkdafiuTrJg3fQerSgTHCtZbYgm8TMBT9SOvwX6/EWe9fK3AIb0IapY?=
- =?iso-8859-1?Q?dCMsr+9AZ+J0m1xBOaosM/U1lF8OtDcJvs43sJDq4op5X8gwSg2G4pzlaW?=
- =?iso-8859-1?Q?x/2MfmTumX62LKwDm0YRxUuKTlWNL3ADxAOpH13RvVDxxLhuKRhegIz3M+?=
- =?iso-8859-1?Q?eJQU9sfiM/r3LBliZWOwHyuqqfS21h/adJIT8cj17BS1OTl+enuvBA2/D8?=
- =?iso-8859-1?Q?hYx1T0nziBvLTRNod78+Rf1M+z3CNGaCFzncW10i0W69n90732NHNsC9s8?=
- =?iso-8859-1?Q?ilr21lvfPm0Rv0YWP5xNoY1YYIb+H31Qph452fn8+ldYhNeGwawiEMYuC3?=
- =?iso-8859-1?Q?V+jZsRXVgUDOS6D6lTH1sYeHVVYLA7ONwpnrS8suEUex6NL+fHCkkBmjRL?=
- =?iso-8859-1?Q?FZDcLzZAQzLH0pkaOlO58C3sNjg9Vc0mRSNXFYm+BfWrcCbNH2/QWOTApX?=
- =?iso-8859-1?Q?UQSuT91QUjqcoNn5qOpw+LzxAz7wKz+0LXwylJpR9GITHkQFl5dVVtCZ8f?=
- =?iso-8859-1?Q?P96p2o6aLAWIwK6Ay3VDAMGkRS21p2oQYMeGcLyGs/DtZLImzaKVHxZsVS?=
- =?iso-8859-1?Q?HfUc43eWPpAZiuJ55USGQ7jLhSNXp1F48oTLkn8IQb8BuIEgoAHbmOY/cG?=
- =?iso-8859-1?Q?gvF2j9NN//C0THxBJjjGF3QpdNYtRCN/nos/HKe9FUlt/M5x/vOOKG0BNY?=
- =?iso-8859-1?Q?DrsCOm14VnE5KT04e1xnwxXXET54HTV/3M0jW770opCcWqcH9GAL88z/Bf?=
- =?iso-8859-1?Q?EYFph0nJwzldk=3D?=
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6878A60B0E
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6878A60B0E
+ for <buildroot@buildroot.org>; Thu, 13 Oct 2022 16:35:32 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id w18so5081800ejq.11
+ for <buildroot@buildroot.org>; Thu, 13 Oct 2022 09:35:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=PWB3kOzpq6+eKMk85P460JwQ/x26zVsoKRJt3kWTVVI=;
+ b=ULLuWCG2Pr6uiENEnU0FZqG+yHiVK8d33q6MJbFojwsjGm11RurcmTwMXK11lN580L
+ yKLDlexl+sxHLUIqzdUH12dco6Dbgw4xEkZ4VugF5KRNJzWuWngrLA06c1Q3i2ztlmhy
+ 6TjTaafNXB6CrmViKW7pQJZ4VZXpfSUmbhUdtvciNUS7/YQzJexZsKqO0QbUfksr8X2+
+ bXo/pNcIMCACHE/pcQAaMof37KdD9bsksuzqvDjCWh+2K8/YIDXNLW6kjpTTmkcHkQc4
+ t9Qsg1gCo+9QUae0qXw0nymIVUrFNnIDe373ZByEjdNwHzB+8vNpMGa5ceqlhq29grgN
+ vcbQ==
+X-Gm-Message-State: ACrzQf2P9RTz9EVWSV2ISaXUZ0NzVum9w2BgEpZeaQO/GV1G/VnvqyNf
+ FtzhyWp3GnXp3+2hl+HqtZTzhgEHi1gmkQ==
+X-Google-Smtp-Source: AMsMyM6f0K6RPAsdMZRTfN/MrVBrF4utcEtiyYKeOM7kS9Wb1SPIZtpZiPdiauXLD5V8I4qryEjEhQ==
+X-Received: by 2002:a17:907:c25:b0:78e:1a4:132 with SMTP id
+ ga37-20020a1709070c2500b0078e01a40132mr411502ejc.521.1665678930553; 
+ Thu, 13 Oct 2022 09:35:30 -0700 (PDT)
+Received: from LinkTed.fritz.box ([2a02:8070:4182:37a0:97b2:fd91:46b3:8d3a])
+ by smtp.gmail.com with ESMTPSA id
+ k13-20020a17090627cd00b0077826b92d99sm128066ejc.12.2022.10.13.09.35.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 13 Oct 2022 09:35:29 -0700 (PDT)
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 13 Oct 2022 18:34:32 +0200
+Message-Id: <20221013163432.18545-1-raphael.pavlidis@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220904124315.12728-1-raphael.pavlidis@gmail.com>
+References: <20220904124315.12728-1-raphael.pavlidis@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: abatec.at
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0493.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d2f203a-b969-4da7-b616-08daad2c0a51
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Oct 2022 15:03:08.9171 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8814618e-1e36-4349-bccb-87b9400379c3
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BzMGjaI2w7fJr2Z5BwSw8RN1Cu9vT7KsHWhlBRdYkXKpAIb7Sn7m0w4u6OcH86rlUymGEvv+pTR3Pcle5GJ3RA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P190MB0682
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=abatec.at; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iAn1u3zJ3rrfEE2rG/nErbIrWr5fswTFuiXbRKDUCOk=;
- b=GmSaNPItIO6ifpSM41xc5f1hI87O/nw5vCmNxcemXuFJOvDkZNehKHtTbVtD3OMHKT/hIpKrGzWb5vHm2hT+WjJWlTMPC60MQdvqEDzKElbxFyye4at6X522hYL/Hv5VHYO/37Ap1N0aGz+oDpF6oEXzH2RVpM1CQxkV1JMvaS0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=abatec.at header.i=@abatec.at header.a=rsa-sha256
- header.s=selector1 header.b=GmSaNPIt
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=abatec.at;
-Subject: [Buildroot] [PATCH 2/2] package/iwd: no autoreconfigure
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=PWB3kOzpq6+eKMk85P460JwQ/x26zVsoKRJt3kWTVVI=;
+ b=Hp2Y6k9BluzrQpUUECA9HAxvbEEuAnA3/qIeavkqXs26mRtJFQrrjwffWA4HNh6X8S
+ uUBJo5Ij2Ze5FZQYw6p6w74wSwjRpYTkVhV1+ftpAxFgdLEFsJqYudo2MjOgoynVDavc
+ jqSFH4I/LeG8ekaiqhajWQeDscvSP68mMS1J5OsHTlECWLJkrHauTxXvW5NFRfDZi6iZ
+ 5hKIbksFvIVFlcdagpJlDC+Ov+tizaHxsGLNJBoCPatFXXAOt0dPeVjoXYSWJCV0oObS
+ aF+NNNeBVlhHkSjoSAaWU+mIL1ruLXWzNxw36RnJGiU3pu/y5z/H3EFTAlee4piClUQX
+ LnLg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Hp2Y6k9B
+Subject: [Buildroot] [PATCH v3 1/1] package/shadow: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -139,35 +96,289 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Lang Daniel via buildroot <buildroot@buildroot.org>
-Reply-To: Lang Daniel <d.lang@abatec.at>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-configure.ac is no longer patched, autoreconfigure isn't needed.
+shadow provides utilities to deal with user accounts.
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
+The shadow package includes the necessary programs for converting UNIX
+password files to the shadow password format, plus programs for managing
+user and group accounts. Especially it is useful if rootless podman
+container should be used, which requires newuidmap and newgidmap.
+
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/iwd/iwd.mk | 2 --
- 1 file changed, 2 deletions(-)
+Changes v2 -> v3:
+- remove nscd support
+- remove sssd support
+- remove group name max length parameter
+- remove su build
+- improve help text of subordinate-ids
+- use a define instead of variable for SHADOW_ACCOUNT_TOOLS_SETUID
+  SHADOW_SUBORDINATE_IDS_PERMISSIONS and 
 
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 8497fd1141..fe79704641 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -12,8 +12,6 @@ IWD_LICENSE_FILES = COPYING
- IWD_CPE_ID_VENDOR = intel
- IWD_CPE_ID_PRODUCT = inet_wireless_daemon
- IWD_SELINUX_MODULES = networkmanager
--# We're patching configure.ac
--IWD_AUTORECONF = YES
+Changes v1 -> v2:
+- DEVELOPERS: add Raphael Pavlids for shadow
+
+ DEVELOPERS                 |   3 +-
+ package/Config.in          |   1 +
+ package/shadow/Config.in   |  61 +++++++++++++++++
+ package/shadow/shadow.hash |   3 +
+ package/shadow/shadow.mk   | 133 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 200 insertions(+), 1 deletion(-)
+ create mode 100644 package/shadow/Config.in
+ create mode 100644 package/shadow/shadow.hash
+ create mode 100644 package/shadow/shadow.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 59121c6a54..0dad0ba0ba 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2474,7 +2474,8 @@ F:	support/testing/tests/package/test_python_jmespath.py
+ F:	support/testing/tests/package/test_python_rsa.py
+ F:	support/testing/tests/package/test_python_s3transfer.py
  
- IWD_CONF_OPTS = \
- 	--disable-manual-pages \
+-N:	Raphael Pavlidis <raphael.pavlidis@googlemail.com>
++N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
++F:	package/shadow/
+ F:	package/slirp4netns/
+ 
+ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index e3a34d6e97..d9ead48647 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2642,6 +2642,7 @@ menu "System tools"
+ 	source "package/sdbus-cpp/Config.in"
+ 	source "package/sdbusplus/Config.in"
+ 	source "package/seatd/Config.in"
++	source "package/shadow/Config.in"
+ 	source "package/smack/Config.in"
+ 	source "package/start-stop-daemon/Config.in"
+ 	source "package/supervisor/Config.in"
+diff --git a/package/shadow/Config.in b/package/shadow/Config.in
+new file mode 100644
+index 0000000000..6b1fe0a61f
+--- /dev/null
++++ b/package/shadow/Config.in
+@@ -0,0 +1,61 @@
++menuconfig BR2_PACKAGE_SHADOW
++	bool "shadow"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
++	help
++	  Utilities to deal with user accounts.
++
++	  https://github.com/shadow-maint/shadow
++
++if BR2_PACKAGE_SHADOW
++
++config BR2_PACKAGE_SHADOW_SHADOWGRP
++	bool "shadowgrp"
++	help
++	  Enable shadow group support.
++
++config BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID
++	bool "account-tools-setuid"
++	depends on BR2_USE_MMU  # linux-pam
++	depends on BR2_ENABLE_LOCALE  # linux-pam
++	depends on BR2_USE_WCHAR  # linux-pam
++	depends on !BR2_STATIC_LIBS  # linux-pam
++	select BR2_PACKAGE_LINUX_PAM
++	help
++	  Install the user and group management tools (e.g. groupadd) with setuid and
++	  authenticate the callers via PAM.
++
++comment "account-tools-setuid needs a toolchain w/ shared libs, wchar, locale"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_ENABLE_LOCALE
++
++config BR2_PACKAGE_SHADOW_UTMPX
++	bool "utmpx"
++	help
++	  Enable loggin in utmpx / wtmpx.
++
++config BR2_PACKAGE_SHADOW_SUBORDINATE_IDS
++	bool "subordinate-ids"
++	help
++	  Support subordinate ids. Helpful to use container solution like podman
++	  without root.
++
++config BR2_PACKAGE_SHADOW_SHA_CRYPT
++	bool "sha-crypt"
++	default y
++	help
++	  Allow the SHA256 and SHA512 password encryption algorithms.
++
++config BR2_PACKAGE_SHADOW_BCRYPT
++	bool "bcrypt"
++	help
++	  Allow the bcrypt password encryption algorithm.
++
++config BR2_PACKAGE_SHADOW_YESCRYPT
++	bool "yescrypt"
++	help
++	  Allow the yescrypt password encryption algorithm.
++
++endif # BR2_PACKAGE_SHADOW
++
++comment "shadow needs a toolchain w/ headers >= 4.14"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
+new file mode 100644
+index 0000000000..6b9faac10f
+--- /dev/null
++++ b/package/shadow/shadow.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  41f093ce58b2ae5f389a1c5553e0c18bc73e6fe27f66273891991198a7707c95  shadow-4.11.1.tar.xz
++sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
+diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
+new file mode 100644
+index 0000000000..261f28dd28
+--- /dev/null
++++ b/package/shadow/shadow.mk
+@@ -0,0 +1,133 @@
++################################################################################
++#
++# shadow
++#
++################################################################################
++
++SHADOW_VERSION = 4.11.1
++SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/v$(SHADOW_VERSION)
++SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
++SHADOW_LICENSE = BSD-3-Clause
++SHADOW_LICENSE_FILES = COPYING
++
++SHADOW_CONF_OPTS = \
++	--disable-man \
++    --without-btrfs \
++    --without-nscd \
++    --without-skey \
++    --without-sssd \
++    --without-su \
++    --without-tcb
++
++ifeq ($(BR2_PACKAGE_SHADOW_SHADOWGRP),y)
++SHADOW_CONF_OPTS += --enable-shadowgrp
++else
++SHADOW_CONF_OPTS += --disable-shadowgrp
++endif
++
++ifeq ($(BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID),y)
++SHADOW_CONF_OPTS += --enable-account-tools-setuid
++define SHADOW_ACCOUNT_TOOLS_SETUID_PERMISSIONS
++	/usr/sbin/chgpasswd f 4755 0 0 - - - - -
++	/usr/sbin/chpasswd f 4755 0 0 - - - - -
++	/usr/sbin/groupadd f 4755 0 0 - - - - -
++	/usr/sbin/groupdel f 4755 0 0 - - - - -
++	/usr/sbin/groupmod f 4755 0 0 - - - - -
++	/usr/sbin/newusers f 4755 0 0 - - - - -
++	/usr/sbin/useradd f 4755 0 0 - - - - -
++	/usr/sbin/usermod f 4755 0 0 - - - - -
++endef
++else
++SHADOW_CONF_OPTS += --disable-account-tools-setuid
++endif
++
++ifeq ($(BR2_PACKAGE_SHADOW_UTMPX),y)
++SHADOW_CONF_OPTS += --enable-utmpx
++else
++SHADOW_CONF_OPTS += --disable-utmpx
++endif
++
++ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
++SHADOW_CONF_OPTS += --enable-subordinate-ids
++define SHADOW_SUBORDINATE_IDS_PERMISSIONS
++	/usr/bin/newuidmap f 4755 0 0 - - - - -
++	/usr/bin/newgidmap f 4755 0 0 - - - - -
++endef
++else
++SHADOW_CONF_OPTS += --disable-subordinate-ids
++endif
++
++ifeq ($(BR2_PACKAGE_ACL),y)
++SHADOW_CONF_OPTS += --with-acl
++SHADOW_DEPENDENCIES += acl
++else
++SHADOW_CONF_OPTS += --without-acl
++endif
++
++ifeq ($(BR2_PACKAGE_ATTR),y)
++SHADOW_CONF_OPTS += --with-attr
++SHADOW_DEPENDENCIES += attr
++else
++SHADOW_CONF_OPTS += --without-attr
++endif
++
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++SHADOW_CONF_OPTS += --with-audit
++SHADOW_DEPENDENCIES += audit
++else
++SHADOW_CONF_OPTS += --without-audit
++endif
++
++ifeq ($(BR2_PACKAGE_CRACKLIB),y)
++SHADOW_CONF_OPTS += --with-libcrack
++SHADOW_DEPENDENCIES += cracklib
++else
++SHADOW_CONF_OPTS += --without-libcrack
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++SHADOW_CONF_OPTS += --with-selinux
++SHADOW_DEPENDENCIES += libselinux libsemanage
++else
++SHADOW_CONF_OPTS += --without-selinux
++endif
++
++# linux-pam is also used without account-tools-setuid enabled
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++SHADOW_CONF_OPTS += --with-libpam
++SHADOW_DEPENDENCIES += linux-pam
++else
++SHADOW_CONF_OPTS += --without-libpam
++endif
++
++ifeq ($(BR2_PACKAGE_SHADOW_SHA_CRYPT),y)
++SHADOW_CONF_OPTS += --with-sha-crypt
++else
++SHADOW_CONF_OPTS += --without-sha-crypt
++endif
++
++ifeq ($(BR2_PACKAGE_SHADOW_BCRYPT),y)
++SHADOW_CONF_OPTS += --with-bcrypt
++else
++SHADOW_CONF_OPTS += --without-bcrypt
++endif
++
++ifeq ($(BR2_PACKAGE_SHADOW_YESCRYPT),y)
++SHADOW_CONF_OPTS += --with-yescrypt
++else
++SHADOW_CONF_OPTS += --without-yescrypt
++endif
++
++define SHADOW_PERMISSIONS
++	/usr/bin/chage f 4755 0 0 - - - - -
++	/usr/bin/chfn f 4755 0 0 - - - - -
++	/usr/bin/chsh f 4755 0 0 - - - - -
++	/usr/bin/expiry f 4755 0 0 - - - - -
++	/usr/bin/gpasswd f 4755 0 0 - - - - -
++	/usr/bin/newgrp f 4755 0 0 - - - - -
++	/usr/bin/passwd f 4755 0 0 - - - - -
++	$(SHADOW_ACCOUNT_TOOLS_SETUID)
++	$(SHADOW_SUBORDINATE_IDS_PERMISSIONS)
++endef
++
++$(eval $(autotools-package))
 -- 
-2.25.1
+2.35.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
