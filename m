@@ -1,90 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BCF7C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 16:35:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB9FBC4332F
+	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 16:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9163C40CC5;
-	Thu, 13 Oct 2022 16:35:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9163C40CC5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4418683F3D;
+	Thu, 13 Oct 2022 16:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4418683F3D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EOMnrtZFr0Ve; Thu, 13 Oct 2022 16:35:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YJ1XVloT28Xr; Thu, 13 Oct 2022 16:43:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5DEF4404BF;
-	Thu, 13 Oct 2022 16:35:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DEF4404BF
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DA2FB1BF28B
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 16:35:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5967D83F3A;
+	Thu, 13 Oct 2022 16:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5967D83F3A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A43C1BF28B
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 16:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C274160B13
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 16:35:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C274160B13
+ by smtp1.osuosl.org (Postfix) with ESMTP id 026B983F3A
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 16:43:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 026B983F3A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yD9os7Ol0dwV for <buildroot@lists.busybox.net>;
- Thu, 13 Oct 2022 16:35:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nQXkBFquVU5k for <buildroot@lists.busybox.net>;
+ Thu, 13 Oct 2022 16:43:08 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6878A60B0E
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6878A60B0E
- for <buildroot@buildroot.org>; Thu, 13 Oct 2022 16:35:32 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id w18so5081800ejq.11
- for <buildroot@buildroot.org>; Thu, 13 Oct 2022 09:35:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A806783F34
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com
+ [IPv6:2607:f8b0:4864:20::82e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A806783F34
+ for <buildroot@buildroot.org>; Thu, 13 Oct 2022 16:43:08 +0000 (UTC)
+Received: by mail-qt1-x82e.google.com with SMTP id s3so1807845qtn.12
+ for <buildroot@buildroot.org>; Thu, 13 Oct 2022 09:43:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=PWB3kOzpq6+eKMk85P460JwQ/x26zVsoKRJt3kWTVVI=;
- b=ULLuWCG2Pr6uiENEnU0FZqG+yHiVK8d33q6MJbFojwsjGm11RurcmTwMXK11lN580L
- yKLDlexl+sxHLUIqzdUH12dco6Dbgw4xEkZ4VugF5KRNJzWuWngrLA06c1Q3i2ztlmhy
- 6TjTaafNXB6CrmViKW7pQJZ4VZXpfSUmbhUdtvciNUS7/YQzJexZsKqO0QbUfksr8X2+
- bXo/pNcIMCACHE/pcQAaMof37KdD9bsksuzqvDjCWh+2K8/YIDXNLW6kjpTTmkcHkQc4
- t9Qsg1gCo+9QUae0qXw0nymIVUrFNnIDe373ZByEjdNwHzB+8vNpMGa5ceqlhq29grgN
- vcbQ==
-X-Gm-Message-State: ACrzQf2P9RTz9EVWSV2ISaXUZ0NzVum9w2BgEpZeaQO/GV1G/VnvqyNf
- FtzhyWp3GnXp3+2hl+HqtZTzhgEHi1gmkQ==
-X-Google-Smtp-Source: AMsMyM6f0K6RPAsdMZRTfN/MrVBrF4utcEtiyYKeOM7kS9Wb1SPIZtpZiPdiauXLD5V8I4qryEjEhQ==
-X-Received: by 2002:a17:907:c25:b0:78e:1a4:132 with SMTP id
- ga37-20020a1709070c2500b0078e01a40132mr411502ejc.521.1665678930553; 
- Thu, 13 Oct 2022 09:35:30 -0700 (PDT)
-Received: from LinkTed.fritz.box ([2a02:8070:4182:37a0:97b2:fd91:46b3:8d3a])
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=TxbzTEAM2MhM2tddROz5HzXcTagYvnw/nG6sSXa8rMY=;
+ b=54KPp6w9AsXT1LLqGztz606Yyod8WNfl8p9MsSTXxFFSO7599QtrL7+hL/2nGEGcbH
+ enup6CYN04qz4OjS5ovyUpwSBQ6c9vYupi/5rpz22z1GXiSs+lWm5kPu6B++zS0ER7so
+ z5s1cv7iblR+gfHDiN0WrqvnCRlErBvTe2JrCFSSBAf5ErWLjj/Ow6tirsomx4mFSfh5
+ 6DBHthKsPFwngRFozRShBgOS5xh2721xqAOUX8EZsxRzXsdqzxjjTPT0pPce157pqG2Z
+ pgpJPe3zsVock8aiTRg7cRv8K8baoY40vnzppBKRv0/o/wwl2OF+cX8DRyimXW2eqSJP
+ N+hQ==
+X-Gm-Message-State: ACrzQf1B28J9n6WwKdHet87oU2Ihq9PhVxpq2lup9tm81Xu8yUb06je3
+ 66bxlSytv/ZgfDjEyxxeT1ttpHu+VQt5zu0gWAM=
+X-Google-Smtp-Source: AMsMyM6KfKstZm/uAmlTb0pwg1e+MnSLgqfZNYcD7yHuA3fqniN0GmR9xBLZNyJ+OyM9F9e6XROYUg==
+X-Received: by 2002:a05:620a:2591:b0:6c9:cc85:87e3 with SMTP id
+ x17-20020a05620a259100b006c9cc8587e3mr588536qko.577.1665679387193; 
+ Thu, 13 Oct 2022 09:43:07 -0700 (PDT)
+Received: from neptune.lan (24-212-229-25.cable.teksavvy.com. [24.212.229.25])
  by smtp.gmail.com with ESMTPSA id
- k13-20020a17090627cd00b0077826b92d99sm128066ejc.12.2022.10.13.09.35.29
+ v6-20020ac87286000000b0038b684a1642sm279025qto.32.2022.10.13.09.43.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 13 Oct 2022 09:35:29 -0700 (PDT)
-From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+ Thu, 13 Oct 2022 09:43:06 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 13 Oct 2022 18:34:32 +0200
-Message-Id: <20221013163432.18545-1-raphael.pavlidis@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220904124315.12728-1-raphael.pavlidis@gmail.com>
-References: <20220904124315.12728-1-raphael.pavlidis@gmail.com>
+Date: Thu, 13 Oct 2022 12:42:44 -0400
+Message-Id: <20221013164244.150039-1-kyle@balena.io>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=PWB3kOzpq6+eKMk85P460JwQ/x26zVsoKRJt3kWTVVI=;
- b=Hp2Y6k9BluzrQpUUECA9HAxvbEEuAnA3/qIeavkqXs26mRtJFQrrjwffWA4HNh6X8S
- uUBJo5Ij2Ze5FZQYw6p6w74wSwjRpYTkVhV1+ftpAxFgdLEFsJqYudo2MjOgoynVDavc
- jqSFH4I/LeG8ekaiqhajWQeDscvSP68mMS1J5OsHTlECWLJkrHauTxXvW5NFRfDZi6iZ
- 5hKIbksFvIVFlcdagpJlDC+Ov+tizaHxsGLNJBoCPatFXXAOt0dPeVjoXYSWJCV0oObS
- aF+NNNeBVlhHkSjoSAaWU+mIL1ruLXWzNxw36RnJGiU3pu/y5z/H3EFTAlee4piClUQX
- LnLg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=Hp2Y6k9B
-Subject: [Buildroot] [PATCH v3 1/1] package/shadow: new package
+ d=balena.io; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=TxbzTEAM2MhM2tddROz5HzXcTagYvnw/nG6sSXa8rMY=;
+ b=ZM/5UiQgE4zQagFYUcIMjUM4g5SbBsHWtpK0/S7Ebdmj4MtQnN9hY1tidKtbEktwit
+ /1KhBj6qaJ0ioMzYyXRR8YVW+Pm7F4HIYkRCGcAjYh1YL0ksulh4xwdKq1iIrNCsoIP0
+ Cfk+hwyTCcIJ48V5hYXA4r5SVHJGf+sTpyd/jD8Mz5X2NZCMElwDWOTzD1SPw8YyzAqQ
+ 0HcSTztxVquQ0JA4R/VWf0ggyfLJ8ub4hR4bQDR7YlD7/OjomENzNnUTF4DvO8LbunCq
+ cwKC1m63u1xUgHsj/OnpWFdYFiWeKpMWnGLoUVP0Dhgn5zSuC1M4qvcssK/DynVPLdZM
+ nILg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=balena.io header.i=@balena.io
+ header.a=rsa-sha256 header.s=google header.b=ZM/5UiQg
+Subject: [Buildroot] [PATCH 1/1] package/unbound: bump version to 1.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,288 +92,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Kyle Harding via buildroot <buildroot@buildroot.org>
+Reply-To: Kyle Harding <kyle@balena.io>
+Cc: Kyle Harding <kyle@balena.io>, Stefan Ott <stefan@ott.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-shadow provides utilities to deal with user accounts.
-
-The shadow package includes the necessary programs for converting UNIX
-password files to the shadow password format, plus programs for managing
-user and group accounts. Especially it is useful if rootless podman
-container should be used, which requires newuidmap and newgidmap.
-
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Signed-off-by: Kyle Harding <kyle@balena.io>
 ---
-Changes v2 -> v3:
-- remove nscd support
-- remove sssd support
-- remove group name max length parameter
-- remove su build
-- improve help text of subordinate-ids
-- use a define instead of variable for SHADOW_ACCOUNT_TOOLS_SETUID
-  SHADOW_SUBORDINATE_IDS_PERMISSIONS and 
+ package/unbound/unbound.hash | 4 ++--
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Changes v1 -> v2:
-- DEVELOPERS: add Raphael Pavlids for shadow
-
- DEVELOPERS                 |   3 +-
- package/Config.in          |   1 +
- package/shadow/Config.in   |  61 +++++++++++++++++
- package/shadow/shadow.hash |   3 +
- package/shadow/shadow.mk   | 133 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 200 insertions(+), 1 deletion(-)
- create mode 100644 package/shadow/Config.in
- create mode 100644 package/shadow/shadow.hash
- create mode 100644 package/shadow/shadow.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 59121c6a54..0dad0ba0ba 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2474,7 +2474,8 @@ F:	support/testing/tests/package/test_python_jmespath.py
- F:	support/testing/tests/package/test_python_rsa.py
- F:	support/testing/tests/package/test_python_s3transfer.py
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index cef8edc4a2..147ac7b13a 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,5 +1,5 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.16.3.tar.gz.sha256
+-sha256  ea0c6665e2c3325b769eac1dfccd60fe1828d5fcf662650039eccb3f67edb28e  unbound-1.16.3.tar.gz
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.17.0.tar.gz.sha256
++sha256  dcbc95d7891d9f910c66e4edc9f1f2fde4dea2eec18e3af9f75aed44a02f1341  unbound-1.17.0.tar.gz
  
--N:	Raphael Pavlidis <raphael.pavlidis@googlemail.com>
-+N:	Raphael Pavlidis <raphael.pavlidis@gmail.com>
-+F:	package/shadow/
- F:	package/slirp4netns/
+ # Locally calculated
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 73a460d103..d86d9c2067 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Refik Tuzakli <tuzakli.refik@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index e3a34d6e97..d9ead48647 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2642,6 +2642,7 @@ menu "System tools"
- 	source "package/sdbus-cpp/Config.in"
- 	source "package/sdbusplus/Config.in"
- 	source "package/seatd/Config.in"
-+	source "package/shadow/Config.in"
- 	source "package/smack/Config.in"
- 	source "package/start-stop-daemon/Config.in"
- 	source "package/supervisor/Config.in"
-diff --git a/package/shadow/Config.in b/package/shadow/Config.in
-new file mode 100644
-index 0000000000..6b1fe0a61f
---- /dev/null
-+++ b/package/shadow/Config.in
-@@ -0,0 +1,61 @@
-+menuconfig BR2_PACKAGE_SHADOW
-+	bool "shadow"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-+	help
-+	  Utilities to deal with user accounts.
-+
-+	  https://github.com/shadow-maint/shadow
-+
-+if BR2_PACKAGE_SHADOW
-+
-+config BR2_PACKAGE_SHADOW_SHADOWGRP
-+	bool "shadowgrp"
-+	help
-+	  Enable shadow group support.
-+
-+config BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID
-+	bool "account-tools-setuid"
-+	depends on BR2_USE_MMU  # linux-pam
-+	depends on BR2_ENABLE_LOCALE  # linux-pam
-+	depends on BR2_USE_WCHAR  # linux-pam
-+	depends on !BR2_STATIC_LIBS  # linux-pam
-+	select BR2_PACKAGE_LINUX_PAM
-+	help
-+	  Install the user and group management tools (e.g. groupadd) with setuid and
-+	  authenticate the callers via PAM.
-+
-+comment "account-tools-setuid needs a toolchain w/ shared libs, wchar, locale"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_ENABLE_LOCALE
-+
-+config BR2_PACKAGE_SHADOW_UTMPX
-+	bool "utmpx"
-+	help
-+	  Enable loggin in utmpx / wtmpx.
-+
-+config BR2_PACKAGE_SHADOW_SUBORDINATE_IDS
-+	bool "subordinate-ids"
-+	help
-+	  Support subordinate ids. Helpful to use container solution like podman
-+	  without root.
-+
-+config BR2_PACKAGE_SHADOW_SHA_CRYPT
-+	bool "sha-crypt"
-+	default y
-+	help
-+	  Allow the SHA256 and SHA512 password encryption algorithms.
-+
-+config BR2_PACKAGE_SHADOW_BCRYPT
-+	bool "bcrypt"
-+	help
-+	  Allow the bcrypt password encryption algorithm.
-+
-+config BR2_PACKAGE_SHADOW_YESCRYPT
-+	bool "yescrypt"
-+	help
-+	  Allow the yescrypt password encryption algorithm.
-+
-+endif # BR2_PACKAGE_SHADOW
-+
-+comment "shadow needs a toolchain w/ headers >= 4.14"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
-new file mode 100644
-index 0000000000..6b9faac10f
---- /dev/null
-+++ b/package/shadow/shadow.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  41f093ce58b2ae5f389a1c5553e0c18bc73e6fe27f66273891991198a7707c95  shadow-4.11.1.tar.xz
-+sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-new file mode 100644
-index 0000000000..261f28dd28
---- /dev/null
-+++ b/package/shadow/shadow.mk
-@@ -0,0 +1,133 @@
-+################################################################################
-+#
-+# shadow
-+#
-+################################################################################
-+
-+SHADOW_VERSION = 4.11.1
-+SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/v$(SHADOW_VERSION)
-+SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
-+SHADOW_LICENSE = BSD-3-Clause
-+SHADOW_LICENSE_FILES = COPYING
-+
-+SHADOW_CONF_OPTS = \
-+	--disable-man \
-+    --without-btrfs \
-+    --without-nscd \
-+    --without-skey \
-+    --without-sssd \
-+    --without-su \
-+    --without-tcb
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_SHADOWGRP),y)
-+SHADOW_CONF_OPTS += --enable-shadowgrp
-+else
-+SHADOW_CONF_OPTS += --disable-shadowgrp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID),y)
-+SHADOW_CONF_OPTS += --enable-account-tools-setuid
-+define SHADOW_ACCOUNT_TOOLS_SETUID_PERMISSIONS
-+	/usr/sbin/chgpasswd f 4755 0 0 - - - - -
-+	/usr/sbin/chpasswd f 4755 0 0 - - - - -
-+	/usr/sbin/groupadd f 4755 0 0 - - - - -
-+	/usr/sbin/groupdel f 4755 0 0 - - - - -
-+	/usr/sbin/groupmod f 4755 0 0 - - - - -
-+	/usr/sbin/newusers f 4755 0 0 - - - - -
-+	/usr/sbin/useradd f 4755 0 0 - - - - -
-+	/usr/sbin/usermod f 4755 0 0 - - - - -
-+endef
-+else
-+SHADOW_CONF_OPTS += --disable-account-tools-setuid
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_UTMPX),y)
-+SHADOW_CONF_OPTS += --enable-utmpx
-+else
-+SHADOW_CONF_OPTS += --disable-utmpx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
-+SHADOW_CONF_OPTS += --enable-subordinate-ids
-+define SHADOW_SUBORDINATE_IDS_PERMISSIONS
-+	/usr/bin/newuidmap f 4755 0 0 - - - - -
-+	/usr/bin/newgidmap f 4755 0 0 - - - - -
-+endef
-+else
-+SHADOW_CONF_OPTS += --disable-subordinate-ids
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ACL),y)
-+SHADOW_CONF_OPTS += --with-acl
-+SHADOW_DEPENDENCIES += acl
-+else
-+SHADOW_CONF_OPTS += --without-acl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ATTR),y)
-+SHADOW_CONF_OPTS += --with-attr
-+SHADOW_DEPENDENCIES += attr
-+else
-+SHADOW_CONF_OPTS += --without-attr
-+endif
-+
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+SHADOW_CONF_OPTS += --with-audit
-+SHADOW_DEPENDENCIES += audit
-+else
-+SHADOW_CONF_OPTS += --without-audit
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CRACKLIB),y)
-+SHADOW_CONF_OPTS += --with-libcrack
-+SHADOW_DEPENDENCIES += cracklib
-+else
-+SHADOW_CONF_OPTS += --without-libcrack
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SHADOW_CONF_OPTS += --with-selinux
-+SHADOW_DEPENDENCIES += libselinux libsemanage
-+else
-+SHADOW_CONF_OPTS += --without-selinux
-+endif
-+
-+# linux-pam is also used without account-tools-setuid enabled
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+SHADOW_CONF_OPTS += --with-libpam
-+SHADOW_DEPENDENCIES += linux-pam
-+else
-+SHADOW_CONF_OPTS += --without-libpam
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_SHA_CRYPT),y)
-+SHADOW_CONF_OPTS += --with-sha-crypt
-+else
-+SHADOW_CONF_OPTS += --without-sha-crypt
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_BCRYPT),y)
-+SHADOW_CONF_OPTS += --with-bcrypt
-+else
-+SHADOW_CONF_OPTS += --without-bcrypt
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_YESCRYPT),y)
-+SHADOW_CONF_OPTS += --with-yescrypt
-+else
-+SHADOW_CONF_OPTS += --without-yescrypt
-+endif
-+
-+define SHADOW_PERMISSIONS
-+	/usr/bin/chage f 4755 0 0 - - - - -
-+	/usr/bin/chfn f 4755 0 0 - - - - -
-+	/usr/bin/chsh f 4755 0 0 - - - - -
-+	/usr/bin/expiry f 4755 0 0 - - - - -
-+	/usr/bin/gpasswd f 4755 0 0 - - - - -
-+	/usr/bin/newgrp f 4755 0 0 - - - - -
-+	/usr/bin/passwd f 4755 0 0 - - - - -
-+	$(SHADOW_ACCOUNT_TOOLS_SETUID)
-+	$(SHADOW_SUBORDINATE_IDS_PERMISSIONS)
-+endef
-+
-+$(eval $(autotools-package))
+-UNBOUND_VERSION = 1.16.3
++UNBOUND_VERSION = 1.17.0
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+ UNBOUND_LICENSE = BSD-3-Clause
 -- 
-2.35.1
+2.36.2
 
 _______________________________________________
 buildroot mailing list
