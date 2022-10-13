@@ -1,58 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0C06C433FE
-	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 08:27:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B24EC433FE
+	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 09:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5008B40C4B;
-	Thu, 13 Oct 2022 08:27:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5008B40C4B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32FC083EB8;
+	Thu, 13 Oct 2022 09:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32FC083EB8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cf44WSu-awWc; Thu, 13 Oct 2022 08:27:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Nrf2_p13ng0X; Thu, 13 Oct 2022 09:35:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C3D840C3D;
-	Thu, 13 Oct 2022 08:27:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C3D840C3D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D3E983EB4;
+	Thu, 13 Oct 2022 09:35:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D3E983EB4
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1D22D1BF4D8
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 08:27:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 924C11BF487
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 09:35:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F38D56111F
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 08:27:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F38D56111F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D9306112D
+ for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 09:35:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D9306112D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x9oZLkaGutay for <buildroot@lists.busybox.net>;
- Thu, 13 Oct 2022 08:27:53 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 701376111D
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 701376111D
- for <buildroot@buildroot.org>; Thu, 13 Oct 2022 08:27:53 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 9ED0660006;
- Thu, 13 Oct 2022 08:27:48 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1oitZE-00Enyl-0H; Thu, 13 Oct 2022 10:27:48 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20221012215008.2918444-1-thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Oct 2022 10:27:47 +0200
-In-Reply-To: <20221012215008.2918444-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Wed, 12 Oct 2022 23:50:08 +0200")
-Message-ID: <87h708nn5o.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+ with ESMTP id 5QM6vJUrxMsd for <buildroot@lists.busybox.net>;
+ Thu, 13 Oct 2022 09:35:53 +0000 (UTC)
+X-Greylist: delayed 00:29:57 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4BF86112C
+Received: from 8.mo560.mail-out.ovh.net (8.mo560.mail-out.ovh.net
+ [188.165.52.147])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C4BF86112C
+ for <buildroot@buildroot.org>; Thu, 13 Oct 2022 09:35:52 +0000 (UTC)
+Received: from player158.ha.ovh.net (unknown [10.111.172.176])
+ by mo560.mail-out.ovh.net (Postfix) with ESMTP id 63FC925312
+ for <buildroot@buildroot.org>; Thu, 13 Oct 2022 09:00:32 +0000 (UTC)
+Received: from armadeus.com (lfbn-str-1-84-188.w92-140.abo.wanadoo.fr
+ [92.140.211.188])
+ (Authenticated sender: sebastien.szymanski@armadeus.com)
+ by player158.ha.ovh.net (Postfix) with ESMTPSA id 54D512FA0069A;
+ Thu, 13 Oct 2022 09:00:29 +0000 (UTC)
+X-OVh-ClientIp: 92.140.211.188
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+To: buildroot@buildroot.org
+Date: Thu, 13 Oct 2022 10:57:33 +0200
+Message-Id: <20221013085733.4973-1-sebastien.szymanski@armadeus.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] Config.in: introduce BR2_TIME_BITS_64
- option for Y2038 compatibility
+X-Ovh-Tracer-Id: 15253410465311746835
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeektddgudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeehvdfhtdehudekieeihfekjedvudevfedugfeuhffgjedufedtffeileffgedufeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsuhhilhgurhhoohhtrdhnvghtpdgsuhhilhgurhhoohhtrdhorhhgnecukfhppeduvdejrddtrddtrddupdelvddrudegtddrvdduuddrudekkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheeitddpmhhouggvpehsmhhtphhouhht
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-107S0019efe268d-ee7a-42c7-abd5-8a5467985ed2,
+ AAE7D8CF461432263D5EC2D0A9650A68A5C44AB6)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: [Buildroot] [PATCH v2 1/1] package/mmc-utils: bump to version
+ dfc3b6ecda84d21418fb4408b39c5c71db4c6458
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,80 +72,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E.
- MORIN" <yann.morin.1998@free.fr>, Buildroot List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-
- > Y2038 is now almost only 15 years away, and embedded systems built
- > today are potentially going to still be operational in 15 years, and
- > even though they are supposed to receive updates by then, we all know
- > how things go, and potentially some of these embedded systems will not
- > receive any update.
-
-Thanks for picking this up! This has been on my todo list for a while as well!.
-
-
- > In 2038, the signed 32-bit representation of time_t used on 32-bit
- > architectures will overflow, causing all time-related functions to go
- > back in time in a surprising way.
-
- > The Linux kernel has already been modified to support a 64-bit
- > representation of time_t on 32-bit architectures, but from a C library
- > perspective, the situation varies:
-
- >  - glibc uses this 64-bit time_t representation on 32-bit systems
- >    since glibc 2.34, but only if -D_TIME_BITS=64 is
- >    specified. Therefore, this commit adds an option to add this flag
- >    globally to the build, when glibc is the C library and the
- >    architecture is not 64-bit.
-
- >  - musl uses unconditionally a 64-bit time_t representation on 32-bit
- >    systems since musl 1.2.0. So there is nothing to do here since
- >    Buildroot has been using a musl >= 1.2.0, used since Buildroot
- >    2020.05. No Buildroot option is needed here.
-
- >  - uClibc-ng does not support a 64-bit time_t representation on 32-bit
- >    systems, so systems using uClibc-ng will not be Y2038 compliant, at
- >    least for now. No Buildroot option is needed here.
-
- > It should be noted that being Y2038-compliant will only work if all
- > application/library code is correct. For example if an
- > application/library stores a timestamp in an "int" instead of using
- > the proper time_t type, then the mechanisms described above will not
- > fix this, and the application/library will continue to be broken in
- > terms of Y2038 support.
-
- > Possible discussions points about this patch:
-
- >  - Should we have an option at all, or should we unconditionally pass
- >    -D_TIME_BITS=64, like we have been doing for _FILE_OFFSET_BITS=64
- >    for quite some time. The reasoning for having an option is that
- >    the mechanism is itself opt-in in glibc, and generally relatively
- >    new, so it seemed logical for now to make it optional as well in
- >    Buildroot.
-
-I was hoping we could just do it unconditionally, given that musl does
-it already.
-
-Failing that, I would think we could at least make it default y.
-
-
- >  - Should we show something (a Config.in comment?) in the musl and
- >    uClibc-ng case to let the user know that the code is Y2038
- >    compliant (musl) or not Y2038 compliant (uClibc-ng). Or should this
- >    discussion be part of the Buildroot documentation?
-
-Having a notice about this in the documentation certainly cannot
-harm. I'm not sure it makes sense to have it in Config.in.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RHJvcCBmaXJzdCBwYXRjaCwgdXBzdHJlYW1lZDoKaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIv
+c2NtL3V0aWxzL21tYy9tbWMtdXRpbHMuZ2l0L2NvbW1pdC8/aWQ9NTIwZjU0ZWI5NDg0NWU1OTc4
+MzdhZTkwOGEwM2I5MWFlOGM4NzU4ZgoKRGVwZW5kcyBvbiBrZXJuZWwgaGVhZGVycyA+PSA0LjQg
+Zm9yIHN0cnVjdCBtbWNfaW9jX211bHRpX2NtZAoKRml4ZXM6IGh0dHA6Ly9hdXRvYnVpbGQuYnVp
+bGRyb290Lm5ldC9yZXN1bHRzLzAxZjc4MDgxYTUwNzQzZDFmYWE1MGEwOTBjMDBiN2U5MGExN2Zh
+MzkKClNpZ25lZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFu
+c2tpQGFybWFkZXVzLmNvbT4KLS0tCgpDaGFuZ2VzIGZvciB2MjoKIC0gbmVlZHMga2VybmVsIGhl
+YWRlcnMgPj0gNC40CgogLi4uMDEtbW1jX2NtZHMuYy1maXgtYnVpbGQtd2l0aC1nY2MtNC45LnBh
+dGNoIHwgMzcgLS0tLS0tLS0tLS0tLS0tLS0tLQogcGFja2FnZS9tbWMtdXRpbHMvQ29uZmlnLmlu
+ICAgICAgICAgICAgICAgICAgIHwgIDYgKy0tCiBwYWNrYWdlL21tYy11dGlscy9tbWMtdXRpbHMu
+aGFzaCAgICAgICAgICAgICAgfCAgNCArLQogcGFja2FnZS9tbWMtdXRpbHMvbW1jLXV0aWxzLm1r
+ICAgICAgICAgICAgICAgIHwgIDIgKy0KIDQgZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCsp
+LCA0MyBkZWxldGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL21tYy11dGlscy8w
+MDAxLW1tY19jbWRzLmMtZml4LWJ1aWxkLXdpdGgtZ2NjLTQuOS5wYXRjaAoKZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvbW1jLXV0aWxzLzAwMDEtbW1jX2NtZHMuYy1maXgtYnVpbGQtd2l0aC1nY2MtNC45
+LnBhdGNoIGIvcGFja2FnZS9tbWMtdXRpbHMvMDAwMS1tbWNfY21kcy5jLWZpeC1idWlsZC13aXRo
+LWdjYy00LjkucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDc3MjVmOWNhNWUu
+LjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9tbWMtdXRpbHMvMDAwMS1tbWNfY21kcy5jLWZpeC1i
+dWlsZC13aXRoLWdjYy00LjkucGF0Y2gKKysrIC9kZXYvbnVsbApAQCAtMSwzNyArMCwwIEBACi1G
+cm9tIDYyMDhjYzc4ZjZlZmQxZmFmYzRmNWJjNmE0ODcyNDdhMzgzZGY4MGYgTW9uIFNlcCAxNyAw
+MDowMDowMCAyMDAxCi1Gcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250YWluZS5mYWJyaWNlQGdt
+YWlsLmNvbT4KLURhdGU6IFNhdCwgMjggU2VwIDIwMTkgMjA6NDQ6NTIgKzAyMDAKLVN1YmplY3Q6
+IFtQQVRDSF0gbW1jX2NtZHMuYzogZml4IGJ1aWxkIHdpdGggZ2NjIDQuOQotCi1GaXggZm9sbG93
+aW5nIGVycm9yIHdpdGggZ2NjIDQuOToKLQotbW1jX2NtZHMuYzoxOTE4Ojk6IGVycm9yOiBtaXNz
+aW5nIGJyYWNlcyBhcm91bmQgaW5pdGlhbGl6ZXIgWy1XZXJyb3I9bWlzc2luZy1icmFjZXNdCi0g
+IHN0cnVjdCBycG1iX2ZyYW1lIGZyYW1lX3N0YXR1cyA9IHswfTsKLQotRml4ZXM6Ci0gLSBodHRw
+Oi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9iZjNiNmY5ZjZlZjM5Yjk5ODQyYjNj
+OTI0OTViN2JmMzU5YzY4MTU4Ci0KLVNpZ25lZC1vZmYtYnk6IEZhYnJpY2UgRm9udGFpbmUgPGZv
+bnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgotW1Vwc3RyZWFtIHN0YXR1czogc2VudCB0byBsaW51
+eC1tbWNAdmdlci5rZXJuZWwub3JnXQotLS0tCi0gbW1jX2NtZHMuYyB8IDQgKysrLQotIDEgZmls
+ZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKLQotZGlmZiAtLWdpdCBh
+L21tY19jbWRzLmMgYi9tbWNfY21kcy5jCi1pbmRleCBmYjM3MTg5Li42YjA5ZjI2IDEwMDY0NAot
+LS0tIGEvbW1jX2NtZHMuYwotKysrIGIvbW1jX2NtZHMuYwotQEAgLTE5MTUsNyArMTkxNSw5IEBA
+IHN0YXRpYyBpbnQgZG9fcnBtYl9vcChpbnQgZmQsCi0gCXVfaW50MTZfdCBycG1iX3R5cGU7Ci0g
+CXN0cnVjdCBtbWNfaW9jX211bHRpX2NtZCAqbWlvYzsKLSAJc3RydWN0IG1tY19pb2NfY21kICpp
+b2M7Ci0tCXN0cnVjdCBycG1iX2ZyYW1lIGZyYW1lX3N0YXR1cyA9IHswfTsKLSsJc3RydWN0IHJw
+bWJfZnJhbWUgZnJhbWVfc3RhdHVzOwotKwotKwltZW1zZXQoJmZyYW1lX3N0YXR1cywgMCwgc2l6
+ZW9mKGZyYW1lX3N0YXR1cykpOwotIAotIAlpZiAoIWZyYW1lX2luIHx8ICFmcmFtZV9vdXQgfHwg
+IW91dF9jbnQpCi0gCQlyZXR1cm4gLUVJTlZBTDsKLS0tIAotMi4yMy4wCi0KZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvbW1jLXV0aWxzL0NvbmZpZy5pbiBiL3BhY2thZ2UvbW1jLXV0aWxzL0NvbmZpZy5p
+bgppbmRleCA4NTBhZWFjNDQ1Li5hYzMyYWU2OGJmIDEwMDY0NAotLS0gYS9wYWNrYWdlL21tYy11
+dGlscy9Db25maWcuaW4KKysrIGIvcGFja2FnZS9tbWMtdXRpbHMvQ29uZmlnLmluCkBAIC0xLDEw
+ICsxLDEwIEBACiBjb25maWcgQlIyX1BBQ0tBR0VfTU1DX1VUSUxTCiAJYm9vbCAibW1jLXV0aWxz
+IgotCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IRUFERVJTX0FUX0xFQVNUXzNfMAorCWRlcGVu
+ZHMgb24gQlIyX1RPT0xDSEFJTl9IRUFERVJTX0FUX0xFQVNUXzRfNAogCWhlbHAKIAkgIE1NQyB1
+dGlscwogCiAJICBodHRwczovL2dpdC5rZXJuZWwub3JnL2NnaXQvbGludXgva2VybmVsL2dpdC9j
+amIvbW1jLXV0aWxzLmdpdAogCi1jb21tZW50ICJtbWMtdXRpbHMgbmVlZHMgYSB0b29sY2hhaW4g
+dy8gaGVhZGVycyA+PSAzLjAiCi0JZGVwZW5kcyBvbiAhQlIyX1RPT0xDSEFJTl9IRUFERVJTX0FU
+X0xFQVNUXzNfMAorY29tbWVudCAibW1jLXV0aWxzIG5lZWRzIGEgdG9vbGNoYWluIHcvIGhlYWRl
+cnMgPj0gNC40IgorCWRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fSEVBREVSU19BVF9MRUFTVF80
+XzQKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbW1jLXV0aWxzL21tYy11dGlscy5oYXNoIGIvcGFja2Fn
+ZS9tbWMtdXRpbHMvbW1jLXV0aWxzLmhhc2gKaW5kZXggZThiMjgyNjYxMi4uMTI1NmY2MzQ4NyAx
+MDA2NDQKLS0tIGEvcGFja2FnZS9tbWMtdXRpbHMvbW1jLXV0aWxzLmhhc2gKKysrIGIvcGFja2Fn
+ZS9tbWMtdXRpbHMvbW1jLXV0aWxzLmhhc2gKQEAgLTEsMyArMSwzIEBACiAjIExvY2FsbHkgY29t
+cHV0ZWQKLXNoYTI1NiAgZmZjOGY3NzIzM2QxYmQzOWNlNGVjNjg4MzVhZDk0YWE2NzYyNjI0ZTRl
+OTZmYjYwMTAyZTg3YmE4MmRiMDgzZSAgbW1jLXV0aWxzLWQ0MGVjNTM1YjlkNGU0Yzk3NGU4YzJm
+YmZiNDIyY2QwMzQ4Y2M1ZTgtYnIxLnRhci5negotc2hhMjU2ICBjMzE2NTM5M2JjZDcxMDYyNGUy
+OTA5MzI3YTZmYmViNzM2YzQ3YmRiZTY2ZGUxYzFhMzY0YWM3MzI0ZDNlNGQ2ICBtbWMuaAorc2hh
+MjU2ICBmNmVkMWNiMmYwMmQ0OWRmNDI0NGY4ODcyYjQ3YjIyNzgwZGQ2MzRmYTE5ZDg1NzI5OGNl
+MWI3OTM3NTI3NzZmICBtbWMtdXRpbHMtZGZjM2I2ZWNkYTg0ZDIxNDE4ZmI0NDA4YjM5YzVjNzFk
+YjRjNjQ1OC1icjEudGFyLmd6CitzaGEyNTYgIGY1N2UzYzYxNjkxMTZhYTlmZjA2ZWVjOTU3MzRj
+YTAwMGU0ZDAxOTY0NjdiYjIyMWU4MGU1MDUzMGM3NjgwODEgIG1tYy5oCmRpZmYgLS1naXQgYS9w
+YWNrYWdlL21tYy11dGlscy9tbWMtdXRpbHMubWsgYi9wYWNrYWdlL21tYy11dGlscy9tbWMtdXRp
+bHMubWsKaW5kZXggYzg0NzM3ODY5Mi4uYmY5NDA5NjdlZiAxMDA2NDQKLS0tIGEvcGFja2FnZS9t
+bWMtdXRpbHMvbW1jLXV0aWxzLm1rCisrKyBiL3BhY2thZ2UvbW1jLXV0aWxzL21tYy11dGlscy5t
+awpAQCAtNCw3ICs0LDcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLU1NQ19VVElM
+U19WRVJTSU9OID0gZDQwZWM1MzViOWQ0ZTRjOTc0ZThjMmZiZmI0MjJjZDAzNDhjYzVlOAorTU1D
+X1VUSUxTX1ZFUlNJT04gPSBkZmMzYjZlY2RhODRkMjE0MThmYjQ0MDhiMzljNWM3MWRiNGM2NDU4
+CiBNTUNfVVRJTFNfU0lURSA9IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9r
+ZXJuZWwvZ2l0L2NqYi9tbWMtdXRpbHMuZ2l0CiBNTUNfVVRJTFNfU0lURV9NRVRIT0QgPSBnaXQK
+IE1NQ19VVElMU19MSUNFTlNFID0gR1BMLTIuMAotLSAKMi4zNy4zCgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo=
