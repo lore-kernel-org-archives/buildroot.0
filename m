@@ -1,87 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5277BC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 22:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F09AC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 22:08:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1682404AB;
-	Fri, 14 Oct 2022 22:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1682404AB
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9C0560BE7;
+	Fri, 14 Oct 2022 22:07:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9C0560BE7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5CyPthHzOkAL; Fri, 14 Oct 2022 22:07:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BECE860BBC;
+	Fri, 14 Oct 2022 22:07:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BECE860BBC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DF6CB1BF844
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 22:07:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C88AB40390
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 22:07:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C88AB40390
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5iJKkEv2qibE; Fri, 14 Oct 2022 22:04:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D2DAD404F7;
-	Fri, 14 Oct 2022 22:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2DAD404F7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8E5C41BF844
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 22:04:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 69D7981D11
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 22:04:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69D7981D11
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UXXvoypc8ZnY for <buildroot@lists.busybox.net>;
- Fri, 14 Oct 2022 22:04:24 +0000 (UTC)
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wpfW1suqljHA for <buildroot@lists.busybox.net>;
+ Fri, 14 Oct 2022 22:07:55 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57C1E8176E
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 57C1E8176E
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 22:04:24 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id bp11so9590590wrb.9
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 15:04:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3BF14036F
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B3BF14036F
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 22:07:54 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ fn7-20020a05600c688700b003b4fb113b86so4681036wmb.0
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 15:07:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=dGVKR4Aod1N7KmsVwAPm+4MqdKjhM6UT/Uq//R+UnNM=;
- b=V7eM6WcKDyx74z59mJpAhqomabbg0Wnpf3vCK8CJqpjnbv9thkBSgHsXk3JsBYQGJl
- ADB/QnHLzqmVVQI2ZIJyRoE7pU0RIv60VdZ52VczZFvDqEAvVNjjrnlRR9uE51t9+63a
- PDlVoAtLlHDfEif8+D+41CryMjB7eQ4C4RF4IAov053cLicVrdUe2B1WU+WbyYQeYKHE
- l2/lMI9VOSUkkuGdldFDeYVt8PemM89eeG1M9jj3tOsMHC/zFIuGVNd20uyLY50A3U7M
- ytWe/mXcRM93O+YshAYrPHS61ysL+SRXVuUvKwKDC/98+s90OsSAQLtDEkyfYJ6WvG3+
- mq3Q==
-X-Gm-Message-State: ACrzQf0rBZIp2zX3n6Z1X8bNGOF3EKXDFvtULQPdmgXPuFTyUZ27o9b/
- Ervh4PMNfqURK8EGCbnHs7y6Alns3Xo=
-X-Google-Smtp-Source: AMsMyM7iq9qASxVJQlYIfDe2+t/RRDqMKLTJLyrEY5WOFM+yUFOZ5YYREVJV/kmti4F0OSYCh01oKw==
-X-Received: by 2002:a5d:4bcd:0:b0:22c:dfba:6b61 with SMTP id
- l13-20020a5d4bcd000000b0022cdfba6b61mr4501172wrt.424.1665785062028; 
- Fri, 14 Oct 2022 15:04:22 -0700 (PDT)
+ bh=S9hvSi/jUrUcVNl2xnFl+pI8Uc2M30UHU8beM+dcTSc=;
+ b=JBTg9HltCm9n4RIFG+2N1xyCEHit0HUvlZGgScCAQJcehFgTmMfC5u/vCUdMtQ8vsS
+ DSTbt+6H1Fq8umHdm8/5HWGGoVzC589E7dEvvlkHT83oXKtGbadMEkzpDxVbVKE170sZ
+ bNeOBdT8zdlzp8Qru4lGMYT3JnhifxyZU0l9ArZ93gRTHFnHboC1HiXlpHGUcwdpx4FT
+ cQ4VyidMzqi02U50n/NDt19UBlv7dHlBHUrPwALQPyitXCdz4eMJsTriwqRyutWVSe9I
+ qkf4PZDe3oy+t1IpuMW0MIL3/BvkN+NUi7Yl9V2B67Mj0lwAWaf3bUI/CnGhFAA7XQ61
+ 8IoA==
+X-Gm-Message-State: ACrzQf3K+TZXy108CfYIcY/C3XITMSMTYOxHJunuibaDbmcafeO6KU2f
+ I/IyjsgCUzRIwQzp7R7guclVof39Wq4=
+X-Google-Smtp-Source: AMsMyM5qak9c5U5t7baYOiSPuUbgVWhmsTXmDrsqiM7GHJk4ndOGwUVcdyG1ZlViVYC/yWj+9dAzAA==
+X-Received: by 2002:a05:600c:2f08:b0:3c6:befc:9778 with SMTP id
+ r8-20020a05600c2f0800b003c6befc9778mr4958490wmn.101.1665785272313; 
+ Fri, 14 Oct 2022 15:07:52 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- i29-20020a1c541d000000b003c41144b3cfsm8113605wmb.20.2022.10.14.15.04.21
+ q65-20020a1c4344000000b003a8434530bbsm8143221wma.13.2022.10.14.15.07.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 14 Oct 2022 15:04:21 -0700 (PDT)
+ Fri, 14 Oct 2022 15:07:51 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 00:04:17 +0200
-Message-Id: <20221014220417.7167-1-fontaine.fabrice@gmail.com>
+Date: Sat, 15 Oct 2022 00:07:48 +0200
+Message-Id: <20221014220748.14254-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=dGVKR4Aod1N7KmsVwAPm+4MqdKjhM6UT/Uq//R+UnNM=;
- b=L/UlHfXnRe01eFmSDqJKA2YYzD8f7V/5agne9n0nKSFvfSuTgciPMn4uj/+svVZg4v
- EfYocrz4QEK02aejnprkqEaldAidEHaV5cKc/RQmUvFhawE2neoDFC2nUWiyS2f2bouL
- kRckS23c4kHc1NN/yP0MC/MGbAIqIc8AFMQJRbWexTTnpB7AWUwU7gZZ/P8Su9BckJPM
- 4xaBzf1Gl+4AgcKl8MWrodcUBMs3zTJ27yhhkaI9oMwk/VQVZImC5aKONeqWjLI6c1wD
- i6JIt1jdHq0CaBzgine9Ng0PyFdaNtDBR0oKrYQmd2aQCbWPer1hrpevZeBNm/liZf32
- ds8g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=S9hvSi/jUrUcVNl2xnFl+pI8Uc2M30UHU8beM+dcTSc=;
+ b=T0focwz8kPhQwJrPYkc562uWiUS8grqlVy6dNakodmu148qYA1KAFbf+AdWx5c5m2u
+ Y6GiNq822v758vdkqeqgMG0/hCf9r81gXfObpPHTEBjoc/NnwdF+NpWE1odOL+bYH8eo
+ eDaVEY2u7WA5c0GN3hfUWffcJqhsDjKcqgS8GDbiTAmNuQ17U+FaZld9lsLuuUW0t6va
+ m4RgY4p2vGV0nrdPTSGcMIZwqYYZnYrqfBXmfvjT3y1jsmbHb6aifYbB0dvR2+OOck3a
+ TQKAgKutBLKZ7+h4YC1HLUigZELnGCdf8POf//1V9D2hhnqdI21h+0YbJZCFRDLbnlha
+ vlvg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=L/UlHfXn
-Subject: [Buildroot] [PATCH 1/1] package/agent-proxy: fix AGENT_PROXY_VERSION
+ header.a=rsa-sha256 header.s=20210112 header.b=T0focwz8
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to version
+ 2.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +95,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, Rufus Segar <rhs@riseup.net>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Make AGENT_PROXY_VERSION compliant with release-monitoring.org
+Fix CVE-2022-39282 and CVE-2022-39283
+
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.8.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/agent-proxy/agent-proxy.hash | 2 +-
- package/agent-proxy/agent-proxy.mk   | 4 ++--
+ package/freerdp/freerdp.hash | 4 ++--
+ package/freerdp/freerdp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/agent-proxy/agent-proxy.hash b/package/agent-proxy/agent-proxy.hash
-index bd0e814d20..685dd4fbaf 100644
---- a/package/agent-proxy/agent-proxy.hash
-+++ b/package/agent-proxy/agent-proxy.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index a600a96172..94d0746d40 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.8.0.tar.gz.sha256
+-sha256  fd26a41c367ea1f23a06716725d19efa41fd572c4536348d39b3465b116b3703  freerdp-2.8.0.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.8.1.tar.gz.sha256
++sha256  ea8903b29914134202a972c06052432678c89cb5eebcc8f5a41553030c97376b  freerdp-2.8.1.tar.gz
+ 
  # Locally calculated
--sha256  c4db014339b5bbdae3d98e814844e1b80d87b663a343f7d33fdb89fdbb02f16d  agent-proxy-agent-proxy-1.97-br1.tar.gz
-+sha256  b1667b36074c10ebd6dd1f89eda75d5877bc8e06ecf2919f18e75a7a5a9de19b  agent-proxy-1.97.tar.gz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/agent-proxy/agent-proxy.mk b/package/agent-proxy/agent-proxy.mk
-index 46108aef02..c8844ccbf1 100644
---- a/package/agent-proxy/agent-proxy.mk
-+++ b/package/agent-proxy/agent-proxy.mk
-@@ -4,8 +4,8 @@
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index c7e01fa541..ae844c589e 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AGENT_PROXY_VERSION = agent-proxy-1.97
--AGENT_PROXY_SITE = git://git.kernel.org/pub/scm/utils/kernel/kgdb/agent-proxy.git
-+AGENT_PROXY_VERSION = 1.97
-+AGENT_PROXY_SITE = https://git.kernel.org/pub/scm/utils/kernel/kgdb/agent-proxy.git/snapshot
- AGENT_PROXY_LICENSE = GPL-2.0
- AGENT_PROXY_LICENSE_FILES = COPYING
- 
+-FREERDP_VERSION = 2.8.0
++FREERDP_VERSION = 2.8.1
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
 -- 
 2.35.1
 
