@@ -1,66 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3DD0C4332F
-	for <buildroot@archiver.kernel.org>; Thu, 13 Oct 2022 17:31:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B244C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 00:51:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 693BD41D8E;
-	Thu, 13 Oct 2022 17:31:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 693BD41D8E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JiS6akQGzvBe; Thu, 13 Oct 2022 17:31:45 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A86041D8A;
-	Thu, 13 Oct 2022 17:31:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A86041D8A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 480531BF3EC
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 17:31:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C45383F4E
- for <buildroot@lists.busybox.net>; Thu, 13 Oct 2022 17:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C45383F4E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64C1283FAF;
+	Fri, 14 Oct 2022 00:51:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64C1283FAF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NeTJy3OZskuK for <buildroot@lists.busybox.net>;
- Thu, 13 Oct 2022 17:31:41 +0000 (UTC)
-X-Greylist: delayed 00:07:03 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE8B583F4D
-Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE8B583F4D
- for <buildroot@buildroot.org>; Thu, 13 Oct 2022 17:31:40 +0000 (UTC)
-Received: from localhost.localdomain ([146.241.87.206])
- by Aruba Outgoing Smtp  with ESMTPSA
- id j1whoRbpalrBMj1wioVB2T; Thu, 13 Oct 2022 19:24:36 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Thu, 13 Oct 2022 19:24:33 +0200
-Message-Id: <20221013172433.100738-1-giulio.benetti@benettiengineering.com>
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bzxAOlwi5moL; Fri, 14 Oct 2022 00:51:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B3B683FA9;
+	Fri, 14 Oct 2022 00:51:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B3B683FA9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F7BA1BF3A1
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 00:51:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E5D0D405FB
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 00:51:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5D0D405FB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 01loKooIEdCB for <buildroot@lists.busybox.net>;
+ Fri, 14 Oct 2022 00:51:06 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DE7C405E7
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com
+ [IPv6:2607:f8b0:4864:20::f34])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7DE7C405E7
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 00:51:06 +0000 (UTC)
+Received: by mail-qv1-xf34.google.com with SMTP id mg6so2359775qvb.10
+ for <buildroot@buildroot.org>; Thu, 13 Oct 2022 17:51:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=7OuhFyitca+c0q8LA7ZQ+OLDG0OgpugWeYypm6KXACc=;
+ b=RilK0crofcFEpwJ6tVl0uW0pN9rOSqwF6tbLqa+ZLUXKsNYt7rh69qpwA4NHY5Xb9F
+ ockdfVOkCfgtPsztG03yviTFvSgzs3XeeebWPqe8pRqRG6Zvr97EHwEEGR5BnRY9BEo1
+ xiesX4/JGRxhqkIrMkqKihnviLS9/iyPmY2Sf6a38S2eJRDyg1v7hyusvgGe7Fmzp4HE
+ sC2bM3AjS2mL8eG0U+zkdio38Aw20oD8PMKP3UEglRbsNjgNvwUBWEqD14dffWxET0cb
+ pHKtWKxTy0SkRdtknQoLFduQ1K4ZNzI5hDLlbAu2nudxcLS1hodrvf5lX8sRcNsfT0pi
+ 3DLQ==
+X-Gm-Message-State: ACrzQf0tAZAoEor3kWV9iqf9Zjl9Iexe/OU5KWOrkM7xSFYz516JbhZy
+ uthkbIwbwrB5yxm2TPJVdFnhmA==
+X-Google-Smtp-Source: AMsMyM5Nu3X2hbEn+bH6LJ1+a56XzXAh3TLKxzawFAMLUol6FVMD5vznPI4TfYOL2WY8dI+j/bAd6g==
+X-Received: by 2002:ad4:5962:0:b0:4b1:d684:f726 with SMTP id
+ eq2-20020ad45962000000b004b1d684f726mr2099472qvb.31.1665708665033; 
+ Thu, 13 Oct 2022 17:51:05 -0700 (PDT)
+Received: from lbrmn-mmayer.ric.broadcom.net ([192.19.161.248])
+ by smtp.gmail.com with ESMTPSA id
+ j4-20020ac874c4000000b0039cb59f00fcsm1031741qtr.30.2022.10.13.17.51.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 13 Oct 2022 17:51:04 -0700 (PDT)
+Received: by lbrmn-mmayer.ric.broadcom.net (Postfix, from userid 1000)
+ id 9F7644A920B9; Thu, 13 Oct 2022 17:51:02 -0700 (PDT)
+To: Buildroot Mailing List <buildroot@buildroot.org>
+Date: Thu, 13 Oct 2022 17:50:55 -0700
+Message-Id: <20221014005055.746362-1-mmayer@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfHqDN6LbGYEs2SUmQFHbpMJR7tHu++XKUIX3ozYczsF7lqmKv1Uudin10GbnLQ0GDvmSbZ3BFBRGpDPZZtJg3nCiU+1AYei9qSP4B3VOsnuw/+06hfCK
- gor7GXjrGCx5FovxXLZQeganCYUJAHwn+m08zce2RK6wBqgUkuuIrquadWokP6YTagWlaAY3eEh8qakz60afiJTo+DRgjAvcjKIkhD8zpdxmxCTuX2+7hZJ2
- uuw+Xn1t9jy4QXcEeLn0rMffmwgzXnT3edAFxwIrbhRrIFMK4MtYpM88xfhljoI3v1FysVKKSnLAx5Pg+KHngQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1665681876; bh=GWA2WatBD/WPWHwe2INazu7YsmKohe0h8ohD/PCtc4Q=;
- h=From:To:Subject:Date:MIME-Version;
- b=M91gEToDH1g3d8frzFY+sFUEhKjJnsAH582bdR9nzpLefYH1CFpaOqvzLD7AMaVfa
- Gi6ZgVAWDzTQ3BY9nrO0XAAYuTV1TrdrloUupl5CwUzrk3CkT5G5k9QyHOipTGoWkC
- vOWxmoyWJ6NOIyBDlr9P8GAo5cPWw6s2VPst2LoOEfw6gAmkXHA6eEakNp2zkESNwP
- MopSaC1rHxBYXCPagC19UMVmUO3b7/b4G2IA4KEo4+mb9b4OLmXW/kdIlEkBprw3jM
- fa6mcjrQZycsEGnjdWb09ASoxG94VgwHmlJcURMYh1/tOL+EZbvtPt8trHieWWYoL0
- aXJm39ZvKlCnA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=M91gEToD
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.84
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=broadcom.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=7OuhFyitca+c0q8LA7ZQ+OLDG0OgpugWeYypm6KXACc=;
+ b=SX0ZqCE7dU8p3s5WGasp5a0Z9UQUvWs83CU91tt4jMOfTRuDgQF8+TPXvnssvo0rAN
+ luz+/gnfqJ7FB53mGpKOnh60IMzuCYA4EaWezou0EM4Ctpw2fdQdHlfoRoLBMvGQlHdn
+ Xr4/eJLztZ74U77fx65JPYUwML3k9mTcj3poU=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com
+ header.a=rsa-sha256 header.s=google header.b=SX0ZqCE7
+Subject: [Buildroot] [PATCH] mmc-utils: allow enabling of "dangerous
+ commands"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,43 +92,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Markus Mayer via buildroot <buildroot@buildroot.org>
+Reply-To: Markus Mayer <mmayer@broadcom.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Markus Mayer <mmayer@broadcom.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Provide a config option that allows the user to enable mmc's "dangerous
+commands" if so desired. mmc-utils considers turning on permanent write
+protection on a device a "dangerous command" and doesn't offer it by
+default.
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 026344668f..2b34cc1a77 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_83_RTM/src/SHA256SUMS
--sha256  ab23ea67f964090b8b73c80a674082571c36e5f4eba92057ac648c9c1def0128  nss-3.83.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_84_RTM/src/SHA256SUMS
-+sha256  9a387ffe350ff14f001d943f96cc0c064891551d71e1a97a5ddbffe7f1207a25  nss-3.84.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 1099ae199c..041b2cfc56 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+---
+ package/mmc-utils/Config.in    | 8 ++++++++
+ package/mmc-utils/mmc-utils.mk | 9 ++++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/package/mmc-utils/Config.in b/package/mmc-utils/Config.in
+index 850aeac44571..0283658a7a57 100644
+--- a/package/mmc-utils/Config.in
++++ b/package/mmc-utils/Config.in
+@@ -8,3 +8,11 @@ config BR2_PACKAGE_MMC_UTILS
  
--LIBNSS_VERSION = 3.83
-+LIBNSS_VERSION = 3.84
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+ comment "mmc-utils needs a toolchain w/ headers >= 3.0"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++
++config BR2_PACKAGE_MMC_UTILS_ENABLE_DANGEROUS_COMMANDS
++	bool "Enable dangerous commands"
++	depends on BR2_PACKAGE_MMC_UTILS
++	help
++	   Enable support for dangerous commands in mmc-utils. mmc-utils
++	   considers turning on permanent write protection on a device a
++	   "dangerous command" and doesn't offer it by default.
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index c84737869264..a176cb94ae43 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -10,12 +10,19 @@ MMC_UTILS_SITE_METHOD = git
+ MMC_UTILS_LICENSE = GPL-2.0
+ MMC_UTILS_LICENSE_FILES = mmc.h
+ 
++MMC_UTILS_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_PACKAGE_MMC_UTILS_ENABLE_DANGEROUS_COMMANDS),y)
++MMC_UTILS_CFLAGS += -DDANGEROUS_COMMANDS_ENABLED
++endif
++
+ # override AM_CFLAGS as the project Makefile uses it to pass
+ # -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2, and the latter conflicts
+ # with the _FORTIFY_SOURCE that we pass when hardening options are
+ # enabled.
+ define MMC_UTILS_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) AM_CFLAGS=
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS=$(MMC_UTILS_CFLAGS) \
++		AM_CFLAGS=
+ endef
+ 
+ define MMC_UTILS_INSTALL_TARGET_CMDS
 -- 
 2.34.1
 
