@@ -1,72 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4938AC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 19:33:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1C0BC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 19:55:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF02D4197D;
-	Fri, 14 Oct 2022 19:33:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF02D4197D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5172C60BD0;
+	Fri, 14 Oct 2022 19:55:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5172C60BD0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mqeeXkfACJUe; Fri, 14 Oct 2022 19:33:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Hcxq2-CvefK6; Fri, 14 Oct 2022 19:55:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C3D341975;
-	Fri, 14 Oct 2022 19:33:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C3D341975
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 101561BF352
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 19:33:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 066CB60BC6;
+	Fri, 14 Oct 2022 19:54:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 066CB60BC6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B2101BF352
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 19:54:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF39540159
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 19:33:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF39540159
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0680A81448
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 19:54:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0680A81448
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KYTXizBr4d7H for <buildroot@lists.busybox.net>;
- Fri, 14 Oct 2022 19:33:31 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEFC4400C4
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CEFC4400C4
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 19:33:30 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:24db:412f:58ba:c302])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id A60F078034D;
- Fri, 14 Oct 2022 21:33:21 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 14 Oct 2022 21:33:21 +0200
-Date: Fri, 14 Oct 2022 21:33:21 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20221014193321.GE2503@scaer>
-References: <20220925171932.1630739-1-thomas.petazzoni@bootlin.com>
- <20220925171932.1630739-2-thomas.petazzoni@bootlin.com>
- <8735bup3qe.fsf@dell.be.48ers.dk> <87tu49o3ay.fsf@dell.be.48ers.dk>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id paALg0QWsQPL for <buildroot@lists.busybox.net>;
+ Fri, 14 Oct 2022 19:54:56 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0A4981445
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com
+ [IPv6:2607:f8b0:4864:20::52f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F0A4981445
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 19:54:55 +0000 (UTC)
+Received: by mail-pg1-x52f.google.com with SMTP id 128so5223115pga.1
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 12:54:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=2l7SbYkAzAMtCpjbQy/vhpWve0KLcpHvpwgXMgBgGrk=;
+ b=L1+gTX0Th/VyL+SXtmgqeEU3vFob6SzwrfpSxSTdo0O9BigR9UPMhufN6rGKj+6r1o
+ mMlPHvUsCJ/c0jCcG5v/XBVjnehHqQToB2/KZmf36u2g7dDTIJ8Lnbs9ayf9EBLmJ9xM
+ U++h9ppI0o73X8x7e305JtlYAbRyeEIpXTRmil1E9muNxEGGtUfW+X8tVqRmkDXRvM8R
+ E1He9epSYReIeGTu/fydORILtUcQeaPxrlmptNzxzc07+CVIFIkygVRm9sNubLPWirFw
+ qvIDrTg75puZzFq5P60Ag5LXEubyIsvdmXxSJn6Hit4Lp8Hr5degQZmlokmonCbFJeKd
+ SxRQ==
+X-Gm-Message-State: ACrzQf1LCHSndxKfyv8JXPlgZdTGIt7dv/6+alSbzJDRPrWqdKczBSb3
+ KgZ5rV6PxMzk0IW1zDvbM4wteE+usuWOj4cEuHvfOA==
+X-Google-Smtp-Source: AMsMyM5Z6ZgZLG9yI8C+TEwUmGTH2OuvovNnBTCKysVQkQXDzEIXdmebCgwn5FzAHL1EHiNZNeu7QuG81sl/vmAm3Ok=
+X-Received: by 2002:a05:6a00:3249:b0:565:fc2c:ad79 with SMTP id
+ bn9-20020a056a00324900b00565fc2cad79mr6719299pfb.72.1665777295177; Fri, 14
+ Oct 2022 12:54:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <87tu49o3ay.fsf@dell.be.48ers.dk>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1665776009;
- bh=FaZgEN3KwgpKkEpEBLDE+7cPQjm77MaDQrsLeRw2IME=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=VzSflSecAo7sG/viHyb7bQsL7ETjUKEtZaBEmUE8lcKqIxAHH8zo7hq74bqUJYnUX
- RfEvmRGFAFzYe2aaOurc+S4RDDyBsUTx5SmPTh/cYyxQnOQURBKpA6WlO+/fwtbIcg
- sdIoc6VbS9iT0FlnuUWZ01Tw7MwGOIgDk8JyLcGbmHa9kzC/rVMEPNkjCX6zgYcx1j
- YToLElp5zjFpIBhhk03k2P19/6bVSlvP2xM/mKHCPiszP+WS/V9luSwq2xfmxDfQX3
- SXbebpXPLkpHlecfPLX9I2HtFB8WeEQogmhCrBGUZVfAxUVJ+Utw8TDBspdtW2KG1+
- TlcJJSAsXOg7w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=VzSflSec
-Subject: Re: [Buildroot] [PATCH 2/4] package/nodejs: bump to v16.17.1
+References: <20221014172013.758628-1-mmayer@broadcom.com>
+ <20221014191846.GC2503@scaer>
+In-Reply-To: <20221014191846.GC2503@scaer>
+Date: Fri, 14 Oct 2022 12:54:43 -0700
+Message-ID: <CAGt4E5t3Vq54Lu_AgKOVmqizy696GAjmtdxz7CpEBbU-=8OZVw@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=broadcom.com; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=2l7SbYkAzAMtCpjbQy/vhpWve0KLcpHvpwgXMgBgGrk=;
+ b=G7MENRIhjsjQzMb4ErRxxMhXVpPOHycuptArqeuPpwNKKUOSMW/SpMGlcwWmG04B+s
+ YWTq3vU+UnhlpkKoZSgmf13pRFx7TYcLoYUVUd6hVcLKXM2LlFk8ygwl/uljylNqAb/q
+ IGt2Zfw48fnjswqXYdaTqbUdsADPGvAWL+jbI=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com
+ header.a=rsa-sha256 header.s=google header.b=G7MENRIh
+Subject: Re: [Buildroot] [PATCH v2] mmc-utils: allow enabling of "dangerous
+ commands"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,39 +87,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Price <daniel.price@gmail.com>,
- Alexandru Ardelean <ardeleanalex@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas Petazzoni via buildroot <buildroot@buildroot.org>,
- Martin Bark <martin@barkynet.com>
+From: Markus Mayer via buildroot <buildroot@buildroot.org>
+Reply-To: Markus Mayer <mmayer@broadcom.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+On Fri, 14 Oct 2022 at 12:18, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
-On 2022-10-12 10:26 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-> >>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
->  >> This is currently the latest version in the v16.x branch.
->  > Committed to 2022.08.x, thanks.
-> I forgot to mention that this should have been marked as a security bump
-> given the security fixes it contains:
+> > @@ -8,3 +8,11 @@ config BR2_PACKAGE_MMC_UTILS
+> >
+> >  comment "mmc-utils needs a toolchain w/ headers >= 3.0"
+> >       depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+> > +
+> > +config BR2_PACKAGE_MMC_UTILS_ENABLE_DANGEROUS_COMMANDS
+> > +     bool "Enable dangerous commands"
+> > +     depends on BR2_PACKAGE_MMC_UTILS
+> > +     help
+> > +        Enable support for dangerous commands in mmc-utils. mmc-utils
+> > +        considers turning on permanent write protection on a device a
+> > +        "dangerous command" and doesn't offer it by default.
+>
+> Sub-options must immediately follow the main option, or the indentation
+> is not correct.
+>
+> We also prefer if-endif blocks when introducing new sub-options, for
+> consistency across the code base.
 
-Hrm... Aren't all nodejs version bumps security fixes? ;-]
+Gotcha.
+
+> Applied to master with the above two changes, thanks.
+
+Thanks for the fixup.
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+-Markus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
