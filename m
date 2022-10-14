@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AF54C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 14:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D295C43217
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 14:09:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B7686FA9A;
-	Fri, 14 Oct 2022 14:09:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B7686FA9A
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD522414CD;
+	Fri, 14 Oct 2022 14:09:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD522414CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zn9cUl-uj7XQ; Fri, 14 Oct 2022 14:09:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qeUWOP66hLy8; Fri, 14 Oct 2022 14:09:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5249F6F9FE;
-	Fri, 14 Oct 2022 14:09:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5249F6F9FE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0ADB11BF2F9
+	by smtp4.osuosl.org (Postfix) with ESMTP id B183C410E0;
+	Fri, 14 Oct 2022 14:09:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B183C410E0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E5BA1C11A0
  for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:09:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA680840FE
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:09:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA680840FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A2544119A
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:09:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A2544119A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VQPZ_4nyTawc for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1NzKeSg2-u9N for <buildroot@lists.busybox.net>;
  Fri, 14 Oct 2022 14:09:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 102CC83EC4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B28540D7E
  for <buildroot@buildroot.org>; Fri, 14 Oct 2022 14:09:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 102CC83EC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B28540D7E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F086D86CE8; Fri, 14 Oct 2022 14:09:32 +0000 (UTC)
+ id 29ABD86CE8; Fri, 14 Oct 2022 14:09:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Oct 2022 16:06:16 +0200
+Date: Fri, 14 Oct 2022 16:08:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7b04fcea33a809dfd60bf60c5df1fc6f89555e74
-X-Git-Newrev: 17a0980bc50c3bc3daec00cf57b7c00e2a71a60a
+X-Git-Oldrev: dd2ded3355c01f333c18dc16e7d9a3c496007960
+X-Git-Newrev: bcdf2fc0e41832147d3fc398070074be29c159d4
 X-Patchwork-Hint: ignore
-Message-Id: <20221014140932.F086D86CE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl2: bump version to 2.24.1
+Message-Id: <20221014140933.29ABD86CE8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.84
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,40 +62,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17a0980bc50c3bc3daec00cf57b7c00e2a71a60a
+commit: https://git.buildroot.net/buildroot/commit/?id=bcdf2fc0e41832147d3fc398070074be29c159d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 981c98531e..782c552c52 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 026344668f..2b34cc1a77 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
 @@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.0.tar.gz.sig
--sha256  91e4c34b1768f92d399b078e171448c6af18cafda743987ed2064a28954d6d97  SDL2-2.24.0.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.24.1.tar.gz.sig
-+sha256  bc121588b1105065598ce38078026a414c28ea95e66ed2adab4c44d80b309e1b  SDL2-2.24.1.tar.gz
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_83_RTM/src/SHA256SUMS
+-sha256  ab23ea67f964090b8b73c80a674082571c36e5f4eba92057ac648c9c1def0128  nss-3.83.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_84_RTM/src/SHA256SUMS
++sha256  9a387ffe350ff14f001d943f96cc0c064891551d71e1a97a5ddbffe7f1207a25  nss-3.84.tar.gz
  # Locally calculated
- sha256  fcb07e07ac6bc8b2fcf047b50431ef4ebe5b619d7ca7c82212018309a9067426  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 4585c33c9b..28e2c5cb36 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 88097c8db5..415ca900df 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SDL2_VERSION = 2.24.0
-+SDL2_VERSION = 2.24.1
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+-LIBNSS_VERSION = 3.83
++LIBNSS_VERSION = 3.84
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
