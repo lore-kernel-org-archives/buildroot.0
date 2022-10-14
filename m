@@ -4,54 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59ECAC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 15:19:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B281CC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 17:20:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B2DC5414EB;
-	Fri, 14 Oct 2022 15:19:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2DC5414EB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A1CE41593;
+	Fri, 14 Oct 2022 17:20:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A1CE41593
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4udB_lbbk0RP; Fri, 14 Oct 2022 15:19:33 +0000 (UTC)
+	with ESMTP id g4KdvT3YCZQO; Fri, 14 Oct 2022 17:20:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3BE9411A1;
-	Fri, 14 Oct 2022 15:19:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3BE9411A1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D3C91BF2EA
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 15:19:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 450EA4158F;
+	Fri, 14 Oct 2022 17:20:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 450EA4158F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C2AA91BF297
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 17:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7805E411A1
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 15:19:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7805E411A1
+ by smtp4.osuosl.org (Postfix) with ESMTP id A9D1842427
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 17:20:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9D1842427
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mCk1vW4yEYSx for <buildroot@lists.busybox.net>;
- Fri, 14 Oct 2022 15:19:28 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E985340C57
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E985340C57
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 15:19:27 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id BBB03D15E1
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 15:10:37 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id B6540E0005;
- Fri, 14 Oct 2022 15:10:30 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@dell.be.48ers.dk>)
- id 1ojMKT-00G7zs-Iz; Fri, 14 Oct 2022 17:10:29 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 14 Oct 2022 17:10:27 +0200
-Message-Id: <20221014151028.3843939-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XaXLAFlHwRVt for <buildroot@lists.busybox.net>;
+ Fri, 14 Oct 2022 17:20:24 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3C2C42425
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com
+ [IPv6:2607:f8b0:4864:20::831])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D3C2C42425
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 17:20:23 +0000 (UTC)
+Received: by mail-qt1-x831.google.com with SMTP id s3so4080713qtn.12
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 10:20:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=lHsZDbnU6JkTADhL0N7RW5m+a5nE3DbrFYOI9+io3mc=;
+ b=F3xLxinOAgRmWFbI1rSgpyzkYeoHkwDPPwCmhYEi04TMcRLlX7gCMA+/4LzqxD4Qzu
+ t3pL1ZxBsAZwxZL+5/YlebrcgTQCvnIsLHre41c2vUpNfYI+i6BafJ+pROcXrZvg6V2y
+ AlzXiqBx7tkc/phq3RcQ2fiF5Z5Xd7+AJNmmtA7Plb1e9+0zJHT4/MOCjKQLRTk7owO0
+ aSU6ALZbpF7FN3BnSKGU2nSXcbqsxCy/jxQFPWw5O/RyACHRjl05Ww9Y0YVCQFzp3vWH
+ +dQt9g6DMmOVjuzAx16v/9YVTNZYcO8aa2CxIONq2oG9hVSUUcU1/0DIb/sGSHrPeGUu
+ mmNg==
+X-Gm-Message-State: ACrzQf1QYRw9sBJ5oSk2tSjMc278+heOlyDKbgsSlOayNvLKJfrAHWGd
+ 7CsoyKzs7hAQzTThL4N3iloOPA==
+X-Google-Smtp-Source: AMsMyM5JgaWjpeK+crsiPgYE5mpnuLA/FfP0sjueYQ1QEGqLr3taSeCMW86EBACBRbdqrdKjPLHZMQ==
+X-Received: by 2002:ac8:5c0f:0:b0:39c:db4c:82af with SMTP id
+ i15-20020ac85c0f000000b0039cdb4c82afmr2301713qti.538.1665768022307; 
+ Fri, 14 Oct 2022 10:20:22 -0700 (PDT)
+Received: from lbrmn-mmayer.ric.broadcom.net ([192.19.161.248])
+ by smtp.gmail.com with ESMTPSA id
+ t21-20020a37ea15000000b006ce1bfbd603sm2677509qkj.124.2022.10.14.10.20.21
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 14 Oct 2022 10:20:21 -0700 (PDT)
+Received: by lbrmn-mmayer.ric.broadcom.net (Postfix, from userid 1000)
+ id DED304A93919; Fri, 14 Oct 2022 10:20:19 -0700 (PDT)
+To: Buildroot Mailing List <buildroot@buildroot.org>
+Date: Fri, 14 Oct 2022 10:20:12 -0700
+Message-Id: <20221014172013.758628-1-mmayer@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.{4, 10, 15}.x / 6.0.x series
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=broadcom.com; s=google;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=lHsZDbnU6JkTADhL0N7RW5m+a5nE3DbrFYOI9+io3mc=;
+ b=Z2BfmCed2jui+9LwlBQCMRnzCvly58dxj+atjz9bYj+vGpc8QAjw3vsvJa8QQMiUBh
+ F0wGgdZe6Wjz29u8lKGtotwYXJKLrWiKzgfrKregvXYqOa3mh1ytvb08R5pPAJy9N430
+ 6yHlJGyeD/ANJwPhCQO7fslonOwxQHCufLEq4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com
+ header.a=rsa-sha256 header.s=google header.b=Z2BfmCed
+Subject: [Buildroot] [PATCH v2] mmc-utils: allow enabling of "dangerous
+ commands"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,87 +92,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Markus Mayer via buildroot <buildroot@buildroot.org>
+Reply-To: Markus Mayer <mmayer@broadcom.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Markus Mayer <mmayer@broadcom.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 15 +++++++--------
- package/linux-headers/Config.in.host | 16 ++++++++--------
- 3 files changed, 16 insertions(+), 17 deletions(-)
+Provide a config option that allows the user to enable mmc's "dangerous
+commands" if so desired. mmc-utils considers turning on permanent write
+protection on a device a "dangerous command" and doesn't offer it by
+default.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f9caa3c652..ee59761f33 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+---
+ package/mmc-utils/Config.in    |  8 ++++++++
+ package/mmc-utils/mmc-utils.mk | 10 +++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/package/mmc-utils/Config.in b/package/mmc-utils/Config.in
+index 850aeac44571..0283658a7a57 100644
+--- a/package/mmc-utils/Config.in
++++ b/package/mmc-utils/Config.in
+@@ -8,3 +8,11 @@ config BR2_PACKAGE_MMC_UTILS
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.0" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.0.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 07963f185e..e1fd0feb44 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,15 +1,14 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  5c2443a5538de52688efb55c27ab0539c1f5eb58c0cfd16a2b9fbb08fd81788e  linux-6.0.tar.xz
-+sha256  8ede745a69351ea0f27fe0c48780d4efa37ff086135e129358ce09694957e8f9  linux-6.0.1.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  4ecdb8b59c6f6f258d89cbf22eede210e0a55c09db884988fe706efe2fe8f148  linux-5.19.13.tar.xz
--sha256  4a1c922a490eeabf5b44d4fde36de9ba5b71711b7352c6258716da41160db628  linux-5.17.15.tar.xz
-+sha256  4686e33847db3ec58e1043bc0c806472aae694b2c413bb7d8da91a5c9a55eb1b  linux-5.19.15.tar.xz
- sha256  da47d9a80b694548835ccb553b6eb1a1f3f5d5cddd9e2bd6f4886b99ca14f940  linux-5.15.67.tar.xz
--sha256  3f47ebdb9afe152a0c32c1157336ef13fa5cc08ac6d884dfc1f6ddc2b7dba268  linux-5.10.142.tar.xz
--sha256  09c72e3dd85df773eb52e53e25c556d132958bd775b0ed6985a6b1ac21c9cfc2  linux-5.4.212.tar.xz
-+sha256  85253abf097eb5013b988a400eb022eed0e0626e7e0a7daa3ab4b6bcabbced9a  linux-5.10.147.tar.xz
-+sha256  2bb826cdf9b2cfce385fb5d51fc8070fe428e467bd3df4ae2a7eb6f0c0cc2e63  linux-5.4.217.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  2283c1af5373c43e79adca6987174d932989a8b2551405e83e2e39ebe31e06d2  linux-4.9.327.tar.xz
--sha256  70f4df21901a654632ebbb533884ccaf117a29b14e6f2b672f0c36613c3e897d  linux-4.14.292.tar.xz
--sha256  eadd13aa70f37cdf50eef45c5964bd7146d353b61a1fd026d4fa0b2a68a3ea47  linux-4.19.257.tar.xz
-+sha256  bf021936a450e9292e10cc7db9909cd0d336406191d22aadd22bdcc51ca2595f  linux-4.9.330.tar.xz
-+sha256  62ccb9ba94a7da5115bc923eebf8dffee9229801da02be87d90ae68ab9a76a6b  linux-4.14.295.tar.xz
-+sha256  bec33298bd0470b5e725c7dc29a2dd4daf02065cb01cd4a54f6adee6ff582cb2  linux-4.19.261.tar.xz
- # Locally computed
- sha256  4594c147bdc493c7c286688542bbe65e550fb7bd58e0649ec587a2fe893ec0ee  linux-cip-5.10.145-cip17.tar.gz
- sha256  a5598f7f673b3ef819d6ed24f08d539eecb6febd11673a1d4752a1c05d4ee289  linux-cip-5.10.145-cip17-rt7.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7aee67de56..8679241a2c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -392,14 +392,14 @@ endchoice
+ comment "mmc-utils needs a toolchain w/ headers >= 3.0"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++
++config BR2_PACKAGE_MMC_UTILS_ENABLE_DANGEROUS_COMMANDS
++	bool "Enable dangerous commands"
++	depends on BR2_PACKAGE_MMC_UTILS
++	help
++	   Enable support for dangerous commands in mmc-utils. mmc-utils
++	   considers turning on permanent write protection on a device a
++	   "dangerous command" and doesn't offer it by default.
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index c84737869264..14e2bee58736 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -10,12 +10,20 @@ MMC_UTILS_SITE_METHOD = git
+ MMC_UTILS_LICENSE = GPL-2.0
+ MMC_UTILS_LICENSE_FILES = mmc.h
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.9.327"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.292"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.257"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.212"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.142"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.67"	if BR2_KERNEL_HEADERS_5_15
--	default "5.19.13"	if BR2_KERNEL_HEADERS_5_19
--	default "6.0"		if BR2_KERNEL_HEADERS_6_0
-+	default "4.9.330"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.295"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.261"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.217"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.147"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.73"	if BR2_KERNEL_HEADERS_5_15
-+	default "5.19.15"	if BR2_KERNEL_HEADERS_5_19
-+	default "6.0.1"		if BR2_KERNEL_HEADERS_6_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++MMC_UTILS_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_PACKAGE_MMC_UTILS_ENABLE_DANGEROUS_COMMANDS),y)
++MMC_UTILS_CFLAGS += -DDANGEROUS_COMMANDS_ENABLED
++endif
++
+ # override AM_CFLAGS as the project Makefile uses it to pass
+ # -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2, and the latter conflicts
+ # with the _FORTIFY_SOURCE that we pass when hardening options are
+ # enabled.
+ define MMC_UTILS_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) AM_CFLAGS=
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(MMC_UTILS_CFLAGS)" \
++		AM_CFLAGS=
+ endef
+ 
+ define MMC_UTILS_INSTALL_TARGET_CMDS
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
