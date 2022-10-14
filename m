@@ -1,58 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 383E2C433FE
-	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 14:11:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67143C433FE
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 14:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D298C41846;
-	Fri, 14 Oct 2022 14:11:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D298C41846
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0ACE44119A;
+	Fri, 14 Oct 2022 14:12:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ACE44119A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VpyYRbV2bl9U; Fri, 14 Oct 2022 14:11:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uB0fC4VBOezX; Fri, 14 Oct 2022 14:12:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D304F41571;
-	Fri, 14 Oct 2022 14:11:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D304F41571
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42A434060D;
+	Fri, 14 Oct 2022 14:12:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42A434060D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ACC1F1BF2F9
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:11:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4DBD61BF2F9
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:12:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86A6841571
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:11:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86A6841571
+ by smtp4.osuosl.org (Postfix) with ESMTP id 34E5241578
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:12:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34E5241578
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y4d9f7bu4gSy for <buildroot@lists.busybox.net>;
- Fri, 14 Oct 2022 14:11:43 +0000 (UTC)
+ with ESMTP id J3XxQGIofbV0 for <buildroot@lists.busybox.net>;
+ Fri, 14 Oct 2022 14:12:39 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57967410DF
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 57967410DF
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 14:11:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 366A041571
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 366A041571
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 14:12:39 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8CE8B40008;
- Fri, 14 Oct 2022 14:11:41 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8B00D1C0005;
+ Fri, 14 Oct 2022 14:12:37 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ojLPY-00G5QJ-O7; Fri, 14 Oct 2022 16:11:40 +0200
+ id 1ojLQS-00G5UO-NY; Fri, 14 Oct 2022 16:12:36 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Chris Packham <judge.packham@gmail.com>
 References: <20221002004931.1805825-1-judge.packham@gmail.com>
-Date: Fri, 14 Oct 2022 16:11:40 +0200
-In-Reply-To: <20221002004931.1805825-1-judge.packham@gmail.com> (Chris
- Packham's message of "Sun, 2 Oct 2022 13:49:30 +1300")
-Message-ID: <875ygmlckj.fsf@dell.be.48ers.dk>
+ <20221002004931.1805825-2-judge.packham@gmail.com>
+Date: Fri, 14 Oct 2022 16:12:36 +0200
+In-Reply-To: <20221002004931.1805825-2-judge.packham@gmail.com> (Chris
+ Packham's message of "Sun, 2 Oct 2022 13:49:31 +1300")
+Message-ID: <871qralciz.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/micropython: Bug fix release
- 1.19.1
+Subject: Re: [Buildroot] [PATCH 2/2] package/syslog-ng: Bump version to
+ 3.38.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,18 +73,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
 
- > This is a bug fix release.  The changes are:
- > - extmod/machine_i2c: only use WRITE1 option if transfer supports it
-
- >   This fixes the machine.SoftI2C.readfrom_mem() method on esp32, so it
- >   writes the address to read from.
+ > Add new version. Remove patch that has been applied upstream. Update
+ > hash for COPYING as it's text has changed to clarify some details but
+ > the license remains LGP-2.0+L/GPL-2.0+.
 
  > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+ > ---
+ >  ...-lib-tlscontext.c-fix-libressl-build.patch | 85 -------------------
+ >  package/syslog-ng/syslog-ng.hash              |  4 +-
+ >  package/syslog-ng/syslog-ng.mk                |  2 +-
 
-Committed, thanks.
-
-Does this mean that it also needs to be backported to 2022.08.x? If this
-is an esp32-only issue then presumably not?
+Don't you need to update the version in syslog-ng.conf as well?
 
 -- 
 Bye, Peter Korsgaard
