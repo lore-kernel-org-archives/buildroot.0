@@ -4,47 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6258BC4332F
-	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 14:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E2DDC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 14:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED2BC841AA;
-	Fri, 14 Oct 2022 14:10:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED2BC841AA
+	by smtp1.osuosl.org (Postfix) with ESMTP id D6A28841C6;
+	Fri, 14 Oct 2022 14:10:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6A28841C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3T5jlhVUjvdX; Fri, 14 Oct 2022 14:10:29 +0000 (UTC)
+	with ESMTP id Dw9C0l8Yff9u; Fri, 14 Oct 2022 14:10:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E3BE84039;
-	Fri, 14 Oct 2022 14:10:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E3BE84039
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1EE6C1BF2F9
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:09:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F87F83EC4;
+	Fri, 14 Oct 2022 14:10:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F87F83EC4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D2221BF2F9
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC442840FE
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:09:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC442840FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25CF140629
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 14:10:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25CF140629
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TKgjxeC6ziuM for <buildroot@lists.busybox.net>;
- Fri, 14 Oct 2022 14:09:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 187B184070
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 14:09:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 187B184070
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0635386CA6; Fri, 14 Oct 2022 14:09:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BcEedJJLaB5B for <buildroot@lists.busybox.net>;
+ Fri, 14 Oct 2022 14:09:59 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE15D4060D
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE15D4060D
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 14:09:58 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 8EC1F60010;
+ Fri, 14 Oct 2022 14:09:55 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ojLNq-00G5Hl-Jg; Fri, 14 Oct 2022 16:09:54 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 14 Oct 2022 16:06:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 17a0980bc50c3bc3daec00cf57b7c00e2a71a60a
-X-Git-Newrev: 63ee0e8b35e556e34e724b74b951e80d3f571f3c
-X-Patchwork-Hint: ignore
-Message-Id: <20221014140933.0635386CA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ell: bump to version 0.53
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20221001212114.11912-1-fontaine.fabrice@gmail.com>
+Date: Fri, 14 Oct 2022 16:09:54 +0200
+In-Reply-To: <20221001212114.11912-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 1 Oct 2022 23:21:14 +0200")
+Message-ID: <87edvalcnh.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/bind: security bump to version
+ 9.16.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,46 +64,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63ee0e8b35e556e34e724b74b951e80d3f571f3c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ell/ell.hash | 2 +-
- package/ell/ell.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > - Fix memory leak in EdDSA verify processing. (CVE-2022-38178)
+ > - Fix memory leak in ECDSA verify processing. (CVE-2022-38177)
+ > - Fix serve-stale crash that could happen when
+ >   stale-answer-client-timeout was set to 0 and there was a stale CNAME
+ >   in the cache for an incoming query. (CVE-2022-3080)
+ > - Prevent excessive resource use while processing large delegations.
+ >   (CVE-2022-2795)
 
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index 9affa390b8..68832c3201 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
--sha256  a7ff8ecbc76b187d942dd22b61cb489711400897c790319ffb7e944791687c3f  ell-0.49.tar.xz
-+sha256  a7d0df846af839bbea1b80f292166371070328854b3fa785b5c607fe600552ad  ell-0.53.tar.xz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index 9735865eae..b27d6feb65 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ELL_VERSION = 0.49
-+ELL_VERSION = 0.53
- ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
- ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
- ELL_LICENSE = LGPL-2.1+
+ > https://gitlab.isc.org/isc-projects/bind9/-/blob/v9_16_33/CHANGES
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
