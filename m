@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F21EEC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 13:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1DDCC4332F
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 13:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A27F681CAF;
-	Fri, 14 Oct 2022 13:54:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A27F681CAF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E00241887;
+	Fri, 14 Oct 2022 13:54:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E00241887
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id S1w2MuvMcLG7; Fri, 14 Oct 2022 13:54:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MtfXFZH0QfTS; Fri, 14 Oct 2022 13:54:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D53CB8146A;
-	Fri, 14 Oct 2022 13:54:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D53CB8146A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6315C1C2744
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 13:53:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2CB00417F7;
+	Fri, 14 Oct 2022 13:54:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CB00417F7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 201FF1C1190
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 13:53:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA55360BAC
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 13:53:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA55360BAC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 00AE642273
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 13:53:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00AE642273
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wwpvbdp7j4_5 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9QskigIUl9iA for <buildroot@lists.busybox.net>;
  Fri, 14 Oct 2022 13:53:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C645060D68
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBDF24226F
  for <buildroot@buildroot.org>; Fri, 14 Oct 2022 13:53:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C645060D68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBDF24226F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B5C1786CA9; Fri, 14 Oct 2022 13:53:06 +0000 (UTC)
+ id C904A86CA7; Fri, 14 Oct 2022 13:53:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Oct 2022 15:49:09 +0200
+Date: Fri, 14 Oct 2022 15:49:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c2940513298fdb5a6e582916128e914243c784f5
-X-Git-Newrev: d5dc2bdf5895770a26617e58f1e61668ee564261
+X-Git-Oldrev: d5dc2bdf5895770a26617e58f1e61668ee564261
+X-Git-Newrev: f0faa3b71c585cb70bcd6fa4bafb756b98130bd5
 X-Patchwork-Hint: ignore
-Message-Id: <20221014135306.B5C1786CA9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/checksec: bump to version 2.6.0
+Message-Id: <20221014135306.C904A86CA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeipmi: bump to version 1.6.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,44 +62,746 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5dc2bdf5895770a26617e58f1e61668ee564261
+commit: https://git.buildroot.net/buildroot/commit/?id=f0faa3b71c585cb70bcd6fa4bafb756b98130bd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of LICENSE.txt (update in year with
-https://github.com/slimm609/checksec.sh/commit/24a81d33b9bc600c676ed96c183e87181e514844)
+Drop patch (already in version)
 
-https://github.com/slimm609/checksec.sh/releases/tag/2.6.0
+https://github.com/chu11/freeipmi-mirror/blob/freeipmi-1-6-10/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/checksec/checksec.hash | 4 ++--
- package/checksec/checksec.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...eipmi-rename-md2-and-md5-functions-macros.patch | 695 ---------------------
+ package/freeipmi/freeipmi.hash                     |   2 +-
+ package/freeipmi/freeipmi.mk                       |   2 +-
+ 3 files changed, 2 insertions(+), 697 deletions(-)
 
-diff --git a/package/checksec/checksec.hash b/package/checksec/checksec.hash
-index 41aae8188c..a29866ba07 100644
---- a/package/checksec/checksec.hash
-+++ b/package/checksec/checksec.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1034459d7cd2b0ee515c2b6b003375fec566fb59c838fc5e1961e1fcf76b54fa  checksec-2.5.0.tar.gz
--sha256  7888fee828bf56d547fc1f634e40638984148b4fc41373b7626eb465060640de  LICENSE.txt
-+sha256  39d4158f96bdc7533ad6595703375c0046951fe4f6367b831ef92d9c66c1a307  checksec-2.6.0.tar.gz
-+sha256  55154b4be6dfcb3ff29d1e3648d0d07b3943a5fcc3af7c2e0e799b074734f722  LICENSE.txt
-diff --git a/package/checksec/checksec.mk b/package/checksec/checksec.mk
-index 61ef110f90..ed9846ac2d 100644
---- a/package/checksec/checksec.mk
-+++ b/package/checksec/checksec.mk
+diff --git a/package/freeipmi/0001-libfreeipmi-rename-md2-and-md5-functions-macros.patch b/package/freeipmi/0001-libfreeipmi-rename-md2-and-md5-functions-macros.patch
+deleted file mode 100644
+index 0de5b29c9c..0000000000
+--- a/package/freeipmi/0001-libfreeipmi-rename-md2-and-md5-functions-macros.patch
++++ /dev/null
+@@ -1,695 +0,0 @@
+-From 50eeda7f14c4eaa56aa86ba570a47557456544f2 Mon Sep 17 00:00:00 2001
+-From: Albert Chu <chu11@llnl.gov>
+-Date: Wed, 19 Jan 2022 11:55:55 -0800
+-Subject: [PATCH] libfreeipmi: rename md2 and md5 functions / macros
+-
+-Static compilation with libfreeipmi can lead to problems if
+-other software has similarly named md2/md5 functions
+-(such as md5_init()).  Prefix all macros and functions with
+-'ipmi_' as needed.  Update all callers accordingly.
+-
+-[Retrieved from:
+-https://github.com/chu11/freeipmi-mirror/commit/50eeda7f14c4eaa56aa86ba570a47557456544f2]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- ChangeLog                                     |  11 ++
+- libfreeipmi/interface/ipmi-lan-interface.c    |  48 +++----
+- .../interface/ipmi-rmcpplus-interface.c       |   2 +-
+- libfreeipmi/libcommon/ipmi-md2.c              |  72 +++++------
+- libfreeipmi/libcommon/ipmi-md2.h              |  30 ++---
+- libfreeipmi/libcommon/ipmi-md5.c              |  64 +++++-----
+- libfreeipmi/libcommon/ipmi-md5.h              |  18 +--
+- libfreeipmi/util/ipmi-lan-util.c              | 120 +++++++++---------
+- 8 files changed, 188 insertions(+), 177 deletions(-)
+-
+-diff --git a/ChangeLog b/ChangeLog
+-index 883a195cf..60bf8c323 100644
+---- a/ChangeLog
+-+++ b/ChangeLog
+-@@ -1,3 +1,14 @@
+-+2021-01-19 Albert Chu <chu11@llnl.gov>
+-+
+-+	* libfreeipmi/libcommon/ipmi-md2.h,
+-+	libfreeipmi/libcommon/ipmi-md2.c,
+-+	libfreeipmi/libcommon/ipmi-md5.h,
+-+	libfreeipmi/libcommon/ipmi-md5.c: Static compilation with
+-+	libfreeipmi can lead to problems if other software has similarly
+-+	named md2/md5 functions (such as md5_init()).  Prefix all macros
+-+	and functions with 'ipmi_' as needed.  Update all callers
+-+	accordingly.
+-+
+- 2022-01-18 Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- 
+- 	* configure.ac: use pkg-config to find gcrypt
+-diff --git a/libfreeipmi/interface/ipmi-lan-interface.c b/libfreeipmi/interface/ipmi-lan-interface.c
+-index 20099d770..658be53e1 100644
+---- a/libfreeipmi/interface/ipmi-lan-interface.c
+-+++ b/libfreeipmi/interface/ipmi-lan-interface.c
+-@@ -533,37 +533,37 @@ assemble_ipmi_lan_pkt (fiid_obj_t obj_rmcp_hdr,
+- 
+-               if (authentication_type == IPMI_AUTHENTICATION_TYPE_MD2)
+-                 {
+--                  md2_t ctx;
+--                  uint8_t digest[MD2_DIGEST_LENGTH];
+-+                  ipmi_md2_t ctx;
+-+                  uint8_t digest[IPMI_MD2_DIGEST_LENGTH];
+- 
+--                  assert (IPMI_1_5_MAX_PASSWORD_LENGTH == MD2_DIGEST_LENGTH);
+-+                  assert (IPMI_1_5_MAX_PASSWORD_LENGTH == IPMI_MD2_DIGEST_LENGTH);
+- 
+--                  md2_init (&ctx);
+--                  md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--                  md2_update_data (&ctx, session_id_buf, session_id_len);
+--                  md2_update_data (&ctx, msg_data_ptr, msg_data_count);
+--                  md2_update_data (&ctx, session_sequence_number_buf, session_sequence_number_len);
+--                  md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--                  md2_finish (&ctx, digest, MD2_DIGEST_LENGTH);
+--                  md2_init (&ctx);
+-+                  ipmi_md2_init (&ctx);
+-+                  ipmi_md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+                  ipmi_md2_update_data (&ctx, session_id_buf, session_id_len);
+-+                  ipmi_md2_update_data (&ctx, msg_data_ptr, msg_data_count);
+-+                  ipmi_md2_update_data (&ctx, session_sequence_number_buf, session_sequence_number_len);
+-+                  ipmi_md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+                  ipmi_md2_finish (&ctx, digest, IPMI_MD2_DIGEST_LENGTH);
+-+                  ipmi_md2_init (&ctx);
+- 
+-                   memcpy (authentication_code_field_ptr, digest, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-                 }
+-               else if (authentication_type == IPMI_AUTHENTICATION_TYPE_MD5)
+-                 {
+--                  md5_t ctx;
+--                  uint8_t digest[MD5_DIGEST_LENGTH];
+--
+--                  assert (IPMI_1_5_MAX_PASSWORD_LENGTH == MD5_DIGEST_LENGTH);
+--
+--                  md5_init (&ctx);
+--                  md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--                  md5_update_data (&ctx, session_id_buf, session_id_len);
+--                  md5_update_data (&ctx, msg_data_ptr, msg_data_count);
+--                  md5_update_data (&ctx, session_sequence_number_buf, session_sequence_number_len);
+--                  md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--                  md5_finish (&ctx, digest, MD5_DIGEST_LENGTH);
+--                  md5_init (&ctx);
+-+                  ipmi_md5_t ctx;
+-+                  uint8_t digest[IPMI_MD5_DIGEST_LENGTH];
+-+
+-+                  assert (IPMI_1_5_MAX_PASSWORD_LENGTH == IPMI_MD5_DIGEST_LENGTH);
+-+
+-+                  ipmi_md5_init (&ctx);
+-+                  ipmi_md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+                  ipmi_md5_update_data (&ctx, session_id_buf, session_id_len);
+-+                  ipmi_md5_update_data (&ctx, msg_data_ptr, msg_data_count);
+-+                  ipmi_md5_update_data (&ctx, session_sequence_number_buf, session_sequence_number_len);
+-+                  ipmi_md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+                  ipmi_md5_finish (&ctx, digest, IPMI_MD5_DIGEST_LENGTH);
+-+                  ipmi_md5_init (&ctx);
+- 
+-                   memcpy (authentication_code_field_ptr, digest, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-                 }
+-diff --git a/libfreeipmi/interface/ipmi-rmcpplus-interface.c b/libfreeipmi/interface/ipmi-rmcpplus-interface.c
+-index 1f462da7e..d1fd0753a 100644
+---- a/libfreeipmi/interface/ipmi-rmcpplus-interface.c
+-+++ b/libfreeipmi/interface/ipmi-rmcpplus-interface.c
+-@@ -1134,7 +1134,7 @@ _construct_session_trlr_authentication_code (uint8_t integrity_algorithm,
+-     {
+-       hash_algorithm = IPMI_CRYPT_HASH_MD5;
+-       hash_flags = 0;
+--      expected_digest_len = MD5_DIGEST_LENGTH;
+-+      expected_digest_len = IPMI_MD5_DIGEST_LENGTH;
+-       copy_digest_len = IPMI_MD5_128_AUTHENTICATION_CODE_LENGTH;
+-     }
+-   else /* IPMI_INTEGRITY_ALGORITHM_HMAC_SHA256_128 */
+-diff --git a/libfreeipmi/libcommon/ipmi-md2.c b/libfreeipmi/libcommon/ipmi-md2.c
+-index 6e9386be7..076b555bd 100644
+---- a/libfreeipmi/libcommon/ipmi-md2.c
+-+++ b/libfreeipmi/libcommon/ipmi-md2.c
+-@@ -101,15 +101,15 @@ static unsigned char S[256] =
+-     0xDB, 0x99, 0x8D, 0x33, 0x9F, 0x11, 0x83, 0x14
+-   };
+- 
+--#define L          ctx->l
+--#define X          ctx->x
+--#define C          ctx->c
+--#define M          ctx->m
+--#define Mlen       ctx->mlen
+--#define MD2_MAGIC  0xf00fd00d
+-+#define L               ctx->l
+-+#define X               ctx->x
+-+#define C               ctx->c
+-+#define M               ctx->m
+-+#define Mlen            ctx->mlen
+-+#define IPMI_MD2_MAGIC  0xf00fd00d
+- 
+- int
+--md2_init (md2_t *ctx)
+-+ipmi_md2_init (ipmi_md2_t *ctx)
+- {
+- 
+-   if (ctx == NULL)
+-@@ -118,26 +118,26 @@ md2_init (md2_t *ctx)
+-       return (-1);
+-     }
+- 
+--  ctx->magic = MD2_MAGIC;
+-+  ctx->magic = IPMI_MD2_MAGIC;
+- 
+-   L = 0;
+-   Mlen = 0;
+--  memset (X, '\0', MD2_BUFFER_LENGTH);
+--  memset (C, '\0', MD2_CHKSUM_LENGTH);
+--  memset (M, '\0', MD2_BLOCK_LENGTH);
+-+  memset (X, '\0', IPMI_MD2_BUFFER_LENGTH);
+-+  memset (C, '\0', IPMI_MD2_CHKSUM_LENGTH);
+-+  memset (M, '\0', IPMI_MD2_BLOCK_LENGTH);
+- 
+-   return (0);
+- }
+- 
+- static void
+--_md2_update_digest_and_checksum (md2_t *ctx)
+-+_ipmi_md2_update_digest_and_checksum (ipmi_md2_t *ctx)
+- {
+-   unsigned int j, k;
+-   uint8_t c, t;
+- 
+-   /* Update X */
+- 
+--  for (j = 0; j < MD2_BLOCK_LENGTH; j++)
+-+  for (j = 0; j < IPMI_MD2_BLOCK_LENGTH; j++)
+-     {
+-       X[16+j] = M[j];
+-       X[32+j] = (X[16+j] ^ X[j]);
+-@@ -145,9 +145,9 @@ _md2_update_digest_and_checksum (md2_t *ctx)
+- 
+-   t = 0;
+- 
+--  for (j = 0; j < MD2_ROUNDS_LENGTH; j++)
+-+  for (j = 0; j < IPMI_MD2_ROUNDS_LENGTH; j++)
+-     {
+--      for (k = 0; k < MD2_BUFFER_LENGTH; k++)
+-+      for (k = 0; k < IPMI_MD2_BUFFER_LENGTH; k++)
+-         {
+-           t = X[k] = (X[k] ^ S[t]);
+-         }
+-@@ -166,7 +166,7 @@ _md2_update_digest_and_checksum (md2_t *ctx)
+-    * Set C[j] to C[j] xor S[c xor L].
+-    */
+- 
+--  for (j = 0; j < MD2_BLOCK_LENGTH; j++)
+-+  for (j = 0; j < IPMI_MD2_BLOCK_LENGTH; j++)
+-     {
+-       c = M[j];
+-       C[j] = C[j] ^ S[c ^ L];
+-@@ -175,10 +175,10 @@ _md2_update_digest_and_checksum (md2_t *ctx)
+- }
+- 
+- int
+--md2_update_data (md2_t *ctx, const void *buf, unsigned int buflen)
+-+ipmi_md2_update_data (ipmi_md2_t *ctx, const void *buf, unsigned int buflen)
+- {
+- 
+--  if (ctx == NULL || ctx->magic != MD2_MAGIC || buf == NULL)
+-+  if (ctx == NULL || ctx->magic != IPMI_MD2_MAGIC || buf == NULL)
+-     {
+-       errno = EINVAL;
+-       return (-1);
+-@@ -187,19 +187,19 @@ md2_update_data (md2_t *ctx, const void *buf, unsigned int buflen)
+-   if (buflen == 0)
+-     return (0);
+- 
+--  if ((Mlen + buflen) >= MD2_BLOCK_LENGTH)
+-+  if ((Mlen + buflen) >= IPMI_MD2_BLOCK_LENGTH)
+-     {
+-       unsigned int bufcount;
+- 
+--      bufcount = (MD2_BLOCK_LENGTH - Mlen);
+-+      bufcount = (IPMI_MD2_BLOCK_LENGTH - Mlen);
+-       memcpy (M + Mlen, buf, bufcount);
+--      _md2_update_digest_and_checksum (ctx);
+-+      _ipmi_md2_update_digest_and_checksum (ctx);
+- 
+--      while ((buflen - bufcount) >= MD2_BLOCK_LENGTH)
+-+      while ((buflen - bufcount) >= IPMI_MD2_BLOCK_LENGTH)
+-         {
+--          memcpy (M, buf + bufcount, MD2_BLOCK_LENGTH);
+--          bufcount += MD2_BLOCK_LENGTH;
+--          _md2_update_digest_and_checksum (ctx);
+-+          memcpy (M, buf + bufcount, IPMI_MD2_BLOCK_LENGTH);
+-+          bufcount += IPMI_MD2_BLOCK_LENGTH;
+-+          _ipmi_md2_update_digest_and_checksum (ctx);
+-         }
+- 
+-       Mlen = buflen - bufcount;
+-@@ -217,33 +217,33 @@ md2_update_data (md2_t *ctx, const void *buf, unsigned int buflen)
+- }
+- 
+- static void
+--_md2_append_padding_and_checksum (md2_t *ctx)
+-+_ipmi_md2_append_padding_and_checksum (ipmi_md2_t *ctx)
+- {
+-   unsigned int padlen;
+-   int padindex;
+- 
+--  padlen = MD2_PADDING_LENGTH - Mlen;
+-+  padlen = IPMI_MD2_PADDING_LENGTH - Mlen;
+-   padindex = padlen - 1;
+- 
+--  md2_update_data (ctx, padding[padindex], padlen);
+-+  ipmi_md2_update_data (ctx, padding[padindex], padlen);
+- 
+--  md2_update_data (ctx, C, MD2_CHKSUM_LENGTH);
+-+  ipmi_md2_update_data (ctx, C, IPMI_MD2_CHKSUM_LENGTH);
+- }
+- 
+- int
+--md2_finish (md2_t *ctx, void *digest, unsigned int digestlen)
+-+ipmi_md2_finish (ipmi_md2_t *ctx, void *digest, unsigned int digestlen)
+- {
+--  if (ctx == NULL || ctx->magic != MD2_MAGIC
+--      || digest == NULL || digestlen < MD2_DIGEST_LENGTH)
+-+  if (ctx == NULL || ctx->magic != IPMI_MD2_MAGIC
+-+      || digest == NULL || digestlen < IPMI_MD2_DIGEST_LENGTH)
+-     {
+-       errno = EINVAL;
+-       return (-1);
+-     }
+- 
+--  _md2_append_padding_and_checksum (ctx);
+--  memcpy (digest, X, MD2_DIGEST_LENGTH);
+-+  _ipmi_md2_append_padding_and_checksum (ctx);
+-+  memcpy (digest, X, IPMI_MD2_DIGEST_LENGTH);
+- 
+--  ctx->magic = ~MD2_MAGIC;
+--  return (MD2_DIGEST_LENGTH);
+-+  ctx->magic = ~IPMI_MD2_MAGIC;
+-+  return (IPMI_MD2_DIGEST_LENGTH);
+- }
+- 
+-diff --git a/libfreeipmi/libcommon/ipmi-md2.h b/libfreeipmi/libcommon/ipmi-md2.h
+-index c102fce2c..05328e85e 100644
+---- a/libfreeipmi/libcommon/ipmi-md2.h
+-+++ b/libfreeipmi/libcommon/ipmi-md2.h
+-@@ -34,26 +34,26 @@
+- 
+- #include <stdint.h>
+- 
+--#define MD2_BLOCK_LENGTH   16
+--#define MD2_BUFFER_LENGTH  48
+--#define MD2_CHKSUM_LENGTH  16
+--#define MD2_DIGEST_LENGTH  16
+--#define MD2_PADDING_LENGTH 16
+--#define MD2_ROUNDS_LENGTH  18
+--
+--typedef struct __md2 {
+-+#define IPMI_MD2_BLOCK_LENGTH   16
+-+#define IPMI_MD2_BUFFER_LENGTH  48
+-+#define IPMI_MD2_CHKSUM_LENGTH  16
+-+#define IPMI_MD2_DIGEST_LENGTH  16
+-+#define IPMI_MD2_PADDING_LENGTH 16
+-+#define IPMI_MD2_ROUNDS_LENGTH  18
+-+
+-+typedef struct __ipmi_md2 {
+-   uint32_t magic;
+-   uint8_t l;
+-   unsigned int mlen;
+--  uint8_t x[MD2_BUFFER_LENGTH];
+--  uint8_t c[MD2_CHKSUM_LENGTH];
+--  uint8_t m[MD2_BLOCK_LENGTH];
+--} md2_t;
+-+  uint8_t x[IPMI_MD2_BUFFER_LENGTH];
+-+  uint8_t c[IPMI_MD2_CHKSUM_LENGTH];
+-+  uint8_t m[IPMI_MD2_BLOCK_LENGTH];
+-+} ipmi_md2_t;
+- 
+--int md2_init (md2_t *ctx);
+-+int ipmi_md2_init (ipmi_md2_t *ctx);
+- 
+--int md2_update_data (md2_t *ctx, const void *buf, unsigned int buflen);
+-+int ipmi_md2_update_data (ipmi_md2_t *ctx, const void *buf, unsigned int buflen);
+- 
+--int md2_finish (md2_t *ctx, void *digest, unsigned int digestlen);
+-+int ipmi_md2_finish (ipmi_md2_t *ctx, void *digest, unsigned int digestlen);
+- 
+- #endif /* IPMI_MD2_H */
+-diff --git a/libfreeipmi/libcommon/ipmi-md5.c b/libfreeipmi/libcommon/ipmi-md5.c
+-index 17073b85f..c84e350a6 100644
+---- a/libfreeipmi/libcommon/ipmi-md5.c
+-+++ b/libfreeipmi/libcommon/ipmi-md5.c
+-@@ -92,7 +92,7 @@ static uint32_t T[64] =
+- #define D               ctx->d
+- #define M               ctx->m
+- #define Mlen            ctx->mlen
+--#define MD5_MAGIC       0xfb0fdb0d
+-+#define IPMI_MD5_MAGIC  0xfb0fdb0d
+- 
+- #define F(x,y,z)  (((x) & (y)) | ((~(x)) & (z)))
+- #define G(x,y,z)  (((x) & (z)) | ((y) & (~(z))))
+-@@ -126,7 +126,7 @@ static uint32_t T[64] =
+-   } while (0)
+- 
+- int
+--md5_init (md5_t *ctx)
+-+ipmi_md5_init (ipmi_md5_t *ctx)
+- {
+-   if (ctx == NULL)
+-     {
+-@@ -134,13 +134,13 @@ md5_init (md5_t *ctx)
+-       return (-1);
+-     }
+- 
+--  ctx->magic = MD5_MAGIC;
+-+  ctx->magic = IPMI_MD5_MAGIC;
+- 
+-   Mlen = 0;
+-   ctx->bytes_mod_64 = 0;
+-   ctx->bit_count[0] = 0;
+-   ctx->bit_count[1] = 0;
+--  memset (M, '\0', MD5_BLOCK_LENGTH);
+-+  memset (M, '\0', IPMI_MD5_BLOCK_LENGTH);
+- 
+-   /* initial values are listed low-order byte first */
+-   A = 0x67452301;
+-@@ -152,16 +152,16 @@ md5_init (md5_t *ctx)
+- }
+- 
+- static void
+--_md5_update_digest (md5_t *ctx)
+-+_ipmi_md5_update_digest (ipmi_md5_t *ctx)
+- {
+-   uint32_t AA, BB, CC, DD;
+--  uint32_t X[MD5_BLOCK_WORDS_LENGTH];
+-+  uint32_t X[IPMI_MD5_BLOCK_WORDS_LENGTH];
+-   unsigned int j;
+- 
+-   /* Note there are no endian issues here, compiler is required to
+-    * handle shifts correctly
+-    */
+--  for (j = 0; j < MD5_BLOCK_WORDS_LENGTH; j++)
+-+  for (j = 0; j < IPMI_MD5_BLOCK_WORDS_LENGTH; j++)
+-     X[j] = ((uint32_t)M[j*4]
+-             | ((uint32_t)M[j*4+1] << 8)
+-             | ((uint32_t)M[j*4+2] << 16)
+-@@ -251,7 +251,7 @@ _md5_update_digest (md5_t *ctx)
+- }
+- 
+- static void
+--_md5_update_count (md5_t *ctx, unsigned int buflen)
+-+_ipmi_md5_update_count (ipmi_md5_t *ctx, unsigned int buflen)
+- {
+- 
+-   /* Use two uint32_t integers to hold our 64 bit count.
+-@@ -272,10 +272,10 @@ _md5_update_count (md5_t *ctx, unsigned int buflen)
+- }
+- 
+- int
+--md5_update_data (md5_t *ctx, const void *buf, unsigned int buflen)
+-+ipmi_md5_update_data (ipmi_md5_t *ctx, const void *buf, unsigned int buflen)
+- {
+- 
+--  if (ctx == NULL || ctx->magic != MD5_MAGIC || buf == NULL)
+-+  if (ctx == NULL || ctx->magic != IPMI_MD5_MAGIC || buf == NULL)
+-     {
+-       errno = EINVAL;
+-       return (-1);
+-@@ -284,28 +284,28 @@ md5_update_data (md5_t *ctx, const void *buf, unsigned int buflen)
+-   if (buflen == 0)
+-     return (0);
+- 
+--  if ((Mlen + buflen) >= MD5_BLOCK_LENGTH)
+-+  if ((Mlen + buflen) >= IPMI_MD5_BLOCK_LENGTH)
+-     {
+-       unsigned int bufcount;
+- 
+--      bufcount = (MD5_BLOCK_LENGTH - Mlen);
+-+      bufcount = (IPMI_MD5_BLOCK_LENGTH - Mlen);
+-       memcpy (M + Mlen, buf, bufcount);
+--      _md5_update_digest (ctx);
+--      _md5_update_count (ctx, bufcount);
+-+      _ipmi_md5_update_digest (ctx);
+-+      _ipmi_md5_update_count (ctx, bufcount);
+- 
+--      while ((buflen - bufcount) >= MD5_BLOCK_LENGTH)
+-+      while ((buflen - bufcount) >= IPMI_MD5_BLOCK_LENGTH)
+-         {
+--          memcpy (M, buf + bufcount, MD5_BLOCK_LENGTH);
+--          bufcount += MD5_BLOCK_LENGTH;
+--          _md5_update_digest (ctx);
+--          _md5_update_count (ctx, MD5_BLOCK_LENGTH);
+-+          memcpy (M, buf + bufcount, IPMI_MD5_BLOCK_LENGTH);
+-+          bufcount += IPMI_MD5_BLOCK_LENGTH;
+-+          _ipmi_md5_update_digest (ctx);
+-+          _ipmi_md5_update_count (ctx, IPMI_MD5_BLOCK_LENGTH);
+-         }
+- 
+-       Mlen = buflen - bufcount;
+-       if (Mlen > 0)
+-         {
+-           memcpy (M, buf + bufcount, Mlen);
+--          _md5_update_count (ctx, Mlen);
+-+          _ipmi_md5_update_count (ctx, Mlen);
+-         }
+-     }
+-   else
+-@@ -313,14 +313,14 @@ md5_update_data (md5_t *ctx, const void *buf, unsigned int buflen)
+-       /* Not enough data to update digest, just copy in data */
+-       memcpy (M + Mlen, buf, buflen);
+-       Mlen += buflen;
+--      _md5_update_count (ctx, buflen);
+-+      _ipmi_md5_update_count (ctx, buflen);
+-     }
+- 
+-   return (buflen);
+- }
+- 
+- static void
+--_md5_append_padding_and_length (md5_t *ctx)
+-+_ipmi_md5_append_padding_and_length (ipmi_md5_t *ctx)
+- {
+-   unsigned int padlen;
+-   char length[8];
+-@@ -348,23 +348,23 @@ _md5_append_padding_and_length (md5_t *ctx)
+-   length[6] = (ctx->bit_count[0] & 0x00ff0000) >> 16;
+-   length[7] = (ctx->bit_count[0] & 0xff000000) >> 24;
+- 
+--  md5_update_data (ctx, padding, padlen);
+--  md5_update_data (ctx, length, 8);
+-+  ipmi_md5_update_data (ctx, padding, padlen);
+-+  ipmi_md5_update_data (ctx, length, 8);
+- }
+- 
+- int
+--md5_finish (md5_t *ctx, void *digest, unsigned int digestlen)
+-+ipmi_md5_finish (ipmi_md5_t *ctx, void *digest, unsigned int digestlen)
+- {
+--  uint8_t buf[MD5_DIGEST_LENGTH];
+-+  uint8_t buf[IPMI_MD5_DIGEST_LENGTH];
+- 
+--  if (ctx == NULL || ctx->magic != MD5_MAGIC
+--      || digest == NULL || digestlen < MD5_DIGEST_LENGTH)
+-+  if (ctx == NULL || ctx->magic != IPMI_MD5_MAGIC
+-+      || digest == NULL || digestlen < IPMI_MD5_DIGEST_LENGTH)
+-     {
+-       errno = EINVAL;
+-       return (-1);
+-     }
+- 
+--  _md5_append_padding_and_length (ctx);
+-+  _ipmi_md5_append_padding_and_length (ctx);
+- 
+-   /* Note there are no endian issues here, compiler is required to
+-    * handle bitmasks and shifts correctly
+-@@ -387,7 +387,7 @@ md5_finish (md5_t *ctx, void *digest, unsigned int digestlen)
+-   buf[14] = (D & 0x00ff0000) >> 16;
+-   buf[15] = (D & 0xff000000) >> 24;
+- 
+--  memcpy (digest, buf, MD5_DIGEST_LENGTH);
+--  ctx->magic = ~MD5_MAGIC;
+--  return (MD5_DIGEST_LENGTH);
+-+  memcpy (digest, buf, IPMI_MD5_DIGEST_LENGTH);
+-+  ctx->magic = ~IPMI_MD5_MAGIC;
+-+  return (IPMI_MD5_DIGEST_LENGTH);
+- }
+-diff --git a/libfreeipmi/libcommon/ipmi-md5.h b/libfreeipmi/libcommon/ipmi-md5.h
+-index 0f86f1754..6b863ef36 100644
+---- a/libfreeipmi/libcommon/ipmi-md5.h
+-+++ b/libfreeipmi/libcommon/ipmi-md5.h
+-@@ -34,11 +34,11 @@
+- 
+- #include <stdint.h>
+- 
+--#define MD5_BLOCK_LENGTH       64
+--#define MD5_BLOCK_WORDS_LENGTH (MD5_BLOCK_LENGTH/4)
+--#define MD5_DIGEST_LENGTH      16
+-+#define IPMI_MD5_BLOCK_LENGTH       64
+-+#define IPMI_MD5_BLOCK_WORDS_LENGTH (IPMI_MD5_BLOCK_LENGTH/4)
+-+#define IPMI_MD5_DIGEST_LENGTH      16
+- 
+--typedef struct __md5 {
+-+typedef struct __ipmi_md5 {
+-   uint32_t magic;
+-   unsigned int mlen;
+-   unsigned int bytes_mod_64;
+-@@ -47,13 +47,13 @@ typedef struct __md5 {
+-   uint32_t b;
+-   uint32_t c;
+-   uint32_t d;
+--  uint8_t m[MD5_BLOCK_LENGTH];
+--} md5_t;
+-+  uint8_t m[IPMI_MD5_BLOCK_LENGTH];
+-+} ipmi_md5_t;
+- 
+--int md5_init (md5_t *ctx);
+-+int ipmi_md5_init (ipmi_md5_t *ctx);
+- 
+--int md5_update_data (md5_t *ctx, const void *buf, unsigned int buflen);
+-+int ipmi_md5_update_data (ipmi_md5_t *ctx, const void *buf, unsigned int buflen);
+- 
+--int md5_finish (md5_t *ctx, void *digest, unsigned int digestlen);
+-+int ipmi_md5_finish (ipmi_md5_t *ctx, void *digest, unsigned int digestlen);
+- 
+- #endif /* IPMI_MD5_H */
+-diff --git a/libfreeipmi/util/ipmi-lan-util.c b/libfreeipmi/util/ipmi-lan-util.c
+-index cd269fcb9..a374acc8d 100644
+---- a/libfreeipmi/util/ipmi-lan-util.c
+-+++ b/libfreeipmi/util/ipmi-lan-util.c
+-@@ -281,33 +281,33 @@ ipmi_lan_check_session_authentication_code (fiid_obj_t obj_lan_session_hdr_rs,
+- 
+-       if (authentication_type == IPMI_AUTHENTICATION_TYPE_MD2)
+-         {
+--          md2_t ctx;
+--
+--          assert (IPMI_1_5_MAX_PASSWORD_LENGTH == MD2_DIGEST_LENGTH);
+--
+--          md2_init (&ctx);
+--          md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md2_update_data (&ctx, session_id_buf, session_id_len);
+--          md2_update_data (&ctx, buf, len);
+--          md2_update_data (&ctx, session_sequence_number_buf, session_sequence_number_len);
+--          md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md2_finish (&ctx, authentication_code_calc, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md2_init (&ctx);
+-+          ipmi_md2_t ctx;
+-+
+-+          assert (IPMI_1_5_MAX_PASSWORD_LENGTH == IPMI_MD2_DIGEST_LENGTH);
+-+
+-+          ipmi_md2_init (&ctx);
+-+          ipmi_md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md2_update_data (&ctx, session_id_buf, session_id_len);
+-+          ipmi_md2_update_data (&ctx, buf, len);
+-+          ipmi_md2_update_data (&ctx, session_sequence_number_buf, session_sequence_number_len);
+-+          ipmi_md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md2_finish (&ctx, authentication_code_calc, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md2_init (&ctx);
+-         }
+-       else if (authentication_type == IPMI_AUTHENTICATION_TYPE_MD5)
+-         {
+--          md5_t ctx;
+--
+--          assert (IPMI_1_5_MAX_PASSWORD_LENGTH == MD5_DIGEST_LENGTH);
+--
+--          md5_init (&ctx);
+--          md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md5_update_data (&ctx, session_id_buf, session_id_len);
+--          md5_update_data (&ctx, buf, len);
+--          md5_update_data (&ctx, session_sequence_number_buf, session_sequence_number_len);
+--          md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md5_finish (&ctx, authentication_code_calc, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md5_init (&ctx);
+-+          ipmi_md5_t ctx;
+-+
+-+          assert (IPMI_1_5_MAX_PASSWORD_LENGTH == IPMI_MD5_DIGEST_LENGTH);
+-+
+-+          ipmi_md5_init (&ctx);
+-+          ipmi_md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md5_update_data (&ctx, session_id_buf, session_id_len);
+-+          ipmi_md5_update_data (&ctx, buf, len);
+-+          ipmi_md5_update_data (&ctx, session_sequence_number_buf, session_sequence_number_len);
+-+          ipmi_md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md5_finish (&ctx, authentication_code_calc, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md5_init (&ctx);
+-         }
+-     }
+- 
+-@@ -451,45 +451,45 @@ ipmi_lan_check_packet_session_authentication_code (const void *pkt,
+-       memcpy (pwbuf, authentication_code_data, authentication_code_data_len);
+-       if (authentication_type == IPMI_AUTHENTICATION_TYPE_MD2)
+-         {
+--          md2_t ctx;
+--
+--          assert (IPMI_1_5_MAX_PASSWORD_LENGTH == MD2_DIGEST_LENGTH);
+--
+--          md2_init (&ctx);
+--          md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md2_update_data (&ctx,
+--                           pkt + session_id_offset,
+--                           session_id_len);
+--          md2_update_data (&ctx,
+--                           pkt + data_offset,
+--                           pkt_len - data_offset);
+--          md2_update_data (&ctx,
+--                           pkt + session_sequence_number_offset,
+--                           session_sequence_number_len);
+--          md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md2_finish (&ctx, authentication_code_buf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md2_init (&ctx);
+-+          ipmi_md2_t ctx;
+-+
+-+          assert (IPMI_1_5_MAX_PASSWORD_LENGTH == IPMI_MD2_DIGEST_LENGTH);
+-+
+-+          ipmi_md2_init (&ctx);
+-+          ipmi_md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md2_update_data (&ctx,
+-+                                pkt + session_id_offset,
+-+                                session_id_len);
+-+          ipmi_md2_update_data (&ctx,
+-+                                pkt + data_offset,
+-+                                pkt_len - data_offset);
+-+          ipmi_md2_update_data (&ctx,
+-+                                pkt + session_sequence_number_offset,
+-+                                session_sequence_number_len);
+-+          ipmi_md2_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md2_finish (&ctx, authentication_code_buf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md2_init (&ctx);
+-         }
+-       else if (authentication_type == IPMI_AUTHENTICATION_TYPE_MD5)
+-         {
+--          md5_t ctx;
+--
+--          assert (IPMI_1_5_MAX_PASSWORD_LENGTH == MD5_DIGEST_LENGTH);
+--
+--          md5_init (&ctx);
+--          md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md5_update_data (&ctx,
+--                           pkt + session_id_offset,
+--                           session_id_len);
+--          md5_update_data (&ctx,
+--                           pkt + data_offset,
+--                           pkt_len - data_offset);
+--          md5_update_data (&ctx,
+--                           pkt + session_sequence_number_offset,
+--                           session_sequence_number_len);
+--          md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md5_finish (&ctx, authentication_code_buf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+--          md5_init (&ctx);
+-+          ipmi_md5_t ctx;
+-+
+-+          assert (IPMI_1_5_MAX_PASSWORD_LENGTH == IPMI_MD5_DIGEST_LENGTH);
+-+
+-+          ipmi_md5_init (&ctx);
+-+          ipmi_md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md5_update_data (&ctx,
+-+                                pkt + session_id_offset,
+-+                                session_id_len);
+-+          ipmi_md5_update_data (&ctx,
+-+                                pkt + data_offset,
+-+                                pkt_len - data_offset);
+-+          ipmi_md5_update_data (&ctx,
+-+                                pkt + session_sequence_number_offset,
+-+                                session_sequence_number_len);
+-+          ipmi_md5_update_data (&ctx, pwbuf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md5_finish (&ctx, authentication_code_buf, IPMI_1_5_MAX_PASSWORD_LENGTH);
+-+          ipmi_md5_init (&ctx);
+-         }
+-     }
+-   else /* authentication_type == IPMI_AUTHENTICATION_TYPE_STRAIGHT_PASSWORD_KEY
+diff --git a/package/freeipmi/freeipmi.hash b/package/freeipmi/freeipmi.hash
+index 05fb50bd4c..bc22d2ff6b 100644
+--- a/package/freeipmi/freeipmi.hash
++++ b/package/freeipmi/freeipmi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  f25e1c35f3d0f1b5a99cc31ecc2353ca83ed46a15163842fba870127dc9c8206  freeipmi-1.6.9.tar.gz
++sha256  fce4a1e401b6189c103d2b1203261d0bfbf45985c6f3fa44c51b186b13fe7a7d  freeipmi-1.6.10.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.bmc-watchdog
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.ipmiconsole
+diff --git a/package/freeipmi/freeipmi.mk b/package/freeipmi/freeipmi.mk
+index b26ed0c0bf..916f2eb68a 100644
+--- a/package/freeipmi/freeipmi.mk
++++ b/package/freeipmi/freeipmi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CHECKSEC_VERSION = 2.5.0
-+CHECKSEC_VERSION = 2.6.0
- CHECKSEC_SITE = $(call github,slimm609,checksec.sh,$(CHECKSEC_VERSION))
- CHECKSEC_LICENSE = BSD-3-Clause
- CHECKSEC_LICENSE_FILES = LICENSE.txt
+-FREEIPMI_VERSION = 1.6.9
++FREEIPMI_VERSION = 1.6.10
+ FREEIPMI_SITE = https://ftp.gnu.org/gnu/freeipmi
+ FREEIPMI_LICENSE = GPL-3.0+, BSD-like (sunbmc)
+ FREEIPMI_LICENSE_FILES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
