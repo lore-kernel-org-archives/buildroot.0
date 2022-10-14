@@ -1,87 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCCD6C4332F
-	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 15:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59ECAC433FE
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 15:19:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4801F6FA04;
-	Fri, 14 Oct 2022 15:07:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4801F6FA04
+	by smtp2.osuosl.org (Postfix) with ESMTP id B2DC5414EB;
+	Fri, 14 Oct 2022 15:19:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2DC5414EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wPTXM1hikM8d; Fri, 14 Oct 2022 15:07:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4udB_lbbk0RP; Fri, 14 Oct 2022 15:19:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B5616F9FA;
-	Fri, 14 Oct 2022 15:06:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B5616F9FA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5EC611BF2EA
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 15:06:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3BE9411A1;
+	Fri, 14 Oct 2022 15:19:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3BE9411A1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D3C91BF2EA
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 15:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 39E6584188
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 15:06:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39E6584188
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7805E411A1
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 15:19:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7805E411A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fdQv3sZ-p8Wg for <buildroot@lists.busybox.net>;
- Fri, 14 Oct 2022 15:06:56 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E8E884177
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2E8E884177
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 15:06:56 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id 8so2664790ilj.4
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 08:06:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=GqQWYPOed7RlowlzGhg4/qu6lv5TtxibWPSnABOrwJ8=;
- b=tmaEnc7NzShkPIsonivIsAe71xQZFLZfcvq/dq0m495WYtr9BcpicLeC+GzZjjuZb7
- aairzrIvktYQ3V7EjZo8Cnc7m/ZBwbv+9aOELSpWHbDBGXHo25uUSv61HauuNhaA//Ok
- orDo52toIrYqKdMyjZXTSlV3M80Wut1+nLEYW/k8/Qv3N5IhnpuKLtqo7cLHmMmoOnUn
- J3MwpqEuXHbgCKtLkL0tQlyBXCf6OIeZX3Or0tkzKHgZAt/NPcw2nO965c4/3EmScFPm
- Z453uq9rMeKvFBdMJG2TxbUth4QghIq0SeEyy9dhJeo+qJR58WzAqEVvFExyLbtpez7V
- m7cQ==
-X-Gm-Message-State: ACrzQf2sJCyW+ly++lxz4deyrAmm61JVrDWjeA5+fYKXArt64op7iHI8
- +0oCFJNekmTHedRHM6GT87uWOJ1RRgTAEQ==
-X-Google-Smtp-Source: AMsMyM4XOj7BOOYOx8Jq0hPDzlnXfP1T0mUWA0cxlEH032opLzX25FEBpQtecdPFmK8EUyMdm4b4Jw==
-X-Received: by 2002:a92:b752:0:b0:2f9:5159:6d52 with SMTP id
- c18-20020a92b752000000b002f951596d52mr2675392ilm.9.1665760014818; 
- Fri, 14 Oct 2022 08:06:54 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
- [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- u24-20020a02b1d8000000b00363753f4730sm1188291jah.91.2022.10.14.08.06.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 14 Oct 2022 08:06:54 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mCk1vW4yEYSx for <buildroot@lists.busybox.net>;
+ Fri, 14 Oct 2022 15:19:28 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E985340C57
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E985340C57
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 15:19:27 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id BBB03D15E1
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 15:10:37 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id B6540E0005;
+ Fri, 14 Oct 2022 15:10:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@dell.be.48ers.dk>)
+ id 1ojMKT-00G7zs-Iz; Fri, 14 Oct 2022 17:10:29 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Oct 2022 09:06:51 -0600
-Message-Id: <20221014150651.2527997-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Fri, 14 Oct 2022 17:10:27 +0200
+Message-Id: <20221014151028.3843939-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GqQWYPOed7RlowlzGhg4/qu6lv5TtxibWPSnABOrwJ8=;
- b=BSZhJ3oFwSjGw6BGLy6GmbONCR5vrkIQvCsAMPmX9r5vDeW9SIjNZKI8CR3ffZK1YI
- 45O8ukQJw5bhPj5hMo9md6bmPjijM2k4F5DGbcRobDIHSbyUBMHrI+YiOJygDiXTlC6O
- moFgIscv0i4g1hNo6Ama4MYVT8udVnMYj9uSPA3wua/+oYHFMQGY2fZnzMuQo/q6+8sQ
- gJigZKXwAZoElh+yte8MlR4ohespPFYsRKy4fuiflIyV7zoDYA8Amy00Ks6qvUQl08FF
- janWKvV4sIzwe/qyTiPladmoS5LaaNLDLcKNg52fo6swLP5BGlUvhMia2fnUClCOeloE
- 37WA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BSZhJ3oF
-Subject: [Buildroot] [PATCH 1/1] package/rtl8192eu: new package
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14,
+ 19}.x / 5.{4, 10, 15}.x / 6.0.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,107 +63,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/rtl8192eu/Config.in      | 13 +++++++++++++
- package/rtl8192eu/rtl8192eu.hash |  2 ++
- package/rtl8192eu/rtl8192eu.mk   | 23 +++++++++++++++++++++++
- 5 files changed, 40 insertions(+)
- create mode 100644 package/rtl8192eu/Config.in
- create mode 100644 package/rtl8192eu/rtl8192eu.hash
- create mode 100644 package/rtl8192eu/rtl8192eu.mk
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 15 +++++++--------
+ package/linux-headers/Config.in.host | 16 ++++++++--------
+ 3 files changed, 16 insertions(+), 17 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bfde353c8a..0a3ecee2eb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1404,6 +1404,7 @@ F:	package/python-typing-inspect/
- F:	package/python-weasyprint/
- F:	package/python-yarl/
- F:	package/python-zopfli/
-+F:	package/rtl8192eu/
- F:	package/serd/
- F:	package/sord/
- F:	package/sratom/
-diff --git a/package/Config.in b/package/Config.in
-index e3a34d6e97..e2ea999d60 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -576,6 +576,7 @@ endmenu
- 	source "package/rtl8188eu/Config.in"
- 	source "package/rtl8189es/Config.in"
- 	source "package/rtl8189fs/Config.in"
-+	source "package/rtl8192eu/Config.in"
- 	source "package/rtl8723bu/Config.in"
- 	source "package/rtl8723ds/Config.in"
- 	source "package/rtl8812au-aircrack-ng/Config.in"
-diff --git a/package/rtl8192eu/Config.in b/package/rtl8192eu/Config.in
-new file mode 100644
-index 0000000000..4d71b711c3
---- /dev/null
-+++ b/package/rtl8192eu/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_RTL8192EU
-+	bool "rtl8192eu"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  A standalone driver for the RTL8192EU USB Wi-Fi adapter.
-+
-+	  Make sure your target kernel has the CONFIG_WIRELESS_EXT
-+	  config option enabled.
-+
-+	  https://github.com/clnhub/rtl8192eu-linux
-+
-+comment "rtl8192eu needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-diff --git a/package/rtl8192eu/rtl8192eu.hash b/package/rtl8192eu/rtl8192eu.hash
-new file mode 100644
-index 0000000000..167864c35d
---- /dev/null
-+++ b/package/rtl8192eu/rtl8192eu.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  b2b363b8dc27c658cbfd5be32a65d0876cfd7c723ac6f72fdefeb6e44a9b1c9e  rtl8192eu-7b17d51543859e23d845d473806347db3415e8e4.tar.gz
-diff --git a/package/rtl8192eu/rtl8192eu.mk b/package/rtl8192eu/rtl8192eu.mk
-new file mode 100644
-index 0000000000..cb612a4c15
---- /dev/null
-+++ b/package/rtl8192eu/rtl8192eu.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# rtl8192eu
-+#
-+################################################################################
-+
-+RTL8192EU_VERSION = 7b17d51543859e23d845d473806347db3415e8e4
-+RTL8192EU_SITE = $(call github,clnhub,rtl8192eu-linux,$(RTL8192EU_VERSION))
-+RTL8192EU_LICENSE = GPL-2.0
-+RTL8192EU_MODULE_MAKE_OPTS = \
-+	CONFIG_RTL8192EU=m \
-+	USER_EXTRA_CFLAGS="-Wno-error"
-+
-+define RTL8192EU_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB_SUPPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USB)
-+endef
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+diff --git a/linux/Config.in b/linux/Config.in
+index f9caa3c652..ee59761f33 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.0" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.0.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 07963f185e..e1fd0feb44 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,15 +1,14 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  5c2443a5538de52688efb55c27ab0539c1f5eb58c0cfd16a2b9fbb08fd81788e  linux-6.0.tar.xz
++sha256  8ede745a69351ea0f27fe0c48780d4efa37ff086135e129358ce09694957e8f9  linux-6.0.1.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  4ecdb8b59c6f6f258d89cbf22eede210e0a55c09db884988fe706efe2fe8f148  linux-5.19.13.tar.xz
+-sha256  4a1c922a490eeabf5b44d4fde36de9ba5b71711b7352c6258716da41160db628  linux-5.17.15.tar.xz
++sha256  4686e33847db3ec58e1043bc0c806472aae694b2c413bb7d8da91a5c9a55eb1b  linux-5.19.15.tar.xz
+ sha256  da47d9a80b694548835ccb553b6eb1a1f3f5d5cddd9e2bd6f4886b99ca14f940  linux-5.15.67.tar.xz
+-sha256  3f47ebdb9afe152a0c32c1157336ef13fa5cc08ac6d884dfc1f6ddc2b7dba268  linux-5.10.142.tar.xz
+-sha256  09c72e3dd85df773eb52e53e25c556d132958bd775b0ed6985a6b1ac21c9cfc2  linux-5.4.212.tar.xz
++sha256  85253abf097eb5013b988a400eb022eed0e0626e7e0a7daa3ab4b6bcabbced9a  linux-5.10.147.tar.xz
++sha256  2bb826cdf9b2cfce385fb5d51fc8070fe428e467bd3df4ae2a7eb6f0c0cc2e63  linux-5.4.217.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  2283c1af5373c43e79adca6987174d932989a8b2551405e83e2e39ebe31e06d2  linux-4.9.327.tar.xz
+-sha256  70f4df21901a654632ebbb533884ccaf117a29b14e6f2b672f0c36613c3e897d  linux-4.14.292.tar.xz
+-sha256  eadd13aa70f37cdf50eef45c5964bd7146d353b61a1fd026d4fa0b2a68a3ea47  linux-4.19.257.tar.xz
++sha256  bf021936a450e9292e10cc7db9909cd0d336406191d22aadd22bdcc51ca2595f  linux-4.9.330.tar.xz
++sha256  62ccb9ba94a7da5115bc923eebf8dffee9229801da02be87d90ae68ab9a76a6b  linux-4.14.295.tar.xz
++sha256  bec33298bd0470b5e725c7dc29a2dd4daf02065cb01cd4a54f6adee6ff582cb2  linux-4.19.261.tar.xz
+ # Locally computed
+ sha256  4594c147bdc493c7c286688542bbe65e550fb7bd58e0649ec587a2fe893ec0ee  linux-cip-5.10.145-cip17.tar.gz
+ sha256  a5598f7f673b3ef819d6ed24f08d539eecb6febd11673a1d4752a1c05d4ee289  linux-cip-5.10.145-cip17-rt7.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7aee67de56..8679241a2c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -392,14 +392,14 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.9.327"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.292"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.257"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.212"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.142"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.67"	if BR2_KERNEL_HEADERS_5_15
+-	default "5.19.13"	if BR2_KERNEL_HEADERS_5_19
+-	default "6.0"		if BR2_KERNEL_HEADERS_6_0
++	default "4.9.330"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.295"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.261"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.217"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.147"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.73"	if BR2_KERNEL_HEADERS_5_15
++	default "5.19.15"	if BR2_KERNEL_HEADERS_5_19
++	default "6.0.1"		if BR2_KERNEL_HEADERS_6_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.34.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
