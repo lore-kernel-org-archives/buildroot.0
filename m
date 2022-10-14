@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A223EC433FE
-	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 13:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02F67C4332F
+	for <buildroot@archiver.kernel.org>; Fri, 14 Oct 2022 13:50:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CFDF84149;
-	Fri, 14 Oct 2022 13:50:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CFDF84149
+	by smtp1.osuosl.org (Postfix) with ESMTP id A023C841AA;
+	Fri, 14 Oct 2022 13:50:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A023C841AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pS-ZeRACB_o6; Fri, 14 Oct 2022 13:50:06 +0000 (UTC)
+	with ESMTP id vIzaUhBpIQg7; Fri, 14 Oct 2022 13:50:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81ECC8276B;
-	Fri, 14 Oct 2022 13:50:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81ECC8276B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8405D1C1190
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 13:50:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA10A84173;
+	Fri, 14 Oct 2022 13:50:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA10A84173
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 537801C1190
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 13:50:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E1E442248
- for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 13:50:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E1E442248
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F92D4060D
+ for <buildroot@lists.busybox.net>; Fri, 14 Oct 2022 13:50:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F92D4060D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IMXu5PSriatN for <buildroot@lists.busybox.net>;
- Fri, 14 Oct 2022 13:50:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zxwrY4MGR5R1 for <buildroot@lists.busybox.net>;
+ Fri, 14 Oct 2022 13:50:49 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D11B41A0D
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0D11B41A0D
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 13:50:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C651A400F2
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C651A400F2
+ for <buildroot@buildroot.org>; Fri, 14 Oct 2022 13:50:48 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8A6D2E0003;
- Fri, 14 Oct 2022 13:49:57 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 59F13240009;
+ Fri, 14 Oct 2022 13:50:45 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ojL4V-00G46T-1a; Fri, 14 Oct 2022 15:49:55 +0200
+ id 1ojL5I-00G4GV-CH; Fri, 14 Oct 2022 15:50:44 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221009213823.116245-1-fontaine.fabrice@gmail.com>
-Date: Fri, 14 Oct 2022 15:49:55 +0200
-In-Reply-To: <20221009213823.116245-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 9 Oct 2022 23:38:23 +0200")
-Message-ID: <87lepims58.fsf@dell.be.48ers.dk>
+References: <20221009214945.128155-1-fontaine.fabrice@gmail.com>
+Date: Fri, 14 Oct 2022 15:50:44 +0200
+In-Reply-To: <20221009214945.128155-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 9 Oct 2022 23:49:45 +0200")
+Message-ID: <87h706ms3v.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/freeipmi: bump to version 1.6.10
+Subject: Re: [Buildroot] [PATCH 1/1] package/gesftpserver: bump to version 2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,8 +71,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Drop patch (already in version)
- > https://github.com/chu11/freeipmi-mirror/blob/freeipmi-1-6-10/NEWS
+ > - Drop patch (already in version)
+ > - Replace rjk_cv_python24 by rjk_cv_python3 due to
+ >   https://github.com/ewxrjk/sftpserver/commit/6c0b4852a3654747e88f457a37b20530c5e426ca
+
+ > http://www.chiark.greenend.org.uk/pipermail/sgo-software-announce/2022/000070.html
+ > https://github.com/ewxrjk/sftpserver/blob/2/CHANGES.md
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
