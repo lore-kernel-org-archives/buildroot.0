@@ -4,47 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 660A3C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66D08C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 16:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1272681372;
-	Sat, 15 Oct 2022 15:48:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1272681372
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1F6781340;
+	Sat, 15 Oct 2022 16:41:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1F6781340
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BYnFf5_NrEKr; Sat, 15 Oct 2022 15:48:44 +0000 (UTC)
+	with ESMTP id mTZ_2kUf6-VD; Sat, 15 Oct 2022 16:41:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C9128131F;
-	Sat, 15 Oct 2022 15:48:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C9128131F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 053828130D;
+	Sat, 15 Oct 2022 16:41:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 053828130D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C8B3F1BF5DE
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:48:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E7BBC1BF3E8
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 16:41:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4A378131F
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:48:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4A378131F
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFED38130D
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 16:41:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFED38130D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nJgCrfchUzAh for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 15:48:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97F16812A5
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:48:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97F16812A5
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 809C786E14; Sat, 15 Oct 2022 15:48:40 +0000 (UTC)
+ with ESMTP id Iu9hF5EPeRMH for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 16:41:41 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80A5181302
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 80A5181302
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 16:41:41 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 3599B1BF204;
+ Sat, 15 Oct 2022 16:41:36 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ojkEC-00H3iM-78; Sat, 15 Oct 2022 18:41:36 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 17:46:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7131dee4b6d73c434b328b3b6b0e95d3f21ae956
-X-Git-Newrev: c8ed72c15d39cc6c676485bff8955ac5f4258138
-X-Patchwork-Hint: ignore
-Message-Id: <20221015154840.809C786E14@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libdnet: bump to version 1.16.1
+To: Neal Frager <neal.frager@amd.com>
+References: <20221013064931.60174-1-neal.frager@amd.com>
+Date: Sat, 15 Oct 2022 18:41:36 +0200
+In-Reply-To: <20221013064931.60174-1-neal.frager@amd.com> (Neal Frager's
+ message of "Thu, 13 Oct 2022 00:49:31 -0600")
+Message-ID: <87zgdxdoov.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v4 1/1] boot/uboot/uboot.mk: add pmufw.elf
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,75 +64,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: luca.ceresoli@bootlin.com, buildroot@buildroot.org, kris.chaplin@amd.com,
+ wesley@sonifex.co.uk, giulio.benetti@benettiengineering.com,
+ michal.simek@amd.com, yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8ed72c15d39cc6c676485bff8955ac5f4258138
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
 
-Refresh patch
+ > This patch adds support for zynqmp pmufw.elf files.
+ > It will allow buildroot to use pmufw.elf binaries directly
+ > from the Xilinx git repository built by petalinux in
+ > addition to still supporting pmufw.bin binaries built
+ > by the zynqmp-pmufw-builder.
 
-https://github.com/ofalk/libdnet/releases/tag/libdnet-1.16
-https://github.com/ofalk/libdnet/releases/tag/libdnet-1.16.1
+ > https://github.com/Xilinx/ubuntu-firmware/tree/v2022.1_22.04_1/xlnx-firmware
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libdnet/0001-python-makefile.patch | 6 ++++--
- package/libdnet/libdnet.hash               | 2 +-
- package/libdnet/libdnet.mk                 | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ > Signed-off-by: Neal Frager <neal.frager@amd.com>
+ > ---
+ V1-> V2:
+ >   - corrected objcopy instruction for converting elf to bin
+ V2-> V3:
+ >   - removed unnecessary spaces
+ >   - simplified if statement to check for a pmufw.elf file
+ V3-> V4:
+ >   - added spaces around = sign of UBOOT_ZYNQMP_PMUFW_BASENAME definition
 
-diff --git a/package/libdnet/0001-python-makefile.patch b/package/libdnet/0001-python-makefile.patch
-index eae22b2f14..e5526482ed 100644
---- a/package/libdnet/0001-python-makefile.patch
-+++ b/package/libdnet/0001-python-makefile.patch
-@@ -6,6 +6,8 @@ Subject: [PATCH] python makefile
- Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- [adam: refresh for 1.14; make it git-formatted]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+[Fabrice: updated for 1.16.1]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  python/Makefile.am | 1 +
-  1 file changed, 1 insertion(+)
-@@ -15,9 +17,9 @@ index 1a74ef2..59fe0f3 100644
- --- a/python/Makefile.am
- +++ b/python/Makefile.am
- @@ -11,6 +11,7 @@ $(srcdir)/dnet.c: $(srcdir)/dnet.pyx
-- 	pyrexc $(srcdir)/dnet.pyx
-  
-- python-build: $(srcdir)/dnet.c
-+ 
-+ python-build: 
- +	CC="$(CC)" LDSHARED="$(CC) -shared" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(PYTHON) setup.py build_ext -I$(PYINCDIR) -L$(PYLIBDIR)
-  	$(PYTHON) setup.py build
-  	touch python-build
-diff --git a/package/libdnet/libdnet.hash b/package/libdnet/libdnet.hash
-index d322a1cc29..c31ec90596 100644
---- a/package/libdnet/libdnet.hash
-+++ b/package/libdnet/libdnet.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  592599c54a57102a177270f3a2caabda2c2ac7768b977d7458feba97da923dfe  libdnet-1.14.tar.gz
-+sha256  b151c4913758ef80daf4558361b4f2680a37b01d59272625bb78c77183062c63  libdnet-1.16.1.tar.gz
- sha256  6b46ec86e290066c47b6607d322135b3c473566e7225ac23d35a7c0588a82da6  LICENSE
-diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
-index 4c58ea20a5..1e75dae323 100644
---- a/package/libdnet/libdnet.mk
-+++ b/package/libdnet/libdnet.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDNET_VERSION = 1.14
-+LIBDNET_VERSION = 1.16.1
- LIBDNET_SITE = $(call github,ofalk,libdnet,libdnet-$(LIBDNET_VERSION))
- LIBDNET_LICENSE = BSD-3-Clause
- LIBDNET_LICENSE_FILES = LICENSE
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
