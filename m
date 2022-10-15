@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 160C8C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C742C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:37:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8982541505;
-	Sat, 15 Oct 2022 15:37:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8982541505
+	by smtp1.osuosl.org (Postfix) with ESMTP id E988D81B52;
+	Sat, 15 Oct 2022 15:37:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E988D81B52
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cFFeZ6vszHkn; Sat, 15 Oct 2022 15:37:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hREhvamOTWDq; Sat, 15 Oct 2022 15:37:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AEB3414CC;
-	Sat, 15 Oct 2022 15:37:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AEB3414CC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BEE811BF962
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:37:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 078F881AF3;
+	Sat, 15 Oct 2022 15:37:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 078F881AF3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EF321BF5DE
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7DB04061F
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE97F60BB2
  for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:37:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7DB04061F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE97F60BB2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uIeID15QW52Q for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gVliM_AShrbw for <buildroot@lists.busybox.net>;
  Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1B574012B
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC6E960BBB
  for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1B574012B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC6E960BBB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BFB6486DB6; Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
+ id CAE3F86DB7; Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 17:29:39 +0200
+Date: Sat, 15 Oct 2022 17:30:14 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 7e444acba528201d04e6532d31b633d79b6371a1
-X-Git-Newrev: 180f2cdffce411a3c84888d667b514739e8fbcbd
+X-Git-Oldrev: 180f2cdffce411a3c84888d667b514739e8fbcbd
+X-Git-Newrev: 956de5414111988fb2ea6ade373022b5a83baca7
 X-Patchwork-Hint: ignore
-Message-Id: <20221015153717.BFB6486DB6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/gnutls: bump to
- version 3.7.8
+Message-Id: <20221015153717.CAE3F86DB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/libmdbx: bump
+ version to 0.11.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,54 +58,79 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8597934389359044775=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=180f2cdffce411a3c84888d667b514739e8fbcbd
+--===============8597934389359044775==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=956de5414111988fb2ea6ade373022b5a83baca7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This is a bug fix and enhancement release on the 3.7.x branch.
+This is stable bugfix release of libmdbx. So it is reasonable to backport
+this patch to all applicable releases/branches of Buildroot.
 
-https://lists.gnupg.org/pipermail/gnutls-help/2022-September/004765.html
+Release notes for v0.11.12
+--------------------------
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+  - Fixed static assertion failure on platforms where the `off_t` type is wider
+    than corresponding fields of `struct flock` used for file locking (backport).
+    Now _libmdbx_ will use `fcntl64(F_GETLK64/F_SETLK64/F_SETLKW64)` if available.
+  - Fixed assertion check inside `page_retire_ex()` (backport).
+
+Minors:
+
+  - Fixed `-Wint-to-pointer-cast` warnings while casting to `mdbx_tid_t` (backport).
+  - Removed needless `LockFileEx()` inside `mdbx_env_copy()` (backport).
+
+The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
+
+Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2acba99893cbe76926229f00e333b444a5570c6d)
+(cherry picked from commit dd2ded3355c01f333c18dc16e7d9a3c496007960)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmdbx/libmdbx.hash | 2 +-
+ package/libmdbx/libmdbx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 46dd99291c..303f1351e0 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.7.tar.xz.sig
--sha256  be9143d0d58eab64dba9b77114aaafac529b6c0d7e81de6bdf1c9b59027d2106  gnutls-3.7.7.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz.sig
-+sha256  c58ad39af0670efe6a8aee5e3a8b2331a1200418b64b7c51977fb396d4617114  gnutls-3.7.8.tar.xz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index dece16140d..0010f91fca 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index c4d9c8d8ce..79af189633 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,5 +1,5 @@
+ # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
+-sha256  d2c81db716a33d007cc75702ecf3c45cfb7c33a2261fbacced6945204ece1b67  libmdbx-amalgamated-0.11.11.tar.xz
++sha256  dde8f3626509bb764b17c93fe0629389625cb50362502eb1c27ca208342f3894  libmdbx-amalgamated-0.11.12.tar.xz
  
- # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
- GNUTLS_VERSION_MAJOR = 3.7
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+ # Locally calculated
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index 357b1bac9e..ac1a3a0d6f 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMDBX_VERSION = 0.11.11
++LIBMDBX_VERSION = 0.11.12
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
+ LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
+
+--===============8597934389359044775==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8597934389359044775==--
