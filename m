@@ -1,58 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF867C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:03:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35253C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:04:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57975812EA;
-	Sat, 15 Oct 2022 15:03:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57975812EA
+	by smtp3.osuosl.org (Postfix) with ESMTP id A066560B3A;
+	Sat, 15 Oct 2022 15:04:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A066560B3A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id B93H2vgAZZ6P; Sat, 15 Oct 2022 15:04:09 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6717607E3;
+	Sat, 15 Oct 2022 15:04:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6717607E3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9A3791BF307
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:04:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8356881339
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:04:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8356881339
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LoOu1CwmKydV; Sat, 15 Oct 2022 15:03:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67AEA812F3;
-	Sat, 15 Oct 2022 15:03:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67AEA812F3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9C30C1BF307
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:03:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FC3C4136C
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:03:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FC3C4136C
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FZchEc9AuT9U for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 15:03:37 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0228841296
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0228841296
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:03:36 +0000 (UTC)
-Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 220E62000C;
- Sat, 15 Oct 2022 15:03:34 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1ojihK-00GxwQ-6o; Sat, 15 Oct 2022 17:03:34 +0200
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K7fanpJvVSns for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 15:04:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8899D819B8
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:04:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8899D819B8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6DB2686BF8; Sat, 15 Oct 2022 15:04:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20221002211910.9526-1-fontaine.fabrice@gmail.com>
-Date: Sat, 15 Oct 2022 17:03:34 +0200
-In-Reply-To: <20221002211910.9526-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 2 Oct 2022 23:19:10 +0200")
-Message-ID: <87h705i0xl.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/darkhttpd: security bump to
- version 1.14
+To: buildroot@buildroot.org
+Date: Sat, 15 Oct 2022 17:03:00 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 52340cee491ad5996411a557e9e2f8acd7f83b0d
+X-Git-Newrev: eb4607da1f23ba3d447122d156c3abb39982a70e
+X-Patchwork-Hint: ignore
+Message-Id: <20221015150406.6DB2686BF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/darkhttpd:
+ security bump to version 1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,25 +57,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eb4607da1f23ba3d447122d156c3abb39982a70e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
- > - Drop patch (already in version)
- > - Fix CVE-2020-25691: https://github.com/emikulic/darkhttpd/issues/21
+- Drop patch (already in version)
+- Fix CVE-2020-25691: https://github.com/emikulic/darkhttpd/issues/21
 
- > https://github.com/emikulic/darkhttpd/releases/tag/v1.14
+https://github.com/emikulic/darkhttpd/releases/tag/v1.14
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit cced5b68acba02abfd72f66264faed60f4bfd65a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...lare-vars-outside-of-for-loop-for-std-c90.patch | 39 ----------------------
+ package/darkhttpd/darkhttpd.hash                   |  4 +--
+ package/darkhttpd/darkhttpd.mk                     |  2 +-
+ 3 files changed, 3 insertions(+), 42 deletions(-)
 
-Committed to 2022.08.x and 2022.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch b/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
+deleted file mode 100644
+index 7584bff98e..0000000000
+--- a/package/darkhttpd/0001-Declare-vars-outside-of-for-loop-for-std-c90.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 81b491e60affd67f4ec2feccbee1cdf98dc57b81 Mon Sep 17 00:00:00 2001
+-From: Emil Mikulic <emikulic@gmail.com>
+-Date: Sun, 21 Mar 2021 15:03:14 +1100
+-Subject: [PATCH] Declare vars outside of for() loop for -std=c90.
+-
+-Fixes #2.
+-
+-[Retrieved from:
+-https://github.com/emikulic/darkhttpd/commit/81b491e60affd67f4ec2feccbee1cdf98dc57b81]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- darkhttpd.c | 7 ++++---
+- 1 file changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/darkhttpd.c b/darkhttpd.c
+-index 219a8a3..268628a 100644
+---- a/darkhttpd.c
+-+++ b/darkhttpd.c
+-@@ -966,8 +966,9 @@ static char *base64_encode(char *str) {
+-     char *encoded_data = malloc(output_length+1);
+-     if (encoded_data == NULL) return NULL;
+- 
+--    for (int i = 0, j = 0; i < input_length;) {
+--
+-+    int i;
+-+    int j;
+-+    for (i = 0, j = 0; i < input_length;) {
+-         uint32_t octet_a = i < input_length ? (unsigned char)str[i++] : 0;
+-         uint32_t octet_b = i < input_length ? (unsigned char)str[i++] : 0;
+-         uint32_t octet_c = i < input_length ? (unsigned char)str[i++] : 0;
+-@@ -981,7 +982,7 @@ static char *base64_encode(char *str) {
+-     }
+- 
+-     const int mod_table[] = {0, 2, 1};
+--    for (int i = 0; i < mod_table[input_length % 3]; i++)
+-+    for (i = 0; i < mod_table[input_length % 3]; i++)
+-         encoded_data[output_length - 1 - i] = '=';
+-     encoded_data[output_length] = '\0';
+- 
+diff --git a/package/darkhttpd/darkhttpd.hash b/package/darkhttpd/darkhttpd.hash
+index af5a2bf8c9..188afff767 100644
+--- a/package/darkhttpd/darkhttpd.hash
++++ b/package/darkhttpd/darkhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256  1d88c395ac79ca9365aa5af71afe4ad136a4ed45099ca398168d4a2014dc0fc2  darkhttpd-1.13.tar.gz
+-sha256  44e784df460954c7760e2eeae69aecb12a3d23ca1c0a4f6047c3c6452b2e2f49  darkhttpd.c
++sha256  e063de9efa5635260c8def00a4d41ec6145226a492d53fa1dac436967670d195  darkhttpd-1.14.tar.gz
++sha256  f002944c9a8516e3346002d39c3e13681306833358c0f3c7781dff1fdb639710  darkhttpd.c
+diff --git a/package/darkhttpd/darkhttpd.mk b/package/darkhttpd/darkhttpd.mk
+index bc68d43ef9..bda08899b8 100644
+--- a/package/darkhttpd/darkhttpd.mk
++++ b/package/darkhttpd/darkhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DARKHTTPD_VERSION = 1.13
++DARKHTTPD_VERSION = 1.14
+ DARKHTTPD_SITE = $(call github,emikulic,darkhttpd,v$(DARKHTTPD_VERSION))
+ DARKHTTPD_LICENSE = MIT
+ DARKHTTPD_LICENSE_FILES = darkhttpd.c
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
