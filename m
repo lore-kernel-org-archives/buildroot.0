@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD6D7C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 22:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7759C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 22:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56B9760DF0;
-	Sat, 15 Oct 2022 22:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56B9760DF0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AD1B414CD;
+	Sat, 15 Oct 2022 22:34:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AD1B414CD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iY5y8-Uxyjk0; Sat, 15 Oct 2022 22:26:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YktJHJ0TfUTl; Sat, 15 Oct 2022 22:34:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7E4DD60DCB;
-	Sat, 15 Oct 2022 22:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E4DD60DCB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 698911BF35C
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 22:26:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CA6A4089B;
+	Sat, 15 Oct 2022 22:34:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CA6A4089B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B0341BF35C
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 22:34:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 449E060DCB
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 22:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 449E060DCB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66173408BB
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 22:34:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66173408BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AQXogrko3mSr for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 22:26:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ILGgmHe-Xr6D for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 22:34:44 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36D7860D9D
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 36D7860D9D
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 22:26:12 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id j7so12881755wrr.3
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:26:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D272400D9
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1D272400D9
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 22:34:44 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id a3so12975110wrt.0
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:34:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=96ELJqZCUxwjkaZrFZ+oYPLbF0wYuhu1+S5m3NLTbGg=;
- b=pd2KYeTtXpysV9Ij4cwSG29l2bF+2bEJwp+s9pCBHXZIk0FauTAVAiUPP9Jhg9jMzL
- EaZa97SHfu7Y/4FUlbbzPiUqASm3jJoDbFKN26kMpXBknNbgqM/aG5AtFEDoeHB6yl21
- YVvvq/Zti3AE8b1ONuHhihuTrCUrbdYM/AegAuBpuCsJ8xVA7AAN22pWTbxi2BjDWFVu
- NBAOOuW9EOPLEu0cWjZzkUyMBsW9mHqrgLcBXkLpJpKMEhyn363g3L/JvKXEf6dHZDJS
- raihSTTlLLMvlkknQhBSFBxsBj89Ia3E5Orz1i5OZXECp3WZ/6xBZAMATd5lgm97JRiA
- Iy4g==
-X-Gm-Message-State: ACrzQf1DUA+/EdeUXwxPiKWm5C7eATMeJbjqAgPfE1tHqS9pYEkXb2vE
- fiXzWlUg0UblqygLjlnkCvIhZ/aLG0U=
-X-Google-Smtp-Source: AMsMyM5lMvQrXaYFoGPFAyEQWHAPbXj7D0LNtiADJbuW+Cc7/WwS/iD+e5qcpCbUVaTiAV6blTuCuA==
-X-Received: by 2002:a5d:59a4:0:b0:230:eaa4:88d7 with SMTP id
- p4-20020a5d59a4000000b00230eaa488d7mr2477146wrr.35.1665872770117; 
- Sat, 15 Oct 2022 15:26:10 -0700 (PDT)
+ bh=n6iF26gngb1N/fowKf+roxa9LE5IWvtAwVb2FFTiIZI=;
+ b=5Ra1rTEw5kI4kxVrzv++GjKnA+1EmJU+mGgT8XT7j91Btxkdon6om3uZpj5d96lahG
+ mbnfnV3R1U9HQ0vpY/B1ysiMaD4TcwL4WIchYEpNSCfGCZan0OzAFq5iCwprnNl5ey0/
+ fmJVI9z4gR+mQltXnAuG/QU2d6xHrmvIoc/9094/m5qVdk2fhMjYzMkiNLgtBWHHbHTI
+ SRFx17adt2+c0GiRDrgj9Qi3u7zGXSB82t/tqlatz9MmEqnUbMRueOKZO8e+HPXqP5P3
+ cjk55muqFmkFMyRiCmzaLca7nr+Z/iJMHjilbSdeb8ciY0Lr3PpQC5V4XYvjaOU52Wvl
+ Rjaw==
+X-Gm-Message-State: ACrzQf1s22w52KIyYN58ZsoxOR5Xvb4K3oOfrmLSYJ/zjaokFjQb6ejr
+ 5AVnyTxb9+Gjqxkw+u5dCdMIy0cytGM=
+X-Google-Smtp-Source: AMsMyM5bSTQ4BTryCLRNWpqPi0CFsQDjQ/V3wcZvYxBj9xkAnyk+RbzMZpyyo1sSPBuC1bS2VB0xeQ==
+X-Received: by 2002:adf:ea0f:0:b0:22e:6ef7:aaa8 with SMTP id
+ q15-20020adfea0f000000b0022e6ef7aaa8mr2486211wrm.670.1665873281874; 
+ Sat, 15 Oct 2022 15:34:41 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- h12-20020a05600c314c00b003c6ee9e254dsm3177428wmo.32.2022.10.15.15.26.09
+ n10-20020a05600c3b8a00b003c6b7f55673sm11593803wms.2.2022.10.15.15.34.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 15 Oct 2022 15:26:09 -0700 (PDT)
+ Sat, 15 Oct 2022 15:34:41 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Oct 2022 00:26:05 +0200
-Message-Id: <20221015222605.171104-1-fontaine.fabrice@gmail.com>
+Date: Sun, 16 Oct 2022 00:34:39 +0200
+Message-Id: <20221015223439.202348-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=96ELJqZCUxwjkaZrFZ+oYPLbF0wYuhu1+S5m3NLTbGg=;
- b=kANVLyRjAhJAU7nA3hghgGQESvkEOG7RozC29m5Ds3OcJVpyD/pSrM+2UGkfoDcb+z
- P/MQM3ZMv1nbW+u0qDSR6SyZFyLALOrf4fHle/pzMPV5rKN9gKxb1K//+lUlKaLsuBBW
- Imuuk6ZjdBkHvkNnBjvE9QfKqyk0wnK+t203v3KahWMfItc6XjiLWMx2NpF0DCruaCTP
- BY4529D038y37vAbEWuFDaEMPssEjmNWz50VFmx4xIJ2+jqLYwfIkrhHEBR4K+cStGh2
- c31pGW1hSMVvPzYZR8hRqxF4udeQkQ9NRSYV0KKV9WJ4F9lfE02sfglNpeB/dhbaZwr9
- NrYQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=n6iF26gngb1N/fowKf+roxa9LE5IWvtAwVb2FFTiIZI=;
+ b=ARsueXn6bofA4H1KnI+4Y8DHOPz7uPGeM0zfcUehyDrJP7DaETh3jCbhzC3HTYu8/2
+ LSwvtBRRoPOHW6TyPzH5YxTFk4zfoZHcsjheTXeK9AmOuxX322TiHvri56R5fh7wvKrS
+ 6GWcaOqO6YXpdMMwhpC26uF2w/LWg79vgJsctiIAId+Frkbd/BXTJpmYNQilYzTX/1kK
+ 7jdc41502pqALUI3EZzQ2+1ArouagyUMysT98s6d7hSbRU7hCVJr5WRJAeqptKNhovxq
+ LM2aw5w5yJtMdkigX++SQIr4ppr5KJav9AlY0d5PMbDIZTEKosPbrvKQD0vgFZIUhkLR
+ a+SQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=kANVLyRj
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/lrzip: security bump to version 0.651
+ header.a=rsa-sha256 header.s=20210112 header.b=ARsueXn6
+Subject: [Buildroot] [PATCH 1/1] package/libxml2: security bump to version
+ 2.10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,55 +94,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sam Lancia <sam@gpsm.co.uk>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Fix CVE-2022-26291: lrzip v0.641 was discovered to contain a multiple
-  concurrency use-after-free between the functions zpaq_decompress_buf()
-  and clear_rulist(). This vulnerability allows attackers to cause a
-  Denial of Service (DoS) via a crafted Irz file.
-- Use official tarball and so drop autoreconf
+- [CVE-2022-40304] Fix dict corruption caused by entity reference cycles
+- [CVE-2022-40303] Fix integer overflows with XML_PARSE_HUGE
+- Fix overflow check in SAX2.c
 
-https://github.com/ckolivas/lrzip/blob/v0.651/WHATS-NEW
+https://gitlab.gnome.org/GNOME/libxml2/-/tags/v2.10.3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Drop autoreconf
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/lrzip/lrzip.hash | 2 +-
- package/lrzip/lrzip.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/lrzip/lrzip.hash b/package/lrzip/lrzip.hash
-index 19295383c3..cb03ff07cc 100644
---- a/package/lrzip/lrzip.hash
-+++ b/package/lrzip/lrzip.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  9b6b4bb1ae76dafbaab96ec9d50d41af5fed45a6c4f2e06feea828c2cd8025c0  lrzip-0.641.tar.gz
-+sha256  48bd8decb097c1596c9b3777959cd3e332819434ed77a2823e65aa436f1602f9  lrzip-0.651.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/lrzip/lrzip.mk b/package/lrzip/lrzip.mk
-index 27d9fde204..0375696414 100644
---- a/package/lrzip/lrzip.mk
-+++ b/package/lrzip/lrzip.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 4d24c60132..00daa21a83 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.10/libxml2-2.10.2.sha256sum
+-sha256  d240abe6da9c65cb1900dd9bf3a3501ccf88b3c2a1cb98317d03f272dda5b265  libxml2-2.10.2.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.10/libxml2-2.10.3.sha256sum
++sha256  5d2cc3d78bec3dbe212a9d7fa629ada25a7da928af432c93060ff5c17ee28a9c  libxml2-2.10.3.tar.xz
+ # License files, locally calculated
+ sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 37a4396cbe..321e8b756b 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LRZIP_VERSION = 0.641
--LRZIP_SITE = $(call github,ckolivas,lrzip,v$(LRZIP_VERSION))
--LRZIP_AUTORECONF = YES
-+LRZIP_VERSION = 0.651
-+LRZIP_SOURCE = lrzip-$(LRZIP_VERSION).tar.xz
-+LRZIP_SITE = http://ck.kolivas.org/apps/lrzip
- LRZIP_LICENSE = GPL-2.0+
- LRZIP_LICENSE_FILES = COPYING
- LRZIP_CPE_ID_VENDOR = long_range_zip_project
+ LIBXML2_VERSION_MAJOR = 2.10
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).2
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).3
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
 -- 
 2.35.1
 
