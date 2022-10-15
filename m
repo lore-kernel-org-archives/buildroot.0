@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEEDBC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 12:50:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45288C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 13:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81FF940554;
-	Sat, 15 Oct 2022 12:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81FF940554
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OmbAvfaFR3y9; Sat, 15 Oct 2022 12:50:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EEDA404EC;
-	Sat, 15 Oct 2022 12:50:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EEDA404EC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 42B681BF963
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 12:50:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C4D540522
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 12:50:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C4D540522
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3EFA405EF;
+	Sat, 15 Oct 2022 13:01:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3EFA405EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pjrspqN3UY4R for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 12:50:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5967840125
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 12:50:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5967840125
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 496008669C; Sat, 15 Oct 2022 12:50:23 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id MNl9c39oXMNg; Sat, 15 Oct 2022 13:01:30 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E746B40235;
+	Sat, 15 Oct 2022 13:01:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E746B40235
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 24DAC1BF5F8
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 13:01:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 00BCB607EC
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 13:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00BCB607EC
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ibTtQqwecZHg for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 13:01:26 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA86B60784
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CA86B60784
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 13:01:25 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id A9F83C000C;
+ Sat, 15 Oct 2022 13:01:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ojgn3-00Gt4u-Jh; Sat, 15 Oct 2022 15:01:21 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 14:46:06 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 0fed79d6c7f3d1027da7801926758b4ba57b693e
-X-Git-Newrev: 75368d47446534a1cd8f0d932882f61df9d35eb3
-X-Patchwork-Hint: ignore
-Message-Id: <20221015125023.496008669C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] DEVELOPERS: remove Joerg
- Krause
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20220928192802.437811-1-giulio.benetti@benettiengineering.com>
+Date: Sat, 15 Oct 2022 15:01:21 +0200
+In-Reply-To: <20220928192802.437811-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Wed, 28 Sep 2022 21:28:02 +0200")
+Message-ID: <87fsfpjl5q.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH] package/rtl8189es: fix build failure due to
+ wrong endianness
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,69 +64,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1974473579756669737=="
+Cc: Louis Aussedat <aussedat.louis@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1974473579756669737==
-Content-Type: text/plain
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75368d47446534a1cd8f0d932882f61df9d35eb3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+ > At the moment rtl8189es module has -DCONFIG_LITTLE_ENDIAN hardcoded and
+ > there is no way to override it. So to do this let's add a patch that is
+ > pending upstream[1] to allow to override CFLAGS and then let's undefine
+ > CONFIG_LITTLE_ENDIAN and define the correct endianness in rtl8189es.mk
 
-His e-mail server is no longer responsive. Every single day, we get:
+ > Fixes:
+ > http://autobuild.buildroot.net/results/3bcad5e88876c86a2a3338961ed20f28b5953779/
 
-<joerg.krause@embedded.rocks>: connect to embedded.rocks[99.83.154.118]:25:
-    Connection timed out
+ > [1]: https://github.com/jwrdegoede/rtl8189ES_linux/pull/83
 
-when sending the daily autobuilder report.
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c6b987f39ddd2abbce526021ccb39bd42e50fa23)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 17 -----------------
- 1 file changed, 17 deletions(-)
+Committed to 2022.08.x and 2022.02.x, thanks.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 55e81be072..91707bbc4a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1502,23 +1502,6 @@ N:	Joris Offouga <offougajoris@gmail.com>
- F:	package/python-colorlog/
- F:	package/python-simplelogging/
- 
--N:	Jörg Krause <joerg.krause@embedded.rocks>
--F:	board/lemaker/bananapro/
--F:	configs/bananapro_defconfig
--F:	package/augeas/
--F:	package/bluez-alsa/
--F:	package/caps/
--F:	package/freescale-imx/imx-alsa-plugins/
--F:	package/libopusenc/
--F:	package/libupnpp/
--F:	package/luv/
--F:	package/luvi/
--F:	package/mpd/
--F:	package/shairport-sync/
--F:	package/swupdate/
--F:	package/upmpdcli/
--F:	package/wavemon/
--
- N:	Joris Lijssens <joris.lijssens@gmail.com>
- F:	package/emlog/
- F:	package/libcoap/
-
---===============1974473579756669737==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1974473579756669737==--
