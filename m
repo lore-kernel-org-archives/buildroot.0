@@ -1,51 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03E71C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 16:50:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1D2FC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 17:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72D7A410AC;
-	Sat, 15 Oct 2022 16:50:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72D7A410AC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 114D760C1C;
+	Sat, 15 Oct 2022 17:09:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 114D760C1C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uvla5H1Szuzx; Sat, 15 Oct 2022 16:50:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id bhyhuhsg_8G5; Sat, 15 Oct 2022 17:09:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25945410A3;
-	Sat, 15 Oct 2022 16:50:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25945410A3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CB86606FF;
+	Sat, 15 Oct 2022 17:09:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CB86606FF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 89E261BF3E8
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 16:50:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 007D71BF3D6
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 17:09:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6452A410A4
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 16:50:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6452A410A4
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE278402C1
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 17:09:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE278402C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id V4NlMXPYuPfo for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 16:50:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 30BC94109F
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 16:50:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30BC94109F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1CD1C82A98; Sat, 15 Oct 2022 16:50:16 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id wchs0881xlHx for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 17:09:12 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F82E401BB
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7F82E401BB
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 17:09:12 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id q196so6182540iod.8
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 10:09:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wN6KjKFz8BiwdstRps9dix13sNX6zogdKP5bVStOuRI=;
+ b=iWcGjteXbQoWmoqTw1MlpDMSqojpJldPhmP9QfU4DbeZEfo9c5Kdt2qbiepGma7xFI
+ XewUD8AijDlL4MXE0X6/zWIw3ReuaiGnejr/QJaE9F/srm/mdsOVU/YSUc+dSWnVRSIZ
+ AvaKCb1UBWSZIlXdojS8QGADDuGP3txZ0eN6uOII4P3QNhjvO+bdN0mpkXhIpPw9Zww/
+ IrH3XyVwoUUQ6XGCA/JDLttv/J1cuFQoM8kzZ9C9yn1pOTEgFR2K+rOhzsd7427Pldfm
+ QmoSx4QbZ6yOa/5P23NXFphZ8u2s3haahhCJWmLfMl45oIdDoo2wTbxYW5ftKS8+PE6C
+ QUSg==
+X-Gm-Message-State: ACrzQf1z9QPrfCKWJrAVQ4ouBkiMLw782t3aW9vyOvKBtOHkWdklaqB2
+ fdbp+LIV1AXkUwnctCQuCtWT1ICVhTuPMQ==
+X-Google-Smtp-Source: AMsMyM4NacH5jthBEuWIvoP1KOolyuUEeqMrIET3dzFtKqCdNE8NuqquWL3JdYgdqB/QtAHiDNTrqg==
+X-Received: by 2002:a05:6602:92:b0:6a3:4c7c:7ab2 with SMTP id
+ h18-20020a056602009200b006a34c7c7ab2mr1451922iob.57.1665853751139; 
+ Sat, 15 Oct 2022 10:09:11 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ y21-20020a056602165500b006a92d813842sm2177855iow.3.2022.10.15.10.09.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 15 Oct 2022 10:09:10 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 18:49:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d07e6b7071cf9496aa67b2459d0574bc5ffd9c46
-X-Git-Newrev: 716b8c4e7bac4f39b7a2297f39858f5c4bfbcab6
-X-Patchwork-Hint: ignore
-Message-Id: <20221015165016.1CD1C82A98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.{4, 10, 15}.x / 6.0.x series
+Date: Sat, 15 Oct 2022 11:09:08 -0600
+Message-Id: <20221015170908.1494436-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wN6KjKFz8BiwdstRps9dix13sNX6zogdKP5bVStOuRI=;
+ b=qfpfAfV0/CME+B7fjJEDDDx8/phTOAnh51aAhNvRyw/Aex4aTHBY+J4Gr4o4cTWYzL
+ Apv8tqJM1O265CnEBfeYC0TyvdwN3/AAw4rwRRQUXhJfs7uTQxO0W+XXR8fD4yjIzOUI
+ eKhGiMjDQFxCjkqkpscebjA/S/0bPJqrVDOLW3Nd+hgWO0z8CLSQsVJUcUNaHX4+rEjL
+ WeTdWP6J+dQx8VkqdbaRGhgByxHu03qd+nqocapRzaul0W9b8UEKLxWw3dHpWjWtG3UV
+ xGX55Xl52sJG3ikeQhDbKFNgUmJuGy7MwL5AWHeR3Nx86XXGaamgAyZYEu7KxoV7fyRY
+ CMEQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=qfpfAfV0
+Subject: [Buildroot] [PATCH 1/1] package/brltty: fix infinite loop in
+ configure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,90 +94,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, Mario Lang <mlang@blind.guru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=716b8c4e7bac4f39b7a2297f39858f5c4bfbcab6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Revert a broken commit that introduced an infinite loop during
+configure.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/82a/82af705f7ca282495461cb3994f5a7e6f64273e1
+ - http://autobuild.buildroot.net/results/06c/06c9414a1ecbc1a147bc8dfddced03fc659af694
+ - http://autobuild.buildroot.net/results/59e/59e36093f7e437a5a37037f7fa50ce2443c47fd3
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 17 ++++++++---------
- package/linux-headers/Config.in.host | 16 ++++++++--------
- 3 files changed, 17 insertions(+), 18 deletions(-)
+ ...ushProgramTerminationCommand-shell-f.patch | 107 ++++++++++++++++++
+ 1 file changed, 107 insertions(+)
+ create mode 100644 package/brltty/0002-Revert-Add-the-pushProgramTerminationCommand-shell-f.patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f9caa3c652..ee59761f33 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.0" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.0.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.145-cip17" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.145-cip17-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 07963f185e..c4ee15c37b 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,15 +1,14 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  5c2443a5538de52688efb55c27ab0539c1f5eb58c0cfd16a2b9fbb08fd81788e  linux-6.0.tar.xz
-+sha256  8ede745a69351ea0f27fe0c48780d4efa37ff086135e129358ce09694957e8f9  linux-6.0.1.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  4ecdb8b59c6f6f258d89cbf22eede210e0a55c09db884988fe706efe2fe8f148  linux-5.19.13.tar.xz
--sha256  4a1c922a490eeabf5b44d4fde36de9ba5b71711b7352c6258716da41160db628  linux-5.17.15.tar.xz
--sha256  da47d9a80b694548835ccb553b6eb1a1f3f5d5cddd9e2bd6f4886b99ca14f940  linux-5.15.67.tar.xz
--sha256  3f47ebdb9afe152a0c32c1157336ef13fa5cc08ac6d884dfc1f6ddc2b7dba268  linux-5.10.142.tar.xz
--sha256  09c72e3dd85df773eb52e53e25c556d132958bd775b0ed6985a6b1ac21c9cfc2  linux-5.4.212.tar.xz
-+sha256  4686e33847db3ec58e1043bc0c806472aae694b2c413bb7d8da91a5c9a55eb1b  linux-5.19.15.tar.xz
-+sha256  a822f09525ae8803453939a91e73f18097a3ba2aec73be4fe9ab314a0131715d  linux-5.15.73.tar.xz
-+sha256  85253abf097eb5013b988a400eb022eed0e0626e7e0a7daa3ab4b6bcabbced9a  linux-5.10.147.tar.xz
-+sha256  2bb826cdf9b2cfce385fb5d51fc8070fe428e467bd3df4ae2a7eb6f0c0cc2e63  linux-5.4.217.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  2283c1af5373c43e79adca6987174d932989a8b2551405e83e2e39ebe31e06d2  linux-4.9.327.tar.xz
--sha256  70f4df21901a654632ebbb533884ccaf117a29b14e6f2b672f0c36613c3e897d  linux-4.14.292.tar.xz
--sha256  eadd13aa70f37cdf50eef45c5964bd7146d353b61a1fd026d4fa0b2a68a3ea47  linux-4.19.257.tar.xz
-+sha256  bf021936a450e9292e10cc7db9909cd0d336406191d22aadd22bdcc51ca2595f  linux-4.9.330.tar.xz
-+sha256  62ccb9ba94a7da5115bc923eebf8dffee9229801da02be87d90ae68ab9a76a6b  linux-4.14.295.tar.xz
-+sha256  bec33298bd0470b5e725c7dc29a2dd4daf02065cb01cd4a54f6adee6ff582cb2  linux-4.19.261.tar.xz
- # Locally computed
- sha256  4594c147bdc493c7c286688542bbe65e550fb7bd58e0649ec587a2fe893ec0ee  linux-cip-5.10.145-cip17.tar.gz
- sha256  a5598f7f673b3ef819d6ed24f08d539eecb6febd11673a1d4752a1c05d4ee289  linux-cip-5.10.145-cip17-rt7.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7aee67de56..8679241a2c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -392,14 +392,14 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.9.327"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.292"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.257"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.212"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.142"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.67"	if BR2_KERNEL_HEADERS_5_15
--	default "5.19.13"	if BR2_KERNEL_HEADERS_5_19
--	default "6.0"		if BR2_KERNEL_HEADERS_6_0
-+	default "4.9.330"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.295"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.261"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.217"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.147"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.73"	if BR2_KERNEL_HEADERS_5_15
-+	default "5.19.15"	if BR2_KERNEL_HEADERS_5_19
-+	default "6.0.1"		if BR2_KERNEL_HEADERS_6_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/package/brltty/0002-Revert-Add-the-pushProgramTerminationCommand-shell-f.patch b/package/brltty/0002-Revert-Add-the-pushProgramTerminationCommand-shell-f.patch
+new file mode 100644
+index 0000000000..f5653342e2
+--- /dev/null
++++ b/package/brltty/0002-Revert-Add-the-pushProgramTerminationCommand-shell-f.patch
+@@ -0,0 +1,107 @@
++From 941acbb1caa8a85454a491364e74fb273223b7fb Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Sat, 15 Oct 2022 10:54:57 -0600
++Subject: [PATCH] Revert "Add the pushProgramTerminationCommand shell function.
++ (dm)"
++
++Fixes infinite loop during configure:
++
++config.status: executing build-configure commands
++configure: WARNING: libudev support not available
++configure: WARNING: Human Interface Device I/O support not available on this platform
++./mk4build: 104: let: not found
++./mk4build: 104: let: not found
++./mk4build: 111: cd: can't cd to /tmp/mk4build.20221015-092924.ZL6KlF
++./mk4build: 104: let: not found
++./mk4build: 111: cd: can't cd to /tmp/mk4build.20221015-092924.ZL6KlF
++./mk4build: 104: let: not found
++./mk4build: 111: cd: can't cd to /tmp/mk4build.20221015-092924.ZL6KlF
++./mk4build: 104: let: not found
++./mk4build: 111: cd: can't cd to /tmp/mk4build.20221015-092924.ZL6KlF
++./mk4build: 104: let: not found
++./mk4build: 111: cd: can't cd to /tmp/mk4build.20221015-092924.ZL6KlF
++./mk4build: 104: let: not found
++./mk4build: 111: cd: can't cd to /tmp/mk4build.20221015-092924.ZL6KlF
++./mk4build: 104: let: not found
++./mk4build: 111: cd: can't cd to /tmp/mk4build.20221015-092924.ZL6KlF
++./mk4build: 104: let: not found
++./mk4build: 111: cd: can't cd to /tmp/mk4build.20221015-092924.ZL6KlF
++
++This reverts commit df1e070d30f583381b48fddd829bdde8efcdd16a.
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/brltty/brltty/pull/393]
++---
++ brltty-prologue.sh | 48 +++++++++++++---------------------------------
++ 1 file changed, 13 insertions(+), 35 deletions(-)
++
++diff --git a/brltty-prologue.sh b/brltty-prologue.sh
++index 05b817742..a4fa34053 100644
++--- a/brltty-prologue.sh
+++++ b/brltty-prologue.sh
++@@ -94,41 +94,6 @@ logDetail() {
++    logMessage detail "${@}"
++ }
++ 
++-programTerminationCommandCount=0
++-
++-runProgramTerminationCommands() {
++-   set +e
++-
++-   while [ "${programTerminationCommandCount}" -gt 0 ]
++-   do
++-      set -- $(getVariable "programTerminationCommand${programTerminationCommandCount}")
++-      let "programTerminationCommandCount -= 1"
++-
++-      local process="${1}"
++-      local directory="${2}"
++-      shift 2
++-
++-      [ "${process}" = "${$}" ] && {
++-         cd "${directory}"
++-         "${@}"
++-      }
++-   done
++-}
++-
++-pushProgramTerminationCommand() {
++-   [ "${programTerminationCommandCount}" -gt 0 ] || trap runProgramTerminationCommands exit
++-   setVariable "programTerminationCommand$((programTerminationCommandCount += 1))" "${$} $(pwd) ${*}"
++-}
++-
++-needTemporaryDirectory() {
++-   [ -n "${temporaryDirectory}" ] || {
++-      umask 022
++-      [ -n "${TMPDIR}" -a -d "${TMPDIR}" -a -r "${TMPDIR}" -a -w "${TMPDIR}" -a -x "${TMPDIR}" ] || export TMPDIR="/tmp"
++-      temporaryDirectory="$(mktemp -d "${TMPDIR}/${programName}.$(date +"%Y%m%d-%H%M%S").XXXXXX")" && cd "${temporaryDirectory}" || exit "${?}"
++-      pushProgramTerminationCommand rm -f -r -- "${temporaryDirectory}"
++-   }
++-}
++-
++ resolveDirectory() {
++    local path="${1}"
++    local variable="${2}"
++@@ -512,6 +477,19 @@ verifyOutputDirectory() {
++    fi
++ }
++ 
+++needTemporaryDirectory() {
+++   cleanup() {
+++      set +e
+++      cd /
+++      [ -z "${temporaryDirectory}" ] || rm -f -r -- "${temporaryDirectory}"
+++   }
+++   trap "cleanup" 0
+++
+++   umask 022
+++   [ -n "${TMPDIR}" -a -d "${TMPDIR}" -a -r "${TMPDIR}" -a -w "${TMPDIR}" -a -x "${TMPDIR}" ] || export TMPDIR="/tmp"
+++   temporaryDirectory="$(mktemp -d "${TMPDIR}/${programName}.XXXXXX")" && cd "${temporaryDirectory}" || exit "${?}"
+++}
+++
++ programParameterCount=0
++ programParameterCountMinimum=-1
++ programParameterLabelWidth=0
++-- 
++2.34.1
++
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
