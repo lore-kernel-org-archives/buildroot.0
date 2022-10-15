@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34E12C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 10:53:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C326C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 10:54:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0310415FD;
-	Sat, 15 Oct 2022 10:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0310415FD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FplmAavagSaE; Sat, 15 Oct 2022 10:53:23 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BEF5415F0;
-	Sat, 15 Oct 2022 10:53:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BEF5415F0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B36A41BF292
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 10:53:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8EF6140323
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 10:53:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EF6140323
+	by smtp2.osuosl.org (Postfix) with ESMTP id E150F4052D;
+	Sat, 15 Oct 2022 10:54:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E150F4052D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x5T7-rNUkNjC for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 10:53:10 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dA406H0PYiYy; Sat, 15 Oct 2022 10:54:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D7AA40241;
+	Sat, 15 Oct 2022 10:54:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D7AA40241
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E1B81BF292
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 10:54:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 196DC817A9
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 10:54:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 196DC817A9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IAaTNadtlU9C for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 10:54:12 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84D05400D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2314381756
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 84D05400D3
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 10:53:08 +0000 (UTC)
-X-QQ-mid: bizesmtp63t1665831183tvh21jmc
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2314381756
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 10:54:11 +0000 (UTC)
+X-QQ-mid: bizesmtp63t1665831185tzm7bqvb
 Received: from pc.. ( [202.188.176.82]) by bizesmtp.qq.com (ESMTP) with 
- id ; Sat, 15 Oct 2022 18:53:02 +0800 (CST)
+ id ; Sat, 15 Oct 2022 18:53:04 +0800 (CST)
 X-QQ-SSF: 01000000002000206000B00A0000000
-X-QQ-FEAT: HH6/KuQOBEbux29qBZscB8qvQ1fzBGsbgXYMctgHpeNyKzCrbU4sVCUEIZ736
- 6da04zuSwpDYQC6wuwEEsCMZIsaXoVNplqq+O68td4wWb226CBfbuHwqb2+1sOmc8lgJpGa
- jxJuNkxeM6OzZIlW/ON1aXqE1nSdzBVPlyD5cCuus/+hfrxtNngjfHSrgkdHHqM5cAZZ9h/
- gRxbCZ1bxWp4XPFt4uVVK5+0k9eab4D9tYAVbcR4gawnh/C/ha6F+6EjSCXIxsMOzP4B9O6
- 1tQeLfbhtW0R/u2opcnnDNnCgEHEC5JQTl1vm3cECup6ywRf0QcOi0a2Ip9VLTGP+oQEt9m
- 9cTu1KFmOsw2uQTVDBh1CoXUCrRWUNfWMjvrjaIae0sA6jzAXriYHvVRUWrwF2Wp0D29EqC
+X-QQ-FEAT: YzZUXEAk3VPiOAbXo3YbFp+NbB4Yjgglg/IlbUJwK6in5KuBhueCLIv7tbsG7
+ t2QNDOYTs7ELHLfFudEevGwrg9Z52+o1GWneHtU5hy2lFBymleYtkkuE3O8GVySiaMWorEC
+ jAuqVGW1lk7ljoNbqqtjEjE3BTi4Q9qq/f70KluUVyahH1poQXn6YfdEci5e8pHw25k6ohl
+ Xgod1SlxN/WnHz4sUz8riDQbGtxh5Rt2AffdGF4sH6a/OiSDeOsYn1267KgqS/qaa4VM5wp
+ bkvf5dhti0+pERcjMKCSpGelOGhcQh5pQGFi4pDab4F9hX2v0hQA8HS1oX9U+Srd88twBPW
+ DbqNnMKChxZIvRaeUPKSKthAiZ6OUKaBz8WPSCzCRsCPjSIh+VnjXPZHuPE8Ify4CCt6mz8
 X-QQ-GoodBg: 0
 From: Tan En De <ende.tan@linux.starfivetech.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 16:47:56 +0800
-Message-Id: <20221015084757.277050-3-ende.tan@linux.starfivetech.com>
+Date: Sat, 15 Oct 2022 16:47:57 +0800
+Message-Id: <20221015084757.277050-4-ende.tan@linux.starfivetech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221015084757.277050-1-ende.tan@linux.starfivetech.com>
 References: <20221015084757.277050-1-ende.tan@linux.starfivetech.com>
 MIME-Version: 1.0
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr4
-Subject: [Buildroot] [2/3] package/libkcapi: support building kcapi-dgst
- application
+Subject: [Buildroot] [3/3] package/libkcapi: support enabling lib-asym and
+ lib-kpp
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,39 +75,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Just add a new Kconfig option in order to support building kcapi-dgst
-application.
+Add Kconfig options to allow enabling asymmetric cipher support
+(--enable-lib-asym) and key protocol primitives support
+(--enable-lib-kpp) in library.
 
 Signed-off-by: Tan En De <ende.tan@linux.starfivetech.com>
 ---
- package/libkcapi/Config.in   | 3 +++
- package/libkcapi/libkcapi.mk | 6 ++++++
- 2 files changed, 9 insertions(+)
+ package/libkcapi/Config.in   |  6 ++++++
+ package/libkcapi/libkcapi.mk | 12 ++++++++++++
+ 2 files changed, 18 insertions(+)
 
 diff --git a/package/libkcapi/Config.in b/package/libkcapi/Config.in
-index 8243f6b738..176767e338 100644
+index 176767e338..97eda31a4e 100644
 --- a/package/libkcapi/Config.in
 +++ b/package/libkcapi/Config.in
-@@ -28,4 +28,7 @@ config BR2_PACKAGE_LIBKCAPI_TEST
- 	bool "build test program"
- 	depends on BR2_USE_MMU # fork()
+@@ -31,4 +31,10 @@ config BR2_PACKAGE_LIBKCAPI_TEST
+ config BR2_PACKAGE_LIBKCAPI_DGSTAPP
+ 	bool "build dgst application"
  
-+config BR2_PACKAGE_LIBKCAPI_DGSTAPP
-+	bool "build dgst application"
++config BR2_PACKAGE_LIBKCAPI_ASYM
++	bool "enable asymmetric ciphers library functions (kernel patching required)"
++
++config BR2_PACKAGE_LIBKCAPI_KPP
++	bool "enable KPP library functions (kernel patching required)"
 +
  endif
 diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
-index 30d500696b..214999ddd2 100644
+index 214999ddd2..c3b655bb35 100644
 --- a/package/libkcapi/libkcapi.mk
 +++ b/package/libkcapi/libkcapi.mk
-@@ -47,4 +47,10 @@ else
- LIBKCAPI_CONF_OPTS += --disable-kcapi-test
+@@ -53,4 +53,16 @@ else
+ LIBKCAPI_CONF_OPTS += --disable-kcapi-dgstapp
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBKCAPI_DGSTAPP),y)
-+LIBKCAPI_CONF_OPTS += --enable-kcapi-dgstapp
++ifeq ($(BR2_PACKAGE_LIBKCAPI_ASYM),y)
++LIBKCAPI_CONF_OPTS += --enable-lib-asym
 +else
-+LIBKCAPI_CONF_OPTS += --disable-kcapi-dgstapp
++LIBKCAPI_CONF_OPTS += --disable-lib-asym
++endif
++
++ifeq ($(BR2_PACKAGE_LIBKCAPI_KPP),y)
++LIBKCAPI_CONF_OPTS += --enable-lib-kpp
++else
++LIBKCAPI_CONF_OPTS += --disable-lib-kpp
 +endif
 +
  $(eval $(autotools-package))
