@@ -1,83 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39B25C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 22:14:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26E5DC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 22:24:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7277818CD;
-	Sat, 15 Oct 2022 22:14:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7277818CD
+	by smtp3.osuosl.org (Postfix) with ESMTP id B80F560DED;
+	Sat, 15 Oct 2022 22:24:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B80F560DED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fQg8h_zGegyZ; Sat, 15 Oct 2022 22:14:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SK2NKOhB4vEK; Sat, 15 Oct 2022 22:24:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A776F81656;
-	Sat, 15 Oct 2022 22:14:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A776F81656
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C5F191BF35C
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 22:14:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDA5160DCB;
+	Sat, 15 Oct 2022 22:24:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDA5160DCB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 80BFB1BF35C
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 22:24:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A17EA40483
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 22:14:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A17EA40483
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B5C860DCB
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 22:24:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B5C860DCB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DTJsOlNCeAj4 for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 22:14:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id teMvD-Ap4OTb for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 22:24:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8153B400D9
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8153B400D9
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 22:14:42 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id f37so12251308lfv.8
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:14:42 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C40960D9D
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3C40960D9D
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 22:24:25 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id a10so12810833wrm.12
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:24:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=JNCzIejEOFkYRhepo3gOJFZ0dDLD8LsCaOaBdlGSGBc=;
- b=J0/T+OziZCqVJYX+BCS2IyPtgp7VZkSBo5ATU363bTHNcvGMOBxM4srewd6rNzTNhj
- PTSWMkvl7acedz1LpBN6OpLGzQDmzIohJu/NishASnYAwyyD+kEWcJlrjvhOTX+4It1E
- D4OWlXMW1lNaiaUcG+58A2DnNjuzYl663DhkJc1kMVOxZiydKbubvx48JNQLIz+qeEk6
- PDnhC0Czy9O8OdkxWDOc+tNmi2VNYEO0fzsGhtFUIYYjw+mMmPglxtQrQtmMhadsohcZ
- sG0n8r1QtXBhuBrEA5PYii63H9jYfkFPJ8HiE+10EH4bbGQqBE/ExuzJednq5xWtknS5
- jZsQ==
-X-Gm-Message-State: ACrzQf0yOPM91MJamKf+pEkWiKSuhhM5qjONPcA+zD1vSshFJjvi32bK
- E5mbx6k9UrX1+9Wg1XH8D5payxCzKH5RBqE0tCWZf2Nh
-X-Google-Smtp-Source: AMsMyM6DcUZUC9chiLJifRoATvaYNPMo9dchuaO5zPXfYNEDuROptwe02axBv/4sXHiNSQEL40aKn9CxbLoC/DkLR/o=
-X-Received: by 2002:a05:6512:2144:b0:4a2:3c2b:f694 with SMTP id
- s4-20020a056512214400b004a23c2bf694mr1608034lfr.642.1665872080052; Sat, 15
- Oct 2022 15:14:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221015005813.4055238-1-james.hilliard1@gmail.com>
-In-Reply-To: <20221015005813.4055238-1-james.hilliard1@gmail.com>
+ bh=n8OHapATY1agwnBADkqa1OYQPmxTEAQulbFIND0fReE=;
+ b=j1i/WawCEPSVSLfX4Fk2BCQ6QjpKSEl9nMP9WnCuQ4mAqrvFUOOnjCeJ8w7FRaZ+WS
+ I8NlE/ncy6spZL3ED2CHSyezDqGCCnKYYJS/atgLlXmYhFQJKvq3ZY0mavDaj1RVSLp5
+ iZYif+hvfv29QLi/EZl0Tv3UuVIQyk2j/osIxSADDEP9F33OFSWhmsjPLmg2GWezAj3B
+ iV8wgGfqH6kRJF5dKvN7FWpOYj0mD3Vnm8fAyyF44sd2hzvqZTQ8BhKQ5ceJKMxV2WX/
+ 1q8yFum5G7pePdrwepXvVq0CafsLv0bt7lmG+/gan57L/uDzYaFG5UmRvVu25hKxEBqR
+ wnVA==
+X-Gm-Message-State: ACrzQf2Rz4hoLDlCyy6MaxpVyuAVobWaNharuY+pluEK0PlWP9mLxKxF
+ QcAlJVjIv20yv3ZlagJcBnmz4MNkSoM=
+X-Google-Smtp-Source: AMsMyM7ppzsZcoARlkJLrO4AmrUEpcCeckK196NJyptQ2fJpOnHhTd7WcqVnBj4I/hijeRNIlN+RwQ==
+X-Received: by 2002:adf:f7d2:0:b0:22e:3ca4:a657 with SMTP id
+ a18-20020adff7d2000000b0022e3ca4a657mr2380454wrq.177.1665872663003; 
+ Sat, 15 Oct 2022 15:24:23 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
+ [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
+ bl13-20020adfe24d000000b00228de351fc0sm4922605wrb.38.2022.10.15.15.24.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 15 Oct 2022 15:24:22 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Oct 2022 00:14:28 +0200
-Message-ID: <CAPi7W828RqJOB3wUx3y68PFHE+M+pt5Ohck+-E-YzPim-C54eQ@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 16 Oct 2022 00:24:20 +0200
+Message-Id: <20221015222420.165934-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=JNCzIejEOFkYRhepo3gOJFZ0dDLD8LsCaOaBdlGSGBc=;
- b=n210qQxAEWYtcWm2N+1dBVxnAfFVozJNHB9uKNDgyY/N8xOaKCdCbEJo7gycgeithj
- em3WY/QvUUd2jvV2MRrPmpvpoHCAmWIA7xjkMNo5fFFT4OadgwBhmpOzAaTo782ScHaZ
- U0saBbRILUHxHI2jAY2GHLY2TevSu1LFi0x9/zZNYIdidMy0RR7vGkWgmfZ2GzkYw35d
- 1XM0MnQWAr9NlblEFitf1JIRXDdJMIRRSb1rxZwQWsnxX3k/aD6uS0x/RRYcpgAVlwns
- +0apGhsD2x4TIenc4W9CQJGCAGl2jfVWVux7S5f+zBqp7DxUhNOhufbO7F571GFo2noN
- Oayw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=n8OHapATY1agwnBADkqa1OYQPmxTEAQulbFIND0fReE=;
+ b=GsXQxDHqaURW0cV9ZnainJQwHS03gHEPwKbRRI24FNvFgTYDBo8DEyOPgKQoTPKBN7
+ cqzvhzGZZ2AOHWmVZaC/2NRF2R7QBrD8Gg6ybby4gkPrpYVv2KxZol6sXyXnDz5cDRC6
+ kdihNXX9agZ/TuYLHIQzFGXoUGmoli3LnLJegDFCkhiTcjltAKgBS3ZwVc8whGZ6QCnR
+ hBq0ZgdzEoOlnAsEdbG5FEMfl6WjNpbhy2LZNEZTRmSNH9fy0kiFOKgnRdLcYIuMI3mn
+ ZQmWZGw0Q5COBG9U+rEgVM06JGfrpzUJkvqBJDeAHY9cZnqWR+GIrebvF2vF7C3rbOoT
+ fILg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=n210qQxA
-Subject: Re: [Buildroot] [PATCH 1/1] package/bearssl: disable parallel build
+ header.a=rsa-sha256 header.s=20210112 header.b=GsXQxDHq
+Subject: [Buildroot] [PATCH 1/1] package/lrzip: security bump to version
+ 0.651
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,130 +94,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============3643157622266401369=="
+Cc: Sam Lancia <sam@gpsm.co.uk>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3643157622266401369==
-Content-Type: multipart/alternative; boundary="00000000000092a4fb05eb1a1140"
+Fix CVE-2022-26291: lrzip v0.641 was discovered to contain a multiple
+concurrency use-after-free between the functions zpaq_decompress_buf()
+and clear_rulist(). This vulnerability allows attackers to cause a
+Denial of Service (DoS) via a crafted Irz file.
 
---00000000000092a4fb05eb1a1140
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+https://github.com/ckolivas/lrzip/blob/v0.651/WHATS-NEW
 
-Hi James,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/lrzip/lrzip.hash | 2 +-
+ package/lrzip/lrzip.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Le sam. 15 oct. 2022 =C3=A0 02:58, James Hilliard <james.hilliard1@gmail.co=
-m> a
-=C3=A9crit :
-
-> The bearssl package is not compatible with parallel builds.
->
-
-bearssl was building perfectly fine up until now and it seems there are a
-lot of packages that are affected by parallel build issues (e.g. dmraid,
-musepack, slang, etc).
-Did we change something recently on the autobuilders?
-
-
->
-> Fixes:
->  -
-> http://autobuild.buildroot.net/results/5e1/5e1b72db206b2d17fa5ce378a70fdc=
-2f3f5bf773
->
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/bearssl/bearssl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/bearssl/bearssl.mk b/package/bearssl/bearssl.mk
-> index ff5f4e87b7..c2a5760af5 100644
-> --- a/package/bearssl/bearssl.mk
-> +++ b/package/bearssl/bearssl.mk
-> @@ -24,7 +24,7 @@ BEARSSL_TARGETS +=3D lib
->  endif
->
->  define BEARSSL_BUILD_CMDS
-> -       $(TARGET_MAKE_ENV) $(MAKE) $(BEARSSL_MAKE_OPTS) -C $(@D) \
-> +       $(TARGET_MAKE_ENV) $(MAKE1) $(BEARSSL_MAKE_OPTS) -C $(@D) \
->                 $(BEARSSL_TARGETS)
->  endef
->
-> --
-> 2.34.1
->
-> Best Regards,
-
-Fabrice
-
---00000000000092a4fb05eb1a1140
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi James,<br></div><br><div class=3D"gmai=
-l_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0sam. 15 oct. 2022 =
-=C3=A0=C2=A002:58, James Hilliard &lt;<a href=3D"mailto:james.hilliard1@gma=
-il.com">james.hilliard1@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blo=
-ckquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left=
-:1px solid rgb(204,204,204);padding-left:1ex">The bearssl package is not co=
-mpatible with parallel builds.<br></blockquote><div><br></div><div>bearssl =
-was building perfectly fine up until now and it seems there are a lot of pa=
-ckages that are affected by parallel build issues (e.g. dmraid, musepack, s=
-lang, etc).</div><div>Did we change something recently on the autobuilders?=
-<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margi=
-n:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex=
-">
-<br>
-Fixes:<br>
-=C2=A0- <a href=3D"http://autobuild.buildroot.net/results/5e1/5e1b72db206b2=
-d17fa5ce378a70fdc2f3f5bf773" rel=3D"noreferrer" target=3D"_blank">http://au=
-tobuild.buildroot.net/results/5e1/5e1b72db206b2d17fa5ce378a70fdc2f3f5bf773<=
-/a><br>
-<br>
-Signed-off-by: James Hilliard &lt;<a href=3D"mailto:james.hilliard1@gmail.c=
-om" target=3D"_blank">james.hilliard1@gmail.com</a>&gt;<br>
----<br>
-=C2=A0package/bearssl/<a href=3D"http://bearssl.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">bearssl.mk</a> | 2 +-<br>
-=C2=A01 file changed, 1 insertion(+), 1 deletion(-)<br>
-<br>
-diff --git a/package/bearssl/<a href=3D"http://bearssl.mk" rel=3D"noreferre=
-r" target=3D"_blank">bearssl.mk</a> b/package/bearssl/<a href=3D"http://bea=
-rssl.mk" rel=3D"noreferrer" target=3D"_blank">bearssl.mk</a><br>
-index ff5f4e87b7..c2a5760af5 100644<br>
---- a/package/bearssl/<a href=3D"http://bearssl.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">bearssl.mk</a><br>
-+++ b/package/bearssl/<a href=3D"http://bearssl.mk" rel=3D"noreferrer" targ=
-et=3D"_blank">bearssl.mk</a><br>
-@@ -24,7 +24,7 @@ BEARSSL_TARGETS +=3D lib<br>
-=C2=A0endif<br>
-<br>
-=C2=A0define BEARSSL_BUILD_CMDS<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) $(MAKE) $(BEARSSL_MAKE_OPTS)=
- -C $(@D) \<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) $(MAKE1) $(BEARSSL_MAKE_OPTS=
-) -C $(@D) \<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 $(BEARSSL_TARGETS)<=
-br>
-=C2=A0endef<br>
-<br>
--- <br>
-2.34.1<br><br></blockquote><div>Best Regards,</div><div><br></div><div>Fabr=
-ice <br></div></div></div>
-
---00000000000092a4fb05eb1a1140--
-
---===============3643157622266401369==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/lrzip/lrzip.hash b/package/lrzip/lrzip.hash
+index 19295383c3..cb03ff07cc 100644
+--- a/package/lrzip/lrzip.hash
++++ b/package/lrzip/lrzip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  9b6b4bb1ae76dafbaab96ec9d50d41af5fed45a6c4f2e06feea828c2cd8025c0  lrzip-0.641.tar.gz
++sha256  48bd8decb097c1596c9b3777959cd3e332819434ed77a2823e65aa436f1602f9  lrzip-0.651.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/lrzip/lrzip.mk b/package/lrzip/lrzip.mk
+index 27d9fde204..55f28e3212 100644
+--- a/package/lrzip/lrzip.mk
++++ b/package/lrzip/lrzip.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-LRZIP_VERSION = 0.641
+-LRZIP_SITE = $(call github,ckolivas,lrzip,v$(LRZIP_VERSION))
++LRZIP_VERSION = 0.651
++LRZIP_SOURCE = lrzip-$(LRZIP_VERSION).tar.xz
++LRZIP_SITE = http://ck.kolivas.org/apps/lrzip
+ LRZIP_AUTORECONF = YES
+ LRZIP_LICENSE = GPL-2.0+
+ LRZIP_LICENSE_FILES = COPYING
+-- 
+2.35.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3643157622266401369==--
