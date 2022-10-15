@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C742C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C3A7C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:38:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E988D81B52;
-	Sat, 15 Oct 2022 15:37:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E988D81B52
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF50441522;
+	Sat, 15 Oct 2022 15:38:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF50441522
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hREhvamOTWDq; Sat, 15 Oct 2022 15:37:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id e2lokVMel_Ag; Sat, 15 Oct 2022 15:37:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 078F881AF3;
-	Sat, 15 Oct 2022 15:37:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 078F881AF3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1EF321BF5DE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9046C414CD;
+	Sat, 15 Oct 2022 15:37:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9046C414CD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 334161BF962
  for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:37:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE97F60BB2
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:37:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE97F60BB2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B035414CC
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B035414CC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gVliM_AShrbw for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FnnK3FsMjNJu for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 15:37:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DC6E960BBB
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9739410DB
  for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC6E960BBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9739410DB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAE3F86DB7; Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
+ id D5D4086DB9; Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 17:30:14 +0200
+Date: Sat, 15 Oct 2022 17:31:59 +0200
 X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 180f2cdffce411a3c84888d667b514739e8fbcbd
-X-Git-Newrev: 956de5414111988fb2ea6ade373022b5a83baca7
+X-Git-Oldrev: 956de5414111988fb2ea6ade373022b5a83baca7
+X-Git-Newrev: 3223b8f5c1285516f088371888ed0315e3da52ab
 X-Patchwork-Hint: ignore
-Message-Id: <20221015153717.CAE3F86DB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/libmdbx: bump
- version to 0.11.12
+Message-Id: <20221015153717.D5D4086DB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/bind: bump
+ version to 9.16.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,79 +58,48 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8597934389359044775=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8597934389359044775==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=956de5414111988fb2ea6ade373022b5a83baca7
+commit: https://git.buildroot.net/buildroot/commit/?id=3223b8f5c1285516f088371888ed0315e3da52ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-This is stable bugfix release of libmdbx. So it is reasonable to backport
-this patch to all applicable releases/branches of Buildroot.
-
-Release notes for v0.11.12
---------------------------
-
-Fixes:
-
-  - Fixed static assertion failure on platforms where the `off_t` type is wider
-    than corresponding fields of `struct flock` used for file locking (backport).
-    Now _libmdbx_ will use `fcntl64(F_GETLK64/F_SETLK64/F_SETLKW64)` if available.
-  - Fixed assertion check inside `page_retire_ex()` (backport).
-
-Minors:
-
-  - Fixed `-Wint-to-pointer-cast` warnings while casting to `mdbx_tid_t` (backport).
-  - Removed needless `LockFileEx()` inside `mdbx_env_copy()` (backport).
-
-The complete ChangeLog: https://gitflic.ru/project/erthink/libmdbx/blob?file=ChangeLog.md
-
-Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dd2ded3355c01f333c18dc16e7d9a3c496007960)
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8d11c2dbb8fc1899571d6c8991b22b3ca1539c78)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmdbx/libmdbx.hash | 2 +-
- package/libmdbx/libmdbx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index c4d9c8d8ce..79af189633 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
-@@ -1,5 +1,5 @@
- # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
--sha256  d2c81db716a33d007cc75702ecf3c45cfb7c33a2261fbacced6945204ece1b67  libmdbx-amalgamated-0.11.11.tar.xz
-+sha256  dde8f3626509bb764b17c93fe0629389625cb50362502eb1c27ca208342f3894  libmdbx-amalgamated-0.11.12.tar.xz
- 
- # Locally calculated
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index 357b1bac9e..ac1a3a0d6f 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 2c10a0429b..171edc8806 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.16.27/bind-9.16.27.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.16.31/bind-9.16.31.tar.xz.asc
+ # with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
+-sha256  90902aaf104c81019d75d6f8b2f7ec40fcd249406f894b44e4a9c6b5e08bf566  bind-9.16.27.tar.xz
++sha256  8ca2cb6c37b605c70f7a25f0cf8a94d2040e025824db2341b92625efd96e7cfb  bind-9.16.31.tar.xz
+ sha256  daf6f1eddf5983ed664a2d125b619e56e2e93917c19d0d41c7586ea153ba2155  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index bd12f7ad31..5e8d9d5033 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMDBX_VERSION = 0.11.11
-+LIBMDBX_VERSION = 0.11.12
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
- LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-
---===============8597934389359044775==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-BIND_VERSION = 9.16.27
++BIND_VERSION = 9.16.31
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8597934389359044775==--
