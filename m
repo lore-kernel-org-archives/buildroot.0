@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7468DC433FE
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4BECC4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:39:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11E4E81AAC;
-	Sat, 15 Oct 2022 15:39:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11E4E81AAC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 76A6940643;
+	Sat, 15 Oct 2022 15:39:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76A6940643
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2UC6j7DGr3Qe; Sat, 15 Oct 2022 15:39:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9Qg43s-TkVLT; Sat, 15 Oct 2022 15:39:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4EC3381A33;
-	Sat, 15 Oct 2022 15:39:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EC3381A33
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E98D1BF5DE
+	by smtp2.osuosl.org (Postfix) with ESMTP id 85DA640639;
+	Sat, 15 Oct 2022 15:39:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85DA640639
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CF871BF5DE
  for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:38:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C678415A3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 667BE81AAC
  for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:38:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C678415A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 667BE81AAC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ug_yY2RQIHpp for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XdtoNHD81jXP for <buildroot@lists.busybox.net>;
  Sat, 15 Oct 2022 15:38:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9E4914157B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C9FE81AF3
  for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E4914157B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C9FE81AF3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 878DE86DCF; Sat, 15 Oct 2022 15:38:23 +0000 (UTC)
+ id 7A76386DD2; Sat, 15 Oct 2022 15:38:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 17:36:14 +0200
+Date: Sat, 15 Oct 2022 17:31:02 +0200
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 0b74bc5ead7844b639d383a804c6793e1dd48613
-X-Git-Newrev: 444611a9a12dd81635a635a994b4718afcc3cfdd
+X-Git-Oldrev: 6112142aa044cc1648ec32665ca2fafad0a84702
+X-Git-Newrev: 0b74bc5ead7844b639d383a804c6793e1dd48613
 X-Patchwork-Hint: ignore
-Message-Id: <20221015153823.878DE86DCF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/iwd: no
- autoreconfigure
+Message-Id: <20221015153823.7A76386DD2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/bind: security
+ bump to version 9.16.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +63,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=444611a9a12dd81635a635a994b4718afcc3cfdd
+commit: https://git.buildroot.net/buildroot/commit/?id=0b74bc5ead7844b639d383a804c6793e1dd48613
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-Since commit ff0d53405157 (package/iwd: bump version to 1.19), we are no
-longer patching configure.ac, so autoreconfigure isn't needed anymore.
+- Fix memory leak in EdDSA verify processing. (CVE-2022-38178)
+- Fix memory leak in ECDSA verify processing. (CVE-2022-38177)
+- Fix serve-stale crash that could happen when
+  stale-answer-client-timeout was set to 0 and there was a stale CNAME
+  in the cache for an incoming query. (CVE-2022-3080)
+- Prevent excessive resource use while processing large delegations.
+  (CVE-2022-2795)
 
-Signed-off-by: Daniel Lang <d.lang@abatec.at>
-[yann.morin.1998@free.fr: reword with reference to ff0d53405157]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1db79dffcae63dbed021143203f1908f3f7db33f)
+https://gitlab.isc.org/isc-projects/bind9/-/blob/v9_16_33/CHANGES
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8c31f3b50f7c41f4e79b57a4ff4a1e430367bc63)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iwd/iwd.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index fc10c5f1d4..d179e46ebf 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -12,8 +12,6 @@ IWD_LICENSE_FILES = COPYING
- IWD_CPE_ID_VENDOR = intel
- IWD_CPE_ID_PRODUCT = inet_wireless_daemon
- IWD_SELINUX_MODULES = networkmanager
--# We're patching configure.ac
--IWD_AUTORECONF = YES
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 171edc8806..d41a9bbc5e 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.16.31/bind-9.16.31.tar.xz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.16.33/bind-9.16.33.tar.xz.asc
+ # with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
+-sha256  8ca2cb6c37b605c70f7a25f0cf8a94d2040e025824db2341b92625efd96e7cfb  bind-9.16.31.tar.xz
++sha256  ec4fbea4b2e368d1824971509e33fa159224ad14b436034c6bcd46104c328d91  bind-9.16.33.tar.xz
+ sha256  daf6f1eddf5983ed664a2d125b619e56e2e93917c19d0d41c7586ea153ba2155  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index e5bf2be318..2f83a6276e 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- IWD_CONF_OPTS = \
- 	--disable-manual-pages \
+-BIND_VERSION = 9.16.31
++BIND_VERSION = 9.16.33
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
