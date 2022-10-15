@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 039E6C4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B982CC433FE
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 955414063E;
-	Sat, 15 Oct 2022 15:38:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 955414063E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5772E41516;
+	Sat, 15 Oct 2022 15:38:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5772E41516
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OpJuQs1uHR9r; Sat, 15 Oct 2022 15:38:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xdTKA4RCgw5g; Sat, 15 Oct 2022 15:38:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BBB104061F;
-	Sat, 15 Oct 2022 15:38:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBB104061F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 72F821BF962
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:37:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3215D414E5;
+	Sat, 15 Oct 2022 15:38:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3215D414E5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D7631BF962
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D02164012B
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:37:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D02164012B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 459BE60BB2
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:38:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 459BE60BB2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9d33pUMP6inj for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 15:37:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 522IGx957FHb for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 15:38:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 01B8C40643
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01B8C40643
+ by smtp3.osuosl.org (Postfix) with ESMTP id 758B4606F5
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:38:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 758B4606F5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E193486DB5; Sat, 15 Oct 2022 15:37:17 +0000 (UTC)
+ id 658BF86DD0; Sat, 15 Oct 2022 15:38:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 17:32:06 +0200
-X-Git-Refname: refs/heads/2022.02.x
-X-Git-Oldrev: 3223b8f5c1285516f088371888ed0315e3da52ab
-X-Git-Newrev: 66a3f84b573a710ba9384121812f14091e01ca08
+Date: Sat, 15 Oct 2022 17:29:31 +0200
+X-Git-Refname: refs/heads/2022.08.x
+X-Git-Oldrev: 406d740c8a1e87eec8badbc0c60d7fac0d61ef93
+X-Git-Newrev: 0777bd794d6dac764e5f0fe6b49dc5f6bd4850f0
 X-Patchwork-Hint: ignore
-Message-Id: <20221015153717.E193486DB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.02.x] package/bind: security
- bump to version 9.16.33
+Message-Id: <20221015153823.658BF86DD0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/gnutls: bump to
+ version 3.7.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66a3f84b573a710ba9384121812f14091e01ca08
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0777bd794d6dac764e5f0fe6b49dc5f6bd4850f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-- Fix memory leak in EdDSA verify processing. (CVE-2022-38178)
-- Fix memory leak in ECDSA verify processing. (CVE-2022-38177)
-- Fix serve-stale crash that could happen when
-  stale-answer-client-timeout was set to 0 and there was a stale CNAME
-  in the cache for an incoming query. (CVE-2022-3080)
-- Prevent excessive resource use while processing large delegations.
-  (CVE-2022-2795)
+This is a bug fix and enhancement release on the 3.7.x branch.
 
-https://gitlab.isc.org/isc-projects/bind9/-/blob/v9_16_33/CHANGES
+https://lists.gnupg.org/pipermail/gnutls-help/2022-September/004765.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8c31f3b50f7c41f4e79b57a4ff4a1e430367bc63)
+(cherry picked from commit 2acba99893cbe76926229f00e333b444a5570c6d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 171edc8806..d41a9bbc5e 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.16.31/bind-9.16.31.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.16.33/bind-9.16.33.tar.xz.asc
- # with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
--sha256  8ca2cb6c37b605c70f7a25f0cf8a94d2040e025824db2341b92625efd96e7cfb  bind-9.16.31.tar.xz
-+sha256  ec4fbea4b2e368d1824971509e33fa159224ad14b436034c6bcd46104c328d91  bind-9.16.33.tar.xz
- sha256  daf6f1eddf5983ed664a2d125b619e56e2e93917c19d0d41c7586ea153ba2155  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 5e8d9d5033..cfacf0e56b 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 46dd99291c..303f1351e0 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.7.tar.xz.sig
+-sha256  be9143d0d58eab64dba9b77114aaafac529b6c0d7e81de6bdf1c9b59027d2106  gnutls-3.7.7.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.8.tar.xz.sig
++sha256  c58ad39af0670efe6a8aee5e3a8b2331a1200418b64b7c51977fb396d4617114  gnutls-3.7.8.tar.xz
+ # Locally calculated
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 56dae4c6b7..6e2cc501ef 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
  
--BIND_VERSION = 9.16.31
-+BIND_VERSION = 9.16.33
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.7
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
