@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96959C433FE
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8FF5C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 15:26:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 429A860BE6;
-	Sat, 15 Oct 2022 15:26:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 429A860BE6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 953BE60BF6;
+	Sat, 15 Oct 2022 15:26:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 953BE60BF6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L7JnNqhHT0Sm; Sat, 15 Oct 2022 15:26:23 +0000 (UTC)
+	with ESMTP id ycffpkEVnQa7; Sat, 15 Oct 2022 15:26:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7143360BD5;
-	Sat, 15 Oct 2022 15:26:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7143360BD5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 07B551BF5DE
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6ABE60C13;
+	Sat, 15 Oct 2022 15:26:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6ABE60C13
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 258721BF962
  for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:26:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D767981ADE
+ by smtp3.osuosl.org (Postfix) with ESMTP id F35CB60BDF
  for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 15:26:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D767981ADE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F35CB60BDF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LOUqq3Q_ZP7Z for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OLPWyDr4KAdr for <buildroot@lists.busybox.net>;
  Sat, 15 Oct 2022 15:26:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1077C81ABB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E49760BB2
  for <buildroot@buildroot.org>; Sat, 15 Oct 2022 15:26:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1077C81ABB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E49760BB2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEA3B86D80; Sat, 15 Oct 2022 15:26:19 +0000 (UTC)
+ id 1A0AD86D82; Sat, 15 Oct 2022 15:26:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 17:23:15 +0200
+Date: Sat, 15 Oct 2022 17:23:59 +0200
 X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: 281f923449594506058e7e418fd3a5d5a49579cd
-X-Git-Newrev: 03d8b05c12642368c4b0f9241882e2c536799a06
+X-Git-Oldrev: 15547176843494c60abb0cbb60000cda3f52ba77
+X-Git-Newrev: 616b1d017a5347b32e421d4e76ae8a2b14877000
 X-Patchwork-Hint: ignore
-Message-Id: <20221015152619.EEA3B86D80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/qdecoder: add
- QDECODER_CPE_ID_VENDOR
+Message-Id: <20221015152620.1A0AD86D82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.08.x] package/timescaledb: add
+ TIMESCALEDB_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03d8b05c12642368c4b0f9241882e2c536799a06
+commit: https://git.buildroot.net/buildroot/commit/?id=616b1d017a5347b32e421d4e76ae8a2b14877000
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
 
-cpe:2.3:a:qdecoder_project:qdecoder is a valid CPE identifier for this
+cpe:2.3:a:timescale:timescaledb is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aqdecoder_project%3Aqdecoder
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atimescale%3Atimescaledb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d95faeea442796d0f79cae2bc666824955a668fe)
+(cherry picked from commit 6a184841bd293fd85c5691382da13cbd2068e798)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qdecoder/qdecoder.mk | 1 +
+ package/timescaledb/timescaledb.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
-index 05ee657131..c465617e26 100644
---- a/package/qdecoder/qdecoder.mk
-+++ b/package/qdecoder/qdecoder.mk
-@@ -8,6 +8,7 @@ QDECODER_VERSION = 12.1.0
- QDECODER_SITE = $(call github,wolkykim,qdecoder,v$(QDECODER_VERSION))
- QDECODER_LICENSE = BSD-2-Clause
- QDECODER_LICENSE_FILES = COPYING
-+QDECODER_CPE_ID_VENDOR = qdecoder_project
- QDECODER_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 0268712399..02f7602b4c 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -8,6 +8,7 @@ TIMESCALEDB_VERSION = 2.7.2
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
++TIMESCALEDB_CPE_ID_VENDOR = timescale
  
- QDECODER_INSTALL_STAGING = YES
+ TIMESCALEDB_DEPENDENCIES = postgresql
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
