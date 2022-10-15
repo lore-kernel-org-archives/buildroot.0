@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10E7CC4332F
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 13:06:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28824C4332F
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 13:07:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A785F82446;
-	Sat, 15 Oct 2022 13:06:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A785F82446
+	by smtp3.osuosl.org (Postfix) with ESMTP id B587060B77;
+	Sat, 15 Oct 2022 13:07:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B587060B77
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GuD-jjMqQ0DD; Sat, 15 Oct 2022 13:07:12 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C6C6608A5;
+	Sat, 15 Oct 2022 13:07:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C6C6608A5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 158FB1BF5F5
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 13:07:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E52C381CDB
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 13:07:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E52C381CDB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ak931WRsWsZy; Sat, 15 Oct 2022 13:06:18 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2B3C82423;
-	Sat, 15 Oct 2022 13:06:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2B3C82423
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 324AD1BF962
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 13:06:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EA3940522
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 13:06:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EA3940522
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Xk3oYAEEuYDU for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 13:06:03 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L8SOqiJTaqIw for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 13:07:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A9DA40125
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 13:06:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A9DA40125
+ by smtp1.osuosl.org (Postfix) with ESMTP id BCCC4813B4
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 13:07:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCCC4813B4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 07032866F5; Sat, 15 Oct 2022 13:06:03 +0000 (UTC)
+ id ACFAC866FA; Sat, 15 Oct 2022 13:07:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 14:56:19 +0200
-X-Git-Refname: refs/heads/2022.08.x
-X-Git-Oldrev: c45cbea560280327a4667d166e8f0cd709a4c55d
-X-Git-Newrev: c7531673a0f8026574e797cd6d43251bca48dfa8
+Date: Sat, 15 Oct 2022 15:01:09 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: 75368d47446534a1cd8f0d932882f61df9d35eb3
+X-Git-Newrev: 2b8b8214f262d218d219e6bb190c45fb669fbe00
 X-Patchwork-Hint: ignore
-Message-Id: <20221015130603.07032866F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2022.08.x] package/rtl8189es: fix
+Message-Id: <20221015130708.ACFAC866FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/rtl8189es: fix
  build failure due to wrong endianness
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7531673a0f8026574e797cd6d43251bca48dfa8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2b8b8214f262d218d219e6bb190c45fb669fbe00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
 At the moment rtl8189es module has -DCONFIG_LITTLE_ENDIAN hardcoded and
 there is no way to override it. So to do this let's add a patch that is
