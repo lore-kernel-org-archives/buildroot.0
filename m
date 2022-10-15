@@ -1,74 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BB1EC433FE
-	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 06:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A184C433FE
+	for <buildroot@archiver.kernel.org>; Sat, 15 Oct 2022 08:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4341406E0;
-	Sat, 15 Oct 2022 06:04:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4341406E0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53E30404BA;
+	Sat, 15 Oct 2022 08:11:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53E30404BA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BheR9EQYrssP; Sat, 15 Oct 2022 06:04:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yul1MV0_oxx5; Sat, 15 Oct 2022 08:11:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6544C404A6;
-	Sat, 15 Oct 2022 06:04:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6544C404A6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48E9440494;
+	Sat, 15 Oct 2022 08:11:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48E9440494
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5BADA1BF836
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 06:04:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 82CC91BF383
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 08:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3552A404A6
- for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 06:04:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3552A404A6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59177410E0
+ for <buildroot@lists.busybox.net>; Sat, 15 Oct 2022 08:11:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59177410E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id N2cNwlUG2Hqj for <buildroot@lists.busybox.net>;
- Sat, 15 Oct 2022 06:04:23 +0000 (UTC)
+ with ESMTP id 0WP4tLrX6qyU for <buildroot@lists.busybox.net>;
+ Sat, 15 Oct 2022 08:11:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBA8C40324
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com
- [209.85.208.51])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DBA8C40324
- for <buildroot@buildroot.org>; Sat, 15 Oct 2022 06:04:22 +0000 (UTC)
-Received: by mail-ed1-f51.google.com with SMTP id r14so9414502edc.7
- for <buildroot@buildroot.org>; Fri, 14 Oct 2022 23:04:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EFF0410A7
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5EFF0410A7
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 08:11:35 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id i6so6664636pli.12
+ for <buildroot@buildroot.org>; Sat, 15 Oct 2022 01:11:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=v34Ltq6Yy+6bRSfdqmAPqB9P+0kdwjQoXFOHO63/UZk=;
- b=G4AoqXnvvv7WlaAyybUyK0k/mS9J4+KrbWQ6Zr30VjfnkJL6FYgLSmapJBWfP6x3zx
- ODplsE0NgNBKw3m6+DUZ4TQ4oBb/N7iPq7jjVxR9UakRnAeNQ0Y2S4GeMwuLHgDErFy/
- Sh0jhtMAcGjoWbIoUdpKy/+0rN30pufavMuqJGUq0DiCvv7dg/8+YyfvZFe0ao3LS0Gb
- GnN/qi/jmsQ9iNKRgPrtRKP6AcRw7siMN5UECyqRGn2jHUYHtHUqeSxHZ9zzNAhVbohH
- 11t+7TF+h4Po54RVvulvquGoCd2jiIUTtKrC6YnnRPX8Z2AcLNgiV9Tl0+sozE5ScNqr
- M7Tw==
-X-Gm-Message-State: ACrzQf3jBF0Oet0XkkV/umR2WiC0hjjx7LGHdrp/ASFb8PVUWKlXv0fJ
- 0oPARbBKee6Q9qQlHq21+Eu2gqxSpOg=
-X-Google-Smtp-Source: AMsMyM6INeFZJGZthwjaIGyoX2RhmE3ybYnsQ1fhQEJCtjP6m8W6+LzBDoY6u9DLXyY3/eqTB77G0A==
-X-Received: by 2002:a05:6402:2793:b0:45c:d273:8c18 with SMTP id
- b19-20020a056402279300b0045cd2738c18mr1119508ede.337.1665813860767; 
- Fri, 14 Oct 2022 23:04:20 -0700 (PDT)
-Received: from localhost.localdomain (tmo-082-129.customers.d1-online.com.
- [80.187.82.129]) by smtp.gmail.com with ESMTPSA id
- w16-20020a50fa90000000b004582a37889csm3062258edr.16.2022.10.14.23.04.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 14 Oct 2022 23:04:20 -0700 (PDT)
-From: Thomas Huth <huth@tuxfamily.org>
-To: buildroot@buildroot.org
-Date: Sat, 15 Oct 2022 08:04:11 +0200
-Message-Id: <20221015060411.326933-1-huth@tuxfamily.org>
-X-Mailer: git-send-email 2.37.3
+ bh=t2jzxOkYGHZAk7sdUE5CJzsj0rELy8NESEBFY3XCWcM=;
+ b=3oMBGqJyyil5Q2jTtYDnQ23fyYmPchaptmaYYUVT1AerBZRkCGmstlenH7QoIqljhs
+ UN4cpILqaC4nrbIgyElil6sdF+34epswL2ROkLif7YvaC0BO3GYpxVgYhc9XjxvSAy5w
+ 7IjsUhCDyNMnjBpSCJ1cry7OkBJUw2gaG305G6qMgmhZ75khnrzsc7xIt0hcIPd7TBHo
+ wKQcghuezlNAkh24U74oZvIDlhxqGp3LsURnEoPi6DOPDfNxz2VZF4qFpZck2UEJZ1Uu
+ CymCxsDKQbLol+K8QFsDNgr1eIIDp0qtos/zyZjgwjaLNSUHdX8Eiv0znETeGCerd5cM
+ ibaQ==
+X-Gm-Message-State: ACrzQf3agK1LUq8XGLcudQ+7xwWO9U99GDWeYONu9IWKNLYlSMTS97DR
+ xbDj65+KcpkJlIr72CjbB0ODHc8Y6ijG+lmlMg3wIyJ6veg=
+X-Google-Smtp-Source: AMsMyM5v9R8mukK/YOoFqciVFlHvzbq0agmeaEoOrmVOWdZuw2lpaqsOFnqzMkOhpJwaKadbFvTLakvg3kYjKYeKk/s=
+X-Received: by 2002:a17:902:7598:b0:178:3f96:4ffc with SMTP id
+ j24-20020a170902759800b001783f964ffcmr1864373pll.53.1665821494702; Sat, 15
+ Oct 2022 01:11:34 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/frotz: Add a missing dependency to the
- Makefile to fix build problems
+References: <CAMdwsN--va3eFthe39JypnPWJtkXKJdN_HdMChHS8d=RoneJbQ@mail.gmail.com>
+ <ede6e1e7-000e-da1a-e7af-39cc4a0a9e42@theobroma-systems.com>
+In-Reply-To: <ede6e1e7-000e-da1a-e7af-39cc4a0a9e42@theobroma-systems.com>
+From: Jesse Van Gavere <jesseevg@gmail.com>
+Date: Sat, 15 Oct 2022 10:11:22 +0200
+Message-ID: <CAMdwsN--yUCczL6LavYzTDMKk_wtY4QA8femjOUX6tQdU2vF1w@mail.gmail.com>
+To: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=t2jzxOkYGHZAk7sdUE5CJzsj0rELy8NESEBFY3XCWcM=;
+ b=QDjt/HTR+dCilD+w5GJ6MFVawi9UY0AKX5+J8nOuSw1lJfwbNuBhHm7o56LUW1qBtj
+ L0yYj6DsMwDKmQfcleFb/R5+h1y5B84WsWXRaYClz2Np9Mctr8Y3rIofqWNFf4kyCZOc
+ su/K4PPJq38FtmBLqOS8YMaMnZ4/CKfQh9a3e+wiPLhPK3cDp8sQbclcv04JTmiKWH05
+ 30wfj6uwO6bTxfIaMXofx68YFv0PvVqgbrPIdmggW28h+IrALD5FO1im2crCquxMNYpw
+ REGJEa9hneDHThLCbdR9mkrjDdUyAEaD8LX8CQrLTnbHIJ4M8rX4dVtumZVeC3xHCWOO
+ /gQg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=QDjt/HTR
+Subject: Re: [Buildroot] Changing configuration options of package in
+ another one
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,74 +91,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4700654141487025225=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There are currently some build jobs failing where blorblib is built before
-hash.h has been created. This patch should hopefully fix these issues.
+--===============4700654141487025225==
+Content-Type: multipart/alternative; boundary="00000000000073776b05eb0e4ae8"
 
-Signed-off-by: Thomas Huth <huth@tuxfamily.org>
----
- See e.g. here for a failed build:
- http://autobuild.buildroot.net/results/9cd213ce2d36f797041c7b21044c2b2c223dd546/build-end.log
+--00000000000073776b05eb0e4ae8
+Content-Type: text/plain; charset="UTF-8"
 
- ...0001-Makefile-blorb-lib-needs-hash.h.patch | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/frotz/0001-Makefile-blorb-lib-needs-hash.h.patch
+On Fri, Oct 14, 2022, 14:48 Quentin Schulz <
+quentin.schulz@theobroma-systems.com> wrote:
 
-diff --git a/package/frotz/0001-Makefile-blorb-lib-needs-hash.h.patch b/package/frotz/0001-Makefile-blorb-lib-needs-hash.h.patch
-new file mode 100644
-index 0000000000..3bde10b6ba
---- /dev/null
-+++ b/package/frotz/0001-Makefile-blorb-lib-needs-hash.h.patch
-@@ -0,0 +1,40 @@
-+From cdf0ad4aff2d8937034e02e41a5aadcca320ea18 Mon Sep 17 00:00:00 2001
-+From: Thomas Huth <huth@tuxfamily.org>
-+Date: Fri, 14 Oct 2022 20:29:41 +0200
-+Subject: [PATCH] Makefile: blorb-lib needs hash.h
-+
-+If running "make blorb-lib" on a vanilla source directory, the
-+compilation fails with:
-+
-+ make -C src/blorb
-+ make[1]: Entering directory '/home/thomas/src/frotz/src/blorb'
-+ cc -Wall -std=c99 -O3  -g -D_POSIX_C_SOURCE=200809L -I../common -fPIC
-+  -fpic -o blorblib.o -c blorblib.c
-+ In file included from blorblib.c:11:
-+ ../common/frotz.h:74:10: fatal error: hash.h: No such file or directory
-+    74 | #include "hash.h"
-+       |          ^~~~~~~~
-+ compilation terminated.
-+
-+Looks like we also have to make sure that hash.h is in place before
-+compiling the blorb target, thus add the dependency to the Makefile.
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 1d27b09..3d2bc45 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -461,7 +461,7 @@ $(SDL_LIB): $(COMMON_DEFINES) $(HASH) $(SDL_DIR)
-+ $(DUMB_LIB): $(COMMON_DEFINES) $(HASH)
-+ 	$(MAKE) -C $(DUMB_DIR)
-+ 
-+-$(BLORB_LIB): $(COMMON_DEFINES)
-++$(BLORB_LIB): $(COMMON_DEFINES) $(HASH)
-+ 	$(MAKE) -C $(BLORB_DIR)
-+ 
-+ $(SUB_CLEAN):
-+-- 
-+2.37.3
-+
--- 
-2.37.3
+> Hi Jesse,
+>
+> On 10/13/22 15:06, Jesse Van Gavere wrote:
+> > Hello,
+> >
+> > I'm in a bit of a peculiar situation for which I'm not sure what the
+> > correct solution is.
+> > I'm trying to implement the qt6 remote objects package, this has a
+> > dependency on host-qt6remoteobjects because it needs a host tool from
+> > it to build the target package, however, to build the host package it
+> > needs qt6base network enabled in the host qt6 build, this is by
+> > default turned off as it's not a necessity for the host tools needed
+> > to build the target package.
+> >
+> > So to make it work I've added an enable for the network module to
+> > HOST_QT6BASE_CONF_OPTS but this seems like a bit of a dirty solution,
+> > what should I do here? Manipulate the qt6 host build it in the remote
+> > objects package? Or maybe turn on the network module for the qt6 host
+> > build whenever the target qt6 network module gets enabled?
+> >
+>
+> Not sure I have entirely understood the issue but here's a try anyways :)
+>
+> I would add a build option to the host qt6 for network support in
+> Kconfig, then have your remote objects package depends on this option
+> being selected. If it's not selected, your package won't be selected
+> either, which is what is desired I think?
+>
+> Cheers,
+> Quentin
+
+
+Hello Quentin,
+
+Thank you, that might work yes, I think I could make it a "hidden" kconfig
+option in the qt6 package which is then selected by the remote objects
+package, I'll implement it that way and see how the reception to it is.
+Thanks!
+
+
+Regards,
+Jesse
+
+--00000000000073776b05eb0e4ae8
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div><br><br><div class=3D"gmail_quote"><div dir=3D"ltr" =
+class=3D"gmail_attr">On Fri, Oct 14, 2022, 14:48 Quentin Schulz &lt;<a href=
+=3D"mailto:quentin.schulz@theobroma-systems.com">quentin.schulz@theobroma-s=
+ystems.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hi Jesse=
+,<br>
+<br>
+On 10/13/22 15:06, Jesse Van Gavere wrote:<br>
+&gt; Hello,<br>
+&gt; <br>
+&gt; I&#39;m in a bit of a peculiar situation for which I&#39;m not sure wh=
+at the<br>
+&gt; correct solution is.<br>
+&gt; I&#39;m trying to implement the qt6 remote objects package, this has a=
+<br>
+&gt; dependency on host-qt6remoteobjects because it needs a host tool from<=
+br>
+&gt; it to build the target package, however, to build the host package it<=
+br>
+&gt; needs qt6base network enabled in the host qt6 build, this is by<br>
+&gt; default turned off as it&#39;s not a necessity for the host tools need=
+ed<br>
+&gt; to build the target package.<br>
+&gt; <br>
+&gt; So to make it work I&#39;ve added an enable for the network module to<=
+br>
+&gt; HOST_QT6BASE_CONF_OPTS but this seems like a bit of a dirty solution,<=
+br>
+&gt; what should I do here? Manipulate the qt6 host build it in the remote<=
+br>
+&gt; objects package? Or maybe turn on the network module for the qt6 host<=
+br>
+&gt; build whenever the target qt6 network module gets enabled?<br>
+&gt; <br>
+<br>
+Not sure I have entirely understood the issue but here&#39;s a try anyways =
+:)<br>
+<br>
+I would add a build option to the host qt6 for network support in <br>
+Kconfig, then have your remote objects package depends on this option <br>
+being selected. If it&#39;s not selected, your package won&#39;t be selecte=
+d <br>
+either, which is what is desired I think?<br>
+<br>
+Cheers,<br>
+Quentin</blockquote></div></div><div dir=3D"auto"><br></div><div dir=3D"aut=
+o">Hello Quentin,</div><div dir=3D"auto"><br></div><div dir=3D"auto">Thank =
+you, that might work yes, I think I could make it a &quot;hidden&quot; kcon=
+fig option in the qt6 package which is then selected by the remote objects =
+package, I&#39;ll implement it that way and see how the reception to it is.=
+</div><div dir=3D"auto">Thanks!</div><div dir=3D"auto"><br></div><div dir=
+=3D"auto"><br></div><div dir=3D"auto">Regards,</div><div dir=3D"auto">Jesse=
+</div><div dir=3D"auto"></div></div>
+
+--00000000000073776b05eb0e4ae8--
+
+--===============4700654141487025225==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4700654141487025225==--
