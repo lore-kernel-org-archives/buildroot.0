@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64972C433FE
-	for <buildroot@archiver.kernel.org>; Sun, 16 Oct 2022 21:15:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A463C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 16 Oct 2022 21:27:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2B6260F0F;
-	Sun, 16 Oct 2022 21:15:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2B6260F0F
+	by smtp2.osuosl.org (Postfix) with ESMTP id ED2BB409DB;
+	Sun, 16 Oct 2022 21:27:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED2BB409DB
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 021yykLYDgBC; Sun, 16 Oct 2022 21:27:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 38674409D5;
+	Sun, 16 Oct 2022 21:27:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38674409D5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 45D7A1BF25F
+ for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 21:27:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 203C060EF2
+ for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 21:27:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 203C060EF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MRg15_5qihD9; Sun, 16 Oct 2022 21:15:26 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10AEA60EF2;
-	Sun, 16 Oct 2022 21:15:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10AEA60EF2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5CF721BF3A9
- for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 21:15:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 368A540918
- for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 21:15:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 368A540918
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2cxKYnQCl9lv for <buildroot@lists.busybox.net>;
- Sun, 16 Oct 2022 21:15:22 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YoejPKny7GUb for <buildroot@lists.busybox.net>;
+ Sun, 16 Oct 2022 21:27:16 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEB04408FE
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EEB04408FE
- for <buildroot@buildroot.org>; Sun, 16 Oct 2022 21:15:21 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id bv10so15644069wrb.4
- for <buildroot@buildroot.org>; Sun, 16 Oct 2022 14:15:21 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E734B60E4C
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E734B60E4C
+ for <buildroot@buildroot.org>; Sun, 16 Oct 2022 21:27:15 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id a3so15758382wrt.0
+ for <buildroot@buildroot.org>; Sun, 16 Oct 2022 14:27:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=nj5ypmdywAZHd+aHeiaYzKdwy/2j0q5m+GdYntFL5Xg=;
- b=W3azyK9Grrl9oNvNZEW04jbkLrN/G6kCKpevrDz7gTmylvXbPZHSvN6Xps/t5/NcZQ
- 2YdD5pKUuI9OJfPdUPi4Lief4xXFYW+P0CXVJJExcebKNO+FFpOmMxIjydREg3i7fZ0z
- q5fTDpF1kAuXyMU8wVK/uMNLkWSAx4eT6H3IabO6VAxHTeLx1DtWTO/SmphOvi1m/oB7
- X/WDgaL54Oe56GJaigELUgX4WAhHpZFlWrkE13gvYStX1LTVZE4ec8s+dOnD781CteA/
- PxExjsqPV8u9vBGYp2A2Jw5U3OoGHGZA3la4KKXzrTx0Cg7jqoERPsTnETnyRE37zSjl
- kqGg==
-X-Gm-Message-State: ACrzQf0mf8QGGBLLtyuppnJy+CwRMAnSXbdLZzk/Q0SkSb26nWej/8bJ
- IfvQTma48QNXr1tRNGuonbuoXhvYJkA=
-X-Google-Smtp-Source: AMsMyM4Qi70Jau2M07RrrYngqlPqoacNYiNXx4Zf5UJOPOgsWpi0tvqDl7CMy4rduthX98aoweDSBw==
-X-Received: by 2002:a05:6000:713:b0:232:bd2e:8620 with SMTP id
- bs19-20020a056000071300b00232bd2e8620mr4551430wrb.139.1665954919689; 
- Sun, 16 Oct 2022 14:15:19 -0700 (PDT)
+ bh=KmeKJXuLuU/D+If6TicakHdMvsn4ZCSiZ1XTpZ6OtYo=;
+ b=y+bvfbM9N2X72Xp+eWpVL94o3bC7P2BKKMVtHFJ0tTJQUIJYzN9KqXudnNPmeSNskv
+ 61rZC1PAhD2j4fWiQM/dulEteE8KYuLmPovsNIvZtmM/1ux4r4UJ35yhmCTvYi2jNZ1Q
+ LdNG1nl6CDfhDGk2X9vuylsdfOkRbSZ2ql60TMS+eYQTBTNdMJMnAUL7cuj0LDapGxeS
+ 8Rp9Ee6SIva9Evh8X17cOhPe0tulmTdsMfmTT4ltpN0aWjgOxE+9n0iE8CtnTA2bl7Ix
+ W9pJnHlsfDZsfzgT6JnVUspmedSMBRCBoD/tgUkyzlxCfx8rE8fSDsw74Gs/3Ve15HMf
+ JzZQ==
+X-Gm-Message-State: ACrzQf3DNnr9hwurli4Hs8yC3hIjJ+HQwnsTCHmjbbMOxzhNUVwI5aBE
+ DdNiMNd/Zr7sqovTVSfhxADOqjL3mHo=
+X-Google-Smtp-Source: AMsMyM6VhFjZIgnMt+0kbx9DnQsHqkfmzn5GZica3peLF7lv8FReNtEqmzG/I0EaE8dwLqfBpuOy+Q==
+X-Received: by 2002:a05:6000:154e:b0:230:45ad:fb87 with SMTP id
+ 14-20020a056000154e00b0023045adfb87mr4698273wry.270.1665955633805; 
+ Sun, 16 Oct 2022 14:27:13 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
  [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- c1-20020adfed81000000b00226dba960b4sm7031122wro.3.2022.10.16.14.15.19
+ p14-20020a05600c468e00b003c6f3e5ba42sm3222407wmo.46.2022.10.16.14.27.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 16 Oct 2022 14:15:19 -0700 (PDT)
+ Sun, 16 Oct 2022 14:27:13 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Oct 2022 23:15:17 +0200
-Message-Id: <20221016211517.58308-1-fontaine.fabrice@gmail.com>
+Date: Sun, 16 Oct 2022 23:27:07 +0200
+Message-Id: <20221016212707.315323-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=nj5ypmdywAZHd+aHeiaYzKdwy/2j0q5m+GdYntFL5Xg=;
- b=hrByTSxuER4/uqoc1c6iH6BzGsjlys/pLTU4u6ugkfu97tmzqNSyTasdA3I3g/f2xH
- NO2npbsSgByFzL714fNtkSVHU1+NRXipxif7994OvSq9gjkcX+QxozFKtidGsXHG9zi7
- sVwJg2sPOhZX76aCG7Wu3lgE0aFov48ZWcOU8pttKzSOBsJB0fa98rJH58waaAla9nZD
- BffxRczG2sFLe19FjuU3+WrkZTtZlrB9+Dic11TKyXq+4OtUeyGeXVIVDd23jLY+mCy9
- Acc6rwpIhQUw1iVTTq29rwDhJBGmhBnF3KZyP7kzM1O6jTHCnT6uCi9F+9kiQihf0o4m
- psBQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=KmeKJXuLuU/D+If6TicakHdMvsn4ZCSiZ1XTpZ6OtYo=;
+ b=S9YdTVdKG8cEgmMCKPVqnxPlJklsDIpYkI0sTkQj4wXc0ZfS+/T8UW+olQfUOtF45h
+ LIsBumB0qQLYC2nUiUYWYAep8i/VSaIZjbO7V3cDzssoX1zIsPleK76q+Ut9cZ4UHepO
+ 0Lc+pgUSmbjErMjhLy8ubffXWccSUk3mZJh6tBJS9U0ewFN/ajhdt29cV0AseAotRSXD
+ vW86T2Jg6XB8vsZwD3+0J4zh/CVtKn6h8jL1SOKhJoXeqx4MmIq/eAHK9qLAu2A9oXh7
+ ++cHx+70YS6V2CNbJM9/3JZ2J9zMGztH1+CeiI/wYfa1RtnnvZLl0dATp5jjZ3TdvSQe
+ qibQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=hrByTSxu
-Subject: [Buildroot] [PATCH 1/1] package/libpfm4: bump to version 4.12.0
+ header.a=rsa-sha256 header.s=20210112 header.b=S9YdTVdK
+Subject: [Buildroot] [PATCH 1/1] package/ksmbd-tools: bump to version 3.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,64 +99,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Major updates:
- - Add IBM Power10 core PMU support
- - Add Intel IcelakeX core PMU support
- - Add Intel SapphireRapid core PMU support
- - Add Intel SapphireRapid RAPL PMU support
- - Update Intel Icelake RAPL PMU support
- - Add support HiSilicon Kunpeng uncore PMUs
- - Add support HiSilicon Kunpeng core PMU
- - Remove arm_fujitsu_a64fx_support for ARM(32 bit)
- - Update Intel Skylake event table
- - Add Intel PERF_METRICS event support for Icelake
- - Add support for ARM Neoverse N2 core PMU
- - Add ARM SPE events for Neoverse N1 core PMU
- - Add cgroup-switches software event
- - Add Intel Tigerlake and Rocketlake core PMU support
- - Add AMD64 Fam19h Zen3 L3 PMU support
- - Add AMD64 Fam17h Zen2 RAPL support
- - Add AMD64 Fam19h Zen3 core PMU support
- - Add RAPL for AMD64 Fam19h Zen3 processor
- - Update ARM N1 event table
- - Update AMD Fam17h Zen2 event table
- - s390: Update counter definition for IBM z16
-
-https://perfmon2.sourceforge.net/
+https://github.com/cifsd-team/ksmbd-tools/releases/tag/3.4.6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libpfm4/libpfm4.hash | 6 +++---
- package/libpfm4/libpfm4.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ksmbd-tools/ksmbd-tools.hash | 2 +-
+ package/ksmbd-tools/ksmbd-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpfm4/libpfm4.hash b/package/libpfm4/libpfm4.hash
-index bdc7806a7c..42740adb1e 100644
---- a/package/libpfm4/libpfm4.hash
-+++ b/package/libpfm4/libpfm4.hash
-@@ -1,6 +1,6 @@
- # From http://sourceforge.net/projects/perfmon2/files/libpfm4/:
--sha1  112bced9a67d565ff0ce6c2bb90452516d1183e5  libpfm-4.11.0.tar.gz
--md5  4811c1d99b95752b4ba53b89a9389ec3  libpfm-4.11.0.tar.gz
-+sha1  4c61cfb489426d9fff15428cb8536ba0e391c8ac  libpfm-4.12.0.tar.gz
-+md5  9e4f9b89d23171eb9314a948a51b4284  libpfm-4.12.0.tar.gz
+diff --git a/package/ksmbd-tools/ksmbd-tools.hash b/package/ksmbd-tools/ksmbd-tools.hash
+index 589128c189..b31c66bbe7 100644
+--- a/package/ksmbd-tools/ksmbd-tools.hash
++++ b/package/ksmbd-tools/ksmbd-tools.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  5da5f8872bde14b3634c9688d980f68bda28b510268723cc12973eedbab9fecc  libpfm-4.11.0.tar.gz
-+sha256  4b0c1f53f39a61525b69bebf532c68040c1b984d7544a8ae0844b13cd91e1ee4  libpfm-4.12.0.tar.gz
- sha256  beef323d68fc5db9c67b20e8e9de7ccde371d20cdbcdd686804055b18b926d90  COPYING
-diff --git a/package/libpfm4/libpfm4.mk b/package/libpfm4/libpfm4.mk
-index 2144766d96..7165d78cd9 100644
---- a/package/libpfm4/libpfm4.mk
-+++ b/package/libpfm4/libpfm4.mk
+-sha256  c1b9096f37eddaced055dfc90a9ed06ceb9e8ceb608ed46c51ed5a2c901ddc81  ksmbd-tools-3.4.5.tar.gz
++sha256  09ab343e9bf10ddfdd3216f400b19740a391645bf3645fa6f136b8da36306559  ksmbd-tools-3.4.6.tar.gz
+ sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/ksmbd-tools/ksmbd-tools.mk b/package/ksmbd-tools/ksmbd-tools.mk
+index e7f2bf91bc..c4f9c503e6 100644
+--- a/package/ksmbd-tools/ksmbd-tools.mk
++++ b/package/ksmbd-tools/ksmbd-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPFM4_VERSION = 4.11.0
-+LIBPFM4_VERSION = 4.12.0
- LIBPFM4_SOURCE = libpfm-$(LIBPFM4_VERSION).tar.gz
- LIBPFM4_SITE = http://downloads.sourceforge.net/project/perfmon2/libpfm4
- LIBPFM4_LICENSE = libpfm4 license
+-KSMBD_TOOLS_VERSION = 3.4.5
++KSMBD_TOOLS_VERSION = 3.4.6
+ KSMBD_TOOLS_SITE = https://github.com/cifsd-team/ksmbd-tools/releases/download/$(KSMBD_TOOLS_VERSION)
+ KSMBD_TOOLS_LICENSE = GPL-2.0+
+ KSMBD_TOOLS_LICENSE_FILES = COPYING
 -- 
 2.35.1
 
