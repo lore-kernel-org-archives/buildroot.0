@@ -4,86 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEFCFC4332F
-	for <buildroot@archiver.kernel.org>; Sun, 16 Oct 2022 08:06:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA57C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 16 Oct 2022 10:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D41D408ED;
-	Sun, 16 Oct 2022 08:06:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D41D408ED
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9829840518;
+	Sun, 16 Oct 2022 10:43:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9829840518
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wRuNM2xTTCQm; Sun, 16 Oct 2022 08:06:41 +0000 (UTC)
+	with ESMTP id LPGtJRkPZqYT; Sun, 16 Oct 2022 10:43:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8A60B40585;
-	Sun, 16 Oct 2022 08:06:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A60B40585
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7049C1BF28C
- for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 08:06:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D66434017B;
+	Sun, 16 Oct 2022 10:43:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D66434017B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EE201BF591
+ for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 10:43:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49B4C41516
- for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 08:06:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49B4C41516
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1AC304017B
+ for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 10:43:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AC304017B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EtXQWKgpQ6pj for <buildroot@lists.busybox.net>;
- Sun, 16 Oct 2022 08:06:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4Zt-Qhs6WUax for <buildroot@lists.busybox.net>;
+ Sun, 16 Oct 2022 10:43:49 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83A6E410A1
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 83A6E410A1
- for <buildroot@buildroot.org>; Sun, 16 Oct 2022 08:06:36 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id u10so13903633wrq.2
- for <buildroot@buildroot.org>; Sun, 16 Oct 2022 01:06:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CE86400AC
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
+ [IPv6:2a00:1450:4864:20::230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6CE86400AC
+ for <buildroot@buildroot.org>; Sun, 16 Oct 2022 10:43:49 +0000 (UTC)
+Received: by mail-lj1-x230.google.com with SMTP id b18so10815220ljr.13
+ for <buildroot@buildroot.org>; Sun, 16 Oct 2022 03:43:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=HK4/RDpJ5axu2LqP9aibPSM5t7oEqhWkPACZ9MINfLw=;
- b=WazRhpmsVqYScJOlCUEuaDbvAlhnO2Z+NWZG7Ui4KI4ZODzXOrlO2RUh5av8Y8E2rP
- oEkDslLcemww+zXKNnIeDGqMxtw9iOcdLMNXNFqwUMRWlJVh/MnOnjlU6K77i5L/s8s3
- pWDqcHzlEd/SkK5V1pkIo788bmFDVn3/QEyL5EjvVFPDMhHhmjDEdoz8a/Re5oyDIV7v
- NIenQl2lEba1vSfngBVHsRYbiYg2LCa0cohMkKFZNy1i+TtyzVBuBdLU72/aE726BH6Q
- wR+ybuxXZvWlI/ae2jknivdfBhUC5dr0wfVbAisWJ67WWatfS1v/5cFBDf0HB7ISBsgi
- lsFg==
-X-Gm-Message-State: ACrzQf369RBRw4wh9nTRP1LAiLDvWwNoHh13P086x86g0nIlT+I/CWvt
- 2Dv7TlKlS9ZXq5TQ7Oc5hpFrCb9g2wsW4cbz
-X-Google-Smtp-Source: AMsMyM7hxkVZhfULsqYpaInuGS/CbTtPWbstpk21TEwvTHYqY3tb80GtC76iZfvP777oc9NZ9b28ZQ==
-X-Received: by 2002:a5d:5552:0:b0:22e:6941:81f8 with SMTP id
- g18-20020a5d5552000000b0022e694181f8mr2973580wrw.521.1665907594626; 
- Sun, 16 Oct 2022 01:06:34 -0700 (PDT)
-Received: from localhost.localdomain
- (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
- by smtp.googlemail.com with ESMTPSA id
- bv16-20020a0560001f1000b0022e6f0d0d7csm6824384wrb.18.2022.10.16.01.06.34
+ h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+ :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=zjc+yJKfjffJSGBZwzYopkHfdT/JB/hxIpaGCzPOYwA=;
+ b=D3UDBp0qMpuB3RplN5mFt2307To6vyDNUiy9CN3Rh+q8MZXcMGq3vqZxtDGtS+9KUs
+ 6lNrW1cmaHo6cTTN6PKY0FdSkKnx3g7F7OYpdGbQ9EjHHA1AwOrFqUINf7tCwefhPRVt
+ txYdFvgLuN5erzLpz2luab66QDdaNvXsOWMiFacuVI3D89nOFHo9E5mJRFSsL8PkPuAR
+ XIVi8u5+2RXi0qEQEKKyM6MEkxzR1OXT47LvKiE/+AySpDepHALNG/K/iULRksQN0y/z
+ 7s/1CuBxqTVe/D47jwHX2rStyvbKtOpYJlXgnW3Y5BQRlC4FEqmhTAWXoOjxOUDU7eSR
+ crsg==
+X-Gm-Message-State: ACrzQf2l+dT+GhrWQcPnzyhd0CCGzeGDpomm04686DFl/cDiCCBZ1Isf
+ haM+e1wNHt+iYWbjcSZuf9Y=
+X-Google-Smtp-Source: AMsMyM5aJYS1RTfF/WXTv/F1Pw3BM2MnppzrTbUUVCq4wHFy23F25X4mWluMMW6eFTZysu8lqMmMRw==
+X-Received: by 2002:a05:651c:1102:b0:26f:c343:f378 with SMTP id
+ e2-20020a05651c110200b0026fc343f378mr2014944ljo.261.1665917027172; 
+ Sun, 16 Oct 2022 03:43:47 -0700 (PDT)
+Received: from gimli ([2001:9b0:215:1000::af3])
+ by smtp.gmail.com with ESMTPSA id
+ d12-20020a056512368c00b00497a41b3a42sm1031782lfs.88.2022.10.16.03.43.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 16 Oct 2022 01:06:34 -0700 (PDT)
-From: Corentin Labbe <clabbe@baylibre.com>
-To: buildroot@buildroot.org
-Date: Sun, 16 Oct 2022 08:06:29 +0000
-Message-Id: <20221016080629.3354482-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+ Sun, 16 Oct 2022 03:43:46 -0700 (PDT)
+From: Joachim Wiberg <troglobit@gmail.com>
+To: Corentin Labbe <clabbe@baylibre.com>, buildroot@buildroot.org
+In-Reply-To: <20221016080629.3354482-1-clabbe@baylibre.com>
+References: <20221016080629.3354482-1-clabbe@baylibre.com>
+Date: Sun, 16 Oct 2022 12:43:45 +0200
+Message-ID: <86ilkkcala.fsf@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=baylibre-com.20210112.gappssmtp.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HK4/RDpJ5axu2LqP9aibPSM5t7oEqhWkPACZ9MINfLw=;
- b=lxg4vCvWOS8Z4XlbSyJ97BwV8cLpeBdpsYfTrifIwA2BFi9FBMX1yod+5KQy8+TQGO
- pI+9b+EOMPDG0wZIDbsjP6D9AujrRe7mRUZlsDjpExFSg9w5+wxBwTlzQ4wx0rAhrSAD
- HzGwnoh358xa0+MRX0/2qpoRSVpPQnyMuLwlQBros5T+bPUKPjFqFWmTv8G6/OEM9maw
- 9EDQ4egdfyKEaXwJ3omeklNDpPT16c17yLiRrdm45EWtLpe9fUFLBpcrCW/51x1QzrMC
- /pyuWukllLIa7kvzFv8yjNSVmPX1C6gdZ4pbskuYM+jA+U4EAMFAJ5uO4Bej8751Rg0g
- H7Bw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=baylibre-com.20210112.gappssmtp.com
- header.i=@baylibre-com.20210112.gappssmtp.com header.a=rsa-sha256
- header.s=20210112 header.b=lxg4vCvW
-Subject: [Buildroot] [PATCH] package/ffmpeg: handle new SDL2 version scheme
+ d=gmail.com; s=20210112;
+ h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=zjc+yJKfjffJSGBZwzYopkHfdT/JB/hxIpaGCzPOYwA=;
+ b=ZwAmD2xe7wq6yyedwtjTbXIuh1cwDKxhlhDbNsJPzZxfAFTJ95fLTCrALdHTlTrq5L
+ T2tl4yjMP1/zK5wnCF05eafXd4A/QYfFPR+xZhjDlxR+YZn1FPQPzgErARzNzg3GeaH/
+ ky43vWagSPEYTOzKurTPjFRveR74YuNxpw80NjaTYrF8QseYh792iPTQrWZ4V8LFLCNq
+ cIZdxzDs4A4LuDhkCK9Rc76SVaj4S9DJuYiQ7yYQRGsTnE83Ew95sjCKkqp4bXXQcXz2
+ kJ0oXjJGZZvI/uiQKCTfc62+u+c2cYOrLB0fCEhLIeE2R8BooVbzCidZCvkThblxDUMh
+ ugLA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=ZwAmD2xe
+Subject: Re: [Buildroot] [PATCH] package/ffmpeg: handle new SDL2 version
+ scheme
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,50 +100,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Current ffmpeg package does not install ffplay.
-The root cause is that ffmpeg configure does not detect SDL2 due to
-version mismatch.
-The patch fixing that is taken from gentoo portage tree.
+On Sun, Oct 16, 2022 at 08:06, Corentin Labbe <clabbe@baylibre.com> wrote:
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- ...peg-4.4.2-libsdl2-new-version-scheme.patch | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/ffmpeg/0005-ffmpeg-4.4.2-libsdl2-new-version-scheme.patch
+> Current ffmpeg package does not install ffplay.  The root cause is
+> that ffmpeg configure does not detect SDL2 due to version mismatch.
+> The patch fixing that is taken from gentoo portage tree.
+>
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 
-diff --git a/package/ffmpeg/0005-ffmpeg-4.4.2-libsdl2-new-version-scheme.patch b/package/ffmpeg/0005-ffmpeg-4.4.2-libsdl2-new-version-scheme.patch
-new file mode 100644
-index 0000000000..b592c2f9b7
---- /dev/null
-+++ b/package/ffmpeg/0005-ffmpeg-4.4.2-libsdl2-new-version-scheme.patch
-@@ -0,0 +1,25 @@
-+https://git.ffmpeg.org/gitweb/ffmpeg.git/commitdiff/839f98ff6719cf2db0cbd88cd787a1b19b9cbf47
-+
-+From: Christopher Degawa <ccom@randomderp.com>
-+Date: Wed, 11 May 2022 15:11:04 -0500
-+Subject: [PATCH] configure: extend SDL check to accept all 2.x versions
-+
-+sdl2 recently changed their versioning, moving the patch level to minor level
-+https://github.com/libsdl-org/SDL/commit/cd7c2f1de7d9e418bb554047d714dd7cacc020ff
-+and have said that they will instead ship sdl3.pc for 3.0.0
-+
-+Fixes ticket 9768
-+
-+Signed-off-by: Christopher Degawa <ccom@randomderp.com>
-+Signed-off-by: Gyan Doshi <ffmpeg@gyani.pro>
-+--- a/configure
-++++ b/configure
-+@@ -6383,7 +6383,7 @@ fi
-+ 
-+ if enabled sdl2; then
-+     SDL2_CONFIG="${cross_prefix}sdl2-config"
-+-    test_pkg_config sdl2 "sdl2 >= 2.0.1 sdl2 < 2.1.0" SDL_events.h SDL_PollEvent
-++    test_pkg_config sdl2 "sdl2 >= 2.0.1 sdl2 < 3.0.0" SDL_events.h SDL_PollEvent
-+     if disabled sdl2 && "${SDL2_CONFIG}" --version > /dev/null 2>&1; then
-+         sdl2_cflags=$("${SDL2_CONFIG}" --cflags)
-+         sdl2_extralibs=$("${SDL2_CONFIG}" --libs)
--- 
-2.25.1
+Reviewed-by: Joachim Wiberg <troglobit@gmail.com>
 
 _______________________________________________
 buildroot mailing list
