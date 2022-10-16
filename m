@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82200C43217
-	for <buildroot@archiver.kernel.org>; Sun, 16 Oct 2022 15:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01577C433FE
+	for <buildroot@archiver.kernel.org>; Sun, 16 Oct 2022 15:04:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F4924085F;
-	Sun, 16 Oct 2022 15:04:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F4924085F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8FCF8416BF;
+	Sun, 16 Oct 2022 15:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FCF8416BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g7SJf-hCsMTd; Sun, 16 Oct 2022 15:04:28 +0000 (UTC)
+	with ESMTP id xmOmHYjOnybs; Sun, 16 Oct 2022 15:04:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F00F840442;
-	Sun, 16 Oct 2022 15:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F00F840442
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A09D51BF2FA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65F604049A;
+	Sun, 16 Oct 2022 15:04:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65F604049A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A7B7B1BF973
  for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 15:04:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B8B460E7E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FF2A408EB
  for <buildroot@lists.busybox.net>; Sun, 16 Oct 2022 15:04:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B8B460E7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FF2A408EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bPv7oEZaBt5l for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gQjmVgXx0oVF for <buildroot@lists.busybox.net>;
  Sun, 16 Oct 2022 15:04:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A250660BF7
+ by smtp2.osuosl.org (Postfix) with ESMTP id BED51405C7
  for <buildroot@buildroot.org>; Sun, 16 Oct 2022 15:04:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A250660BF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BED51405C7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88C2C86709; Sun, 16 Oct 2022 15:04:24 +0000 (UTC)
+ id AB31E86756; Sun, 16 Oct 2022 15:04:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Oct 2022 16:56:58 +0200
+Date: Sun, 16 Oct 2022 16:57:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 716b8c4e7bac4f39b7a2297f39858f5c4bfbcab6
-X-Git-Newrev: df77618b12bfd442e5efd39abd013c3ba88481b8
+X-Git-Oldrev: c81289645f8cf2160bd029e1eec15229c6e13ebd
+X-Git-Newrev: b0696cb6786c20f732dc7bd6a443c8d3b9f50e1e
 X-Patchwork-Hint: ignore
-Message-Id: <20221016150424.88C2C86709@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxml2: security bump to version
- 2.10.3
+Message-Id: <20221016150424.AB31E86756@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gst1-plugins-good: bump version to
+ 1.20.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df77618b12bfd442e5efd39abd013c3ba88481b8
+commit: https://git.buildroot.net/buildroot/commit/?id=b0696cb6786c20f732dc7bd6a443c8d3b9f50e1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- [CVE-2022-40304] Fix dict corruption caused by entity reference cycles
-- [CVE-2022-40303] Fix integer overflows with XML_PARSE_HUGE
-- Fix overflow check in SAX2.c
-
-https://gitlab.gnome.org/GNOME/libxml2/-/tags/v2.10.3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 4d24c60132..00daa21a83 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.10/libxml2-2.10.2.sha256sum
--sha256  d240abe6da9c65cb1900dd9bf3a3501ccf88b3c2a1cb98317d03f272dda5b265  libxml2-2.10.2.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/libxml2/2.10/libxml2-2.10.3.sha256sum
-+sha256  5d2cc3d78bec3dbe212a9d7fa629ada25a7da928af432c93060ff5c17ee28a9c  libxml2-2.10.3.tar.xz
- # License files, locally calculated
- sha256  c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 37a4396cbe..321e8b756b 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 81da41388f..b30c512878 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.20.3.tar.xz.sha256sum
+-sha256  f8f3c206bf5cdabc00953920b47b3575af0ef15e9f871c0b6966f6d0aa5868b7  gst-plugins-good-1.20.3.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.20.4.tar.xz.sha256sum
++sha256  b16130fbe632fa8547c2147a0ef575b0140fb521065c5cb121c72ddbd23b64da  gst-plugins-good-1.20.4.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index de7dcb985d..cc7bab5824 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBXML2_VERSION_MAJOR = 2.10
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).2
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).3
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
- 	http://ftp.gnome.org/pub/gnome/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+-GST1_PLUGINS_GOOD_VERSION = 1.20.3
++GST1_PLUGINS_GOOD_VERSION = 1.20.4
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
