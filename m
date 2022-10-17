@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CE12C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 08:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93121C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 08:39:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1A8D82404;
-	Mon, 17 Oct 2022 08:39:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1A8D82404
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CC1660F3E;
+	Mon, 17 Oct 2022 08:39:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CC1660F3E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M6uiyi6kh2iY; Mon, 17 Oct 2022 08:39:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GBAUjcfp_Qel; Mon, 17 Oct 2022 08:39:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 204E481D0B;
-	Mon, 17 Oct 2022 08:39:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 204E481D0B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B6A811BF982
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7507260BF2;
+	Mon, 17 Oct 2022 08:39:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7507260BF2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BB3851BF983
  for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 923B3812EF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 979E160BD3
  for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 923B3812EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 979E160BD3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YCCpLVrD78gS for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Io7sQgjQT5kI for <buildroot@lists.busybox.net>;
  Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BEAB9812DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABD6960C1A
  for <buildroot@buildroot.org>; Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEAB9812DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABD6960C1A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC17886E13; Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
+ id 996DF86DF9; Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Oct 2022 10:35:37 +0200
+Date: Mon, 17 Oct 2022 10:32:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 529203635159f224a0de1a5f3a9fb11bbba46644
-X-Git-Newrev: 6c33056fff080dd1795bcfb543b87e7b70ac455c
+X-Git-Oldrev: 9883ff708e300b93247b4463dc7dcf1681c32354
+X-Git-Newrev: 42d66f8fc6d4836dc08f0c75c93ce4ed35b13eee
 X-Patchwork-Hint: ignore
-Message-Id: <20221017083837.AC17886E13@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sofia-sip: bump version to 1.13.9
+Message-Id: <20221017083837.996DF86DF9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/mv-ddr-marvell: disable SSP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,41 +62,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c33056fff080dd1795bcfb543b87e7b70ac455c
+commit: https://git.buildroot.net/buildroot/commit/?id=42d66f8fc6d4836dc08f0c75c93ce4ed35b13eee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add a patch to disable SSP. The toolchain enables SSP by default when
+one of BR2_SSP_ options is enabled. But ATF code for the Marvell
+platform does not provide the required low level routines. This leads to
+link time failure.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/3101770000
+https://gitlab.com/buildroot.org/buildroot/-/jobs/3134230006
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sofia-sip/sofia-sip.hash | 2 +-
- package/sofia-sip/sofia-sip.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-Makefile-disable-stack-protection.patch   | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
-index ae2b3e725c..776136bb15 100644
---- a/package/sofia-sip/sofia-sip.hash
-+++ b/package/sofia-sip/sofia-sip.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  ebd006a98a7dff6e7f4d8357c5ebeee1d3bee3ac29ff213a4909e845f230fcbe  sofia-sip-1.13.8-756ab9b5c9.tar.gz
-+sha256  daf75c41408c559c2d58a8fd4d39be4a8ff5144bc1db220d4dbc28deeed6670a  sofia-sip-1.13.9-f6ee306084.tar.gz
- sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
- sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index 80e59057c4..9071d964e4 100644
---- a/package/sofia-sip/sofia-sip.mk
-+++ b/package/sofia-sip/sofia-sip.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SOFIA_SIP_VERSION = 1.13.8
--SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-756ab9b5c9.tar.gz
-+SOFIA_SIP_VERSION = 1.13.9
-+SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION)-f6ee306084.tar.gz
- SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs/sofia-sip
- SOFIA_SIP_INSTALL_STAGING = YES
- SOFIA_SIP_DEPENDENCIES = host-pkgconf
+diff --git a/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch b/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch
+new file mode 100644
+index 0000000000..62b1000727
+--- /dev/null
++++ b/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch
+@@ -0,0 +1,34 @@
++From 53e34e3bff26fcbb7cc14178fa9fc80e7a73d556 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 11 Oct 2022 16:34:44 +0300
++Subject: [PATCH] Makefile: disable stack protection
++
++The Buildroot toolchain might enable stack protection by default. That
++breaks linking because ATF does not provide the required __stack_chk
++routines.
++
++The mv-ddr-marvell Makefile provides no way to add custom CFLAGS. Patch
++Makefile to disable stack protection.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: not applicable; Buildroot specific
++---
++ Makefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Makefile b/Makefile
++index 3f0dd89a7381..feae75cc16e4 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -331,6 +331,7 @@ OBJ_DIR ?= $(MV_DDR_ROOT)
++ CFLAGS = -DMV_DDR_ATF -DCONFIG_DDR4
++ CFLAGS += -Wall -Werror -Os -ffreestanding -mlittle-endian -g -gdwarf-2 -nostdinc
++ CFLAGS += -march=armv8-a -fpie
+++CFLAGS += -fno-stack-protector
++ 
++ # PLATFORM is set in ble/ble.mk
++ ifneq ($(findstring a80x0,$(PLATFORM)),)
++-- 
++2.35.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
