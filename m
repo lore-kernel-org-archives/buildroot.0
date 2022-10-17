@@ -1,55 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 709D1C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 08:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 132C0C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 08:34:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E45E44091C;
-	Mon, 17 Oct 2022 08:20:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E45E44091C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9A35F40A04;
+	Mon, 17 Oct 2022 08:34:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A35F40A04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8I70H7Tue-YU; Mon, 17 Oct 2022 08:20:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1iT3Mkw1Gxt8; Mon, 17 Oct 2022 08:34:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7CC54090E;
-	Mon, 17 Oct 2022 08:20:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7CC54090E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E55A61BF38A
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:20:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 566EE40531;
+	Mon, 17 Oct 2022 08:34:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 566EE40531
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 386651BF38A
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:34:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5EFD60BCF
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:20:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5EFD60BCF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2140E8142B
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:34:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2140E8142B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kOV-zC04Pb4D for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 08:20:46 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C4B860BC0
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2C4B860BC0
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 08:20:46 +0000 (UTC)
-Received: from webmail.serv15.avernis.de (ip6-localhost [IPv6:::1])
- by serv15.avernis.de (Postfix) with ESMTPSA id D498DBDE56BF;
- Mon, 17 Oct 2022 10:20:42 +0200 (CEST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id seFyTYaKREwD for <buildroot@lists.busybox.net>;
+ Mon, 17 Oct 2022 08:34:24 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2A6B81429
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E2A6B81429
+ for <buildroot@busybox.net>; Mon, 17 Oct 2022 08:34:23 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 63F71240004;
+ Mon, 17 Oct 2022 08:34:20 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1okLZe-006MOa-Fo; Mon, 17 Oct 2022 10:34:14 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Baruch Siach via buildroot <buildroot@buildroot.org>
+References: <96728725434424ecdff6a4087126c9d665c877ec.1665496931.git.baruch@tkos.co.il>
+Date: Mon, 17 Oct 2022 10:34:14 +0200
+In-Reply-To: <96728725434424ecdff6a4087126c9d665c877ec.1665496931.git.baruch@tkos.co.il>
+ (Baruch Siach via buildroot's message of "Tue, 11 Oct 2022 17:02:09
+ +0300")
+Message-ID: <87a65uc0hl.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Date: Mon, 17 Oct 2022 08:20:41 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: samuel ammonius <sfammonius@gmail.com>
-In-Reply-To: <mailman.12392.1665991612.43027.buildroot@buildroot.org>
-References: <mailman.12392.1665991612.43027.buildroot@buildroot.org>
-Message-ID: <001c74b1a3b54786f3d62bc18d53af5a@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 0.103.7 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] Help with isolinux: "No DEFAULT or UI configuration
- directive found!"
+Subject: Re: [Buildroot] [PATCH 1/3] boot/arm-trusted-firmware: fix SSP
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,68 +64,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: buildroot@busybox.net, Sergey Matyukevich <geomatsi@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Sam,
+>>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
 
-On 2022-10-17 18:15, samuel ammonius wrote:
-> Hello everybody,
-> 
-> I don't know anything about embedded systems or bootloaders or most of 
-> the
-> stuff involved with buildroot. I wanted to make an installer that could 
-> be
-> burned to a USB to run a graphical app that depends on Qt. I have the
-> dependencies and filesystem all set up, but booting the generated 
-> iso9660
-> image gives me this message:
-> 
-> Booting from DVD/CD...
-> 
-> ISOLINUX 6.03  ETCD Copyright (C) 1994-2014 H. Peter Anvin et al
-> 
-> No DFEAULT or UI configuration directive found!
+ > Commit ccac9a5bbbd ("boot/arm-trusted-firmware: don't force
+ > ENABLE_STACK_PROTECTOR") fixed a build failure but also effectively
+ > disabled SSP entirely for ATF. This is because ENABLE_STACK_PROTECTOR is
+ > set to 0 unconditionally in make_helpers/defaults.mk, overwriting any
+ > environment set value. So we must pass ENABLE_STACK_PROTECTOR in
+ > MAKE_OPTS for it to be effective. But to avoid said build failure we
+ > can't pass ENABLE_STACK_PROTECTOR=0.
 
-Check if you have a syslinux.cfg file where isolinux can find it. The 
-root of the ISO image would be a possible location. This file contains 
-the boot configuration:
+ > Only pass ENABLE_STACK_PROTECTOR when
+ > BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is enabled. Drop SSP_LEVEL value for
+ > the !BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP case which is now unused.
 
-  DEFAULT linux
-   SAY Booting from DVD/CD...
-  LABEL linux
-   KERNEL bzImage
-   APPEND quiet
+ > Cc: Dick Olsson <hi@senzilla.io>
+ > Cc: Sergey Matyukevich <geomatsi@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-See [1] for detailed information.
+Heh, I just spent some time investigating some ATF link failures for
+avenger96_defconfig after we moved to glibc by default (which enables
+SSP support) and got to the same conclusion ;)
 
-This config file is system specific and not supplied by Buildroot. It 
-would be part of your BR2_ROOTFS_OVERLAY or generated from a 
-BR2_ROOTFS_POST_BUILD_SCRIPT.
+Committed, thanks.
 
-You may also need the ldlinux.c32 module (BR2_TARGET_SYSLINUX_C32).
-
-> boot: _
-> 
-> 
-> Typing anything into the "boot" prompt just repeats the same error 
-> message.
-> Does anyone know how this problem could be fixed?
-
-Try entering 'KERNEL <image_name>' (relative to root of boot device) 
-here.
-
-> ---
-> Thanks,
-> Sam
-
-Kind regards,
-Andreas
-
-[1] https://wiki.syslinux.org/wiki/index.php?title=Config
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
