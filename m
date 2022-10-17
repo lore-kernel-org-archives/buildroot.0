@@ -1,51 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11B49C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 08:39:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E576C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 08:40:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4695409FF;
-	Mon, 17 Oct 2022 08:39:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4695409FF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 928AF4097E;
+	Mon, 17 Oct 2022 08:40:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 928AF4097E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zln_-s1wxS_k; Mon, 17 Oct 2022 08:39:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Dji2XHMzaExD; Mon, 17 Oct 2022 08:40:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E23CE4053F;
-	Mon, 17 Oct 2022 08:39:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E23CE4053F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CBE521BF38A
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:38:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C877408F3;
+	Mon, 17 Oct 2022 08:40:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C877408F3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 10F471BF38A
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADC2D812DD
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADC2D812DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id D6DB76070A
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:38:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6DB76070A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rf80SgwVWJad for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 08:38:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Dht4QTMUZ5PF for <buildroot@lists.busybox.net>;
+ Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC758812E4
+ by smtp3.osuosl.org (Postfix) with ESMTP id B506860C2B
  for <buildroot@buildroot.org>; Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC758812E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B506860C2B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD6C186DF8; Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
+ id A34EE86E08; Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Oct 2022 10:36:58 +0200
+Date: Mon, 17 Oct 2022 10:35:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b8230ab648ec33b93ff29a6c1ed5b327d36c7dd
-X-Git-Newrev: 1684cd72b0557444ee80195b60c5ab57ff6b1313
+X-Git-Oldrev: 42d66f8fc6d4836dc08f0c75c93ce4ed35b13eee
+X-Git-Newrev: 529203635159f224a0de1a5f3a9fb11bbba46644
 X-Patchwork-Hint: ignore
-Message-Id: <20221017083837.DD6C186DF8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: security bump version to
- 8.1.11
+Message-Id: <20221017083837.A34EE86E08@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 4.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1684cd72b0557444ee80195b60c5ab57ff6b1313
+commit: https://git.buildroot.net/buildroot/commit/?id=529203635159f224a0de1a5f3a9fb11bbba46644
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-- CVE-2022-31628: http://bugs.php.net/81726
-- CVE-2022-31629: http://bugs.php.net/81727
+Changelog:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;hb=refs/heads/release/4.4
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 5fb373ec11..c4c42a2c7d 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 8669a060d0..c9d7ea7c41 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
 @@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  53477e73e6254dc942b68913a58d815ffdbf6946baf61a1f8ef854de524c27bf  php-8.1.9.tar.xz
-+sha256  3005198d7303f87ab31bc30695de76e8ad62783f806b6ab9744da59fe41cc5bd  php-8.1.11.tar.xz
- 
- # License file
- sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 77584813c3..7136fd9744 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+ # Locally calculated
+-sha256  af419a7f88adbc56c758ab19b4c708afbcae15ef09606b82b855291f6a6faa93  ffmpeg-4.4.2.tar.xz
++sha256  6c5b6c195e61534766a0b5fe16acc919170c883362612816d0a1c7f4f947006e  ffmpeg-4.4.3.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index ced5ce598f..136e3e24ca 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.1.9
-+PHP_VERSION = 8.1.11
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-FFMPEG_VERSION = 4.4.2
++FFMPEG_VERSION = 4.4.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
