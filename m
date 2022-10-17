@@ -4,85 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0885C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 15:17:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7BAAC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 15:17:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3810741764;
-	Mon, 17 Oct 2022 15:17:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3810741764
+	by smtp4.osuosl.org (Postfix) with ESMTP id 905EF417AA;
+	Mon, 17 Oct 2022 15:17:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 905EF417AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ac1fpyQSQSV4; Mon, 17 Oct 2022 15:17:43 +0000 (UTC)
+	with ESMTP id s-Ie1l6mvfOE; Mon, 17 Oct 2022 15:17:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C573A4176A;
-	Mon, 17 Oct 2022 15:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C573A4176A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C77CF1BF2A5
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 15:17:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C773417AC;
+	Mon, 17 Oct 2022 15:17:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C773417AC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 18F771BF2A5
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 15:17:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B007781991
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 15:17:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B007781991
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8EB3404D5
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 15:17:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8EB3404D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EJA2fDbSZqPU for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 15:17:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L5NBMQ2BOBez for <buildroot@lists.busybox.net>;
+ Mon, 17 Oct 2022 15:17:41 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B070B814B3
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B070B814B3
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 15:17:39 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id q9so25811173ejd.0
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 08:17:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EB8C400EF
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9EB8C400EF
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 15:17:41 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id e18so16531327edj.3
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 08:17:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gcD2WqD4jaluztOmOHD7eWGNSEiuWsHhLa5EOhHy5ZQ=;
- b=gBumMhaDYz1IoPIZmLMfmRUjVMI9J/n6TAvvZZXmTANiioqTd7iLEqIeKOTbfM9ULA
- tegCPiFmo/eDStsNzteCG1p4FtcRkXk8YrJzF7QHHwiqGVhuzyO8xwXI/lQxKsotm8Zj
- M0UMc73/Xav7IAfXHLRwC9bwXNft0JPG9RZQsOA7Lq7EjL6xkZN2qvCgstzjmfR1MzJL
- 6YflHieZ4FkLlv9gGrzEx4lzFErvbE6Py49GHnQ+BusIdLmBdr1JqKvrZ+aX9mmvqewL
- NgpXaog7QiGYieINCtZMlVdjdoRdzr6J7/QMMDkERnDNwHwateRL39SnIS0M+izizaOH
- qdMg==
-X-Gm-Message-State: ACrzQf3ZYvg28ETYMTY6yMRPIWb73NWMhsvpq0wmyWUW1la1W+vGZrBi
- Dk9y6omzLpAtq1uYahrk/dTPuTbg2RkQs5UC
-X-Google-Smtp-Source: AMsMyM7+xxyxevMz0Hz8IbinCehf17rFgxK/zfhCmfo08jPy5pukQ6XYFCJBIMj+fGVOo/uQzZ7peg==
-X-Received: by 2002:a17:907:a4c:b0:77b:ba98:d3e with SMTP id
- be12-20020a1709070a4c00b0077bba980d3emr9154096ejc.13.1666019857251; 
- Mon, 17 Oct 2022 08:17:37 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=9ynxSndqj0hBYNl5wUN1ZvQj+Il9/sGuiNMvpNqGmv8=;
+ b=ySprJjntdYr4yoCp429I+SW4wLAjAnAWN+HtYmpAzsgIyDYmDWPVkTXkAHi2KmSQGO
+ 8xQGU69T1B/q8x5yUONFFfOVkg5BfZAkTa42YuayGek0T82Ahpeiwdsr6wx1P4bqaTDG
+ e/s3S2W8UaEuuWL4RfdPhAXnKaQXPdpJdUEELbs+ncjZMjLod85DA8OhP+ZfWwwX19ki
+ yC35XI7hhZk7ryQ5pmcVA2tUpKGw+HnUpALV9SVbnA8zazoSyLy6ukCFFawxGfATv06U
+ x+WxHC1MLvFof1fFMBsYyoz+aYRlW/BrVv/y1saEw9jGi0ollyLn+z9p5FJMNWDYeWGz
+ 1FuA==
+X-Gm-Message-State: ACrzQf3MlY62vLiF4IblebUIDLXno9mO51oIhscp/yMVd0SY6IPOcxzA
+ oc/DHIC//JwY768QBzFWEcMMG2cXla8yFerP
+X-Google-Smtp-Source: AMsMyM4LjIOXbnp2WCLdHEAxLpAuGw6r8wIxAlpPeLQOPcBOzwcPxCT9E1gzb6p73x/z9Tj+Qt3uYg==
+X-Received: by 2002:a05:6402:2802:b0:43a:9098:55a0 with SMTP id
+ h2-20020a056402280200b0043a909855a0mr10559679ede.179.1666019858929; 
+ Mon, 17 Oct 2022 08:17:38 -0700 (PDT)
 Received: from localhost.localdomain ([2a02:2788:1a4:785::9])
  by smtp.gmail.com with ESMTPSA id
- s11-20020a50d48b000000b00458947539desm7471904edi.78.2022.10.17.08.17.35
+ s11-20020a50d48b000000b00458947539desm7471904edi.78.2022.10.17.08.17.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 17 Oct 2022 08:17:36 -0700 (PDT)
+ Mon, 17 Oct 2022 08:17:37 -0700 (PDT)
 X-Google-Original-From: Thomas Perale <thomas.perale@mind.be>
 To: buildroot@buildroot.org
-Date: Mon, 17 Oct 2022 17:17:22 +0200
-Message-Id: <20221017151726.44005-1-thomas.perale@mind.be>
+Date: Mon, 17 Oct 2022 17:17:23 +0200
+Message-Id: <20221017151726.44005-2-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20221017151726.44005-1-thomas.perale@mind.be>
+References: <20221017151726.44005-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=essensium.com; s=google;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gcD2WqD4jaluztOmOHD7eWGNSEiuWsHhLa5EOhHy5ZQ=;
- b=gdrMYqVxTIL2i4ajQ5+TsT03tdmZnoxhYjsgr3Rf1W68GAmq9Cbb1Wtj5mOV4mrp1h
- rJ+IKSDXG8eBw809Vq2XXqO34mrmIE0CK0FD5D7r2oD/Xy8WX5GwJxz2ehcjlRtSqtvq
- J6iLvFx1bBLpPYanznftdshH4wjyWNYpfCxBQBMl51lFfIWUhxB7H0zdzA6/9zadKNDe
- Y+OYFBE+g1dIlzP1k8ghz2ObrYFWYT/bOYQnaLTMknrlj5SiRv0D0kWKkdRPt0XH4/tt
- 8HZ7OtlA08l3+Th+fmd2p6OKpzZL04FIkN0btgD297G58metzyPF7KtMYq7fR+Bo0Qvo
- TyyQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=9ynxSndqj0hBYNl5wUN1ZvQj+Il9/sGuiNMvpNqGmv8=;
+ b=W1ub6aQTQcd3u1UfP+NIfA6ZF8BjRy9F79GeZUnsmZG6P8yN10wLYTvaCyW5NPlJh7
+ 1xCSBDAyZi+bySQd8mqefyxDehrJFpHdAD8uel5QKMyCEuKmjx9znXZuGPAfu80FyyB/
+ 0OlEYptiN4pxjLiCHXhwQPl8jcxuCDpChQ4sruAlU566AbM3rUaQ8DWivSyHDp1ZzniC
+ V2ivTmlmxgIXugcpC15OTjppH0JDTNDCCZXy7XGFezG4UQW3L6CiJmMUn8QSPVlQ4yUX
+ kSkoZY94h3Atn61MCMcHx1QES19Xu4FwU8Orw9wr5V/3HpTkNEiwh75AOnHCRhRKFKxc
+ bEJw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=essensium.com header.i=@essensium.com
- header.a=rsa-sha256 header.s=google header.b=gdrMYqVx
-Subject: [Buildroot] [PATCH 0/4] Add support for using a pre-compiled Go
- compiler
+ header.a=rsa-sha256 header.s=google header.b=W1ub6aQT
+Subject: [Buildroot] [PATCH 1/4] package/goc: new virtual package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,63 +104,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Improvement from the buildroot TODO list. This patch add supports for
-pre-built version of the Go compiler.
+This virtual package implement the already existing go compiler compiled
+from source and shows it on the host package menu.
 
-Right now this patch introduce a new virtual package called 'goc' to
-do the selection between two provider:
-  - go
-  - go-bin
-Right now there is some variable from the 'go' package are used in 
-multiple go provider packages.
-In an upcoming patch all the go related packages will move to a 'go'
-subfolder that will hold all the common variables.
+The usage of a virtual package on top of the go compiler enable the
+supports of for multiple providers for the Go compiler.
+Similarly to the rust compiler, a pre-built go compiler package will be
+available in parallel to the current compiled go compiler package.
 
-Thomas Perale (4):
-  package/goc: new virtual package
-  package/pkg-golang: set dependencies to host-goc
-  package/go-bin: new package
-  support/testing: add tests for Go
-
- fs/oci/Config.in                         |  1 +
- package/Config.in.host                   |  2 ++
- package/balena-engine/Config.in          |  1 +
- package/containerd/Config.in             |  1 +
- package/crucible/Config.in               |  1 +
- package/delve/Config.in                  |  1 +
- package/docker-cli/Config.in             |  1 +
- package/docker-compose/Config.in         |  1 +
- package/docker-engine/Config.in          |  1 +
- package/docker-proxy/Config.in           |  1 +
- package/embiggen-disk/Config.in          |  1 +
- package/flannel/Config.in                |  1 +
- package/gitlab-runner/Config.in          |  1 +
- package/go-bin/Config.in.host            |  5 +++
- package/go-bin/go-bin.hash               |  4 +++
- package/go-bin/go-bin.mk                 | 20 ++++++++++++
- package/go/go.mk                         |  2 ++
- package/goc/Config.in.host               | 39 +++++++++++++++++++++++
- package/goc/goc.mk                       |  7 +++++
- package/gocryptfs/Config.in              |  1 +
- package/mender-artifact/Config.in.host   |  1 +
- package/mender-connect/Config.in         |  1 +
- package/mender/Config.in                 |  1 +
- package/moby-buildkit/Config.in          |  1 +
- package/moby-buildkit/Config.in.host     |  1 +
- package/nerdctl/Config.in                |  1 +
- package/pkg-golang.mk                    |  4 +--
- package/runc/Config.in                   |  1 +
- package/tinifier/Config.in               |  1 +
- package/wtfutil/Config.in                |  1 +
- support/testing/tests/package/test_go.py | 40 ++++++++++++++++++++++++
- 31 files changed, 143 insertions(+), 2 deletions(-)
- create mode 100644 package/go-bin/Config.in.host
- create mode 100644 package/go-bin/go-bin.hash
- create mode 100644 package/go-bin/go-bin.mk
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ package/Config.in.host     |  1 +
+ package/go/go.mk           |  2 ++
+ package/goc/Config.in.host | 15 +++++++++++++++
+ package/goc/goc.mk         |  7 +++++++
+ 4 files changed, 25 insertions(+)
  create mode 100644 package/goc/Config.in.host
  create mode 100644 package/goc/goc.mk
- create mode 100644 support/testing/tests/package/test_go.py
 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index f437ef680c..8c44ff0cb4 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -38,6 +38,7 @@ menu "Host utilities"
+ 	source "package/gnupg/Config.in.host"
+ 	source "package/go/Config.in.host"
+ 	source "package/go-bootstrap/Config.in.host"
++	source "package/goc/Config.in.host"
+ 	source "package/google-breakpad/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
+ 	source "package/imagemagick/Config.in.host"
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 9f0fbbde00..96c756cb11 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -12,6 +12,8 @@ GO_LICENSE = BSD-3-Clause
+ GO_LICENSE_FILES = LICENSE
+ GO_CPE_ID_VENDOR = golang
+ 
++HOST_GO_PROVIDES = host-goc
++
+ HOST_GO_DEPENDENCIES = host-go-bootstrap
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+diff --git a/package/goc/Config.in.host b/package/goc/Config.in.host
+new file mode 100644
+index 0000000000..b0266b50ea
+--- /dev/null
++++ b/package/goc/Config.in.host
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_HOST_GOC
++	bool "host go compiler"
++	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
++	help
++	  Compiler for the Go language
++
++	  https://go.dev
++
++if BR2_PACKAGE_HOST_GOC
++
++config BR2_PACKAGE_PROVIDES_HOST_GOC
++	string
++	default "host-go"
++
++endif
+diff --git a/package/goc/goc.mk b/package/goc/goc.mk
+new file mode 100644
+index 0000000000..3259618989
+--- /dev/null
++++ b/package/goc/goc.mk
+@@ -0,0 +1,7 @@
++################################################################################
++#
++# goc
++#
++################################################################################
++
++$(eval $(host-virtual-package))
 -- 
 2.37.0
 
