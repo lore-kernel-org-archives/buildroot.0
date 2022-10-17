@@ -4,65 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47689C433FE
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 07:43:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B61DC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 18:17:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83F14416E5;
-	Mon, 17 Oct 2022 07:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83F14416E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02A6D41828;
+	Mon, 17 Oct 2022 18:17:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02A6D41828
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ivrXmwxiS9Ho; Mon, 17 Oct 2022 07:43:43 +0000 (UTC)
+	with ESMTP id JzJyh9LAT6tb; Mon, 17 Oct 2022 18:17:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25E4A416EA;
-	Mon, 17 Oct 2022 07:43:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25E4A416EA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 073CF1BF3F4
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 07:43:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E04D941811;
+	Mon, 17 Oct 2022 18:17:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E04D941811
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 359291BF31C
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 18:17:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E367B81276
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 07:43:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E367B81276
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F0CA60B9B
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 18:17:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F0CA60B9B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iPpvUTUenO0W for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 07:43:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0BECC8125F
- for <buildroot@uclibc.org>; Mon, 17 Oct 2022 07:43:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BECC8125F
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id E8FE186708; Mon, 17 Oct 2022 07:43:39 +0000 (UTC)
-From: bugzilla@busybox.net
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qSxHPoXFVZOR for <buildroot@lists.busybox.net>;
+ Mon, 17 Oct 2022 18:17:01 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F0C060B5E
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4F0C060B5E
+ for <buildroot@uclibc.org>; Mon, 17 Oct 2022 18:17:01 +0000 (UTC)
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1okUfa-0002CU-Sz
+ for buildroot@uclibc.org; Mon, 17 Oct 2022 20:16:58 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Mon, 17 Oct 2022 07:43:39 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.08
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: hello.skyclo@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15061-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15061] New: Node.js Package fails to build against
- musl i386
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 17 Oct 2022 20:16:27 +0200
+Message-ID: <pan$b9d19$b921215f$5fead8d7$8a34cf11@ID-313208.user.individual.net>
+References: <20221016155252.1723048-1-bernd.kuhls@t-online.de>
+ <87k04yals1.fsf__18092.1028529823$1665995868$gmane$org@dell.be.48ers.dk>
+Mime-Version: 1.0
+User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: security bump version to
+ 8.1.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,70 +65,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15061
+Am Mon, 17 Oct 2022 10:37:18 +0200 schrieb Peter Korsgaard:
 
-            Bug ID: 15061
-           Summary: Node.js Package fails to build against musl i386
-           Product: buildroot
-           Version: 2022.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: hello.skyclo@gmail.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+>>>>>> "Bernd" == Bernd Kuhls
+>>>>>> <bernd.kuhls@t-online.de> writes:
+> 
+>  > Fixes - CVE-2022-31628: http://bugs.php.net/81726 - CVE-2022-31629:
+>  > http://bugs.php.net/81727
+> 
+>  > Signed-off-by: Bernd Kuhls
+>  > <bernd.kuhls@t-online.de>
+> 
+> Committed, thanks.
+> 
+> Is there a similar fix for the 8.0.x branch for 2022.02.x?
 
-Hello,
+Hi Peter,
 
-I have been trying to build the Nodejs package against musl for a i386 Pentium3
-target. Nodejs has an unofficial build for musl (x64) and for x86 (gcc),
-however there is no unofficial build for x86 musl. I assume it's possible to
-build against musl-i386. I built nodejs against uClibc-ng i386 on the exact
-same machine months ago, however now that doesn't work either. For reference,
-my system uses glibc x64 and does not contain a musl i386 linker (since Ubuntu
-no longer supports i386).
+yes, sent http://patchwork.ozlabs.org/project/buildroot/patch/
+20221017181523.95205-1-bernd.kuhls@t-online.de/
 
-The full output of make is attached here along with the defconfig (for
-reprod.):
-https://gist.github.com/Skyclo/4168deaa1a73be8574d43eb70a4d9de1
+Regards, Bernd
 
-The ninja build seems to fail consistently when doing anything related to
-"obj/gen/generate-bytecode-output-root/builtins-generated/bytecodes-builtins-list.h".
-It produces the following output before eventually crashing the make job queue:
-
-
->> [218/2653] ACTION generate_bytecode_builtins_list: generate_bytecode_builtins_list_action_3931b343a4cb0bd98da4e581f6ce90fe
->> FAILED: obj/gen/generate-bytecode-output-root/builtins-generated/bytecodes-builtins-list.h
->> cd ../../tools/v8_gypfiles; python ../../deps/v8/tools/run.py ../../out/Release/v8-qemu-wrapper ../../out/Release/bytecode_builtins_list_generator ../../out/Release/obj/gen/generate-bytecode-output-root/builtins-generated/bytecodes-builtins-list.h
->> qemu-i386: Could not open '/lib/ld-musl-i386.so.1': No such file or directory
-Return code is 255
-
-
-Getting the file info from "./output/target/lib/ld-musl-i386.so.1" returns the
-following:
-
-
->> ./output/target/lib/ld-musl-i386.so.1: broken symbolic link to /lib/libc.so
-
-
-I'm unsure if that is what is causing my issues. From what I can tell, the qemu
-wrapper should be able to resolve that symlink to the one found under the
-target's lib.
-
-I do not believe that my issue is related to Bug 14936 nor Bug 14366. I have
-not had time to see if the patch available at
-https://patchwork.ozlabs.org/project/buildroot/patch/20220809075704.86472-4-ardeleanalex@gmail.com/
-works for my specific case.
-
-Thanks for any help in advance!
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
