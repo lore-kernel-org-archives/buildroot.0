@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89799C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 08:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8AD4C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 08:38:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3900860BF8;
-	Mon, 17 Oct 2022 08:38:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3900860BF8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DA4560C1A;
+	Mon, 17 Oct 2022 08:38:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DA4560C1A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PesbywxMRNR3; Mon, 17 Oct 2022 08:38:41 +0000 (UTC)
+	with ESMTP id sEZqoZkIviK7; Mon, 17 Oct 2022 08:38:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61AE160BD3;
-	Mon, 17 Oct 2022 08:38:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61AE160BD3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9371C1BF38A
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB88160F2F;
+	Mon, 17 Oct 2022 08:38:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB88160F2F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B006F1BF97F
  for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F2D8403FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98342416FD
  for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 08:38:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F2D8403FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98342416FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AMCjO9UdA1oG for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kmvy0WtVoS_E for <buildroot@lists.busybox.net>;
  Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 989654056E
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0419416F2
  for <buildroot@buildroot.org>; Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 989654056E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0419416F2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84E3586DEE; Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
+ id 8DA0B86DF8; Mon, 17 Oct 2022 08:38:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Oct 2022 10:30:08 +0200
+Date: Mon, 17 Oct 2022 10:31:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e451f1a578d1629ac1e6cf1e61bc8fcead0910d3
-X-Git-Newrev: 09acc7cbc91f50305730ca0690a58fb93529034b
+X-Git-Oldrev: 09acc7cbc91f50305730ca0690a58fb93529034b
+X-Git-Newrev: 9883ff708e300b93247b4463dc7dcf1681c32354
 X-Patchwork-Hint: ignore
-Message-Id: <20221017083837.84E3586DEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: fix SSP support
+Message-Id: <20221017083837.8DA0B86DF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/solidrun_{macchiatobin,
+ clearfog_gt_8k}: disable SSP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,66 +63,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09acc7cbc91f50305730ca0690a58fb93529034b
+commit: https://git.buildroot.net/buildroot/commit/?id=9883ff708e300b93247b4463dc7dcf1681c32354
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit ccac9a5bbbd ("boot/arm-trusted-firmware: don't force
-ENABLE_STACK_PROTECTOR") fixed a build failure but also effectively
-disabled SSP entirely for ATF. This is because ENABLE_STACK_PROTECTOR is
-set to 0 unconditionally in make_helpers/defaults.mk, overwriting any
-environment set value. So we must pass ENABLE_STACK_PROTECTOR in
-MAKE_OPTS for it to be effective. But to avoid said build failure we
-can't pass ENABLE_STACK_PROTECTOR=0.
+The Armada target does not provide platform level support for SSP.
 
-Only pass ENABLE_STACK_PROTECTOR when
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is enabled. Drop SSP_LEVEL value for
-the !BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP case which is now unused.
+Fixes link failure:
 
-Cc: Dick Olsson <hi@senzilla.io>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
+(.text.asm.update_stack_protector_canary+0x4): undefined reference to `plat_get_stack_protector_canary'
+
+This error does not show up on CI jobs because SSP was effectively always
+disabled until the previous commit.
+
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/arm-trusted-firmware/Config.in               | 4 ----
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 ++++++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ configs/solidrun_clearfog_gt_8k_defconfig | 1 +
+ configs/solidrun_macchiatobin_defconfig   | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index aa571502b3..5070849d9b 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -226,10 +226,6 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP
+diff --git a/configs/solidrun_clearfog_gt_8k_defconfig b/configs/solidrun_clearfog_gt_8k_defconfig
+index bec4a7dacc..30b1e17925 100644
+--- a/configs/solidrun_clearfog_gt_8k_defconfig
++++ b/configs/solidrun_clearfog_gt_8k_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="mrvl_flash"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
++# BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is not set
+ BR2_TARGET_BINARIES_MARVELL=y
+ BR2_TARGET_MV_DDR_MARVELL=y
  
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL
- 	string
--	# While newer versions of TF-A support "none" as
--	# ENABLE_STACK_PROTECTOR value, older versions (e.g 2.0) only
--	# supported "0" to disable SSP.
--	default "0"    	  if !BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP
- 	default "default" if BR2_SSP_REGULAR
- 	default "strong"  if BR2_SSP_STRONG
- 	default "all"     if BR2_SSP_ALL
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 246c0699bb..34d7d80243 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -64,10 +64,14 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
- 	PLAT=$(ARM_TRUSTED_FIRMWARE_PLATFORM) \
- 	TARGET_BOARD=$(ARM_TRUSTED_FIRMWARE_TARGET_BOARD)
+diff --git a/configs/solidrun_macchiatobin_defconfig b/configs/solidrun_macchiatobin_defconfig
+index 7d06313b03..f388e37163 100644
+--- a/configs/solidrun_macchiatobin_defconfig
++++ b/configs/solidrun_macchiatobin_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="mrvl_flash"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
++# BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP is not set
+ BR2_TARGET_BINARIES_MARVELL=y
+ BR2_TARGET_MV_DDR_MARVELL=y
  
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
-+	ENABLE_STACK_PROTECTOR=$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL))
-+endif
-+
- ARM_TRUSTED_FIRMWARE_MAKE_ENV += \
- 	$(TARGET_MAKE_ENV) \
--	$(if $(BR2_PIC_PIE),CFLAGS="-fno-PIE") \
--	ENABLE_STACK_PROTECTOR=$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_SSP_LEVEL))
-+	$(if $(BR2_PIC_PIE),CFLAGS="-fno-PIE")
- 
- ifeq ($(BR2_ARM_CPU_ARMV7A),y)
- ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ARM_ARCH_MAJOR=7
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
