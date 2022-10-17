@@ -1,70 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1584C43217
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 12:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4B04C4332F
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 12:21:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 101C4812AE;
-	Mon, 17 Oct 2022 12:18:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 101C4812AE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C17160D4E;
+	Mon, 17 Oct 2022 12:21:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C17160D4E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tC6AbCZ9Wi4O; Mon, 17 Oct 2022 12:18:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id sQj-_yiLjiqo; Mon, 17 Oct 2022 12:21:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F5FD81256;
-	Mon, 17 Oct 2022 12:18:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F5FD81256
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 489281BF3DE
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 12:18:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82B8060C22;
+	Mon, 17 Oct 2022 12:21:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82B8060C22
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A83EC1BF3DE
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 12:21:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2886C81256
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 12:18:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2886C81256
+ by smtp2.osuosl.org (Postfix) with ESMTP id 91791405BE
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 12:21:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91791405BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mxsPWBRRgbr9 for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 12:18:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OT56LDGu5IEA for <buildroot@lists.busybox.net>;
+ Mon, 17 Oct 2022 12:21:15 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC68681063
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC68681063
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 12:18:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A58B405CD
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4A58B405CD
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 12:21:15 +0000 (UTC)
 Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id CB9F8E000F;
- Mon, 17 Oct 2022 12:18:44 +0000 (UTC)
-Date: Mon, 17 Oct 2022 14:18:43 +0200
-To: Paul Cercueil <paul@crapouillou.net>
-Message-ID: <20221017141843.0d7d2963@windsurf>
-In-Reply-To: <K2AWJR.ZU8FSKYACOJE1@crapouillou.net>
-References: <K2AWJR.ZU8FSKYACOJE1@crapouillou.net>
+ by mail.gandi.net (Postfix) with ESMTPSA id F197020017;
+ Mon, 17 Oct 2022 12:21:10 +0000 (UTC)
+Date: Mon, 17 Oct 2022 14:21:09 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20221017142109.424863e1@windsurf>
+In-Reply-To: <CADvTj4qT7BZY4QhkC0A=LFQ5x2fgWBAdECaAGFxu5VUE=ukgxw@mail.gmail.com>
+References: <20221015005813.4055238-1-james.hilliard1@gmail.com>
+ <CAPi7W828RqJOB3wUx3y68PFHE+M+pt5Ohck+-E-YzPim-C54eQ@mail.gmail.com>
+ <CADvTj4p15dWwuUN0rz4D5_tQi+UzuTdoFq76ewYh00xaULhp8A@mail.gmail.com>
+ <20221016075056.GI2503@scaer>
+ <CADvTj4rBi3uu2bXJy=Tp76NV6Yjk7--EtDOm0kmxi47XOVsQ=Q@mail.gmail.com>
+ <20221016160505.GK2503@scaer>
+ <CADvTj4q+ztJca7+MEcOK5-gd94155C0X1s0_5-SvCxp=XXOptg@mail.gmail.com>
+ <20221017091644.1104527b@windsurf>
+ <CADvTj4qT7BZY4QhkC0A=LFQ5x2fgWBAdECaAGFxu5VUE=ukgxw@mail.gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666009125;
+ d=bootlin.com; s=gm1; t=1666009272;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ubBO32UQR/4+7rxSqiSEbgYDFi0VbLE5vAUqbbVCsPw=;
- b=ow/Wj48XwmFKMUwuLKd2xbCzzQkUqZFtD+8ucqGVahLsWzoewv+cyknhaSpgqib26HQvcO
- EfFTNoE4865prtsrXbi6UjmNIkzpnm/KwpOMS1bPrKQpW6ELRmxHq1B1ri64TbgHBftc6y
- o2FpkDX0Ns/j9BsFflnQoL+K4Mu2+8BRvhKIy2FrJyZIn3sEFks13/FfyUkiDKV8MIB5Tv
- zr1Yklr7CREl96OFRcJifEtXnCRIHsZph7lxub9bU6I+AK5S5pC+7TVWRyMCkJB5oeDa8I
- 5CkIIq7nS5HJ5+4m3sYJE2WpeII29rAzrqtBN4KHSO0W3VFHWfVhO0nMjZdofQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=kCVviit4mUtRxOt67MiwUfCJebNsMOIrTw513/jJzFg=;
+ b=cDBQUYfz2neJmH2uu6qXeRogEmdNTmmziYPomR6Gx46iHkfCXuqq9YldMVaXwu0qFbBOv5
+ OKzQ7KWa3iFKYgfim39FUj0Db4NprPv/b5aumxcYeoGmjUZ0V29/F36ZocaoIk474dpDrH
+ hyGo5gId3Yj2Hlfa6sW8z/dPmeqiwSIscgVaVw7/jQO5E6PlKX72IUyvhiqw8h1MmzHAb5
+ KxPrwKZcUCGTaNDAZcIyyG/Nj9XAzQKqZE/5ksO3q77jTHrJ1N/I6AglfuL/yMiIcVhkQ+
+ 1zeMGUTjgATJ5QNbVptqnLotnEzUrtTLCO+d3ZCeVELjyR2wvwRk1f5jx1V3bw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ow/Wj48X
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-10-15
+ header.s=gm1 header.b=cDBQUYfz
+Subject: Re: [Buildroot] [PATCH 1/1] package/bearssl: disable parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,43 +85,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org, "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUGF1bCwKClRoaXMgaXMgaGFwcGVuaW5nIG9uIEphbWVzIGF1dG9idWlsZGVyLCB3aG8g
-aGFzIGludHJvZHVjZWQgc29tZSBzcGVjaWFsCnJhbmRvbWl6YXRpb24gc3R1ZmYgdGhhdCB3b3Vs
-ZCBvbmx5IGFwcGVhciB3aXRoIG1ha2UgNC40LiBJIGhhdmUgYWRkZWQKSmFtZXMgaW4gQ2Mgc28g
-dGhhdCBoZSBjYW4gY29tbWVudCBhbmQgc2VlIGlmIGhlIGNhbiByZXByb2R1Y2UgYW5kCnByb3Zp
-ZGUgbW9yZSBkZXRhaWxzLgoKQmVzdCByZWdhcmRzLAoKVGhvbWFzCgpPbiBNb24sIDE3IE9jdCAy
-MDIyIDEyOjE4OjIwICswMTAwClBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PiB3
-cm90ZToKCj4gSGkgVGhvbWFzLAo+IAo+IEkgY2FuJ3QgcmVwcm9kdWNlLCB3aXRoIHRoaXMgYnVp
-bGQncyBkZWZjb25maWcgb24gbGF0ZXN0IG1hc3Rlci4gSXQgCj4ganVzdCBidWlsZHMgZmluZSBo
-ZXJlLgo+IAo+IENoZWVycywKPiAtUGF1bAo+IAo+IAo+IExlIGRpbS4sIG9jdC4gMTYgMjAyMiBh
-dCAwNTozODoxOSAtMDAwMCwgVGhvbWFzIFBldGF6em9uaSAKPiA8dGhvbWFzLnBldGF6em9uaUBi
-b290bGluLmNvbT4gYSDDqWNyaXQgOgo+ID4gSGVsbG8sCj4gPiAKPiA+IEF1dG9idWlsZGVyIGZh
-aWx1cmVzCj4gPiA9PT09PT09PT09PT09PT09PT09PQo+ID4gCj4gPiBCZWxvdyBpcyBhIGxpc3Qg
-b2YgYnVpbGQgZmFpbHVyZXMgcmVwb3J0ZWQgYnkgdGhlIEJ1aWxkcm9vdCAKPiA+IGF1dG9idWls
-ZGVycwo+ID4gaW4gcmVsYXRpb24gdG8gcGFja2FnZXMgb3IgQ1BVIGFyY2hpdGVjdHVyZXMgeW91
-IGFyZSBpbiBjaGFyZ2Ugb2YuCj4gPiBQbGVhc2UgaGVscCB1cyBpbXByb3ZpbmcgdGhlIHF1YWxp
-dHkgb2YgQnVpbGRyb290IGJ5IGludmVzdGlnYXRpbmcgCj4gPiB0aG9zZQo+ID4gYnVpbGQgZmFp
-bHVyZXMgYW5kIHNlbmRpbmcgcGF0Y2hlcyB0byBmaXggdGhlbS4KPiA+IAo+ID4gUmVzdWx0cyBm
-b3IgdGhlICdtYXN0ZXInIGJyYW5jaAo+ID4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LQo+ID4gCj4gPiBCdWlsZCBmYWlsdXJlcyByZWxhdGVkIHRvIHlvdXIgcGFja2FnZXM6Cj4gPiAK
-PiA+ICAgICBhcmNoICAgICB8ICAgICAgICAgICAgIHJlYXNvbiAgICAgICAgICAgICB8ICAgICAg
-ICAgICAgICAgICAgICAgICAKPiA+ICAgICAgICAgICAgICAgICB1cmwKPiA+IC0tLS0tLS0tLS0t
-LS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tCj4gPiAgICAgYXJtICAgICAgfCAgICAgICAgICB1bXRwcmQtMS42LjIgICAgICAgICAgfCAK
-PiA+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2M3Y2U5NzVkMzk4MTkw
-ZmMxOTFjY2MwMzgxM2Y4ZWMwYjM0NjRjN2QKPiA+IAo+ID4gCj4gPiBUaGFua3MgZm9yIHlvdXIg
-Y29udHJpYnV0aW9uIHRvIEJ1aWxkcm9vdCEKPiA+IAo+ID4gLS0KPiA+IGh0dHA6Ly9hdXRvYnVp
-bGQuYnVpbGRyb290Lm5ldCAgCj4gCj4gCgoKCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25l
-ciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcg
-YW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+On Mon, 17 Oct 2022 07:29:52 -0400
+James Hilliard <james.hilliard1@gmail.com> wrote:
+
+> The shuffle=random changes don't require modifying autobuild-run, I'm
+> just tweaking the path to make in my autobuild service environment and
+> then passing an additional config flag to autobuild-run like this:
+> --make-opts="--shuffle=random"
+
+Right, but my point stands: it's custom usage/configuration of
+autobuild-run that we would prefer to discuss on the mailing list first
+before deploying/enabling.
+
+> Well builds were mostly failing in the same place due to deterministic
+> build ordering, I was trying to make it so that we would see failures
+> in different places as that's more useful compared with always seeing
+> the same errors.
+> 
+> To me seeing the same errors most of the time indicates there's some
+> major coverage issues with the autobuilders which need fixing.
+
+I think you're missing a point here: many of the builds today are
+failing due to the glibc 2.36 bump. So pretty much every single build
+that is glibc based will indeed fail with some error related to this
+glibc bump.
+
+Your additional randomization will not change anything to this. It's
+just that we now have the glibc bump issues + the newly discovered
+issues related to the extra randomization + the usual amount of build
+issues.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
