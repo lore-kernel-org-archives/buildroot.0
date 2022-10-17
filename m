@@ -1,79 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09728C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 16:00:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36A33C433FE
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 16:05:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79D064090C;
-	Mon, 17 Oct 2022 16:00:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79D064090C
+	by smtp1.osuosl.org (Postfix) with ESMTP id B299881589;
+	Mon, 17 Oct 2022 16:05:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B299881589
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SCXWi7a0NEOr; Mon, 17 Oct 2022 16:00:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bshzv7FFtkUY; Mon, 17 Oct 2022 16:05:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E315408EB;
-	Mon, 17 Oct 2022 16:00:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E315408EB
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B7DEA1BF973
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 16:00:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA039813AB;
+	Mon, 17 Oct 2022 16:05:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA039813AB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 79D211BF331
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 16:05:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92C3A60B8D
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 16:00:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C3A60B8D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54E914053C
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 16:05:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54E914053C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W0_m0pcmeOo4 for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 16:00:49 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B5FC60864
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.41])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5B5FC60864
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 16:00:49 +0000 (UTC)
-Received: from opfedar07.francetelecom.fr (unknown [xx.xx.xx.9])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfedar20.francetelecom.fr (ESMTP service) with ESMTPS id 4MrhYB6vgVz8swj; 
- Mon, 17 Oct 2022 18:00:46 +0200 (CEST)
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Mon, 17 Oct 2022 18:00:44 +0200
-Date: Mon, 17 Oct 2022 18:00:44 +0200
-From: <yann.morin@orange.com>
-To: Norbert Lange <nolange79@gmail.com>
-Message-ID: <14503_1666022446_634D7C2E_14503_9_8_20221017160044.GF2064029@tl-lnx-nyma7486>
-References: <cover.1665868987.git.yann.morin.1998@free.fr>
- <CADYdroMmvaBpSbVkrc+Eu7KtkBt1m7Zqeu4mO6a2UZp+a1Hjrw@mail.gmail.com>
- <30300_1666015916_634D62AC_30300_412_1_20221017141154.GE2064029@tl-lnx-nyma7486>
- <CADYdroMNqJr3nDGhi0=_TttJ9jNp2dD44M=NVQJioLFDxreQVQ@mail.gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rImAqkKMWC_Y for <buildroot@lists.busybox.net>;
+ Mon, 17 Oct 2022 16:05:15 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01522404E5
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 01522404E5
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 16:05:14 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id r14so16744992edc.7
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 09:05:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=+uNo/ujycIzp/4rH/5P4JKA2LwqCj5o8IJAe2nznvLI=;
+ b=KHnLETsiRg7Ik/lPtmIUTJ6ybLtYSwwc3XGq/2ZcBiq3O+SFUGR1FUU+TLROsWI5qL
+ waUL18OJHcuK8wC8dTReLT+pl2jWsv8b0BqO1ReEyiYtF4vgjSEQhglJlqGSlXTpJR3z
+ fNcbIyrO54KhNk697YZbfj5+461dpv6TTPaMi1IRcqfqgZXIa3CllEXqu5AbvjHduX+C
+ 5WdDWmWn42tKSlSTU2gZ/Pqtyd/rTFl5fow6xGdQB37ZE0vgzOVkSNobur0rDS2HVyGD
+ +Psc1A2iZ79+OW6drFxvFMA0eGFbPDnukqARXmyJ5ZUcJE4ZwB3bL1+mGAyyw6VtjECC
+ sIGg==
+X-Gm-Message-State: ACrzQf0SIoUvabklODjzKKhmSJrNXPHeqih5bsjbV6ySh5rbym+BMzwp
+ 93uPo3/a7UeA8l0bj+NFikMM09XcraJv2vJ0
+X-Google-Smtp-Source: AMsMyM4GDppBfgOd90BQYDwW/OJlOko3M4NuYdEygc3gZabTiD5BlgY4p/0VMWbfTxZuOZA6stJoxg==
+X-Received: by 2002:a05:6402:557:b0:458:7488:8958 with SMTP id
+ i23-20020a056402055700b0045874888958mr10779034edx.242.1666022712657; 
+ Mon, 17 Oct 2022 09:05:12 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com.
+ [209.85.208.45]) by smtp.gmail.com with ESMTPSA id
+ j16-20020aa7c410000000b0045769dee1fdsm7576366edq.29.2022.10.17.09.05.11
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 17 Oct 2022 09:05:11 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id a67so16689322edf.12
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 09:05:11 -0700 (PDT)
+X-Received: by 2002:a05:6402:40d6:b0:45d:636c:a12f with SMTP id
+ z22-20020a05640240d600b0045d636ca12fmr9490304edb.233.1666022711385; Mon, 17
+ Oct 2022 09:05:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CADYdroMNqJr3nDGhi0=_TttJ9jNp2dD44M=NVQJioLFDxreQVQ@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX302.corporate.adroot.infra.ftgroup
- (10.115.26.11) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+References: <20221017142849.41399-1-thomas.perale@mind.be>
+ <20221017142849.41399-4-thomas.perale@mind.be>
+In-Reply-To: <20221017142849.41399-4-thomas.perale@mind.be>
+Date: Mon, 17 Oct 2022 09:05:00 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2pNRrBsChKS3PHQtT0_rsVF3Wi3LwMTD9jKFoKf1ot2-A@mail.gmail.com>
+Message-ID: <CA+h8R2pNRrBsChKS3PHQtT0_rsVF3Wi3LwMTD9jKFoKf1ot2-A@mail.gmail.com>
+To: Thomas Perale <thomas.perale@essensium.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1666022447;
- bh=P5j2+dGFBG3YBG4m3dkxy4Fv2vuoPycU3wQW9OIbmmk=;
- h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
- b=XLsLcCSMIU2+Of47vJIQ013vxN0qmS2/cOiLm1yzu2+/50IirsvjBru4AzahOe5Ae
- oKWYB//A5KvYiw/dZX19PXBJZ9imXr+El9zzajwFPJ8QWU3Htkm3sJjSiI148Ya7bk
- g3JxCiUp7myJkpKn9JlWYrHHd+NIM8euDg2xpD5Ezh7D6uDZGybRW55pJ5p2xqW5Vx
- 6AoilZcfjyapGJ4nWmw6cvD30exFXM677ScToRsItp7dScIVJ7s0idAWqrFq12/0Zg
- CKdqVyuSRlZE2cUkaK6gkx0RK/YOuAK7It7kTS0zzFuaRuBZcrPDND2wNBkZy73WBc
- u5gi/4A/QlMYg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=XLsLcCSM
-Subject: Re: [Buildroot] [PATCH 0/4] systemd: sort out the conflict between
- var factory and tmpfiles (branch systemdify-var)
+ d=paral.in; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=+uNo/ujycIzp/4rH/5P4JKA2LwqCj5o8IJAe2nznvLI=;
+ b=PWix/XRRTIgRwnfozfxIevy2ULNzuz9iIg4nmC2QPYh6tZ1wpydz7nuB2CVPVK70g+
+ s3aI6h+EJrEl5xfovIxmDG9boooiB6nSpwgz+Wf6UOUoVIBYDa0ISw3eGiyJU5dDSVzt
+ 7tWQ+QgTrwn5zoA4/chCXEZ7j37E6dCn6gk7ZhjZ8IgbUc4FqsjNF0tY6ht3IQIrs1tL
+ OBYxVVLrpvUKVAyYRzzUGvTJtrqreJrgYHybIYjfwg5utEXlbvzq3zQADlxq+wxNWc1w
+ EJfBIcYo8AiTUHS8oRTV9458NYXGGCuDLHv2qAWKQZPrvwlEE0bXnBkkwxFdL1fWPqtu
+ ZS/w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=paral.in header.i=@paral.in
+ header.a=rsa-sha256 header.s=google header.b=PWix/XRR
+Subject: Re: [Buildroot] [PATCH 3/4] package/go-bin: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,166 +101,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- =?utf-8?B?SmXMgXJlzIFteQ==?= Rosen <jeremy.rosen@smile.fr>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@paral.in>
+Cc: Christian Stewart <christian@paral.in>, Geoff Levand <geoff@infradead.org>,
+ Anisse Astier <anisse@astier.eu>, Thomas Perale <thomas.perale@mind.be>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>,
+ Romain Naour <romain.naour@gmail.com>, Fabio Estevam <festevam@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: multipart/mixed; boundary="===============3739708435106287436=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Norert, All,
+--===============3739708435106287436==
+Content-Type: multipart/alternative; boundary="000000000000e6674b05eb3d2363"
 
-On 2022-10-17 16:50 +0200, Norbert Lange spake thusly:
-> Am Mo., 17. Okt. 2022 um 16:11 Uhr schrieb <yann.morin@orange.com>:
-> > On 2022-10-17 14:12 +0200, Norbert Lange spake thusly:
-> > > Am Sa., 15. Okt. 2022 um 23:23 Uhr schrieb Yann E. MORIN
-> > > <yann.morin.1998@free.fr>:
-> > [--SNIP--]
-> > > > The solution we implemented in Buildroot is to generate a factory for
-> > > > /var, and register that as tmpfiles, at build time, and mount a tmpfs on
-> > > > the then-empty /var at runtime, so that systemd-tmpfiles populates /var
-> > > > on boot. Having a tmpfs means /var is repopulated from a clean state at
-> > > > each boot, and people who want a persistent /var have to provide their
-> > > > own mechanism to mount their actual filesystem instead.
-> > > Here the issue is, that the logic will never be complete, I will
-> > > have to dig up old threads, but it fails with various combinations
-> > > of symlinks.
-> > The thing is, out of the box, Buildroot needs a working situation.
-> Yes, my argument would be a technical better solution.
+--000000000000e6674b05eb3d2363
+Content-Type: text/plain; charset="UTF-8"
 
-But so far, we do not have that technically better solution, so we need
-to fix things that are arctually broken.
+Hi all,
 
-[--SNIP--]
-[--SNIP--]
-> > Now, please understand that some people are very happy with using a /var
-> > factory, and some are even happy that /var is being mounted as a tmpfs
-> > too.
-> Would they be unhappy if everything works as it did before?
+This looks interesting, one request though...
 
-By "works as it did before", do you mean "using a var factory that was
-not broken for them"? Yes, I am being teasing.
+On Mon, Oct 17, 2022, 7:29 AM Thomas Perale <thomas.perale@essensium.com>
+wrote:
+> +       # Default to host-go-bin
 
-We'd have to evaluate the alternative proposal when we see it, if that
-can replace the existing solution.
-
-> > That is assuming that one will use an initramfs. For example, in my
-> > systems, I do not use one, and I do not want to use one.
-> No, initramfs is optional
-
-Ah, but you had so far only talked about using an initramfs to prepare
-an overlay, so I assumed your solution was tied to using an initramfs.
-If it's not, then let's see it.
-
-[--SNIP--]
-> > However, in my case I expressely do not want to use an initramfs: my
-> > rootfs is a squashfs mounted on an initrd. I also have a tmpfs mounted on
-> > /var, as I am very happy that /var gets factory value at boot (my
-> > resilient data is accessed in some other ways).
-> I am not sure if initrd/initramfs means something different here.
-
-initrd is a blockdevice in memory. The filesystem one puts in there can
-be any filesystem that could be otherwise stored on another blockdevice.
-
-initramfs is a filesystem in memory, like a tmpfs. The initramfs is
-read-write.
-
-> > > The recurring attempts to discuss this ended in [1].
-[--SNIP--]
-> > And finally, I believe it may even address more complex situations,
-> > where people will provide their own fakeroot-script to do the
-> > preparatory works.
-> 
-> My own usecase is that  use the buildroot as pristine rootfs and then
-> slice it up as
-> necessary. But just to get this out of the way.
-> 
-> More importantly, I would propose a simpler, yet more robust solution
-> than the var factory.
-> 
-> For this, the files in the attached archive have to end up in
-> /lib/systemd/system.
-
-Did you forget to attach something, by chance?
-
-> What this does:
-> Before the time /var is supposed to be accessed, an tmpfs will be
-> mounted in /run,
-
-We already have that: /run is automatically mounted by systemd, no?
-
-> and the /var folder will be shifted around to end up in an overlayfs
-> *below* this tmpfs.
-
-What do you mean by "shifted"?
-
-> The bind-mount is done with a systemd mount unit, means if you have mounts
-> *in /var or below* those will be correctly ordered.
-
-Yeah, switching away from the fstab is good.
-
-> -   No initramfs necessary
-> -   No duplicate files in the var factory and tmpfs (unless they are
-> modified of course). So your suashed files stay compressed.
-> -   No tricky autogenerated tmpfiles
-> -   Would be possible to do something similar in other init systems
-> 
-> The only downside would be the reliance on overlayfs - technically you
-> could also
-> adopt that solution to copy stuff into the tmpfs.
-> 
-> Besides my obvious biases there are technical arguments to be had.
-
-We all have biases, me ot the last. :-)
-
-My technical arguments for this series are:
-  - it is currently kinda-broken
-  - var factory works until proven otherwise
-  - so we need to fix them
-
-I'll be sure to do as unbiased a review as possible for your proposal
-when I see it. ;-)
-
-> > PS. Please note that there are two different Yann in this thread: me at
-> > work using Buildroot, and Yann at home, one of the maintainers. Look at
-> > the email to be sure who's talking (not that I-at-work talk in the name
-> > of my employer either).
-> > I try to segregate the two identities as much as I can, but sometime
-> > there is some overlap, like here.
-> > YEM.
-> 
-> Not making things much clearer ;)
-
-If it can comfort you, it is not much clearer in my own head either!  ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+> +       default "host-go-bin" if BR2_PACKAGE_HOST_GO_BIN
+> +       default "host-go" if BR2_PACKAGE_HOST_GO
 
 
-_________________________________________________________________________________________________________________________
+Please don't default to downloading something predompiled. Especially when
+the behavior currently defaults to compiling everything from source.
 
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+Thanks,
+Christian Stewart
 
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+--000000000000e6674b05eb3d2363
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div>Hi all,<div dir=3D"auto"><br></div>This looks intere=
+sting, one request though...<br><br><div class=3D"gmail_quote"><div dir=3D"=
+ltr" class=3D"gmail_attr">On Mon, Oct 17, 2022, 7:29 AM Thomas Perale &lt;<=
+a href=3D"mailto:thomas.perale@essensium.com">thomas.perale@essensium.com</=
+a>&gt; wrote:</div><div dir=3D"ltr" class=3D"gmail_attr">&gt; +=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0# Default to host-go-bin</div><blockquote class=3D"gmail_q=
+uote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1e=
+x">
++=C2=A0 =C2=A0 =C2=A0 =C2=A0default &quot;host-go-bin&quot; if BR2_PACKAGE_=
+HOST_GO_BIN<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0default &quot;host-go&quot; if BR2_PACKAGE_HOST=
+_GO</blockquote></div></div><div dir=3D"auto"><br></div><div dir=3D"auto">P=
+lease don&#39;t default to downloading something predompiled. Especially wh=
+en the behavior currently defaults to compiling everything from source.</di=
+v><div dir=3D"auto"><br></div><div dir=3D"auto">Thanks,</div><div dir=3D"au=
+to">Christian Stewart</div><div dir=3D"auto"><br></div></div>
+
+--000000000000e6674b05eb3d2363--
+
+--===============3739708435106287436==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3739708435106287436==--
