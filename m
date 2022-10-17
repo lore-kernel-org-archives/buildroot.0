@@ -1,90 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70595C4332F
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 11:30:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB50FC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 12:12:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F08CA4056A;
-	Mon, 17 Oct 2022 11:30:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F08CA4056A
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3JOap_fEVgrn; Mon, 17 Oct 2022 11:30:12 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECC2E4014B;
-	Mon, 17 Oct 2022 11:30:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECC2E4014B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 414761BF3B5
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 11:30:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27D2E40882
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 11:30:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27D2E40882
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D9104170A;
+	Mon, 17 Oct 2022 12:12:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D9104170A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CNeNuKpPxyQE for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 11:30:05 +0000 (UTC)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IKGn9U0SI8pT; Mon, 17 Oct 2022 12:12:20 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4058F416FA;
+	Mon, 17 Oct 2022 12:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4058F416FA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D4BF01BF3DE
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 12:12:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDCBC60D57
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 12:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDCBC60D57
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NhbB4ySR-m77 for <buildroot@lists.busybox.net>;
+ Mon, 17 Oct 2022 12:12:15 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C18F4171C
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com
- [IPv6:2607:f8b0:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6C18F4171C
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 11:30:05 +0000 (UTC)
-Received: by mail-pf1-x433.google.com with SMTP id g28so10784907pfk.8
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 04:30:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED28F60D4D
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com
+ [IPv6:2607:f8b0:4864:20::f33])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ED28F60D4D
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 12:12:14 +0000 (UTC)
+Received: by mail-qv1-xf33.google.com with SMTP id mx8so7248813qvb.8
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 05:12:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=5Kjb6D/Nuwt0qgkDIds4ztqBi8LfrwoiOdsG8uP9y1s=;
- b=u9pWLS6ZMluev95DsaPxFTgS7r1aC6zs8J5NWWWLvy6OZbNNYxIcDVl3NheDtWjukF
- c7DAmRzxeFf2evXWzwvKZgUYX6HEWpFvE+MGsq/4t01jbkevluYeuKj40V32sJ57Zlff
- kW5MHmlMfFnrSEJfY1P+PYY6YUNriQDw10rYeLQeb4EOqKiIeKf0yyFUqruGaVeKhQMc
- yVmCcPrnQonYYOCHD2tNldhEaTyxfhSwF21kRzVSGPIA/OiTtQoIhNdae4ix2d8SZGkW
- 1/RD0Vdqz3N0Ro5C8qYaYlUZoaPcp9IHuw964GPPaxJwwcjmPZIzV5HWqHtsp/v4gMXC
- Pjzw==
-X-Gm-Message-State: ACrzQf3tZ//u9a9iGrK8IansXQ1qFKZh0zn9fM22EzAkTKVWBLxVXDG6
- dhRfmI1590pz/mgqgvaD5y2v25bsri84dk9CYM8=
-X-Google-Smtp-Source: AMsMyM55hJ9PXRH/hXzO+vwqPZ2klpmIg7kIlx7KlKvDTwT6XFENI104ntOjdQl03B0X6+vR1S41zJ27V5R7Tvp7990=
-X-Received: by 2002:a05:6a00:1389:b0:566:1549:c5bc with SMTP id
- t9-20020a056a00138900b005661549c5bcmr12198459pfg.8.1666006204731; Mon, 17 Oct
- 2022 04:30:04 -0700 (PDT)
+ bh=dRpsV4QbUoFKca2/W0zAyTwjc9giHp2v0p6rUsCdbt8=;
+ b=0PmjjJlvmGJAlyKqfPe4ZlLvRsKQBOqC16mI1Fyisgmm5REnTOUcHABUDi6e3g7SGq
+ 8CL+gBdOw1ju0I50xnnEkf7uy7kBkzfGlqFqKbthbpM8froRW+evdiCkFWySU8OaUqm/
+ Es8paEM17U/uXvbbppKkR2NaZ/yc17IG3fhBGxo59DguY0aQcOpY6JG2GauA2YzAWsoM
+ nDdO3ZQsZ4c3yG4fR781b6yUNcjhAfVvYI40yLTXYRY/OAHMQ4Hq/J+v2scnkHVS4fcB
+ nsWnJ4gQgrs9vf1HRnaGWPFw1qqDiuFMb5ceU4vCEJ8uNfHB/aIylMLeLLqyWX6LUNWk
+ 08xw==
+X-Gm-Message-State: ACrzQf0LHovSvHHg3v6cqw5I6PvFGVGrDIMTnFT/JmuLiHTq7q+bT+u1
+ Gy49iPM3JK/s82M7cbcqaCxfH5G7DhoY0bWd9Wo=
+X-Google-Smtp-Source: AMsMyM6JDGVO6xs/4EqUcg5J/6MTI4qEhx95OT+19/3ivgQvyKmvXaFnVzR089kj74G2BNPzQGaznuvPKzyXNoIoNpA=
+X-Received: by 2002:a05:6214:21ab:b0:4b4:6dc:b94e with SMTP id
+ t11-20020a05621421ab00b004b406dcb94emr7733994qvc.107.1666008733635; Mon, 17
+ Oct 2022 05:12:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221015005813.4055238-1-james.hilliard1@gmail.com>
- <CAPi7W828RqJOB3wUx3y68PFHE+M+pt5Ohck+-E-YzPim-C54eQ@mail.gmail.com>
- <CADvTj4p15dWwuUN0rz4D5_tQi+UzuTdoFq76ewYh00xaULhp8A@mail.gmail.com>
- <20221016075056.GI2503@scaer>
- <CADvTj4rBi3uu2bXJy=Tp76NV6Yjk7--EtDOm0kmxi47XOVsQ=Q@mail.gmail.com>
- <20221016160505.GK2503@scaer>
- <CADvTj4q+ztJca7+MEcOK5-gd94155C0X1s0_5-SvCxp=XXOptg@mail.gmail.com>
- <20221017091644.1104527b@windsurf>
-In-Reply-To: <20221017091644.1104527b@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 17 Oct 2022 07:29:52 -0400
-Message-ID: <CADvTj4qT7BZY4QhkC0A=LFQ5x2fgWBAdECaAGFxu5VUE=ukgxw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <cover.1665868987.git.yann.morin.1998@free.fr>
+In-Reply-To: <cover.1665868987.git.yann.morin.1998@free.fr>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 17 Oct 2022 14:12:02 +0200
+Message-ID: <CADYdroMmvaBpSbVkrc+Eu7KtkBt1m7Zqeu4mO6a2UZp+a1Hjrw@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: multipart/mixed; boundary="000000000000c3223505eb39e222"
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=5Kjb6D/Nuwt0qgkDIds4ztqBi8LfrwoiOdsG8uP9y1s=;
- b=n4r1mXWKrBS5D3JZIenJvbOfIn2Ym9JcZyJq0Il7i+J6hUDFRxKOJfHe2hrGnnP9jb
- hxgHafewqmlR0gYTdN5sV7v+cIjRs8qnDDUxRF5d28/hVMFQYpR2Fzmqkyx1Fco80QiX
- k7eYeFyOSzqNZIiarSShYzbn0zftgjRISCFzmvkUtjEbTHGFx8nfpD4n9ujiPArlxuJL
- vTwL2+TuoXM56suwTWu1u2RFWAlYZdVhVvocuOcLiJ3F7Yh6nmcTB6E2eVRqH6uBcxCs
- 0WxqsFDKZlcVInLYfmy8xz04koZia1t6S/oH0O/JcRDsH9SOfj0JcvmSwCAj74y/1c9W
- bR3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=dRpsV4QbUoFKca2/W0zAyTwjc9giHp2v0p6rUsCdbt8=;
+ b=W4hzJq+G75EZBEpafbbEz9zLDgor6Gf1mN6256UpoN6bp9BbdZcfS8IXWB6W33WotB
+ VjAuIl3TsrWiv4BaOkdoBMXwsSI/HikFMAYL2UIK5v8CKKhqVVPf+eLlKmoJKFwtJtOX
+ KajRPpNUs3EzBsuZpPJ1fMdpiEb3Lf51EmeN6odZ+vgDtDUCdsW9cqDWL6WgPMDZpXdl
+ DjOjU0aSUuuN5g0et4yy1KxJngQfUD/g8EDD9bfozJUC4nXfGnNhSY3eQQdjUJ+O+SCk
+ 7b98rdClwxM3h2pqGtYYVDyrwarSnTYtH34KvR6ttwasTcRsdeMDjhgal3pDONgOCsRx
+ i84w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=n4r1mXWK
-Subject: Re: [Buildroot] [PATCH 1/1] package/bearssl: disable parallel build
+ header.a=rsa-sha256 header.s=20210112 header.b=W4hzJq+G
+Subject: Re: [Buildroot] [PATCH 0/4] systemd: sort out the conflict between
+ var factory and tmpfiles (branch systemdify-var)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,71 +91,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org, "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?B?SmXMgXJlzIFteSBSb3Nlbg==?= <jeremy.rosen@smile.fr>,
+ Romain Naour <romain.naour@smile.fr>, "Yann E . MORIN" <yann.morin@orange.com>,
+ buildroot@buildroot.org
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, Oct 17, 2022 at 3:16 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Sun, 16 Oct 2022 12:45:06 -0400
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > > Again, that is very interesting, but please, please, conordinate with
-> > > the rest of us when you do such changes, because that is very weird, as
-> > > Fabrice noted, to suddenly get build failures out of the blue when
-> > > nothing seemed to have otherwise changed.
-> >
-> > I've been experimenting a bit in general with autobuilder settings to try
-> > and fix some issues with poor coverage.
-> >
-> > One other reason for testing with shuffle=random is to make higher kconfig
-> > probability values more useful(as otherwise build failures will be concentrated
-> > in packages early in the dependency ordering) :
-> > https://patchwork.ozlabs.org/project/buildroot/patch/20220514214612.3221647-1-james.hilliard1@gmail.com/
->
-> Thanks a lot for all this work, which I find really useful. However,
-> like Yann said I believe we need to coordinate better. I think we would
-> prefer to see build results submitted on autobuild.buildroot.org to
-> only be generated by the official/upstream autobuild-run script.
-> Otherwise, it's super confusing as we get results that corresponding to
-> variations of build configurations/build logic that we are not even
-> aware they exist.
+--000000000000c3223505eb39e222
+Content-Type: text/plain; charset="UTF-8"
 
-The shuffle=random changes don't require modifying autobuild-run, I'm
-just tweaking the path to make in my autobuild service environment and
-then passing an additional config flag to autobuild-run like this:
---make-opts="--shuffle=random"
+Hi,
+
+Am Sa., 15. Okt. 2022 um 23:23 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> Hello All!
+>
+> This small four-patch series touches on the delicate intricacies of the
+> systemd package and how we integrate it in Buildroot, especially with
+> regard to read-only filesystems.
+>
+> The underlying issue is that systemd wants a writable /var filesystem
+> (it will store a bunch of things at runtime in there). A lot of packages
+> also expect a writable /var. After all, var stands for variadic, so it
+> is not supposed to be set in stone and read-only.
+
+Nobody says var should be read-only, the argument is about
+doing work up-front. Which is enough to get alot
+things running even *if* its read-only.
+
+> The solution we implemented in Buildroot is to generate a factory for
+> /var, and register that as tmpfiles, at build time, and mount a tmpfs on
+> the then-empty /var at runtime, so that systemd-tmpfiles populates /var
+> on boot. Having a tmpfs means /var is repopulated from a clean state at
+> each boot, and people who want a persistent /var have to provide their
+> own mechanism to mount their actual filesystem instead.
+
+Here the issue is, that the logic will never be complete, I will
+have to dig up old threads, but it fails with various combinations
+of symlinks.
+
+Its an inherently fragile approach, and I would question the solution as whole.
+
+> However, for some people, this does not seem to work as expected, so we
+> introduced a call to systemd-tmpfiles at build time, to pre-populate the
+> rootfs from all the tmpfiles, of which our var factory, at build time.
+
+There are several usecases where this is atleast non-optimal,
+and for a default to mess with the filesystem in such a way is
+not a good foundation.
+
+I am not sure if I am up-to-date, but the original call during
+the fakeroot stage you just do the work that wouldve been
+done on first boot.
 
 >
-> Another concern is that the autobuilder results are already extremely
-> bad these days, and therefore the priority is more on addressing/fixing
-> the existing issues rather than adding more. It's a lot
-> easier/practical to fix new problems when they are not mixed together
-> with zillions of old problems.
+> These two mechanism clash with each others, and are mostly incompatible,
+> and causes files to be duplicated.
 
-Well builds were mostly failing in the same place due to deterministic
-build ordering, I was trying to make it so that we would see failures
-in different places as that's more useful compared with always seeing
-the same errors.
-
-To me seeing the same errors most of the time indicates there's some
-major coverage issues with the autobuilders which need fixing.
+One of them doesn't do anything than a regular system start,
+the other is likely to cause trouble, trying to fix packages
+that wont work with an empty var in an automatic way.
 
 >
-> Again, thanks a lot for your work on this!
+> To solve the issue, this series introduces new options, so the user can
+> elect to use either, none, or both mechanisms, as they see fit.
 >
-> Thomas
+> The first steps are borrowed from Yann@work, where we make it easier to
+> change the location where /var is nounted from, by making it a systemd
+> mount unit, rather than use the legacy fstab, and move the factory to
+> /usr/share as it is a system factory (/etc is for the administartor to
+> provide overrides). Note that those two are not strictly required for
+> the following, but since that makes it easier to change the /var
+> filesystem in a systemd-compliant manner, they are a nice addition to
+> the series.
+>
+> Then we move together the two mechanisms under the auspices of a common
+> package, to make it easier to later make them conditional.
+>
+> Finally, we introduce those two new options, that drive each mechanism.
+>
+> Eventally, we want to highlight that, by default, the behaviour has not
+> changed, since the two new options default to y, so as to explicitly
+> keep the behaviour from nefore this patchset.
+
+I would prefer a  robust solution that provides a filesystem image
+that is compatible with further tinkering, particularly mounting /var
+in the initramfs.
+
+I attacked a drop-in solution, that has none of the drawbacks,
+correctly works with mounting stuff in /var,
+and only requires overlayfs to be available in the kernel.
+
+Funny detail: together with the upfront creation
+of some directories in /var via the systemd-tmpfiles build-time call,
+a basic usable system is available even if the overlay fails.
+
+The recurring attempts to discuss this ended in [1].
+
+Short on time nowadays so I can hardly pull together all relevant parts again.
+
+regards, Norbert
+
+>
+> Regards,
+> Yann E. MORIN.
+>
+>
+> ----------------------------------------------------------------
+> Yann E. MORIN (4):
+>       package/skeleton-systemd: move /var factory out of /etc
+>       package/skeleton-systemd: systemd-ify mounting /var tmpfs with ro rootfs
+>       package/skeleton-systemd: host the tmpfiles preparation script
+>       system: add options for var factory and tmpfiles pre-seed
+>
+>  .../fakeroot_tmpfiles.sh                           |  0
+>  .../skeleton-init-systemd/skeleton-init-systemd.mk | 18 +++++++---
+>  package/skeleton-init-systemd/var.mount            | 18 ++++++++++
+>  package/systemd/systemd.mk                         |  6 ----
+>  system/Config.in                                   | 38 +++++++++++++++++++++-
+>  5 files changed, 69 insertions(+), 11 deletions(-)
+>  rename package/{systemd => skeleton-init-systemd}/fakeroot_tmpfiles.sh (100%)
+>  create mode 100644 package/skeleton-init-systemd/var.mount
+>
 > --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
+[1] - https://lists.buildroot.org/pipermail/buildroot/2022-July/645680.html
+
+--000000000000c3223505eb39e222
+Content-Type: application/x-xz; name="overlay_var.tar.xz"
+Content-Disposition: attachment; filename="overlay_var.tar.xz"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l9cq9e8h0>
+X-Attachment-Id: f_l9cq9e8h0
+
+/Td6WFoAAATm1rRGAgAhARYAAAB0L+Wj4BH/AnNdADYbyIzvO8yPAP4FziZo3Oy0itJTZ1Giqnuw
+DGfVmjx9l/5Wh5HVtFaZPoP+lVzwNIDYIZ+5bKfsXhema754JsFlNvHD0agdqyWRINs6JiH7C4qe
+H2jO/25uRz8drAg3/D+f5gDqV++vakthLJkZ/AUz0ZaIIC4qO1I15g+BBFfHZ6IUHWISB2h2n1PP
+TUJjhHCyPA3oJZeyIfKhFOkcAYUXkOxyD16A7zlY+mCeo+mkAwaihOja7RNwmvJctIzOwdK5r2lC
+2lUp1juR/2bDzKW7txPkHMEmkLaXfli2KIhG1va+QXEgfyZbniXiWA/G0faYVI9NySMDZL8KMn02
+fm0nW8eswLEEXSR4Pf8V24Osh+cR5CRf2aMXNFBCNUIEVWV/GDp9TS6sWXuPXS5k+czUgSOKdFCP
+iSKqBBPevd5oFFkRb7X30U/O22LJcStkcAABgdaah0vSRttbCniwdihubOwfuDSRaaTq3jj/8ydF
+dSIsevKrS9kRCdhTmeBf8o27uwZ3LstazQIsOoTLKJI01vaDUX+/f6dCzCfWp9m1tWJGUTsLkzOq
+Np+pH31NG1wSkg4TE7fpXzDnTqBIGtl3gjPywNX2SVvBIWEJ4EJnUvRDBUE3SEdttX1/beyYJ5sM
+pqBM/YU05z3G41nlXICxSxb3sdYInV5ANP6G1V3F+2MuFe/9X33Pn6wpIIlyABpUnj2l1hDxvIEY
+TqUvm/K0nvyF1Ijk45lLoUcoA5/JBYOO8IqNe/YMOslCsb2g3geTzd8PgCHnJHoJjRRtYF3T6mOm
+pISHG/Yuhk9mJh1VVUDN0wKq/n9aAzRfAmPnbdmJQAAAApuesqx07TAAAY8FgCQAAKelTjaxxGf7
+AgAAAAAEWVo=
+--000000000000c3223505eb39e222
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--000000000000c3223505eb39e222--
