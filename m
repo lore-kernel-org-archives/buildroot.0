@@ -1,50 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E16EEC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 15:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A85ACC433FE
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 15:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FBFE404C4;
-	Mon, 17 Oct 2022 15:07:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FBFE404C4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A1274173E;
+	Mon, 17 Oct 2022 15:07:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A1274173E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ScevywDk3vrH; Mon, 17 Oct 2022 15:07:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tlroNO7U2cSF; Mon, 17 Oct 2022 15:07:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9FCDE404D5;
-	Mon, 17 Oct 2022 15:07:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FCDE404D5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 585E71BF2A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3752341737;
+	Mon, 17 Oct 2022 15:07:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3752341737
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 64FB81BF97F
  for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 15:06:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 412F08142E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4DF3860F25
  for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 15:06:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 412F08142E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DF3860F25
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uuqX3rrV7Q10 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C0nyZwKT3Y9u for <buildroot@lists.busybox.net>;
  Mon, 17 Oct 2022 15:06:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8081F82A6C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9500E60EDB
  for <buildroot@buildroot.org>; Mon, 17 Oct 2022 15:06:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8081F82A6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9500E60EDB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6ECC686E38; Mon, 17 Oct 2022 15:06:55 +0000 (UTC)
+ id 827CE86E72; Mon, 17 Oct 2022 15:06:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Oct 2022 17:04:45 +0200
+Date: Mon, 17 Oct 2022 17:05:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ebdd163c0d7bbf77bbe61a71a4d0fb13d9d9796
-X-Git-Newrev: 998bf9206461855fc13e7a338abffdad2a1d0610
+X-Git-Oldrev: d8bad2880dc5826043bf7c257c78c5ca2cd13e33
+X-Git-Newrev: d6e72d04d5b8c8ee8e6af21decc12e4c6570f583
 X-Patchwork-Hint: ignore
-Message-Id: <20221017150655.6ECC686E38@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libva: bump version to 2.16.0
+Message-Id: <20221017150655.827CE86E72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
+ 22.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,55 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=998bf9206461855fc13e7a338abffdad2a1d0610
+commit: https://git.buildroot.net/buildroot/commit/?id=d6e72d04d5b8c8ee8e6af21decc12e4c6570f583
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes: https://github.com/intel/libva/blob/v2.16-branch/NEWS
-
-Removed ac_cv_path_WAYLAND_SCANNER hack due to upstream commit
-https://github.com/intel/libva/commit/a60756887e59bef0c7e8b7b20814c64666be497d
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libva/libva.hash | 6 +++---
- package/libva/libva.mk   | 3 +--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index ecca9271cc..2916898c31 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva/releases/download/2.15.0/libva-2.15.0.tar.bz2.sha1sum
--sha1  b4fca8600961336b246e80552f9b0278c187051b  libva-2.15.0.tar.bz2
-+# From https://github.com/intel/libva/releases/download/2.16.0/libva-2.16.0.tar.bz2.sha1sum
-+sha1  ba1c0e196d69a26e54b065dc0f645bdf3be147a7  libva-2.16.0.tar.bz2
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index 9509796850..bfff5e4b82 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  258ed409458d3e7a000e1908bc852619615ee6a933359c745fcd93eb3e461eca  libva-2.15.0.tar.bz2
-+sha256  115faca0db2c417a37da49830870e260450fa13066f5e24e252a20c36d920a1c  libva-2.16.0.tar.bz2
- sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 4138daf8b4..3b6e9580d3 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
+-sha256  0b2253894c6fc8455b6d7c5e87e6504a76d6f60ea192e1445c2f93164bf529c0  intel-gmmlib-22.2.0.tar.gz
++sha256  363084a52db1557f6e7409278c8ce46a66fcafa2b4672e399c452501a60b4437  intel-gmmlib-22.2.1.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 6fec276205..e949176cf7 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 2.15.0
-+LIBVA_VERSION = 2.16.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
-@@ -30,7 +30,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- LIBVA_DEPENDENCIES += wayland
--LIBVA_CONF_ENV += ac_cv_path_WAYLAND_SCANNER=$(HOST_DIR)/bin/wayland-scanner
- LIBVA_CONF_OPTS += --enable-wayland
- else
- LIBVA_CONF_OPTS += --disable-wayland
+-INTEL_GMMLIB_VERSION = 22.2.0
++INTEL_GMMLIB_VERSION = 22.2.1
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
