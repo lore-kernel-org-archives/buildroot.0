@@ -1,77 +1,137 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9C0AC433FE
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 14:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3C2EC4332F
+	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 14:15:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 72F9C605EA;
-	Mon, 17 Oct 2022 14:12:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72F9C605EA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56FE58250B;
+	Mon, 17 Oct 2022 14:15:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56FE58250B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r2_QzL2hsKhT; Mon, 17 Oct 2022 14:12:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id H7XfQSt7b2if; Mon, 17 Oct 2022 14:15:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54FE5606DC;
-	Mon, 17 Oct 2022 14:12:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54FE5606DC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 86E781BF2F2
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 14:12:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9260081C58;
+	Mon, 17 Oct 2022 14:15:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9260081C58
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B9F231BF2F2
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 14:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6023741769
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 14:12:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6023741769
+ by smtp2.osuosl.org (Postfix) with ESMTP id 875794010D
+ for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 14:15:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 875794010D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8Ggamlijoohm for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 14:11:59 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 880F941765
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.41])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 880F941765
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 14:11:59 +0000 (UTC)
-Received: from opfedar07.francetelecom.fr (unknown [xx.xx.xx.9])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by opfedar25.francetelecom.fr (ESMTP service) with ESMTPS id 4Mrf7d0rTvz8sZm; 
- Mon, 17 Oct 2022 16:11:57 +0200 (CEST)
-Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Mon, 17 Oct 2022 16:11:54 +0200
-Date: Mon, 17 Oct 2022 16:11:54 +0200
-From: <yann.morin@orange.com>
-To: Norbert Lange <nolange79@gmail.com>
-Message-ID: <30300_1666015916_634D62AC_30300_412_1_20221017141154.GE2064029@tl-lnx-nyma7486>
-References: <cover.1665868987.git.yann.morin.1998@free.fr>
- <CADYdroMmvaBpSbVkrc+Eu7KtkBt1m7Zqeu4mO6a2UZp+a1Hjrw@mail.gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HJ5S3Jt9yCsl for <buildroot@lists.busybox.net>;
+ Mon, 17 Oct 2022 14:15:19 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C660F400EF
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on2075.outbound.protection.outlook.com [40.107.223.75])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C660F400EF
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 14:15:19 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BJ3Wto3CgtUqLIIZttAlhjiOOcTCuTntjIwk2phGkx+bgfAk7pLgjYTGtK6PqTCN/QcMiemZ24Bwo9fnM2lAp4caK8e9ZtoXYTfWBQcbBRBxCU+VCmBAA6rLZ9uX0ELF058LNkV5/9EnoDeA/qVLkdBl4S1uH/HJtJQ96kc8fRRBmowiNJopDEbR/8mFDfzZC71XquDzZo4gDw8btNh/NYKpnDPlRs9Oq485f+Azwb19NfpILbasLbmz1xZUzlpAWM58FN3dDPsVfSM5qXrIO0/iyLlx7E+zcTjjvpmIpbT/egjWaiGa9fcDv04mK+zHDHi9rC24srRg1qSu8OzZrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3m8SYOXKdV5H39kCZ6J3R5dFdXMsbEe98pyQAj/UvCE=;
+ b=UvDyKMmi2eSeIucHvGPX2Kaw291bS1kgtm2KpCO6ZSsczMKHSwPQ4PkacVwJ/mHDAHhCaIHTNrXqR2QTpherYQJrzafuX/ANR73OUzXTGKJ7INUkrsmIjw9dVVQ1FbLYR7a8AJDThLn4MYWPl5zLgV1d+ttw2xZrRwIuSCRn3Z4q9Rh8VdNJHKtG19xRYBZzvQMfGLzPiCSr3Yx6ybOTlBnKchhDd+z6H5FTsEzCPkXKHW1w5YKvPfiJUOoqx5Glpu/VTT0J/9i986CnTcNaqCDifDKvahvwEBc62ezAUkiYPV4To0Ypb2W/vufjVBILKh9Q097wVhLTk5cv/9ydHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by DS0PR12MB6581.namprd12.prod.outlook.com (2603:10b6:8:d3::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 17 Oct
+ 2022 14:15:16 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::eda2:578d:ad49:a8df]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::eda2:578d:ad49:a8df%4]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
+ 14:15:16 +0000
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Thread-Topic: [PATCH v1 1/2] configs/zynqmp_zcu102_defconfig: fix pmufw sw
+ reset
+Thread-Index: AQHY4fd4fOWrqP5fk0eqzs7qMZKr8q4SnUAAgAABkRA=
+Date: Mon, 17 Oct 2022 14:15:16 +0000
+Message-ID: <CH2PR12MB5004B9D704E2468C787578ACF0299@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20221017071002.48266-1-neal.frager@amd.com>
+ <20221017155854.48220785@booty>
+In-Reply-To: <20221017155854.48220785@booty>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|DS0PR12MB6581:EE_
+x-ms-office365-filtering-correlation-id: 50db3743-3a62-455d-66de-08dab04a03ef
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vQU65k+uyLhEytuNqeheyrYOhtP0HqxLJ2kKculycQtI/hCrGDTfUNCXpM2qC3h4I95Q/cD+rjQYtR17EPbUnc+2iHAWpqJYM9zfsxGBtoj80kUo7LI8LpoIEPfW1/48lq7WNqbWPqExUy5tffKQFJT3JPKdYtL1SC8c0xQzFzUAC/Fsikf/Kxn9WSa+kB+6RNAnAnjfpoCIeuYfqSNv94p5xmnvzIIeKPGNy56mYwhTie70rG2syfvj/RlgJeFE8E6zuhbMu60AnKMcuMjMI9ydnIgcB7n0V5xpJhQa3c64fMkEbcW6lSj43MgIDKg4eFe2ABuAvXA34ZyC/7V0C0UpvnGnN5QgLpwqbWZs9zXuIMQpsFE97f+xo2SCsKp/1wiAsoYNQUVk3EOCZ9ZnfTq8nr0Wpw44gmPvFD68iNGP4T+rXwxPTwT5pqG57Y4rA8KWwgyzNg8mYPQnA2UluVW0OCAbB7ZG59AkCkb55Rz73+bWXN65ext/2z0A40rPVUa0vZmF9G1fGQn42+0hYYRzOJUQqqgj1jYztMg26xXuarecA4d21/pnFV2orHo30vQNHOO2QnSsltHqPppSPXpuoOc5xj7Xvfyy+hsQ3lsPVyONj1BaESU0RdOzJEkn/FWH6hVx1MfmOJF+49Ngn6KCIgzNFZyDKbtFMzOfdpgS1EAHbUzmNzn86VenIZIIonv0mVxs90Lc1TNoAw3VOqaA9IfaYzA3+Z9xAP9gGPUdbTxqlzyjMNVitzmZqizfYmM7wEKgGKDSNL5AjzQLkah7m2ji1HhFvxAzT+UJmZ4=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230022)(4636009)(136003)(376002)(366004)(346002)(39860400002)(396003)(451199015)(38100700002)(122000001)(71200400001)(38070700005)(478600001)(6916009)(54906003)(6506007)(7696005)(41300700001)(186003)(2906002)(316002)(64756008)(66476007)(66446008)(55016003)(86362001)(8676002)(4326008)(66946007)(66556008)(76116006)(8936002)(52536014)(33656002)(9686003)(5660300002)(41080700001);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iYBiTFK4UWbis3QzIdA95s1x0yQILNevDBrDhO9FuJXC90pD/3sPMKf+pio0?=
+ =?us-ascii?Q?y+fo3iFZNTVaKkdd6jLVU6lS0zzvB9Jt0cVF2bvtg4BbVIEeKqZ71+3lYoEP?=
+ =?us-ascii?Q?7dosE+8JvxFAkRiEArHuNf0kVKkTzUret4B8O/tbweyhV/0zjrIvAN79u5hm?=
+ =?us-ascii?Q?eSiSq6hbZMDEd/8jChiJeV0noTkVImWr/Pz59QsDOR57oO3yc9mYdV8NnGEp?=
+ =?us-ascii?Q?HYu9Ve6wCIlcqGSKq2ANBDGrSdkx+BRVrR91ndFGpsKg4qNqDb8X27jY+iM1?=
+ =?us-ascii?Q?wUUCOIQc/HYGSA4unvUVP72oVjRnHyZDF3CCUPPh/e2eSEicHF9FC6j5OYCn?=
+ =?us-ascii?Q?2a7ssSNlHXQtx2pqmhspXK2uZrg428+KLayZjGnDmAzZwgBhKYHdh3LBP7/r?=
+ =?us-ascii?Q?w+G0kEmKZGoAIjrWSQDt8e8pF9VGQHquxk1TNuR/KSeJ+c4IBeY5ddIerB4B?=
+ =?us-ascii?Q?GDviuy03IKs45LTkaIfacPqFC5ZHVNrl/3jckyHLdLJcbW7R/we4C8HIPhNo?=
+ =?us-ascii?Q?0w09dFEyYs9IdTS8V7pJ4oz6xba5HD+QcbhtpCZHXzlsF6IlrNT2og5w8raf?=
+ =?us-ascii?Q?nYTQVY58KhEy6/4FOKGV6561bEN37Q/3utnC3Md055pjc6n8UmBbsfFs7mDi?=
+ =?us-ascii?Q?iKudODp+QqUsRSn1NYDh0dtGioDYhzgW7wNm0Iol7yLCZpeNF6pTaIQJUVGR?=
+ =?us-ascii?Q?GnQkZBPN9VANsXwc1/AyY4x9eapwQ9+ksto7+zhS3GFksyB1LX5SF2IO3srD?=
+ =?us-ascii?Q?HCzc/9E44JBNove009aPpHDF7FsYC5sCv2cU45BTnyYntvbMtOjkiIBhmsJS?=
+ =?us-ascii?Q?3eMHlTnDN8rLN/dmgO1BZDR5DAfBvZW8poCjlI6TPFeVZ/zD27EOtpopoSEQ?=
+ =?us-ascii?Q?D1EQ5fve7cU89xqKWfksOJOpIUMhWm+NItEkvyYucsWHeMayhovQNSIjn5Is?=
+ =?us-ascii?Q?Q0bWjNTlH6Vjiti91M6+xizClOtOfz3Y6d26ayFTq5nBrJ6YOQDlAJPEEeSm?=
+ =?us-ascii?Q?G6lOTiKYfTRneCBXI7uKS31V2kH95RTgEV5sjYW8dp3xPTfOAndiIZY+3A2w?=
+ =?us-ascii?Q?LQtoK+jSjVZp3km+HNTVUDvARsZT7mb2N1r0exo5ez75Bw4pZmcAs9uavRXP?=
+ =?us-ascii?Q?uNoWsMSkhGRqmEt4iIdtmiGewMZWRGmxKu/xwcmyBeTTkdL84PDXWpa1xkw7?=
+ =?us-ascii?Q?Bk6YQrw3T2va7UytCz3ulgsPOshtl+W9p2p7Mh4zmA0Uyxn8lAZQoPewsiKO?=
+ =?us-ascii?Q?k7QxIStBGqx4n92xCpGbghMXRlYS5lbuC4yb3zVnPBL0bbDJ4uL472ddm2BS?=
+ =?us-ascii?Q?sBsQwwkcxxFyU0wpv2XEp4Zr0EJGx7/z0gqlwQ/TPAF1W1Z4QgXR31IRlK1w?=
+ =?us-ascii?Q?7ncMWYnDqJFgTbky1VUzWrCHhWmjUXguOiBrzj+OYgaEvkDGI9mb8bOcNrAZ?=
+ =?us-ascii?Q?JMt2oref7WGNZyJf6oG+G9cM/Vs4Wh+qH6G21ms5nBj0nQvcBTBnU/Hep6oX?=
+ =?us-ascii?Q?b1/lBGuPs3nZmSKl0FBiLQUGYll1ZaiG+8bawMnMgvVEbtzwpvA+CztJ0g6J?=
+ =?us-ascii?Q?gi1V4Jo/WT/c9+PQKJ+4rrX2pLt5J7CTZAcsnCnR4Virjt1gYl2jmhNi+2S6?=
+ =?us-ascii?Q?xvmgRuF9yvFrKcY0ySiJm1s=3D?=
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CADYdroMmvaBpSbVkrc+Eu7KtkBt1m7Zqeu4mO6a2UZp+a1Hjrw@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX504.corporate.adroot.infra.ftgroup
- (10.115.26.28) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50db3743-3a62-455d-66de-08dab04a03ef
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2022 14:15:16.6279 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xaFbE9ohQDBXQomE6yRJUBqRiDDay0aswol33CbHM3ysfS6ijb57oxge72Wdj98Q
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6581
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1666015917;
- bh=hcOAJqbdQu+dKvc4Q9qx31RECD/AeG1puMMcsjTifb4=;
- h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
- b=G7U7q4uXKSj7WN4xR/gVYZ+vCLUl6wmEmX+KLgUv0rkgiAoJ7m7fQLhghZlriv3uM
- IW7Wh7ycf+2zZEXk8KLh8OND/pcfoSs0y5Q5/V2FbblQE7lD5QPr9btphCH2wHsnC+
- E7IUJZB1cvFqTOUVLGrnSx9F1R0oOxxHv4A1brTb9fnExiYdUa34m+h2KbDFhJnzNZ
- UAaW/zgSjt5rKdiTLIQPgl/PaYbSA89nTpEmvl2QkAy19uRCYM0dRef2CRviRTWJO/
- wOMlOzrbyuYREukf5/T8Qp22lzpglUbZbv4dj1UjbJK3gNoRqsjoUy0louKaaKhTvg
- OLvZ3/+6pOyrA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=G7U7q4uX
-Subject: Re: [Buildroot] [PATCH 0/4] systemd: sort out the conflict between
- var factory and tmpfiles (branch systemdify-var)
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3m8SYOXKdV5H39kCZ6J3R5dFdXMsbEe98pyQAj/UvCE=;
+ b=1q/Sbt4OtZxBvLKDTmg2lx1Uqy7ooYe/ZtV15wFYZwnwxzvNt2mqXRtK+4SvyWvgyP4Ux44OgYfRzwhKOkRH1LGthaFEvztXRB8Zf00wrARHS/2UDqXUv8aj4eDIBMQACnLG5oLyEi4rA7eKMyga/NxiEgAXidbGXBn5Orbhdus=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=1q/Sbt4O
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v1 1/2] configs/zynqmp_zcu102_defconfig: fix
+ pmufw sw reset
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,201 +143,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@smile.fr>,
- =?utf-8?B?SmXMgXJlzIFteQ==?= Rosen <jeremy.rosen@smile.fr>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>, "Chaplin,
+ Kris" <Kris.Chaplin@amd.com>, "wesley@sonifex.co.uk" <wesley@sonifex.co.uk>,
+ "giulio.benetti@benettiengineering.com"
+ <giulio.benetti@benettiengineering.com>, "Simek,
+ Michal" <michal.simek@amd.com>,
+ "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Norbert, All,
+Hi Luca,
 
-On 2022-10-17 14:12 +0200, Norbert Lange spake thusly:
-> Am Sa., 15. Okt. 2022 um 23:23 Uhr schrieb Yann E. MORIN
-> <yann.morin.1998@free.fr>:
-[--SNIP--]
-> > The solution we implemented in Buildroot is to generate a factory for
-> > /var, and register that as tmpfiles, at build time, and mount a tmpfs on
-> > the then-empty /var at runtime, so that systemd-tmpfiles populates /var
-> > on boot. Having a tmpfs means /var is repopulated from a clean state at
-> > each boot, and people who want a persistent /var have to provide their
-> > own mechanism to mount their actual filesystem instead.
-> 
-> Here the issue is, that the logic will never be complete, I will
-> have to dig up old threads, but it fails with various combinations
-> of symlinks.
+> Why are these binaries board-specific? I thought this used to be only
+> needed for the "community workflow" before U-Boot SPL was able to load
+> a pmufw cfg object.
 
-Then we should fix it up and make the procedure more robust, when you
-can point to actual issues so that we know how it is broken and how to
-fix it. I (see the post-scriptum) would be happy to help look into that.
+Good question!  I had a feeling you would ask this.
 
-> Its an inherently fragile approach, and I would question the solution as whole.
+In the case of the zcu102, zcu104 and zcu106, the pmufw binary is not board specific.  The same pmufw binary will work on all 3 boards and even custom hardware, if a developer wants to use it unchanged.
 
-The thing is, out of the box, Buildroot needs a working situation.
+But since the pmu reset gpios are customisable among other things, the kria kv260 actually uses a different pmufw configuration.  And developers may wish to modify the pmufw for their target as well.
 
-Providing an overlay (see below) requires a setup by the user, setup
-That is highly dependent on the actual target: does it need to be
-partitioned and formatted on first boot? If so, how? Should it be
-mounted on the whole of / or just /var?
+Since the Xilinx firmware repository is created using the petalinux prebuilt images for each target hardware, we chose to have a pmufw.elf in each board directory to match what comes from the petalinux builds.
 
-Those are not something that falls in the scope of Buildroot. Providing
-a var factory and a tmpfs on /var is the only solution that can be
-(rather easily) implemented.
+That said, since the Xilinx repository has a pmufw.elf in each individual board directory, I thought it would be cleaner for buildroot to use the pmufw.elf for each specific target.  Even if the zcu102 and zcu106 pmufw.elf binaries are really interchangeable.
 
-> > However, for some people, this does not seem to work as expected, so we
-> > introduced a call to systemd-tmpfiles at build time, to pre-populate the
-> > rootfs from all the tmpfiles, of which our var factory, at build time.
-> 
-> There are several usecases where this is atleast non-optimal,
-> and for a default to mess with the filesystem in such a way is
-> not a good foundation.
-> 
-> I am not sure if I am up-to-date, but the original call during
-> the fakeroot stage you just do the work that wouldve been
-> done on first boot.
-> 
-> >
-> > These two mechanism clash with each others, and are mostly incompatible,
-> > and causes files to be duplicated.
-> 
-> One of them doesn't do anything than a regular system start,
-> the other is likely to cause trouble, trying to fix packages
-> that wont work with an empty var in an automatic way.
+What do you think?
 
-Look, I do understand that you do not want to be using the var factory,
-and I do appreciate your arguments.
-
-Now, please understand that some people are very happy with using a /var
-factory, and some are even happy that /var is being mounted as a tmpfs
-too.
-
-All this series does, is make the two mechanisms optional, so that people
-with different expectations can still have a functional systm in either
-case, without an overshoot in the filesystem size due to the duplication
-of files caused by unconditionally calling systemd-tmpfiles at build
-time.
-
-It even keeps the curent behaviour by default.
-
-> > To solve the issue, this series introduces new options, so the user can
-> > elect to use either, none, or both mechanisms, as they see fit.
-[--SNIP--]
-> I would prefer a  robust solution that provides a filesystem image
-> that is compatible with further tinkering, particularly mounting /var
-> in the initramfs.
-
-That is assuming that one will use an initramfs. For example, in my
-systems, I do not use one, and I do not want to use one.
-
-> I attacked a drop-in solution, that has none of the drawbacks,
-> correctly works with mounting stuff in /var,
-> and only requires overlayfs to be available in the kernel.
-
-That is assuming two things:
-  - that an initramfs be used
-  - that an overlay be mounted
-
-However, in my case I expressely do not want to use an initramfs: my
-rootfs is a squashfs mounted on an initrd. I also have a tmpfs mounted on
-/var, as I am very happy that /var gets factory value at boot (my
-resilient data is accessed in some other ways).
-
-> Funny detail: together with the upfront creation
-> of some directories in /var via the systemd-tmpfiles build-time call,
-> a basic usable system is available even if the overlay fails.
-
-That is not true. Anything that expects /var to be writable will fail to
-start.
-
-> The recurring attempts to discuss this ended in [1].
-
-And this series addresses the fact that, for some people, the var
-factory is not a good solution, so that they can disable it.
-
-It also addresses the case of those people for whom the var factory
-actually works, and want to keep using it, can disable the
-systemd-tmpfiles buildtime call.
-
-And finally, I believe it may even address more complex situations,
-where people will provide their own fakeroot-script to do the
-preparatory works.
-
-Regards,
-Yann E. MORIN.
-
-PS. Please note that there are two different Yann in this thread: me at
-work using Buildroot, and Yann at home, one of the maintainers. Look at
-the email to be sure who's talking (not that I-at-work talk in the name
-of my employer either).
-I try to segregate the two identities as much as I can, but sometime
-there is some overlap, like here.
-YEM.
-
-> Short on time nowadays so I can hardly pull together all relevant parts again.
-> 
-> regards, Norbert
-> 
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> >
-> > ----------------------------------------------------------------
-> > Yann E. MORIN (4):
-> >       package/skeleton-systemd: move /var factory out of /etc
-> >       package/skeleton-systemd: systemd-ify mounting /var tmpfs with ro rootfs
-> >       package/skeleton-systemd: host the tmpfiles preparation script
-> >       system: add options for var factory and tmpfiles pre-seed
-> >
-> >  .../fakeroot_tmpfiles.sh                           |  0
-> >  .../skeleton-init-systemd/skeleton-init-systemd.mk | 18 +++++++---
-> >  package/skeleton-init-systemd/var.mount            | 18 ++++++++++
-> >  package/systemd/systemd.mk                         |  6 ----
-> >  system/Config.in                                   | 38 +++++++++++++++++++++-
-> >  5 files changed, 69 insertions(+), 11 deletions(-)
-> >  rename package/{systemd => skeleton-init-systemd}/fakeroot_tmpfiles.sh (100%)
-> >  create mode 100644 package/skeleton-init-systemd/var.mount
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-> 
-> [1] - https://lists.buildroot.org/pipermail/buildroot/2022-July/645680.html
-
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+Best regards,
+Neal Frager
+AMD
 
 _______________________________________________
 buildroot mailing list
