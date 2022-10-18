@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E677C43217
-	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 19:42:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 925F2C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 19:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7488041A1C;
-	Tue, 18 Oct 2022 19:42:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7488041A1C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C13041B50;
+	Tue, 18 Oct 2022 19:42:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C13041B50
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p5CiP1NWGOk8; Tue, 18 Oct 2022 19:42:06 +0000 (UTC)
+	with ESMTP id HwqdyVijXM8H; Tue, 18 Oct 2022 19:42:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5E7A41A1D;
-	Tue, 18 Oct 2022 19:42:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5E7A41A1D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2337B41B3E;
+	Tue, 18 Oct 2022 19:42:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2337B41B3E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C70731BF95F
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:42:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 67AC91BF95F
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:42:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A28F0402C3
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:42:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A28F0402C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 432CA402C3
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:42:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 432CA402C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5Poi5_yFY5fc for <buildroot@lists.busybox.net>;
- Tue, 18 Oct 2022 19:42:02 +0000 (UTC)
+ with ESMTP id 0S2hD0sfsT3b for <buildroot@lists.busybox.net>;
+ Tue, 18 Oct 2022 19:42:25 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BBAF40111
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4BBAF40111
- for <buildroot@buildroot.org>; Tue, 18 Oct 2022 19:42:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ED8E40111
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0ED8E40111
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 19:42:24 +0000 (UTC)
 Received: (Authenticated sender: peter@korsgaard.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 279ACE0002;
- Tue, 18 Oct 2022 19:41:56 +0000 (UTC)
+ by mail.gandi.net (Postfix) with ESMTPSA id 04A89FF803;
+ Tue, 18 Oct 2022 19:42:19 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1oksTJ-008mea-Tm; Tue, 18 Oct 2022 21:41:53 +0200
+ id 1oksTi-008mfJ-Kw; Tue, 18 Oct 2022 21:42:18 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Neal Frager <neal.frager@amd.com>
 References: <20221017071002.48266-1-neal.frager@amd.com>
-Date: Tue, 18 Oct 2022 21:41:53 +0200
-In-Reply-To: <20221017071002.48266-1-neal.frager@amd.com> (Neal Frager's
- message of "Mon, 17 Oct 2022 01:10:01 -0600")
-Message-ID: <87ilkg7wce.fsf@dell.be.48ers.dk>
+ <20221017071002.48266-2-neal.frager@amd.com>
+Date: Tue, 18 Oct 2022 21:42:18 +0200
+In-Reply-To: <20221017071002.48266-2-neal.frager@amd.com> (Neal Frager's
+ message of "Mon, 17 Oct 2022 01:10:02 -0600")
+Message-ID: <87bkq87wbp.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 1/2] configs/zynqmp_zcu102_defconfig: fix
+Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig: fix
  pmufw sw reset
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -75,7 +76,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
 
  > This patch will solve the problem of the pmufw built by the
- > zynqmp-pmufw-builder where soft resets crash for the zcu102.
+ > zynqmp-pmufw-builder where soft resets crash for the zcu106.
  > Details of the issue can be found here:
 
  > https://lore.kernel.org/buildroot/87ilqccu3k.fsf@dell.be.48ers.dk/
