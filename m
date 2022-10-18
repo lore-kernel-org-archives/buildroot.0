@@ -4,84 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7C3CC433FE
-	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 21:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FD73C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 23:46:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2DA141B7F;
-	Tue, 18 Oct 2022 21:38:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2DA141B7F
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9DE4419D0;
+	Tue, 18 Oct 2022 23:46:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9DE4419D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E_SqgeSQOcfT; Tue, 18 Oct 2022 21:38:08 +0000 (UTC)
+	with ESMTP id OMclg0hTKrhm; Tue, 18 Oct 2022 23:46:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BDF9141B7C;
-	Tue, 18 Oct 2022 21:38:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDF9141B7C
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7211419D3;
+	Tue, 18 Oct 2022 23:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7211419D3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1FF7F1BF44C
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 21:38:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C1C721BF59C
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 23:46:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 04B7183F05
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 21:38:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04B7183F05
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA1D783F1C
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 23:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA1D783F1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fS16_5UbcVE8 for <buildroot@lists.busybox.net>;
- Tue, 18 Oct 2022 21:38:05 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E94FD83F03
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E94FD83F03
- for <buildroot@buildroot.org>; Tue, 18 Oct 2022 21:38:04 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id j7so25981891wrr.3
- for <buildroot@buildroot.org>; Tue, 18 Oct 2022 14:38:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=s4VQ8D87taXn2lnRwNtf7J9gPqB4dFR1Xw5FI8NOYpU=;
- b=IqtF8lpFUn4CtDh4SIZskP14rp63HUr4cy3q13Xw2EETSPcU7KyO0lpAMinEGVkloW
- EQlXdD+XHJcFNkQP5gHPDXAogUxijZkeElvkDQGcLnOhFd7SAiuSJBd0Ix1bfcfMgb0j
- q31plQXDwauDCfDG3W+LtbVcmXn7RLakO+aBkxoGeOpXfrMGZFxnv9YVbZaa+vyKGng+
- g4LvrHWUYYXqKqpRMnDHTfvprJx6+a1IwCeuDxIms7tEegofJJXKn9hd7Cg0FjFK6JfU
- koL9FCCngGfYeeOJBKLmvfaegmTiEtWzW+nY6Gc8EMJNQLpqYPgZbMgCXGS7J1huw4Bu
- lrDA==
-X-Gm-Message-State: ACrzQf2mb3JJRuerzZojmeTSdunRIjDRXKvOzeCxyg1YmhyZxpT6MGd7
- Da1FUTpeNK5m1qyN1sEMudSfvb3MBwE=
-X-Google-Smtp-Source: AMsMyM6dkbXfxxfv9tWYEFR+UYIGb40YJ9N2tB+k9mJpTMxBfWnvYnXf5S1Era8iyJttuqN6XLpT/A==
-X-Received: by 2002:a5d:64c3:0:b0:22e:57e7:6230 with SMTP id
- f3-20020a5d64c3000000b0022e57e76230mr3108046wri.482.1666129082836; 
- Tue, 18 Oct 2022 14:38:02 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-2140-123.w92-167.abo.wanadoo.fr.
- [92.167.219.123]) by smtp.gmail.com with ESMTPSA id
- j18-20020adff012000000b00228fa832b7asm11907409wro.52.2022.10.18.14.38.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 18 Oct 2022 14:38:02 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ with ESMTP id U99vgj0jQxy0 for <buildroot@lists.busybox.net>;
+ Tue, 18 Oct 2022 23:46:21 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D676083F11
+Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D676083F11
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 23:46:20 +0000 (UTC)
+Received: from localhost.localdomain ([146.241.87.206])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id kwHpowviNaWj1kwHpoEi0W; Wed, 19 Oct 2022 01:46:18 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Oct 2022 23:37:56 +0200
-Message-Id: <20221018213756.268341-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.35.1
+Date: Wed, 19 Oct 2022 01:46:17 +0200
+Message-Id: <20221018234617.225947-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=s4VQ8D87taXn2lnRwNtf7J9gPqB4dFR1Xw5FI8NOYpU=;
- b=PltqFdQojY770OZBj/DEA/+4yCnNTzIWJzJwSYQN35OEj4GR6scjcUmCMCEn6c2kgx
- zzOaABHbXmjUCyBoPivp2mffqjrfx83djWUDdosrIZr9IJ9iidlep2VTzaSeZ7/FeNcW
- WqV5Vx1q6ScOAM7wyMGfS0piaMKi4xmZSkZUVZbPNbZES4R1OB52v9fhSIJKMbXLyrcl
- olExEoyb2ZkyhZgJ9rq7/bLJ5T2+UbGm15Dt/qqDczITwhSonxfPosFG/vG61/VxGETk
- BtK02gBQhg4B9/OcVC2Kn5QfzvBUCJm5z2Iu6pfLzWfBFTvUb0KrzPIIBjYuNmn3BYAF
- OYoQ==
+X-CMAE-Envelope: MS4xfIGWS8ghiqYnC1DcDEqpieMti4XvLuB8qt3C2Qx8oJ5FeOPr/LwDK4iZqoms0HHH3t+uyXs2oQNPVb1ZPMNMATlg7Q3qK3yWZBt48SRGKfbpizmfKZTS
+ ZQfcwbkm+9e9vc5A7r2qX+9ferDnxlN5DX8rFGyjRT+J5ziSq29MV5tnMrNyLfwny4DjecKH9BdDm8ioJykiRUWotyHNLg9kWzMWz0/oO7dPkseTfsBo7TOT
+ yYIdMIs4Zw7ynTNpEO0KJ5aZqAv+GTwI2DLeKVF1qn2EDoppOOULQqFk/3LwgOqguGvkMytNe9vCuGTZPxt16TpQp7sep18nxvsg5yulXUk=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1666136778; bh=2xT2fYQVDFc6THWZwNrUK9JEb9zHe3vw7JPZuqVYyaQ=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=XNZzD4GKkmmKWtRQYQOUbZJzZT3vnfLqfnsvq+jW1AZ8NslqCMdL85XWNUvzz4Ll0
+ wtUgyNwtLuYRxTCeETIlKf/8L7p1dozuwM8j9iGAiiVXP+wJTVTV/ZKkYcCYQJE31A
+ ZiJIRlda6714DW+WXlb8IOtHyW8H9uf40nnGKwiJbx+6XHHADo/kgSxwrywQsCahw7
+ N//S2eNbOA0SOfoIXWeB9HoGf50MbtBeqkFwr4frArf25DejDffv1csseIYNfsIxVD
+ 9MZFj1amAp+oG7Gt1gqIAwJ+B27Q/oa/AKZMTdTWNSeTgTf+HOS7P8rlCXh55xq1+z
+ 3NANaZEguHI8A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=PltqFdQo
-Subject: [Buildroot] [PATCH 1/1] package/oracle-mysql: add CPE variables
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=XNZzD4GK
+Subject: [Buildroot] [PATCH] package/mono: allow to select which folders to
+ install to target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,36 +73,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-cpe:2.3:a:oracle:mysql is a valid CPE identifier for this package:
+At the moment all APIs folders are copied to target increasing the size of
+rootfs of ~190MB. Allow to select which API folders we want to copy to
+target to shrink rootfs down.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aoracle%3Amysql
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/oracle-mysql/oracle-mysql.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mono/Config.in | 16 ++++++++++++++++
+ package/mono/mono.mk   | 12 ++++++++++++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
-index f1f16abbb4..1086e4125f 100644
---- a/package/oracle-mysql/oracle-mysql.mk
-+++ b/package/oracle-mysql/oracle-mysql.mk
-@@ -13,6 +13,8 @@ ORACLE_MYSQL_DEPENDENCIES = ncurses
- ORACLE_MYSQL_AUTORECONF = YES
- ORACLE_MYSQL_LICENSE = GPL-2.0
- ORACLE_MYSQL_LICENSE_FILES = README COPYING
-+ORACLE_MYSQL_CPE_ID_VENDOR = oracle
-+ORACLE_MYSQL_CPE_ID_PRODUCT = mysql
- ORACLE_MYSQL_SELINUX_MODULES = mysql
- ORACLE_MYSQL_PROVIDES = mysql
- ORACLE_MYSQL_CONFIG_SCRIPTS = mysql_config
+diff --git a/package/mono/Config.in b/package/mono/Config.in
+index 76178bcf9b..8690ee68ef 100644
+--- a/package/mono/Config.in
++++ b/package/mono/Config.in
+@@ -23,6 +23,22 @@ config BR2_PACKAGE_MONO
+ 
+ 	  http://download.mono-project.com/sources/mono/
+ 
++config BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL
++	bool "Specify folders to install to target"
++	help
++	  Allow to specify which Mono folder to install to target
++
++if BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL
++
++config BR2_PACKAGE_MONO_FOLDERS_TO_INSTALL
++	string "Mono folders to install to target"
++	help
++	  Paths to Mono folders to install to target /usr/lib/mono/.
++	  Only these folders will be copied to the target and not all
++	  the built ones. You can provide a list of folders separated by
++	  by spaces.
++
++endif
+ comment "mono needs a toolchain w/ C++, NPTL, dynamic library"
+ 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 219effc5d3..8036d23205 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -30,10 +30,22 @@ MONO_CONF_OPTS = $(MONO_COMMON_CONF_OPTS) --disable-mcs-build
+ 
+ # The libraries have been built by the host-mono build. Since they are
+ # architecture-independent, we simply copy them to the target.
++ifeq ($(BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL),y)
++# Copy only selected folders
++define MONO_INSTALL_LIBS
++	mkdir -p $(TARGET_DIR)/usr/lib/mono
++	(for dir in $(call qstrip,$(BR2_PACKAGE_MONO_FOLDERS_TO_INSTALL)); do \
++		rsync -av --exclude=*.so --exclude=*.mdb \
++		$(HOST_DIR)/lib/mono/$${dir} $(TARGET_DIR)/usr/lib/mono; \
++	done)
++endef
++else
++# Copy all folders
+ define MONO_INSTALL_LIBS
+ 	rsync -av --exclude=*.so --exclude=*.mdb \
+ 		$(HOST_DIR)/lib/mono $(TARGET_DIR)/usr/lib/
+ endef
++endif
+ 
+ MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
+ 
 -- 
-2.35.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
