@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2991BC433FE
-	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 19:43:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D532C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 19:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B450E61120;
-	Tue, 18 Oct 2022 19:43:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B450E61120
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BDA96111E;
+	Tue, 18 Oct 2022 19:43:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BDA96111E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9jTHcCYieCI6; Tue, 18 Oct 2022 19:43:14 +0000 (UTC)
+	with ESMTP id j5DtehDFh4al; Tue, 18 Oct 2022 19:43:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF2436111B;
-	Tue, 18 Oct 2022 19:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF2436111B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 718921BF95F
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:43:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A19F6111D;
+	Tue, 18 Oct 2022 19:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A19F6111D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D433C1BF95F
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4CD1A83E22
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:43:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CD1A83E22
+ by smtp3.osuosl.org (Postfix) with ESMTP id B001B6111D
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:43:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B001B6111D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aESUAsyBWi7M for <buildroot@lists.busybox.net>;
- Tue, 18 Oct 2022 19:43:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kIPz1TI0rKYR for <buildroot@lists.busybox.net>;
+ Tue, 18 Oct 2022 19:43:14 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ACBA8349A
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.35])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2ACBA8349A
- for <buildroot@buildroot.org>; Tue, 18 Oct 2022 19:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7891D61115
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.34])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7891D61115
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 19:43:14 +0000 (UTC)
 Received: from opfednr02.francetelecom.fr (unknown [xx.xx.xx.66])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits))
  (No client certificate requested)
- by opfednr21.francetelecom.fr (ESMTP service) with ESMTPS id 4MsPRJ4hNWz5vs1; 
- Tue, 18 Oct 2022 21:43:08 +0200 (CEST)
+ by opfednr23.francetelecom.fr (ESMTP service) with ESMTPS id 4MsPRN1yRbz5w04; 
+ Tue, 18 Oct 2022 21:43:12 +0200 (CEST)
 Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Tue, 18 Oct 2022 21:43:06 +0200
+ Tue, 18 Oct 2022 21:43:09 +0200
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Tue, 18 Oct 2022 21:43:06 +0200
-Message-ID: <10881_1666122188_634F01CC_10881_33_1_cover.1666122184.git.yann.morin@orange.com>
+Date: Tue, 18 Oct 2022 21:43:04 +0200
+Message-ID: <18712_1666122192_634F01D0_18712_304_1_aadcab6f9e8f71b5581c8a15b2773a431bb29ca0.1666122184.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1666122184.git.yann.morin@orange.com>
+References: <cover.1666122184.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
 X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX301.corporate.adroot.infra.ftgroup
- (10.115.26.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX302.corporate.adroot.infra.ftgroup
+ (10.115.26.11) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1666122188;
- bh=xeXetC6HudmbqQFwfEYelsrYjkv3r8UQW+FMD+JVWwc=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:
- Content-Transfer-Encoding:Content-Type;
- b=gN/lou0a5gmu9AjKm/nJ77OZcNSMeCAgPP8XMJXtyI/xIUYS8UPmzzCtqD0+cw1Ic
- ry5OqgF9qH9Mw3Fpm4GjbuOS88IbM1dKicbiKg4lKgQEqjoQvrwxVZKAcMtpMgVTWm
- kGIup5ODO6SKZDTOcP5J22GSaU+0xcAWU3pjyuIhtRz9r/l4nS1LnHTwYWni+nLK1A
- XKYeS2YZ1nPyoMINnC9oUi7QKixKEAzWuEgYPMVcGxpUSwlAcMJohNxch5K1XU99s4
- 26LzmR68WDxT00oqAHhKhbfsWy0pggMAuI7+uyQVg2swaUW9IllId4e4KQW/YHiI+F
- FAhMa1db55yKA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=orange.com; s=ORANGE001; t=1666122192;
+ bh=PW1kWKnrFIsUp6e0BeGQOtY4EkD31TPZKHUfwI6otmk=;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:
+ Content-Transfer-Encoding;
+ b=HU8sMAlwganZbiHNBSbwl6gQWTAvzz/TI/hNUUBb3A2+9v1QISontDs9bIC0WvyeY
+ 8uS7qq5gNgrVSJtQbe7Ru2h+OcQNt9/04mSWWWHzQNdCGfB9oFVUvbVrcIBsaTLI/E
+ LTkK9hDrQSRiApcezzI3eZgVW4BbVdixMU0s/f44l1wX9YkeHpHm+bIlM2OWDDCkYO
+ WcH4ZXY6YCpUWv/TRjoec1NBZX4u+5Lf1Hh2kWFl5s8GYmHJVDjCLJvav9Euug47/1
+ YhVCgkrQ5iylXjhV6OAax5088crffJ4C/bdZbdgN9ZWu5rDdLiApBClhs0BimXEPbX
+ 7TovuU73BYRjw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=gN/lou0a
-Subject: [Buildroot] [PATCH 0/6 v3] systemd: sort out the conflict between
- var factory and tmpfiles
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=HU8sMAlw
+Subject: [Buildroot] [PATCH 1/6 v3] package/skeleton-systemd: move /var
+ factory tmpfiles out of /etc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,139 +82,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Je=CC=81re=CC=81my=20Rosen?= <jeremy.rosen@smile.fr>,
- "Yann E . MORIN" <yann.morin@orange.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Norbert Lange <nolange79@gmail.com>, Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Norbert Lange <nolange79@gmail.com>, yann.morin@orange.com,
+ =?UTF-8?q?Je=CC=81re=CC=81my=20Rosen?= <jeremy.rosen@smile.fr>,
+ Romain Naour <romain.naour@smile.fr>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
-
-This six-patch series touches on the delicate intricacies of the systemd
-package and how we integrate it in Buildroot, especially with regard to
-read-only filesystems.
-
-The underlying issue is that systemd wants a writable /var filesystem
-(it will store a bunch of things at runtime in there). A lot of packages
-also expect a writable /var.
-
-The solution we implemented in Buildroot is to generate a factory for
-/var, and register that as tmpfiles, at build time, and mount a tmpfs on
-the then-empty /var at runtime, so that systemd-tmpfiles populates /var
-on boot. Having a tmpfs means /var is repopulated from a clean state at
-each boot, and people who want a persistent /var have to provide their
-own mechanism to mount their actual filesystem instead.
-
-However, for some people, this does not seem to work as expected, so we
-introduced a call to systemd-tmpfiles at build time, to pre-populate the
-rootfs from all the tmpfiles, of which our var factory, at build time,
-entirely leaving them the reponsibility to make /var read-write.
-
-These two mechanisms clash with each others; they do not prevent a
-system from booting, but they cause files to be duplicated between the
-factory and the pre-populated /var.
-
-To solve the issue, this series introduces new options, so the user can
-elect to use either, none, or both mechanisms, as they see fit.
-
-The first two patches make it easier to change the location where /var
-is nounted from, by making it a systemd mount unit, rather than use the
-legacy fstab, and move the factory to /usr/share as it is a system
-factory (/etc is for the administartor to provide overrides).
-
-Then we move together the two mechanisms under the auspices of a common
-package, to make it easier to later make them conditional.
-
-Then we introduce those two new options, that drive each mechanism. We
-make sure the behaviour so far is kept, for those who have setups that
-are functional as is.
-
-Eventually, we add a new way to provide a writable /var, which uses a
-pre-populated /var on which an tmpfs is overlayed with an overlayfs.
-This new feature still uses a tmpfs as the writable part, and like for
-the factory case, leaves to the user the responsiility to provide for a
-persitent filesystem should they need one.
-
-This series would not have been entirely possible without the input from
-Norbert, who provided the basis for the overlayfs-based solution.
-Thanks!
-
-Changes v2 -> v3:
-  - introduce the overlayfs-based proposal from Norbert
-  - some rewording
-  - some typo fixes (yah, Yann being Yann being me...)
-
-Changes v1 -> v2:
-  - split Yann@work initial patch into the first two patch
-  - move the systemd-tmpfile handling to the skeleton
-  - introduce options to enable/disable factory or systemd-tmpfiles
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 5b5d3befef9c92a7485c1c68989d95749882ee2a
-
-  package/python-django: security bump to version 4.0.8 (2022-10-17 22:37:25 +0200)
-
-
-are available as patches in this mail series,
-
-for you to apply patches up to b3efa290e26b85b54ab27728bf190316cf2ab1ee
-
-  system: add option to use an overlayfs on /var on a r/o root w/ systemd (2022-10-18 21:37:43 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      package/skeleton-systemd: move /var factory tmpfiles out of /etc
-      package/skeleton-systemd: systemd-ify mounting /var tmpfs with ro rootfs
-      package/skeleton-systemd: host the tmpfiles preparation script
-      system: add options for /var factory and tmpfiles pre-seed
-      system: introduce a choice for /var management
-      system: add option to use an overlayfs on /var on a r/o root w/ systemd
-
- package/skeleton-init-systemd/factory/var.mount    | 18 ++++++
- .../fakeroot_tmpfiles.sh                           |  0
- .../overlayfs/rootfs-bindmount-var.service         | 21 +++++++
- package/skeleton-init-systemd/overlayfs/var.mount  | 15 +++++
- .../skeleton-init-systemd/skeleton-init-systemd.mk | 36 ++++++++++--
- package/systemd/systemd.mk                         |  6 --
- system/Config.in                                   | 67 +++++++++++++++++++++-
- 7 files changed, 150 insertions(+), 13 deletions(-)
- create mode 100644 package/skeleton-init-systemd/factory/var.mount
- rename package/{systemd => skeleton-init-systemd}/fakeroot_tmpfiles.sh (100%)
- create mode 100644 package/skeleton-init-systemd/overlayfs/rootfs-bindmount-var.service
- create mode 100644 package/skeleton-init-systemd/overlayfs/var.mount
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+V2hlbiB0aGUgcm9vdGZzIGlzIG5vdCByZW1vdW50ZWQgcmVhZC13cml0ZSAodGh1cyBhc3N1bWlu
+ZyBhIHJlYWQtb25seQpyb290ZnMgbGlrZSBzcXVhc2hmcyksIHdlIGNyZWF0ZSBhIHRtcGZpbGVz
+LmQgZmFjdG9yeSBmb3IgL3Zhci4KCkhvd2V2ZXIsIHdlIHJlZ2lzdGVyIHRob3NlIGluIC9ldGMv
+dG1wZmlsZXMuZC8sIGJ1dCAvZXRjIGNvdWxkIGFsc28gYmUKYSB0bXBmcyAoZm9yIGZ1bGwgc3Rh
+dGUtbGVzcyBzeXN0ZW1zLCBvciBlYXN5IGZhY3RvcnktcmVzZXQsIHNlZSBbMF0pLgoKU28sIHdl
+IG1vdmUgb3VyIHZhciBmYWN0b3J5IHRvIC91c3IvbGliL3RtcGZpbGVzLmQvLCB3aGljaCBpcyBh
+bHNvIHRoZQpsb2NhdGlvbiB3aGVyZSBzeXN0ZW1kIGl0c2VsZiBwbGFjZXMgaXRzIG93biB0bXBm
+aWxlcywgYW5kIHdoZXJlIHdlCmFscmVhZHkgcHV0IGFsbCBvdXIgb3RoZXIgdG1wZmlsZXMgKHNl
+ZSBhdWRpdCwgYXZhaGksIGNyeXB0c2V0dXAsIGRoY3AsCmxpZ2h0dHBkLCBuZnMtdXRpbHMsIHF1
+YWdnYSwgc2FtYmE0LCBzd3VwZGF0ZSkgYW5kIG91ciBoYW5kbGluZyBvZgpzeXN0ZW1kJ3MgY2F0
+YWxvZyBmaWxlcyB0b28uIFdlIGFsc28gcmVuYW1lIHRoZSBmaWxlIHRvIGEgYmV0dGVyIG5hbWUs
+CnNvIHRoYXQgaXQgaXMgb2J2aW91cyBpdCBpcyBnZW5lcmF0ZWQgYnkgdXMgKHN5c3RlbWQgYWxy
+ZWFkeSBpbnN0YWxscyBhCnZhci5jb25mIG9mIGl0cyBvd24sIHNvIHdlIHdhbnQgdG8gYXZvaWQg
+bmFtZSBjbGFzaGluZykuCgpMYXN0IGxpdHRsZSBkZXRhaWw6IHRoZXJlIGlzIG5vIG5lZWQgb3Ig
+cmVhc29uIHRvIGNyZWF0ZSAuLi4vdG1wZmlsZXMuZC8KYXQgaW5zdGFsbCB0aW1lOyBpdCBpcyBv
+bmx5IG5lZWRlZCBpbiB0aGUgcm9vdGZzLXByZS1jbWQgaG9vaywgc28gd2UKb25seSBjcmVhdGUg
+aXQganVzdCBiZWZvcmUgd2UgbmVlZCBpdC4KClswXSBodHRwOi8vMHBvaW50ZXIuZGUvYmxvZy9w
+cm9qZWN0cy9zdGF0ZWxlc3MuaHRtbAoKU2lnbmVkLW9mZi1ieTogWWFubiBFLiBNT1JJTiA8eWFu
+bi5tb3JpbkBvcmFuZ2UuY29tPgpDYzogTm9yYmVydCBMYW5nZSA8bm9sYW5nZTc5QGdtYWlsLmNv
+bT4KQ2M6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQHNtaWxlLmZyPgpDYzogSmXMgXJlzIFt
+eSBSb3NlbiA8amVyZW15LnJvc2VuQHNtaWxlLmZyPgpbeWFubi5tb3Jpbi4xOTk4QGZyZWUuZnI6
+CiAgLSBzcGxpdCBvcmlnaW5hbCBwYXRjaCBpbiB0d28KICAtIHRoaXMgb25lIG9ubHkgbW92ZXMg
+b3V0IG9mIC9ldGMgYW5kIGludG8gL3Vzci9saWIKICAtIGFkYXB0IGNvbW1pdCBsb2cgYWNjb3Jk
+aW5nbHkKXQpTaWduZWQtb2ZmLWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluLjE5OThAZnJl
+ZS5mcj4KLS0tCiBwYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9za2VsZXRvbi1pbml0LXN5
+c3RlbWQubWsgfCA0ICsrLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVs
+ZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvc2tl
+bGV0b24taW5pdC1zeXN0ZW1kLm1rIGIvcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvc2tl
+bGV0b24taW5pdC1zeXN0ZW1kLm1rCmluZGV4IDc5NWExNzE4MDkuLjdiNjY3MzJlZjQgMTAwNjQ0
+Ci0tLSBhL3BhY2thZ2Uvc2tlbGV0b24taW5pdC1zeXN0ZW1kL3NrZWxldG9uLWluaXQtc3lzdGVt
+ZC5taworKysgYi9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9za2VsZXRvbi1pbml0LXN5
+c3RlbWQubWsKQEAgLTI5LDcgKzI5LDYgQEAgZWxzZQogIyBhIHJlYWwgKGJ1dCBlbXB0eSkgZGly
+ZWN0b3J5LCBhbmQgdGhlICJmYWN0b3J5IGZpbGVzIiB3aWxsIGJlIGNvcGllZAogIyBiYWNrIHRo
+ZXJlIGJ5IHRoZSB0bXBmaWxlcy5kIG1lY2hhbmlzbS4KIGRlZmluZSBTS0VMRVRPTl9JTklUX1NZ
+U1RFTURfUk9PVF9ST19PUl9SVwotCW1rZGlyIC1wICQoVEFSR0VUX0RJUikvZXRjL3N5c3RlbWQv
+dG1wZmlsZXMuZAogCWVjaG8gIi9kZXYvcm9vdCAvIGF1dG8gcm8gMCAxIiA+JChUQVJHRVRfRElS
+KS9ldGMvZnN0YWIKIAllY2hvICJ0bXBmcyAvdmFyIHRtcGZzIG1vZGU9MTc3NyAwIDAiID4+JChU
+QVJHRVRfRElSKS9ldGMvZnN0YWIKIGVuZGVmCkBAIC0zOCw2ICszNyw3IEBAIGRlZmluZSBTS0VM
+RVRPTl9JTklUX1NZU1RFTURfUFJFX1JPT1RGU19WQVIKIAlybSAtcmYgJChUQVJHRVRfRElSKS91
+c3Ivc2hhcmUvZmFjdG9yeS92YXIKIAltdiAkKFRBUkdFVF9ESVIpL3ZhciAkKFRBUkdFVF9ESVIp
+L3Vzci9zaGFyZS9mYWN0b3J5L3ZhcgogCW1rZGlyIC1wICQoVEFSR0VUX0RJUikvdmFyCisJbWtk
+aXIgLXAgJChUQVJHRVRfRElSKS91c3IvbGliL3RtcGZpbGVzLmQKIAlmb3IgaSBpbiAkKFRBUkdF
+VF9ESVIpL3Vzci9zaGFyZS9mYWN0b3J5L3Zhci8qIFwKIAkJICQoVEFSR0VUX0RJUikvdXNyL3No
+YXJlL2ZhY3RvcnkvdmFyL2xpYi8qIFwKIAkJICQoVEFSR0VUX0RJUikvdXNyL3NoYXJlL2ZhY3Rv
+cnkvdmFyL2xpYi9zeXN0ZW1kLyo7IGRvIFwKQEAgLTUxLDcgKzUxLDcgQEAgZGVmaW5lIFNLRUxF
+VE9OX0lOSVRfU1lTVEVNRF9QUkVfUk9PVEZTX1ZBUgogCQkJcHJpbnRmICJDISAlcyAtIC0gLSAt
+XG4iICIkJHtqfSIgXAogCQkJfHwgZXhpdCAxOyBcCiAJCWZpOyBcCi0JZG9uZSA+JChUQVJHRVRf
+RElSKS9ldGMvdG1wZmlsZXMuZC92YXItZmFjdG9yeS5jb25mCisJZG9uZSA+JChUQVJHRVRfRElS
+KS91c3IvbGliL3RtcGZpbGVzLmQvYnVpbGRyb290LWZhY3RvcnkuY29uZgogZW5kZWYKIFNLRUxF
+VE9OX0lOSVRfU1lTVEVNRF9ST09URlNfUFJFX0NNRF9IT09LUyArPSBTS0VMRVRPTl9JTklUX1NZ
+U1RFTURfUFJFX1JPT1RGU19WQVIKIAotLSAKMi4yNS4xCgoKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwoKQ2UgbWVzc2FnZSBl
+dCBzZXMgcGllY2VzIGpvaW50ZXMgcGV1dmVudCBjb250ZW5pciBkZXMgaW5mb3JtYXRpb25zIGNv
+bmZpZGVudGllbGxlcyBvdSBwcml2aWxlZ2llZXMgZXQgbmUgZG9pdmVudCBkb25jCnBhcyBldHJl
+IGRpZmZ1c2VzLCBleHBsb2l0ZXMgb3UgY29waWVzIHNhbnMgYXV0b3Jpc2F0aW9uLiBTaSB2b3Vz
+IGF2ZXogcmVjdSBjZSBtZXNzYWdlIHBhciBlcnJldXIsIHZldWlsbGV6IGxlIHNpZ25hbGVyCmEg
+bCdleHBlZGl0ZXVyIGV0IGxlIGRldHJ1aXJlIGFpbnNpIHF1ZSBsZXMgcGllY2VzIGpvaW50ZXMu
+IExlcyBtZXNzYWdlcyBlbGVjdHJvbmlxdWVzIGV0YW50IHN1c2NlcHRpYmxlcyBkJ2FsdGVyYXRp
+b24sCk9yYW5nZSBkZWNsaW5lIHRvdXRlIHJlc3BvbnNhYmlsaXRlIHNpIGNlIG1lc3NhZ2UgYSBl
+dGUgYWx0ZXJlLCBkZWZvcm1lIG91IGZhbHNpZmllLiBNZXJjaS4KClRoaXMgbWVzc2FnZSBhbmQg
+aXRzIGF0dGFjaG1lbnRzIG1heSBjb250YWluIGNvbmZpZGVudGlhbCBvciBwcml2aWxlZ2VkIGlu
+Zm9ybWF0aW9uIHRoYXQgbWF5IGJlIHByb3RlY3RlZCBieSBsYXc7CnRoZXkgc2hvdWxkIG5vdCBi
+ZSBkaXN0cmlidXRlZCwgdXNlZCBvciBjb3BpZWQgd2l0aG91dCBhdXRob3Jpc2F0aW9uLgpJZiB5
+b3UgaGF2ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBz
+ZW5kZXIgYW5kIGRlbGV0ZSB0aGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRhY2htZW50cy4KQXMgZW1h
+aWxzIG1heSBiZSBhbHRlcmVkLCBPcmFuZ2UgaXMgbm90IGxpYWJsZSBmb3IgbWVzc2FnZXMgdGhh
+dCBoYXZlIGJlZW4gbW9kaWZpZWQsIGNoYW5nZWQgb3IgZmFsc2lmaWVkLgpUaGFuayB5b3UuCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
