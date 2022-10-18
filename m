@@ -4,51 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B61DC4332F
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 18:17:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E677C43217
+	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 19:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02A6D41828;
-	Mon, 17 Oct 2022 18:17:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02A6D41828
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7488041A1C;
+	Tue, 18 Oct 2022 19:42:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7488041A1C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JzJyh9LAT6tb; Mon, 17 Oct 2022 18:17:05 +0000 (UTC)
+	with ESMTP id p5CiP1NWGOk8; Tue, 18 Oct 2022 19:42:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E04D941811;
-	Mon, 17 Oct 2022 18:17:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E04D941811
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 359291BF31C
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 18:17:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5E7A41A1D;
+	Tue, 18 Oct 2022 19:42:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5E7A41A1D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C70731BF95F
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:42:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F0CA60B9B
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 18:17:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F0CA60B9B
+ by smtp2.osuosl.org (Postfix) with ESMTP id A28F0402C3
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:42:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A28F0402C3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qSxHPoXFVZOR for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 18:17:01 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F0C060B5E
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4F0C060B5E
- for <buildroot@uclibc.org>; Mon, 17 Oct 2022 18:17:01 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1okUfa-0002CU-Sz
- for buildroot@uclibc.org; Mon, 17 Oct 2022 20:16:58 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 17 Oct 2022 20:16:27 +0200
-Message-ID: <pan$b9d19$b921215f$5fead8d7$8a34cf11@ID-313208.user.individual.net>
-References: <20221016155252.1723048-1-bernd.kuhls@t-online.de>
- <87k04yals1.fsf__18092.1028529823$1665995868$gmane$org@dell.be.48ers.dk>
-Mime-Version: 1.0
-User-Agent: Pan/0.148 (Chamechaude; a70bd74)
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 8.1.11
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5Poi5_yFY5fc for <buildroot@lists.busybox.net>;
+ Tue, 18 Oct 2022 19:42:02 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BBAF40111
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BBAF40111
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 19:42:02 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 279ACE0002;
+ Tue, 18 Oct 2022 19:41:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1oksTJ-008mea-Tm; Tue, 18 Oct 2022 21:41:53 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Neal Frager <neal.frager@amd.com>
+References: <20221017071002.48266-1-neal.frager@amd.com>
+Date: Tue, 18 Oct 2022 21:41:53 +0200
+In-Reply-To: <20221017071002.48266-1-neal.frager@amd.com> (Neal Frager's
+ message of "Mon, 17 Oct 2022 01:10:01 -0600")
+Message-ID: <87ilkg7wce.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH v1 1/2] configs/zynqmp_zcu102_defconfig: fix
+ pmufw sw reset
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,33 +64,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: luca.ceresoli@bootlin.com, buildroot@buildroot.org, kris.chaplin@amd.com,
+ wesley@sonifex.co.uk, giulio.benetti@benettiengineering.com,
+ michal.simek@amd.com, yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Mon, 17 Oct 2022 10:37:18 +0200 schrieb Peter Korsgaard:
+>>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
 
->>>>>> "Bernd" == Bernd Kuhls
->>>>>> <bernd.kuhls@t-online.de> writes:
-> 
->  > Fixes - CVE-2022-31628: http://bugs.php.net/81726 - CVE-2022-31629:
->  > http://bugs.php.net/81727
-> 
->  > Signed-off-by: Bernd Kuhls
->  > <bernd.kuhls@t-online.de>
-> 
-> Committed, thanks.
-> 
-> Is there a similar fix for the 8.0.x branch for 2022.02.x?
+ > This patch will solve the problem of the pmufw built by the
+ > zynqmp-pmufw-builder where soft resets crash for the zcu102.
+ > Details of the issue can be found here:
 
-Hi Peter,
+ > https://lore.kernel.org/buildroot/87ilqccu3k.fsf@dell.be.48ers.dk/
 
-yes, sent http://patchwork.ozlabs.org/project/buildroot/patch/
-20221017181523.95205-1-bernd.kuhls@t-online.de/
+ > Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-Regards, Bernd
+Committed, thanks.
 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
