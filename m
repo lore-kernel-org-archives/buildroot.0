@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A1CBC43219
-	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 07:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27453C43217
+	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 07:05:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9A4A040A8F;
-	Tue, 18 Oct 2022 07:04:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A4A040A8F
+	by smtp2.osuosl.org (Postfix) with ESMTP id AAF9240A90;
+	Tue, 18 Oct 2022 07:05:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAF9240A90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id y-guoqLa5uNx; Tue, 18 Oct 2022 07:04:49 +0000 (UTC)
+	with ESMTP id odE-3rQYrQa9; Tue, 18 Oct 2022 07:05:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A923640A5F;
-	Tue, 18 Oct 2022 07:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A923640A5F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8B8361BF354
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 07:04:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D728540A8B;
+	Tue, 18 Oct 2022 07:05:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D728540A8B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9035F1BF354
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 07:05:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58079417C9
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 07:04:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58079417C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B39D82E5F
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 07:05:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B39D82E5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fo19SpF62-Q4 for <buildroot@lists.busybox.net>;
- Tue, 18 Oct 2022 07:04:46 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15650417C8
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 15650417C8
- for <buildroot@buildroot.org>; Tue, 18 Oct 2022 07:04:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zIjUQvpmaMKh for <buildroot@lists.busybox.net>;
+ Tue, 18 Oct 2022 07:05:10 +0000 (UTC)
+X-Greylist: delayed 00:05:16 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58D0D828DF
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 58D0D828DF
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 07:05:10 +0000 (UTC)
 Received: from booty (unknown [77.244.183.192])
  (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 7EC7424000A;
- Tue, 18 Oct 2022 07:04:43 +0000 (UTC)
-Date: Tue, 18 Oct 2022 09:04:42 +0200
-To: "Frager, Neal" <neal.frager@amd.com>
-Message-ID: <20221018090442.2cb7fda8@booty>
-In-Reply-To: <CH2PR12MB5004B9D704E2468C787578ACF0299@CH2PR12MB5004.namprd12.prod.outlook.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 3104F240016;
+ Tue, 18 Oct 2022 07:05:06 +0000 (UTC)
+Date: Tue, 18 Oct 2022 09:05:05 +0200
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20221018090505.6bd09c80@booty>
+In-Reply-To: <20221017071002.48266-2-neal.frager@amd.com>
 References: <20221017071002.48266-1-neal.frager@amd.com>
- <20221017155854.48220785@booty>
- <CH2PR12MB5004B9D704E2468C787578ACF0299@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20221017071002.48266-2-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666076684;
+ d=bootlin.com; s=gm1; t=1666076708;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=AffAAm6kvKEayflUphTf75B2axgsBH0zWpwKVGHzgZQ=;
- b=eI2xo8BF/25QOJ0CHaWwtG5SNwMqNMSW45yd+MGWBCnlHxu6KaJ30ndIu/Mr/MkGz1rKxm
- /u2ZFOpjFHt8/XYZlm6wJJ+03WcW75YZCNCpD9uJ9IuEBlCoTQyzf1FjkynryND2v3k44+
- CbzqQwl0z3hscRwiRPAiarpphYexjXK9xcJRGDk4a7sP7FRQMoIhL7uUZYghNoNFeQPyEg
- 9x8kKvrCgdF7OsTSuCRJ4KT5kMwhEIjIJ+L8iG1peDc47Upx+Q4IOrpSE+Ya44yv9/suwd
- SmCVldZbjLjZT1IGrE3djuLCD+g8QqMW9xwbPHjUf5NSRENO7joYgGs5WIA57A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=gDUm9Lrh/gJCTM0iTQIuZPf72g6+NrczLos67tiUdFw=;
+ b=mLh5u46IkedP1GUcYDnF4ZC4fH9Q3NlPzOoxSRHLu+Xv8d78MuSsQzF42ibss/c9DFr5Wh
+ z0ADVNsyivMnXflDeanRIgppPM2u3x+avMi1ak76Ei8IyUT3VqV1VkGvF6p7rM7j43b0kb
+ AxlQ7fdwZQzzeLsVj9Gwl9Ke0IBzLl99WuBDtmeVy76zCikh6AjuBr95KuMo+phpDK9DlG
+ R8TW27jvy3W615FWPOMHhplBtSVWNuekVB5lscTxPZhS5ZEazSBIpZ8FfDogIKqHXy6QjK
+ J9hrAMVVUOcxR7iFEqt0Q2eaYEih9L1vkci4UgQ3QEOS+DVsKkFEOPeeaF/6xw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=eI2xo8BF
-Subject: Re: [Buildroot] [PATCH v1 1/2] configs/zynqmp_zcu102_defconfig: fix
+ header.s=gm1 header.b=mLh5u46I
+Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig: fix
  pmufw sw reset
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -80,51 +80,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
 Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>, "Chaplin,
- Kris" <Kris.Chaplin@amd.com>, "wesley@sonifex.co.uk" <wesley@sonifex.co.uk>,
- "giulio.benetti@benettiengineering.com"
- <giulio.benetti@benettiengineering.com>, "Simek,
- Michal" <michal.simek@amd.com>,
- "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org, kris.chaplin@amd.com, wesley@sonifex.co.uk,
+ giulio.benetti@benettiengineering.com, michal.simek@amd.com,
+ yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Neal, Michal,
+On Mon, 17 Oct 2022 01:10:02 -0600
+Neal Frager <neal.frager@amd.com> wrote:
 
-On Mon, 17 Oct 2022 14:15:16 +0000
-"Frager, Neal" <neal.frager@amd.com> wrote:
-
-> Hi Luca,
+> This patch will solve the problem of the pmufw built by the
+> zynqmp-pmufw-builder where soft resets crash for the zcu106.
+> Details of the issue can be found here:
 > 
-> > Why are these binaries board-specific? I thought this used to be only
-> > needed for the "community workflow" before U-Boot SPL was able to load
-> > a pmufw cfg object.  
+> https://lore.kernel.org/buildroot/87ilqccu3k.fsf@dell.be.48ers.dk/
 > 
-> Good question!  I had a feeling you would ask this.
-
-;-)
-
-> In the case of the zcu102, zcu104 and zcu106, the pmufw binary is not board specific.  The same pmufw binary will work on all 3 boards and even custom hardware, if a developer wants to use it unchanged.
-
-OK, I see. (@Michal) I compared the zcu102 and zcu106 binaries and they
-are different, thus I wondered.
-
-> But since the pmu reset gpios are customisable among other things, the kria kv260 actually uses a different pmufw configuration.  And developers may wish to modify the pmufw for their target as well.
-> 
-> Since the Xilinx firmware repository is created using the petalinux prebuilt images for each target hardware, we chose to have a pmufw.elf in each board directory to match what comes from the petalinux builds.
-
-Sure, knowing the process clarifies the reason for having different
-places for firmwares that are equivalent.
-
-> That said, since the Xilinx repository has a pmufw.elf in each individual board directory, I thought it would be cleaner for buildroot to use the pmufw.elf for each specific target.  Even if the zcu102 and zcu106 pmufw.elf binaries are really interchangeable.
-
-Sure it is.
-
-Thank you both for the clarifications!
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+
 
 -- 
 Luca Ceresoli, Bootlin
