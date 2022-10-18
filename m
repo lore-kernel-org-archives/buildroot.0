@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E272C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 06:36:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A5E5C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 06:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88AA641899;
-	Tue, 18 Oct 2022 06:36:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88AA641899
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1601A60FD7;
+	Tue, 18 Oct 2022 06:59:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1601A60FD7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0fSS4PJEuqaT; Tue, 18 Oct 2022 06:36:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Bfe5sY6pjapW; Tue, 18 Oct 2022 06:59:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72F0841892;
-	Tue, 18 Oct 2022 06:36:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72F0841892
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5431B60FB7;
+	Tue, 18 Oct 2022 06:59:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5431B60FB7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E87361BF35F
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 06:36:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9424C1BF35F
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 06:59:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90D6741892
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 06:36:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90D6741892
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78E8D417AC
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 06:59:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78E8D417AC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x2mJCGYz9XeE for <buildroot@lists.busybox.net>;
- Tue, 18 Oct 2022 06:36:38 +0000 (UTC)
+ with ESMTP id KJAJEvUwGawU for <buildroot@lists.busybox.net>;
+ Tue, 18 Oct 2022 06:59:49 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E100541878
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E100541878
- for <buildroot@buildroot.org>; Tue, 18 Oct 2022 06:36:37 +0000 (UTC)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 8733A240002;
- Tue, 18 Oct 2022 06:36:33 +0000 (UTC)
-Date: Tue, 18 Oct 2022 08:36:32 +0200
-To: Christian Stewart <christian@paral.in>
-Message-ID: <20221018083632.6f336ec6@windsurf>
-In-Reply-To: <CA+h8R2pNnYsj9Yz0Do_UKQz+XWiz4LTxPrLz_aQgGEg1LsZsOg@mail.gmail.com>
-References: <20221017143125.41622-1-thomas.perale@mind.be>
- <20221017143125.41622-4-thomas.perale@mind.be>
- <CA+h8R2pNnYsj9Yz0Do_UKQz+XWiz4LTxPrLz_aQgGEg1LsZsOg@mail.gmail.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B628F417BA
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B628F417BA
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 06:59:48 +0000 (UTC)
+Received: from booty (unknown [77.244.183.192])
+ (Authenticated sender: luca.ceresoli@bootlin.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id EC8DC240007;
+ Tue, 18 Oct 2022 06:59:44 +0000 (UTC)
+Date: Tue, 18 Oct 2022 08:59:43 +0200
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20221018085943.104f227f@booty>
+In-Reply-To: <20221017211048.43d2394c@gmx.net>
+References: <20221017073953.510219-1-luca.ceresoli@bootlin.com>
+ <20221017211048.43d2394c@gmx.net>
 Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666074995;
+ d=bootlin.com; s=gm1; t=1666076386;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=aNHAWVzfO8BPEgh5iEPpBew+unlLvDRu+/3TpGdCgVQ=;
- b=dF4ZIZO3dOo2W6R8IVgslt4bch6Tet3k4ITBxp2hZZjmygSckpkbWo+8FQ/dLRJmDvGiyZ
- jHsZaJR7dCLzD8ozoD/rTLSKWWmZBqU8Z336Cja1qYVrQR7KIGARbHVo8YlgmxTt1qXSz/
- 2TJEFoNs1cawglZaIBfmrzF/byFFjqhkg7nkWd03MLvOjMhgjuT/Mt1lZe/aHt0fkDxIvf
- mPeSZGh8G474EwwELK3P5BZmv2Kr5UNvn1gPsGjyG5xDmcdP2YlJzP4zaaB79e4s+VSSji
- zGNWrlJHcq7P6PHkNyATt3HebdUY19XiYp3kBwOgyvQhNleKwB6iVLeSHmsL3Q==
+ bh=qZZSgeKLtelGat08WxLSDOuefXzc7k/mbjD0GlwE+0g=;
+ b=bOyf7t8r2YZl/PKUBEx8P3Po/aMFg4qc2+AZJYSVqnWdd65mHJ6acm5hvA8MoSx1VLD6FZ
+ IX6XC0D1Kib5pdBw1ypD+9S05O4rzeaZSK40AwnK0qINHfa7OGmaawfQ53Cy+cDiPG8HWa
+ Ty0J+NsNyqKLrx02M9l2vkIEylexAw3l6MvW8kgreZ7+yRK5xh/P4g96TYNOCHlQ/NnRVS
+ nbo232W4i9yEpWpL7Z8S310jftnRLPO0lngsSm9zKQ4TeVlfLnhuH9kdMOsjCahMGEFVqm
+ azp9YDQ4AVwHQs1AIRY38/BlU2pBIigidfmfLEMjhf+2TvstGGxSJ61ydVUSFg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dF4ZIZO3
-Subject: Re: [Buildroot] [PATCH 3/4] package/go-bin: new package
+ header.s=gm1 header.b=bOyf7t8r
+Subject: Re: [Buildroot] [PATCH] rtl8188eu: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,63 +76,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Geoff Levand <geoff@infradead.org>, Anisse Astier <anisse@astier.eu>,
- Thomas Perale <thomas.perale@mind.be>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>,
- Buildroot Mailing List <buildroot@buildroot.org>,
- Romain Naour <romain.naour@gmail.com>, Fabio Estevam <festevam@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Perale <thomas.perale@essensium.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Luca Ceresoli via buildroot <buildroot@buildroot.org>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+ TIAN Yuanhao <tianyuanhao3@163.com>,
+ William =?UTF-8?Q?Wennerstr=C3=B6m?= <william@willeponken.me>,
+ Heiko Thiery <heiko.thiery@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 17 Oct 2022 09:13:54 -0700
-Christian Stewart <christian@paral.in> wrote:
-
-> Instead of adding new packages...
-> 
-> Continue using "host-go" and add parameters under a menu config for it.
-> Then you can simply use a single variable - GO_VERSION - rather than 2 new
-> packages.
-> 
-> I'm happy to send a prototype of this if you need.
-
-I also thought of doing this for the NodeJS package, instead of
-separating host-nodejs-bin and host-nodejs-src. I went for the
-virtual-package + 2 providers solution as this is what we had done with
-Rust.
-
-The main advantage I see with the single package solution is that the
-version of NodeJS would be located at only one place. Although this
-could also be solved by:
-
-package/
- nodejs/
-  nodejs.mk 	<= contains the version
-  nodejs/   	<= virtual package
-  nodejs-bin/	<= pre-compiled provider
-  nodejs-src/   <= source-based provider
-
-In my proposal I solved this duplicated version by simply having a
-comment above the <pkg>_VERSION field to remind people that the other
-package supporting NodeJS should be bumped at the same time.
-
-The advantage of the 2 packages solution is obviously that each package
-is simpler.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgUGV0ZXIsIEdpdWxpbywgUGV0ciwKClRoYW5rIHlvdSBhbGwgZm9yIHRoZSBmZWVkYmFjayAt
+LSBJIHNlZSBteSBwYXRjaCB3b3JrZWQgZWZmZWN0aXZlbHkgOikKCllvdSBhbGwgc2VlbSB0byBr
+bm93IHdheSBtb3JlIHRoYW4gSSBkbywgd2hpY2ggaXMgbm90IHN1cnByaXNpbmcgYXMgSSdtIG5v
+dAphY3RpdmVseSB1c2luZyB0aGlzIHBhY2thZ2UgYW55bW9yZS4KCk9uIE1vbiwgMTcgT2N0IDIw
+MjIgMjE6MTA6NDggKzAyMDAKUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0PiB3cm90
+ZToKCj4gSGVsbG8gTHVjYSwgKiwKPiAKPiBPbiBNb24sIDE3IE9jdCAyMDIyIDA5OjM5OjUzICsw
+MjAwLCBMdWNhIENlcmVzb2xpIHZpYSBidWlsZHJvb3QgPGJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+PiB3cm90ZToKPiAKPiA+IEZyb206IEx1Y2EgQ2VyZXNvbGkgPGx1Y2EuY2VyZXNvbGlAYm9vdGxp
+bi5jb20+Cj4gPiAKPiA+IFRoaXMgcGFja2FnZSBmYWlscyBidWlsZGluZyB3aXRoIGEga2VybmVs
+ID49IDYuMCBbMF0gZHVlIHRvIGludGVybmFsIEFQSQo+ID4gY2hhbmdlcyBbMV06Cj4gPiAKPiA+
+ICAgLi4uL2lvY3RsX2NmZzgwMjExLmM6IEluIGZ1bmN0aW9uIOKAmHJ0d19jZmc4MDIxMV9pbmRp
+Y2F0ZV9jb25uZWN04oCZOgo+ID4gICAuLi5pb2N0bF9jZmc4MDIxMS5jOjcwOToxMjogZXJyb3I6
+IOKAmHN0cnVjdCBjZmc4MDIxMV9yb2FtX2luZm/igJkgaGFzIG5vIG1lbWJlciBuYW1lZCDigJhj
+aGFubmVs4oCZCj4gPiAgIDcwOSB8ICAgcm9hbV9pbmZvLmNoYW5uZWwgPSBub3RpZnlfY2hhbm5l
+bDsKPiA+ICAgICAgIHwgICAgICAgICAgICBeCj4gPiAgIC4uLmlvY3RsX2NmZzgwMjExLmM6NzEw
+OjEyOiBlcnJvcjog4oCYc3RydWN0IGNmZzgwMjExX3JvYW1faW5mb+KAmSBoYXMgbm8gbWVtYmVy
+IG5hbWVkIOKAmGJzc2lk4oCZCj4gPiAgIDcxMCB8ICAgcm9hbV9pbmZvLmJzc2lkID0gY3VyX25l
+dHdvcmstPm5ldHdvcmsuTWFjQWRkcmVzczsKPiA+ICAgICAgIHwgICAgICAgICAgICBeCj4gPiAK
+PiA+IFRoZXJlIGlzIGN1cnJlbnRseSBubyBmaXggaW4gdGhlIGdpdGh1YiByZXBvc2l0b3J5LCBh
+bmQgaXQncyBwcm9iYWJseSBub3QKPiA+IHdvcnRoIGZpeGluZyBiZWNhdXNlLCBhcyB0aGUgQ29u
+ZmlnLmluIGhlbHAgdGV4dCBzdGF0ZXM6Cj4gPiAKPiA+ICAgVGhpcyBpcyBuZWVkZWQgb25seSBm
+b3IgTGludXgga2VybmVscyBiZWZvcmUgMy4xMi4KPiA+ICAgU2luY2UgMy4xMiwgdGhlcmUgaXMg
+YSAoc3RhZ2luZykgZHJpdmVyIGluIG1haW5saW5lLCB3aXRoIGEKPiA+ICAgc2ltaWxhciBjb2Rl
+YmFzZS4gIAo+IAo+IERlc3BpdGUgdGhlIGJ1aWxkcm9vdCBoZWxwIHRleHQgdGhlIHJ0bDgxODhl
+dSBjb2RlIGJhc2UgaXMgc3RpbGwgbWFpbnRhaW5lZAo+IHNlZSBlLmcuICdydGw4MTg4ZXU6IEZp
+eCBidWlsZHMgZm9yIGtlcm5lbCA2LjAgJyhbMl0pIGFuZCB0aGUgdmFyaW91cyBmb3Jrcy91cHN0
+cmVhbQo+IHZlcnNpb25zIHRlbmQgdG8gc3VwcG9ydCBkaWZmZXJlbnQgZmVhdHVyZSBzZXRzIHJl
+Z2FyZGluZyBJQlNTIGFuZC9vciBtb25pdG9yCj4gbW9kZSBldGMuIC0gbm90IHN1cmUgYWJvdXQg
+dGhpcyBvbmUgYnV0IHZhbGlkIGZvciBzb21lIG90aGVyIHJ0bHh4eHggb25lcyksCgpHb29kIHRv
+IGtub3chIFdoeSBub3QgYWRkaW5nIHRoaXMgaW5mbyB0byBDb25maWcuaW4gdG9vPyBJdCB3b3Vs
+ZCBhdm9pZApvdGhlcnMgdHJ5aW5nIHRvIHJlbW92ZSB0aGUgcGFja2FnZSBhZ2Fpbi4KCi0tIApM
+dWNhIENlcmVzb2xpLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJp
+bmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
+b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAo=
