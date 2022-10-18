@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94B6AC433FE
-	for <buildroot@archiver.kernel.org>; Mon, 17 Oct 2022 22:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B257C433FE
+	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 03:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC22282E1A;
-	Mon, 17 Oct 2022 22:45:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC22282E1A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 773AE82A2E;
+	Tue, 18 Oct 2022 03:46:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 773AE82A2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id meBiwYKWv30X; Mon, 17 Oct 2022 22:45:56 +0000 (UTC)
+	with ESMTP id r_nNRodubFn6; Tue, 18 Oct 2022 03:46:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F96C82E4C;
-	Mon, 17 Oct 2022 22:45:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F96C82E4C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A4401BF3AD
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 22:45:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A62D782974;
+	Tue, 18 Oct 2022 03:46:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A62D782974
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F0C221BF2F0
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 03:46:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E056417D2
- for <buildroot@lists.busybox.net>; Mon, 17 Oct 2022 22:45:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E056417D2
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC2384061D
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 03:46:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC2384061D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P_CghiSSlaTR for <buildroot@lists.busybox.net>;
- Mon, 17 Oct 2022 22:45:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nyz-y1zfGhiI for <buildroot@lists.busybox.net>;
+ Tue, 18 Oct 2022 03:46:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1B70417D1
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A1B70417D1
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 22:45:51 +0000 (UTC)
-Received: by mail-pl1-x62f.google.com with SMTP id f23so12115190plr.6
- for <buildroot@buildroot.org>; Mon, 17 Oct 2022 15:45:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0806B40133
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0806B40133
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 03:46:08 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id q196so10788559iod.8
+ for <buildroot@buildroot.org>; Mon, 17 Oct 2022 20:46:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=dwW8diwW+71quM2ak+DL+UbA0W04Mxp0VqSLq2xbRVo=;
- b=bctORW2CCoVJ/nW+pHVDkEVr588cTey6CMFh2EXNnGwLnOZLqPT5Q1vyx17mWSWB0R
- Qz+RB7D5OKHpaMeJ6DNRnD8d7kC7qo4egB/OnkGNF3t++TKIYZ0578ohsLbgKlM654wa
- Jn7LZ2S3Z2rVDwJajmFFZGxMfYaIwaK9dwIQQfPBIpoSnqpdvMRtzl6UB8Gwp7wnMTxa
- 6hZ2V+CSiPRR016hDkc+dU5/Wa15TiRhoSMqhOAdnaW0MayA6XxXsGoR6eRgXgAcIAvQ
- NU7VjzMzQONZim0ZL8jOm+qiqHldxTvmwfsfL0bZECU3frPnumyxeef2nrhBpo/DW/i6
- V2Og==
-X-Gm-Message-State: ACrzQf2EL80Vy7wYyG+eIip7JatgUvrcrr09gBHTG0T4K/Gx8pJr7fL1
- RUFn0DWTl7SG1jv/APHZwsxVIm4lKZB5dDhFDBs=
-X-Google-Smtp-Source: AMsMyM5YR0YUbK0VJwqDhsbkO3F9CrG4W1V3tryXAsELYbTj+wE4rrCI9PzouwqAsD+ToBrki4kt2Ia4JKelHDOAazg=
-X-Received: by 2002:a17:902:b598:b0:184:e49d:3042 with SMTP id
- a24-20020a170902b59800b00184e49d3042mr171334pls.16.1666046751000; Mon, 17 Oct
- 2022 15:45:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <K2AWJR.ZU8FSKYACOJE1@crapouillou.net>
- <20221017141843.0d7d2963@windsurf>
-In-Reply-To: <20221017141843.0d7d2963@windsurf>
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=41MvAtTcWJBRucmjTftYCM4nNUZ8MhvJxXEokBVBLRc=;
+ b=Kw+vmGYcl6F5GSO44WqGCzSJ7O3DIcOi2tNggOVzza5zM151ByIjbZc4S5hYVIQdo3
+ FERWqIQcj+nN+YDINCpn0+7XSd79+e9o5pUKPiiNau0Q6yQRgCSLj9S0hTNuQ1RIyYKN
+ lXNSr0Bb2ZxjBQNT0ZA9Z/v5I2O/4mqu31T2EZFoVVbUKuUYbt48BU2oAQDHLvTClZhg
+ GoI0gV7VAHciwHNXVBqo7G2Y+bq7UlWPEq5W/PkGhngrOVTrJSswYDc+HWvQ+OYC0lyp
+ 84BCw0fPKtL79ZBVelWEN8bp1FFQLcJdy44m0P7PbiVVfFy+IoXzOtdB6dSYWyVdBk3l
+ iIWQ==
+X-Gm-Message-State: ACrzQf3v61Alj3sRRwomfSazMZHekGV/7MIdQnlQNyVDIa4Bc4NYAsBe
+ 2XFojNgI6UW8OXjbZz9fi4Jcxgp3SLU=
+X-Google-Smtp-Source: AMsMyM4pYdajlkoDJ0IFZDLXqpVRPFCat81CKKfdz6SBtTX/7lXWp723vNAh0g9j9h3OR1rgSYT+aA==
+X-Received: by 2002:a05:6638:144a:b0:364:5a1:d54d with SMTP id
+ l10-20020a056638144a00b0036405a1d54dmr901499jad.42.1666064767626; 
+ Mon, 17 Oct 2022 20:46:07 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ f10-20020a056602088a00b006bb7764890dsm622556ioz.45.2022.10.17.20.46.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 17 Oct 2022 20:46:07 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 17 Oct 2022 18:45:39 -0400
-Message-ID: <CADvTj4pBgWN2W+ARPaeBz52LXXvUyZ-NBSEKba6JLso1E5rkYw@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Paul Cercueil <paul@crapouillou.net>
+To: buildroot@buildroot.org
+Date: Mon, 17 Oct 2022 21:46:05 -0600
+Message-Id: <20221018034605.800593-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmail.com; s=20210112;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=dwW8diwW+71quM2ak+DL+UbA0W04Mxp0VqSLq2xbRVo=;
- b=BsQyatm6i29c/K+llzTRpP2ve/DE7Kvz1vEA8tpoXBoUbnzMVfu4Mbh/RJFzRjrLYi
- 4Fy9YDOO28W4wq3fUCHpED1bBeBUb/ggz8dD11Yo7oj02iBOjaqQFIOddR6ViGFUQTj9
- vRn60wRdkmwpxvi59jmiXbQtBZyMs3cVaP7IFWyUquG0DN0nQe/usJhTEgVJySzMfklh
- OE1BtEo3IVc8jFhO+FO1aPa4Ey/BSUQHvJlPuXRCBxMI0vhGdgGlAQWrXMRJ7B88cKxz
- 8qPzrZFkqiYyArS0GyIjgaCQjQcEuDgVpX3p6TzDFYwEv2NK+44OP3wGgx4aGOQ18zbJ
- ECjQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=41MvAtTcWJBRucmjTftYCM4nNUZ8MhvJxXEokBVBLRc=;
+ b=DIboYGLDjT5xcUorVea+MAak6peKYLC1pKj4WBvAEK+AlImOqZR0FZCH25lI7LGWMc
+ sl0JPtrjgFvFissNzUTlqYS/RS0DwO02oyNXz3VSswGGI7AwM3emiQOujt0tAkNN89fD
+ MjwThHOEJhMwSvTxD8Kb7wWo0Je/sttkTr3GZESnOGVUlpdNIkHK8x8xSYlgqDePI5GW
+ xpY/ZzASb7VSjeWZyHKRQHs1NrIm7/e9uciA0Q7pU5Hd4smZ/knsev0mO54ttsKusMCd
+ Mm+CCil4SbHqZYzv3854De6/9xRvNb2z7vQeOcEN+q4qXNYZ+JVlQLHjoNe3NFAbLH7k
+ Ce1w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=BsQyatm6
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2022-10-15
+ header.a=rsa-sha256 header.s=20210112 header.b=DIboYGLD
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix rule order for
+ re{install, build, configure}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,46 +94,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBPY3QgMTcsIDIwMjIgYXQgODoxOCBBTSBUaG9tYXMgUGV0YXp6b25pCjx0aG9tYXMu
-cGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKPgo+IEhlbGxvIFBhdWwsCj4KPiBUaGlzIGlz
-IGhhcHBlbmluZyBvbiBKYW1lcyBhdXRvYnVpbGRlciwgd2hvIGhhcyBpbnRyb2R1Y2VkIHNvbWUg
-c3BlY2lhbAo+IHJhbmRvbWl6YXRpb24gc3R1ZmYgdGhhdCB3b3VsZCBvbmx5IGFwcGVhciB3aXRo
-IG1ha2UgNC40LiBJIGhhdmUgYWRkZWQKPiBKYW1lcyBpbiBDYyBzbyB0aGF0IGhlIGNhbiBjb21t
-ZW50IGFuZCBzZWUgaWYgaGUgY2FuIHJlcHJvZHVjZSBhbmQKPiBwcm92aWRlIG1vcmUgZGV0YWls
-cy4KClRoaXMgc2hvdWxkIGZpeCBpdDoKaHR0cHM6Ly9naXRodWIuY29tL3ZpdmVyaXMvdU1UUC1S
-ZXNwb25kZXIvcHVsbC84NQoKPgo+IEJlc3QgcmVnYXJkcywKPgo+IFRob21hcwo+Cj4gT24gTW9u
-LCAxNyBPY3QgMjAyMiAxMjoxODoyMCArMDEwMAo+IFBhdWwgQ2VyY3VlaWwgPHBhdWxAY3JhcG91
-aWxsb3UubmV0PiB3cm90ZToKPgo+ID4gSGkgVGhvbWFzLAo+ID4KPiA+IEkgY2FuJ3QgcmVwcm9k
-dWNlLCB3aXRoIHRoaXMgYnVpbGQncyBkZWZjb25maWcgb24gbGF0ZXN0IG1hc3Rlci4gSXQKPiA+
-IGp1c3QgYnVpbGRzIGZpbmUgaGVyZS4KPiA+Cj4gPiBDaGVlcnMsCj4gPiAtUGF1bAo+ID4KPiA+
-Cj4gPiBMZSBkaW0uLCBvY3QuIDE2IDIwMjIgYXQgMDU6Mzg6MTkgLTAwMDAsIFRob21hcyBQZXRh
-enpvbmkKPiA+IDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiBhIMOpY3JpdCA6Cj4gPiA+
-IEhlbGxvLAo+ID4gPgo+ID4gPiBBdXRvYnVpbGRlciBmYWlsdXJlcwo+ID4gPiA9PT09PT09PT09
-PT09PT09PT09PQo+ID4gPgo+ID4gPiBCZWxvdyBpcyBhIGxpc3Qgb2YgYnVpbGQgZmFpbHVyZXMg
-cmVwb3J0ZWQgYnkgdGhlIEJ1aWxkcm9vdAo+ID4gPiBhdXRvYnVpbGRlcnMKPiA+ID4gaW4gcmVs
-YXRpb24gdG8gcGFja2FnZXMgb3IgQ1BVIGFyY2hpdGVjdHVyZXMgeW91IGFyZSBpbiBjaGFyZ2Ug
-b2YuCj4gPiA+IFBsZWFzZSBoZWxwIHVzIGltcHJvdmluZyB0aGUgcXVhbGl0eSBvZiBCdWlsZHJv
-b3QgYnkgaW52ZXN0aWdhdGluZwo+ID4gPiB0aG9zZQo+ID4gPiBidWlsZCBmYWlsdXJlcyBhbmQg
-c2VuZGluZyBwYXRjaGVzIHRvIGZpeCB0aGVtLgo+ID4gPgo+ID4gPiBSZXN1bHRzIGZvciB0aGUg
-J21hc3RlcicgYnJhbmNoCj4gPiA+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiA+
-ID4KPiA+ID4gQnVpbGQgZmFpbHVyZXMgcmVsYXRlZCB0byB5b3VyIHBhY2thZ2VzOgo+ID4gPgo+
-ID4gPiAgICAgYXJjaCAgICAgfCAgICAgICAgICAgICByZWFzb24gICAgICAgICAgICAgfAo+ID4g
-PiAgICAgICAgICAgICAgICAgdXJsCj4gPiA+IC0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gPiA+ICAgICBhcm0g
-ICAgICB8ICAgICAgICAgIHVtdHByZC0xLjYuMiAgICAgICAgICB8Cj4gPiA+IGh0dHA6Ly9hdXRv
-YnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2M3Y2U5NzVkMzk4MTkwZmMxOTFjY2MwMzgxM2Y4
-ZWMwYjM0NjRjN2QKPiA+ID4KPiA+ID4KPiA+ID4gVGhhbmtzIGZvciB5b3VyIGNvbnRyaWJ1dGlv
-biB0byBCdWlsZHJvb3QhCj4gPiA+Cj4gPiA+IC0tCj4gPiA+IGh0dHA6Ly9hdXRvYnVpbGQuYnVp
-bGRyb290Lm5ldAo+ID4KPiA+Cj4KPgo+Cj4gLS0KPiBUaG9tYXMgUGV0YXp6b25pLCBjby1vd25l
-ciBhbmQgQ0VPLCBCb290bGluCj4gRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmlu
-ZyBhbmQgdHJhaW5pbmcKPiBodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+These command rely on the clean operations being first so that the
+stamp files being deleted will rebuild the targets.
+
+The execution ordering of the clean and rebuild operations may
+change, for example if --shuffle=reversed is set.
+
+To ensure the evaluation order is always correct use double colon
+rules to make the evaluation order explicit as per make docs:
+
+The double-colon rules for a target are executed in the order they
+appear in the makefile.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/pkg-generic.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f24e03a325..6cb461af90 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1057,17 +1057,20 @@ endif
+ 			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
+ 			rm -f $$($(2)_TARGET_INSTALL_HOST)
+ 
+-$(1)-reinstall:		$(1)-clean-for-reinstall $(1)
++$(1)-reinstall::		$(1)-clean-for-reinstall
++$(1)-reinstall::		$(1)
+ 
+ $(1)-clean-for-rebuild: $(1)-clean-for-reinstall
+ 			rm -f $$($(2)_TARGET_BUILD)
+ 
+-$(1)-rebuild:		$(1)-clean-for-rebuild $(1)
++$(1)-rebuild::		$(1)-clean-for-rebuild
++$(1)-rebuild::		$(1)
+ 
+ $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
+ 			rm -f $$($(2)_TARGET_CONFIGURE)
+ 
+-$(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
++$(1)-reconfigure::	$(1)-clean-for-reconfigure
++$(1)-reconfigure::	$(1)
+ 
+ # define the PKG variable for all targets, containing the
+ # uppercase package variable prefix
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
