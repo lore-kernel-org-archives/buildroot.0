@@ -1,72 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27453C43217
-	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 07:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C44DC4332F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 07:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AAF9240A90;
-	Tue, 18 Oct 2022 07:05:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAF9240A90
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id odE-3rQYrQa9; Tue, 18 Oct 2022 07:05:14 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D728540A8B;
-	Tue, 18 Oct 2022 07:05:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D728540A8B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9035F1BF354
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 07:05:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B39D82E5F
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 07:05:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B39D82E5F
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE56982FE7;
+	Tue, 18 Oct 2022 07:12:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE56982FE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zIjUQvpmaMKh for <buildroot@lists.busybox.net>;
- Tue, 18 Oct 2022 07:05:10 +0000 (UTC)
-X-Greylist: delayed 00:05:16 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58D0D828DF
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 58D0D828DF
- for <buildroot@buildroot.org>; Tue, 18 Oct 2022 07:05:10 +0000 (UTC)
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 22AKV5zNglfy; Tue, 18 Oct 2022 07:12:54 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CC6082FC9;
+	Tue, 18 Oct 2022 07:12:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CC6082FC9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D8EE01BF354
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 07:12:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA81B4181F
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 07:12:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA81B4181F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ky7baPX9M8iH for <buildroot@lists.busybox.net>;
+ Tue, 18 Oct 2022 07:12:49 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 617E841802
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 617E841802
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 07:12:49 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id DC128C54C1
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 07:00:00 +0000 (UTC)
 Received: from booty (unknown [77.244.183.192])
  (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 3104F240016;
- Tue, 18 Oct 2022 07:05:06 +0000 (UTC)
-Date: Tue, 18 Oct 2022 09:05:05 +0200
-To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20221018090505.6bd09c80@booty>
-In-Reply-To: <20221017071002.48266-2-neal.frager@amd.com>
-References: <20221017071002.48266-1-neal.frager@amd.com>
- <20221017071002.48266-2-neal.frager@amd.com>
+ by mail.gandi.net (Postfix) with ESMTPSA id 2D9361C000B;
+ Tue, 18 Oct 2022 06:59:54 +0000 (UTC)
+Date: Tue, 18 Oct 2022 08:59:53 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20221018085953.1c4d07a0@booty>
+In-Reply-To: <20221017201804.995212-2-giulio.benetti@benettiengineering.com>
+References: <20221017201804.995212-1-giulio.benetti@benettiengineering.com>
+ <20221017201804.995212-2-giulio.benetti@benettiengineering.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666076708;
+ d=bootlin.com; s=gm1; t=1666076395;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=gDUm9Lrh/gJCTM0iTQIuZPf72g6+NrczLos67tiUdFw=;
- b=mLh5u46IkedP1GUcYDnF4ZC4fH9Q3NlPzOoxSRHLu+Xv8d78MuSsQzF42ibss/c9DFr5Wh
- z0ADVNsyivMnXflDeanRIgppPM2u3x+avMi1ak76Ei8IyUT3VqV1VkGvF6p7rM7j43b0kb
- AxlQ7fdwZQzzeLsVj9Gwl9Ke0IBzLl99WuBDtmeVy76zCikh6AjuBr95KuMo+phpDK9DlG
- R8TW27jvy3W615FWPOMHhplBtSVWNuekVB5lscTxPZhS5ZEazSBIpZ8FfDogIKqHXy6QjK
- J9hrAMVVUOcxR7iFEqt0Q2eaYEih9L1vkci4UgQ3QEOS+DVsKkFEOPeeaF/6xw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=oIXd3JuuhyrDUsB4Nzhs2s1Rw/4o6uF768Y3JgxVI0Y=;
+ b=KKo+D7IJmFCFohN7hGt6n1jRF2xHEuPA2TI5KasNQ8zUH3A8mFXD36iHMPWNVzKWxitWKr
+ XcEwl53RF0GdCU54+V44LpYsa0GkvNy7grdsuRLawjzje5lVGh9KkhDSnC5jU5JdiNVMFF
+ gECBlLII50MKFcRYJ1OMGWyVs/zyvhhp3bJtjPaKtWJCwZts/kWLANcOn1+Pc9zVrXUIOf
+ nN6F/zcvg8tKb9a8OGkAcywSMMNYei8uwU0frbBk1n1UO/nsw17nfyuz4+kz9rXTFuPfcM
+ 4huIZ+2RVAvoOZ8mv33zP8lIR5vbl+J7PA11fGhUx+pxHKakIRlUACg/0pnDhw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mLh5u46I
-Subject: Re: [Buildroot] [PATCH v1 2/2] configs/zynqmp_zcu106_defconfig: fix
- pmufw sw reset
+ header.s=gm1 header.b=KKo+D7IJ
+Subject: Re: [Buildroot] [PATCH 2/2] DEVELOPERS: add Giulio Benetti to
+ rtl8188eu package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,27 +82,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
 Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: buildroot@buildroot.org, kris.chaplin@amd.com, wesley@sonifex.co.uk,
- giulio.benetti@benettiengineering.com, michal.simek@amd.com,
- yann.morin.1998@free.fr
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 17 Oct 2022 01:10:02 -0600
-Neal Frager <neal.frager@amd.com> wrote:
+Hi Giulio,
 
-> This patch will solve the problem of the pmufw built by the
-> zynqmp-pmufw-builder where soft resets crash for the zcu106.
-> Details of the issue can be found here:
-> 
-> https://lore.kernel.org/buildroot/87ilqccu3k.fsf@dell.be.48ers.dk/
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+On Mon, 17 Oct 2022 22:18:04 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Thank you!
+
+Not sure it makes sense for this kind of patch, but since I discovered
+Giulio knows much better than me this package:
 
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
 
 -- 
 Luca Ceresoli, Bootlin
