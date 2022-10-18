@@ -1,76 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 154A5C433FE
-	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 19:44:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48A25C4332F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Oct 2022 19:44:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B684983E88;
-	Tue, 18 Oct 2022 19:44:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B684983E88
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE5316110C;
+	Tue, 18 Oct 2022 19:44:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE5316110C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0Yhdu6wXnJ24; Tue, 18 Oct 2022 19:44:19 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28B5060608;
+	Tue, 18 Oct 2022 19:44:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28B5060608
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 528C31BF95F
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:43:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E10583E22
+ for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:43:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E10583E22
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lFBNUSwMCQru; Tue, 18 Oct 2022 19:44:06 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B1CF83E84;
-	Tue, 18 Oct 2022 19:44:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B1CF83E84
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E2B4B1BF95F
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:43:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9F7D41B3E
- for <buildroot@lists.busybox.net>; Tue, 18 Oct 2022 19:43:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9F7D41B3E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0rf_WQc6HwXS for <buildroot@lists.busybox.net>;
- Tue, 18 Oct 2022 19:43:22 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jmS3ng394Q3B for <buildroot@lists.busybox.net>;
+ Tue, 18 Oct 2022 19:43:24 +0000 (UTC)
 X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F41E41A11
-Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.66.41])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1F41E41A11
- for <buildroot@buildroot.org>; Tue, 18 Oct 2022 19:43:22 +0000 (UTC)
-Received: from opfedar03.francetelecom.fr (unknown [xx.xx.xx.5])
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 404F88349A
+Received: from relais-inet.orange.com (relais-inet.orange.com [80.12.70.36])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 404F88349A
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 19:43:24 +0000 (UTC)
+Received: from opfednr05.francetelecom.fr (unknown [xx.xx.xx.69])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits))
  (No client certificate requested)
- by opfedar22.francetelecom.fr (ESMTP service) with ESMTPS id 4MsPRW5DdQz2xqt; 
- Tue, 18 Oct 2022 21:43:19 +0200 (CEST)
+ by opfednr22.francetelecom.fr (ESMTP service) with ESMTPS id 4MsPRY5Fbjz10Ws
+ for <buildroot@buildroot.org>; Tue, 18 Oct 2022 21:43:21 +0200 (CEST)
 Received: by tl-lnx-nyma7486 (sSMTP sendmail emulation);
- Tue, 18 Oct 2022 21:43:17 +0200
+ Tue, 18 Oct 2022 21:43:19 +0200
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Tue, 18 Oct 2022 21:43:07 +0200
-Message-ID: <30918_1666122199_634F01D7_30918_364_1_3fe68afdbb79505161ac76e31e6054dc44dd340d.1666122184.git.yann.morin@orange.com>
+Date: Tue, 18 Oct 2022 21:43:08 +0200
+Message-ID: <4895_1666122201_634F01D9_4895_296_1_acafcb63e0879326a88681d7f3d27afeb31ccd51.1666122184.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1666122184.git.yann.morin@orange.com>
 References: <cover.1666122184.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX203.corporate.adroot.infra.ftgroup (10.115.26.8)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX608.corporate.adroot.infra.ftgroup
+ (10.115.27.32) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; s=ORANGE001; t=1666122199;
- bh=Fp5PRJFR1A/UOixbDE7z/96jq+toYllC79A1+i57hUU=;
- h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:
- Content-Transfer-Encoding;
- b=qs3BEPE81wlXrxIcreluSMKef60amGsrlkMwtc9p8L0PiVFcr2Y/TgdwsqJ7XWj1H
- TkEl8b6SnMpJm1iejOn0kY78Xn5sFdqn1yj89QFaHyPffl7J+zIk1PMJasfqfIHtK+
- aHlWZjd5MpFYh3cYFHCS6vcmad6ES+GycxX9q3a5W/FGYYLrYXVpLFchZqdE824hsH
- YrIi7b4Qwwk0QyaKjXaDuEKEbpoKoicXcyf3xxeniISWhit1wEMENRk/r0w3l3j9CB
- bkfUQ55FxJZKGRfVs9BWNPmpYrfEBZOjt7rZCShxdHQEJYG3KCONiHLEr8soeidhfs
- bcThXIRJzX4hQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=orange.com; s=ORANGE001; t=1666122201;
+ bh=DbjA2dGFQEkSlSwIwpgEJjHlErkM4ppQMyszMyB8vwc=;
+ h=From:To:Subject:Date:Message-ID:MIME-Version:
+ Content-Transfer-Encoding:Content-Type;
+ b=FXNTsQxuDGJyEAN4G72agN0E6skQ6dpB7+BnCEsEJuclcX3IrC46mI7arWShz9fpx
+ t8chYow6hDTptXxytVrqVbGfsGNMnCDMkmCtozXhlsa+DLTeVRdWaLrMh9Ega6sive
+ fHA5xyaKND36orpq6qui4m+cwFaKLyemhxnxtBRt+VAS9fPSWJTkFIfhNbk3lEenQW
+ KxK9sI6R0LUed2Q7FHm/hvZzTn/hvkjf4ioEw+rj/yEaD7glQWS0dgpqSIcQXrSR9r
+ CQS3sR5gmmFgrDJXzIS8mzvw+y52oC5qeBNJ8X78gIvc189GWYZOIV11swkGtOp6q5
+ sJPOuvnkIdiMA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=ORANGE001 header.b=qs3BEPE8
-Subject: [Buildroot] [PATCH 4/6 v3] system: add options for /var factory and
- tmpfiles pre-seed
+ header.a=rsa-sha256 header.s=ORANGE001 header.b=FXNTsQxu
+Subject: [Buildroot] [PATCH 5/6 v3] system: introduce a choice for /var
+ management
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,141 +82,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Je=CC=81re=CC=81my=20Rosen?= <jeremy.rosen@smile.fr>,
- Romain Naour <romain.naour@smile.fr>, yann.morin@orange.com,
- Norbert Lange <nolange79@gmail.com>, "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: yann.morin@orange.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogIllhbm4gRS4gTU9SSU4iIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KCkN1cnJlbnRs
-eSwgd2hlbiBvbmUgZG9lcyBub3QgZW5hYmxlIHJlbW91bnRpbmcgdGhlIHJvb3RmcyByZWFkLXdy
-aXRlLAppLmUuIGtlZXAgaXQgcmVhZC1vbmx5LCBmb3IgZXhhbXBsZSBiZWNhdXNlIHRoZSBmaWxl
-c3lzdGVtIGlzIGFjdHVhbHlsCnJlYWQtb25seSBieSBkZXNpZ24sIGxpa2Ugc3F1YXNoZnMsIHRo
-ZW4gdHdvIHRoaW5ncyBoYXBwZW46CgogIC0gd2UgY3JlYXRlIGEgZmFjdG9yeSBmcm9tIHRoZSBj
-b250ZW50IG9mIC92YXIgYXQgYnVpbGQgdGltZSwgcmVnaXN0ZXIKICAgIHRtcGZpbGVzIGVudHJp
-ZXMgZm9yIGl0LCBhbmQgbW91bnQgYSB0bXBmcyBvbiAvdmFyIGF0IHJ1bnRpbWUsIHNvCiAgICB0
-aGF0IHN5c3RlbWQtdG1wZmlsZXMgZG9lcyBwb3B1bGF0ZSAvdmFyIGZyb20gdGhlIGZhY3Rvcnk7
-IHRoaXMgaXMKICAgIG9ubHkgZG9uZSB3aGVuIHRoZSByb290ZnMgaXMgbm90IHJlbW91bnRlZCBy
-L3c7CgogIC0gd2UgdHJpZ2dlciBzeXN0ZW1kLXRtcGZpbGVzIGF0IGJ1aWxkIHRpbWUsIHdoaWNo
-IHVzZXMgdGhlIHRtcGZpbGVzCiAgICBkYiwgb2Ygd2hpY2ggb3VyIC92YXIgZW50cmllcywgdG8g
-cHJlLXBvcHVsYXRlIHRoZSBmaWxlc3lzdGVtOyB0aGlzCiAgICBpcyBhbHdheXMgZG9uZSwgd2hl
-dGhlciB0aGUgcm9vdGZzIGlzIHJlbW91bnRlZCByL3cgb3Igbm90LgoKTm90ZSB0aGF0IEJ1aWxk
-cm9vdCBtb3VudHMgYSB0bXBmcyBvbiAvdmFyLCBhbmQgbGVhdmVzIHRvIHRoZSBpbnRlZ3JhdG9y
-CnRvIGNhcmUgZm9yIHByb3ZpZGluZyBhbiBhY3R1YWwgZmlsZXN5c3RlbSwgYXMgdGhlcmUgYXJl
-IHRvbyBtYW55CnZhcmlhbnRzIGFuZCBpcyB2ZXJ5IHNwZWNpZmljIHRvIGVhY2ggdXNlLWNhc2Uu
-CgpUaGVzZSB0d28gbWVjaGFuaXNtcyBhcmUgY29uZmxpY3RpbmcsIHNlbWFudGljYWxseSwgYml0
-IGFsc28KdGVjaG5pY2FsbHk6IHRoZSBmaWxlcyBmcm9tIHRoZSBmYWN0b3J5IHdpbGwgYmUgZHVw
-bGljYXRlZCwgYnV0IHRoYXQKbWF5IGhlbHAgaW4gc29tZSBzaXR1YXRpb25zIHdoZW4gdGhlIGFj
-dHVhbCAvdmFyIGZpbGVzeXN0ZW0gaXMgbm90Cm1vdW50YWJsZS4KCkluIHNvbWUgY2FzZXMsIGl0
-IG1pZ2h0IGJlIHByZWZlcmFibGUgdG8gaGF2ZSBub25lLCBlaXRoZXIsIG9yIGJvdGgKbWVjaGFu
-aXNtcyBlbmFibGVkOyBpdCBoaWdobHkgZGVwZW5kcyBvbiB0aGUgdWx0aW1hdGUgaW50ZWdyYXRp
-b24gc2NoZW1lCmNob3NlbiBmb3IgYSBkZXZpY2UuCgpGb3IgZXhhbXBsZSwgc29tZSBwZW9wbGUg
-d2lsbCBiZSB2ZXJ5IGhhcHB5IHdpdGggYSAvdmFyIHRoYXQgaXMgYWN0dWFsbHkKb24gYSB0bXBm
-cyBhbmQgdGhhdCBpdCBnZXRzIHJlc2VlZGVkIGZvcm0gc2NyYXRjaCBhdCBldmVyeSBib290LCB3
-aGlsZQpvdGhlcnMgbWF5IHdhbnQgdG8gZW5zdXJlIHRoYXQgdGhlaXIgc3lzdGVtIGNvbnRpbnVl
-IHRvIHdvcmsgZXZlbiB3aGVuCnRoZXkgY2FuJ3QgbW91bnQgc29tZXRoaW5nIHRoYXQgbWFrZXMg
-L3ZhciB3cml0YWJsZS4KCllNTVYsIGFzIHRoZXkgdXNlZCB0byBzYXkgYmFjayBpbiB0aGUgZGF5
-Li4uCgpTbywgd2UgaW50cm9kdWNlIHR3byBuZXcgb3B0aW9ucywgaW4gdGhlIHN5c3RlbSBzdWIt
-bWVudSwgZWFjaCB0byBkcml2ZQplYWNoIG1lY2hhbmlzbS4gV2UgZGVmYXVsdCB0aG9zZSBvcHRp
-b25zIHRvIHksIHRvIGtlZXAgdGhlIHByZXZpb3VzCmJlaGF2aW91ciBieSBkZWZhdWx0LCBleGNl
-cHQgdGhlIHZhciBmYWN0b3J5IGlzIG9ubHkgYXZhaWxhYmxlIHdoZW4gdGhlCnJvb3RmcyBpcyBu
-b3QgcmVtb3VudGVkIHIvdywgYXMgaXQgd2VyZSBzbyBmYXIuCgpXZSBzdGlsbCBoaW50IGluIHRo
-ZSBoZWxwIHRleHQgdGhhdCB0aGVyZSBtaWdodCBiZSBzb21lIGNvbmZsaWN0IGJldHdlZW4KdGhl
-IHR3byBtZWNoYW5pc21zLCBidCBzaW5jZSBpdCBoYXMgYmVlbiB0aGF0IHdheSBmb3Igc29tZSB0
-aW1lLCBpdCBkb2VzCm5vdCBsb29rIHRvbyBicm9rZW4gZm9yIG1vc3QgcGVvcGxlLgoKU2luY2Ug
-dGhhdCBpbnRyb2R1Y2VzIG1vcmUgb3B0aW9ucyByZWxhdGVkIHRvIHN5c3RlbWQgYmVpbmcgY2hv
-c2VuIGFzIGFuCmluaXQgc3lzdGVtLCB3ZSBnYXRoZXIgdGhvc2UgdHdvIG9wdGlvbnMgYW5kIHRo
-ZSBleGlzdGluZyBvbmUgaW5zaWRlIGEKaWYtZW5kaWYgYmxvY2ssIHJhdGhlciB0aGFuIGFkZGlu
-ZyBtb3JlICdkZXBlbmRzIG9uJyBvbiBlYWNoIG9wdGlvbnMuCgpTaWduZWQtb2ZmLWJ5OiBZYW5u
-IEUuIE1PUklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4KQ2M6IE5vcmJlcnQgTGFuZ2UgPG5v
-bGFuZ2U3OUBnbWFpbC5jb20+CkNjOiBBcm5vdXQgVmFuZGVjYXBwZWxsZSAoRXNzZW5zaXVtL01p
-bmQpIDxhcm5vdXRAbWluZC5iZT4KQ2M6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQHNtaWxl
-LmZyPgpDYzogSmXMgXJlzIFteSBSb3NlbiA8amVyZW15LnJvc2VuQHNtaWxlLmZyPgpDYzogWWFu
-biBFLiBNT1JJTiA8eWFubi5tb3JpbkBvcmFuZ2UuY29tPgotLS0KIC4uLi9za2VsZXRvbi1pbml0
-LXN5c3RlbWQubWsgICAgICAgICAgICAgICAgICB8ICA3ICsrKy0KIHN5c3RlbS9Db25maWcuaW4g
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDQyICsrKysrKysrKysrKysrKysrKy0KIDIg
-ZmlsZXMgY2hhbmdlZCwgNDYgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9za2VsZXRvbi1pbml0LXN5c3RlbWQu
-bWsgYi9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9za2VsZXRvbi1pbml0LXN5c3RlbWQu
-bWsKaW5kZXggODlhMjhkMTc4MC4uNjk5OTEyNjVhNSAxMDA2NDQKLS0tIGEvcGFja2FnZS9za2Vs
-ZXRvbi1pbml0LXN5c3RlbWQvc2tlbGV0b24taW5pdC1zeXN0ZW1kLm1rCisrKyBiL3BhY2thZ2Uv
-c2tlbGV0b24taW5pdC1zeXN0ZW1kL3NrZWxldG9uLWluaXQtc3lzdGVtZC5tawpAQCAtMzIsNiAr
-MzIsNyBAQCBkZWZpbmUgU0tFTEVUT05fSU5JVF9TWVNURU1EX1JPT1RfUk9fT1JfUlcKIAllY2hv
-ICIvZGV2L3Jvb3QgLyBhdXRvIHJvIDAgMSIgPiQoVEFSR0VUX0RJUikvZXRjL2ZzdGFiCiBlbmRl
-ZgogCitpZmVxICgkKEJSMl9JTklUX1NZU1RFTURfVkFSX0ZBQ1RPUlkpLHkpCiBkZWZpbmUgU0tF
-TEVUT05fSU5JVF9TWVNURU1EX1BSRV9ST09URlNfVkFSCiAJcm0gLXJmICQoVEFSR0VUX0RJUikv
-dXNyL3NoYXJlL2ZhY3RvcnkvdmFyCiAJbXYgJChUQVJHRVRfRElSKS92YXIgJChUQVJHRVRfRElS
-KS91c3Ivc2hhcmUvZmFjdG9yeS92YXIKQEAgLTU1LDE0ICs1NiwxNiBAQCBkZWZpbmUgU0tFTEVU
-T05fSU5JVF9TWVNURU1EX1BSRV9ST09URlNfVkFSCiAJCSQoVEFSR0VUX0RJUikvdXNyL2xpYi9z
-eXN0ZW1kL3N5c3RlbS92YXIubW91bnQKIGVuZGVmCiBTS0VMRVRPTl9JTklUX1NZU1RFTURfUk9P
-VEZTX1BSRV9DTURfSE9PS1MgKz0gU0tFTEVUT05fSU5JVF9TWVNURU1EX1BSRV9ST09URlNfVkFS
-CitlbmRpZiAgIyBCUjJfSU5JVF9TWVNURU1EX1ZBUl9GQUNUT1JZCitlbmRpZiAgIyBCUjJfVEFS
-R0VUX0dFTkVSSUNfUkVNT1VOVF9ST09URlNfUlcKIAotZW5kaWYKLQoraWZlcSAoJChCUjJfSU5J
-VF9TWVNURU1EX1BPUFVMQVRFX1RNUEZJTEVTKSx5KQogZGVmaW5lIFNLRUxFVE9OX0lOSVRfU1lT
-VEVNRF9DUkVBVEVfVE1QRklMRVNfSE9PSwogCUhPU1RfU1lTVEVNRF9UTVBGSUxFUz0kKEhPU1Rf
-RElSKS9iaW4vc3lzdGVtZC10bXBmaWxlcyBcCiAJCSQoU0tFTEVUT05fSU5JVF9TWVNURU1EX1BL
-R0RJUikvZmFrZXJvb3RfdG1wZmlsZXMuc2ggJChUQVJHRVRfRElSKQogZW5kZWYKIFNLRUxFVE9O
-X0lOSVRfU1lTVEVNRF9ST09URlNfUFJFX0NNRF9IT09LUyArPSBTS0VMRVRPTl9JTklUX1NZU1RF
-TURfQ1JFQVRFX1RNUEZJTEVTX0hPT0sKK2VuZGlmICAjIEJSMl9JTklUX1NZU1RFTURfUE9QVUxB
-VEVfVE1QRklMRVMKIAogZGVmaW5lIFNLRUxFVE9OX0lOSVRfU1lTVEVNRF9JTlNUQUxMX1RBUkdF
-VF9DTURTCiAJbWtkaXIgLXAgJChUQVJHRVRfRElSKS9ob21lCmRpZmYgLS1naXQgYS9zeXN0ZW0v
-Q29uZmlnLmluIGIvc3lzdGVtL0NvbmZpZy5pbgppbmRleCA4ODhjMjRjZTgxLi44MDZhNzQ3MzE1
-IDEwMDY0NAotLS0gYS9zeXN0ZW0vQ29uZmlnLmluCisrKyBiL3N5c3RlbS9Db25maWcuaW4KQEAg
-LTE1NCwxMCArMTU0LDQ4IEBAIHNvdXJjZSAiJEJSMl9CQVNFX0RJUi8uYnIyLWV4dGVybmFsLmlu
-LmluaXQiCiAKIGVuZGNob2ljZQogCitpZiBCUjJfSU5JVF9TWVNURU1ECisKK2NvbmZpZyBCUjJf
-SU5JVF9TWVNURU1EX1ZBUl9GQUNUT1JZCisJYm9vbCAiYnVpbGQgYSBmYWN0b3J5IHRvIHBvcHVs
-YXRlIGEgdG1wZnMgb24gL3ZhciIKKwlkZWZhdWx0IHkgICMgbGVnYWN5CisJZGVwZW5kcyBvbiAh
-QlIyX1RBUkdFVF9HRU5FUklDX1JFTU9VTlRfUk9PVEZTX1JXCisJaGVscAorCSAgQnVpbGQgYSBm
-YWN0b3J5IG9mIHRoZSBjb250ZW50IG9mIC92YXIgYXMgaW5zdGFsbGVkIGJ5CisJICBwYWNrYWdl
-cywgbW91bnQgYSB0bXBmcyBvbiAvdmFyIGF0IHJ1bnRpbWUsIHNvIHRoYXQKKwkgIHN5c3RlbWQt
-dG1wZmlsZXMgY2FuIHBvcHVsYXRlIGl0IGZyb20gdGhlIGZhY3RvcnkuCisKKwkgIFRoaXMgbWF5
-IGhlbHAgb24gYSByZWFkLW9ubHkgcm9vdGZzLgorCisJICBJdCBwcm9iYWJseSBkb2VzIG5vdCBw
-bGF5IHZlcnkgd2VsbCB3aXRoIHRyaWdnZXJpbmcgYSBjYWxsCisJICB0byBzeXN0ZW1kLXRtcGZp
-bGVzIGF0IGJ1aWxkIHRpbWUgKGJlbG93KS4KKworCSAgTm90ZTogQnVpbGRyb290IG1vdW50cyBh
-IHRtcGZzIG9uIC92YXIgdG8gYXQgbGVhc3QgbWFrZSB0aGUKKwkgIHN5c3RlbSBib290YWJsZSBv
-dXQgb2YgdGhlIGJveDsgbW91bnRpbmcgYSBmaWxlc3lzdGVtIGZyb20KKwkgIGFjdHVhbCBzdG9y
-YWdlIGlzIGxlZnQgdG8gdGhlIGludGVncmF0aW9uLCBhcyBpdCBpcyB0b28KKwkgIHNwZWNpZmlj
-IGFuZCBtYXkgbmVlZCBwcmVwYXJhdG9yeSB3b3JrIGxpa2UgcGFydGl0aW9ubmluZyBhCisJICBk
-ZXZpY2UgYW5kL29yIGZvcm1hdHRpbmcgYSBmaWxlc3lzdGVtIGZpcnN0LCBzbyB0aGF0IGZhbGxz
-CisJICBvdXQgb2YgdGhlIHNjb3BlIG9mIEJ1aWxkcm9vdC4KKworCSAgVG8gdXNlIHBlcnNpc3Rl
-bnQgc3RvcmFnZSwgcHJvdmlkZSBhIHN5c3RlbWQgZHJvcGluIGZvciB0aGUKKwkgIHZhci5tb3Vu
-dCB1bml0LCB0aGF0IG92ZXJyaWRlcyB0aGUgV2hhdCBhbmQgVHlwZSwgYW5kIHBvc3NpYmx5CisJ
-ICB0aGUgT3B0aW9ucyBhbmQgQWZ0ZXIsIGZpZWxkcy4KKworY29uZmlnIEJSMl9JTklUX1NZU1RF
-TURfUE9QVUxBVEVfVE1QRklMRVMKKwlib29sICJ0cmlnZ2VyIHN5c3RlbWQtdG1wZmlsZXMgZHVy
-aW5nIGJ1aWxkIgorCWRlZmF1bHQgeSAgIyBsZWdhY3kKKwloZWxwCisJICBBY3Qgb24gdGhlIHN5
-c3RlbWQtdG1wZmlsZXMuZCBkYXRhYmFzZSBhdCBidWlsZCB0aW1lLCB3aGVuCisJICBhc3NlbWJs
-aW5nIHRoZSByb290IGZpbGVzeXN0ZW1zLgorCisJICBUaGlzIG1heSBoZWxwIG9uIGEgcmVhZC1v
-bmx5IGZpbGVzeXN0ZW0uCisKKwkgIEl0IHByb2JhYmx5IGRvZXMgbm90IHBsYXkgdmVyeSB3ZWxs
-IHdpdGggdGhlIC92YXIgZmFjdG9yeQorCSAgKGFib3ZlKS4KKwogY29uZmlnIEJSMl9QQUNLQUdF
-X1NZU1RFTURfREVGQVVMVF9UQVJHRVQKIAlzdHJpbmcgIlRoZSBkZWZhdWx0IHVuaXQgc3lzdGVt
-ZCBzdGFydHMgYXQgYm9vdHVwIgogCWRlZmF1bHQgIm11bHRpLXVzZXIudGFyZ2V0IgotCWRlcGVu
-ZHMgb24gQlIyX0lOSVRfU1lTVEVNRAogCWhlbHAKIAkgIFNwZWNpZnkgdGhlIG5hbWUgb2YgdGhl
-IHVuaXQgY29uZmlndXJhdGlvbiBmaWxlIHRvIGJlIHN0YXJ0ZWQKIAkgIGF0IGJvb3R1cCBieSBz
-eXN0ZW1kLiBTaG91bGQgZW5kIGluICIudGFyZ2V0Ii4KQEAgLTE2NSw2ICsyMDMsOCBAQCBjb25m
-aWcgQlIyX1BBQ0tBR0VfU1lTVEVNRF9ERUZBVUxUX1RBUkdFVAogCiAJICBodHRwczovL3d3dy5m
-cmVlZGVza3RvcC5vcmcvc29mdHdhcmUvc3lzdGVtZC9tYW4vc3lzdGVtZC5zcGVjaWFsLmh0bWwj
-ZGVmYXVsdC50YXJnZXQKIAorZW5kaWYgIyBCUjJfSU5JVF9TWVNURU1ECisKIGNob2ljZQogCXBy
-b21wdCAiL2RldiBtYW5hZ2VtZW50IiBpZiAhQlIyX0lOSVRfU1lTVEVNRAogCWRlZmF1bHQgQlIy
-X1JPT1RGU19ERVZJQ0VfQ1JFQVRJT05fRFlOQU1JQ19ERVZUTVBGUwotLSAKMi4yNS4xCgoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwoKQ2UgbWVzc2FnZSBldCBzZXMgcGllY2VzIGpvaW50ZXMgcGV1dmVudCBjb250ZW5pciBk
-ZXMgaW5mb3JtYXRpb25zIGNvbmZpZGVudGllbGxlcyBvdSBwcml2aWxlZ2llZXMgZXQgbmUgZG9p
-dmVudCBkb25jCnBhcyBldHJlIGRpZmZ1c2VzLCBleHBsb2l0ZXMgb3UgY29waWVzIHNhbnMgYXV0
-b3Jpc2F0aW9uLiBTaSB2b3VzIGF2ZXogcmVjdSBjZSBtZXNzYWdlIHBhciBlcnJldXIsIHZldWls
-bGV6IGxlIHNpZ25hbGVyCmEgbCdleHBlZGl0ZXVyIGV0IGxlIGRldHJ1aXJlIGFpbnNpIHF1ZSBs
-ZXMgcGllY2VzIGpvaW50ZXMuIExlcyBtZXNzYWdlcyBlbGVjdHJvbmlxdWVzIGV0YW50IHN1c2Nl
-cHRpYmxlcyBkJ2FsdGVyYXRpb24sCk9yYW5nZSBkZWNsaW5lIHRvdXRlIHJlc3BvbnNhYmlsaXRl
-IHNpIGNlIG1lc3NhZ2UgYSBldGUgYWx0ZXJlLCBkZWZvcm1lIG91IGZhbHNpZmllLiBNZXJjaS4K
-ClRoaXMgbWVzc2FnZSBhbmQgaXRzIGF0dGFjaG1lbnRzIG1heSBjb250YWluIGNvbmZpZGVudGlh
-bCBvciBwcml2aWxlZ2VkIGluZm9ybWF0aW9uIHRoYXQgbWF5IGJlIHByb3RlY3RlZCBieSBsYXc7
-CnRoZXkgc2hvdWxkIG5vdCBiZSBkaXN0cmlidXRlZCwgdXNlZCBvciBjb3BpZWQgd2l0aG91dCBh
-dXRob3Jpc2F0aW9uLgpJZiB5b3UgaGF2ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBw
-bGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYW5kIGRlbGV0ZSB0aGlzIG1lc3NhZ2UgYW5kIGl0cyBh
-dHRhY2htZW50cy4KQXMgZW1haWxzIG1heSBiZSBhbHRlcmVkLCBPcmFuZ2UgaXMgbm90IGxpYWJs
-ZSBmb3IgbWVzc2FnZXMgdGhhdCBoYXZlIGJlZW4gbW9kaWZpZWQsIGNoYW5nZWQgb3IgZmFsc2lm
-aWVkLgpUaGFuayB5b3UuCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Currently, we have a single solution to handle the /var content on a
+read-only root filesystem, and users can opt out of using it.
+
+We're going to introduce another solution (based on an overlayfs), which
+is incompatible with using the factory, so we'll have a choice of three
+mutually exclusive options.
+
+Introduce that choice now with just the existing /var factory, and a new
+option to opt out of it.
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+---
+ system/Config.in | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/system/Config.in b/system/Config.in
+index 806a747315..074fda509c 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -156,10 +156,16 @@ endchoice
+ 
+ if BR2_INIT_SYSTEMD
+ 
+-config BR2_INIT_SYSTEMD_VAR_FACTORY
+-	bool "build a factory to populate a tmpfs on /var"
+-	default y  # legacy
++choice
++	bool "/var management"
++	default BR2_INIT_SYSTEMD_VAR_FACTORY  # legacy
+ 	depends on !BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
++	help
++	  Select how Buildroot provides a read-write /var when the
++	  rootfs is not remounted read-write.
++
++config BR2_INIT_SYSTEMD_VAR_FACTORY
++	bool "build a factory to populate a tmpfs"
+ 	help
+ 	  Build a factory of the content of /var as installed by
+ 	  packages, mount a tmpfs on /var at runtime, so that
+@@ -181,6 +187,15 @@ config BR2_INIT_SYSTEMD_VAR_FACTORY
+ 	  var.mount unit, that overrides the What and Type, and possibly
+ 	  the Options and After, fields.
+ 
++config BR2_INIT_SYSTEMD_VAR_CUSTOM
++	bool "something else"
++	help
++	  Choose this if you have custom dispositions (like a
++	  post-build, fakeroot script, systemd units, or initramfs)
++	  that prepare /var to be writable on a read-only rootfs.
++
++endchoice
++
+ config BR2_INIT_SYSTEMD_POPULATE_TMPFILES
+ 	bool "trigger systemd-tmpfiles during build"
+ 	default y  # legacy
+-- 
+2.25.1
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
