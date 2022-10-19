@@ -1,70 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F389BC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 07:15:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 068CEC433FE
+	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 08:02:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 705EE41BA5;
-	Wed, 19 Oct 2022 07:15:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 705EE41BA5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FF8A61184;
+	Wed, 19 Oct 2022 08:02:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FF8A61184
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r1zEno1f_UdF; Wed, 19 Oct 2022 07:15:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id G0ow_f9Mijgx; Wed, 19 Oct 2022 08:02:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47B8141B99;
-	Wed, 19 Oct 2022 07:15:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47B8141B99
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B28CE1BF95D
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 07:15:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C15C360C29;
+	Wed, 19 Oct 2022 08:02:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C15C360C29
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 73A1A1BF95D
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 08:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7665541B99
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 07:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7665541B99
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F5C6402F3
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 08:02:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F5C6402F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZUgnE6atcaYG for <buildroot@lists.busybox.net>;
- Wed, 19 Oct 2022 07:15:18 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF1EC41B97
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AF1EC41B97
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 07:15:17 +0000 (UTC)
-Received: from booty (unknown [77.244.183.192])
- (Authenticated sender: luca.ceresoli@bootlin.com)
- by mail.gandi.net (Postfix) with ESMTPSA id 86D9324000C;
- Wed, 19 Oct 2022 07:15:14 +0000 (UTC)
-Date: Wed, 19 Oct 2022 09:15:12 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20221019091512.77a48aa8@booty>
-In-Reply-To: <20221018131506.123350-1-giulio.benetti@benettiengineering.com>
-References: <20221018131506.123350-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IQCz3v5nI2LU for <buildroot@lists.busybox.net>;
+ Wed, 19 Oct 2022 08:02:32 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB0E0400F1
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DB0E0400F1
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 08:02:31 +0000 (UTC)
+Received: (Authenticated sender: peter@korsgaard.com)
+ by mail.gandi.net (Postfix) with ESMTPSA id 88BF5FF802;
+ Wed, 19 Oct 2022 08:02:28 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1ol41z-0098Iu-DZ; Wed, 19 Oct 2022 10:02:27 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20221014220748.14254-1-fontaine.fabrice@gmail.com>
+Date: Wed, 19 Oct 2022 10:02:27 +0200
+In-Reply-To: <20221014220748.14254-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 15 Oct 2022 00:07:48 +0200")
+Message-ID: <87wn8w5jho.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1666163714;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=SmmWZbMBCpmwRJOzcHQwC+tG1Km0iLqf+5QnlQj4vw8=;
- b=KdGk5AnyNVy1TtLhUHC+C6L4w3nmTgIemk762qHOsLiAyNvVIBhGTPEdEuAqHrkNxtCGtH
- J8+kVSzCjmf8Of4ighWigLDpedVAxPNQ+uC2I40ndAqK6+W2Zg95HW9AvcbUEOJywV9Uzj
- gOH91dUN8GN4heqMnpFUZpAw1QfIzrVoctlx3m5AkRHzpt2/CAuTb98fIVr9VOBNGwCokC
- uNwI3jt/souL5JkCfNAF2Y2SsvW2Ij5sHHdKwmrJERrT4lPvh4+Oytub4wMUAP5V9jDW6x
- 5FJZmqxMqVRJfOC+TtkKAmZAHgQfpiY5ubmL3dPVMWFAdUeG3kBsAeGPE9gWkw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KdGk5Any
-Subject: Re: [Buildroot] [PATCH] package/rtl8188eu: remove wrong description
- in Config.in
+Subject: Re: [Buildroot] [PATCH 1/1] package/freerdp: security bump to
+ version 2.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,63 +64,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Giulio,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Tue, 18 Oct 2022 15:15:06 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+ > Fix CVE-2022-39282 and CVE-2022-39283
+ > https://github.com/FreeRDP/FreeRDP/releases/tag/2.8.1
 
-> This rtl8188eu driver is not the same as the one in mainline Linux that
-> still has pending work to be done that in this driver is done, check:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/r8188eu/TODO
-> specifically:
-> * Switch to use LIB80211.
-> * Switch to use MAC80211.
-> * Switch to use CFG80211.
-> So let's remove the description that is not valid anymore.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-A lot of this text would be useful in the help text below. The help
-text is visible in any moment in later releases, the commit log needs
-to be searched.
-
-> Suggested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/rtl8188eu/Config.in | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
-> index 76d9085297..8d68d104c8 100644
-> --- a/package/rtl8188eu/Config.in
-> +++ b/package/rtl8188eu/Config.in
-> @@ -4,9 +4,6 @@ config BR2_PACKAGE_RTL8188EU
->  	depends on BR2_LINUX_KERNEL
->  	help
->  	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
-> -	  This is needed only for Linux kernels before 3.12.
-> -	  Since 3.12, there is a (staging) driver in mainline, with a
-> -	  similar codebase.
-
-For the above reasons, I'd add here:
-
-This rtl8188eu driver is not the same as the one in mainline Linux that
-still has pending work to be done that in this driver is done, check:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/r8188eu/TODO
-
-I'd not add the todo list, as it will (hopefully) change in the future
-in the kernel and we don't want to keep updating our own copy.
+Committed to 2022.08.x and 2022.02.x, thanks.
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
