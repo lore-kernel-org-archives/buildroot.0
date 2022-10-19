@@ -1,83 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1116EC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 08:04:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15839C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 08:05:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F4206118B;
-	Wed, 19 Oct 2022 08:04:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F4206118B
+	by smtp4.osuosl.org (Postfix) with ESMTP id A011E41B99;
+	Wed, 19 Oct 2022 08:05:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A011E41B99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pc8qYNqiOV7z; Wed, 19 Oct 2022 08:04:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id piroLoujnejg; Wed, 19 Oct 2022 08:05:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7BB860C31;
-	Wed, 19 Oct 2022 08:04:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7BB860C31
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53DDA4197C;
+	Wed, 19 Oct 2022 08:05:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53DDA4197C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1662B1BF95D
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 08:03:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C02021BF2C7
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 08:05:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A71040154
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 08:03:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A71040154
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9BE5C402F3
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 08:05:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BE5C402F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SDtY60WOMal5 for <buildroot@lists.busybox.net>;
- Wed, 19 Oct 2022 08:03:54 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8285240C40
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com
- [IPv6:2607:f8b0:4864:20::1033])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8285240C40
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 08:03:54 +0000 (UTC)
-Received: by mail-pj1-x1033.google.com with SMTP id 70so16369592pjo.4
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 01:03:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7LQOJFLQ4WzEfvsPK61UMbyA6kt0CAbTmFlYohQlAPg=;
- b=adEaZCSix8NETNzMMlcZza1RyDgZR6yyKyFqY/lg1aE+e363HdPZBDiT22IMaAjcUq
- nGM3NsaRZAtGwuWlZa4TR1uzdu0fRbmIwqsT/xPwmFU8fQxBGeOvyoqzCt8gBTRdC30O
- urNEjDu8z9L4d+dvvZgF8K4RFDCu+jj7RJBrfmDmHD0G/LucYjDlzdqrzXfYCyhijt77
- V/7IIzguinXGdo5G79GFimgF25r1+191+29ZKGzPteMr6mufKeoIpAvZDF5ozPsUhvNA
- abL0ygbyTFv1sUUof1XEYmA0rDvkng0EjL9lPNGwD/NVZNEDmyDPXirjEAsRwgPuOgLa
- lmJw==
-X-Gm-Message-State: ACrzQf1fH1kwdmjLGguuG+w/F2DlRSaIS+1tOi7Y9dUSHxbXr/TSQZtz
- 99YT96r6mrbidNQ6g95Uj8uhRLIV2Q6sTO70vyOPyqqVAvo=
-X-Google-Smtp-Source: AMsMyM7KBKcKiinOxqkurT3/J4eLzHENMrj67zFFZDjkUuUXe6hS7qkpokE7bo8+h6lNditvtOGarg1Krgj5YZZpaGs=
-X-Received: by 2002:a17:90a:ab06:b0:20d:8764:b97a with SMTP id
- m6-20020a17090aab0600b0020d8764b97amr8460123pjq.7.1666166633685; Wed, 19 Oct
- 2022 01:03:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221002150443.159058-1-robimarko@gmail.com>
-In-Reply-To: <20221002150443.159058-1-robimarko@gmail.com>
-From: Robert Marko <robimarko@gmail.com>
-Date: Wed, 19 Oct 2022 10:03:42 +0200
-Message-ID: <CAOX2RU79VfmjD=Fhjp1bW9RrDUM4y=kb-b4HMNKOeMp2ROdVcg@mail.gmail.com>
+ with ESMTP id 440dUFmcy6a7 for <buildroot@lists.busybox.net>;
+ Wed, 19 Oct 2022 08:05:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74D77400F1
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 08:05:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74D77400F1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 635CF86EEF; Wed, 19 Oct 2022 08:05:10 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=7LQOJFLQ4WzEfvsPK61UMbyA6kt0CAbTmFlYohQlAPg=;
- b=CU2TXeYP0IgVFXruoYgh8Ekw+HpDzH3Rv2QBxyyJRy0d/E4geeZQajq/O7StJ2cERr
- 8TJujnCzO0o5Ng7JCGCr0TVTwoZ0TukqvH//JFqz6qesAS1RSqxbm+1k6SiMUCTsPRrq
- ZvS5mE0htP89+T4rSL8ErhIb/rvj8Le3DsLBJRFxEp+IXwlM1P+favUMaZpEMU0W1pv1
- R0lXjK4wtt73Jw/hQV450CrDNfKWsGtan1WbLUn1qCJc4BK2HDs716kADFqaOyno2Rf5
- 5ZLy/jxgxtLuqUm8h9uwxGiKT/0lm3Mv0c9aNqC/SxyiVJWUO5tAUStuyyCsHQb0k2tA
- 7AiQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=CU2TXeYP
-Subject: Re: [Buildroot] [PATCH v2] package/mdio-tools: new package
+Date: Wed, 19 Oct 2022 09:59:20 +0200
+X-Git-Refname: refs/heads/2022.02.x
+X-Git-Oldrev: ec14fbf8ecb600274c7431d4992b50adcc1c8bee
+X-Git-Newrev: 9dbeb7d0d9a70d30677ff49eb0b80f0cf19f7cec
+X-Patchwork-Hint: ignore
+Message-Id: <20221019080510.635CF86EEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2022.02.x] package/freerdp: bump to
+ version 2.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,108 +57,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 2 Oct 2022 at 17:04, Robert Marko <robimarko@gmail.com> wrote:
->
-> mdio-tools are kernel module and accompanying tools for low-level
-> debugging of devices attached on MDIO bus like PHY-s, switches etc.
->
-> Userspace tools provide C22 or C45 reads and writes, benchmarking
-> and even dedicated Marvell Link Street tools via the included
-> kernel module.
->
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
-> Changes in v2:
-> * Correct license
-> * Add host-pkgconf to DEPENDENCIES
-> * Add minimal required kernel config options
+commit: https://git.buildroot.net/buildroot/commit/?id=9dbeb7d0d9a70d30677ff49eb0b80f0cf19f7cec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2022.02.x
 
-Anything I can do to help get this reviewed?
+Drop fourth patch (already in version)
 
-Regards,
-Robert
-> ---
->  package/Config.in                  |  1 +
->  package/mdio-tools/Config.in       |  9 +++++++++
->  package/mdio-tools/mdio-tools.hash |  3 +++
->  package/mdio-tools/mdio-tools.mk   | 20 ++++++++++++++++++++
->  4 files changed, 33 insertions(+)
->  create mode 100644 package/mdio-tools/Config.in
->  create mode 100644 package/mdio-tools/mdio-tools.hash
->  create mode 100644 package/mdio-tools/mdio-tools.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index e3a34d6e97..ed41e8bdd4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -536,6 +536,7 @@ endmenu
->         source "package/mbpfan/Config.in"
->         source "package/mdadm/Config.in"
->         source "package/mdevd/Config.in"
-> +       source "package/mdio-tools/Config.in"
->         source "package/memtest86/Config.in"
->         source "package/memtester/Config.in"
->         source "package/memtool/Config.in"
-> diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
-> new file mode 100644
-> index 0000000000..feb1e825ac
-> --- /dev/null
-> +++ b/package/mdio-tools/Config.in
-> @@ -0,0 +1,9 @@
-> +comment "mdio-tools needs a Linux kernel to be built"
-> +       depends on !BR2_LINUX_KERNEL
-> +
-> +config BR2_PACKAGE_MDIO_TOOLS
-> +       bool "mdio-tools"
-> +       depends on BR2_LINUX_KERNEL
-> +       select BR2_PACKAGE_LIBMNL
-> +       help
-> +         Low-level debug tools for MDIO devices
-> diff --git a/package/mdio-tools/mdio-tools.hash b/package/mdio-tools/mdio-tools.hash
-> new file mode 100644
-> index 0000000000..0111165f27
-> --- /dev/null
-> +++ b/package/mdio-tools/mdio-tools.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256  c5e17431c62392f6c1da1ba4fb0a6f5918521509a377af74485851f93ff2a106  mdio-tools-1.2.0.tar.gz
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/mdio-tools/mdio-tools.mk b/package/mdio-tools/mdio-tools.mk
-> new file mode 100644
-> index 0000000000..308a23824b
-> --- /dev/null
-> +++ b/package/mdio-tools/mdio-tools.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# mdio-tools
-> +#
-> +################################################################################
-> +
-> +MDIO_TOOLS_VERSION = 1.2.0
-> +MDIO_TOOLS_SITE = https://github.com/wkz/mdio-tools/releases/download/$(MDIO_TOOLS_VERSION)
-> +MDIO_TOOLS_LICENSE = GPL-2.0
-> +MDIO_TOOLS_LICENSE_FILES = COPYING
-> +MDIO_TOOLS_DEPENDENCIES = host-pkgconf libmnl
-> +
-> +MDIO_TOOLS_MODULE_SUBDIRS = kernel
-> +define MDIO_TOOLS_LINUX_CONFIG_FIXUPS
-> +       $(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-> +       $(call KCONFIG_ENABLE_OPT,CONFIG_MDIO_DEVICE)
-> +endef
-> +
-> +$(eval $(kernel-module))
-> +$(eval $(autotools-package))
-> --
-> 2.37.3
->
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.8.0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a223802adb2c6d0aca45de78ce246421a270044e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...Fix-building-with-LibreSSL-2.7.0-or-newer.patch | 126 ---------------------
+ package/freerdp/freerdp.hash                       |   4 +-
+ package/freerdp/freerdp.mk                         |   2 +-
+ 3 files changed, 3 insertions(+), 129 deletions(-)
+
+diff --git a/package/freerdp/0004-Fix-building-with-LibreSSL-2.7.0-or-newer.patch b/package/freerdp/0004-Fix-building-with-LibreSSL-2.7.0-or-newer.patch
+deleted file mode 100644
+index 3edf1ff3b3..0000000000
+--- a/package/freerdp/0004-Fix-building-with-LibreSSL-2.7.0-or-newer.patch
++++ /dev/null
+@@ -1,126 +0,0 @@
+-From 55a5a0a14ecef81c8ece1fea4a5a6004aebfeaff Mon Sep 17 00:00:00 2001
+-From: Adrian Perez de Castro <aperez@igalia.com>
+-Date: Mon, 27 Jun 2022 11:45:44 +0200
+-Subject: [PATCH] Fix building with LibreSSL 2.7.0 or newer
+-
+-With LibreSSL 2.7.0 (or newer versions) some more structs have made
+-opaque, which requires a few changes:
+-
+-- BIO_meth_new() and related functions are now defined by LibreSSL, the
+-  versions from opensslcompat.{h,c} does not need to be used anymore.
+-- HMAC_CTX is now opaque, HMAC_CTX_new(), EVP_MD_CTX_new, and related
+-  functions should be used instead in winpr's hash.c.
+-
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-[Upstream status: https://github.com/FreeRDP/FreeRDP/commit/436f212be3950917e4bb209aa5064e423f0dd882]
+----
+- libfreerdp/crypto/opensslcompat.c |  3 ++-
+- libfreerdp/crypto/opensslcompat.h |  3 ++-
+- winpr/libwinpr/crypto/hash.c      | 21 ++++++++++++++-------
+- 3 files changed, 18 insertions(+), 9 deletions(-)
+-
+-diff --git a/libfreerdp/crypto/opensslcompat.c b/libfreerdp/crypto/opensslcompat.c
+-index 701902dc2..314d6b51f 100644
+---- a/libfreerdp/crypto/opensslcompat.c
+-+++ b/libfreerdp/crypto/opensslcompat.c
+-@@ -19,7 +19,8 @@
+- 
+- #include "opensslcompat.h"
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
+- 
+- BIO_METHOD* BIO_meth_new(int type, const char* name)
+- {
+-diff --git a/libfreerdp/crypto/opensslcompat.h b/libfreerdp/crypto/opensslcompat.h
+-index 169e8e4c2..3ad5b6bd4 100644
+---- a/libfreerdp/crypto/opensslcompat.h
+-+++ b/libfreerdp/crypto/opensslcompat.h
+-@@ -30,7 +30,8 @@
+- 
+- #include <openssl/opensslv.h>
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
+- 
+- #include <openssl/bio.h>
+- #include <openssl/rsa.h>
+-diff --git a/winpr/libwinpr/crypto/hash.c b/winpr/libwinpr/crypto/hash.c
+-index 8265b2e90..5e94039e7 100644
+---- a/winpr/libwinpr/crypto/hash.c
+-+++ b/winpr/libwinpr/crypto/hash.c
+-@@ -151,7 +151,8 @@ WINPR_HMAC_CTX* winpr_HMAC_New(void)
+- 	WINPR_HMAC_CTX* ctx = NULL;
+- #if defined(WITH_OPENSSL)
+- 	HMAC_CTX* hmac = NULL;
+--#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
+- 
+- 	if (!(hmac = (HMAC_CTX*)calloc(1, sizeof(HMAC_CTX))))
+- 		return NULL;
+-@@ -185,7 +186,8 @@ BOOL winpr_HMAC_Init(WINPR_HMAC_CTX* ctx, WINPR_MD_TYPE md, const BYTE* key, siz
+- 	if (!evp || !hmac)
+- 		return FALSE;
+- 
+--#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
+- 	HMAC_Init_ex(hmac, key, keylen, evp, NULL); /* no return value on OpenSSL 0.9.x */
+- 	return TRUE;
+- #else
+-@@ -221,7 +223,8 @@ BOOL winpr_HMAC_Update(WINPR_HMAC_CTX* ctx, const BYTE* input, size_t ilen)
+- {
+- #if defined(WITH_OPENSSL)
+- 	HMAC_CTX* hmac = (HMAC_CTX*)ctx;
+--#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
+- 	HMAC_Update(hmac, input, ilen); /* no return value on OpenSSL 0.9.x */
+- 	return TRUE;
+- #else
+-@@ -253,7 +256,8 @@ BOOL winpr_HMAC_Final(WINPR_HMAC_CTX* ctx, BYTE* output, size_t olen)
+- 
+- #if defined(WITH_OPENSSL)
+- 	hmac = (HMAC_CTX*)ctx;
+--#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER < 0x10000000L) || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
+- 	HMAC_Final(hmac, output, NULL); /* no return value on OpenSSL 0.9.x */
+- 	return TRUE;
+- #else
+-@@ -279,7 +283,8 @@ void winpr_HMAC_Free(WINPR_HMAC_CTX* ctx)
+- 
+- 	if (hmac)
+- 	{
+--#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
+- 		HMAC_CTX_cleanup(hmac);
+- 		free(hmac);
+- #else
+-@@ -332,7 +337,8 @@ WINPR_DIGEST_CTX* winpr_Digest_New(void)
+- 	WINPR_DIGEST_CTX* ctx = NULL;
+- #if defined(WITH_OPENSSL)
+- 	EVP_MD_CTX* mdctx;
+--#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
+- 	mdctx = EVP_MD_CTX_create();
+- #else
+- 	mdctx = EVP_MD_CTX_new();
+-@@ -464,7 +470,8 @@ void winpr_Digest_Free(WINPR_DIGEST_CTX* ctx)
+- 
+- 	if (mdctx)
+- 	{
+--#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL)
+- 		EVP_MD_CTX_destroy(mdctx);
+- #else
+- 		EVP_MD_CTX_free(mdctx);
+--- 
+-2.36.1
+-
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 2b7aa25999..a600a96172 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.7.0.tar.gz.sha256
+-sha256  89000728b6e66ac37db018d6dc5f0981b530fd550ab748877ff42892dd0c166b  freerdp-2.7.0.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.8.0.tar.gz.sha256
++sha256  fd26a41c367ea1f23a06716725d19efa41fd572c4536348d39b3465b116b3703  freerdp-2.8.0.tar.gz
+ 
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index f4636724d3..c7e01fa541 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREERDP_VERSION = 2.7.0
++FREERDP_VERSION = 2.8.0
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
