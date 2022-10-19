@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E816CC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 21:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40BBFC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 21:55:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94E24403CA;
-	Wed, 19 Oct 2022 21:55:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94E24403CA
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB8A2402E8;
+	Wed, 19 Oct 2022 21:55:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB8A2402E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qR9o7j1-PMep; Wed, 19 Oct 2022 21:55:01 +0000 (UTC)
+	with ESMTP id ztWyLqf71ida; Wed, 19 Oct 2022 21:55:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 65732402F6;
-	Wed, 19 Oct 2022 21:55:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65732402F6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2546C1BF41B
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 21:53:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDF9640543;
+	Wed, 19 Oct 2022 21:55:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDF9640543
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AEB71BF41B
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 21:54:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F38104016F
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 21:53:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F38104016F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2499041BE0
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 21:54:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2499041BE0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zHZynx7Qs24p for <buildroot@lists.busybox.net>;
- Wed, 19 Oct 2022 21:53:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ddw-KQxqICkM for <buildroot@lists.busybox.net>;
+ Wed, 19 Oct 2022 21:53:58 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE3F04013E
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AE3F04013E
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 21:53:57 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id r20so9913871ilt.11
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 14:53:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8314941C24
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
+ [IPv6:2607:f8b0:4864:20::133])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8314941C24
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 21:53:58 +0000 (UTC)
+Received: by mail-il1-x133.google.com with SMTP id l3so9517502ilg.13
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 14:53:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=9EMe/8IE7bt1ytBk4WkRqfqMx0BztZnxfEa8PxRDxkQ=;
- b=V6zhU4tky1tTfHBQ6upUB/BXzTsXnIH0A/9eS8aSSA/WK7QB5REP8gO6CpNOi/ndGy
- mpeiEnwd9Zl4vARlud3xUqbTNHfCqaUdcaNEYgHysUXDADPMXUlbz5Wc12xDVqeqymL2
- eUczMbmHdAZ99Gu2NjAav/x2btiVIhZWMGNTI2BVR3boAgEfqvkuhCv/EjLXXLG7l1DQ
- TaJmdQrFtjT88zYXuuwb1X5moeh+aMgzB+nxjpcyyEfVWtHMK9vWPqEvMwoHVXhvqj09
- zo8mXC9wBl5OzZoPtHrbbDbMmFyIzUjIGLYC+MshvrExvDD/dIpolmHQNjtvvEvGIRmV
- oK/A==
-X-Gm-Message-State: ACrzQf0EIXq972XdePkaakdeeX/zTaJjLpJUd2SWBWU0t6vgAEAKkTPM
- IUu6iZJfzR0E7vWM94i9xoiNPW3VtzjDXw==
-X-Google-Smtp-Source: AMsMyM6GeNL9KN8JpZ/c7tMm99i57L0T1FblVelV6Ca0iO1ZHsoTHOuPzq8xk/jHwwybRujNdZVfgw==
-X-Received: by 2002:a05:6e02:1b8e:b0:2fc:5417:8d29 with SMTP id
- h14-20020a056e021b8e00b002fc54178d29mr7732604ili.304.1666216436512; 
- Wed, 19 Oct 2022 14:53:56 -0700 (PDT)
+ bh=LCxUdL2TuPCHncNdxknmdRQYeAATlVWtUNLULt0Shlc=;
+ b=fgShRM4ngFbro81HKGMs4IAwxHqE/4hQmvkCDieG/hGkcfgiJ8Qz7u6mHvILWhQyVC
+ GFCHU5GWf8HErRh+IXMPWu29aNN8JceH9myBWbUA65dDTZAxh9/C35THLiUEPVr7h5V1
+ 0pGV8dPRpGzFgZYMOjBmMdu0enc0/9niGDHA7qPl4raNx3r3sqdgrfu3dit7Kv5eS/np
+ SjbffPf0NsXWC5dPUKnd6uZcLxJvixK3PHcIbICEjfPfsyoxMS94KE62rJcu+Ph7WHvu
+ tk6zeXxP6N/GeKOTiiwkhvixJTsv/ZIrNrPtlb5rPyOeb9hIoWN2rSvfYcDhR/lebwQW
+ /gxQ==
+X-Gm-Message-State: ACrzQf1im0Q5EKPT8JTPCR6W0x8jddq5Z8dtbK4zRKYmv8cDNVcvoJlj
+ i5iUipTudvjJu52HXAS+1pnookckKuZVCA==
+X-Google-Smtp-Source: AMsMyM53dAS+tZUS+h2NHEcx7ECbBINnFNVcksChJJJgMYa/wUVV3+3/D1wZwcyh9I6zR3Ifh0vH0Q==
+X-Received: by 2002:a05:6e02:160a:b0:2f9:8a30:c3af with SMTP id
+ t10-20020a056e02160a00b002f98a30c3afmr7844395ilu.11.1666216437411; 
+ Wed, 19 Oct 2022 14:53:57 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- v3-20020a056602058300b006bc69b0fa07sm2645358iox.12.2022.10.19.14.53.55
+ v3-20020a056602058300b006bc69b0fa07sm2645358iox.12.2022.10.19.14.53.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Oct 2022 14:53:55 -0700 (PDT)
+ Wed, 19 Oct 2022 14:53:56 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 19 Oct 2022 15:53:47 -0600
-Message-Id: <20221019215348.3262192-6-james.hilliard1@gmail.com>
+Date: Wed, 19 Oct 2022 15:53:48 -0600
+Message-Id: <20221019215348.3262192-7-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221019215348.3262192-1-james.hilliard1@gmail.com>
 References: <20221019215348.3262192-1-james.hilliard1@gmail.com>
@@ -74,17 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=9EMe/8IE7bt1ytBk4WkRqfqMx0BztZnxfEa8PxRDxkQ=;
- b=H2lpYVaFbJZh4ePtn8AAd1RzTA8fzhecxXc366rqRXfb+0sgoUTz4+Oo5hOWZgQrSh
- F8QAyYZTe9+LVh3taX6sSt7lKSqIyZBWpikDzzrP7SnVPM+f7k8AJlCZlsFfX3+vIeAb
- ztfS0knZ2cAsllbn9eLx/U8gJOhuIabx7UUOsStJva3nhCUezBNUcQ9jix2m5APr3Qel
- cEWlEfVBl+PkNkH2fwF821960rCxT+wFZunTKgVRKPeshGWrmUWkc+SEzWDMDzyEomee
- hFvsbbnvijLjEKId5mrh8ti5i6rZtmYSp26NWOtc3oyOMsVZTlu9fzTf3cCngcFy1N1m
- S7Og==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=LCxUdL2TuPCHncNdxknmdRQYeAATlVWtUNLULt0Shlc=;
+ b=H0hZV9ujFDYyfmDF1Z0wxCTqOPniTKGV28BwD0Hi0QKqX+C901sppayiHkfof9JnJ4
+ u81SvcXCvoErAjDQNjdyvhv6Xi/l93Y6074iCAU7v2UpwQuuwEzP7kOYkK2I4Io5gvwA
+ A8KHVaK8xOdw1a13tNXfixegZ4Oex65fixYOD3wWJkKZwcVR8drs8q48zMtwughWhcN8
+ 0I7aEuyfVlXZjn6YO0WZaBJMNbynwpF8fbzsYe3R9iE6SL/pDxKeyI87EqAn1B6lCh1W
+ rCAlGsVPaRVPtq4cSBZudfkpgVomj4l00gWavprqx8CQgQpmZj1huIa9ruNHBDoW7yEw
+ rE5w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=H2lpYVaF
-Subject: [Buildroot] [PATCH 6/7] package/python-hatch-vcs: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=H0hZV9uj
+Subject: [Buildroot] [PATCH 7/7] package/python-jsonschema: bump to version
+ 4.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,61 +105,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Migrate to new pep517 based hatchling build system.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                                     |  1 +
- package/python-hatch-vcs/python-hatch-vcs.hash |  5 +++++
- package/python-hatch-vcs/python-hatch-vcs.mk   | 17 +++++++++++++++++
- 3 files changed, 23 insertions(+)
- create mode 100644 package/python-hatch-vcs/python-hatch-vcs.hash
- create mode 100644 package/python-hatch-vcs/python-hatch-vcs.mk
+ package/python-jsonschema/python-jsonschema.hash |  4 ++--
+ package/python-jsonschema/python-jsonschema.mk   | 10 +++++++---
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index df61582cd4..c917cbe12a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1385,6 +1385,7 @@ F:	package/python-frozenlist/
- F:	package/python-greenlet/
- F:	package/python-hatchling/
- F:	package/python-hatch-fancy-pypi-readme/
-+F:	package/python-hatch-vcs/
- F:	package/python-installer/
- F:	package/python-janus/
- F:	package/python-logstash/
-diff --git a/package/python-hatch-vcs/python-hatch-vcs.hash b/package/python-hatch-vcs/python-hatch-vcs.hash
-new file mode 100644
-index 0000000000..e57eeddd2f
---- /dev/null
-+++ b/package/python-hatch-vcs/python-hatch-vcs.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/hatch_vcs/json
-+md5  e56b6d0c05cfb9b59d493c67f94d6e48  hatch_vcs-0.2.0.tar.gz
-+sha256  9913d733b34eec9bb0345d0626ca32165a4ad2de15d1ce643c36d09ca908abff  hatch_vcs-0.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  117aa5006d8475562f04442ab06dd2a4c501af3a77255eae0deef1f0c2499a1a  LICENSE.txt
-diff --git a/package/python-hatch-vcs/python-hatch-vcs.mk b/package/python-hatch-vcs/python-hatch-vcs.mk
-new file mode 100644
-index 0000000000..55c6461751
---- /dev/null
-+++ b/package/python-hatch-vcs/python-hatch-vcs.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# python-hatch-vcs
-+#
-+################################################################################
-+
-+PYTHON_HATCH_VCS_VERSION = 0.2.0
-+PYTHON_HATCH_VCS_SOURCE = hatch_vcs-$(PYTHON_HATCH_VCS_VERSION).tar.gz
-+PYTHON_HATCH_VCS_SITE = https://files.pythonhosted.org/packages/ac/13/b3d83564c0cc0f1d45b4ea2a78b87b383a8165797613fedf11f1a7e49b48
-+PYTHON_HATCH_VCS_LICENSE = MIT
-+PYTHON_HATCH_VCS_LICENSE_FILES = LICENSE.txt
-+PYTHON_HATCH_VCS_SETUP_TYPE = pep517
-+HOST_PYTHON_HATCH_VCS_DEPENDENCIES = \
+diff --git a/package/python-jsonschema/python-jsonschema.hash b/package/python-jsonschema/python-jsonschema.hash
+index a2766f78cc..d4c2759811 100644
+--- a/package/python-jsonschema/python-jsonschema.hash
++++ b/package/python-jsonschema/python-jsonschema.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/jsonschema/json
+-md5  c3f7a29c187bf1d038c66a5d5763eab1  jsonschema-4.5.1.tar.gz
+-sha256  7c6d882619340c3347a1bf7315e147e6d3dae439033ae6383d6acb908c101dfc  jsonschema-4.5.1.tar.gz
++md5  3bc1f63a74fc61bf2847f22cadb0dfff  jsonschema-4.16.0.tar.gz
++sha256  165059f076eff6971bae5b742fc029a7b4ef3f9bcf04c14e4776a7605de14b23  jsonschema-4.16.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439  COPYING
+ sha256  837402bd25fad9b704265801ca3f92566a98157c1f9a7acd6f446299ba1c305a  json/LICENSE
+diff --git a/package/python-jsonschema/python-jsonschema.mk b/package/python-jsonschema/python-jsonschema.mk
+index 013a5c1293..68a25aed58 100644
+--- a/package/python-jsonschema/python-jsonschema.mk
++++ b/package/python-jsonschema/python-jsonschema.mk
+@@ -4,11 +4,15 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JSONSCHEMA_VERSION = 4.5.1
++PYTHON_JSONSCHEMA_VERSION = 4.16.0
+ PYTHON_JSONSCHEMA_SOURCE = jsonschema-$(PYTHON_JSONSCHEMA_VERSION).tar.gz
+-PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/9e/62/93a54db0e44c4de57868a7d638d7a8abce113c8bc43a20b10b1109b2a517
+-PYTHON_JSONSCHEMA_SETUP_TYPE = setuptools
++PYTHON_JSONSCHEMA_SITE = https://files.pythonhosted.org/packages/cf/54/8923ba38b5145f2359d57e5516715392491d674c83f446cd4cd133eeb4d6
++PYTHON_JSONSCHEMA_SETUP_TYPE = pep517
+ PYTHON_JSONSCHEMA_LICENSE = MIT
+ PYTHON_JSONSCHEMA_LICENSE_FILES = COPYING json/LICENSE
++PYTHON_JSONSCHEMA_DEPENDENCIES = \
 +	host-python-hatchling \
-+	host-python-setuptools-scm
-+
-+$(eval $(host-python-package))
++	host-python-hatch-fancy-pypi-readme \
++	host-python-hatch-vcs
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
