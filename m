@@ -1,85 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C3BCC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 09:03:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB793C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 09:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 295F860D4C;
-	Wed, 19 Oct 2022 09:03:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 295F860D4C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D28140604;
+	Wed, 19 Oct 2022 09:12:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D28140604
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cZVZEuHWEvkk; Wed, 19 Oct 2022 09:03:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Z-QsF25HJwiI; Wed, 19 Oct 2022 09:12:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B05F60671;
-	Wed, 19 Oct 2022 09:03:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B05F60671
+	by smtp2.osuosl.org (Postfix) with ESMTP id 427D1403B7;
+	Wed, 19 Oct 2022 09:12:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 427D1403B7
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6E6391BF2C7
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 09:03:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4ED521BF28A
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 09:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55B564026E
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 09:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55B564026E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36F77402F3
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 09:12:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36F77402F3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lDYtXoYrYSTC for <buildroot@lists.busybox.net>;
- Wed, 19 Oct 2022 09:03:20 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78A3440154
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 78A3440154
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 09:03:20 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id b2so38392057eja.6
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 02:03:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=SDHOWVfwlIXne43MhrdvFhDIdP/1fe+OIyuRANEgfzw=;
- b=Ged5DS4p9Wwz6A5gpwazuna0ayjQ6iwD71gMvjYDNMuMwF7RF3UYYIbd9H3/GBrBsV
- oulSZO2If5PQ3YPB1pwbxcYZvKWT1jwOE9rA6ja4Hjd4axEF0J8yq4tjfe7VWUuDOr7X
- AlGucpe+qI/ent9pJvLCWXH+cRY37a9iaU8vhOwVaWHrX3iqir7sdXThDONy64BGsL2B
- GUqOlABKZE8Lmm6j/JaTIzuWrP1q0u0chEWiCIQ3Q2uE7T9i7KAqBO/o3LnmPIHyVIjK
- QsThMy9OvVdk/o+/J8D1cKGAhJ/SNHlQGmGuFr6hQCFCcqoXybAWAvQudnFsTYUWQudE
- GuPg==
-X-Gm-Message-State: ACrzQf3KK2U3hZn2/vaDls0UCGjNCcIqMlDyDtsMeaAkd/+2Rwsqo0tu
- BJFuV/IT2h78VsKFouoESHlCoOkShYx0XA==
-X-Google-Smtp-Source: AMsMyM6hbIAbJzR9DKbyN1yhJL/8D4H6zZjlhpE4JpUETi3jTvQTLvtHt2uK5JezZjhD99bRMB8YkA==
-X-Received: by 2002:a17:906:8457:b0:78d:b793:5511 with SMTP id
- e23-20020a170906845700b0078db7935511mr5770638ejy.393.1666170198152; 
- Wed, 19 Oct 2022 02:03:18 -0700 (PDT)
-Received: from localhost.localdomain ([37.160.4.29])
- by smtp.gmail.com with ESMTPSA id
- v1-20020a170906292100b00773f3cb67ffsm8611206ejd.28.2022.10.19.02.03.16
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Oct 2022 02:03:17 -0700 (PDT)
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ with ESMTP id upESWyO-i5GQ for <buildroot@lists.busybox.net>;
+ Wed, 19 Oct 2022 09:11:59 +0000 (UTC)
+X-Greylist: delayed 00:10:00 by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D17CC40154
+Received: from mail.h6t.eu (cloud.h6t.eu [IPv6:2a01:4f8:1c1e:8216::1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D17CC40154
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 09:11:58 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 203E02147B1; Wed, 19 Oct 2022 10:54:03 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Wed, 19 Oct 2022 11:03:09 +0200
-Message-Id: <20221019090309.1410432-1-angelo@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+Date: Wed, 19 Oct 2022 10:53:53 +0200
+Message-Id: <20221019085353.8864-1-moritz@h6t.eu>
 MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=SDHOWVfwlIXne43MhrdvFhDIdP/1fe+OIyuRANEgfzw=;
- b=g809YrJzGrIyB30g5aFsOROYxWm5dp8OgX8A2/JRpsaFu810bgwstl4tp8TzwioO0S
- t/rXZXvOn6e6GVnctefYm3hmgb1OZf+J6vxWQ03/mYVDO3T4tTGFPnteyAjx7BLN+/ub
- scZFG3wBK3UOrPmbfZbluRgB1mddRV0XwwWcE=
+ d=h6t.eu; s=dkim; 
+ t=1666169643; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=CzUgO8doHh5a3aYuADrtwBCClugg6pA186zWMf52KPM=;
+ b=LAnLU9k+QwP8gw3b9s1Ft7KZOYTtMG3oOarQSkXb53aUnoFdr9+cSzyRnX29nSrO3Pmq0N
+ +7JI8s6w+phjlYknAkdwWFtQiZIJ657kO61L3RsAu6kjawQrjOCA87P0avItrDpLu3vZoa
+ iPmauJ3Bj9nxgo8hShjFIIg019cjWyjZJaA0GOP6ptcds1SQCuzovdb2rtWh5SgIe0G2L0
+ 07fBQlZGf4nGc4CYwqAzQcmF5VWXqlxkxaV90YM+V7hCf5VMVSzVjEtzUUCyj5vRBoe4zy
+ PZA99ErXEyj2jjUae+ptWXkWxDJly71ifh86qAcOb8CuEBaxXuzO19LVF7voxA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=g809YrJz
-Subject: [Buildroot] [PATCH v2] package/python-minimalmodbus: new package
+ dkim=pass (2048-bit key) header.d=h6t.eu header.i=@h6t.eu header.a=rsa-sha256
+ header.s=dkim header.b=LAnLU9k+
+Subject: [Buildroot] [PATCH 1/1] package/pkg-cargo.mk: fix handling of debug
+ and runtime debug builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,98 +67,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
+From: Moritz Bitsch via buildroot <buildroot@buildroot.org>
+Reply-To: moritz@h6t.eu
+Cc: Moritz Bitsch <moritz@h6t.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Easy-to-use Modbus RTU and Modbus ASCII implementation for Python.
+From: Moritz Bitsch <moritz@h6t.eu>
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+* when not supplying --release to cargo various optimizations get disabled,
+  resulting in slower runtime: use BR2_ENABLE_RUNTIME_DEBUG
+
+* Debug symbol generation can be controlled with the RUSTFLAGS variable:
+  add -g to RUSTFLAGS for debug symbols
+
+Signed-off-by: Moritz Bitsch <moritz@h6t.eu>
 ---
-V2:
-* Adding me to DEVELOPERS
+ package/pkg-cargo.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/python-minimalmodbus/Config.in             |  7 +++++++
- .../python-minimalmodbus/python-minimalmodbus.hash |  4 ++++
- .../python-minimalmodbus/python-minimalmodbus.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/python-minimalmodbus/Config.in
- create mode 100644 package/python-minimalmodbus/python-minimalmodbus.hash
- create mode 100644 package/python-minimalmodbus/python-minimalmodbus.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c0e6f8bbef..9eb5400999 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -173,6 +173,7 @@ F:	package/mono-gtksharp3/
- F:	package/monolite/
- F:	package/openjpeg/
- F:	package/python-can/
-+F:	package/python-minimalmodbus/
- F:	package/python-pillow/
- F:	package/python-pydal/
- F:	package/python-spidev/
-diff --git a/package/Config.in b/package/Config.in
-index e3a34d6e97..08574931f8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1112,6 +1112,7 @@ menu "External python modules"
- 	source "package/python-mbstrdecoder/Config.in"
- 	source "package/python-memory-profiler/Config.in"
- 	source "package/python-mimeparse/Config.in"
-+	source "package/python-minimalmodbus/Config.in"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-modbus-tk/Config.in"
- 	source "package/python-more-itertools/Config.in"
-diff --git a/package/python-minimalmodbus/Config.in b/package/python-minimalmodbus/Config.in
-new file mode 100644
-index 0000000000..fd0f33e0d4
---- /dev/null
-+++ b/package/python-minimalmodbus/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_MINIMALMODBUS
-+	bool "python-minimalmodbus"
-+	select BR2_PACKAGE_PYTHON_SERIAL # runtime
-+	help
-+	  Easy-to-use Modbus RTU and Modbus ASCII implementation.
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+index f7e3f39503..7ce7867f67 100644
+--- a/package/pkg-cargo.mk
++++ b/package/pkg-cargo.mk
+@@ -51,9 +51,15 @@ PKG_CARGO_ENV = \
+ # and should be removed when fixed upstream
+ #
+ ifeq ($(NORMALIZED_ARCH),arm)
+-	PKG_CARGO_ENV += RUSTFLAGS="-Clink-arg=-Wl,--allow-multiple-definition"
++	PKG_CARGO_RUSTFLAGS += -Clink-arg=-Wl,--allow-multiple-definition
+ endif
+ 
++ifeq ($(BR2_ENABLE_DEBUG),y)
++	PKG_CARGO_RUSTFLAGS += -g
++endif
 +
-+	  https://minimalmodbus.readthedocs.io/
-diff --git a/package/python-minimalmodbus/python-minimalmodbus.hash b/package/python-minimalmodbus/python-minimalmodbus.hash
-new file mode 100644
-index 0000000000..56af3d426b
---- /dev/null
-+++ b/package/python-minimalmodbus/python-minimalmodbus.hash
-@@ -0,0 +1,4 @@
-+# sha256 locally computed
-+sha256  aa7e3989074d4efba0013c3c50263aec01afae368bd5bd234008b50aea1b7ab4  minimalmodbus-2.0.1.tar.gz
-+# Hash for license file
-+sha256  abe787d472ae2069e935c84eb13fd770518dfb08b92d5f190f3cd7ff6d1f6f32  LICENSE
-diff --git a/package/python-minimalmodbus/python-minimalmodbus.mk b/package/python-minimalmodbus/python-minimalmodbus.mk
-new file mode 100644
-index 0000000000..e4e93b4c31
---- /dev/null
-+++ b/package/python-minimalmodbus/python-minimalmodbus.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-minimalmodbus
-+#
-+################################################################################
++PKG_CARGO_ENV += RUSTFLAGS=$(subst $(space),$(comma),$(strip $(PKG_CARGO_RUSTFLAGS)))
 +
-+PYTHON_MINIMALMODBUS_VERSION = 2.0.1
-+PYTHON_MINIMALMODBUS_SOURCE = minimalmodbus-$(PYTHON_MINIMALMODBUS_VERSION).tar.gz
-+PYTHON_MINIMALMODBUS_SITE = $(call github,pyhys,minimalmodbus,$(PYTHON_MINIMALMODBUS_VERSION))
-+PYTHON_MINIMALMODBUS_SETUP_TYPE = setuptools
-+PYTHON_MINIMALMODBUS_LICENSE = Apache License 2.0
-+PYTHON_MINIMALMODBUS_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+ HOST_PKG_CARGO_ENV = \
+ 	$(PKG_COMMON_CARGO_ENV)
+ 
+@@ -119,7 +125,7 @@ define $(2)_BUILD_CMDS
+ 		$$($(2)_CARGO_ENV) \
+ 		cargo build \
+ 			--offline \
+-			$$(if $$(BR2_ENABLE_DEBUG),,--release) \
++			$$(if $$(BR2_ENABLE_RUNTIME_DEBUG),,--release) \
+ 			--manifest-path Cargo.toml \
+ 			--locked \
+ 			$$($(2)_CARGO_BUILD_OPTS)
 -- 
-2.25.1
+2.37.3
 
 _______________________________________________
 buildroot mailing list
