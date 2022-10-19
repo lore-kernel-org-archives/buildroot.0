@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CA79C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 21:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 536CEC4332F
+	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 21:54:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA3D1401FB;
-	Wed, 19 Oct 2022 21:54:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA3D1401FB
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB8B241C56;
+	Wed, 19 Oct 2022 21:54:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB8B241C56
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id clBQDWWVKZm3; Wed, 19 Oct 2022 21:54:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pHYugsJHY1C5; Wed, 19 Oct 2022 21:54:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D8F340438;
-	Wed, 19 Oct 2022 21:54:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D8F340438
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 82C781BF41B
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6E3341C61;
+	Wed, 19 Oct 2022 21:54:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6E3341C61
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DAAC81BF41B
  for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 21:53:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EA9C60AD2
+ by smtp1.osuosl.org (Postfix) with ESMTP id B6AF7815CA
  for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 21:53:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EA9C60AD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6AF7815CA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 00y-FPGF7SVU for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wdxxEjbtN-ek for <buildroot@lists.busybox.net>;
  Wed, 19 Oct 2022 21:53:56 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1C2D60783
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com
- [IPv6:2607:f8b0:4864:20::12f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F1C2D60783
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 21:53:55 +0000 (UTC)
-Received: by mail-il1-x12f.google.com with SMTP id d14so9921799ilf.2
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 14:53:55 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AAD681308
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
+ [IPv6:2607:f8b0:4864:20::136])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4AAD681308
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 21:53:56 +0000 (UTC)
+Received: by mail-il1-x136.google.com with SMTP id o13so9919293ilc.7
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 14:53:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=xY+gXgqvO/Ti185Xgw6Pd9Ba2UOlbUQGeaygfeq1uvQ=;
- b=Wo8koz8b8lbbERBd70JtOGftS43xp49Nv+sKl4vDudOqkP8IUhpmpIiO6YfWGVQOS7
- oR3ZimGixvYGrbtrEDYO6mfm21Nf27TRMhOL/0zusabiNaZBWjDKw3tjKE1ZLUgknk3x
- J7gimL4n10udArLZY388eAMaoy3TSqdUgT6daqt1iuTP+avTaVVELy2dG7Woq0UXflUC
- ggdnqgZMaXwExCyO3LiM7iqzsxFND96tQd73Au6msYOjIkC71Vegr+phm6YIu9g31pVp
- AbGD3mwyeiK0LnqW4D6/lTfIlVt7h5C5pg/ihdlKw49XKIrrgQ5X/fPyiui0Z3JqI6xt
- r6rA==
-X-Gm-Message-State: ACrzQf3yAVbz1Q04izu9QL4AdIgcGhh465Hbc3hupfl9639NNNzLbCGz
- yaMOBOZZtCZc+jqkHwF5b0QFwfZf6MSsig==
-X-Google-Smtp-Source: AMsMyM7xuBcpkNKb0Hs5vHAB6RFIi/SZLg5oUbQZkrkywcLq0UbfCkioVpkpQJJjWRf9hBGW6YJ/fQ==
-X-Received: by 2002:a92:cd03:0:b0:2f9:463e:279d with SMTP id
- z3-20020a92cd03000000b002f9463e279dmr7669880iln.223.1666216434763; 
- Wed, 19 Oct 2022 14:53:54 -0700 (PDT)
+ bh=vsx6K+of8NEV4EYjp+6uYlovhsXy+11wiofcz+qIB7E=;
+ b=7HhAJY2R4i7buDq72S1HgEQbXfk6CpBZSpb3ZoQ7RxcsgpmKqjUlu6m6GUCpLpj8xw
+ YAxb3JjSWS1aNVs/tJTuM5etBG1f8I6K2cVysISZMtFqRvd3PyrzQr+kgsExLFF4SQRU
+ Zlg6mtMWW5dyUWISD0OrdS3NHVCygcbJ/agwmrgd5vADqtaH6RnflHQh3yZ/Ru01GRPL
+ gwixgRWtswqxDI6r/1z1Pq8jCWRD2gdUGVn4tiFEOigGVhx5peUm2zjGF2cCwMu18FrM
+ BLczITTipETASzFL5t6bZmIrz9Tnp1JvBxWdiDtpVAAGnpdIwwLpbvWbdxPuNQ4WA+po
+ XgZw==
+X-Gm-Message-State: ACrzQf0X33ZBCKMsMI7NDTvAO5bpwgjnLo1a2sLdY5cirrXNrWmDZdy+
+ Gf8EDPCLuSdg2JBJbrwoXh7Brurb0nbQhA==
+X-Google-Smtp-Source: AMsMyM7sgG4jFcuISRDp1wyFw1GY6N9pFQ7khrzVNBsCulK7zt+te5XjVGu26fcPzfRIumsJdMN32Q==
+X-Received: by 2002:a05:6e02:16c8:b0:2fa:f950:9708 with SMTP id
+ 8-20020a056e0216c800b002faf9509708mr7699648ilx.141.1666216435690; 
+ Wed, 19 Oct 2022 14:53:55 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
  [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
- v3-20020a056602058300b006bc69b0fa07sm2645358iox.12.2022.10.19.14.53.53
+ v3-20020a056602058300b006bc69b0fa07sm2645358iox.12.2022.10.19.14.53.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Oct 2022 14:53:54 -0700 (PDT)
+ Wed, 19 Oct 2022 14:53:55 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 19 Oct 2022 15:53:45 -0600
-Message-Id: <20221019215348.3262192-4-james.hilliard1@gmail.com>
+Date: Wed, 19 Oct 2022 15:53:46 -0600
+Message-Id: <20221019215348.3262192-5-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221019215348.3262192-1-james.hilliard1@gmail.com>
 References: <20221019215348.3262192-1-james.hilliard1@gmail.com>
@@ -74,17 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=xY+gXgqvO/Ti185Xgw6Pd9Ba2UOlbUQGeaygfeq1uvQ=;
- b=jrUubCNHXJXxzPeIIvNbbxh2Q5s/9/1LWF8nCrW/4by7xCAJ7r5JIqLXMkOZv6aC7q
- MobWjeyJAWQTrsa02m94mqeZCF2ba/eBz8caKN0EhIxQU8T+k0D5KmHwdxWvMGM64/tu
- HR2zViuD8KQsHWHqAyVKPqs1tf2DhD5uCPcRWDkHQmfrC3GroR1nVoaFmLAPK+pKq95I
- UAbi1FbikQz0deErSze+GB5yHPj0UkO4HJCvALX3h797c0l5ocyNwJfDvbkXJ0Io1Wq8
- XxAV7iXv6xmRSGZZLby/13jUpt3Bj8QHjPsVZerh95U1ESQOyCbsLOHfgKm12Lg3G90R
- VtGw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=vsx6K+of8NEV4EYjp+6uYlovhsXy+11wiofcz+qIB7E=;
+ b=LlTgk9dB4v5s/kEs1TtAgDm+KqgEb01ZRU0acOEn4oCrpEXjhdaKqspsom5cWojq0w
+ 6MGsXo4QcS58mfYv/0nmpahdwz9ykX64f958yEtOlx4Boz6RCzgFT0WV51rJfCN4Ra+Z
+ MKXVxvVq8hyRWYvU1bnwZIqyrkWk/KAFtycDaJHhTZnFY023+UPiGkJluTNGwTO3l8RM
+ nGp01vcnYf2y2V2TUa/mWTRZZbkz8PcOBlJN8E+Nc+hBChz1YeMpuLUMnWxjx24N+mTm
+ 0rgANeKMU+XjJ6pfCvq5B58dZAoKxWM55S+8tW70fiC2Z/59AW9LgqaRSOWxIIoVARKq
+ HSOQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=jrUubCNH
-Subject: [Buildroot] [PATCH 4/7] package/python-hatchling: new package
+ header.a=rsa-sha256 header.s=20210112 header.b=LlTgk9dB
+Subject: [Buildroot] [PATCH 5/7] package/python-hatch-fancy-pypi-readme: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,63 +105,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a new pep517 based build backend.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                                    |  1 +
- .../python-hatchling/python-hatchling.hash    |  5 +++++
- package/python-hatchling/python-hatchling.mk  | 19 +++++++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/python-hatchling/python-hatchling.hash
- create mode 100644 package/python-hatchling/python-hatchling.mk
+ DEVELOPERS                                        |  1 +
+ .../python-hatch-fancy-pypi-readme.hash           |  5 +++++
+ .../python-hatch-fancy-pypi-readme.mk             | 15 +++++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
+ create mode 100644 package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 48d2193db6..9e2e7a2b87 100644
+index 9e2e7a2b87..df61582cd4 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1383,6 +1383,7 @@ F:	package/python-flatbuffers/
- F:	package/python-fonttools/
+@@ -1384,6 +1384,7 @@ F:	package/python-fonttools/
  F:	package/python-frozenlist/
  F:	package/python-greenlet/
-+F:	package/python-hatchling/
+ F:	package/python-hatchling/
++F:	package/python-hatch-fancy-pypi-readme/
  F:	package/python-installer/
  F:	package/python-janus/
  F:	package/python-logstash/
-diff --git a/package/python-hatchling/python-hatchling.hash b/package/python-hatchling/python-hatchling.hash
+diff --git a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
 new file mode 100644
-index 0000000000..41d7be977e
+index 0000000000..1b287072b7
 --- /dev/null
-+++ b/package/python-hatchling/python-hatchling.hash
++++ b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/hatchling/json
-+md5  e06cc65ac646f9b01df5406aa1f97022  hatchling-1.11.1.tar.gz
-+sha256  9f84361f70cf3a7ab9543b0c3ecc64211ed2ba8a606a71eb6a473c1c9b08e1d0  hatchling-1.11.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/hatch_fancy_pypi_readme/json
++md5  588776ea8e3608714d4cbba16dffa92b  hatch_fancy_pypi_readme-22.8.0.tar.gz
++sha256  da91282ca09601c18aded8e378daf8b578c70214866f0971156ee9bb9ce6c26a  hatch_fancy_pypi_readme-22.8.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  7f143a8127ad4873862d70854b5bd2abd0085aa73e64fd2b08704a3b9f5c07fc  LICENSE.txt
-diff --git a/package/python-hatchling/python-hatchling.mk b/package/python-hatchling/python-hatchling.mk
++sha256  e69ea57f96e599e617f61af3e85bf326b87e833994709fb5e5908a81197730a2  LICENSE.txt
+diff --git a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
 new file mode 100644
-index 0000000000..13155a20a4
+index 0000000000..f28721181a
 --- /dev/null
-+++ b/package/python-hatchling/python-hatchling.mk
-@@ -0,0 +1,19 @@
++++ b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-hatchling
++# python-hatch-fancy-pypi-readme
 +#
 +################################################################################
 +
-+PYTHON_HATCHLING_VERSION = 1.11.1
-+PYTHON_HATCHLING_SOURCE = hatchling-$(PYTHON_HATCHLING_VERSION).tar.gz
-+PYTHON_HATCHLING_SITE = https://files.pythonhosted.org/packages/24/20/3e21d2bc57229822ac9fb9b314d7892c16f829f34a0eb247c55fc11e09a8
-+PYTHON_HATCHLING_LICENSE = MIT
-+PYTHON_HATCHLING_LICENSE_FILES = LICENSE.txt
-+PYTHON_HATCHLING_SETUP_TYPE = pep517
-+HOST_PYTHON_HATCHLING_DEPENDENCIES = \
-+	host-python-editables \
-+	host-python-packaging \
-+	host-python-pathspec \
-+	host-python-pluggy
++PYTHON_HATCH_FANCY_PYPI_README_VERSION = 22.8.0
++PYTHON_HATCH_FANCY_PYPI_README_SOURCE = hatch_fancy_pypi_readme-$(PYTHON_HATCH_FANCY_PYPI_README_VERSION).tar.gz
++PYTHON_HATCH_FANCY_PYPI_README_SITE = https://files.pythonhosted.org/packages/4e/ab/9b48589d6e3a2f72cc1e8f5221c28ff28fcdf116dbbd6e9beb946054212d
++PYTHON_HATCH_FANCY_PYPI_README_LICENSE = MIT
++PYTHON_HATCH_FANCY_PYPI_README_LICENSE_FILES = LICENSE.txt
++PYTHON_HATCH_FANCY_PYPI_README_SETUP_TYPE = pep517
++HOST_PYTHON_HATCH_FANCY_PYPI_README_DEPENDENCIES = host-python-hatchling
 +
 +$(eval $(host-python-package))
 -- 
