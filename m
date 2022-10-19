@@ -1,71 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C71AEC4332F
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 18:25:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95744C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 19:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5077C41D32;
-	Wed, 19 Oct 2022 18:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5077C41D32
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mt_R2thA5GCn; Wed, 19 Oct 2022 18:25:32 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E660B41A69;
-	Wed, 19 Oct 2022 18:25:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E660B41A69
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 941A41BF3FD
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 18:25:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6F3BC60AD0
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 18:25:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F3BC60AD0
+	by smtp3.osuosl.org (Postfix) with ESMTP id E356560AE4;
+	Wed, 19 Oct 2022 19:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E356560AE4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oCx_yJX3ylfk for <buildroot@lists.busybox.net>;
- Wed, 19 Oct 2022 18:25:28 +0000 (UTC)
-X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D343A60615
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D343A60615
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 18:25:27 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b51:cb00:b849:ce06:f6eb:ded9])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 2C31F78034D;
- Wed, 19 Oct 2022 20:25:22 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 19 Oct 2022 20:25:21 +0200
-Date: Wed, 19 Oct 2022 20:25:21 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Nevo Hed <nhed+buildroot@starry.com>
-Message-ID: <20221019182521.GF3666@scaer>
-References: <20221019175151.1030079-1-nhed+buildroot@starry.com>
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id adP6VnI0nwZv; Wed, 19 Oct 2022 19:46:22 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FFC660AF1;
+	Wed, 19 Oct 2022 19:46:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FFC660AF1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B30F71BF41F
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 19:46:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8BBF841D06
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 19:46:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BBF841D06
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s8E4RTai1Q03 for <buildroot@lists.busybox.net>;
+ Wed, 19 Oct 2022 19:46:17 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68B7141D05
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 68B7141D05
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 19:46:17 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id y80so15405769iof.3
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 12:46:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=yfqdZcQ4CSNTuzNP1fXHblo+fLKG+mLBTqBU68dRo1Y=;
+ b=CEna1S9G/t7H6ZxVgxHpuVwVN8NNXMp+itZCSYyelFoSPqbh0G1j3m2BC0mWEg2OB1
+ eR0sz/oIsNfhhM688RDEzY/mjjp5srN6rp/Orzq1GNfUAnrRqoyuJTyYCP7D3b5jIad5
+ AyYEID4L/RHyP/y0PpD3X8I8tkXY5+Z7yw2fwY+TDMA+kDGkHOAAj7vJUkOfs8ekwfrn
+ iYaSJJ1JexAgLOnwvnHtxQwwFlSY05GsuhRTtHY9ElypvjYSzO2P/WQz4hocO24jXbT6
+ q9ARMjTozkEXVr230eeILLMxTBKgWyiol6bD/TCLO8w3x1Bp5jHm83+Z83TzPhwTC0OM
+ 3DJA==
+X-Gm-Message-State: ACrzQf2agEWOtfLNhDY2dhe4fOrKG/JSpJBeVqOt82lkGItZfwc9tr67
+ SrXhFQE4YSKaiGP1nXKTD+n5Vdn8ZxLH4Q==
+X-Google-Smtp-Source: AMsMyM7wW8kr+1i/odb2aRqZbsQSbU2kszd1R9eo3WAKDiSNUBniKUhVvmGE0E7Aobrd4ais6fUzhw==
+X-Received: by 2002:a6b:5f17:0:b0:6bb:e3d9:8abd with SMTP id
+ t23-20020a6b5f17000000b006bbe3d98abdmr6786095iob.51.1666208776072; 
+ Wed, 19 Oct 2022 12:46:16 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-240-5.hlrn.qwest.net.
+ [71.218.240.5]) by smtp.gmail.com with ESMTPSA id
+ g7-20020a02a087000000b00363753f4730sm2423729jah.91.2022.10.19.12.46.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 19 Oct 2022 12:46:15 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 19 Oct 2022 13:46:13 -0600
+Message-Id: <20221019194613.145290-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20221019175151.1030079-1-nhed+buildroot@starry.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1666203924;
- bh=oyzzaxml5/N8W+ix/WurnPAKPZ+SmUsGYLH6mbh/zk8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=TiN+tGrCPDmw65TZy33fYCnM1Jw7URM2kKNVUF2DPtOo2PLjG4KzGHm50Hp3JBUUV
- KTZutD7B8Cwq3BuEjkFqYrKmC8VMalx1IyM3uyTnm06YfXVM+d8yPCWee5RjpuphFS
- RuW3KnTLV+fo2GehAoKYP7qVF9U0r1naq/MkDlK6pEGra7fY1YqLboWZddIEczLTcb
- zOG+s1+Xd/FNQKuGhzOcl9XnhimGRrFkv0mwMsJ0pwIidrGdo9Dr9nuDh+hrxTXzuS
- kp5OAv3PLzMEP23cbgCm0O9eATY1vm7UF1eqtfb9YvGr/5AA6VYtcK1ZnqbEBdrAnL
- yAyhNPqtG0Eag==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=TiN+tGrC
-Subject: Re: [Buildroot] [PATCH] core: Use of percent_defconfig seems to
- impact performance
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=yfqdZcQ4CSNTuzNP1fXHblo+fLKG+mLBTqBU68dRo1Y=;
+ b=Gtdctwomsx2VNDJ5ZVxyimgnZC0l5/RfyX/QqiTb/SRyriFXCcvPSjgiK33p5fkXoQ
+ Kz5FyHksm81pOyllVx/sBDZPrtYF9gNIzwDYNgi8GbbWF3YgkBfPORxX6p4dd79UObDX
+ YQW8iZfvPZtgz2xeyDVpbp10NLCFkCjvkmwrqpTEHQQp8vL/r1R8FS2ATkmtQ++5lLXW
+ uZPzaFnjETMKCGuoijEoiIBCCKLKDr3O+E0Wl49KowVdsjTAblHo+FvZii1zCnwNyKt6
+ JDDtVWNHKlLzEiM75uYkiKdU2UkfQx9ufObY3gc8wKw8KAw/qtA16cA2GXS7pygucUmI
+ Pbyg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20210112 header.b=Gtdctwom
+Subject: [Buildroot] [PATCH 1/1] package/python-setuptools: bump to version
+ 65.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,78 +94,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TmV2bywgQWxsLAoKT24gMjAyMi0xMC0xOSAxMzo1MSAtMDQwMCwgTmV2byBIZWQgc3Bha2UgdGh1
-c2x5Ogo+IE5vdGljZWQgYSBzaWduaWZpY2FudCBzbG93ZG93biB3aXRoIHJpc2Ugb2YgbnVtYmVy
-IG9mIGV4dGVybmFsIHRyZWVzCj4gaW4gb3VyIGVudi4gIFRoaXMgc2xvd2Rvd24gc2VlbWVkIHRv
-IGJlIHJlbGF0ZWQgdG8gaW52b2NhdGlvbnMgaWYgdGhlCj4gcGVyY2VudF9kZWZjb25maWcgZnVu
-Y3Rpb24gKEdOVSBNYWtlIDQuMykuCgpXZSBhbHJlYWR5IGhhdmUgYSBwZW5kaW5nIHBhdGNoIHRv
-IGFkZHJlc3MgdGhpcyBpc3N1ZToKICAgICBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3By
-b2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjIwOTIwMTk0NjQ1LjY3MDQzMi0xLXlhbm4ubW9yaW4u
-MTk5OEBmcmVlLmZyLwoKPiBXaGlsZSBJIGhhdmUgbm90IGRvIGEgZGVlcCBkaXZlIGluIGFuYWx5
-emluZyB0aGUgcGVyZm9ybWFuY2UgaXNzdWUsIGl0Cj4gZmVsdCBsaWtlIHJlZGVmaW5pbmcgdGhl
-ICVfZGVmY29uZmlnIHJ1bGUgTiB0aW1lcyBpbXBhY3QgcGVyZm9ybWFuY2UuCgpQbGVhc2UsIG5v
-IGZpcnN0LXBlcnNvbiBzZW50ZW5jZXMgaW4gY29tbWl0IGxvZyAoaS5lLiwgbm8gIkkiKS4KCj4g
-VGhpcyBwYXRjaCBtYWtlcyAlX2RlZmNvbmZpZyBhIHNpbmdsZSBydWxlIHdoaWNoIGNvbWJpbmVz
-IHVzZXMgdGhlCj4gZmlyc3QgcmV0dXJuIG9mIGEgd2lsZGNhcmQgZXhwcmVzc2lvbi4KCkkgY2Fu
-IGNlcnRhaW5seSBzZWUgdGhhdCB0aGlzIGxvb2tzIGEgYml0IHNpbXBsZXIgdGhhbiBteSBwcm9w
-b3NhbC4KCkhvZXZlciwgSSBhbSBub3QgdG9vIGZvbmQgb2YgaXQsIGJlY2F1c2UgaXQgZGVmZXJz
-IHRoZSB0ZXN0IHRoYXQgdGhlCmRlZmNvbmZpZyBleGlzdHMgaW50byB0aGUgc2hlbGwgcmF0aGVy
-IHRoYW4gdGhlIE1ha2VmaWxlLiBJIGRvbid0IGtub3csCm1heWJlIGl0IGlzIGluIGZhY3QgYmV0
-dGVyIGJlY2F1c2Ugd2UgY2FuIHByaW50IGEgbW9yZSB1c2VyLWZyaWVuZGx5CmVycm9yIG1lc3Nh
-Z2UuLi4KCj4gVGltaW5nIChzZWNvbmRzKSBvZiBgbWFrZSBwY194ODZfNjRfYmlvc19kZWZjb25m
-aWdgIHdpdGggMS04IGV4dGVybmFsCj4gdHJlZXM6Cj4gCj4gICAgICNUcmVlcyAgICBCZWZvcmUg
-ICAgQWZ0ZXIKPiAgICAgICAgICAxICAgICAgMC4zOCAgICAgMC4zNwo+ICAgICAgICAgIDIgICAg
-ICAwLjMyICAgICAwLjMxCj4gICAgICAgICAgMyAgICAgIDAuMzEgICAgIDAuMzMKPiAgICAgICAg
-ICA0ICAgICAgMC4zNiAgICAgMC4zMgo+ICAgICAgICAgIDUgICAgICAwLjQ1ICAgICAwLjM1Cj4g
-ICAgICAgICAgNiAgICAgIDEuMjYgICAgIDAuMzYKPiAgICAgICAgICA3ICAgICAgOS4xMCAgICAg
-MC4zNgo+ICAgICAgICAgIDggICAgIDg1LjkzICAgICAwLjQyCgpXZWlyZC4gRm9yIG1lLCBzdGFy
-dGluZyBhdCA2IGV4dGVybmFsIHRyZWVzLCB0aGUgdGltZSB0byBjb21wbGV0aW9uCmRpcmVjdGx5
-IGV4cGxvZGVkIGFib3ZlIHRoZSBob3VyLgoKT25lIGludGVyZXN0aW5nIHBvaW50LCB0aG91Z2gg
-aXMgdGhhdCB0aGUgZHVyYXRpb24gZG9lcyBub3Qgc2VlbSB0byBiZQptdWNoIGltcGFjdGVkIGJ5
-IHRoZSBudW1iZXIgb2YgYnLDqWV4dGVybmFsIHRyZWVzLiBDb3VsZCB5b3UgdGVzdCB3aXRoIHVw
-CnRvIDEwMDAgdHJlZXMsIGxpa2UgSSBkaWQ/CgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiBT
-aWduZWQtb2ZmLWJ5OiBOZXZvIEhlZCA8bmhlZCtidWlsZHJvb3RAc3RhcnJ5LmNvbT4KPiAtLS0K
-PiAgTWFrZWZpbGUgfCAxMyArKysrKystLS0tLS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2Vy
-dGlvbnMoKyksIDcgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL01ha2VmaWxlIGIvTWFr
-ZWZpbGUKPiBpbmRleCBlYzdjMDM0YWMxLi5hODI5OGRkNWZkIDEwMDY0NAo+IC0tLSBhL01ha2Vm
-aWxlCj4gKysrIGIvTWFrZWZpbGUKPiBAQCAtMTAxMCwxMyArMTAxMCwxMiBAQCBvbGRjb25maWcg
-c3luY2NvbmZpZyBvbGRkZWZjb25maWc6ICQoQlVJTERfRElSKS9idWlsZHJvb3QtY29uZmlnL2Nv
-bmYgb3V0cHV0bWFrZQo+ICBkZWZjb25maWc6ICQoQlVJTERfRElSKS9idWlsZHJvb3QtY29uZmln
-L2NvbmYgb3V0cHV0bWFrZWZpbGUKPiAgCUAkKENPTU1PTl9DT05GSUdfRU5WKSAkPCAtLWRlZmNv
-bmZpZyQoaWYgJChERUZDT05GSUcpLD0kKERFRkNPTkZJRykpICQoQ09ORklHX0NPTkZJR19JTikK
-PiAgCj4gLWRlZmluZSBwZXJjZW50X2RlZmNvbmZpZwo+IC0jIE92ZXJyaWRlIHRoZSBCUjJfREVG
-Q09ORklHIGZyb20gQ09NTU9OX0NPTkZJR19FTlYgd2l0aCB0aGUgbmV3IGRlZmNvbmZpZwo+IC0l
-X2RlZmNvbmZpZzogJChCVUlMRF9ESVIpL2J1aWxkcm9vdC1jb25maWcvY29uZiAkKDEpL2NvbmZp
-Z3MvJV9kZWZjb25maWcgb3V0cHV0bWFrZWZpbGUKPiAtCUAkJChDT01NT05fQ09ORklHX0VOVikg
-QlIyX0RFRkNPTkZJRz0kKDEpL2NvbmZpZ3MvJCRAIFwKPiAtCQkkJDwgLS1kZWZjb25maWc9JCgx
-KS9jb25maWdzLyQkQCAkJChDT05GSUdfQ09ORklHX0lOKQo+IC1lbmRlZgo+IC0kKGV2YWwgJChm
-b3JlYWNoIGQsJChjYWxsIHJldmVyc2UsJChUT1BESVIpICQoQlIyX0VYVEVSTkFMX0RJUlMpKSwk
-KGNhbGwgcGVyY2VudF9kZWZjb25maWcsJChkKSkkKHNlcCkpKQo+ICslX2RlZmNvbmZpZzogJChC
-VUlMRF9ESVIpL2J1aWxkcm9vdC1jb25maWcvY29uZiAgb3V0cHV0bWFrZWZpbGUKPiArCUBkZWZj
-b25maWc9JChmaXJzdHdvcmQgJChmb3JlYWNoIGQsXAo+ICsJCSQoY2FsbCByZXZlcnNlLCQoVE9Q
-RElSKSAkKEJSMl9FWFRFUk5BTF9ESVJTKSksJCh3aWxkY2FyZCAkKGQpL2NvbmZpZ3MvJEApKSk7
-IFwKPiArCWlmIFsgLXogIiQke2RlZmNvbmZpZ30iIF07IHRoZW4gZWNobyAiQ2FuJ3QgZmluZCAk
-QCIgPiYyOyBleGl0IDE7IGZpOyBcCj4gKwkkKENPTU1PTl9DT05GSUdfRU5WKSBCUjJfREVGQ09O
-RklHPSQke2RlZmNvbmZpZ30gXAo+ICsJCSQ8IC0tZGVmY29uZmlnPSQke2RlZmNvbmZpZ30gJChD
-T05GSUdfQ09ORklHX0lOKQo+ICAKPiAgdXBkYXRlLWRlZmNvbmZpZzogc2F2ZWRlZmNvbmZpZwo+
-ICAKPiAtLSAKPiAyLjM3LjMKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0t
-LS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwg
-UmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5
-OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdO
-ICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0t
-LS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0
-cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAg
-diAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0t
-LV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-setuptools/python-setuptools.hash | 4 ++--
+ package/python-setuptools/python-setuptools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index 3f68084068..2592fc201c 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,4 +1,4 @@
+ # From https://pypi.org/pypi/setuptools/json
+-md5  66c6b8819c5306c12c38d7fad41b7f99  setuptools-65.3.0.tar.gz
+-sha256  7732871f4f7fa58fb6bdcaeadb0161b2bd046c85905dbaa066bdcbcc81953b57  setuptools-65.3.0.tar.gz
++md5  9018a18990e7c16159ec3972affba76c  setuptools-65.5.0.tar.gz
++sha256  512e5536220e38146176efb833d4a62aa726b7bbff82cfbc8ba9eaa3996e0b17  setuptools-65.5.0.tar.gz
+ sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index b7483c6347..9dc0a6a38b 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SETUPTOOLS_VERSION = 65.3.0
++PYTHON_SETUPTOOLS_VERSION = 65.5.0
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/cc/83/7ea9d9b3a6ff3225aca2fce5e4df373bee7e0a74c539711a4fbfda53374f
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/c5/41/247814d8b7a044717164c74080725a6c8f3d2b5fc82b34bd825b617df663
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
