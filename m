@@ -1,130 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEFE9C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 14:33:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11B13C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 14:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43E3F84057;
-	Wed, 19 Oct 2022 14:33:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43E3F84057
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BF44611E4;
+	Wed, 19 Oct 2022 14:56:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BF44611E4
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ycsHNmUMilV0; Wed, 19 Oct 2022 14:56:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E94C60B4E;
+	Wed, 19 Oct 2022 14:56:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E94C60B4E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 177441BF403
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 14:56:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E6BC283F68
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 14:56:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6BC283F68
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rDhoAuA8RwKs; Wed, 19 Oct 2022 14:33:08 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1AB1284051;
-	Wed, 19 Oct 2022 14:33:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AB1284051
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A52561BF403
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 14:33:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 681AE40CD7
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 14:33:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 681AE40CD7
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BktacSj_DhXd for <buildroot@lists.busybox.net>;
- Wed, 19 Oct 2022 14:33:03 +0000 (UTC)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CkFAUY5QHkoG for <buildroot@lists.busybox.net>;
+ Wed, 19 Oct 2022 14:56:17 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BA3040C99
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
- (mail-eopbgr80052.outbound.protection.outlook.com [40.107.8.52])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7BA3040C99
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 14:33:02 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jib13tPBBfEb0/9geur83GMa5+apUeIO5lFn67xdX6no2HR3knb3QTiuieZvYJnOQhRAY4JlTwvL3vZVY/DJhTz/w+XJtwUQBq1F31IfHg0XcwuOj1lYdN7tApzSF0SHabWtSd11qwwIVkgGgTD4w/GWPiE2MOuiWZo0tbwieFwoTDl+o0TjSyquACcxaystFKpjtGJTFjsZlUhKZLZQSOkF0ziyQZjNU8Rh9jYBneKyc8RDW7IWJkoZOtNaX3ACILmvMDp7YzypbDBIE0qv9zhGYG94CtIueVKhODyOZTCx+EubNi02pEtStiXRxHl1SL4Mu/43VZjgJlCtYNAuNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bEiiG3RwgqFrxvQ7kG1r5twnYPPfCqQLyNLWo/vEjVM=;
- b=nr+6XDJxMqAWloLeLuWsvZVzvEwVgY2Q78Ae1a4PFTkxlbsdpX+9hBcZuJTikQn4Fe2Fru1wiGiPd/1BaGJ2ZMW/QW6FixS6TBGuvdwPVPUTbVRXEqGlNsZf6lZ04gO0qwD2zC9BjtYXhpQ4gT9hRfaVnwqnNIgr7efywRS0/46qDNLFMs2za+oiEGLo6F7NTyKRTPg5winYc4EQyvty5rYLWGTmUNJVUGjDHajaWs+9Pf8M0PoGe5Et2KNUm2qMh1F3ZQZsK0dMZqSdlpEoaeCWmxVSSa2bFuKd3CuUsKnj/RhBSmRMsnBTx7w3OTMxeLgbQV7YHTsbH5qpTrfYTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vaisala.com; dmarc=pass action=none header.from=vaisala.com;
- dkim=pass header.d=vaisala.com; arc=none
-Received: from HE1PR0601MB2361.eurprd06.prod.outlook.com (2603:10a6:3:97::9)
- by DBAPR06MB6951.eurprd06.prod.outlook.com (2603:10a6:10:1a3::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Wed, 19 Oct
- 2022 14:32:58 +0000
-Received: from HE1PR0601MB2361.eurprd06.prod.outlook.com
- ([fe80::b98d:390e:3a17:e9f9]) by HE1PR0601MB2361.eurprd06.prod.outlook.com
- ([fe80::b98d:390e:3a17:e9f9%10]) with mapi id 15.20.5723.034; Wed, 19 Oct
- 2022 14:32:57 +0000
-To: buildroot@buildroot.org
-Date: Wed, 19 Oct 2022 17:32:19 +0300
-Message-Id: <20221019143219.329504-1-eero.aaltonen@vaisala.com>
-X-Mailer: git-send-email 2.25.1
-X-ClientProxiedBy: GV3P280CA0014.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:150:b::29) To HE1PR0601MB2361.eurprd06.prod.outlook.com
- (2603:10a6:3:97::9)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9124883F23
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com
+ [IPv6:2607:f8b0:4864:20::236])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9124883F23
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 14:56:17 +0000 (UTC)
+Received: by mail-oi1-x236.google.com with SMTP id y72so19533918oia.3
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 07:56:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=CJcvESdB2lEwUzo24UqGENSr/NuUtKxDizSyx8YfZEg=;
+ b=CHSs8b/nq/Vf/2aQHkvPshTj7bMcilBgjQvi/BKgUVT04skoLN0ViEDT2hiGFmdAj/
+ 54ZawTMYuPmmyS0QwMAKqsNQaVevogRD50hgR2A/KRmRb21axolq6Cy40YVjseBP3aBs
+ sAsTtMUx1hxar3oTK79NdnwFTir+ONWk9tCwQcSlqeTeQUJ1dOBriAUZS6ex7OoVNYIV
+ fofeEcW2Q11cAZ677LajxO4LKH80OtEP3ZLtcpQk2Ev9N4M1fRXqS4MlYtCIEPM0wdsm
+ 5HTS5pTgMcfDlaPXgcRLeNeKTC/NHj3OJTA19IFaf3ZrbDBs64K/1J9q8zuM2gvus5JL
+ 1Etw==
+X-Gm-Message-State: ACrzQf0ICMrFvDh/kRgZR63BXTmvGjS2tmX5r/4mFVFf1hL1NE0vBWIc
+ RybwoW43Hm40X5E8bNxzXcvAvLoRC5LMYzgIwzfD0Q==
+X-Google-Smtp-Source: AMsMyM5tTRfV+OHHbHTUTyenem4c7+TlNeM3LUV0L9Qh7Rz6Esdv8rYeN2Z3GQb3bjJ+WqEpfRz/YZ2yTlZlblJzBbc=
+X-Received: by 2002:a05:6808:120c:b0:351:6d17:1845 with SMTP id
+ a12-20020a056808120c00b003516d171845mr4712113oil.254.1666191376232; Wed, 19
+ Oct 2022 07:56:16 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1PR0601MB2361:EE_|DBAPR06MB6951:EE_
-X-MS-Office365-Filtering-Correlation-Id: f846073e-8276-4fa1-b83c-08dab1ded118
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sCOO+wreMXEbSbuQgoc5AzPJhwvhAnaU+dY2wznV64+/Cup+O4VUaQ1fD7ovzNq/uINKYc0gZqxo/LB06qkJ2WeUw8QhnkgtWE6R+bjx4ZQ5wQkdeHuYbgPCcMdt80sahGJBt3sGryEJtCE9TQYeFKpqU50905OzjL6AAViTl1WPQ6/ccUEFQzzDe9JHyRc7prs5Oea19lwcUBjxTkBWnTVksligtNBLM5Ion3wCAHt/jkApnV4f89TyO2lPz/4UF8Kqd9KhKySuSD9xEw+u7x+FrQRYUSecmolpvQBelhhFAFamEff63pY8OKMsJoGM6vcZQDK7zWf03B8uK568M1PSCKM8ZUJMluwHxaWRZtnRnfMvVI4jj2KjWfXoprVZEXYtDW7TDhIgEUVUxmlX8Gixd2t7+6HwmUWsCL/lcmwEvi163lGazE00SZZ6tlrgnI0Cr/2ihhqrkdIVYufoqZrSbPgwj2qJJzl8CaoFG9RcKc76gwQV0DP74LQA9fsRothuFtyF3j5ZeQxrpqPq9gSO4lRNnu8jRxEN1/HqYPcIX0aHnzktdEtBHWpmI7ojr45wFboWuiZ3gOTw9fQmGvUsAVo1bEOyqIh4H/sFMByjwaLWVasrK2I2p1cWlpdMPk1LGuo95PeinWTN6qGhPRxTX/OHpIcPZ6TCOm4yuuRL4bYugl7BprrbYfXTCU0E51vD1ozcJs9oFw/OKyjmatZpWGrz6vh9/fPAcBQr8gTBax49tgdIid0x6Z/+pYizF1ue3iGXEueNbxc+OQR0+1RTFkzLbz2KEFDm22hDyGeVw76vl7H0R76ce6h8znfIVpAtbkGEMZq0HygV+7AhmQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:HE1PR0601MB2361.eurprd06.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(396003)(376002)(39850400004)(136003)(346002)(366004)(451199015)(44832011)(2906002)(66946007)(41300700001)(66556008)(36756003)(66476007)(4326008)(8676002)(8936002)(5660300002)(26005)(6512007)(6506007)(1076003)(186003)(2616005)(6916009)(966005)(6486002)(316002)(86362001)(38350700002)(38100700002)(478600001)(52116002)(6666004)(107886003);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b8UAbIqt+Yt3E29XeRRSfJhuGaNVe13iq9VbX3Klvr6ZvjFighYFvFwPwawi?=
- =?us-ascii?Q?JtsKxzkvAgRvUI4+gwsWzCguhJ3iclvKy7GN6BI8a8htohdFkEN/c4IMR/7Z?=
- =?us-ascii?Q?Y+unf/sKaXl5pxNvaBrA3+4K2KGJRaT/5FBYtr0/pAV5y4CbcLtLyH5Zx7uo?=
- =?us-ascii?Q?seotH/csJrKHAlXFrbbyMIAhztNxPap4Wfzn/Cg4PFgRvU+D6JlQCgBqz7pr?=
- =?us-ascii?Q?0ZUe2qTbXHrKYOq0oRKDGmvYZTxzvUjFjZC/gL917h46R1gaZN61jXxjK4aR?=
- =?us-ascii?Q?TyFyJxrHsAqW20KI7lUcAM8vr21QEkXuQ2HvxZWFvUQFHslANNQUcHb11sQT?=
- =?us-ascii?Q?hCFrlUb3a1/zxF3Rbxytpjfe6k42sXclTH0yGe1aluSXsp+JQRq1yM3ipX22?=
- =?us-ascii?Q?1VQiMqGivLU0MCIqPdS7nJdsOKQZbs18pZ+BmmbD/wx7yWoZYnXn0rlAyRqy?=
- =?us-ascii?Q?2kIJkNh63jrxW1Qrx/lbbPFxhlKTMwPfjKXWdqwMHcE3bsVhBUcbCRjIDA6a?=
- =?us-ascii?Q?zxwmeDyT33F1B+s/OFk+9DMFEkWeOqrSYrbhLdU7DsCDDVfwHEDdpjQIQs64?=
- =?us-ascii?Q?0qmKLHxXO2f5Hrs42Nk05I5agxo5nflj+IcvJMz4dvZT4r/EvduaILFobc99?=
- =?us-ascii?Q?lw1+HZzBuZo9rz8p8W3xQJajH9jN+MMfdB2YfT0fxv0IaV78mXWJ5hptZm2G?=
- =?us-ascii?Q?Ts4Xw2nfvgfN4mCIcGs8n1zreEPzMD9sOYQ6ZcNhzzVZ1bmjHn+TtHh51KO+?=
- =?us-ascii?Q?WJCVuPzXvbj9g2u+skKaUv1AoQyHuFgtntt8HWiHZPyc623e8wsJQLzgrfJL?=
- =?us-ascii?Q?3yPqwzaro9DktQp9O6OY/vlwF/jg/Z9zkHYlalyah9vLV4w5t40OjjZlZ3+N?=
- =?us-ascii?Q?Hm5yEWn7yIG0TFXpJ0sYwJ7iBDDbnB0cAq1BKNrGJjUqYDj+nj8RFaA0QHpf?=
- =?us-ascii?Q?ZlitkLJTCjgmdW5dG3AkyatPkPwzO+p7+/Hg6AaMWf/mID4cRTICM0vlFocB?=
- =?us-ascii?Q?ZG9co0izxRM04IIc3BkMx00BtVycxmbV8lXwFeTikHTEetniphpHdbKzZjfB?=
- =?us-ascii?Q?yqKSY5y/8TxaxVI6BpULlPtIBYxmWItpFi1d2RR0+UBLG0hAlqgpjmogdnq9?=
- =?us-ascii?Q?YqVBI26Kb838Zk2HzuQDi0UjvtMdrUBYLu+pIDktHxafRJ2RLYXmmWJAFD07?=
- =?us-ascii?Q?Sdlf2cqaL3DQLTFx7dNMrypp88iz8Egrhphc5d6VH+x4zh5gfQKhhr1pqcRV?=
- =?us-ascii?Q?mmpPdGvmmK4K6sCuFB1KOH+mKJdCg3XQtoacNjr24O74UvRuFlrKswA/ofzf?=
- =?us-ascii?Q?WMzv5s+jna9IDD+YTK2nMr7gT7epZwNgUl4ktyu5+ypkTtSgetxhAT23KqYT?=
- =?us-ascii?Q?sx6n+/Jv6RfUWDrG9chEjUzp3OJu79xGI57jk1sqcb7EKERQFaOKmGYzPeE4?=
- =?us-ascii?Q?ZbMaJhrr1LAuzDVMKX15jw42QggFx+I0S7oJcFFOtifWX6afjBFTfL65eHNz?=
- =?us-ascii?Q?3O19kzCDCnB4VvMR0Kxt9lV3gGx+q5+UU9ImkCvlt3df5fxXTRVgcmyZpJB1?=
- =?us-ascii?Q?XEWNNY0JR/MCd2zbJZMiK8QSeYkwV/3AOfVC7kpiCzJD4dsMHglg0NthuKeB?=
- =?us-ascii?Q?Fg=3D=3D?=
-X-OriginatorOrg: vaisala.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f846073e-8276-4fa1-b83c-08dab1ded118
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0601MB2361.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2022 14:32:57.8385 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 6d7393e0-41f5-4c2e-9b12-4c2be5da5c57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tgfdxiex1oTUo6IALmXkb4lfPXduXUJ6yTwb6YFtvQG4pdiGx5cKHddQHsXGIyAX5F+nF8eHJoqqmuc2tPU1DQXZyb4s+0Jzk8r5xbZa/ow=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR06MB6951
+References: <20221019143219.329504-1-eero.aaltonen@vaisala.com>
+In-Reply-To: <20221019143219.329504-1-eero.aaltonen@vaisala.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Wed, 19 Oct 2022 16:55:36 +0200
+Message-ID: <CA+_SqVbv4KPcGnUryifUEy3RbUn+cw_J=BydTxhJfeMs-RC9Sw@mail.gmail.com>
+To: Eero Aaltonen <eero.aaltonen@vaisala.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=vaisala.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bEiiG3RwgqFrxvQ7kG1r5twnYPPfCqQLyNLWo/vEjVM=;
- b=gmQv2LKTOjaP7L6WcezO1AqUeL9IfZQ/thl1gYC4n0gaT5aYGpAF1sEjr8aL9WFdmxo7zqBboAHVwOLXPaIyOlfgSh4Aq/DExsaePXXWWRiNSVfgy/4hs3C0W/xqLOG127sFZs8yO7KeST+TcpoUPMr/OqjDItIU0UsWbZPjSA9VN3E9yKjpjFAgH5m/A4dKDQufQ04OFfCOfr3jpauxK1JOujHbT2vpIDae2vrMN9RpOeHRvfZUNVnbdZWZFKcdWKeWZBEWSkgXYInWqQlpf41xR38WU3XqVpzYO5equePLbAVnO4up+G4bW+C+F34rdI8kERQA7b6ej3JT8T8G0Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=vaisala.com header.i=@vaisala.com header.a=rsa-sha256
- header.s=selector1 header.b=gmQv2LKT
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vaisala.com;
-Subject: [Buildroot] [PATCH 1/1] package/docopt.cpp: new package
+ d=amarulasolutions.com; s=google;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=CJcvESdB2lEwUzo24UqGENSr/NuUtKxDizSyx8YfZEg=;
+ b=WkYaIaGK6aUi+FaahfStSOFpRtVtMmP+RZGwqHxaHc0wA6a0k9pL8KQSFasPceeaoO
+ ggnuly7+9hclYkLG0HCYMTfmJBY60bxN3+xXlpP/+Wnj1yjRFWP64Jb+2GanqSbpy9v9
+ cQbOS3cPQnfLNT6d7udB1UQ6MSqCmkNj/mm0Q=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=WkYaIaGK
+Subject: Re: [Buildroot] [PATCH 1/1] package/docopt.cpp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -136,112 +87,393 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Eero Aaltonen via buildroot <buildroot@buildroot.org>
-Reply-To: Eero Aaltonen <eero.aaltonen@vaisala.com>
-Cc: Eero Aaltonen <eero.aaltonen@vaisala.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============8393471867399964220=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add docopt.cpp library that can be used to create intuitive command
-line interfaces with very little code by describing the valid calls
-using the (POSIX.1-2017) command line utility argument syntax.
+--===============8393471867399964220==
+Content-Type: multipart/alternative; boundary="0000000000001bc96305eb646984"
 
-Signed-off-by: Eero Aaltonen <eero.aaltonen@vaisala.com>
+--0000000000001bc96305eb646984
+Content-Type: text/plain; charset="UTF-8"
+
+On Wed, Oct 19, 2022 at 4:33 PM Eero Aaltonen via buildroot <
+buildroot@buildroot.org> wrote:
+
+> Add docopt.cpp library that can be used to create intuitive command
+> line interfaces with very little code by describing the valid calls
+> using the (POSIX.1-2017) command line utility argument syntax.
+>
+> Signed-off-by: Eero Aaltonen <eero.aaltonen@vaisala.com>
+>
+
+Reviewed-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+
 ---
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/docopt.cpp/Config.in       | 15 +++++++++++++++
- package/docopt.cpp/docopt.cpp.hash |  6 ++++++
- package/docopt.cpp/docopt.cpp.mk   | 13 +++++++++++++
- 5 files changed, 38 insertions(+)
- create mode 100644 package/docopt.cpp/Config.in
- create mode 100644 package/docopt.cpp/docopt.cpp.hash
- create mode 100644 package/docopt.cpp/docopt.cpp.mk
+>
+Good to me.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c0e6f8bbef..8972bab2d1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -777,6 +777,9 @@ F:	board/acmesystems/acqua-a5/
- F:	configs/acmesystems_acqua_a5_256mb_defconfig
- F:	configs/acmesystems_acqua_a5_512mb_defconfig
- 
-+N:	Eero Aaltonen <eero.aaltonen@vaisala.com>
-+F:	package/docopt.cpp/
-+
- N:	Eloi Bail <eloi.bail@savoirfairelinux.com>
- F:	package/bayer2rgb-neon/
- F:	package/gstreamer1/gst1-plugins-bayer2rgb-neon/
-diff --git a/package/Config.in b/package/Config.in
-index e3a34d6e97..77f86328ce 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2113,6 +2113,7 @@ endmenu
- 
- menu "Text and terminal handling"
- 	source "package/augeas/Config.in"
-+	source "package/docopt.cpp/Config.in"
- 	source "package/enchant/Config.in"
- 	source "package/fmt/Config.in"
- 	source "package/fstrcmp/Config.in"
-diff --git a/package/docopt.cpp/Config.in b/package/docopt.cpp/Config.in
-new file mode 100644
-index 0000000000..655a656398
---- /dev/null
-+++ b/package/docopt.cpp/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_DOCOPT_CPP
-+	bool "docopt.cpp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	help
-+	  docopt is a library that lets you define a command line
-+	  interface with the utility argument syntax that has been
-+	  used by command line utilities for decades (POSIX.1-2017).
-+	  From the description, docopt automatically generates a parser
-+	  for the command line arguments.
-+
-+	  docopt Command-line interface description language
-+	  http://docopt.org/
-+
-+	  docopt C++ port https://github.com/docopt/docopt.cpp
-diff --git a/package/docopt.cpp/docopt.cpp.hash b/package/docopt.cpp/docopt.cpp.hash
-new file mode 100644
-index 0000000000..f8a7f8d97b
---- /dev/null
-+++ b/package/docopt.cpp/docopt.cpp.hash
-@@ -0,0 +1,6 @@
-+# Locally computed:
-+sha256  28af5a0c482c6d508d22b14d588a3b0bd9ff97135f99c2814a5aa3cbff1d6632  v0.6.3.tar.gz
-+
-+# Hash for license files:
-+sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE-Boost-1.0
-+sha256  b2959a980bc25f5d5e020d7a31777b7184aace6eb160acc80619f85edf646f19  LICENSE-MIT
-diff --git a/package/docopt.cpp/docopt.cpp.mk b/package/docopt.cpp/docopt.cpp.mk
-new file mode 100644
-index 0000000000..647071243a
---- /dev/null
-+++ b/package/docopt.cpp/docopt.cpp.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# docopt.cpp
-+#
-+################################################################################
-+
-+DOCOPT_CPP_VERSION = 0.6.3
-+DOCOPT_CPP_SOURCE = v$(DOCOPT_CPP_VERSION).tar.gz
-+DOCOPT_CPP_SITE = https://github.com/docopt/docopt.cpp/archive/refs/tags
-+DOCOPT_CPP_INSTALL_STAGING = YES
-+DOCOPT_CPP_LICENSE_FILES = LICENSE-Boost-1.0 LICENSE-MIT
-+
-+$(eval $(cmake-package))
+Testing:
+* check-package
+* legal-info
+* compiling from source for an architecture
+
+
+>  DEVELOPERS                         |  3 +++
+>  package/Config.in                  |  1 +
+>  package/docopt.cpp/Config.in       | 15 +++++++++++++++
+>  package/docopt.cpp/docopt.cpp.hash |  6 ++++++
+>  package/docopt.cpp/docopt.cpp.mk   | 13 +++++++++++++
+>  5 files changed, 38 insertions(+)
+>  create mode 100644 package/docopt.cpp/Config.in
+>  create mode 100644 package/docopt.cpp/docopt.cpp.hash
+>  create mode 100644 package/docopt.cpp/docopt.cpp.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c0e6f8bbef..8972bab2d1 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -777,6 +777,9 @@ F:  board/acmesystems/acqua-a5/
+>  F:     configs/acmesystems_acqua_a5_256mb_defconfig
+>  F:     configs/acmesystems_acqua_a5_512mb_defconfig
+>
+> +N:     Eero Aaltonen <eero.aaltonen@vaisala.com>
+> +F:     package/docopt.cpp/
+> +
+>  N:     Eloi Bail <eloi.bail@savoirfairelinux.com>
+>  F:     package/bayer2rgb-neon/
+>  F:     package/gstreamer1/gst1-plugins-bayer2rgb-neon/
+> diff --git a/package/Config.in b/package/Config.in
+> index e3a34d6e97..77f86328ce 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2113,6 +2113,7 @@ endmenu
+>
+>  menu "Text and terminal handling"
+>         source "package/augeas/Config.in"
+> +       source "package/docopt.cpp/Config.in"
+>         source "package/enchant/Config.in"
+>         source "package/fmt/Config.in"
+>         source "package/fstrcmp/Config.in"
+> diff --git a/package/docopt.cpp/Config.in b/package/docopt.cpp/Config.in
+> new file mode 100644
+> index 0000000000..655a656398
+> --- /dev/null
+> +++ b/package/docopt.cpp/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_DOCOPT_CPP
+> +       bool "docopt.cpp"
+> +       depends on BR2_INSTALL_LIBSTDCPP
+> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+> +       help
+> +         docopt is a library that lets you define a command line
+> +         interface with the utility argument syntax that has been
+> +         used by command line utilities for decades (POSIX.1-2017).
+> +         From the description, docopt automatically generates a parser
+> +         for the command line arguments.
+> +
+> +         docopt Command-line interface description language
+> +         http://docopt.org/
+> +
+> +         docopt C++ port https://github.com/docopt/docopt.cpp
+> diff --git a/package/docopt.cpp/docopt.cpp.hash
+> b/package/docopt.cpp/docopt.cpp.hash
+> new file mode 100644
+> index 0000000000..f8a7f8d97b
+> --- /dev/null
+> +++ b/package/docopt.cpp/docopt.cpp.hash
+> @@ -0,0 +1,6 @@
+> +# Locally computed:
+> +sha256  28af5a0c482c6d508d22b14d588a3b0bd9ff97135f99c2814a5aa3cbff1d6632
+> v0.6.3.tar.gz
+> +
+> +# Hash for license files:
+> +sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566
+> LICENSE-Boost-1.0
+> +sha256  b2959a980bc25f5d5e020d7a31777b7184aace6eb160acc80619f85edf646f19
+> LICENSE-MIT
+> diff --git a/package/docopt.cpp/docopt.cpp.mk b/package/docopt.cpp/
+> docopt.cpp.mk
+> new file mode 100644
+> index 0000000000..647071243a
+> --- /dev/null
+> +++ b/package/docopt.cpp/docopt.cpp.mk
+> @@ -0,0 +1,13 @@
+>
+> +################################################################################
+> +#
+> +# docopt.cpp
+> +#
+>
+> +################################################################################
+> +
+> +DOCOPT_CPP_VERSION = 0.6.3
+> +DOCOPT_CPP_SOURCE = v$(DOCOPT_CPP_VERSION).tar.gz
+> +DOCOPT_CPP_SITE = https://github.com/docopt/docopt.cpp/archive/refs/tags
+> +DOCOPT_CPP_INSTALL_STAGING = YES
+> +DOCOPT_CPP_LICENSE_FILES = LICENSE-Boost-1.0 LICENSE-MIT
+> +
+> +$(eval $(cmake-package))
+> --
+> 2.25.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+
 -- 
-2.25.1
+
+Angelo Compagnucci
+
+Software Engineer
+
+angelo@amarulasolutions.com
+__________________________________
+Amarula Solutions SRL
+
+Via le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 (0)42 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
+[`as] https://www.amarulasolutions.com|
+
+--0000000000001bc96305eb646984
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Oct 19, 2022 at 4:33 PM Eero =
+Aaltonen via buildroot &lt;<a href=3D"mailto:buildroot@buildroot.org">build=
+root@buildroot.org</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote=
+" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);=
+padding-left:1ex">Add docopt.cpp library that can be used to create intuiti=
+ve command<br>
+line interfaces with very little code by describing the valid calls<br>
+using the (POSIX.1-2017) command line utility argument syntax.<br>
+<br>
+Signed-off-by: Eero Aaltonen &lt;<a href=3D"mailto:eero.aaltonen@vaisala.co=
+m" target=3D"_blank">eero.aaltonen@vaisala.com</a>&gt;<br></blockquote><div=
+><br></div><div><span class=3D"gmail-term">Reviewed-by: Angelo Compagnucci =
+&lt;<a href=3D"mailto:angelo@amarulasolutions.com">angelo@amarulasolutions.=
+com</a>&gt;</span></div><div><span class=3D"gmail-term">Tested-by: Angelo C=
+ompagnucci &lt;<a href=3D"mailto:angelo@amarulasolutions.com">angelo@amarul=
+asolutions.com</a>&gt;</span></div><div><span class=3D"gmail-term"><br></sp=
+an></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
+x;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+---<br></blockquote><div>Good to me.</div><div>=C2=A0<br></div><div>Testing=
+:</div><div>* check-package</div><div>* legal-info<br></div><div>* compilin=
+g from source for an architecture</div><div>=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">
+=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 3 +++<br>
+=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 |=C2=A0 1 +<br>
+=C2=A0package/docopt.cpp/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0| 15 +++++++++=
+++++++<br>
+=C2=A0package/docopt.cpp/docopt.cpp.hash |=C2=A0 6 ++++++<br>
+=C2=A0package/docopt.cpp/<a href=3D"http://docopt.cpp.mk" rel=3D"noreferrer=
+" target=3D"_blank">docopt.cpp.mk</a>=C2=A0 =C2=A0| 13 +++++++++++++<br>
+=C2=A05 files changed, 38 insertions(+)<br>
+=C2=A0create mode 100644 package/docopt.cpp/Config.in<br>
+=C2=A0create mode 100644 package/docopt.cpp/docopt.cpp.hash<br>
+=C2=A0create mode 100644 package/docopt.cpp/<a href=3D"http://docopt.cpp.mk=
+" rel=3D"noreferrer" target=3D"_blank">docopt.cpp.mk</a><br>
+<br>
+diff --git a/DEVELOPERS b/DEVELOPERS<br>
+index c0e6f8bbef..8972bab2d1 100644<br>
+--- a/DEVELOPERS<br>
++++ b/DEVELOPERS<br>
+@@ -777,6 +777,9 @@ F:=C2=A0 board/acmesystems/acqua-a5/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0configs/acmesystems_acqua_a5_256mb_defconfig<br=
+>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0configs/acmesystems_acqua_a5_512mb_defconfig<br=
+>
+<br>
++N:=C2=A0 =C2=A0 =C2=A0Eero Aaltonen &lt;<a href=3D"mailto:eero.aaltonen@va=
+isala.com" target=3D"_blank">eero.aaltonen@vaisala.com</a>&gt;<br>
++F:=C2=A0 =C2=A0 =C2=A0package/docopt.cpp/<br>
++<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Eloi Bail &lt;<a href=3D"mailto:eloi.bail@savoi=
+rfairelinux.com" target=3D"_blank">eloi.bail@savoirfairelinux.com</a>&gt;<b=
+r>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/bayer2rgb-neon/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/gstreamer1/gst1-plugins-bayer2rgb-neon/=
+<br>
+diff --git a/package/Config.in b/package/Config.in<br>
+index e3a34d6e97..77f86328ce 100644<br>
+--- a/package/Config.in<br>
++++ b/package/Config.in<br>
+@@ -2113,6 +2113,7 @@ endmenu<br>
+<br>
+=C2=A0menu &quot;Text and terminal handling&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/augeas/Config.in&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/docopt.cpp/Config.in&quot;=
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/enchant/Config.in&quot;<br=
+>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/fmt/Config.in&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/fstrcmp/Config.in&quot;<br=
+>
+diff --git a/package/docopt.cpp/Config.in b/package/docopt.cpp/Config.in<br=
+>
+new file mode 100644<br>
+index 0000000000..655a656398<br>
+--- /dev/null<br>
++++ b/package/docopt.cpp/Config.in<br>
+@@ -0,0 +1,15 @@<br>
++config BR2_PACKAGE_DOCOPT_CPP<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;docopt.cpp&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_INSTALL_LIBSTDCPP<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++=
+11<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0docopt is a library that lets you define=
+ a command line<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0interface with the utility argument synt=
+ax that has been<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0used by command line utilities for decad=
+es (POSIX.1-2017).<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0From the description, docopt automatical=
+ly generates a parser<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0for the command line arguments.<br>
++<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0docopt Command-line interface descriptio=
+n language<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"http://docopt.org/" rel=3D"no=
+referrer" target=3D"_blank">http://docopt.org/</a><br>
++<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0docopt C++ port <a href=3D"https://githu=
+b.com/docopt/docopt.cpp" rel=3D"noreferrer" target=3D"_blank">https://githu=
+b.com/docopt/docopt.cpp</a><br>
+diff --git a/package/docopt.cpp/docopt.cpp.hash b/package/docopt.cpp/docopt=
+.cpp.hash<br>
+new file mode 100644<br>
+index 0000000000..f8a7f8d97b<br>
+--- /dev/null<br>
++++ b/package/docopt.cpp/docopt.cpp.hash<br>
+@@ -0,0 +1,6 @@<br>
++# Locally computed:<br>
++sha256=C2=A0 28af5a0c482c6d508d22b14d588a3b0bd9ff97135f99c2814a5aa3cbff1d6=
+632=C2=A0 v0.6.3.tar.gz<br>
++<br>
++# Hash for license files:<br>
++sha256=C2=A0 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad=
+566=C2=A0 LICENSE-Boost-1.0<br>
++sha256=C2=A0 b2959a980bc25f5d5e020d7a31777b7184aace6eb160acc80619f85edf646=
+f19=C2=A0 LICENSE-MIT<br>
+diff --git a/package/docopt.cpp/<a href=3D"http://docopt.cpp.mk" rel=3D"nor=
+eferrer" target=3D"_blank">docopt.cpp.mk</a> b/package/docopt.cpp/<a href=
+=3D"http://docopt.cpp.mk" rel=3D"noreferrer" target=3D"_blank">docopt.cpp.m=
+k</a><br>
+new file mode 100644<br>
+index 0000000000..647071243a<br>
+--- /dev/null<br>
++++ b/package/docopt.cpp/<a href=3D"http://docopt.cpp.mk" rel=3D"noreferrer=
+" target=3D"_blank">docopt.cpp.mk</a><br>
+@@ -0,0 +1,13 @@<br>
++##########################################################################=
+######<br>
++#<br>
++# docopt.cpp<br>
++#<br>
++##########################################################################=
+######<br>
++<br>
++DOCOPT_CPP_VERSION =3D 0.6.3<br>
++DOCOPT_CPP_SOURCE =3D v$(DOCOPT_CPP_VERSION).tar.gz<br>
++DOCOPT_CPP_SITE =3D <a href=3D"https://github.com/docopt/docopt.cpp/archiv=
+e/refs/tags" rel=3D"noreferrer" target=3D"_blank">https://github.com/docopt=
+/docopt.cpp/archive/refs/tags</a><br>
++DOCOPT_CPP_INSTALL_STAGING =3D YES<br>
++DOCOPT_CPP_LICENSE_FILES =3D LICENSE-Boost-1.0 LICENSE-MIT<br>
++<br>
++$(eval $(cmake-package))<br>
+-- <br>
+2.25.1<br>
+<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div><br clear=3D"all"><br>-- <br><div dir=3D"ltr" class=3D"g=
+mail_signature"><div dir=3D"ltr"><p dir=3D"ltr" style=3D"line-height:1.38;m=
+argin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:11pt;font-family:=
+Arial;color:rgb(0,0,0);background-color:transparent;font-weight:400;font-st=
+yle:normal;font-variant:normal;text-decoration:none;vertical-align:baseline=
+;white-space:pre-wrap"></span><span style=3D"font-size:10pt;font-family:Ubu=
+ntu,sans-serif;color:rgb(0,0,0);background-color:transparent;font-weight:50=
+0;font-style:normal;font-variant:normal;text-decoration:none;vertical-align=
+:baseline;white-space:pre-wrap">Angelo Compagnucci</span></p><p dir=3D"ltr"=
+ style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=3D"=
+font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,=
+0);background-color:transparent;font-weight:400;font-style:normal;font-vari=
+ant:normal;text-decoration:none;vertical-align:baseline;white-space:pre-wra=
+p">Software Engineer</span></p><p dir=3D"ltr" style=3D"line-height:1.8;marg=
+in-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&qu=
+ot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparen=
+t;font-weight:400;font-style:normal;font-variant:normal;text-decoration:non=
+e;vertical-align:baseline;white-space:pre-wrap"><a href=3D"mailto:angelo@am=
+arulasolutions.com" target=3D"_blank">angelo@amarulasolutions.com</a>=C2=A0=
+<br></span><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot=
+;,monospace;color:rgb(241,194,50);background-color:transparent;font-weight:=
+400;font-style:normal;font-variant:normal;text-decoration:none;vertical-ali=
+gn:baseline;white-space:pre-wrap">__________________________________</span>=
+<span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace=
+;color:rgb(0,0,0);background-color:transparent;font-weight:400;font-style:n=
+ormal;font-variant:normal;text-decoration:none;vertical-align:baseline;whit=
+e-space:pre-wrap"><br></span><span style=3D"font-size:10pt;font-family:Ubun=
+tu,sans-serif;color:rgb(0,0,0);background-color:transparent;font-weight:500=
+;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:=
+baseline;white-space:pre-wrap">Amarula Solutions SRL</span></p><p dir=3D"lt=
+r" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=
+=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
+0,0,0);background-color:transparent;font-weight:400;font-style:normal;font-=
+variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre=
+-wrap">Via le Canevare 30, 31100 Treviso, Veneto, IT</span></p><p dir=3D"lt=
+r" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=
+=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
+0,0,0);background-color:transparent;font-weight:400;font-style:normal;font-=
+variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre=
+-wrap">T. +39 (0)42 243 5310</span><span style=3D"font-size:10pt;font-famil=
+y:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:trans=
+parent;font-weight:400;font-style:normal;font-variant:normal;text-decoratio=
+n:none;vertical-align:baseline;white-space:pre-wrap"><br></span><span style=
+=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
+0,0,0);background-color:transparent;font-weight:400;font-style:normal;font-=
+variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre=
+-wrap"><a href=3D"mailto:info@amarulasolutions.com" target=3D"_blank">info@=
+amarulasolutions.com</a></span></p><p dir=3D"ltr" style=3D"line-height:1.8;=
+margin-top:0pt;margin-bottom:0pt"><a href=3D"http://www.amarulasolutions.co=
+m/" style=3D"text-decoration:none" target=3D"_blank"><span style=3D"font-si=
+ze:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);back=
+ground-color:transparent;font-weight:400;font-style:normal;font-variant:nor=
+mal;text-decoration:none;vertical-align:baseline;white-space:pre-wrap">www.=
+amarulasolutions.com</span></a></p><div>[`as] <a href=3D"https://www.amarul=
+asolutions.com" target=3D"_blank">https://www.amarulasolutions.com</a>|</di=
+v></div></div></div>
+
+--0000000000001bc96305eb646984--
+
+--===============8393471867399964220==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8393471867399964220==--
