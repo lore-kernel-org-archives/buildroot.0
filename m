@@ -4,89 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C95C4332F
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 12:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9EB3C433FE
+	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 12:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53E946119F;
-	Wed, 19 Oct 2022 12:40:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53E946119F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66083611C2;
+	Wed, 19 Oct 2022 12:57:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66083611C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DNKkrCsVe3Bt; Wed, 19 Oct 2022 12:40:23 +0000 (UTC)
+	with ESMTP id fOoTOfN53dsO; Wed, 19 Oct 2022 12:57:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 728B360BB5;
-	Wed, 19 Oct 2022 12:40:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 728B360BB5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 58CC01BF46D
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 12:40:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B9D06119F;
+	Wed, 19 Oct 2022 12:57:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B9D06119F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1377E1BF46D
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 12:56:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 34A5683F8A
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 12:40:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34A5683F8A
+ by smtp4.osuosl.org (Postfix) with ESMTP id EEEFF4195B
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 12:56:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEEFF4195B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OtHZMO8SwvjV for <buildroot@lists.busybox.net>;
- Wed, 19 Oct 2022 12:40:19 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE31680C1C
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EE31680C1C
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 12:40:18 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id b4so28867408wrs.1
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 05:40:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=bg4sN4NSj11IvL/8KlVHnlgK+Tb90no41ZYitreEN8I=;
- b=SWqloBM6GlU3iiifLaJ1cDTD8Imkvh3eXzaYSMBxUVAOpPxSXHRj8lgieznKdSXkQJ
- rpLmWSkTfKozSdAwEBfXKoF2P2yFjhfqCnk9iDWMfuWrey9Q8f+F4zLHO8UJ58Q8payS
- nO4CS4M75XW6vMBrOn1CijwSYJ3Q+0snDtsReRRiHu+pGORuh8ssd7QEBC6rzhGWL8df
- +NpllQRNQ3G/AxkewM8EkvLC8ptV3+JKBBFvzMdcOSSvTZFZfHHtCqbSKfnrrxMBQV02
- tAl36Lo78hjtEEJ4odDeuKO9UbcJ5SA2njrIfr2YIBCsiq9EiXxuSJtwdMncShSKXxUT
- PT3w==
-X-Gm-Message-State: ACrzQf1oG313jBiUpLowPD5Imjw9i6SRZcD2fCYLL3OPkxZ7+oeCYemR
- m+d3r0A01U/IOpdQCBvRjOWehDiVCdM=
-X-Google-Smtp-Source: AMsMyM4mZb6csdKljaoUy0rjVScZ/QCvaXCGdqpFaMfkNZ/8GdVrLd6PuC8bgAX5ZRTKDaELhII7pw==
-X-Received: by 2002:a05:6000:1087:b0:22e:3731:e6d with SMTP id
- y7-20020a056000108700b0022e37310e6dmr5216105wrw.614.1666183217122; 
- Wed, 19 Oct 2022 05:40:17 -0700 (PDT)
-Received: from p19180.intranet.cnim.net
- (pop.92-184-112-86.mobile.abo.orange.fr. [92.184.112.86])
- by smtp.gmail.com with ESMTPSA id
- g16-20020a05600c311000b003c6237e867esm17136474wmo.0.2022.10.19.05.40.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Oct 2022 05:40:16 -0700 (PDT)
-From: Victor Dumas <dumasv.dev@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed, 19 Oct 2022 14:40:16 +0200
-Message-Id: <20221019124017.427199-1-dumasv.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221006155217.626248-1-dumasv.dev@gmail.com>
-References: <20221006155217.626248-1-dumasv.dev@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MiwlDmBtVHyA for <buildroot@lists.busybox.net>;
+ Wed, 19 Oct 2022 12:56:56 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 932CD41938
+Received: from mout-b-105.mailbox.org (mout-b-105.mailbox.org [195.10.208.50])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 932CD41938
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 12:56:56 +0000 (UTC)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by mout-b-105.mailbox.org (Postfix) with ESMTPS id 4MsrN40t26z9ts1;
+ Wed, 19 Oct 2022 14:56:52 +0200 (CEST)
+Message-ID: <83402c3a-a873-7b1d-5f21-519c8d97ec35@othermo.de>
+Date: Wed, 19 Oct 2022 14:56:50 +0200
 MIME-Version: 1.0
+Content-Language: en-US
+To: buildroot@buildroot.org, Angelo Compagnucci <angelo@amarulasolutions.com>
+References: <20221019090309.1410432-1-angelo@amarulasolutions.com>
+From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+In-Reply-To: <20221019090309.1410432-1-angelo@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=bg4sN4NSj11IvL/8KlVHnlgK+Tb90no41ZYitreEN8I=;
- b=dZH08nzlvjw1vwkfaWPpk3cCU00/bL7owvatJf6vdzI5FWclM+Wt/tHHF8d1JjIaSN
- 7TSl0N7nIlw+Y1FNgIDocNyNNKsopZPFr2Um9Fs2ATHukshluQhT6OCsKUinR6/G+YlF
- LJyeLuQLOBWUfzyAeSEZ8PyiWzJtbnmhT2At+hBJ/QL2v5hEVAPmmFpv7xaPZa2ioUvU
- 9O6JztGSHPLRkue+rJG0RtqQXub1dJq1+3QNAig4BIi81nOgDfP7G7v/bRoDYIBsrKsq
- BKQRWZyjGYzTIbWQQbhYaYXWSnL3B/uIUZulNmb/AO/TzSCB3g0B5QOyW5HfBbc9cKAi
- PyMQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=dZH08nzl
-Subject: [Buildroot] [PATCH v3] support/scripts/fix-rpath: parallelize
- patching files
+ d=othermo.de; s=MBO0001; t=1666184212;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=fXZxZ1Yeo9L1jbAU36wUFi3weuRXWTrHeK6YNbMO2ZA=;
+ b=iwcZ8xnVdhltA9B0IB/DvUzGuDz9cMw1x9X3KwDamBDP00Qo9pO40N11EAxW4bfcUSUBJD
+ XKadxTk1GiMeWrQsxqzpwmaApAh90MAhq6tVlNROW0hZqRevV6gxO+zVb0tVsNOB3dDc9b
+ Hf/oUhCix/icMAP8+7MV5utDDit31g3c7wKQ3nO0BOLF7b846BViSwAU9sK3o3D563M9BF
+ yHyCYE2lqbcerFfIVFj2+3W6fc6qqe2scS7lEvXX8Y9dIirPF8qc35okuceezE7Oe0MNwS
+ 3q43BSp77n0ApVbpjKmu23AO4bNYnIN886dEzS8OhbLJt6LjnlQEezqyVNalhw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=othermo.de header.i=@othermo.de
+ header.a=rsa-sha256 header.s=MBO0001 header.b=iwcZ8xnV
+Subject: Re: [Buildroot] [PATCH v2] package/python-minimalmodbus: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,104 +76,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Victor Dumas <dumasv.dev@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Using "xargs" instead of "while read" loop allows for the patching of files to be parallelized, significantly reducing the amount of time it takes to fix all the paths.On a larger RFS(~300MB) this script was taking 5 minutes, it now only takes about 30s on a 12 core machine
+Thanks,
 
-Signed-off-by: Victor Dumas <dumasv.dev@gmail.com>
----
- support/scripts/fix-rpath | 66 ++++++++++++++++++++++-----------------
- 1 file changed, 38 insertions(+), 28 deletions(-)
+I've been meaning to submit this as well but didn't get around to it yet.
 
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-index 3e67e770e5..7ed1851aac 100755
---- a/support/scripts/fix-rpath
-+++ b/support/scripts/fix-rpath
-@@ -58,6 +58,40 @@ HOST_EXCLUDEPATHS="/share/terminfo"
- STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
- TARGET_EXCLUDEPATHS="/lib/firmware"
- 
-+patch_file() {
-+    PATCHELF="${1}"
-+    rootdir="${2}"
-+    sanitize_extra_args="${3}"
-+    file="${4}"
-+
-+    # check if it's an ELF file
-+    rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
-+    if test $? -ne 0 ; then
-+        return 0
-+    fi
-+
-+    # make files writable if necessary
-+    changed=$(chmod -c u+w "${file}")
-+
-+    # With per-package directory support, most RPATH of host
-+    # binaries will point to per-package directories. This won't
-+    # work with the --make-rpath-relative ${rootdir} invocation as
-+    # the per-package host directory is not within ${rootdir}. So,
-+    # we rewrite all RPATHs pointing to per-package directories so
-+    # that they point to the global host directry.
-+    changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
-+    if test "${rpath}" != "${changed_rpath}" ; then
-+        ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
-+    fi
-+
-+    # call patchelf to sanitize the rpath
-+    ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
-+    # restore the original permission
-+    test "${changed}" != "" && chmod u-w "${file}"
-+}
-+
- main() {
-     local rootdir
-     local tree="${1}"
-@@ -123,34 +157,10 @@ main() {
-             ;;
-     esac
- 
--    find_args+=( "-type" "f" "-print" )
--
--    while read file ; do
--        # check if it's an ELF file
--        rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
--        if test $? -ne 0 ; then
--            continue
--        fi
--
--        # make files writable if necessary
--        changed=$(chmod -c u+w "${file}")
--
--        # With per-package directory support, most RPATH of host
--        # binaries will point to per-package directories. This won't
--        # work with the --make-rpath-relative ${rootdir} invocation as
--        # the per-package host directory is not within ${rootdir}. So,
--        # we rewrite all RPATHs pointing to per-package directories so
--        # that they point to the global host directry.
--        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
--        if test "${rpath}" != "${changed_rpath}" ; then
--            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
--        fi
--
--        # call patchelf to sanitize the rpath
--        ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
--        # restore the original permission
--        test "${changed}" != "" && chmod u-w "${file}"
--    done < <(find "${rootdir}" ${find_args[@]})
-+    find_args+=( "-type" "f" "-print0" )
-+
-+    export -f patch_file
-+    find "${rootdir}" ${find_args[@]} | xargs -0 -r -P $(nproc) -I {} bash -c "patch_file '${PATCHELF}' '${rootdir}' '${sanitize_extra_args}' $@" _ {}
- 
-     # Restore patched patchelf utility
-     test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
--- 
-2.30.2
+On 19.10.22 11:03, Angelo Compagnucci wrote:
+> Easy-to-use Modbus RTU and Modbus ASCII implementation for Python.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
+One somewhat general question below, but otherwise this looks all good.
+
+Reviewed-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+
+> ---
+> V2:
+> * Adding me to DEVELOPERS
+> 
+>   DEVELOPERS                                         |  1 +
+>   package/Config.in                                  |  1 +
+>   package/python-minimalmodbus/Config.in             |  7 +++++++
+>   .../python-minimalmodbus/python-minimalmodbus.hash |  4 ++++
+>   .../python-minimalmodbus/python-minimalmodbus.mk   | 14 ++++++++++++++
+>   5 files changed, 27 insertions(+)
+>   create mode 100644 package/python-minimalmodbus/Config.in
+>   create mode 100644 package/python-minimalmodbus/python-minimalmodbus.hash
+>   create mode 100644 package/python-minimalmodbus/python-minimalmodbus.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index c0e6f8bbef..9eb5400999 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -173,6 +173,7 @@ F:	package/mono-gtksharp3/
+>   F:	package/monolite/
+>   F:	package/openjpeg/
+>   F:	package/python-can/
+> +F:	package/python-minimalmodbus/
+>   F:	package/python-pillow/
+>   F:	package/python-pydal/
+>   F:	package/python-spidev/
+> diff --git a/package/Config.in b/package/Config.in
+> index e3a34d6e97..08574931f8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1112,6 +1112,7 @@ menu "External python modules"
+>   	source "package/python-mbstrdecoder/Config.in"
+>   	source "package/python-memory-profiler/Config.in"
+>   	source "package/python-mimeparse/Config.in"
+> +	source "package/python-minimalmodbus/Config.in"
+>   	source "package/python-mistune/Config.in"
+>   	source "package/python-modbus-tk/Config.in"
+>   	source "package/python-more-itertools/Config.in"
+> diff --git a/package/python-minimalmodbus/Config.in b/package/python-minimalmodbus/Config.in
+> new file mode 100644
+> index 0000000000..fd0f33e0d4
+> --- /dev/null
+> +++ b/package/python-minimalmodbus/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_MINIMALMODBUS
+> +	bool "python-minimalmodbus"
+> +	select BR2_PACKAGE_PYTHON_SERIAL # runtime
+> +	help
+> +	  Easy-to-use Modbus RTU and Modbus ASCII implementation.
+> +
+> +	  https://minimalmodbus.readthedocs.io/
+> diff --git a/package/python-minimalmodbus/python-minimalmodbus.hash b/package/python-minimalmodbus/python-minimalmodbus.hash
+> new file mode 100644
+> index 0000000000..56af3d426b
+> --- /dev/null
+> +++ b/package/python-minimalmodbus/python-minimalmodbus.hash
+> @@ -0,0 +1,4 @@
+> +# sha256 locally computed
+> +sha256  aa7e3989074d4efba0013c3c50263aec01afae368bd5bd234008b50aea1b7ab4  minimalmodbus-2.0.1.tar.gz
+> +# Hash for license file
+> +sha256  abe787d472ae2069e935c84eb13fd770518dfb08b92d5f190f3cd7ff6d1f6f32  LICENSE
+> diff --git a/package/python-minimalmodbus/python-minimalmodbus.mk b/package/python-minimalmodbus/python-minimalmodbus.mk
+> new file mode 100644
+> index 0000000000..e4e93b4c31
+> --- /dev/null
+> +++ b/package/python-minimalmodbus/python-minimalmodbus.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-minimalmodbus
+> +#
+> +################################################################################
+> +
+> +PYTHON_MINIMALMODBUS_VERSION = 2.0.1
+> +PYTHON_MINIMALMODBUS_SOURCE = minimalmodbus-$(PYTHON_MINIMALMODBUS_VERSION).tar.gz
+> +PYTHON_MINIMALMODBUS_SITE = $(call github,pyhys,minimalmodbus,$(PYTHON_MINIMALMODBUS_VERSION))
+
+I used ./utils/scanpypi and thus have https://files.pythonhosted.org as 
+a site. Does buildroot have any preference for which upstream version of 
+python packages to prefer if both work?
+
+> +PYTHON_MINIMALMODBUS_SETUP_TYPE = setuptools
+> +PYTHON_MINIMALMODBUS_LICENSE = Apache License 2.0
+> +PYTHON_MINIMALMODBUS_LICENSE_FILES = LICENSE
+> + > +$(eval $(python-package))
+
+Best,
+Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
