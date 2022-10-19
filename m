@@ -4,78 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D43C8C433FE
-	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 16:15:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 543C0C4332F
+	for <buildroot@archiver.kernel.org>; Wed, 19 Oct 2022 16:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 662464002A;
-	Wed, 19 Oct 2022 16:15:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 662464002A
+	by smtp4.osuosl.org (Postfix) with ESMTP id D780441736;
+	Wed, 19 Oct 2022 16:17:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D780441736
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PaSskvsycWB3; Wed, 19 Oct 2022 16:15:26 +0000 (UTC)
+	with ESMTP id IeEyQHpsWNDT; Wed, 19 Oct 2022 16:17:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4C0D4018F;
-	Wed, 19 Oct 2022 16:15:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4C0D4018F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CD90F1BF283
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 16:15:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A2CF401FF;
+	Wed, 19 Oct 2022 16:17:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A2CF401FF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A29D1BF283
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 16:17:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A77B44020A
- for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 16:15:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A77B44020A
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9423840BE
+ for <buildroot@lists.busybox.net>; Wed, 19 Oct 2022 16:17:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9423840BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RdsamuR-ynnV for <buildroot@lists.busybox.net>;
- Wed, 19 Oct 2022 16:15:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sk5w-A30slaU for <buildroot@lists.busybox.net>;
+ Wed, 19 Oct 2022 16:17:09 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3A244018F
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
- [IPv6:2607:f8b0:4864:20::22f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F3A244018F
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 16:15:15 +0000 (UTC)
-Received: by mail-oi1-x22f.google.com with SMTP id p127so19133199oih.9
- for <buildroot@buildroot.org>; Wed, 19 Oct 2022 09:15:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79A9D84045
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
+ [IPv6:2607:f8b0:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 79A9D84045
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 16:17:09 +0000 (UTC)
+Received: by mail-ot1-x32c.google.com with SMTP id
+ r8-20020a056830120800b00661a0a236efso9784399otp.4
+ for <buildroot@buildroot.org>; Wed, 19 Oct 2022 09:17:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zoi7pHPR1aXkxayYmt7QISShkkjchlWmvb/zRdJhIx4=;
- b=J7UfXXky1eNwIDg0tnqc1mV/D99+ix1ZCM9nbqFjEwhGHJvTuAlFIIYHdt30SUgP9C
- HgJUHuS9bmt5bQQkOU1Zsljc7Tt96opIXt8CUV7r4hArWtuJwzX7kTluR/6AMO7LrK/O
- cPax/ciqIMtzB9s57gRlvJ8AoJhFreANMAz6pPdRsDmwohv1XqUCspyneeec7EY7Qa0b
- pOrcS09dDM4ePMWZQF79Hu4xf+3Lnxz1/LcSsiX6QbBSRr4bzkeELkUnAmF/UG2d4Awh
- CtbZI4ZQL7dSKLV+VbKAOSSvO6mogYN8ng3R8KhINV+C5dxtFAYiSYafLTPWqxMimExL
- vukQ==
-X-Gm-Message-State: ACrzQf0u4pPOqxPWfL90s3ryqGCnfk/ZOm/LtsZQeHskCmZ8GVMY/rHw
- bc0ElH7tAkrOt7TqBeX/kD/Q/NS/dVWNp3pDLDDaeBe/RzP6RA==
-X-Google-Smtp-Source: AMsMyM5LW1OCtjhy+0R7jOYwzuyatawxgNSvEpA8jfPHoqr2NZpmzF2xosCwNMBUJMGtEVaHZaWYLxo3zdVqyOvLyR4=
-X-Received: by 2002:a05:6808:120c:b0:351:6d17:1845 with SMTP id
- a12-20020a056808120c00b003516d171845mr4943932oil.254.1666196114967; Wed, 19
- Oct 2022 09:15:14 -0700 (PDT)
+ bh=oglD/eECueuPCI9GNXzwyqb/js6vSLFtov4X9viWoOE=;
+ b=imhRPqlL+ma5JsLG1W2pHWkVE2t3KazvQEiuFVMUYvaSojJBRMx5Oy1UtFoQTxyNL1
+ KHqL4AomdiRj2Jo/WUxKVkeAV76axn/s9RhP3ICOJc2nUIgCZV2sLEApfywzL/NJB7kc
+ /TfckG8XZCQUSCwXeoABIBh3FkxACX7whKdBU5kWRHdpPzgxA/AnvTMRB7mMKdO+RR6n
+ G3MEHtnuDnSY2G0OevrevPX56bWB1L/Qr4c4xU6hmUSKyLozUCc6G8UEY3Agp1WfgCwN
+ t1rlHuTmgDaS9gCe8NnOAcZmCJBCoNRk2Em2o1dB6WE++Csl5PV34dFDVDeEn/Y1JRPH
+ 28Vw==
+X-Gm-Message-State: ACrzQf1D6AUDFGl4UYTXWy3EX8xWfT5rAv+PWfSgua5O1A+LHxtzIsYT
+ Ep5Dp8C25qVkpzX306FkysBRbr7+/AJAVDmhNviKkydQ25lcSQ==
+X-Google-Smtp-Source: AMsMyM4CewxUNb/sKm2vL45ArlGbu8vphXCgymzvWG77H5H5cK83/lEZhMycxdL6tRY+G0pjhWd7bYxjB7n0bwlq29E=
+X-Received: by 2002:a9d:7d04:0:b0:661:b65c:63c8 with SMTP id
+ v4-20020a9d7d04000000b00661b65c63c8mr4417381otn.384.1666196228350; Wed, 19
+ Oct 2022 09:17:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221002150443.159058-1-robimarko@gmail.com>
-In-Reply-To: <20221002150443.159058-1-robimarko@gmail.com>
+References: <20221018234617.225947-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20221018234617.225947-1-giulio.benetti@benettiengineering.com>
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 19 Oct 2022 18:14:37 +0200
-Message-ID: <CA+_SqVb_myPvacmgT4+hvk09VqxB0zSTWVNMPcfQX7_vjc8paA@mail.gmail.com>
-To: Robert Marko <robimarko@gmail.com>
+Date: Wed, 19 Oct 2022 18:16:31 +0200
+Message-ID: <CA+_SqVa20CoBfekqEMskKzn_u5Ln6Mu-yws_4eCMg+7jDK1JoQ@mail.gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amarulasolutions.com; s=google;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=zoi7pHPR1aXkxayYmt7QISShkkjchlWmvb/zRdJhIx4=;
- b=oGzbgWtUCvnC3FQjlVjhh8pyzBcB2AQrADT+NUoDBKItBEoT4U9r37Tsp2zX4AQYSw
- jIhsb4sYGeej6dqIs3/6YH35aqQl9JyQyYrOzitl/choxmsCVD8RViUJObra1k+al22s
- /bQ1A5L2T3aK2lanzsDXKdlsUCI2GNqN+lDXc=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=oglD/eECueuPCI9GNXzwyqb/js6vSLFtov4X9viWoOE=;
+ b=Kw6oBHfpl7AsMx5okxyOApuGOK7nh6NtY9ivfv9YgUZ6NDRK1FuOS27Gf4/ummNNtw
+ aQ/Ze5Tw5vgJ4RzagaEutBBydo8bPbsDakdLKxJbgzo/ElFT04ogHFMe0P5XG75WmTz+
+ 1vJAXyygB7ApUD7MFnD6amXnwy19inM7a9RPY=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=oGzbgWtU
-Subject: Re: [Buildroot] [PATCH v2] package/mdio-tools: new package
+ header.b=Kw6oBHfp
+Subject: Re: [Buildroot] [PATCH] package/mono: allow to select which folders
+ to install to target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,121 +89,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============4339624853792097642=="
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============6129866700843511397=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4339624853792097642==
-Content-Type: multipart/alternative; boundary="0000000000008f244205eb65830c"
+--===============6129866700843511397==
+Content-Type: multipart/alternative; boundary="000000000000513e8805eb658a8f"
 
---0000000000008f244205eb65830c
+--000000000000513e8805eb658a8f
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Oct 2, 2022 at 5:05 PM Robert Marko <robimarko@gmail.com> wrote:
+On Wed, Oct 19, 2022 at 1:46 AM Giulio Benetti <
+giulio.benetti@benettiengineering.com> wrote:
 
-> mdio-tools are kernel module and accompanying tools for low-level
-> debugging of devices attached on MDIO bus like PHY-s, switches etc.
+> At the moment all APIs folders are copied to target increasing the size of
+> rootfs of ~190MB. Allow to select which API folders we want to copy to
+> target to shrink rootfs down.
 >
-> Userspace tools provide C22 or C45 reads and writes, benchmarking
-> and even dedicated Marvell Link Street tools via the included
-> kernel module.
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 >
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+
 > ---
-> Changes in v2:
-> * Correct license
-> * Add host-pkgconf to DEPENDENCIES
-> * Add minimal required kernel config options
-> ---
->  package/Config.in                  |  1 +
->  package/mdio-tools/Config.in       |  9 +++++++++
->  package/mdio-tools/mdio-tools.hash |  3 +++
->  package/mdio-tools/mdio-tools.mk   | 20 ++++++++++++++++++++
->  4 files changed, 33 insertions(+)
->  create mode 100644 package/mdio-tools/Config.in
->  create mode 100644 package/mdio-tools/mdio-tools.hash
->  create mode 100644 package/mdio-tools/mdio-tools.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index e3a34d6e97..ed41e8bdd4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -536,6 +536,7 @@ endmenu
->         source "package/mbpfan/Config.in"
->         source "package/mdadm/Config.in"
->         source "package/mdevd/Config.in"
-> +       source "package/mdio-tools/Config.in"
->         source "package/memtest86/Config.in"
->         source "package/memtester/Config.in"
->         source "package/memtool/Config.in"
-> diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in
-> new file mode 100644
-> index 0000000000..feb1e825ac
-> --- /dev/null
-> +++ b/package/mdio-tools/Config.in
-> @@ -0,0 +1,9 @@
-> +comment "mdio-tools needs a Linux kernel to be built"
-> +       depends on !BR2_LINUX_KERNEL
-> +
-> +config BR2_PACKAGE_MDIO_TOOLS
-> +       bool "mdio-tools"
-> +       depends on BR2_LINUX_KERNEL
 >
 
-depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+Looks good to me, even if I'm not sure how much this will be used. Mono is
+usually run on beefy hardware where you have plenty of space. It's a nice
+addition anyway.
 
-I think you miss this here
-
-
-> +       select BR2_PACKAGE_LIBMNL
+ package/mono/Config.in | 16 ++++++++++++++++
+>  package/mono/mono.mk   | 12 ++++++++++++
+>  2 files changed, 28 insertions(+)
+>
+> diff --git a/package/mono/Config.in b/package/mono/Config.in
+> index 76178bcf9b..8690ee68ef 100644
+> --- a/package/mono/Config.in
+> +++ b/package/mono/Config.in
+> @@ -23,6 +23,22 @@ config BR2_PACKAGE_MONO
+>
+>           http://download.mono-project.com/sources/mono/
+>
+> +config BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL
+> +       bool "Specify folders to install to target"
 > +       help
-> +         Low-level debug tools for MDIO devices
-> diff --git a/package/mdio-tools/mdio-tools.hash
-> b/package/mdio-tools/mdio-tools.hash
-> new file mode 100644
-> index 0000000000..0111165f27
-> --- /dev/null
-> +++ b/package/mdio-tools/mdio-tools.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256  c5e17431c62392f6c1da1ba4fb0a6f5918521509a377af74485851f93ff2a106
-> mdio-tools-1.2.0.tar.gz
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
-> COPYING
-> diff --git a/package/mdio-tools/mdio-tools.mk b/package/mdio-tools/
-> mdio-tools.mk
-> new file mode 100644
-> index 0000000000..308a23824b
-> --- /dev/null
-> +++ b/package/mdio-tools/mdio-tools.mk
-> @@ -0,0 +1,20 @@
->
-> +################################################################################
-> +#
-> +# mdio-tools
-> +#
->
-> +################################################################################
+> +         Allow to specify which Mono folder to install to target
 > +
-> +MDIO_TOOLS_VERSION = 1.2.0
-> +MDIO_TOOLS_SITE =
-> https://github.com/wkz/mdio-tools/releases/download/$(MDIO_TOOLS_VERSION)
-> +MDIO_TOOLS_LICENSE = GPL-2.0
-> +MDIO_TOOLS_LICENSE_FILES = COPYING
-> +MDIO_TOOLS_DEPENDENCIES = host-pkgconf libmnl
+> +if BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL
 > +
-> +MDIO_TOOLS_MODULE_SUBDIRS = kernel
-> +define MDIO_TOOLS_LINUX_CONFIG_FIXUPS
-> +       $(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-> +       $(call KCONFIG_ENABLE_OPT,CONFIG_MDIO_DEVICE)
+> +config BR2_PACKAGE_MONO_FOLDERS_TO_INSTALL
+> +       string "Mono folders to install to target"
+> +       help
+> +         Paths to Mono folders to install to target /usr/lib/mono/.
+> +         Only these folders will be copied to the target and not all
+> +         the built ones. You can provide a list of folders separated by
+> +         by spaces.
+> +
+> +endif
+>  comment "mono needs a toolchain w/ C++, NPTL, dynamic library"
+>         depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
+>         depends on !BR2_INSTALL_LIBSTDCPP || \
+> diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+> index 219effc5d3..8036d23205 100644
+> --- a/package/mono/mono.mk
+> +++ b/package/mono/mono.mk
+> @@ -30,10 +30,22 @@ MONO_CONF_OPTS = $(MONO_COMMON_CONF_OPTS)
+> --disable-mcs-build
+>
+>  # The libraries have been built by the host-mono build. Since they are
+>  # architecture-independent, we simply copy them to the target.
+> +ifeq ($(BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL),y)
+> +# Copy only selected folders
+> +define MONO_INSTALL_LIBS
+> +       mkdir -p $(TARGET_DIR)/usr/lib/mono
+> +       (for dir in $(call qstrip,$(BR2_PACKAGE_MONO_FOLDERS_TO_INSTALL));
+> do \
+> +               rsync -av --exclude=*.so --exclude=*.mdb \
+> +               $(HOST_DIR)/lib/mono/$${dir} $(TARGET_DIR)/usr/lib/mono; \
+> +       done)
 > +endef
-> +
-> +$(eval $(kernel-module))
-> +$(eval $(autotools-package))
+> +else
+> +# Copy all folders
+>  define MONO_INSTALL_LIBS
+>         rsync -av --exclude=*.so --exclude=*.mdb \
+>                 $(HOST_DIR)/lib/mono $(TARGET_DIR)/usr/lib/
+>  endef
+> +endif
+>
+>  MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
+>
 > --
-> 2.37.3
+> 2.34.1
 >
 > _______________________________________________
 > buildroot mailing list
@@ -228,130 +207,114 @@ info@amarulasolutions.com
 www.amarulasolutions.com
 [`as] https://www.amarulasolutions.com|
 
---0000000000008f244205eb65830c
+--000000000000513e8805eb658a8f
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Oct 2, 2022 at 5:05 PM Robert=
- Marko &lt;<a href=3D"mailto:robimarko@gmail.com">robimarko@gmail.com</a>&g=
-t; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0p=
-x 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">mdio-t=
-ools are kernel module and accompanying tools for low-level<br>
-debugging of devices attached on MDIO bus like PHY-s, switches etc.<br>
+<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Oct 19, 2022 at 1:46 AM Giuli=
+o Benetti &lt;<a href=3D"mailto:giulio.benetti@benettiengineering.com">giul=
+io.benetti@benettiengineering.com</a>&gt; wrote:<br></div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">At the moment all APIs folders are copied =
+to target increasing the size of<br>
+rootfs of ~190MB. Allow to select which API folders we want to copy to<br>
+target to shrink rootfs down.<br>
 <br>
-Userspace tools provide C22 or C45 reads and writes, benchmarking<br>
-and even dedicated Marvell Link Street tools via the included<br>
-kernel module.<br>
+Signed-off-by: Giulio Benetti &lt;<a href=3D"mailto:giulio.benetti@benettie=
+ngineering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a>=
+&gt;<br></blockquote><div>Reviewed-by: Angelo Compagnucci &lt;<a href=3D"ma=
+ilto:angelo@amarulasolutions.com">angelo@amarulasolutions.com</a>&gt;<br>Te=
+sted-by: Angelo Compagnucci &lt;<a href=3D"mailto:angelo@amarulasolutions.c=
+om">angelo@amarulasolutions.com</a>&gt; <br></div><blockquote class=3D"gmai=
+l_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,20=
+4,204);padding-left:1ex">
+---<br></blockquote><div><br></div><div>Looks good to me, even if I&#39;m n=
+ot sure how much this will be used. Mono is usually run on beefy hardware w=
+here you have plenty of space. It&#39;s a nice addition anyway. <br></div><=
+div><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
+ 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+=C2=A0package/mono/Config.in | 16 ++++++++++++++++<br>
+=C2=A0package/mono/<a href=3D"http://mono.mk" rel=3D"noreferrer" target=3D"=
+_blank">mono.mk</a>=C2=A0 =C2=A0| 12 ++++++++++++<br>
+=C2=A02 files changed, 28 insertions(+)<br>
 <br>
-Signed-off-by: Robert Marko &lt;<a href=3D"mailto:robimarko@gmail.com" targ=
-et=3D"_blank">robimarko@gmail.com</a>&gt;<br>
----<br>
-Changes in v2:<br>
-* Correct license<br>
-* Add host-pkgconf to DEPENDENCIES<br>
-* Add minimal required kernel config options<br>
----<br>
-=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 |=C2=A0 1 +<br>
-=C2=A0package/mdio-tools/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 9 ++++=
-+++++<br>
-=C2=A0package/mdio-tools/mdio-tools.hash |=C2=A0 3 +++<br>
-=C2=A0package/mdio-tools/<a href=3D"http://mdio-tools.mk" rel=3D"noreferrer=
-" target=3D"_blank">mdio-tools.mk</a>=C2=A0 =C2=A0| 20 ++++++++++++++++++++=
+diff --git a/package/mono/Config.in b/package/mono/Config.in<br>
+index 76178bcf9b..8690ee68ef 100644<br>
+--- a/package/mono/Config.in<br>
++++ b/package/mono/Config.in<br>
+@@ -23,6 +23,22 @@ config BR2_PACKAGE_MONO<br>
 <br>
-=C2=A04 files changed, 33 insertions(+)<br>
-=C2=A0create mode 100644 package/mdio-tools/Config.in<br>
-=C2=A0create mode 100644 package/mdio-tools/mdio-tools.hash<br>
-=C2=A0create mode 100644 package/mdio-tools/<a href=3D"http://mdio-tools.mk=
-" rel=3D"noreferrer" target=3D"_blank">mdio-tools.mk</a><br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 <a href=3D"http://download.mono-project.=
+com/sources/mono/" rel=3D"noreferrer" target=3D"_blank">http://download.mon=
+o-project.com/sources/mono/</a><br>
 <br>
-diff --git a/package/Config.in b/package/Config.in<br>
-index e3a34d6e97..ed41e8bdd4 100644<br>
---- a/package/Config.in<br>
-+++ b/package/Config.in<br>
-@@ -536,6 +536,7 @@ endmenu<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/mbpfan/Config.in&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/mdadm/Config.in&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/mdevd/Config.in&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/mdio-tools/Config.in&quot;=
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/memtest86/Config.in&quot;<=
-br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/memtester/Config.in&quot;<=
-br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/memtool/Config.in&quot;<br=
->
-diff --git a/package/mdio-tools/Config.in b/package/mdio-tools/Config.in<br=
->
-new file mode 100644<br>
-index 0000000000..feb1e825ac<br>
---- /dev/null<br>
-+++ b/package/mdio-tools/Config.in<br>
-@@ -0,0 +1,9 @@<br>
-+comment &quot;mdio-tools needs a Linux kernel to be built&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on !BR2_LINUX_KERNEL<br>
-+<br>
-+config BR2_PACKAGE_MDIO_TOOLS<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;mdio-tools&quot;<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_LINUX_KERNEL<br></blockquote><di=
-v>=C2=A0</div><div>depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1</div><div>=
-<br></div><div>I think you miss this here<br></div><div>=C2=A0</div><blockq=
-uote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1p=
-x solid rgb(204,204,204);padding-left:1ex">+=C2=A0 =C2=A0 =C2=A0 =C2=A0sele=
-ct BR2_PACKAGE_LIBMNL<br>
++config BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;Specify folders to install to target=
+&quot;<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Low-level debug tools for MDIO devices<b=
-r>
-diff --git a/package/mdio-tools/mdio-tools.hash b/package/mdio-tools/mdio-t=
-ools.hash<br>
-new file mode 100644<br>
-index 0000000000..0111165f27<br>
---- /dev/null<br>
-+++ b/package/mdio-tools/mdio-tools.hash<br>
-@@ -0,0 +1,3 @@<br>
-+# Locally computed<br>
-+sha256=C2=A0 c5e17431c62392f6c1da1ba4fb0a6f5918521509a377af74485851f93ff2a=
-106=C2=A0 mdio-tools-1.2.0.tar.gz<br>
-+sha256=C2=A0 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880=
-643=C2=A0 COPYING<br>
-diff --git a/package/mdio-tools/<a href=3D"http://mdio-tools.mk" rel=3D"nor=
-eferrer" target=3D"_blank">mdio-tools.mk</a> b/package/mdio-tools/<a href=
-=3D"http://mdio-tools.mk" rel=3D"noreferrer" target=3D"_blank">mdio-tools.m=
-k</a><br>
-new file mode 100644<br>
-index 0000000000..308a23824b<br>
---- /dev/null<br>
-+++ b/package/mdio-tools/<a href=3D"http://mdio-tools.mk" rel=3D"noreferrer=
-" target=3D"_blank">mdio-tools.mk</a><br>
-@@ -0,0 +1,20 @@<br>
-+##########################################################################=
-######<br>
-+#<br>
-+# mdio-tools<br>
-+#<br>
-+##########################################################################=
-######<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Allow to specify which Mono folder to in=
+stall to target<br>
 +<br>
-+MDIO_TOOLS_VERSION =3D 1.2.0<br>
-+MDIO_TOOLS_SITE =3D <a href=3D"https://github.com/wkz/mdio-tools/releases/=
-download/$(MDIO_TOOLS_VERSION)" rel=3D"noreferrer" target=3D"_blank">https:=
-//github.com/wkz/mdio-tools/releases/download/$(MDIO_TOOLS_VERSION)</a><br>
-+MDIO_TOOLS_LICENSE =3D GPL-2.0<br>
-+MDIO_TOOLS_LICENSE_FILES =3D COPYING<br>
-+MDIO_TOOLS_DEPENDENCIES =3D host-pkgconf libmnl<br>
++if BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL<br>
 +<br>
-+MDIO_TOOLS_MODULE_SUBDIRS =3D kernel<br>
-+define MDIO_TOOLS_LINUX_CONFIG_FIXUPS<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_NET)<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$(call KCONFIG_ENABLE_OPT,CONFIG_MDIO_DEVICE)<b=
-r>
++config BR2_PACKAGE_MONO_FOLDERS_TO_INSTALL<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0string &quot;Mono folders to install to target&=
+quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Paths to Mono folders to install to targ=
+et /usr/lib/mono/.<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Only these folders will be copied to the=
+ target and not all<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the built ones. You can provide a list o=
+f folders separated by<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0by spaces.<br>
++<br>
++endif<br>
+=C2=A0comment &quot;mono needs a toolchain w/ C++, NPTL, dynamic library&qu=
+ot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 depends on !BR2_INSTALL_LIBSTDCPP || \<br>
+diff --git a/package/mono/<a href=3D"http://mono.mk" rel=3D"noreferrer" tar=
+get=3D"_blank">mono.mk</a> b/package/mono/<a href=3D"http://mono.mk" rel=3D=
+"noreferrer" target=3D"_blank">mono.mk</a><br>
+index 219effc5d3..8036d23205 100644<br>
+--- a/package/mono/<a href=3D"http://mono.mk" rel=3D"noreferrer" target=3D"=
+_blank">mono.mk</a><br>
++++ b/package/mono/<a href=3D"http://mono.mk" rel=3D"noreferrer" target=3D"=
+_blank">mono.mk</a><br>
+@@ -30,10 +30,22 @@ MONO_CONF_OPTS =3D $(MONO_COMMON_CONF_OPTS) --disable-m=
+cs-build<br>
+<br>
+=C2=A0# The libraries have been built by the host-mono build. Since they ar=
+e<br>
+=C2=A0# architecture-independent, we simply copy them to the target.<br>
++ifeq ($(BR2_PACKAGE_MONO_SPECIFY_FOLDERS_TO_INSTALL),y)<br>
++# Copy only selected folders<br>
++define MONO_INSTALL_LIBS<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0mkdir -p $(TARGET_DIR)/usr/lib/mono<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0(for dir in $(call qstrip,$(BR2_PACKAGE_MONO_FO=
+LDERS_TO_INSTALL)); do \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0rsync -av --exclude=
+=3D*.so --exclude=3D*.mdb \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(HOST_DIR)/lib/mon=
+o/$${dir} $(TARGET_DIR)/usr/lib/mono; \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0done)<br>
 +endef<br>
-+<br>
-+$(eval $(kernel-module))<br>
-+$(eval $(autotools-package))<br>
++else<br>
++# Copy all folders<br>
+=C2=A0define MONO_INSTALL_LIBS<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 rsync -av --exclude=3D*.so --exclude=3D*.mdb \<=
+br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 $(HOST_DIR)/lib/mon=
+o $(TARGET_DIR)/usr/lib/<br>
+=C2=A0endef<br>
++endif<br>
+<br>
+=C2=A0MONO_POST_INSTALL_TARGET_HOOKS +=3D MONO_INSTALL_LIBS<br>
+<br>
 -- <br>
-2.37.3<br>
+2.34.1<br>
 <br>
 _______________________________________________<br>
 buildroot mailing list<br>
@@ -417,9 +380,9 @@ amarulasolutions.com</span></a></p><div>[`as] <a href=3D"https://www.amarul=
 asolutions.com" target=3D"_blank">https://www.amarulasolutions.com</a>|</di=
 v></div></div></div>
 
---0000000000008f244205eb65830c--
+--000000000000513e8805eb658a8f--
 
---===============4339624853792097642==
+--===============6129866700843511397==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -430,4 +393,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4339624853792097642==--
+--===============6129866700843511397==--
