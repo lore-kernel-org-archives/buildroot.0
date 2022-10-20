@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8678EC433FE
-	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 10:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D300C4332F
+	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 10:30:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E7EC940526;
-	Thu, 20 Oct 2022 10:27:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7EC940526
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9543D6FA95;
+	Thu, 20 Oct 2022 10:30:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9543D6FA95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CXX9LwSmnERa; Thu, 20 Oct 2022 10:27:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tAegZsvupMjs; Thu, 20 Oct 2022 10:30:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D7FF404A0;
-	Thu, 20 Oct 2022 10:27:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D7FF404A0
+	by smtp3.osuosl.org (Postfix) with ESMTP id D34406FA07;
+	Thu, 20 Oct 2022 10:30:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D34406FA07
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A43E11BF955
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 10:27:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D59FE1BF955
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 10:30:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8CA6740494
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 10:27:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CA6740494
+ by smtp2.osuosl.org (Postfix) with ESMTP id B133140494
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 10:30:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B133140494
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K76kGPHSv8xo for <buildroot@lists.busybox.net>;
- Thu, 20 Oct 2022 10:27:24 +0000 (UTC)
+ with ESMTP id s8KdY4ENx95g for <buildroot@lists.busybox.net>;
+ Thu, 20 Oct 2022 10:30:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF5A7403BE
- for <buildroot@uclibc.org>; Thu, 20 Oct 2022 10:27:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF5A7403BE
+ by smtp2.osuosl.org (Postfix) with ESMTP id E609F403BE
+ for <buildroot@uclibc.org>; Thu, 20 Oct 2022 10:30:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E609F403BE
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id B8D4286EC9; Thu, 20 Oct 2022 10:27:24 +0000 (UTC)
+ id D1EAB85EDA; Thu, 20 Oct 2022 10:30:41 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 20 Oct 2022 10:27:23 +0000
+Date: Thu, 20 Oct 2022 10:30:41 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Outdated package
 X-Bugzilla-Version: 2022.02.6
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
+X-Bugzilla-Severity: major
 X-Bugzilla-Who: alirezatm@ymail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
@@ -54,14 +54,14 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15071-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: bug_severity
+Message-ID: <bug-15071-163-gTkEby4oKq@https.bugs.busybox.net/>
+In-Reply-To: <bug-15071-163@https.bugs.busybox.net/>
+References: <bug-15071-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15071] New: RTL8723BS library is outdated
+Subject: [Buildroot] [Bug 15071] RTL8723BS library is outdated
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,43 +80,15 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15071
 
-            Bug ID: 15071
-           Summary: RTL8723BS library is outdated
-           Product: buildroot
-           Version: 2022.02.6
-          Hardware: Other
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: alirezatm@ymail.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+alirezatm@ymail.com changed:
 
-Good day, It seems that the RTL8723BS library in the buildroot settings
-accessible by "make menuconfig" and "make linux-menunconfig" is outdated and
-hasn't been updated for a long time
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Severity|normal                      |major
 
-In the "~/buildroot-2022.02.6/package/rtl8723bs/rtl8723bs.mk" file, I saw this
-line: 
-RTL8723BS_SITE = $(call github,hadess,rtl8723bs,$(RTL8723BS_VERSION))
-which means that it's fetching the library from
-https://github.com/hadess/rtl8723bs which as you can see is not being updated
-anymore and is extremely outdated. For example it doesn't respect the changes
-to the timer done in the 4.15 kernel
-
-I tried lowering my linux kernel version in the "make menuconfig" settings as a
-compromise but this library still won't compile. Tried and failed with kernel
-versions 4.11, 4.12 and 4.14
-
-The kernel itself seems to have an up-to-date driver for it
-(https://github.com/torvalds/linux/tree/master/drivers/staging/rtl8723bs) but I
-don't think we can access it via buildroot
-
-Is there any chance to fix this library? Thanks
-I've attached my .config file if it helps
+--- Comment #1 from alirezatm@ymail.com ---
+Sorry, seems that this website has a 75kB limit, so I've uploaded my .config
+file here: https://anonymfile.com/pZKO/.config
 
 -- 
 You are receiving this mail because:
