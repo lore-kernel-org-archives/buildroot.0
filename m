@@ -1,86 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 020BEC4332F
-	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 13:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48EADC43217
+	for <buildroot@archiver.kernel.org>; Thu, 20 Oct 2022 14:14:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CDF16FADE;
-	Thu, 20 Oct 2022 13:29:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CDF16FADE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9033D41BDC;
+	Thu, 20 Oct 2022 14:14:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9033D41BDC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F-ORQf7OcECg; Thu, 20 Oct 2022 13:29:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Pt2c2Tgto8Dp; Thu, 20 Oct 2022 14:14:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93E806FAC0;
-	Thu, 20 Oct 2022 13:29:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93E806FAC0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 75DD51BF27E
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 13:29:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A5D241A17;
+	Thu, 20 Oct 2022 14:14:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A5D241A17
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A3B021BF312
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4AC986FAC0
- for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 13:29:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AC986FAC0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FCD2841FF
+ for <buildroot@lists.busybox.net>; Thu, 20 Oct 2022 14:14:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FCD2841FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vFVFssSYhIb9 for <buildroot@lists.busybox.net>;
- Thu, 20 Oct 2022 13:29:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aiD2Y-euJuhe for <buildroot@lists.busybox.net>;
+ Thu, 20 Oct 2022 14:14:39 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBCDD6FAAB
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com
- [IPv6:2607:f8b0:4864:20::62c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BBCDD6FAAB
- for <buildroot@buildroot.org>; Thu, 20 Oct 2022 13:29:30 +0000 (UTC)
-Received: by mail-pl1-x62c.google.com with SMTP id f9so1844403plb.13
- for <buildroot@buildroot.org>; Thu, 20 Oct 2022 06:29:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 660EF8434A
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
+ [IPv6:2a00:1450:4864:20::231])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 660EF8434A
+ for <buildroot@buildroot.org>; Thu, 20 Oct 2022 14:14:39 +0000 (UTC)
+Received: by mail-lj1-x231.google.com with SMTP id i21so23644933ljh.12
+ for <buildroot@buildroot.org>; Thu, 20 Oct 2022 07:14:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Cbt4btpoUFTZSR4HRDY4Hpm3gQ4KTac1V1vyzXSuLnk=;
- b=IDFjqkXD0Z28X56/048OI6kL53A6ymQyb1ggwmhfcBnDULyCwWyOADH3KaPyI/Rbve
- mETvFcZEC9kdEs3aYE6SyWl8mCN5wga2ECSCl/TiXN8CjtT8dPNG+4q1LmU39z9LkPN6
- H8Uea+t3gPFSSHSn3ys/4UcvM/nwpwzQOsBhvq1EAvCCP29VZXC650Qffr4J60UhbBdC
- Hc1vnGpgiPwdGRq5ZbOmfzqKaXGi7IcjbdyhGT89hJTYEU3GLhZiefLR4ItHCo2arK8h
- /S74koIK8EuW6ODR2L8stN6ZrA3QHb2n0K5h39AMW5tiPwsd0T1ncwBtLCwwpe9DwQjm
- LP/g==
-X-Gm-Message-State: ACrzQf0b2LdL5LXOEr8aMgTpkhoqg24M2yiyOQlFuxcNhyNZAssfFNOB
- f24+RCjCw9fuRJsYV6677PnR+9vUNu5Ctk+UbMLAaneYHTWYgQ==
-X-Google-Smtp-Source: AMsMyM69PBObvXq3AN3eEGoq2mjFZmr/7ZoagLD9dt1SQUwyh6srwBv2g33xxonxdbxhi5B8TGsiOVilF/fwimNmibM=
-X-Received: by 2002:a17:902:e552:b0:179:e795:71c5 with SMTP id
- n18-20020a170902e55200b00179e79571c5mr13927285plf.57.1666272570024; Thu, 20
- Oct 2022 06:29:30 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=J/ECSHES7G1ii9v4LYFHbhuTcJRgv/q6iTUegg/6QvI=;
+ b=HbsArYedopzkPmbDcPdZI3W1dWoKq/ERj8MDXt0sWMbCmFTA42nckanYrqvlcQA1on
+ J2SZ3z3DgHTdkcRUjrn5esXwrP2rOYv6oivDDs42MzVxSBIwL6BhRPyp1fzl9t/YgNlP
+ KL4l8D5YDlg7GGAUR0Ng3mZuZGuXPwE2QUM0GucYWdoqBU9w4fV1/E2M4xPNB8oeOsYT
+ yAzXbQWPZAjJsW4QumEb5PUJMFc9Z9np3G3CmbnrkiLXYeW/BstUSIQbgCAFY/7y/FuY
+ HryOqvMh8hxh1X621esY2yZ3gmCrRNRvLEkOTL4pEWDVpCLdDp+7Vh6r4KaH+/7ngeVv
+ m/dA==
+X-Gm-Message-State: ACrzQf1BJEaBRYI9l0xKEmbzvsn3MjkpIv1foCgLHolR+8hnGFYYGCv+
+ oTcGbLtpLP+VUmUhxVrmhq7LyIiI6UHD1Q==
+X-Google-Smtp-Source: AMsMyM4SD9izfcWvqOliniRS3vJVfGDQdI3jKjX4PB2SAeLfwlkzzkBzTEr31/9VgqRVunqMoR5IIA==
+X-Received: by 2002:a05:651c:114:b0:26f:a696:5a40 with SMTP id
+ a20-20020a05651c011400b0026fa6965a40mr5242636ljb.350.1666275276851; 
+ Thu, 20 Oct 2022 07:14:36 -0700 (PDT)
+Received: from wkz-x13.addiva.ad (a120.broadband3.quicknet.se. [46.17.184.120])
+ by smtp.gmail.com with ESMTPSA id
+ a3-20020ac25e63000000b0048b969ac5cdsm2739975lfr.5.2022.10.20.07.14.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 20 Oct 2022 07:14:36 -0700 (PDT)
+From: Tobias Waldekranz <tobias@waldekranz.com>
+To: buildroot@buildroot.org
+Date: Thu, 20 Oct 2022 16:14:08 +0200
+Message-Id: <20221020141412.346992-1-tobias@waldekranz.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CADvTj4qYnqsAjQMZQHBTdpxgiZ2VoLtewn9uWa1QzPjriT_VZg@mail.gmail.com>
- <A7C2FFDF-A321-49E6-A82C-3DA7C936C65E@benettiengineering.com>
-In-Reply-To: <A7C2FFDF-A321-49E6-A82C-3DA7C936C65E@benettiengineering.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 20 Oct 2022 09:29:18 -0400
-Message-ID: <CADvTj4rMLacz40pDcGWWE9MrBx-X6yYvrreST83Exa2yRAM_8w@mail.gmail.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20210112;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Cbt4btpoUFTZSR4HRDY4Hpm3gQ4KTac1V1vyzXSuLnk=;
- b=L9eCeieq2HrGf/WqLMipyNDwjEfPZJN2frouuBOLU6zoAzoU6GQwd0ogDl/5A5UD/8
- y3dRE67Wf8odFhHCXBON++A+EgRILz28AVPb9iakG/g55cxHNlXx4rXFQZ8JY8MO8xmK
- Wr0Cto727mJk3ebz1ku0iQLXWeNGSttpk8LNYXOkBXHuo008uJUVY8JQpw8Kb+zzG3jl
- JTy071T4YktIxBQOXtIIMzf/Laqzbt3NGamUYyhEEAERxShFQiCdEGLt4R4z8JIeTzdf
- hLE6HA0hNC8+sWXNyvRtLOM8bIzF099hmUhQGfzN2WPZ/HsCwueA/6QlUyVs5LBOO1cz
- ckrw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20210112 header.b=L9eCeieq
-Subject: Re: [Buildroot] [PATCH] package/libnss: disable parallel build with
- Make 4.4
+ d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=J/ECSHES7G1ii9v4LYFHbhuTcJRgv/q6iTUegg/6QvI=;
+ b=nKpv1SDkvXswyc8v9S8GbUKQeLf4BdCjHtRC8+eDagJJ80gTyKZLxTCukXObZI92Vv
+ ivTnXNRmbFLHpYTbGnixV+xwx5zYBUkGekPaLXi4/YQ75wvuOflic3ceLwe0M6NyiTzF
+ xXQKFqDRebS3IqGzCq5LLnYS5OAzqnZilHAdAMg1GrofauxG+8M1TY5cJHo2ZBJcrvMF
+ xQcUK/bIP4/hCkyd6Cj1nT5AE82oOnS1RQbpTqAGRyDHx3h/hj3BbPN7StlGqO6W8vmh
+ gnKTgHlyItcmTlmxM93hWXwhDV0n5fsJ+0YosgiJQzgiOhJSzPyLKjbSdrdwVCThcoWZ
+ eGQQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=waldekranz-com.20210112.gappssmtp.com
+ header.i=@waldekranz-com.20210112.gappssmtp.com header.a=rsa-sha256
+ header.s=20210112 header.b=nKpv1SDk
+Subject: [Buildroot] [PATCH 0/4] package/kmemd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,56 +94,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCBPY3QgMjAsIDIwMjIgYXQgMjo1MyBBTSBHaXVsaW8gQmVuZXR0aQo8Z2l1bGlvLmJl
-bmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbT4gd3JvdGU6Cj4KPiBIaSBKYW1lcywKPgo+ID4g
-SWwgZ2lvcm5vIDIwIG90dCAyMDIyLCBhbGxlIG9yZSAwMjoyMywgSmFtZXMgSGlsbGlhcmQgPGph
-bWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+IGhhIHNjcml0dG86Cj4gPgo+ID4g77u/T24gV2VkLCBP
-Y3QgMTksIDIwMjIgYXQgNzozNiBQTSBKYW1lcyBIaWxsaWFyZAo+ID4gPGphbWVzLmhpbGxpYXJk
-MUBnbWFpbC5jb20+IHdyb3RlOgo+ID4+Cj4gPj4+IE9uIFdlZCwgT2N0IDE5LCAyMDIyIGF0IDM6
-NTUgUE0gR2l1bGlvIEJlbmV0dGkKPiA+Pj4gPGdpdWxpby5iZW5ldHRpQGJlbmV0dGllbmdpbmVl
-cmluZy5jb20+IHdyb3RlOgo+ID4+Pgo+ID4+PiBGaXhlczoKPiA+Pj4gaHR0cDovL2F1dG9idWls
-ZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvNDMzLzQzMzVkMGQ4NDU0MDM1YThmNzQ2NDViYThkNmMy
-MzI5YWIyZTU0ODAvCj4gPj4KPiA+PiBIbW0sIHRoaXMgbG9va3MgbGlrZSBhIGJ1ZyBpbiB0aGUg
-bGlibnNzIG1ha2VmaWxlLCB3aGF0IHdhcyB0aGUgZmFpbHVyZQo+ID4+IHNlZW4gd2l0aCBtYWtl
-IDQuMyBoZXJlOgo+ID4+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDIyMDEw
-MTIxMDk1Mi4yMTQ4MjU2LTEtZ2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVuZ2luZWVyaW5nLmNvbS8K
-PiA+Cj4gPiBUaGlzIHBhdGNoIGFsc28gZG9lcyBub3QgZml4IHRoZSBidWlsZCB3aXRoIG1ha2Ug
-NC40KG1ha2UgZnJvbSBtYXN0ZXIgYnJhbmNoKQo+ID4gZnJvbSBteSB0ZXN0aW5nLgo+ID4KPiA+
-IEV2ZW4gd2l0aG91dCBzaHVmZmxlIG1vZGUgZW5hYmxlZCB0aGUgYnVpbGQgYXBwZWFycyB0byBh
-bHdheXMgZmFpbC4KPgo+IFRoYW5rIHlvdSBmb3IgdGVzdGluZywgSSBoYXZlIGZvcmdvdHRlbiBl
-eGFjdGx5IHRvIGFzayB5b3UgdG8gZG8gaXQgOi0pIHNpbmNlIGFsbW9zdCBhbGwgdGhlIGZhaWx1
-cmVzIGNvbWVzIGZyb20geW91ciBhc2FoaS1taW5pIHRoYXQgSSByZW1lbWJlciB0byBoYXZlIE1h
-a2UgNC40LgoKSSdtIHJ1bm5pbmcgbWFrZSBtYXN0ZXIgYnJhbmNoIG9uIGFsbCBteSBhdXRvYnVp
-bGRlcnMgYXQgdGhlIG1vbWVudCwKdGhlIGZhaWx1cmVzIGFyZW4ndCBsaW1pdGVkIHRvIGFzYWhp
-LW1pbmk6Cmh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC8/cmVhc29uPWxpYm5zcy0zLjg0
-Cgo+Cj4gU28gSSB0cnkgdG8gcmVwcm9kdWNlIHRoZSBidWcgaGVyZSBhdCBtZSBhbmQgZmluZCBv
-dXQgYSBmaXguCgpVc2UgbWFrZSBtYXN0ZXIgYnJhbmNoIGZyb20gaGVyZSBmb3IgdGVzdGluZzoK
-Z2l0IGNsb25lIGh0dHBzOi8vZ2l0LnNhdmFubmFoLmdudS5vcmcvZ2l0L21ha2UuZ2l0Cgo+Cj4g
-VGhhbmtzIGFnYWluCj4KPiBCZXN0IHJlZ2FyZHMKPiBHaXVsaW8KPgo+ID4KPiA+Pgo+ID4+Pgo+
-ID4+PiBTaWduZWQtb2ZmLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0
-aWVuZ2luZWVyaW5nLmNvbT4KPiA+Pj4gLS0tCj4gPj4+IHBhY2thZ2UvbGlibnNzL2xpYm5zcy5t
-ayB8IDQgKystLQo+ID4+PiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0
-aW9ucygtKQo+ID4+Pgo+ID4+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJuc3MvbGlibnNzLm1r
-IGIvcGFja2FnZS9saWJuc3MvbGlibnNzLm1rCj4gPj4+IGluZGV4IDA0MWIyY2ZjNTYuLmE2MTMw
-MDZmNzAgMTAwNjQ0Cj4gPj4+IC0tLSBhL3BhY2thZ2UvbGlibnNzL2xpYm5zcy5tawo+ID4+PiAr
-KysgYi9wYWNrYWdlL2xpYm5zcy9saWJuc3MubWsKPiA+Pj4gQEAgLTE1LDggKzE1LDggQEAgTElC
-TlNTX0xJQ0VOU0VfRklMRVMgPSBuc3MvQ09QWUlORwo+ID4+PiBMSUJOU1NfQ1BFX0lEX1ZFTkRP
-UiA9IG1vemlsbGEKPiA+Pj4gTElCTlNTX0NQRV9JRF9QUk9EVUNUID0gbnNzCj4gPj4+Cj4gPj4+
-IC0jIERvbid0IHBhcmFsbGVsIGJ1aWxkIGlmIG1ha2UgdmVyc2lvbiA9IDQuMwo+ID4+PiAtaWZu
-ZXEgKCQoZmlsdGVyICQoUlVOTklOR19NQUtFX1ZFUlNJT04pLDQuMyksKQo+ID4+PiArIyBEb24n
-dCBwYXJhbGxlbCBidWlsZCBpZiBtYWtlIHZlcnNpb24gPSA0LjMgb3IgNC40Cj4gPj4+ICtpZm5l
-cSAoJChmaWx0ZXIgJChSVU5OSU5HX01BS0VfVkVSU0lPTiksNC4zIDQuNCksKQo+ID4+PiBMSUJO
-U1NfTUFLRSA9ICQoTUFLRTEpCj4gPj4+IGVsc2UKPiA+Pj4gTElCTlNTX01BS0UgPSAkKE1BS0Up
-Cj4gPj4+IC0tCj4gPj4+IDIuMzQuMQo+ID4+Pgo+ID4+PiBfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwo+ID4+PiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4g
-Pj4+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gPj4+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+Cl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cg==
+kmemd implements a GDB stub that let's you access a running kernel's
+memory. There's no way to control the flow of execution in any way,
+but you can inspect internal data structures with all the DWARF
+parsing and scripting power of GDB - without the need for any hardware
+debugger or a dedicated KGDB serial port.
+
+I've chosen not to install any startup scripts for it, since it
+effectively provides the same service as Heartbleed, but with a much
+better UX :) The expectation is that the user will start it manually
+when needed.
+
+Before adding kmemd, 1-3/4 fixes some issues around libbpf. The
+cross-compilation fix for 32-bit targets (1/4) has been accepted
+upstream[1].
+
+[1]: https://github.com/libbpf/libbpf/commit/68e6f83f223ebf3fbf0d94c0f4592e5e6773f0c1
+
+Tobias Waldekranz (4):
+  package/libbpf: fix cross compilation for 32-bit targets
+  package/libbpf: remove architecture restrictions
+  package/libbpf: extract dependencies to separate kconfig symbol
+  package/kmemd: new package
+
+ package/Config.in                             |  1 +
+ package/kmemd/Config.in                       | 11 ++++++
+ package/kmemd/kmemd.hash                      |  5 +++
+ package/kmemd/kmemd.mk                        | 20 ++++++++++
+ ...cross-compilation-for-32-bit-targets.patch | 37 +++++++++++++++++++
+ package/libbpf/Config.in                      | 24 ++++--------
+ 6 files changed, 81 insertions(+), 17 deletions(-)
+ create mode 100644 package/kmemd/Config.in
+ create mode 100644 package/kmemd/kmemd.hash
+ create mode 100644 package/kmemd/kmemd.mk
+ create mode 100644 package/libbpf/1.0.1/0001-Makefile-Fix-cross-compilation-for-32-bit-targets.patch
+
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
